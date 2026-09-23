@@ -141,6 +141,16 @@ def _is_steam_deck_hardware() -> bool:
     return product in ("Jupiter", "Galileo")
 
 
+# How many models Ollama keeps loaded at once, for both ways bonsAI starts it: the
+# start-with-the-Deck service (ollama_local_autostart_service.py) and the plugin starting
+# it directly (below). Two lets the answering model and the note-searching model stay
+# loaded together, which turns a ~700ms swap on every question into ~24ms (measured
+# runs/plan48-R6-deck-model-eviction.json). The two paths used to disagree -- the service
+# wrote 2, the direct start 1 -- so the same Deck behaved differently depending on how
+# Ollama had been started. Read live on the Deck 2026-09-23: the service's copy runs with 2.
+OLLAMA_MAX_LOADED_MODELS_DEFAULT = "2"
+
+
 def _linux_ollama_gpu_env_defaults() -> dict[str, str]:
     """Best-effort GPU env for Steam Deck / AMD Linux when the user has not set overrides."""
     if not sys.platform.startswith("linux"):
@@ -163,7 +173,7 @@ def _linux_ollama_gpu_env_defaults() -> dict[str, str]:
     if os.environ.get("OLLAMA_NUM_PARALLEL") is None:
         out["OLLAMA_NUM_PARALLEL"] = "1"
     if os.environ.get("OLLAMA_MAX_LOADED_MODELS") is None:
-        out["OLLAMA_MAX_LOADED_MODELS"] = "1"
+        out["OLLAMA_MAX_LOADED_MODELS"] = OLLAMA_MAX_LOADED_MODELS_DEFAULT
     return out
 
 

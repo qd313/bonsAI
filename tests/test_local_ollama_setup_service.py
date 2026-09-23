@@ -99,6 +99,27 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
             self.assertTrue(mock_listen.call_args.kwargs.get("force_fresh_serve"))
             self.assertTrue(key.is_file())
 
+    def test_both_start_paths_keep_the_same_number_of_models_loaded(self):
+        """The plugin starting Ollama itself used to allow 1 loaded model while the
+        start-with-the-Deck service allowed 2, so the same Deck swapped models on every
+        question or not depending on how Ollama had been started. Both now come from one value."""
+        from backend.services import local_ollama_setup_service as setup
+        from backend.services.ollama_local_autostart_service import _AUTOSTART_ENV
+
+        with patch.dict("os.environ", {}, clear=True), patch.object(setup.sys, "platform", "linux"):
+            direct = setup._linux_ollama_gpu_env_defaults()
+        self.assertEqual(direct["OLLAMA_MAX_LOADED_MODELS"], "2")
+        self.assertEqual(direct["OLLAMA_MAX_LOADED_MODELS"], _AUTOSTART_ENV["OLLAMA_MAX_LOADED_MODELS"])
+
+    def test_a_models_limit_the_user_set_is_left_alone(self):
+        from backend.services import local_ollama_setup_service as setup
+
+        with patch.dict("os.environ", {"OLLAMA_MAX_LOADED_MODELS": "3"}, clear=True), patch.object(
+            setup.sys, "platform", "linux"
+        ):
+            direct = setup._linux_ollama_gpu_env_defaults()
+        self.assertNotIn("OLLAMA_MAX_LOADED_MODELS", direct)
+
 
 if __name__ == "__main__":
     unittest.main()

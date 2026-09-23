@@ -38,6 +38,7 @@ from typing import Any
 
 from backend.services.local_ollama_setup_service import (
     DEFAULT_BASE,
+    OLLAMA_MAX_LOADED_MODELS_DEFAULT,
     _env_for_host_system_tools,
     probe_ollama_http_ok,
 )
@@ -50,16 +51,14 @@ _SYSTEMD_USER_DIR_RELATIVE = Path(".config") / "systemd" / "user"
 # verbatim except OLLAMA_MAX_LOADED_MODELS. The others decide how Ollama uses the
 # Deck's graphics (Vulkan GPU offload, flash attention, parallel request count) --
 # changing them would change how answers behave, so this entry leaves them exactly
-# as measured. Only the model limit changes: raising it from 1 to 2 lets the
-# answering model and the note-searching (embedding) model both stay loaded, which
-# is what turns a ~700ms swap on every question into ~24ms (measured
-# runs/plan48-R6-deck-model-eviction.json).
+# as measured. Only the model limit changes, to the shared default both start paths
+# use (OLLAMA_MAX_LOADED_MODELS_DEFAULT, where the reason is written down).
 _AUTOSTART_ENV: dict[str, str] = {
     "OLLAMA_VULKAN": "1",
     "OLLAMA_IGPU_ENABLE": "1",
     "OLLAMA_FLASH_ATTENTION": "0",
     "OLLAMA_NUM_PARALLEL": "1",
-    "OLLAMA_MAX_LOADED_MODELS": "2",
+    "OLLAMA_MAX_LOADED_MODELS": OLLAMA_MAX_LOADED_MODELS_DEFAULT,
 }
 
 

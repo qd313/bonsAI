@@ -355,6 +355,14 @@ export function useBonsaiAskOrchestration(
     appName?: string;
     askedEntity?: string;
     spoilerConsentEffective?: boolean;
+    /**
+     * The chat this turn belongs to, captured at write time. `onAskOllama`'s flush-on-next-ask
+     * below must only replay a turn into the chat it came from — a plain chat switch (selectSlot)
+     * deliberately leaves this ref alone, so without this tag a turn archived in chat A was still
+     * sitting here when the first question in a brand-new chat B ran, and got appended above B's
+     * own question ("the previous chat's last question shows in a brand-new chat").
+     */
+    slotId?: string | null;
   } | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
   /** Last request_id whose completion already re-seeded suggested prompts (reseed is randomized). */
@@ -558,8 +566,9 @@ export function useBonsaiAskOrchestration(
       appName: lastExchange.appName || undefined,
       askedEntity: lastExchange.askedEntity || undefined,
       spoilerConsentEffective: lastExchange.spoilerConsentEffective === true,
+      slotId: a.activeSlotIdRef?.current ?? null,
     };
-  }, [lastExchange, ollamaContext?.app_id]);
+  }, [lastExchange, ollamaContext?.app_id, a.activeSlotIdRef]);
 
   // --- Input transparency (Show details chip) ---
   const refreshInputTransparency = useCallback(async () => {
@@ -1157,7 +1166,19 @@ export function useBonsaiAskOrchestration(
       }
 
       const arch = pendingArchiveTurnRef.current;
-      if (arch && arch.question.trim() && arch.answer.trim()) {
+      /*
+       * Guard added for the "ghost question" bug: this flush exists to replay the just-finished
+       * turn into `askThreadCollapsed` synchronously, ahead of the disk reload's own race (see
+       * the comment below). That is only correct when the flush lands in the SAME chat the turn
+       * belongs to. `resetLiveAskPresentation` (a plain chat switch) deliberately leaves this ref
+       * alone, so asking the first question in a brand-new chat used to replay the PREVIOUS
+       * chat's last question above the new one, for as long as it took that previous chat's own
+       * disk reload to overwrite it — roadmap: "the previous chat's question shows in a brand-new
+       * chat for about 40 seconds". A turn whose slot no longer matches the chat we're asking
+       * into now is simply stale and dropped below, not replayed.
+       */
+      const archBelongsToActiveSlot = (arch?.slotId ?? null) === (a.activeSlotIdRef?.current ?? null);
+      if (arch && archBelongsToActiveSlot && arch.question.trim() && arch.answer.trim()) {
         /*
          * Replace the tail rather than always appending, or the previous turn shows up twice for
          * the whole length of this generation.
@@ -1544,6 +1565,7 @@ export function useBonsaiAskOrchestration(
           pendingArchiveTurnRef.current = {
             question: lastExchange.question,
             answer: lastExchange.answer,
+            slotId: a.activeSlotIdRef?.current ?? null,
           };
         }
       }

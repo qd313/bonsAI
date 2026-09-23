@@ -1114,6 +1114,103 @@ describe("useBonsaiAskOrchestration", () => {
     });
   });
 
+  /*
+   * Plan 64 bug A: "the previous chat's question shows in a brand-new chat for about 40 seconds."
+   * `onAskOllama` flushes `pendingArchiveTurnRef` -- the just-finished turn -- into
+   * `askThreadCollapsed` at the top of the NEXT Ask, ahead of the disk reload that would otherwise
+   * do it a beat later. That flush used to fire no matter which chat the next Ask actually landed
+   * in: switching to a brand-new "[+]" chat and asking its first question replayed the OLD chat's
+   * last question (and answer) above the new one, because nothing had told the flush which chat
+   * the archived turn belonged to. It self-corrected once the new chat's real, empty transcript
+   * came back from disk and the auto-title landed -- which is the ~35-41s the bug report measured.
+   */
+  describe("ask thread archive stays with its own chat (plan 64 bug A, ghost question)", () => {
+    it("does not replay the previous chat's last turn into a brand-new chat's first question", async () => {
+      vi.useFakeTimers();
+      const activeSlotIdRef = { current: "slot-a" as string | null };
+
+      // First Ask, in slot-a, completes immediately (the "start_background_game_ai" fast path).
+      setRpcHandler("start_background_game_ai", () => ({
+        accepted: true,
+        status: "completed",
+        success: true,
+        response: "Go north past the bridge.",
+        request_id: 601,
+      }));
+
+      const ensureActiveSlotForAsk = vi.fn(async () => {
+        activeSlotIdRef.current = "slot-b";
+        return "slot-b";
+      });
+
+      const { result } = renderHook(() =>
+        useBonsaiAskOrchestration(makeArgs({ activeSlotIdRef, ensureActiveSlotForAsk })),
+      );
+
+      let firstPending: Promise<void> | undefined;
+      act(() => {
+        firstPending = result.current.onAskOllama("where is the key");
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      await act(async () => {
+        await firstPending;
+      });
+
+      expect(result.current.lastExchange?.question).toBe("where is the key");
+
+      // Leave slot-a for a brand-new, still-unsaved chat -- the "[+]" slot. This mirrors what
+      // `useChatSlots.ts`'s `selectSlot(null)` actually does: reset the live-answer view and
+      // clear the on-screen thread, but leave `pendingArchiveTurnRef` alone (its own deliberate
+      // choice, so a foreign in-flight reply can still archive once it lands). No chat is active
+      // yet, same as the real "[+]" screen.
+      act(() => {
+        result.current.resetLiveAskPresentation();
+        result.current.setAskThreadCollapsed([]);
+        result.current.setAskThreadDisplayQuestion("");
+      });
+      activeSlotIdRef.current = null;
+
+      // First question in the new chat. `ensureActiveSlotForAsk` (mocked above) mints slot-b and
+      // moves `activeSlotIdRef` there, exactly as `useChatSlots.ts` does -- but only partway
+      // through `onAskOllama`, after the archive flush this test is checking.
+      setRpcHandler("start_background_game_ai", () => ({
+        accepted: true,
+        status: "pending",
+        request_id: 602,
+      }));
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "what weapon is best here",
+        request_id: 602,
+        chat_slot_id: "slot-b",
+      }));
+
+      let pending: Promise<void> | undefined;
+      act(() => {
+        pending = result.current.onAskOllama("what weapon is best here");
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      await act(async () => {
+        await pending;
+      });
+
+      expect(ensureActiveSlotForAsk).toHaveBeenCalledWith("what weapon is best here");
+      // The new chat's transcript must hold only what belongs to it -- not slot-a's "where is
+      // the key" turn replayed above the new question.
+      expect(result.current.askThreadCollapsed).toHaveLength(0);
+      expect(result.current.askThreadCollapsed.some((t) => t.question === "where is the key")).toBe(
+        false,
+      );
+
+      vi.useRealTimers();
+    });
+  });
+
   describe("session RAG preset chips", () => {
     const DREADNOUGHT = "How do I beat Glyphid Dreadnought?";
 

@@ -68,6 +68,18 @@ export type OllamaModelsHubModalProps = {
 };
 
 /**
+ * The tallest the scrolling body may be and still leave the dialog's own title, Done and Cancel
+ * on screen. Measured on the Deck's own screen 2026-09-23
+ * (docs/test-evidence/plan64-MODELS-LIST-CAP-01-try2.json): the page is 534px tall, Steam's top
+ * and bottom bars take 40 and 42, the dialog sits 24 below the top bar, and its own padding,
+ * title, gaps and 56px footer take 156 -- 262 in all, which leaves 272 for this box. The old cap,
+ * 72vh (384px there), pushed Done 46px below the visible edge whenever the long list showed.
+ * Fixed pixels rather than vh because every part of those 262 is a fixed size; 270 leaves 8px of
+ * slack, and 520 still caps it on a tall monitor.
+ */
+const HUB_BODY_MAX_HEIGHT = "min(calc(100vh - 270px), 520px)";
+
+/**
  * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
  * advanced routing.
  */
@@ -176,7 +188,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             gap: 12,
             textAlign: "left",
             maxWidth: "100%",
-            maxHeight: "min(72vh, 520px)",
+            maxHeight: HUB_BODY_MAX_HEIGHT,
             overflowY: "auto",
             paddingRight: 4,
           }}

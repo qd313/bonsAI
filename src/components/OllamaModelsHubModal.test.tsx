@@ -95,6 +95,20 @@ describe("no standalone Policy section, and no section-button row, any more", ()
   });
 });
 
+describe("the scrolling body's height cap", () => {
+  // Measured on the Deck 2026-09-23 (plan64-MODELS-LIST-CAP-01-try2.json): at 72vh the long list
+  // pushed Done and Cancel 46px below the visible edge. The cap is now the page height less the
+  // fixed-size parts around the body.
+  it("leaves room for the dialog's own title and footer instead of taking 72% of the screen", () => {
+    const { container } = render(<OllamaModelsHubModal {...buildProps()} />);
+    const body = container.querySelector(".bonsai-models-hub-shell > div") as HTMLElement | null;
+    expect(body).not.toBeNull();
+    const style = body!.getAttribute("style") ?? "";
+    expect(style).toContain("100vh - 270px");
+    expect(style).not.toContain("72vh");
+  });
+});
+
 describe("Done saves the licence + advanced draft", () => {
   it("commits the draft and closes when Browse has nothing queued to pull", async () => {
     const onCommitOllamaModelsHub = vi.fn().mockResolvedValue(undefined);

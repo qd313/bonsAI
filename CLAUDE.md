@@ -39,21 +39,8 @@ agent, or another tool calls the matching MCP prompt:
 | `foss-advocate` | `.claude/agents/foss-advocate.md` | [docs/agents/foss-advocate.md](docs/agents/foss-advocate.md) |
 | `security-auditor` | `.claude/agents/security-auditor.md` | [docs/agents/security-auditor.md](docs/agents/security-auditor.md) |
 
-The lane and helper agents named in AGENTS.md under 'Which model does which work' are files in
-`.claude/agents/`, tracked like any other file in this repo — see that section for what each one
-does and when to use it. Their front matter sets the model and effort:
-
-| Agent | Model | Effort |
-|---|---|---|
-| `bookkeeper` | Sonnet | High |
-| `bugfix-lane` | Sonnet | High |
-| `feature-lane` | Sonnet | High |
-| `kb-lane` | Sonnet | High |
-| `deck-driver` | Opus | Medium |
-
-`deck-driver` is the newest, added 2026-09-23 for plan 64: it drives the real Deck from a session
-owner's runbook, with the Deck rules (never press A on the question box, the one allowed SSH
-command shape, and so on) written into the file itself.
+The helpers in AGENTS.md, 'Which model does which work' (`bookkeeper`, the `*-lane` agents,
+`deck-driver`) are files there too; front matter sets model and effort.
 
 ## Commands specific to this session
 

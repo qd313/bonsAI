@@ -980,11 +980,21 @@ def _row_relevance(row: sqlite3.Row) -> float:
         return 0.0
 
 
+# The `game_title` every shared troubleshooting tip card carries. Named here, not inlined,
+# because `_format_block`'s `sources` list builds each entry's title as
+# f"{c.game_title} — {c.name}" (this value, for a tip) while game_ai_request.py's
+# `_parse_kb_attached_notes` used to rebuild that same key from the parsed text block instead --
+# where a tip's header never writes the game title at all (`_card_lines` writes "[Tip: Name]"
+# only), so that side always rebuilt "" and the two keys never matched. See docs/roadmap.md,
+# "A shared troubleshooting tip that has a source page never gets it shown."
+_COMPAT_GAME_TITLE = "Shared troubleshooting"
+
+
 def _compat_row_to_card(row: sqlite3.Row) -> KnowledgeCard:
     return KnowledgeCard(
         section_id=int(row["pattern_id"]),
         game_id=0,
-        game_title="Shared troubleshooting",
+        game_title=_COMPAT_GAME_TITLE,
         section_type="tip",
         name=str(row["topic"] or ""),
         card=str(row["card"] or ""),

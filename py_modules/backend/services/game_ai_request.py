@@ -142,6 +142,12 @@ from backend.services.knowledge_base_service import (
     # failure than a parser that quietly stops trimming correctly. See that function's docstring
     # for why the notes it needs are not exposed any more directly than this.
     _BLOCK_SENTINEL,
+    # The `game_title` every shared troubleshooting tip's `sources` entry is keyed under
+    # (knowledge_base_service.py's `_compat_row_to_card` and `_format_block`). Reused here for
+    # the same reason as `_BLOCK_SENTINEL` above: a tip's own text never writes its game title
+    # (`_card_lines` writes "[Tip: Name]" only), so `_parse_kb_attached_notes` cannot recover it
+    # from the parsed block and has to know the fixed value the sources side used instead.
+    _COMPAT_GAME_TITLE,
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.services.spoiler_risk_service import build_spoiler_risk_signals
@@ -251,12 +257,19 @@ def _parse_kb_attached_notes(
         if m.group("tip_name") is not None:
             name = m.group("tip_name")
             kind = "tip"
+            # The note itself carries no game title -- a tip's header never writes one -- but
+            # the `sources` entry `_format_block` built for this same card is keyed under
+            # `_COMPAT_GAME_TITLE` regardless (`_compat_row_to_card` sets it there even though
+            # `_card_lines` never prints it). Look the source up under that fixed key so a tip
+            # with a real source page is still credited; `game_title` below stays "" so the
+            # published note itself is unchanged.
             game_title = ""
+            title_key = f"{_COMPAT_GAME_TITLE} — {name}"
         else:
             name = m.group("name")
             kind = m.group("kind")
             game_title = m.group("game_title")
-        title_key = f"{game_title} — {name}" if game_title else ""
+            title_key = f"{game_title} — {name}" if game_title else ""
         src = by_title.get(title_key, {})
         notes.append(
             {

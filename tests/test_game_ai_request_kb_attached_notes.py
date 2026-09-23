@@ -34,6 +34,7 @@ if "decky" not in sys.modules:
 
 from backend.services.game_ai_request import _parse_kb_attached_notes, run_game_ai_request
 from backend.services.knowledge_base_service import (
+    _COMPAT_GAME_TITLE,
     KnowledgeCard,
     KnowledgeRetrievalResult,
     _format_block,
@@ -58,6 +59,29 @@ def _card(**overrides) -> KnowledgeCard:
     return KnowledgeCard(**base)
 
 
+def _tip_card(**overrides) -> KnowledgeCard:
+    """A shared troubleshooting tip, carrying the game title `_compat_row_to_card` gives every tip."""
+    base = dict(
+        game_title=_COMPAT_GAME_TITLE,
+        section_type="tip",
+        name="Proton log tip",
+        card="Proton log: PROTON_LOG=1 %command% captures useful launch traces to ~/steam-*.log.",
+        source_url="",
+        source_license="",
+        trust_tier="fallback_no_source",
+    )
+    base.update(overrides)
+    return _card(**base)
+
+
+def _round_trip(cards, *, domain="strategy", max_bytes=6_144):
+    """Format `cards` with the real `_format_block`, then parse that block back apart."""
+    text_block, _trust, sources = _format_block(
+        cards, fallback_text=None, domain=domain, max_bytes=max_bytes
+    )
+    return _parse_kb_attached_notes(text_block, kb_domain=domain, sources=sources), sources
+
+
 class ParseKbAttachedNotesAgainstTheRealFormatterTests(unittest.TestCase):
     """`_parse_kb_attached_notes` reads knowledge_base_service.py's own `_card_lines` format back
     apart -- these prove it stays in step with the real formatter, not a hand-typed guess at its
@@ -66,10 +90,7 @@ class ParseKbAttachedNotesAgainstTheRealFormatterTests(unittest.TestCase):
 
     def test_a_single_strategy_card_round_trips_byte_for_byte(self):
         card = _card()
-        text_block, _trust, sources = _format_block(
-            [card], fallback_text=None, domain="strategy", max_bytes=6_144
-        )
-        notes = _parse_kb_attached_notes(text_block, kb_domain="strategy", sources=sources)
+        notes, _sources = _round_trip([card])
         self.assertEqual(len(notes), 1)
         note = notes[0]
         # The exact assertion the brief asks for: published text equals the attached card's own
@@ -89,10 +110,7 @@ class ParseKbAttachedNotesAgainstTheRealFormatterTests(unittest.TestCase):
         card = _card(game_title="The Legend of Zelda: Ocarina of Time", section_type="mechanic",
                      name="Deku Nuts", card="Stun enemies briefly with a thrown Deku Nut.",
                      source_url="", source_license="")
-        text_block, _trust, sources = _format_block(
-            [card], fallback_text=None, domain="strategy", max_bytes=6_144
-        )
-        notes = _parse_kb_attached_notes(text_block, kb_domain="strategy", sources=sources)
+        notes, _sources = _round_trip([card])
         self.assertEqual(len(notes), 1)
         self.assertEqual(notes[0]["game_title"], "The Legend of Zelda: Ocarina of Time")
         self.assertEqual(notes[0]["name"], "Deku Nuts")
@@ -110,37 +128,59 @@ class ParseKbAttachedNotesAgainstTheRealFormatterTests(unittest.TestCase):
         entry with a blank url reads exactly the same way.
         """
         card = _card(source_url="", source_license="", trust_tier="fallback_no_source")
-        text_block, _trust, sources = _format_block(
-            [card], fallback_text=None, domain="strategy", max_bytes=6_144
-        )
+        notes, sources = _round_trip([card])
         self.assertEqual(len(sources), 1, "the card is named in `sources` now, just with no url")
         self.assertEqual(sources[0]["url"], "")
-        notes = _parse_kb_attached_notes(text_block, kb_domain="strategy", sources=sources)
         self.assertEqual(len(notes), 1)
         self.assertEqual(notes[0]["source_host"], "")
         self.assertEqual(notes[0]["source_license"], "")
         self.assertEqual(notes[0]["trust_tier"], "fallback_no_source")
 
     def test_a_compat_tip_card_is_kind_tip_and_carries_no_game_title(self):
-        card = _card(
-            game_title="Shared troubleshooting",
-            section_type="tip",
-            name="Proton log tip",
-            card="Proton log: PROTON_LOG=1 %command% captures useful launch traces to ~/steam-*.log.",
-            source_url="",
-            source_license="",
-            trust_tier="fallback_no_source",
-        )
-        text_block, _trust, sources = _format_block(
-            [card], fallback_text=None, domain="compat", max_bytes=2_048
-        )
-        notes = _parse_kb_attached_notes(text_block, kb_domain="compat", sources=sources)
+        card = _tip_card()
+        notes, _sources = _round_trip([card], domain="compat", max_bytes=2_048)
         self.assertEqual(len(notes), 1)
         note = notes[0]
         self.assertEqual(note["kind"], "tip")
         self.assertEqual(note["domain"], "compat")
         self.assertEqual(note["game_title"], "")
         self.assertEqual(note["card"], card.card)
+
+    def test_a_shared_tip_with_a_source_page_still_gets_it_credited(self):
+        """The bug filed as "A shared troubleshooting tip that has a source page never gets it
+        shown" (plan 63 lane G): `_format_block`'s `sources` entry for a tip is keyed under
+        "Shared troubleshooting — {name}" (the tip's real `game_title`, per
+        `_compat_row_to_card`), but a tip's own header text never prints a game title
+        (`_card_lines` writes "[Tip: Name]" only) -- so the parser used to rebuild the lookup
+        key as "" and never found the entry, even when the tip really did have a url and a
+        licence. Built with the real `_format_block`, not a hand-written header string, so this
+        proves the two sides actually agree rather than testing a guess at their shapes."""
+        card = _tip_card(
+            source_url="https://www.protondb.com/help",
+            source_license="CC-BY-SA-4.0",
+            trust_tier="wiki_verified",
+        )
+        notes, _sources = _round_trip([card], domain="compat", max_bytes=2_048)
+        self.assertEqual(len(notes), 1)
+        note = notes[0]
+        self.assertEqual(note["kind"], "tip")
+        self.assertEqual(note["source_host"], "www.protondb.com")
+        self.assertEqual(note["source_license"], "CC-BY-SA-4.0")
+
+    def test_a_game_note_still_matches_its_source_alongside_a_sourceless_tip(self):
+        """Guards against a fix that only special-cases tips and breaks the ordinary game-note
+        lookup, or one that only works when a tip is the sole card attached."""
+        tip_card = _tip_card(
+            name="Verify integrity",
+            card="Right-click the game in Steam, Properties, Local Files, Verify integrity.",
+        )
+        notes, _sources = _round_trip([_card(), tip_card])
+        self.assertEqual(len(notes), 2)
+        self.assertEqual(notes[0]["source_host"], "hollowknight.wiki")
+        self.assertEqual(notes[0]["source_license"], "CC-BY-SA-3.0")
+        self.assertEqual(notes[1]["kind"], "tip")
+        self.assertEqual(notes[1]["source_host"], "")
+        self.assertEqual(notes[1]["source_license"], "")
 
     def test_a_card_written_as_labelled_lines_keeps_its_embedded_newlines(self):
         """The real Exploder/Praetorian seed rows write Summary/Weak points/Tips as three lines

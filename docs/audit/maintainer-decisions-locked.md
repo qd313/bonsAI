@@ -5916,3 +5916,38 @@ What these answers do to the roadmap:
 - **(8)** the mid-generation half of "Clear cache cleared the screen but not the session" moves off this
   session's Verify list and onto the maintainer's own checklist. It stays recorded in Verify with a note;
   the rest of that entry is unchanged.
+
+### D116 — LOCKED 2026-09-23 (raised 2026-09-23) — Plan 64 big verification session: the ten calls before flow 0
+
+Raised from [the plan 64 session plan](../planning/64-big-verification-session.md) § 10, written before the
+session began. The maintainer answered all ten on 2026-09-23, the first four while the plan was being
+written and the other six just after.
+
+1. **New chats.** Four checks need a brand-new chat, and each new chat pushes out the oldest of the eight
+   saved ones. Yes: back up first, and put the eight chats back exactly at the end.
+2. **Which known bugs to fix this session.** New bugs found tonight, plus the D-pad bugs already measured
+   on the Deck and the small shared-tip bug. Nothing rated five stars, and not the spoiler safety net.
+3. **A large model downloaded with the high-memory switch goes to the top of the try order**, as the code
+   does now. This replaces the 19 September reading of "tried in the order the user set" for this one
+   case. The 17 GB check runs as written.
+4. **Publish the 2026.09.18 knowledge-base library** to both public download hosts. Yes.
+5. **The preload timing check** may switch Ask to a small model for the timing, then switch it back. Yes.
+6. **The two thinking-line checks** close after five clean tries, each worded differently, since unit
+   tests cover the fix. Yes.
+7. **The library format check** (the last August knowledge-base check) is retired as covered by its unit
+   tests. It could only run by replacing the library under test.
+8. **KB-ATTRIB-01 is reworded** to match the 21 September fix: a reply built only on bonsAI's own
+   hand-written notes now names them under "No source page", and that is the fix working.
+9. **The screen:** checks run on the Deck's own screen, not the monitor.
+10. **Where the library lives:** the rig may remove the installed library and download it fresh through
+    the plugin's own first-time download button, onto the **SD card**. That also tests the two-taps
+    download bug, which needs a Deck with no library installed.
+
+What these answers do to the roadmap:
+
+- **(3)** the try-order entry's large-model half runs as written.
+- **(4)** and **(10)** the ten-games entry's publish call and storage choice are made.
+- **(6)** the thinking-line entry closes after five clean, varied tries.
+- **(7)** the library format check is retired.
+- **(8)** the KB-ATTRIB-01 call leaves "Calls waiting on you".
+- The others change no entry.

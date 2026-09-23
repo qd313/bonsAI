@@ -96,7 +96,8 @@ starts work outside this.
   **OPEN, found 2026-09-16.** While a reply is being written, Down from the question box or from the live
   answer never reaches Stop generation; the only route is Right, then Right again from the Ask-mode button.
   Not a trap, since Stop can still be reached — just not where a person would first look. **Confirmed on the
-  Deck 2026-09-17**, same route needed. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
+  Deck 2026-09-17**, same route needed. Likely closed by the Down-goes-to-Stop fix, the entry under Verify
+  named **ASKBAR-DOWN-TO-STOP-01**; plan 64 checks both with one walk. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, fix did not hold
   on the Deck 2026-09-19.** Going down passes an extra copy of the question text, half hidden behind a
   button, that going up does not show. The tap-to-reveal spoiler box takes three presses to get past going
@@ -381,6 +382,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
   we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
+  **As of 2026-09-18, seven of the twelve have real evidence behind them now.** Five remain: the spoiler-reveal
+  reachability check, the knowledge-base update button check, the 12 September follow-up-memory re-run, model
+  eviction on the Deck, and the wave-three Deck evening. All five are scheduled in plan 64. The table in
+  [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
 - ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
@@ -506,9 +511,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Session context bar is gone; the opened Show details panel now carries two tabs, *This answer* and *Session · N*, with
   Left and Right between them, on the newest answer only. Clear sits at the end of the Session tab, full width, with the
   same confirm box. The lane also fixed the chip list's own B handling, which used a method already measured on the device
-  as not reliably stopping Steam backing the ring out of the whole panel. Row **SESSION-TAB-01**, **run on the Deck
-  2026-09-21 and FAILED**: both tabs are drawn, but the highlight never lands on them, so the Session tab
-  cannot be opened at all — filed as its own three-star bug above. [Plan](planning/62-feature-session-five.md)
+  as not reliably stopping Steam backing the ring out of the whole panel. The cause of that first run's
+  failure — the highlight never landing on the two tabs — was fixed and proved on the Deck 2026-09-21; it
+  sits in Done as "The new Session tab cannot be reached with the D-pad". Row **SESSION-TAB-01** itself
+  still owes a fresh run, scheduled in plan 64. [Plan](planning/62-feature-session-five.md)
 
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).** The
   name shows only while the ring is on the row, with the row's height held steady either way; the chat's
@@ -539,15 +545,18 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   read pictures. Still owed: with high-VRAM fallback on, a large pulled model should go to the top instead.
   Row **ROUTING-MERGE-01**. **Tried on the Deck 2026-09-19:** the bottom half passed again; the top half
   still needs a person at the Deck to type a large model's name by hand and remove it again afterwards.
-  [Detail](roadmap-details.md#pulled-models-join-the-model-try-order).
+  Per D116 #3, that top half runs as built — a large model downloaded with the high-memory switch goes to
+  the top of the try order — and plan 64 runs it as written. [Detail](roadmap-details.md#pulled-models-join-the-model-try-order).
 
-- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
-  **SMOKE-F** passes.
+- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete. **VAC-02**
+  passed on the Deck 2026-09-16 and the **SMOKE-F** check passed 2026-09-17. Left: **VAC-03 to 06**, which need
+  the maintainer's own Steam Web API key typed into the plugin, so they stay on the maintainer's own list.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag
   survives, no bare-emoji phase changes, one writer. **Five of seven rows pass on the Deck**, the last three
   confirmed 2026-09-17. Left: **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, automated only,
   never read on the device. **Tried on the Deck 2026-09-18:** the status line always read as words, but the
-  specific fault each row hunts never came up, so neither is proven either way.
+  specific fault each row hunts never came up, so neither is proven either way. Per D116 #6, these two rows
+  close after five clean tries on the Deck, each worded differently, since the unit tests cover the fix.
   [Detail](roadmap-details.md#thinking-line-fixes-from-2026-08-0708).
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
@@ -568,7 +577,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it
   spent memory on a model no question would touch. It now uses Ask's own resolver, and warms nothing when Ask's model is over the
   three-billion cap — which is what happens on this Deck, confirmed. **Still owed:** the timing comparison (**PRELOAD-01**), which
-  needs a Deck whose Ask model is under the cap, and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
+  needs a Deck whose Ask model is under the cap — per D116 #5, the check may switch Ask to a small model
+  for the timing, then switch it back — and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
   model survives the Deck sleeping.
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
@@ -678,10 +688,6 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
   and trim-only for wiki notes stands unless the maintainer overturns it.
 - **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
   wave-four plan. Locks as D112, after phase 1.
-- **KB-ATTRIB-01's negative case now contradicts itself.** That row requires NO credit block for a reply
-  built only on hand-written notes; the credit-line fix landed 2026-09-21 means such a reply now names the
-  note under "No source page" — the fix working, not a regression, but the row's own wording says the
-  opposite. Needs the maintainer to reword or retire it.
 
 A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
@@ -747,7 +753,10 @@ ones from this month are D81 to D88.
   retire.** Covers the corpus format gate, the relevance floor, follow-ups, transparency, and the
   Developer kill-switch. **Update 2026-09-22:** four of the five now have real answers — the transparency
   check joined them that night, once the log finally named the attached notes (see the row below). Only
-  the corpus-format check still cannot run, since that means replacing the library it tests.
+  the corpus-format check still cannot run, since that means replacing the library it tests. **Per D116
+  #7, the corpus-format check is retired, covered by its own unit tests.** The other four are not all
+  clean passes yet — the relevance floor and the follow-up check are each only half passed, so this entry
+  stays open rather than moving to Done.
   [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
 - ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
   **VERIFY, fixed 2026-09-21 (plan 63, lane G, commit `81a86a4`).** Such notes were dropped before the
@@ -776,9 +785,9 @@ ones from this month are D81 to D88.
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that
-  game's own notes, the right wiki named every time. Owed: the maintainer's publish call, then, once
-  published, a choice on the SD-card location, since this local install put the library on internal
-  storage. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
+  game's own notes, the right wiki named every time. Per D116 #4 and #10, the maintainer said yes to
+  publishing and the library goes on the SD card; both are scheduled in plan 64. Evidence
+  `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
   and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
   — the only stop still missing is the chip ladder inside the open block, its own bug above. Why the tip and

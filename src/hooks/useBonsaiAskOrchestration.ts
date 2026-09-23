@@ -357,10 +357,13 @@ export function useBonsaiAskOrchestration(
     spoilerConsentEffective?: boolean;
     /**
      * The chat this turn belongs to, captured at write time. `onAskOllama`'s flush-on-next-ask
-     * below must only replay a turn into the chat it came from — a plain chat switch (selectSlot)
+     * below must only replay a turn into the chat it came from — a plain chat switch, selectSlot,
      * deliberately leaves this ref alone, so without this tag a turn archived in chat A was still
      * sitting here when the first question in a brand-new chat B ran, and got appended above B's
-     * own question ("the previous chat's last question shows in a brand-new chat").
+     * own question: "the previous chat's last question shows in a brand-new chat".
+     *
+     * No round brackets anywhere in this comment: it sits inside useRef's type argument, and
+     * tests/test_ask_hook_order.py finds each hook by a pattern that stops at the first one.
      */
     slotId?: string | null;
   } | null>(null);

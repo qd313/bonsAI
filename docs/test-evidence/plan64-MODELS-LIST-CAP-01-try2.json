@@ -1,0 +1,25 @@
+{
+  "row": "plan64 flow F step 1 extra (asked by the session owner mid-run) - MODELS-LIST-CAP-01 measurement: the AI models dialog with the long list showing, to size the list's height cap",
+  "build_commit": "11029d5 (deployed)",
+  "deck_time": "2026-09-23T17:35:00-04:00 to 17:36:43-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "big_picture_window_css": [854, 534], "device_pixel_ratio": 1.5, "screenshot_pixels": [1280, 800]},
+  "setup": "AI models screen opened from 'Manage AI models'; in the Filters panel A on 'Essentials only' turned it off ('Filters, 1 on: Also try open-weight models'); A on 'Close filters'. 25 model rows in the list. Ring on the Filters button. DOWN then UP once so the model list scrolled back to the top (list scrollTop 0, outer overlay scrollTop 0) - the first reading had the list scrolled 133 px from the Filters panel, box positions were the same in both.",
+  "measured_css_px": {
+    "note": "top / bottom / height, in the Steam Big Picture page (the page that draws the dialog)",
+    "window_height": 534,
+    "visible_area_clip": {"element": "the modal overlay box (overflow auto) that holds the dialog", "top": 40, "bottom": 492, "height": 452, "scrollHeight": 589, "scrollTop": 0, "note": "anything below y 492 is hidden behind Steam's bottom bar; the overlay could scroll 137 px but the D-pad never scrolled it during this reading"},
+    "dialog_outer": {"top": 64, "bottom": 604.5, "height": 540.5, "x": 97, "w": 660},
+    "dialog_inner_content": {"top": 90, "bottom": 578.5, "height": 488.5},
+    "title_AI_models": {"top": 90, "bottom": 118, "height": 28},
+    "dialog_body": {"top": 128, "bottom": 578.5, "height": 450.5},
+    "popup_body_capped_box": {"top": 128, "bottom": 512.5, "height": 384.5, "max_height_computed": "384.48px", "max_height_inline": "min(72vh, 520px)", "scrollHeight": 384, "clientHeight": 384, "scrolls_itself": false},
+    "model_list_box": {"class": "bonsai-pullmodels-list", "top": 216.7, "bottom": 512.5, "height": 295.8, "scrollHeight": 1022, "clientHeight": 296, "scrolls_itself": true},
+    "footer_row": {"top": 522.5, "bottom": 578.5, "height": 56},
+    "Done": {"top": 538.5, "bottom": 578.5, "height": 40, "x": 123, "w": 290},
+    "Cancel": {"top": 538.5, "bottom": 578.5, "height": 40, "x": 441, "w": 290}
+  },
+  "what_it_means": "With the long list the popup body grows to its full cap of 384.5 px (72% of 534). Together with the title and the 56 px footer the dialog is 540.5 px tall, so it overflows the 452 px visible area: the footer starts 30.5 px below the visible edge (522.5 vs 492) and Done's top is 46.5 px below it (538.5 vs 492). Done and Cancel cannot be seen. The popup body itself does not scroll; only the model list inside it scrolls.",
+  "restored": "Essentials only turned back on; Filters button reads 'Filters, 2 on: Also try open-weight models, Essentials only'; list back to 4 rows.",
+  "screenshots": ["plan64-MODELS-LIST-CAP-01-try2.png (list at top)", "plan64-MODELS-LIST-CAP-01-try2-list-scrolled.png (first reading, list scrolled 133 px)"],
+  "verdict": "MEASUREMENT ONLY (no pass/fail asked). Done is hidden: 46.5 px below the visible edge."
+}

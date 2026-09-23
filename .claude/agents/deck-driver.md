@@ -50,6 +50,9 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
    Edit the file, then reload the plugin at once. If you wait, the plugin writes its own copy back over
    your edit. When done, put back only the keys you changed, to the values you noted, then reload.
    Settings live at `~/homebrew/settings/bonsAI/settings.json`. Never delete that folder or anything in it.
+   Since 2026-09-23, Claude Code's own automatic permission check may refuse an SSH edit of that file; if it
+   does, do not look for another way to write it — use the plugin's own screen for that setting if it has
+   one, otherwise stop and report.
 8. **Opening the plugin fails once after every deploy or reload.** Check whether it is already open before
    opening it. A first failure is expected; a second one is worth reporting.
 9. **The AI models screen:** walk it one press at a time and read focus after each. "Remove from Deck" is one

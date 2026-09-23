@@ -192,6 +192,12 @@ method before pressing the button.
 by bringing the mirror window to the front. The helper that talks to it raises an error even when
 the answer is "fine". The Python side runs on the PC, with a stand-in for the answer service.
 
+**Claude Code's own automatic permission check can refuse an SSH edit of the plugin's settings
+file, even where earlier sessions edited it freely.** Hit 2026-09-23: a Deck driver's SSH write to
+the settings file was refused as "Modify Shared Resources," which stopped a device check partway
+through. Change a setting through the plugin's own screens where one exists for it; where none
+exists, stop and ask the maintainer rather than finding another way to write the file.
+
 ---
 
 ## 4. Briefing helpers
@@ -280,6 +286,13 @@ it is re-added.
 **Normalise line endings before an exact-match edit.** Files here can carry Windows line endings,
 and an exact-match edit or a "did my change survive" check will fail for that reason alone and
 nothing else. Two helpers once failed their checks over this with nothing wrong in their work.
+
+**Clear a Python module's compiled cache after proving a test guard by flipping a value back.**
+Changing a value, running the check, then changing it back within the same second and the same
+file size can leave the broken version's compiled copy in use, since nothing tells Python the
+source changed. The next test run then fails for no reason that shows in the diff. Hit
+2026-09-23. After flipping a value back to prove a guard, delete that module's `__pycache__`
+before trusting the next run.
 
 **Working folder carries over between shell calls.** Changing folder in one call leaves the next
 call somewhere unexpected. Start every command from the repo path spelled out in full.

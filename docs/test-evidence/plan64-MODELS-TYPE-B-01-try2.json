@@ -1,0 +1,26 @@
+{
+  "row": "plan64 flow F step 1 - MODELS-TYPE-B-01 with typed text (B on the 'Type a name' box closes and clears just that box, not the AI models screen)",
+  "build_commit": "11029d5 (deployed)",
+  "deck_time": "2026-09-23T17:36:50-04:00 to 17:38:00-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "big_picture_window_css": [854, 534]},
+  "setup": "AI models screen open, Filters panel closed, filters 2 on (Also try open-weight models, Essentials only), nothing ticked",
+  "pressed": [
+    "RIGHT from the Filters button to 'Type a model name by hand' (the chip), A on the chip",
+    "PC side: ssh deck@192.168.86.52 'python3 - --text \"zzz-plan64-test-tag\"' < deck_set_input.py (scratch folder copy)",
+    "LEFT (close button -> Pull), LEFT (Pull -> text field). No A on the field.",
+    "B",
+    "A on the 'Type a name' chip to reopen, read the field",
+    "A on the close button (x) to close the box again, then B to leave the screen"
+  ],
+  "seen": {
+    "chip_A": "row swapped to a text field (empty), 'Pull custom model tag' and 'Close typing a model name by hand'; ring on the close button",
+    "script_output": "native setter : True / wrote : 'zzz-plan64-test-tag' / field now : 'zzz-plan64-test-tag' / VERIFIED - the field holds exactly what was sent. (exit 0)",
+    "field_read_after_script": "'zzz-plan64-test-tag'; the Pull button became enabled (not pressed)",
+    "ring_before_B": "on the text field (INPUT), 100% visible",
+    "after_B": "typing row gone, the 'Type a name' chip back and holding the ring, AI models screen still open",
+    "reopened_field": "'' (empty)",
+    "leave": "close button closed the box; B closed the screen with the ring on 'Manage AI models'"
+  },
+  "typing_script_verified": true,
+  "verdict": "PASS - B closed only the small box and cleared the typed name (reopened field empty); the AI models screen stayed open. The typing script now works on this box (VERIFIED)."
+}

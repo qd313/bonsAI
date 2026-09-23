@@ -1,0 +1,28 @@
+{
+  "row": "plan64 flow A row 11 - UI size setting: two stops, never Desktop (part one), and an old saved 'desktop' value loading as Handheld (part two)",
+  "build_commit": "11029d5 (deployed)",
+  "deck_time": "2026-09-23T17:41:00-04:00 to 17:43:23-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454], "device_pixel_ratio": 1.5},
+  "part_one": {
+    "pressed": ["Settings tab, A on 'Adjust UI automatically' (on -> off)", "read the slider from the page", "A on the toggle again (off -> on)"],
+    "seen": {
+      "notch_marks": ["0%", "100%"],
+      "stop_labels_under_the_slider": ["Handheld", "Couch"],
+      "word_desktop_in_slider_markup": false,
+      "word_desktop_in_slider_text": false,
+      "word_desktop_in_whole_UI_scale_section": false,
+      "section_text": "UI scale / Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active: Handheld (1.00x) ... Profile: Couch / Handheld / Couch / TV distance - larger type, spacing, and focus targets. / Reset to automatic / Apply UI scale",
+      "note": "the slider has no aria value range; its stops are the two notch marks and the two labels. In row 10 one RIGHT moved Handheld -> Couch."
+    },
+    "verdict": "PASS - exactly two stops (Handheld, Couch); 'Desktop' appears nowhere in the slider or the section."
+  },
+  "part_two": {
+    "step1_read": {"ui_scale_auto_enabled": true, "ui_scale_manual_profile": "couch (left by row 10's Apply; the session started at 'handheld')"},
+    "step2_main_tab_before": {"ask_button_rect": [48.67, 394.83, 298.67, 36], "chat_row_rect": [48, 88, 300, 48.33], "question_box_rect": [72.67, 323.5, 274.67, 44], "scale": "1"},
+    "step3_attempt": "ssh deck@192.168.86.52 'python3 - ui_scale_auto_enabled=false ui_scale_manual_profile=\"desktop\"' < set_keys.py (a small scratch script that sets the named keys)",
+    "what_stopped_it": "Refused before it ran by Claude Code's automatic permission check: 'Permission for this action was denied by the Claude Code auto mode classifier. Reason: [Modify Shared Resources]'. Read back afterwards: the file was unchanged (auto true, profile couch).",
+    "verdict": "COULD NOT RUN - the settings file edit this part needs was refused by the permission check."
+  },
+  "restore": "ui_scale_manual_profile put back from 'couch' to 'handheld' through the plugin's own controls (automatic off, slider LEFT to Handheld, Apply, automatic on, Apply). Read back from the file: ui_scale_auto_enabled true, ui_scale_manual_profile 'handheld'. Active line: 'Handheld (1.00x)'.",
+  "verdict": "Part one PASS. Part two COULD NOT RUN (settings file edit refused by the permission check)."
+}

@@ -15,16 +15,49 @@ All notable changes to this project are documented in this file.
   happened when the screen was opened from the Ollama tab's "Manage AI models…" button — closing it
   landed the D-pad ring outside the plugin entirely, on Steam's own Quick Access rail, so the next press
   did not reach the plugin's tabs. The screen's other opener already remembered where to send the ring
-  back; this button now does too. `modalReturnFocusRegistry.ts`, `OllamaTab.tsx`. On-Deck row owed:
-  **MODELS-HUB-RETURN-01** in `docs/roadmap.md`.
+  back; this button now does too. `modalReturnFocusRegistry.ts`, `OllamaTab.tsx`. Confirmed on the Deck
+  2026-09-23, both closing the screen with B and closing it by walking Down to Done: the ring lands back
+  on "Manage AI models…" every time. On-Deck row **MODELS-HUB-RETURN-01** in `docs/roadmap.md` — passed.
 - **The AI models list can now use the room its own popup already gives it, instead of stopping
   early:** the list capped itself at a fixed share of the screen no matter how much room was free
   above it, which is why the same plugin showed about five rows on an external monitor and about
   three on the Deck's own screen — not a difference in the list, a difference in screen. It now
-  fills the space its popup already has. Expected: about two more rows on an external monitor,
-  about three more on the Deck's own screen. `gamepadAndPullModels.ts`. On-Deck row owed:
-  **MODELS-LIST-CAP-01** in `docs/roadmap.md`, not yet checked — deploying to the Deck is currently
-  blocked (the plugin folder there is owned by root).
+  fills the space its popup already has. `gamepadAndPullModels.ts`. Measured on the Deck 2026-09-23:
+  with the long list showing, about seven rows now fit, but Done and Cancel were pushed below the
+  visible edge — fixed the same night, see "Done and Cancel stay on screen" below. On-Deck row
+  **MODELS-LIST-CAP-01** in `docs/roadmap.md` — re-check running on the corrected cap.
+- **A shared troubleshooting tip's source page can now reach the credit line under a reply:** the list of
+  notes a reply was built on names each shared tip under "Shared troubleshooting — <tip>", but the code
+  reading that list back looked every tip up under an empty name instead, so the two never matched and a
+  tip's own source page and licence could never show. Both sides now use the same name. Nothing changes on
+  screen today, since none of the 159 shared tips has a source page yet — this closes the bug before one
+  does. `game_ai_request.py`, `knowledge_base_service.py`.
+- **Walking an answer with the D-pad while it is still being written no longer loses the highlight:** while
+  an answer streams in, the view follows the newest text; a D-pad step near the end used to not count as
+  moving away, so the view kept following and carried the highlighted control off the screen with it — on
+  the Deck, six of eight stops on one walk ended up highlighted but out of sight. The view now holds still
+  while the highlight is anywhere inside the reply, and starts following again once it moves to the question
+  box, Ask or Stop. `useStreamScrollPin.ts`. On-Deck row owed: the streaming half of the free-play walk, plan
+  64 flow B.
+- **AI models screen: Down from the last model now reaches Done:** Down from the last row in the list used
+  to go nowhere, even with Done fully visible on screen below it — the last row was looking for a footer
+  button that only exists once something is queued, so the press found nothing and was lost. The last row
+  now hands Down back to Steam, the way every other Decky dialog already works. `PullModelsModal.tsx`.
+  Confirmed on the Deck 2026-09-23: Down from the last row reaches Done, or "Pull selected" once a model is
+  ticked.
+- **Both ways of starting Ollama now keep the same two models loaded:** bonsAI can start the Deck's own
+  Ollama through the start-with-the-Deck service, or directly from the plugin; the service kept two models
+  loaded side by side, but starting it directly only kept one, so a question could quietly swap a model out
+  and back in depending only on how Ollama happened to start — measured at about 700 ms against 24 ms for the
+  same question. Both paths now use the same number. `local_ollama_setup_service.py`,
+  `ollama_local_autostart_service.py`.
+- **AI models screen: Done and Cancel stay on screen with the long model list:** with every model showing
+  (Essentials only off, 25 rows), the screen grew taller than Steam's own space for it, and Done and Cancel
+  sat 46 pixels below the visible edge. Measured on the Deck 2026-09-23: the dialog's title, padding and
+  button row need 156 pixels together, so the scrolling list can be at most 272 pixels tall on the Deck's own
+  screen, not the 384 it was allowed. Done and Cancel are now always visible; the list shows about four
+  models at once on the Deck's own screen instead of about seven with the buttons cut off.
+  `OllamaModelsHubModal.tsx`. On-Deck row **MODELS-LIST-CAP-01** in `docs/roadmap.md` — re-check running.
 - **A chat's own name now sits centred on its row, and the game it belongs to shows only while the
   D-pad ring is on that row:** the chat's name used to sit off-centre because the small × that
   deletes the chat was being centred along with it; the × now sits fixed at the right-hand edge

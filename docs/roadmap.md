@@ -90,7 +90,10 @@ starts work outside this.
   measured 2026-09-16.** The Open Permissions button under a blocked reply is a real D-pad stop and does open
   the Permissions tab, but the highlight lands on the wrong row. The Back to Main return itself works
   correctly. **Confirmed on the Deck 2026-09-17, worse than first measured:** the jump now lands at the very
-  top of the tab, on the Back to Main button, nowhere near the toggle it should reach.
+  top of the tab, on the Back to Main button, nowhere near the toggle it should reach. **A timed measurement
+  was set up 2026-09-23** to record every focus and highlight change as it happens, which would show exactly
+  where the jump goes wrong; it could not run, because it needs to switch a permission off first and Claude
+  Code's own automatic permission check refused that edit. Still owed.
   [Detail](roadmap-details.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
 - ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
   **OPEN, found 2026-09-16.** While a reply is being written, Down from the question box or from the live
@@ -138,6 +141,10 @@ starts work outside this.
   only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
   though, it still does not join the saved order used to pick which model answers a question. The fix for
   that half lives in the back end and has not been built.
+- ★ `[focus]` **After pressing "Apply UI scale" on the Settings tab, nothing holds the D-pad ring** — **OPEN,
+  found on the Deck 2026-09-23.** The button takes the press, but nothing after it takes the ring: the next
+  press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
+  not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -431,12 +438,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   maintainer**, from `docs/test-evidence/plan64-BYEYE-01-preset-chip.png`. This line is the chip's only
   highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
   stay clearly visible, not just calmer.
-- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI models
-  screen** — **VERIFY, half passed on the Deck 2026-09-23.** On an empty box, B closed only the small typing
-  box; the models screen stayed open and the ring returned to the chip. **Still owed:** whether B also clears
-  already-typed text — the first try looked at the wrong window, since the typing box is drawn in Steam's own
-  main window, not the plugin's page; a corrected check is running now. Row **MODELS-TYPE-B-01**. Evidence
-  `docs/test-evidence/plan64-MODELS-TYPE-B-01.json`.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones. Row **PULL-MISSING-NAME-01**. **Tried on the Deck 2026-09-19: blocked** — a made-up
@@ -445,36 +446,29 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
   **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game, and
   confirm the menu either does not appear or names a real place — never the literal words THIS GAME.
-- ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
-  found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
-  box, so the end of a line sat 23 pixels outside the panel. Only at the biggest size; nothing overflowed at the
-  default. Its width had been written a frame too early and nothing re-measured, because the size change does not
-  change the column's width. Row **UI-SIZE-01**, not seen on the Deck — recorded as blocked by deploying,
-  **which was wrong: six deploys went through on 2026-09-21, so this is simply owed.** Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
 - ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **VERIFY,
   fixed in `163ff16`.** Row **CHAT-GHOST-REPLY-01**. Owed: switch to a brand-new chat right after a reply
   finishes elsewhere, four times over to match the four sightings, and see it blank from the first frame with
   no reopen needed. [Detail](roadmap-details.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
 
-- ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
-  rail, outside the plugin** — **VERIFY, B half passed on the Deck 2026-09-23.** On the screen (which opens
-  with the Filters panel showing), the first B closes only that panel; the second closes the whole screen
-  with the ring landing back on "Manage AI models…", fully visible, and the next shoulder press still
-  switches tabs. **The Done half could not run** — see the new Down-from-last-model bug below, which
-  blocked reaching Done during this pass — so this row stays in Verify. Row **MODELS-HUB-RETURN-01**.
-  Evidence `docs/test-evidence/plan64-MODELS-HUB-RETURN-01.json`.
-- ★★ `[ollama]` `[focus]` **On the AI models screen, Down from the last model went nowhere** — **VERIFY,
-  found and fixed on the Deck 2026-09-23.** Done and Pull selected could not be reached by D-pad, even
-  though Done was fully on screen below. Cause: the last row looked for a footer button labelled "Pull
-  selected", which reads "Done" on this screen until something is queued, so the press found nothing and
-  was swallowed. Fixed in commit `11029d5`; a Deck re-check is running now.
 - ★★ `[ollama]` `[layout]` **The AI models screen showed about two rows of the model list on the Deck's
   screen** — **VERIFY, unclear on the Deck 2026-09-23.** Under the default filters, all 4 rows show in a
   271-pixel box with nothing to scroll, so the taller cap was never actually reached. The screen's real cap
   measures 384 pixels, not the 520 assumed earlier. With the long list showing (25 rows), about 7 rows are
-  now visible at once, against about 2 before this fix — better, but see the new "Done falls below the
-  visible edge" bug in [Bugs](#bugs), found on this same long list. Row **MODELS-LIST-CAP-01**. Evidence
+  now visible at once, against about 2 before this fix — better, but see the entry right below, found on this
+  same long list. **The cap was re-set the same night from a full measurement of the dialog; the re-check on
+  that new cap is running now.** Row **MODELS-LIST-CAP-01**. Evidence
   `docs/test-evidence/plan64-MODELS-LIST-CAP-01.json` (+ `.png`).
+- ★★ `[ollama]` `[layout]` **With the long model list showing, Done falls below the visible edge of the AI
+  models screen** — **VERIFY, fixed in `d7f611a`.** The measurement behind the fix: the visible area runs
+  from about 40 to 492 pixels down the screen; the dialog's title, padding, gaps and its 56-pixel footer use
+  156 of that, and the dialog sits 24 pixels below the top bar, so the scrolling list can be at most 272
+  pixels tall — the old cap gave it 384 pixels and pushed Done about 46 pixels past the bottom edge. The
+  list's cap is now the screen's own height minus 270 pixels (264 pixels on the Deck's screen), so about four
+  models now show at once on the Deck's own screen instead of about seven, but Done and Cancel stay on
+  screen. The same cause also put the dialog's own title above the top of the screen when the Filters panel
+  was open. Deck re-check running. Evidence `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try2.json` (+ two
+  screenshots).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -490,11 +484,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
-- ★★★ `[ui]` **The UI size setting barely changes anything** — **VERIFY, fixed 2026-09-21 (plan 63, commit
-  `03bfc02`).** The Desktop stop is gone since it always drew the same as Handheld; an old saved Desktop
-  setting now loads as Handheld with no visible change. Automatic itself stays, on purpose. Owed: confirm
-  the slider snaps between exactly two stops and never shows Desktop.
-  [Detail](roadmap-details.md#the-ui-size-setting-barely-changes-anything).
 ### Features that need verification
 
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
@@ -543,7 +532,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete. **VAC-02**
   passed on the Deck 2026-09-16 and the **SMOKE-F** check passed 2026-09-17. Left: **VAC-03 to 06**, which need
-  the maintainer's own Steam Web API key typed into the plugin, so they stay on the maintainer's own list.
+  the maintainer's own Steam Web API key typed into the plugin, so they stay on the maintainer's own list. **The
+  maintainer said yes on 2026-09-23** to running these with the Steam key already stored on the PC; the run was
+  stopped before the key was typed in, because Claude Code's own automatic permission check refused the edit
+  needed to set it up. The key was never put on the Deck. Still waiting on the maintainer.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag
   survives, no bare-emoji phase changes, one writer. **Five of seven rows pass on the Deck**, the last three
   confirmed 2026-09-17. Left: **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, automated only,
@@ -922,8 +914,33 @@ line for line, nothing reworded, to keep this document under its size limit.
 - ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five changes
   that give the list more room** — **DONE for the filters themselves, confirmed on the Deck 2026-09-23:**
   Installed only, Essentials only and Recently added all changed the model list as expected. The "more room"
-  half of this entry is tracked separately, under **MODELS-LIST-CAP-01** and the new "Done falls below the
-  visible edge" bug, both still open. [Full detail](archive/roadmap-completed.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
+  half of this entry is tracked separately, under **MODELS-LIST-CAP-01** and the "Done falls below the
+  visible edge" bug, both still unresolved (now both in Verify). [Full detail](archive/roadmap-completed.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
+
+**Closed 2026-09-23 (plan 64, flow A part 2, proven on the Deck):**
+
+- ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
+  rail, outside the plugin** — **DONE, confirmed on the Deck 2026-09-23:** Down now walks Filters, the four
+  model rows and then Done, fully visible; pressing A on Done closes the screen with the ring back on
+  "Manage AI models…". [Full detail](archive/roadmap-bugs-fixed.md#closing-the-ai-models-screen-could-leave-the-d-pad-ring-on-steams-own-side-rail-outside-the-plugin).
+- ★★ `[ollama]` `[focus]` **On the AI models screen, Down from the last model went nowhere** — **DONE,
+  confirmed on the Deck 2026-09-23:** Down from the last model row now reaches Done, or "Pull selected" when
+  a model is ticked. [Full detail](archive/roadmap-bugs-fixed.md#on-the-ai-models-screen-down-from-the-last-model-went-nowhere).
+- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI
+  models screen** — **DONE, confirmed on the Deck 2026-09-23:** typing a name by hand and pressing B closes
+  only the small typing box, leaves the AI models screen open, and the box is empty when reopened. Whether
+  Steam's own on-screen keyboard would swallow the B press first is still unknown — it never opened during
+  this check. [Full detail](archive/roadmap-bugs-fixed.md#b-while-typing-a-model-name-by-hand-looks-likely-to-back-out-of-the-whole-ai-models-screen).
+- ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **DONE,
+  confirmed on the Deck 2026-09-23:** at the bigger size, with a long sentence typed, the typed text now
+  stays inside the box and wraps rather than running past its right edge, at both the bigger size and the
+  default. [Full detail](archive/roadmap-bugs-fixed.md#typed-text-ran-off-the-right-edge-of-the-panel-at-the-bigger-ui-size).
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **DONE for what this row owed, confirmed on
+  the Deck 2026-09-23:** the size slider has exactly two stops, Handheld and Couch, and the word "Desktop" is
+  gone from both the slider and the UI scale section. One more check — an old saved "desktop" value opening
+  as Handheld — could not run on the Deck tonight, because Claude Code's own automatic permission check
+  refused the edit needed to set that up; it is covered instead by a written test that pins the same result.
+  [Full detail](archive/roadmap-bugs-fixed.md#the-ui-size-setting-barely-changes-anything).
 
 **Closed 2026-09-22 (plan 63, verification pass):**
 

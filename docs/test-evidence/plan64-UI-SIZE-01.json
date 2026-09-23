@@ -1,0 +1,37 @@
+{
+  "row": "plan64 flow A row 10 - UI-SIZE-01 (at the Couch size the typed-text copy over the question box must not be wider than the box or stick out past the 300 px panel column)",
+  "build_commit": "11029d5 (deployed)",
+  "deck_time": "2026-09-23T17:38:00-04:00 to 17:42:30-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454], "device_pixel_ratio": 1.5, "note": "plan62's reading was on the external monitor (1500x843), so its box was 274.46 px; here the box is 274.67 px"},
+  "settings_before": {"ui_scale_auto_enabled": true, "ui_scale_manual_profile": "handheld"},
+  "pressed": [
+    "Settings tab: A on 'Adjust UI automatically' (on -> off); the slider appeared with labels 'Handheld' and 'Couch' only (two notch marks at 0% and 100%)",
+    "DOWN to the slider, RIGHT x1 -> 'Profile: Couch'; DOWN x2 to 'Apply UI scale', A -> 'Active: Couch (1.18x)'",
+    "LB x3 to Main (the first LB after Apply did nothing visible - the ring was unowned)",
+    "PC: deck_send_ask.py --clear (VERIFIED), then --text with the long sentence (VERIFIED, full 120 characters read back). Ask not pressed.",
+    "read the box and the typed-text copies; screenshot",
+    "PC: --clear (VERIFIED)",
+    "back to Settings, A on 'Adjust UI automatically' (off -> on), 'Apply UI scale', A; back to Main and read the widths again"
+  ],
+  "seen": {
+    "at_couch_1_18": {
+      "question_box": {"left": 72.67, "right": 347.33, "width": 274.67, "height": 78.25},
+      "typed_text_measure_copy": {"width": 274.67, "style_width": "274.667px", "right": 347.33},
+      "typed_text_overlay": {"width": 274.67, "right": 347.33, "text_lines": 3, "rightmost_text_pixel": 337.4},
+      "native_field": {"width": 274.67},
+      "panel_column": {"left": 48, "right": 348, "width": 300},
+      "overhang_past_box_px": 0,
+      "overhang_past_column_px": 0
+    },
+    "after_restore_handheld_1_00": {
+      "active_line": "Active: Handheld (1.00x)",
+      "question_box_width": 274.67,
+      "typed_text_measure_width": 274.67,
+      "field_width": 274.67
+    },
+    "detour": "While heading back to Settings, RB x2 was pressed with the ring on the chat row: that row uses the shoulder buttons to switch chats, so it moved from 'wheatley fight' to 'Hades'. LB x2 brought it back to 'wheatley fight'. No chat was created or deleted."
+  },
+  "screenshot": "plan64-UI-SIZE-01-couch.png",
+  "settings_after": {"ui_scale_auto_enabled": true, "ui_scale_manual_profile": "couch (was handheld - put back in row 11's restore; see plan64-UISIZE-TWO-STOPS-01.json)"},
+  "verdict": "PASS - at Couch the typed-text copy is exactly as wide as the box (274.67 = 274.67) and ends at x 347.33, inside the column's right edge at 348. The 23 px overhang from 2026-09-20 is gone."
+}

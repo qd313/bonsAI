@@ -1,0 +1,26 @@
+{
+  "row": "plan64 flow F step 0 - replay of the saved Show details chip ladder check (plan64-DETAILS-LADDER-01) after deploying 11029d5",
+  "build_commit": "11029d5 (checkout HEAD, deployed; dist/index.js sha256 1b0f1c5f... and main.py sha256 f930c764... match on PC and Deck)",
+  "deck_time": "2026-09-23T17:29:30-04:00 to 17:32:00-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454], "device_pixel_ratio": 1.5},
+  "setup": {
+    "deploy": "deck_deploy ok, loader ready after 293 ms; plugin log shows only 'bonsAI plugin loaded!' at 17:28:52",
+    "open_plugin": "first deck_openPlugin failed (QAM chord gave no pane, the expected post-deploy failure); second opened bonsAI",
+    "chat": "wheatley fight, newest turn 'in hollow knight how do i beat the broken vessel' (finished); no game running",
+    "to_ladder": "walkTo DOWN 'Show details' (9 presses), A, DOWN x4 (Hide details -> notes block -> 'This answer / Session 18' tabs -> ladder; 4th press did not move), ladder read 'Chip 2 of 7', LEFT x1 -> 'Chip 1 of 7' active 'Keyword + meaning'"
+  },
+  "pressed": [
+    "deck_replayChecks only plan64-DETAILS-LADDER-01",
+    "because the replay refused to run, the same twelve saved steps run by hand with deck_runSequence: RIGHT x6 then LEFT x6, reading the ladder counter after each half",
+    "deck_saveCheck as plan64-DETAILS-LADDER-01-try2 (runs the twelve steps again)"
+  ],
+  "seen": {
+    "replay": "did not press anything. Result: saved against build sha256:ac6635bf..., current build sha256:00434be7..., so 'this check has never been verified against what is running now'. 0 of 1 passed, no stop compared. (The build fingerprint includes Python cache files, so it changes on every deploy; a known rig limit.)",
+    "manual_right_x6": "6 of 6 steps kept the ring on the ladder (.bonsai-chip-ladder); counter after: 'Chip 7 of 7', active 'Developer details'",
+    "manual_left_x6": "6 of 6 steps kept the ring on the ladder; counter after: 'Chip 1 of 7', active 'Keyword + meaning'",
+    "save_run": "12 of 12 steps on the ladder, no cycle, nothing unreached",
+    "visibility_note": "the ladder box is 290 x 337 px, taller than the visible pane, so the rig called 5 of 12 stops 'partly visible' (67%, and 33% at chip 7 where the preset chips cover the box's lower part). This is the whole box, not the active chip."
+  },
+  "saved_check": "checks/plan64-DETAILS-LADDER-01-try2.json (new file; the old check file was not overwritten)",
+  "verdict": "Replay: COULD NOT RUN (build fingerprint mismatch, nothing pressed). Same steps run by hand: PASS, every Right and Left press stayed on the ladder and the counter went 1 -> 7 -> 1."
+}

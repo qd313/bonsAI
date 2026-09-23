@@ -247,6 +247,80 @@ at the end of each._
   pressing Done with nothing moved, and the file's saved date did not change. Evidence
   `docs/test-evidence/plan64-ROUTING-NOOP-SAVE-01.json`.
 
+### Closing the AI models screen could leave the D-pad ring on Steam's own side rail, outside the plugin (closed 2026-09-23)
+
+- ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
+  rail, outside the plugin** — **VERIFY, B half passed on the Deck 2026-09-23.** On the screen (which opens
+  with the Filters panel showing), the first B closes only that panel; the second closes the whole screen
+  with the ring landing back on "Manage AI models…", fully visible, and the next shoulder press still
+  switches tabs. **The Done half could not run** — a separate D-pad bug (Down from the last model went
+  nowhere) blocked reaching Done during this pass — so this row stayed in Verify. Row
+  **MODELS-HUB-RETURN-01**. Evidence `docs/test-evidence/plan64-MODELS-HUB-RETURN-01.json`.
+
+  **Closed 2026-09-23, both halves confirmed on the Deck.** With the Down-from-last-model bug fixed the same
+  evening, the Done half could now run: Down walks Filters, the four model rows and then Done (fully
+  visible); pressing A on Done closes the screen with the ring back on "Manage AI models…". Evidence
+  `docs/test-evidence/plan64-MODELS-HUB-RETURN-01-try2.json`, saved check
+  `checks/plan64-MODELS-HUB-RETURN-01-down-to-done.json`.
+
+### On the AI models screen, Down from the last model went nowhere (closed 2026-09-23)
+
+- ★★ `[ollama]` `[focus]` **On the AI models screen, Down from the last model went nowhere** — **VERIFY,
+  found and fixed on the Deck 2026-09-23.** Done and Pull selected could not be reached by D-pad, even
+  though Done was fully on screen below. Cause: the last row looked for a footer button labelled "Pull
+  selected", which reads "Done" on this screen until something is queued, so the press found nothing and
+  was swallowed. Fixed in commit `11029d5`; a Deck re-check was running.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Down from the last row now lands on Done; with a model
+  ticked it lands on "Pull selected (1) · 3.2 GB" instead. Evidence
+  `docs/test-evidence/plan64-MODELS-HUB-RETURN-01-try2.json`.
+
+### B while typing a model name by hand looks likely to back out of the whole AI models screen (closed 2026-09-23)
+
+- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI
+  models screen** — **VERIFY, half passed on the Deck 2026-09-23.** On an empty box, B closed only the small
+  typing box; the models screen stayed open and the ring returned to the chip. **Still owed:** whether B
+  also clears already-typed text — the first try looked at the wrong window, since the typing box is drawn
+  in Steam's own main window, not the plugin's page; a corrected check was running. Row **MODELS-TYPE-B-01**.
+  Evidence `docs/test-evidence/plan64-MODELS-TYPE-B-01.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Typing a name by hand with the corrected script ("VERIFIED",
+  the tag "zzz-plan64-test-tag"), walking the ring onto the box without pressing A, then pressing B: the
+  small box closed, the AI models screen stayed open, and the box was empty when reopened. **The on-screen
+  keyboard was never opened during this check**, so whether Steam's own keyboard would swallow the B press
+  first is still unknown. Evidence `docs/test-evidence/plan64-MODELS-TYPE-B-01-try2.json`.
+
+### Typed text ran off the right edge of the panel at the bigger UI size (closed 2026-09-23)
+
+- ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
+  found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than
+  its own box, so the end of a line sat 23 pixels outside the panel. Only at the biggest size; nothing
+  overflowed at the default. Its width had been written a frame too early and nothing re-measured, because
+  the size change does not change the column's width. Row **UI-SIZE-01**, not seen on the Deck — recorded as
+  blocked by deploying, **which was wrong: six deploys went through on 2026-09-21, so this was simply owed.**
+  Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck.** At Couch size (1.18×) with a long sentence typed, the box and
+  both copies of the typed text measure 274.67 pixels wide and end at 347.33 pixels across, inside the
+  panel's own edge at 348; the text wraps to 3 lines, with its last letter at 337.4 pixels. The old 23-pixel
+  overhang is gone, and the same widths hold at Handheld. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`,
+  screenshot `plan64-UI-SIZE-01-couch.png`.
+
+### The UI size setting barely changes anything (closed 2026-09-23)
+
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **VERIFY, fixed 2026-09-21 (plan 63, commit
+  `03bfc02`).** The Desktop stop is gone since it always drew the same as Handheld; an old saved Desktop
+  setting now loads as Handheld with no visible change. Automatic itself stays, on purpose. Owed: confirm
+  the slider snaps between exactly two stops and never shows Desktop.
+
+  **Closed 2026-09-23 for what this row owed, confirmed on the Deck.** The slider has exactly two stops,
+  Handheld and Couch, and the word "Desktop" appears nowhere in the slider or the UI scale section. Evidence
+  `docs/test-evidence/plan64-UISIZE-TWO-STOPS-01.json`. **One further check could not run on the Deck this
+  pass:** an old saved "desktop" value loading as Handheld. Setting that up needed an SSH edit to the Deck's
+  settings file, and Claude Code's own automatic permission check refused it. That case is covered instead
+  by a written test that pins the same result — `src/data/uiScaleProfile.test.ts`, the test
+  "normalizeUiScaleProfileId redirects a legacy 'desktop' save to handheld, same scale as before".
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

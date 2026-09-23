@@ -8,9 +8,32 @@
  * (isPlausibleOllamaPullTag, in mergePullModelCatalog.test.ts) plus the button's driven-by-state
  * disabled/enabled behaviour here; the on-Deck row covers actually typing a tag.
  */
-import { describe, expect, it } from "vitest";
-import { render, waitFor, fireEvent } from "@testing-library/react";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { act, render, waitFor, fireEvent } from "@testing-library/react";
 import { toaster } from "@decky/api";
+
+// Captures every TextField's props as PullModelsModal renders them, so the tests below can call
+// its onChange directly -- see the block comment at the top of this file: the stubbed TextField
+// renders as a plain <div>, and a DOM-dispatched change/input event never reaches a real onChange
+// on it, so "typing" here means invoking the captured handler the same way a real keystroke would.
+const hoisted = vi.hoisted(() => ({
+  textFieldProps: [] as Array<Record<string, unknown>>,
+}));
+
+vi.mock("@decky/ui", async () => {
+  const stubs = await import("../test-harness/fakeDeckyUi");
+  const RealTextField = stubs.TextField;
+  const CapturingTextField = React.forwardRef<HTMLDivElement, Record<string, unknown>>(
+    function CapturingTextField(props, ref) {
+      React.useLayoutEffect(() => {
+        hoisted.textFieldProps.push(props);
+      });
+      return <RealTextField {...props} ref={ref} />;
+    }
+  );
+  return { ...stubs, TextField: CapturingTextField };
+});
 
 import {
   PullModelsModal,
@@ -24,6 +47,18 @@ import {
 import { isEmbeddingOnlyTag } from "../data/pullModelCatalog";
 import { getRpcCallLog, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
+
+/** Opens the "Type a model name" chip and types `tag` into the captured TextField, the same way
+ *  the on-Deck row types into the real one -- see the note on `hoisted` above. */
+function openCustomTagFieldAndType(container: HTMLElement, tag: string) {
+  const chip = container.querySelector('[aria-label="Type a model name by hand"]') as HTMLButtonElement;
+  fireEvent.click(chip);
+  const props = hoisted.textFieldProps[hoisted.textFieldProps.length - 1];
+  const onChange = props.onChange as (e: { target: { value: string } }) => void;
+  act(() => {
+    onChange({ target: { value: tag } });
+  });
+}
 
 function renderModal(overrides: Partial<React.ComponentProps<typeof PullModelsModal>> = {}) {
   return render(
@@ -161,6 +196,80 @@ describe("PullModelsModal custom tag entry", () => {
     const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
     expect(btn).not.toBeNull();
     expect(btn.disabled).toBe(true);
+  });
+});
+
+describe("PullModelsModal typed-name box checks the registry before pulling", () => {
+  it("says it could not find a made-up name, never starts the pull, and keeps the text in the box", async () => {
+    setRpcHandler("fetch_ollama_catalog_metadata", () => ({
+      source: "live",
+      tags: { "made-up-model:latest": { exists: false } },
+    }));
+
+    const { container } = renderModal();
+    openCustomTagFieldAndType(container, "made-up-model:latest");
+
+    const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
+    await waitFor(() => expect(btn.disabled).toBe(false));
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(toaster.toast).toHaveBeenCalledWith(
+        expect.objectContaining({ title: "Could not find", body: "made-up-model:latest" })
+      );
+    });
+
+    expect(getRpcCallLog().find((c) => c.method === "pull_ollama_models")).toBeUndefined();
+    const field = container.querySelector('[data-decky-ui="TextField"]');
+    expect(field).not.toBeNull();
+    expect((field as HTMLElement).getAttribute("value")).toBe("made-up-model:latest");
+  });
+
+  it("pulls a real name the registry confirms, same as today", async () => {
+    setRpcHandler("fetch_ollama_catalog_metadata", () => ({
+      source: "live",
+      tags: { "qwen2.5:1.5b": { exists: true, size_bytes: 1_000_000_000 } },
+    }));
+
+    const { container } = renderModal();
+    openCustomTagFieldAndType(container, "qwen2.5:1.5b");
+
+    const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
+    await waitFor(() => expect(btn.disabled).toBe(false));
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
+      expect(pullCall).toBeTruthy();
+      expect(pullCall?.args[0]).toEqual(["qwen2.5:1.5b"]);
+    });
+
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Pull started", body: expect.stringContaining("qwen2.5:1.5b") })
+    );
+  });
+
+  it("still starts the pull when the registry check itself throws", async () => {
+    setRpcHandler("fetch_ollama_catalog_metadata", () => {
+      throw new Error("network down");
+    });
+
+    const { container } = renderModal();
+    openCustomTagFieldAndType(container, "qwen2.5:1.5b");
+
+    const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
+    await waitFor(() => expect(btn.disabled).toBe(false));
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
+      expect(pullCall).toBeTruthy();
+      expect(pullCall?.args[0]).toEqual(["qwen2.5:1.5b"]);
+    });
+
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Pull started", body: expect.stringContaining("qwen2.5:1.5b") })
+    );
   });
 });
 

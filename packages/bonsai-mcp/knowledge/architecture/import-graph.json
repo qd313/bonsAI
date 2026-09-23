@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 423,
-  "edgeCount": 1081,
+  "edgeCount": 1082,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -917,6 +917,7 @@
         "src/components/PullModelsModal.tsx",
         "src/data/pullModelCatalog.ts",
         "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/rpcFixtures.ts"
       ],
       "importedBy": []
@@ -2991,6 +2992,7 @@
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",

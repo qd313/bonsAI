@@ -17,7 +17,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1971,
+      "lines": 1996,
       "role": ""
     },
     {
@@ -191,13 +191,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 535,
+      "path": "src/components/PullModelsModal.test.tsx",
+      "lines": 542,
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.test.ts",
-      "lines": 532,
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 535,
       "role": ""
     }
   ]

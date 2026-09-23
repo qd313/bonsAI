@@ -339,7 +339,9 @@ closing note added at the end of each._
   25 models showing: the title sits at 90 to 118 pixels down the screen and Done/Cancel at 418 to 458, both
   fully inside the visible 40-to-492 area; the scrolling list itself is capped at 264 pixels, showing three
   model rows at once. One oddity worth a line for the maintainer: the first A press on the Filters button did
-  nothing, and the second closed the panel. Evidence `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try3.json`
+  nothing, and the second closed the panel. It shows three model rows at once, not the seven of the first
+  fix, because that room went to keeping Done and Cancel on screen instead; more rows would need a layout
+  change, such as shorter rows. Evidence `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try3.json`
   and two screenshots.
 
 ### Down from the question box while a reply is arriving used to do nothing, and Stop was hard to find by D-pad (closed 2026-09-23)

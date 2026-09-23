@@ -100,11 +100,6 @@ starts work outside this.
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
   which chip is lit. Evidence `docs/test-evidence/plan64-DETAILS-LADDER-01.json` (+ `.png`).
-- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
-  start** — **OPEN, found on the Deck 2026-09-23.** Two answer sections, 308 and 375 pixels tall, were only
-  33% visible whichever way the D-pad walk reached them, and the view showed the lower end of the first one,
-  so its opening lines sat above the screen. Earlier, shorter answers on the same kind of walk read clean.
-  Evidence `docs/test-evidence/plan64-QA-FREE-PLAY-01-finished.json`.
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **OPEN, found on the Deck 2026-09-23; a fix is being built in this session.** The
   confirm box ("Start the next question fresh?") opens with the ring on the destructive Clear button rather
@@ -427,6 +422,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
+- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
+  start** — **VERIFY, fixed in `a5684c7`.** Two answer sections, 308 and 375 pixels tall, were only 33%
+  visible whichever way the D-pad walk reached them, and the view showed the lower end of the first one, so
+  its opening lines sat above the screen. Owed: on the Deck, walk Down through a long answer and confirm a
+  section taller than the space above the dock shows its first line when the ring lands on it.
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
@@ -868,60 +868,6 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
 Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
 line for line, nothing reworded, to keep this document under its size limit.
 
-**Closed 2026-09-23 (plan 64, flow A part 1, proven on the Deck):**
-
-- ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** —
-  **DONE, measured fixed on the Deck 2026-09-23:** the placeholder text and the real cursor both sit at 12
-  pixels, so the old mismatch is gone. The maintainer's own glance is still welcome, from the same
-  screenshots. [Full detail](archive/roadmap-bugs-fixed.md#the-blinking-cursor-in-the-question-box-does-not-line-up-with-the-placeholder-text).
-- ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **DONE, confirmed on the
-  Deck 2026-09-23:** Decky's own plugin list and the tab strip now show the same bonsai drawing, at 26 and
-  22 pixels. [Full detail](archive/roadmap-bugs-fixed.md#the-decky-plugin-icon-does-not-match-the-tab-bars-bonsai-icon).
-- ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **DONE,
-  confirmed on the Deck 2026-09-23:** the settings file's hash and its saved date were both unchanged after
-  pressing Done with nothing moved. [Full detail](archive/roadmap-bugs-fixed.md#the-vision-try-order-picker-writes-settings-even-when-nothing-changed).
-- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **DONE, confirmed on the Deck
-  2026-09-23:** with the panel open, every Left and Right press changed the lit chip, 12 of 12, and the ring
-  never left the ladder. [Full detail](archive/roadmap-bugs-fixed.md#the-show-details-chip-ladder-is-not-a-d-pad-stop).
-- ★★ `[focus]` **Walking down from the chat row skips the whole answer** — **DONE, no longer reproduces —
-  measured on the Deck 2026-09-23** with the details panel both closed and open; Down from the chat row now
-  reaches every stop in the reply, in order. [Full detail](archive/roadmap-bugs-fixed.md#walking-down-from-the-chat-row-skips-the-whole-answer).
-- ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away** —
-  **DONE for the part that shipped, confirmed on the Deck 2026-09-23:** ticking the first tickable model now
-  only queues it; nothing downloads until Pull is pressed. The second half — a model pulled this way never
-  joining the saved try order — is not fixed; a smaller entry for it stays in Bugs.
-  [Full detail](archive/roadmap-bugs-fixed.md#the-very-first-model-ticked-in-a-fresh-download-picker-starts-downloading-right-away).
-- ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five changes
-  that give the list more room** — **DONE for the filters themselves, confirmed on the Deck 2026-09-23:**
-  Installed only, Essentials only and Recently added all changed the model list as expected. The "more room"
-  half of this entry is tracked separately, under **MODELS-LIST-CAP-01** and the "Done falls below the
-  visible edge" bug, both still unresolved (now both in Verify). [Full detail](archive/roadmap-completed.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
-
-**Closed 2026-09-23 (plan 64, flow A part 2, proven on the Deck):**
-
-- ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
-  rail, outside the plugin** — **DONE, confirmed on the Deck 2026-09-23:** Down now walks Filters, the four
-  model rows and then Done, fully visible; pressing A on Done closes the screen with the ring back on
-  "Manage AI models…". [Full detail](archive/roadmap-bugs-fixed.md#closing-the-ai-models-screen-could-leave-the-d-pad-ring-on-steams-own-side-rail-outside-the-plugin).
-- ★★ `[ollama]` `[focus]` **On the AI models screen, Down from the last model went nowhere** — **DONE,
-  confirmed on the Deck 2026-09-23:** Down from the last model row now reaches Done, or "Pull selected" when
-  a model is ticked. [Full detail](archive/roadmap-bugs-fixed.md#on-the-ai-models-screen-down-from-the-last-model-went-nowhere).
-- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI
-  models screen** — **DONE, confirmed on the Deck 2026-09-23:** typing a name by hand and pressing B closes
-  only the small typing box, leaves the AI models screen open, and the box is empty when reopened. Whether
-  Steam's own on-screen keyboard would swallow the B press first is still unknown — it never opened during
-  this check. [Full detail](archive/roadmap-bugs-fixed.md#b-while-typing-a-model-name-by-hand-looks-likely-to-back-out-of-the-whole-ai-models-screen).
-- ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **DONE,
-  confirmed on the Deck 2026-09-23:** at the bigger size, with a long sentence typed, the typed text now
-  stays inside the box and wraps rather than running past its right edge, at both the bigger size and the
-  default. [Full detail](archive/roadmap-bugs-fixed.md#typed-text-ran-off-the-right-edge-of-the-panel-at-the-bigger-ui-size).
-- ★★★ `[ui]` **The UI size setting barely changes anything** — **DONE for what this row owed, confirmed on
-  the Deck 2026-09-23:** the size slider has exactly two stops, Handheld and Couch, and the word "Desktop" is
-  gone from both the slider and the UI scale section. One more check — an old saved "desktop" value opening
-  as Handheld — could not run on the Deck tonight, because Claude Code's own automatic permission check
-  refused the edit needed to set that up; it is covered instead by a written test that pins the same result.
-  [Full detail](archive/roadmap-bugs-fixed.md#the-ui-size-setting-barely-changes-anything).
-
 **Closed 2026-09-23 (plan 64, flow B, proven on the Deck):**
 
 - ★★ `[ollama]` `[layout]` **The AI models list could push Done and Cancel off screen, and did not use all
@@ -948,48 +894,3 @@ line for line, nothing reworded, to keep this document under its size limit.
   Deck 2026-09-23:** both tabs, all 27 session rows and Clear all take the ring, fully visible. **Two new
   focus bugs split out, filed separately in Bugs:** the confirm box's default and its Cancel path. [Full detail](archive/roadmap-completed.md#session-context-folds-into-show-details).
 
-**Closed 2026-09-22 (plan 63, verification pass):**
-
-- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **DONE, fixed
-  and confirmed on the Deck 2026-09-22.** A question sent from a pinned chip — the bug's own trigger —
-  still left the chip offering pinned sentences afterwards. Covers one sitting, one question; not proven
-  the settings fix itself is the cure, only that the symptom is gone on a build carrying it.
-  [Full detail](archive/roadmap-bugs-fixed.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
-
-**Closed 2026-09-21 (D115, the maintainer's answers before plan 63 started):**
-
-- ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
-  **DONE, closed 2026-09-21 (D115).** The maintainer's word: accepted as it is. No code changed.
-  [Full detail](archive/roadmap-bugs-fixed.md#pressing-b-while-the-reasoning-displays-show-details-panel-is-open-does-not-close-it).
-- ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did** — **DONE, closed
-  2026-09-21 (D115).** The maintainer's word: keep it, a filter should filter. 17 of 26 models show on the
-  default setting, by design. [Full detail](archive/roadmap-bugs-fixed.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
-
-**Closed 2026-09-21 (plan 63 block 0, fixed and proven on the Deck):**
-
-- ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **DONE, fixed and
-  confirmed on the Deck 2026-09-21.** Down from Show details now reaches the row of chips instead of jumping
-  past it into the bottom bar. [Full detail](archive/roadmap-bugs-fixed.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
-- ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
-  least 18 September** — **DONE, fixed 2026-09-21.** The check now passes on a clean tree again. Nothing was
-  deleted to get there — the oversized documents were trimmed and their old detail moved to the archive
-  files, linked rather than lost. [Full detail](archive/roadmap-bugs-fixed.md#the-check-everyone-runs-before-a-commit-has-been-failing-on-a-clean-tree-since-at-least-18-september).
-- ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **DONE, fixed and
-  confirmed on the Deck 2026-09-21.** Walking down from Show details now reaches the tabs and opens the
-  Session tab; its rows can be walked too. The entry's second recorded cause, the row sitting off screen, did
-  not reproduce — it had simply never taken focus before. [Full detail](archive/roadmap-bugs-fixed.md#the-new-session-tab-cannot-be-reached-with-the-d-pad).
-
-**Closed 2026-09-21 (plan 63 wave one, fixed and proven on the Deck):**
-
-- ★ `[focus]` **Walking up from the question box skips every reply row** — **DONE, fixed and confirmed on
-  the Deck 2026-09-21.** Pressing Up from the question box now lands on the answer above instead of jumping
-  straight past the whole reply. [Full detail](archive/roadmap-bugs-fixed.md#walking-up-from-the-question-box-skips-every-reply-row).
-- ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out
-  by hand several times over** — **DONE, fixed 2026-09-21.** Every setting is now named once, in one place,
-  instead of being copied out by hand in several spots where one copy could quietly go stale.
-  [Full detail](archive/roadmap-bugs-fixed.md#a-new-setting-can-quietly-stop-working-in-one-place-because-the-list-of-settings-is-written-out-by-hand-several-times-over).
-- ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any control
-  shuts it** — **DONE, fixed and confirmed on the Deck 2026-09-21.** Pressing the controller's A button on a
-  control in the AI models screen now does what that control does, instead of closing the whole screen; this
-  also unblocks the new filters button, which had never once been usable.
-  [Full detail](archive/roadmap-bugs-fixed.md#the-ai-models-screen-closes-instead-of-doing-anything-a-on-almost-any-control-shuts-it).

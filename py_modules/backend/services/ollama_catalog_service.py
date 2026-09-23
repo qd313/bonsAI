@@ -69,7 +69,18 @@ def split_ollama_tag(tag: str) -> tuple[str, str]:
     return tag.strip(), "latest"
 
 
-def _fetch_manifest_size_bytes(name: str, variant: str) -> tuple[int | None, bool]:
+def _fetch_manifest_size_bytes(name: str, variant: str) -> tuple[int | None, bool, bool]:
+    """Return (size_bytes, exists, definite).
+
+    ``definite`` is True whenever the registry itself gave a real answer -- either the manifest
+    was found, or the registry said outright that it does not exist. Measured from this machine
+    against registry.ollama.ai: a made-up library name and a real name with a made-up tag both
+    come back HTTP 404. ``definite`` is False for everything that is NOT a real answer -- a
+    network error, a timeout, a redirect off the registry host, some other HTTP status, or a
+    reply that does not parse as a manifest -- because none of those tell "not real" apart from
+    "could not check". See ``fetch_catalog_metadata``: only a definite answer counts as proof the
+    registry was reachable at all.
+    """
     url = f"{REGISTRY_BASE}/v2/library/{name}/manifests/{variant}"
     req = urllib.request.Request(
         url,
@@ -80,17 +91,22 @@ def _fetch_manifest_size_bytes(name: str, variant: str) -> tuple[int | None, boo
         with urlopen_with_ca_fallback(req, timeout=PER_REQUEST_TIMEOUT_S) as resp:
             host = (getattr(resp, "url", None) or url).split("/")[2] if resp else REGISTRY_HOST
             if host != REGISTRY_HOST:
-                return None, False
+                return None, False, False
             raw = resp.read(MAX_MANIFEST_BYTES + 1)
             if len(raw) > MAX_MANIFEST_BYTES:
-                return None, False
+                return None, False, False
             data = json.loads(raw.decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, OSError, ValueError):
-        return None, False
+    except urllib.error.HTTPError as exc:
+        # 404 is what a missing repository or a missing tag on a real repository both return
+        # (measured, see docstring). Any other status is not a status we have confirmed means
+        # "not real", so it stays unknown rather than being treated as a refusal.
+        return None, False, exc.code == 404
+    except (urllib.error.URLError, json.JSONDecodeError, OSError, ValueError):
+        return None, False, False
 
     layers = data.get("layers")
     if not isinstance(layers, list):
-        return None, False
+        return None, False, False
     total = 0
     for layer in layers:
         if not isinstance(layer, dict):
@@ -99,7 +115,7 @@ def _fetch_manifest_size_bytes(name: str, variant: str) -> tuple[int | None, boo
             total += int(layer.get("size") or 0)
         except (TypeError, ValueError):
             continue
-    return total, True
+    return total, True, True
 
 
 def fetch_catalog_metadata(tags: list[str]) -> dict[str, Any]:
@@ -120,9 +136,13 @@ def fetch_catalog_metadata(tags: list[str]) -> dict[str, Any]:
         name, variant = split_ollama_tag(tag)
         if not is_valid_ollama_pull_tag(name) or not variant:
             continue
-        size_bytes, exists = _fetch_manifest_size_bytes(name, variant)
-        if exists and size_bytes is not None:
+        size_bytes, exists, definite = _fetch_manifest_size_bytes(name, variant)
+        # A definite "no" from the registry is still proof it answered -- the registry was
+        # reachable, it just does not have this name. Only "could not tell" should fall back to
+        # offline (assume it is fine), not "the registry said no".
+        if definite:
             any_live = True
+        if exists and size_bytes is not None:
             results[tag] = {"size_bytes": size_bytes, "exists": True}
         else:
             results[tag] = {"size_bytes": None, "exists": False}

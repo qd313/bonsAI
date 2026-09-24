@@ -26,13 +26,13 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1803,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1787,
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1787,
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 1763,
       "role": ""
     },
     {

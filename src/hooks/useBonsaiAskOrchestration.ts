@@ -65,6 +65,9 @@
  *    useReplyFeedbackChips), and session restore — is state this hook keeps
  *    so the screen files can stay simple.
  *
+ * This file's own argument type lives beside its return type, in
+ * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts.
+ *
  * Gotchas:
  * - The mount-time restore effect runs exactly once (an empty dependency
  *   list) on purpose. The callbacks it needs change identity on every
@@ -76,13 +79,14 @@
  *   the time it fires, if that reordering changes which render's closures a
  *   callback captures.
  */
-import { useCallback, useEffect, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toaster } from "@decky/api";
 import { Router } from "@decky/ui";
 
 import type { AskAttachment } from "../types/bonsaiUi";
 import type { BonsaiAskOrchestration } from "../types/askOrchestration";
-import { type AskModeId, type UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
+import type { UseBonsaiAskOrchestrationArgs } from "../types/askOrchestrationArgs";
+import { type AskModeId } from "../data/bonsaiSettingsSchema";
 import { buildResponseText } from "../utils/appliedTuningText";
 import { detectPromptCategory } from "../data/presets";
 import {
@@ -203,54 +207,10 @@ export function resolveInitialOllamaContext(
   return survived ?? null;
 }
 
-/** Maps RPC poll payloads into Main-tab AI presentation state (pending vs terminal branches differ sharply). */
-export type UseBonsaiAskOrchestrationArgs = {
-  desktopDebugNoteAutoSave: boolean;
-  filesystemWrite: boolean;
-  strategySpoilerMaskingEnabled: boolean;
-  askMode: AskModeId;
-  unifiedInput: string;
-  setUnifiedInput: Dispatch<SetStateAction<string>>;
-  unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
-  effectiveOllamaPcIp: string;
-  selectedAttachment: AskAttachment | null;
-  setSelectedAttachment: Dispatch<SetStateAction<AskAttachment | null>>;
-  /** Reload settings from disk after server-side persistence (e.g. sanitizer keywords). */
-  syncSettingsFromDisk: () => Promise<unknown>;
-  unifiedInputFieldLayerRef: RefObject<HTMLDivElement | null>;
-  unifiedInputHostRef: RefObject<HTMLDivElement | null>;
-  setSelectedIndex: Dispatch<SetStateAction<number>>;
-  setNavigationMessage: Dispatch<SetStateAction<string>>;
-  saveIp: (ip: string) => void;
-  persistSearchQuery: (unifiedInputText: string) => void;
-  /** When app log level is verbose, copy external/RPC failures into Desktop bonsAI_logs. */
-  onExternalFailure?: (source: string, message: string, detail?: Record<string, unknown>) => void;
-  aiCharacterEnabled?: boolean;
-  aiCharacterPresetId?: string | null;
-  useLocalKnowledgeBase?: boolean;
-  /**
-   * False until ``load_settings`` resolves. The preset carousel waits for it before its
-   * one-shot mount reseed, because the KB flags above are still at their UI defaults
-   * before then. Omit to opt out of the wait (tests that do not model settings loading).
-   */
-  settingsLoaded?: boolean;
-  /** QA override (Developer tab): force every eligible carousel slot to a session RAG chip. */
-  devForceSessionRagChips?: boolean;
-  /** Active chat slot id for Ask submit — ref updated synchronously in useChatSlots. */
-  activeSlotIdRef?: RefObject<string | null>;
-  /**
-   * Creates a slot when none is active and returns the id this Ask should carry. Omit it
-   * and the Ask still runs — the backend simply has nowhere to file the turns, which is
-   * the data loss this arg exists to prevent.
-   */
-  ensureActiveSlotForAsk?: (question: string) => Promise<string | null>;
-  /** Reload slot transcript from disk after terminal Ask completion. */
-  onSlotTurnsChanged?: () => void;
-  /** Which slot the backend is generating for right now, or null when nothing is pending. */
-  onGeneratingSlotChange?: (slotId: string | null) => void;
-  /** A slot the user was not looking at just finished an answer — it is now unread. */
-  onSlotAnswerFinished?: (slotId: string) => void;
-};
+// UseBonsaiAskOrchestrationArgs now lives in ../types/askOrchestrationArgs, beside the
+// return-type it pairs with. Re-exported so the existing import in this hook's own test
+// file keeps working unchanged.
+export type { UseBonsaiAskOrchestrationArgs } from "../types/askOrchestrationArgs";
 
 /*
  * In: UseBonsaiAskOrchestrationArgs — the current settings this needs to ask

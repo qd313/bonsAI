@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 446,
-  "edgeCount": 1171,
+  "fileCount": 447,
+  "edgeCount": 1173,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -492,6 +492,7 @@
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
@@ -4082,6 +4083,14 @@
         "src/utils/focusNavigation.test.ts"
       ]
     },
+    "src/utils/focusPerTurnRow.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/utils/i18n.test.ts": {
       "imports": [
         "src/utils/i18n.ts"
@@ -4739,6 +4748,7 @@
         "src/utils/drgGlossaryTermRegistry.ts",
         "src/utils/focusNavigation.test.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/settingsPanelScroll.ts",

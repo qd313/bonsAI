@@ -46,11 +46,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1171,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "lines": 1104,
       "role": ""
@@ -68,6 +63,11 @@
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1017,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 996,
       "role": ""
     },
     {

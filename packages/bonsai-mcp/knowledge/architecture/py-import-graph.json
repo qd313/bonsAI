@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 92,
-  "edgeCount": 216,
+  "fileCount": 93,
+  "edgeCount": 218,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -91,6 +91,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/services/ollama_catalog_service.py",
       "count": 4
     },
@@ -132,10 +136,6 @@
     },
     {
       "path": "py_modules/backend/services/input_sanitizer_service.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
       "count": 3
     },
     {
@@ -280,6 +280,10 @@
     },
     {
       "path": "py_modules/backend/services/intent_pack_rpc.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/kb_attached_notes.py",
       "count": 1
     },
     {
@@ -675,6 +679,7 @@
         "py_modules/backend/services/capabilities.py",
         "py_modules/backend/services/destructive_advice_guard.py",
         "py_modules/backend/services/input_sanitizer_service.py",
+        "py_modules/backend/services/kb_attached_notes.py",
         "py_modules/backend/services/kb_followup_memory.py",
         "py_modules/backend/services/kb_not_in_notes_notice.py",
         "py_modules/backend/services/knowledge_base_service.py",
@@ -717,6 +722,14 @@
       "importedBy": [
         "main.py",
         "py_modules/backend/services/intent_pack_rpc.py"
+      ]
+    },
+    "py_modules/backend/services/kb_attached_notes.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/game_ai_request.py"
       ]
     },
     "py_modules/backend/services/kb_followup_memory.py": {
@@ -800,6 +813,7 @@
       ],
       "importedBy": [
         "py_modules/backend/services/game_ai_request.py",
+        "py_modules/backend/services/kb_attached_notes.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
         "py_modules/backend/services/rag_corpus_rpc.py"
       ]

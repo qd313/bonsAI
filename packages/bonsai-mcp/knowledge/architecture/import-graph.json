@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 430,
-  "edgeCount": 1104,
+  "fileCount": 431,
+  "edgeCount": 1106,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2203,6 +2203,7 @@
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
         "src/hooks/useBackgroundGameAi.ts",
+        "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/hooks/useStrategyChecklistSession.ts",
@@ -2361,6 +2362,14 @@
       "imports": [],
       "importedBy": [
         "src/components/MainTab.tsx"
+      ]
+    },
+    "src/hooks/useOllamaGameContextSync.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
     "src/hooks/usePermissionJump.test.ts": {
@@ -3148,6 +3157,7 @@
         "src/components/StrategyChecklistPanel.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",
+        "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",

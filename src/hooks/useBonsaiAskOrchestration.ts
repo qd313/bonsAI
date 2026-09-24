@@ -66,7 +66,8 @@
  *    so the screen files can stay simple.
  *
  * This file's own argument type lives beside its return type, in
- * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts.
+ * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask-bar footnote's
+ * own running-game poll is useOllamaGameContextSync.
  *
  * Gotchas:
  * - The mount-time restore effect runs exactly once (an empty dependency
@@ -152,6 +153,7 @@ import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsai
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
+import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -161,17 +163,6 @@ export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
  * "abort never landed" path, not the normal one.
  */
 const STOP_STATUS_GRACE_MS = 4000;
-
-/**
- * How often the Ask-bar footnote re-checks which game Steam reports as running while this hook
- * stays mounted. Before this poll existed, the footnote only picked up a game change through
- * `trackedRunningAppId` (owned by the Strategy checklist, a different feature) or by restarting
- * the plugin outright — on the Deck the line was measured staying wrong for minutes, in both
- * directions, while the panel never closed (roadmap: "The panel only learns which game is
- * running when it starts, and never again"). A few seconds, not faster: this is cheap but it
- * does not need to be instant.
- */
-const GAME_CONTEXT_POLL_MS = 2000;
 
 // Both moved to ../utils/askOrchestrationRestore.ts — pure functions, testable with no React.
 // Re-exported so the existing import in this hook's own test file keeps working unchanged.
@@ -341,59 +332,13 @@ export function useBonsaiAskOrchestration(
   askThreadDisplayQuestionRef.current = askThreadDisplayQuestion;
 
   // --- Running game context (Ollama app_id chip) ---
-  const syncOllamaContextFromRunningApp = useCallback(() => {
-    const running = Router.MainRunningApp;
-    const liveAppId = (running?.appid?.toString() ?? "").trim();
-    const appId = liveAppId || trackedRunningAppId.trim();
-    // Only trust the name next to an id read from Steam in this same call — a name paired with
-    // an id that came from the `trackedRunningAppId` fallback instead could name the wrong game.
-    const appName = liveAppId ? (running?.display_name ?? "").trim() : "";
-    const next: NonNullable<OllamaContextUi> = {
-      app_id: appId,
-      app_context: appId ? "active" : "none",
-      app_name: appName,
-    };
-    setOllamaContext((prev) => {
-      if (
-        prev?.app_id === next.app_id &&
-        prev?.app_context === next.app_context &&
-        (prev?.app_name ?? "") === next.app_name
-      ) {
-        return prev;
-      }
-      return next;
-    });
-  }, [trackedRunningAppId]);
-
-  /** Keep Main-tab game context in sync with Steam before/after Asks (not only mid-Ask). */
-  useEffect(() => {
-    if (isAsking) return;
-    syncOllamaContextFromRunningApp();
-  }, [trackedRunningAppId, isAsking, syncOllamaContextFromRunningApp]);
-
-  /*
-   * Read inside the poll below without restarting its interval on every isAsking flip.
-   * `isAsking` itself still gates the effect above so a game changing mid-Ask is picked up the
-   * instant the Ask ends, without waiting for this poll's own next tick.
-   */
-  const isAskingForGameContextPollRef = useRef(isAsking);
-  isAskingForGameContextPollRef.current = isAsking;
-
-  /*
-   * The footnote's own poll, on its own timer rather than borrowed from `trackedRunningAppId`
-   * (the Strategy checklist's poll, a different feature). Measured on the Deck: the footnote
-   * stayed wrong for minutes in both directions — naming Hades after it was exited, and never
-   * naming Deep Rock Galactic: Survivor after it launched — while the panel stayed open the
-   * whole time, so waiting on another feature's timer was not enough on its own. Runs the whole
-   * time this hook is mounted and stops the moment it unmounts.
-   */
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      if (isAskingForGameContextPollRef.current) return;
-      syncOllamaContextFromRunningApp();
-    }, GAME_CONTEXT_POLL_MS);
-    return () => window.clearInterval(id);
-  }, [syncOllamaContextFromRunningApp]);
+  // Lifted into useOllamaGameContextSync. It must stay at exactly this point in the list:
+  // React matches hooks by the order they run, not by name.
+  const syncOllamaContextFromRunningApp = useOllamaGameContextSync({
+    trackedRunningAppId,
+    isAsking,
+    setOllamaContext,
+  });
 
   // --- Preset carousel + session RAG chips ---
   // Lifted into useSuggestedPromptChips. It must stay at exactly this point in the list:

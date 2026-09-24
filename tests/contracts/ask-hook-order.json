@@ -9,6 +9,10 @@
     {
       "name": "useReplyFeedbackChips",
       "file": "src/hooks/useReplyFeedbackChips.ts"
+    },
+    {
+      "name": "useOllamaGameContextSync",
+      "file": "src/hooks/useOllamaGameContextSync.ts"
     }
   ],
   "count": 82,

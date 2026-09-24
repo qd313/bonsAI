@@ -281,3 +281,28 @@ document.
     Main tab and back; Balanced and Deep afterwards never showed the notice again. Evidence
     `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
 
+  - [x] **DRG-01** `2321470`, *"How do I beat Glyphid Dreadnought?"*, no consent phrase, masking on → boss tactics in plain text, no tap-to-reveal — **PASS (Deck) 2026-09-15.** Plain text, no fence, no tap-to-reveal. Evidence `docs/test-evidence/plan55-DRG-01.json`, recording `recordings/DeckRecord_20260915_210556_game.mkv`.
+  - [x] **DRG-01d** As DRG-01, **then ask a second question** → the first answer stays unfenced after it leaves the live turn *(the D1 regression: history turns used to re-fence)* — **PASS (Deck) 2026-09-15.** After a second question, the Dreadnought answer stayed plain text once it was history (464 characters, no spoiler fence, no tap-to-reveal). Evidence `docs/test-evidence/plan55-DRG-01d.json`.
+  - [x] **DRG-01-STREAM-01** — **fixed 2026-08-15 (R4), confirm on-Deck.** As DRG-01 with streaming **on**: no `Spoiler hidden until complete…` chip appears at any point while the answer streams in — the fence renders as plain text from the moment it opens, not only after it closes — **PASS (Deck) 2026-09-15.** No mask chip seen in 74 polls over 62 seconds. Evidence `docs/test-evidence/plan55-DRG-01.json`, recording `recordings/DeckRecord_20260915_210556_game.mkv`.
+  - [x] *(recommended)* **HADES-NAMED-01** Hades `1145360`, *"How do I beat Megaera?"* → plain text. Naming the boss is consent for that boss on any title (spoiler-constitution rule 7) — **PASS (Deck) 2026-09-15**, plain text; the misspelling bug (Megara vs Megaera) also reproduced on the same run. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
+  - [x] **STRAT-SPOIL-FIRST-01** name-first boss question. Setup: Portal 2 `620` running, Strategy, masking on,
+    streaming on. Do: ask *"wheatley fight"*. Pass when: Wheatley's tactics are plain text from the first streamed
+    word with no mid-stream chip, and any other story detail the reply touches is still boxed (that half proves
+    nothing else was opened; it depends on the model drawing a box for something else, so it may take a few
+    asks). Compare with *"how do I beat wheatley"*, which should behave the same. Then reopen the chat from the
+    slot list: still plain. **BLOCKED 2026-09-15 as "Portal 2 not in this Deck's library" — settled 2026-09-18:
+    Portal 2 was installed all along.** **PASS (Deck) 2026-09-18:** asked "wheatley fight" with Portal 2 running;
+    the whole reply, including Wheatley's tactics, came back as plain text from the first streamed word with no
+    hidden box, and stayed plain after the chat was closed and reopened from the slot list. The comparison
+    phrasing ("how do I beat wheatley") could not be reached in time because of a separate, already-filed D-pad
+    problem, so only the first phrasing is confirmed; the row's main pass condition is fully met. Evidence
+    `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`.
+  - [x] **STRAT-SPOIL-TEXT-01** game named only in the question. Setup: nothing running, Strategy, masking on.
+    Do: ask *"drg survivor what class"*. Pass when: the answer is plain text with no spoiler box, the risk chip
+    under Show details reads low, and the reply does not claim the game is running. Then the guard: *"new vegas
+    best build"* with nothing running → still fenced or careful, as a story game. — **PASS (Deck) 2026-09-15,
+    both halves.** The Deep Rock half: plain text, spoiler risk chip low, the game resolved from the question
+    text, no claim of the game running (`docs/test-evidence/plan55-STRAT-SPOIL-TEXT-01-drg.json`). The New
+    Vegas guard: a gameplay-only reply about stats and early armour, no story detail, and the follow-up menu
+    named New Vegas places (`docs/test-evidence/plan55-STRAT-SPOIL-TEXT-01-newvegas.json`).
+

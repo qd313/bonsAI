@@ -133,6 +133,7 @@ import {
 } from "./MainTabAttachMenuPopover";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
+import { useAskBarSettingsCardRows } from "../hooks/useAskBarSettingsCardRows";
 import {
   registerNavFocus,
   takeNavFocus,
@@ -141,8 +142,6 @@ import {
 } from "../utils/navFocusRegistry";
 import {
   SETTINGS_CARD_ROW_HEIGHT_PX,
-  SETTINGS_CARD_TAB_BAR_GAP_PX,
-  settingsCardRowsThatFit,
   shouldHideSettingsResultsCard,
 } from "../hooks/useSteamSettingsSearch";
 
@@ -315,91 +314,21 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
   }, []);
 
-  /*
-   * The settings-results card's own row nearest the box (plan 45 step 3 / plan 56 lane E2): Up
-   * from the box has to hand Steam's own ring to it, the same cross-container transfer as
-   * focusUnifiedTextField above -- a plain DOM focus() is only safe between siblings inside one
-   * Focusable container (the focus law), and this file cannot tell from here whether the card and
-   * the box actually share one. Steam's transfer is tried first (registerNavFocus / takeNavFocus,
-   * navFocusRegistry.ts) with a DOM `.focus()` on the last row's own ref as the fallback for the
-   * frames before Decky populates the nav node -- the same ladder every other cross-container jump
-   * in this file uses.
-   *
-   * The "last" row is whichever one is currently drawn nearest the box -- the card grows upward
-   * from the box's own top edge, so that is always the row with the highest index actually shown,
-   * not a fixed DOM node. Only that one Button ever carries the navRef prop (see the row map
-   * below), so this holder always reflects whichever row is current without re-registering by hand
-   * on every keystroke.
-   */
-  const settingsCardLastRowNavRef = useRef<NavRefHolder["current"]>(null);
-  useEffect(() => {
-    registerNavFocus("settings-results-card", settingsCardLastRowNavRef);
-    return () => unregisterNavFocus("settings-results-card", settingsCardLastRowNavRef);
-  }, []);
-  const settingsCardRowRefs = useRef<Array<HTMLElement | null>>([]);
-  /** The card's own DOM node -- read by the tap-outside effect below to tell a tap on the card
-   *  apart from a tap anywhere else. */
-  const settingsCardHostRef = useRef<HTMLDivElement | null>(null);
-  const focusSettingsCardLastRow = useCallback((): boolean => {
-    if (takeNavFocus("settings-results-card")) return true;
-    const rows = settingsCardRowRefs.current;
-    const last = rows[rows.length - 1];
-    if (!last) return false;
-    last.focus();
-    return true;
-  }, []);
-
-  /*
-   * Typing while the ring sits in the settings-results card hands it straight back to the box and
-   * lets the list redraw under the new letter (plan 45 section 4's "Typing while the highlight is
-   * in the card" row). `unifiedInput` only changes through the box's own onChange, so a change here
-   * with the ring still inside the card means a key landed on the box while Steam's ring was
-   * visually somewhere else -- the same ring/DOM-focus split navFocusRegistry.ts documents at
-   * length elsewhere in this file, which is exactly why `uiGamepadFocusElement` (Steam's `.gpfocus`
-   * ring, falling back to `activeElement` only when there is no ring at all) is asked rather than a
-   * plain `document.activeElement` check.
-   */
-  const unifiedInputForTypingRedirectRef = useRef(unifiedInput);
-  useEffect(() => {
-    if (unifiedInputForTypingRedirectRef.current === unifiedInput) return;
-    unifiedInputForTypingRedirectRef.current = unifiedInput;
-    const ring = uiGamepadFocusElement();
-    if (ring?.closest(".bonsai-settings-results-card")) {
-      focusUnifiedTextField();
-    }
-  }, [unifiedInput, focusUnifiedTextField]);
-
-  /*
-   * How much room the settings-results card actually has, measured live rather than assumed.
-   * Plan 45 was drawn against a 696px panel; measured on the Deck's own 1280x800 screen the panel
-   * is 454px, so a flat eight-row card would cover the tab bar. The room is the gap between the
-   * question box's own top edge (unifiedInputHostRef -- the card is anchored there, see the render
-   * below) and the tab bar's bottom edge, both read through getBoundingClientRect on the real
-   * elements rather than any assumed pixel count, minus a 6px clearance kept under the tab bar.
-   * Re-measured whenever the result count or the box's own height (it grows as text wraps) could
-   * have changed how much of that room is left. Falls back to showing everything the cap allows
-   * when the tab bar cannot be found (an unmounted card, or a test with no `.bonsai-scope`
-   * wrapper) rather than hiding the card outright.
-   */
-  useLayoutEffect(() => {
-    const boxEl =
-      unifiedInputHostRef && typeof unifiedInputHostRef === "object" && "current" in unifiedInputHostRef
-        ? (unifiedInputHostRef as React.RefObject<HTMLDivElement | null>).current
-        : null;
-    if (!boxEl) return;
-    const scope = boxEl.closest(".bonsai-scope");
-    const tabBar = scope?.querySelector<HTMLElement>(".bonsai-tab-bar") ?? null;
-    if (!tabBar) {
-      setSettingsCardRowsShown(filteredSettings.length);
-      return;
-    }
-    const boxTop = boxEl.getBoundingClientRect().top;
-    const tabBarBottom = tabBar.getBoundingClientRect().bottom;
-    const availableHeightPx = boxTop - tabBarBottom - SETTINGS_CARD_TAB_BAR_GAP_PX;
-    setSettingsCardRowsShown(
-      settingsCardRowsThatFit(availableHeightPx, filteredSettings.length).shown,
-    );
-  }, [filteredSettings.length, unifiedInput, unifiedInputSurfacePx, unifiedInputHostRef]);
+  // The card's own row-measuring, "last row" nav registration and typing-redirect effects live
+  // in useAskBarSettingsCardRows now (src/hooks) -- see that file for what each piece does.
+  const {
+    focusSettingsCardLastRow,
+    settingsCardRowRefs,
+    settingsCardHostRef,
+    settingsCardLastRowNavRef,
+  } = useAskBarSettingsCardRows({
+    filteredSettings,
+    unifiedInput,
+    unifiedInputSurfacePx,
+    unifiedInputHostRef,
+    focusUnifiedTextField,
+    setSettingsCardRowsShown,
+  });
 
   /*
    * ATTEMPT at "opening the panel leaves nothing highlighted": on a fresh panel open nothing

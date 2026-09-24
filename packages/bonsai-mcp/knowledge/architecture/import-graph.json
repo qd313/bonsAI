@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 472,
-  "edgeCount": 1252,
+  "fileCount": 473,
+  "edgeCount": 1256,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -671,6 +671,7 @@
         "src/components/icons.tsx",
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/useSteamSettingsSearch.ts",
         "src/utils/focusNavigation.ts",
@@ -2344,6 +2345,16 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useAskBarSettingsCardRows.ts": {
+      "imports": [
+        "src/hooks/useSteamSettingsSearch.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
+      ]
+    },
     "src/hooks/useAskMountRestore.ts": {
       "imports": [
         "src/types/backgroundAsk.ts",
@@ -2930,6 +2941,7 @@
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useSteamSettingsSearch.test.ts",
         "src/index.tsx",
         "src/styles/sections/section-4.ts"
@@ -4582,6 +4594,7 @@
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
@@ -5035,6 +5048,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",

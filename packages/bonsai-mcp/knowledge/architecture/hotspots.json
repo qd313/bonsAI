@@ -36,11 +36,6 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1465,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 1422,
       "role": ""
@@ -54,6 +49,11 @@
       "path": "src/index.tsx",
       "lines": 1398,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
+    },
+    {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1394,
+      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

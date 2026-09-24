@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 439,
-  "edgeCount": 1154,
+  "fileCount": 440,
+  "edgeCount": 1155,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1379,7 +1379,7 @@
       ],
       "importedBy": [
         "src/data/characterUiAccent.test.ts",
-        "src/index.tsx"
+        "src/features/plugin-shell/useBonsaiScopeStyle.ts"
       ]
     },
     "src/data/deckEssentialsTags.ts": {
@@ -1929,6 +1929,15 @@
     "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useBonsaiScopeStyle.ts": {
+      "imports": [
+        "src/data/characterUiAccent.ts",
+        "src/utils/uiScaleScopeBridge.ts"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -2803,7 +2812,6 @@
         "src/components/icons.tsx",
         "src/context/UiScaleContext.tsx",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/characterUiAccent.ts",
         "src/data/knowledgeBaseDev.ts",
         "src/data/modelPolicy.ts",
         "src/data/presets.ts",
@@ -2824,6 +2832,7 @@
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx",
+        "src/features/plugin-shell/useBonsaiScopeStyle.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
@@ -2860,7 +2869,6 @@
         "src/utils/deckyCall.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/steamInputJump.ts",
-        "src/utils/uiScaleScopeBridge.ts",
         "src/utils/unifiedInputPersistenceMode.ts"
       ],
       "importedBy": [
@@ -4674,7 +4682,7 @@
       "imports": [],
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
-        "src/index.tsx"
+        "src/features/plugin-shell/useBonsaiScopeStyle.ts"
       ]
     },
     "src/utils/unifiedInputPersistenceMode.test.ts": {

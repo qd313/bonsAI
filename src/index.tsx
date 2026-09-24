@@ -54,7 +54,8 @@
  * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts; the
  * post-remount session restore moved to
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
- * features/plugin-shell/useChatSlotActivityState.ts.
+ * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
+ * features/plugin-shell/useBonsaiScopeStyle.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -104,7 +105,6 @@ import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
 import { PULL_MODEL_CATALOG } from "./data/pullModelCatalog";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
-import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
   getPluginDataClearedGeneration,
@@ -141,7 +141,6 @@ import { useQamPanelHeightGuard } from "./hooks/useQamPanelHeightGuard";
 import { useQamPanelSideBleed } from "./hooks/useQamPanelSideBleed";
 import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
 import { UiScaleProvider } from "./context/UiScaleContext";
-import { publishUiScaleScopeStyle } from "./utils/uiScaleScopeBridge";
 import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
 import { callDeckyWithTimeout } from "./utils/deckyCall";
 import { SEED_KB_SOURCE_DIR } from "./data/knowledgeBaseDev";
@@ -168,6 +167,7 @@ import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTe
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
+import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
 
 type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
@@ -610,25 +610,13 @@ const Content: React.FC = () => {
     [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
   );
 
-  const uiAccent = useMemo(
-    () =>
-      resolveUiAccentFromCharacterSettings({
-        ai_character_enabled: aiCharacterEnabled,
-        ai_character_random: aiCharacterRandom,
-        ai_character_preset_id: aiCharacterPresetId,
-        ai_character_custom_text: aiCharacterCustomText,
-      }),
-    [aiCharacterEnabled, aiCharacterRandom, aiCharacterPresetId, aiCharacterCustomText]
-  );
-  const bonsaiScopeAccentStyle = useMemo(() => buildBonsaiScopeAccentInlineStyle(uiAccent), [uiAccent]);
-  const bonsaiScopeStyle = useMemo(
-    () => ({ ...bonsaiScopeAccentStyle, ...uiScale.scopeStyle }),
-    [bonsaiScopeAccentStyle, uiScale.scopeStyle],
-  );
-
-  useEffect(() => {
-    publishUiScaleScopeStyle(bonsaiScopeStyle);
-  }, [bonsaiScopeStyle]);
+  const bonsaiScopeStyle = useBonsaiScopeStyle({
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    uiScaleScopeStyle: uiScale.scopeStyle,
+  });
 
   useEffect(() => {
     if (!settingsLoaded) return;

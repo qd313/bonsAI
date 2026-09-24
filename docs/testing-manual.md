@@ -135,11 +135,11 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 ### SMOKE-C — Permission gate (P0)
 
-**Blocked 2026-09-03:** the deny surface's *Open Permissions* button is not reachable by D-pad (roadmap Bugs, filed 2026-09-03), so the jump and the *Back to …* return cannot be driven until that is fixed. The deny half itself passes: `bonsai:vac-check` with Steam ban lookup off answered with the capability message and made no Ollama call.
-
-**Fixed at the desk 2026-09-04, Deck check owed:** the button is a genuine D-pad stop now and joins the reply row's Down/Up chain — see PERM-JUMP-01 below.
-
-**FAIL (Deck) 2026-09-16, build 0fbecb6:** the button is a real D-pad stop now and A on it does reach the Permissions tab — but the highlight lands one row above the toggle it was asked for: **Save files to Desktop** instead of **Steam ban lookup**. Evidence `docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json`, with the setup and restore steps in `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json` and `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`. The **Back to …** return half is recorded separately and stays owed. Filed as its own one-star focus bug on the roadmap.
+**Current state:** the deny half passes (a blocked capability answers with the capability message, no
+model call). The **Open Permissions** jump is a real D-pad stop and, as of 2026-09-23, lands on the
+right toggle — see PERM-JUMP-01 below for the timing. History (the 2026-09-03 block and the intermediate
+2026-09-16 wrong-row failure):
+[testing-manual-history-2026.md § SMOKE-C](archive/testing-manual-history-2026.md#smoke-c).
 
 - [ ] Turn a capability **off** → blocked action → **Open Permissions** (or troubleshooting hint button) → lands on matching toggle → **Back to …** returns → no crash
 - [ ] Re-enable before Tier 1
@@ -148,15 +148,10 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 Capability off for each row; trigger the deny surface; D-pad to **Open Permissions** → Permissions tab → matching toggle focused → **Back to …** → prior tab.
 
-**Blocked 2026-09-03:** the deny surface's *Open Permissions* button is not a D-pad stop (roadmap Bugs, filed 2026-09-03), so no row here can be driven until that is fixed.
-
-**Fixed at the desk 2026-09-04, Deck check owed:** `PermissionDenyAction`'s button and the troubleshooting Ask hint's button are genuine D-pad stops now (`focusable`), and both join the reply row's Down/Up chain — Down from Retry/Show details/Copy reaches whichever is mounted, Down from it reaches the session context strip, and Up returns either way. Expect: Down from Copy lands on **Open Permissions**, visible; the jump and *Back to …* halves below still need a device pass.
-
-**FAIL (Deck) 2026-09-16, build 0fbecb6, Steam ban lookup row:** A on **Open Permissions** does open the Permissions tab, but the highlight lands on **Save files to Desktop**, one row above the **Steam ban lookup** toggle it was asked for (`docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json`). Setup (toggle off) and restore (toggle back on) steps: `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json`, `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`. The **Back to …** return half is recorded separately and stays owed.
-
-**FAIL (Deck) 2026-09-17, worse than the 2026-09-16 run:** Open Permissions now opens the Permissions tab at the very top, on the **Back to Main** button itself, nowhere near the toggle it should land on. **Back to Main** still works. Evidence `docs/test-evidence/plan57-QA-PERM-JUMP-01.json`.
-
 **PASS (Deck) 2026-09-23, fixed in `af53b7d`, timed to the millisecond (plan 64, flow E):** the ring reached the **Read game & screenshot context** switch 2,736 ms after pressing **Open Permissions** — then was still pulled away to **Back to Main** 22 ms later, the same wrong landing as before — but this time came back to the switch about 100 ms after that and stayed there for the rest of the 11.6-second recording. A person would at most see a brief flicker through **Back to Main**, not land on the wrong row. Evidence `docs/test-evidence/plan64-PERM-JUMP-01-try2.json`.
+
+History (the 2026-09-03 block and the two earlier FAIL runs this fix replaced):
+[testing-manual-history-2026.md § PERM-JUMP-01](archive/testing-manual-history-2026.md#perm-jump-01).
 
 | Capability | Deny surface | Expected toggle |
 |------------|--------------|-----------------|

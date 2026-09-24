@@ -71,11 +71,6 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1108,
-      "role": ""
-    },
-    {
       "path": "src/data/characterPlaceholderEmoticonGrids.ts",
       "lines": 1102,
       "role": ""
@@ -138,6 +133,11 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 704,
+      "role": ""
+    },
+    {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 685,
       "role": ""
     },
     {

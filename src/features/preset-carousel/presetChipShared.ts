@@ -2,19 +2,25 @@
  * Title: Preset chip shared timing and seed helpers
  *
  * Purpose: The small pieces every animation mode in MainTabPresetAnimatedChips.tsx needs alike —
- * the fade durations, the per-slot stagger, the reduced-motion check, and normalizeThreeSeeds
- * (which fills out a short seed list to exactly three prompts).
+ * the fade durations, the per-slot stagger, the reduced-motion check, normalizeThreeSeeds (which
+ * fills out a short seed list to exactly three prompts), and the row's own prop contract
+ * (MainTabPresetAnimatedChipsProps).
  *
  * Used for: MainTabPresetAnimatedChipsInner (fade/static), MainTabPresetDecodeSlots and
  * MainTabPresetSidewaysCarousel, all in src/components/MainTabPresetAnimatedChips.tsx.
  *
  * Solves: Keeps the numbers that have to agree with the CSS transition durations (the fade
  * timings) and the "always exactly three seeds" contract in one place, so the four animation
- * modes cannot quietly drift apart on either.
+ * modes cannot quietly drift apart on either. The prop type lives here too (not in the component
+ * file) so that MainTabPresetDecodeSlots, in its own file, can read it without importing back
+ * from the component file that imports MainTabPresetDecodeSlots — an import cycle the front-end
+ * ratchet catches.
  *
  * Does not: Decide which animation mode is active, or draw anything.
  */
+import type React from "react";
 import { getRandomPresets, type PresetPrompt, type PresetSamplerOptions } from "../../data/presets";
+import type { AskModeId } from "../../data/askMode";
 
 /*
  * Fade timings for chips side by side: while one chip fades, the other is still there, so a slow
@@ -53,6 +59,35 @@ export function normalizeThreeSeeds(
 }
 
 export type PresetChipAnimationMode = "fade" | "carousel" | "static" | "decode";
+
+export type MainTabPresetAnimatedChipsProps = {
+  /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
+  seeds: PresetPrompt[];
+  setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
+  /** When false, chips stay fully opaque and prompts rotate after hold without opacity transitions. */
+  fadeAnimationEnabled?: boolean;
+  /** fade = opacity crossfade; carousel = sideways window on a history; static = no opacity animation; decode = Ghost in the Shell scramble-to-resolve reveal. */
+  animationMode?: PresetChipAnimationMode;
+  /** If a preset declares `preferAskMode`, apply it when the chip is chosen. */
+  onPreferAskMode?: (mode: AskModeId) => void;
+  /** D-pad Down from any chip hands the ring to the Ask field; returns whether it moved. */
+  onCarouselExitDown?: () => boolean | void;
+  /** When true, KB-advice static seeds are excluded from timer-driven re-samples. */
+  useLocalKnowledgeBase?: boolean;
+  /**
+   * Bumped by MainTabPresetRow every time an Ask completes, so every mode's 60-second walk
+   * restarts even when the reseed produced the exact same three seeds. A pinned QA batch always
+   * returns its first three entries verbatim (`applyTempFrozenCarousel` in data/presets.ts), so
+   * `seedsKeyFrom` cannot tell an Ask happened from this alone (D58 #3).
+   */
+  askRestartToken?: number;
+  /**
+   * "One suggestion chip" setting (roadmap `[chips]` ★★★): when true the row shows a single chip
+   * with the whole column instead of `PRESET_VISIBLE_SLOTS` side by side. Off (two chips) is the
+   * shipped default. See `effectivePresetVisibleSlots`.
+   */
+  presetSingleChip?: boolean;
+};
 
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;

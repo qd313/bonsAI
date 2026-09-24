@@ -71,11 +71,6 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 924,
-      "role": ""
-    },
-    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 902,
       "role": ""
@@ -167,6 +162,11 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 573,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 573,
       "role": ""
     },

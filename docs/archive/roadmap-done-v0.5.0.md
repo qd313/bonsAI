@@ -21,6 +21,36 @@ flow E bookkeeping pass, for the same reason. The newer flow E block stayed in r
 _The plan 64 flow E block below was moved out the same way, during the same plan's flow G bookkeeping
 pass, for the same reason. The newer flow G block stayed in roadmap.md._
 
+_The plan 64 flow G block, and the first two entries of its flow H block, were moved out the same way
+on 2026-09-24 during plan 65's bookkeeping pass, oldest of the remaining Done entries first, for the
+same reason. The rest of the flow H block stayed in roadmap.md._
+
+**Closed 2026-09-23 (plan 64, flow G, proven on the Deck):**
+
+- ★ `[ollama]` **Typing a made-up model name and pressing Pull said the pull started, not that it was
+  refused** — **DONE, confirmed on the Deck 2026-09-23:** the toast now names the tag and suggests real
+  ones; nothing downloaded, and a real typed name still downloads. [Full
+  detail](archive/roadmap-bugs-fixed.md#typing-a-made-up-model-name-and-pressing-pull-said-the-pull-started-not-that-it-was-refused).
+- ★★ `[ollama]` `[KB]` **Pressing Done on a popup could write old values back over something the back end
+  had just changed** — **DONE, confirmed on the Deck 2026-09-23:** with a download saved to the SD card,
+  a switch and Done on the AI models screen no longer wrote the old, deleted location back over it. [Full
+  detail](archive/roadmap-bugs-fixed.md#pressing-done-on-a-popup-could-write-old-values-back-over-something-the-back-end-had-just-changed-including-a-knowledge-base-location).
+
+**Closed 2026-09-23 (plan 64, flow H part 1, proven on the Deck):**
+
+- ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **DONE, confirmed on
+  the Deck 2026-09-23:** after an answer finishes, the ring now stays on the same section instead of
+  vanishing, and the view no longer jumps to the end. Two small notes for later: right at the finish the
+  section's own top few pixels sit under the tab bar, and the view briefly reads its old position for one
+  frame before settling. [Full
+  detail](archive/roadmap-bugs-fixed.md#the-ring-is-lost-when-an-answer-finishes-while-you-are-walking-it).
+- ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
+  for about a minute** — **DONE, confirmed on the Deck 2026-09-23:** the section now reads Installed within
+  half a second of the download finishing, without leaving the tab. Left over: when the storage picker
+  closes, the ring still jumps up to the Ollama tab's own icon instead of staying in the pane — the same
+  rebuild, not yet fixed. [Full
+  detail](archive/roadmap-bugs-fixed.md#after-downloading-the-knowledge-base-onto-the-sd-card-the-section-still-read-not-installed-for-about-a-minute).
+
 **Closed 2026-09-23 (plan 64, flow E, proven on the Deck):**
 
 - ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **DONE,

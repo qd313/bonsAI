@@ -1261,3 +1261,35 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   — so this half proves less than it sounds like it does. Also noted: the ban report itself draws as plain
   lines of pipes and dashes, not as an actual table — filed as its own small bug. Evidence
   `docs/test-evidence/plan64-VAC-03-06.json`.
+
+### Trim the five documents that are still big (closed 2026-09-24, plan 65)
+
+- ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
+  Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
+  carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
+  about 3,700 tokens off every landing.** Four left. The next one that matters is the testing rows, because the house rules
+  say those are read before anything is marked done too. The biggest single win is the locked decisions file at 89,000
+  tokens a read. Do them one at a time; each is its own small job.
+
+  **Closed 2026-09-24 (plan 65).** The four remaining documents are trimmed. Testing rows dropped from
+  149,062 to 100,450 bytes, the manual Deck checks from 141,611 to 58,918, the maintainer-decisions file
+  from 429,015 to 124,027, and the long notes behind roadmap entries from 256,301 to 134,168 — 975,989 to
+  417,563 bytes together, 57% less to read before any work is marked done. [Plan
+  65](../planning/65-trim-docs-split-long-files.md).
+
+### The eleven long files, left long on purpose (closed 2026-09-24, plan 65)
+
+- ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15.** Nothing a person
+  using the plugin would notice. Eleven files in the code are past the size limit — seven that draw the screen,
+  four behind the scenes — and were left alone on purpose this round, because splitting each one safely is a
+  day's careful work. This entry is the record that they were skipped on purpose, not missed, with the sizes
+  so nobody has to re-measure. Two smaller files already came out of the Ask file the same safe way, each with
+  its own test. Do the rest one at a time, each with its own Deck check.
+  [Full file list and sizes](../roadmap-details.md#the-eleven-long-files-left-long-on-purpose) ·
+  [Plan](51-refactor-round-two.md).
+
+  **Closed 2026-09-24 (plan 65).** Fourteen long files (the eleven plus three found along the way) were
+  split, code lines going from 18,767 to 11,521 overall — most files came out between a tenth and two
+  thirds smaller, not half, because the screen-drawing code and the one long question-building function
+  cannot move without a rewrite. A new check now stops any file over 800 lines of code from growing back.
+  [Plan 65](../planning/65-trim-docs-split-long-files.md).

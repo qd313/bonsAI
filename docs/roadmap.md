@@ -163,6 +163,13 @@ starts work outside this.
   Show details with A, and separately by tap; try each once right after cancelling the Clear confirm box,
   and again right after switching chats. Needs a Deck walk with the focus recorder before any fix — the
   session thinks this is the same family as the tab-bar ghost below.
+- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, found by the
+  plan 65 Deck check 2026-09-24.**
+- ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **OPEN, found by
+  plan 65 2026-09-24.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was not touched
+  that night. Widen its slack, or make it wait on an event instead of a clock.
+- ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
+  plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -230,6 +237,27 @@ starts work outside this.
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
   never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
   the moment a second listener is added, a wake word for example.
+- ★★ `[docs]` **Some long-notes blocks and testing rows don't match what was found** — **OPEN, found by
+  plan 65 2026-09-24, a maintainer read, not a helper's.** 23 long-notes blocks could not be matched to
+  a finished roadmap entry (list in plan 65 §12). In the testing rows: KB-ROUTER-01 and STREAM-FOLLOW-01
+  read Open but say they moved to Done, HUB-EDGE-01 reads Verified for a screen that no longer exists,
+  and five more rows carry "owed" in their own status.
+- ★★ `[focus]` **Up under an answer skips whole rows of controls** — **OPEN, found by the plan 65 Deck
+  check 2026-09-24.** With details open, Up from "Save chat to Desktop" jumps past the chip ladder and
+  the tabs row straight to the notes block, 3 of 3 tries. With details closed, Up from there skips the
+  choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
+  visible area, with the panel half blank.
+- ★★ `[focus]` **"Manage AI models" can open with the ring already sitting on a licence filter** —
+  **OPEN, found by the plan 65 Deck check 2026-09-24.** The ring lands one press away from changing the
+  filter, with nothing pressed to put it there.
+- ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
+  found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
+  shared checkout, so a copy's own generated files go stale and its full checks fail one step.
+  Workaround: commit with `git -c core.hooksPath=.githooks commit`.
+- ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
+  after a deploy** — **OPEN, found by the plan 65 Deck check 2026-09-24.** Every saved walk was recorded
+  against an older build, so 0 walks compared that night. The check's own fingerprint of a build includes
+  Python cache files, which change on every run.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
   Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
@@ -352,22 +380,6 @@ replace it with a specific issue when one exists.
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
   while you are looking at the answer, and tapping it opens Decky instead. Questions answered; the Deck test is next.
   [Plan 66](planning/66-quick-tab-own-menu-icon.md).
-- ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
-  Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
-  carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
-  about 3,700 tokens off every landing.** Four left. The next one that matters is the testing rows, because the house rules
-  say those are read before anything is marked done too. The biggest single win is the locked decisions file at 89,000
-  tokens a read. Do them one at a time; each is its own small job.
-
-- ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15.** Nothing a person
-  using the plugin would notice. Eleven files in the code are past the size limit — seven that draw the screen,
-  four behind the scenes — and were left alone on purpose this round, because splitting each one safely is a
-  day's careful work. This entry is the record that they were skipped on purpose, not missed, with the sizes
-  so nobody has to re-measure. Two smaller files already came out of the Ask file the same safe way, each with
-  its own test. Do the rest one at a time, each with its own Deck check.
-  [Full file list and sizes](roadmap-details.md#the-eleven-long-files-left-long-on-purpose) ·
-  [Plan](archive/51-refactor-round-two.md).
-
 - ★★★ `[reply]` **The Spy opens as somebody else** — **OPEN, split off 2026-09-15 (D105).** On a random chance his first message
   introduces him as a different character from the list and he keeps it up. A character has no first message today, so this
   needs a greeting feature first and is its own job, not a line of prompt text. Decide before building: how often, whether the
@@ -935,31 +947,23 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
 Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
 line for line, nothing reworded, to keep this document under its size limit.
 
-**Closed 2026-09-23 (plan 64, flow G, proven on the Deck):**
+Plan 64's flow G block, and the first two entries of its flow H block, were moved out the same way on
+2026-09-24 during plan 65's bookkeeping pass, oldest of the remaining Done entries first, again to keep
+this document under its size limit.
 
-- ★ `[ollama]` **Typing a made-up model name and pressing Pull said the pull started, not that it was
-  refused** — **DONE, confirmed on the Deck 2026-09-23:** the toast now names the tag and suggests real
-  ones; nothing downloaded, and a real typed name still downloads. [Full
-  detail](archive/roadmap-bugs-fixed.md#typing-a-made-up-model-name-and-pressing-pull-said-the-pull-started-not-that-it-was-refused).
-- ★★ `[ollama]` `[KB]` **Pressing Done on a popup could write old values back over something the back end
-  had just changed** — **DONE, confirmed on the Deck 2026-09-23:** with a download saved to the SD card,
-  a switch and Done on the AI models screen no longer wrote the old, deleted location back over it. [Full
-  detail](archive/roadmap-bugs-fixed.md#pressing-done-on-a-popup-could-write-old-values-back-over-something-the-back-end-had-just-changed-including-a-knowledge-base-location).
+**Closed 2026-09-24 (plan 65, trim and split — nothing a person using the plugin would notice):**
+
+- ★★★ `[platform]` **Trim the five documents that are still big** — **DONE, plan 65 2026-09-24:** the
+  four remaining big documents dropped from 975,989 to 417,563 bytes together, 57% less to read before
+  any work is marked done. [Full
+  detail](archive/roadmap-completed.md#trim-the-five-documents-that-are-still-big).
+- ★★★ `[platform]` **The eleven long files, left long on purpose** — **DONE, plan 65 2026-09-24:**
+  fourteen long files split, code lines 18,767 to 11,521 overall (39% moved out); a check now stops any
+  file over 800 lines of code from growing back. [Full
+  detail](archive/roadmap-completed.md#the-eleven-long-files-left-long-on-purpose).
 
 **Closed 2026-09-23 (plan 64, flow H, proven on the Deck):**
 
-- ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **DONE, confirmed on
-  the Deck 2026-09-23:** after an answer finishes, the ring now stays on the same section instead of
-  vanishing, and the view no longer jumps to the end. Two small notes for later: right at the finish the
-  section's own top few pixels sit under the tab bar, and the view briefly reads its old position for one
-  frame before settling. [Full
-  detail](archive/roadmap-bugs-fixed.md#the-ring-is-lost-when-an-answer-finishes-while-you-are-walking-it).
-- ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
-  for about a minute** — **DONE, confirmed on the Deck 2026-09-23:** the section now reads Installed within
-  half a second of the download finishing, without leaving the tab. Left over: when the storage picker
-  closes, the ring still jumps up to the Ollama tab's own icon instead of staying in the pane — the same
-  rebuild, not yet fixed. [Full
-  detail](archive/roadmap-bugs-fixed.md#after-downloading-the-knowledge-base-onto-the-sd-card-the-section-still-read-not-installed-for-about-a-minute).
 - ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **DONE,
   confirmed on the Deck 2026-09-23:** opening the block now brings its header right to the top of the pane,
   showing about 40% of a three-note block instead of 17%. [Full

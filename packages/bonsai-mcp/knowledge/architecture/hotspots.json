@@ -31,11 +31,6 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1228,
-      "role": ""
-    },
-    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1220,
       "role": ""
@@ -48,6 +43,11 @@
     {
       "path": "src/data/characterPlaceholderEmoticonGrids.ts",
       "lines": 1102,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 1083,
       "role": ""
     },
     {

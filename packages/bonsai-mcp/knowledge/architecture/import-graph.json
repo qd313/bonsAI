@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 483,
-  "edgeCount": 1281,
+  "fileCount": 484,
+  "edgeCount": 1286,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -554,6 +554,7 @@
         "src/data/presets.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
@@ -1279,6 +1280,7 @@
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/presets.ts",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/sessionRagComposer.ts",
         "src/types/backgroundAsk.ts"
       ]
@@ -1548,6 +1550,7 @@
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
@@ -2225,6 +2228,17 @@
         "src/hooks/useSuggestedPromptChips.ts"
       ]
     },
+    "src/features/preset-carousel/presetChipButton.tsx": {
+      "imports": [
+        "src/data/askMode.ts",
+        "src/data/presets.ts",
+        "src/features/preset-carousel/presetRowLayout.ts",
+        "src/utils/joinPresetWithRunningGame.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx"
+      ]
+    },
     "src/features/preset-carousel/presetChipDecodeText.ts": {
       "imports": [
         "src/data/presets.ts"
@@ -2258,6 +2272,7 @@
         "src/components/MainTabPresetRow.tsx",
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetRowLayout.test.ts",
         "src/features/preset-carousel/sessionRagComposer.ts",
         "src/styles/sections/section-4.test.ts",
@@ -4575,6 +4590,7 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.tsx",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/utils/joinPresetWithRunningGame.test.ts"
       ]
     },

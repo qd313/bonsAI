@@ -21,11 +21,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 1402,
-      "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
       "path": "src/index.tsx",
       "lines": 1398,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -64,6 +59,11 @@
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1017,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 1015,
+      "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",

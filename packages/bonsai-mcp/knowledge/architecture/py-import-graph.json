@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 95,
-  "edgeCount": 221,
+  "fileCount": 97,
+  "edgeCount": 224,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -116,6 +116,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/services/transparency_service.py",
       "count": 4
     },
@@ -157,10 +161,6 @@
     },
     {
       "path": "py_modules/backend/services/tdp_service.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/token_accounting_service.py",
       "count": 3
     },
     {
@@ -340,6 +340,14 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_stop_service.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/ollama_window_fit.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/plugin_data_reset.py",
       "count": 1
     },
@@ -498,7 +506,7 @@
       "importedBy": [
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
-        "py_modules/backend/services/ollama_service.py"
+        "py_modules/backend/services/ollama_stop_service.py"
       ]
     },
     "py_modules/backend/ollama_routing.py": {
@@ -843,7 +851,7 @@
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
-        "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/ollama_stop_service.py",
         "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_model_download_service.py",
         "py_modules/backend/services/voice_transcription_service.py",
@@ -1019,14 +1027,14 @@
     "py_modules/backend/services/ollama_service.py": {
       "imports": [
         "py_modules/backend/constants.py",
-        "py_modules/backend/ollama_connectivity.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
-        "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
         "py_modules/backend/services/ollama_health_probe.py",
         "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/ollama_stop_service.py",
+        "py_modules/backend/services/ollama_window_fit.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
@@ -1036,6 +1044,23 @@
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_connection_test.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_stop_service.py": {
+      "imports": [
+        "py_modules/backend/ollama_connectivity.py",
+        "py_modules/backend/services/local_ollama_setup_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_window_fit.py": {
+      "imports": [
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
       ]
     },
     "py_modules/backend/services/plugin_data_reset.py": {
@@ -1266,7 +1291,8 @@
       "importedBy": [
         "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/ollama_preload_service.py",
-        "py_modules/backend/services/ollama_service.py"
+        "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/ollama_window_fit.py"
       ]
     },
     "py_modules/backend/services/transparency_service.py": {

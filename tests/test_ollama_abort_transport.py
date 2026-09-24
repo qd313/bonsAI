@@ -9,7 +9,7 @@ import threading
 import unittest
 from unittest import mock
 
-from backend.services import ollama_service
+from backend.services import ollama_stop_service
 from backend.services.ollama_service import close_ollama_chat_response, spawn_ollama_stop_thread
 
 
@@ -76,7 +76,7 @@ class TestSpawnOllamaStopThread(unittest.TestCase):
             seen["model_name"] = model_name
 
         log = RecordingLogger()
-        with mock.patch.object(ollama_service, "best_effort_abort_ollama_inference", fake_abort):
+        with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", fake_abort):
             spawn_ollama_stop_thread("192.168.1.50", "qwen2.5:7b", log).join(timeout=5)
         self.assertEqual(seen, {"pc_ip_field": "192.168.1.50", "model_name": "qwen2.5:7b"})
 
@@ -87,7 +87,7 @@ class TestSpawnOllamaStopThread(unittest.TestCase):
             seen["model_name"] = model_name
 
         log = RecordingLogger()
-        with mock.patch.object(ollama_service, "best_effort_abort_ollama_inference", fake_abort):
+        with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", fake_abort):
             spawn_ollama_stop_thread("host", object(), log).join(timeout=5)
         self.assertIsNone(seen["model_name"])
 
@@ -98,14 +98,14 @@ class TestSpawnOllamaStopThread(unittest.TestCase):
             raise RuntimeError("unload failed")
 
         log = RecordingLogger()
-        with mock.patch.object(ollama_service, "best_effort_abort_ollama_inference", boom):
+        with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", boom):
             spawn_ollama_stop_thread("host", "model", log).join(timeout=5)
         self.assertEqual(len(log.exception_calls), 1)
 
     def test_thread_is_a_named_daemon(self):
         """Daemon so a slow unload cannot block plugin shutdown."""
         log = RecordingLogger()
-        with mock.patch.object(ollama_service, "best_effort_abort_ollama_inference", lambda **_k: None):
+        with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", lambda **_k: None):
             thread = spawn_ollama_stop_thread("host", "model", log)
         self.assertIsInstance(thread, threading.Thread)
         self.assertTrue(thread.daemon)
@@ -122,7 +122,7 @@ class TestSpawnOllamaStopThread(unittest.TestCase):
             release.wait(timeout=5)
 
         log = RecordingLogger()
-        with mock.patch.object(ollama_service, "best_effort_abort_ollama_inference", slow):
+        with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", slow):
             thread = spawn_ollama_stop_thread("host", "model", log)
             self.assertTrue(started.wait(timeout=5))
             self.assertTrue(thread.is_alive(), "spawn blocked until the unload finished")

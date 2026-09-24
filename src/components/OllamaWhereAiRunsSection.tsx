@@ -250,9 +250,20 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const setupAutoTestRanRef = useRef(false);
   const lastCompletedSetupProfileRef = useRef<string>("");
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
-  const autoProbeRanRef = useRef(
-    peekOllamaTabLocalPending()?.connectionStatus != null
+  /*
+   * Which mode -- Ollama on this Deck (true) or on the network (false) -- the automatic probe last
+   * ran for; null before the first. Keyed on the mode rather than "ran once" because after a plugin
+   * reload this tab can mount before settings arrive, while `ollamaLocalOnDeck` still reads its
+   * default false: the one probe then went to the saved network address (or the "192.168.1."
+   * placeholder), failed, and the tab showed "Could not reach Ollama" and offered Install Ollama
+   * with Ollama answering on this Deck the whole time (plugin log 2026-09-23 21:44:45, "Name or
+   * service not known"). When settings land and the mode flips, the probe runs again for it.
+   */
+  const autoProbeModeRef = useRef<boolean | null>(
+    peekOllamaTabLocalPending()?.connectionStatus != null ? ollamaLocalOnDeck : null
   );
+  /** Only the newest probe may set the status: an older one finishing late must not overwrite it. */
+  const probeSeqRef = useRef(0);
   const [autostartStatus, setAutostartStatus] = useState<OllamaLocalAutostartStatus | null>(null);
   const [autostartBusy, setAutostartBusy] = useState(false);
 
@@ -351,7 +362,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     setMdnsDiscoveryMessage(local.mdnsDiscoveryMessage);
     setLocalInstallMenuOpen(local.localInstallMenuOpen);
     if (local.connectionStatus != null) {
-      autoProbeRanRef.current = true;
+      autoProbeModeRef.current = ollamaLocalOnDeck;
     }
   }, []);
 
@@ -392,6 +403,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
       TEST_CONNECTION_TIMEOUT_SECONDS * 1000 +
       (loopbackLikelyProbe ? LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS : 3000);
 
+    const seq = ++probeSeqRef.current;
     if (!quiet) {
       setConnectionTesting(true);
       setConnectionStatus(null);
@@ -402,10 +414,12 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         [target, TEST_CONNECTION_TIMEOUT_SECONDS],
         rpcDeadlineMs
       );
+      if (seq !== probeSeqRef.current) return;
       setConnectionStatus(result);
       onLastConnectionStatus?.(result);
       if (result.reachable && !ollamaLocalOnDeck) onPersistOllamaIp(target);
     } catch (e: unknown) {
+      if (seq !== probeSeqRef.current) return;
       const failed = { reachable: false, error: formatDeckyRpcError(e) };
       setConnectionStatus(failed);
       onLastConnectionStatus?.(failed);
@@ -416,16 +430,17 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
 
   onTestConnectionRef.current = onTestConnection;
 
-  // Auto-probe once on mount so Install/Update label reflects reachability without Test connection.
+  // Auto-probe on mount, and again when the on-Deck / network mode changes, so the Install/Update
+  // label reflects reachability without Test connection. Typing a new host still waits for an
+  // explicit Test connection.
   useEffect(() => {
-    if (autoProbeRanRef.current) return;
+    if (autoProbeModeRef.current === ollamaLocalOnDeck) return;
     const target = ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim();
     if (!target) return;
-    autoProbeRanRef.current = true;
+    autoProbeModeRef.current = ollamaLocalOnDeck;
     void onTestConnectionRef.current({ quiet: true });
-    // Mount-once probe; host changes still use explicit Test connection.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional one-shot on section mount
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the mode alone, on purpose
+  }, [ollamaLocalOnDeck]);
 
   const localSetupBusy = localSetupStatus?.phase === "running";
   const ollamaEngineReady = Boolean(connectionStatus?.reachable);

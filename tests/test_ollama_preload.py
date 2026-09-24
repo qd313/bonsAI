@@ -161,11 +161,13 @@ class PreloadAskModelSyncTests(unittest.TestCase):
     def setUp(self) -> None:
         # The room calculation reads the server itself; keep these tests off the network. 0 means
         # "say nothing", the old request shape. The test below that needs a number patches it again.
-        window = patch("backend.services.ollama_service.choose_window_tokens", return_value=0)
+        window = patch(
+            "backend.services.ollama_preload_service.choose_window_tokens", return_value=0
+        )
         window.start()
         self.addCleanup(window.stop)
 
-    @patch("backend.services.ollama_service.choose_window_tokens", return_value=16384)
+    @patch("backend.services.ollama_preload_service.choose_window_tokens", return_value=16384)
     @patch("backend.services.ollama_service.urllib.request.urlopen")
     def test_warms_with_the_same_room_ask_will_ask_for(
         self, mock_urlopen: MagicMock, mock_window: MagicMock

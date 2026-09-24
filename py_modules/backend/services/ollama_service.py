@@ -87,11 +87,10 @@ before it is not reliable enough on its own:
 5. Stopping a question in progress is handled separately, by `best_effort_abort_ollama_inference()`,
    which runs the three-step chain drawn above. Only the network step runs against a remote
    Ollama host; the other two only make sense against the AI running on the Deck itself.
-6. Two smaller, unrelated jobs also live here: `probe_ollama_health()` reads whether an Ollama
-   host is reachable and what it currently has loaded, for the Connection panel; and
-   `preload_ask_model_sync()` warms one small, already-installed model into memory once at
-   startup — picked by `pick_preload_model()` to match the model Ask would actually reach for —
-   so the very first question of a session is not the one paying to load a model from disk.
+6. Two smaller, unrelated jobs are re-exported here but actually live in their own files now:
+   `probe_ollama_health()` (Connection-panel reachability) is in ollama_health_probe.py, and
+   `preload_ask_model_sync()` (warming one small model at startup) is in
+   ollama_preload_service.py.
 """
 
 import json
@@ -116,10 +115,21 @@ from backend.ollama_connectivity import (
     is_loopback_ollama_base,
     ollama_http_base_from_pc_ip_field,
 )
-from backend.ollama_routing import resolve_routing_order
 from backend.ollama_urls import normalize_ollama_base
 
 from backend.services.bonsai_stream_tags import extract_bonsai_status
+from backend.services.ollama_health_probe import (
+    _loaded_model_snapshots,
+    probe_ollama_health,
+    vram_weight_share_pct,
+)
+from backend.services.ollama_preload_service import (
+    PRELOAD_MAX_PARAMETER_BILLIONS,
+    _installed_sizes,
+    parse_parameter_size_billions,
+    pick_preload_model,
+    preload_ask_model_sync,
+)
 from backend.services.ollama_ask_budgets import (
     SOFT_CONTINUE_CUE,
     SOFT_CONTINUE_USER_MESSAGE,
@@ -203,233 +213,6 @@ def _is_loopback_ollama_base(base_http: str) -> bool:
 
 def _guess_ollama_cli_paths() -> list[str]:
     return guess_ollama_cli_paths()
-
-
-def vram_weight_share_pct(size_bytes: Any, size_vram_bytes: Any) -> Optional[float]:
-    """Approximate share of a loaded model's weights that Ollama reports as GPU-visible.
-
-    Ollama's /api/ps gives `size` (total) and `size_vram` (the part in VRAM). The ratio is a
-    rough health signal, not an exact measurement — a model can report `size_vram > size`, which
-    is clamped to 100% rather than treated as an error. Returns None when the total is unusable,
-    which the UI renders as "unknown" rather than as 0%.
-    """
-    try:
-        total = int(size_bytes or 0)
-        in_vram = int(size_vram_bytes or 0)
-    except (TypeError, ValueError):
-        return None
-    if total <= 0 or in_vram < 0:
-        return None
-    return round(100.0 * min(in_vram, total) / total, 1)
-
-
-def _loaded_model_snapshots(ps_data: Any) -> list[dict[str, Any]]:
-    """Shape /api/ps into the per-model rows the Connection panel shows.
-
-    Deliberately not defensive per row: a malformed payload raises, and `probe_ollama_health`
-    turns that into an empty list for the whole endpoint. That is the behavior this code had
-    inline in the RPC, and it is the right one — a partly-parsed list of loaded models would be
-    more misleading than none.
-    """
-    out: list[dict[str, Any]] = []
-    for m in ps_data.get("models", []) or []:
-        size_bytes = int(m.get("size") or 0)
-        vram_bytes = int(m.get("size_vram") or 0)
-        out.append(
-            {
-                "name": str(m.get("name") or m.get("model") or "?"),
-                "size_bytes": size_bytes,
-                "size_vram_bytes": vram_bytes,
-                "vram_weight_share_pct_appx": vram_weight_share_pct(size_bytes, vram_bytes),
-            }
-        )
-    return out
-
-
-def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
-    """Read /api/version, /api/tags and /api/ps from an Ollama host.
-
-    `deadline` is an absolute `time.time()` value; each request gets whatever is left of it, with
-    a 0.25s floor so a already-expired deadline still makes one honest attempt rather than raising
-    a confusing negative-timeout error.
-
-    **Version and tags are required** — if either fails this raises, and the caller decides whether
-    that means "unreachable" or "try starting the local runtime and retry". /api/ps is optional:
-    older Ollama builds do not serve it, so a failure there yields an empty list rather than
-    failing a host that is otherwise healthy.
-    """
-    ver_timeout = max(0.25, deadline - time.time())
-    ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
-    ver_resp = urllib.request.urlopen(ver_req, timeout=ver_timeout)
-    ver_data = json.loads(ver_resp.read().decode("utf-8"))
-    version_local = ver_data.get("version", "unknown")
-
-    tags_timeout = max(0.25, deadline - time.time())
-    tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
-    tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
-    tags_data = json.loads(tags_resp.read().decode("utf-8"))
-    models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
-
-    ps_snapshots: list[dict[str, Any]] = []
-    ps_timeout = max(0.25, deadline - time.time())
-    try:
-        ps_req = urllib.request.Request(f"{base}/api/ps", method="GET")
-        ps_resp = urllib.request.urlopen(ps_req, timeout=ps_timeout)
-        ps_snapshots = _loaded_model_snapshots(json.loads(ps_resp.read().decode("utf-8")))
-    except Exception:
-        ps_snapshots = []
-
-    return {"version": version_local, "models": models_local, "ps_loaded": ps_snapshots}
-
-
-# Boot-time preload (roadmap: Speed-mode VRAM preload, developer switch first) only ever warms a
-# model at or under this size, so the switch can never accidentally load a big model at startup.
-PRELOAD_MAX_PARAMETER_BILLIONS = 3.0
-
-
-def parse_parameter_size_billions(raw: Any) -> Optional[float]:
-    """Parse Ollama's ``details.parameter_size`` (``"3.8B"``, ``"893M"``) into billions of params.
-
-    Anything that does not match returns ``None`` -- an unparsable or missing size is treated as
-    unknown, never as "small enough", so preload never guesses at a model it cannot measure.
-    """
-    if not isinstance(raw, str):
-        return None
-    match = re.match(r"^\s*([0-9]+(?:\.[0-9]+)?)\s*([BM])\s*$", raw.strip(), re.IGNORECASE)
-    if not match:
-        return None
-    value = float(match.group(1))
-    return value if match.group(2).upper() == "B" else value / 1000.0
-
-
-def _installed_sizes(tags_models: Any) -> "dict[str, Optional[float]]":
-    """Installed model name -> billions of parameters, or ``None`` when Ollama did not say."""
-    out: "dict[str, Optional[float]]" = {}
-    if not isinstance(tags_models, list):
-        return out
-    for entry in tags_models:
-        if not isinstance(entry, dict):
-            continue
-        name = entry.get("name") or entry.get("model")
-        if not isinstance(name, str) or not name.strip():
-            continue
-        details = entry.get("details")
-        out[name] = (
-            parse_parameter_size_billions(details.get("parameter_size"))
-            if isinstance(details, dict)
-            else None
-        )
-    return out
-
-
-def pick_preload_model(tags_models: Any, try_order: Any = None) -> Optional[str]:
-    """The model Ask will actually reach for, when it is small enough to be worth warming.
-
-    **The try order decides which model; the size cap only decides whether to bother.** Warming
-    *some* small model is worse than warming none: it spends memory on a model no question will
-    touch and leaves the first question exactly as slow as before. Measured on the Deck
-    2026-09-05 (PRELOAD-01): the only installed model under the cap was ``qwen2.5:1.5b`` at 1.5B,
-    while Ask was routed to ``gemma4:e2b-it-qat`` at 4.6B. Picking "the first small one" would
-    have loaded a model that never answers anything.
-
-    So when Ask's first installed model is over ``PRELOAD_MAX_PARAMETER_BILLIONS``, the answer is
-    ``None``. Warming nothing is the honest outcome of the roadmap's "models of 3B or under" —
-    not warming something else instead.
-
-    ``try_order`` is ``text_model_routing_order`` from settings. With none given (a fresh install
-    that has never saved one) this falls back to the first small installed model, skipping
-    embedding models: they are small enough to pass any cap and can never answer a question, so
-    on this Deck the 137M ``nomic-embed-text`` would otherwise have been a candidate.
-
-    A model whose size Ollama did not report is skipped rather than guessed at.
-    """
-    sizes = _installed_sizes(tags_models)
-    if not sizes:
-        return None
-
-    def small_enough(name: str) -> bool:
-        size_b = sizes.get(name)
-        return size_b is not None and size_b <= PRELOAD_MAX_PARAMETER_BILLIONS
-
-    if isinstance(try_order, list):
-        for wanted in try_order:
-            if not isinstance(wanted, str) or not wanted.strip():
-                continue
-            if wanted not in sizes:
-                continue  # in the try order but not installed: Ask would fall through it too
-            return wanted if small_enough(wanted) else None
-
-    for name in sizes:
-        if "embed" in name.lower():
-            continue
-        if small_enough(name):
-            return name
-    return None
-
-
-def preload_ask_model_sync(
-    base_http: str,
-    logger: Any,
-    *,
-    timeout_seconds: float = 20.0,
-    settings: Any = None,
-) -> None:
-    """Best-effort warm of a small installed model into Ollama's memory, once, at boot.
-
-    Reads the installed model list from ``GET /api/tags``, picks the model Ask would actually reach
-    for when it is at or under ``PRELOAD_MAX_PARAMETER_BILLIONS`` billion parameters
-    (``pick_preload_model``), and sends a
-    zero-token ``POST /api/generate`` (empty ``prompt``) -- Ollama's documented way to load a
-    model into memory without generating anything.
-
-    Never raises. A missing host, no eligible small model installed, or the host declining the
-    warm request for lack of memory are all silent no-ops here on purpose: the roadmap entry
-    calls for "skip silently -- no error, no toast, no stuck status line," because this is a
-    startup nicety, never something the plugin should surface as broken. There is no retry and no
-    polling loop behind this; the caller runs it once, at boot, and never again.
-    """
-    try:
-        tags_req = urllib.request.Request(f"{base_http.rstrip('/')}/api/tags", method="GET")
-        with urllib.request.urlopen(tags_req, timeout=min(5.0, timeout_seconds)) as resp:
-            tags_data = json.loads(resp.read().decode("utf-8"))
-        models_list = tags_data.get("models") if isinstance(tags_data, dict) else None
-        # Ask's own resolver, so the warm-up and the Ask agree on which model comes first. It
-        # covers the case a saved order cannot: an empty order (never set, which is the state on
-        # a fresh install and was the state on the maintainer's Deck) still resolves to the
-        # order Ask would build for itself from what is installed.
-        try_order = None
-        if isinstance(settings, dict):
-            installed = [
-                str(e.get("name") or e.get("model") or "")
-                for e in (models_list or [])
-                if isinstance(e, dict)
-            ]
-            try_order = resolve_routing_order(False, settings, [t for t in installed if t])
-        model = pick_preload_model(models_list, try_order)
-        if not model:
-            logger.info("preload_ask_model: no eligible small model installed, skipping")
-            return
-        warm: dict[str, Any] = {"model": model, "prompt": ""}
-        # Load it with the room Ask will ask for. Without num_ctx the server loads at its own
-        # default (4,096 on the Deck), and the first Ask -- which asks for more -- reloads the
-        # model: measured on the Deck (plan 64 flow H, PRELOAD-01), warm and cold both took 9.8 s
-        # to first words, the journal showing a second load 2 s after the press. choose_window_tokens
-        # remembers its answer per server and model for the session, so Ask gets the same number.
-        window = choose_window_tokens(base_http, model, logger=logger)
-        if window > 0:
-            warm["options"] = {"num_ctx": window}
-        body = json.dumps(warm).encode("utf-8")
-        gen_req = urllib.request.Request(
-            f"{base_http.rstrip('/')}/api/generate",
-            data=body,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urllib.request.urlopen(gen_req, timeout=timeout_seconds) as resp:
-            resp.read()
-        logger.info("preload_ask_model: warmed %s", model)
-    except Exception as exc:
-        logger.info("preload_ask_model: skipped (%s)", exc)
 
 
 def close_ollama_chat_response(response: Any, logger: Any) -> bool:

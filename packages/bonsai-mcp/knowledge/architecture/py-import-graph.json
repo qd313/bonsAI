@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 93,
-  "edgeCount": 218,
+  "fileCount": 95,
+  "edgeCount": 221,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -23,6 +23,7 @@
     "py_modules/backend/services/model_policy.py",
     "py_modules/backend/services/network_service.py",
     "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_health_probe.py",
     "py_modules/backend/services/prompt_budget_service.py",
     "py_modules/backend/services/proton_troubleshooting_logs.py",
     "py_modules/backend/services/reply_followup_blocks.py",
@@ -159,6 +160,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/tdp_intent.py",
       "count": 3
     },
@@ -216,10 +221,6 @@
     },
     {
       "path": "py_modules/backend/services/spy_confession_service.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/token_accounting_service.py",
       "count": 2
     },
     {
@@ -319,6 +320,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_health_probe.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_local_autostart_service.py",
       "count": 1
     },
@@ -328,6 +333,10 @@
     },
     {
       "path": "py_modules/backend/services/ollama_mdns_discovery_service.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/ollama_preload_service.py",
       "count": 1
     },
     {
@@ -501,7 +510,7 @@
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
-        "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/settings_service.py"
       ]
     },
@@ -945,6 +954,12 @@
         "py_modules/backend/services/rag_corpus_status.py"
       ]
     },
+    "py_modules/backend/services/ollama_health_probe.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
+      ]
+    },
     "py_modules/backend/services/ollama_local_autostart_service.py": {
       "imports": [
         "py_modules/backend/services/local_ollama_setup_service.py"
@@ -973,6 +988,15 @@
         "main.py"
       ]
     },
+    "py_modules/backend/services/ollama_preload_service.py": {
+      "imports": [
+        "py_modules/backend/ollama_routing.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
+      ]
+    },
     "py_modules/backend/services/ollama_prompts.py": {
       "imports": [
         "py_modules/backend/services/ask_topic_instructions.py",
@@ -996,11 +1020,12 @@
       "imports": [
         "py_modules/backend/constants.py",
         "py_modules/backend/ollama_connectivity.py",
-        "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
+        "py_modules/backend/services/ollama_health_probe.py",
+        "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/token_accounting_service.py"
@@ -1240,6 +1265,7 @@
       "imports": [],
       "importedBy": [
         "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },

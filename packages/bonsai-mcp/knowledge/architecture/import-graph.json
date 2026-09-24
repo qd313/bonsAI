@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 441,
-  "edgeCount": 1159,
+  "fileCount": 442,
+  "edgeCount": 1161,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1421,7 +1421,7 @@
     "src/data/knowledgeBaseDev.ts": {
       "imports": [],
       "importedBy": [
-        "src/index.tsx"
+        "src/features/plugin-shell/useDeveloperToolActions.ts"
       ]
     },
     "src/data/modelPolicy.ts": {
@@ -1601,7 +1601,7 @@
       "imports": [],
       "importedBy": [
         "src/data/steam-input-lexicon.test.ts",
-        "src/index.tsx",
+        "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/utils/steamInputJump.ts"
       ]
     },
@@ -1971,6 +1971,17 @@
         "src/components/PermissionDenyAction.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/permissionDeepLink.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useDeveloperToolActions.ts": {
+      "imports": [
+        "src/data/knowledgeBaseDev.ts",
+        "src/data/steam-input-lexicon.ts",
+        "src/hooks/usePluginSettings.ts",
+        "src/utils/steamInputJump.ts"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -2530,6 +2541,7 @@
         "src/utils/settingsPayload.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/hooks/usePluginSettings.test.ts",
@@ -2827,11 +2839,9 @@
         "src/components/icons.tsx",
         "src/context/UiScaleContext.tsx",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/knowledgeBaseDev.ts",
         "src/data/modelPolicy.ts",
         "src/data/presets.ts",
         "src/data/pullModelCatalog.ts",
-        "src/data/steam-input-lexicon.ts",
         "src/data/steamSettingsNavigation.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
@@ -2851,6 +2861,7 @@
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
+        "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
@@ -2882,7 +2893,6 @@
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts",
         "src/utils/navFocusRegistry.ts",
-        "src/utils/steamInputJump.ts",
         "src/utils/unifiedInputPersistenceMode.ts"
       ],
       "importedBy": [
@@ -4520,7 +4530,7 @@
         "src/data/steam-input-lexicon.ts"
       ],
       "importedBy": [
-        "src/index.tsx"
+        "src/features/plugin-shell/useDeveloperToolActions.ts"
       ]
     },
     "src/utils/steamParental.test.ts": {

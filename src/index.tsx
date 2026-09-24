@@ -56,7 +56,8 @@
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
  * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
  * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its read-aloud glue moved to
- * features/voice/useVoiceAskWithReadAloud.ts.
+ * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
+ * features/plugin-shell/useDeveloperToolActions.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -94,7 +95,7 @@
  *   render and produce an update loop.
  */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
-import { definePlugin, toaster, call, useQuickAccessVisible } from "@decky/api";
+import { definePlugin, toaster, useQuickAccessVisible } from "@decky/api";
 import { Navigation, Tabs } from "@decky/ui";
 
 import { PLUGIN_VERSION } from "./pluginVersion";
@@ -104,8 +105,6 @@ import { setFrozenTestChips } from "./data/presets";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
 import { PULL_MODEL_CATALOG } from "./data/pullModelCatalog";
-import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
-import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
   getPluginDataClearedGeneration,
@@ -143,7 +142,6 @@ import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
 import { UiScaleProvider } from "./context/UiScaleContext";
 import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
 import { callDeckyWithTimeout } from "./utils/deckyCall";
-import { SEED_KB_SOURCE_DIR } from "./data/knowledgeBaseDev";
 import { usePluginSettings } from "./hooks/usePluginSettings";
 import { useReplyLanguage } from "./hooks/useReplyLanguage";
 import { useIntentPacks } from "./hooks/useIntentPacks";
@@ -153,6 +151,7 @@ import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
 import { usePermissionJump } from "./hooks/usePermissionJump";
 import { effectiveCapabilities, useKidsLock } from "./hooks/useKidsLock";
 import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
+import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToolActions";
 import { useRoutingOrderModal } from "./features/model-routing/useRoutingOrderModal";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
@@ -1207,47 +1206,9 @@ const Content: React.FC = () => {
     kidsLockActive,
   });
 
-  const onSteamInputPhase1Jump = useCallback(() => {
-    const entry = getSteamInputLexiconEntry("phase1_per_game_controller_config");
-    if (!entry) {
-      toaster.toast({ title: "Steam Input", body: "Lexicon entry missing.", duration: 3500 });
-      return;
-    }
-    const result = jumpToSteamInputEntry(entry);
-    if (result.ok) {
-      toaster.toast({
-        title: "Steam Input jump",
-        body: `${result.confidenceLabel}: ${result.method} → ${result.detail}`,
-        duration: 4000,
-      });
-    } else {
-      const hint = entry.breadcrumb.length ? ` ${entry.breadcrumb[0]}` : "";
-      toaster.toast({ title: "Steam Input jump", body: `${result.reason}${hint}`, duration: 6000 });
-    }
-  }, []);
-
-  const installSeedKnowledgeBase = useCallback(async () => {
-    // Deliberately unwrapped: installing a corpus copies the whole seed knowledge
-    // base to disk, which can outrun any UI deadline on Deck storage.
-    const out = await call<
-      [{ source_dir: string }],
-      { ok?: boolean; error?: string; install_path?: string; version?: string }
-    >("install_rag_corpus_local", { source_dir: SEED_KB_SOURCE_DIR });
-    if (!out?.ok) {
-      toaster.toast({
-        title: "Seed KB install failed",
-        body: out?.error ?? "Could not install seed knowledge base.",
-        duration: 10000,
-      });
-      return;
-    }
-    await syncSettingsFromDisk();
-    toaster.toast({
-      title: "Seed knowledge base installed",
-      body: `${out.version ?? "seed"} → ${out.install_path ?? "~/.bonsai/rag"}`,
-      duration: 6000,
-    });
-  }, [syncSettingsFromDisk]);
+  const { onSteamInputPhase1Jump, installSeedKnowledgeBase } = useDeveloperToolActions({
+    syncSettingsFromDisk,
+  });
 
   const developerTab = useDeveloperTabPayload({
     capturedErrors,

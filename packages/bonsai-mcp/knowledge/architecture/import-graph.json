@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 475,
-  "edgeCount": 1260,
+  "fileCount": 476,
+  "edgeCount": 1263,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -672,6 +672,7 @@
         "src/components/icons.tsx",
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarMenuToggles.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useAskBarSettingsCardVisibility.ts",
@@ -2346,6 +2347,15 @@
       ],
       "importedBy": [
         "src/index.tsx"
+      ]
+    },
+    "src/hooks/useAskBarInitialRingClaim.ts": {
+      "imports": [
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
     "src/hooks/useAskBarMenuToggles.ts": {
@@ -4614,6 +4624,7 @@
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
@@ -5068,6 +5079,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",

@@ -260,6 +260,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/hooks
 
+- **useAskBarInitialRingClaim.ts** (src/hooks/useAskBarInitialRingClaim.ts) — *Ask bar initial ring claim*: On a fresh panel open, where nothing owns Steam's D-pad ring yet, try a few times to place it on the question box rather than leave the first press to land wherever Steam happens to put it.
 - **useAskBarMenuToggles.ts** (src/hooks/useAskBarMenuToggles.ts) — *Ask bar menu toggles*: The open/close functions for the Ask bar's two popover menus (the Ask-mode picker and the attach menu), and the effect that marks the nearest `.bonsai-scope` ancestor while either one is open.
 - **useAskBarSettingsCardRows.ts** (src/hooks/useAskBarSettingsCardRows.ts) — *Ask bar settings-results card rows*: Everything about how many rows of the settings-search results card can actually fit above the question box, and how the ring gets handed to (and back out of) whichever row is nearest the box.
 - **useAskBarSettingsCardVisibility.ts** (src/hooks/useAskBarSettingsCardVisibility.ts) — *Ask bar settings-card visibility state*: Whether the settings-search results card is hidden outright by what was typed, how many of its rows currently fit, and whether a person closed it for the rest of this search (the B / tap-outside behavior).

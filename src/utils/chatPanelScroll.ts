@@ -121,3 +121,24 @@ export function chunkHasContentBelowViewport(chunkEl: HTMLElement, scrollEl: HTM
 export function chunkHasContentAboveViewport(chunkEl: HTMLElement, scrollEl: HTMLElement): boolean {
   return chunkEl.getBoundingClientRect().top < scrollEl.getBoundingClientRect().top - 4;
 }
+
+/**
+ * Put `el`'s top edge at the scroll pane's own top edge, `padPx` below it. Unlike
+ * `scrollIntoView({ block: "start" })` this ignores the pane's `scroll-padding-top`, which Steam's
+ * Quick Access scroll area sets to 116 px: measured on the Deck
+ * (docs/test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json), opening a "From the notes" block asked to
+ * bring its header to the top, the header already sat exactly 116 px down, and the view moved 1 px
+ * -- 17% of the block showed in a band of about 200 px above the dock. Nothing of ours is pinned
+ * to the top of that pane (only the dock, at the bottom), so the full band is free to use.
+ * Returns false, after falling back to scrollIntoView, when there is no scroll pane to move.
+ */
+export function scrollElementTopToPaneTop(el: HTMLElement, padPx = 4): boolean {
+  const pane = findScrollablePanel(el);
+  if (!pane) {
+    el.scrollIntoView({ block: "start" });
+    return false;
+  }
+  const delta = el.getBoundingClientRect().top - pane.getBoundingClientRect().top - padPx;
+  pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), pane.scrollTop + delta));
+  return true;
+}

@@ -186,6 +186,7 @@ import {
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
 import { focusAnswerChunkAtIndex, focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
+import { scrollElementTopToPaneTop } from "../utils/chatPanelScroll";
 import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
@@ -1308,7 +1309,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     const header = kbNotesHeaderElRefs.current[turnKey];
     if (!header) return;
     const raf = requestAnimationFrame(() => {
-      header.scrollIntoView({ block: "start" });
+      // Not scrollIntoView: that honours the pane's 116 px scroll-padding-top and left the header
+      // where it already was (see scrollElementTopToPaneTop).
+      scrollElementTopToPaneTop(header);
     });
     return () => cancelAnimationFrame(raf);
   });

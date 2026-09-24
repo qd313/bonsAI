@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 425,
-  "edgeCount": 1089,
+  "edgeCount": 1090,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -487,6 +487,7 @@
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildThinkingBlurbTextElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/chatTurnTitle.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
@@ -3549,6 +3550,7 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/utils/answerBubbleNavigation.ts",

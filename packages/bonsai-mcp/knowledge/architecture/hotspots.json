@@ -22,7 +22,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1971,
+      "lines": 1978,
       "role": ""
     },
     {
@@ -106,13 +106,13 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 853,
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 867,
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 839,
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
       "role": ""
     },
     {

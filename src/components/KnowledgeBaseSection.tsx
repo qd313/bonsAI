@@ -130,6 +130,27 @@ const KB_NOMIC_HINT_SESSION_KEY = "bonsai_kb_nomic_hint_warned";
 /** Shared row height so Update (long label) and Remove match on Deck (stretch alone fails on Decky Button). */
 const KB_ACTION_ROW_MIN_HEIGHT = 44;
 
+/*
+ * A download outlives the component that started it. Closing the storage picker is a Decky modal
+ * close, which remounts the tab's content: `downloadBusy`, and the poll it drives, died with the old
+ * instance while the download ran on, and the new instance's one mount-time status read came before
+ * the download finished. Measured on the Deck (docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json):
+ * the section read "Not installed" for 37 s and more after the library was installed and saved, and
+ * only a second modal (another remount) brought it back. This marker lives at module scope so a
+ * remounted section picks the poll back up; it clears when a poll sees the download end.
+ */
+let kbDownloadStartedAtMs: number | null = null;
+const KB_DOWNLOAD_RESUME_WINDOW_MS = 10 * 60 * 1000;
+
+function kbDownloadLikelyInFlight(): boolean {
+  return kbDownloadStartedAtMs != null && Date.now() - kbDownloadStartedAtMs < KB_DOWNLOAD_RESUME_WINDOW_MS;
+}
+
+/** Test seam: forget any in-flight marker between tests. */
+export function resetKbDownloadInFlightForTests(): void {
+  kbDownloadStartedAtMs = null;
+}
+
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;
 
@@ -226,7 +247,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   onMoveDownFromRemove,
 }) => {
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
-  const [downloadBusy, setDownloadBusy] = useState(false);
+  const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
   const [cancelBusy, setCancelBusy] = useState(false);
   const [nomicPullBusy, setNomicPullBusy] = useState(false);
   /** Set once a pull is accepted; polls status until the model shows up, then stops. */
@@ -301,6 +322,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       setStatus(st);
+      // A download already running on the back end (started before a remount) still gets polled.
+      if (st?.phase === "running" && !st.done) setDownloadBusy(true);
       if (
         useLocalKnowledgeBase &&
         st &&
@@ -361,6 +384,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             }
           }
           if (st?.done || st?.phase === "failed" || st?.phase === "done" || st?.phase === "cancelled") {
+            kbDownloadStartedAtMs = null;
             setDownloadBusy(false);
             void refreshStatus();
           }
@@ -395,6 +419,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   }, [nomicPullStarted, refreshStatus]);
 
   const startDownload = async (installPath: string, storage: string) => {
+    kbDownloadStartedAtMs = Date.now();
     setDownloadBusy(true);
     try {
       const out = await callDeckyWithTimeout<
@@ -402,6 +427,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         { accepted?: boolean; reason?: string }
       >("start_rag_corpus_download", [{ install_path: installPath, storage }], 15000);
       if (!out?.accepted) {
+        kbDownloadStartedAtMs = null;
         setDownloadBusy(false);
         toaster.toast({
           title: "Download not started",
@@ -416,6 +442,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         duration: 6000,
       });
     } catch (e: unknown) {
+      kbDownloadStartedAtMs = null;
       setDownloadBusy(false);
       const msg = formatDeckyRpcError(e);
       toaster.toast({ title: "Download failed", body: msg, duration: 8000 });
@@ -532,6 +559,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           body: out.version ? `Downloading version ${out.version}…` : "Downloading the latest corpus…",
           duration: 4000,
         });
+        kbDownloadStartedAtMs = Date.now();
         setDownloadBusy(true);
       })
       .catch((e) => toaster.toast({ title: "Update failed", body: formatDeckyRpcError(e), duration: 8000 }));

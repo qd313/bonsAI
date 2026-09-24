@@ -10,7 +10,7 @@
  */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { KnowledgeBaseSection } from "./KnowledgeBaseSection";
+import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
 import {
   getRpcCallLog,
   ragCorpusStatusFixture,
@@ -55,6 +55,7 @@ const cancelCalls = () => getRpcCallLog().filter((c) => c.method === "cancel_rag
 describe("KnowledgeBaseSection cancel", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+    resetKbDownloadInFlightForTests();
   });
 
   it("offers a Cancel control while a download is running", async () => {
@@ -127,5 +128,48 @@ describe("KnowledgeBaseSection cancel", () => {
 
     await screen.findByText("Manifest unreachable.");
     expect(screen.queryByText(/Download cancelled/)).toBeNull();
+  });
+});
+
+/*
+ * Closing the storage picker is a Decky modal close, which remounts the tab's content. The download
+ * ran on, but the remounted section had forgotten it: no poll, one status read taken before the
+ * install finished, and "Not installed" for 37 s and more on the Deck
+ * (docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json). A remount is simulated here by unmounting
+ * the section and rendering a fresh one while the download is still "running".
+ */
+describe("KnowledgeBaseSection after the tab is rebuilt mid-download", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    resetKbDownloadInFlightForTests();
+  });
+
+  function statusThatFinishesOnRead(n: number, before: Record<string, unknown>) {
+    let reads = 0;
+    return () => {
+      reads += 1;
+      return reads < n
+        ? ragCorpusStatusFixture(before)
+        : ragCorpusStatusFixture({ installed: true, done: true, phase: "done", corpus_version: "2026.09.18" });
+    };
+  }
+
+  it("keeps checking a download started before the rebuild, and shows Installed when it lands", async () => {
+    const first = await startDownloadViaUpdate();
+    first.unmount();
+
+    // The rebuilt section's first read comes before the install finished, as on the Deck.
+    setRpcHandler("get_rag_corpus_status", statusThatFinishesOnRead(2, { installed: false, done: false, phase: "idle" }));
+    renderSection();
+
+    await screen.findByText(/Installed/, undefined, { timeout: 4000 });
+    expect(screen.queryByText(/Not installed/)).toBeNull();
+  });
+
+  it("picks up a download the back end reports as running, with no marker left from before", async () => {
+    setRpcHandler("get_rag_corpus_status", statusThatFinishesOnRead(2, { installed: false, done: false, phase: "running" }));
+    renderSection();
+
+    await screen.findByText(/Installed/, undefined, { timeout: 4000 });
   });
 });

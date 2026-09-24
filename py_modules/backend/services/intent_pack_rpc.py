@@ -31,7 +31,7 @@ from backend.services.intent_pack_service import (
 )
 
 
-async def get_intent_packs(self) -> dict:
+async def get_intent_packs(self):
     """Return intent pack summaries and full entries for unified search indexing."""
     store = self._load_intent_pack_store()
     return {
@@ -41,7 +41,7 @@ async def get_intent_packs(self) -> dict:
     }
 
 
-async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True) -> dict:
+async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True):
     """Enable or disable a search intent pack."""
     if not hasattr(self, "_intent_pack_store_lock"):
         self._intent_pack_store_lock = asyncio.Lock()
@@ -58,13 +58,13 @@ async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True)
         }
 
 
-async def export_intent_pack(self, pack_id: str = "") -> Any:
+async def export_intent_pack(self, pack_id: str = ""):
     """Export one intent pack as formatted JSON."""
     store = self._load_intent_pack_store()
     return export_pack(store, pack_id)
 
 
-async def import_intent_pack(self, payload: Any = None) -> dict:
+async def import_intent_pack(self, payload: Any = None):
     """Dry-run or confirm-merge import of a single intent pack from JSON."""
     data = payload if isinstance(payload, dict) else {}
     raw_json = data.get("json")
@@ -88,7 +88,7 @@ async def import_intent_pack(self, payload: Any = None) -> dict:
         return result
 
 
-async def remove_intent_pack(self, pack_id: str = "") -> dict:
+async def remove_intent_pack(self, pack_id: str = ""):
     """Remove a user/imported intent pack (bundled packs cannot be removed)."""
     if not hasattr(self, "_intent_pack_store_lock"):
         self._intent_pack_store_lock = asyncio.Lock()

@@ -34,7 +34,7 @@ import decky
 logger = decky.logger
 
 
-async def get_strategy_checklist_session(self, app_id: str = "") -> Any:
+async def get_strategy_checklist_session(self, app_id: str = ""):
     """Return persisted checklist for the given game AppID (or generic bucket when empty)."""
     store = self._load_strategy_checklist_store()
     entry = get_session_entry(store, app_id)
@@ -50,7 +50,7 @@ async def get_strategy_checklist_session(self, app_id: str = "") -> Any:
     }
 
 
-async def save_strategy_checklist_session(self, payload: Any = None) -> dict:
+async def save_strategy_checklist_session(self, payload: Any = None):
     """Persist checklist + checked state for one game bucket."""
     if not isinstance(payload, dict):
         return {"ok": False, "error": "Invalid payload"}
@@ -80,7 +80,7 @@ async def save_strategy_checklist_session(self, payload: Any = None) -> dict:
         return {"ok": True, "entry": entry}
 
 
-async def clear_strategy_checklist_session(self, app_id: str = "") -> dict:
+async def clear_strategy_checklist_session(self, app_id: str = ""):
     """Remove persisted checklist for one game or entire file when app_id omitted."""
     if not hasattr(self, "_strategy_checklist_store_lock"):
         self._strategy_checklist_store_lock = asyncio.Lock()

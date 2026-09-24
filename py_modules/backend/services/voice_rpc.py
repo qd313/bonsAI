@@ -59,7 +59,7 @@ async def _require_microphone_access(self) -> tuple[bool, dict[str, Any]]:
     return True, {}
 
 
-async def get_voice_engine_status(self, PLUGIN_ROOT: str) -> dict:
+async def get_voice_engine_status(self, PLUGIN_ROOT: str):
     """Return whisper binary + model readiness for the configured STT model."""
     settings = await self.load_settings()
     model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
@@ -68,7 +68,7 @@ async def get_voice_engine_status(self, PLUGIN_ROOT: str) -> dict:
     return {**ready, "install": install}
 
 
-async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = "") -> dict:
+async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
     """Install whisper-cli (podman) and download the selected GGUF model (requires microphone_access)."""
     ok_gate, gate_out = await _require_microphone_access(self)
     if not ok_gate:
@@ -119,12 +119,12 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = "") -> di
     return {"accepted": True, "model_id": mid}
 
 
-async def get_voice_install_status(self) -> dict:
+async def get_voice_install_status(self):
     """Poll voice model download progress."""
     return dict(self._voice_install_state)
 
 
-async def start_voice_transcription(self, PLUGIN_ROOT: str) -> dict:
+async def start_voice_transcription(self, PLUGIN_ROOT: str):
     """Start PipeWire/Pulse capture and local whisper interim transcription."""
     ok_gate, gate_out = await _require_microphone_access(self)
     if not ok_gate:
@@ -184,7 +184,7 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str) -> dict:
     return out
 
 
-async def stop_voice_transcription(self) -> dict:
+async def stop_voice_transcription(self):
     """Stop capture and return finalized transcript."""
     async with self._voice_lock:
         session = self._voice_session
@@ -205,7 +205,7 @@ async def stop_voice_transcription(self) -> dict:
     return out
 
 
-async def get_voice_transcription_status(self) -> dict:
+async def get_voice_transcription_status(self):
     """Poll interim/final transcript while recording."""
     settings = await self.load_settings()
     if not capability_enabled(settings, "microphone_access"):
@@ -229,7 +229,7 @@ async def get_voice_transcription_status(self) -> dict:
     return st
 
 
-async def start_voice_read_aloud(self, text: str) -> dict:
+async def start_voice_read_aloud(self, text: str):
     """Feature: read an answer's text aloud in the Deck's own voice.
 
     Input: plain text, already stripped of markdown and hidden spoiler blocks by the frontend
@@ -240,13 +240,13 @@ async def start_voice_read_aloud(self, text: str) -> dict:
     return await asyncio.to_thread(self._read_aloud_service.start, text)
 
 
-async def stop_voice_read_aloud(self) -> dict:
+async def stop_voice_read_aloud(self):
     """Feature: stop reading aloud. Output: {"ok", "stopped"} — stopped is True only when a
     reading was actually in progress. Safe to call when nothing is playing."""
     return await asyncio.to_thread(self._read_aloud_service.stop)
 
 
-async def get_voice_read_aloud_status(self) -> dict:
+async def get_voice_read_aloud_status(self):
     """Feature: poll the read-aloud state while it plays in the background.
 
     Output: {"state": "idle"|"speaking"|"done"|"error", "sentence_index", "sentence_count",

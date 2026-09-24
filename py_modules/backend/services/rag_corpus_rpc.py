@@ -48,7 +48,7 @@ import decky
 logger = decky.logger
 
 
-async def get_rag_corpus_status(self, data: Any = None) -> dict:
+async def get_rag_corpus_status(self, data: Any = None):
     """Return knowledge-base download state and whether a corpus is installed."""
     settings = await self.load_settings()
     return build_rag_corpus_status(
@@ -56,7 +56,7 @@ async def get_rag_corpus_status(self, data: Any = None) -> dict:
     )
 
 
-async def start_rag_corpus_download(self, data: Any = None) -> dict:
+async def start_rag_corpus_download(self, data: Any = None):
     """Download and install the knowledge base corpus (user-initiated; Model A consent)."""
     install_dir = default_corpus_dir_internal()
     storage = "internal"
@@ -122,7 +122,7 @@ async def start_rag_corpus_download(self, data: Any = None) -> dict:
     return {"accepted": True, "install_path": install_dir}
 
 
-async def cancel_rag_corpus_download(self) -> dict:
+async def cancel_rag_corpus_download(self):
     ce = getattr(self, "_rag_corpus_cancel_event", None)
     if isinstance(ce, asyncio.Event):
         ce.set()
@@ -136,7 +136,7 @@ async def cancel_rag_corpus_download(self) -> dict:
     return {"cancel_requested": True}
 
 
-async def update_rag_corpus(self) -> dict:
+async def update_rag_corpus(self):
     """Check remote manifest and re-download when version differs."""
     settings = await self.load_settings()
     try:
@@ -153,7 +153,7 @@ async def update_rag_corpus(self) -> dict:
     return {"ok": bool(out.get("accepted")), "updated": True, "version": remote_ver, **out}
 
 
-async def remove_rag_corpus(self) -> dict:
+async def remove_rag_corpus(self):
     """Remove installed corpus files and clear path settings."""
     settings = await self.load_settings()
     path = str(settings.get("rag_corpus_path") or "").strip()
@@ -170,7 +170,7 @@ async def remove_rag_corpus(self) -> dict:
     return {"ok": True, "removed": removed}
 
 
-async def install_rag_corpus_local(self, data: Any = None) -> Any:
+async def install_rag_corpus_local(self, data: Any = None):
     """Dev/QA: install corpus from a local manifest directory (no network)."""
     settings = await self.load_settings()
     outcome = await install_rag_corpus_from_local_dir(settings, data)
@@ -184,7 +184,7 @@ async def get_session_rag_chip_candidates(
     app_id: str = "",
     app_name: str = "",
     shortcut_name: str = "",
-) -> dict:
+):
     """Preset-chip prompts drawn from the offline KB for the running game."""
     settings = await self.load_settings()
     try:

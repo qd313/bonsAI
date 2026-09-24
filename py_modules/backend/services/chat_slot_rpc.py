@@ -36,7 +36,7 @@ import decky
 logger = decky.logger
 
 
-async def list_chat_slots(self) -> dict:
+async def list_chat_slots(self):
     """Return recent chat slot summaries (newest first)."""
     settings_dir = self._chat_slots_settings_dir()
 
@@ -48,7 +48,7 @@ async def list_chat_slots(self) -> dict:
     return {"slots": rows}
 
 
-async def get_chat_slot(self, slot_id: str = "") -> dict:
+async def get_chat_slot(self, slot_id: str = ""):
     """Load one chat slot with full turn history."""
     sid = str(slot_id or "").strip()
     if not sid:
@@ -65,7 +65,7 @@ async def get_chat_slot(self, slot_id: str = "") -> dict:
     return {"ok": True, "slot": slot_to_rpc_payload(slot)}
 
 
-async def create_chat_slot(self, payload: Any = None) -> dict:
+async def create_chat_slot(self, payload: Any = None):
     """Create a new empty chat slot."""
     body = payload if isinstance(payload, dict) else {}
     settings_dir = self._chat_slots_settings_dir()
@@ -89,7 +89,7 @@ async def create_chat_slot(self, payload: Any = None) -> dict:
     return {"ok": True, "slot": slot_to_rpc_payload(slot)}
 
 
-async def delete_chat_slot(self, slot_id: str = "", payload: Any = None) -> dict:
+async def delete_chat_slot(self, slot_id: str = "", payload: Any = None):
     """Delete a chat slot from private store."""
     sid = str(slot_id or "").strip()
     if not sid and isinstance(payload, dict):
@@ -105,7 +105,7 @@ async def delete_chat_slot(self, slot_id: str = "", payload: Any = None) -> dict
     return {"ok": True}
 
 
-async def rename_chat_slot(self, payload: Any = None) -> dict:
+async def rename_chat_slot(self, payload: Any = None):
     """Rename a chat slot label."""
     if not isinstance(payload, dict):
         return {"ok": False, "error": "Invalid payload"}

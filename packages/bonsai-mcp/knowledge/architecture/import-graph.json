@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 474,
-  "edgeCount": 1258,
+  "fileCount": 475,
+  "edgeCount": 1260,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -674,6 +674,7 @@
         "src/features/unified-input/constants.ts",
         "src/hooks/useAskBarMenuToggles.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
+        "src/hooks/useAskBarSettingsCardVisibility.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/useSteamSettingsSearch.ts",
         "src/utils/focusNavigation.ts",
@@ -2365,6 +2366,14 @@
         "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
+    "src/hooks/useAskBarSettingsCardVisibility.ts": {
+      "imports": [
+        "src/hooks/useSteamSettingsSearch.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
+      ]
+    },
     "src/hooks/useAskMountRestore.ts": {
       "imports": [
         "src/types/backgroundAsk.ts",
@@ -2952,6 +2961,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/hooks/useAskBarSettingsCardRows.ts",
+        "src/hooks/useAskBarSettingsCardVisibility.ts",
         "src/hooks/useSteamSettingsSearch.test.ts",
         "src/index.tsx",
         "src/styles/sections/section-4.ts"

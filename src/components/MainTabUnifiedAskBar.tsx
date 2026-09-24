@@ -132,16 +132,14 @@ import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
 import { useAskBarSettingsCardRows } from "../hooks/useAskBarSettingsCardRows";
 import { useAskBarMenuToggles } from "../hooks/useAskBarMenuToggles";
+import { useAskBarSettingsCardVisibility } from "../hooks/useAskBarSettingsCardVisibility";
 import {
   registerNavFocus,
   takeNavFocus,
   unregisterNavFocus,
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
-import {
-  SETTINGS_CARD_ROW_HEIGHT_PX,
-  shouldHideSettingsResultsCard,
-} from "../hooks/useSteamSettingsSearch";
+import { SETTINGS_CARD_ROW_HEIGHT_PX } from "../hooks/useSteamSettingsSearch";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
 // that imports it from this file (tests included) needs to change.
@@ -226,25 +224,15 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
 
-  /*
-   * The settings-results card (plan 45 / plan 56 lane E): does what was typed hide it outright
-   * (a long question, unless it is an exact run inside a setting's own name -- see
-   * shouldHideSettingsResultsCard), and if not, how many of the results actually fit above the
-   * question box without reaching the tab bar.
-   */
-  const settingsCardHidden = shouldHideSettingsResultsCard(unifiedInput);
-  const [settingsCardRowsShown, setSettingsCardRowsShown] = useState<number>(filteredSettings.length);
-
-  /*
-   * B closes the settings-results card for the rest of this search while keeping what was typed
-   * (plan 45 section 4's "B" row / plan 56 lane E2 step 3). Reset the moment the box is emptied,
-   * since that is what "a new search starts" means here -- the card cannot show again before then
-   * anyway, because showSettingsCard below also requires filteredSettings.length > 0.
-   */
-  const [settingsCardClosedForSearch, setSettingsCardClosedForSearch] = useState(false);
-  useEffect(() => {
-    if (unifiedInput.trim() === "") setSettingsCardClosedForSearch(false);
-  }, [unifiedInput]);
+  // The card's hidden/closed/rows-shown state, and the reset-on-empty effect, live in
+  // useAskBarSettingsCardVisibility now (src/hooks) -- see that file.
+  const {
+    settingsCardHidden,
+    settingsCardRowsShown,
+    setSettingsCardRowsShown,
+    settingsCardClosedForSearch,
+    setSettingsCardClosedForSearch,
+  } = useAskBarSettingsCardVisibility(unifiedInput, filteredSettings.length);
 
   useEffect(() => {
     if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");

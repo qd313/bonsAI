@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 455,
-  "edgeCount": 1199,
+  "fileCount": 456,
+  "edgeCount": 1200,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -298,7 +298,7 @@
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-        "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useSpoilerFenceRecheck.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx"
       ]
@@ -459,7 +459,6 @@
     "src/components/MainTabChatTranscript.tsx": {
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
-        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/PermissionDenyAction.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
@@ -475,6 +474,7 @@
         "src/hooks/usePermHintNavTargets.ts",
         "src/hooks/useReadAloudAutoStop.ts",
         "src/hooks/useReasoningFoldState.ts",
+        "src/hooks/useSpoilerFenceRecheck.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
@@ -2767,6 +2767,14 @@
       "importedBy": [
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useSmoothStreamReveal.test.ts"
+      ]
+    },
+    "src/hooks/useSpoilerFenceRecheck.ts": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
       ]
     },
     "src/hooks/useSteamSettingsSearch.test.ts": {

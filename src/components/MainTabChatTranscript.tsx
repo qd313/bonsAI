@@ -204,7 +204,7 @@ import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
-import { subscribeToSpoilerFenceOpenChange } from "./MainTabBonsaiAiMarkdownChunk";
+import { useSpoilerFenceRecheck } from "../hooks/useSpoilerFenceRecheck";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */
@@ -608,17 +608,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
      occupied (tests/test_ask_hook_order.py). */
   const { isKbNotesOpen, toggleKbNotesOpen, kbNotesHeaderElRefs } = useKbNotesFold();
 
-  /*
-   * Plan 58 phase 1: re-render whenever a spoiler fence opens or closes anywhere, so
-   * kbNotesBlockedBySpoiler's read of anySpoilerFenceOpen() below is never stale. The count
-   * itself lives in MainTabBonsaiAiMarkdownChunk.tsx, several components away, and changing it
-   * does not by itself cause this component to re-render — this subscription is what does.
-   */
-  const [, forceSpoilerOpenRecheck] = useState(0);
-  useEffect(
-    () => subscribeToSpoilerFenceOpenChange(() => forceSpoilerOpenRecheck((n) => n + 1)),
-    []
-  );
+  /* Re-render whenever a spoiler fence opens or closes anywhere, so kbNotesBlockedBySpoiler's
+     read of anySpoilerFenceOpen() below is never stale — lifted into its own hook, called from
+     exactly the spot this block occupied (tests/test_ask_hook_order.py). */
+  useSpoilerFenceRecheck();
 
   /**
    * Feature: the Show reasoning line between a question and its answer.

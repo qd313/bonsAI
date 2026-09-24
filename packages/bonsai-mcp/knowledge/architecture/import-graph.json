@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 449,
-  "edgeCount": 1189,
+  "fileCount": 450,
+  "edgeCount": 1192,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -490,10 +490,10 @@
         "src/utils/buildThinkingBlurbTextElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/chatPanelScroll.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/chatTurnTitle.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
-        "src/utils/focusNavigation.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
@@ -3891,6 +3891,16 @@
         "src/utils/chatSlotTurns.ts"
       ]
     },
+    "src/utils/chatTranscriptNavHelpers.ts": {
+      "imports": [
+        "src/utils/focusNavigation.ts",
+        "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/utils/chatTurnTitle.test.ts": {
       "imports": [
         "src/utils/chatTurnTitle.ts"
@@ -4103,7 +4113,6 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
-        "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -4115,6 +4124,7 @@
         "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/deckSliderMath.ts",
         "src/utils/focusNavigation.test.ts"
       ]
@@ -4233,6 +4243,7 @@
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/liveTurnFocusGraph.test.ts"
       ]
     },
@@ -4332,6 +4343,7 @@
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/index.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.remount.test.ts",
         "src/utils/navFocusRegistry.test.ts",

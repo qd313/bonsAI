@@ -1,11 +1,6 @@
 {
   "hotspots": [
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2472,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "lines": 2294,
       "role": ""
@@ -14,6 +9,11 @@
       "path": "main.py",
       "lines": 2288,
       "role": "Decky RPC entrypoints and orchestration"
+    },
+    {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 2176,
+      "role": ""
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",

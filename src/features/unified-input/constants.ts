@@ -83,8 +83,11 @@ export const BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX = 12;
 export const BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX = 14;
 /** Vertical gap (px) above the AI response bubble stack (below status/thinking lines). */
 export const BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX = 12;
-/** Main-tab AI bubble max width as a fraction of the transcript column (0–1). */
-export const BONSAI_CHAT_AI_BUBBLE_MAX_FRAC = 0.92;
+/** Main-tab AI bubble max width as a fraction of the transcript column (0–1). Not imported on its
+ *  own outside this file any more (2026-09-24) — every consumer wants the CSS value below. */
+const BONSAI_CHAT_AI_BUBBLE_MAX_FRAC = 0.92;
+/** The same max width, as the CSS `min()` MainTabChatTranscript and its reply blocks apply. */
+export const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 /** Main tab tree glyph — same outer cell as other tabs for uniform hit/outline; slightly larger than gear. */
 export const TAB_TITLE_MAIN_TAB_ICON_PX = 36;
 /** Debug tab — same outer cell as other tabs so LB/RB strip outlines match. */

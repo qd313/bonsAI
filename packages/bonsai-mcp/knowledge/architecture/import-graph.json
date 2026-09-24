@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 471,
-  "edgeCount": 1250,
+  "fileCount": 472,
+  "edgeCount": 1252,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -666,17 +666,16 @@
         "src/components/CharacterRoleplayEmoticon.tsx",
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabAttachMenuPopover.tsx",
+        "src/components/MainTabUnifiedAskBar.types.ts",
         "src/components/PermissionDenyAction.tsx",
         "src/components/icons.tsx",
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/useSteamSettingsSearch.ts",
-        "src/types/bonsaiUi.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/mediaFormat.ts",
         "src/utils/navFocusRegistry.ts",
-        "src/utils/permissionDeepLink.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
@@ -687,6 +686,16 @@
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx"
+      ]
+    },
+    "src/components/MainTabUnifiedAskBar.types.ts": {
+      "imports": [
+        "src/data/askMode.ts",
+        "src/types/bonsaiUi.ts",
+        "src/utils/permissionDeepLink.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
     "src/components/ModelPolicyTierPanel.tsx": {
@@ -1238,6 +1247,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/MainTabUnifiedAskBar.types.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/presets.ts",
@@ -3585,7 +3595,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
-        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/MainTabUnifiedAskBar.types.ts",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
@@ -4611,7 +4621,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
-        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/MainTabUnifiedAskBar.types.ts",
         "src/components/PermissionDenyAction.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",

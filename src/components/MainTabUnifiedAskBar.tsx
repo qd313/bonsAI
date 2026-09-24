@@ -82,6 +82,10 @@
  *   `.bonsai-scope` ancestor rather than something local to this file, since
  *   the menu itself renders as a popover that needs to sit above other Main
  *   tab content, not just above this bar.
+ *
+ * Split out: the prop type and its one helper live in
+ * MainTabUnifiedAskBar.types.ts now (re-exported below, so nothing that
+ * imports them from here needs to change).
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
@@ -101,7 +105,10 @@ import {
 } from "../utils/focusNavigation";
 import { getUiDocument, uiActiveElement, uiGamepadFocusElement } from "../utils/uiDocument";
 import { formatBytes, toFileUri } from "../utils/mediaFormat";
-import type { AskAttachment } from "../types/bonsaiUi";
+import {
+  screenshotMediaErrorCapability,
+  type MainTabUnifiedAskBarProps,
+} from "./MainTabUnifiedAskBar.types";
 import {
   AskMicIcon,
   AskStopIcon,
@@ -118,7 +125,6 @@ import {
   ASK_MODE_ACCENT_GLOW_LOW,
   ASK_MODE_FILL,
   ASK_MODE_LABELS,
-  type AskModeId,
 } from "../data/askMode";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
 import {
@@ -126,7 +132,6 @@ import {
   type AttachMenuActionId,
 } from "./MainTabAttachMenuPopover";
 import { PermissionDenyAction } from "./PermissionDenyAction";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
 import {
   registerNavFocus,
@@ -141,55 +146,9 @@ import {
   shouldHideSettingsResultsCard,
 } from "../hooks/useSteamSettingsSearch";
 
-export type MainTabUnifiedAskBarProps = {
-  fullBleedRowStyle: React.CSSProperties;
-  presetCarouselHostRef: React.RefObject<HTMLDivElement | null>;
-  unifiedInputHostRef: React.Ref<HTMLDivElement>;
-  unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
-  unifiedInputMeasureRef: React.Ref<HTMLDivElement>;
-  attachActionHostRef: React.Ref<HTMLDivElement>;
-  askBarHostRef: React.Ref<HTMLDivElement>;
-  unifiedInputSurfacePx: number;
-  unifiedInput: string;
-  usesNativeMultilineField: boolean;
-  setIsUnifiedInputFocused: (v: boolean) => void;
-  isUnifiedInputFocused: boolean;
-  setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
-  filteredSettings: string[];
-  selectedIndex: number;
-  onSettingClick: (settingPath: string, index?: number) => void;
-  isAsking: boolean;
-  ollamaIp: string;
-  onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
-  onOpenScreenshotBrowser: () => void | Promise<void>;
-  onTakeScreenshot: () => void | Promise<void>;
-  onCancelAsk: () => void;
-  onMicInput: () => void;
-  voiceRecording?: boolean;
-  selectedAttachment: AskAttachment | null;
-  setSelectedAttachment: React.Dispatch<React.SetStateAction<AskAttachment | null>>;
-  clearUnifiedInput: () => void;
-  showSearchClearButton: boolean;
-  mediaError: string;
-  isCapturingScreenshot?: boolean;
-  mediaLibraryEnabled?: boolean;
-  aiCharacterPadClass?: boolean;
-  aiCharacterAvatarPresetId?: string | null;
-  aiCharacterAvatarBadgeLetter?: string | null;
-  onOpenCharacterPicker?: () => void;
-  aiCharacterDebugLine?: string | null;
-  askMode: AskModeId;
-  onAskModeChange: (mode: AskModeId) => void;
-  isQamSetting: (settingPath: string) => boolean;
-  onFocusHandlersReady?: (handlers: { focusUnifiedTextField: () => boolean }) => void;
-  onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
-};
-
-function screenshotMediaErrorCapability(message: string): BonsaiCapabilityKey {
-  if (message.includes("Read game & screenshot context")) return "steam_logs_read";
-  return "media_library_access";
-}
+// The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
+// that imports it from this file (tests included) needs to change.
+export type { MainTabUnifiedAskBarProps };
 
 /*
  * In: MainTabUnifiedAskBarProps — the question text and its setter, whether

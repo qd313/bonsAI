@@ -158,25 +158,6 @@ export type MainTabPresetAnimatedChipsProps = {
 };
 
 /**
- * The prompt text. A prompt longer than its chip scrolls sideways through Steam's own Marquee —
- * the crawl the library uses for long game names — which decides "does this overflow" on the live
- * element, never from a predicted width (the roadmap's marquee item insists on that, with receipts).
- * Decky finds the component in Steam's bundle at runtime; when it is missing, and under reduced
- * motion, the label is cut off with an ellipsis instead.
- */
-/**
- * The row's focus container, shared by every mode. Steam treats it as one navigation container;
- * the chips inside carry their own Left/Right/Up/Down handlers (`usePresetRowNav`), because the
- * `flow-children` hint on its own left Steam navigating the row as a column on device.
- *
- * `navRef` is what lets the Ask bar hand the ring up across that boundary. Steam populates it with
- * the container's nav node, which is the only supported way to move the gamepad ring between
- * containers — a plain `focus()` moves `activeElement` and leaves the ring where it was
- * (navFocusRegistry, measured 2026-08-04). That split is what put a ring on a chip while the D-pad
- * was really on the tab strip, found on device 2026-08-28. Before 2026-09-01 only carousel mode
- * registered; the other modes fell back to the plain `focus()` and inherited that bug.
- */
-/**
  * The label's text is owned by the reveal effect below while the prompt is still churning, written
  * straight to the churn span's `textContent` via `setLabelRef` — never through React state. The JSX
  * child there is only what paints during a slot's stagger delay, before its first `begin` call;

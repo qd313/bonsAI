@@ -22,7 +22,9 @@ reads and writes them through the settings service.
 Where the RPC bodies moved to (plan 65 split; the class still keeps every
 method, just as a one-line hand-off): the settings-search-pack buttons are in
 `backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
-clear are in `backend/services/strategy_checklist_rpc.py`.
+clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
+list/open/create/delete/rename buttons are in
+`backend/services/chat_slot_rpc.py`.
 
 How it works:
 
@@ -133,15 +135,11 @@ from backend.services.intent_pack_service import (
 from backend.services import intent_pack_rpc
 from backend.services.chat_slot_service import (
     append_turn as chat_append_turn,
-    create_slot as chat_create_slot,
-    delete_slot as chat_delete_slot,
     ensure_slot as chat_ensure_slot,
-    list_slot_summaries,
     load_slot as chat_load_slot,
-    slot_to_rpc_payload,
-    update_slot_label as chat_update_slot_label,
     wipe_all_slots,
 )
+from backend.services import chat_slot_rpc
 from backend.services.reply_language_service import reply_language_snapshot
 from backend.services.settings_service import (
     clamp_int,
@@ -1115,89 +1113,23 @@ class Plugin:
 
     async def list_chat_slots(self):
         """Return recent chat slot summaries (newest first)."""
-        settings_dir = Plugin._chat_slots_settings_dir()
-
-        def _run() -> list:
-            return list_slot_summaries(settings_dir, logger)
-
-        async with self._chat_slots_store_lock:
-            rows = await asyncio.to_thread(_run)
-        return {"slots": rows}
+        return await chat_slot_rpc.list_chat_slots(self)
 
     async def get_chat_slot(self, slot_id: str = ""):
         """Load one chat slot with full turn history."""
-        sid = str(slot_id or "").strip()
-        if not sid:
-            return {"ok": False, "error": "Slot id required"}
-        settings_dir = Plugin._chat_slots_settings_dir()
-
-        def _run():
-            return chat_load_slot(settings_dir, sid, logger)
-
-        async with self._chat_slots_store_lock:
-            slot = await asyncio.to_thread(_run)
-        if slot is None:
-            return {"ok": False, "error": "Slot not found"}
-        return {"ok": True, "slot": slot_to_rpc_payload(slot)}
+        return await chat_slot_rpc.get_chat_slot(self, slot_id)
 
     async def create_chat_slot(self, payload: Any = None):
         """Create a new empty chat slot."""
-        body = payload if isinstance(payload, dict) else {}
-        settings_dir = Plugin._chat_slots_settings_dir()
-        origin_app_id = str(body.get("origin_app_id") or body.get("originAppId") or "").strip()
-        first_question = str(body.get("first_question") or body.get("firstQuestion") or "").strip()
-        app_name = str(body.get("app_name") or body.get("appName") or "").strip()
-        label = str(body.get("label") or "").strip()
-
-        def _run():
-            return chat_create_slot(
-                settings_dir,
-                label=label,
-                origin_app_id=origin_app_id,
-                first_question=first_question,
-                app_name=app_name,
-                logger=logger,
-            )
-
-        async with self._chat_slots_store_lock:
-            slot = await asyncio.to_thread(_run)
-        return {"ok": True, "slot": slot_to_rpc_payload(slot)}
+        return await chat_slot_rpc.create_chat_slot(self, payload)
 
     async def delete_chat_slot(self, slot_id: str = "", payload: Any = None):
         """Delete a chat slot from private store."""
-        sid = str(slot_id or "").strip()
-        if not sid and isinstance(payload, dict):
-            sid = str(payload.get("slot_id") or payload.get("slotId") or payload.get("id") or "").strip()
-        if not sid:
-            return {"ok": False, "error": "Slot id required"}
-        settings_dir = Plugin._chat_slots_settings_dir()
-
-        async with self._chat_slots_store_lock:
-            removed = await asyncio.to_thread(chat_delete_slot, settings_dir, sid, logger)
-        if not removed:
-            return {"ok": False, "error": "Slot not found"}
-        return {"ok": True}
+        return await chat_slot_rpc.delete_chat_slot(self, slot_id, payload)
 
     async def rename_chat_slot(self, payload: Any = None):
         """Rename a chat slot label."""
-        if not isinstance(payload, dict):
-            return {"ok": False, "error": "Invalid payload"}
-        sid = str(payload.get("slot_id") or payload.get("slotId") or payload.get("id") or "").strip()
-        label = str(payload.get("label") or "").strip()
-        if not sid:
-            return {"ok": False, "error": "Slot id required"}
-        if not label:
-            return {"ok": False, "error": "Label required"}
-        settings_dir = Plugin._chat_slots_settings_dir()
-
-        def _run():
-            return chat_update_slot_label(settings_dir, sid, label, logger)
-
-        async with self._chat_slots_store_lock:
-            saved = await asyncio.to_thread(_run)
-        if saved is None:
-            return {"ok": False, "error": "Slot not found"}
-        return {"ok": True, "slot": slot_to_rpc_payload(saved)}
+        return await chat_slot_rpc.rename_chat_slot(self, payload)
 
     # --- Strategy checklist session RPC ---
 

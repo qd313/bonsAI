@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 74,
-  "edgeCount": 171,
+  "fileCount": 75,
+  "edgeCount": 173,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -150,6 +150,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/intent_pack_service.py",
       "count": 2
     },
@@ -230,7 +234,7 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/chat_slot_service.py",
+      "path": "py_modules/backend/services/chat_slot_rpc.py",
       "count": 1
     },
     {
@@ -353,6 +357,7 @@
         "py_modules/backend/services/background_request_state.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/capabilities.py",
+        "py_modules/backend/services/chat_slot_rpc.py",
         "py_modules/backend/services/chat_slot_service.py",
         "py_modules/backend/services/clipboard_service.py",
         "py_modules/backend/services/desktop_note_service.py",
@@ -540,12 +545,21 @@
         "py_modules/backend/services/ollama_ask_service.py"
       ]
     },
+    "py_modules/backend/services/chat_slot_rpc.py": {
+      "imports": [
+        "py_modules/backend/services/chat_slot_service.py"
+      ],
+      "importedBy": [
+        "main.py"
+      ]
+    },
     "py_modules/backend/services/chat_slot_service.py": {
       "imports": [
         "py_modules/backend/services/ollama_service.py"
       ],
       "importedBy": [
-        "main.py"
+        "main.py",
+        "py_modules/backend/services/chat_slot_rpc.py"
       ]
     },
     "py_modules/backend/services/clipboard_service.py": {

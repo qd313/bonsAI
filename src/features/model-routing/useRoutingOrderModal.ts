@@ -50,7 +50,7 @@ export type UseRoutingOrderModalArgs = {
   captureSessionBeforeModal: () => void;
   finalizeShowModalAndRestoreActiveTab: (close: () => void) => void;
   pauseDebouncedSettingsSave: () => Promise<void>;
-  buildSettingsPayload: (patch: Partial<BonsaiSettings>) => BonsaiSettings;
+  buildSettingsPayload: (patch: Partial<BonsaiSettings>) => Partial<BonsaiSettings>;
   hydrateFromSettings: (saved: BonsaiSettings) => void;
 };
 
@@ -142,7 +142,7 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
               kind === "vision"
                 ? { vision_model_routing_order: order }
                 : { text_model_routing_order: order };
-            const saved = await callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>("save_settings", [
+            const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [
               a.buildSettingsPayload(patch),
             ]);
             a.hydrateFromSettings(saved);

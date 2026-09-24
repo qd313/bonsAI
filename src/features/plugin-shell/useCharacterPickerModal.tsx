@@ -38,7 +38,7 @@ export type UseCharacterPickerModalArgs = {
    * alone is sufficient: it is memoized on the settings snapshot, so its identity already
    * changes whenever any setting does.
    */
-  buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => BonsaiSettings;
+  buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => Partial<BonsaiSettings>;
   hydrateFromSettings: (settings: BonsaiSettings) => void;
   captureSessionBeforeModal: () => void;
   finalizeShowModalAndRestoreActiveTab: (close: () => void) => void;
@@ -87,7 +87,7 @@ export function useCharacterPickerModal({
           setAiCharacterPresetId(pid);
           setAiCharacterCustomText(ctxt);
           try {
-            const saved = await callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>(
+            const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>(
               "save_settings",
               [
                 buildSettingsPayload({

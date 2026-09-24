@@ -44,7 +44,7 @@ export type UseOllamaModelsHubModalArgs = {
   setModelAllowHighVramFallbacks: (v: boolean) => void;
   /** Tag the router last chose, shown as the active model in the hub. */
   activeRoutingTag: string | null;
-  buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => BonsaiSettings;
+  buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => Partial<BonsaiSettings>;
   hydrateFromSettings: (settings: BonsaiSettings) => void;
   /** Held off so a debounced autosave cannot race the explicit write below. */
   pauseDebouncedSettingsSave: () => Promise<void>;
@@ -103,7 +103,7 @@ export function useOllamaModelsHubModal({
       setModelPolicyNonFossUnlocked(patch.modelPolicyNonFossUnlocked);
       setModelAllowHighVramFallbacks(patch.modelAllowHighVramFallbacks);
       await pauseDebouncedSettingsSave();
-      const saved = await callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>("save_settings", [
+      const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [
         buildSettingsPayload({
           model_policy_tier: patch.modelPolicyTier,
           model_policy_non_foss_unlocked: patch.modelPolicyNonFossUnlocked,
@@ -133,7 +133,7 @@ export function useOllamaModelsHubModal({
   const onApplyTier2MultimodalPolicy = useCallback(async () => {
     await pauseDebouncedSettingsSave();
     setModelPolicyTier("open_weight");
-    const saved = await callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>("save_settings", [
+    const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [
       buildSettingsPayload({ model_policy_tier: "open_weight" }),
     ]);
     hydrateFromSettings(saved);

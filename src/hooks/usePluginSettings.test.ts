@@ -250,4 +250,49 @@ describe("usePluginSettings", () => {
 
     expect(disk.dev_frozen_test_chips).toEqual(["a brand new pinned question"]);
   });
+
+  /*
+   * Measured on the Deck (docs/test-evidence/plan64-ROUTING-MERGE-01-top.json): a knowledge base
+   * download finished in the background and the back end saved its new SD-card location; then
+   * Done on the AI models screen sent the screen's whole settings copy, which still held the old
+   * internal location, and wrote it back over the new one. The tab then offered to download the
+   * library again. A popup's save now carries only what changed on screen plus its own patch.
+   */
+  it("a popup's save leaves a knowledge base location the back end wrote alone", async () => {
+    let disk: Record<string, unknown> = {
+      ...defaultSettingsFixture(),
+      rag_corpus_path: "/home/deck/.bonsai/rag",
+      rag_corpus_version: "2026.09.18",
+    };
+    setRpcHandler("load_settings", () => disk);
+    setRpcHandler("save_settings", (...args: unknown[]) => {
+      const payload = (args[0] as Record<string, unknown>) ?? {};
+      disk = { ...disk, ...payload };
+      return disk;
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    // The download finishes behind the screen's back and the back end saves the new location.
+    disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+
+    // One unsaved change on screen, then the AI models screen's Done with its own patch.
+    act(() => {
+      result.current.setLatencyWarningSeconds(77);
+    });
+    let payload: Record<string, unknown> = {};
+    await act(async () => {
+      await result.current.pauseDebouncedSettingsSave();
+      payload = result.current.buildChangedSettingsPayload({ model_allow_high_vram_fallbacks: true }) as Record<
+        string,
+        unknown
+      >;
+      result.current.hydrateFromSettings((await call("save_settings", payload)) as never);
+    });
+
+    expect(payload).toEqual({ latency_warning_seconds: 77, model_allow_high_vram_fallbacks: true });
+    expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+    expect(result.current.ragCorpusPath).toBe("/run/media/deck/sd/.bonsai/rag");
+  });
 });

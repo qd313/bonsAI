@@ -439,6 +439,7 @@ const Content: React.FC = () => {
     settingsLoaded,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
+    buildChangedSettingsPayload,
     syncSettingsFromDisk,
   } = usePluginSettings();
 
@@ -871,8 +872,8 @@ const Content: React.FC = () => {
       setUiScaleAutoEnabled(autoEnabled);
       setUiScaleManualProfile(normalized);
       await pauseDebouncedSettingsSave();
-      const saved = await callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>("save_settings", [
-        toBonsaiSettingsPayload(settingsSnapshotForSave, {
+      const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [
+        buildChangedSettingsPayload({
           ui_scale_auto_enabled: autoEnabled,
           ui_scale_manual_profile: normalized,
         }),
@@ -882,18 +883,16 @@ const Content: React.FC = () => {
       toaster.toast({ title: "UI scale applied", body: "Plugin layout updated.", duration: 2800 });
     },
     [
+      buildChangedSettingsPayload,
       hydrateFromSettings,
       pauseDebouncedSettingsSave,
-      settingsSnapshotForSave,
       setUiScaleAutoEnabled,
       setUiScaleManualProfile,
     ],
   );
 
-  const buildSettingsPayload = useCallback(
-    (patch?: Partial<BonsaiSettings>) => toBonsaiSettingsPayload(settingsSnapshotForSave, patch),
-    [settingsSnapshotForSave]
-  );
+  /* Changed fields plus the patch, never a full copy: see buildChangedSettingsPayload. */
+  const buildSettingsPayload = buildChangedSettingsPayload;
 
   sessionSnapshotRef.current = () => ({
     currentTab,

@@ -30,6 +30,16 @@ function collectByClassName(node: React.ReactNode, cls: string): React.ReactElem
 }
 
 
+/**
+ * The bubble's own element. The builder always returns one fragment -- the bubble, then its Copy
+ * corner when that shows -- so the bubble keeps its identity when an answer finishes (see the
+ * comment above the builder's return).
+ */
+function bubbleProps(el: React.ReactElement): Record<string, unknown> {
+  const children = React.Children.toArray((el.props as { children?: React.ReactNode }).children);
+  return (children[0] as React.ReactElement).props as Record<string, unknown>;
+}
+
 /*
  * Plain prose is a single section while streaming — prepareStreamMarkdown only closes a block at a
  * fence boundary — so a body with a fence in it is what produces a multi-section stack to walk.
@@ -144,7 +154,7 @@ describe("answer bubble section stops", () => {
     stops[0]!.appendChild(collapse);
     collapse.focus();
 
-    const onMoveUp = (el!.props as Record<string, unknown>).onMoveUp as () => boolean;
+    const onMoveUp = bubbleProps(el!).onMoveUp as () => boolean;
     expect(onMoveUp()).toBe(true);
     expect(document.activeElement).toBe(stops[0]);
   });
@@ -190,7 +200,7 @@ describe("answer bubble section stops", () => {
       // No `.TabContentsScroll` ancestor in this fixture, so the in-bubble walk
       // (handleAnswerBubbleMoveDown) finds no scroll container and returns false immediately —
       // exactly the "nothing left inside the bubble" case this test targets.
-      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
       expect(document.activeElement).toBe(branchButton);
     } finally {
@@ -249,7 +259,7 @@ describe("answer bubble section stops", () => {
     setReplyStopUnavailable("helpful", true);
 
     try {
-      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
       expect(document.activeElement).toBe(readAloud);
       expect(document.activeElement).not.toBe(helpful);
@@ -300,7 +310,7 @@ describe("answer bubble section stops", () => {
     registerReplyStop("retry", retry);
 
     try {
-      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
       expect(document.activeElement).toBe(helpful);
     } finally {
@@ -359,7 +369,7 @@ describe("answer bubble section stops", () => {
     registerReplyStop("read-aloud", readAloud);
 
     try {
-      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
       expect(document.activeElement).toBe(readAloud);
       expect(document.activeElement).not.toBe(retry);

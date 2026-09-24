@@ -150,4 +150,66 @@ describe("the ring survives an answer finishing while it is being walked", () =>
     /* Nothing in the archived answer should have claimed focus on our behalf. */
     expect(after.some((el) => el === document.activeElement)).toBe(false);
   });
+
+  /*
+   * The Deck's actual shape (docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json): while the
+   * answer is written it shows ONE section (the live tail), the ring sits on it, and at the finish
+   * the same live bubble re-renders as finished chunks -- three of them -- before the slot reload
+   * archives the turn. The first fix waited for the archive edge alone and the ring was already
+   * gone by then.
+   */
+  function streamingProps(): MainTabChatTranscriptProps {
+    return {
+      ...baseProps(),
+      isAsking: true,
+      isStreamingPreview: true,
+      streamDisplayText: longParagraph("SECTION-ONE"),
+      ollamaResponse: "",
+    };
+  }
+
+  it("keeps the very element holding the ring when the live answer finishes", () => {
+    const { container, rerender } = render(<MainTabChatTranscript {...streamingProps()} />);
+    const writing = liveStops(container);
+    expect(writing.length).toBe(1);
+    writing[0]!.classList.add("gpfocus");
+    writing[0]!.setAttribute("tabindex", "-1");
+    writing[0]!.focus();
+    rerender(<MainTabChatTranscript {...streamingProps()} />);
+
+    // The answer finishes: same live turn, now drawn as finished chunks.
+    rerender(<MainTabChatTranscript {...baseProps()} isAsking={false} isStreamingPreview={false} />);
+
+    const finished = liveStops(container);
+    expect(finished.length).toBeGreaterThanOrEqual(3);
+    expect(finished[0]).toBe(writing[0]);
+    expect(finished[0]!.isConnected).toBe(true);
+  });
+
+  it("still has the ring on the first section after the finish AND the archive that follows", () => {
+    const { container, rerender } = render(<MainTabChatTranscript {...streamingProps()} />);
+    const writing = liveStops(container);
+    writing[0]!.classList.add("gpfocus");
+    writing[0]!.setAttribute("tabindex", "-1");
+    writing[0]!.focus();
+    rerender(<MainTabChatTranscript {...streamingProps()} />);
+
+    rerender(<MainTabChatTranscript {...baseProps()} isAsking={false} isStreamingPreview={false} />);
+    rerender(
+      <MainTabChatTranscript
+        {...baseProps()}
+        isAsking={false}
+        isStreamingPreview={false}
+        askThreadDisplayQuestion=""
+        expandedTurnKey="turn-1"
+        askThreadCollapsed={[
+          { id: "turn-1", question: "give me ten detailed tips for the boss", answer: THREE_SECTION_ANSWER },
+        ]}
+      />
+    );
+
+    const archived = archivedStops(container, "turn-1");
+    expect(archived.length).toBeGreaterThanOrEqual(3);
+    expect(document.activeElement).toBe(archived[0]);
+  });
 });

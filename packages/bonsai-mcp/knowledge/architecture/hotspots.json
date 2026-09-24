@@ -7,7 +7,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2490,
+      "lines": 2494,
       "role": ""
     },
     {
@@ -97,7 +97,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 892,
+      "lines": 902,
       "role": ""
     },
     {
@@ -141,13 +141,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 632,
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 651,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 631,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 632,
       "role": ""
     },
     {

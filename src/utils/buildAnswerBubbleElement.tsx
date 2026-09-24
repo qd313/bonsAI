@@ -218,6 +218,19 @@ function stopAttrs(
   } as Record<string, unknown>;
 }
 
+/**
+ * One key per section POSITION, shared by the streaming stack (closed blocks, the fence wait chip,
+ * the live tail) and the finished chunks. They used to carry their kind in the key (`-closed-0`,
+ * `-tail`, `-chunk-0`), so the moment an answer finished every section was a new element and the
+ * one holding Steam's ring was destroyed with it: the ring vanished and the view fell to the end
+ * (Deck, docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json -- ring on the only section while
+ * writing, gone at the finish). Keyed by position, React keeps the same element for section N
+ * across the switch, and the ring stays on it.
+ */
+function answerStopKey(answerKey: string, index: number): string {
+  return `${answerKey}-stop-${index}`;
+}
+
 /*
  * Cuts an answer that is still arriving into D-pad stops.
  *
@@ -255,7 +268,7 @@ function renderStreamMarkdownStack(
   prepared.closedBlocks.forEach((block, i) => {
     nodes.push(
       <Focusable
-        key={`${answerKey}-closed-${i}`}
+        key={answerStopKey(answerKey, i)}
         className={`${STOP_CLASS} bonsai-ai-response-chunk--stream-closed`}
         ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, i, el)}
         {...stopAttrs(stopNav, i)}
@@ -275,7 +288,7 @@ function renderStreamMarkdownStack(
     const waitIndex = prepared.closedBlocks.length;
     nodes.push(
       <Focusable
-        key={`${answerKey}-wait`}
+        key={answerStopKey(answerKey, waitIndex)}
         className={`${STOP_CLASS} bonsai-ai-response-chunk--stream-wait`}
         ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, waitIndex, el)}
         {...stopAttrs(stopNav, waitIndex)}
@@ -291,7 +304,7 @@ function renderStreamMarkdownStack(
     const tailIndex = prepared.closedBlocks.length + (prepared.waitChip ? 1 : 0);
     nodes.push(
       <Focusable
-        key={`${answerKey}-tail`}
+        key={answerStopKey(answerKey, tailIndex)}
         className={STOP_CLASS}
         ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, tailIndex, el)}
         {...stopAttrs(stopNav, tailIndex, { "data-bonsai-stream-preview": "true" })}
@@ -543,7 +556,7 @@ export function buildAnswerBubbleElement(
                  T3, when the layout switches from stream sections to these chunks. */
               displayChunks.map((chunk, i) => (
                 <Focusable
-                  key={`${answerKey}-chunk-${i}`}
+                  key={answerStopKey(answerKey, i)}
                   className={STOP_CLASS}
                   ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, i, el)}
                   {...stopAttrs(
@@ -582,9 +595,14 @@ export function buildAnswerBubbleElement(
     </Focusable>
   );
 
-  if (!showCornerCopy) return bubble;
-
   /*
+   * Always the same wrapper, with or without Copy. This used to return the bare bubble while Copy
+   * was hidden (while an answer streams) and a fragment of bubble + Copy once it showed, so at the
+   * finish the element at this position changed type and React rebuilt the whole bubble: every
+   * section, including the one holding Steam's ring, was a new element, the ring vanished and the
+   * view fell to the end (Deck, docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json). With one
+   * wrapper shape the bubble keeps its identity, and its sections keep theirs (answerStopKey).
+   *
    * Copy sits just under the answer, tucked to its bottom right — a SIBLING of the bubble, not a
    * child of it. Measured twice on the Deck 2026-09-06, and both failures came from it being
    * inside:
@@ -608,23 +626,25 @@ export function buildAnswerBubbleElement(
   return (
     <>
       {bubble}
-      <Focusable
-        key={`answer-copy-${answerKey}`}
-        className="bonsai-reply-copy-corner-slot"
-        {...({
-          navRef: copyNavRef,
-          onMoveLeft: () => leftOutOfCopy(),
-          onMoveUp: () => leftOutOfCopy(),
-          onMoveDown: () => downOutOfCopy(),
-          onButtonDown: (button: unknown) => {
-            if (isDeckDirectionLeftEvent(button)) return leftOutOfCopy();
-            if (isDownDeckButtonEvent(button)) return downOutOfCopy();
-            return false;
-          },
-        } as Record<string, unknown>)}
-      >
-        <ReplyCopyButton corner getCopyText={getAnswerCopyText!} />
-      </Focusable>
+      {showCornerCopy ? (
+        <Focusable
+          key={`answer-copy-${answerKey}`}
+          className="bonsai-reply-copy-corner-slot"
+          {...({
+            navRef: copyNavRef,
+            onMoveLeft: () => leftOutOfCopy(),
+            onMoveUp: () => leftOutOfCopy(),
+            onMoveDown: () => downOutOfCopy(),
+            onButtonDown: (button: unknown) => {
+              if (isDeckDirectionLeftEvent(button)) return leftOutOfCopy();
+              if (isDownDeckButtonEvent(button)) return downOutOfCopy();
+              return false;
+            },
+          } as Record<string, unknown>)}
+        >
+          <ReplyCopyButton corner getCopyText={getAnswerCopyText!} />
+        </Focusable>
+      ) : null}
     </>
   );
 }

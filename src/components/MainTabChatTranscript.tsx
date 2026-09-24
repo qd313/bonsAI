@@ -124,7 +124,7 @@ import {
   buildReasoningFoldRow,
   buildReasoningOpenBlock,
 } from "../utils/buildReasoningFoldElement";
-import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "../utils/uiDocument";
+import { elementHasFocus, elementHasGamepadFocus, getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
@@ -1390,35 +1390,39 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * try 2): ring on a live answer stop, answer finishes, "no focus event recorded", scrollTop jumps
    * to 1333 of 1333.
    *
-   * The fix remembers WHICH stop (by position — the element itself is about to be destroyed) held
-   * the ring while the live turn was still showing, and the moment it is replaced by its archived
-   * twin, hands the ring to the same position in the new bubble's own stops
-   * (`focusAnswerChunkAtIndex`). Recorded on every render rather than once at completion, because
-   * nothing here is told when the ring moves — Steam moves it without touching React state — so the
-   * only reliable reading is "whatever it was on the last commit before the swap". A ring recorded
-   * as -1 (on Ask, Stop, the header, or anywhere outside the live answer) is left alone, matching
-   * the rest of this file's rule that a restore only ever returns the ring to where it already was.
+   * The fix remembers WHICH stop held the ring while the live turn shows -- its position, and the
+   * element itself -- and on any later commit where that element is gone and nothing else holds
+   * the ring, hands the ring to the same position in whichever bubble now shows the turn: the live
+   * one, or its archived twin (`focusAnswerChunkAtIndex`, clamped to the last stop). Recorded on
+   * every render rather than once at completion, because nothing here is told when the ring moves
+   * -- Steam moves it without touching React state -- so the only reliable reading is "whatever it
+   * was on the last commit". A ring that has moved anywhere else (Ask, Stop, the header) is left
+   * alone, matching the rest of this file's rule that a restore only ever returns the ring to where
+   * it already was.
+   *
+   * The first version (97cde97) only restored on the live -> archived edge and failed on the Deck
+   * (docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json): the stop was destroyed one step
+   * earlier, when the finished answer re-rendered its sections under new keys inside the still-live
+   * bubble, so by the archive edge the recorded position already read "no ring". Section keys are
+   * now positional (buildAnswerBubbleElement.tsx, answerStopKey), so that step keeps the element;
+   * this watches for the element going away at any step rather than at one named edge.
    */
-  const liveAnswerRingStopIndexRef = useRef(-1);
+  const liveAnswerRingStopRef = useRef<{ index: number; el: HTMLElement } | null>(null);
   useLayoutEffect(() => {
+    const held = liveAnswerRingStopRef.current;
+    if (held && !held.el.isConnected) {
+      liveAnswerRingStopRef.current = null;
+      const owner = uiGamepadFocusElement();
+      const ringHeldElsewhere = Boolean(owner && owner.isConnected && owner !== getUiDocument().body);
+      const targetKey = showLiveTurn ? "live" : askThreadCollapsed[askThreadCollapsed.length - 1]?.id;
+      if (!ringHeldElsewhere && targetKey) focusAnswerChunkAtIndex(targetKey, held.index);
+    }
     if (!showLiveTurn) return;
     const bubble = getRegisteredAnswerBubble("live");
     const stops = bubble ? orderedAnswerStops("live", bubble) : [];
-    liveAnswerRingStopIndexRef.current = focusedAnswerStopIndex(stops);
+    const index = focusedAnswerStopIndex(stops);
+    liveAnswerRingStopRef.current = index >= 0 ? { index, el: stops[index]! } : null;
   });
-
-  const wasLiveTurnShowingRef = useRef(showLiveTurn);
-  useLayoutEffect(() => {
-    const wasShowing = wasLiveTurnShowingRef.current;
-    wasLiveTurnShowingRef.current = showLiveTurn;
-    if (!wasShowing || showLiveTurn) return; // only the live -> archived edge
-    const stopIndex = liveAnswerRingStopIndexRef.current;
-    liveAnswerRingStopIndexRef.current = -1;
-    if (stopIndex < 0) return; // the ring was not in the live answer — nothing to restore
-    const newestTurn = askThreadCollapsed[askThreadCollapsed.length - 1];
-    if (!newestTurn) return;
-    focusAnswerChunkAtIndex(newestTurn.id, stopIndex);
-  }, [showLiveTurn, askThreadCollapsed]);
 
   const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 

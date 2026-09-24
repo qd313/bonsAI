@@ -18,6 +18,9 @@
  * Does not: Decide the order bonsAI tries installed models in when
  * answering — see ModelRoutingOrderModal for that. This screen only
  * installs and removes models, and can mark one as the current pick.
+ * The New-badge record math lives in utils/pullModelNewBadge.ts, and the
+ * shared request/prop types live in PullModelsModal.types.ts — both are
+ * re-exported below so nothing else needs to change its imports.
  *
  * How it works:
  *
@@ -134,6 +137,14 @@ import {
   PULL_MODEL_NEW_BADGE_WINDOW_MS,
   type PullModelPullRecord,
 } from "../utils/pullModelNewBadge";
+import type {
+  CatalogMetadataResponse,
+  ConnectionTestResult,
+  PullModelsRoutingOrderSettings,
+  TableSection,
+  PullModelsModalProps,
+} from "./PullModelsModal.types";
+export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
@@ -150,24 +161,6 @@ export {
 export { PULL_MODEL_NEW_BADGE_STORAGE_KEY };
 
 /** Minimal shape this modal needs from `load_settings` / `save_settings` — see bonsaiSettingsSchema.ts for the rest. */
-type PullModelsRoutingOrderSettings = {
-  text_model_routing_order?: string[];
-  vision_model_routing_order?: string[];
-};
-
-type CatalogMetadataResponse = {
-  source?: "live" | "offline";
-  error?: string;
-  fetched_at?: number | null;
-  tags?: Record<string, { size_bytes?: number | null; exists?: boolean }>;
-};
-
-type ConnectionTestResult = {
-  reachable?: boolean;
-  models?: string[];
-  error?: string;
-};
-
 /**
  * Which of the requested tags the Ollama registry does not actually publish.
  *
@@ -188,45 +181,6 @@ export function findUnavailableRegistryTags(
   const tagMeta = meta.tags ?? {};
   return tags.filter((tag) => tagMeta[tag]?.exists !== true);
 }
-
-type VisibleCatalogRow = { kind: "catalog"; entry: PullModelEntry; group: PullModelGroup };
-type VisibleOtherRow = { kind: "other"; tag: string };
-type VisibleTableRow = VisibleCatalogRow | VisibleOtherRow;
-
-type TableSection = {
-  title: string;
-  rows: VisibleTableRow[];
-};
-
-export type PullModelsFooterState = {
-  okText: string;
-  onOk: () => void;
-  okDisabled: boolean;
-  /** True once at least one model is queued to pull — lets the hub know Done means "pull" here
-   *  rather than "save and close" (see OllamaModelsHubModal's handleDone). */
-  hasQueuedPull: boolean;
-};
-
-export type PullModelsModalProps = {
-  activeRoutingTag: string | null;
-  modelPolicyTier?: ModelPolicyTierId;
-  /** Gates the "Any installed model" licence row exactly like it gated the old Tier 3 button. */
-  modelPolicyNonFossUnlocked?: boolean;
-  /** Licence row picked directly in the Filters panel — a draft, saved the same way the three
-   *  Policy buttons were (see OllamaModelsHubModal's Done handling). */
-  onSelectModelPolicyTier?: (tier: ModelPolicyTierId) => void;
-  onApplyTier2Policy?: () => void | Promise<void>;
-  onBeforeNestedDeckyModal?: () => void;
-  onCompleteNestedDeckyModalClose?: (close: () => void) => void;
-  onCancel: () => void;
-  onPullAccepted: () => void;
-  /** When true, render panel body only (for AI models hub). */
-  embedded?: boolean;
-  onFooterStateChange?: (state: PullModelsFooterState) => void;
-  /** Opens the Filters panel, ring inside it, the moment this screen mounts — used for the
-   *  "Manage models → Policy" shortcut now that Policy is a filter, not its own section. */
-  initialFiltersOpen?: boolean;
-};
 
 function normalizeInstalledSet(models: string[]): Set<string> {
   const s = new Set<string>();

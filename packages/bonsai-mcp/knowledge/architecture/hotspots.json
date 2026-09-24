@@ -46,11 +46,6 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1083,
-      "role": ""
-    },
-    {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1029,
       "role": ""
@@ -73,6 +68,11 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 946,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 943,
       "role": ""
     },
     {

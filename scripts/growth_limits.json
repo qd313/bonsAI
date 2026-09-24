@@ -1,0 +1,16 @@
+{
+  "note": "Files whose code line count (comments, blank lines and docstrings excluded -- see scripts/code_line_count.py) was already over 800 the last time this was recorded. A file listed here may not go over the number next to it. Any file not listed here may not go over 800. To grow a listed file on purpose: review the growth, then run `python scripts/growth_limit.py --record` again so the new size becomes the new limit. Written by scripts/growth_limit.py --record -- do not hand-edit.",
+  "recorded_at": "2026-09-24",
+  "limits": {
+    "main.py": 1710,
+    "py_modules/backend/services/ollama_service.py": 1002,
+    "src/components/MainTabChatTranscript.tsx": 1104,
+    "src/components/MainTabPresetAnimatedChips.tsx": 914,
+    "src/components/MainTabUnifiedAskBar.tsx": 1127,
+    "src/components/OllamaWhereAiRunsSection.tsx": 880,
+    "src/components/PullModelsModal.tsx": 935,
+    "src/data/characterPlaceholderEmoticonGrids.ts": 993,
+    "src/hooks/useBonsaiAskOrchestration.ts": 1061,
+    "src/index.tsx": 1158
+  }
+}

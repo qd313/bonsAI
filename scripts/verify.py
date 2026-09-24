@@ -3,11 +3,11 @@ Title: Verify
 
 Purpose: The one command every refactor lane runs before it commits, and the one the merge
 step runs before it lands a branch. Quick mode is a fast pre-commit gate (typecheck, only the
-tests touched by the current change, the header check, the ratchet check). Full mode adds the
-whole test suite, the production build, and the generated-architecture snapshot check, for use
-at merge time. Both modes print nothing on success but a one-line summary, and print only
-failures otherwise, because a lane reading its own output should not have to scroll past noise
-to find the thing that broke.
+tests touched by the current change, the header check, the ratchet check, the growth-limit
+check). Full mode adds the whole test suite, the production build, and the generated-architecture
+snapshot check, for use at merge time. Both modes print nothing on success but a one-line
+summary, and print only failures otherwise, because a lane reading its own output should not
+have to scroll past noise to find the thing that broke.
 
 Used for: `python scripts/verify.py --quick` before every lane commit; `python scripts/verify.py
 --full` at every merge. `--json` switches to a single machine-readable object for a headless
@@ -19,10 +19,10 @@ refactor, and a failure is always reported the same way: step name, failing test
 assertion, nothing else.
 
 Does not: Fix anything, install anything, or decide what the tests should assert. Does not talk
-to the Steam Deck. Does not replace `scripts/check_headers.py` or `scripts/ratchet.py` - it only
-calls them. Both exist and both now fail the run rather than warning; the code still skips a
-missing one gracefully, which is left in place only because it costs nothing, not because either
-is optional.
+to the Steam Deck. Does not replace `scripts/check_headers.py`, `scripts/ratchet.py` or
+`scripts/growth_limit.py` - it only calls them. All three exist and all three now fail the run
+rather than warning; the code still skips a missing one gracefully, which is left in place only
+because it costs nothing, not because any of them is optional.
 
 How it works:
     1. Work out what changed (`git diff --name-only HEAD` plus untracked files), once, up front.
@@ -30,7 +30,9 @@ How it works:
        under `src/` only, skipped when none changed; the whole Python suite, whenever any `.py`
        file changed; the header check, at its strict level, which fails on a file with no
        description, a large file with no walkthrough, or a header naming something that is not
-       there; the ratchet check.
+       there; the ratchet check; the growth-limit check, which fails on any app file over 800
+       lines of code that has grown past its recorded size (or past 800 lines with no recorded
+       size at all).
     3. Full mode runs all of the above, then the whole JS test suite, the whole Python suite
        again (matching the documented `npm run test:py`), the production build, and the
        architecture-snapshot check.
@@ -342,6 +344,10 @@ def run(mode: str) -> tuple[list[StepResult], float]:
     # person adding it still remembers what it is for.
     steps.append(step_optional_script("scripts/check_headers.py", ["--level", "full", "--json"], "check_headers"))
     steps.append(step_optional_script("scripts/ratchet.py", ["check", "--json"], "ratchet"))
+    # A hard limit, not a ratchet: a file already over 800 lines of code may not grow past the
+    # size it had when scripts/growth_limits.json was last recorded, and no other app file may
+    # cross 800 at all. See scripts/growth_limit.py.
+    steps.append(step_optional_script("scripts/growth_limit.py", ["--json"], "growth_limit"))
 
     if mode == "full":
         steps.append(step_npm("test", "npm_test", kind="tests"))

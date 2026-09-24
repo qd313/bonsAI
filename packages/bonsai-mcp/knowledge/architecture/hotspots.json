@@ -31,11 +31,6 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1652,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1619,
       "role": "Prompt build, Ollama HTTP, streaming"
@@ -43,6 +38,11 @@
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1586,
+      "role": ""
+    },
+    {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 1578,
       "role": ""
     },
     {

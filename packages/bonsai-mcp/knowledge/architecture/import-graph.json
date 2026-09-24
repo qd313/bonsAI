@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 456,
-  "edgeCount": 1200,
+  "fileCount": 457,
+  "edgeCount": 1201,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3070,6 +3070,12 @@
       ],
       "importedBy": []
     },
+    "src/styles/sections/answerMarkdownFormatting.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/styles/sections/section-6.ts"
+      ]
+    },
     "src/styles/sections/chatSlotModal.ts": {
       "imports": [],
       "importedBy": [
@@ -3163,6 +3169,7 @@
     "src/styles/sections/section-6.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
+        "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [

@@ -1,16 +1,36 @@
 {
-  "note": "Files whose code line count (comments, blank lines and docstrings excluded -- see scripts/code_line_count.py) was already over 800 the last time this was recorded. A file listed here may not go over the number next to it. Any file not listed here may not go over 800. To grow a listed file on purpose: review the growth, then run `python scripts/growth_limit.py --record` again so the new size becomes the new limit. Written by scripts/growth_limit.py --record -- do not hand-edit.",
+  "note": "Files whose code line count (comments, blank lines and docstrings excluded -- see scripts/code_line_count.py) is over 800. A file listed here may not go over the \"limit\" number next to it. Any file not listed here may not go over 800. `python scripts/growth_limit.py --record` keeps this file in sync with reality, but it never raises a limit by itself -- a file that has grown past its own recorded limit is left alone and reported as refused. To grow a listed file's limit on purpose: review the growth, then run `python scripts/growth_limit.py --raise <path> --reason \"<why>\"`, which writes the new number, the reason, and today's date. Written by scripts/growth_limit.py -- do not hand-edit.",
   "recorded_at": "2026-09-24",
   "limits": {
-    "main.py": 1710,
-    "py_modules/backend/services/ollama_service.py": 1002,
-    "src/components/MainTabChatTranscript.tsx": 1104,
-    "src/components/MainTabPresetAnimatedChips.tsx": 914,
-    "src/components/MainTabUnifiedAskBar.tsx": 1127,
-    "src/components/OllamaWhereAiRunsSection.tsx": 880,
-    "src/components/PullModelsModal.tsx": 935,
-    "src/data/characterPlaceholderEmoticonGrids.ts": 993,
-    "src/hooks/useBonsaiAskOrchestration.ts": 1061,
-    "src/index.tsx": 1158
+    "main.py": {
+      "limit": 1710
+    },
+    "py_modules/backend/services/ollama_service.py": {
+      "limit": 1002
+    },
+    "src/components/MainTabChatTranscript.tsx": {
+      "limit": 1104
+    },
+    "src/components/MainTabPresetAnimatedChips.tsx": {
+      "limit": 914
+    },
+    "src/components/MainTabUnifiedAskBar.tsx": {
+      "limit": 1127
+    },
+    "src/components/OllamaWhereAiRunsSection.tsx": {
+      "limit": 880
+    },
+    "src/components/PullModelsModal.tsx": {
+      "limit": 935
+    },
+    "src/data/characterPlaceholderEmoticonGrids.ts": {
+      "limit": 993
+    },
+    "src/hooks/useBonsaiAskOrchestration.ts": {
+      "limit": 1061
+    },
+    "src/index.tsx": {
+      "limit": 1158
+    }
   }
 }

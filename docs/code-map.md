@@ -212,6 +212,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **useOllamaConnectionState.ts** (src/features/plugin-shell/useOllamaConnectionState.ts) — *Where the AI is running, and how to reach it*: Keeps track of the address the person typed for a computer running the AI, works out the actual address to use (that typed one, or a fixed local address when the AI is set to run on the Deck itself), and remembers the last time the plugin checked whether that address could be…
 - **useOllamaModelsHubModal.tsx** (src/features/plugin-shell/useOllamaModelsHubModal.tsx) — *Models hub popup*: Opens the popup where a person browses, picks, and installs the AI models the plugin is allowed to use, and saves the policy choices made there (which tier of model is allowed, and whether bigger models are allowed on lower-memory hardware).
 - **usePluginHelpModal.tsx** (src/features/plugin-shell/usePluginHelpModal.tsx) — *Help popup and its "seen it" chip*: Opens the plugin's help popup, and remembers whether a person has already opened it, so the help chip on the Main tab only offers itself once. […]
+- **useSessionResetActions.tsx** (src/features/plugin-shell/useSessionResetActions.tsx) — *Clearing a session, and clearing everything*: The two ways a person can deliberately throw a session away — `resetPluginSession` (the Settings tab's *Clear session*, which forgets the current question and answer but keeps every setting) and `onClearAllPluginData` (*Clear all plugin data*, which resets settings, local Ollama…
 
 ## src/features/plugin-shell/tabs
 

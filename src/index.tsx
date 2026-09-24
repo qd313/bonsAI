@@ -49,7 +49,8 @@
  * backend side of everything this file wires up.
  *
  * Split note (plan 65): the empty starting snapshot moved to
- * features/plugin-shell/initialSessionSnapshot.ts.
+ * features/plugin-shell/initialSessionSnapshot.ts; the two "clear the session" /
+ * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -103,22 +104,17 @@ import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
-  acknowledgePluginDataClearHandled,
   clearBonsaiSessionSurvival,
   consumeBonsaiSessionAfterRemount,
   finalizeSessionRestoreAfterRemount,
   getPluginDataClearedGeneration,
-  markPluginDataCleared,
   peekBonsaiSessionPendingRestore,
   shouldIgnoreRestoredSettingsSnapshot,
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
 import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
-import { clearBonsaiBrowserStorage } from "./utils/clearBonsaiBrowserStorage";
 import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
-import { clearOllamaTabLocalSurvival } from "./utils/ollamaTabLocalSurvival";
-import { clearSettingsTabLocalSurvival } from "./utils/settingsTabLocalSurvival";
 import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import {
   BonsaiSvgIcon,
@@ -153,7 +149,7 @@ import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
 import { UiScaleProvider } from "./context/UiScaleContext";
 import { publishUiScaleScopeStyle } from "./utils/uiScaleScopeBridge";
 import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
-import { formatDeckyRpcError, callDeckyWithTimeout } from "./utils/deckyCall";
+import { callDeckyWithTimeout } from "./utils/deckyCall";
 import { SEED_KB_SOURCE_DIR } from "./data/knowledgeBaseDev";
 import { usePluginSettings } from "./hooks/usePluginSettings";
 import { useReplyLanguage } from "./hooks/useReplyLanguage";
@@ -176,7 +172,7 @@ import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
 import { getSteamSettingsUrl } from "./data/steamSettingsNavigation";
 import { registerPreviewTestHooks, isDeckyPreviewRuntime } from "./preview/previewTestHooks";
 import { buildReplyLayoutReport } from "./preview/replyLayoutReport";
-import { IP_DEFAULT } from "./data/storageKeys";
+import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 
 type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
@@ -1047,132 +1043,27 @@ const Content: React.FC = () => {
   }, [unifiedInputPersistenceMode]);
 
 
-  const resetPluginSession = useCallback(() => {
-    /*
-     * Tell Python to forget the last answer *first* (D35, option 1, locked 2026-08-27) — and stop a
-     * generation still in flight, which is the maintainer's call on D35's open sub-question.
-     *
-     * This is the route the maintainer was actually hitting. D32 (chat slot) and D34 (modal
-     * snapshot) were both real and are both fixed, and the cleared thread still came back: the
-     * restored turn was tagged `live`, so it came from neither. It came from the backend — the
-     * finished answer lives on in `_background_state` so that a reply survives the user tabbing
-     * away mid-generation, and `useBonsaiAskOrchestration.ts` calls `get_background_game_ai_status`
-     * on *every* mount to repaint it. Clearing never told Python, so switching tabs was enough to
-     * bring it back.
-     *
-     * Dispatched before anything else in this function, and not awaited. The remount that follows
-     * the confirmation modal closing sends its own `get_background_game_ai_status`; both travel the
-     * same socket in send order, and `forget_background_game_ai` resets the state under
-     * `_background_lock` before its first suspension point, so the status call either finds idle
-     * state or waits on the lock. Awaiting instead would hold the modal open for the Ollama stop
-     * (up to ~1.5s), which is a worse trade for a button that should feel instant.
-     */
-    void callDeckyWithTimeout<[], { ok?: boolean; stopped?: boolean }>(
-      "forget_background_game_ai",
-      [],
-    ).catch(() => {
-      /* Best-effort: the UI is cleared either way, and a failure only means a remount can repaint. */
-    });
-    resetAskSessionSlice();
-    /*
-     * Detach the saved chat slot, or the cleared screen fills itself back in.
-     *
-     * `resetAskSessionSlice` clears React state and stops there, leaving `activeSlotIdRef` pointing
-     * at the slot on disk. `reloadActiveSlotTranscript` runs after every completed Ask (via
-     * `onSlotTurnsChanged` above), reads that pointer, and calls `setAskThreadCollapsed` with the
-     * slot's turns — so the next Ask brought the whole cleared thread back, which is what the
-     * maintainer reported as "I can't tell if it did anything" (D32).
-     *
-     * Detach rather than delete, which D32 leaves to the implementer: it keeps the modal's own
-     * promise true — *"Does not change settings.json, Ollama, or image files on disk"* would become
-     * false the moment we removed the slot file. Clearing the pointer is enough to satisfy the
-     * other half of D32 ("and it must stay clean"), because `reloadActiveSlotTranscript` blanks the
-     * thread rather than restoring anything when the pointer is null, and the session-survival
-     * snapshot stores `chatSlots.activeSlotId` — now null — so a QAM reopen has nothing to restore.
-     *
-     * `ensureActiveSlotForAsk` mints a fresh slot on the next Ask. That is intended: a cleared
-     * session is a new session. The slots left behind accumulate; that is NOT settled by D32 and is
-     * tracked as its own follow-up on the roadmap entry.
-     */
-    chatSlots.setActiveSlot(null);
-    /*
-     * Then throw away the modal survival snapshot, or the confirmation box undoes the clear (D34,
-     * option 1, locked 2026-08-27).
-     *
-     * Measured on device: detaching the pointer alone did nothing, because *Clear cache* is a
-     * `ConfirmModal` and opening any Decky modal remounts the plugin. `onBeforeDeckyModal` snapshots
-     * the whole live session — thread and `activeSlotId` — *before* the user presses Clear
-     * (SettingsTab.tsx, `captureSessionBeforeModal` in useBonsaiPluginShell.ts). The modal then
-     * closes, the plugin remounts, and `finalizeSessionRestoreAfterRemount` restores that pre-clear
-     * snapshot over everything this function just cleared. Pressing Clear and asking nothing at all
-     * still brought the thread straight back.
-     *
-     * Discarding the snapshot wholesale is D34's chosen option, and the accepted cost is that the
-     * remount no longer restores `currentTab` either — so clearing from the Settings tab lands the
-     * user back on the default tab. `clear_plugin_data` already does exactly this via
-     * `markPluginDataCleared`, so this is the established shape rather than a new mechanism.
-     *
-     * Known and deliberately not handled: a settings edit still inside its save debounce would be
-     * read back from disk on the remount rather than from the discarded snapshot. Reaching that
-     * needs a toggle and a Clear press within a few hundred ms of each other, which is several
-     * D-pad presses apart in practice; `flushSettingsSnapshotNow` is the lever if it ever bites.
-     */
-    clearBonsaiSessionSurvival();
-    persistSearchQuery("");
-    setUnifiedInput("");
-    clearAskCameFromMicRef.current();
-    setSelectedIndex(-1);
-    setNavigationMessage("");
-    setSelectedAttachment(null);
-    void reseedSuggestedPrompts("random", undefined, true);
-    toaster.toast({
-      title: uiT("toast.sessionCleared.title"),
-      body: uiT("toast.sessionCleared.body"),
-      duration: 3800,
-    });
-  }, [chatSlots.setActiveSlot, resetAskSessionSlice, reseedSuggestedPrompts, uiT]);
-
-  const onClearAllPluginData = useCallback(async () => {
-    try {
-      markPluginDataCleared();
-      clearSettingsTabLocalSurvival();
-      clearOllamaTabLocalSurvival();
-      setLastConnectionStatus(null);
-      resetOllamaTab();
-      await pauseDebouncedSettingsSave();
-      // Deliberately unwrapped: clear_plugin_data tears down local Ollama models
-      // (ollama rm plus multi-GB rmtree), which can far exceed any UI deadline.
-      await call("clear_plugin_data");
-      clearBonsaiBrowserStorage();
-      await syncSettingsFromDisk();
-      acknowledgePluginDataClearHandled();
-      setOllamaIp(IP_DEFAULT);
-      localRuntimeBetaPromptIssuedRef.current = false;
-      ollamaLocalOnDeckPrevRef.current = null;
-      resetPluginHelpDismissed();
-      resetPluginSession();
-      await intentPacks.refresh();
-      showDisclaimerModalAgain();
-      toaster.toast({
-        title: "Plugin data cleared",
-        body: "Settings and local plugin storage were reset. Re-enter your Ollama host and permissions as needed.",
-        duration: 4500,
-      });
-    } catch (e: unknown) {
-      toaster.toast({
-        title: uiT("toast.clearFailed.title"),
-        body: formatDeckyRpcError(e),
-        duration: 5000,
-      });
-    }
-  }, [
-    syncSettingsFromDisk,
-    pauseDebouncedSettingsSave,
-    resetPluginSession,
-    showDisclaimerModalAgain,
-    intentPacks.refresh,
+  const { resetPluginSession, onClearAllPluginData } = useSessionResetActions({
+    chatSlots,
+    resetAskSessionSlice,
+    reseedSuggestedPrompts,
     uiT,
-  ]);
+    setUnifiedInput,
+    clearAskCameFromMicRef,
+    setSelectedIndex,
+    setNavigationMessage,
+    setSelectedAttachment,
+    setLastConnectionStatus,
+    resetOllamaTab,
+    pauseDebouncedSettingsSave,
+    syncSettingsFromDisk,
+    setOllamaIp,
+    localRuntimeBetaPromptIssuedRef,
+    ollamaLocalOnDeckPrevRef,
+    resetPluginHelpDismissed,
+    intentPacks,
+    showDisclaimerModalAgain,
+  });
 
   const {
     voiceRecording,

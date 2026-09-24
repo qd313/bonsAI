@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 435,
-  "edgeCount": 1121,
+  "fileCount": 436,
+  "edgeCount": 1133,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1627,8 +1627,8 @@
         "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
-        "src/hooks/useBonsaiPluginShell.test.ts",
-        "src/index.tsx"
+        "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/hooks/useBonsaiPluginShell.test.ts"
       ]
     },
     "src/data/strategyGuideFollowup.test.ts": {
@@ -1837,6 +1837,7 @@
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useChatSlots.ts",
@@ -1982,6 +1983,7 @@
         "src/utils/persistOllamaIp.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/index.tsx"
       ]
     },
@@ -2002,6 +2004,28 @@
         "src/components/PluginHelpModal.tsx",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useSessionResetActions.tsx": {
+      "imports": [
+        "src/data/storageKeys.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
+        "src/features/plugin-shell/useOllamaConnectionState.ts",
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useChatSlots.ts",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/hooks/useIntentPacks.ts",
+        "src/hooks/usePluginSettings.ts",
+        "src/hooks/useReplyLanguage.ts",
+        "src/hooks/useScreenshotBrowser.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/clearBonsaiBrowserStorage.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/ollamaTabLocalSurvival.ts",
+        "src/utils/settingsTabLocalSurvival.ts"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -2255,6 +2279,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/index.tsx"
       ]
@@ -2306,6 +2331,7 @@
         "src/utils/chatSlotsApi.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useChatSlots.test.ts",
         "src/index.tsx"
       ]
@@ -2315,6 +2341,7 @@
         "src/data/deckEssentialsTags.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx"
@@ -2351,6 +2378,7 @@
         "src/utils/intentPackSearch.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/index.tsx"
       ]
     },
@@ -2441,6 +2469,7 @@
         "src/utils/settingsPayload.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/usePluginSettings.test.ts",
         "src/index.tsx"
       ]
@@ -2544,6 +2573,7 @@
         "src/utils/i18n.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/index.tsx"
       ]
     },
@@ -2554,6 +2584,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/index.tsx"
       ]
     },
@@ -2737,7 +2768,6 @@
         "src/data/pullModelCatalog.ts",
         "src/data/steam-input-lexicon.ts",
         "src/data/steamSettingsNavigation.ts",
-        "src/data/storageKeys.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/PluginErrorBoundary.tsx",
@@ -2757,6 +2787,7 @@
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/unified-input/constants.ts",
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/features/voice/useVoiceAskInput.ts",
@@ -2784,12 +2815,9 @@
         "src/utils/bonsaiDebugIngest.ts",
         "src/utils/bonsaiReplySurface.ts",
         "src/utils/bonsaiSessionSurvival.ts",
-        "src/utils/clearBonsaiBrowserStorage.ts",
         "src/utils/deckyCall.ts",
         "src/utils/navFocusRegistry.ts",
-        "src/utils/ollamaTabLocalSurvival.ts",
         "src/utils/settingsPayload.ts",
-        "src/utils/settingsTabLocalSurvival.ts",
         "src/utils/steamInputJump.ts",
         "src/utils/uiScaleScopeBridge.ts",
         "src/utils/unifiedInputPersistenceMode.ts"
@@ -3518,6 +3546,7 @@
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -3713,7 +3742,7 @@
     "src/utils/clearBonsaiBrowserStorage.ts": {
       "imports": [],
       "importedBy": [
-        "src/index.tsx",
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/utils/clearBonsaiBrowserStorage.test.ts"
       ]
     },
@@ -3809,6 +3838,7 @@
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+        "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/voice/useVoiceAskInput.ts",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.ts",
@@ -4128,8 +4158,8 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/hooks/useBonsaiPluginShell.ts",
-        "src/index.tsx"
+        "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/hooks/useBonsaiPluginShell.ts"
       ]
     },
     "src/utils/permissionDeepLink.test.ts": {
@@ -4353,8 +4383,8 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
-        "src/hooks/useBonsaiPluginShell.ts",
-        "src/index.tsx"
+        "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/hooks/useBonsaiPluginShell.ts"
       ]
     },
     "src/utils/splitResponseIntoChunks.test.ts": {

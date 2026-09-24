@@ -56,7 +56,7 @@ class SessionRagChipCandidatesRpcTests(unittest.IsolatedAsyncioTestCase):
             captured.update(kwargs)
             return SessionRagChipCandidatesResult(ok=True)
 
-        with patch.object(main, "suggest_chip_candidates", side_effect=fake):
+        with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", side_effect=fake):
             await self.plugin.get_session_rag_chip_candidates("  2321470 ", " Deep Rock ", " DRG.sh ")
 
         self.assertEqual(captured["app_id"], "2321470")
@@ -70,7 +70,7 @@ class SessionRagChipCandidatesRpcTests(unittest.IsolatedAsyncioTestCase):
             captured.update(kwargs)
             return SessionRagChipCandidatesResult(ok=True)
 
-        with patch.object(main, "suggest_chip_candidates", side_effect=fake):
+        with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", side_effect=fake):
             await self.plugin.get_session_rag_chip_candidates()
 
         self.assertEqual(captured, {"app_id": "", "app_name": "", "shortcut_name": ""})
@@ -89,7 +89,7 @@ class SessionRagChipCandidatesRpcTests(unittest.IsolatedAsyncioTestCase):
             ],
         )
 
-        with patch.object(main, "suggest_chip_candidates", return_value=result):
+        with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", return_value=result):
             out = await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
 
         self.assertTrue(out["ok"])
@@ -110,24 +110,24 @@ class SessionRagChipCandidatesRpcTests(unittest.IsolatedAsyncioTestCase):
         broken = SessionRagChipCandidatesResult(ok=False, reason="corpus_error:database disk image is malformed")
         healthy = SessionRagChipCandidatesResult(ok=True, candidates=[])
 
-        with patch.object(main, "logger") as log:
-            with patch.object(main, "suggest_chip_candidates", return_value=broken):
+        with patch.object(main.rag_corpus_rpc, "logger") as log:
+            with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", return_value=broken):
                 await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
                 await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
             self.assertEqual(log.warning.call_count, 1)
 
             # Recovering and breaking again is a new fault and must be logged again.
-            with patch.object(main, "suggest_chip_candidates", return_value=healthy):
+            with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", return_value=healthy):
                 await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
-            with patch.object(main, "suggest_chip_candidates", return_value=broken):
+            with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", return_value=broken):
                 await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
             self.assertEqual(log.warning.call_count, 2)
 
     async def test_empty_result_is_not_logged_as_a_fault(self) -> None:
         """A game with no KB content is normal, not a fault."""
-        with patch.object(main, "logger") as log:
+        with patch.object(main.rag_corpus_rpc, "logger") as log:
             with patch.object(
-                main,
+                main.rag_corpus_rpc,
                 "suggest_chip_candidates",
                 return_value=SessionRagChipCandidatesResult(ok=False, reason="no_sections"),
             ):
@@ -137,7 +137,7 @@ class SessionRagChipCandidatesRpcTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_corpus_error_returns_failure_instead_of_raising(self) -> None:
         """A raised exception would reject the RPC — the exact failure this feature shipped with."""
-        with patch.object(main, "suggest_chip_candidates", side_effect=sqlite3.Error("corpus gone")):
+        with patch.object(main.rag_corpus_rpc, "suggest_chip_candidates", side_effect=sqlite3.Error("corpus gone")):
             out = await self.plugin.get_session_rag_chip_candidates("2321470", "Deep Rock")
 
         self.assertFalse(out["ok"])

@@ -1722,3 +1722,42 @@ What these answers do to the roadmap:
 - **(8)** the KB-ATTRIB-01 call leaves "Calls waiting on you".
 - The others change no entry.
 
+### D117 — LOCKED 2026-09-24 (raised 2026-09-23) — Plan 65 trim and split: the seven calls before go, and the calls made during the night
+
+Raised from [plan 65](../planning/65-trim-docs-split-long-files.md) § 9, written before the session began
+(while plan 64 was still running on the Deck). The maintainer answered all seven the same day,
+2026-09-23, before "go".
+
+1. **How many helpers at once?** Five within the house rules (three on code, two on documents); five
+   that may all split code; or three in all, gentler on the shared allowance. **Five, and all five may
+   split code** — past the three-at-once rule, on purpose.
+2. **Which files beyond the eleven?** The back end's front door, the Ask logic, the question builder.
+   **All three.**
+3. **How far to split each file?** About half; down to the 400-line house number; or one or two pieces
+   each. **About half.**
+4. **The four files plan 64 will most likely change** (transcript, Ask bar, main screen, Ask logic).
+   Split now and carry its fixes across, or wait for it to finish. **Split now, land them last; the
+   session carries fixes across.**
+5. **The testing rows and the manual checks.** Wait for plan 64, or trim now around its rows. **Wait
+   for plan 64.**
+6. **The Deck check.** One combined check, one per file, or a later session. **One combined check, this
+   session.**
+7. **Stop the big files growing back?** A hard limit, a warning only, or nothing. **A hard limit**: a
+   file over 800 lines of code may not grow; comments do not count.
+
+The calls made during the night, not raised in advance:
+
+- Lifting a whole block of hooks out into its own hook, called from the same spot and proved by the
+  hook-order script, was allowed once the first split came back only 7% smaller with hook calls left
+  untouched.
+- The settings-snapshot move was left out of the main screen's split, because it copied a 48-field list
+  twice; the rest of that file's split landed without it.
+- The testing documents started as soon as plan 64 finished, in the same overnight run, rather than
+  waiting for a separate session.
+- The document helpers moved older, superseded history out to an archive rather than rewording the rows
+  that stayed.
+- Five decisions were kept open for doubt (D38, D41, D74, D75, D82); four were moved to closed on their
+  own "settled by" line (D40's second entry, D53, D54, D81).
+- Raising a growth limit needs its own step with a written reason, closing a loophole where recording a
+  new baseline could silently raise a limit too.
+

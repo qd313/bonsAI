@@ -94,23 +94,17 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, ty
 import { Button, ConfirmModal, Focusable, TextField } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
-  PULL_MODEL_GROUP_LABELS,
-  PULL_MODEL_GROUP_ORDER,
   PULL_MODEL_MODE_FILTER_OPTIONS,
   PULL_MODEL_RATING_COLUMN_LABEL,
   bytesToGb,
-  comparePullModelEntriesNewestFirst,
-  comparePullModelEntriesStretchOrder,
   formatGtaStars,
   formatPullModelTags,
   formatReleasedYmShort,
   formatSizeGb,
   isDeckDailyPullModel,
-  isDeckEssentialsPullModel,
   isEmbeddingOnlyTag,
   type PullModelEntry,
   type PullModelModeFilterId,
-  type PullModelGroup,
 } from "../data/pullModelCatalog";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
@@ -126,12 +120,8 @@ import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
 import { usePullModelPinForAsk } from "../hooks/usePullModelPinForAsk";
 import { usePullModelSubmitSelected } from "../hooks/usePullModelSubmitSelected";
 import { usePullModelCustomTagPull } from "../hooks/usePullModelCustomTagPull";
-import {
-  getCatalogTags,
-  isCatalogModelTagInList,
-  isPlausibleOllamaPullTag,
-  mergePullModelCatalog,
-} from "../utils/mergePullModelCatalog";
+import { usePullModelTableData } from "../hooks/usePullModelTableData";
+import { getCatalogTags, isPlausibleOllamaPullTag, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
 import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
 import {
   computeUpdatedPullRecord,
@@ -143,13 +133,10 @@ import type {
   CatalogMetadataResponse,
   ConnectionTestResult,
   PullModelsRoutingOrderSettings,
-  TableSection,
   PullModelsModalProps,
 } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
 import {
-  entryMatchesLicenceTier,
-  entryMatchesModeFilters,
   filterPanelRowAriaLabel,
   filterPanelRowGroupHeading,
   filterPanelRowKey,
@@ -377,119 +364,20 @@ export function PullModelsModal(props: PullModelsModalProps) {
     }
   }, [installedTags]);
 
-  const otherInstalledTags = useMemo(() => {
-    const out: string[] = [];
-    for (const t of installedTags) {
-      if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
-    }
-    // Not in the curated catalog, so there is no license or mode data to check the Licence /
-    // Ask-mode filters against -- only "Recently added" (the New badge, tracked by tag alone)
-    // applies to this section, same as it always applied to these rows' own badge.
-    const filtered = recentlyAddedOnly
-      ? out.filter((t) => isRecentPullModelTag(pullRecord, t, Date.now()))
-      : out;
-    filtered.sort((a, b) => a.localeCompare(b));
-    return filtered;
-  }, [installedTags, mergedCatalog, recentlyAddedOnly, pullRecord]);
-
-  const filteredCatalog = useMemo(() => {
-    return mergedCatalog.filter((entry) => {
-      if (!entryMatchesLicenceTier(entry, modelPolicyTier)) return false;
-      if (!entryMatchesModeFilters(entry, modeFilters)) return false;
-      if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
-      // Essentials only ON: show just the essentials group. OFF: show everything else,
-      // stretch (Expert large) included -- it used to be dropped here too, through a
-      // second "daily driver" check that excluded it in both toggle states, so the
-      // Expert group could never be shown at all (found while wiring its bake-off order,
-      // docs/planning/41-deck-model-survey.md § 9, D73).
-      //
-      // A model already on this Deck always keeps its row, though: Essentials only is about what
-      // to download, and hiding an installed model left no star to use it for Ask and no Remove
-      // unless you knew to open Filters -- while the header still counted it (Deck, plan 64 flow
-      // G: qwen2.5:1.5b pulled by typed name, "Installed 3", no row; plan64-PRELOAD-01-try2.json).
-      if (essentialsOnly && !isDeckEssentialsPullModel(entry) && !isTagInstalled(entry.tag, installedTags)) {
-        return false;
-      }
-      if (recentlyAddedOnly) {
-        const installed = isTagInstalled(entry.tag, installedTags);
-        if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, Date.now())) return false;
-      }
-      return true;
-    });
-  }, [
-    modelPolicyTier,
+  // Lifted into usePullModelTableData. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { tableSections, flatRows, installedCatalogCount, installedTotalGb, selectedTotalGb } = usePullModelTableData({
+    mergedCatalog,
+    installedTags,
     modeFilters,
     installedOnly,
     essentialsOnly,
     recentlyAddedOnly,
-    installedTags,
-    mergedCatalog,
     pullRecord,
-  ]);
-
-  const groupedCatalog = useMemo(() => {
-    const map = new Map<PullModelGroup, PullModelEntry[]>();
-    for (const g of PULL_MODEL_GROUP_ORDER) map.set(g, []);
-    for (const entry of filteredCatalog) {
-      map.get(entry.group)?.push(entry);
-    }
-    for (const g of PULL_MODEL_GROUP_ORDER) {
-      // Expert (large) sorts by the bake-off's own ranking, strongest first, instead of
-      // newest-first like every other group (docs/planning/41-deck-model-survey.md § 9).
-      const cmp = g === "stretch" ? comparePullModelEntriesStretchOrder : comparePullModelEntriesNewestFirst;
-      map.get(g)?.sort(cmp);
-    }
-    return map;
-  }, [filteredCatalog]);
-
-  const tableSections = useMemo((): TableSection[] => {
-    const sections: TableSection[] = [];
-    for (const group of PULL_MODEL_GROUP_ORDER) {
-      const entries = groupedCatalog.get(group) ?? [];
-      if (!entries.length) continue;
-      sections.push({
-        title: PULL_MODEL_GROUP_LABELS[group],
-        rows: entries.map((entry) => ({ kind: "catalog", entry, group })),
-      });
-    }
-    if (!installedOnly && otherInstalledTags.length > 0) {
-      sections.push({
-        title: "Other installed (not in curated catalog)",
-        rows: otherInstalledTags.map((tag) => ({ kind: "other", tag })),
-      });
-    }
-    return sections;
-  }, [groupedCatalog, installedOnly, otherInstalledTags]);
-
-  const flatRows = useMemo(() => tableSections.flatMap((s) => s.rows), [tableSections]);
-
-  const installedCatalogCount = useMemo(() => {
-    let n = 0;
-    for (const e of mergedCatalog) {
-      if (isTagInstalled(e.tag, installedTags)) n += 1;
-    }
-    return n + otherInstalledTags.length;
-  }, [installedTags, mergedCatalog, otherInstalledTags.length]);
-
-  const installedTotalGb = useMemo(() => {
-    let sum = 0;
-    for (const e of mergedCatalog) {
-      if (isTagInstalled(e.tag, installedTags)) sum += resolveRowSizeGb(e, liveSizeGbByTag);
-    }
-    for (const t of otherInstalledTags) {
-      sum += liveSizeGbByTag[t] ?? 0;
-    }
-    return sum;
-  }, [installedTags, mergedCatalog, otherInstalledTags, liveSizeGbByTag]);
-
-  const selectedTotalGb = useMemo(() => {
-    let sum = 0;
-    for (const tag of selectedTags) {
-      const entry = mergedCatalog.find((e) => e.tag === tag);
-      if (entry) sum += resolveRowSizeGb(entry, liveSizeGbByTag);
-    }
-    return sum;
-  }, [selectedTags, mergedCatalog, liveSizeGbByTag]);
+    modelPolicyTier,
+    liveSizeGbByTag,
+    selectedTags,
+  });
 
   const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
 

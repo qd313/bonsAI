@@ -3,9 +3,9 @@
 > **Trimmed 2026-09-24 (plan 65).** More finished rows moved to
 > [archive/testing-closed-2026.md](archive/testing-closed-2026.md); a few still-open rows had their
 > older, superseded history moved to [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md),
-> each with a link back on its live row. 149,062 to 107,845 bytes — short of the 60 KB goal; the
-> remaining open rows are long mostly because their steps and latest results are what a person
-> actually needs, not because of leftover history.
+> each with a link back on its live row. A second pass moved more. 149,062 to 100,414 bytes —
+> still short of the 60 KB goal; what is left is mostly steps and the newest result on each row,
+> which a person running the check actually needs, not leftover history.
 
 **Purpose:** Where to test, what to run, and how coverage is tracked — without dumping every historical checkbox into one file.
 

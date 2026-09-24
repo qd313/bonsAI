@@ -45,7 +45,7 @@ import threading
 import urllib.request
 import zlib
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any, Awaitable, Callable, Optional
 
 from backend.services.knowledge_base_schema import (
     CORPUS_ATTRIBUTIONS_FILENAME,
@@ -308,8 +308,16 @@ async def run_rag_corpus_download(
     cancel_event: asyncio.Event,
     manifest_url_hf: str = DEFAULT_MANIFEST_HF_URL,
     manifest_url_github: str = DEFAULT_MANIFEST_GITHUB_URL,
+    on_installed: Optional[Callable[[str, str], Awaitable[None]]] = None,
 ) -> None:
-    """Populate state while downloading corpus (async wrapper)."""
+    """Populate state while downloading corpus (async wrapper).
+
+    ``on_installed(root, version)`` runs after the files are in place and before the state
+    says ``done``. The caller saves the new path there: the screen stops polling the moment it
+    reads ``done`` and checks "installed" once, from settings, so a save that landed after
+    ``done`` left the section reading "Not installed" until the tab was reopened (measured on
+    the Deck, plan64-TWO-TAPS-DOWNLOAD.json). If it raises, the download counts as failed.
+    """
 
     def log(msg: str) -> None:
         _append_log(list(state.setdefault("log_tail", [])), msg)
@@ -365,6 +373,8 @@ async def run_rag_corpus_download(
         )
         state["progress_pct"] = 100
         state["install_path"] = root
+        if on_installed is not None:
+            await on_installed(root, state["manifest_version"])
         state["phase"] = "done"
         state["stage"] = "complete"
         state["done"] = True

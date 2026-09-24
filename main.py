@@ -1558,6 +1558,15 @@ class Plugin:
                 }
             )
 
+            async def save_installed_corpus(root: str, version: str) -> None:
+                await self.save_settings(
+                    {
+                        "rag_corpus_path": str(root or install_dir),
+                        "rag_corpus_version": str(version or ""),
+                        "use_local_knowledge_base": True,
+                    }
+                )
+
             async def runner() -> None:
                 assert self._rag_corpus_cancel_event is not None
                 await run_rag_corpus_download(
@@ -1565,17 +1574,8 @@ class Plugin:
                     state=self._rag_corpus_download_state,
                     logger=logger,
                     cancel_event=self._rag_corpus_cancel_event,
+                    on_installed=save_installed_corpus,
                 )
-                if self._rag_corpus_download_state.get("phase") == "done":
-                    version = str(self._rag_corpus_download_state.get("manifest_version") or "")
-                    root = str(self._rag_corpus_download_state.get("install_path") or install_dir)
-                    await self.save_settings(
-                        {
-                            "rag_corpus_path": root,
-                            "rag_corpus_version": version,
-                            "use_local_knowledge_base": True,
-                        }
-                    )
 
             self._rag_corpus_download_task = asyncio.create_task(runner())
 

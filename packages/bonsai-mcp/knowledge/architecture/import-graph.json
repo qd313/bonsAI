@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 424,
-  "edgeCount": 1083,
+  "fileCount": 425,
+  "edgeCount": 1089,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -446,6 +446,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.tsx": {
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
@@ -465,9 +474,11 @@
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
+        "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
+        "src/utils/answerStopRegistry.ts",
         "src/utils/appliedTuningText.ts",
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/askThinkingPhases.ts",
@@ -508,6 +519,7 @@
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
+        "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx"
       ]
     },
@@ -2981,6 +2993,7 @@
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
+        "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
@@ -3137,6 +3150,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
         "src/utils/answerBubbleElRegistry.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
@@ -3221,6 +3235,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.test.ts",
@@ -4404,6 +4420,7 @@
         "src/components/BonsaiPluginShell.test.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
+        "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",

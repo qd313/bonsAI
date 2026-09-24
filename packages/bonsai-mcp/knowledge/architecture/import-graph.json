@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 450,
-  "edgeCount": 1192,
+  "fileCount": 451,
+  "edgeCount": 1195,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -470,6 +470,7 @@
         "src/data/replyMicroActions.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
@@ -2482,6 +2483,15 @@
         "src/hooks/useStreamScrollPin.ts"
       ]
     },
+    "src/hooks/useEarlierTurnsPill.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/hooks/useInputTransparencyRefresh.ts": {
       "imports": [
         "src/utils/deckyCall.ts",
@@ -3367,6 +3377,7 @@
         "src/components/StrategyChecklistPanel.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",
+        "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyBranchActions.ts",
@@ -4340,6 +4351,7 @@
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/index.tsx",

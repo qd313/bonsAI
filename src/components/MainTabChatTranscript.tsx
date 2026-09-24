@@ -202,6 +202,7 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloud } from "../hooks/useReadAloud";
+import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { subscribeToSpoilerFenceOpenChange } from "./MainTabBonsaiAiMarkdownChunk";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
@@ -792,18 +793,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 
-  const [earlierExpanded, setEarlierExpanded] = useState(false);
-  const firstArchivedTurnNavRef = useRef<NavRefHolder["current"]>(null);
-  /* A slot switch (or a cleared thread) re-collapses: the pill is about this thread, not the user. */
-  const earlierIdentity = `${askThreadCollapsed.length}:${askThreadCollapsed[0]?.id ?? ""}`;
-  useEffect(() => {
-    setEarlierExpanded(false);
-  }, [earlierIdentity]);
-  /* Expanding unmounts the pill, so focus would be orphaned. Hand it to the first revealed row. */
-  useLayoutEffect(() => {
-    if (!earlierExpanded) return;
-    firstArchivedTurnNavRef.current?.TakeFocus?.(true);
-  }, [earlierExpanded]);
+  /* The "N earlier" pill's own open/close state and first-row focus handoff — lifted into its
+     own hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
+  const { earlierExpanded, setEarlierExpanded, firstArchivedTurnNavRef } = useEarlierTurnsPill({
+    askThreadCollapsed,
+  });
 
   /*
    * Whether an OPEN question's title really overflows its five-line cap (roadmap: "A short

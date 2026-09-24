@@ -168,4 +168,38 @@ describe("Done saves the licence + advanced draft", () => {
     // must not also close the hub out from under an in-flight pull.
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it("saves a pending draft when a typed-name pull closes the screen on its own", async () => {
+    const onCommitOllamaModelsHub = vi.fn().mockResolvedValue(undefined);
+    const onClose = vi.fn();
+    render(<OllamaModelsHubModal {...buildProps({ onCommitOllamaModelsHub, onClose })} />);
+
+    act(() => {
+      (hoisted.pullModelsProps?.onSelectModelPolicyTier as (t: string) => void)?.("open_weight");
+    });
+    act(() => {
+      (hoisted.pullModelsProps?.onPullAccepted as () => void)();
+    });
+
+    expect(onCommitOllamaModelsHub).toHaveBeenCalledWith(
+      expect.objectContaining({ modelPolicyTier: "open_weight" })
+    );
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("does not save again when a pull closes the screen with nothing pending", () => {
+    const onCommitOllamaModelsHub = vi.fn().mockResolvedValue(undefined);
+    const onClose = vi.fn();
+    render(<OllamaModelsHubModal {...buildProps({ onCommitOllamaModelsHub, onClose })} />);
+
+    act(() => {
+      (hoisted.pullModelsProps?.onPullAccepted as () => void)();
+    });
+
+    expect(onCommitOllamaModelsHub).not.toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
 });

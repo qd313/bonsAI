@@ -133,19 +133,44 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     setBrowseFooter(state);
   }, []);
 
-  const commitPolicyAndAdvanced = useCallback(async () => {
-    await onCommitOllamaModelsHub({
+  const draftPatch = useCallback(
+    () => ({
       modelPolicyTier: draftTierRef.current,
       modelPolicyNonFossUnlocked: draftNonFossRef.current,
       modelAllowHighVramFallbacks: draftHighVramRef.current,
-    });
-  }, [draftTierRef, onCommitOllamaModelsHub]);
+    }),
+    [draftTierRef]
+  );
+  /** The draft as last saved (or as it stood when the screen opened), to tell whether one is pending. */
+  const lastSavedDraftRef = useRef(
+    JSON.stringify({ modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks })
+  );
 
+  const commitPolicyAndAdvanced = useCallback(async () => {
+    const patch = draftPatch();
+    await onCommitOllamaModelsHub(patch);
+    lastSavedDraftRef.current = JSON.stringify(patch);
+  }, [draftPatch, onCommitOllamaModelsHub]);
+
+  /*
+   * A typed-name pull closes this screen by itself (PullModelsModal's onPullAccepted), without
+   * Done. That close used to drop the licence + Advanced draft: measured on the Deck
+   * (docs/test-evidence/plan64-ROUTING-MERGE-01-top.json), "Allow high-VRAM models in routing"
+   * was turned on, the typed Pull closed the screen, and the switch read off again on reopening --
+   * the one pull the switch was meant for merged into the try order without it. A pending draft
+   * is now saved before that close, the same save Done makes.
+   */
   const handleHubClose = useCallback(
-    (_reason: string) => {
+    (reason: string) => {
+      if (reason === "pullAccepted" && JSON.stringify(draftPatch()) !== lastSavedDraftRef.current) {
+        void commitPolicyAndAdvanced()
+          .catch((err) => console.error("save_settings failed (AI models hub, pull close)", err))
+          .finally(() => onClose());
+        return;
+      }
       onClose();
     },
-    [onClose]
+    [commitPolicyAndAdvanced, draftPatch, onClose]
   );
 
   /**

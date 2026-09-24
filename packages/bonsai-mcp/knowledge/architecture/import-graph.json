@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 468,
-  "edgeCount": 1238,
+  "fileCount": 469,
+  "edgeCount": 1244,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -942,12 +942,12 @@
       "imports": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/PullModelsModal.types.ts",
-        "src/data/bonsaiSettingsSchema.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
         "src/data/storageKeys.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
@@ -978,6 +978,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
@@ -1313,7 +1314,6 @@
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
         "src/components/PermissionsTab.tsx",
-        "src/components/PullModelsModal.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
@@ -1333,6 +1333,7 @@
         "src/hooks/useKidsLock.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePluginSettings.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useStrategyChecklistSession.ts",
@@ -1534,6 +1535,7 @@
         "src/data/pullModelCatalog.test.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2648,6 +2650,19 @@
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelCatalogRefresh.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelCatalogRefresh.ts": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/mergePullModelCatalog.ts",
+        "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -4217,6 +4232,7 @@
         "src/hooks/useKidsLock.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
@@ -4475,6 +4491,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/utils/mergePullModelCatalog.test.ts"
@@ -4637,6 +4654,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelToggleSelection.tsx"

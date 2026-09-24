@@ -56,13 +56,13 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1333,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 1319,
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1319,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1257,
       "role": ""
     },
     {

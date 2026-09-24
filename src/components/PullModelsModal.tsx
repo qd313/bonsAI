@@ -92,11 +92,9 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type RefCallback } from "react";
 import { Button, ConfirmModal, Focusable, TextField } from "@decky/ui";
-import { toaster } from "@decky/api";
 import {
   PULL_MODEL_MODE_FILTER_OPTIONS,
   PULL_MODEL_RATING_COLUMN_LABEL,
-  bytesToGb,
   formatGtaStars,
   formatPullModelTags,
   formatReleasedYmShort,
@@ -107,9 +105,8 @@ import {
   type PullModelModeFilterId,
 } from "../data/pullModelCatalog";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
-import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
@@ -121,20 +118,15 @@ import { usePullModelPinForAsk } from "../hooks/usePullModelPinForAsk";
 import { usePullModelSubmitSelected } from "../hooks/usePullModelSubmitSelected";
 import { usePullModelCustomTagPull } from "../hooks/usePullModelCustomTagPull";
 import { usePullModelTableData } from "../hooks/usePullModelTableData";
-import { getCatalogTags, isPlausibleOllamaPullTag, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
-import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
+import { usePullModelCatalogRefresh } from "../hooks/usePullModelCatalogRefresh";
+import { isPlausibleOllamaPullTag } from "../utils/mergePullModelCatalog";
 import {
   computeUpdatedPullRecord,
   isRecentPullModelTag,
   PULL_MODEL_NEW_BADGE_WINDOW_MS,
   type PullModelPullRecord,
 } from "../utils/pullModelNewBadge";
-import type {
-  CatalogMetadataResponse,
-  ConnectionTestResult,
-  PullModelsRoutingOrderSettings,
-  PullModelsModalProps,
-} from "./PullModelsModal.types";
+import type { PullModelsRoutingOrderSettings, PullModelsModalProps } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
 import {
   filterPanelRowAriaLabel,
@@ -143,15 +135,11 @@ import {
   filterPanelRowLabel,
   findUnavailableRegistryTags,
   isTagInstalled,
-  normalizeInstalledSet,
   resolveRowSizeGb,
   FILTER_PANEL_ROWS,
   type FilterPanelRow,
 } from "../utils/pullModelFilters";
 export { findUnavailableRegistryTags };
-
-const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
-const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
 
 // "New" badge history (when each tag was first seen installed) — the record math and the
 // first-run rule it protects live in pullModelNewBadge.ts; re-exported so existing imports of
@@ -249,80 +237,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
 
-  /**
-   * Several places here (opening/closing the Filters panel, opening/closing the custom-tag
-   * field) schedule a `requestAnimationFrame` to move focus one tick after a state change, so
-   * the target actually exists in the DOM first. None of those are effects, so there is no
-   * natural cleanup slot to cancel them in -- and an uncancelled one firing after this screen has
-   * already unmounted would call `.focus()` on a stale ref. Guarded on this instead: the frame
-   * still fires, but does nothing once unmounted.
-   */
-  const mountedRef = useRef(true);
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-  function scheduleFocusFrame(fn: () => void): void {
-    window.requestAnimationFrame(() => {
-      if (mountedRef.current) fn();
-    });
-  }
-
-  const refreshInstalledAndMeta = useCallback(
-    async (forceCatalog = false) => {
-      if (forceCatalog) setRefreshingMeta(true);
-      else setLoadingMeta(true);
-      try {
-        const overlayRes = await refreshCatalog(forceCatalog);
-        const tags = getCatalogTags(mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined));
-
-        const tasks: Promise<unknown>[] = [
-          callDeckyWithTimeout<[string, number], ConnectionTestResult>(
-            "test_ollama_connection",
-            [OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, TEST_CONNECTION_TIMEOUT_SECONDS],
-            TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS
-          ).then((res) => {
-            if (res.reachable && Array.isArray(res.models)) {
-              setInstalledTags(normalizeInstalledSet(res.models));
-            }
-          }),
-          callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
-            "fetch_ollama_catalog_metadata",
-            [tags],
-            DECKY_RPC_TIMEOUT_MS
-          ).then((meta) => {
-            const src = meta.source === "live" ? "live" : "offline";
-            setSizeSource(src);
-            const next: Record<string, number> = {};
-            const tagMap = meta.tags ?? {};
-            for (const [tag, info] of Object.entries(tagMap)) {
-              const b = info?.size_bytes;
-              if (typeof b === "number" && b > 0) next[tag] = bytesToGb(b);
-            }
-            setLiveSizeGbByTag(next);
-          }),
-        ];
-        await Promise.all(tasks);
-      } catch (e) {
-        setSizeSource("offline");
-        toaster.toast({
-          title: "Could not refresh models",
-          body: formatDeckyRpcError(e),
-          duration: 5000,
-        });
-      } finally {
-        setLoadingMeta(false);
-        setRefreshingMeta(false);
-      }
-    },
-    [refreshCatalog]
-  );
-
-  useEffect(() => {
-    void refreshInstalledAndMeta(false);
-  }, [refreshInstalledAndMeta]);
+  // Lifted into usePullModelCatalogRefresh. It must stay at exactly this point in the hook
+  // list: React matches hooks by the order they run, not by name.
+  const { refreshInstalledAndMeta, scheduleFocusFrame } = usePullModelCatalogRefresh({
+    refreshCatalog,
+    setInstalledTags,
+    setSizeSource,
+    setLiveSizeGbByTag,
+    setLoadingMeta,
+    setRefreshingMeta,
+  });
 
   // Seed "which model is Ask using" once on open, from the saved text try-order's first entry —
   // the same field ModelRoutingOrderModal edits and merge_pulled_tags_into_routing_orders appends

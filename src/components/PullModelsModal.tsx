@@ -125,6 +125,7 @@ import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
 import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
+import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelection";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -743,80 +744,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
     openWeightTierConfirmedRef,
   });
 
-  const toggleSelected = useCallback(
-    (entry: PullModelEntry, ev?: { stopPropagation?: () => void; preventDefault?: () => void }) => {
-      ev?.stopPropagation?.();
-      // Decky's Button renders a plain <button> with no `type`, which defaults to "submit", and
-      // this screen always sits inside Steam's own ConfirmModal, which renders a real <form>. An
-      // un-prevented click here submits that form and takes the modal's own OK/Done/Pull-selected
-      // path instead of just toggling this one row -- the same mechanism already found and fixed
-      // once in this codebase (ModelRoutingOrderModal.tsx, PICKER-REORDER-02, 2026-09-04), and the
-      // likely cause of the very first model ticked in a fresh picker downloading immediately with
-      // no Pull selected press (one sighting 2026-09-19, docs/test-evidence/plan61-PULL-MISSING-
-      // NAME-01.json).
-      ev?.preventDefault?.();
-      if (isTagInstalled(entry.tag, installedTags)) {
-        toaster.toast({
-          title: "Already installed",
-          body: `${entry.tag} is on this Deck. Use Del to remove it.`,
-          duration: 3500,
-        });
-        return;
-      }
-      const queueSelection = () => {
-        setSelectedTags((prev) => {
-          const next = new Set(prev);
-          if (next.has(entry.tag)) {
-            next.delete(entry.tag);
-            toaster.toast({
-              title: "Removed from pull queue",
-              body: entry.tag,
-              duration: 2200,
-            });
-          } else {
-            next.add(entry.tag);
-            toaster.toast({
-              title: "Queued to pull",
-              body: entry.tag,
-              duration: 2200,
-            });
-          }
-          return next;
-        });
-      };
-      if (entry.group === "stretch" && !stretchConfirmedRef.current.has(entry.tag)) {
-        onBeforeNestedDeckyModal?.();
-        const handle = showModal(
-          <ConfirmModal
-            strTitle="Large model — continue?"
-            strDescription={
-              <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
-                {entry.tag} is about {formatSizeGb(resolveRowSizeGb(entry, liveSizeGbByTag))} on disk and may run
-                slowly on Deck CPU/RAM. Pull only if you have room and accept longer waits.
-              </div>
-            }
-            strOKButtonText="Pull anyway"
-            strCancelButtonText="Cancel"
-            onOK={() => {
-              stretchConfirmedRef.current.add(entry.tag);
-              completeNestedModalClose(() => handle.Close());
-              confirmOpenWeightTierIfNeeded(entry, queueSelection);
-            }}
-            onCancel={() => completeNestedModalClose(() => handle.Close())}
-          />
-        );
-        return;
-      }
-      confirmOpenWeightTierIfNeeded(entry, queueSelection);
-    },
-    [
-      installedTags,
-      liveSizeGbByTag,
-      completeNestedModalClose,
-      onBeforeNestedDeckyModal,
-      confirmOpenWeightTierIfNeeded,
-    ]
-  );
+  // Lifted into usePullModelToggleSelection. It must stay at exactly this point in the hook
+  // list: React matches hooks by the order they run, not by name.
+  const { toggleSelected } = usePullModelToggleSelection({
+    installedTags,
+    liveSizeGbByTag,
+    completeNestedModalClose,
+    onBeforeNestedDeckyModal,
+    confirmOpenWeightTierIfNeeded,
+    setSelectedTags,
+    stretchConfirmedRef,
+  });
 
   /**
    * "Use for Ask" — moves this tag to the front of the saved text try-order (and the vision one

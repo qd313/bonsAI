@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 462,
-  "edgeCount": 1212,
+  "fileCount": 463,
+  "edgeCount": 1215,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -949,6 +949,7 @@
         "src/data/storageKeys.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/hooks/usePullModelToggleSelection.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelFilters.ts",
@@ -1524,6 +1525,7 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/hooks/usePullModelToggleSelection.tsx",
         "src/index.tsx",
         "src/utils/mergePullModelCatalog.test.ts",
         "src/utils/mergePullModelCatalog.ts",
@@ -2641,6 +2643,15 @@
       "imports": [
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelToggleSelection.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts",
+        "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -4552,7 +4563,8 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelToggleSelection.tsx"
       ]
     },
     "src/utils/pullModelNewBadge.ts": {

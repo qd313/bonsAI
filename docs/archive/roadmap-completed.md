@@ -307,7 +307,7 @@ this session's Verify entries, nothing reworded, with the confirmation added at 
   that reply gets a "Spy" entry reading "The Spy was on" with what he lied about, or "The Spy was on and did
   not confess". Below Heavy he is unchanged and no chip appears. Row **SPY-REVEAL-01**: pick Spy at Heavy, ask
   a strategy question, and check for the chip with a confession; at Balanced, check no chip appears.
-  [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
+  [Detail](roadmap-details-closed.md#spy-a-character-who-lies-to-you-on-purpose).
 
   **Passed on the Deck 2026-09-16, at Heavy.** With the Spy picked and set to the Heavy accent, a Gonarch
   strategy question came back with two wrong-sounding tips inside a normal-reading 141-word reply; the

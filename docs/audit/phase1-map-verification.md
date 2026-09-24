@@ -77,7 +77,7 @@ across `src/` (excluding tests and `test-harness/`): **46 distinct method names*
 ### Called from TypeScript, implemented nowhere in Python — 2
 
 > **Resolved 2026-08-02.** Both RPCs are now implemented on `class Plugin` per
-> **D1** ([roadmap.md](maintainer-decisions-locked.md#maintainer-decisions-locked--2026-08-02)).
+> **D1** ([roadmap.md](maintainer-decisions-archive.md#maintainer-decisions-locked--2026-08-02)).
 > The finding below is kept as the discovery record; the RPC surface is 56
 > methods and this count is now **0**.
 

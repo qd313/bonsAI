@@ -37,7 +37,7 @@ this session's Bugs entries, nothing reworded, with the closing note added at th
   2026-09-16 on two separate builds.** Down from Show details skips the whole chip row and lands on the
   Session context bar; only the first chip can ever be read. It worked before this regression — the closed
   CONTEXT-LADDER-01… 03 check (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
-  back out. [Detail](roadmap-details.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
+  back out. [Detail](roadmap-details-closed.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
 
   **Closed 2026-09-21, fixed and proven on the Deck.** Fixed in commit `3daa21e`. Evidence
   `docs/test-evidence/plan63-DETAILS-LADDER-01.json`. With the panel open, Down now reaches the row of
@@ -72,7 +72,7 @@ this session's Bugs entries, nothing reworded, with the closing note added at th
   wanted.** On the default "open source only" choice the AI models list now shows 17 of 26 models, where
   before all 26 were always listed. A filter that filters is a fair reading of the brief, but a third of
   the catalogue changing on the default setting needs the maintainer's own word before it counts as settled.
-  [Detail](roadmap-details.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
+  [Detail](roadmap-details-closed.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
 
   **Closed 2026-09-21 (D115).** The maintainer answered: keep it, a filter should filter. It closes as
   wanted behaviour, not as a fix. 17 of 26 models show on the default setting, by design.
@@ -1776,7 +1776,7 @@ measurements and the QA rows survive. The roadmap keeps a one-line entry in **Do
   Fixed at the desk 2026-09-04, Deck check owed: the sanitizer, shortcut-setup and VAC-check replies now save their question
   and reply to the active chat slot the same way a normal Ask's completed turn does, so the slot gets a first turn, renames
   itself off *New chat*, and the header reads the command instead of `…`. Row **CMD-REPLY-TITLE-01**.
-  [Detail](roadmap-details.md#a-command-reply-leaves-the-turn-header-blank-and-the-chat-titled-new-chat).
+  [Detail](roadmap-details-closed.md#a-command-reply-leaves-the-turn-header-blank-and-the-chat-titled-new-chat).
   - **Deck 2026-09-04, build f9a4c17:** header and slot title both read *bonsai:vac-check*, the slot file on disk carried the label and both turns, and a chord close and reopen kept the header. The backend now saves a local command reply to the active chat the way a normal Ask does (lane F).
 
 ### Chip rotation favoured the top of the candidate list (verified on the Deck 2026-09-04)
@@ -1785,7 +1785,7 @@ measurements and the QA rows survive. The roadmap keeps a one-line entry in **Do
   2026-09-04, Deck check owed: the guarantee and the roll both used to take the first unseen candidate every
   time, so ranks 1-3 came round every minute and ranks 4-6 rarely appeared; both now pick at random among the
   eligible candidates, keeping game chips ahead of generic Deck tips. Row **CHIP-ROTATION-01**.
-  [Detail](roadmap-details.md#chip-rotation-is-biased-to-the-top-of-the-candidate-list).
+  [Detail](roadmap-details-closed.md#chip-rotation-is-biased-to-the-top-of-the-candidate-list).
   - **Deck 2026-09-04, build f9a4c17:** with Half-Life 2 running and the frozen batch cleared, the carousel showed ranks 2, 3, 4 and 5 of the game's eight chips inside 30 seconds and rank 1 never came round (`docs/test-evidence/CHIP-ROTATION-01-carousel-sample-half-life-2.json`).
 
 ### The question overlay sat a few pixels off the native text field (verified on the Deck 2026-09-04)
@@ -1834,7 +1834,7 @@ measurements and the QA rows survive. The roadmap keeps a one-line entry in **Do
   Deck 2026-09-03.** Fixed 2026-09-02: on those turns the prompt now says plainly not to fence. Measured on the PC with the answer
   eval: 28 of 96 misfires before, 3 after, ending questions still fenced. Deck run **KB-ANSWER-02**, 5 of 5: Tank, antlions,
   Theseus and Asterius, Volvagia unfenced with the branch menu; the Red Dead ending question fenced. Deck-local model, character
-  voice on. [Detail](roadmap-details.md#the-spoiler-fence-on-a-no-story-game-lands-mid-reply).
+  voice on. [Detail](roadmap-details-closed.md#the-spoiler-fence-on-a-no-story-game-lands-mid-reply).
   - Confirmed on the Deck as **KB-ANSWER-02**, 5 of 5, and recorded in the Done list; this copy was still sitting in the verify list after a docs merge, so it is filed here rather than dropped.
 
 ### The Open Permissions button under a blocked reply was not a D-pad stop (verified on the Deck 2026-09-05)

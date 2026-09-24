@@ -8,7 +8,7 @@ only what is different and why the batch exists. Plain language on purpose.
 
 Blind rows exist to be a ship gate, and the two earlier batches went entirely to `holdout` for
 exactly that reason — 56 rows, none in tune. Then the first measurement against them
-([D37](../audit/maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them))
+([D37](../audit/maintainer-decisions-archive.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them))
 turned up something the split boundary itself makes hard to act on, raised as **D38**:
 
 | Split | keyword | vector_only | rrf (ships) |

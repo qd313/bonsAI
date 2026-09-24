@@ -531,7 +531,7 @@ the plugin itself, so nothing here needs a Deck check):**
   question was always correct and never proved the bug. The real evidence is a PC test run that lost the start of 22 of
   37 prompts, and three Deck questions that went over the window by 703, 780 and 712 tokens. Full numbers and the three
   smaller trims that came first: [CHANGELOG.md](../../CHANGELOG.md). On-Deck **KB-PROMPT-FIT-01** in [testing.md](../testing.md).
-  [Detail](../roadmap-details.md#game-notes-are-attached-and-then-thrown-away).
+  [Detail](roadmap-details-closed.md#game-notes-are-attached-and-then-thrown-away).
 - ★★★ `[KB]` **A quick question in Speed mode no longer pays for the slow search** — confirmed on the Deck 2026-09-06 with
   Deep Rock Galactic: Survivor running, on a fresh build. All three of the row's sentences were asked in Speed: two read
   *Keyword search*, the third read *Knowledge base (skipped)* because the word search found nothing on its own — none of
@@ -741,4 +741,4 @@ since April (`25742f2`), and a deliberate failing test exits 1 today. If it recu
 <a id="appendix"></a>
 
 The cross-feature dependency summary, the dependency diagram, and the icon-sizing note moved to
-[roadmap-details.md](../roadmap-details.md#appendix-moved-from-the-roadmap-2026-09-02) on 2026-09-02.
+[roadmap-details.md](roadmap-details-closed.md#appendix-moved-from-the-roadmap-2026-09-02) on 2026-09-02.

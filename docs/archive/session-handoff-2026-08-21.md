@@ -16,7 +16,7 @@ this one goes stale first.
 > **DONE 2026-08-22.** Corpus `2026.08.22` (133 cards) is published on both mirrors and installed
 > on the maintainer's Deck; the plugin is deployed. The on-Deck QA in §6 has been run — results
 > are in [../testing.md](../testing.md). One new bug came out of it:
-> [D28](../audit/maintainer-decisions-locked.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be).
+> [D28](../audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be).
 
 **Publish a new corpus** (D24 — locked, maintainer said yes on 2026-08-21; **done 2026-08-22**).
 Kept below as the record of what was done and how.
@@ -144,7 +144,7 @@ understated; prior reports carry a correction banner and must not be quoted.
 > **SUPERSEDED 2026-08-22 by the D23 fold-in.** The table below is the last measurement on the
 > **old** fixture set and is kept only as that record. The approved set now has 15 more rows, so
 > these numbers and the current ones are not comparable (R4). **Current baseline, and what
-> changed, are on [D23](../audit/maintainer-decisions-locked.md#d23--where-do-the-paraphrase-questions-go)**
+> changed, are on [D23](../audit/maintainer-decisions-archive.md#d23--where-do-the-paraphrase-questions-go)**
 > — headline: labelled tune fusion 94.1% → **91.5%** (the set got harder, as intended), holdout
 > **unchanged** at 83.3% (so D23 did not achieve what it was for), troubleshooting 72.5% →
 > **75.0%** (that slice got *easier*, which is not an improvement).
@@ -212,12 +212,12 @@ Deck, not what is configured.**
 - **Phase 5 is gated on Phase 4 passing on the Deck.** Maintainer's own gate; a good one.
 - ~~**A2 / D23 is not implemented yet**~~ — **done 2026-08-22.** The fifteen rows are folded into
   `kb_eval_v2.json` as `V2-PARA-*`, all `tune`, and the arms run reads them. See
-  [D23](../audit/maintainer-decisions-locked.md#d23--where-do-the-paraphrase-questions-go) for the new
+  [D23](../audit/maintainer-decisions-archive.md#d23--where-do-the-paraphrase-questions-go) for the new
   baseline. **It did not fix the holdout** — that still needs rows written blind.
 - Two small bugs: the details panel says *"Running game could not be matched"* when no game is
   running, and two different decisions are both filed as **D19** — **fixed 2026-08-28**: the
   corpus-licence decision is renumbered **D19b** (see
-  [D31](../audit/maintainer-decisions-locked.md#d31--which-of-the-two-d19s-keeps-the-number)); the live
+  [D31](../audit/maintainer-decisions-archive.md#d31--which-of-the-two-d19s-keeps-the-number)); the live
   *"Can you reach the strategy corpus without the game running?"* decision keeps **D19**.
 
 ---

@@ -58,7 +58,7 @@ it ([01-map.md](01-map.md) §4).
 **Behavior-preserving.** Yes, if the precondition holds.
 **Coverage.** `test_proton_experiment_journal_service.py` and
 `test_tdp_sandbox_sysfs.py` exist and would be deleted with their subjects.
-**Risk: LOW** — with one gate. **Blocked on [D2](../audit/maintainer-decisions-locked.md#d2--a-whole-group-of-backend-functions-is-unused-safe-to-delete).**
+**Risk: LOW** — with one gate. **Blocked on [D2](../audit/maintainer-decisions-archive.md#d2--a-whole-group-of-backend-functions-is-unused-safe-to-delete).**
 
 > **Gate before deleting: run 2026-08-02, one hole found.** The RPC scan
 > originally covered `src/` only. Grepping `tests/preview-suite/` and `scripts/`
@@ -66,7 +66,7 @@ it ([01-map.md](01-map.md) §4).
 > `log_navigation`, `capture_screenshot`, `dbg_fe_log`,
 > `cancel_rag_corpus_download`, and `thinking_tiny`. `ask_game_ai` returns 22
 > hits across five tier files — it stays, per
-> [D2](../audit/maintainer-decisions-locked.md#maintainer-decisions-locked--2026-08-02). `apply_tdp` has no
+> [D2](../audit/maintainer-decisions-archive.md#maintainer-decisions-locked--2026-08-02). `apply_tdp` has no
 > non-test reference anywhere in the repo, so the `tier1-tdp.json` cases that ask
 > to set wattage exercise the recommendation path and cannot reach it.
 >
@@ -259,7 +259,7 @@ locking, not RPC behavior.
 ([04-coverage.md](04-coverage.md)). 44 component files share one vitest file.
 
 **Risk: HIGH.** A behavior-preserving move here **cannot be verified as
-behavior-preserving**. **Blocked on [D3](../audit/maintainer-decisions-locked.md#d3--the-riskiest-refactor-has-no-safety-net-how-do-you-want-to-handle-it).** `npm test` would pass with every component deleted.
+behavior-preserving**. **Blocked on [D3](../audit/maintainer-decisions-archive.md#d3--the-riskiest-refactor-has-no-safety-net-how-do-you-want-to-handle-it).** `npm test` would pass with every component deleted.
 
 **Do not start this until one of:**
 

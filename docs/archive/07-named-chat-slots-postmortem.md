@@ -169,8 +169,8 @@ state** — `STRATEGY-CHECKLIST-THREAD` was unpassable as written.
 
 `tsc --noEmit` cannot catch this: the value crosses an untyped RPC boundary and
 the hand-written type simply asserts a shape the backend never produces. This is
-the settings-drift problem of [D12](../audit/maintainer-decisions-locked.md#d12--settings-live-in-two-languages-how-far-do-you-want-to-go-to-fix-that)
-/ [D13](../audit/maintainer-decisions-locked.md#d13--ts-and-python-disagree-about-five-settings-which-side-is-right),
+the settings-drift problem of [D12](../audit/maintainer-decisions-archive.md#d12--settings-live-in-two-languages-how-far-do-you-want-to-go-to-fix-that)
+/ [D13](../audit/maintainer-decisions-archive.md#d13--ts-and-python-disagree-about-five-settings-which-side-is-right),
 reappearing in a second data domain before the first was fixed.
 
 ### 1.6 Every thread RPC bypassed the timeout wrapper
@@ -413,7 +413,7 @@ needs a field table per language mirroring step **7b/7d**, not a hand-written ty
 
 ## 5. Dependency on D3
 
-**Current state.** [D9](../audit/maintainer-decisions-locked.md#d9--how-far-does-the-entry-point-split-actually-go)
+**Current state.** [D9](../audit/maintainer-decisions-archive.md#d9--how-far-does-the-entry-point-split-actually-go)
 locked 2026-08-03: *done = finish step 8 (`index.tsx` only)*, with
 `useBonsaiAskOrchestration.ts` and `MainTab.tsx` as follow-ups.
 
@@ -531,7 +531,7 @@ worse than none*.
 | **CHAT-SLOTS-V2-04** | Close QAM mid-Ask → reopen → question visible with pending answer, not an empty transcript |
 
 02 is manual because preview does not validate Deck focus graphs
-([D10](../audit/maintainer-decisions-locked.md#d10--focus-and-d-pad-behavior-has-no-automated-coverage-what-gates-the-remaining-split)).
+([D10](../audit/maintainer-decisions-archive.md#d10--focus-and-d-pad-behavior-has-no-automated-coverage-what-gates-the-remaining-split)).
 03 and 04 have unit counterparts above; they stay manual because they are the two
 failures that actually reached a user, and they exercise real timing.
 

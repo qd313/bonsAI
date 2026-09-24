@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 81,
-  "edgeCount": 192,
+  "fileCount": 82,
+  "edgeCount": 193,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -226,6 +226,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ask_topic_instructions.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/async_task_lifecycle.py",
       "count": 1
     },
@@ -426,7 +430,7 @@
         "py_modules/backend/ollama_connectivity.py",
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
-        "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/ask_topic_instructions.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/rag_corpus_status.py",
         "py_modules/backend/services/vac_check_commands.py"
@@ -513,6 +517,14 @@
       "importedBy": [
         "main.py",
         "py_modules/backend/services/ollama_ask_service.py"
+      ]
+    },
+    "py_modules/backend/services/ask_topic_instructions.py": {
+      "imports": [
+        "py_modules/backend/constants.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_prompts.py"
       ]
     },
     "py_modules/backend/services/async_background_job.py": {
@@ -860,7 +872,7 @@
     },
     "py_modules/backend/services/ollama_prompts.py": {
       "imports": [
-        "py_modules/backend/constants.py",
+        "py_modules/backend/services/ask_topic_instructions.py",
         "py_modules/backend/services/reply_language_service.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
         "py_modules/backend/services/strategy_guide_parse.py",

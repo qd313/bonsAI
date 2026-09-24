@@ -56,11 +56,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1172,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1171,
       "role": ""
@@ -93,6 +88,11 @@
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 902,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 877,
       "role": ""
     },
     {

@@ -1836,3 +1836,56 @@ does. The plan removes Clear, which ends it.
 What these answers do to the roadmap: the entry "The chat sums itself up instead of being cleared" gets a
 link to plan 68 and loses its "Compact replacing Clear" wording in favour of *Sum up this chat*; its
 spoiler chance rating becomes a separate, later piece.
+
+### D119 — LOCKED 2026-09-24 (raised 2026-09-24) — Plan 69 streamed answers scramble into place: the calls from discovery
+
+Raised during a discovery session on 2026-09-24, before [plan 69](../planning/69-streamed-answers-scramble.md)
+was written. Every choice was tried on the working [mockup](https://claude.ai/artifact/Vr8xPftAhcUK4bQf9AYUo4)
+at the Deck's true size before it was picked. Calls marked *proposed* were put forward during discovery and
+accepted with "go with your leans".
+
+**Measured first, at the maintainer's request (Deck, not a fast PC).** The Deck's model writes evenly (a
+piece every 50 ms with a game running), but the plugin passes text on only in 4 KB lumps, about every
+1.5 to 2 seconds with a game. The panel draws 8 to 40 frames a second while answer text appears with a game
+running. Evidence: [scramble-stream-timing-2026-09-24.json](../test-evidence/scramble-stream-timing-2026-09-24.json).
+
+**What it does**
+
+1. **No blinking block** while the scramble is on, neither where letters settle nor at the end. Not
+   picked: at the settle point like the chips; at the end like today; both.
+2. **Spaces stay spaces.** Not picked: spaces scramble too, like the chips.
+3. **When the answer finishes, the last letters finish settling.** Not picked: snap to real text.
+4. **The thinking lines never scramble.**
+5. **How letters settle is a Developer tab choice** — *Settle after a moment*, *Chip pace*, *Fixed tail* —
+   until the right one is clear. **Default: Settle after a moment, 300 ms per letter** (*proposed*).
+   *Fixed tail* keeps 10 letters (*proposed*).
+6. **The colour of scrambled letters is a Developer tab choice** — same as text, dimmer, bonsAI green,
+   streaming cyan. **Default: same as text** (*proposed*).
+7. **No sliders.** The settle time and tail length are narrowed in the mockup first.
+8. **Reduced motion shows plain text.**
+9. **Stop turns scrambled letters real at once.**
+10. **Closing and reopening the panel mid-answer** shows the earlier text plain; only new text scrambles.
+
+**Where it lives**
+
+11. **A new *Animations* section on the Developer tab**, and the *Preset suggestions* picker moves into
+    it (*proposed*).
+12. **The switch is called *Scramble animation*.** Off by default.
+13. **The style and colour rows hide while the switch is off.**
+
+**The bar and the fix**
+
+14. **The hold-up fix is part of this work, done first, proved on the Deck on its own.**
+15. **The scramble must not make the panel's frame rate worse** than it is today while text appears.
+    "Not worse" means the usual frame rate within 10% and the longest single frame no more than 20 ms
+    longer, over three runs each way (*proposed*).
+16. **If the scramble is worse**, try reshuffling half as often and measure again; if it is still worse,
+    it does not ship and the numbers go back to the maintainer (*proposed*).
+17. **The hold-up fix faces the same bar**; if it is worse, the build stops and the numbers go back to
+    the maintainer before the scramble is built (*proposed*).
+18. **The game's own frame rate is measured too**, once after the fix and once with the scramble, from
+    screenshots with Steam's performance overlay on (*proposed*).
+
+What these answers do to the roadmap: the scramble entry gets a link to plan 69, and the accepted bug
+"Token streaming reveals text in bursts while a game is running" gets its cause and a pointer to plan 69's
+first step.

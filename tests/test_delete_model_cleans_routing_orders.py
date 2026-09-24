@@ -15,19 +15,22 @@ from unittest.mock import AsyncMock, patch
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
 import main
-from main import Plugin
 
 
 class DeleteModelCleansRoutingOrdersTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self) -> None:
         self.start_plugin_with_settings_file()
-        gate = patch.object(Plugin, "_require_local_ollama_on_deck", AsyncMock(return_value=(True, None)))
+        gate = patch.object(
+            main.ollama_local_setup_rpc,
+            "_require_local_ollama_on_deck",
+            AsyncMock(return_value=(True, None)),
+        )
         gate.start()
         self.addCleanup(gate.stop)
 
     async def _delete(self, tag: str, rm_ok: bool = True) -> dict:
         rm = AsyncMock(return_value=(rm_ok, "" if rm_ok else "rm failed"))
-        with patch.object(main, "run_ollama_rm_async", rm):
+        with patch.object(main.ollama_local_setup_rpc, "run_ollama_rm_async", rm):
             return await self.plugin.delete_ollama_model(tag)
 
     async def test_removed_model_leaves_both_saved_orders(self) -> None:

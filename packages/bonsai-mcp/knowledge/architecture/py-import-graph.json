@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 78,
-  "edgeCount": 186,
+  "fileCount": 79,
+  "edgeCount": 188,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -43,7 +43,7 @@
   "fanIn": [
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "count": 10
+      "count": 11
     },
     {
       "path": "py_modules/backend/constants.py",
@@ -294,6 +294,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_local_setup_rpc.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_mdns_discovery_service.py",
       "count": 1
     },
@@ -359,12 +363,10 @@
     "main.py": {
       "imports": [
         "py_modules/backend/constants.py",
-        "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ai_character_service.py",
         "py_modules/backend/services/ask_local_commands.py",
         "py_modules/backend/services/ask_payload.py",
-        "py_modules/backend/services/async_background_job.py",
         "py_modules/backend/services/async_task_lifecycle.py",
         "py_modules/backend/services/background_request_state.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
@@ -382,13 +384,12 @@
         "py_modules/backend/services/media_desktop_rpc.py",
         "py_modules/backend/services/network_service.py",
         "py_modules/backend/services/ollama_ask_service.py",
-        "py_modules/backend/services/ollama_catalog_service.py",
         "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_local_autostart_service.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/plugin_data_reset.py",
-        "py_modules/backend/services/pull_model_catalog_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
         "py_modules/backend/services/rag_corpus_rpc.py",
         "py_modules/backend/services/screenshot_media.py",
@@ -439,10 +440,10 @@
         "py_modules/backend/constants.py"
       ],
       "importedBy": [
-        "main.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/settings_service.py"
       ]
@@ -509,7 +510,7 @@
     "py_modules/backend/services/async_background_job.py": {
       "imports": [],
       "importedBy": [
-        "main.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/rag_corpus_rpc.py",
         "py_modules/backend/services/voice_rpc.py"
       ]
@@ -710,6 +711,7 @@
         "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_local_autostart_service.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/voice_transcription_service.py",
@@ -792,8 +794,8 @@
         "py_modules/backend/tls_ca_fallback.py"
       ],
       "importedBy": [
-        "main.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/pull_model_catalog_service.py",
         "py_modules/backend/services/settings_service.py"
       ]
@@ -823,6 +825,18 @@
     "py_modules/backend/services/ollama_local_autostart_service.py": {
       "imports": [
         "py_modules/backend/services/local_ollama_setup_service.py"
+      ],
+      "importedBy": [
+        "main.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_local_setup_rpc.py": {
+      "imports": [
+        "py_modules/backend/ollama_routing.py",
+        "py_modules/backend/services/async_background_job.py",
+        "py_modules/backend/services/local_ollama_setup_service.py",
+        "py_modules/backend/services/ollama_catalog_service.py",
+        "py_modules/backend/services/pull_model_catalog_service.py"
       ],
       "importedBy": [
         "main.py"
@@ -901,7 +915,7 @@
         "py_modules/backend/tls_ca_fallback.py"
       ],
       "importedBy": [
-        "main.py"
+        "py_modules/backend/services/ollama_local_setup_rpc.py"
       ]
     },
     "py_modules/backend/services/rag_corpus_download_service.py": {

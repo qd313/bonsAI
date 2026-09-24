@@ -81,11 +81,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 945,
-      "role": ""
-    },
-    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 902,
       "role": ""
@@ -123,6 +118,11 @@
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 727,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 713,
       "role": ""
     },
     {

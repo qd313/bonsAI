@@ -19,6 +19,10 @@ Does not: Talk to the AI itself, or build the words sent to it -- that is the
 Ollama and game-request services. It does not store your settings either; it
 reads and writes them through the settings service.
 
+Where the RPC bodies moved to (plan 65 split; the class still keeps every
+method, just as a one-line hand-off): the settings-search-pack buttons are in
+`backend/services/intent_pack_rpc.py`.
+
 How it works:
 
 There are two ways to ask the AI a question, and the difference between them is
@@ -122,17 +126,12 @@ from backend.services.local_ollama_teardown_service import (
     teardown_local_ollama_for_plugin_reset,
 )
 from backend.services.intent_pack_service import (
-    export_pack,
     intent_packs_path,
     load_intent_packs,
-    merge_import_pack,
-    pack_summaries,
-    parse_import_payload,
-    remove_pack,
     reset_intent_packs_file,
     save_intent_packs,
-    set_pack_enabled,
 )
+from backend.services import intent_pack_rpc
 from backend.services.chat_slot_service import (
     append_turn as chat_append_turn,
     create_slot as chat_create_slot,
@@ -1265,28 +1264,11 @@ class Plugin:
 
     async def get_intent_packs(self):
         """Return intent pack summaries and full entries for unified search indexing."""
-        store = self._load_intent_pack_store()
-        return {
-            "schema_version": store.get("schema_version"),
-            "summaries": pack_summaries(store),
-            "packs": store.get("packs") or [],
-        }
+        return await intent_pack_rpc.get_intent_packs(self)
 
     async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True):
         """Enable or disable a search intent pack."""
-        if not hasattr(self, "_intent_pack_store_lock"):
-            self._intent_pack_store_lock = asyncio.Lock()
-        async with self._intent_pack_store_lock:
-            store = self._load_intent_pack_store()
-            result = set_pack_enabled(store, pack_id, enabled)
-            if not result.get("ok"):
-                return result
-            saved = self._save_intent_pack_store(result["store"])
-            return {
-                "ok": True,
-                "summaries": pack_summaries(saved),
-                "packs": saved.get("packs") or [],
-            }
+        return await intent_pack_rpc.set_intent_pack_enabled(self, pack_id, enabled)
 
     async def set_kids_lock_state(self, active: bool = False):
         """Session Kids master lock from Steam parental `locked` (frontend assertion)."""
@@ -1295,47 +1277,15 @@ class Plugin:
 
     async def export_intent_pack(self, pack_id: str = ""):
         """Export one intent pack as formatted JSON."""
-        store = self._load_intent_pack_store()
-        return export_pack(store, pack_id)
+        return await intent_pack_rpc.export_intent_pack(self, pack_id)
 
     async def import_intent_pack(self, payload: Any = None):
         """Dry-run or confirm-merge import of a single intent pack from JSON."""
-        data = payload if isinstance(payload, dict) else {}
-        raw_json = data.get("json")
-        confirm = data.get("confirm") is True
-        if not isinstance(raw_json, str) or not raw_json.strip():
-            return {"ok": False, "error": "json string required"}
-        incoming, parse_error = parse_import_payload(raw_json)
-        if parse_error:
-            return {"ok": False, "error": parse_error}
-        if not hasattr(self, "_intent_pack_store_lock"):
-            self._intent_pack_store_lock = asyncio.Lock()
-        async with self._intent_pack_store_lock:
-            store = self._load_intent_pack_store()
-            result = merge_import_pack(store, incoming or {}, confirm=confirm)
-            if not result.get("ok"):
-                return result
-            if confirm and isinstance(result.get("store"), dict):
-                saved = self._save_intent_pack_store(result["store"])
-                result["summaries"] = pack_summaries(saved)
-                result["packs"] = saved.get("packs") or []
-            return result
+        return await intent_pack_rpc.import_intent_pack(self, payload)
 
     async def remove_intent_pack(self, pack_id: str = ""):
         """Remove a user/imported intent pack (bundled packs cannot be removed)."""
-        if not hasattr(self, "_intent_pack_store_lock"):
-            self._intent_pack_store_lock = asyncio.Lock()
-        async with self._intent_pack_store_lock:
-            store = self._load_intent_pack_store()
-            result = remove_pack(store, pack_id)
-            if not result.get("ok"):
-                return result
-            saved = self._save_intent_pack_store(result["store"])
-            return {
-                "ok": True,
-                "summaries": pack_summaries(saved),
-                "packs": saved.get("packs") or [],
-            }
+        return await intent_pack_rpc.remove_intent_pack(self, pack_id)
 
     @staticmethod
     def _clean_env() -> dict:

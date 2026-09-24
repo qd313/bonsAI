@@ -25,7 +25,8 @@ method, just as a one-line hand-off): the settings-search-pack buttons are in
 clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the knowledge base's download/update/
-remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`.
+remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`;
+the voice-input and read-aloud buttons are in `backend/services/voice_rpc.py`.
 
 How it works:
 
@@ -188,16 +189,13 @@ from backend.services.screenshot_media import (
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.async_background_job import (
     make_local_ollama_setup_hooks,
-    make_state_updating_on_stage,
     new_asyncio_cancel_event,
-    new_threading_cancel_event,
 )
 from backend.services.network_service import get_deck_ip_async
 from backend.services.ollama_ask_service import run_ask_ollama
 from backend.services.transparency_service import (
     build_immediate_command_snapshot,
     build_sanitizer_block_snapshot,
-    build_voice_transcribe_snapshot,
     transparency_snapshot_for_chat_slot,
 )
 from backend.services.ollama_connection_test import (
@@ -232,13 +230,9 @@ from backend.services.ollama_catalog_service import (
 from backend.services.pull_model_catalog_service import fetch_pull_model_catalog
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
-    download_voice_model,
-    engine_readiness,
-    install_whisper_cli,
     new_voice_install_state,
-    new_voice_transcription_state,
-    sanitize_voice_stt_model,
 )
+from backend.services import voice_rpc
 from backend.services.voice_read_aloud_service import VoiceReadAloudService
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
@@ -2774,202 +2768,41 @@ class Plugin:
 
         await asyncio.to_thread(force_whisper_engine_stop)
 
-    async def _require_microphone_access(self) -> tuple[bool, dict[str, Any]]:
-        settings = await self.load_settings()
-        if not capability_enabled(settings, "microphone_access"):
-            return False, {
-                "accepted": False,
-                "error": "permission_denied",
-                "reason": "Enable Voice input (microphone) in the Permissions tab first.",
-            }
-        return True, {}
-
     async def get_voice_engine_status(self):
         """Return whisper binary + model readiness for the configured STT model."""
-        settings = await self.load_settings()
-        model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
-        ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
-        install = dict(self._voice_install_state)
-        return {**ready, "install": install}
+        return await voice_rpc.get_voice_engine_status(self, PLUGIN_ROOT)
 
     async def install_voice_engine(self, model_id: str = ""):
         """Install whisper-cli (podman) and download the selected GGUF model (requires microphone_access)."""
-        ok_gate, gate_out = await self._require_microphone_access()
-        if not ok_gate:
-            return gate_out or {"accepted": False, "reason": "permission_denied"}
-
-        settings = await self.load_settings()
-        mid = sanitize_voice_stt_model(model_id or settings.get("voice_stt_model"))
-        async with self._voice_install_lock:
-            existing = self._voice_install_task
-            if existing is not None and not existing.done():
-                return {"accepted": False, "reason": "Voice engine install already running.", "error": "busy"}
-
-            self._voice_install_cancel = new_threading_cancel_event()
-            self._voice_install_state = new_voice_install_state()
-            self._voice_install_state.update(
-                {"phase": "running", "done": False, "accepted": True, "model_id": mid}
-            )
-
-            on_stage = make_state_updating_on_stage(self._voice_install_state)
-
-            async def runner() -> None:
-                try:
-                    await asyncio.to_thread(
-                        install_whisper_cli,
-                        PLUGIN_ROOT,
-                        decky.DECKY_PLUGIN_SETTINGS_DIR,
-                        self._voice_install_state,
-                        self._voice_install_cancel,
-                        on_stage,
-                    )
-                    await asyncio.to_thread(
-                        download_voice_model,
-                        PLUGIN_ROOT,
-                        decky.DECKY_PLUGIN_SETTINGS_DIR,
-                        mid,
-                        self._voice_install_state,
-                        self._voice_install_cancel,
-                        on_stage,
-                    )
-                except Exception as exc:
-                    self._voice_install_state.update(
-                        {"phase": "failed", "done": True, "error": str(exc)[:500]}
-                    )
-
-            self._voice_install_task = asyncio.create_task(runner())
-
-        await self._maybe_app_log("voice.install", "voice engine install accepted", fields={"model_id": mid})
-        return {"accepted": True, "model_id": mid}
+        return await voice_rpc.install_voice_engine(self, PLUGIN_ROOT, model_id)
 
     async def get_voice_install_status(self):
         """Poll voice model download progress."""
-        return dict(self._voice_install_state)
+        return await voice_rpc.get_voice_install_status(self)
 
     async def start_voice_transcription(self):
         """Start PipeWire/Pulse capture and local whisper interim transcription."""
-        ok_gate, gate_out = await self._require_microphone_access()
-        if not ok_gate:
-            return gate_out or {"accepted": False, "reason": "permission_denied"}
-
-        settings = await self.load_settings()
-        model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
-        ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
-        if not ready.get("binary_ready"):
-            return {
-                "accepted": False,
-                "error": "engine_missing",
-                "reason": (
-                    "whisper-cli is not installed. Open Settings → Voice input and tap "
-                    "Install voice engine (downloads whisper-cli + model)."
-                ),
-            }
-        if not ready.get("model_ready"):
-            return {
-                "accepted": False,
-                "error": "model_missing",
-                "reason": f"Download the {model_id} voice model in Settings → Voice input first.",
-            }
-
-        async with self._voice_lock:
-            if self._voice_session is not None:
-                st = self._voice_session.status()
-                if st.get("recording"):
-                    return {"accepted": True, "status": st}
-                old = self._voice_session
-                self._voice_session = None
-            else:
-                old = None
-        if old is not None:
-            await asyncio.to_thread(old.force_stop)
-
-        async with self._voice_lock:
-            session = VoiceTranscriptionSession(
-                PLUGIN_ROOT,
-                decky.DECKY_PLUGIN_SETTINGS_DIR,
-                model_id,
-                logger,
-            )
-            out = await asyncio.to_thread(session.start)
-            if out.get("accepted"):
-                self._voice_session = session
-            else:
-                self._voice_session = None
-
-        if out.get("accepted"):
-            await self._persist_input_transparency(build_voice_transcribe_snapshot(model_id=model_id))
-            await self._maybe_app_log(
-                "voice.start",
-                "voice transcription started",
-                fields={"model_id": model_id},
-            )
-        return out
+        return await voice_rpc.start_voice_transcription(self, PLUGIN_ROOT)
 
     async def stop_voice_transcription(self):
         """Stop capture and return finalized transcript."""
-        async with self._voice_lock:
-            session = self._voice_session
-            self._voice_session = None
-        if session is None:
-            return {
-                "stopped": True,
-                "status": "idle",
-                "finalized_transcript": "",
-                "partial_transcript": "",
-            }
-        out = await asyncio.to_thread(session.stop)
-        await self._maybe_app_log(
-            "voice.stop",
-            "voice transcription stopped",
-            fields={"transcript_len": len(str(out.get("finalized_transcript") or ""))},
-        )
-        return out
+        return await voice_rpc.stop_voice_transcription(self)
 
     async def get_voice_transcription_status(self):
         """Poll interim/final transcript while recording."""
-        settings = await self.load_settings()
-        if not capability_enabled(settings, "microphone_access"):
-            await self._stop_voice_transcription_internal()
-            return {
-                **new_voice_transcription_state(),
-                "status": "permission_denied",
-                "error": "Microphone permission revoked.",
-                "recording": False,
-                "streaming": False,
-            }
-
-        async with self._voice_lock:
-            session = self._voice_session
-        if session is None:
-            return new_voice_transcription_state()
-        st = await asyncio.to_thread(session.status)
-        st["streaming"] = bool(st.get("recording")) and (
-            bool(st.get("partial_transcript")) or bool(st.get("finalized_transcript"))
-        )
-        return st
+        return await voice_rpc.get_voice_transcription_status(self)
 
     async def start_voice_read_aloud(self, text: str):
-        """Feature: read an answer's text aloud in the Deck's own voice.
-
-        Input: plain text, already stripped of markdown and hidden spoiler blocks by the frontend
-        (see plan 42 § 5, § 8 step 1 for the shared text helper). Output: {"ok", "sentence_count",
-        "error"}. Returns at once — the reading itself runs in the background so no call here can
-        outrun the RPC deadline. Starting while a previous reading is still going stops it first.
-        """
-        return await asyncio.to_thread(self._read_aloud_service.start, text)
+        """Feature: read an answer's text aloud in the Deck's own voice. See voice_rpc.py."""
+        return await voice_rpc.start_voice_read_aloud(self, text)
 
     async def stop_voice_read_aloud(self):
-        """Feature: stop reading aloud. Output: {"ok", "stopped"} — stopped is True only when a
-        reading was actually in progress. Safe to call when nothing is playing."""
-        return await asyncio.to_thread(self._read_aloud_service.stop)
+        """Feature: stop reading aloud. See voice_rpc.py."""
+        return await voice_rpc.stop_voice_read_aloud(self)
 
     async def get_voice_read_aloud_status(self):
-        """Feature: poll the read-aloud state while it plays in the background.
-
-        Output: {"state": "idle"|"speaking"|"done"|"error", "sentence_index", "sentence_count",
-        "error", "started_at"}.
-        """
-        return await asyncio.to_thread(self._read_aloud_service.status)
+        """Feature: poll the read-aloud state while it plays in the background. See voice_rpc.py."""
+        return await voice_rpc.get_voice_read_aloud_status(self)
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

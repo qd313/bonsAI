@@ -1,0 +1,20 @@
+{
+  "row": "plan65-REPLY-ROW",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:49:10-03:50:40-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "The Hades answer from plan65-KB-ANSWER, details closed. Plugin log had 15 lines before the presses.",
+  "pressed": [
+    "UP, UP, RIGHT to 'Copy reply text'; A",
+    "DOWN (landed on Helpful; skipped the A/B choice buttons), RIGHT x2 to 'Read aloud'; A; about 5 s later A again",
+    "LEFT x2 to 'Mark reply helpful'; A"
+  ],
+  "seen": {
+    "copy": "icon class changed to bonsai-reply-copy-corner--copied, label 'Reply copied to clipboard'; no toast in Steam's toast layer (empty); screenshot plan65-REPLY-ROW-copied.png",
+    "readAloud": "button changed to its speaking state, label 'Stop'; on the Deck, pw-play was playing /home/deck/homebrew/settings/bonsAI/read_aloud_tmp/bonsai_read_aloud_*.wav and PipeWire showed 1 sound stream (1ch 22050 Hz). Second A: label back to 'Read aloud', no pw-play process, 0 sound streams.",
+    "helpful": "the Helpful / Not really buttons were replaced by 'Saved on this Deck'. ~/homebrew/settings/bonsAI/bonsai_feedback.jsonl gained 1 line: rating 'up', question_len 36 (the question is 36 characters), success true. Screenshot plan65-REPLY-ROW-helpful-saved.png.",
+    "focusAfterHelpful": "the ring was on the Helpful button, which disappeared; afterwards nothing held the ring (the footer's 'A Select' hint is gone in the screenshot).",
+    "log": "0 new lines in the plugin log for copy, read aloud and helpful; 0 Traceback/Error lines. Loader journal: no bonsAI errors."
+  },
+  "verdict": "PASS. Copy, Read aloud and Helpful all worked, with no error toast and no log errors. Side notes for the owner: after Helpful the ring is lost, because its button vanishes, so the next D-pad press has to place it again. And Down from Copy skips the two choice buttons."
+}

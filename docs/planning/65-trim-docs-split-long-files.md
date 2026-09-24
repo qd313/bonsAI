@@ -1,8 +1,10 @@
 # Plan 65 — Trim the big documents, split the long files
 
 **Status:** written 2026-09-23 while plan 64 runs on the Deck. All seven questions in § 9 answered the same
-day. Plan 64 finished at 00:01 (§ 5 reordered for that). Nothing started. Waiting only on the word "go". Runs overnight
-unattended, restarting itself after a usage-limit stop (§ 11).
+day. Plan 64 finished at 00:01 (§ 5 reordered for that). "Go" at 00:05 on 2026-09-24; ran overnight
+unattended through one usage-limit stop (§ 11). **FINISHED 2026-09-24 about 04:25.** All nineteen jobs
+landed, the Deck check ran (one regression from the night, fixed and re-checked on the Deck), bookkeeping
+done, all on the shared branch. Nothing pushed. Read § 12's "Finish" first.
 **Purpose:** two roadmap entries, both three stars, both about what every piece of work costs before it starts.
 Nothing a person using the plugin would notice. *Trim the five documents that are still big* (four left) and
 *The eleven long files, left long on purpose*.
@@ -355,8 +357,175 @@ by however long the wait until the reset is.
 
 ## 12. Progress log
 
-Written as work lands. Nothing has run yet. Each helper gets a row the moment it starts, so a restart after a
+Written as work lands.
+**Times in this log, corrected at 03:40:** from about 02:45 the times written below were estimates, and
+they ran up to an hour ahead of the clock. They have been corrected from the landing commits' own time
+stamps (`git log --date=format:%H:%M` on the landing branch); "about" marks a helper's start or finish
+time inferred from those stamps.
+ Each helper gets a row the moment it starts, so a restart after a
 usage-limit stop can find it.
 
 | Job | Helper's agent ID | Its copy | Started | State |
 |---|---|---|---|---|
+| Back end's front door | ab501ce613743e0d2 | p65-main | 00:17 | done 01:02: 8 commits, code 2,593 → 1,710 (34%); every screen-callable method kept, signatures proved identical by a script; the Ask engine left (other files reach into it). Two tests' patch targets repointed. One cosmetic dodge: single blank lines between three near-identical log writers so the copy-paste count does not rise (the duplication itself is older). Reviewed 01:30; **landed 01:55, tip dafbdac1, full checks green** |
+| Chat transcript | a95fc4da3b5fdd2a1 | p65-transcript | 00:17 | done 01:07: 10 commits, code 1,527 → 1,104 (28%); six hook blocks lifted, order proved; the three blocks behind tonight's D-pad fixes left in place on purpose. Reviewed 01:40; **landed 02:18, tip e5d94e96, full checks green** (with the session's shared-focus-step commit after its first move) |
+| Model download window | ac8fd789a2b3ffc25 | p65-pull | 00:17 | first pass done 00:38 (3 commits, only 7% smaller: moved top-level pieces only); second pass, lifting hook blocks, started 00:47, done 01:58: 10 more commits, code 1,443 → 935 (40% below the original 1,558); 66-hook order proved; the focus-wiring block (tonight's Deck fixes) left on purpose. Reviewed 02:12; **landed 02:27, tip 0522e64a, full checks green** |
+| Main screen | a8fcf1784fb24868d | p65-index | 00:17 | done 01:00: 13 commits, code 1,458 → 1,107 (24%); 14 hook blocks lifted, 88-hook order proved; what is left is the tab wiring (left on purpose). Reviewed; **12 of 13 landed 01:35** (the settings-snapshot move left out, see below; so index.tsx lands somewhat above 1,107). One plugin-loading test timed out in the full run with five helpers testing at once; it passes alone in 11 s. Follow-up: the new starting-snapshot file's header says the function is called once, but the screen keeps the function itself as the starting value — fix the wording at the finish |
+| Ask logic | a46350c39029ec0d0 | p65-askhook | 00:17 | done 00:43: 6 commits, code 1,219 → 1,061 (13%); four hook blocks lifted, order proved; the rest shares 15–20 pieces of state and would need a rewrite. Reviewed; **landed 01:05, landing tip fa0be962, full checks green** |
+| Style sheet section | a84f3a82f3867cf56 | p65-style | 00:58 | done 01:23: 4 commits, code 1,533 → 570 (63%); full style text proved byte-identical after every commit. Reviewed 01:50; **landed 02:25, tip 33491f7f, full checks green** |
+| Ask bar | aaa927eb592a5971a | p65-askbar | 01:13 | done 01:36: 5 commits, code 1,246 → 1,127 (10%); the bar's own drawing is 772 lines and cannot move under the rules, so half was never reachable; 33-hook order proved. The ring-claim-on-open effect moved as-is: on the Deck list. Reviewed 02:20; **landed 02:28, tip 2b81cdd5, full checks green** |
+| Knowledge-base service | ab7321006a7ee663a | p65-kb | 01:32 | done about 02:55 (after the limit stop): 4 commits, code 1,257 → 519 (59%); every name imported from it elsewhere still there; the ranking-fusion weights stay because an evaluation script sets them on this module directly (a patch trap grep does not find). Session checked every name the tests stand in for is still used from this file. Reviewed; **landed 03:00, tip a98e54a0, full checks green** (two of its changes named functions in a header that the file does not hold; the helper's own later rewording was folded into each one, so every step passes) |
+| Animated chips row | a1e655ad678cfb03a | p65-chips | about 02:58 | done about 03:23: 9 commits, code 914 → 387 (58%); the already-separate chip button, focus container, D-pad hook and decode row moved whole, hook order proved for each; the carousel mode left. Two of its own slips fixed forward (an unused export, an import cycle). The chips' D-pad container moved as-is: on the Deck list. Reviewed; **landed 03:25–03:27, tip dc2d5db5, full checks green** |
+| Prompt builder | a10dfc4d46858ecbd | p65-prompts | 01:42 | done about 02:52 (after the limit stop): 5 commits, code 1,241 → 500 (60%); every prompt from 20 sample cases plus every classifier proved identical by hash after each commit. Reviewed; **landed 02:56, tip e45e80bd, full checks green** |
+| Where-the-AI-runs settings | abf34be9c9da8f1d3 | p65-where | 01:51 | done 02:50 (after the limit stop): 4 commits, code 1,234 → 880 (29%); the drawing alone is 624 lines; 49-hook order proved; the hand-tuned D-pad chain left on purpose. Reviewed; **landed 02:51, tip 2d9559fc, full checks green** |
+| Testing rows (doc) | a1a2cdd2f11f0ff3a | p65-testing | about 02:52 | first pass done about 03:00: 3 commits, 149,062 → 107,726 bytes; 18 finished rows to the closed archive word for word; four open rows' older history to a new history archive; split check clean except the replaced banner. Left for the maintainer: KB-ROUTER-01 and STREAM-FOLLOW-01 read Open but say they moved to Done; HUB-EDGE-01 is Verified for a screen that no longer exists; five rows carry "owed" or "stays open" in their status. First pass **landed 03:04, tip 550f8e50, full checks green**. Second pass done about 03:14 (landed 03:17): 5 more commits, 107,726 → 100,435 bytes (149,062 → 100,435 overall, a third smaller); 16 more rows' older history moved; the rest have nothing superseded to move. KB-ATTRIB-01 also flags its own status as out of date — for the maintainer. Landing after the AI service |
+| Manual Deck checks (doc) | ac0087d71d08d8f50 | p65-manual | about 02:57 | working (closed checks to their own new archive file, so the two doc helpers cannot clash) |
+| AI service | a4eda15f89fa9eab9 | p65-aisvc | 02:14 | working |
+| Voice transcription | a451891580269f107 | p65-voice | 02:21 | done about 02:59 (after the limit stop): 5 commits, code 1,079 → 501 (54%); every name other files use is still there; the live recording session class left whole. Its fifth commit only rewords the second's header, so it is folded in at landing. Reviewed; **landed 03:02, tip ab37bc9b, full checks green** |
+| Question builder | ac8a32a3e0bb8a02f | p65-qbuild | about 03:02 | done about 03:09: 1 commit, code 788 → 704 (11%); everything else is the one long function every question runs through. **Landed 03:11, tip c6f0c94d, full checks green** |
+| AI service (after the limit stop) | a4eda15f89fa9eab9 | p65-aisvc | — | done about 03:12: 3 commits, code 1,120 → 365 (67%); all 32 names still reachable; two tests' stand-ins repointed and proved by breaking; three imports kept only so tests' patch paths still resolve. **Landed 03:14** (all three picks quick-green); its full run failed one read-aloud timing test by 0.01 s with five helpers loading the PC. That test failed 1 of 11 runs on the landed work and 0 of 12 on untouched code, all under load; read-aloud was not touched tonight. Put down as a load-sensitive test, a follow-up for the maintainer |
+| Manual Deck checks (doc) — result | ac0087d71d08d8f50 | p65-manual | — | done about 03:17: 6 commits, 142,525 → 59,489 bytes (58%); 72 closed checklist lines and closed table rows to a new closed archive, dated history to a new history archive; progress tracker untouched; split check clean except the replaced banner. One call to confirm: CHAR-PICKER-RING-01 moved to closed on its last line ("second look passed") though its box was unticked. **Landed 03:20, tip 3c6563d8, full checks green** (testing rows' second pass landed just before, tip 0e5e0c7b, full checks green) |
+| Decisions file (doc) | ac9d2f1cd9ccb1c6f | p65-decisions | about 03:12 | done about 03:28: 1 commit (6e3a7ea6), 429,015 → 125,751 bytes (71%); new archive beside it; all 114 decision headings present across the two, none renumbered. Moved on their own first line's word that a later decision settled them: D40 (the second), D53, D54, D81. Kept for doubt: D38, D41, D74, D75, D82 (answered as a hold with a trigger). Repoint dry-run: 25 links in 9 files, run by the session at the end |
+| Long notes (doc) | a60fed28ea7f2a143 | p65-notes | about 03:12 | first pass done about 03:20: 1 commit (bcb5342c), 256,301 → 200,760 bytes; 26 finished blocks to a new closed archive, 35 open, 34 unclear by title (kept, as told). Split check clean apart from the banner and two fixed in-file links. Repoint dry-run: 9 links in 4 files. Second pass started about 03:21, done about 03:34 (91bacd52: 11 more finished blocks moved, each with its Done line quoted; 256,301 → 135,600 bytes overall; landed 03:35): decide the 34 by reading, each with a quoted Done line or fix commit as evidence |
+| Bookkeeping | a162948575f104406 | p65-land (the landing copy) | 04:08 | done about 04:20: five commits, 9d868a4a to ee14438d (see Finish below) |
+| Deck check | af314eea4df8d31b0 | the shared checkout, build cabda5dd | about 03:32 | done 04:02: 3 FAIL (one a real regression, fixed), rest PASS or UNCLEAR — see below; re-check of the fix at 04:07: PASS |
+| Growth check | adb0992eec11df1ca | p65-growth (from the landing branch) | about 03:12 | first version done about 03:20 (39e7376f): a new check script, its limits file and 15 tests, wired into the quick checks; proved by breaking it four ways (grow a listed file: fails; shrink: passes; comment only: passes; unlisted file crossing 800: fails); half a second. Sent back about 03:22 because its message told people to re-run the record step, which would silently raise every grown file: raising becomes a one-file step with a written reason |
+
+**01:15–01:30, the main screen's landing.** One of its 13 moves (the settings snapshot for saving) passed
+about 48 fields in two identical lists, and the copy-paste count rose from 867 to 916 in the landing copy.
+Left out; the rest were picked around it with a small script that settles the clash in the header note and
+imports. So the copy-paste count *is* read in copies, contrary to § 8's note — at least in the landing copy.
+Rules updated and the running helpers told.
+
+**Finish, about 04:25.** Bookkeeping landed (9d868a4a roadmap: the two entries closed, eight new open entries
+from the night, the roadmap 101,833 → 101,736 bytes with two old Done blocks archived; 8435602b testing rows
+for the growth check and the Deck check; de06866a D117; e912258b changelog; ee14438d six lessons). Then this
+file and the Deck evidence were committed and the shared branch fast-forwarded to the result. The Deck's
+keep-awake lock was released at 04:10; the PC's keep-awake program and the 20-minute check are stopped at the
+finish. The copies of the repo made tonight (p65-*) are left in place for the maintainer's word before any
+is deleted.
+
+**For the maintainer, in the morning:**
+- **What you would notice using the plugin:** nothing, by design. The one thing tonight broke — the Desktop
+  activity log silently stopped writing — was caught by the Deck check and fixed; the fix is confirmed on
+  the Deck.
+- **Owed by eye or by hand:** the chips' Left/Right between chips (only one chip shows with your setting);
+  the saved-chats row with the shoulder buttons; the opening highlight landed in two different places.
+- **New bugs found tonight, not caused by it,** now on the roadmap: Up under an answer skips rows (and the
+  chip ladder can leave the ring off screen); nothing holds the ring after a thumbs up; "Manage AI models"
+  opens one press from changing a licence filter; the mic button's ring is cut off; the Deck walk replay
+  can never compare across builds; the commit hook rebuilds the shared checkout from a copy; a read-aloud
+  timing test fails now and then under load.
+- **Your calls:** D82 kept as open (answered as a hold); CHAR-PICKER-RING-01 moved to closed on its "second
+  look passed" line though its box was unticked; the testing rows whose status contradicts their notes;
+  the 23 long-notes blocks nobody could match; the roadmap's new `[docs]` tag is not in its tag list yet;
+  an old archive file has 56 links one folder too deep (older than tonight).
+- **Short of half:** the Ask bar, where-the-AI-runs, the main screen, the Ask logic and the question builder
+  came out 10–29% smaller. What is left there is the drawing code, the one long function every question
+  runs through, and the D-pad fixes proved on the Deck last night — none of it movable without a rewrite.
+  The growth check now holds each of them at today's size.
+
+**The Deck check, 03:32–04:02 (build cabda5dd, the Deck's own screen):** deploy, load log, free-use pass,
+chips (Up/Down; only one chip showing, so Left/Right could not run), reply buttons (copy, read aloud, thumbs
+up), voice, the AI models screen and download window, where-the-AI-runs, Settings end to end: **PASS**. The
+saved-walk replay compared nothing (every walk was saved against an older build; the rig will not compare
+across builds). Opening highlight: stayed inside bonsAI both times, but landed differently each time —
+UNCLEAR. Saved chats: Right does not switch chats (the row uses the shoulder buttons) — UNCLEAR.
+**One real regression from tonight: every activity-log line failed** ("_desktop_app_log_level_allows() takes
+2 positional arguments but 3 were given"). The front door's move had turned a call through the class into a
+call through the instance, and that one helper is written without `self`. The session missed it in review:
+it read the change as harmless because the other four such helpers are static. **Fixed at b56de863** (called
+through the class again) with a new test that failed with the same error first; a scan of every moved call
+through `self` found no other. Shared branch fast-forwarded to b56de863. **Deck re-check at 04:07, PASS:** no failed log lines
+or Tracebacks since the redeploy, and both Settings opens wrote their line to the Desktop activity log
+(none had on the broken build). Evidence: plan65-DEPLOY-try2.json, plan65-FINAL-LOG-try2.json. **Found, not caused tonight** (code paths only moved; last night's checks never walked them):
+with details open, Up from "Save chat to Desktop" skips the chip ladder and the tabs row to the notes block
+(3 of 3); with details closed, Up skips the choice buttons and "Save chat to Desktop"; the chip ladder can
+shrink and leave the ring above the visible area with the panel half blank (last night's check saw the
+ladder partly off screen too); after a thumbs up nothing holds the ring; the mic button's ring is cut off
+at the panel's right edge; "Manage AI models" opens with the ring on a licence filter, one A from changing a
+setting. Evidence: 20 files `docs/test-evidence/plan65-*`, 5 saved walks `checks/plan65-*`.
+
+**03:33–03:39, the rest landed on the landing branch** (not yet on the shared branch; that waits for the Deck
+check to finish so the shared checkout stays still under it): the growth check (both commits), the long notes'
+two passes, the two link scripts run for real (c77a25fc: 25 decision links in 10 files and 9 notes links in 4
+files; a second dry run finds nothing left; no roadmap links changed), and the growth limits recorded from the
+final sizes (c8d6710c: eight files held at their size, the AI service and the chips row now under 800). Full
+checks green at c8d6710c.
+
+**Sizes at the finish** (code lines, comments excluded; documents in bytes):
+
+| File | Before | After |
+|---|---|---|
+| Back end's front door | 2,593 | 1,710 |
+| Chat transcript | 1,527 | 1,104 |
+| Model download window | 1,558 | 935 |
+| Main screen | 1,458 | 1,158 |
+| Style sheet section | 1,533 | 570 |
+| Ask bar | 1,246 | 1,127 |
+| Where-the-AI-runs settings | 1,234 | 880 |
+| Animated chips row | 914 | 387 |
+| Knowledge-base service | 1,257 | 519 |
+| Prompt builder | 1,241 | 500 |
+| AI service | 1,120 | 365 |
+| Voice transcription | 1,079 | 501 |
+| Ask logic | 1,219 | 1,061 |
+| Question builder | 788 | 704 |
+| **All fourteen** | **18,767** | **11,521 (39% moved out)** |
+| Testing rows | 149,062 | 100,450 |
+| Manual Deck checks | 141,611 | 58,918 |
+| Decisions file | 429,015 | 124,027 |
+| Long notes | 256,301 | 134,168 |
+| **All four documents** | **975,989** | **417,563 (57% less to read)** |
+
+**03:25–03:32, the code finish.** The chips row landed last (its unused-export and import-cycle fixes folded
+into the changes they belong to). The starting-snapshot note was corrected (435e1e0c). The decisions file
+landed (cabda5dd). **The shared branch was fast-forwarded to cabda5dd at about 03:31** — straight forward,
+nothing else had landed on it since 71f052e, and none of the landed changes touch the one file the shared
+checkout had uncommitted (this plan). Full checks passed in the shared checkout (71 s), copy-paste count not
+risen. **The Deck check started at about 03:32** (deck-driver agent, runbook in the scratch folder:
+p65-deck-runbook.md). Still to land: the growth check (loophole closed, 75b0191e) and the long notes' second
+pass; then the two link-repoint scripts, the growth limits re-recorded, and bookkeeping.
+
+**About 03:28, found: another chat's 00:03 commit (71f052e, this plan's base) had swept in this plan file as it
+stood then**, along with its own plan 67 and two roadmap entries. Nothing lost. The shared branch has not
+moved since, so the finish is a straight fast-forward. The newest copy of this file is committed with the
+finish; the shared checkout's copy is then identical and is reset before the fast-forward.
+
+**02:28 usage-limit stop, 02:44 restart — the overnight setup worked.** All five running helpers (AI
+service, where-the-AI-runs, voice, knowledge base, prompt builder) died with the limit error at about 02:28;
+the limit reset at 02:30. The scheduled check put its message in and the session picked up by itself at
+02:44 (the checks queued while the limit was on all arrived together). Keep-awake still running; landing
+copy clean at 2b81cdd5 (model window's second pass and the Ask bar landed just before the stop, full checks
+green). Each helper's copy still held its commits and its half-done change; all five were resumed by one
+message each at 02:45.
+
+**02:00–02:10, the transcript's first move raised the copy-paste count to 877.** In its own file, the per-turn
+row focus helper's last eleven lines matched the end of an older focus helper that already existed. The
+session extracted the shared step into one function both call (each keeps its own safety check first), so
+the count is back to 867 and the focus-pattern baseline dropped from 81 to 79. Extract, never re-record.
+That extract touches a focus file, so it is on the Deck check list at the finish (the chip ladder and details
+tabs row, Up and Down past them).
+
+**Setup, 2026-09-24 00:06–00:17.** Base 71f052e (plan 64's last commit plus one roadmap commit from another
+chat). Full checks green on it in the landing copy (81 seconds). Keep-awake program running (pid 13884, log
+and stop file in the session's scratch folder; Windows' own list needs admin, so only "still running" is
+checked). Scheduled check every 20 minutes at :04, :24, :44 (job 098b24a3). Deck stay-awake lock held until
+08:07, verified on the Deck. Landing copy: p65-land. The split rules every helper reads, and the
+moved-versus-new script, are in the session's scratch folder. This plan file stays uncommitted in the shared
+checkout (so the maintainer can read the log) and is committed with the finish — changed from § 10's
+"committed at setup".
+
+**00:40–00:50, two things found:**
+- **The pre-commit hook rebuilds the shared checkout, not the copy it runs in.** Its path is set absolute,
+  so it changes into the shared checkout first. Copies' generated files never refresh, and the full checks
+  fail their architecture step in every copy. Not new tonight; one other session was already on it. The
+  landing script now rebuilds the landing copy's generated files itself before each commit. Helpers were
+  told to ignore that one step.
+- **The first split came back only 7% smaller.** The rules said to leave hook calls alone, which stops a
+  React screen file well short of half. The rules now allow lifting a contiguous hook block into its own
+  hook, with the hook-order proof. The four running helpers were told.
+- **Correction, 00:55:** worse than first read. With the absolute hook path, the hook rebuilds the shared
+  checkout's generated files and stages *those* into the committing copy. The model window's three landed
+  changes carried out-of-date maps; the last was amended with correct ones and the full checks passed again.
+  The landing script now commits with a relative hook path, so each copy's own hook runs.

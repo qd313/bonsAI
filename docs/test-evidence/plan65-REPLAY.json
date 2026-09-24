@@ -1,0 +1,26 @@
+{
+  "row": "plan65-REPLAY",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a (rig bundle hash sha256:7c2aec67b7c20fd02a88e1128ea3c7558b5af49a3a5ffeed0cd21dc8156f8c26)",
+  "deckTime": "2026-09-24T03:36-04:00",
+  "screen": "Deck built-in panel (854x454 CSS QAM, 1280x800 physical)",
+  "setup": "Plugin open (opened first try after deploy). deck_replayChecks with no 'only'.",
+  "pressed": "nothing: the tool ran no walk (see seen)",
+  "seen": {
+    "checksFound": 8,
+    "buildHashMatch": "false for all 8",
+    "landingComparisonsRun": 0,
+    "diffs": "none reported (none attempted)",
+    "perCheck": [
+      {"name": "phase3-delete-round-smoke-walk", "tool": "deck_sweep", "savedBuildHash": "sha256:704c729060006cb4cac65dd9fa17da4065bf8c8c52b072c5ff8e991bd2a326dc", "result": "not compared: build differs"},
+      {"name": "plan64-CHAT-SLOTS-V3-14c", "tool": "deck_runSequence", "savedBuildHash": "sha256:7f0bbcfa6f21cff5704af008679a8d23308cdc89914759312a6d752dbc1655b1", "result": "not compared: build differs"},
+      {"name": "plan64-DETAILS-LADDER-01-try2", "tool": "deck_runSequence", "savedBuildHash": "sha256:cceab6709e401c258800be0c27380be2a3cba2961c034dd2c0e01074edecc5ec", "result": "not compared: build differs"},
+      {"name": "plan64-DETAILS-LADDER-01", "tool": "deck_runSequence", "savedBuildHash": "sha256:ac6635bf0f3a7ea3abbc4e7b840c5e642227db7962cd1740f3821acbce3c4fde", "result": "not compared: build differs"},
+      {"name": "plan64-MODELS-HUB-RETURN-01-down-to-done", "tool": "deck_runSequence", "savedBuildHash": "sha256:7e9bd90f956f70c59b869a64aeef5b257546dbcc763a68a64f5ca5c3cf437f57", "result": "not compared: build differs"},
+      {"name": "plan64-SESSION-TAB-01-B-close", "tool": "deck_runSequence", "savedBuildHash": "sha256:7f0bbcfa6f21cff5704af008679a8d23308cdc89914759312a6d752dbc1655b1", "result": "not compared: build differs"},
+      {"name": "plan64-TALL-SECTION-01", "tool": "deck_runSequence", "savedBuildHash": "sha256:85d9bf0b248e658e36f24499c9d10bb225890e1733734631eaea77496ab58ed5", "result": "not compared: build differs"},
+      {"name": "plan64-W2-R5-down-walk", "tool": "deck_runSequence", "savedBuildHash": "sha256:7f0bbcfa6f21cff5704af008679a8d23308cdc89914759312a6d752dbc1655b1", "result": "not compared: build differs"}
+    ],
+    "toolSummary": "0/8 check(s) passed; each: 'This replay cannot say whether the plugin changed -- only that this check has never been verified against what is running now.'"
+  },
+  "verdict": "UNCLEAR: the replay tool refuses to run a landing comparison when the build hash differs, so none of the 8 walks was compared. The runbook expected the comparison to run where the build differs. The walks are covered by hand in the later checks instead."
+}

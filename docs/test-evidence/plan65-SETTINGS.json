@@ -1,0 +1,17 @@
+{
+  "row": "plan65-SETTINGS",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:59-04:01-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Settings tab (RB from the AI tab). Nothing was changed; no A pressed on this tab.",
+  "pressed": "DOWN x24 (runs/plan65-SETTINGS-down.json), UP x16 (runs/plan65-SETTINGS-up.json); saved checks/plan65-SETTINGS-walk.json with requireVisible (31/31).",
+  "seen": {
+    "downStops": ["Settings tab", "Adjust UI automatically", "Apply UI scale", "Screenshot quality (Save memory)", "Typed-text memory (Remember everything)", "Hide spoilers until I tap", "Show one chip instead of two", "Voice model tiny.en", "Voice model base.en", "Reinstall voice engine", "Voice replies (Off)", "AI voice & personality", "Ali G — Other", "Accent intensity: Strong", "Show Developer tab", "Clear cache... (bottom; DOWN x9 more stays there)"],
+    "upStops": "exactly the reverse, back to the Settings tab; one more UP reaches Decky's own back arrow",
+    "visible": "31 of 31 saved stops 100% visible; 0 hidden, 0 loops",
+    "notStops": "The UI scale picker at the top of the tab (4 options) is never a stop, going down or up. 'Clear all data...' sits to the right of 'Clear cache...' and is reached with RIGHT, not DOWN (not pressed).",
+    "managePacks": "There is no manage-packs panel. No control on the tab mentions packs, and the code only uses the packs behind the scenes, through a refresh when the chat is reset.",
+    "log": "0 new plugin log lines, 0 errors"
+  },
+  "verdict": "PASS. Every row can be reached going Down and Up, and each is visible. The manage-packs part did not apply because no such panel exists. For the owner: the UI scale picker is skipped by the D-pad, maybe on purpose while 'Adjust UI automatically' is on."
+}

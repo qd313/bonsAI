@@ -1,0 +1,27 @@
+{
+  "row": "plan65-FINAL-LOG",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T04:04-04:00",
+  "screen": "Deck built-in panel (read over SSH; no presses)",
+  "setup": "Whole run, from the deploy at 03:34:08 to 04:04. Plugin log ~/homebrew/logs/bonsAI/2026-09-24 03.34.20.log plus the loader journal (journalctl -u plugin_loader) since 03:33:50, with file-watch noise removed.",
+  "pressed": "nothing",
+  "seen": {
+    "pluginLog": "15 lines, all INFO: load at 03:34:20, then the one Hades ask 03:43:21 to 03:44:03 (completed in 41.5 s, model gemma4:e2b-it-qat, branch picker parsed with 2 options, answer checker 0 warnings). 0 WARN/ERROR/Traceback lines.",
+    "bonsaiErrorInJournal": {
+      "time": "03:58:47, matching the RB press that opened the Settings tab",
+      "lines": [
+        "[loader][ERROR]: Method append_app_log of plugin bonsAI (v0.5.0) failed with the following exception:",
+        "Traceback (most recent call last):",
+        "  File \"decky_loader/loader.py\", line 224, in handle_plugin_method_call",
+        "  File \"decky_loader/plugin/plugin.py\", line 137, in execute_method",
+        "  File \"decky_loader/plugin/messages.py\", line 44, in wait_for_result",
+        "Exception: Plugin._desktop_app_log_level_allows() takes 2 positional arguments but 3 were given"
+      ],
+      "count": 1,
+      "cause_readonly": "main.py:674 defines _desktop_app_log_level_allows(settings, event_level) with no self and no @staticmethod. Before commit 1353b518 (2026-09-24 00:39, 'Split main.py: move screenshots/desktop-log/clipboard/feedback RPC bodies out') append_app_log called it as Plugin._desktop_app_log_level_allows(...). The moved body in py_modules/backend/services/media_desktop_rpc.py:155 calls self._desktop_app_log_level_allows(settings, event_level), so Python passes self as a third argument. main.py:714 (_maybe_app_log) still uses Plugin.… and is unaffected.",
+      "effect": "Every app-activity log line the screen sends to the back end fails before it is written. The setting desktop_app_log_level is 'verbose' on this Deck, so those lines are meant to be written. Nothing visible happened on screen."
+    },
+    "otherJournalLines": "not bonsAI: a Controller Tools unload Traceback (ProcessLookupError) at 03:34:15 during the deploy's restart; 'SharedJSContext socket disconnected' warnings at 03:34:15 and 03:34:21 (restart); legacy-method warnings for Steamback, Battery Tracker and EmuDecky at 03:34:27-29."
+  },
+  "verdict": "FAIL. One new bonsAI error, caused by tonight's move of the log-writing code into its own file: the app-activity log writer cannot run at all. There are no other bonsAI errors or warnings for the whole run."
+}

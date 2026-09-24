@@ -1,0 +1,29 @@
+{
+  "row": "plan65-KB-ANSWER",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:43:20-03:49-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Main tab, saved parrying chat (the question was added to it as a second turn; no new chat). No game running. Model gemma4:e2b-it-qat (from the details ladder).",
+  "pressed": [
+    "deck_send_ask.py --text 'In Hades what does the Chaos boon do': VERIFIED, read back the whole question",
+    "ring was already on Ask; A (rig reported one internal resend of the press; exactly 1 new turn appeared)",
+    "waited: answer finished after 32 s",
+    "UP x16 from the question box (runs/plan65-KB-ANSWER-up.json); DOWN x16 from Decky's back arrow (runs/plan65-KB-ANSWER-down.json); UP x5 from the chip (runs/plan65-KB-ANSWER-up-try2.json)",
+    "walk to Show details, A (details opened)",
+    "DOWN x10 (runs/plan65-KB-ANSWER-details-down.json); UP x11 (runs/plan65-KB-ANSWER-details-up.json); a second try (runs/plan65-KB-ANSWER-details-try2.json); UP walk to find the tabs row (ended stuck on the ladder); UP 1 + DOWN 3 (runs/plan65-KB-ANSWER-ladder-escape.json); DOWN 4 + UP 1 (runs/plan65-KB-ANSWER-ladder-out.json)",
+    "UP to Hide details, A (details closed; ring on Show details)"
+  ],
+  "seen": {
+    "answer": "Yes, in 32 s. Two paragraphs in the Ali G voice about boons in general, gods and duo boons. It never says what the Chaos boon itself does.",
+    "notes": "Yes. A 'From the notes' block: 'Boons and duo boons (+2 more) · From bonsAI's own note', under the reply's buttons. Ladder chip: 'KB: 15 sections', 'Keyword + meaning'.",
+    "extraRows": "A two-choice picker 'Where are you at in Hades?' (A. Early in the game..., B. Later in the game...) between the answer and the Helpful row; 'Save chat to Desktop' above the suggestion chip.",
+    "downWalk_detailsClosed": "tab strip > chat row > old turn > Retry > question row > Show reasoning > answer part 1 > answer part 2 (2 presses) > A > B > Helpful > Show details > notes block > Save chat to Desktop > chip. Every stop visible (the question row and answer are only flagged for the Retry and Copy icons, known false alarms).",
+    "upWalk_detailsClosed": "question box > chip > notes block (skips Save chat to Desktop) > Show details > Helpful > answer part 2 (skips B and A) > answer part 1 > Show reasoning > Retry (skips the question row) > old turn > chat row > tab strip. Same on the repeat (up-try2).",
+    "downWalk_detailsOpen": "Hide details > notes block > tabs row 'This answer | Session · 2' (visible) > chip ladder (one stop, 6 more presses step Chip 1..7 of 7) > Save chat to Desktop. Never left the plugin.",
+    "upWalk_detailsOpen": "Save chat to Desktop > notes block: skips the ladder AND the tabs row, 3 times out of 3 (details-up step 1, ladder-out step 5, and earlier). Both rows were drawn on screen right below the notes block (plan65-KB-ANSWER-details-open.png).",
+    "upFromChip_detailsOpen": "Up from the suggestion chip entered the ladder (skipping Save chat) at 'Chip 2 of 7'. The ladder then shrank from 300 to 169 px, the list stayed scrolled at 1010 px (its new maximum), and the ladder box sat at y -130..39, all above the visible area (which starts at y 88). The ring was 0% visible. The chip row, question box and Ask bar were drawn straight under the tab strip, with the lower half of the panel blank (plan65-KB-ANSWER-ladder-hidden.png). UP x6 did not move the ring. DOWN presses stepped the ladder's hidden chips (2 > 4 > 7) and the 4th DOWN escaped to Save chat to Desktop, after which the layout came back.",
+    "upFromLadderTop": "In try 2, UP right after entering the ladder from the tabs row did not move the ring (it stayed on the ladder); it never reached the tabs row going up.",
+    "leftPlugin": "never; the top UP only reaches Decky's own back arrow above the tab strip"
+  },
+  "verdict": "FAIL. An answer came with a notes block. Down reaches every row, but Up does not. Going Up with details open, the ladder and the tabs row are always skipped. With details closed, the two choice buttons and 'Save chat to Desktop' are skipped. Once, Up left the ring on a ladder the reader cannot see, with half the panel blank, and only four Down presses got it out. The runbook needs every press to land on the next row, visibly. Whether this started tonight or is older is not known: last night's saved walks could not be replayed against this build (see plan65-REPLAY)."
+}

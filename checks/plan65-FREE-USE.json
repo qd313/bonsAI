@@ -1,0 +1,873 @@
+{
+  "formatVersion": 2,
+  "name": "plan65-FREE-USE",
+  "tool": "deck_runSequence",
+  "savedAt": "2026-09-24T07:39:50.630Z",
+  "buildHash": "sha256:7c2aec67b7c20fd02a88e1128ea3c7558b5af49a3a5ffeed0cd21dc8156f8c26",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "bin/README.md",
+    "defaults/defaults.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/__pycache__/__init__.cpython-312.pyc",
+    "py_modules/backend/__pycache__/constants.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_connectivity.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_routing.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_urls.cpython-312.pyc",
+    "py_modules/backend/__pycache__/tdp_intent.cpython-312.pyc",
+    "py_modules/backend/__pycache__/tls_ca_fallback.cpython-312.pyc",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/__pycache__/__init__.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ai_character_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ask_command_text.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ask_local_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ask_payload.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ask_topic_instructions.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/async_background_job.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/async_task_lifecycle.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/background_request_state.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/bonsai_stream_tags.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/capabilities.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_memory_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_slot_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_slot_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_threads_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/clipboard_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/compat_topic_router.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/desktop_note_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/destructive_advice_guard.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/feedback_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/game_ai_request.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/input_sanitizer_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/intent_pack_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/intent_pack_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/kb_attached_notes.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/kb_followup_memory.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/kb_not_in_notes_notice.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_cards.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_chips.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_game_match.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_schema.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_search.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/local_ollama_setup_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/local_ollama_teardown_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/media_desktop_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/model_policy.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/network_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_ask_budgets.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_ask_extras.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_ask_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_catalog_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_chat_stream.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_connection_test.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_embed_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_health_probe.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_local_autostart_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_local_setup_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_mdns_discovery_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_preload_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_prompts.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_stop_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_window_fit.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/plugin_data_reset.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/prompt_budget_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/proton_experiment_journal_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/proton_troubleshooting_logs.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/pull_model_catalog_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/rag_corpus_download_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/rag_corpus_local_install.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/rag_corpus_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/rag_corpus_status.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/reply_followup_blocks.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/reply_language_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/reply_style_blocks.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/response_verify.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/screenshot_media.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/settings_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/shortcut_setup_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/spoiler_risk_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/spoiler_title_profiles.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/spy_confession_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/steam_vac_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_checklist_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_checklist_session_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_entity_extraction.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_guide_parse.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_spoiler_policy.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/tdp_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/thinking_tiny_model_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/token_accounting_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/transparency_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/vac_check_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_audio_capture_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_capture.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_engine_build_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_model_download_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_read_aloud_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_rpc.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_transcript_decode_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_transcription_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_whisper_daemon.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_whisper_runtime.cpython-312.pyc",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/ask_payload.py",
+    "py_modules/backend/services/ask_topic_instructions.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_memory_service.py",
+    "py_modules/backend/services/chat_slot_rpc.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_rpc.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_attached_notes.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/knowledge_base_cards.py",
+    "py_modules/backend/services/knowledge_base_chips.py",
+    "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_search.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/media_desktop_rpc.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_extras.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_chat_stream.py",
+    "py_modules/backend/services/ollama_connection_test.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_local_setup_rpc.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_preload_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_window_fit.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/prompt_budget_service.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/rag_corpus_local_install.py",
+    "py_modules/backend/services/rag_corpus_rpc.py",
+    "py_modules/backend/services/rag_corpus_status.py",
+    "py_modules/backend/services/reply_followup_blocks.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/reply_style_blocks.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/spy_confession_service.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_rpc.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_entity_extraction.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/strategy_spoiler_policy.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_audio_capture_service.py",
+    "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_model_download_service.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_rpc.py",
+    "py_modules/backend/services/voice_transcript_decode_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/services/voice_whisper_runtime.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "steps": [
+      {
+        "press": "DOWN",
+        "label": "slot row"
+      },
+      {
+        "press": "DOWN",
+        "label": "retry"
+      },
+      {
+        "press": "DOWN",
+        "label": "question row"
+      },
+      {
+        "press": "DOWN",
+        "label": "hide reasoning"
+      },
+      {
+        "press": "DOWN",
+        "label": "answer top"
+      },
+      {
+        "press": "DOWN",
+        "label": "answer scroll 1"
+      },
+      {
+        "press": "DOWN",
+        "label": "answer scroll 2"
+      },
+      {
+        "press": "DOWN",
+        "label": "read aloud"
+      },
+      {
+        "press": "DOWN",
+        "label": "show details"
+      },
+      {
+        "press": "DOWN",
+        "label": "chip"
+      },
+      {
+        "press": "DOWN",
+        "label": "question box"
+      },
+      {
+        "press": "DOWN",
+        "label": "ask"
+      },
+      {
+        "press": "UP",
+        "label": "attach screenshot"
+      },
+      {
+        "press": "UP",
+        "label": "character"
+      },
+      {
+        "press": "UP",
+        "label": "chip"
+      },
+      {
+        "press": "UP",
+        "label": "show details"
+      },
+      {
+        "press": "UP",
+        "label": "read aloud"
+      },
+      {
+        "press": "UP",
+        "label": "answer bottom"
+      },
+      {
+        "press": "UP",
+        "label": "answer scroll up"
+      },
+      {
+        "press": "UP",
+        "label": "hide reasoning"
+      },
+      {
+        "press": "UP",
+        "label": "retry"
+      },
+      {
+        "press": "UP",
+        "label": "slot row"
+      },
+      {
+        "press": "UP",
+        "label": "main tab"
+      }
+    ],
+    "stopOnFailure": false,
+    "mustReachText": [],
+    "requireVisible": false,
+    "acquireFocus": false
+  },
+  "expected": {
+    "ok": true,
+    "ranSteps": 23,
+    "totalSteps": 23,
+    "passed": 23,
+    "failed": 0,
+    "visited": [
+      "<DIV> \"Main tab\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"Retry same prompt\"",
+      "<DIV> \"what is a good way to practice parrying in action games\"",
+      "<DIV> \"Hide reasoning · 20 s\"",
+      "<BUTTON> \"Read aloud\"",
+      "<DIV> \"Show details\"",
+      "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "<BUTTON> \"ask\"",
+      "<BUTTON> \"Attach screenshot to Ask\"",
+      "<DIV> \"Choose AI character, A\""
+    ],
+    "cycle": {
+      "key": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "seenAt": [
+        0,
+        23
+      ],
+      "loop": [
+        "<DIV> \"Main tab\"",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<BUTTON> \"Retry same prompt\"",
+        "<DIV> \"what is a good way to practice parrying in action games\"",
+        "<DIV> \"Hide reasoning · 20 s\"",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<BUTTON> \"Read aloud\"",
+        "<DIV> \"Show details\"",
+        "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+        "<BUTTON> \"ask\"",
+        "<BUTTON> \"Attach screenshot to Ask\"",
+        "<DIV> \"Choose AI character, A\"",
+        "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "<DIV> \"Show details\"",
+        "<BUTTON> \"Read aloud\"",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> \"Hide reasoning · 20 s\"",
+        "<BUTTON> \"Retry same prompt\"",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> \"Main tab\""
+      ],
+      "escaped": false,
+      "stepsAfterLoop": 0
+    },
+    "neverReached": [],
+    "stopsFocusedButNotVisible": 6,
+    "notVisibleStops": [
+      "step 3: <DIV> \"what is a good way to practice parrying in action games\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+      "step 5: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-full-bleed-row.bonsai-ask-bleed-wrap > div.bonsai-askbar-merged.bonsai-glass-panel.bonsai-askbar-row-host > div.Panel.Focusable > button.bonsai-askbar-target.bonsai-ask-primary.Focusable",
+      "step 6: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (33%), covered by div.bonsai-main-tab-dock > div.bonsai-full-bleed-row.bonsai-preset-row-host",
+      "step 7: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (56%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+      "step 18: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (33%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+      "step 19: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (33%), covered by div.bonsai-full-bleed-row.bonsai-preset-row-host > div.bonsai-preset-carousel-focus-root.bonsai-preset-across.Panel > div.bonsai-preset-carousel-slot > button.bonsai-preset-glass.Focusable"
+    ],
+    "steps": [
+      {
+        "index": 1,
+        "label": "slot row",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Main tab\"",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 2,
+        "label": "retry",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<BUTTON> \"Retry same prompt\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 3,
+        "label": "question row",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Retry same prompt\"",
+        "to": "<DIV> \"what is a good way to practice parrying in action games\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 4,
+        "label": "hide reasoning",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what is a good way to practice parrying in action games\"",
+        "to": "<DIV> \"Hide reasoning · 20 s\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 5,
+        "label": "answer top",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Hide reasoning · 20 s\"",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-full-bleed-row.bonsai-ask-bleed-wrap > div.bonsai-askbar-merged.bonsai-glass-panel.bonsai-askbar-row-host > div.Panel.Focusable > button.bonsai-askbar-target.bonsai-ask-primary.Focusable",
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 6,
+        "label": "answer scroll 1",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": false,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-main-tab-dock > div.bonsai-full-bleed-row.bonsai-preset-row-host",
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 7,
+        "label": "answer scroll 2",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": false,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 8,
+        "label": "read aloud",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<BUTTON> \"Read aloud\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 9,
+        "label": "show details",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Read aloud\"",
+        "to": "<DIV> \"Show details\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 10,
+        "label": "chip",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Show details\"",
+        "to": "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 11,
+        "label": "question box",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 12,
+        "label": "ask",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+        "to": "<BUTTON> \"ask\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 13,
+        "label": "attach screenshot",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"ask\"",
+        "to": "<BUTTON> \"Attach screenshot to Ask\"",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 14,
+        "label": "character",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Attach screenshot to Ask\"",
+        "to": "<DIV> \"Choose AI character, A\"",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 15,
+        "label": "chip",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Choose AI character, A\"",
+        "to": "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 16,
+        "label": "show details",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Testhow do i beat the gonarch in black mesa\"",
+        "to": "<DIV> \"Show details\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 17,
+        "label": "read aloud",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Show details\"",
+        "to": "<BUTTON> \"Read aloud\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 18,
+        "label": "answer bottom",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Read aloud\"",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+          "clippedBy": "div"
+        }
+      },
+      {
+        "index": 19,
+        "label": "answer scroll up",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": false,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-full-bleed-row.bonsai-preset-row-host > div.bonsai-preset-carousel-focus-root.bonsai-preset-across.Panel > div.bonsai-preset-carousel-slot > button.bonsai-preset-glass.Focusable",
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 20,
+        "label": "hide reasoning",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> \"Hide reasoning · 20 s\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 21,
+        "label": "retry",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Hide reasoning · 20 s\"",
+        "to": "<BUTTON> \"Retry same prompt\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 22,
+        "label": "slot row",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<BUTTON> \"Retry same prompt\"",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 23,
+        "label": "main tab",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> \"Main tab\"",
+        "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      }
+    ]
+  }
+}

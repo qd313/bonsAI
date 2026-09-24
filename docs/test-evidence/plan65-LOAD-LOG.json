@@ -1,0 +1,13 @@
+{
+  "row": "plan65-LOAD-LOG",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:35-04:00",
+  "screen": "Deck built-in panel (854x454 CSS QAM, 1280x800 physical)",
+  "setup": "Read right after deploy, before opening the plugin.",
+  "pressed": "nothing",
+  "seen": {
+    "pluginLog": "~/homebrew/logs/bonsAI/2026-09-24 03.34.20.log holds one line: '[INFO]: bonsAI plugin loaded!'. grep for Traceback|ImportError|ModuleNotFoundError|AttributeError|NameError: 0 hits.",
+    "loaderJournal": "journalctl -u plugin_loader since 03:33:50, bonsAI lines: shut down, unloaded, 'Loaded bonsAI (v0.5.0)', 'bonsAI plugin loaded!'. One Traceback at 03:34:15 belongs to another plugin: 'Failed to unload Controller Tools (v2.0.2)!' ... ProcessLookupError in /home/deck/homebrew/plugins/ControllerTools/main.py line 36. Not bonsAI."
+  },
+  "verdict": "PASS (at load; the moved back-end code is exercised by later checks and re-read in plan65-FINAL-LOG)"
+}

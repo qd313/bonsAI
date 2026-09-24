@@ -1,0 +1,22 @@
+{
+  "row": "plan65-FREE-USE",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a (rig bundle hash sha256:7c2aec67...8c26)",
+  "deckTime": "2026-09-24T03:37-03:40-04:00",
+  "screen": "Deck built-in panel: QAM window 854x454 CSS px (1280x800 physical, dpr 1.5)",
+  "setup": "Main tab, saved chat 'what is a good way to practice parrying in action games' showing (answer 325 px tall, 21 text lines). Dock (chips + ask bar) top at y=289; scroll area y=88..454. Ring started on the tab strip.",
+  "pressed": "From 'Main tab': DOWN x15 (runs/plan65-FREE-USE-down.json), then UP x15 (runs/plan65-FREE-USE-up.json). Then again 12 DOWN + 11 UP saved as checks/plan65-FREE-USE.json (23/23 same landings).",
+  "seen": {
+    "downStops": ["Main tab (tab strip)", "chat slot row (bonsai-chat-slot-row-focus, y 88-136, visible)", "Retry same prompt", "question row", "Hide reasoning · 20 s", "answer, top (12 of 21 lines fully above dock)", "answer, scrolled 80 px (press did not move the ring, scrolled it)", "answer, scrolled 160 px", "Read aloud", "Show details", "chip 'Test / how do i beat the gonarch in black mesa'", "question box", "ask", "ask (3 more DOWN presses: stays, no escape)"],
+    "upStops": ["ask", "Attach screenshot to Ask", "Choose AI character", "chip", "Show details", "Read aloud", "answer bottom", "answer scroll up (no ring move)", "Hide reasoning", "Retry same prompt", "chat slot row", "Main tab", "Decky's own back arrow (header 'bonsAI v0.5.0') on the press after the tab strip; 3 more UP presses stay there"],
+    "cycle": "none",
+    "notVisibleFlags": {
+      "questionRow": "tool says 78% visible, covered by Retry icon. Text line boxes: first line x 112-331, second x 261-331; Retry icon x 82-102. 0 text lines overlap the icon. Known false alarm (rule 5).",
+      "answerTop": "tool says 67%, covered by the ask bar: the 325 px answer is taller than the 201 px of room above the dock; its top edge is at y=89 and 12 lines are fully in view. Expected for a long answer.",
+      "answerScroll1": "33% by the tool; answer box y 9..334, 11 lines fully in view above dock 289.",
+      "answerScroll2": "tool says 56%, covered by the Copy icon. Last text line x 71-187, y 238-252; Copy icon x 292-312, y 238-258: no overlap; last line ends 37 px above the dock. Known false alarm (rule 5).",
+      "upAnswerStops": "same two answer stops in reverse (33%), same cause."
+    },
+    "asymmetry": "UP from Hide reasoning goes to Retry, skipping the question row; DOWN from Retry goes to the question row. Seen in all three Up walks."
+  },
+  "verdict": "PASS for the walk: every press moved to the next expected stop or scrolled the long answer, the bottom stops at ask, no loop, and no words were hidden behind the dock or the icons. For the owner: one more Up press past the tab strip lands on Decky's own back arrow above the plugin (outside bonsAI, but that is Decky's header, reached only by pressing past the top)."
+}

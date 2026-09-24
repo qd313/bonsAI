@@ -1,0 +1,22 @@
+{
+  "row": "plan65-OPEN-RING",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:41:40-03:42:51-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Main tab, saved parrying chat, question box empty. Reference: plan64-BYEYE-01-askbar-ring-on-box.png (ring on the question box after reopening).",
+  "pressed": "Each try: B (ring went from the chip to the plugin's tab strip, still inside bonsAI), B again (panel closed, Decky's plugin list showing), deck_openPlugin (1 press to place the ring in Decky's list, 1 press to the bonsAI row, A), then DOWN once.",
+  "seen": {
+    "try1": {
+      "rightAfterOpen": "nothing held the ring (Steam reported no owner)",
+      "afterOneDown": "ring on the suggestion chip (button.bonsai-preset-glass, box x48 y290 300x30), inside bonsAI; not on Decky's back arrow",
+      "screenshot": "plan65-OPEN-RING-try1.png: chip underlined in blue; question box not highlighted"
+    },
+    "try2": {
+      "rightAfterOpen": "ring already on the question box (input, box x73 y329 275x44, 100% visible)",
+      "afterOneDown": "ring on the Ask button (box x49 y400 299x36), inside bonsAI; not on Decky's back arrow",
+      "screenshot": "plan65-OPEN-RING-try2.png: Ask button highlighted; chip mid-way through its letter-scramble animation"
+    },
+    "deckyBackArrowHit": "0 of 2 tries"
+  },
+  "verdict": "UNCLEAR. The part that matters most holds: both tries kept the highlight inside bonsAI, never on Decky's back arrow. But neither try ended on the question box after the Down press. Try 1 ended on the chip just above it. Try 2 was already on the box before the press, so the Down moved it on to Ask. The two tries also started differently: no owner on try 1, the box on try 2. The owner should judge whether the chip and Ask count."
+}

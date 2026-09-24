@@ -1,0 +1,16 @@
+{
+  "row": "plan65-WHERE",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:57:30-03:58:30-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "AI tab (the tab strip's 'Ollama' tab). 'Run AI on this Deck' is on and 'Start the AI with the Deck' is on (neither changed).",
+  "pressed": "From the tab strip: DOWN x6, UP x6 (runs/plan65-WHERE-walk.json); saved as checks/plan65-WHERE-walk.json with requireVisible (12/12). No A pressed in this section.",
+  "seen": {
+    "stops": ["Run AI on this Deck (toggle)", "Start the AI with the Deck (toggle)", "Update AI & models", "Browse models…", "Install options…", "Test connection"],
+    "walk": "each DOWN moved one stop, UP retraced them exactly back to the tab strip; 12 of 12 stops 100% visible",
+    "statusLines": "'Set up and answering questions.', 'Local Ollama setup  Installed: 2', 'Ollama runs on this Deck at 127.0.0.1:11434', 'Connected · Ollama v0.34.1 · 2 models'. No error text on the tab. Screenshot plan65-WHERE.png.",
+    "findLan": "There is no 'Find LAN' or search-for-a-PC button, because the AI runs on this Deck. The runbook's optional A press did not apply, and nothing was pressed.",
+    "log": "0 new plugin log lines, 0 errors"
+  },
+  "verdict": "PASS. Every control is reachable and visible going Down and Up, and the status lines are drawn with no error. The search-for-a-PC part did not apply: that button only exists when the AI is set to run on a PC."
+}

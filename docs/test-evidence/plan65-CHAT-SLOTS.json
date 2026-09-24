@@ -1,0 +1,15 @@
+{
+  "row": "plan65-CHAT-SLOTS",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T04:01-04:03-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Main tab. Saved-chats row shows the current chat 'what is a good way to practice parrying in action games' (dot 2 of 9: 1 'new chat' dot + 8 saved chats), '[+]' ghost on the left, 'wheatley fight' ghost on the right, and 'LB' / 'RB' bumper pills at the two ends of the row.",
+  "pressed": "LB x2 (Settings to Main), DOWN to the saved-chats row (ring 100% visible on it), RIGHT, RIGHT. No A, no LB/RB on the row.",
+  "seen": {
+    "afterRight1": "title unchanged, active dot still 2, ring still on the row, same tab",
+    "afterRight2": "same: no change",
+    "rowHint": "the row's own end labels are LB and RB pills (class bonsai-chat-slot-bumper-pill), which suggests the shoulder buttons switch chats on this row, not the D-pad",
+    "sideCheck_readOnly": "~/homebrew/settings/bonsAI/chat_slots: the current chat's file 351b2838... and index.json were rewritten at 03:44:03, right after tonight's Hades answer; the file contains 'Chaos boon' 3 times; index turn_count 4. 8 chat files, so no chat was created or lost."
+  },
+  "verdict": "UNCLEAR. The runbook's route, moving to another saved chat with the D-pad, did nothing in 2 tries. The row labels itself with LB/RB, which the runbook did not predict, so I did not try another route, and no other chat was opened or loaded. What is known: saving to a chat works on this build (tonight's question was written to disk at 03:44:03)."
+}

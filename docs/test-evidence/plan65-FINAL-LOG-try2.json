@@ -1,0 +1,18 @@
+{
+  "row": "plan65-FINAL-LOG (try 2, fix re-check)",
+  "build": "b56de863ba548d00fa820da8eb6702aa91f9ff01",
+  "deckTime": "2026-09-24T04:07:33-04:08:26-04:00",
+  "screen": "Deck built-in panel (QAM 854x454 CSS px, 1280x800 physical)",
+  "setup": "Start time noted on the Deck: 2026-09-24 04:07:33 local (08:07:33 UTC). Settings (read only): desktop_app_log_level 'verbose', capabilities.filesystem_write true. Desktop activity log ~/Desktop/bonsAI_logs/bonsai-app-2026-09-24.log had 13331 lines before the presses.",
+  "pressed": "deck_openPlugin (1st try failed to open the Quick Access menu, as expected after a deploy; 2nd try opened bonsAI on Main). Then RB, RB (Settings), LB, LB (Main), RB, RB (Settings again): runs/plan65-FINAL-LOG-try2-tabs.json. The ring landed on the first control of each tab: 'Adjust UI automatically' on Settings, 'Retry same prompt' on Main. The tab strip read 'Settings tab' at the end.",
+  "seen": {
+    "loaderJournalSince0407_33": "0 lines with 'append_app_log ... failed'; 0 Traceback; 0 bonsAI error or warning lines",
+    "pluginLog": "~/homebrew/logs/bonsAI/2026-09-24 04.07.20.log: 1 line, '[INFO]: bonsAI plugin loaded!'",
+    "activityLog": {
+      "newLinesForTabOpens": ["2026-09-24T08:08:10Z [verbose] ui.tab opened settings tab", "2026-09-24T08:08:17Z [verbose] ui.tab opened settings tab"],
+      "beforeFix": "No ui.tab line exists between 03:39:12Z (yesterday's build) and 08:08:10Z, although Settings was opened at 07:58:47Z on build cabda5dd; that open is the one that failed in plan65-FINAL-LOG.json.",
+      "other": "Opening the Ollama tab also logged 3 connection tests (reachable=true, Ollama 0.34.1, 2 models). File grew 13331 to 13339 lines. Only Settings opens are written as ui.tab lines (Main and Ollama opens do not appear, here or in older lines)."
+    }
+  },
+  "verdict": "PASS. The fix works on the Deck: no append_app_log failure and no Traceback, and both Settings opens now reach the Desktop activity log."
+}

@@ -1,0 +1,19 @@
+{
+  "row": "plan65-DEPLOY",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a (branch experimental)",
+  "deckTime": "2026-09-24T03:34:08-04:00",
+  "screen": "Deck built-in panel: QAM window 854x454 CSS px, screen 853x533 at devicePixelRatio 1.5 (1280x800 physical)",
+  "setup": "Keep-awake lock renewed at 03:33:43 local for 240 min, expiresAt 2026-09-24T11:33:43.844Z (07:33 local). deck_status: deckReachable true, bridgePortOpen true (COM7), ollamaReachable true, automationArmed true.",
+  "pressed": "nothing; deck_deploy mode auto",
+  "seen": {
+    "deployResult": {
+      "mode": "remote",
+      "target": "~/homebrew/plugins/bonsAI",
+      "copied": ["dist", "main.py", "plugin.json", "package.json", "assets", "py_modules", "defaults", "bin"],
+      "loader": {"ready": true, "loader": "active", "waitedMs": 278, "polls": 1}
+    },
+    "bundleMatch": "local dist/index.js and Deck copy both sha256 f0da5bf774657471adfa4fb8633318ab7afab8ca0c71d4b91940adec4023a924, 2500839 bytes, written 03:34:08",
+    "pluginReloaded": "journal: 03:34:15 old copy unloaded; 03:34:20 'Loaded bonsAI (v0.5.0)', 'bonsAI plugin loaded!'"
+  },
+  "verdict": "PASS"
+}

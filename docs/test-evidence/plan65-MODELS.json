@@ -1,0 +1,25 @@
+{
+  "row": "plan65-MODELS",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:52:30-03:57-04:00",
+  "screen": "Deck built-in panel. QAM 854x454 CSS px; the models window opens in Steam's full-screen layer (Big Picture window 854x534 CSS px); screenshots 1280x800.",
+  "setup": "AI tab (the tab strip calls it 'Ollama'). Ollama on the Deck, 2 models installed (gemma4:e2b-it-qat, nomic-embed-text:latest). Filters in the window: '2 on' (Also try open-weight models, Essentials only).",
+  "pressed": [
+    "RB from Main to the Ollama tab; DOWN x13 to 'Manage AI models'; A",
+    "window opened with the Filters panel already open, ring on 'Open source only (recommended)'; no A on it; DOWN x10 (runs/plan65-MODELS-filters-down.json) to 'Close filters'; A",
+    "DOWN x6 (runs/plan65-MODELS-list-down.json) to Done",
+    "UP x5 to the Filters button; A (panel opened, ring stayed on Filters); A (panel closed)",
+    "DOWN x5 to Done; saved checks/plan65-MODELS-list-walk.json (10/10); RIGHT to Cancel; A",
+    "UP x9 to 'Browse models…'; A (the same 'AI models' window, filters closed, ring on 'Advanced ›'); DOWN x8 (runs/plan65-MODELS-browse-down.json); RIGHT to Cancel; A"
+  ],
+  "seen": {
+    "window": "One window titled 'AI models' serves both buttons ('Manage AI models' and 'Browse models…'). It has no separate Browse button. It shows 'Installed 2', 'Queue 0', 'Live catalog · Live sizes'.",
+    "catalogLoads": "Yes. List rows: gemma4:e2b-it-qat (installed, 4.0 GB), qwen3.5:4b (3.2 GB), qwen2.5vl:3b (3.0 GB), plus 'Other installed' nomic-embed-text:latest. On the second opening the header first read 'Offline sizes' (gemma 4.3 GB) and switched to 'Live sizes' within 2 s.",
+    "downToDone": "last model row (nomic-embed-text) > DOWN > Done, both times. Done x123-413 and Cancel x441-731, y 402-442: 100% visible. DOWN on Done stays on Done.",
+    "filtersPanel": "9 rows reachable one per press, all 100% visible ('Any installed model' is disabled and skipped); DOWN from 'Close filters' stays there (Done is not reachable while the panel is open). Opening and closing Filters left it at '2 on'.",
+    "firstRowHalfHidden": "On the first opening, the sticky column header (PULL MODEL SIZE…, y 201-226) covered the top of the gemma4 row (y 211-246); its selector (y 216-240) was 67% visible, 3 times. Screenshot plan65-MODELS-header-over-first-row.png. On the second opening the same row was 100% visible.",
+    "cancel": "Cancel closed the window both times; the ring came back inside bonsAI on the button that opened it ('Manage AI models', then 'Browse models…'), not on Steam's side rail.",
+    "nothingChanged": "no A on any model row or Remove; Ollama still lists nomic-embed-text and gemma4; plugin log 0 new lines, loader journal 0 bonsAI errors"
+  },
+  "verdict": "PASS on what the runbook asks: the list loads, Down from the last model reaches Done, Done and Cancel are visible, Filters opens and closes, and Cancel puts the highlight back inside the plugin. Notes for the owner: 'Manage AI models' opens the window with the licence filters already open and the ring on 'Open source only', so one A there would change a setting. The runbook's separate 'Browse' step does not exist; both buttons open the same window. On the first opening, the column header half-covered the first model row."
+}

@@ -1,0 +1,13 @@
+{
+  "row": "plan65-DEPLOY (try 2, fix re-check)",
+  "build": "b56de863ba548d00fa820da8eb6702aa91f9ff01 (branch experimental)",
+  "deckTime": "2026-09-24T04:07:22-04:00",
+  "screen": "Deck built-in panel (QAM 854x454 CSS px, 1280x800 physical)",
+  "setup": "Keep-awake lock still held (expires 07:33 local). Checkout confirmed at b56de863; media_desktop_rpc.py line 158 now reads 'type(self)._desktop_app_log_level_allows(...)'.",
+  "pressed": "nothing; deck_deploy mode auto",
+  "seen": {
+    "deployResult": {"mode": "remote", "loader": {"ready": true, "loader": "active", "waitedMs": 281, "polls": 1}},
+    "onDeck": "~/homebrew/plugins/bonsAI/py_modules/backend/services/media_desktop_rpc.py:158 has the fixed call; journal 04:07:20 'Loaded bonsAI (v0.5.0)', 'bonsAI plugin loaded!'; new plugin log '2026-09-24 04.07.20.log'"
+  },
+  "verdict": "PASS"
+}

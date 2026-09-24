@@ -1,0 +1,15 @@
+{
+  "row": "plan65-VOICE",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:50:50-03:51:50-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Main tab. Voice model installed beforehand (voice_stt_model 'tiny.en', ~/homebrew/settings/bonsAI/voice_models/ggml-tiny.en.bin present), so no download could start. Room silent (nobody at the Deck).",
+  "pressed": "walk DOWN to Ask, UP to 'Attach screenshot to Ask', RIGHT x2 to 'Voice input'; A; about 25 s later A again",
+  "seen": {
+    "afterFirstA": "mic button gained class bonsai-voice-recording-active, label 'Stop voice input'. On the Deck: whisper-server (tiny.en) and pw-record on the Internal Mic source running; PipeWire showed 1 microphone stream (1ch 16000 Hz). Screenshot plan65-VOICE-listening.png.",
+    "afterSecondA": "label back to 'Voice input', recording class gone; 0 pw-record / whisper processes, 0 microphone streams; question box empty (nothing was said).",
+    "log": "0 new plugin log lines; 0 Traceback; loader journal has no voice or bonsAI errors",
+    "sideNote": "the mic button's box is x 327-347 against the panel's right edge at 348; its focus ring (2 px outline + 2 px shadow, shifted right 2 px) runs past the edge and is cut off on the right in the screenshot"
+  },
+  "verdict": "PASS. The microphone started listening and stopped when asked, with no error toast and no Traceback."
+}

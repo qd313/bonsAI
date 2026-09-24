@@ -1,0 +1,15 @@
+{
+  "row": "plan65-CHIPS",
+  "build": "cabda5dd3e13af8fbbb9c680dac9665b9a589d6a",
+  "deckTime": "2026-09-24T03:40-03:41-04:00",
+  "screen": "Deck built-in panel: QAM 854x454 CSS px (1280x800 physical)",
+  "setup": "Main tab, saved parrying chat. Settings (read only, not changed): preset_single_chip = true, preset_chip_animation = 'decode', dev_frozen_test_chips = 3 questions. The chip row holds 1 chip: 'TEST how do i beat the gonarch in black mesa', box x 48-348, y 290-320.",
+  "pressed": "walk DOWN to the chip; RIGHT x6 (runs/plan65-CHIPS-right.json); LEFT x3 (runs/plan65-CHIPS-left.json); UP, DOWN, DOWN, UP (runs/plan65-CHIPS-updown.json); saved as checks/plan65-CHIPS-updown.json (6/6).",
+  "seen": {
+    "leftRight": "The ring stayed on the one chip for all 9 presses, chip text unchanged, never left the plugin. With one chip there is no second chip to move to, so 'each press moves one chip' could not be tested.",
+    "upFromChip": "lands on 'Show details' (the reply's lowest stop), 100% visible",
+    "downFromChip": "lands on the question box, 100% visible",
+    "screenshots": "plan65-CHIPS-shot1.png (03:41:24) and plan65-CHIPS-shot2.png (03:41:27): chip drawn, words readable, both files identical (sha256 e6d8debb...8550), so it holds still"
+  },
+  "verdict": "PASS for Up, Down and the screenshots. Left/Right between chips: COULD NOT RUN. The 'one chip at a time' setting is on, and turning it off is a settings change this runbook forbids. The single chip holds the ring (no jump out)."
+}

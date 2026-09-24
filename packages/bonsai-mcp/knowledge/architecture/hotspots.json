@@ -21,13 +21,13 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1681,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 1670,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1670,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1620,
       "role": ""
     },
     {

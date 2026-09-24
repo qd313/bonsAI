@@ -126,6 +126,7 @@ import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
 import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
 import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelection";
+import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -800,78 +801,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
     [pinBusyTag]
   );
 
-  const confirmDelete = useCallback(
-    (tag: string, sizeGb: number) => {
-      if (activeRoutingTag && activeRoutingTag === tag) {
-        toaster.toast({
-          title: "Model in use",
-          body: "Switch Ask mode or run a different model before removing this one.",
-          duration: 5000,
-        });
-        return;
-      }
-      onBeforeNestedDeckyModal?.();
-      const handle = showModal(
-        <ConfirmModal
-          strTitle={`Remove ${tag} from the Deck?`}
-          strDescription={
-            <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
-              This will free about {formatSizeGb(sizeGb)} by running <code>ollama rm {tag}</code>. Other models that
-              depend on this tag will fall back to the next entry in the Ask-mode chain.
-            </div>
-          }
-          strOKButtonText="Remove model"
-          strCancelButtonText="Cancel"
-          onOK={() => {
-            completeNestedModalClose(() => handle.Close());
-            void (async () => {
-              setDeleteBusyTag(tag);
-              try {
-                const res = await callDeckyWithTimeout<[string], { ok?: boolean; error?: string; removed?: string }>(
-                  "delete_ollama_model",
-                  [tag],
-                  DECKY_RPC_TIMEOUT_MS
-                );
-                if (res.ok) {
-                  toaster.toast({ title: "Model removed", body: tag, duration: 4000 });
-                  setSelectedTags((prev) => {
-                    const next = new Set(prev);
-                    next.delete(tag);
-                    return next;
-                  });
-                  await refreshInstalledAndMeta(false);
-                } else if (res.error === "in_use") {
-                  toaster.toast({
-                    title: "Model in use",
-                    body: "Switch Ask mode first to remove this model.",
-                    duration: 5000,
-                  });
-                } else if (res.error === "busy") {
-                  toaster.toast({
-                    title: "Pull in progress",
-                    body: "Wait for the current pull to finish before deleting.",
-                    duration: 5000,
-                  });
-                } else {
-                  toaster.toast({
-                    title: "Delete failed",
-                    body: res.error || "Unknown error",
-                    duration: 5000,
-                  });
-                }
-              } catch (e) {
-                toaster.toast({ title: "Delete failed", body: formatDeckyRpcError(e), duration: 5000 });
-              } finally {
-                setDeleteBusyTag(null);
-              }
-            })();
-          }}
-          onCancel={() => completeNestedModalClose(() => handle.Close())}
-        />
-      );
-    },
-    [activeRoutingTag, refreshInstalledAndMeta, completeNestedModalClose, onBeforeNestedDeckyModal]
-  );
+  // Lifted into usePullModelDeleteConfirm. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { confirmDelete } = usePullModelDeleteConfirm({
+    activeRoutingTag,
+    onBeforeNestedDeckyModal,
+    completeNestedModalClose,
+    refreshInstalledAndMeta,
+    setSelectedTags,
+    setDeleteBusyTag,
+  });
 
   const onPullSelected = useCallback(async () => {
     if (selectedTags.size === 0) return;

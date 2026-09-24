@@ -119,6 +119,7 @@ import { usePullModelCustomTagPull } from "../hooks/usePullModelCustomTagPull";
 import { usePullModelTableData } from "../hooks/usePullModelTableData";
 import { usePullModelCatalogRefresh } from "../hooks/usePullModelCatalogRefresh";
 import { usePullModelOpenBookkeeping } from "../hooks/usePullModelOpenBookkeeping";
+import { usePullModelEmbeddedFooterState } from "../hooks/usePullModelEmbeddedFooterState";
 import { isPlausibleOllamaPullTag } from "../utils/mergePullModelCatalog";
 import {
   computeUpdatedPullRecord,
@@ -826,18 +827,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
       ? `Pull selected (${selectedTags.size}) · ${formatSizeGb(selectedTotalGb)}`
       : "Pull selected";
 
-  useEffect(() => {
-    if (!embedded || !onFooterStateChange) return;
-    onFooterStateChange({
-      okText: strOKButtonText,
-      onOk: () => {
-        if (selectedTags.size === 0 || pullBusy) return;
-        void onPullSelected();
-      },
-      okDisabled: selectedTags.size === 0 || pullBusy,
-      hasQueuedPull: selectedTags.size > 0,
-    });
-  }, [embedded, onFooterStateChange, strOKButtonText, selectedTags.size, pullBusy, onPullSelected]);
+  // Lifted into usePullModelEmbeddedFooterState. It must stay at exactly this point in the
+  // hook list: React matches hooks by the order they run, not by name.
+  usePullModelEmbeddedFooterState({
+    embedded,
+    onFooterStateChange,
+    strOKButtonText,
+    selectedTags,
+    pullBusy,
+    onPullSelected,
+  });
 
   /**
    * "Filters · N on" summary (plan 62, § 3d) — the Licence pick always counts (it is always one

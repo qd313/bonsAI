@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 470,
-  "edgeCount": 1248,
+  "fileCount": 471,
+  "edgeCount": 1250,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -950,6 +950,7 @@
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelEmbeddedFooterState.ts",
         "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -979,6 +980,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",
+        "src/hooks/usePullModelEmbeddedFooterState.ts",
         "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2683,6 +2685,14 @@
       "imports": [
         "src/data/pullModelCatalog.ts",
         "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelEmbeddedFooterState.ts": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"

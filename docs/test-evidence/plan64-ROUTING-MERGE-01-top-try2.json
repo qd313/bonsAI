@@ -1,0 +1,42 @@
+{
+ "row": "H1 - ROUTING-MERGE-01 top half, redo: the big model goes to the top of a SAVED try order (also checks fix 2e6f6df)",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 22:59-23:21:10 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; AI models and try-order screens in Big Picture 854x534; screenshot 1280x800)",
+ "setup": "Installed: gemma4:e2b-it-qat, nomic-embed-text:latest. text_model_routing_order [] and model_allow_high_vram_fallbacks false at the start.",
+ "step1_order_before": {
+  "pressed": "Ollama tab -> 'Set text try order...' A. The list showed gemma4:e2b-it-qat, then nomic-embed-text:latest (greyed 'Tier blocked', 'Size unknown'). Done at 22:59 -> key still []. Reopened, nomic Up then Down (list back to gemma4, nomic), Done at 23:00 -> key still [].",
+  "observation": "Done with no change does not save: the screen will not save an order that equals the one it works out by itself (the session says this is by design).",
+  "what_was_done": "The session wrote ['gemma4:e2b-it-qat'] into the file (session's edit, not the driver's). After H5 the plugin was reloaded and the try-order screen, reopened at 23:02, listed gemma4:e2b-it-qat, nomic-embed-text:latest. ORDER-BEFORE = ['gemma4:e2b-it-qat'] (key read 23:01 and 23:03)."
+ },
+ "step2_draft": "Manage AI models... (it opened with its Filters panel open; one B closed it, filters unchanged) -> Advanced -> 'Allow high-VRAM models in routing' A -> switch aria-checked true on screen; key read 23:03:05 still false (draft only). Done not pressed.",
+ "step3_fix_2e6f6df": {
+  "pressed": "'<- Browse & pull' A (Filters panel open again, B) -> Right to 'Type a model name by hand' A -> deck_set_input.py --text 'gemma3:27b' VERIFIED -> ring on 'Pull custom model tag' -> A (23:03:45). Toast 'Pull started / gemma3:27b - watch progress in Settings.'; the screen closed itself.",
+  "high_vram_key_at_once": "true at 23:03:46 and again 23:03:48",
+  "result": "PASS - closing the screen with the typed Pull kept the switch change (fix 2e6f6df works)."
+ },
+ "download": {
+  "first_pull": "started 23:03:45, about 41 MB/s. It STOPPED when the plugin was reloaded at 23:04:58 (reload asked for H3's size value): the plugin log's last progress line was 23:04:56 at 16% (2.7 GB of 17 GB); ollama logged the /api/pull request ending at 23:04:57; no pull process afterwards; the partial file stayed on disk.",
+  "finding": "A plugin reload stops a model download that the plugin started.",
+  "second_pull": "Same route again at 23:11:54 (after H3 and H2). The first progress line read '16% 2.7 GB/17 GB', so it RESUMED from the partial file rather than starting over. 'success' at 23:18:34; ollama list showed gemma3:27b 17 GB at 23:18:37."
+ },
+ "step5_order_after_pull": {
+  "key": "23:18:37 and 23:18:49 still ['gemma4:e2b-it-qat']; by 23:19:29 (after the panel was reopened on the Ollama tab) it read ['gemma3:27b', 'gemma4:e2b-it-qat'] - gemma3:27b first, ORDER-BEFORE unchanged after it.",
+  "screen_23:19:28": "Set text try order... listed: gemma4:e2b-it-qat; gemma3:27b ('Tier blocked', greyed); nomic-embed-text:latest ('Tier blocked', 'Size unknown'). The screen does NOT show gemma3:27b first. Closed with B (Cancel); key unchanged by that.",
+  "screenshot": "plan64-ROUTING-MERGE-01-top-try2-order-screen.png"
+ },
+ "step6_restore": {
+  "remove": "Manage AI models... (Filters panel open again, B) -> 'OTHER INSTALLED (NOT IN CURATED CATALOG)': gemma3:27b row with a filled star 'gemma3:27b is used for Ask' and X -> Right from the star to 'Remove from Deck' (same row) -> A -> box 'Remove gemma3:27b from the Deck? This will free about < 0.1 GB by running ollama rm gemma3:27b...' -> 'Remove model' A (about 23:20:20). ollama list at 23:20:27: nomic-embed-text, gemma4:e2b-it-qat only.",
+  "order_after_remove": "['gemma3:27b', 'gemma4:e2b-it-qat'] - gemma3:27b was NOT taken out of the order (same as H7's qwen2.5:1.5b).",
+  "switch_off": "Advanced -> switch A (aria-checked false) -> Done (23:21:00). model_allow_high_vram_fallbacks false at 23:21:05.",
+  "order_after_switch_off": "['gemma4:e2b-it-qat', 'gemma3:27b'] - the Done moved gemma3:27b to the end, still not removed.",
+  "step7": "Told the session at 23:21 to put the order back to []."
+ },
+ "observations": [
+  "The removal box said it would free '< 0.1 GB' for a 17 GB model (the uncatalogued row shows size '-').",
+  "The AI models header read 'Installed 3 - 4.3 GB' with the 17 GB model installed.",
+  "The AI models screen opened with its Filters panel open every time, ring on 'Open source only (recommended)'.",
+  "gemma3:27b showed a filled star ('is used for Ask') in the models list while the try-order screen listed it second and 'Tier blocked'."
+ ],
+ "verdict": "UNCLEAR for step 5, for the owner: the saved key passes exactly (gemma3:27b first, then ['gemma4:e2b-it-qat'] unchanged), but the try-order screen shows gemma4 first and gemma3:27b second, greyed 'Tier blocked'. Fix 2e6f6df (step 3): PASS. Restore: model removed and switch off, but the removed model stays in the saved order (bug, as in H7); order reset handed to the session."
+}

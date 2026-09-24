@@ -1,0 +1,14 @@
+{
+ "row": "H4 - the ring stays on its section when an answer finishes (fix 64b34a8); STREAM-WALK-REC-01 try 4",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 22:44-22:45 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, no game running. Question put in with the send-question script: 'give me ten detailed tips for keeping warm and fed through a long winter in a survival game' (VERIFIED, read back whole). Ring walked Down to the Ask button (ready, visible 100%). Focus recorder and pane recorder (150 s) armed at about 22:44:55.",
+ "pressed": [
+  "A on Ask - REFUSED by Claude Code's own automatic permission check ('Interfere With Workloads') before it reached the Deck. No press was sent."
+ ],
+ "seen": {
+  "after_refusal": "Nothing was sent; the question stays in the box, the ring stays on Ask. The recorders run out on their own after 150 s."
+ },
+ "verdict": "COULD NOT RUN. The Ask press was refused by Claude Code's permission check; per the task's rule the driver did not retry or route around it."
+}

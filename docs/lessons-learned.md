@@ -214,6 +214,37 @@ model-registry check that could not tell "no such model" apart from "no internet
 ends of the code is not the same as running it. Before closing a bug on a code reading alone, run it
 on the device first.
 
+**Closing a Decky popup rebuilds the tab behind it.** Anything a component was tracking in its own
+memory, such as a knowledge-base download still in progress, is thrown away with the old copy and
+never restarted — the new tab reads status once, before the download finishes, and never again.
+Found 2026-09-23 after a first fix (checking settings a different way) still failed on the Deck; the
+real cause was the picker's close rebuilding the whole tab. Fixed in `ba0bb0d`. Evidence
+`docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try3.json`.
+
+**A component that changes what kind of element it returns rebuilds everything inside it, and
+Steam's own highlight goes with it.** An answer bubble drew itself bare while still being written,
+then got wrapped in another element once it finished — so at the exact moment an answer finished,
+the bubble changed shape underneath the D-pad ring and was rebuilt from scratch, taking the ring with
+it. A first fix that only changed how sections were tracked passed its own tests and still failed on
+the Deck, because the real cause was one layer up: the wrapping itself, not what was inside it. Fixed
+in `64b34a8`, keeping the same element shape throughout. Evidence
+`docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json`, `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
+
+**Steam's own scroll area keeps 116 pixels clear at its own top, and a plain "scroll to the top"
+request honours that reserved space instead of ignoring it.** A fix that asked the page to scroll a
+block's header to the very top of the pane kept landing the header 116 pixels down, looking like the
+request had failed, when it was actually succeeding at the wrong target. Asking the pane directly for
+the header's own top, ignoring the reserved space, fixed it. Fixed in `d305863`. Evidence
+`docs/test-evidence/plan64-NOTES-OPEN-SCROLL-try2-run2.json`.
+
+**A warm-up must load the model with the exact same settings the real question will ask for, or the
+model loads a second time anyway.** Warming a model at boot saved no time at all — cold and warm
+answers both took about 9.8 seconds to first words — because the warm-up asked the server for its
+default memory room (4,096 tokens) while the first real question always asks for more (16,384), so
+the server reloaded the model the moment the question arrived. Fixed by having the warm-up ask for
+the same room Ask will ask for. Fixed in `a224fb6`. Evidence
+`docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`, `docs/test-evidence/plan64-PRELOAD-01-try4.json`.
+
 ---
 
 ## 4. Briefing helpers

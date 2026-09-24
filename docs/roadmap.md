@@ -125,6 +125,30 @@ starts work outside this.
   found on the Deck 2026-09-23.** The button takes the press, but nothing after it takes the ring: the next
   press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
   not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
+- ★ `[ollama]` **Remove greys out once a model has answered a question, until the plugin reloads** —
+  **OPEN, found on the Deck 2026-09-23 (flow H).** After a model has answered a question, its row's Remove
+  button reads "Switch Ask mode first to remove this model" and stays disabled; only a plugin reload clears
+  it. Evidence `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`.
+- ★ `[ollama]` **The AI models screen can open with Filters already showing, and the ring on a filter** —
+  **OPEN, found on the Deck 2026-09-23 (flow H).** Manage AI models… opened with its Filters panel already
+  open and the ring already on "Open source only (recommended)," with nothing pressed to open it. Evidence
+  `docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot
+  `plan64-PRELOAD-01-try3-filters-open.png`).
+- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **OPEN, found on the
+  Deck 2026-09-23 (flow H).** Removing a 17 GB model, the confirm box said it would free "< 0.1 GB," and
+  the list's own header read "Installed 3 · 4.3 GB" while that model was installed. Evidence
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+- ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
+  2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
+  from the same partial file rather than starting over, so nothing was lost, but a running download does
+  not survive a reload. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+- ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** —
+  **OPEN, found on the Deck 2026-09-23 (flow H).** The Ollama tab's first connection check runs before
+  settings finish loading and always fails and logs an error, even though Ollama then answers questions
+  normally right after. Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
+- ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **OPEN, found on the
+  Deck 2026-09-23 (flow H, VAC-03).** The reply's ban report is written as plain lines of pipes and dashes
+  rather than drawn as an actual table. Evidence `docs/test-evidence/plan64-VAC-03-06.json`.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -439,61 +463,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
-- ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **VERIFY, fixed in
-  `97cde97`.** Walking Down with the ring already inside an answer as it finishes used to vanish the ring
-  completely and jump the view to the very end of the reply — the live answer was swapped for its saved
-  copy, and the section holding the ring was destroyed with it. The saved answer now gets the ring on the
-  matching section instead. A different, already-fixed case (`e241c5c`) kept the ring's own control and
-  brought it back into view; this fix does the same job for a ring that had vanished outright. Evidence
-  `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`). **Still FAILED on the Deck 2026-09-23
-  (try 3), with the fix above already on the build:** the ring vanished the same way, nothing had it once
-  the answer finished, and the view jumped to the end again. **Real cause found and fixed the same night,
-  `64b34a8`:** the answer bubble drew itself bare while still being written, then got wrapped with its Copy
-  button once it finished — so at the exact moment it finished, the bubble changed shape underneath the
-  ring and was rebuilt from scratch, and its sections were also named by what kind of piece they were
-  rather than where they sat, so even a bubble that survived would have lost the ring anyway. Both are
-  fixed: the bubble keeps the same shape throughout, and its sections are named by position instead. Owed:
-  the same walk on the Deck, now scheduled in flow H (**H4**). Evidence
-  `docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json` (+ screenshots).
-- ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
-  for about a minute** — **VERIFY, found and fixed the same night, `a34be74`.** The download marked itself
-  finished before the new SD-card path was saved to settings, and the screen checks whether the library is
-  installed only once, right when the download's own state turns to done — so that one check found nothing
-  saved yet. Measured on the Deck: the section stayed on "Not installed" for about 60 seconds until the
-  Ollama tab was left and reopened. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`. **Still
-  FAILED on the Deck 2026-09-23 (try 2), with the fix above already on the build:** the section kept
-  reading "Not installed" with a Download button the whole download, watched without leaving the tab.
-  **Real cause found and fixed the same night, `ba0bb0d`:** closing the storage-choice picker rebuilds the
-  whole tab underneath it, and the piece of state that remembers a download is running, plus the check that
-  polls for it, were both thrown away and never restarted — so the new tab read the library's status once,
-  before install finished, and never again. A download that started is now remembered across the rebuild.
-  Owed: remove the library, download it again, and watch the section read Installed within a few seconds
-  without leaving the tab, scheduled in flow H (**H5**). Evidence
-  `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`.
-- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off**
-  — **VERIFY, found and fixed the same night, `b26f536`.** Essentials only is meant to narrow the download
-  list to three starter models, but it also hid any other installed model — found while warming up a model
-  pulled for the PRELOAD-01 timing check (row above): the header's own count read "Installed 3" but the
-  model had no row, no star for Ask and no Remove, without opening Filters by hand. Installed models now
-  keep their row regardless of the switch. Owed: open AI models with a non-essential model installed and
-  confirm its row, star and Remove show without Filters, scheduled with PRELOAD-01 in flow H (**H7**).
-  Evidence `docs/test-evidence/plan64-PRELOAD-01-try2-no-row.png`.
-- ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
-  Advanced switch change** — **VERIFY, found and fixed the same night, `2e6f6df`.** The screen holds the
-  licence and Advanced switches as a draft until Done is pressed, but a typed-name pull closes the screen by
-  itself, and that close skipped saving the draft. Measured on the Deck: turning on "Allow high-VRAM models
-  in routing," then pulling a typed name, left the switch reading off again on reopening — the very pull the
-  switch was meant to cover would not have used it. Owed: turn the switch on, pull a typed name without
-  pressing Done, and confirm the switch still reads on when reopened. Evidence
-  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
-- ★★ `[ollama]` **After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install
-  Ollama while Ollama was answering questions the whole time** — **VERIFY, found and fixed the same night,
-  `017c4f8`.** The tab's one automatic connection check can run before settings have loaded, while "Ollama
-  on this Deck" still reads its default off, so it checked the saved network address instead — here the
-  placeholder "192.168.1." — and failed. The check now re-runs once settings say Ollama runs on this Deck,
-  and only the newest check may set what the tab shows. Owed: with the Ollama tab open, reload the plugin,
-  and confirm it reads "Update AI & models," not "Install Ollama." Evidence: plugin log line 2026-09-23
-  21:44:45, flow E of plan 64.
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
@@ -565,27 +534,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
-- ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one
-  case left.** A pulled model lands at the bottom of the text list and shows in the vision list if it can
-  read pictures. Still owed: with high-VRAM fallback on, a large pulled model should go to the top instead.
-  Row **ROUTING-MERGE-01**. **Tried on the Deck 2026-09-19:** the bottom half passed again; the top half
-  still needs a person at the Deck to type a large model's name by hand and remove it again afterwards.
-  Per D116 #3, that top half runs as built — a large model downloaded with the high-memory switch goes to
-  the top of the try order — and plan 64 runs it as written. **Tried again 2026-09-23 (flow E), still could
-  not show the top half:** gemma3:27b was pulled with the high-VRAM switch on, but the saved text try order
-  was an empty list the whole time, and the plugin deliberately leaves an empty saved order alone rather
-  than writing one — so nothing could move "to the top" of a list that was never written. A redo is planned
-  in flow H with an order saved first. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
-  [Detail](roadmap-details.md#pulled-models-join-the-model-try-order).
-
-- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete. **VAC-02**
-  passed on the Deck 2026-09-16 and the **SMOKE-F** check passed 2026-09-17. Left: **VAC-03 to 06**, which need
-  the maintainer's own Steam Web API key typed into the plugin, so they stay on the maintainer's own list. **The
-  maintainer said yes on 2026-09-23** to running these with the Steam key already stored on the PC; the run was
-  stopped before the key was typed in, because Claude Code's own automatic permission check refused the edit
-  needed to set it up. The key was never put on the Deck. **The maintainer has since allowed the session to
-  make settings-file edits on the Deck itself, 2026-09-23**, so this block no longer applies; the key still has
-  not been typed in. Still waiting.
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
   re-confirmed on the Deck 2026-09-17:** no lock banner, all four Permissions switches on and reachable.
@@ -603,22 +551,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the strip is taller so the chat row's dots no longer show under it. **Deck run 2026-09-18:** rows 01, 02,
   04, 05 and 06 pass; 03 waits on the maintainer's own look; 07 failed and is filed as its own bug above.
   The free-play sweep's streaming half is still owed. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named).
-- ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
-  A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
-  device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it
-  spent memory on a model no question would touch. It now uses Ask's own resolver, and warms nothing when Ask's model is over the
-  three-billion cap — which is what happens on this Deck, confirmed. **Still owed:** the timing comparison (**PRELOAD-01**), which
-  needs a Deck whose Ask model is under the cap — per D116 #5, the check may switch Ask to a small model
-  for the timing, then switch it back — and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
-  model survives the Deck sleeping. **Could not run 2026-09-23 (flow E):** the large model from the
-  ROUTING-MERGE-01 check above was still installed with the high-VRAM switch on, so no question could be
-  asked to warm anything up, and Steam's own highlight froze on the Ollama tab after the session's
-  usage-limit pause, the same freeze blocking the row above. Carried into flow G. **Could not run again
-  2026-09-23 (flow G):** a small model was pulled by typed name to stand in for one under the cap, but the
-  AI models screen's default view (Essentials only) shows no row for an installed model outside the three
-  essentials, so there was nothing to star for Ask and no way to remove it without opening Filters by hand.
-  **Found and fixed the same night, `b26f536`:** its own new entry below; Deck check scheduled with this
-  row in flow H (**H7**). Evidence `docs/test-evidence/plan64-PRELOAD-01-try2.json` (+ screenshot).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
@@ -833,21 +765,6 @@ ones from this month are D81 to D88.
   clean passes yet — the relevance floor and the follow-up check are each only half passed, so this entry
   stays open rather than moving to Done.
   [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
-- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **VERIFY, cause
-  found and fixed, `d305863`.** Most of its words used to stay behind the chip and the question box; the
-  header measured 33%, then 17%, visible once opened. Found while checking whether the chip ladder inside
-  the open block reaches by D-pad — that reply's block held three shared Deck tips and no ladder, so that
-  question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`),
-  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL.json` (+ `.png`). **Cause measured 2026-09-23 with a
-  scroll-write recorder:** the plugin asked, once, to scroll the header to the top of the pane — and
-  Steam's own scroll area keeps 116 pixels clear at its own top, which that request honours, so the header
-  was already exactly where it had been asked to go; the request was asking for the wrong place, not
-  failing. Fixed by asking the pane directly to put the header's own top at the pane's own top, ignoring
-  that reserved space, since nothing of ours is pinned there. Owed: reopen the block and confirm its header
-  sits at the pane's top, about 40% of a three-note block showing instead of 17%, in flow H (**H6**).
-  Evidence `docs/test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json` (+ screenshot). **Also observed:** after
-  the storage picker closes on the download above, the ring lands on the Ollama tab's own icon rather than
-  inside the pane — same cause, not fixed, an observation only.
 - ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, ran for the first time and passed,
   2026-09-22,** once the answer-lines lane added the missing log line — recorded as impossible every
   earlier time. Row **KB-TRANSPARENCY-01**, full run in [testing.md](testing.md). **All three attached
@@ -1000,4 +917,59 @@ line for line, nothing reworded, to keep this document under its size limit.
   had just changed** — **DONE, confirmed on the Deck 2026-09-23:** with a download saved to the SD card,
   a switch and Done on the AI models screen no longer wrote the old, deleted location back over it. [Full
   detail](archive/roadmap-bugs-fixed.md#pressing-done-on-a-popup-could-write-old-values-back-over-something-the-back-end-had-just-changed-including-a-knowledge-base-location).
+
+**Closed 2026-09-23 (plan 64, flow H, proven on the Deck):**
+
+- ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **DONE, confirmed on
+  the Deck 2026-09-23:** after an answer finishes, the ring now stays on the same section instead of
+  vanishing, and the view no longer jumps to the end. Two small notes for later: right at the finish the
+  section's own top few pixels sit under the tab bar, and the view briefly reads its old position for one
+  frame before settling. [Full
+  detail](archive/roadmap-bugs-fixed.md#the-ring-is-lost-when-an-answer-finishes-while-you-are-walking-it).
+- ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
+  for about a minute** — **DONE, confirmed on the Deck 2026-09-23:** the section now reads Installed within
+  half a second of the download finishing, without leaving the tab. Left over: when the storage picker
+  closes, the ring still jumps up to the Ollama tab's own icon instead of staying in the pane — the same
+  rebuild, not yet fixed. [Full
+  detail](archive/roadmap-bugs-fixed.md#after-downloading-the-knowledge-base-onto-the-sd-card-the-section-still-read-not-installed-for-about-a-minute).
+- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **DONE,
+  confirmed on the Deck 2026-09-23:** opening the block now brings its header right to the top of the pane,
+  showing about 40% of a three-note block instead of 17%. [Full
+  detail](archive/roadmap-bugs-fixed.md#opening-the-from-the-notes-block-does-not-scroll-it-into-view).
+- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off** —
+  **DONE, confirmed on the Deck 2026-09-23:** with a non-essential model installed, its row, star and
+  Remove now show on the AI models screen without opening Filters. [Full
+  detail](archive/roadmap-bugs-fixed.md#a-model-already-installed-on-the-deck-had-no-row-unless-essentials-only-was-turned-off).
+- ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
+  Advanced switch change** — **DONE, confirmed on the Deck 2026-09-23:** turning the high-VRAM switch on,
+  then pulling a typed name, now keeps the switch on when the screen is reopened. [Full
+  detail](archive/roadmap-bugs-fixed.md#pulling-a-typed-in-model-name-closed-the-ai-models-screen-and-threw-away-an-unsaved-advanced-switch-change).
+- ★ `[ollama]` **Pulled models join the model try order** — **DONE, confirmed on the Deck 2026-09-23:** a
+  pulled model joins the bottom of the saved order normally, and with the high-VRAM switch on and an order
+  already saved, a large pulled model now goes to the top of it, the rest kept behind it. One open question
+  for the maintainer: the try-order screen showed the big model last and greyed as licence-blocked, while
+  the saved order itself had it first — the two disagree and nobody has said which should win. [Full
+  detail](archive/roadmap-completed.md#pulled-models-join-the-model-try-order).
+- ★ `[ollama]` **Removing a model did not take it out of the saved try order** — **DONE, found, fixed and
+  confirmed on the Deck the same night, 2026-09-23:** removing a model through its row now drops it from
+  the saved order too, instead of leaving Ask's first choice pointing at a model that is gone. [Full
+  detail](archive/roadmap-bugs-fixed.md#removing-a-model-did-not-take-it-out-of-the-saved-try-order).
+- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **DONE, confirmed on the Deck
+  2026-09-23:** all four remaining checks passed with the maintainer's own Steam key — a real account
+  number, a profile link, and a vanity link that correctly asks for the number instead; with the permission
+  off, it says so and names the switch. The "nothing reached Valve" half is a weaker proof than it sounds —
+  the plugin log never names that request even when it is made, on or off. [Full
+  detail](archive/roadmap-completed.md#vac-check-bonsaivac-check-on-device-qa).
+- ★★ `[ollama]` **After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install
+  Ollama while Ollama was answering questions the whole time** — **DONE, confirmed on the Deck 2026-09-23:**
+  after a reload the tab reads Update AI & models, never Install Ollama, on every read. The plugin's own log
+  still writes one false connection-failed line right at start-up, before settings finish loading — filed
+  as its own small bug, above. [Full
+  detail](archive/roadmap-bugs-fixed.md#after-a-plugin-reload-the-ollama-tab-said-could-not-reach-ollama-and-offered-install-ollama-while-ollama-was-answering-questions-the-whole-time).
+- ★★★★ `[ollama]` **Speed-mode VRAM preload** — **DONE for the timing check, confirmed on the Deck
+  2026-09-23:** with the warm-up switch on, an Ask model under the size cap now loads ahead of time and
+  answers 2.3 seconds sooner (7.72s against a cold 10.05s), with no second load of it. Still owed and not
+  covered by this: the memory-pressure case and whether a warmed model survives the Deck sleeping
+  (`testing.md`'s PRELOAD-02 row, still open). [Full
+  detail](archive/roadmap-completed.md#speed-mode-vram-preload).
 

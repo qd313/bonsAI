@@ -1,0 +1,32 @@
+{
+ "row": "H7 - PRELOAD-01, the warm-up timing, with the small model's row (fix b26f536)",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 22:45:50-22:52:50 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; AI models screen in Big Picture 854x534; screenshot 1280x800)",
+ "setup": "Start: ollama list = qwen2.5:1.5b, nomic-embed-text:latest, gemma4:e2b-it-qat. text_model_routing_order [], vision_model_routing_order ['gemma4:e2b-it-qat'], dev_preload_ask_model false, model_allow_high_vram_fallbacks false. At this point Ask presses were being refused by Claude Code's permission check (22:45 and 22:46), so the timed questions could not be sent; everything else was run.",
+ "row_check_b26f536": "PASS. Manage AI models... opened with its Filters panel already open (ring on 'Open source only (recommended)', nothing pressed yet - screenshot plan64-PRELOAD-01-try3-filters-open.png). One B closed the panel without changing a filter (still '2 on: Also try open-weight models, Essentials only'). Default Essentials-only view then shows 'MORE MODELS: qwen2.5:1.5b New FOSS 0.9 GB Sep 24 Chat' with its star ('Use qwen2.5:1.5b for Ask') and its X ('Remove from Deck'). Screenshot plan64-PRELOAD-01-try3-row-top.png shows the top of the list.",
+ "pressed": [
+  "Ollama tab -> Manage AI models... (A) -> B once (closed the Filters panel that opened by itself)",
+  "Down x4 one at a time: Filters, gemma4 star, qwen3.5:4b select, qwen2.5vl:3b select, 'Use qwen2.5:1.5b for Ask' (read each)",
+  "A on the star (22:47:00) -> B to close the screen",
+  "Developer tab: 'Warm the Ask model at boot' read off (key false)",
+  "ssh ollama ps: gemma4:e2b-it-qat loaded -> ollama stop gemma4:e2b-it-qat -> ollama ps empty (22:47:31)",
+  "deck_reloadPlugin 22:47:40; ollama ps at 22:48:14 (32 s later): empty",
+  "Developer tab -> 'Warm the Ask model at boot' A -> key true (22:48:41); ollama ps empty",
+  "deck_reloadPlugin 22:48:50; ollama ps every 5 s",
+  "restore: 'Warm the Ask model at boot' A -> key false (22:50:00)",
+  "Ollama tab -> Manage AI models... -> (Filters panel open again, B once) -> qwen2.5:1.5b star -> Right once -> 'Remove from Deck' (same row) -> A -> box 'Remove qwen2.5:1.5b from the Deck?' -> 'Remove model' A (22:51:00) -> B to close"
+ ],
+ "seen": {
+  "star_toast": "'Now used for Ask / qwen2.5:1.5b' (notification toast); text_model_routing_order became ['qwen2.5:1.5b']",
+  "cold_reload": "nothing loaded 32 s after the reload with the switch off",
+  "warm_reload": "qwen2.5:1.5b loaded without any question: ollama ps showed it at 22:48:57, the first read, 5 s after the reload (1.2 GB, 100% GPU, context 4096, 'until 4 minutes from now'); ollama's journal: model loaded 22:48:55, POST /api/generate 200 in 2.5 s from 127.0.0.1",
+  "timed_questions": "not sent (Ask refused at the time); no times measured",
+  "after_remove": "ollama list = nomic-embed-text:latest, gemma4:e2b-it-qat. Screen header 'Installed 2 - 4.0 GB'.",
+  "order_after_remove": "text_model_routing_order still ['qwen2.5:1.5b'] after the model was removed through its row (read 22:51:05). Told the session; it reset the key to [] (read back [] at 22:52:44) and the plugin was reloaded. The session says the cleanup exists in the code but nothing calls it."
+ },
+ "left_behind": "dev_preload_ask_model false (as at start). text_model_routing_order [] (reset by the session). qwen2.5:1.5b removed. Only gemma4:e2b-it-qat and nomic-embed-text installed.",
+ "new_bug": "Removing a model through its row leaves it in the saved text try order (['qwen2.5:1.5b'] stayed after the model was gone).",
+ "observation": "The AI models screen opened with its Filters panel open both times, with the ring on the licence choice 'Open source only (recommended)': one A press there would change a filter.",
+ "verdict": "PARTLY RUN. Row check (fix b26f536): PASS. Star gives 'Now used for Ask': PASS. Warm-up load with no question after a reload with the switch on, and no load with it off: seen. Timing comparison (the row's main pass): COULD NOT RUN in this pass - the two timed questions were not sent because Ask presses were refused at the time. The model has since been removed, as the runbook's restore says."
+}

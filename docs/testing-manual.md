@@ -189,6 +189,16 @@ to stay put and got rebuilt from scratch; its sections were also tracked by what
 rather than where they sat. Both are fixed now. Owed: the same walk on the Deck, scheduled in flow H
 (**H4**). Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json` (+ screenshots).
 
+**Run 2026-09-23 (try 4), H4 in flow H, PASS.** With the ring walked onto the answer's first section while
+it was still being written, at the finish the ring stayed on that same section (now numbered 1 of 3), the
+view held the same scroll position (228 of 1647) for the next 20 seconds, and it did not jump to the end.
+Two small things for later, not a fail: right at the finish the section's own top few pixels sat under the
+tab bar (about two thirds of it visible), and the recorded scroll position read its old value for one
+single frame before settling. This row's vanishing-ring case, the one this recorded walk exists to check,
+is now closed. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json` (the first attempt
+this pass was refused by Claude Code's own permission check before any press reached the Deck,
+`docs/test-evidence/plan64-STREAM-WALK-REC-01-try4.json`).
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that

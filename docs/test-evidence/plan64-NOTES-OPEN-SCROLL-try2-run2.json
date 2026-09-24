@@ -1,0 +1,82 @@
+{
+ "row": "H6 - a notes block opens to the top (fix d305863); NOTES-OPEN-SCROLL try 2, second run (the first run's Ask press was refused, see plan64-NOTES-OPEN-SCROLL-try2.json)",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 22:56:35-22:58:10 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Main tab, 'wheatley fight', Strategy, knowledge base on, no game running. Question with the send-question script: 'how should i handle ravenholm in half life 2 when ammo is scarce' (VERIFIED). Asked for real, not a replay: plugin log POST 22:56:37, 'completed in 46.8s' at 22:57:23. The answer got a notes block 'Ravenholm (+2 more) · From the Half-Life wiki'.",
+ "pressed": [
+  "A on Ask",
+  "after the finish: Up x2 from the box (Test chip, then the notes block header, closed: aria-label '... From the Half-Life wiki, show'); header 100% visible at y 204-251",
+  "armed deck_scrollwrite_log.py, waited 1 s, A once on the header (22:57:37), no presses for 6 s",
+  "screenshot 22:57:47, read the recorder",
+  "A once more to close the block (label back to '..., show')"
+ ],
+ "seen": {
+  "before_press": "scrollTop 585 of max 599; pane top 88; dock top 289; block 204-251 (closed); header top 205",
+  "block_opened_2152ms": "block grew to 204-697 (493 tall), max 1045",
+  "scroll_write_2156ms": "one write: scrollTop 585 -> 698 by scrollElementTopToPaneTop (the plugin's own code), stack in the recorder",
+  "after_2164ms": "scrollTop 697; block 92-585; header top 93. hdrTop - paneTop = 93 - 88 = 5 px",
+  "other_writes": "none: the recorder has no other scroll write or scroll event in its window",
+  "block_above_dock": "block 92-585 against dock top 289: 197 of 493 px show above the dock = 40% (flow G: 17%)",
+  "screenshot_note": "the Test chip at the bottom shows scrambled letters in the screenshot: that is its 'decode' animation caught mid-change, not a fault"
+ },
+ "recorder": {
+  "armed": true,
+  "log": [
+   {
+    "top": 585,
+    "max": 599,
+    "paneTop": 88,
+    "dockTop": 289,
+    "blkTop": 204,
+    "blkBottom": 251,
+    "blkOpen": "false",
+    "hdrTop": 205,
+    "ring": "bonsai-kb-notes-block Panel Focusable gpfocus gpfocuswithin",
+    "ms": 16,
+    "kind": "frame"
+   },
+   {
+    "top": 585,
+    "max": 1045,
+    "paneTop": 88,
+    "dockTop": 289,
+    "blkTop": 204,
+    "blkBottom": 697,
+    "blkOpen": "true",
+    "hdrTop": 205,
+    "ring": "bonsai-kb-notes-block Panel Focusable gpfocus gpfocuswithin",
+    "ms": 2152,
+    "kind": "frame"
+   },
+   {
+    "ms": 2156,
+    "kind": "scrollTop=",
+    "value": 698,
+    "el": "_1X4dtbZ_AMX_DXT-SGiK01 _TabContentsScroll _3td3cAnGbbbAOXW8x2pD-j _29WypCpglgRKsR_fMPsoFX",
+    "before": 585,
+    "stack": "    at HTMLDivElement.set [as scrollTop] (<anonymous>:32:141) |     at scrollElementTopToPaneTop (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790218379245:12251:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790218379245:42409:13"
+   },
+   {
+    "ms": 2164,
+    "kind": "scroll-event",
+    "top": 697
+   },
+   {
+    "top": 697,
+    "max": 1045,
+    "paneTop": 88,
+    "dockTop": 289,
+    "blkTop": 92,
+    "blkBottom": 585,
+    "blkOpen": "true",
+    "hdrTop": 93,
+    "ring": "bonsai-kb-notes-block Panel Focusable gpfocus gpfocuswithin",
+    "ms": 2164,
+    "kind": "frame"
+   }
+  ]
+ },
+ "screenshot": "plan64-NOTES-OPEN-SCROLL-try2-run2.png",
+ "verdict": "PASS. Opening the notes block brought its header to the top of the chat area: its top ends 5 px below the scroll area's top (was 116), with one scroll write from the plugin and nothing undoing it; 40% of the open block now shows above the dock, against 17% in flow G. The block was closed again afterwards."
+}

@@ -1,0 +1,20 @@
+{
+ "row": "H0 - deploy, and the Ollama tab after a reload (fix 017c4f8)",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (experimental tip; built locally 22:41:16, deployed 22:41, the Deck's dist/index.js has the same md5 as the fresh build 68aa82da0c10a6850f56c4e10d0776fc)",
+ "deck_time": "2026-09-23 22:41-22:43:30 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Deploy at 22:41; plugin log '2026-09-23 22.41.31.log' holds only 'bonsAI plugin loaded!' (22:41:32) - a clean load. Opening the plugin failed once (expected) and opened on the second try, on Main.",
+ "pressed": [
+  "Down (placed the ring on Retry), RB -> Ollama tab ('Where AI runs'), ring on a control of that tab",
+  "deck_reloadPlugin at 22:42:44 (the reload closed the plugin)",
+  "deck_openPlugin: failed once (expected), then opened"
+ ],
+ "seen": {
+  "came_back_on": "Ollama tab (aria-selected on the ollama tab) - no walk needed",
+  "big_button_read_1_22:43:12": "'Update AI & models' (aria-label 'Update AI engine and installed models')",
+  "big_button_read_2_22:43:23": "'Update AI & models'",
+  "plugin_log_after_reload": "New log '2026-09-23 22.42.45.log': 22:42:45 'bonsAI plugin loaded!', then 22:43:06,222 [ERROR] 'test_ollama_connection failed (non-loopback)' with urllib URLError '[Errno -2] Name or service not known' (socket.gaierror in getaddrinfo), raised from probe_ollama_health (ollama_service.py line 263) via ollama_connection_test.py line 153. No other lines.",
+  "settings_read_only": "named_ollama_hosts [], ollama_local_on_deck true, ollama_local_autostart true"
+ },
+ "verdict": "FAIL. What a person sees is right: after the reload the plugin came back on the Ollama tab and the big button read 'Update AI & models' both times, never 'Install Ollama'. But the runbook's second condition fails: the plugin log after the reload has the 'test_ollama_connection failed (non-loopback)' line again, at 22:43:06 (21 s after the reload), this time a name lookup failure ('Name or service not known') for whatever non-loopback host it probed."
+}

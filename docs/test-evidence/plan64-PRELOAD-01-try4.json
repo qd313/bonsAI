@@ -1,0 +1,39 @@
+{
+ "row": "H8 - PRELOAD-01 try 4: warm-up timing on fix a224fb6, and model removal cleaning the try order (fix e5c8d91)",
+ "build_commit": "a224fb6 (experimental tip; deployed 23:33:40, plugin log 'bonsAI plugin loaded!' 23:33:42 and nothing else; the Deck's ollama_service.py and main.py match the checkout)",
+ "deck_time": "2026-09-23 23:33-23:40 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "qwen2.5:1.5b installed and starred (text_model_routing_order ['qwen2.5:1.5b']). Main tab, 'wheatley fight', Strategy, no game.",
+ "cold": {
+  "switch": "'Warm the Ask model at boot' off (key false)",
+  "unload": "ollama stop both models, ollama ps empty 23:33:59; plugin reloaded 23:34:05; ollama ps empty at 23:34:37",
+  "question": "'what is the pulse rifle best used for in half life 2' (VERIFIED, new wording)",
+  "ask_press": "23:35:34.292 (plugin log RPC entry)",
+  "first_words": "23:35:44.344",
+  "time_to_first_words_s": 10.05,
+  "finished": "'completed in 14.2s'",
+  "journal_after_press": "23:35:34 model loaded (runners 1, the note-search model, then /api/embed); 23:35:37 model loaded (runners 2, qwen2.5:1.5b); 23:35:48 /api/chat 200"
+ },
+ "warm": {
+  "switch": "'Warm the Ask model at boot' on (key true)",
+  "unload": "ollama ps empty 23:36:24; plugin reloaded 23:36:30; plugin log 23:36:39 'preload_ask_model: warmed qwen2.5:1.5b'",
+  "ollama_ps_before_question": "23:37:06 and 23:37:49: qwen2.5:1.5b, 2.3 GB, CONTEXT 16384 (was 4096 on the old build)",
+  "question": "'how useful is the magnum revolver in half life 2' (VERIFIED, new wording)",
+  "ask_press": "23:37:52.867",
+  "first_words": "23:38:00.589",
+  "time_to_first_words_s": 7.72,
+  "finished": "'completed in 12.3s'",
+  "journal_after_press": "23:37:53 one 'model loaded' (runners 2) followed by /api/embed - the note-search model nomic-embed-text, which the warm-up does not cover; NO second load of qwen2.5:1.5b; 23:38:05 /api/chat 200 in 11.6 s"
+ },
+ "timing_result": "Warm first words 7.72 s against cold 10.05 s: 2.3 s (23%) sooner. The answer model was not loaded again after the warm press.",
+ "restore_and_e5c8d91": {
+  "switch_off": "'Warm the Ask model at boot' A -> key false (23:38:41)",
+  "reload": "plugin reloaded 23:38:47 (new log 23.38.48), reopened",
+  "remove": "Manage AI models... (Filters panel open again, B) -> qwen2.5:1.5b star -> Right -> 'Remove from Deck' ENABLED (same row) -> A -> box 'Remove qwen2.5:1.5b from the Deck? This will free about 0.9 GB...' -> 'Remove model' A (about 23:39:58)",
+  "after": "23:40:03: ollama list = nomic-embed-text, gemma4:e2b-it-qat; text_model_routing_order [] with no help from the session; vision order ['gemma4:e2b-it-qat']; dev_preload_ask_model false; model_allow_high_vram_fallbacks false"
+ },
+ "verdict": {
+  "a224fb6_warm_up": "PASS for the answer model: the warm-up now loads qwen2.5:1.5b at the context Ask uses (16384), the warm question's first words came 2.3 s sooner (7.72 s vs 10.05 s), and qwen2.5:1.5b was not loaded again after the press. For the owner: one 'model loaded' line does follow the warm press - it is the note-search model (nomic-embed-text), which the warm-up does not load; the cold run loaded it too.",
+  "e5c8d91_remove_cleans_order": "PASS: after the reload the Remove button was enabled again, and removing qwen2.5:1.5b through its row left text_model_routing_order as [] by itself."
+ }
+}

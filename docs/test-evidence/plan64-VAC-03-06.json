@@ -1,0 +1,32 @@
+{
+ "row": "H2 - VAC-03 to VAC-06, the Steam ban lookup, with the maintainer's key",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 23:07:20-23:09:50 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "The session put the maintainer's Steam Web API key into the settings file before 23:04:50 (the driver never saw, typed or printed it; only the key's name was listed once). Plugin reloaded 23:06:44 after the size restore. gemma3:27b checked absent from 'ollama list' before every Ask (23:07:51, 23:08:15, 23:08:36, 23:09:27). Main tab, chat 'wheatley fight'.",
+ "step2_switch_at_start": "Permissions tab: the switch is labelled 'Steam ban lookup' ('For the bonsai:vac-check command. API key lives in Developer -> Integrations.'), settings key capabilities.steam_web_api. It read ON at the start (23:06).",
+ "pressed": [
+  "VAC-03: send-question script 'bonsai:vac-check 76561197983599210' (VERIFIED), walk to Ask, A (23:07:53)",
+  "VAC-04: 'bonsai:vac-check https://steamcommunity.com/profiles/76561197983599210' (VERIFIED), Down from the box to Ask, A (23:08:27)",
+  "VAC-05: 'bonsai:vac-check https://steamcommunity.com/id/gabelogannewell' (VERIFIED), Down to Ask, A (23:08:43)",
+  "VAC-06: RB x3 -> Permissions, 'Steam ban lookup' A -> off (23:08:59; capabilities.steam_web_api false); plugin log size 310 bytes; LB x3 -> Main; 'bonsai:vac-check 76561197983599210' (VERIFIED), Down to Ask, A (23:09:29)",
+  "restore: Permissions -> 'Steam ban lookup' A -> on (23:09:47; capabilities.steam_web_api true)"
+ ],
+ "seen": {
+  "VAC-03_23:07:55": "Reply within about 2 s, no AI wording: 'Steam ban status (GetPlayerBans)' / 'Limitation: This reflects these Steam accounts only...' / table row: SteamID 76561197983599210, VAC False, #VAC 0, Game bans 0, Days since last ban 0, Community False, Trade none / 'Interpret bans as account-level history, not proof of behavior in this match.'",
+  "VAC-04_23:08:29": "The same report word for word, same row for 76561197983599210.",
+  "VAC-05_23:08:45": "'Skipped inputs: https://steamcommunity.com/id/gabelogannewell - Vanity URLs (/id/...) need ResolveVanityURL; paste the numeric /profiles/765... URL or 64-bit SteamID instead.' 'No valid SteamIDs to query from those tokens. ... Vanity /id/... links are not supported in this build.' No table, no lookup.",
+  "VAC-06_23:09:32": "'Steam Web API is off for bonsAI. Enable Permissions -> Steam Web API, add your Web API key under Developer -> Integrations, then run: bonsai:vac-check 7656119... This command skips the AI and queries Valve GetPlayerBans for account-level ban flags only.' No table.",
+  "VAC-06_log": "plugin log grew 310 -> 395 bytes; the only new line is '23:09:30 start_background_game_ai: RPC entry (arg type=dict)'. No 'api.steampowered.com' and no 'GetPlayerBans' in the new lines. Caveat: the plugin log did not name Valve's server for the successful lookups at 23:07-23:08 either, so this log cannot show a request even when one is made; the reply text is the stronger sign.",
+  "table_rendering": "The ban table is shown as raw text with pipes ('| SteamID (64) | VAC | ... | | --- | --- |...'): the reply has 0 table elements. It reads as a run of pipes on the Deck, not as a table.",
+  "wording": "The off-message says 'Enable Permissions -> Steam Web API', but the switch on the Permissions tab is labelled 'Steam ban lookup'."
+ },
+ "verdict": {
+  "VAC-03": "PASS - a ban report for the account, no AI wording (the table shows as raw pipes, see table_rendering)",
+  "VAC-04": "PASS - the profile link gives the same report as VAC-03",
+  "VAC-05": "PASS - says vanity links are not supported, asks for the number, makes no lookup",
+  "VAC-06": "PASS on what a person sees (says the permission is off and how to turn it on); the 'no request in the log' half passes as written (no such line) but proves little, since the log never names the request"
+ },
+ "restore": "Steam ban lookup switch back ON as at the start. The session was told 'done with the key' at 23:09:50 to remove the key.",
+ "secret_check": "Grep of this file for 'STEAM_WEB_API_KEY', 'HUGGINGFACE', 'key=' and any 32-character run of capital letters and digits is run after writing and reported to the session."
+}

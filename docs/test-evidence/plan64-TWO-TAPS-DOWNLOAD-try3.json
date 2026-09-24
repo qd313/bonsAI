@@ -1,0 +1,29 @@
+{
+ "row": "H5 - Installed shows after a download, without leaving the tab (fix ba0bb0d); flow G's G4 steps 1-5, try 3",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 23:00:18-23:01:25 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Ollama tab. Start: section 'Installed - version 2026.09.18', SD card path /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag; settings rag_corpus_path = that path, rag_corpus_version 2026.09.18, use_local_knowledge_base true.",
+ "pressed": [
+  "walk Up to 'Update knowledge base', Right 1 -> 'Remove', A",
+  "confirm box 'Remove knowledge base?' - ring read on 'Remove' - A (23:00:36)",
+  "walk Down 8 -> 'Download knowledge base', A = tap 1 (picker 'Choose download location': ring on 'Internal storage (~731 GB free)')",
+  "Down 1 -> 'SD card (~1141 GB free)', A = tap 2 (about 23:01:10)",
+  "no other press; section read every 250 ms, then again at 23:01:18"
+ ],
+ "seen": {
+  "after_remove_23:00:41": "section 'Not installed - download to enable grounded...'; settings rag_corpus_path '', rag_corpus_version '', use_local_knowledge_base false",
+  "log": [
+   "23:01:10.791 rag_corpus_download: Downloading corpus.db.zlib from huggingface.co/datasets/qd313/bonsai-knowledge-base",
+   "23:01:11.789 Decompressing corpus",
+   "23:01:11.813 Knowledge base installed at /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag (version 2026.09.18)."
+  ],
+  "screen_installed_at": "23:01:12.249: 'Installed - version 2026.09.18', SD card path, 'Update knowledge base' and 'Remove' - 0.44 s after the log's installed line, no tab switch",
+  "screen_23:01:18": "same, Installed - 2026.09.18",
+  "settings_after": "rag_corpus_path SD card path, rag_corpus_version 2026.09.18, use_local_knowledge_base true",
+  "ring_after_picker_closed": "on the Ollama tab icon at the top (tab bar opened out, screenshot) - same place as flows E and G. Observation only."
+ },
+ "screenshot": "plan64-TWO-TAPS-DOWNLOAD-try3-installed.png",
+ "end_state": "matches the start: installed on the SD card, 2026.09.18, Use local knowledge base on.",
+ "verdict": "PASS. After the SD-card download the section read Installed - version 2026.09.18 - on the SD card path 0.44 s after the log's 'installed at' line, without leaving the tab (flow G: still 'Not installed' 37 s later). The ring still jumps up to the Ollama tab icon when the picker closes."
+}

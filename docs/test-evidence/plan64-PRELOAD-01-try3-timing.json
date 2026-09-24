@@ -1,0 +1,39 @@
+{
+ "row": "H7 - PRELOAD-01 timing part (flow E row 5 steps 2-6), run after the maintainer allowed Ask presses; continues plan64-PRELOAD-01-try3.json",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 23:22-23:30 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Session had reset text_model_routing_order to [] and the plugin was reloaded (23:21:50). qwen2.5:1.5b pulled again by typed name (23:23:02 -> listed 23:23:32).",
+ "pressed_and_seen": {
+  "step2_star": "Manage AI models... (Filters panel open again, B) -> Down x4 -> 'Use qwen2.5:1.5b for Ask' A -> toast 'Now used for Ask / qwen2.5:1.5b'. Order became ['qwen2.5:1.5b']. PASS.",
+  "step3_cold": {
+   "switch": "'Warm the Ask model at boot' off (key false)",
+   "unload": "ollama ps empty at 23:23:58; plugin reloaded 23:24:10; ollama ps still empty at 23:24:41 (31 s later)",
+   "question": "'what does the shotgun do in half life 2' (VERIFIED, never asked before)",
+   "ask_press": "23:25:28.129 (plugin log 'start_background_game_ai: RPC entry')",
+   "first_words": "23:25:37.935 (page poll every 250 ms)",
+   "time_to_first_words_s": 9.81,
+   "finished": "'completed in 10.1s' at 23:25:38.271 (qwen2.5:1.5b, 70 tokens)",
+   "journal": "after the press: 23:25:28 model loaded (runners 1), 23:25:28 a POST /api/chat returned 400 (the think=True try), 23:25:31 model loaded (runners 2), 23:25:38 POST /api/chat 200 in 9.3 s. The model was loaded after the press, so this was a real cold run, not a replay."
+  },
+  "step4_warm": {
+   "switch": "'Warm the Ask model at boot' on (key true)",
+   "unload": "ollama stop qwen2.5:1.5b and nomic-embed-text; ollama ps empty at 23:26:36",
+   "reload": "23:26:40; plugin log 23:26:46 'preload_ask_model: warmed qwen2.5:1.5b'; journal 23:26:46 model loaded, POST /api/generate 200 in 2.0 s",
+   "ollama_ps_before_question": "23:27:13 and 23:27:54: qwen2.5:1.5b loaded, 1.2 GB, CONTEXT 4096, until '4 minutes from now'",
+   "question": "'what is the crowbar good for in half life 2' (VERIFIED, never asked before)",
+   "ask_press": "23:27:57.953 (RPC entry)",
+   "first_words": "23:28:07.794",
+   "time_to_first_words_s": 9.84,
+   "finished": "'completed in 13.3s' at 23:28:11.332 (192 tokens)",
+   "journal": "after the press: 23:27:58 model loaded (runners 2, the note-search model), POST /api/embed x2, POST /api/chat 400, then 23:28:00 'model loaded' again, then POST /api/chat 200 in 12.7 s. ollama ps afterwards: qwen2.5:1.5b 2.3 GB, CONTEXT 16384, 4 hours.",
+   "reading": "The warm-up loaded the model with a 4096 context; the real Ask uses 16384, so Ollama loaded it a second time after the press. The first words came no sooner."
+  },
+  "step6_restore": {
+   "switch_off": "'Warm the Ask model at boot' A -> key false (23:28:55). PASS.",
+   "remove_qwen": "Manage AI models... (Filters, B) -> qwen2.5:1.5b star ('is used for Ask') -> Right -> the button there is DISABLED, labelled 'Switch Ask mode first to remove this model.' Tried twice (closed and reopened the screen): still disabled. Screenshot plan64-PRELOAD-01-try3-timing-remove-disabled.png. At 22:51 the same model, starred the same way, could be removed - the difference now is that questions had been answered with it.",
+   "order": "text_model_routing_order ['qwen2.5:1.5b'] (for the session to reset)"
+  }
+ },
+ "verdict": "FAIL. Of the three pass conditions: ollama ps listed the small model before the warm question (yes); no model load after the warm press (NO - the journal shows the model loaded again 2 s after the press, because the warm-up used a 4096 context and Ask uses 16384); warm first words clearly sooner than cold (NO - 9.84 s against 9.81 s). The restore could not remove qwen2.5:1.5b through its row (Remove disabled, 'Switch Ask mode first'); the session was told."
+}

@@ -1,7 +1,7 @@
 # Plan 64 — The big verification session
 
-**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A, B and D done; flow C mostly done, a few rows
-deferred to flow D and folded in above; flow E running now; the progress log is § 14.
+**Status:** FINISHED 2026-09-23. All flows (0, A through H) ran; the progress log, including the final
+report, is § 14.
 **Purpose:** one long run on the Deck, mostly without the maintainer, that works through the roadmap's
 Verify list and the knowledge base's owed checks. The roadmap is updated after every block, so it is never
 behind the device. Bugs found along the way are written down and, where the effort is reasonable, fixed.
@@ -627,3 +627,146 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
 - **Carried into flow H:** the four fixes above (`ba0bb0d`, `64b34a8`, `d305863`, `b26f536`), plus two
   earlier same-night fixes from flow E (`017c4f8`, `2e6f6df`) — six Deck checks in total, none proven on
   the device yet.
+
+### Flow H — the last Deck block: questions first, the warm-up fix, and the knowledge base's owed checks, 2026-09-23 22:41 to 23:40 (Deck time), build `d3058636c2a03c2378b569237fcc5bc9aa8d3eff`, then `a224fb6`
+
+- **Deploy:** experimental's tip at 22:41, `d3058636c2a03c2378b569237fcc5bc9aa8d3eff` (carries every fix
+  through flow G). A second deploy went out mid-flow at 23:33:40, `a224fb6`, for the warm-up fix found this
+  same block.
+- **All six checks carried in from flow G closed tonight, all PASS:** the ring stays on its section when an
+  answer finishes (H4 — the first attempt was refused by Claude Code's own permission check before any
+  press reached the Deck; the second run held the ring on the same section for 20 seconds after the finish
+  with no jump to the end); a notes block now opens with its header at the pane's own top (H6 — 40% of the
+  block shows, up from 17%); the knowledge base reads Installed 0.44 seconds after a fresh SD-card download,
+  without leaving the tab (H5); an installed model outside the three Essentials now keeps its own row, star
+  and Remove on the AI models screen (H7's row check); a typed-name pull keeps an unsaved Advanced-switch
+  change (H1 step 3); and after a reload the Ollama tab reads Update AI & models, never Install Ollama, on
+  every read (H0) — though its log still writes one false connection-failed line right at start-up, before
+  settings finish loading, filed as its own small bug.
+- **Found and fixed the same night:** removing a model through its row left it sitting in the saved try
+  order, so Ask's first choice could point at a model no longer installed. Fixed in `e5c8d91`; confirmed on
+  the Deck afterward that a removed model leaves the saved order empty by itself.
+- **The big-model top-of-order redo (H1), with an order saved first this time:** the saved order itself
+  passed exactly as the row asks — a pulled `gemma3:27b` went to the front of it, the rest kept behind. For
+  the maintainer: the try-order screen disagreed with that saved order, showing the big model last and
+  greyed "Tier blocked" (the licence setting), while the saved key had it first — a question, not a bug.
+  Also measured: Done with nothing changed does not write an empty saved order, by design; and a plugin
+  reload stopped the download mid-pull at 16%, with the next pull resuming from the same partial file.
+- **The warm-up timing (H7/PRELOAD-01):** try 3 failed — the warm-up loaded the model at the server's
+  default room instead of the room Ask actually asks for, so it reloaded anyway and saved no time (9.8
+  seconds either way). Fixed the same night, `a224fb6`. Try 4 passed: warm answers started 2.3 seconds
+  sooner than cold (7.72s against 10.05s), with no second load of the model.
+- **The Steam ban lookup (H2, VAC-03 to 06):** all four passed with the maintainer's own key, put in and
+  taken out by the session — a real account number and a profile link both gave the same ban report, a
+  vanity link correctly asked for the number instead, and with the permission off the reply said so and
+  named the right switch. The report itself draws as plain pipes and dashes, not a table — a new small bug.
+  VAC-06's "nothing reached Valve" half proves less than it sounds: the log never names that request even
+  when a lookup succeeds.
+- **The old Desktop size value (H3):** passed — loads as Handheld, nothing on the Main tab moved.
+- **Five more small bugs found and logged, not fixed:** Remove greys out once a model has answered a
+  question, until the plugin reloads; the AI models screen can open with Filters already showing, ring on a
+  filter; the remove box and the models list undercount a big model's size; a plugin reload stops a running
+  model download (the next pull resumes from the partial file); and the plugin log's one false start-up
+  connection line (above).
+- **End state:** only `gemma4:e2b-it-qat` and `nomic-embed-text` installed, every setting the driver
+  touched put back the way it was found, and the Steam Web API key removed.
+
+### Final report — plan 64, 2026-09-23 16:30 to about 00:00 (Deck time)
+
+**In short.** Eight Deck blocks ran (0, A to E, G, H) over about seven hours, with one pause for a
+usage limit (about 20:30 to 21:20). 23 bugs were fixed and landed on experimental, each with a test that was
+broken on purpose to prove it checks something. All but five were proved on the Deck the same night. The five
+still owed: the Session tab's Clear box (a person has to press it), a shared tip's source page (no Deck step),
+the chat row held still while an answer is written (not walked again), the ban lookup's switch name (landed
+after the last deploy), and the start-up log line (the screen half passed).
+
+**Proved on the Deck tonight** (newest first):
+- The highlight stays on its paragraph when an answer finishes under it, and the view no longer falls to the
+  end. It took three tries: the first two fixes passed their tests and failed on the Deck (64b34a8).
+- A "From the notes" block opens with its header at the top: 40% of a three-note block shows, up from 17%
+  (d305863).
+- The Knowledge base section shows Installed 0.4 s after a download, without leaving the tab (ba0bb0d).
+- A model already on the Deck keeps its row on the AI models screen's default view (b26f536).
+- A typed-name download keeps a switch changed just before it (2e6f6df).
+- Done on a popup no longer writes back an old library location (9fdb7a4).
+- The Ollama tab reads right after a plugin reload (017c4f8); one false "couldn't connect" line is still
+  written to the log at startup.
+- A made-up model name says "Pull not started" and downloads nothing (f65ccfe); a real name still downloads.
+- Open Permissions lands on its switch (af53b7d); Reply ready shows after the menu closes (73be15f).
+- An old saved "Desktop" size loads as Handheld with nothing moving.
+- The Steam ban lookup: all four checks (VAC-03 to 06), with the maintainer's key put in and taken out by the
+  session; no file or log kept it.
+- The large-model rule: a big model downloaded with the high-memory switch on goes to the top of a saved try
+  order, with the old order kept behind it.
+- The warm-up now saves time: the first words of a warm answer came 2.3 s sooner than a cold one (7.7 s against
+  10.1 s), with no second load of the answer model (a224fb6).
+- Removing a model takes it out of the saved try order by itself (e5c8d91).
+- Earlier blocks (A to D): the ghost question, the tall section, the streaming hold, the long models list,
+  Down to Stop, and the rows listed in each flow's paragraph above.
+
+**Still open.**
+- Decisions owed (below).
+- Not fixed tonight: the Hollow Knight name-withheld spoiler (three stars); the chat-memory deflection; the
+  "No close match in my notes" line showing with notes attached; Black Mesa's general notes ranking first;
+  the chip ladder under the question box (filed as a feature, 86cc9ed).
+- Found tonight, logged, not fixed:
+  - Remove is greyed out ("Switch Ask mode first") once a model has answered a question.
+  - The try-order screen shows a licence-blocked big model last and greyed, while the saved order has it first.
+  - The AI models screen can open with Filters already open and the highlight on a filter.
+  - The remove box offers to free "< 0.1 GB" for a 17 GB model, and the list header miscounts the total.
+  - The ban report's table shows as raw text.
+  - A plugin reload stops a running model download; the next pull resumes from the partial file.
+  - The highlight jumps up to the Ollama tab's icon when the storage picker closes (the same tab rebuild).
+- Did not reproduce tonight (one clean try each): the busy dot on a chat still writing; the stuck panel after
+  A on the question box. Both stay open for the maintainer to close or keep watching.
+- Could not run: CHIP-BUTTON-09 (three pinned test chips in the way); the soft token limit (the model stops
+  near 1,100 tokens); a note dropped for space (cannot be produced by asking).
+
+**Decisions for the maintainer.**
+1. Screenshots: shrink with ffmpeg, which is already on the Deck (a 2.6 MB picture becomes 86 KB in 0.2 s), and
+   refuse with a message if the shrink ever fails. Recommended. The measured comparison is in
+   `docs/test-evidence/plan64-SCREENSHOT-SHRINK-COMPARISON.md`.
+2. The dots under the chat name: leave, move back 1 px, or hide while the tab strip is open (recommended).
+3. Close the busy-dot and stuck-panel bugs after tonight's clean tries, or keep them open?
+4. Should a big model that the licence setting blocks still go to the top of the saved order? Ask skips it
+   either way; only the saved order and the screen disagree.
+5. Clear the three pinned test chips so CHIP-BUTTON-09 can run?
+6. The quick check's blind spot (below): pick (a), (b) or (c).
+7. One check only a person can do: Show details, then the Session tab, then Clear. The highlight should start
+   on Cancel, and Cancel should keep you on the Session tab.
+
+**How the session went.**
+- **A slip against section 7.** The "highlight lost at the finish" bug is a D-pad bug, and section 7 says the
+  session fixes those itself from the driver's measurement. It went to a Sonnet fix helper instead. That fix
+  passed its tests and failed on the Deck; the real cause (the whole answer was rebuilt at the finish) came
+  from the driver's recording, one step earlier than the fix assumed. The rule is right; it was not followed.
+- **Three first fixes passed their tests and failed on the Deck** (the highlight at the finish, "Not
+  installed" after a download, the warm-up). Each time the Deck showed the cause one step away from where the
+  code reading pointed. Lessons for `docs/lessons-learned.md`:
+  - Closing a Decky popup rebuilds the tab behind it. Anything a component was tracking, like a running
+    download, dies with the old copy.
+  - A component that returns a different kind of element (bare, then wrapped) rebuilds everything inside it,
+    and Steam's highlight goes with it.
+  - Steam's scroll area keeps 116 px clear at its top; "scroll to the top" honours it.
+  - A warm-up must load the model exactly as Ask will ask for it, or Ask loads it again.
+- **The quick check's blind spot.** It skips the Python tests unless a Python file changed, but six Python
+  tests read front-end files. It let one break through tonight (fixed in 33814ce). Options: (a) run the
+  Python tests on every front-end change, about 30 s more; (b) run just those six, about 2 s (recommended);
+  (c) leave it and rely on habit.
+- **Four old focus-pattern warnings** in the live answer's focus file (from 2ecd804), not tonight's work.
+- **The rig.**
+  - After the usage-limit pause, Steam's highlight froze on the Quick Access rail. What cleared it was
+    restarting Steam over SSH, then one A press on the rail's tab icon.
+  - Claude Code's permission check refused the Deck helper's Ask presses until the maintainer approved them
+    in chat.
+  - Settings-file edits work in the plain piped form.
+  - A plugin reload stops a running model download.
+- **The roadmap** is 99.75 KB committed. Two other chats' uncommitted entries push the working copy over the
+  100 KB limit, so plan 65 (the trim) should expect that.
+- **The Deck as left (about 23:55).** Every setting matches the start-of-night backup except the library's
+  location, which moved to the SD card on purpose. Only gemma4:e2b-it-qat and nomic-embed-text are installed,
+  the Steam key is out, and the keep-awake lock is released. The saved chats were not restored from the backup,
+  at the maintainer's word ("It's ok if we lost a chat"); all nine chat files are still there, with tonight's test
+  questions added. The build on the Deck is a224fb6.
+- **The maintainer's page** of checks only they can do was refreshed with tonight's closures and seven new
+  items: [Checks Only You Can Do](https://claude.ai/artifact/8hhevjkTdcGhq8gzDHZ419).

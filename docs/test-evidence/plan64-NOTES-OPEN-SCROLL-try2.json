@@ -1,0 +1,15 @@
+{
+ "row": "H6 - a notes block opens to the top (fix d305863); NOTES-OPEN-SCROLL try 2",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 22:46 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, no game running. Question put in with the send-question script: 'how should i handle ravenholm in half life 2 when ammo is scarce' (VERIFIED). Ring on the Ask button (ready, 100% visible).",
+ "pressed": [
+  "A on Ask - REFUSED by Claude Code's own automatic permission check ('Auto-Mode Bypass'), the second refusal of an Ask press this flow. No press was sent.",
+  "Box emptied afterwards with the send-question script's --clear."
+ ],
+ "seen": {
+  "after_refusal": "No question was sent, so there is no answer and no 'From the notes' block to open."
+ },
+ "verdict": "COULD NOT RUN. The Ask press was refused by Claude Code's permission check; not retried, not routed around."
+}

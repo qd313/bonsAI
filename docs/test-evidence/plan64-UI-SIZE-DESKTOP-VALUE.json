@@ -1,0 +1,22 @@
+{
+ "row": "H3 - UI size setting (two stops, never Desktop): the old Desktop size value loads as Handheld",
+ "build_commit": "d3058636c2a03c2378b569237fcc5bc9aa8d3eff (deployed 22:41)",
+ "deck_time": "2026-09-23 23:04:50-23:07:10 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshots 1280x800)",
+ "setup": "The session wrote ui_scale_manual_profile 'desktop' and ui_scale_auto_enabled false into the settings file (they were 'handheld' and true). The driver reloaded the plugin at 23:04:58; read back after the reload at 23:05:03 and 23:05:54: 'desktop' and false (the plugin did not rewrite them).",
+ "pressed": [
+  "deck_openPlugin (opened first try)",
+  "Down x2, RB -> Settings tab; read the UI scale section; screenshot",
+  "LB x2 -> Main tab; measured; screenshot"
+ ],
+ "seen": {
+  "settings_tab": "'Active: Handheld (1.00x)'; 'Adjust UI automatically' off; 'Profile: Handheld'; slider stops labelled Handheld and Couch only, knob at Handheld. The word Desktop appears nowhere on the panel.",
+  "main_tab": "--bonsai-ui-scale 1; question box 274.67 x 44 at x 72.67; Ask 298.67 x 36; the same as flow A's Handheld reading (box 274.67) and as this flow's 22:42 screenshot (same positions for the '63 earlier' pill, question row, test chip, box and Ask).",
+  "after_restore": "The session put the keys back ('handheld', auto true; read 23:06:46). Reloaded, reopened (the usual first failure, then open): Main tab, scale 1, box 274.67, Ask 298.67 - normal."
+ },
+ "screenshots": {
+  "settings": "plan64-UI-SIZE-DESKTOP-VALUE-settings.png",
+  "main": "plan64-UI-SIZE-DESKTOP-VALUE-main.png"
+ },
+ "verdict": "PASS. With the old 'desktop' value saved, the panel shows Handheld (1.00x), never Desktop, and the Main tab is exactly the usual size - nothing moved."
+}

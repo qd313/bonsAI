@@ -1187,3 +1187,77 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   download-from-a-public-host proof came from the next check instead: removing the library and downloading
   it again pulled `corpus.db.zlib` from huggingface.co, landed on the SD card, and read version 2026.09.18.
   Evidence `docs/test-evidence/plan64-W1-R1.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`.
+
+### Speed-mode VRAM preload (closed for its timing check, 2026-09-23, flow H)
+
+- ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
+  A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
+  device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it
+  spent memory on a model no question would touch. It now uses Ask's own resolver, and warms nothing when Ask's model is over the
+  three-billion cap — which is what happens on this Deck, confirmed. **Still owed:** the timing comparison (**PRELOAD-01**), which
+  needs a Deck whose Ask model is under the cap, and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
+  model survives the Deck sleeping. **Could not run 2026-09-23 (flow E):** the large model from the
+  ROUTING-MERGE-01 check was still installed with the high-VRAM switch on, so no question could be
+  asked to warm anything up, and Steam's own highlight froze on the Ollama tab. Carried into flow G. **Could not run again
+  2026-09-23 (flow G):** a small model was pulled by typed name to stand in for one under the cap, but the
+  AI models screen's default view (Essentials only) showed no row for an installed model outside the three
+  essentials, so there was nothing to star for Ask and no way to remove it without opening Filters by hand.
+  **Found and fixed the same night, `b26f536`.** Evidence `docs/test-evidence/plan64-PRELOAD-01-try2.json` (+ screenshot).
+
+  **Closed 2026-09-23 for the timing check, confirmed on the Deck (flow H).** With `qwen2.5:1.5b` starred
+  for Ask (now possible after the `b26f536` fix above), warming it up at boot then asking a first question:
+  **try 3 FAILED** — the warm-up loaded the model at the server's own default room (4,096 tokens) instead of
+  the 16,384 tokens Ask actually asks for, so the server reloaded it 2 seconds after the warm press and cold
+  and warm runs both took about 9.8 seconds to first words, saving nothing. **Fixed the same night,
+  `a224fb6`:** the warm-up now asks for the same room Ask will ask for. **Try 4 PASSED:** the warm answer's
+  first words came 2.3 seconds sooner than cold (7.72s against 10.05s), and the small model was not loaded a
+  second time; one other model did load after the warm press, but that is the note-search model, which the
+  warm-up does not cover and which the cold run loaded too. Evidence
+  `docs/test-evidence/plan64-PRELOAD-01-try3.json`, `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`,
+  `docs/test-evidence/plan64-PRELOAD-01-try4.json`. **Still open, not covered by this row's close:** the
+  memory-pressure case (**PRELOAD-02**, `docs/testing.md`) and whether a warmed model survives the Deck
+  sleeping — neither has been run.
+
+### Pulled models join the model try order (closed 2026-09-23, flow H)
+
+- ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one
+  case left.** A pulled model lands at the bottom of the text list and shows in the vision list if it can
+  read pictures. Still owed: with high-VRAM fallback on, a large pulled model should go to the top instead.
+  Row **ROUTING-MERGE-01**. **Tried on the Deck 2026-09-19:** the bottom half passed again; the top half
+  still needs a person at the Deck to type a large model's name by hand and remove it again afterwards.
+  **Tried again 2026-09-23 (flow E), still could not show the top half:** gemma3:27b was pulled with the
+  high-VRAM switch on, but the saved text try order was an empty list the whole time, and the plugin
+  deliberately leaves an empty saved order alone rather than writing one — so nothing could move "to the
+  top" of a list that was never written. A redo is planned with an order saved first. Evidence
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H, redo with a saved order).** With a non-empty text
+  order saved first, `gemma3:27b` pulled by typed name with the high-VRAM switch on went to the front of
+  the saved order, the rest kept unchanged behind it — exactly what this row asks. Removing the model
+  afterward left it in the saved order still (the same leftover-tag issue closed in the entry above, fixed
+  the same night in `e5c8d91`). Two more things measured, not bugs: pressing Done with nothing changed does
+  not write an empty saved order (by design), and a plugin reload stopped the download mid-pull at 16%,
+  with the next pull resuming from the same partial file instead of starting over. **One open question for
+  the maintainer:** the try-order screen itself did not agree with the saved order — it showed
+  `gemma4:e2b-it-qat` first and `gemma3:27b` second, greyed "Tier blocked" because the licence setting
+  blocks it, while the saved key (what Ask actually reads) had `gemma3:27b` first. Whether a licence-blocked
+  model should still be allowed to sit at the top of the saved order, and whether the screen should show
+  that, is unsettled. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+
+### VAC check (`bonsai:vac-check`) on-device QA (closed 2026-09-23, flow H)
+
+- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete. **VAC-02**
+  passed on the Deck 2026-09-16 and the **SMOKE-F** check passed 2026-09-17. Left: **VAC-03 to 06**, which need
+  the maintainer's own Steam Web API key typed into the plugin. **The maintainer said yes on 2026-09-23** to
+  running these with the Steam key already stored on the PC; the run was stopped before the key was typed
+  in that pass, because Claude Code's own automatic permission check refused the edit needed to set it up.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H), with the maintainer's own key put in and taken out
+  by the session.** All four remaining checks passed: a real account number and a profile link both gave
+  the same ban report; a vanity link correctly said vanity links are not supported and asked for the number
+  instead of guessing; and with the permission turned back off, the reply said so and named the switch to
+  turn it on. One weaker half: "no request reached Valve" is true by the log (no new line names Valve's
+  server), but the log never names that request even when the permission is on and a real lookup succeeds
+  — so this half proves less than it sounds like it does. Also noted: the ban report itself draws as plain
+  lines of pipes and dashes, not as an actual table — filed as its own small bug. Evidence
+  `docs/test-evidence/plan64-VAC-03-06.json`.

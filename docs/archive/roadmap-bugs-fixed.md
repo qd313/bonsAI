@@ -321,6 +321,11 @@ at the end of each._
   by a written test that pins the same result — `src/data/uiScaleProfile.test.ts`, the test
   "normalizeUiScaleProfileId redirects a legacy 'desktop' save to handheld, same scale as before".
 
+  **Also run on the Deck 2026-09-23 (flow H), PASS.** With the old "desktop" value written into the
+  settings file by hand, the panel loads reading Handheld, never Desktop, and the Main tab's question box
+  and Ask button measure exactly the same as the ordinary Handheld reading — nothing moved or resized.
+  Evidence `docs/test-evidence/plan64-UI-SIZE-DESKTOP-VALUE.json`.
+
 _The five entries below were moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow B
 bookkeeping pass — copied line for line from this session's Verify or Bugs entry, nothing reworded, with the
 closing note added at the end of each._
@@ -563,6 +568,138 @@ the closing note added at the end of each._
   models screen; the saved knowledge-base location still named the SD card and the section still read
   Installed. The switch was turned back off and confirmed saved false, leaving the Deck as it started.
   Evidence `docs/test-evidence/plan64-KB-PATH-KEPT-ON-DONE.json`.
+
+### The ring is lost when an answer finishes while you are walking it (closed 2026-09-23, flow H)
+
+- ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **VERIFY, fixed in
+  `97cde97`.** Walking Down with the ring already inside an answer as it finishes used to vanish the ring
+  completely and jump the view to the very end of the reply — the live answer was swapped for its saved
+  copy, and the section holding the ring was destroyed with it. The saved answer now gets the ring on the
+  matching section instead. A different, already-fixed case (`e241c5c`) kept the ring's own control and
+  brought it back into view; this fix does the same job for a ring that had vanished outright. **Still
+  FAILED on the Deck 2026-09-23 (try 3), with the fix above already on the build:** the ring vanished the
+  same way, nothing had it once the answer finished, and the view jumped to the end again. **Real cause
+  found and fixed the same night, `64b34a8`:** the answer bubble drew itself bare while still being
+  written, then got wrapped with its Copy button once it finished — so at the exact moment it finished, the
+  bubble changed shape underneath the ring and was rebuilt from scratch, and its sections were also named
+  by what kind of piece they were rather than where they sat, so even a bubble that survived would have
+  lost the ring anyway. Both are fixed: the bubble keeps the same shape throughout, and its sections are
+  named by position instead. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01.json`,
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H, try 4).** Walking onto the answer's section while it
+  was still being written and holding still there, the ring stayed on that same section once the answer
+  finished (now numbered section 1 of 3), the view held the same scroll position for the next 20 seconds
+  without jumping to the end, and a focus recording showed the ring never left the section at any point.
+  Two small things for later, not a fail: right at the finish, the top 36 pixels of the section sat under
+  the tab bar (about two thirds of it visible), and the recorded scroll position read its old value for one
+  single frame before settling on the new one. Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json` (the first attempt this pass was refused by
+  Claude Code's own permission check before any press reached the Deck, `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4.json`).
+
+### After downloading the knowledge base onto the SD card, the section still read "Not installed" for about a minute (closed 2026-09-23, flow H)
+
+- ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
+  for about a minute** — **VERIFY, found and fixed the same night, `a34be74`.** The download marked itself
+  finished before the new SD-card path was saved to settings, and the screen checks whether the library is
+  installed only once, right when the download's own state turns to done — so that one check found nothing
+  saved yet. Measured on the Deck: the section stayed on "Not installed" for about 60 seconds until the
+  Ollama tab was left and reopened. **Still FAILED on the Deck 2026-09-23 (try 2), with the fix above
+  already on the build:** the section kept reading "Not installed" with a Download button the whole
+  download, watched without leaving the tab. **Real cause found and fixed the same night, `ba0bb0d`:**
+  closing the storage-choice picker rebuilds the whole tab underneath it, and the piece of state that
+  remembers a download is running, plus the check that polls for it, were both thrown away and never
+  restarted — so the new tab read the library's status once, before install finished, and never again. A
+  download that started is now remembered across the rebuild. Evidence
+  `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H, try 3).** After removing the library and downloading
+  it again to the SD card, the section read Installed — version 2026.09.18 — on the SD card path 0.44
+  seconds after the log's own "installed at" line, without ever leaving the tab (the earlier try still read
+  "Not installed" after 37 seconds). Left over, not fixed: when the storage-choice picker closes, the ring
+  still jumps up to the Ollama tab's own icon instead of staying in the pane — the same tab rebuild as the
+  fix above, an observation only. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try3.json`.
+
+### A model already installed on the Deck had no row unless Essentials only was turned off (closed 2026-09-23, flow H)
+
+- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off**
+  — **VERIFY, found and fixed the same night, `b26f536`.** Essentials only is meant to narrow the download
+  list to three starter models, but it also hid any other installed model — found while warming up a model
+  pulled for the PRELOAD-01 timing check. Installed models now keep their row regardless of the switch.
+  Evidence `docs/test-evidence/plan64-PRELOAD-01-try2-no-row.png`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H).** Opening Manage AI models… with a non-essential
+  model installed and Filters left untouched, that model already had its own row, star and Remove button
+  — no need to open Filters by hand. Evidence `docs/test-evidence/plan64-PRELOAD-01-try3.json`.
+
+### Pulling a typed-in model name closed the AI models screen and threw away an unsaved Advanced switch change (closed 2026-09-23, flow H)
+
+- ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
+  Advanced switch change** — **VERIFY, found and fixed the same night, `2e6f6df`.** The screen holds the
+  licence and Advanced switches as a draft until Done is pressed, but a typed-name pull closes the screen
+  by itself, and that close skipped saving the draft. Measured on the Deck: turning on "Allow high-VRAM
+  models in routing," then pulling a typed name, left the switch reading off again on reopening. Evidence
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H).** With "Allow high-VRAM models in routing" turned on
+  and left as a draft, pulling `gemma3:27b` by typed name closed the screen as usual, and reading the
+  setting straight afterward showed it saved as true. Evidence
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+
+### After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install Ollama while Ollama was answering questions the whole time (closed 2026-09-23, flow H)
+
+- ★★ `[ollama]` **After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install
+  Ollama while Ollama was answering questions the whole time** — **VERIFY, found and fixed the same night,
+  `017c4f8`.** The tab's one automatic connection check can run before settings have loaded, while "Ollama
+  on this Deck" still reads its default off, so it checked the saved network address instead — here the
+  placeholder "192.168.1." — and failed. The check now re-runs once settings say Ollama runs on this Deck,
+  and only the newest check may set what the tab shows. Evidence: plugin log line 2026-09-23 21:44:45,
+  flow E of plan 64.
+
+  **Closed 2026-09-23 for what a person sees, confirmed on the Deck (flow H).** With the Ollama tab open,
+  reloading the plugin brought it back reading "Update AI & models," never "Install Ollama," on two
+  separate reads. **One thing this fix does not reach:** the plugin log still writes one false
+  `test_ollama_connection failed (non-loopback)` line right at start-up, before settings have finished
+  loading — filed as its own small bug, below. Evidence
+  `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
+
+### Opening the "From the notes" block does not scroll it into view (closed 2026-09-23, flow H)
+
+- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **VERIFY, cause
+  found and fixed, `d305863`.** Most of its words used to stay behind the chip and the question box; the
+  header measured 33%, then 17%, visible once opened. Found while checking whether the chip ladder inside
+  the open block reaches by D-pad — that reply's block held three shared Deck tips and no ladder, so that
+  question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`),
+  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL.json` (+ `.png`). **Cause measured 2026-09-23 with a
+  scroll-write recorder:** the plugin asked, once, to scroll the header to the top of the pane — and
+  Steam's own scroll area keeps 116 pixels clear at its own top, which that request honours, so the header
+  was already exactly where it had been asked to go; the request was asking for the wrong place, not
+  failing. Fixed by asking the pane directly to put the header's own top at the pane's own top, ignoring
+  that reserved space, since nothing of ours is pinned there. Evidence
+  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json` (+ screenshot).
+
+  **Closed 2026-09-23, confirmed on the Deck (flow H, try 2).** Opening the block brought its header to the
+  top of the chat area: its top now ends 5 pixels below the scroll area's top, down from 116, with one
+  scroll write from the plugin and nothing undoing it. 40% of the open block now shows above the dock,
+  against 17% in the earlier pass. Evidence `docs/test-evidence/plan64-NOTES-OPEN-SCROLL-try2-run2.json`
+  (the first attempt this pass was refused by Claude Code's own permission check before any press reached
+  the Deck, `docs/test-evidence/plan64-NOTES-OPEN-SCROLL-try2.json`). **Also observed
+  and not fixed:** after the storage picker on the knowledge-base download closes, the ring lands on the
+  Ollama tab's own icon rather than inside the pane — same cause, an observation only, carried on the
+  "Not installed" entry above rather than here.
+
+### Removing a model did not take it out of the saved try order (closed 2026-09-23, flow H)
+
+- ★ `[ollama]` **Removing a model did not take it out of the saved try order** — **Found on the Deck
+  2026-09-23 (flow H).** Removing `qwen2.5:1.5b` through its row on the AI models screen left the saved
+  text order reading `['qwen2.5:1.5b']`: Ask's first choice was a model no longer installed. The cleanup
+  code for exactly this case already existed in the plugin and nothing called it. Evidence
+  `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`.
+
+  **Fixed and confirmed the same night, `e5c8d91`.** After a successful remove, the plugin now drops the
+  tag from both the saved text and vision orders. Confirmed on the Deck: with the Remove button working
+  again after a reload, removing the model through its row left the saved order empty by itself. Evidence
+  `docs/test-evidence/plan64-PRELOAD-01-try4.json`.
 
 ## Moved from the roadmap 2026-09-19
 

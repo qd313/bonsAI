@@ -80,11 +80,10 @@ pass, for the same reason. The newer flow G block stayed in roadmap.md._
   confirmed on the Deck 2026-09-23:** at the bigger size, with a long sentence typed, the typed text now
   stays inside the box and wraps rather than running past its right edge, at both the bigger size and the
   default. [Full detail](archive/roadmap-bugs-fixed.md#typed-text-ran-off-the-right-edge-of-the-panel-at-the-bigger-ui-size).
-- ★★★ `[ui]` **The UI size setting barely changes anything** — **DONE for what this row owed, confirmed on
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **DONE, confirmed on
   the Deck 2026-09-23:** the size slider has exactly two stops, Handheld and Couch, and the word "Desktop" is
-  gone from both the slider and the UI scale section. One more check — an old saved "desktop" value opening
-  as Handheld — could not run on the Deck tonight, because Claude Code's own automatic permission check
-  refused the edit needed to set that up; it is covered instead by a written test that pins the same result.
+  gone from both the slider and the UI scale section. The last owed check ran later the same night: an old
+  saved "desktop" value now loads as Handheld, with nothing on the Main tab moved or resized.
   [Full detail](archive/roadmap-bugs-fixed.md#the-ui-size-setting-barely-changes-anything).
 
 **Closed 2026-09-23 (plan 64, flow B, proven on the Deck):**

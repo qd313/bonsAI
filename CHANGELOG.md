@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **The ban-lookup permission message now names the switch the way the Permissions tab does:** with
+  Steam ban lookup turned off, asking for a ban check used to say "Enable Permissions -> Steam Web
+  API" — a name that switch has never had on screen; it reads "Steam ban lookup." The message now
+  says the right name. `vac_check_commands.py`. On-Deck row owed: this build has not been deployed
+  yet.
+- **The Ask warm-up now actually saves time, instead of quietly saving none:** with "Warm the Ask
+  model at boot" on, the model was loaded ahead of time at the server's own default room (4,096
+  tokens) rather than the room the first real question actually asks for (16,384) — so the server
+  quietly reloaded it anyway the moment a question arrived, and cold and warm starts both took about
+  the same 9.8 seconds to first words. The warm-up now asks for the same room Ask will ask for.
+  Measured on the Deck: a warm answer's first words now arrive 2.3 seconds sooner than a cold one
+  (7.72s against 10.05s), with no second load of the model. `ollama_service.py`. On-Deck row
+  **PRELOAD-01** in `docs/roadmap.md` — passed.
+- **Removing a model now takes it out of the saved try order too:** removing an installed model
+  through its row used to leave it sitting in the saved order that picks which model answers a
+  question, so Ask's first choice could keep pointing at a model no longer on the Deck. Removing a
+  model now drops it from both saved orders (text and vision) at the same time. `main.py`. Confirmed
+  on the Deck 2026-09-23: removing a model through its row left the saved order without it.
 - **Pressing Down right after asking a question used to do nothing until the answer arrived:** the
   D-pad ring lands on the question box the moment you press Ask, and Down there was deliberately
   swallowed while the Ask button sits greyed out — but the Stop button is live in that same window, and

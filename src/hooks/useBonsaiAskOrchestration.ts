@@ -67,7 +67,8 @@
  *
  * This file's own argument type lives beside its return type, in
  * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask-bar footnote's
- * own running-game poll is useOllamaGameContextSync.
+ * own running-game poll is useOllamaGameContextSync, and the Show-details refresh is
+ * useInputTransparencyRefresh.
  *
  * Gotchas:
  * - The mount-time restore effect runs exactly once (an empty dependency
@@ -132,7 +133,6 @@ import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopCha
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type {
-  InputTransparencyRpcResult,
   KbAttachedNote,
   TransparencySnapshot,
 } from "../utils/inputTransparency";
@@ -154,6 +154,7 @@ import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
 import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
+import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -449,28 +450,12 @@ export function useBonsaiAskOrchestration(
   }, [lastExchange, ollamaContext?.app_id, a.activeSlotIdRef]);
 
   // --- Input transparency (Show details chip) ---
-  const refreshInputTransparency = useCallback(async () => {
-    try {
-      const r = await callDeckyWithTimeout<[], InputTransparencyRpcResult>(
-        "get_input_transparency",
-        [],
-        DECKY_RPC_TIMEOUT_MS,
-      );
-      if (r.available && "snapshot" in r) {
-        setLastTransparency(r.snapshot);
-        if (pendingArchiveTurnRef.current) {
-          pendingArchiveTurnRef.current = {
-            ...pendingArchiveTurnRef.current,
-            transparency: r.snapshot,
-          };
-        }
-      } else {
-        setLastTransparency(null);
-      }
-    } catch {
-      setLastTransparency(null);
-    }
-  }, []);
+  // Lifted into useInputTransparencyRefresh. It must stay at exactly this point in the list:
+  // React matches hooks by the order they run, not by name.
+  const refreshInputTransparency = useInputTransparencyRefresh({
+    setLastTransparency,
+    pendingArchiveTurnRef,
+  });
 
   // --- Poll bridge: map get_background_game_ai_status → UI state ---
   const applyBackgroundStatusToUi = useCallback(

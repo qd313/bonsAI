@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 431,
-  "edgeCount": 1106,
+  "fileCount": 432,
+  "edgeCount": 1109,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2203,6 +2203,7 @@
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
         "src/hooks/useBackgroundGameAi.ts",
+        "src/hooks/useInputTransparencyRefresh.ts",
         "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useSmoothStreamReveal.ts",
@@ -2310,6 +2311,15 @@
         "src/components/MainTab.tsx",
         "src/hooks/useDockClearanceOnFocus.test.ts",
         "src/hooks/useStreamScrollPin.ts"
+      ]
+    },
+    "src/hooks/useInputTransparencyRefresh.ts": {
+      "imports": [
+        "src/utils/deckyCall.ts",
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
     "src/hooks/useIntentPacks.ts": {
@@ -3762,6 +3772,7 @@
         "src/features/voice/useVoiceAskInput.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useInputTransparencyRefresh.ts",
         "src/hooks/useIntentPacks.ts",
         "src/hooks/useKidsLock.test.ts",
         "src/hooks/useKidsLock.ts",
@@ -3900,6 +3911,7 @@
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useInputTransparencyRefresh.ts",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",

@@ -13,6 +13,10 @@
     {
       "name": "useOllamaGameContextSync",
       "file": "src/hooks/useOllamaGameContextSync.ts"
+    },
+    {
+      "name": "useInputTransparencyRefresh",
+      "file": "src/hooks/useInputTransparencyRefresh.ts"
     }
   ],
   "count": 82,

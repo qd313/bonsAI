@@ -31,13 +31,13 @@
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1678,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 1670,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1670,
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 1663,
       "role": ""
     },
     {

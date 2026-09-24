@@ -232,3 +232,52 @@ document.
 | **NOTES-BLOCK-06** | Strategy question about a covered game. Press Ask and watch the screen from that press through the reply completing. | The block is on screen before the reply starts streaming its first word, not only after it completes. | ✅ **PASS (Deck) 2026-09-18** — the block was already on screen with the reply text still empty, well before the model's first word, and did not change or flicker once the reply finished. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-06.json`. **Re-run 2026-09-18, after the fixes:** a second-by-second watch on a new question showed the block on screen from the very first second, all the way through the model's thinking and its full reply, with never a gap. Across ten questions asked the same evening, one for each new game, this held for nine of them; one question, about Super Smash Bros., showed the block only a few seconds after the reply had already finished. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-06.json`, `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`. **Update 2026-09-18:** the same cause explains the Super Smash Bros. miss — the block loses the value it was showing the instant a reply finishes and does not get it back until a second, separate load lands a moment later. The fix has landed on the branch, with two new screen tests, one of them proved by turning the fix off and watching it fail. A repeated watch on the build before this fix, asking about Pikmin 2 a quarter-second at a time, found no gap that time, which fits the miss depending on timing rather than always happening. **Confirmed on the Deck 2026-09-19 (build 07f1299):** a shared-tip question, watched every quarter second, showed the block about a second and a quarter after the press, staying through the thinking and the whole reply with no gap across 121 checks over the next 30 seconds. This row now passes in full. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-06-fixbuild-07f1299.json` |
 | **TEN-GAMES-01** | Library 2026.09.18 installed on the Deck from the plugin's own folder (not from the public download hosts). Nothing running. Ask one question naming each of the ten new games in turn. | Every question attaches that game's own notes, with the block naming the note and the wiki it came from. | ✅ **PASS (Deck) 2026-09-18** — ten of ten questions attached the right game's own notes, with the correct wiki named in every header, and no false "I don't know" line on any of them. The library (version 2026.09.18) was installed straight from the plugin's own folder on the device; publishing it to the public download hosts is a separate step, still owed and waiting on the maintainer. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`. **Publishing done 2026-09-23:** the library now serves from Hugging Face and the GitHub release. Pressing Update knowledge base on the Deck reached that public manifest and read version 2026.09.18; a fresh remove-and-download pulled the file from huggingface.co and landed on the SD card, also reading 2026.09.18. Both pieces this row was still owing are done. Evidence `docs/test-evidence/plan64-W1-R1.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json` |
 
+### Open regression IDs (bugs / recent ships)
+
+- [ ] **CHAR-PICKER-RING-01** Character picker grid, D-pad to a tile on the edge of a column (top, bottom, left-most and right-most column) — the focus ring must render in full, not cut off by the column's own edge. **Fixed at the desk 2026-09-04:** each grid column now carries 6px of inner padding (`PICKER_GRID_RING_PAD_PX` in `CharacterPickerModal.tsx`) so a tile's ring has room before the column's `overflow: hidden` clips it. Owed: a screenshot with the ring visible on an edge tile, for each of the four edges **Deck 2026-09-04, build 49241e7 (plan 32): measured, PNG for the maintainer's eyes.** Settings, Ali G, A opened the picker; Down landed the ring on the top-left tile (Jackie Welles). The tile sits 6.0 px from its column's left edge and 6.1 px from the right, the column is the first overflow-hidden ancestor and carries the 6 px padding, and Steam's ring here is a sub-pixel `outline auto` in orange, so the ring has room on every side. Picture: `screenshots/DeckCapture_20260904_214941_game.png`. The maintainer's glance closes it. **Maintainer 2026-09-05: FAIL — "why is the AI character screen have rings that are yellow? they should be white".** The measurement was about spacing and missed the colour. Cause: the tiles are Decky buttons with no class of their own, so no plugin rule matched them and the browser drew its own hairline ring; on that build it took the gold tint from the active character (Ali G). A fresh capture 2026-09-05 04:04 shows it white but still hairline-thin (`screenshots/DeckCapture_20260905_040431_game.png`), and the computed styles on the focused tile carry no colour of ours at all. **Fixed the same day:** the tiles join the plugin's own white-ring rule, which the column's 6px padding was already sized for. Second look owed. **Measured after the rebuild, same day:** the focused tile computes `outline: rgba(255,255,255,0.9) solid 1.56px`, offset 1.99px, with the soft outer glow — the plugin's own ring, not the browser's. Picture `screenshots/DeckCapture_20260905_041028_game.png`. **Maintainer, second look 2026-09-05: PASS.** Row closed.
+
+  (Note: this row's own checkbox was left unticked in the source, but its last line says "Row closed" after
+  the maintainer's own second look passed it — moved here on that word, not on the checkbox.)
+
+  - [x] **REASONING-01** Thinking Balanced, the default model, the frozen Deep Rock Survivor question — the
+    space under the question changes to the model's own sentences within a few seconds, three lines at the
+    answer's own size, never more. **PASS (Deck) 2026-09-17:** the live block appeared about 9 seconds after
+    send, three lines, the newest one marked, sitting above the dock. Ran with "what does the pickaxe do"
+    (see the deviation note above).
+  - [x] **REASONING-02** When the answer starts, the space folds to one line with the seconds — Down from
+    the question reaches it and the ring is visible above the dock; A opens the block, A closes it; Down
+    from the fold enters the answer. **PASS (Deck) 2026-09-17:** the fold read "Show reasoning · 16 s"; A
+    opened the block and flipped the label, A closed it, and A then B also closed it with the ring still on
+    the row; Down entered the answer, Up returned. **One wrinkle:** from the Retry icon it takes two Down
+    presses to reach the fold, not one, because the question's own row is an extra stop in between; from the
+    question header it is one press.
+  - [x] **REASONING-03** Reopen the chat after switching tabs, and again after a plugin restart — the fold
+    is there, closed, and opens to the same text with the same seconds. **PASS (Deck) 2026-09-17:** after a
+    tab switch and a full plugin restart the fold was still there, closed, reading the same 16 seconds, and
+    opened to the exact same 1,861 characters.
+  - [x] **REASONING-04** Thinking Off, the frozen pickaxe question — today's phrases show, no fold, no chip.
+    **PASS (Deck) 2026-09-17:** Thinking Off showed only the ordinary waiting phrase, no live block, no
+    fold, and the details chips skipped the Thinking chip entirely. Ran with "how do i kill the big armoured
+    bug boss" (see the deviation note above).
+  - [x] **REASONING-06** Red Dead Redemption 2, Strategy, the frozen ending question, the first time with
+    thinking on — the one-time notice appears and asks to confirm; the live lines may name the ending; once
+    the answer starts, nothing of the reasoning shows outside the closed fold. **PASS (Deck) 2026-09-17:**
+    after an earlier decline the notice returned; switching Balanced to Deep and back prompted nothing; a
+    bare ending question with no game running (a deviation from the row, which names Red Dead) showed the
+    model's own unmasked reasoning live while it thought, and nothing of it showed once the answer started
+    outside the closed fold.
+  - [x] **REASONING-07** Decline the notice — Thinking stays Off and nothing shows; accept it on a later try
+    and the level changes, with the notice never coming back. **FAIL on the first build, Deck 2026-09-17:**
+    declining kept Thinking off, but the ring landed on the tab strip at the top of the panel instead of the
+    Thinking row; accepting the notice closed the box and remembered it was answered, but did not actually
+    turn Thinking on — a second pick of Balanced then worked silently, with no further prompt. **Fixed the
+    same day, commit `d2096ee`:** the notice now returns focus through the shared modal return-focus
+    registry, and patches the chosen level into the pending settings snapshot instead of losing it to a
+    stale snapshot restored after the confirm box closes. **PASS on the re-run, Deck 2026-09-17, bundle
+    `b8d903d9`:** declining now closes the box, lands the ring back on the Off button inside the Thinking
+    row instead of the tab strip, and the row stays roughly where it was on screen rather than the list
+    snapping to the top; Thinking is still correctly off. Accepting on the next try turns Thinking on in the
+    same press — read Balanced right away, again about 3.6 seconds later, and again after leaving to the
+    Main tab and back; Balanced and Deep afterwards never showed the notice again. Evidence
+    `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
+

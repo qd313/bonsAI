@@ -366,26 +366,8 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
   `d2096ee`); only 05 stays owed, for its body-text half. Evidence
   `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
   `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
-  - [x] **REASONING-01** Thinking Balanced, the default model, the frozen Deep Rock Survivor question — the
-    space under the question changes to the model's own sentences within a few seconds, three lines at the
-    answer's own size, never more. **PASS (Deck) 2026-09-17:** the live block appeared about 9 seconds after
-    send, three lines, the newest one marked, sitting above the dock. Ran with "what does the pickaxe do"
-    (see the deviation note above).
-  - [x] **REASONING-02** When the answer starts, the space folds to one line with the seconds — Down from
-    the question reaches it and the ring is visible above the dock; A opens the block, A closes it; Down
-    from the fold enters the answer. **PASS (Deck) 2026-09-17:** the fold read "Show reasoning · 16 s"; A
-    opened the block and flipped the label, A closed it, and A then B also closed it with the ring still on
-    the row; Down entered the answer, Up returned. **One wrinkle:** from the Retry icon it takes two Down
-    presses to reach the fold, not one, because the question's own row is an extra stop in between; from the
-    question header it is one press.
-  - [x] **REASONING-03** Reopen the chat after switching tabs, and again after a plugin restart — the fold
-    is there, closed, and opens to the same text with the same seconds. **PASS (Deck) 2026-09-17:** after a
-    tab switch and a full plugin restart the fold was still there, closed, reading the same 16 seconds, and
-    opened to the exact same 1,861 characters.
-  - [x] **REASONING-04** Thinking Off, the frozen pickaxe question — today's phrases show, no fold, no chip.
-    **PASS (Deck) 2026-09-17:** Thinking Off showed only the ordinary waiting phrase, no live block, no
-    fold, and the details chips skipped the Thinking chip entirely. Ran with "how do i kill the big armoured
-    bug boss" (see the deviation note above).
+  Rows 01, 02, 03, 04, 06 and 07 passed and moved to
+  [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
   - [ ] **REASONING-05** Show details on a thinking turn — the chip reads the level, the seconds and the
     token estimate, and its body says the count is an estimate. **PARTIAL (Deck) 2026-09-17:** the chip read
     "Thinking: Balanced · 16 s · ~465 tokens", the same seconds as the fold — but the whole details chip row
@@ -393,27 +375,6 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
     from Session context lands back on Hide details), so nobody using a controller can select this chip to
     read its body; only a page read reached the text. Filed as its own Bugs entry, below. Stays owed for the
     body-text half.
-  - [x] **REASONING-06** Red Dead Redemption 2, Strategy, the frozen ending question, the first time with
-    thinking on — the one-time notice appears and asks to confirm; the live lines may name the ending; once
-    the answer starts, nothing of the reasoning shows outside the closed fold. **PASS (Deck) 2026-09-17:**
-    after an earlier decline the notice returned; switching Balanced to Deep and back prompted nothing; a
-    bare ending question with no game running (a deviation from the row, which names Red Dead) showed the
-    model's own unmasked reasoning live while it thought, and nothing of it showed once the answer started
-    outside the closed fold.
-  - [x] **REASONING-07** Decline the notice — Thinking stays Off and nothing shows; accept it on a later try
-    and the level changes, with the notice never coming back. **FAIL on the first build, Deck 2026-09-17:**
-    declining kept Thinking off, but the ring landed on the tab strip at the top of the panel instead of the
-    Thinking row; accepting the notice closed the box and remembered it was answered, but did not actually
-    turn Thinking on — a second pick of Balanced then worked silently, with no further prompt. **Fixed the
-    same day, commit `d2096ee`:** the notice now returns focus through the shared modal return-focus
-    registry, and patches the chosen level into the pending settings snapshot instead of losing it to a
-    stale snapshot restored after the confirm box closes. **PASS on the re-run, Deck 2026-09-17, bundle
-    `b8d903d9`:** declining now closes the box, lands the ring back on the Off button inside the Thinking
-    row instead of the tab strip, and the row stays roughly where it was on screen rather than the list
-    snapping to the top; Thinking is still correctly off. Accepting on the next try turns Thinking on in the
-    same press — read Balanced right away, again about 3.6 seconds later, and again after leaving to the
-    Main tab and back; Balanced and Deep afterwards never showed the notice again. Evidence
-    `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
 - [ ] **KB-FOCUS-01** Ollama KB Update/Remove: Left/Right between pair; both Up → KB toggle; both Down → Reply style; **equal row height** (Update not taller than Remove)
 - [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the roadmap's Shelved list until a throttle or a slower test copy exists.
 - [ ] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows **Update AI & models** (quiet auto-probe)
@@ -424,7 +385,6 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 - [ ] **ROUTING-01** Set text/vision try order opens picker listing installed tags without requiring a prior Test connection tap
 - [ ] **ROUTING-02** Reorder + Done persists; reopen modal shows saved order
 - [ ] **ROUTING-FOCUS-01** Try-order modal chrome matches Pull Models / Character picker (deferred bug). **The D-pad half is no longer a question** — it failed on 2026-08-28, see PICKER-REORDER-01
-- [ ] **CHAR-PICKER-RING-01** Character picker grid, D-pad to a tile on the edge of a column (top, bottom, left-most and right-most column) — the focus ring must render in full, not cut off by the column's own edge. **Fixed at the desk 2026-09-04:** each grid column now carries 6px of inner padding (`PICKER_GRID_RING_PAD_PX` in `CharacterPickerModal.tsx`) so a tile's ring has room before the column's `overflow: hidden` clips it. Owed: a screenshot with the ring visible on an edge tile, for each of the four edges **Deck 2026-09-04, build 49241e7 (plan 32): measured, PNG for the maintainer's eyes.** Settings, Ali G, A opened the picker; Down landed the ring on the top-left tile (Jackie Welles). The tile sits 6.0 px from its column's left edge and 6.1 px from the right, the column is the first overflow-hidden ancestor and carries the 6 px padding, and Steam's ring here is a sub-pixel `outline auto` in orange, so the ring has room on every side. Picture: `screenshots/DeckCapture_20260904_214941_game.png`. The maintainer's glance closes it. **Maintainer 2026-09-05: FAIL — "why is the AI character screen have rings that are yellow? they should be white".** The measurement was about spacing and missed the colour. Cause: the tiles are Decky buttons with no class of their own, so no plugin rule matched them and the browser drew its own hairline ring; on that build it took the gold tint from the active character (Ali G). A fresh capture 2026-09-05 04:04 shows it white but still hairline-thin (`screenshots/DeckCapture_20260905_040431_game.png`), and the computed styles on the focused tile carry no colour of ours at all. **Fixed the same day:** the tiles join the plugin's own white-ring rule, which the column's 6px padding was already sized for. Second look owed. **Measured after the rebuild, same day:** the focused tile computes `outline: rgba(255,255,255,0.9) solid 1.56px`, offset 1.99px, with the soft outer glow — the plugin's own ring, not the browser's. Picture `screenshots/DeckCapture_20260905_041028_game.png`. **Maintainer, second look 2026-09-05: PASS.** Row closed.
 - [ ] **QAM-BODY-RO-01** Switch tabs repeatedly (10+, through the taller Settings/Ollama panels), then D-pad to the **bottom** of a long panel: the pane must still reach its end and not be pinned to a stale height. Steam replaces the scroll node on every switch, so this is specifically about the 2nd switch onward — one switch proves nothing. Fixed 2026-08-08; if it regresses, `--bonsai-tab-body-height` will stop matching the live pane's `clientHeight` after a switch. **Re-run QAM-BAZZITE-01 and D-PAD-SCROLL-01 with this** — same measurement chain
 - [ ] **SOFT-PREDICT-04** Strategy mode, an answer long enough to continue mid-branch (opens a `bonsai-strategy-branches` fence before hitting the length wall): confirm no half-rendered fence or stray JSON appears at any point in the stream, including right at the continue boundary — **BLOCKED 2026-09-18:** the long Hades walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`. **Tried again 2026-09-23, still unclear:** the finished text read clean — no half-rendered fence, no stray JSON, at any point — but the reply stopped on its own at 1,117 tokens against a 2,112-token limit in the log, so it never had to continue and the join point this row actually checks never happened. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04.json`. **Tried a second time 2026-09-23, still unclear, same shape:** a Half-Life 2 walkthrough question asked for a very long answer on purpose; the model still stopped itself at 1,050 tokens, well under the 2,112 limit. Asking for more length does not reach the wall — the row needs another way to bring the limit down rather than the question up. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04-try2.json`.
 - [ ] **EXPERT-CAP-01** Expert-mode Ask with a long answer: it now runs to ~1200 tokens before a soft continue rather than ~800. Expert was silently capped at the Speed budget until 2026-08-15, so a long Expert reply should visibly need fewer `Continuing…` cues than before the fix

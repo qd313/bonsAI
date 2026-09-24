@@ -28,9 +28,9 @@ own whisper-cli process for every decode pass; see that file for how that
 shared engine is started and stopped.
 
 Split (2026-09-24): finding and opening the microphone moved to
-voice_audio_capture_service.py. Every name it took (`env_for_audio_capture`
-included) is still imported back in here, so nothing outside this file had to
-change.
+voice_audio_capture_service.py, and downloading the speech model moved to
+voice_model_download_service.py. Every name either took is still imported
+back in here, so nothing outside this file had to change.
 
 How it works:
 
@@ -101,13 +101,23 @@ import subprocess
 import tempfile
 import threading
 import time
-import urllib.request
 import wave
 from collections import deque
 from typing import Any, Callable, Optional
 
 from backend.services.local_ollama_setup_service import _env_for_host_system_tools
-from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.services.voice_model_download_service import (
+    DEFAULT_VOICE_STT_MODEL,
+    VALID_VOICE_STT_MODELS,
+    VOICE_STT_MODEL_SPECS,
+    _append_log_tail,
+    _download_model_file,
+    download_voice_model,
+    new_voice_install_state,
+    sanitize_voice_stt_model,
+    voice_model_path,
+    voice_models_dir,
+)
 from backend.services.voice_audio_capture_service import (
     _discover_session_runtime_dir,
     _parse_proc_environ,
@@ -163,46 +173,12 @@ def _is_whisper_non_speech_tag(text: str) -> bool:
     return inner.startswith("BLANK")
 
 
-VALID_VOICE_STT_MODELS = frozenset({"tiny.en", "base.en"})
-DEFAULT_VOICE_STT_MODEL = "tiny.en"
-
-
-def sanitize_voice_stt_model(value: Any) -> str:
-    if isinstance(value, str) and value.strip() in VALID_VOICE_STT_MODELS:
-        return value.strip()
-    return DEFAULT_VOICE_STT_MODEL
-
-
-VOICE_STT_MODEL_SPECS: dict[str, dict[str, str]] = {
-    "tiny.en": {
-        "filename": "ggml-tiny.en.bin",
-        "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en.bin",
-    },
-    "base.en": {
-        "filename": "ggml-base.en.bin",
-        "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin",
-    },
-}
-
 # Do not float on :main — upstream image churn caused SIGILL on Deck when copying prebuilt binaries.
 # Bump digest only after podman pull + CPU-safe compile + inference smoke on hardware. See docs/voice-input-follow-up.md.
 WHISPER_CPP_IMAGE = (
     "ghcr.io/ggml-org/whisper.cpp"
     "@sha256:c0b535add76d7ff7613c70f32a7a4c794985f94238501e1b5b3b7f0eb56e9685"
 )
-
-
-def new_voice_install_state() -> dict[str, Any]:
-    return {
-        "phase": "idle",
-        "stage": "",
-        "model_id": "",
-        "done": True,
-        "error": "",
-        "accepted": False,
-        "progress_pct": 0,
-        "log_tail": [],
-    }
 
 
 def new_voice_transcription_state() -> dict[str, Any]:
@@ -220,16 +196,6 @@ def new_voice_transcription_state() -> dict[str, Any]:
         "started_at": None,
         "stopped_at": None,
     }
-
-
-def voice_models_dir(plugin_root: str, settings_dir: str) -> str:
-    base = settings_dir or os.path.join(plugin_root, "data")
-    return os.path.join(base, "voice_models")
-
-
-def voice_model_path(plugin_root: str, settings_dir: str, model_id: str) -> str:
-    spec = VOICE_STT_MODEL_SPECS.get(model_id, VOICE_STT_MODEL_SPECS[DEFAULT_VOICE_STT_MODEL])
-    return os.path.join(voice_models_dir(plugin_root, settings_dir), spec["filename"])
 
 
 def _link_versioned_sonames(bin_dir: str) -> None:
@@ -531,108 +497,6 @@ def merge_sliding_window_transcript(
 
     finalized = _join_transcript_parts(finalized, previous_partial)
     return finalized, window_text
-
-
-def _append_log_tail(state: dict[str, Any], line: str, max_lines: int = 80) -> None:
-    tail = list(state.get("log_tail") or [])
-    msg = (line or "").strip()
-    if msg:
-        tail.append(msg[:240])
-    state["log_tail"] = tail[-max_lines:]
-
-
-def _download_model_file(
-    url: str,
-    tmp_path: str,
-    cancel_event: threading.Event,
-    on_progress: Optional[Callable[[int], None]] = None,
-) -> None:
-    """Download GGUF model; prefer curl on Linux (more reliable TLS on SteamOS)."""
-    curl = shutil.which("curl")
-    env = _env_for_host_system_tools()
-    if curl:
-        proc = subprocess.run(
-            [curl, "-fL", "--retry", "3", "--retry-delay", "2", "-o", tmp_path, url],
-            capture_output=True,
-            text=True,
-            timeout=900,
-            env=env,
-        )
-        if proc.returncode == 0 and os.path.isfile(tmp_path) and os.path.getsize(tmp_path) > 1024:
-            return
-        err = (proc.stderr or proc.stdout or "curl download failed").strip()
-        try:
-            if os.path.isfile(tmp_path):
-                os.remove(tmp_path)
-        except OSError:
-            pass
-
-    req = urllib.request.Request(url, headers={"User-Agent": "bonsAI/1.0"})
-    with urlopen_with_ca_fallback(req, timeout=120) as resp:
-        total = int(resp.headers.get("Content-Length") or 0)
-        read = 0
-        chunk_size = 256 * 1024
-        with open(tmp_path, "wb") as out:
-            while True:
-                if cancel_event.is_set():
-                    raise RuntimeError("Download cancelled.")
-                chunk = resp.read(chunk_size)
-                if not chunk:
-                    break
-                out.write(chunk)
-                read += len(chunk)
-                if total > 0 and on_progress:
-                    on_progress(min(99, int(read * 100 / total)))
-
-
-def download_voice_model(
-    plugin_root: str,
-    settings_dir: str,
-    model_id: str,
-    state: dict[str, Any],
-    cancel_event: threading.Event,
-    on_stage: Optional[Callable[[str, dict[str, Any]], None]] = None,
-) -> None:
-    model_id = sanitize_voice_stt_model(model_id)
-    spec = VOICE_STT_MODEL_SPECS[model_id]
-    dest_dir = voice_models_dir(plugin_root, settings_dir)
-    os.makedirs(dest_dir, exist_ok=True)
-    dest_path = os.path.join(dest_dir, spec["filename"])
-    tmp_path = dest_path + ".part"
-
-    def stage(name: str, **fields: Any) -> None:
-        state["stage"] = name
-        if on_stage:
-            on_stage(name, {"model_id": model_id, **fields})
-
-    if os.path.isfile(dest_path) and os.path.getsize(dest_path) > 1024:
-        state.update({"phase": "done", "done": True, "error": "", "progress_pct": 100, "model_id": model_id})
-        stage("model_ready")
-        return
-
-    state.update({"phase": "running", "done": False, "error": "", "model_id": model_id, "progress_pct": 0})
-    stage("download_start", url=spec["url"])
-
-    try:
-        def on_progress(pct: int) -> None:
-            state["progress_pct"] = pct
-            if pct % 10 == 0:
-                stage("downloading", progress_pct=pct)
-
-        _download_model_file(spec["url"], tmp_path, cancel_event, on_progress)
-        os.replace(tmp_path, dest_path)
-        state.update({"phase": "done", "done": True, "error": "", "progress_pct": 100})
-        stage("model_ready")
-        _append_log_tail(state, f"Model ready: {model_id}")
-    except Exception as exc:
-        try:
-            if os.path.isfile(tmp_path):
-                os.remove(tmp_path)
-        except OSError:
-            pass
-        state.update({"phase": "failed", "done": True, "error": str(exc)[:500]})
-        stage("failed", error=str(exc)[:200])
-        raise
 
 
 def _voice_bin_keep_names() -> frozenset[str]:

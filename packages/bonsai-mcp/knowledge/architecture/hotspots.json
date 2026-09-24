@@ -41,11 +41,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1277,
-      "role": ""
-    },
-    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1220,
       "role": ""
@@ -53,6 +48,11 @@
     {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1171,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1141,
       "role": ""
     },
     {

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 444,
-  "edgeCount": 1166,
+  "fileCount": 445,
+  "edgeCount": 1168,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1937,6 +1937,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts": {
+      "imports": [
+        "src/hooks/useCapturedFrontendErrors.ts",
+        "src/utils/appDesktopLog.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
     "src/features/plugin-shell/useBonsaiScopeStyle.ts": {
       "imports": [
         "src/data/characterUiAccent.ts",
@@ -2406,7 +2415,7 @@
         "src/utils/appDesktopLog.ts"
       ],
       "importedBy": [
-        "src/index.tsx"
+        "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts"
       ]
     },
     "src/hooks/useChatSlots.test.ts": {
@@ -2878,6 +2887,7 @@
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx",
+        "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts",
         "src/features/plugin-shell/useBonsaiScopeStyle.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useChatSlotActivityState.ts",
@@ -2895,7 +2905,6 @@
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useBonsaiPluginShell.ts",
-        "src/hooks/useCapturedFrontendErrors.ts",
         "src/hooks/useChatSlots.ts",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
         "src/hooks/useIntentPacks.ts",
@@ -3485,6 +3494,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts",
         "src/hooks/useCapturedFrontendErrors.ts",
         "src/index.tsx",
         "src/utils/appDesktopLog.test.ts"

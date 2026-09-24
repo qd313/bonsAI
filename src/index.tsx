@@ -60,7 +60,9 @@
  * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
  * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts; the two
  * leave-the-panel navigation actions (and the SteamUrlApi type) moved to
- * features/plugin-shell/useExternalNavigationActions.ts.
+ * features/plugin-shell/useExternalNavigationActions.ts; the desktop-log prefs, captured
+ * frontend errors, and the tab-open log line moved to
+ * features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -162,13 +164,13 @@ import { usePluginHelpModal } from "./features/plugin-shell/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
-import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
 import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
+import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -436,20 +438,12 @@ const Content: React.FC = () => {
     setNavigationMessage,
   });
 
-  const appLogPrefs = useMemo(
-    () => ({
-      desktopAppLogLevel,
-      capabilities: { filesystem_write: gatedCapabilities.filesystem_write },
-    }),
-    [desktopAppLogLevel, gatedCapabilities.filesystem_write]
-  );
-  const [capturedErrors, setCapturedErrors] = useCapturedFrontendErrors(appLogPrefs);
-
-  useEffect(() => {
-    if (!settingsLoaded) return;
-    if (currentTab !== "developer" && currentTab !== "settings") return;
-    appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "ui.tab", `opened ${currentTab} tab`);
-  }, [currentTab, settingsLoaded, appLogPrefs]);
+  const { appLogPrefs, capturedErrors, setCapturedErrors } = useAppLogPrefsAndCapturedErrors({
+    desktopAppLogLevel,
+    filesystemWrite: gatedCapabilities.filesystem_write,
+    currentTab,
+    settingsLoaded,
+  });
 
   // --- Connection / host state (Ask + poll state: ``useBonsaiAskOrchestration``) ---
   const {

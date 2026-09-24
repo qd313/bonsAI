@@ -5,14 +5,8 @@
     "main.py": {
       "limit": 1710
     },
-    "py_modules/backend/services/ollama_service.py": {
-      "limit": 1002
-    },
     "src/components/MainTabChatTranscript.tsx": {
       "limit": 1104
-    },
-    "src/components/MainTabPresetAnimatedChips.tsx": {
-      "limit": 914
     },
     "src/components/MainTabUnifiedAskBar.tsx": {
       "limit": 1127

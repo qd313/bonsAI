@@ -128,61 +128,26 @@ import {
   mergePullModelCatalog,
 } from "../utils/mergePullModelCatalog";
 import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
+import {
+  computeUpdatedPullRecord,
+  isRecentPullModelTag,
+  PULL_MODEL_NEW_BADGE_WINDOW_MS,
+  type PullModelPullRecord,
+} from "../utils/pullModelNewBadge";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
 
-/**
- * Local record of when each tag was first seen installed, for the "New" badge (30 days).
- *
- * No pull ever recorded a timestamp anywhere before this — checked main.py, the local Ollama
- * setup service, and settings.json. Rather than teach the backend a new history file (main.py's
- * pull path is outside this feature's owned files), the badge is tracked here, client-side, keyed
- * by tag. `bonsai:`-prefixed so `clearBonsaiBrowserStorage` (Clear all plugin data) takes it with
- * everything else, with no separate line needed there.
- *
- * A fresh install must not badge every already-installed model "New": the first time this ever
- * runs in a browser every currently installed tag is seeded as already-old rather than "just
- * pulled". Only a tag that appears installed on a *later* run, with no prior record, is genuinely
- * new.
- *
- * **An empty record counts as that first run, and that is not a nicety.** Measured on the Deck
- * 2026-09-05 (PULL-NEW-BADGE-01): all four already-installed models were stamped with today's
- * date and would have worn a "New" label for a month. The modal renders once before the
- * connection test answers, so the first pass has an *empty* installed set and persisted `{}`.
- * The second pass — the one that actually has the tags — then read a non-null record, concluded
- * it was not a first run, and stamped every pre-existing model as just pulled. Testing only
- * `storedRecord === null` cannot see that, because by then the key exists.
- *
- * The accepted consequence, on a Deck with **no** models at all: the very first model pulled is
- * not badged New, because a flat tag-to-timestamp record cannot tell "never looked" from "looked
- * and there was nothing". A missing badge once on an empty Deck is a far better failure than
- * every model on a full one wearing it for thirty days.
- */
-export type PullModelPullRecord = Record<string, number>;
+// "New" badge history (when each tag was first seen installed) — the record math and the
+// first-run rule it protects live in pullModelNewBadge.ts; re-exported so existing imports of
+// these names from this file keep working unchanged.
+export {
+  computeUpdatedPullRecord,
+  isRecentPullModelTag,
+  PULL_MODEL_NEW_BADGE_WINDOW_MS,
+  type PullModelPullRecord,
+};
 export { PULL_MODEL_NEW_BADGE_STORAGE_KEY };
-export const PULL_MODEL_NEW_BADGE_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
-
-export function computeUpdatedPullRecord(
-  installedTags: ReadonlySet<string>,
-  storedRecord: PullModelPullRecord | null,
-  now: number
-): PullModelPullRecord {
-  const next: PullModelPullRecord = { ...(storedRecord ?? {}) };
-  const isFirstRunEver = storedRecord === null || Object.keys(storedRecord).length === 0;
-  for (const tag of installedTags) {
-    if (tag in next) continue;
-    next[tag] = isFirstRunEver ? now - PULL_MODEL_NEW_BADGE_WINDOW_MS - 1 : now;
-  }
-  return next;
-}
-
-export function isRecentPullModelTag(record: PullModelPullRecord, tag: string, now: number): boolean {
-  const seenAt = record[tag];
-  if (typeof seenAt !== "number" || !Number.isFinite(seenAt)) return false;
-  const age = now - seenAt;
-  return age >= 0 && age <= PULL_MODEL_NEW_BADGE_WINDOW_MS;
-}
 
 /** Minimal shape this modal needs from `load_settings` / `save_settings` — see bonsaiSettingsSchema.ts for the rest. */
 type PullModelsRoutingOrderSettings = {

@@ -28,9 +28,11 @@ own whisper-cli process for every decode pass; see that file for how that
 shared engine is started and stopped.
 
 Split (2026-09-24): finding and opening the microphone moved to
-voice_audio_capture_service.py, and downloading the speech model moved to
-voice_model_download_service.py. Every name either took is still imported
-back in here, so nothing outside this file had to change.
+voice_audio_capture_service.py, downloading the speech model moved to
+voice_model_download_service.py, and turning one whisper decode pass into
+stitched, growing text moved to voice_transcript_decode_service.py. Every
+name any of them took is still imported back in here, so nothing outside
+this file had to change.
 
 How it works:
 
@@ -94,7 +96,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-import re
 import shutil
 import struct
 import subprocess
@@ -127,13 +128,31 @@ from backend.services.voice_audio_capture_service import (
     _runtime_dir_usable,
     env_for_audio_capture,
 )
+from backend.services.voice_transcript_decode_service import (
+    FILLER_MIN_RMS,
+    WHISPER_CLI_INFERENCE_ARGS,
+    WHISPER_FILLER_WORDS,
+    WHISPER_NON_SPEECH_TAGS,
+    _WHISPER_TS_LINE,
+    _is_isolated_filler_partial,
+    _is_stale_word_fragment,
+    _is_whisper_filler_only,
+    _is_whisper_non_speech_tag,
+    _join_transcript_parts,
+    _normalize_merge_word,
+    _normalize_whisper_word,
+    _parse_whisper_stdout,
+    _run_whisper_transcribe,
+    _suffix_prefix_word_overlap,
+    _whisper_decode_usable,
+    _word_list,
+    merge_sliding_window_transcript,
+)
 from backend.services.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
     SAMPLE_WIDTH,
     WHISPER_THREADS,
-    _pcm_to_wav_bytes,
-    _sanitize_whisper_transcript,
     voice_bin_dir,
     voice_whisper_cli_path,
     voice_whisper_runtime_env,
@@ -151,27 +170,7 @@ WINDOW_SECONDS = 3
 WHISPER_MIN_DECODE_PCM_BYTES = BYTES_PER_SECOND // 4  # 0.25 s before first decode pass
 # Deck internal mic in Gaming Mode often peaks ~150–250 RMS; 350 blocked all whisper passes.
 VOICE_RMS_THRESHOLD = 120.0
-# Keep high bar for whisper filler hallucinations on noise (was SILENCE_RMS_THRESHOLD * 2.5).
-FILLER_MIN_RMS = 875.0
 SILENCE_HOLD_SECONDS = 2.0
-# Whisper tiny/base often hallucinate these on quiet/noise windows.
-WHISPER_FILLER_WORDS = frozenset(
-    {"you", "yes", "no", "ok", "okay", "uh", "um", "hmm", "yeah", "oh", "test"}
-)
-# Bracket tags whisper.cpp may emit on noise/uncertainty (not user speech).
-WHISPER_NON_SPEECH_TAGS = frozenset(
-    {"BLANK_AUDIO", "INAUDIBLE", "MUSIC", "APPLAUSE", "SILENCE", "NOISE"}
-)
-
-
-def _is_whisper_non_speech_tag(text: str) -> bool:
-    inner = (text or "").strip().strip("[]").upper()
-    if not inner:
-        return True
-    if inner in WHISPER_NON_SPEECH_TAGS:
-        return True
-    return inner.startswith("BLANK")
-
 
 # Do not float on :main — upstream image churn caused SIGILL on Deck when copying prebuilt binaries.
 # Bump digest only after podman pull + CPU-safe compile + inference smoke on hardware. See docs/voice-input-follow-up.md.
@@ -214,7 +213,6 @@ def _link_versioned_sonames(bin_dir: str) -> None:
             os.symlink(name, link_path)
 
 
-WHISPER_CLI_INFERENCE_ARGS = ("-ng", "-nfa")
 VOICE_BIN_CPU_SAFE_MARKER = ".bonsai_cpu_safe"
 
 
@@ -303,200 +301,6 @@ def _voice_binary_ready_for_inference(
     if _voice_bin_is_cpu_safe(plugin_root, settings_dir):
         return path
     return None
-
-
-def _normalize_whisper_word(word: str) -> str:
-    return (word or "").strip().lower().strip(".,!?;:\"'()[]")
-
-
-def _is_whisper_filler_only(text: str) -> bool:
-    words = [_normalize_whisper_word(w) for w in (text or "").split() if w.strip()]
-    if not words or len(words) > 2:
-        return False
-    return all(w in WHISPER_FILLER_WORDS for w in words)
-
-
-def _whisper_decode_usable(text: str, window_rms: float) -> bool:
-    if not (text or "").strip():
-        return False
-    if _is_whisper_filler_only(text):
-        return window_rms >= FILLER_MIN_RMS
-    return True
-
-
-def _is_isolated_filler_partial(text: str) -> bool:
-    words = [_normalize_whisper_word(w) for w in (text or "").split() if w.strip()]
-    return len(words) == 1 and words[0] in WHISPER_FILLER_WORDS
-
-
-def _is_stale_word_fragment(fragment: str, continuation: str) -> bool:
-    """True when a lone prior token is a whisper prefix of the next decode (Test → Testing)."""
-    frag_words = _word_list(fragment)
-    cont_words = _word_list(continuation)
-    if len(frag_words) != 1 or not cont_words:
-        return False
-    frag_norm = _normalize_merge_word(frag_words[0])
-    first_norm = _normalize_merge_word(cont_words[0])
-    if not frag_norm or not first_norm or len(frag_norm) < 3:
-        return False
-    return first_norm.startswith(frag_norm) and len(first_norm) > len(frag_norm)
-
-
-_WHISPER_TS_LINE = re.compile(
-    r"^\[\d{2}:\d{2}:\d{2}(?:\.\d+)?\s*-->\s*\d{2}:\d{2}:\d{2}(?:\.\d+)?\]\s*(.*)$",
-    re.IGNORECASE,
-)
-
-
-def _parse_whisper_stdout(stdout: str) -> str:
-    """Extract spoken text from whisper-cli stdout (with or without -nt)."""
-    if not stdout:
-        return ""
-    parts: list[str] = []
-    for line in stdout.splitlines():
-        line = line.strip()
-        if not line or line.lower().startswith("whisper"):
-            continue
-        match = _WHISPER_TS_LINE.match(line)
-        if match:
-            text = (match.group(1) or "").strip()
-        elif line.startswith("[") and "]" in line:
-            text = line.split("]", 1)[1].strip()
-        else:
-            text = line
-        if not text or _is_whisper_non_speech_tag(text) or text.startswith("[BLANK"):
-            continue
-        parts.append(text)
-    return _sanitize_whisper_transcript(" ".join(parts).strip())
-
-
-def _run_whisper_transcribe(
-    whisper_bin: str,
-    model_path: str,
-    pcm: bytes,
-    env: dict[str, str],
-) -> str:
-    if not pcm:
-        return ""
-    wav_bytes = _pcm_to_wav_bytes(pcm)
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
-        tmp.write(wav_bytes)
-        tmp.flush()
-        proc = subprocess.run(
-            [
-                whisper_bin,
-                "-m",
-                model_path,
-                "-f",
-                tmp.name,
-                "-l",
-                "en",
-                "-t",
-                str(WHISPER_THREADS),
-                "-nt",
-                *WHISPER_CLI_INFERENCE_ARGS,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=45,
-            env=env,
-        )
-    if proc.returncode != 0:
-        err = (proc.stderr or proc.stdout or "").strip()
-        raise RuntimeError(err or f"whisper-cli exited {proc.returncode}")
-    text = (proc.stdout or "").strip()
-    return _parse_whisper_stdout(text)
-
-
-def _normalize_merge_word(word: str) -> str:
-    return re.sub(r"[^a-z0-9']+", "", (word or "").lower())
-
-
-def _word_list(text: str) -> list[str]:
-    return [w for w in (text or "").split() if w.strip()]
-
-
-def _suffix_prefix_word_overlap(left_text: str, right_text: str) -> int:
-    left = [_normalize_merge_word(w) for w in _word_list(left_text)]
-    right = [_normalize_merge_word(w) for w in _word_list(right_text)]
-    if not left or not right:
-        return 0
-    for size in range(min(len(left), len(right)), 0, -1):
-        if left[-size:] == right[:size]:
-            return size
-    return 0
-
-
-def _join_transcript_parts(left: str, right: str) -> str:
-    left = (left or "").strip()
-    right = (right or "").strip()
-    if not left:
-        return right
-    if not right:
-        return left
-    return f"{left} {right}"
-
-
-def merge_sliding_window_transcript(
-    finalized: str,
-    previous_partial: str,
-    window_text: str,
-) -> tuple[str, str]:
-    """Accumulate rolling-window whisper decodes without dropping earlier words.
-
-    Each pass transcribes only the latest audio window, so ``window_text`` often
-    overlaps the tail of ``previous_partial``. Commit non-overlapping words to
-    ``finalized`` and keep the live tail in ``partial``.
-    """
-    finalized = (finalized or "").strip()
-    previous_partial = (previous_partial or "").strip()
-    window_text = (window_text or "").strip()
-
-    if not window_text:
-        return finalized, previous_partial
-    if not previous_partial:
-        if not finalized:
-            return finalized, window_text
-        if _is_stale_word_fragment(finalized, window_text):
-            return "", window_text
-        overlap = _suffix_prefix_word_overlap(finalized, window_text)
-        if overlap > 0:
-            win_words = _word_list(window_text)
-            remainder = " ".join(win_words[overlap:])
-            return finalized, remainder
-        return finalized, window_text
-
-    if window_text.startswith(previous_partial):
-        return finalized, window_text
-    if previous_partial.startswith(window_text):
-        return finalized, previous_partial
-
-    prev_words = _word_list(previous_partial)
-    new_words = _word_list(window_text)
-    prev_norm = [_normalize_merge_word(w) for w in prev_words]
-    new_norm = [_normalize_merge_word(w) for w in new_words]
-    best_overlap = 0
-    for size in range(min(len(prev_norm), len(new_norm)), 0, -1):
-        if prev_norm[-size:] == new_norm[:size]:
-            best_overlap = size
-            break
-
-    if best_overlap > 0:
-        commit_words = prev_words[:-best_overlap] if best_overlap < len(prev_words) else []
-        if commit_words:
-            finalized = _join_transcript_parts(finalized, " ".join(commit_words))
-        return finalized, window_text
-
-    if _is_isolated_filler_partial(previous_partial) and not window_text.lower().startswith(
-        previous_partial.lower()
-    ):
-        return finalized, window_text
-
-    if _is_stale_word_fragment(previous_partial, window_text):
-        return finalized, window_text
-
-    finalized = _join_transcript_parts(finalized, previous_partial)
-    return finalized, window_text
 
 
 def _voice_bin_keep_names() -> frozenset[str]:

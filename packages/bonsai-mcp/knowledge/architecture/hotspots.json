@@ -51,11 +51,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1141,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "lines": 1104,
       "role": ""
@@ -83,6 +78,11 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 946,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 945,
       "role": ""
     },
     {

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 90,
-  "edgeCount": 211,
+  "fileCount": 91,
+  "edgeCount": 213,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -115,6 +115,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/voice_whisper_runtime.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/ollama_connectivity.py",
       "count": 3
     },
@@ -152,10 +156,6 @@
     },
     {
       "path": "py_modules/backend/services/tdp_service.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/voice_whisper_runtime.py",
       "count": 3
     },
     {
@@ -388,6 +388,10 @@
     },
     {
       "path": "py_modules/backend/services/voice_rpc.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcript_decode_service.py",
       "count": 1
     },
     {
@@ -1280,11 +1284,20 @@
         "main.py"
       ]
     },
+    "py_modules/backend/services/voice_transcript_decode_service.py": {
+      "imports": [
+        "py_modules/backend/services/voice_whisper_runtime.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/voice_transcription_service.py"
+      ]
+    },
     "py_modules/backend/services/voice_transcription_service.py": {
       "imports": [
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_model_download_service.py",
+        "py_modules/backend/services/voice_transcript_decode_service.py",
         "py_modules/backend/services/voice_whisper_daemon.py",
         "py_modules/backend/services/voice_whisper_runtime.py"
       ],
@@ -1310,6 +1323,7 @@
       ],
       "importedBy": [
         "py_modules/backend/services/voice_audio_capture_service.py",
+        "py_modules/backend/services/voice_transcript_decode_service.py",
         "py_modules/backend/services/voice_transcription_service.py",
         "py_modules/backend/services/voice_whisper_daemon.py"
       ]

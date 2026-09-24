@@ -80,12 +80,14 @@ lives in strategy_entity_extraction.py, the spoiler-policy wording (spoiler cons
 low-spoiler-risk title logic, and the actual policy paragraphs) now lives in
 strategy_spoiler_policy.py, the topic classifiers plus their call-out text (Ollama host
 help, model policy tiers, power/TDP, display resolution, troubleshooting) now live in
-ask_topic_instructions.py, and the reply verbosity / reply language blocks now live in
-reply_style_blocks.py; all are re-exported here.
+ask_topic_instructions.py, the reply verbosity / reply language blocks now live in
+reply_style_blocks.py, and the reply-refinement chip handling (sanitize_reply_followup,
+build_reply_followup_context_block) now lives in reply_followup_blocks.py; all are
+re-exported here.
 """
 
 import re
-from typing import Callable, Optional, Any
+from typing import Callable, Optional
 
 from backend.tdp_intent import is_current_tdp_read_intent
 from backend.services.strategy_guide_parse import (
@@ -126,6 +128,11 @@ from backend.services.reply_style_blocks import (
     user_asks_for_detail_depth,
     build_reply_language_block,
     build_reply_verbosity_block,
+)
+from backend.services.reply_followup_blocks import (
+    sanitize_reply_followup,
+    build_reply_followup_context_block,
+    REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS,
 )
 
 
@@ -716,59 +723,4 @@ def format_ai_response(
     if attachment_errors:
         response_text += "\n\n[Attachment errors: " + "; ".join(attachment_errors) + "]"
     return response_text
-
-
-_REPLY_FOLLOWUP_CHIP_LABELS = {
-    "bad_information": "Bad information",
-    "too_long": "Too long",
-    "too_short": "Too short",
-    "misidentified_game": "Misidentified game/problem",
-    "unfenced_spoiler": "Unfenced spoiler",
-}
-
-
-def sanitize_reply_followup(raw: Any) -> Optional[dict]:
-    """Normalize optional reply-follow-up payload from the Ask RPC dict."""
-    if not isinstance(raw, dict):
-        return None
-    chip_id = str(raw.get("chip_id", "") or "").strip().lower()
-    if chip_id not in _REPLY_FOLLOWUP_CHIP_LABELS:
-        return None
-    parent_question = str(raw.get("parent_question", "") or "").strip()
-    parent_answer = str(raw.get("parent_answer", "") or "").strip()
-    if not parent_question or not parent_answer:
-        return None
-    preferred_model = str(raw.get("preferred_model", "") or "").strip() or None
-    return {
-        "chip_id": chip_id,
-        "parent_question": parent_question,
-        "parent_answer": parent_answer,
-        "preferred_model": preferred_model,
-    }
-
-
-# Decision D46 (2026-09-01): the parent answer is pasted into the follow-up message, and a
-# Strategy reply can run to 1,600 tokens on its own. Against the Deck's 4,096-token window that
-# paste plus the system prompt plus the new reply budget did not fit, and Ollama drops the start
-# of the prompt silently. 1,500 characters (~400 tokens) keeps the orientation and the first
-# tactics, which is what a refinement chip refers back to.
-REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS = 1500
-_REPLY_FOLLOWUP_TRIM_MARK = " […earlier answer trimmed to fit the model's window]"
-
-
-def build_reply_followup_context_block(chip_id: str, parent_question: str, parent_answer: str) -> str:
-    """Inject prior turn Q+A before the user's refinement message."""
-    label = _REPLY_FOLLOWUP_CHIP_LABELS.get(chip_id, "Follow-up")
-    pq = (parent_question or "").strip()
-    pa = (parent_answer or "").strip()
-    if len(pa) > REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS:
-        pa = pa[:REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS].rstrip() + _REPLY_FOLLOWUP_TRIM_MARK
-    return (
-        "REPLY FOLLOW-UP CONTEXT\n"
-        f"The user is refining their previous Ask ({label}).\n"
-        f"Previous question:\n{pq}\n\n"
-        f"Previous answer:\n{pa}\n\n"
-        "Address the refinement request in the user's new message below.\n"
-        "---\n"
-    )
 

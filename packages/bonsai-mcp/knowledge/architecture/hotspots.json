@@ -111,11 +111,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 775,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 745,
       "role": ""
@@ -123,6 +118,11 @@
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 743,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 727,
       "role": ""
     },
     {

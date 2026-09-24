@@ -61,11 +61,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 1015,
-      "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 996,
       "role": ""
@@ -174,6 +169,11 @@
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 573,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 567,
+      "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
       "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",

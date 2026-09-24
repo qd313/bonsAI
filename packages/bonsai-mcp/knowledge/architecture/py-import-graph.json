@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 97,
-  "edgeCount": 224,
+  "fileCount": 98,
+  "edgeCount": 229,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -80,6 +80,14 @@
       "count": 5
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 5
+    },
+    {
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/services/voice_whisper_runtime.py",
       "count": 5
     },
@@ -112,14 +120,6 @@
       "count": 4
     },
     {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
-      "count": 4
-    },
-    {
-      "path": "py_modules/backend/services/token_accounting_service.py",
-      "count": 4
-    },
-    {
       "path": "py_modules/backend/services/transparency_service.py",
       "count": 4
     },
@@ -137,6 +137,10 @@
     },
     {
       "path": "py_modules/backend/services/async_background_job.py",
+      "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
       "count": 3
     },
     {
@@ -172,10 +176,6 @@
       "count": 2
     },
     {
-      "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "count": 2
-    },
-    {
       "path": "py_modules/backend/services/chat_slot_service.py",
       "count": 2
     },
@@ -205,6 +205,10 @@
     },
     {
       "path": "py_modules/backend/services/ollama_embed_service.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/ollama_window_fit.py",
       "count": 2
     },
     {
@@ -316,6 +320,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_chat_stream.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_connection_test.py",
       "count": 1
     },
@@ -341,10 +349,6 @@
     },
     {
       "path": "py_modules/backend/services/ollama_stop_service.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/ollama_window_fit.py",
       "count": 1
     },
     {
@@ -493,7 +497,7 @@
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ask_topic_instructions.py",
-        "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/rag_corpus_status.py",
         "py_modules/backend/services/vac_check_commands.py"
       ]
@@ -617,6 +621,7 @@
       ],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -940,6 +945,18 @@
         "py_modules/backend/services/settings_service.py"
       ]
     },
+    "py_modules/backend/services/ollama_chat_stream.py": {
+      "imports": [
+        "py_modules/backend/constants.py",
+        "py_modules/backend/services/bonsai_stream_tags.py",
+        "py_modules/backend/services/ollama_window_fit.py",
+        "py_modules/backend/services/strategy_guide_parse.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
+      ]
+    },
     "py_modules/backend/services/ollama_connection_test.py": {
       "imports": [
         "py_modules/backend/ollama_urls.py",
@@ -1026,10 +1043,10 @@
     },
     "py_modules/backend/services/ollama_service.py": {
       "imports": [
-        "py_modules/backend/constants.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_health_probe.py",
         "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_prompts.py",
@@ -1060,6 +1077,7 @@
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -1263,6 +1281,7 @@
     "py_modules/backend/services/strategy_guide_parse.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
@@ -1290,6 +1309,7 @@
       "imports": [],
       "importedBy": [
         "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/ollama_window_fit.py"

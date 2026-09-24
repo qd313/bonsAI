@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 481,
-  "edgeCount": 1277,
+  "fileCount": 482,
+  "edgeCount": 1279,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -554,6 +554,7 @@
         "src/data/presets.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetRowNav.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
@@ -1546,6 +1547,7 @@
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetSlotRotation.test.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
@@ -2219,6 +2221,14 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
         "src/hooks/useSuggestedPromptChips.ts"
+      ]
+    },
+    "src/features/preset-carousel/presetChipDecodeText.ts": {
+      "imports": [
+        "src/data/presets.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx"
       ]
     },
     "src/features/preset-carousel/presetRowLayout.test.ts": {

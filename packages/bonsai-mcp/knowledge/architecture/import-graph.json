@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 447,
-  "edgeCount": 1173,
+  "edgeCount": 1174,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4088,7 +4088,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx"
+        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/liveTurnFocusGraph.ts"
       ]
     },
     "src/utils/i18n.test.ts": {
@@ -4178,6 +4179,7 @@
     },
     "src/utils/liveTurnFocusGraph.ts": {
       "imports": [
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"

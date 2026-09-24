@@ -8,6 +8,7 @@
 
 import { focusRegisteredReplyStop, type ReplyStopId } from "./replyStopRegistry";
 import { elementHasFocus, getUiDocument } from "./uiDocument";
+import { focusRowElement } from "./focusPerTurnRow";
 import { takeNavFocus } from "./navFocusRegistry";
 
 const FOCUSABLE_SELECTOR =
@@ -225,15 +226,7 @@ export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
   if (!el) return false;
   const ours = Array.from(el.classList).some((c) => c.startsWith("bonsai-"));
   if (!ours) return false;
-  if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
-    el.setAttribute("tabindex", "-1");
-  }
-  try {
-    el.focus({ preventScroll: true });
-  } catch {
-    return false;
-  }
-  return elementHasFocus(el);
+  return focusRowElement(el);
 }
 
 /**

@@ -1,44 +1,13 @@
 """merge_pulled_tags_into_routing_orders must extend saved try orders without replacing derived ones."""
 
-import json
-import os
-import tempfile
 import unittest
-from unittest.mock import patch
 
-from backend_module_stubs import install_fcntl_and_decky_stubs
-
-install_fcntl_and_decky_stubs()
-
-from main import Plugin  # noqa: E402
+from plugin_settings_file_harness import PluginSettingsFileMixin
 
 
-class MergePulledTagsRpcTests(unittest.IsolatedAsyncioTestCase):
+class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self) -> None:
-        self.tmp = tempfile.TemporaryDirectory()
-        self.settings_dir = self.tmp.name
-        self.settings_path = os.path.join(self.settings_dir, "settings.json")
-        os.makedirs(self.settings_dir, exist_ok=True)
-
-        self.plugin = Plugin()
-        patcher = patch.object(Plugin, "_settings_path", return_value=self.settings_path)
-        self.addCleanup(patcher.stop)
-        patcher.start()
-
-        import decky
-
-        decky.DECKY_PLUGIN_SETTINGS_DIR = self.settings_dir
-
-    async def asyncTearDown(self) -> None:
-        self.tmp.cleanup()
-
-    def _write_settings(self, data: dict) -> None:
-        with open(self.settings_path, "w", encoding="utf-8") as f:
-            json.dump(data, f)
-
-    def _read_settings(self) -> dict:
-        with open(self.settings_path, encoding="utf-8") as f:
-            return json.load(f)
+        self.start_plugin_with_settings_file()
 
     async def test_appends_pulled_tag_to_saved_text_order(self) -> None:
         self._write_settings({"text_model_routing_order": ["gemma4:e2b", "tinyllama"]})

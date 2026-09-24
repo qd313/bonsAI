@@ -265,6 +265,7 @@ from backend.ollama_routing import (
     is_valid_setup_pull_profile,
     is_vision_capable_tag,
     merge_pulled_tag,
+    remove_tag_from_routing_orders,
 )
 from backend.ollama_urls import build_ollama_chat_url, normalize_ollama_base
 
@@ -1877,6 +1878,19 @@ class Plugin:
             "ollama rm succeeded",
             fields={"ok": True},
         )
+        # A removed model also leaves the saved try orders. remove_tag_from_routing_orders was
+        # written for this and never called: on the Deck (plan 64 flow H) qwen2.5:1.5b was removed
+        # through its row and the saved text order still read ['qwen2.5:1.5b'], so Ask's first
+        # choice was a model no longer there. Only the two order keys are written.
+        current = await self.load_settings()
+        cleaned = remove_tag_from_routing_orders(current, t)
+        order_patch = {
+            key: cleaned[key]
+            for key in ("text_model_routing_order", "vision_model_routing_order")
+            if cleaned.get(key) != current.get(key)
+        }
+        if order_patch:
+            await self.save_settings(order_patch)
         return {"ok": True, "removed": t, "error": ""}
 
     async def fetch_ollama_catalog_metadata(self, tags: Any = None):

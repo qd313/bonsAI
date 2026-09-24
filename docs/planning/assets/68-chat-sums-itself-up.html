@@ -1,0 +1,973 @@
+<title>Chat Sums Itself Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Semi+Condensed:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* ---------- Page: one deliberate dark look, because the thing drawn is a dark Deck panel ---------- */
+  :root {
+    color-scheme: dark;
+    --ground: #0a0e13;
+    --surface: #10171f;
+    --surface-2: #16202b;
+    --line: #223040;
+    --ink: #dde6ee;
+    --ink-2: #aab9c9;
+    --muted: #7c90a5;
+    --accent: #9ce7ff;
+    --pick: #e6bf78;
+    --ok: #6fd49a;
+    --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --f-head: "Barlow Semi Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  html { background: var(--ground); }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.55;
+    padding-inline: 16px;
+    padding-block: 36px 72px;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  .prose { max-width: 680px; }
+  h1 {
+    font-family: var(--f-head); font-weight: 600; font-size: clamp(32px, 5.4vw, 48px);
+    line-height: 1.02; letter-spacing: 0.005em; margin: 6px 0 14px; text-wrap: balance;
+  }
+  h2 { font-family: var(--f-head); font-weight: 600; font-size: 28px; line-height: 1.1; margin: 4px 0 8px; text-wrap: balance; }
+  h3 { font-family: var(--f-head); font-weight: 600; font-size: 19px; margin: 0 0 8px; letter-spacing: 0.01em; }
+  p { margin: 0 0 12px; }
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--muted); margin: 0;
+  }
+  .lede { color: var(--ink-2); font-size: 16.5px; }
+  a { color: var(--accent); }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 18px 28px;
+    margin: 28px 0 8px; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .facts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .facts li { position: relative; padding-left: 18px; color: var(--ink-2); font-size: 14.5px; line-height: 1.45; }
+  .facts li::before {
+    content: ""; position: absolute; left: 2px; top: 0.52em; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ok);
+  }
+  .facts .wait p { color: var(--ink-2); font-size: 14.5px; line-height: 1.5; }
+  .num { font-family: var(--f-mono); font-size: 13.5px; color: var(--ink); white-space: nowrap; }
+
+  /* ---------- Scene controls ---------- */
+  .scene { margin-top: 56px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 18px 0 12px; }
+  .btn {
+    font: 700 14px/1 var(--f-body); padding: 10px 14px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  }
+  .btn.primary { background: #123445; border-color: #2d6b86; color: #dcf7ff; }
+  .btn:hover { border-color: #3a5a74; }
+  .seg-wrap { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .seg-label { font-size: 13.5px; color: var(--muted); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .seg button {
+    font: 14px/1 var(--f-body); padding: 9px 12px; background: transparent; color: var(--ink-2);
+    border: 0; cursor: pointer;
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
+  .seg .rec-dot { color: var(--pick); font-size: 11px; margin-left: 6px; font-family: var(--f-mono); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  ol.steps { list-style: none; counter-reset: step; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; }
+  ol.steps li { counter-increment: step; }
+  ol.steps button {
+    text-align: left; background: transparent; border: 1px solid var(--line); border-radius: 6px;
+    color: var(--ink-2); padding: 7px 11px 8px; font: 13.5px/1.3 var(--f-body); cursor: pointer;
+  }
+  ol.steps button::before {
+    content: counter(step); font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-right: 8px;
+  }
+  ol.steps button.now { border-color: var(--accent); color: var(--ink); background: rgba(156, 231, 255, 0.06); }
+  ol.steps .hint { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .bar { height: 2px; background: var(--line); margin: 12px 0 24px; border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+
+  .panels { display: flex; flex-wrap: wrap; gap: 36px 28px; align-items: flex-start; }
+  figure { margin: 0; width: 300px; max-width: 100%; }
+  .ruler {
+    position: relative; height: 14px; margin-bottom: 6px; border-bottom: 1px dashed rgba(255, 255, 255, 0.22);
+    font-family: var(--f-mono); font-size: 10px; color: rgba(255, 255, 255, 0.45);
+  }
+  .ruler span { position: absolute; right: 0; top: -2px; }
+  figcaption { margin-top: 12px; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+  figcaption b { color: var(--ink); }
+  figcaption p { margin: 6px 0 0; }
+  .tag {
+    display: inline-block; font-family: var(--f-mono); font-size: 12px; color: var(--accent);
+    border: 1px solid #2a5566; border-radius: 4px; padding: 0 5px; margin-right: 6px; line-height: 1.5;
+  }
+  .rec {
+    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--pick); margin-left: 6px; white-space: nowrap;
+  }
+  .cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 300px)); gap: 36px 28px; }
+  @media (max-width: 700px) { .cases { grid-template-columns: minmax(0, 300px); } }
+  .foot { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
+  .foot p { max-width: 720px; }
+
+  /* =====================================================================
+     The Deck panel. Every value below is copied from the plugin's own
+     styles (questionBubble.ts, answerBubble.ts, section-6.ts, section-4.ts,
+     savedChatSlotsRow.ts, SessionContextStrip.tsx, ContextChipLadder.tsx)
+     unless a comment says it is drawn by eye. 300 wide; reading area 412.
+     ===================================================================== */
+  .dk {
+    position: relative; width: 300px; height: 660px; overflow: hidden;
+    background: #0e141b; color: #d4dde6;
+    font-family: "Motiva Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 24px 60px rgba(0, 0, 0, 0.5);
+    font-size: 12px; line-height: 1.4;
+  }
+  .dk *, .dk *::before, .dk *::after { box-sizing: border-box; }
+
+  /* Top tab bar at rest: 20 tall + 4 gap (arrangement simplified). */
+  .dk-tabbar { position: absolute; top: 0; left: 0; right: 0; height: 20px; display: flex; align-items: center; gap: 10px; padding: 0 8px; }
+  .dk-mark { font-size: 9px; font-weight: 700; color: rgba(168, 182, 198, 0.62); letter-spacing: 0.04em; }
+  .dk-dashes { display: flex; gap: 4px; align-items: center; flex: 1; }
+  .dk-dashes i { width: 14px; height: 3px; background: rgba(168, 182, 198, 0.35); border-radius: 1px; }
+  .dk-dashes i.on { height: 5px; background: #52d88a; }
+  .dk-tabname { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #52d88a; }
+
+  /* Chat row at rest, about 55 tall. */
+  .dk-slots {
+    position: absolute; top: 24px; left: 0; right: 0; height: 55px; padding: 5px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+  }
+  .dk-slotline { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; }
+  .dk-slot-title { font-size: 12px; font-weight: 700; line-height: 1.2; color: rgba(200, 214, 230, 0.72); }
+  .dk-nb { position: absolute; font-size: 11px; color: rgba(200, 214, 230, 0.28); filter: blur(0.7px); white-space: nowrap; }
+  .dk-nb.l { left: 0; color: rgba(156, 231, 255, 0.42); font-weight: 700; filter: none; }
+  .dk-nb.r { right: 0; }
+  .dk-dots { display: flex; gap: 6px; }
+  .dk-dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(143, 168, 196, 0.3); }
+  .dk-dots i.cur { background: rgba(200, 214, 230, 0.5); }
+
+  /* The scrolling chat: 12 of main-column margin + the measured 412 reading area. */
+  .dk-scroll { position: absolute; top: 79px; left: 0; right: 0; height: 424px; overflow: hidden; }
+  .dk-inner { padding-top: 12px; padding-bottom: 22px; }
+  .dk-tr { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 0 6px 0 4px; }
+  .dk-turn { display: flex; flex-direction: column; gap: 6px; }
+
+  .dk-pillrow { display: flex; align-items: center; gap: 8px; opacity: 0.55; margin: 2px 0 6px; border-radius: 999px; }
+  .dk-pill {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: rgba(200, 214, 230, 0.85);
+    padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(18, 26, 34, 0.5);
+    white-space: nowrap;
+  }
+  .dk-rule { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.09); }
+  .dk-pillrow.lit { opacity: 1; }
+  .dk-pillrow.ring { opacity: 1; }
+  .dk-pillrow.ring .dk-pill { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+
+  .dk-q {
+    position: relative; display: block; width: fit-content; max-width: min(92%, 280px); margin-left: auto; align-self: flex-end;
+    text-align: right; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(22, 34, 48, 0.78) 0%, rgba(14, 22, 34, 0.82) 100%); color: #8fa8c4;
+  }
+  .dk-q.open {
+    border-color: rgba(120, 155, 198, 0.42);
+    background: linear-gradient(180deg, rgba(36, 52, 72, 0.82) 0%, rgba(24, 36, 52, 0.85) 100%); color: #e8eef4;
+  }
+  .dk-q-t { font-size: 11px; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-q.open .dk-q-t { white-space: normal; overflow-wrap: anywhere; }
+  .dk-retry-sp { float: left; width: 22px; height: 1.3em; }
+  .dk-retry { position: absolute; left: 6px; bottom: 3px; width: 20px; height: 20px; display: grid; place-items: center; color: #d4dde6; }
+
+  .dk-a {
+    width: 92%; align-self: flex-start; border-radius: 10px; border: 1px solid rgba(46, 135, 83, 0.48);
+    background:
+      linear-gradient(0deg, rgba(130, 183, 152, 0.11), rgba(130, 183, 152, 0.11)),
+      linear-gradient(180deg, rgba(46, 135, 83, 0.12) 0%, rgba(18, 52, 34, 0.55) 100%);
+    color: #d4dde6; padding: 8px 10px; font-size: 12px; line-height: 1.4; margin-bottom: 8px;
+  }
+  .dk-a p { margin: 0 0 0.5em; border-left: 2px solid transparent; padding-left: 6px; border-radius: 4px; }
+  .dk-a p:last-child { margin-bottom: 0; }
+  .dk-caret { margin-left: 2px; }
+
+  .dk-wait { display: flex; align-items: center; gap: 8px; color: #9fb7d5; font-size: 12px; line-height: 1.35; margin: 8px 0 4px; }
+  .dk-wait em { font-style: italic; }
+  .dk-secs { font-style: normal; color: #7f97b3; font-variant-numeric: tabular-nums; }
+  .dk-ic { flex: 0 0 auto; display: block; }
+  .dk-live { display: flex; flex-direction: column; width: 100%; padding: 2px 4px 2px 8px; border-left: 2px solid rgba(159, 183, 213, 0.55); margin-bottom: 8px; }
+  .dk-live div { font-size: 12px; line-height: 1.4; color: #9fb7d5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-live div.newest { color: #c9d6e4; }
+  .dk-warn { color: #f2cf84; font-size: 12px; line-height: 1.35; margin: 8px 0 4px; }
+  .dk-stopped { color: #9fb7d5; font-size: 12px; margin: 8px 0 4px; }
+
+  .dk-ra { margin-top: 4px; width: 92%; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .dk-cap { font-size: 11px; color: #9fb7d5; line-height: 1.35; }
+  .dk-rarow { display: flex; gap: 8px; width: 100%; align-items: center; }
+  .dk-btn {
+    min-height: 32px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(110, 150, 200, 0.38); background: linear-gradient(180deg, rgba(26, 42, 62, 0.82) 0%, rgba(18, 28, 42, 0.88) 100%);
+    color: #c8daf0; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+  .dk-speaker { margin-left: auto; width: 30px; min-height: 32px; display: grid; place-items: center; opacity: 0.45; color: #d4dde6; }
+  .dk-dl { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0 2px; border-radius: 4px; }
+  .dk-dl .r { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.09); }
+  .dk-dl .l { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #9fb7d5; white-space: nowrap; padding: 0 2px; }
+  .dk-dl.dim { opacity: 0.45; }
+  .dk-dl.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+  .dk-dl.ring .l { color: #e8eef5; }
+  .dk-dl.ring .r { background: rgba(255, 255, 255, 0.28); }
+
+  .dk-tabs { display: flex; gap: 4px; width: 100%; margin-top: 8px; border-radius: 6px; }
+  .dk-tabs.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+  .dk-tab {
+    flex: 1 1 0; text-align: center; padding: 6px 4px; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: 0.03em;
+    color: #8fa8c4; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dk-tab.on { color: #e2e8f0; background: rgba(156, 231, 255, 0.14); border-color: rgba(156, 231, 255, 0.4); }
+
+  .dk-lad { margin-top: 2px; width: 100%; border-radius: 6px; }
+  .dk-lad.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+  .dk-lad-count { font-size: 10px; font-weight: 600; color: rgba(159, 183, 213, 0.9); letter-spacing: 0.03em; margin-bottom: 6px; }
+  .dk-chiprow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .dk-chip {
+    display: inline-block; font-size: 10px; font-weight: 400; padding: 4px 10px; border-radius: 999px; max-width: 100%;
+    border: 1px solid rgba(96, 118, 144, 0.55); background: rgba(26, 34, 44, 0.88); color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dk-chip.on { font-size: 11px; font-weight: 600; background: rgba(156, 231, 255, 0.22); border-color: #9ce7ff; }
+  .dk-lad-panel { padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(100, 140, 180, 0.28); background: rgba(14, 22, 32, 0.55); font-size: 11px; color: #dce8f4; line-height: 1.45; }
+  .dk-lad-panel b { display: block; margin-bottom: 6px; }
+
+  .dk-sb { margin-top: 8px; width: 100%; display: flex; flex-direction: column; gap: 6px; }
+  .dk-srow { padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08); font-size: 11px; color: #dce8f4; }
+  .dk-srow.on { border-color: rgba(125, 211, 252, 0.55); background: rgba(56, 189, 248, 0.12); }
+  .dk-srow.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+
+  /* The quiet full-width button Clear uses today; Compact takes its look. */
+  .dk-qbtn {
+    width: 100%; text-align: center; padding: 8px 0; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8fa8c4; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;
+  }
+  .dk-qbtn.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.12); color: #dce8f4; }
+  .dk-qbtn.press { background: rgba(255, 255, 255, 0.10); }
+  .dk-qbtn.off { opacity: 0.45; }
+  .dk-qbtn.del { color: rgba(241, 140, 128, 0.85); }
+  .dk-three { display: flex; gap: 6px; width: 100%; }
+  .dk-three .dk-qbtn { flex: 1 1 0; min-width: 0; }
+  .dk-hint { font-size: 11px; color: #8fa8c4; line-height: 1.4; padding: 0 2px; }
+
+  /* New piece: the summary card. Built from the chip ladder's panel so it reads as part of Show details. */
+  .dk-sum { border-radius: 8px; border: 1px solid rgba(125, 211, 252, 0.30); background: rgba(14, 22, 32, 0.55); padding: 8px 10px; font-size: 11px; line-height: 1.45; color: #dce8f4; }
+  .dk-sum-h { display: flex; justify-content: space-between; gap: 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.03em; color: #9fb7d5; margin-bottom: 6px; }
+  .dk-sum ul { margin: 0; padding-left: 14px; }
+  .dk-sum li { margin: 0 0 3px; }
+  .dk-sum-f { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.07); font-size: 10px; color: #8fa8c4; line-height: 1.4; }
+
+  /* Option B: a card at the top of the chat (drawn in the notes block's shape, in the session blue). */
+  .dk-card { width: 92%; border-radius: 8px; border: 1px solid rgba(125, 211, 252, 0.28); background: rgba(56, 189, 248, 0.05); }
+  .dk-card.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+  .dk-card-h { padding: 7px 10px; font-size: 11px; line-height: 1.35; display: flex; gap: 6px; align-items: baseline; }
+  .dk-card-h .arr { color: #9ce7ff; }
+  .dk-card-h b { color: #cfe6f5; }
+  .dk-card-h span.m { color: #8fa8c4; }
+  .dk-card-prev { padding: 0 10px 7px 22px; font-size: 11px; color: #8fa8c4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-card-body { border-top: 1px solid rgba(125, 211, 252, 0.18); padding: 7px 10px 8px; font-size: 11px; line-height: 1.45; color: #dce8f4; }
+  .dk-card-body ul { margin: 0; padding-left: 14px; }
+  .dk-card-body li { margin: 0 0 3px; }
+  .dk-card-body .dk-sum-f { margin-top: 4px; }
+
+  /* Option A, opened: where the summary ends and the word-for-word turns begin. */
+  .dk-sumline { display: flex; align-items: center; gap: 8px; margin: 2px 0; }
+  .dk-sumline .r { flex: 1; height: 1px; background: rgba(156, 231, 255, 0.28); }
+  .dk-sumline .l { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: rgba(156, 231, 255, 0.8); white-space: nowrap; }
+
+  /* Option C: one quiet line under the answer that summed up. */
+  .dk-note { width: 92%; display: flex; gap: 6px; align-items: flex-start; font-size: 11px; line-height: 1.35; color: #9fb7d5; border-radius: 4px; padding: 1px 2px; }
+  .dk-note .dk-ic { margin-top: 1px; color: #9ce7ff; opacity: 0.8; }
+  .dk-note.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; color: #dce8f4; }
+
+  /* Dock: 157 tall. Chips 30 (two across, 147 each, 6 gap), question box 66, ask row 36. */
+  .dk-dock {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 157px; padding: 8px 0 5px;
+    background: rgba(18, 26, 34, 0.92); border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .dk-dock::before {
+    content: ""; position: absolute; left: 0; right: 0; top: -19px; height: 18px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(18, 26, 34, 0) 0%, rgba(18, 26, 34, 0.85) 100%);
+  }
+  .dk-chips { display: flex; gap: 6px; height: 30px; }
+  .dk-pchip {
+    flex: 0 0 147px; height: 30px; border-radius: 4px; padding: 0 10px; display: flex; align-items: center;
+    background: linear-gradient(180deg, rgba(34, 48, 64, 0.72), rgba(20, 30, 42, 0.78)); border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 3px rgba(0, 0, 0, 0.4);
+    font-size: 11px; color: #b9c8d8; min-width: 0;
+  }
+  .dk-pchip span { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dk-qbox {
+    height: 66px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(30, 42, 56, 0.6), rgba(18, 26, 36, 0.7)); display: flex; flex-direction: column;
+  }
+  .dk-qbox.ring { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: -2px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55); }
+  .dk-qtext { flex: 1; padding: 8px 10px 0; font-size: 12px; line-height: 1.2; color: #e8eef5; }
+  .dk-tcaret { display: inline-block; width: 1px; height: 13px; background: #e8eef5; vertical-align: -2px; margin-left: 1px; }
+  .dk-qstrip { height: 24px; display: flex; align-items: center; gap: 8px; padding: 0 8px; color: #8fa8c4; }
+  .dk-mode { font-size: 10px; font-weight: 600; color: #d6a06a; border: 1px solid rgba(192, 138, 82, 0.7); border-radius: 999px; padding: 1px 8px; }
+  .dk-mic { margin-left: auto; display: grid; place-items: center; }
+  .dk-askrow {
+    height: 36px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(24, 34, 46, 0.6);
+    display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; font-variant: small-caps;
+    letter-spacing: 0.55px; line-height: 1; color: #a8b4c4;
+  }
+  .dk-askrow.has { color: #d0dbe8; background: linear-gradient(180deg, rgba(42, 58, 76, 0.52) 0%, rgba(22, 34, 46, 0.46) 100%); border-color: rgba(255, 255, 255, 0.11); }
+  .dk-askrow.ring { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: -2px; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2); }
+
+  /* Steam's own confirm box, drawn small inside the panel. On the Deck it covers the whole screen. */
+  .dk-modal-bg { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.62); display: flex; align-items: center; justify-content: center; z-index: 5; }
+  .dk-modal { width: 272px; background: linear-gradient(180deg, #2a2f38, #1d2129); border-radius: 4px; padding: 16px 16px 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); }
+  .dk-m-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .dk-m-body { font-size: 12px; color: #b8bcbf; line-height: 1.45; margin-bottom: 14px; }
+  .dk-m-btns { display: flex; gap: 8px; }
+  .dk-m-btn { flex: 1; text-align: center; padding: 8px 0; border-radius: 2px; background: #3d4450; color: #fff; font-size: 12px; }
+  .dk-m-btn.ring { background: #fff; color: #1d2129; }
+  .dk-m-btn.press { background: #d7e3ee; }
+  .dk-m-note { margin-top: 10px; font-size: 10px; color: #8a8f98; font-style: italic; }
+
+  /* Static crops for the odd cases. */
+  .dk.crop { height: auto; padding: 12px 0 14px; }
+  .dk.crop .dk-tr { padding: 0 6px 0 4px; }
+  .dk-empty { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 34px 20px 30px; }
+  .dk-empty .logo { width: 52px; height: 52px; border-radius: 50%; border: 2px solid rgba(200, 214, 230, 0.16); }
+  .dk-empty .cap { font-style: italic; font-size: 13px; line-height: 1.55; color: rgba(143, 168, 196, 0.5); text-align: center; }
+
+  .side { flex: 1 1 300px; min-width: 0; max-width: 560px; }
+  .side h3 { margin-top: 20px; }
+  .side dl { margin: 0; display: grid; gap: 4px 0; }
+  .side dt { font-weight: 700; color: var(--ink); font-size: 14.5px; margin-top: 10px; }
+  .side dd { margin: 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.5; }
+  @media (prefers-reduced-motion: reduce) {
+    .bar i { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="prose">
+    <p class="eyebrow">bonsAI · plan 68 · the design as picked, 2026-09-24</p>
+    <h1>The chat sums itself up</h1>
+    <p class="lede">What you will see on the Deck when a long chat sums itself up instead of being cleared, as picked on 2026-09-24. Drawn at true size: the plugin column is <span class="num">300 px</span> wide, the chat's reading area <span class="num">412 px</span> tall and the dock <span class="num">157 px</span>. Colours and sizes are copied from the plugin's own styles. Nothing here is built yet.</p>
+    <p>Press <b>Play</b> on a scene to watch it, or press any step to jump there. A white outline shows where the D-pad is. The options that were not picked are in the first version of this page and, in words, in the plan's decision record.</p>
+  </header>
+
+  <div class="facts">
+    <div>
+      <h3>What was decided</h3>
+      <ul>
+        <li>The Deck's AI writes the summary, only when the chat outgrows its room.</li>
+        <li>After that the AI gets the summary plus the newest turns word for word, never fewer than the newest two.</li>
+        <li>It sums up even while a game is running. No warning beforehand, and no setting to turn it off.</li>
+        <li>While it works you see one line with a timer.</li>
+        <li>A note under the answer says it happened. On the newest answer, pressing it opens the Session tab.</li>
+        <li><b>Sum up this chat</b> is the first thing in the Session tab, with the summary under it. No confirm box. Afterwards it reads <b>Sum up again</b>.</li>
+        <li>Stop during the summary stops everything. The chat stays as it was.</li>
+        <li>Each chat keeps its own subject. Checklist ticks stay with the game.</li>
+        <li>Written in your reply language, about 200 words, read-only.</li>
+        <li>A very old, very long chat sums up its newest part, in one wait.</li>
+        <li>The look-back spoiler rating gets its own plan, later.</li>
+      </ul>
+    </div>
+    <div class="wait">
+      <h3>How long the wait is</h3>
+      <p>Not measured yet, because nothing writes a summary yet. Worked out from speeds already measured on the Deck: reading the chat takes a few seconds, and writing a summary of about 200 words with a game running takes <span class="num">12–20 s</span>.</p>
+      <p>So expect roughly <span class="num">20–30 s</span>, once, each time the chat sums itself up. The questions in between cost about a second more than today.</p>
+      <p><b>Measuring it is the plan's first step.</b> If it comes out over a minute with a game running, the build stops and the number comes back to you first.</p>
+      <p>In the animation every wait runs about four times faster than on the Deck.</p>
+    </div>
+  </div>
+
+  <!-- ================= Scene 1 ================= -->
+  <section class="scene" id="auto">
+    <div class="prose">
+      <p class="eyebrow">Scene 1 · on its own</p>
+      <h2>When the chat outgrows its room</h2>
+      <p>You're deep in a Water Temple chat and ask a follow-up that names nothing: <i>"and what about the boots?"</i> The chat is too long to carry whole, so it sums itself up first, then answers, and a note under the answer says so.</p>
+    </div>
+    <div class="controls">
+      <button class="btn primary" data-act="play" type="button">▶ Play</button>
+      <button class="btn" data-act="restart" type="button">↺ From the start</button>
+    </div>
+    <ol class="steps"></ol>
+    <div class="bar"><i></i></div>
+    <div class="panels">
+      <figure>
+        <div class="ruler"><span>300 px</span></div>
+        <div class="dk" data-variant="line"></div>
+      </figure>
+      <div class="side">
+        <h3>The pieces, as drawn</h3>
+        <dl>
+          <dt>The wait line</dt>
+          <dd>Today's waiting line, spinner and all, reading <i>Summing up the chat so far · 12 s</i>. The seconds count up live. Once the summary is written, today's lines take over: <i>Searching knowledge base…</i>, <i>Writing your answer…</i></dd>
+          <dt>The note</dt>
+          <dd>One line between the answer and <i>Was this helpful?</i>, in the muted blue of the waiting line, with a small squeeze icon: <i>The chat summed itself up before this answer. Press to read what it kept.</i> A D-pad stop only on the newest answer.</dd>
+          <dt>Pressing the note</dt>
+          <dd>Opens Show details on the <b>Session</b> tab, with the summary on screen.</dd>
+          <dt>On older answers</dt>
+          <dd>The same line as plain text, <i>The chat summed itself up here.</i> Not a D-pad stop. See the still picture below.</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Scene 2 ================= -->
+  <section class="scene" id="manual">
+    <div class="prose">
+      <p class="eyebrow">Scene 2 · pressing it yourself</p>
+      <h2>Sum up this chat, in the Session tab</h2>
+      <p>Show details, then the Session tab, then one press down to <b>Sum up this chat</b>. The summary gets written right away and appears under the button. No confirm box: nothing is deleted, every turn stays in the chat.</p>
+    </div>
+    <div class="controls">
+      <button class="btn primary" data-act="play" type="button">▶ Play</button>
+      <button class="btn" data-act="restart" type="button">↺ From the start</button>
+    </div>
+    <ol class="steps"></ol>
+    <div class="bar"><i></i></div>
+    <div class="panels">
+      <figure>
+        <div class="ruler"><span>300 px</span></div>
+        <div class="dk" data-variant="top"></div>
+      </figure>
+      <div class="side">
+        <h3>The pieces, as drawn</h3>
+        <dl>
+          <dt>The button</dt>
+          <dd>Clear's own quiet full-width look, moved to the top of the tab. <i>Sum up this chat</i>, then <i>Sum up again</i> once a summary exists. While working: spinner and <i>Summing up · 12 s</i>, nothing else.</dd>
+          <dt>Greyed out</dt>
+          <dd>When the whole chat still fits, or while an answer is being written, with one line under it saying why.</dd>
+          <dt>The summary card</dt>
+          <dd>Drawn from the chip ladder's own panel, with a faint blue edge. Header <i>What the AI remembers</i> and how many turns it covers; the summary as short lines; a footer saying how many newest turns are kept word for word and how many hidden notes were left out.</dd>
+          <dt>Below it</dt>
+          <dd>The turn list and its chips, as today. Clear is gone.</dd>
+          <dt>The tab itself</dt>
+          <dd>Shows whenever the chat has a question in it, not only when some turn attached something extra.</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Scene 3 ================= -->
+  <section class="scene" id="cases">
+    <div class="prose">
+      <p class="eyebrow">Scene 3 · the odd cases</p>
+      <h2>When it can't, or shouldn't</h2>
+      <p>Still pictures of the cases the answers already settle.</p>
+    </div>
+    <div class="cases" style="margin-top:22px">
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="nothing"></div>
+        <figcaption><b>Nothing to sum up yet</b><p>A short chat still fits whole. The button is greyed out and says why, instead of disappearing.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="answering"></div>
+        <figcaption><b>While an answer is being written</b><p>Greyed out too, with its own reason. One job at a time.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="failed"></div>
+        <figcaption><b>The summary didn't work this time</b><p>The model timed out or failed. Your question is still answered the way it is today, one line says so, and the next question tries again.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="stopped"></div>
+        <figcaption><b>Stop while it's summing up</b><p>Stop stops everything: no summary, no answer. The next question tries the summary again.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="older"></div>
+        <figcaption><b>The note on an older answer</b><p>Once newer answers follow, the note stays as plain text. It records when it happened; the summary itself lives in the newest answer's Session tab.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="old"></div>
+        <figcaption><b>A very old, very long chat</b><p>Too long to read in one pass. It sums up the newest part and says plainly what was left out.</p></figcaption></figure>
+      <figure><div class="ruler"><span>300 px</span></div><div class="dk crop" data-case="new"></div>
+        <figcaption><b>New chat</b><p>Starts with nothing carried over: no summary and no subject. The running game's checklist ticks stay, because they're about the game, not the chat.</p></figcaption></figure>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p><b>Where the sizes come from.</b> The bubbles, Show details, the Session tab, the chip ladder, the chat row and the dock are copied from the plugin's own style code. The 300 px width and the 412 px reading height were measured on the Deck. The top tab bar and the dock's inner layout are simplified. The summary card, the button's states and the note are new and drawn for this plan. Steam's Motiva Sans font isn't available here, so Segoe UI or your system font stands in.</p>
+    <p><b>The example chat</b> is made up, apart from the answer to "and what about the boots?", which is the real one the Deck gave on 2026-09-21.</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+
+  /* ---------------- The example chat ---------------- */
+  const EARLIER = [
+    "where is the water temple", "how do i get into the water temple", "where do i get the iron boots",
+    "how do i change the water level", "where is the first small key", "i'm stuck on the second floor",
+    "what's the zora tunic for", "where is the key behind the waterfall", "how do i open the central pillar",
+    "where is the dragon statue room", "how do i beat dark link", "dark link keeps copying me, any tips",
+    "where is the longshot", "keep answers short please", "how do i get the boss key",
+    "the boss key chest is across the whirlpools", "where do i go after the boss key", "how do i beat morpha",
+  ];
+  const MORPHA_Q = "how do i beat morpha";
+  const MORPHA_A = [
+    "Morpha is the Water Temple boss. Stay on the outer ledges and keep away from the water tentacle.",
+    "When the tentacle rises, fire the Longshot at the red nucleus inside it to pull it out, then slash it with your sword before it slips back into the water.",
+  ];
+  const BOOTS_Q = "and what about the boots?";
+  const BOOTS_A = [
+    "You should keep the Iron Boots off during the fight in Ocarina of Time so you can move freely and effectively use your Longshot to yank the nucleus out of the water.",
+    "Wearing them only slows you down, and the tentacle catches slow targets.",
+  ];
+  const SUM = [
+    "Playing Ocarina of Time, in the Water Temple.",
+    "Has the Iron Boots and Zora Tunic; knows how to change the water level at the three Triforce marks.",
+    "Found the keys behind the waterfall and inside the central pillar.",
+    "Beat Dark Link, got the Longshot, then the boss key past the whirlpools.",
+    "Wants short, step-by-step answers.",
+  ];
+  const SUM_TOTAL = SUM.join("").length;
+  const SUM_FOOT = "Plus the newest 2 turns, word for word · 1 hidden note left out";
+  const SUMMARY_SECS = 26;
+  const ROWS2 = ["where is the water temple", "how do i get into the water temple"];
+  const ROWS4 = ["how do i beat dark link", "where is the longshot", "how do i get the boss key", "how do i beat morpha"];
+  const ROWS5 = ROWS4.concat([BOOTS_Q]);
+  const LADDER = {
+    count: "Chip 1 of 3",
+    chips: ["KB: 2 sections", "Routed gemma4:e2b-it-qat", "Spoiler risk: low"],
+    title: "KB: 2 sections",
+    body: "Morpha · Water Temple layout, both from bonsAI's own notes.",
+  };
+
+  /* ---------------- Motion, all worked out from the clock so a jump lands exactly ---------------- */
+  const spinA = (t) => (RM ? 0 : ((t % 900) / 900) * 360);
+  const wave = (t, p = 2000) => (RM ? 0.5 : 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / p));
+  const caretOp = (t) => (RM ? 0.85 : t % 900 < 450 ? 0.85 : 0.15);
+  const pulse = (t) => {
+    const a = wave(t);
+    return `0 0 ${(8 * a).toFixed(1)}px ${a.toFixed(2)}px rgba(56,189,248,${(0.12 + 0.16 * a).toFixed(3)})`;
+  };
+  const glow = (g) => (g <= 0 || RM ? "" : `box-shadow:0 0 0 1px rgba(156,231,255,${(0.75 * g).toFixed(2)}),0 0 16px rgba(56,189,248,${(0.5 * g).toFixed(2)});`);
+
+  /* ---------------- Icons ---------------- */
+  const svg = (d, s = 14, w = 1.8) =>
+    `<svg class="dk-ic" width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const IC = {
+    spin: (t) =>
+      `<svg class="dk-ic" width="14" height="14" viewBox="0 0 24 24" style="transform:rotate(${spinA(t).toFixed(0)}deg)" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+    retry: svg("M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7", 14, 2),
+    up: svg("M7 10v10H4V10h3zm0 0 4-7c1.5 0 2.6 1.1 2.3 2.6L12.6 10H19a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7", 14),
+    down: svg("M7 14V4H4v10h3zm0 0 4 7c1.5 0 2.6-1.1 2.3-2.6L12.6 14H19a2 2 0 0 0 2-2.3l-1.2-6A2 2 0 0 0 17.8 4H7", 14),
+    speaker: svg("M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11", 16),
+    clip: svg("M21 11.5 12.5 20a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8", 13),
+    mic: svg("M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3", 13),
+    squeeze: svg("M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5", 13, 2),
+  };
+
+  /* ---------------- Pieces of the panel ---------------- */
+  const TABBAR = `<div class="dk-tabbar"><span class="dk-mark">LB</span><span class="dk-dashes"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></span><span class="dk-tabname">Main</span><span class="dk-mark">RB</span></div>`;
+  const SLOTS = `<div class="dk-slots"><div class="dk-slotline"><span class="dk-nb l">[+]</span><span class="dk-slot-title">Water Temple</span><span class="dk-nb r">Hades run</span></div><div class="dk-dots"><i class="cur"></i><i></i><i></i></div></div>`;
+
+  function pill(label, o = {}) {
+    const cls = ["dk-pillrow"];
+    if (o.ring) cls.push("ring");
+    if (o.g > 0) cls.push("lit");
+    return `<div class="${cls.join(" ")}"><span class="dk-pill" style="${glow(o.g || 0)}">${esc(label)}</span><span class="dk-rule"></span></div>`;
+  }
+  function qb(text, o = {}) {
+    const cls = ["dk-q"];
+    if (o.open) cls.push("open");
+    const retry = o.retry
+      ? `<span class="dk-retry-sp"></span><span class="dk-retry" style="opacity:${o.retryDim ? 0.45 : 0.5}">${IC.retry}</span>`
+      : "";
+    return `<div class="${cls.join(" ")}">${retry}<div class="dk-q-t">${esc(text)}</div></div>`;
+  }
+  function turnHead(text) {
+    return `<div class="dk-turn">${qb(text)}</div>`;
+  }
+  function ans(paras, o = {}) {
+    const chars = o.chars == null ? Infinity : o.chars;
+    const out = [];
+    let left = chars;
+    for (const p of paras) {
+      if (left <= 0) break;
+      out.push(p.slice(0, left));
+      left -= p.length;
+    }
+    if (!out.length) out.push("");
+    const html = out
+      .map((s, i) => {
+        const caret = o.streaming && i === out.length - 1 ? `<span class="dk-caret" style="opacity:${caretOp(o.t || 0)}">▋</span>` : "";
+        return `<p>${esc(s)}${caret}</p>`;
+      })
+      .join("");
+    return `<div class="dk-a" style="${o.streaming && !RM ? "box-shadow:" + pulse(o.t || 0) : ""}">${html}</div>`;
+  }
+  function wait(text, t, secs) {
+    const s = secs == null ? "" : ` <span class="dk-secs">· ${secs} s</span>`;
+    return `<div class="dk-wait">${IC.spin(t)}<em>${esc(text)}</em>${s}</div>`;
+  }
+  function streamLines(p) {
+    let n = Math.floor(p * SUM_TOTAL);
+    const out = [];
+    for (const l of SUM) {
+      if (n <= 0) break;
+      out.push(l.slice(0, n));
+      n -= l.length;
+    }
+    return out.slice(-3);
+  }
+  function live(lines) {
+    if (!lines.length) return "";
+    return `<div class="dk-live">${lines.map((l, i) => `<div class="${i === lines.length - 1 ? "newest" : ""}">${esc(l)}</div>`).join("")}</div>`;
+  }
+  function replyInner() {
+    return `<span class="dk-cap">Was this helpful?</span><div class="dk-rarow"><span class="dk-btn">${IC.up}Helpful</span><span class="dk-btn">${IC.down}Not really</span><span class="dk-speaker">${IC.speaker}</span></div>`;
+  }
+  function dl(o = {}) {
+    const cls = ["dk-dl"];
+    if (o.ring) cls.push("ring");
+    if (o.dim) cls.push("dim");
+    return `<div class="${cls.join(" ")}"><span class="r"></span><span class="l">${o.open ? "Hide details ↑" : "Show details ↓"}</span><span class="r"></span></div>`;
+  }
+  function tabs(o) {
+    return `<div class="dk-tabs${o.ring ? " ring" : ""}"><span class="dk-tab${o.active === "answer" ? " on" : ""}">This answer</span><span class="dk-tab${o.active === "session" ? " on" : ""}">Session · ${o.n}</span></div>`;
+  }
+  function ladder(ring) {
+    const chips = LADDER.chips.map((c, i) => `<span class="dk-chip${i === 0 ? " on" : ""}">${esc(c)}</span>`).join("");
+    return `<div class="dk-lad${ring ? " ring" : ""}"><div class="dk-lad-count">${LADDER.count}</div><div class="dk-chiprow">${chips}</div><div class="dk-lad-panel"><b>${esc(LADDER.title)}</b>${esc(LADDER.body)}</div></div>`;
+  }
+  function srows(rows, ringLast) {
+    return rows
+      .map((r, i) => {
+        const last = i === rows.length - 1;
+        return `<div class="dk-srow${last ? " on" : ""}${last && ringLast ? " ring" : ""}">${esc(r.slice(0, 48))}</div>`;
+      })
+      .join("");
+  }
+  function sumCard(o = {}) {
+    const items = SUM.map((l) => `<li>${esc(l)}</li>`).join("");
+    return `<div class="dk-sum" style="${glow(o.g || 0)}"><div class="dk-sum-h"><span>What the AI remembers</span><span>${o.meta || "16 turns · just now"}</span></div><ul>${items}</ul><div class="dk-sum-f">${esc(o.foot || SUM_FOOT)}</div></div>`;
+  }
+  function compactBtn(o) {
+    const cls = ["dk-qbtn", "dk-cbtn"];
+    if (o.ring === "compact") cls.push("ring");
+    if (o.press) cls.push("press");
+    if (o.cstate === "disabled") cls.push("off");
+    let label = "Sum up this chat";
+    if (o.cstate === "busy") label = `${IC.spin(o.t)}Summing up · ${o.secs} s`;
+    if (o.cstate === "done") label = "Sum up again";
+    return `<div class="${cls.join(" ")}">${label}</div>`;
+  }
+  function threeBtns(o) {
+    const cls = ["dk-qbtn", "dk-cbtn"];
+    if (o.ring === "compact") cls.push("ring");
+    if (o.press) cls.push("press");
+    const label = o.cstate === "busy" ? `${IC.spin(o.t)}${o.secs} s` : "Compact";
+    return `<div class="dk-three"><div class="${cls.join(" ")}">${label}</div><div class="dk-qbtn">New chat</div><div class="dk-qbtn del">Delete chat</div></div>`;
+  }
+  function session(o) {
+    const rowsH = srows(o.rows, o.ring === "row");
+    const lad = ladder(o.ring === "ladder");
+    const btn = o.layout === "three" ? threeBtns(o) : compactBtn(o);
+    let under = "";
+    if (o.cstate === "busy") under = "";
+    else if (o.cstate === "done") under = sumCard({ g: o.sumG || 0 });
+    else if (o.cstate === "disabled") under = `<div class="dk-hint">${esc(o.reason || "The whole chat still fits, so there's nothing to sum up yet.")}</div>`;
+    const topPart = btn + under;
+    const inner = o.layout === "bottom" ? rowsH + lad + topPart : topPart + rowsH + lad;
+    return `<div class="dk-sb">${inner}</div>`;
+  }
+  function chatCard(o) {
+    const head = `<div class="dk-card-h"><span class="arr">${o.open ? "▾" : "▸"}</span><b>Summed up</b><span class="m">· 16 earlier turns</span></div>`;
+    const body = o.open
+      ? `<div class="dk-card-body"><ul>${SUM.map((l) => `<li>${esc(l)}</li>`).join("")}</ul><div class="dk-sum-f">${esc(SUM_FOOT)}</div></div>`
+      : `<div class="dk-card-prev">${esc(SUM[0] + " " + SUM[1])}</div>`;
+    return `<div class="dk-card${o.ring ? " ring" : ""}" style="${glow(o.g || 0)}">${head}${body}</div>`;
+  }
+  function noteLine(o) {
+    return `<div class="dk-note${o.ring ? " ring" : ""}" style="${glow(o.g || 0)}">${IC.squeeze}<span>The chat summed itself up before this answer. Press to read what it kept.</span></div>`;
+  }
+  function dock(o = {}) {
+    const busy = o.busy ? `border-color:rgba(200,146,90,${(0.3 + 0.45 * wave(o.t || 0)).toFixed(2)});` : "";
+    const caret = o.caret ? `<span class="dk-tcaret" style="opacity:${caretOp(o.t || 0)}"></span>` : "";
+    return `<div class="dk-chips"><div class="dk-pchip"><span>Where's the boss key?</span></div><div class="dk-pchip"><span>Best way past the whirlpools?</span></div></div>
+      <div class="dk-qbox${o.ring === "box" ? " ring" : ""}" style="${busy}"><div class="dk-qtext">${esc(o.typed || "")}${caret}</div><div class="dk-qstrip">${IC.clip}<span class="dk-mode">Strategy</span><span class="dk-mic">${IC.mic}</span></div></div>
+      <div class="dk-askrow${o.typed ? " has" : ""}${o.ring === "ask" ? " ring" : ""}">ask</div>`;
+  }
+  function modal(pressed) {
+    return `<div class="dk-modal-bg"><div class="dk-modal"><div class="dk-m-title">Sum up this chat?</div><div class="dk-m-body">The AI will carry a short summary instead of every turn. Nothing is deleted: every turn stays in the chat.</div><div class="dk-m-btns"><span class="dk-m-btn ring${pressed ? " press" : ""}">Compact</span><span class="dk-m-btn">Cancel</span></div><div class="dk-m-note">Steam's own box, drawn small. On the Deck it covers the screen.</div></div></div>`;
+  }
+  const frame = (tr, dk, overlay) =>
+    `${TABBAR}${SLOTS}<div class="dk-scroll"><div class="dk-inner"><div class="dk-tr">${tr}</div></div></div><div class="dk-dock">${dk}</div>${overlay || ""}`;
+
+  function drawPanel(el, parts, snap) {
+    el.innerHTML = frame(parts.tr, parts.dock, parts.overlay);
+    const sc = el.querySelector(".dk-scroll");
+    const inner = sc.firstElementChild;
+    const view = sc.clientHeight;
+    const max = Math.max(0, inner.scrollHeight - view);
+    let target = max;
+    if (parts.anchor) {
+      const a = inner.querySelector(parts.anchor);
+      if (a) {
+        const top = a.getBoundingClientRect().top - inner.getBoundingClientRect().top;
+        const h = a.offsetHeight;
+        target = h + 24 <= view ? top - (view - h) / 2 : top - 12;
+        target = clamp(target, 0, max);
+      }
+    }
+    if (snap || el._sc == null || RM) el._sc = target;
+    else el._sc += (target - el._sc) * 0.2;
+    sc.scrollTop = Math.round(el._sc);
+  }
+
+  /* ---------------- Scene 1: on its own ---------------- */
+  const T1 = { typeStart: 500, typeEnd: 2100, askRing: 2150, ask: 2500, sumStart: 2700, sumEnd: 9000, write: 9900, streamStart: 10700, streamEnd: 15500, done: 15500, epi: 17300, epiOpen: 18100, end: 21500 };
+  const S1 = { wait: "line" };
+
+  function scene1(v, t) {
+    const h = [];
+    let anchor = null;
+    const typed = t >= T1.typeStart && t < T1.ask ? BOOTS_Q.slice(0, Math.round(prog(t, T1.typeStart, T1.typeEnd) * BOOTS_Q.length)) : "";
+    const ring = t >= T1.typeStart - 200 && t < T1.askRing ? "box" : t >= T1.askRing && t < T1.ask + 150 ? "ask" : null;
+    const dockHtml = dock({ typed, ring, caret: ring === "box", busy: t >= T1.ask && t < T1.done, t });
+
+    if (t < T1.ask) {
+      h.push(pill("17 earlier"));
+      h.push(`<div class="dk-turn">${qb(MORPHA_Q, { open: true, retry: true })}${ans(MORPHA_A)}<div class="dk-ra">${replyInner()}${dl()}</div></div>`);
+      return { tr: h.join(""), dock: dockHtml, anchor };
+    }
+
+    const done = t >= T1.done;
+    const g = done ? 1 - prog(t, T1.done, T1.done + 1500) : 0;
+    const epi = t >= T1.epi;
+    const open = t >= T1.epiOpen;
+
+    if (v === "card" && done) {
+      h.push(chatCard({ open, ring: epi, g }));
+      if (epi) anchor = ".dk-card";
+    }
+    if (v === "pill" && open) {
+      EARLIER.forEach((q, i) => {
+        if (i === 16) h.push(`<div class="dk-sumline"><span class="r"></span><span class="l">↑ summed up · kept word for word ↓</span><span class="r"></span></div>`);
+        h.push(turnHead(q));
+      });
+      anchor = ".dk-sumline";
+    } else {
+      const label = v === "pill" && done ? "18 earlier · 16 summed up" : "18 earlier";
+      h.push(pill(label, { ring: v === "pill" && epi, g: v === "pill" ? g : 0 }));
+      if (v === "pill" && epi) anchor = ".dk-pillrow";
+    }
+
+    let body = qb(BOOTS_Q, { open: true, retry: true, retryDim: !done });
+    if (t < T1.streamStart) {
+      if (t < T1.sumStart) body += wait("Thinking…", t);
+      else if (t < T1.sumEnd) {
+        const p = prog(t, T1.sumStart, T1.sumEnd);
+        body += wait("Summing up the chat so far", t, Math.floor(p * SUMMARY_SECS));
+        if (S1.wait === "stream") body += live(streamLines(p));
+      } else body += wait(t < T1.write ? "Searching knowledge base…" : "Writing your answer…", t);
+    } else {
+      const streaming = t < T1.streamEnd;
+      const total = BOOTS_A.join("").length;
+      body += ans(BOOTS_A, { chars: streaming ? Math.floor(prog(t, T1.streamStart, T1.streamEnd) * total) : null, streaming, t });
+      if (v === "line" && done) {
+        body += noteLine({ ring: epi && !open, g });
+        if (epi && !open) anchor = ".dk-note";
+      }
+      const detailsOpen = v === "line" && open;
+      let ra = (done ? replyInner() : "") + dl({ open: detailsOpen, dim: !done });
+      if (detailsOpen) {
+        ra += tabs({ active: "session", n: 5 }) + session({ layout: "top", cstate: "done", rows: ROWS5, ring: null, t });
+        anchor = ".dk-sum";
+      }
+      body += `<div class="dk-ra">${ra}</div>`;
+    }
+    h.push(`<div class="dk-turn">${body}</div>`);
+    return { tr: h.join(""), dock: dockHtml, anchor };
+  }
+  const STEPS1 = [
+    { t: 500, text: "You ask a follow-up" },
+    { t: 2700, text: "It's too long to carry whole, so it sums itself up first", hint: "≈ 20–30 s on the Deck (estimate)" },
+    { t: 9000, text: "Then it answers as usual", hint: "as today, plus about 1 s" },
+    { t: 15500, text: "The chat tells you it happened" },
+    { t: 17300, text: "Press that to see what was kept" },
+  ];
+
+  /* ---------------- Scene 2: pressing Compact ---------------- */
+  const S2 = { confirm: false };
+  function T2() {
+    const busyStart = S2.confirm ? 5700 : 4200;
+    return { open: 700, toTabs: 1500, session: 2200, toCompact: 3000, press: 4000, modalPress: 5300, busyStart, busyEnd: busyStart + 6000, end: busyStart + 8400 };
+  }
+  function scene2(v, t) {
+    const T = T2();
+    const open = t >= T.open;
+    const tab = t >= T.session ? "session" : "answer";
+    const showModal = S2.confirm && t >= T.press && t < T.busyStart;
+    const cstate = t < T.busyStart ? "idle" : t < T.busyEnd ? "busy" : "done";
+    const p = prog(t, T.busyStart, T.busyEnd);
+    const secs = Math.floor(p * SUMMARY_SECS);
+    const sumG = cstate === "done" ? 1 - prog(t, T.busyEnd, T.busyEnd + 1500) : 0;
+
+    let ringKey;
+    if (t < T.toTabs) ringKey = "dl";
+    else if (t < T.toCompact) ringKey = "tabs";
+    else if (v === "bottom" && t < T.toCompact + 350) ringKey = "row";
+    else if (v === "bottom" && t < T.toCompact + 700) ringKey = "ladder";
+    else ringKey = "compact";
+    if (showModal) ringKey = null;
+    const press = !S2.confirm && t >= T.press && t < T.press + 220;
+
+    let ra = replyInner() + dl({ open, ring: ringKey === "dl" });
+    if (open) {
+      ra += tabs({ active: tab, n: 4, ring: ringKey === "tabs" });
+      if (tab === "answer") ra += `<div style="margin-top:8px;width:100%">${ladder(false)}</div>`;
+      else ra += session({ layout: v, cstate, secs, p, t, ring: ringKey, rows: ROWS4, sumG, press });
+    }
+    const tr = pill("17 earlier") + `<div class="dk-turn">${qb(MORPHA_Q, { open: true, retry: true })}${ans(MORPHA_A)}<div class="dk-ra">${ra}</div></div>`;
+
+    let anchor = ".dk-dl";
+    if (open && ringKey === "tabs") anchor = ".dk-tabs";
+    if (tab === "session") {
+      if (ringKey === "row") anchor = ".dk-srow.ring";
+      if (ringKey === "ladder") anchor = ".dk-lad";
+      if (ringKey === "compact" || showModal) anchor = ".dk-cbtn";
+      if (cstate === "busy") anchor = v === "bottom" ? ".dk-live" : ".dk-cbtn";
+      if (cstate === "done") anchor = ".dk-sum";
+    }
+    return { tr, dock: dock({ t }), anchor, overlay: showModal ? modal(t >= T.modalPress) : "" };
+  }
+  function steps2() {
+    const T = T2();
+    const s = [
+      { t: 0, text: "Open Show details" },
+      { t: T.toTabs, text: "Go to the Session tab" },
+      { t: T.toCompact, text: "One press down to Sum up this chat" },
+    ];
+    if (S2.confirm) s.push({ t: T.press, text: "Say yes in the confirm box" });
+    s.push({ t: T.busyStart, text: "It sums up while you watch", hint: "≈ 20–30 s on the Deck (estimate)" });
+    s.push({ t: T.busyEnd, text: "The summary appears under the button" });
+    return s;
+  }
+
+  /* ---------------- A small player per scene ---------------- */
+  function makePlayer(section, o) {
+    const panels = [...section.querySelectorAll(".dk[data-variant]")];
+    const stepsEl = section.querySelector("ol.steps");
+    const barEl = section.querySelector(".bar i");
+    const playBtn = section.querySelector('[data-act="play"]');
+    const restartBtn = section.querySelector('[data-act="restart"]');
+    const P = { t: o.rest(), playing: false, last: 0, lastDraw: -1 };
+
+    function buildSteps() {
+      stepsEl.innerHTML = o
+        .steps()
+        .map((s, i) => `<li><button type="button" data-i="${i}">${esc(s.text)}${s.hint ? `<span class="hint">${esc(s.hint)}</span>` : ""}</button></li>`)
+        .join("");
+    }
+    function draw(snap) {
+      panels.forEach((el) => drawPanel(el, o.render(el.dataset.variant, P.t), snap));
+      const steps = o.steps();
+      let cur = -1;
+      steps.forEach((s, i) => {
+        if (P.t >= s.t) cur = i;
+      });
+      stepsEl.querySelectorAll("button").forEach((b, i) => b.classList.toggle("now", i === cur));
+      barEl.style.width = `${(100 * P.t) / o.end()}%`;
+      playBtn.textContent = P.playing ? "❚❚ Pause" : P.t >= o.end() ? "▶ Play again" : "▶ Play";
+    }
+    function loop(now) {
+      if (!P.playing) return;
+      P.t += now - P.last;
+      P.last = now;
+      if (P.t >= o.end()) {
+        P.t = o.end();
+        P.playing = false;
+      }
+      if (now - P.lastDraw > 33 || !P.playing) {
+        P.lastDraw = now;
+        draw(false);
+      }
+      if (P.playing) requestAnimationFrame(loop);
+    }
+    function play(from) {
+      if (from != null) P.t = from;
+      else if (P.t >= o.end()) P.t = 0;
+      P.playing = true;
+      P.last = performance.now();
+      draw(from != null);
+      requestAnimationFrame(loop);
+    }
+    function pause() {
+      P.playing = false;
+      draw(false);
+    }
+    playBtn.addEventListener("click", () => (P.playing ? pause() : play()));
+    restartBtn.addEventListener("click", () => play(0));
+    stepsEl.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-i]");
+      if (!b) return;
+      play(o.steps()[+b.dataset.i].t);
+    });
+    buildSteps();
+    draw(true);
+    return {
+      redraw() {
+        buildSteps();
+        if (P.t > o.end()) P.t = o.end();
+        draw(true);
+      },
+    };
+  }
+
+  const p1 = makePlayer(document.getElementById("auto"), {
+    render: scene1,
+    steps: () => STEPS1,
+    end: () => T1.end,
+    rest: () => T1.epi - 100,
+  });
+  const p2 = makePlayer(document.getElementById("manual"), {
+    render: scene2,
+    steps: steps2,
+    end: () => T2().end,
+    rest: () => T2().busyEnd + 1600,
+  });
+
+  function segWire(sectionId, attr, apply) {
+    const btns = [...document.querySelectorAll(`#${sectionId} [data-${attr}]`)];
+    btns.forEach((b) =>
+      b.addEventListener("click", () => {
+        btns.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        apply(b.dataset[attr]);
+      })
+    );
+  }
+
+  /* ---------------- Scene 3: still pictures ---------------- */
+  const CASES = {
+    nothing: () =>
+      `<div class="dk-ra" style="width:92%">${dl({ open: true })}${tabs({ active: "session", n: 2 })}${session({ layout: "top", cstate: "disabled", rows: ROWS2, t: 0 })}</div>`,
+    answering: () =>
+      `<div class="dk-ra" style="width:92%">${tabs({ active: "session", n: 5 })}${session({ layout: "top", cstate: "disabled", reason: "Wait for the answer to finish, then sum up.", rows: ROWS5, t: 0 })}</div>`,
+    older: () =>
+      `<div class="dk-turn">${qb(BOOTS_Q, { open: true })}${ans(BOOTS_A)}<div class="dk-note">${IC.squeeze}<span>The chat summed itself up here.</span></div><div class="dk-ra">${dl()}</div></div>` +
+      `<div class="dk-turn">${qb("so do i need the iron boots at all in the fight")}</div>`,
+    failed: () =>
+      pill("18 earlier") +
+      `<div class="dk-turn">${qb(BOOTS_Q, { open: true, retry: true })}<div class="dk-warn">Couldn't sum up the chat this time, so this answer only knows the newest turns. It will try again on your next question.</div>${ans(BOOTS_A)}</div>`,
+    stopped: () =>
+      pill("18 earlier") +
+      `<div class="dk-turn">${qb(BOOTS_Q, { open: true, retry: true })}<div class="dk-stopped">Stopped.</div></div>`,
+    old: () =>
+      `<div style="width:92%">${sumCard({
+        meta: "60 turns · just now",
+        foot: "Too long to read in one go: this covers the newest 60 turns. The oldest 140 are not in it.",
+      })}</div>`,
+    new: () => `<div class="dk-empty"><div class="logo"></div><div class="cap">Ask anything — this slot keeps its own history.</div></div>`,
+  };
+  document.querySelectorAll(".dk[data-case]").forEach((el) => {
+    el.innerHTML = `<div class="dk-tr">${CASES[el.dataset.case]()}</div>`;
+  });
+})();
+</script>

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 461,
-  "edgeCount": 1209,
+  "fileCount": 462,
+  "edgeCount": 1212,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -948,6 +948,7 @@
         "src/data/pullModelCatalog.ts",
         "src/data/storageKeys.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelFilters.ts",
@@ -1449,6 +1450,7 @@
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/bonsaiSessionSurvival.ts",
@@ -1521,6 +1523,7 @@
         "src/data/pullModelCatalog.test.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/index.tsx",
         "src/utils/mergePullModelCatalog.test.ts",
         "src/utils/mergePullModelCatalog.ts",
@@ -2629,6 +2632,15 @@
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelCatalogRefresh.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelTier2Confirm.tsx": {
+      "imports": [
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"

@@ -124,6 +124,7 @@ import {
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
+import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -732,60 +733,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
     fn();
   };
 
-  const completeNestedModalClose = useCallback(
-    (close: () => void) => {
-      if (onCompleteNestedDeckyModalClose) {
-        onCompleteNestedDeckyModalClose(close);
-      } else {
-        close();
-      }
-    },
-    [onCompleteNestedDeckyModalClose]
-  );
-
-  const confirmOpenWeightTierIfNeeded = useCallback(
-    (entry: PullModelEntry, onConfirmed: () => void) => {
-      if (
-        modelPolicyTier !== "open_source_only" ||
-        entry.licenseClass !== "open_weight" ||
-        openWeightTierConfirmedRef.current.has(entry.tag)
-      ) {
-        onConfirmed();
-        return;
-      }
-      onBeforeNestedDeckyModal?.();
-      const tier2Note = disclosureSummaryForSourceClass("open_weight");
-      const handle = showModal(
-        <ConfirmModal
-          strTitle="Enable Tier 2 for this model?"
-          strDescription={
-            <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
-              <div style={{ marginBottom: 8 }}>
-                <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is an open-weight model. With{" "}
-                <strong>Tier 1 (open-source only)</strong>, bonsAI will not route Ask to it after download.
-              </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                Enable <strong>Tier 2 (open-weight)</strong> so this tag is eligible for Ask fallbacks. {tier2Note}
-              </div>
-              <div>You can change this later under Ollama → Manage AI models → Policy.</div>
-            </div>
-          }
-          strOKButtonText="Enable Tier 2 and queue"
-          strCancelButtonText="Cancel"
-          onOK={() => {
-            openWeightTierConfirmedRef.current.add(entry.tag);
-            void (async () => {
-              await onApplyTier2Policy?.();
-              onConfirmed();
-              completeNestedModalClose(() => handle.Close());
-            })();
-          }}
-          onCancel={() => completeNestedModalClose(() => handle.Close())}
-        />
-      );
-    },
-    [modelPolicyTier, onApplyTier2Policy, completeNestedModalClose, onBeforeNestedDeckyModal]
-  );
+  // Lifted into usePullModelTier2Confirm. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { completeNestedModalClose, confirmOpenWeightTierIfNeeded } = usePullModelTier2Confirm({
+    modelPolicyTier,
+    onApplyTier2Policy,
+    onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose,
+    openWeightTierConfirmedRef,
+  });
 
   const toggleSelected = useCallback(
     (entry: PullModelEntry, ev?: { stopPropagation?: () => void; preventDefault?: () => void }) => {

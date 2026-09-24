@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 451,
-  "edgeCount": 1195,
+  "fileCount": 452,
+  "edgeCount": 1196,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -471,6 +471,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
         "src/hooks/useEarlierTurnsPill.ts",
+        "src/hooks/useKbNotesFold.ts",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
@@ -490,7 +491,6 @@
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildThinkingBlurbTextElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
-        "src/utils/chatPanelScroll.ts",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/chatTurnTitle.ts",
         "src/utils/contextChipsFromSnapshot.ts",
@@ -2511,6 +2511,14 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useKbNotesFold.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/hooks/useKidsLock.test.ts": {
       "imports": [
         "src/hooks/useKidsLock.ts",
@@ -3862,8 +3870,8 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useDockClearanceOnFocus.ts",
+        "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/buildReplyActionsElement.tsx",

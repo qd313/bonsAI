@@ -186,7 +186,6 @@ import {
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
 import { focusAnswerChunkAtIndex, focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
-import { scrollElementTopToPaneTop } from "../utils/chatPanelScroll";
 import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
@@ -203,21 +202,12 @@ import {
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloud } from "../hooks/useReadAloud";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
+import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { subscribeToSpoilerFenceOpenChange } from "./MainTabBonsaiAiMarkdownChunk";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */
 export { focusKbNotesBlock, focusUpPastLiveKbNotesBlock, focusUpPastSessionContextStripKbNotesBlock };
-
-/*
- * The "From the notes" block (plan 58 phase 1), under a reply that used a note from the
- * knowledge base or a shared troubleshooting tip. The maintainer has not yet picked open or
- * closed by default (the mockup page at docs/planning/assets/58-phase-1-block-mockups.html is
- * what they are picking from) — this lane's own recommendation and the session's are both
- * closed, so that is what ships behind this one constant. Flipping it to `true` is meant to be
- * the entire change once an answer comes back.
- */
-const KB_NOTES_BLOCK_OPEN_BY_DEFAULT = false;
 
 /**
  * Mirrors `__bonsaiTabRestoreAfterModal` in useBonsaiPluginShell.ts -- same problem, one level
@@ -632,53 +622,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     setReasoningOpenFor(null);
   }, [expandedTurnKey]);
 
-  /**
-   * Which turns have their "From the notes" block open, independent per turn (unlike the single
-   * reasoning fold above, several of these can reasonably be open at once while scrolling back
-   * through a chat). Starts empty on every mount, so a reopened saved chat and a fresh panel open
-   * both come back at KB_NOTES_BLOCK_OPEN_BY_DEFAULT for every turn.
-   */
-  const [kbNotesOpenByTurn, setKbNotesOpenByTurn] = useState<Record<string, boolean>>({});
-  const isKbNotesOpen = (turnKey: string) =>
-    kbNotesOpenByTurn[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT;
-  /**
-   * The block's own header row, one per turn key — separate from `kbNotesBlockEls` (the whole
-   * Focusable, header plus body) because opening the block has to scroll to the HEADER alone,
-   * not to the block's own bottom edge. First Deck rows (NOTES-BLOCK-01): a three-note block
-   * opens to about 970 px in a 366 px pane, and the pane scrolled to follow the growing
-   * Focusable's own bottom edge, leaving the header 768 px above the top — a person had to
-   * scroll back up to read the very first note the press was meant to reveal.
-   */
-  const kbNotesHeaderElRefs = useRef<Record<string, HTMLElement | null>>({});
-  /** Set only on a closed-to-open toggle, read once by the effect below, then cleared — the
-   *  smallest signal that says "this one just opened, scroll its header into view." */
-  const justOpenedKbNotesTurnRef = useRef<string | null>(null);
-  const toggleKbNotesOpen = (turnKey: string) =>
-    setKbNotesOpenByTurn((prev) => {
-      const wasOpen = prev[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT;
-      if (!wasOpen) justOpenedKbNotesTurnRef.current = turnKey;
-      return { ...prev, [turnKey]: !wasOpen };
-    });
-  /*
-   * Runs after every render (no dependency array — the ref, not a dependency, is what gates it)
-   * so it always sees the DOM the just-committed open state produced. `requestAnimationFrame`
-   * lets that paint settle first, the same reason `isStreamSettling` elsewhere in this file
-   * waits a frame — scrolling before layout has caught up would measure the block's old,
-   * still-closed height.
-   */
-  useEffect(() => {
-    const turnKey = justOpenedKbNotesTurnRef.current;
-    if (!turnKey) return;
-    justOpenedKbNotesTurnRef.current = null;
-    const header = kbNotesHeaderElRefs.current[turnKey];
-    if (!header) return;
-    const raf = requestAnimationFrame(() => {
-      // Not scrollIntoView: that honours the pane's 116 px scroll-padding-top and left the header
-      // where it already was (see scrollElementTopToPaneTop).
-      scrollElementTopToPaneTop(header);
-    });
-    return () => cancelAnimationFrame(raf);
-  });
+  /* Which turns have their "From the notes" block open, and scrolling a block's own header into
+     view the moment it opens — lifted into its own hook, called from exactly the spot this block
+     occupied (tests/test_ask_hook_order.py). */
+  const { isKbNotesOpen, toggleKbNotesOpen, kbNotesHeaderElRefs } = useKbNotesFold();
 
   /*
    * Plan 58 phase 1: re-render whenever a spoiler fence opens or closes anywhere, so

@@ -12,8 +12,9 @@
  * have to carry every one of its fields just to say "empty".
  *
  * Does not: Read or write anything — it takes no arguments and has no side effects. Does not
- * decide when a snapshot is empty; `index.tsx` decides that by calling this exactly once, as
- * the ref's initial value.
+ * decide when a snapshot is empty. `index.tsx` hands this function itself to the ref as its
+ * starting value, and the first render replaces it with one that reads the live state, so this
+ * only ever runs if a snapshot is asked for before that first render.
  */
 import { IP_DEFAULT } from "../../data/storageKeys";
 import type { BonsaiSessionSurvivalSnapshot } from "../../utils/bonsaiSessionSurvival";

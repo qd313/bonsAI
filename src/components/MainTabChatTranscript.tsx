@@ -199,7 +199,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
-import { useReadAloud } from "../hooks/useReadAloud";
+import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
@@ -432,9 +432,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   /*
    * Read aloud / Stop (plan 42 step 3a). One instance for the whole transcript — the background
    * reader can only speak one answer at a time, so "which turn is speaking" lives here rather than
-   * per-turn state.
+   * per-turn state. Stopping on a new Ask (`wasAskingRef` and its effect) is lifted into the hook
+   * itself now — see useReadAloudAutoStop.ts.
    */
-  const readAloud = useReadAloud();
+  const readAloud = useReadAloudAutoStop(isAsking);
   const buildTurnReadableText = (
     body: string,
     askQuestion: string,
@@ -488,21 +489,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       },
     };
   };
-
-  /*
-   * A new Ask stops whatever is being read aloud (plan 42 step 3a). Watching `isAsking` here,
-   * rather than wherever an Ask happens to start, catches every path that begins one — the Ask
-   * button, a follow-up chip, "Ask again" — since they all flip this same prop true, and stopping
-   * is idempotent when nothing is speaking.
-   */
-  const wasAskingRef = useRef(false);
-  useEffect(() => {
-    if (isAsking && !wasAskingRef.current) {
-      readAloud.stop();
-    }
-    wasAskingRef.current = isAsking;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAsking]);
 
   /*
    * `expandedTurnKey` is a dependency because the details panel is a single boolean shared by

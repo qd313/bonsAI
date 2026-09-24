@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 453,
-  "edgeCount": 1197,
+  "fileCount": 454,
+  "edgeCount": 1198,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -473,7 +473,7 @@
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/usePermHintNavTargets.ts",
-        "src/hooks/useReadAloud.ts",
+        "src/hooks/useReadAloudAutoStop.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
@@ -2684,11 +2684,19 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
-        "src/components/MainTabChatTranscript.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useReadAloud.test.ts",
+        "src/hooks/useReadAloudAutoStop.ts",
         "src/utils/bonsaiAskCompletionWatch.ts"
+      ]
+    },
+    "src/hooks/useReadAloudAutoStop.ts": {
+      "imports": [
+        "src/hooks/useReadAloud.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
       ]
     },
     "src/hooks/useReplyFeedbackChips.test.ts": {

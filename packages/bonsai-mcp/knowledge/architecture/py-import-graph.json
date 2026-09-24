@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 84,
-  "edgeCount": 195,
+  "fileCount": 85,
+  "edgeCount": 197,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -55,11 +55,11 @@
       "count": 7
     },
     {
-      "path": "py_modules/backend/ollama_routing.py",
-      "count": 6
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "count": 7
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "path": "py_modules/backend/ollama_routing.py",
       "count": 6
     },
     {
@@ -268,6 +268,10 @@
     },
     {
       "path": "py_modules/backend/services/intent_pack_rpc.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_cards.py",
       "count": 1
     },
     {
@@ -701,9 +705,18 @@
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
+    "py_modules/backend/services/knowledge_base_cards.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_schema.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/knowledge_base_service.py"
+      ]
+    },
     "py_modules/backend/services/knowledge_base_schema.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
@@ -716,6 +729,7 @@
       "imports": [
         "py_modules/backend/services/compat_topic_router.py",
         "py_modules/backend/services/kb_not_in_notes_notice.py",
+        "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_prompts.py"

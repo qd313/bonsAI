@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 80,
-  "edgeCount": 190,
+  "fileCount": 81,
+  "edgeCount": 192,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -98,6 +98,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/services/transparency_service.py",
       "count": 4
     },
@@ -139,10 +143,6 @@
     },
     {
       "path": "py_modules/backend/services/strategy_checklist_session_service.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
       "count": 3
     },
     {
@@ -339,6 +339,10 @@
     },
     {
       "path": "py_modules/backend/services/strategy_entity_extraction.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "count": 1
     },
     {
@@ -858,9 +862,9 @@
       "imports": [
         "py_modules/backend/constants.py",
         "py_modules/backend/services/reply_language_service.py",
-        "py_modules/backend/services/spoiler_title_profiles.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
         "py_modules/backend/services/strategy_guide_parse.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py",
         "py_modules/backend/tdp_intent.py"
       ],
       "importedBy": [
@@ -1033,8 +1037,8 @@
       "imports": [],
       "importedBy": [
         "py_modules/backend/services/game_ai_request.py",
-        "py_modules/backend/services/ollama_prompts.py",
-        "py_modules/backend/services/spoiler_risk_service.py"
+        "py_modules/backend/services/spoiler_risk_service.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py"
       ]
     },
     "py_modules/backend/services/spy_confession_service.py": {
@@ -1081,7 +1085,17 @@
       "importedBy": [
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
-        "py_modules/backend/services/strategy_entity_extraction.py"
+        "py_modules/backend/services/strategy_entity_extraction.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py"
+      ]
+    },
+    "py_modules/backend/services/strategy_spoiler_policy.py": {
+      "imports": [
+        "py_modules/backend/services/spoiler_title_profiles.py",
+        "py_modules/backend/services/strategy_guide_parse.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_prompts.py"
       ]
     },
     "py_modules/backend/services/tdp_service.py": {

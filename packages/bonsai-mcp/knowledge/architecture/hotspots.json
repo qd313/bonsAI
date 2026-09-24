@@ -31,11 +31,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1430,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 1422,
       "role": ""
@@ -58,6 +53,11 @@
     {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1220,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 1172,
       "role": ""
     },
     {

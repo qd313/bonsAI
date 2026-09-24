@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 479,
-  "edgeCount": 1269,
+  "fileCount": 480,
+  "edgeCount": 1273,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -829,7 +829,8 @@
     "src/components/OllamaWhereAiRunsSection.constants.tsx": {
       "imports": [],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
     },
     "src/components/OllamaWhereAiRunsSection.test.tsx": {
@@ -847,6 +848,7 @@
         "src/data/deckEssentialsTags.ts",
         "src/data/modelPolicy.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/utils/deckyCall.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
@@ -865,6 +867,7 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts"
       ]
     },
@@ -2657,6 +2660,16 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/hooks/useMdnsOllamaDiscovery.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.constants.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
+      ]
+    },
     "src/hooks/useOllamaGameContextSync.ts": {
       "imports": [
         "src/types/bonsaiUi.ts"
@@ -4332,6 +4345,7 @@
         "src/hooks/useIntentPacks.ts",
         "src/hooks/useKidsLock.test.ts",
         "src/hooks/useKidsLock.ts",
+        "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",

@@ -110,9 +110,9 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
+import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
 import type {
   MdnsOllamaHost,
-  MdnsDiscoveryResult,
   LocalOllamaSetupStatus,
   OllamaLocalAutostartStatus,
   ConnectionStatus,
@@ -121,8 +121,6 @@ import type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.t
 import {
   TEST_CONNECTION_TIMEOUT_SECONDS,
   LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS,
-  MDNS_DISCOVERY_TIMEOUT_SECONDS,
-  MDNS_DISCOVERY_RPC_MS,
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
@@ -382,70 +380,16 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const localSetupBusy = localSetupStatus?.phase === "running";
   const ollamaEngineReady = Boolean(connectionStatus?.reachable);
 
-  const runMdnsDiscovery = useCallback(async () => {
-    setMdnsDiscovering(true);
-    setMdnsDiscoveryMessage(null);
-    setMdnsHosts([]);
-    try {
-      const result = await callDeckyWithTimeout<[number], MdnsDiscoveryResult>(
-        "discover_mdns_ollama_hosts",
-        [MDNS_DISCOVERY_TIMEOUT_SECONDS],
-        MDNS_DISCOVERY_RPC_MS
-      );
-      const hosts = Array.isArray(result.hosts) ? result.hosts : [];
-      if (hosts.length > 0) {
-        setMdnsHosts(hosts);
-        setMdnsDiscoveryMessage(null);
-      } else {
-        setMdnsHosts([]);
-        setMdnsDiscoveryMessage(
-          (result.hint || result.error || "No Ollama services found via mDNS on this network.").trim()
-        );
-      }
-    } catch (e: unknown) {
-      setMdnsHosts([]);
-      setMdnsDiscoveryMessage(formatDeckyRpcError(e));
-    } finally {
-      setMdnsDiscovering(false);
-    }
-  }, []);
-
-  const openMdnsDiscoveryConfirm = useCallback(() => {
-    if (ollamaLocalOnDeck || mdnsDiscovering || localSetupBusy) return;
-    onBeforeDeckyModal();
-    const handle = showModal(
-      <ConfirmModal
-        strTitle="Find Ollama on LAN (mDNS)"
-        strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
-            <div style={{ marginBottom: 8 }}>
-              This browses your local network for services advertised as{" "}
-              <code style={{ color: "#9ce7ff" }}>_ollama._tcp</code> (Bonjour / Avahi). It does not scan IP addresses or
-              ports.
-            </div>
-            <div>
-              Stock Ollama on a PC often needs an Avahi or Bonjour publish step — see troubleshooting. You can still
-              enter a PC address manually.
-            </div>
-          </div>
-        }
-        strOKButtonText="Search"
-        strCancelButtonText="Cancel"
-        onOK={() => {
-          onCompleteDeckyModalClose(() => handle.Close());
-          void runMdnsDiscovery();
-        }}
-        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
-      />
-    );
-  }, [
-    localSetupBusy,
+  const { openMdnsDiscoveryConfirm } = useMdnsOllamaDiscovery({
     mdnsDiscovering,
+    setMdnsDiscovering,
+    setMdnsHosts,
+    setMdnsDiscoveryMessage,
     ollamaLocalOnDeck,
+    localSetupBusy,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
-    runMdnsDiscovery,
-  ]);
+  });
 
   const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => {
     if (!st || st.phase !== "running") return "";

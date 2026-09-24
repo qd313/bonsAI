@@ -91,7 +91,7 @@
  *   matching label (findModalFooterButton()) rather than by a ref.
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type RefCallback } from "react";
-import { Button, ConfirmModal, Focusable, TextField, showModal } from "@decky/ui";
+import { Button, ConfirmModal, Focusable, TextField } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
   PULL_MODEL_GROUP_LABELS,
@@ -116,11 +116,7 @@ import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
-import {
-  disclosureSummaryForSourceClass,
-  MODEL_POLICY_PERMISSIONS_INTRO,
-  MODEL_POLICY_TIER_LABELS_PLAIN,
-} from "../data/modelPolicy";
+import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
@@ -128,6 +124,7 @@ import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
 import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelection";
 import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
 import { usePullModelPinForAsk } from "../hooks/usePullModelPinForAsk";
+import { usePullModelSubmitSelected } from "../hooks/usePullModelSubmitSelected";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -773,124 +770,19 @@ export function PullModelsModal(props: PullModelsModalProps) {
     setDeleteBusyTag,
   });
 
-  const onPullSelected = useCallback(async () => {
-    if (selectedTags.size === 0) return;
-
-    const runPull = async () => {
-      setPullBusy(true);
-      try {
-        const tags = [...selectedTags];
-
-        // Check the registry for the exact names about to be sent, so a bad one (a typo in a
-        // catalog update, most likely -- the checkboxes only ever queue real catalog tags) is
-        // caught and named here rather than dropped silently by the back end. A failed check
-        // must not block a pull that would otherwise work; it just skips the warning.
-        let unavailable: string[] = [];
-        try {
-          const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
-            "fetch_ollama_catalog_metadata",
-            [tags],
-            DECKY_RPC_TIMEOUT_MS
-          );
-          unavailable = findUnavailableRegistryTags(tags, meta);
-        } catch {
-          unavailable = [];
-        }
-        const toPull = unavailable.length ? tags.filter((t) => !unavailable.includes(t)) : tags;
-
-        if (toPull.length === 0) {
-          toaster.toast({
-            title: "Could not find",
-            body: unavailable.join(", "),
-            duration: 6000,
-          });
-          return;
-        }
-
-        const res = await callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
-          "pull_ollama_models",
-          [toPull],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        if (res.accepted) {
-          toaster.toast({
-            title: "Pull started",
-            body: unavailable.length
-              ? `${toPull.length} model(s) — watch progress in Settings. Could not find: ${unavailable.join(", ")}`
-              : `${tags.length} model(s) — watch progress in Settings.`,
-            duration: unavailable.length ? 8000 : 5000,
-          });
-          onPullAccepted();
-        } else {
-          toaster.toast({
-            title: "Pull not started",
-            body: res.reason || "Setup busy or local Ollama is off.",
-            duration: 5000,
-          });
-        }
-      } catch (e) {
-        toaster.toast({ title: "Pull failed", body: formatDeckyRpcError(e), duration: 5000 });
-      } finally {
-        setPullBusy(false);
-      }
-    };
-
-    if (modelPolicyTier === "open_source_only") {
-      const openWeightTags = [...selectedTags].filter((tag) => {
-        const entry = mergedCatalog.find((e) => e.tag === tag);
-        return entry?.licenseClass === "open_weight";
-      });
-      if (
-        openWeightTags.length > 0 &&
-        openWeightTags.some((tag) => !openWeightTierConfirmedRef.current.has(tag))
-      ) {
-        const tagList = openWeightTags.join(", ");
-        const tier2Note = disclosureSummaryForSourceClass("open_weight");
-        onBeforeNestedDeckyModal?.();
-        const handle = showModal(
-          <ConfirmModal
-            strTitle="Enable Tier 2 before pulling?"
-            strDescription={
-              <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
-                <div style={{ marginBottom: 8 }}>
-                  Your queue includes open-weight model(s):{" "}
-                  <span style={{ color: "#9ce7ff" }}>{tagList}</span>. Tier 1 limits Ask routing to FOSS-friendly
-                  tags only.
-                </div>
-                <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                  Enable <strong>Tier 2 (open-weight)</strong> before pulling so these models can be used. {tier2Note}
-                </div>
-              </div>
-            }
-            strOKButtonText="Enable Tier 2 and pull"
-            strCancelButtonText="Cancel"
-            onOK={() => {
-              for (const tag of openWeightTags) {
-                openWeightTierConfirmedRef.current.add(tag);
-              }
-              completeNestedModalClose(() => handle.Close());
-              void (async () => {
-                await onApplyTier2Policy?.();
-                await runPull();
-              })();
-            }}
-            onCancel={() => completeNestedModalClose(() => handle.Close())}
-          />
-        );
-        return;
-      }
-    }
-
-    await runPull();
-  }, [
-    onPullAccepted,
+  // Lifted into usePullModelSubmitSelected. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { onPullSelected } = usePullModelSubmitSelected({
     selectedTags,
     modelPolicyTier,
     mergedCatalog,
     onApplyTier2Policy,
     completeNestedModalClose,
     onBeforeNestedDeckyModal,
-  ]);
+    onPullAccepted,
+    setPullBusy,
+    openWeightTierConfirmedRef,
+  });
 
   /**
    * Type-any-tag pull. Deliberately a separate one-off RPC call rather than folding into

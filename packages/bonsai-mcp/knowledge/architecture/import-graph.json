@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 465,
-  "edgeCount": 1222,
+  "fileCount": 466,
+  "edgeCount": 1228,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -950,6 +950,7 @@
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
         "src/utils/deckyCall.ts",
@@ -976,6 +977,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/utils/pullModelFilters.ts"
       ]
     },
@@ -1454,6 +1456,7 @@
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
@@ -1529,6 +1532,7 @@
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
         "src/index.tsx",
@@ -2658,6 +2662,18 @@
         "src/components/PullModelsModal.types.ts",
         "src/data/pullModelCatalog.ts",
         "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelSubmitSelected.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts",
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -4176,6 +4192,7 @@
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useReplyLanguage.ts",
@@ -4590,6 +4607,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelToggleSelection.tsx"
       ]
     },

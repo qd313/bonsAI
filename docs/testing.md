@@ -1,17 +1,11 @@
 # bonsAI testing
 
-> **Clean-up task — trim this file.** ★★ · about 45 minutes with one worker · Sonnet 5 at high effort.
->
-> Reading this costs roughly **34,000 tokens**, and the house rules say it is read before any work is
-> marked done — so that cost lands on every single piece of work. Getting it to 60 KB would save
-> roughly **19,000 tokens** every time.
->
-> The closed rows already moved to the archive on 2026-09-13; what is left is long because the rows
-> still open are wordy, not because there are many. So this one needs judgement, not just moving:
-> shorten each row to what a person actually has to do and see. Take care — a row's wording is what
-> is under test, and several are worded deliberately around words they must avoid.
->
-> Not started. Filed 2026-09-13 during the clean-up.
+> **Trimmed 2026-09-24 (plan 65).** More finished rows moved to
+> [archive/testing-closed-2026.md](archive/testing-closed-2026.md); a few still-open rows had their
+> older, superseded history moved to [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md),
+> each with a link back on its live row. 149,062 to 107,845 bytes — short of the 60 KB goal; the
+> remaining open rows are long mostly because their steps and latest results are what a person
+> actually needs, not because of leftover history.
 
 **Purpose:** Where to test, what to run, and how coverage is tracked — without dumping every historical checkbox into one file.
 
@@ -22,6 +16,7 @@
 | [testing-manual.md](testing-manual.md) | Maintainers | On-Deck smokes, Tier 0–4 runbook, Deck-only checklists |
 | [test-evidence/](test-evidence/) | CI / agents | Preview-suite artifacts (`--write` / `--evidence`) — see [retention](#evidence-retention) |
 | [archive/testing-closed-2026.md](archive/testing-closed-2026.md) | Everyone | Closed rows moved out of the coverage table below |
+| [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md) | Everyone | Older, superseded history moved out of still-open rows below |
 
 Related: [roadmap.md](roadmap.md) ([Bugs](roadmap.md#bugs), [Verify](roadmap.md#verify), [Features](roadmap.md#features), [Done](archive/roadmap-done-v0.5.0.md)), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md).
 

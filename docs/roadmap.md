@@ -232,6 +232,9 @@ starts work outside this.
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
   and suffers. Making streaming the default stays a separate feature call. Row **STREAM-11**. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
+  **Cause found 2026-09-24:** the model writes evenly (a piece every 50 ms with a game running), but the plugin reads its output
+  4 KB at a time and waits for each 4 KB to fill, so text reaches the panel in lumps of about 115 letters every 1.5 to 2 seconds.
+  [Plan 69](planning/69-streamed-answers-scramble.md) step 1 fixes it and measures the game's frame rate.
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
@@ -328,6 +331,9 @@ replace it with a specific issue when one exists.
   mode, its unsettled tail churning through placeholder glyphs that lock into the real letters, smooth and without bursts, like
   the Ghost in the Shell titles. Off by default. Reuse the decode chip's animation and timings (`MainTabPresetAnimatedChips.tsx`,
   `MainTabChatTranscript.tsx`). Related to the accepted bug about streamed text arriving in bursts.
+  **Planned 2026-09-24, calls locked (D119):** [plan 69](planning/69-streamed-answers-scramble.md) and its working
+  [mockup](planning/assets/69-streamed-answers-scramble.html). The bursts fix comes first; the switch is *Scramble animation* in a
+  new Animations section; the scramble must not cost the panel any frames.
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
   answer finishes while the menu is closed, the toast says only *Reply ready*. It would read *bonsAI* over the first lines of
   the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.

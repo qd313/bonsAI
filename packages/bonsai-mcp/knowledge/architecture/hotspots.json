@@ -6,13 +6,13 @@
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 2042,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 2008,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2008,
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1809,
       "role": ""
     },
     {

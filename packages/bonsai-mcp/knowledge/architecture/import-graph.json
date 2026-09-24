@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 429,
-  "edgeCount": 1101,
+  "fileCount": 430,
+  "edgeCount": 1104,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2212,6 +2212,7 @@
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/appliedTuningText.ts",
+        "src/utils/askOrchestrationRestore.ts",
         "src/utils/askThinkingPhases.ts",
         "src/utils/bonsaiAskCompletionWatch.ts",
         "src/utils/bonsaiSessionSurvival.ts",
@@ -3154,6 +3155,7 @@
         "src/types/askOrchestrationArgs.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/archivedTurnTransparency.ts",
+        "src/utils/askOrchestrationRestore.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/chatSlotTurns.ts",
         "src/utils/reasoningDisplay.ts",
@@ -3319,6 +3321,15 @@
         "src/utils/archivedTurnTransparency.test.ts"
       ]
     },
+    "src/utils/askOrchestrationRestore.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
+      ]
+    },
     "src/utils/askThinkingPhases.test.ts": {
       "imports": [
         "src/utils/askThinkingPhases.ts"
@@ -3459,6 +3470,7 @@
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
+        "src/utils/askOrchestrationRestore.ts",
         "src/utils/bonsaiSessionSurvival.test.ts"
       ]
     },

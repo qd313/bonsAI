@@ -143,6 +143,10 @@ import {
   peekBonsaiSessionPendingRestore,
   type BonsaiSessionSurvivalSnapshot,
 } from "../utils/bonsaiSessionSurvival";
+import {
+  initialExpandedTurnKeyFromSurvival,
+  resolveInitialOllamaContext,
+} from "../utils/askOrchestrationRestore";
 import { type ReplyMicroActionId } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
@@ -169,43 +173,9 @@ const STOP_STATUS_GRACE_MS = 4000;
  */
 const GAME_CONTEXT_POLL_MS = 2000;
 
-function initialExpandedTurnKeyFromSurvival(): AskThreadExpandedTurnKey {
-  const peek = peekBonsaiSessionPendingRestore();
-  if (!peek) return "live";
-  if (peek.expandedTurnKey !== undefined) {
-    return peek.expandedTurnKey;
-  }
-  const legacyIdx = peek.askThreadViewIndex;
-  if (legacyIdx != null && legacyIdx >= 0 && legacyIdx < peek.askThreadCollapsed.length) {
-    return peek.askThreadCollapsed[legacyIdx]?.id ?? "live";
-  }
-  return "live";
-}
-
-/**
- * The Ask-bar footnote's game context, resolved once at mount rather than left to wait for the
- * first Ask's status poll. Measured (CHIP-ROTATION-01, runs/CHIP-ROTATION-01-carousel-sample-half-life-2.json):
- * with Half-Life 2 already running, the footnote read "Context: no active game detected" for a
- * full 96-second sample while the preset carousel already showed Half-Life 2's own chips — the
- * carousel detects the running game on mount (`Router.MainRunningApp`, same id `trackedRunningAppId`
- * tracks) but the footnote used to start from the last survived snapshot (or nothing) and only
- * ever got corrected once an Ask's status poll ran.
- *
- * `liveAppId` is the same id the preset carousel already reads on mount — when it names a running
- * game, that wins outright. Only when nothing is running does a modal-remount's survived context
- * apply, so a mid-Ask restore (disclaimer modal, tab switch) is unaffected. No repeating poll is
- * added; this runs once, at the `useState` initializer.
- */
-export function resolveInitialOllamaContext(
-  liveAppId: string,
-  survived: OllamaContextUi | null | undefined,
-): OllamaContextUi {
-  const trimmed = liveAppId.trim();
-  if (trimmed) {
-    return { app_id: trimmed, app_context: "active" };
-  }
-  return survived ?? null;
-}
+// Both moved to ../utils/askOrchestrationRestore.ts — pure functions, testable with no React.
+// Re-exported so the existing import in this hook's own test file keeps working unchanged.
+export { resolveInitialOllamaContext } from "../utils/askOrchestrationRestore";
 
 // UseBonsaiAskOrchestrationArgs now lives in ../types/askOrchestrationArgs, beside the
 // return-type it pairs with. Re-exported so the existing import in this hook's own test

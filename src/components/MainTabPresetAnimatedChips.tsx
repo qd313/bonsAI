@@ -58,6 +58,12 @@
  *   hint and its own registered Up/Down handovers: Steam treats a Focusable
  *   as a column by default, and the hint alone was not enough to change that
  *   on its own, measured on device.
+ *
+ * Split across files (plan 65): the decode-text maths, the fade/stagger timings and
+ * normalizeThreeSeeds, the plain chip button and its badges, PresetRowFocusRoot/usePresetRowNav,
+ * and decode mode's own chip row now live in src/features/preset-carousel/ (presetChipDecodeText,
+ * presetChipShared, presetChipButton, presetRowFocusNav, presetDecodeSlots). This file re-exports
+ * the few names the test file still imports by the old path.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {

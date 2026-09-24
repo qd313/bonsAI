@@ -51,7 +51,9 @@
  * Split note (plan 65): the empty starting snapshot moved to
  * features/plugin-shell/initialSessionSnapshot.ts; the two "clear the session" /
  * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
- * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts.
+ * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts; the
+ * post-remount session restore moved to
+ * features/plugin-shell/useSessionRestoreAfterRemount.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -96,7 +98,6 @@ import { PLUGIN_VERSION } from "./pluginVersion";
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
 import { DEFAULT_LATENCY_WARNING_SECONDS, type BonsaiSettings } from "./data/bonsaiSettingsSchema";
 import { setFrozenTestChips } from "./data/presets";
-import { toBonsaiSettingsPayload } from "./utils/settingsPayload";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
 import { PULL_MODEL_CATALOG } from "./data/pullModelCatalog";
@@ -105,17 +106,12 @@ import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
-  clearBonsaiSessionSurvival,
-  consumeBonsaiSessionAfterRemount,
-  finalizeSessionRestoreAfterRemount,
   getPluginDataClearedGeneration,
   peekBonsaiSessionPendingRestore,
-  shouldIgnoreRestoredSettingsSnapshot,
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
 import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
-import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
 import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import {
   BonsaiSvgIcon,
@@ -173,6 +169,7 @@ import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
 import { getSteamSettingsUrl } from "./data/steamSettingsNavigation";
 import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
+import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 
 type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
@@ -620,65 +617,21 @@ const Content: React.FC = () => {
 
   isAskingRef.current = isAsking;
 
-  useLayoutEffect(() => {
-    if (shouldIgnoreRestoredSettingsSnapshot(pluginDataClearSeenRef.current)) {
-      clearBonsaiSessionSurvival();
-      return;
-    }
-    const survived = consumeBonsaiSessionAfterRemount();
-    bonsaiDebugLog("index.tsx:consume", survived ? "restored snapshot" : "no snapshot", "H1", {
-      tab: survived?.currentTab,
-      inputLen: survived?.unifiedInput?.length ?? 0,
-      hasExchange: !!survived?.lastExchange,
-    });
-    if (!survived) {
-      /*
-       * A plain mount — a QAM close/reopen, the ordinary way this panel comes back. There is no
-       * snapshot to restore, but the saved chat is still on disk and the pointer to it now
-       * survives, so load it here. Without this the thread came back empty and the session
-       * context strip counted only the answer the background poll repainted
-       * (SESSION-CONTEXT-COUNT-01): measured on device with four entries in the slot file and
-       * one turn on screen, tagged `live`.
-       */
-      const storedSlotId = loadActiveChatSlotId();
-      if (storedSlotId) {
-        activeSlotIdRef.current = storedSlotId;
-        void chatSlots.selectSlot(storedSlotId);
-      }
-      return;
-    }
-    if (consumePendingFocusMainTab()) {
-      setCurrentTab("main");
-    } else if (survived.currentTab) {
-      setCurrentTab(survived.currentTab);
-    }
-    setUnifiedInput(survived.unifiedInput);
-    setSelectedIndex(survived.selectedIndex);
-    setNavigationMessage(survived.navigationMessage);
-    restoreScreenshotBrowserSnapshot({
-      selectedAttachment: survived.selectedAttachment,
-      isScreenshotBrowserOpen: survived.isScreenshotBrowserOpen,
-      mediaError: survived.mediaError,
-      recentScreenshots: survived.recentScreenshots,
-      isLoadingRecentScreenshots: survived.isLoadingRecentScreenshots,
-    });
-    restorePluginHelpDismissed(survived.pluginHelpDismissed);
-    setOllamaIp(survived.ollamaIp);
-    hydrateFromSettings(toBonsaiSettingsPayload(survived.settingsSnapshot));
-    restoreSessionSnapshot(survived);
-    if (survived.activeSlotId) {
-      activeSlotIdRef.current = survived.activeSlotId;
-      void chatSlots.selectSlot(survived.activeSlotId);
-    }
-    pendingSessionRestoreFinalizeRef.current = true;
-  }, [chatSlots.selectSlot, restoreSessionSnapshot, hydrateFromSettings]);
-
-  useEffect(() => {
-    if (!pendingSessionRestoreFinalizeRef.current) return;
-    pendingSessionRestoreFinalizeRef.current = false;
-    finalizeSessionRestoreAfterRemount();
-    bonsaiDebugLog("index.tsx:finalizeRestore", "cleared pending snapshot", "H1", {});
-  }, []);
+  useSessionRestoreAfterRemount({
+    pluginDataClearSeenRef,
+    pendingSessionRestoreFinalizeRef,
+    activeSlotIdRef,
+    chatSlots,
+    setCurrentTab,
+    setUnifiedInput,
+    setSelectedIndex,
+    setNavigationMessage,
+    restoreScreenshotBrowserSnapshot,
+    restorePluginHelpDismissed,
+    setOllamaIp,
+    hydrateFromSettings,
+    restoreSessionSnapshot,
+  });
 
   const effectiveLatencyWarningSeconds = useMemo(
     () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),

@@ -41,14 +41,14 @@
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
-      "path": "src/index.tsx",
-      "lines": 1609,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1586,
       "role": ""
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1562,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",

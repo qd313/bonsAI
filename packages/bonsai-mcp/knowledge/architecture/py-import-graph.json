@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 73,
-  "edgeCount": 169,
+  "fileCount": 74,
+  "edgeCount": 171,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -126,6 +126,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/strategy_checklist_session_service.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/tdp_service.py",
       "count": 3
     },
@@ -179,10 +183,6 @@
     },
     {
       "path": "py_modules/backend/services/spy_confession_service.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/strategy_checklist_session_service.py",
       "count": 2
     },
     {
@@ -318,6 +318,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/strategy_checklist_rpc.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
       "count": 1
     },
@@ -378,6 +382,7 @@
         "py_modules/backend/services/screenshot_media.py",
         "py_modules/backend/services/settings_service.py",
         "py_modules/backend/services/shortcut_setup_commands.py",
+        "py_modules/backend/services/strategy_checklist_rpc.py",
         "py_modules/backend/services/strategy_checklist_session_service.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
@@ -972,11 +977,20 @@
         "py_modules/backend/services/vac_check_commands.py"
       ]
     },
+    "py_modules/backend/services/strategy_checklist_rpc.py": {
+      "imports": [
+        "py_modules/backend/services/strategy_checklist_session_service.py"
+      ],
+      "importedBy": [
+        "main.py"
+      ]
+    },
     "py_modules/backend/services/strategy_checklist_session_service.py": {
       "imports": [],
       "importedBy": [
         "main.py",
-        "py_modules/backend/services/ask_payload.py"
+        "py_modules/backend/services/ask_payload.py",
+        "py_modules/backend/services/strategy_checklist_rpc.py"
       ]
     },
     "py_modules/backend/services/strategy_guide_parse.py": {

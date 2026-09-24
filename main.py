@@ -21,7 +21,8 @@ reads and writes them through the settings service.
 
 Where the RPC bodies moved to (plan 65 split; the class still keeps every
 method, just as a one-line hand-off): the settings-search-pack buttons are in
-`backend/services/intent_pack_rpc.py`.
+`backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
+clear are in `backend/services/strategy_checklist_rpc.py`.
 
 How it works:
 
@@ -112,15 +113,13 @@ from backend.services.background_request_state import (
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.services.strategy_checklist_session_service import (
     clear_session_entry,
-    get_session_entry,
     load_session_store,
     normalize_ask_checklist_state,
     reset_session_file,
-    rpc_entry_to_store_payload,
     save_session_store,
     session_path,
-    upsert_session_entry,
 )
+from backend.services import strategy_checklist_rpc
 from backend.services.local_ollama_teardown_service import (
     should_teardown_local_ollama_on_clear,
     teardown_local_ollama_for_plugin_reset,
@@ -1204,61 +1203,15 @@ class Plugin:
 
     async def get_strategy_checklist_session(self, app_id: str = ""):
         """Return persisted checklist for the given game AppID (or generic bucket when empty)."""
-        store = Plugin._load_strategy_checklist_store()
-        entry = get_session_entry(store, app_id)
-        if entry is None:
-            return None
-        return {
-            "app_id": str(app_id or "").strip(),
-            "app_name": entry.get("app_name", ""),
-            "title": entry.get("title", ""),
-            "items": entry.get("items") or [],
-            "checked_ids": entry.get("checked_ids") or [],
-            "updated_at": entry.get("updated_at"),
-        }
+        return await strategy_checklist_rpc.get_strategy_checklist_session(self, app_id)
 
     async def save_strategy_checklist_session(self, payload: Any = None):
         """Persist checklist + checked state for one game bucket."""
-        if not isinstance(payload, dict):
-            return {"ok": False, "error": "Invalid payload"}
-        app_id = str(payload.get("app_id") or payload.get("appId") or "").strip()
-        frag = rpc_entry_to_store_payload(payload)
-        if frag is None:
-            return {"ok": False, "error": "Invalid checklist payload"}
-        if not hasattr(self, "_strategy_checklist_store_lock"):
-            self._strategy_checklist_store_lock = asyncio.Lock()
-        async with self._strategy_checklist_store_lock:
-            store = Plugin._load_strategy_checklist_store()
-            merged = upsert_session_entry(
-                store,
-                app_id=app_id,
-                app_name=str(payload.get("app_name") or payload.get("appName") or frag.get("app_name") or ""),
-                title=frag["title"],
-                items=frag["items"],
-                checked_ids=frag.get("checked_ids"),
-            )
-            save_session_store(
-                Plugin._strategy_checklist_session_path(),
-                merged,
-                settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
-                logger=logger,
-            )
-            entry = get_session_entry(merged, app_id)
-            return {"ok": True, "entry": entry}
+        return await strategy_checklist_rpc.save_strategy_checklist_session(self, payload)
 
     async def clear_strategy_checklist_session(self, app_id: str = ""):
         """Remove persisted checklist for one game or entire file when app_id omitted."""
-        if not hasattr(self, "_strategy_checklist_store_lock"):
-            self._strategy_checklist_store_lock = asyncio.Lock()
-        async with self._strategy_checklist_store_lock:
-            path = Plugin._strategy_checklist_session_path()
-            store = Plugin._load_strategy_checklist_store()
-            if str(app_id or "").strip():
-                merged = clear_session_entry(store, app_id)
-            else:
-                merged = clear_session_entry(store, None)
-            save_session_store(path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger)
-            return {"ok": True}
+        return await strategy_checklist_rpc.clear_strategy_checklist_session(self, app_id)
 
     # --- Intent packs RPC ---
 

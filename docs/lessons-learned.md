@@ -79,6 +79,12 @@ landed and the tests' copy-paste count went from 2113 to 2123. The fix was a fol
 sharing the test setup; until the ratchet itself learns to find `jscpd` from inside a copy, expect
 this and read the ratchet in the shared checkout, not the copy.
 
+**A copy's own commit hook can rebuild the shared checkout instead of itself.** The hook's path is set
+absolute, so committing in a copy changed into the shared checkout, rebuilt its generated files, and
+staged those into the copy's own commit — every copy's full checks then failed one step, and once it
+even staged stale generated files into a real commit. Commit in a copy with
+`git -c core.hooksPath=.githooks commit` so the copy's own hook runs instead.
+
 ---
 
 ## 2. Proving a change is really a change
@@ -120,6 +126,15 @@ frontend-only fix landed red that way (`996752c`), fixed the same night once the
 (`33814ce`): a comment in the Ask code had brackets in it that made the count miscount the hooks,
 not a real drift. Until the runner is taught to run those six tests on any `src` change too, expect
 a screen-side change to be able to turn a Python test red with no warning from `--quick`.
+
+**Moving a helper into its own file can make the copy-paste check see a copy that was already there.**
+Splitting a file can pull a block out next to another block that already reads almost the same, and the
+count goes up even though nothing was duplicated on purpose. Share the common part instead of leaving
+both, and never just re-record the new, higher number as the baseline.
+
+**Tests reach a moved name in more ways than `patch(...)`.** `patch.object(module, ...)` and a plain
+assignment from a script (`module.NAME = ...`) both still point at the old location and miss code that
+has moved. Search for all three before trusting that every caller was found.
 
 ---
 
@@ -265,6 +280,18 @@ ranges and one question costs a fraction of that.
 
 **Script the checkable part first.** A script costs nothing per run. Hand the helper only what a
 script cannot answer.
+
+**A screen file split by moving only top-level pieces stops near 10% smaller.** What gets a file
+meaningfully smaller is lifting a whole block of hooks out into its own hook, called from the same
+spot, with the hook-order proof run after every step.
+
+**Helpers fix their own slips in a later commit, which leaves the earlier commit failing the checks on
+its own.** At landing, fold the fix into the commit it belongs to so every commit on the branch passes
+its own checks by itself.
+
+**A scheduled check every 20 minutes can restart an unattended session after a usage-limit stop.** Once
+it does, each helper that died mid-work comes back with one short message and keeps its context, the
+same as a manual resume.
 
 **Five helpers at once, each in its own copy, while the session drives the Deck.** The shape that
 worked on 2026-09-15 (plan 55), written down because the maintainer asked for it to be kept. The one

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 476,
-  "edgeCount": 1263,
+  "fileCount": 478,
+  "edgeCount": 1266,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -175,7 +175,7 @@
       "importedBy": [
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/tabs/useDeveloperTabPayload.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
@@ -826,6 +826,12 @@
         "src/components/OllamaThinkingEffortRow.test.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.constants.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
+      ]
+    },
     "src/components/OllamaWhereAiRunsSection.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -835,7 +841,8 @@
     },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
-        "src/components/DeveloperTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.constants.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/deckEssentialsTags.ts",
         "src/data/modelPolicy.ts",
@@ -848,6 +855,15 @@
       "importedBy": [
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx"
+      ]
+    },
+    "src/components/OllamaWhereAiRunsSection.types.ts": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/data/bonsaiSettingsSchema.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
       ]
     },
     "src/components/PermissionDenyAction.test.tsx": {
@@ -1329,6 +1345,7 @@
         "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
         "src/components/PermissionsTab.tsx",

@@ -74,6 +74,9 @@
  * - A connection test against this Deck's own loopback address gets a much
  *   longer timeout than a LAN test, because probing it can itself start
  *   the Ollama service if it was not already running.
+ *
+ * The result shapes and the props type live in OllamaWhereAiRunsSection.types.ts; the fixed
+ * numbers and canned modal copy live in OllamaWhereAiRunsSection.constants.tsx.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -87,8 +90,7 @@ import {
   ConfirmModal,
 } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, type NamedOllamaHost, MAX_NAMED_OLLAMA_HOSTS } from "../data/bonsaiSettingsSchema";
-import type { DeveloperConnectionStatus } from "./DeveloperTab";
+import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, MAX_NAMED_OLLAMA_HOSTS } from "../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import {
   consumeOllamaTabLocalPending,
@@ -107,95 +109,29 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import type {
+  MdnsOllamaHost,
+  MdnsDiscoveryResult,
+  LocalOllamaSetupStatus,
+  OllamaLocalAutostartStatus,
+  ConnectionStatus,
+} from "./OllamaWhereAiRunsSection.types";
+import type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
+import {
+  TEST_CONNECTION_TIMEOUT_SECONDS,
+  LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS,
+  MDNS_DISCOVERY_TIMEOUT_SECONDS,
+  MDNS_DISCOVERY_RPC_MS,
+  LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
+  LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL,
+  LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
+  OLLAMA_MODELS_DISK_HINT,
+  LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
+  LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB,
+  LOCAL_SETUP_NETWORK_AND_POWER_HINT,
+} from "./OllamaWhereAiRunsSection.constants";
 
-const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
-/** Loopback probes may start systemd / ``ollama serve``; Decky RPC must outlive nested waits. */
-const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
-const MDNS_DISCOVERY_TIMEOUT_SECONDS = 10;
-const MDNS_DISCOVERY_RPC_MS = 18_000;
-
-type MdnsOllamaHost = {
-  label: string;
-  host: string;
-  port: number;
-  verified?: boolean;
-};
-
-type MdnsDiscoveryResult = {
-  ok?: boolean;
-  hosts?: MdnsOllamaHost[];
-  error?: string;
-  hint?: string;
-};
-
-const LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS = "tier1_essentials";
-const LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL = "tier2_multimodal";
-const LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED = "update_installed";
-
-/** Shown in setup modals; align with `refactor_helpers.setup_recommended_pull_tags` sizes. */
-const OLLAMA_MODELS_DISK_HINT =
-  "Default model folder on this account: /home/deck/.ollama/models (override with the OLLAMA_MODELS environment variable if you moved the store).";
-const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB =
-  "Rough download: about 3–4 GiB (one FOSS multimodal model — chat, screenshots, Strategy).";
-const LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB =
-  "Rough download: about 4–5 GiB (one Gemma 4 edge multimodal model).";
-
-const LOCAL_SETUP_NETWORK_AND_POWER_HINT = (
-  <>
-    <div style={{ marginBottom: 8 }}>
-      Total time depends heavily on <span style={{ color: "#9ce7ff" }}>Wi‑Fi speed and disk</span>. You may close the
-      bonsAI plugin while downloads run as long as Ollama stays up; <span style={{ fontWeight: 700 }}>avoid</span>{" "}
-      suspending the Steam Deck, restarting, toggling network off, or powering down until pulls finish.
-    </div>
-    <div>Use AC power where possible for long Tier‑1 batches.</div>
-  </>
-);
-
-type LocalOllamaSetupStatus = {
-  phase: string;
-  stage: string;
-  profile: string;
-  pull_tags?: string[];
-  pull_step?: number;
-  total_pull_steps?: number;
-  current_tag?: string;
-  log_tail?: string[];
-  error?: string;
-  done?: boolean;
-};
-
-/** Mirrors `get_ollama_local_autostart_status` (main.py) — the Deck startup entry's real state. */
-type OllamaLocalAutostartStatus = {
-  installed?: boolean;
-  enabled?: boolean;
-  running?: boolean;
-  reason?: string;
-};
-
-export type OllamaWhereAiRunsSectionProps = {
-  ollamaIp: string;
-  onOllamaIpChange: (ip: string) => void;
-  onPersistOllamaIp: (ip: string) => void;
-  ollamaLocalOnDeck: boolean;
-  setOllamaLocalOnDeck: (v: boolean) => void;
-  /** "Start the AI with the Deck" — a per-user Deck startup entry for local Ollama, off by default (2026-09-12). */
-  ollamaLocalAutostart: boolean;
-  setOllamaLocalAutostart: (v: boolean) => void;
-  onLastConnectionStatus?: (status: DeveloperConnectionStatus | null) => void;
-  namedOllamaHosts: NamedOllamaHost[];
-  setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
-  onBeforeDeckyModal: () => void;
-  onCompleteDeckyModalClose: (close: () => void) => void;
-  onOpenOllamaModelsHub: (opts?: { initialSection?: "policy" | "browse" | "advanced" }) => void;
-  /** When user confirms Tier 2 one-model multimodal setup — bump policy tier before pull. */
-  onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
-  /** Focus graph: move from connection row into Knowledge base section. */
-  onMoveDownFromConnectionRow?: () => void;
-  /** Focus graph: ref for Test connection button (KB toggle onMoveUp target). */
-  connectionTestBtnRef?: React.RefObject<HTMLButtonElement | null>;
-};
-
-type ConnectionStatus = DeveloperConnectionStatus;
+export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
 /**
  * The whole panel. See "How it works" above for the layout and flow.

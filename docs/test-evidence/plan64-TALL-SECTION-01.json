@@ -1,0 +1,94 @@
+{
+ "row": "TALL-SECTION-01 - a tall answer section keeps its first line on screen (flow D step 0, R3; fix a5684c7)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:18-19:21 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Main tab, chat 'wheatley fight'. Pressed A on '41 earlier' to show old turns, walked Down 40 presses to turn 40 'give me a complete walkthrough of every chapter of half life 2' (flow C row 8's answer), A to unfold it. Answer has 2 sections: 325 px and 258 px. Scroll area top 88 px, dock top 289 px, so the band is 201 px and both sections are tall.",
+ "down_walk": [
+  {
+   "press": 1,
+   "ring": "Show reasoning - 27 s",
+   "top": 213
+  },
+  {
+   "press": 2,
+   "ring": "section 1 (325 px)",
+   "top": 88,
+   "first_line_top": 89,
+   "first_line_shows": true,
+   "note": "arrived on it: top exactly at the scroll area's top"
+  },
+  {
+   "press": 3,
+   "ring": "section 1",
+   "top": 8,
+   "note": "ring stays, view reads on 80 px"
+  },
+  {
+   "press": 4,
+   "ring": "section 1",
+   "top": -72,
+   "bottom": 253,
+   "note": "reads on 80 px; end now above the dock"
+  },
+  {
+   "press": 5,
+   "ring": "section 2 (258 px)",
+   "top": 89,
+   "first_line_top": 89,
+   "first_line_shows": true,
+   "note": "arrived on it: first line at the scroll area's top"
+  },
+  {
+   "press": 6,
+   "ring": "section 2",
+   "top": 9,
+   "bottom": 266,
+   "note": "reads on; end above the dock"
+  },
+  {
+   "press": 7,
+   "ring": "Read aloud",
+   "top": 171
+  }
+ ],
+ "up_walk": [
+  {
+   "press": 1,
+   "ring": "section 2",
+   "top": 89,
+   "note": "first line shows"
+  },
+  {
+   "press": 2,
+   "ring": "section 1",
+   "top": -122,
+   "bottom": 203,
+   "note": "its end shows, arriving from below (expected)"
+  },
+  {
+   "press": 3,
+   "ring": "section 1",
+   "top": -42
+  },
+  {
+   "press": 4,
+   "ring": "section 1",
+   "top": 38
+  },
+  {
+   "press": 5,
+   "ring": "section 1",
+   "top": 118,
+   "note": "first line shows again"
+  },
+  {
+   "press": 6,
+   "ring": "Show reasoning - 27 s",
+   "top": 204
+  }
+ ],
+ "screenshot": "plan64-TALL-SECTION-01.png (Down press 2: 'Right, listen up. You wanna know how to get through Half-Life 2?' is the first line on screen)",
+ "saved_check": "checks/plan64-TALL-SECTION-01.json (Down 6, Up 6; replays from the ring on 'Show reasoning' of that turn)",
+ "verdict": "PASS - both tall sections showed their first line when the ring landed on them walking Down (tops at 88 and 89 against a scroll-area top of 88). Walking Down further inside a section reads on 80 px a press. Walking Up, section 1 arrives showing its end, then scrolls back 80 px a press until its first line is on screen."
+}

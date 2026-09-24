@@ -1,0 +1,25 @@
+{
+ "row": "DRG-01b - knowledge base off, masking on, no consent phrase (flow D, D8)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 20:04-20:09 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Deep Rock Galactic: Survivor running (appid 2321470; 'DRG Survivor.exe' seen), plugin reloaded; context line 'active game Deep Rock Galactic: Survivor'; Main tab, chat 'wheatley fight', Strategy. Settings read before: use_local_knowledge_base=true, strategy_spoiler_masking_enabled=true, strategy_spoiler_auto_reveal_after_consent=false.",
+ "pressed": [
+  "RB x2 to the Ollama tab (first RB only placed the ring), walk Down 6 to 'Use local knowledge base', A -> aria-checked=false",
+  "LB to Main; send-question VERIFIED 'what is the safest way to take down the big armored bug boss without dying'; walk Down 10 to ask (no question-box trap), A",
+  "spoiler recorder read the reply every 50 ms while it streamed",
+  "RB to Ollama tab (ring came back on the same toggle), A -> aria-checked=true"
+ ],
+ "seen": {
+  "elapsed_s": 61.1,
+  "kb_search_log_line": "none for this ask (the knowledge base was off)",
+  "notes_block": "none",
+  "spoiler_covers": "0 in all 36 recorded reads of this reply",
+  "raw_spoiler_fence": false,
+  "reply": "Right, listen up, mate! You wanna know the safest way to handle that big armored bug boss without getting absolutely wrecked? ... learn his rhythm ... kiting - move in and out, keep your distance, and only attack when he's vulnerable ... watch for big slams or charging attacks; when he winds up, back off and wait for the opening ... keep your resources tight, use abilities when they count, and don't let him corner you."
+ },
+ "restored": {
+  "use_local_knowledge_base": "back on through the screen (aria-checked=true; settings file reads True)"
+ },
+ "verdict": "PASS - with the knowledge base off and masking on, the reply gives boss tactics in plain text with no tap-to-reveal box."
+}

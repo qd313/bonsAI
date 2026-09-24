@@ -79,16 +79,6 @@ starts work outside this.
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
   (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
   keyboard on the question box — worth trying on this hidden-block case too.
-- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **OPEN,
-  measured 2026-09-16.** The Open Permissions button under a blocked reply is a real D-pad stop and does open
-  the Permissions tab, but the highlight lands on the wrong row. The Back to Main return itself works
-  correctly. **Confirmed on the Deck 2026-09-17, worse than first measured:** the jump now lands at the very
-  top of the tab, on the Back to Main button, nowhere near the toggle it should reach. **Timed to the
-  millisecond on the Deck 2026-09-23:** the ring does reach the right switch, 2,736 ms after the button
-  press — then 22 ms later it is moved away to Back to Main, and nothing brings it back in the next 11
-  seconds. So the jump lands in the right place and is immediately pulled off it. The session is working on
-  a fix. Evidence `docs/test-evidence/plan64-PERM-JUMP-01.json`.
-  [Detail](roadmap-details.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, re-measured on
   the Deck 2026-09-23.** With the details panel both closed and open, going down visits the question row and
   the question box, but going up skips both and stops instead on Attach screenshot and Choose AI character;
@@ -106,11 +96,6 @@ starts work outside this.
   maintainer's proposed cure is the new Features entry **"While reading an answer, the Show details line
   takes the suggestion chip's place above the question box"**, above. Evidence
   `docs/test-evidence/plan64-DETAILS-LADDER-01-try2.json`.
-- ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
-  out of the panel** — **OPEN, found on the Deck 2026-09-23; a fix is being built in this session.** The
-  confirm box ("Start the next question fresh?") opens with the ring on the destructive Clear button rather
-  than Cancel; after cancelling, the ring lands on the tab bar with the whole details panel closed, instead
-  of back on the row list. Evidence `docs/test-evidence/plan64-SESSION-TAB-01.json`.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -141,26 +126,10 @@ starts work outside this.
   only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
   though, it still does not join the saved order used to pick which model answers a question. The fix for
   that half lives in the back end and has not been built.
-- ★ `[ollama]` **Typing a made-up model name and pressing Pull says the pull started, not that it was
-  refused** — **OPEN, found on the Deck 2026-09-23; a fix is being built in this session.** Typing a name
-  the Ollama library does not have (`zzz-plan64-missing-model`) into the AI models screen's typed box and
-  pressing Pull shows the toast "Pull started — watch progress in Settings" and closes the screen; nothing
-  downloads. The back end does refuse the name correctly, but says so only in a sentence written under
-  "Local Ollama setup," higher up the Ollama tab, out of view — never in the toast, never near the button
-  that was pressed. Cause: the name check only trusts the library's answer as real once at least one name in
-  the batch is genuine, so a single made-up name reads as "could not reach the library" and is waved
-  through. Row **PULL-MISSING-NAME-01**. Evidence `docs/test-evidence/plan64-PULL-MISSING-NAME-01.json`
-  (+ `.png`).
 - ★ `[focus]` **After pressing "Apply UI scale" on the Settings tab, nothing holds the D-pad ring** — **OPEN,
   found on the Deck 2026-09-23.** The button takes the press, but nothing after it takes the ring: the next
   press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
   not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
-- ★★ `[chat]` **A brand-new chat shows the previous chat's question for about 40 seconds** — **OPEN, found
-  on the Deck 2026-09-23; a fix is being built in this session.** Open an empty new chat and ask its first
-  question: within about 70 milliseconds the previous chat's last question appears above the new one, stays
-  35 to 41 seconds, and vanishes when the new chat's title changes. Seen 3 times out of 3. The saved chat
-  files themselves are not affected. Screenshot
-  `docs/test-evidence/plan64-CHAT-GHOST-REPLY-01-leftover-question.png`.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -173,24 +142,12 @@ starts work outside this.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
-  highlight** — **OPEN, found 2026-09-18.** The view keeps following new text as it streams in, and the
-  highlighted control scrolls off screen with it: six of eight stops on one walk were not visible, and
-  walking back down looped instead of reaching the bottom. Evidence
-  `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. **A fix landed 2026-09-23 (`7b9447e`); two
-  Deck tries are still inconclusive** — both walks saw only one stop while text was arriving, since the
-  reply finished within 15 seconds each time; see the standing free-play row in
-  [testing-manual.md](testing-manual.md#standing-row-the-free-play-sweep).
-  **Sighting, 2026-09-23:** on one walk while an Ask was running, Up skipped over the chat row entirely.
-  Evidence `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming.json`,
-  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
-  [Detail](roadmap-details.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
-- ★★ `[focus]` `[layout]` **The view jumps to the end of an answer as it finishes, and the ring's place
-  goes off screen** — **OPEN, found on the Deck 2026-09-23; the session is looking at it.** About 0.8
-  seconds after an answer finished, Down from the chat row put the ring on "40 earlier" as expected, but the
-  view had already jumped to the very end of the answer, leaving the ring 656 pixels above the visible area
-  — 0% visible. With nothing being written at the time, the same press lands the ring on "40 earlier"
-  normally, fully visible. Evidence `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
+- ★★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **OPEN, found on the
+  Deck 2026-09-23.** Walking Down with the ring already inside an answer as it finishes: the moment it
+  finished, the ring vanished completely and the view jumped to the very end of the reply. The fix for the
+  view jumping to the end after an already-finished answer (`e241c5c`) may not cure this — there the ring's
+  own control was kept and brought back into view; here the ring itself disappeared. Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -205,7 +162,13 @@ starts work outside this.
   error, the same "incomplete stream" message after about 14 seconds, and Ollama answering again about 10
   seconds later. A smaller picture (a 177 KB JPG) is the next thing to try, to see whether size is what
   triggers it. Evidence `docs/test-evidence/plan64-THINKING-05.json`,
-  `docs/test-evidence/plan64-SCREENSHOT-CRASH-try2.json`.
+  `docs/test-evidence/plan64-SCREENSHOT-CRASH-try2.json`. **Cause found 2026-09-23, needs the maintainer's
+  pick:** a smaller picture (a 1280×800 JPG, 177 KB) answered normally in 49.7 seconds with a correct
+  description of the screen; the crashing file is a 1920×1080 PNG at 2.6 MB. bonsAI only shrinks a picture
+  before sending it when the Pillow image library is present, and Pillow is not installed on the Deck, so
+  the full-size file goes to the model untouched. Three ways to fix it, the maintainer's call: ship the
+  image library with the plugin, shrink pictures some other way, or refuse pictures over a size limit with a
+  message. Evidence `docs/test-evidence/plan64-SCREENSHOT-CRASH-small.json` (+ `.png`).
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -236,6 +199,12 @@ starts work outside this.
   warning, not a fix:** repeating the identical question came back cached, 1 second against the first
   run's 27, word for word the same — a warning about the counts already here, not proof they are wrong,
   since counting by repeating a question counts nothing. Evidence `docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+  **Reproduced again 2026-09-23 with fresh wording, Hollow Knight, game running:** asking about the boss
+  behind the crystal spike area attached the Soul Master's own note and Show details read "Spoiler risk:
+  med," yet no spoiler cover appeared at any of 83 reads taken while the reply streamed in. The reply names
+  "the Soul Master" outright and gives away its fake death and second round in plain text. The
+  SPOILER-REVEAL reachability check stays owed for a different reason: with no cover ever appearing, there
+  is no hidden block to walk to and reach. Evidence `docs/test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
   [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 
 ---
@@ -459,11 +428,40 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
-- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
-  start** — **VERIFY, fixed in `a5684c7`.** Two answer sections, 308 and 375 pixels tall, were only 33%
-  visible whichever way the D-pad walk reached them, and the view showed the lower end of the first one, so
-  its opening lines sat above the screen. Owed: on the Deck, walk Down through a long answer and confirm a
-  section taller than the space above the dock shows its first line when the ring lands on it.
+- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **VERIFY,
+  fixed in `af53b7d`.** Timed to the millisecond on the Deck 2026-09-23: the ring reached the right switch,
+  then was pulled off it 22 ms later by the tab's own first button and never came back. The fix keeps
+  re-taking the switch after that happens. Owed: the same timed walk on the Deck. Evidence
+  `docs/test-evidence/plan64-PERM-JUMP-01.json`.
+- ★ `[ollama]` **Typing a made-up model name and pressing Pull says the pull started, not that it was
+  refused** — **VERIFY, fixed in `f65ccfe`.** Typing a name the Ollama library does not have and pressing
+  Pull showed the toast "Pull started — watch progress in Settings," not a refusal; the real cause was that
+  the registry check could not tell "no such model" (a 404 from the server) apart from "no internet
+  reached," so one made-up name read as an offline library and was waved through instead of refused. Row
+  **PULL-MISSING-NAME-01**. Owed: type a made-up name and confirm the toast now says it was not found.
+  Evidence `docs/test-evidence/plan64-PULL-MISSING-NAME-01.json` (+ `.png`).
+- ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
+  out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
+  destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
+  whole details panel closed. **Could not run on the Deck 2026-09-23:** Claude Code's own permission check
+  refused the walk to the Clear button before any press was sent, so nothing was tried (0 "clear" lines in
+  the log — confirms nothing was cleared either). **Owed: a by-hand check by the maintainer.** Open Show
+  details, the Session tab, then Clear — the ring should start on Cancel, and pressing Cancel should keep
+  the panel open on the Session tab with the ring back on Clear. Evidence
+  `docs/test-evidence/plan64-SESSION-CLEAR-BOX-01.json`.
+- ★★ `[focus]` **Walking a reply with the ring on the chat row while it streams carries the row off
+  screen** — **VERIFY, found and fixed the same night, `ff62e8c`.** With the ring on the chat row and the
+  answer still being written, the view followed the growing answer and carried the chat row off the top of
+  the screen (its position went from 14 pixels down to 183 pixels above the top). Owed: the same walk on the
+  Deck. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+- ★★ `[focus]` `[layout]` **The view jumps to the end of an answer as it finishes, and the ring's place
+  goes off screen** — **VERIFY, fixed in `e241c5c`.** About 0.8 seconds after an answer finished, Down from
+  the chat row put the ring on "40 earlier" as expected, but the view had already jumped to the very end of
+  the answer, leaving the ring 656 pixels above the visible area — 0% visible. The fix makes the view bring
+  the ring's own control back into view once an answer ends, instead of the end of the text. **A related,
+  separate case is still open** — the ring itself vanishing while it is walked mid-answer, its own bug
+  above, since this fix was not built for that shape. Owed: the same walk on the Deck. Evidence
+  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
@@ -505,13 +503,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   meant Megaera but gave only generic fight advice, and Show details said no search ran at all ("No game is running,
   so there is nothing to look up"). A third question, "what weapon works best against her", lost track of who "her"
   was entirely and asked which game and character were meant. Evidence
-  `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
-
-- ★★★★ `[ollama]` **The plugin owns its token numbers** — **VERIFY, built 2026-09-21.** It asks the AI server for room for
-  16,384 tokens instead of accepting its default 4,096, works out question sizes from real counts instead of dividing
-  characters by 3.5, and keeps what actually went in and came out. **Two Ask modes stop being cut short:** Strategy and Expert
-  with the game's cards attached and thinking on had their answers trimmed to a 600-token floor, and now get their full 1,600
-  and 1,200. Proved through the deployed back end on the Deck; row **TOKEN-BUDGET-01** is the on-screen half, not yet run.
+  `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`. **Tried again 2026-09-23 with Hades running,
+  still FAIL by this row's own rule:** 34 earlier turns were carried, but the reply still opened with "I
+  ain't got no idea what you're talkin' about without a name… tell me which part" before it guessed the
+  right subject (Sandtraps) and gave two lines on it — the same deflect-then-recover shape seen with nothing
+  running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
@@ -566,7 +562,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   answer was still arriving, then watching Steam's own toast window every 200 milliseconds for 150 seconds
   after the reply finished — no "Reply ready" notice ever showed, and reopening the panel showed none either.
   The rig has not yet proven its own toast-reading can see a toast at all, so the next run adds a control
-  question before re-testing this row. [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+  question before re-testing this row. **06c tried again 2026-09-23 with the control run first: still FAIL,
+  cause found and fixed in `73be15f`.** The control confirmed the toast reader works (it caught an unrelated
+  notice on its first read). Closing the menu properly took four B presses this time — the plugin's own
+  panel was already closed after the second — and the reply finished 20 seconds later with the notice
+  window read every 200 ms for 90 seconds; "Reply ready" never showed. Cause: the flag saying "a reply is on
+  screen" was only written while the panel was open and was never cleared once it closed, so a reply that
+  finished in the background read as already seen. Owed: the same walk on the Deck. [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
 
 ---
 
@@ -689,6 +691,10 @@ ones from this month are D81 to D88.
   33% visible once opened. Found while trying to check whether the chip ladder inside the open block can be
   reached by D-pad — this reply's block held three shared Deck tips and no chip ladder at all, so that
   question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`).
+  **Measured again 2026-09-23, still open:** a scroll to the block's top is asked for but never takes
+  effect, and the view had already moved 13 pixels the other way as the block grew while opening — only 86
+  of 493 pixels of the open block show, 17% visible. Evidence
+  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL.json` (+ `.png`).
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, failed on the
   Deck 2026-09-23; was fixed 2026-09-21 (plan 63, lane G, commit `c25456c`).** That fix made the line read
   the best score across every attached note instead of only the first one's, but a Hollow Knight reply built
@@ -747,7 +753,10 @@ ones from this month are D81 to D88.
   stepping stones), where on 2026-09-19 only the two generic notes showed. But the two generic notes are
   still attached too, still listed first, and the block header still names "Starting out in Black Mesa" —
   the same ranking shape as the Hollow Knight "no close match" bug above, where the right note is found but
-  ranks behind generic ones. Evidence `docs/test-evidence/plan64-BLACKMESA-WATER.json`.
+  ranks behind generic ones. Evidence `docs/test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again
+  2026-09-23 with Black Mesa running: no change.** The notes, their order, the scores and the answer all
+  matched the game-not-running run exactly — having the game running did not affect this bug either way.
+  Evidence `docs/test-evidence/plan64-BLACKMESA-WATER-running.json`.
 
 ### Deck check owed
 
@@ -765,15 +774,27 @@ ones from this month are D81 to D88.
   earlier time. Row **KB-TRANSPARENCY-01**, full run in [testing.md](testing.md). **All three attached
   names confirmed on the Deck 2026-09-23**: a Hollow Knight reply's open notes block named the same three
   notes, in the same order, as the log's own search and attach lines. Evidence
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-names.json`. Still owed: a question with a game running; and a
-  case where a note is dropped for space, tried once with nothing running and could not be reproduced —
-  moved to a later flow where a game can produce the Proton log this needs. Evidence
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-starved.json`.
+  `docs/test-evidence/plan64-KB-TRANSPARENCY-names.json`. **The game-running case passed too, 2026-09-23:**
+  with Half-Life 2 running, the open block named Ravenholm, Combine soldiers and Hunter-Chopper, exactly as
+  the log did, and the log named Half-Life 2 itself. Evidence
+  `docs/test-evidence/plan64-KB-TRANSPARENCY-running.json`. **Still owed:** a case where a note is dropped
+  for space. Tried with nothing running, then tried again 2026-09-23 with a game running and a
+  troubleshooting question meant to produce a large Proton log — still could not be reproduced: 3 notes
+  searched, 3 attached, none dropped, with a roughly 16,000-character prompt. The current library and log
+  simply do not produce a drop; stays owed with these numbers on record. Evidence
+  `docs/test-evidence/plan64-KB-TRANSPARENCY-starved.json`,
+  `docs/test-evidence/plan64-KB-TRANSPARENCY-starved-try2.json`. **Sighting, 2026-09-23:** searching the
+  notes by meaning took about 1,070 milliseconds with a game running (Black Mesa, then the first Hades
+  question), against 22 to 60 milliseconds measured elsewhere with nothing running.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
   boss up front keeps the answer in plain text. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the
   Deck**; two Hades rows failed on the name-withheld-boss bug above. **Still owed as of 2026-09-19:**
   STRAT-SPOIL-NAME-01 and DRG-01b, both blocked because their games keep falling off the Recent Games list.
+  **DRG-01b passed on the Deck 2026-09-23:** with Deep Rock Galactic: Survivor running, the knowledge base
+  off, masking on and no consent phrase, the boss tactics came back in plain text — no cover, no notes
+  block, no knowledge-base search in the log, and no question-box trap on the way to Ask. STRAT-SPOIL-NAME-01
+  is still blocked. Evidence `docs/test-evidence/plan64-DRG-01b.json`.
   [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
@@ -937,4 +958,22 @@ line for line, nothing reworded, to keep this document under its size limit.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **DONE, confirmed on the Deck 2026-09-23:** the
   last two rows (the lazy status tag, and phases that are not all emoji) each got their fifth clean,
   differently-worded try; all seven of this entry's rows now pass. [Full detail](archive/roadmap-bugs-fixed.md#thinking-line-fixes-from-2026-08-0708).
+
+**Closed 2026-09-23 (plan 64, flow D, proven on the Deck):**
+
+- ★★ `[chat]` **A brand-new chat shows the previous chat's question for about 40 seconds** — **DONE, fixed
+  in `996752c`, confirmed on the Deck 2026-09-23:** two new chats, each recorded every 50 ms for 60 seconds,
+  showed 0 wrong question rows across 49 and 43 recorded changes. [Full detail](archive/roadmap-bugs-fixed.md#a-brand-new-chat-shows-the-previous-chats-question-for-about-40-seconds).
+- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
+  start** — **DONE, fixed in `a5684c7`, confirmed on the Deck 2026-09-23:** two tall sections landed with
+  their first line at the top of the visible area walking Down; walking Up, each arrived showing its end
+  and then scrolled back to its first line. [Full detail](archive/roadmap-bugs-fixed.md#walking-onto-an-answer-section-taller-than-the-view-shows-its-end-not-its-start).
+- ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
+  highlight** — **DONE, confirmed on the Deck 2026-09-23:** a recorded walk with the ring inside an answer
+  held its position still while the answer grew, the first real Deck proof that the `7b9447e` fix holds.
+  Two narrower problems split out of this one, tracked separately: the ring being carried off screen when it
+  sits on the chat row instead, and the ring vanishing at the moment an answer finishes. [Full detail](archive/roadmap-bugs-fixed.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
+- ★★★★ `[ollama]` **The plugin owns its token numbers** — **DONE, confirmed on the Deck 2026-09-23:**
+  Strategy and Expert replies with thinking on both ended on complete sentences (72 and 50 seconds), with no
+  clamping line in the log and normal stops well under the token limit. [Full detail](archive/roadmap-completed.md#the-plugin-owns-its-token-numbers).
 

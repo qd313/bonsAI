@@ -1,0 +1,403 @@
+{
+ "row": "CHIP-BUTTON-09 - the Tip dot on a note-derived chip, decode animation (flow D, D1)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:31-19:36 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Half-Life 2 running (appid 220, process hl2_linux seen), plugin reloaded, context line 'active game Half-Life 2'. Main tab, chat 'wheatley fight', Strategy, knowledge base on.",
+ "settings_before": {
+  "preset_chip_animation": "decode",
+  "dev_force_session_rag_chips": false,
+  "frozen_test_chips": "on - Developer tab says '3 pinned' (shown: 'what game am i playing', 'how do i beat the gonarch in black mesa')"
+ },
+ "pressed": [
+  "RB x4 to Developer tab",
+  "walk to 'Preset animation: decode' (Down to 'fade', Right x3), A - no change, it was already decode",
+  "Down to 'Force session RAG chips (QA)' (read aria-checked=false), A -> true (log: settings.save changed=dev_force_session_rag_chips)",
+  "LB x4 to Main",
+  "send-question VERIFIED 'what is the best way to deal with a swarm of antlions chasing me through a tunnel'; walk to ask; A",
+  "chip-row recorder (scratch deck_chip_log.py) polled the chips every 100 ms from before Ask until ~2 min after"
+ ],
+ "seen": {
+  "answer": "finished 60.4 s (log 23:34:17Z)",
+  "kb_search": "app_name=Half-Life 2 searched 3, attached 3: Pheropod (bugbait); Antlions; Sandtraps",
+  "chip_row": "never changed in the whole recording - one chip only, 'how do i beat the gonarch in black mesa', with the Test badge and no Tip dot. No note-derived chip ever appeared.",
+  "chip_log_changes": 31,
+  "why": "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts: while frozen test chips are active, the carousel keeps exactly the frozen set and never mixes in a note chip (also for rotation). So with 3 test chips pinned, this row cannot show a note chip at all."
+ },
+ "restored": {
+  "dev_force_session_rag_chips": "back to false through the screen (A on the toggle; aria-checked=false; settings file reads False)",
+  "preset_chip_animation": "decode, unchanged"
+ },
+ "needs": "Someone must clear or turn off the pinned test chips ('Clear frozen test chips' on the Developer tab) before this row can run. I did not, since the runbook does not allow it and the pins may belong to another row.",
+ "chip_log": {
+  "armed": true,
+  "t0wall": 1790206394517,
+  "log": [
+   {
+    "ms": 101,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in black mesa",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 63538,
+    "chips": [
+     {
+      "text": "",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64301,
+    "chips": [
+     {
+      "text": "▋ｶ=ﾖoﾓmhYQﾀﾒｬｱｲﾇcwvﾚ!ｭ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64400,
+    "chips": [
+     {
+      "text": "whv_FG]ﾍﾈy?I9DﾚPﾖIyｼ5m",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64500,
+    "chips": [
+     {
+      "text": "what ~4#ﾈｷﾘ_hG`ｺro6eﾁD",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64601,
+    "chips": [
+     {
+      "text": "what gaﾆﾈJ{Lｷp;ｴ~ｮ?NNｭ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64700,
+    "chips": [
+     {
+      "text": "what gameｷﾇsQjｷ@5{ﾒｨ-o",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64800,
+    "chips": [
+     {
+      "text": "what game am9#+ﾎｪ0ﾎC$ﾁ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 64901,
+    "chips": [
+     {
+      "text": "what game am i▋-PIｬ_!Y",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 65000,
+    "chips": [
+     {
+      "text": "what game am i pl▋d(ﾁ+",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 65101,
+    "chips": [
+     {
+      "text": "what game am i play▋uv",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 65200,
+    "chips": [
+     {
+      "text": "what game am i playin▋",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 65300,
+    "chips": [
+     {
+      "text": "what game am i playing",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73300,
+    "chips": [
+     {
+      "text": "h▋SﾍLｧ6ﾗf}ｫｶﾆｹoﾔRm;o)ﾓ(ﾚiﾉWﾊ0ﾊOdﾐ4ﾜOkﾕﾋ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73400,
+    "chips": [
+     {
+      "text": "how▋nﾊ-WｩH*ｮｱﾋ|2ｯｫ\\ﾕｯT5,'Gjwﾇ)ﾍﾁｦ.ｸｪb>x",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73500,
+    "chips": [
+     {
+      "text": "how do▋ﾖdﾕoCﾔｯｹﾂLqﾗiﾂaeｴ-_ｬRﾙｽpr4ｧ&ｰﾎﾝﾋ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73600,
+    "chips": [
+     {
+      "text": "how do iXZﾁﾖ4zｳﾙﾑ/H/IALTFuRTﾉouiｮﾝｫｰJｮ~",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73701,
+    "chips": [
+     {
+      "text": "how do i beﾑb7xDMﾋﾚqTMaﾃｿﾐﾒ4LｰﾍｵBtｸｶqﾚｨ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73800,
+    "chips": [
+     {
+      "text": "how do i beatFｳﾝuﾝﾙｳｴﾅｮﾍ918Sｺﾆl<`ｱ)ﾙｸ=d",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 73902,
+    "chips": [
+     {
+      "text": "how do i beat tpyﾑﾌFﾆ%kGﾕﾐｳﾝXFz_4+ｭ'R-~",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74001,
+    "chips": [
+     {
+      "text": "how do i beat the ▋~ﾀｬｼ&5\"ﾇ=sｧﾙｯﾙ(ﾘﾙ^ﾐﾍ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74102,
+    "chips": [
+     {
+      "text": "how do i beat the go▋vQｫﾇVfh&ﾑ>q:]pｹｲgO",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74200,
+    "chips": [
+     {
+      "text": "how do i beat the gonar▋ｱi6ｹF(kﾂ2ｰ5\"Ac'",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74300,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch▋NｿTｫIrｪ3ﾛｶｵ]ﾋ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74400,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch i▋ﾌkdｱS0Tg\"ﾌﾉ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74501,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in bﾁﾗﾖ98ﾎｮrｩ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74600,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in blaA>`wUaｶ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74701,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in blackﾝ\\-ｨｻ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74801,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in black me#ｨ",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 74900,
+    "chips": [
+     {
+      "text": "how do i beat the gonarch in black mesa",
+      "tip": false,
+      "tipVisible": false,
+      "test": true,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ]
+   },
+   {
+    "ms": 82901,
+    "chips": []
+   }
+  ]
+ },
+ "verdict": "COULD NOT RUN - the pinned test chips hold the chip row fixed, so no chip from the notes could appear. The row's question did attach three Half-Life 2 notes."
+}

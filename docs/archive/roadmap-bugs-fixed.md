@@ -442,6 +442,60 @@ closing note added at the end of each._
   covers are done. Evidence `docs/test-evidence/plan64-THINKING-06.json` (with `-01.json` through `-04.json`
   from the earlier four clean tries).
 
+_The three entries below were moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow
+D bookkeeping pass — copied line for line from this session's Bugs or Verify entry, nothing reworded, with
+the closing note added at the end of each._
+
+### A brand-new chat shows the previous chat's question for about 40 seconds (closed 2026-09-23)
+
+- ★★ `[chat]` **A brand-new chat shows the previous chat's question for about 40 seconds** — **OPEN, found
+  on the Deck 2026-09-23; a fix is being built in this session.** Open an empty new chat and ask its first
+  question: within about 70 milliseconds the previous chat's last question appears above the new one, stays
+  35 to 41 seconds, and vanishes when the new chat's title changes. Seen 3 times out of 3. The saved chat
+  files themselves are not affected. Screenshot
+  `docs/test-evidence/plan64-CHAT-GHOST-REPLY-01-leftover-question.png`.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Fixed in `996752c`. Two new chats, each recorded every 50 ms
+  for 60 seconds right after their first question, showed 0 wrong question rows across 49 and 43 recorded
+  changes — against 3 of 3 sightings the night before. Evidence
+  `docs/test-evidence/plan64-GHOST-QUESTION-01.json`.
+
+### Walking onto an answer section taller than the view shows its end, not its start (closed 2026-09-23)
+
+- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
+  start** — **VERIFY, fixed in `a5684c7`.** Two answer sections, 308 and 375 pixels tall, were only 33%
+  visible whichever way the D-pad walk reached them, and the view showed the lower end of the first one, so
+  its opening lines sat above the screen. Owed: on the Deck, walk Down through a long answer and confirm a
+  section taller than the space above the dock shows its first line when the ring lands on it.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Two sections, 325 and 258 pixels tall against a 201-pixel
+  band: walking Down, both landed with their top at the scroll area's own top (88 and 89 against 88).
+  Walking Up, the first one to arrive showed its end first, then scrolled back to show its first line.
+  Evidence `docs/test-evidence/plan64-TALL-SECTION-01.json` (+ `.png`), saved check
+  `checks/plan64-TALL-SECTION-01.json`.
+
+### Walking a reply with the D-pad while it is still being written loses the highlight (closed 2026-09-23)
+
+- ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
+  highlight** — **OPEN, found 2026-09-18.** The view keeps following new text as it streams in, and the
+  highlighted control scrolls off screen with it: six of eight stops on one walk were not visible, and
+  walking back down looped instead of reaching the bottom. Evidence
+  `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. **A fix landed 2026-09-23 (`7b9447e`); two
+  Deck tries are still inconclusive** — both walks saw only one stop while text was arriving, since the
+  reply finished within 15 seconds each time. **Sighting, 2026-09-23:** on one walk while an Ask was
+  running, Up skipped over the chat row entirely. Evidence
+  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming.json`,
+  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck with a recorded walk.** With the ring already inside the
+  answer as it kept growing, the view held its scroll position still (431) while the scrollable height grew
+  from 750 to 1,060 pixels — the first real Deck proof that the fix holds. **Two narrower problems split out
+  of this same recording, each tracked as its own entry:** with the ring on the chat row instead, the view
+  followed the answer and carried the row off the top of the screen (already fixed the same night,
+  `ff62e8c`); and at the exact moment an answer finishes while it is being walked, the ring can vanish
+  completely and the view jumps to the very end (still open). Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

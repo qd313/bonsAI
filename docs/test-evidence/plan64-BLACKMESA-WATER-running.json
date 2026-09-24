@@ -1,0 +1,24 @@
+{
+ "row": "Wave-three water note with Black Mesa running (flow D, D6)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:54-19:59 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Black Mesa running (appid 362890; bms.exe seen), plugin reloaded; context line 'active game Black Mesa'; Main tab, chat 'wheatley fight', Strategy, knowledge base on.",
+ "question": "black mesa how do i get across the electrified water (VERIFIED; exact repeat of flow C row 5, on purpose)",
+ "pressed": [
+  "walk Down 12 to ask, A",
+  "waited for the finish",
+  "walk Up 3 to 'Show details', A, read, A"
+ ],
+ "seen": {
+  "time_s": 54.8,
+  "replay_guard": "not a replay (54.8 s, over the 5 s line; no 'please' added)",
+  "log": "2026-09-23T23:55:12Z ask.kb_search app_name=Black Mesa searched/attached (in order): Starting out in Black Mesa; The opening tram ride and where it leads; Crossing the electrified waste pools; starved=false; top_keyword_score=16.85; best_meaning_score=0.682",
+  "notes_block_header": "Starting out in Black Mesa (+2 more) - From the Half-Life wiki",
+  "show_details": "... combineoverwiki.net - CC-BY-SA-4.0 - as of 2026-09-05 | Starting out in Black Mesa | The opening tram ride and where it leads | No source page | Crossing the electrified waste pools | Trust tier: fallback_no_source | app_id:362890 | Embed: 1077.57 ms | Re-rank: 12.35 ms",
+  "reply_summary": "treat the flooded floor like lava; stand on desks, cabinets, shelves, floating crates, overhead pipes; find a red wall switch, breaker or lever and cut the power so the water is safe for good; push loose wooden crates in as stepping stones. Nothing about a cycle or timing.",
+  "compared_with_flow_C_row_5": "identical: same three notes in the same order, same keyword score (16.85) and meaning score (0.682), same answer content. Having the game running changed nothing about which notes attached (it did fill app_id and app_name).",
+  "side_measurement": "the meaning-search step took 1,078 ms here, against 22-34 ms on the Half-Life 2 and Hollow Knight asks tonight"
+ },
+ "verdict": "UNCLEAR - same as flow C row 5: the corrected water note is attached and the answer is built on it (no 'cycle'), but two generic notes are still attached ahead of it and the header names 'Starting out in Black Mesa'. The game running made no difference."
+}

@@ -1,0 +1,40 @@
+{
+ "row": "Wave-three Hades follow-up with Hades running (flow D, D7)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 20:00-20:04 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Hades running (appid 1145360; Hades.exe seen), plugin reloaded; context line 'active game Hades'; Main tab, chat 'wheatley fight', Strategy, knowledge base on.",
+ "pressed": [
+  "send-question 'how do i beat megara in hades' (VERIFIED), walk Down 14 to ask, A",
+  "walk Up 3 to Show details, A, read, A",
+  "send-question 'what about her second phase' (VERIFIED), walk Down 5 to ask, A",
+  "walk Up 3 to Show details, A, read, A"
+ ],
+ "first": {
+  "elapsed_s": 42.0,
+  "replay_guard": "not a replay (42 s)",
+  "log": "2026-09-24T00:01:16Z ask.kb_search app_name=Hades searched/attached in order: Megaera; Theseus and Asterius; Heat and the Pact of Punishment; top_keyword_score=3.82; best_meaning_score=0.640",
+  "show_details_notes_in_order": [
+   "Hades - Megaera",
+   "Hades - Theseus and Asterius",
+   "Hades - Heat and the Pact of Punishment"
+  ],
+  "header": "Megaera (+2 more) - From bonsAI's own note",
+  "embed_ms": 1064.74
+ },
+ "follow_up": {
+  "elapsed_s": 56.1,
+  "replay_guard": "not a replay (56 s)",
+  "log": "2026-09-24T00:02:26Z ask.kb_search app_name=Hades searched/attached in order: Megaera; Mirror of Night; Theseus and Asterius; top_keyword_score=5.62; best_meaning_score=0.630",
+  "budget_line": "[2026-09-23 20:02:26] budget room=16384 rules+cards=2187 (attached 993 chars) memory=2299 ... carried=32 turns, left behind=76, hidden notes removed=0",
+  "show_details_notes_in_order": [
+   "Hades - Megaera",
+   "Hades - Mirror of Night",
+   "Hades - Theseus and Asterius"
+  ],
+  "header": "Megaera (+2 more) - From bonsAI's own note",
+  "embed_ms": 59.09,
+  "reply_start": "Right, listen up, mate! You wanna know about that second phase of Megara in Hades? ... learn her dash patterns ... punish those recovery windows ..."
+ },
+ "verdict": "PASS - with Hades running, Megaera's own note is attached first on the follow-up 'what about her second phase' (and on the first question), in the log and in Show details."
+}

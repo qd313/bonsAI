@@ -1,0 +1,96 @@
+{
+ "row": "NOTES-OPEN-SCROLL - does opening the 'From the notes' block bring it into view? (flow D, D2 step 3). A MEASUREMENT.",
+ "deck_time": "2026-09-23 19:36:30-19:36:45 EDT",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Half-Life 2 running (appid 220), plugin reloaded after launch; Main tab, chat 'wheatley fight', Strategy, knowledge base on. Question (VERIFIED): 'what is the best strategy for surviving ravenholm with limited ammo'. Answer took ~47 s.",
+ "pressed": [
+  "walk Up 2 presses from the question box to the notes header 'Ravenholm (+2 more) - From the Half-Life wiki, show'",
+  "arm scroll recorder + pane recorder",
+  "A on the header",
+  "screenshot, then read both recorders ~5 s later"
+ ],
+ "before": {
+  "header_top": 190,
+  "header_bottom": 237,
+  "header_visible_share_pct": 100,
+  "scrollTop": 735,
+  "max": 735,
+  "scroll_area_top": 88,
+  "dock_top": 289
+ },
+ "after": {
+  "block_top": 203,
+  "block_bottom": 696,
+  "block_height": 493,
+  "block_visible_px": 86,
+  "block_visible_share_pct": 17,
+  "scrollTop": 722,
+  "max": 1181,
+  "note_title_tops": {
+   "Ravenholm": 258,
+   "Combine soldiers": 399,
+   "Hunter-Chopper (helicopter)": 539
+  },
+  "what_shows": "the header, then the first note's title and the top of its first line just above the chip row; the second and third notes are below the dock"
+ },
+ "scroll_requests": "one scrollIntoView({block:'start'}) on a DIV at 1586 ms after arming (~0.5 s after the press); the view had moved up 13 px (735 -> 722) at ~1.1 s as the block grew and did not move again in the rest of the 20 s window",
+ "recorder_note": "The scroll recorder's own header and position columns read null/0 (its selectors do not match this page: the block is '.bonsai-kb-notes-block' and the pane '._TabContentsScroll'); the pane recorder gives the numbers above.",
+ "scroll_log": {
+  "armed": true,
+  "log": [
+   {
+    "top": 0,
+    "max": 0,
+    "dockTop": 289,
+    "hdrTop": null,
+    "hdrText": null,
+    "blkBottom": null,
+    "ms": 6
+   },
+   {
+    "ms": 1586,
+    "kind": "scrollIntoView",
+    "opts": {
+     "block": "start"
+    },
+    "el": "DIV",
+    "stack": "    at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790206239053:42112:20"
+   }
+  ]
+ },
+ "pane_log": {
+  "armed": true,
+  "t0wall": 1790206596233,
+  "log": [
+   {
+    "top": 735,
+    "max": 735,
+    "paneTop": 88,
+    "dockTop": 289,
+    "ring": "bonsai-kb-notes-block",
+    "ringText": "Ravenholm (+2 more) · From the",
+    "ringTop": 190,
+    "ringBottom": 237,
+    "answerLen": 817,
+    "lastQ": "what is the best strategy for ",
+    "ms": 51
+   },
+   {
+    "top": 722,
+    "max": 1181,
+    "paneTop": 88,
+    "dockTop": 289,
+    "ring": "bonsai-kb-notes-block",
+    "ringText": "Ravenholm (+2 more) · From the",
+    "ringTop": 203,
+    "ringBottom": 696,
+    "answerLen": 817,
+    "lastQ": "what is the best strategy for ",
+    "ms": 1102
+   }
+  ]
+ },
+ "screenshot": "plan64-NOTES-OPEN-SCROLL.png",
+ "verdict": "MEASURED - opening the block did not bring it into view: a scroll to its top was asked for but the view stayed put (it even moved 13 px the other way); 17% of the open block (86 of 493 px) shows."
+}

@@ -1,0 +1,55 @@
+{
+ "row": "TOKEN-BUDGET-01 on screen, Strategy and Expert, thinking Balanced (flow D, D3)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:39-19:45 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Half-Life 2 running (appid 220); Main tab, chat 'wheatley fight', knowledge base on.",
+ "settings_read_before": {
+  "thinking": "Balanced on screen (white label), 'medium' in the settings file",
+  "ask_mode": "Strategy"
+ },
+ "pressed": [
+  "RB to Ollama tab; walk Down 9 to 'Set thinking to Off', Right x2 to Balanced, A (no change - already Balanced)",
+  "LB to Main; from Ask: Up to 'Attach screenshot', Right to the mode button, A, Down to 'strategy', A (mode reads Strategy)",
+  "send-question VERIFIED question 1, Down to ask, A",
+  "Show details opened and closed",
+  "mode button, A, Down x2 to 'expert', A (mode reads Expert)",
+  "send-question VERIFIED question 2, Down to ask, A",
+  "Show details opened and closed",
+  "mode button, A, Down to 'strategy', A"
+ ],
+ "strategy": {
+  "question": "explain step by step how to clear a large group of antlions blocking the path using environmental hazards and the gravity gun",
+  "elapsed_s": 72.0,
+  "reply_chars": 1222,
+  "sections": 2,
+  "reasoning": "Show reasoning - 37 s",
+  "reply_end": "So, bait 'em, pull 'em, and blast 'em. Keep that rhythm going, and you'll clear that path faster than you can say \"Combine!\"",
+  "cut_mid_sentence": false,
+  "clamping_num_predict_lines": "0 in the app log, 0 in the plugin log",
+  "show_details": "This answer | Session - 48 | Chip 1 of 7 | Keyword + meaning | KB: 9 sections | Reply style: balanced | Local knowledge base | combineoverwiki.net ... | Antlions | Gravity Gun | Sandtraps | Retrieval: Keyword + meaning | Trust tier: wiki_no_patch | app_id:220 | Embed 30.84 ms | Re-rank 3.18 ms",
+  "note": "A read taken while it was still being written ended mid-word; that was the live stream, not the final answer (my finish test matched the reasoning fold, which shares the Show details class)."
+ },
+ "expert": {
+  "question": "what is the most efficient route through the sandtraps section while conserving resources",
+  "elapsed_s": 50.1,
+  "reply_chars": 771,
+  "sections": 1,
+  "reasoning": "Show reasoning - 26 s",
+  "reply_end": "Keep it simple, mate, and you'll get through it without breaking a sweat.",
+  "cut_mid_sentence": false,
+  "clamping_num_predict_lines": "0 in both logs",
+  "show_details": "This answer | Session - 49 | Chip 1 of 7 | Keyword + meaning | KB: 9 sections | Reply style: balanced | Local knowledge base | ... | Sandtraps | Gravity Gun | Ravenholm | Pheropod (bugbait) | ... | app_id:220"
+ },
+ "finish_reason": "Show details shows nothing about how the reply ended (no 'finished normally' or stop reason) for either reply. The ask trace records success=True and elapsed time, and no stop reason either.",
+ "restored": {
+  "ask_mode": "strategy (file and screen)",
+  "thinking": "medium / Balanced (unchanged all along)"
+ },
+ "verdict": "UNCLEAR - both replies end on complete sentences and no 'clamping num_predict' line appeared (those two checks pass for Strategy and Expert). The third check cannot be judged: Show details has no line saying how the reply finished. Owner to say whether its absence is acceptable.",
+ "plugin_log_stop_reason": {
+  "strategy": "[19:42:00] ask_ollama: stream done done_reason=stop eval_count=1040 num_predict=2112",
+  "expert": "[19:43:58] ask_ollama: stream done done_reason=stop eval_count=653 num_predict=1712",
+  "note": "found later in the plugin log (homebrew/logs/bonsAI/2026-09-23 19.30.31.log): both replies ended with the model's own stop, well under the limit. Show details still shows no such line."
+ }
+}

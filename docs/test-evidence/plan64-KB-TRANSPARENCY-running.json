@@ -1,0 +1,19 @@
+{
+ "row": "KB-TRANSPARENCY-01 with a game running (flow D, D2)",
+ "deck_time": "2026-09-23 19:34:40-19:37 EDT",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Half-Life 2 running (appid 220), plugin reloaded after launch; Main tab, chat 'wheatley fight', Strategy, knowledge base on. Question (VERIFIED): 'what is the best strategy for surviving ravenholm with limited ammo'. Answer took ~47 s.",
+ "log_line": "2026-09-23T23:35:28Z [verbose] ask.kb_search knowledge-base search kb_domain=strategy app_name=Half-Life 2 searched_count=3 searched_notes=Half-Life 2 - Ravenholm; Half-Life 2 - Combine soldiers; Half-Life 2 - Hunter-Chopper (helicopter) attached_count=3 attached_notes=(same three) starved_by_context_budget=false top_keyword_score=15.45 best_meaning_score=0.750",
+ "on_screen": {
+  "header": "Ravenholm (+2 more) - From the Half-Life wiki",
+  "open_block_note_titles": [
+   "Ravenholm - From the Half-Life wiki",
+   "Combine soldiers - From the Half-Life wiki",
+   "Hunter-Chopper (helicopter) - From the Half-Life wiki"
+  ],
+  "note": "only the first title is on screen after opening; the other two are below the dock until scrolled (see plan64-NOTES-OPEN-SCROLL.json)"
+ },
+ "app_name_in_log": "Half-Life 2 (populated, unlike the nothing-running runs)",
+ "verdict": "PASS - the three note names in the open block match searched_notes and attached_notes in the log exactly, and the log line names the running game."
+}

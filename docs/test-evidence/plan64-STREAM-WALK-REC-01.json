@@ -1,0 +1,3828 @@
+{
+ "row": "STREAM-WALK-REC-01 - a recorded walk while an answer is being written (flow D step 0, R4; fix 7b9447e and the 'view jumps to the end at finish' sighting). A MEASUREMENT for the session to judge.",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "try 1 19:21:58-19:22:55 EDT; try 2 19:24:30-19:26:14 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, no game running.",
+ "recorder_note": "The scroll recorder (deck_scroll_log.py) looks for '.TabContentsScroll' but this page's scroll area is '._TabContentsScroll', so its top/max columns read 0 all the time; only its list of scroll requests (scrollIntoView calls) is usable. I added a second read-only recorder (scratch deck_pane_log.py) that reads '._TabContentsScroll' scrollTop/max, the ring's element and box, and the answer length every 50 ms.",
+ "try1": {
+  "question": "give me ten detailed tips for surviving the first night in a survival crafting game (VERIFIED)",
+  "what_happened": "Ask pressed 19:22:01 (log). First words ~30 s later, after the 20 s scroll recorder had already stopped. The ring sat on the question box the whole time. By the time I had saved and re-armed the scroll recorder, the answer finished (log 19:22:50, 49.2 s, so only ~20 s of writing). The 8-press walk was NOT run during writing. Not usable for the check.",
+  "side_observation": "After the finish, walking Up from 'Helpful' onto the 487 px answer section: four focus changes in 6 ms (bubble, section, bubble, section) before settling on the section; Up presses then moved the view within the section, so the walker reported 'stalled'.",
+  "focus_log": {
+   "armed": true,
+   "nowMs": 74664,
+   "log": [
+    {
+     "ms": 3317,
+     "kind": "focusin",
+     "el": {
+      "tag": "input",
+      "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable",
+      "text": "",
+      "perm": null,
+      "y": 313
+     }
+    },
+    {
+     "ms": 3405,
+     "kind": "ring",
+     "el": {
+      "tag": "input",
+      "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": null,
+      "y": 313
+     }
+    },
+    {
+     "ms": 52934,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "Test",
+      "perm": null,
+      "y": 290
+     }
+    },
+    {
+     "ms": 52947,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "Test",
+      "perm": null,
+      "y": 290
+     }
+    },
+    {
+     "ms": 54073,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-details-divider Panel Focusable",
+      "text": "Show details ↓",
+      "perm": null,
+      "y": 221
+     }
+    },
+    {
+     "ms": 54086,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-details-divider Panel Focusable gpfocus gpfocuswithin",
+      "text": "Show details ↓",
+      "perm": null,
+      "y": 221
+     }
+    },
+    {
+     "ms": 55158,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "Helpful",
+      "perm": null,
+      "y": 204
+     }
+    },
+    {
+     "ms": 55160,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "Helpful",
+      "perm": null,
+      "y": 204
+     }
+    },
+    {
+     "ms": 56276,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy Panel Focusable",
+      "text": "Right, listen up, mate! You wanna know how to survive that f",
+      "perm": null,
+      "y": -668
+     }
+    },
+    {
+     "ms": 56278,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop Panel Focusable",
+      "text": "First off, you gotta find shelter, yeah? Don't just huddle i",
+      "perm": null,
+      "y": -113
+     }
+    },
+    {
+     "ms": 56280,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy Panel Focusable",
+      "text": "Right, listen up, mate! You wanna know how to survive that f",
+      "perm": null,
+      "y": -290
+     }
+    },
+    {
+     "ms": 56282,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop Panel Focusable",
+      "text": "First off, you gotta find shelter, yeah? Don't just huddle i",
+      "perm": null,
+      "y": -113
+     }
+    },
+    {
+     "ms": 56295,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop Panel Focusable gpfocus gpfocuswithin",
+      "text": "First off, you gotta find shelter, yeah? Don't just huddle i",
+      "perm": null,
+      "y": -113
+     }
+    }
+   ],
+   "stopped": true
+  },
+  "scroll_log_first_20s": {
+   "armed": true,
+   "log": [
+    {
+     "top": 0,
+     "max": 0,
+     "dockTop": 274,
+     "hdrTop": null,
+     "hdrText": null,
+     "blkBottom": null,
+     "ms": 1
+    },
+    {
+     "ms": 2886,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "smooth",
+      "block": "nearest"
+     },
+     "el": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase F",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34958) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 3027,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "nearest",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--live bonsai-chat-turn-r",
+     "stack": "    at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:42299:37"
+    },
+    {
+     "ms": 3032,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "top": 0,
+     "max": 0,
+     "dockTop": 289,
+     "hdrTop": null,
+     "hdrText": null,
+     "blkBottom": null,
+     "ms": 3095
+    },
+    {
+     "ms": 3114,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "ms": 3205,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "ms": 11858,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "ms": 15367,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 15401,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "ms": 16760,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    }
+   ]
+  },
+  "scroll_log_rearmed": {
+   "armed": true,
+   "log": [
+    {
+     "top": 0,
+     "max": 0,
+     "dockTop": 289,
+     "hdrTop": null,
+     "hdrText": null,
+     "blkBottom": null,
+     "ms": 3
+    },
+    {
+     "ms": 207,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 292,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 348,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 415,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 562,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1646,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1708,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1766,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1832,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1888,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 2310,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 2444,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "nearest",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-tur",
+     "stack": "    at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:42299:37"
+    },
+    {
+     "ms": 2514,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "smooth",
+      "block": "nearest"
+     },
+     "el": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34958) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 2642,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    },
+    {
+     "ms": 3652,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "auto",
+      "block": "nearest",
+      "inline": "nearest"
+     },
+     "el": "bonsai-chat-details-divider Panel Focusable",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34417) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 4738,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "auto",
+      "block": "nearest",
+      "inline": "nearest"
+     },
+     "el": "bonsai-chat-secondary-btn cXzBZxhPBl7fZs9LODEnc Focusable",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34417) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 5856,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "smooth",
+      "block": "nearest"
+     },
+     "el": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy Panel ",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34958) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 5858,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "auto",
+      "block": "nearest",
+      "inline": "nearest"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34417) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 5860,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "smooth",
+      "block": "nearest"
+     },
+     "el": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy Panel ",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34958) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 5862,
+     "kind": "scrollIntoView",
+     "opts": {
+      "behavior": "auto",
+      "block": "nearest",
+      "inline": "nearest"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at P (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:34417) |     at z4.SetDOMFocusAndScroll (https://steamloopback.host/chunk~2dcc5aaf7.js?contenthash=6051010cc27358a39d0b:49:28310) |     at ht.TransferFocusInternal (https://steamloopback.host/chunk~2dcc5aaf7."
+    },
+    {
+     "ms": 5878,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at liftAboveDock (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43029:12) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43087:17"
+    },
+    {
+     "ms": 6029,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at liftAboveDock (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43029:12) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43090:25"
+    },
+    {
+     "ms": 6179,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at liftAboveDock (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43029:12) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43090:25"
+    },
+    {
+     "ms": 6779,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop ",
+     "stack": "    at liftAboveDock (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43029:12) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:43090:25"
+    }
+   ]
+  }
+ },
+ "try2": {
+  "question": "give me ten detailed tips for staying alive during the first week of a zombie survival game (VERIFIED; reworded so it cannot come from the answer cache)",
+  "pressed": [
+   "arm focus recorder + pane recorder (100 s)",
+   "A on ask (log 19:24:34)",
+   "walk Up to put the ring on the question row while the model was thinking - it went past (the new turn offered only its Retry button while thinking) to the Decky back button",
+   "Down x2 -> chat row",
+   "waited for first words (13.4 s after that)",
+   "one deck_runSequence of 8 Down presses, ~1.0 s apart (tool settle time; asked 600 ms)",
+   "scroll recorder armed only after the walk (my mistake), at 19:25:34 - the same second the answer finished"
+  ],
+  "timeline_ms_since_recorder_start": {
+   "37337": "first words appear; ring on the chat row",
+   "37337-42101": "ring still on the chat row; the view follows the growing answer on its own (scrollTop 74 -> 131 -> 198 -> 271), which carries the chat row off the top: ring box top 14 -> -43 -> -110 -> -183 (off screen)",
+   "42401-49555": "the 8 Downs: '43 earlier' (view scrolls back to it), Retry, question row, 'Show reasoning - 1 s', then the answer section",
+   "49136-63418": "ring on the answer section (box top 89 at arrival). Presses 6-8 read on 80 px each (scrollTop 191 -> 271 -> 351 -> 431). From 54.2 s to 63.4 s, the answer grew (max scroll 750 -> 1060, text 1427 -> 2120 chars) and scrollTop stayed at 431 - the view did NOT move on its own while the ring sat in the answer",
+   "63509": "answer finished: the ring disappears (nothing owns focus, no focus event recorded) and the view jumps to the very end (scrollTop 1333 = max), flicks to 0 for one read at 63553, and is back at 1333 at 63805",
+   "after": "read at 19:26:10: still no ring anywhere, scrollTop 1333 of 1333; screenshot shows the end of the answer (Helpful / Not really, Show details, Save chat) and no ring"
+  },
+  "log_finish": "2026-09-23T23:25:34Z ask.background completed elapsed_seconds=60.4",
+  "walk_evidence": "runs/plan64-STREAM-WALK-REC-01-try2.json",
+  "walk_steps": [
+   {
+    "step": 1,
+    "to": "<DIV> \"43 earlier\"",
+    "moved": true,
+    "visibility": "visible",
+    "visiblePercent": 100
+   },
+   {
+    "step": 2,
+    "to": "<BUTTON> \"Retry same prompt\"",
+    "moved": true,
+    "visibility": "visible",
+    "visiblePercent": 100
+   },
+   {
+    "step": 3,
+    "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "moved": true,
+    "visibility": "partial",
+    "visiblePercent": 89
+   },
+   {
+    "step": 4,
+    "to": "<DIV> \"Show reasoning · 1 s\"",
+    "moved": true,
+    "visibility": "visible",
+    "visiblePercent": 100
+   },
+   {
+    "step": 5,
+    "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "moved": true,
+    "visibility": "partial",
+    "visiblePercent": 33
+   },
+   {
+    "step": 6,
+    "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "moved": false,
+    "visibility": "covered",
+    "visiblePercent": 0
+   },
+   {
+    "step": 7,
+    "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "moved": false,
+    "visibility": "partial",
+    "visiblePercent": 33
+   },
+   {
+    "step": 8,
+    "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "moved": false,
+    "visibility": "partial",
+    "visiblePercent": 33
+   }
+  ],
+  "focus_log": {
+   "armed": true,
+   "nowMs": 78177,
+   "log": [
+    {
+     "ms": 3120,
+     "kind": "focusin",
+     "el": {
+      "tag": "input",
+      "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable",
+      "text": "",
+      "perm": null,
+      "y": 300
+     }
+    },
+    {
+     "ms": 3198,
+     "kind": "ring",
+     "el": {
+      "tag": "input",
+      "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": null,
+      "y": 300
+     }
+    },
+    {
+     "ms": 7411,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "Testhow do i beat the gonarch in black mesa",
+      "perm": null,
+      "y": 290
+     }
+    },
+    {
+     "ms": 7488,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "Testhow do i beat the gonarch in black mesa",
+      "perm": null,
+      "y": 290
+     }
+    },
+    {
+     "ms": 8256,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner Disabled cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "",
+      "perm": null,
+      "y": 204
+     }
+    },
+    {
+     "ms": 8268,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner Disabled cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": null,
+      "y": 204
+     }
+    },
+    {
+     "ms": 9143,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-earlier-pill-row Panel Focusable",
+      "text": "43 earlier",
+      "perm": null,
+      "y": 136
+     }
+    },
+    {
+     "ms": 9228,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-earlier-pill-row Panel Focusable gpfocus gpfocuswithin",
+      "text": "43 earlier",
+      "perm": null,
+      "y": 136
+     }
+    },
+    {
+     "ms": 10026,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-slot-row-focus Panel Focusable",
+      "text": "[+]wheatley fight×how should i spend my first hour in a new ",
+      "perm": null,
+      "y": 88
+     }
+    },
+    {
+     "ms": 10122,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+      "text": "LB[+]wheatley fight×how should i spend my first hour in a ne",
+      "perm": null,
+      "y": 88
+     }
+    },
+    {
+     "ms": 10983,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-tab-bar Panel Focusable",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "perm": null,
+      "y": 64
+     }
+    },
+    {
+     "ms": 11006,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-tab-bar bonsai-tab-bar--open Panel Focusable gpfocus gpfocuswithin",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "perm": null,
+      "y": 64
+     }
+    },
+    {
+     "ms": 11924,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "DialogButton _DialogLayout Secondary cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "",
+      "perm": null,
+      "y": 20
+     }
+    },
+    {
+     "ms": 11938,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "DialogButton _DialogLayout Secondary cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": null,
+      "y": 20
+     }
+    },
+    {
+     "ms": 17782,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-tab-bar Panel Focusable",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "perm": null,
+      "y": 64
+     }
+    },
+    {
+     "ms": 17786,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-tab-bar bonsai-tab-bar--open Panel Focusable gpfocus gpfocuswithin",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "perm": null,
+      "y": 64
+     }
+    },
+    {
+     "ms": 19530,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-slot-row-focus Panel Focusable",
+      "text": "[+]wheatley fight×how should i spend my first hour in a new ",
+      "perm": null,
+      "y": 18
+     }
+    },
+    {
+     "ms": 19561,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+      "text": "LB[+]wheatley fight×how should i spend my first hour in a ne",
+      "perm": null,
+      "y": 14
+     }
+    },
+    {
+     "ms": 42709,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-earlier-pill-row Panel Focusable",
+      "text": "43 earlier",
+      "perm": null,
+      "y": -120
+     }
+    },
+    {
+     "ms": 42737,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-earlier-pill-row Panel Focusable gpfocus gpfocuswithin",
+      "text": "43 earlier",
+      "perm": null,
+      "y": -120
+     }
+    },
+    {
+     "ms": 44404,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner Disabled cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "",
+      "perm": null,
+      "y": 215
+     }
+    },
+    {
+     "ms": 44440,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner Disabled cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": null,
+      "y": 215
+     }
+    },
+    {
+     "ms": 46132,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-turn-row-body Panel Focusable",
+      "text": "give me ten detailed tips for staying alive during the first",
+      "perm": null,
+      "y": 189
+     }
+    },
+    {
+     "ms": 46177,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-turn-row-body Panel Focusable gpfocus gpfocuswithin",
+      "text": "give me ten detailed tips for staying alive during the first",
+      "perm": null,
+      "y": 189
+     }
+    },
+    {
+     "ms": 47882,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-details-divider bonsai-chat-reasoning-fold Panel Focusable",
+      "text": "Show reasoning · 1 s",
+      "perm": null,
+      "y": 249
+     }
+    },
+    {
+     "ms": 47929,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-chat-details-divider bonsai-chat-reasoning-fold Panel Focusable gpfocus gpfocuswithin",
+      "text": "Show reasoning · 1 s",
+      "perm": null,
+      "y": 249
+     }
+    },
+    {
+     "ms": 49526,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop Panel Focusable",
+      "text": "Right, listen up, you wanna know how to survive that first w",
+      "perm": null,
+      "y": 204
+     }
+    },
+    {
+     "ms": 49555,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop Panel Focusable gpfocus gpfocuswithin",
+      "text": "Right, listen up, you wanna know how to survive that first w",
+      "perm": null,
+      "y": 204
+     }
+    }
+   ],
+   "stopped": true
+  },
+  "pane_log": {
+   "armed": true,
+   "t0wall": 1790205871514,
+   "log": [
+    {
+     "top": 1008,
+     "max": 1008,
+     "paneTop": 88,
+     "dockTop": 260,
+     "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+     "ringText": "ask",
+     "ringTop": 400,
+     "ringBottom": 436,
+     "answerLen": 1540,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51
+    },
+    {
+     "top": 1008,
+     "max": 1008,
+     "paneTop": 88,
+     "dockTop": 260,
+     "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+     "ringText": "",
+     "ringTop": 300,
+     "ringBottom": 373,
+     "answerLen": 1540,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 2760
+    },
+    {
+     "top": 65,
+     "max": 65,
+     "paneTop": 88,
+     "dockTop": 260,
+     "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+     "ringText": "",
+     "ringTop": 299,
+     "ringBottom": 372,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 2801
+    },
+    {
+     "top": 65,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+     "ringText": "",
+     "ringTop": 329,
+     "ringBottom": 373,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 2876
+    },
+    {
+     "top": 65,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-preset-glass bonsai-preset-glass--decode cX",
+     "ringText": "Testhow do i beat the gonarch ",
+     "ringTop": 290,
+     "ringBottom": 320,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 7065
+    },
+    {
+     "top": 11,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 204,
+     "ringBottom": 224,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 7873
+    },
+    {
+     "top": 11,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 136,
+     "ringBottom": 158,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 8851
+    },
+    {
+     "top": 0,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 8946
+    },
+    {
+     "top": 0,
+     "max": 72,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 88,
+     "ringBottom": 136,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 9707
+    },
+    {
+     "top": 0,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-tab-bar bonsai-tab-bar--open",
+     "ringText": "Main tab",
+     "ringTop": 64,
+     "ringBottom": 84,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 10623
+    },
+    {
+     "top": 0,
+     "max": 68,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "DialogButton _DialogLayout Secondary cXzBZxhPBl7fZ",
+     "ringText": "",
+     "ringTop": 20,
+     "ringBottom": 48,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 11548
+    },
+    {
+     "top": 0,
+     "max": 36,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "DialogButton _DialogLayout Secondary cXzBZxhPBl7fZ",
+     "ringText": "",
+     "ringTop": 20,
+     "ringBottom": 48,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 15080
+    },
+    {
+     "top": 70,
+     "max": 70,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "DialogButton _DialogLayout Secondary cXzBZxhPBl7fZ",
+     "ringText": "",
+     "ringTop": 20,
+     "ringBottom": 48,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 16924
+    },
+    {
+     "top": 70,
+     "max": 70,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-tab-bar bonsai-tab-bar--open",
+     "ringText": "Main tab",
+     "ringTop": 64,
+     "ringBottom": 84,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 17360
+    },
+    {
+     "top": 74,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19126
+    },
+    {
+     "top": 71,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 17,
+     "ringBottom": 65,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19164
+    },
+    {
+     "top": 44,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 44,
+     "ringBottom": 92,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19201
+    },
+    {
+     "top": 14,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 74,
+     "ringBottom": 122,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19251
+    },
+    {
+     "top": 0,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 88,
+     "ringBottom": 136,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19312
+    },
+    {
+     "top": 74,
+     "max": 74,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 0,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 19676
+    },
+    {
+     "top": 74,
+     "max": 80,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 12,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37337
+    },
+    {
+     "top": 74,
+     "max": 80,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 41,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37398
+    },
+    {
+     "top": 74,
+     "max": 97,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 57,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37436
+    },
+    {
+     "top": 74,
+     "max": 97,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 80,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37496
+    },
+    {
+     "top": 74,
+     "max": 114,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 83,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37540
+    },
+    {
+     "top": 74,
+     "max": 114,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 102,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37604
+    },
+    {
+     "top": 74,
+     "max": 114,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 113,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37696
+    },
+    {
+     "top": 74,
+     "max": 114,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 115,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37730
+    },
+    {
+     "top": 74,
+     "max": 114,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": 14,
+     "ringBottom": 62,
+     "answerLen": 118,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37789
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 120,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37856
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 122,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 37943
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 124,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38001
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 127,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38095
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 128,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38132
+    },
+    {
+     "top": 131,
+     "max": 131,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 137,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38700
+    },
+    {
+     "top": 131,
+     "max": 147,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 173,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38803
+    },
+    {
+     "top": 131,
+     "max": 147,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 196,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38900
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 206,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 38998
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 212,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39033
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 215,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39096
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 218,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39161
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 221,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39262
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 223,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39340
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 226,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39402
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 227,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 39483
+    },
+    {
+     "top": 131,
+     "max": 164,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 237,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40011
+    },
+    {
+     "top": 131,
+     "max": 181,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -43,
+     "ringBottom": 6,
+     "answerLen": 261,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40088
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 290,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40152
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 308,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40261
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 318,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40354
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 323,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40458
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 325,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40532
+    },
+    {
+     "top": 198,
+     "max": 198,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 327,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40595
+    },
+    {
+     "top": 198,
+     "max": 215,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 329,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40666
+    },
+    {
+     "top": 198,
+     "max": 215,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 332,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 40780
+    },
+    {
+     "top": 198,
+     "max": 215,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 365,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41396
+    },
+    {
+     "top": 198,
+     "max": 231,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 382,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41433
+    },
+    {
+     "top": 198,
+     "max": 231,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -110,
+     "ringBottom": -62,
+     "answerLen": 402,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41500
+    },
+    {
+     "top": 271,
+     "max": 271,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 431,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41609
+    },
+    {
+     "top": 271,
+     "max": 271,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 439,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41688
+    },
+    {
+     "top": 271,
+     "max": 271,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 447,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41758
+    },
+    {
+     "top": 271,
+     "max": 271,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 451,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41842
+    },
+    {
+     "top": 271,
+     "max": 271,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 454,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41916
+    },
+    {
+     "top": 271,
+     "max": 288,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 457,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 41995
+    },
+    {
+     "top": 271,
+     "max": 288,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 458,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42036
+    },
+    {
+     "top": 271,
+     "max": 288,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-slot-row-focus",
+     "ringText": "LB[+]wheatley fight×how should",
+     "ringTop": -183,
+     "ringBottom": -134,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42101
+    },
+    {
+     "top": 267,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": -120,
+     "ringBottom": -98,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42301
+    },
+    {
+     "top": 257,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": -111,
+     "ringBottom": -89,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42365
+    },
+    {
+     "top": 217,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": -70,
+     "ringBottom": -48,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42401
+    },
+    {
+     "top": 149,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": -2,
+     "ringBottom": 20,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42456
+    },
+    {
+     "top": 103,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 44,
+     "ringBottom": 66,
+     "answerLen": 461,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42517
+    },
+    {
+     "top": 30,
+     "max": 284,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 116,
+     "ringBottom": 138,
+     "answerLen": 473,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42584
+    },
+    {
+     "top": 9,
+     "max": 300,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 137,
+     "ringBottom": 159,
+     "answerLen": 500,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42668
+    },
+    {
+     "top": 0,
+     "max": 300,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 534,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42745
+    },
+    {
+     "top": 0,
+     "max": 317,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 554,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42826
+    },
+    {
+     "top": 0,
+     "max": 317,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 563,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 42900
+    },
+    {
+     "top": 0,
+     "max": 317,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 572,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43033
+    },
+    {
+     "top": 0,
+     "max": 317,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 577,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43119
+    },
+    {
+     "top": 0,
+     "max": 334,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 579,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43193
+    },
+    {
+     "top": 0,
+     "max": 334,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 581,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43265
+    },
+    {
+     "top": 0,
+     "max": 334,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 583,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43337
+    },
+    {
+     "top": 0,
+     "max": 334,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-earlier-pill-row",
+     "ringText": "43 earlier",
+     "ringTop": 146,
+     "ringBottom": 168,
+     "answerLen": 584,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 43379
+    },
+    {
+     "top": 0,
+     "max": 334,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 615,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44036
+    },
+    {
+     "top": 0,
+     "max": 351,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 639,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44099
+    },
+    {
+     "top": 0,
+     "max": 374,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 673,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44201
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 685,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44312
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 692,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44382
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 694,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44447
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 696,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44487
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 698,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44552
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 701,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44664
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 703,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 44742
+    },
+    {
+     "top": 0,
+     "max": 390,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 714,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45365
+    },
+    {
+     "top": 0,
+     "max": 407,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 746,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45435
+    },
+    {
+     "top": 0,
+     "max": 424,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 767,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45502
+    },
+    {
+     "top": 0,
+     "max": 424,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 782,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45583
+    },
+    {
+     "top": 0,
+     "max": 424,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+     "ringText": "Retry same prompt",
+     "ringTop": 215,
+     "ringBottom": 235,
+     "answerLen": 794,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45645
+    },
+    {
+     "top": 0,
+     "max": 424,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 799,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45739
+    },
+    {
+     "top": 0,
+     "max": 424,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 804,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45839
+    },
+    {
+     "top": 0,
+     "max": 441,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 808,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 45912
+    },
+    {
+     "top": 0,
+     "max": 441,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 811,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46010
+    },
+    {
+     "top": 0,
+     "max": 441,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 813,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46088
+    },
+    {
+     "top": 0,
+     "max": 441,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 814,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46718
+    },
+    {
+     "top": 0,
+     "max": 464,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 839,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46791
+    },
+    {
+     "top": 0,
+     "max": 464,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 853,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46840
+    },
+    {
+     "top": 0,
+     "max": 464,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 878,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 46920
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 892,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47000
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 901,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47092
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 906,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47167
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 909,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47247
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 910,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47285
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-turn-row-body",
+     "ringText": "give me ten detailed tips for ",
+     "ringTop": 189,
+     "ringBottom": 232,
+     "answerLen": 913,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47372
+    },
+    {
+     "top": 0,
+     "max": 480,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 915,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 47506
+    },
+    {
+     "top": 0,
+     "max": 497,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 925,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48161
+    },
+    {
+     "top": 0,
+     "max": 497,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 956,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48237
+    },
+    {
+     "top": 0,
+     "max": 537,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 981,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48329
+    },
+    {
+     "top": 0,
+     "max": 537,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1000,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48413
+    },
+    {
+     "top": 0,
+     "max": 537,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1006,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48490
+    },
+    {
+     "top": 0,
+     "max": 537,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1012,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48567
+    },
+    {
+     "top": 0,
+     "max": 537,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1014,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48652
+    },
+    {
+     "top": 0,
+     "max": 554,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1018,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48737
+    },
+    {
+     "top": 0,
+     "max": 554,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-chat-details-divider bonsai-chat-reasoning-",
+     "ringText": "Show reasoning · 1 s",
+     "ringTop": 249,
+     "ringBottom": 263,
+     "answerLen": 1021,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 48822
+    },
+    {
+     "top": 191,
+     "max": 554,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 583,
+     "answerLen": 1021,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49136
+    },
+    {
+     "top": 191,
+     "max": 554,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 583,
+     "answerLen": 1022,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49537
+    },
+    {
+     "top": 191,
+     "max": 554,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 583,
+     "answerLen": 1033,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49586
+    },
+    {
+     "top": 191,
+     "max": 570,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 600,
+     "answerLen": 1077,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49663
+    },
+    {
+     "top": 191,
+     "max": 587,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 616,
+     "answerLen": 1102,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49753
+    },
+    {
+     "top": 191,
+     "max": 587,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 616,
+     "answerLen": 1118,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49843
+    },
+    {
+     "top": 191,
+     "max": 587,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 616,
+     "answerLen": 1127,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 49910
+    },
+    {
+     "top": 191,
+     "max": 587,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 616,
+     "answerLen": 1131,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 50001
+    },
+    {
+     "top": 191,
+     "max": 604,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 633,
+     "answerLen": 1136,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 50114
+    },
+    {
+     "top": 191,
+     "max": 604,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 633,
+     "answerLen": 1140,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 50191
+    },
+    {
+     "top": 191,
+     "max": 604,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 89,
+     "ringBottom": 633,
+     "answerLen": 1142,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 50266
+    },
+    {
+     "top": 271,
+     "max": 604,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 554,
+     "answerLen": 1142,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 50750
+    },
+    {
+     "top": 271,
+     "max": 604,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 554,
+     "answerLen": 1154,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51119
+    },
+    {
+     "top": 271,
+     "max": 644,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 593,
+     "answerLen": 1200,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51202
+    },
+    {
+     "top": 271,
+     "max": 644,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 593,
+     "answerLen": 1227,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51294
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1243,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51381
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1254,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51481
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1259,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51569
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1263,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51667
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1266,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51751
+    },
+    {
+     "top": 271,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": 9,
+     "ringBottom": 610,
+     "answerLen": 1268,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 51834
+    },
+    {
+     "top": 351,
+     "max": 660,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 530,
+     "answerLen": 1268,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52351
+    },
+    {
+     "top": 351,
+     "max": 677,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 547,
+     "answerLen": 1277,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52547
+    },
+    {
+     "top": 351,
+     "max": 677,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 547,
+     "answerLen": 1293,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52594
+    },
+    {
+     "top": 351,
+     "max": 694,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 564,
+     "answerLen": 1322,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52677
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1338,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52756
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1347,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52843
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1352,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52893
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1356,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 52974
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1359,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 53052
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1362,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 53143
+    },
+    {
+     "top": 351,
+     "max": 717,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -71,
+     "ringBottom": 587,
+     "answerLen": 1364,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 53219
+    },
+    {
+     "top": 431,
+     "max": 733,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 523,
+     "answerLen": 1414,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54085
+    },
+    {
+     "top": 431,
+     "max": 750,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 540,
+     "answerLen": 1427,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54176
+    },
+    {
+     "top": 431,
+     "max": 750,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 540,
+     "answerLen": 1453,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54255
+    },
+    {
+     "top": 431,
+     "max": 767,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 557,
+     "answerLen": 1473,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54369
+    },
+    {
+     "top": 431,
+     "max": 767,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 557,
+     "answerLen": 1480,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54458
+    },
+    {
+     "top": 431,
+     "max": 767,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 557,
+     "answerLen": 1484,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54550
+    },
+    {
+     "top": 431,
+     "max": 790,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 580,
+     "answerLen": 1487,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54690
+    },
+    {
+     "top": 431,
+     "max": 790,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 580,
+     "answerLen": 1491,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54793
+    },
+    {
+     "top": 431,
+     "max": 790,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 580,
+     "answerLen": 1492,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 54837
+    },
+    {
+     "top": 431,
+     "max": 790,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 580,
+     "answerLen": 1493,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55591
+    },
+    {
+     "top": 431,
+     "max": 807,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 596,
+     "answerLen": 1537,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55666
+    },
+    {
+     "top": 431,
+     "max": 823,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 613,
+     "answerLen": 1573,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55748
+    },
+    {
+     "top": 431,
+     "max": 823,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 613,
+     "answerLen": 1582,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55798
+    },
+    {
+     "top": 431,
+     "max": 823,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 613,
+     "answerLen": 1595,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55842
+    },
+    {
+     "top": 431,
+     "max": 823,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 613,
+     "answerLen": 1608,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55915
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1615,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 55995
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1617,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 56040
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1621,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 56119
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1623,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 56201
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1627,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 56291
+    },
+    {
+     "top": 431,
+     "max": 840,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 630,
+     "answerLen": 1628,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 56333
+    },
+    {
+     "top": 431,
+     "max": 863,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 653,
+     "answerLen": 1671,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57200
+    },
+    {
+     "top": 431,
+     "max": 880,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 670,
+     "answerLen": 1714,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57326
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1730,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57421
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1740,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57505
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1745,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57596
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1749,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57672
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1752,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57768
+    },
+    {
+     "top": 431,
+     "max": 897,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 686,
+     "answerLen": 1755,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 57854
+    },
+    {
+     "top": 431,
+     "max": 913,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 703,
+     "answerLen": 1790,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58599
+    },
+    {
+     "top": 431,
+     "max": 936,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 726,
+     "answerLen": 1810,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58646
+    },
+    {
+     "top": 431,
+     "max": 936,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 726,
+     "answerLen": 1823,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58691
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1839,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58776
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1848,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58855
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1853,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 58954
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1856,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 59043
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1858,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 59123
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1861,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 59213
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1862,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 59270
+    },
+    {
+     "top": 431,
+     "max": 953,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 743,
+     "answerLen": 1872,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60119
+    },
+    {
+     "top": 431,
+     "max": 970,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 760,
+     "answerLen": 1902,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60207
+    },
+    {
+     "top": 431,
+     "max": 987,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 776,
+     "answerLen": 1929,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60294
+    },
+    {
+     "top": 431,
+     "max": 987,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 776,
+     "answerLen": 1945,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60371
+    },
+    {
+     "top": 431,
+     "max": 1009,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 799,
+     "answerLen": 1953,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60454
+    },
+    {
+     "top": 431,
+     "max": 1009,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 799,
+     "answerLen": 1958,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60554
+    },
+    {
+     "top": 431,
+     "max": 1009,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 799,
+     "answerLen": 1962,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60642
+    },
+    {
+     "top": 431,
+     "max": 1009,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 799,
+     "answerLen": 1965,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60729
+    },
+    {
+     "top": 431,
+     "max": 1009,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 799,
+     "answerLen": 1968,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 60822
+    },
+    {
+     "top": 431,
+     "max": 1026,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 816,
+     "answerLen": 2007,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 61723
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2038,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 61832
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2063,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 61919
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2071,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 62006
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2075,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 62095
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2078,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 62155
+    },
+    {
+     "top": 431,
+     "max": 1043,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 833,
+     "answerLen": 2080,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 62253
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2084,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 62347
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2087,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63101
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2103,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63213
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2111,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63265
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2114,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63326
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2117,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63377
+    },
+    {
+     "top": 431,
+     "max": 1060,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": "bonsai-ai-response-chunk bonsai-ai-response-chunk-",
+     "ringText": "Right, listen up, you wanna kn",
+     "ringTop": -151,
+     "ringBottom": 850,
+     "answerLen": 2120,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63418
+    },
+    {
+     "top": 1333,
+     "max": 1333,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": null,
+     "ringText": null,
+     "ringTop": null,
+     "ringBottom": null,
+     "answerLen": 2122,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63509
+    },
+    {
+     "top": 0,
+     "max": 1333,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": null,
+     "ringText": null,
+     "ringTop": null,
+     "ringBottom": null,
+     "answerLen": 2122,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63553
+    },
+    {
+     "top": 1333,
+     "max": 1333,
+     "paneTop": 88,
+     "dockTop": 289,
+     "ring": null,
+     "ringText": null,
+     "ringTop": null,
+     "ringBottom": null,
+     "answerLen": 2122,
+     "lastQ": "give me ten detailed tips for ",
+     "ms": 63805
+    }
+   ]
+  },
+  "scroll_requests_after_finish": {
+   "armed": true,
+   "log": [
+    {
+     "top": 0,
+     "max": 0,
+     "dockTop": 289,
+     "hdrTop": null,
+     "hdrText": null,
+     "blkBottom": null,
+     "ms": 49
+    },
+    {
+     "ms": 1332,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41277:9 |     at Za (https://steamloopback.host/libraries/libraries~00299a408.js:46:84445)"
+    },
+    {
+     "ms": 1395,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "nearest",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-tur",
+     "stack": "    at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:42299:37"
+    },
+    {
+     "ms": 1633,
+     "kind": "scrollIntoView",
+     "opts": {
+      "block": "end",
+      "behavior": "auto"
+     },
+     "el": "bonsai-chat-main-column",
+     "stack": "    at follow (http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790205108942:41274:20)"
+    }
+   ]
+  }
+ },
+ "screenshot": "plan64-STREAM-WALK-REC-01.png (19:26:14, after the finish: view at the end of the answer, no ring visible)",
+ "verdict": "MEASURED - for the session to judge. In plain words: while the ring sat on the chat row the view followed the answer and pushed the ring off the top of the screen; once the ring was inside the answer the view stayed still while the answer grew; at the moment the answer finished the ring vanished and the view jumped to the end of the answer."
+}

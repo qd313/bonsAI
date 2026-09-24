@@ -88,6 +88,25 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   back on the row list. Evidence `docs/test-evidence/plan64-SESSION-TAB-01.json` + screenshot, saved check
   `checks/plan64-SESSION-TAB-01-B-close.json`.
 
+### The plugin owns its token numbers (closed 2026-09-23)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow D bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★★★ `[ollama]` **The plugin owns its token numbers** — **VERIFY, built 2026-09-21.** It asks the AI
+  server for room for 16,384 tokens instead of accepting its default 4,096, works out question sizes from
+  real counts instead of dividing characters by 3.5, and keeps what actually went in and came out. **Two Ask
+  modes stop being cut short:** Strategy and Expert with the game's cards attached and thinking on had their
+  answers trimmed to a 600-token floor, and now get their full 1,600 and 1,200. Proved through the deployed
+  back end on the Deck; row **TOKEN-BUDGET-01** is the on-screen half, not yet run.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Strategy and Expert, thinking Balanced: both replies ended
+  on complete sentences (72 and 50 seconds), with no clamping line in the log, and normal stops well under
+  the limit (1,040 of 2,112 tokens, and 653 of 1,712). One correction: the row's own pass clause said "Show
+  details reports the reply finishing normally," but Show details has no such line — reworded to what can
+  actually be checked (the log's own stop reason and token counts). Evidence
+  `docs/test-evidence/plan64-TOKEN-BUDGET-01.json`.
+
 ### Reasoning display (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once six of the seven Deck rows passed — copied line

@@ -1,7 +1,7 @@
 # Plan 64 — The big verification session
 
-**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A and B done; flow C mostly done, a few rows deferred
-to flow D; the progress log is § 14.
+**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A, B and D done; flow C mostly done, a few rows
+deferred to flow D and folded in above; flow E running now; the progress log is § 14.
 **Purpose:** one long run on the Deck, mostly without the maintainer, that works through the roadmap's
 Verify list and the knowledge base's owed checks. The roadmap is updated after every block, so it is never
 behind the device. Bugs found along the way are written down and, where the effort is reasonable, fixed.
@@ -497,3 +497,53 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
   time.
 - **Tooling:** every question sent by the exact-words script, none replayed from cache (all timed over 5
   seconds); the notice-reading tool proved itself mid-flow by catching an unrelated toast on its first read.
+
+### Flow D — games running, one step 0 batch first, 2026-09-23 19:10 to 20:10 (Deck time), build e163d8c, chat "wheatley fight"
+
+- **Step 0, tonight's fixes, closed (4):** a brand-new chat no longer shows the previous chat's question
+  (`996752c`, 0 wrong rows across two chats recorded at 50 ms resolution); a tall answer section now keeps
+  its first line in view walking Down or Up (`a5684c7`); the streaming-highlight hold is proven for the
+  first time by a purpose-built recorded walk (`7b9447e`); and the plugin's own token numbers finish
+  Strategy and Expert answers cleanly with no clamping (row reworded, since Show details carries no
+  "finished normally" line to check).
+- **Step 0, still open or owed (2):** the Session tab's Clear-box fix (`e163d8c`) could not be tried — the
+  rig's own permission check refused the walk to the button before any press went out — so it stays VERIFY,
+  owed a by-hand check by the maintainer; and "Reply ready" still failed with a control run first, cause
+  found (a flag that never clears once the panel closes) and fixed the same night (`73be15f`), flow E
+  re-checks it.
+- **Step 0, split out of the recorded walk (2):** the ring carried off screen while sitting on the chat row
+  during a stream, found and fixed the same night (`ff62e8c`); and the ring vanishing entirely the instant
+  an answer finishes while it is being walked, still open — a different shape than the already-fixed
+  finish-jump bug, so that fix may not reach it.
+- **Games, closed (2):** the wave-three Hades follow-up now finds Megaera's note first on both the parent
+  question and "what about her second phase," with a game running; DRG-01b passes with the knowledge base
+  off and no consent phrase.
+- **Games, confirmed unchanged or still open (4):** KB transparency's three-name check now also passes with
+  a game running; Black Mesa's water question is unaffected by the game running — same notes, same order,
+  same answer as with nothing running; a chat's carried memory still fails by its own rule with a game
+  running, the same deflect-then-recover shape as with nothing running; and the name-withheld-boss bug
+  reproduced again on fresh wording, this time Hollow Knight's Soul Master, 83 reads with no cover at any
+  point.
+- **Games, could not run (2):** CHIP-BUTTON-09, blocked by the Developer tab's own pinned test chips
+  crowding out a real note chip — needs the pins cleared first, the maintainer's call since they may be kept
+  on purpose; and a note dropped for space, tried again with a game running and a large-Proton-log question,
+  still could not be produced (3 searched, 3 attached, none dropped, about 16,000 characters).
+- **The screenshot crash, cause found, decision owed:** a smaller picture (a 1280×800 JPG, 177 KB) answers
+  normally; the crashing file is a 1920×1080 PNG at 2.6 MB. bonsAI only shrinks a picture before sending it
+  when the Pillow image library is present, and Pillow is not installed on the Deck, so the full-size file
+  goes through untouched. Three ways to fix it, the maintainer's pick: ship the image library, shrink some
+  other way, or refuse pictures over a size limit.
+- **Sighting:** the note search took about 1,070 ms with a game running, against 22 to 60 ms measured
+  elsewhere with nothing running — one line kept on the knowledge-base section.
+- **Fixes committed since the flow C pass, each moved to VERIFY with its own Deck re-check owed (flow E
+  re-checks the first three):** `73be15f` (Reply ready), `af53b7d` (Open Permissions now keeps re-taking the
+  switch after the tab's own first button takes it 22 ms later), `f65ccfe` (the made-up-model-name check
+  could not tell "no such model" from "no internet," so one bad name read as offline and was let through),
+  `e241c5c` (the view now brings the ring's own control back after an answer ends, instead of the end of the
+  text). `ff62e8c` (the chat-row-carried-away split above) is also fixed. `33814ce` fixed the Python-test
+  miscount (see the new lesson in `docs/lessons-learned.md`) — no change a person using the plugin would
+  notice.
+- **Two lessons added to `docs/lessons-learned.md`:** a screen-side change can turn a Python test red
+  without the quick gate noticing, since only six of them read files under `src/` and the quick check only
+  runs Python tests when a `.py` file changed; and when the Deck and a code reading disagree, the Deck
+  wins — this session reverted a fix on a code reading alone and the Deck showed the bug was real.

@@ -1,0 +1,21 @@
+{
+ "row": "CHAT-MEMORY-01 - a follow-up that names nothing (flow D, D4)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:45:00-19:46:30 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Half-Life 2 running (appid 220); Main tab, chat 'wheatley fight', Strategy, knowledge base on. Preceding turn: 'what is the most efficient route through the sandtraps section while conserving resources' (Expert).",
+ "question": "and what about that (VERIFIED)",
+ "pressed": [
+  "send-question script",
+  "Down from the mode button to ask, A",
+  "waited 56 s for the finish"
+ ],
+ "seen": {
+  "reply": "Right, listen up, mate! You throwin' out \"and what about that\"? Hold up, I ain't got no idea what you're talkin' about without a name, see? It's like askin' me where the party is without tellin' me who's in it-too vague! You gotta tell me which part of Half-Life 2 you're stuck on, yeah? Are we talkin' the Sandtraps, or maybe you're lookin' for some other gear?\n\nIf you wanna know about those Sandtraps, we got the lowdown: it's all about movin' rock to rock. Don't wander off into the sand; stick to the main line. That's the hustle.",
+  "notes_attached": "Sandtraps; Pheropod (bugbait); Antlions (log 23:45:09Z)",
+  "budget_line": "[2026-09-23 19:45:09] ask_ollama: budget room=16384 rules+cards=2116 (attached 763 chars) memory=2439 thinking=512 answer=1600 carried=34 turns, left behind=66, hidden notes removed=1",
+  "elapsed_s": 56.1
+ },
+ "spoiler_half": "Out of scope for Half-Life 2 (no story-spoiler profile). Hollow Knight is the game to try it on (D5 step 4).",
+ "verdict": "FAIL - turns carried is above zero (34), but the reply opens as a 'tell me which part' request to clarify. It does guess the previous subject (Sandtraps) and gives two lines on it, so it is not a pure deflection; the owner may judge it differently."
+}

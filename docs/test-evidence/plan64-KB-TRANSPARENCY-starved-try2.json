@@ -1,0 +1,21 @@
+{
+ "row": "KB-TRANSPARENCY-01 - a note dropped for space (flow D, D2b)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:37:30-19:40 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Half-Life 2 running (appid 220), plugin reloaded after launch; the 'Read game & screenshot context' permission was not read on screen tonight (the runbook says it is on); Main tab, chat 'wheatley fight', Strategy, knowledge base on.",
+ "question": "my game keeps stuttering and then crashing after the latest update what should i check (VERIFIED)",
+ "pressed": [
+  "walk to ask, A",
+  "waited ~50 s for the finish",
+  "walk Up 3 to 'Show details', A, read, A again to close"
+ ],
+ "seen": {
+  "log_line": "2026-09-23T23:37:37Z ask.kb_search app_name=Half-Life 2 searched_count=3 (Sandtraps; Gravity Gun; Ravenholm) attached_count=3 (same) starved_by_context_budget=false top_keyword_score=4.10 best_meaning_score=0.544",
+  "prompt_size": "system message 15,879 characters + user message 177 characters (ask trace), reply 61.1 s",
+  "show_details": "This answer | Session - 47 | Chip 1 of 8 | Keyword + meaning | KB: 9 sections | Read current TDP | Local knowledge base | combineoverwiki.net - CC-BY-SA-4.0 - as of 2026-08-09 | Half-Life 2 - Sandtraps | Half-Life 2 - Gravity Gun | Half-Life 2 - Ravenholm | Retrieval: Keyword + meaning | Trust tier: wiki_no_patch | app_id:220 | Embed: 22.98 ms | Re-rank: 2.17 ms",
+  "dropped_notes": 0,
+  "reply_start": "Right, listen up, mate! You're getting the stutter and the crash right after that update, eh? ... check your drivers ... check those logs ... Proton logs."
+ },
+ "verdict": "COULD NOT RUN - nothing was dropped for space: 3 notes searched, 3 attached, starved=false, prompt about 16,000 characters. Show details lists the same three notes and no dropped note."
+}

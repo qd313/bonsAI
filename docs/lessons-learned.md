@@ -113,6 +113,14 @@ never have shown anything. Before building a check around an example, confirm th
 its own rules will still be carried out, and the helper will report success. One lane spent its
 whole budget on a row that could not have produced a result.
 
+**A screen-side change can turn a Python test red, and the quick gate can miss it.** Six Python
+tests read files under `src/` directly — the Ask hook's own order, settings and catalog parity,
+spoiler profiles — but the quick check only runs Python tests when a `.py` file changed. A
+frontend-only fix landed red that way (`996752c`), fixed the same night once the cause was found
+(`33814ce`): a comment in the Ask code had brackets in it that made the count miscount the hooks,
+not a real drift. Until the runner is taught to run those six tests on any `src` change too, expect
+a screen-side change to be able to turn a Python test red with no warning from `--quick`.
+
 ---
 
 ## 3. Checking work on the Steam Deck
@@ -197,6 +205,14 @@ file, even where earlier sessions edited it freely.** Hit 2026-09-23: a Deck dri
 the settings file was refused as "Modify Shared Resources," which stopped a device check partway
 through. Change a setting through the plugin's own screens where one exists for it; where none
 exists, stop and ask the maintainer rather than finding another way to write the file.
+
+**When the Deck and a code reading disagree, the Deck wins.** A session read the back end,
+concluded that made-up model names were already refused with a clear message, and reverted a fix on
+that reading alone. The Deck showed otherwise: typing a made-up name still showed "Pull started,"
+not a refusal, because the real cause was a different check than the one that had been read (a
+model-registry check that could not tell "no such model" apart from "no internet"). Reading both
+ends of the code is not the same as running it. Before closing a bug on a code reading alone, run it
+on the device first.
 
 ---
 

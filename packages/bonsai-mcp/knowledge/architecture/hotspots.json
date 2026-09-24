@@ -26,11 +26,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1452,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 1422,
       "role": ""
@@ -58,6 +53,11 @@
     {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1171,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1104,
       "role": ""
     },
     {

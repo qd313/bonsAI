@@ -591,7 +591,14 @@ export function PullModelsModal(props: PullModelsModalProps) {
       // second "daily driver" check that excluded it in both toggle states, so the
       // Expert group could never be shown at all (found while wiring its bake-off order,
       // docs/planning/41-deck-model-survey.md § 9, D73).
-      if (essentialsOnly && !isDeckEssentialsPullModel(entry)) return false;
+      //
+      // A model already on this Deck always keeps its row, though: Essentials only is about what
+      // to download, and hiding an installed model left no star to use it for Ask and no Remove
+      // unless you knew to open Filters -- while the header still counted it (Deck, plan 64 flow
+      // G: qwen2.5:1.5b pulled by typed name, "Installed 3", no row; plan64-PRELOAD-01-try2.json).
+      if (essentialsOnly && !isDeckEssentialsPullModel(entry) && !isTagInstalled(entry.tag, installedTags)) {
+        return false;
+      }
       if (recentlyAddedOnly) {
         const installed = isTagInstalled(entry.tag, installedTags);
         if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, Date.now())) return false;

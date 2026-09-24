@@ -270,6 +270,27 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
 });
 
 describe("PullModelsModal 'Use for Ask' pin", () => {
+  /*
+   * Deck, plan 64 flow G (plan64-PRELOAD-01-try2.json): qwen2.5:1.5b pulled by typed name had no
+   * row in the default Essentials-only view -- no star, no Remove -- while the header counted it.
+   */
+  it("gives an installed model its row even with Essentials only on", async () => {
+    setInstalledModels(["qwen2.5:1.5b"]);
+    const { container } = renderModal();
+    await waitFor(() => {
+      expect(container.querySelector('[aria-label="Use qwen2.5:1.5b for Ask"]')).not.toBeNull();
+    });
+  });
+
+  it("still hides a non-essential model that is not installed while Essentials only is on", async () => {
+    setInstalledModels(["gemma4:e2b-it-qat"]);
+    const { container } = renderModal();
+    await waitFor(() => {
+      expect(container.querySelector('[aria-label="Use gemma4:e2b-it-qat for Ask"]')).not.toBeNull();
+    });
+    expect(container.textContent).not.toContain("qwen2.5:1.5b");
+  });
+
   it("shows the hollow star for an installed model with no saved try-order yet", async () => {
     setInstalledModels(["qwen2.5:1.5b"]);
     const { container } = renderModal();

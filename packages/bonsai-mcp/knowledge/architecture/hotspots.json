@@ -26,11 +26,6 @@
       "role": ""
     },
     {
-      "path": "src/index.tsx",
-      "lines": 1671,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 1670,
       "role": ""
@@ -44,6 +39,11 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1619,
       "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1609,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",

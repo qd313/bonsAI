@@ -50,7 +50,8 @@
  *
  * Split note (plan 65): the empty starting snapshot moved to
  * features/plugin-shell/initialSessionSnapshot.ts; the two "clear the session" /
- * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx.
+ * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
+ * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -89,7 +90,7 @@
  */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, call, useQuickAccessVisible } from "@decky/api";
-import { Navigation, Router, Tabs } from "@decky/ui";
+import { Navigation, Tabs } from "@decky/ui";
 
 import { PLUGIN_VERSION } from "./pluginVersion";
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
@@ -170,8 +171,7 @@ import { useChatSlots } from "./hooks/useChatSlots";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
 import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
 import { getSteamSettingsUrl } from "./data/steamSettingsNavigation";
-import { registerPreviewTestHooks, isDeckyPreviewRuntime } from "./preview/previewTestHooks";
-import { buildReplyLayoutReport } from "./preview/replyLayoutReport";
+import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 
 type SteamUrlApi = {
@@ -903,72 +903,11 @@ const Content: React.FC = () => {
     onCompleteDeckyModalClose,
   });
 
-  useEffect(() => {
-    if (!isDeckyPreviewRuntime()) return;
-    registerPreviewTestHooks({
-      getState: () => ({
-        currentTab,
-        unifiedInput,
-        askMode,
-        isAsking,
-        ollamaResponseLen: ollamaResponse.length,
-        hasLastExchange: !!lastExchange,
-        capabilities,
-      }),
-      setGame: (title: string, appId?: string) => {
-        const app = { display_name: title, appid: Number(appId) || 0 };
-        (Router as { setMainRunningApp?: (a: typeof app | null) => void }).setMainRunningApp?.(app);
-      },
-      triggerAsk: async (text: string) => {
-        setUnifiedInput(text);
-        await onAskOllama(text);
-      },
-      attachScreenshot: (base64: string, name = "preview.png") => {
-        setSelectedAttachment({
-          path: name,
-          name,
-          source: "picker",
-          preview_data_uri: base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`,
-        });
-      },
-      getTransparencyJson: () => lastTransparency,
-      // bonsAI stopped writing sysfs on 2026-07-30 and the sandbox write log was
-      // removed with it, so there is nothing left to report. Kept as a stable
-      // empty contract because DPS preview scenarios live outside this repo and
-      // may still call it.
-      getSysfsWrites: async () => [],
-      setTab: (tabId: string) => setCurrentTab(tabId),
-      /*
-       * A finished reply on screen without asking a model. Goes through restoreSessionSnapshot —
-       * the route the modal-survival path already uses — so no new setter has to be handed out of
-       * useBonsaiAskOrchestration just for preview.
-       */
-      seedFinishedTurn: (question: string, answer: string) => {
-        const id = `preview-turn-${Date.now()}`;
-        setCurrentTab("main");
-        restoreSessionSnapshot({
-          ...sessionSnapshotRef.current(),
-          currentTab: "main",
-          ollamaResponse: answer,
-          lastExchange: { question, answer },
-          askThreadCollapsed: [{ id, question, answer }],
-          askThreadDisplayQuestion: "",
-          expandedTurnKey: id,
-        });
-      },
-      getReplyLayoutJson: () => buildReplyLayoutReport(),
-      resetDisclaimer: () => {
-        try {
-          window.localStorage.removeItem("bonsai:disclaimer-accepted");
-        } catch {
-          /* ignore */
-        }
-        showDisclaimerModalAgain();
-      },
-    });
-  }, [
+  useDeckyPreviewTestHookRegistration({
     currentTab,
+    setCurrentTab,
     unifiedInput,
+    setUnifiedInput,
     askMode,
     isAsking,
     ollamaResponse,
@@ -976,12 +915,11 @@ const Content: React.FC = () => {
     capabilities,
     lastTransparency,
     onAskOllama,
-    setUnifiedInput,
     setSelectedAttachment,
-    setCurrentTab,
-    showDisclaimerModalAgain,
     restoreSessionSnapshot,
-  ]);
+    sessionSnapshotRef,
+    showDisclaimerModalAgain,
+  });
 
   const openModelPolicyReadme = useCallback(() => {
     try {

@@ -286,6 +286,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 - **previewTestHooks.ts** (src/preview/previewTestHooks.ts) — *Preview test hooks*: Expose window.__bonsaiTestHooks for Decky Plugin Studio automated preview scenarios.
 - **replyLayoutReport.ts** (src/preview/replyLayoutReport.ts) — *Reply layout report*: Describe the newest reply's block — stop count, and the rectangle of each control.
+- **useDeckyPreviewTestHookRegistration.ts** (src/preview/useDeckyPreviewTestHookRegistration.ts) — *Wiring the preview test hooks into Content*: Registers `window.__bonsaiTestHooks` (see `previewTestHooks.ts`) from live values inside `Content`, but only when running under Decky Plugin Studio's preview harness.
 
 ## src/styles
 

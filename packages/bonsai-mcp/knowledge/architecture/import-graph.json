@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 436,
-  "edgeCount": 1133,
+  "fileCount": 437,
+  "edgeCount": 1140,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2281,7 +2281,8 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/hooks/useBonsaiPluginShell.test.ts": {
@@ -2305,7 +2306,8 @@
       ],
       "importedBy": [
         "src/hooks/useBonsaiPluginShell.test.ts",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/hooks/useCapturedFrontendErrors.ts": {
@@ -2344,7 +2346,8 @@
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/hooks/useDockClearanceOnFocus.test.ts": {
@@ -2471,7 +2474,8 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/usePluginSettings.test.ts",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/hooks/usePullModelCatalog.ts": {
@@ -2585,7 +2589,8 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/hooks/useSmoothStreamReveal.test.ts": {
@@ -2809,8 +2814,7 @@
         "src/hooks/useTabStripBodyOffset.ts",
         "src/hooks/useUiScaleProfile.ts",
         "src/pluginVersion.ts",
-        "src/preview/previewTestHooks.ts",
-        "src/preview/replyLayoutReport.ts",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts",
         "src/utils/appDesktopLog.ts",
         "src/utils/bonsaiDebugIngest.ts",
         "src/utils/bonsaiReplySurface.ts",
@@ -2836,8 +2840,8 @@
     "src/preview/previewTestHooks.ts": {
       "imports": [],
       "importedBy": [
-        "src/index.tsx",
-        "src/preview/replyLayoutReport.ts"
+        "src/preview/replyLayoutReport.ts",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
     "src/preview/replyLayoutReport.test.ts": {
@@ -2853,8 +2857,23 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/index.tsx",
-        "src/preview/replyLayoutReport.test.ts"
+        "src/preview/replyLayoutReport.test.ts",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts"
+      ]
+    },
+    "src/preview/useDeckyPreviewTestHookRegistration.ts": {
+      "imports": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/hooks/usePluginSettings.ts",
+        "src/hooks/useScreenshotBrowser.ts",
+        "src/preview/previewTestHooks.ts",
+        "src/preview/replyLayoutReport.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
       ]
     },
     "src/styles/bonsaiScopeStylesheet.ts": {
@@ -3558,6 +3577,7 @@
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
+        "src/preview/useDeckyPreviewTestHookRegistration.ts",
         "src/types/askOrchestration.ts",
         "src/utils/askOrchestrationRestore.ts",
         "src/utils/bonsaiSessionSurvival.test.ts"

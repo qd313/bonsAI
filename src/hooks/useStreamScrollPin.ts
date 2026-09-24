@@ -58,18 +58,25 @@ function visibleBottom(scroll: HTMLElement): number {
 const RING_SELECTOR = ".gpfocus";
 
 /**
- * Whether the gamepad ring is on something inside the transcript — the person is walking the
- * reply with the D-pad while it is still being written.
+ * The element holding the gamepad ring when it sits on something that scrolls with the chat — the
+ * transcript, or the chat slot row above it — rather than on the dock. Null otherwise.
  *
- * Following the tail then scrolls the very control they are on out of sight, and the D-pad's own
- * scrolls rarely take a pin, because a step near the end leaves the tail inside the slack. Measured
- * on device 2026-09-18 (plan61-QA-FREE-PLAY-01-streaming.json): six of eight stops on a walk during
- * a streaming answer were focused but off screen. The ring and not `document.activeElement`,
- * because the two disagree on the Deck and the ring is what a person sees. The dock and the chat
- * slot row sit outside the anchor, so a ring on Ask or Stop still lets the follow run.
+ * Following the tail then scrolls the very control the person is on out of sight, and the D-pad's
+ * own scrolls rarely take a pin, because a step near the end leaves the tail inside the slack.
+ * Measured on device 2026-09-18 (plan61-QA-FREE-PLAY-01-streaming.json): six of eight stops on a
+ * walk during a streaming answer were focused but off screen. The ring and not
+ * `document.activeElement`, because the two disagree on the Deck and the ring is what a person sees.
+ *
+ * The chat slot row counts too: it scrolls away with the transcript. On the Deck 2026-09-23 (plan
+ * 64) a ring on the chat row was carried off the top of the pane, from 14 to -183px, while the
+ * answer below it grew. Only the dock is excluded: it is pinned to the bottom, so a ring on Ask or
+ * Stop stays visible and still lets the follow run.
  */
-function ringInTranscript(anchor: HTMLElement): HTMLElement | null {
-  return anchor.querySelector<HTMLElement>(RING_SELECTOR);
+function ringOnScrollingContent(scroll: HTMLElement): HTMLElement | null {
+  const ring = scroll.querySelector<HTMLElement>(RING_SELECTOR);
+  if (!ring) return null;
+  const dock = scroll.querySelector<HTMLElement>(DOCK_SELECTOR);
+  return dock && dock.contains(ring) ? null : ring;
 }
 
 /**
@@ -104,7 +111,8 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
  * D-pad's own panel steps set `scrollTop`, which fires `scroll` like a swipe does. Stepping down
  * through the answer therefore pins, and stepping to the bottom resumes the follow, without the
  * navigation code knowing this hook exists. A step that lands near the end takes no pin, though,
- * so the follow also holds while the gamepad ring is inside the transcript (ringInTranscript).
+ * so the follow also holds while the gamepad ring is on the chat above the dock
+ * (ringOnScrollingContent).
  */
 export function useStreamScrollPin(
   anchorRef: RefObject<HTMLElement | null>,
@@ -225,13 +233,13 @@ export function useStreamScrollPin(
            "do not scroll". */
         return;
       }
-      const ring = ringInTranscript(anchor);
+      const ring = ringOnScrollingContent(scroll);
       if (ring) {
         if (enabled) return;
         /*
-         * A delivery pass with the ring inside the transcript brings the ring's own control back,
-         * not the answer's end. The passes exist to undo the slot rebuild's jump to the top, and
-         * for a person walking the reply that jump strands the control they are on. Delivering the
+         * A delivery pass with the ring on the chat, not the dock, brings the ring's own control
+         * back, not the answer's end. The passes exist to undo the slot rebuild's jump to the top,
+         * and for a person walking the reply that jump strands the control they are on. Delivering the
          * tail instead threw it off screen: on the Deck 2026-09-23 (plan 64), Down 0.8s after an
          * answer finished put the ring on "40 earlier" and the 900ms pass then scrolled to the end
          * of the answer, leaving the ring 656px above the pane. "nearest" leaves a control that is

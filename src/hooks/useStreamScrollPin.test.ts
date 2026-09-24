@@ -203,12 +203,34 @@ describe("stream scroll follow", () => {
 
   it("keeps following while the ring is on the dock, outside the transcript", () => {
     const t = makeTranscript({ contentBottom: 400 });
+    const dock = document.createElement("div");
+    dock.className = "bonsai-main-tab-dock";
+    // Parked at the viewport's bottom edge, covering nothing, so the follow's arithmetic is unchanged.
+    dock.getBoundingClientRect = () => rect(VIEWPORT_BOTTOM, VIEWPORT_BOTTOM);
     const dockButton = document.createElement("div");
     dockButton.className = "gpfocus";
-    t.scroll.appendChild(dockButton);
+    dock.appendChild(dockButton);
+    t.scroll.appendChild(dock);
     const { rerender } = mount(t);
 
     act(() => rerender({ text: "first tokens" }));
+
+    expect(t.scrollTop).toBe(150);
+  });
+
+  /* On the Deck 2026-09-23 (plan 64) a ring on the chat row, above the transcript, was carried
+     off the top of the pane as the answer grew. */
+  it("holds still while the ring is on the chat row above the transcript", () => {
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = mount(t);
+    act(() => rerender({ text: "first" }));
+    expect(t.scrollTop).toBe(150);
+
+    const chatRow = document.createElement("div");
+    chatRow.className = "gpfocus";
+    t.scroll.insertBefore(chatRow, t.anchor);
+    t.grow(120);
+    act(() => rerender({ text: "first second" }));
 
     expect(t.scrollTop).toBe(150);
   });

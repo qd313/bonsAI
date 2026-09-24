@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 438,
-  "edgeCount": 1151,
+  "fileCount": 439,
+  "edgeCount": 1154,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1835,6 +1835,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
+        "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
@@ -1940,6 +1941,15 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useChatSlotActivityState.ts": {
+      "imports": [
+        "src/features/plugin-shell/pluginStorage.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -2815,6 +2825,7 @@
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
+        "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
@@ -3589,6 +3600,7 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
+        "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",

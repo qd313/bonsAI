@@ -53,7 +53,8 @@
  * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
  * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts; the
  * post-remount session restore moved to
- * features/plugin-shell/useSessionRestoreAfterRemount.ts.
+ * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
+ * features/plugin-shell/useChatSlotActivityState.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -127,11 +128,7 @@ import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabT
 import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
 import { TabBodyFocusRoot, tabBodyNavFocusId } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./utils/navFocusRegistry";
-import {
-  loadActiveChatSlotId,
-  loadSavedSearchQuery,
-  persistSearchQuery,
-} from "./features/plugin-shell/pluginStorage";
+import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
 import { useOllamaConnectionState } from "./features/plugin-shell/useOllamaConnectionState";
 import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
 import { useAboutTabPayload } from "./features/plugin-shell/tabs/useAboutTabPayload";
@@ -170,6 +167,7 @@ import { getSteamSettingsUrl } from "./data/steamSettingsNavigation";
 import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
+import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 
 type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
@@ -200,42 +198,16 @@ type SteamUrlApi = {
 const Content: React.FC = () => {
   const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(buildInitialSessionSnapshot);
 
-  /*
-   * The modal-survival snapshot first, the stored pointer second.
-   *
-   * The snapshot only exists when a Decky modal opened; a QAM close/reopen is a plain remount and
-   * writes none, so this used to come back null and the whole thread read as empty while the slot
-   * on disk still held every turn. The two cannot disagree — both are written from `setActiveSlot`,
-   * so a snapshot saying "no slot" comes with storage saying the same — which is what makes the
-   * `??` safe rather than a way to resurrect a chat *Clear cache* just detached.
-   */
-  const activeSlotIdRef = useRef<string | null>(
-    peekBonsaiSessionPendingRestore()?.activeSlotId ?? loadActiveChatSlotId(),
-  );
-  /*
-   * Slot activity for the row's dot language: hollow cyan ring = generating, solid green =
-   * finished while the user was elsewhere. Session-lived only — the QAM-closed case is already
-   * covered by the reply-ready toast, so nothing here needs to persist.
-   */
-  const [generatingSlotId, setGeneratingSlotId] = useState<string | null>(null);
-  /* Ref twin for the never-used-slot sweep (D42): the sweep runs inside stable callbacks and must
-     see the CURRENT generating slot, not the one from whichever render created the callback. Both
-     writers below are useCallback([]) on purpose — the bare setter used to be passed directly, and
-     an inline arrow here re-armed an orchestration effect every render into an update loop. */
-  const generatingSlotIdRef = useRef<string | null>(null);
-  const onGeneratingSlotChange = useCallback((slotId: string | null) => {
-    generatingSlotIdRef.current = slotId;
-    setGeneratingSlotId(slotId);
-  }, []);
-  const isSlotGenerating = useCallback(
-    (slotId: string) => generatingSlotIdRef.current === slotId,
-    [],
-  );
-  const [unreadSlotIds, setUnreadSlotIds] = useState<ReadonlySet<string>>(() => new Set<string>());
-  const reloadSlotTranscriptRef = useRef<(() => Promise<void>) | null>(null);
-  /* Same indirection as the ref above: `useChatSlots` owns this but is declared after the
-   * orchestration hook, because it needs that hook's thread setters. */
-  const ensureActiveSlotForAskRef = useRef<((question: string) => Promise<string | null>) | null>(null);
+  const {
+    activeSlotIdRef,
+    generatingSlotId,
+    onGeneratingSlotChange,
+    isSlotGenerating,
+    unreadSlotIds,
+    setUnreadSlotIds,
+    reloadSlotTranscriptRef,
+    ensureActiveSlotForAskRef,
+  } = useChatSlotActivityState();
 
   const {
     currentTab,

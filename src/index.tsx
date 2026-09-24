@@ -55,7 +55,8 @@
  * post-remount session restore moved to
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
  * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
- * features/plugin-shell/useBonsaiScopeStyle.ts.
+ * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its read-aloud glue moved to
+ * features/voice/useVoiceAskWithReadAloud.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -112,7 +113,6 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
-import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
 import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import {
   BonsaiSvgIcon,
@@ -152,7 +152,7 @@ import { useSteamSettingsSearch } from "./hooks/useSteamSettingsSearch";
 import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
 import { usePermissionJump } from "./hooks/usePermissionJump";
 import { effectiveCapabilities, useKidsLock } from "./hooks/useKidsLock";
-import { useVoiceAskInput } from "./features/voice/useVoiceAskInput";
+import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
 import { useRoutingOrderModal } from "./features/model-routing/useRoutingOrderModal";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
@@ -236,8 +236,9 @@ const Content: React.FC = () => {
   const pluginDataClearSeenRef = useRef(getPluginDataClearedGeneration());
   /*
    * "The field's text came from the mic" (D99 call 3) is cleared here too, ahead of where
-   * useVoiceAskInput is called below — a ref so the clear points that run earlier in this function
-   * do not have to wait on hook declaration order. Populated once useVoiceAskInput mounts.
+   * useVoiceAskWithReadAloud is called below — a ref so the clear points that run earlier in this
+   * function do not have to wait on hook declaration order. Populated once useVoiceAskWithReadAloud
+   * mounts (it wraps useVoiceAskInput).
    */
   const clearAskCameFromMicRef = useRef<() => void>(() => {});
 
@@ -921,54 +922,20 @@ const Content: React.FC = () => {
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,
-    askCameFromMic,
     clearAskCameFromMic,
-    lastVoiceText,
-  } = useVoiceAskInput({
+    onAskOllamaWithReadAloud,
+  } = useVoiceAskWithReadAloud({
     setUnifiedInput,
     unifiedInput,
     microphoneAccess: gatedCapabilities.microphone_access,
     isAsking,
     uiT,
+    clearAskCameFromMicRef,
+    voiceReplyMode,
+    strategySpoilerMaskingEnabled,
+    lastRequestId,
+    onAskOllama,
   });
-
-  useEffect(() => {
-    clearAskCameFromMicRef.current = clearAskCameFromMic;
-  }, [clearAskCameFromMic]);
-
-  /* Keeps the two completion watchers (useBackgroundGameAi's poll, bonsaiAskCompletionWatch's
-     module-level loop for when the Main tab is not mounted) in sync with the live setting — see
-     useReadAloud.ts, which mirrors bonsaiReplySurface.ts's pattern for exactly this reason. */
-  useEffect(() => {
-    setReadAloudCompletionContext(voiceReplyMode, strategySpoilerMaskingEnabled);
-  }, [voiceReplyMode, strategySpoilerMaskingEnabled]);
-
-  /*
-   * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and paired with the
-   * request_id as soon as the backend hands one back — `lastRequestId` is set from every poll
-   * response, including the first, so this lands well before the request can complete. Only one
-   * Ask is ever in flight, so a single pending slot (rather than something keyed up front, before
-   * the id exists) is enough.
-   *
-   * The flag alone over-counts: it stays set after dictation until a settings-driven reset, a
-   * session clear, or reusing an old question, so typing over the dictated text or picking a
-   * suggestion chip before pressing Ask leaves it on for words never spoken. `questionCameFromMic`
-   * also checks that the text actually being asked still matches what the mic last wrote.
-   */
-  const pendingAskCameFromMicRef = useRef(false);
-  const onAskOllamaWithReadAloud = useCallback(
-    (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
-      const asked = overrideQuestion ?? unifiedInput;
-      pendingAskCameFromMicRef.current = questionCameFromMic(askCameFromMic, asked, lastVoiceText);
-      return onAskOllama(overrideQuestion, opts);
-    },
-    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText],
-  );
-  useEffect(() => {
-    if (lastRequestId != null) {
-      rememberAskCameFromMic(lastRequestId, pendingAskCameFromMicRef.current);
-    }
-  }, [lastRequestId]);
 
   const showSearchClearButton = Boolean(unifiedInput.trim());
 

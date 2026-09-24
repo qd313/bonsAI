@@ -46,14 +46,14 @@
       "role": ""
     },
     {
-      "path": "src/index.tsx",
-      "lines": 1522,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1506,
       "role": ""
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1489,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",

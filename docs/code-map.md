@@ -243,6 +243,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 ## src/features/voice
 
 - **useVoiceAskInput.ts** (src/features/voice/useVoiceAskInput.ts) — *The microphone button on the Ask bar*: Runs while a person taps the microphone icon to speak a question instead of typing it. Owns whether recording is on, checks permission before starting, writes the recognized words into the question box as they arrive, and shows an error message if anything goes wrong.
+- **useVoiceAskWithReadAloud.ts** (src/features/voice/useVoiceAskWithReadAloud.ts) — *Voice input, wired to Ask and read-aloud*: `useVoiceAskInput` plus the three pieces of glue that connect it to the rest of the Ask flow: mirroring its clear function into a ref other code can call before this hook's own declaration point, keeping the read-aloud completion watchers in step with the live setting, and…
 
 ## src/hooks
 

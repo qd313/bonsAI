@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 478,
-  "edgeCount": 1266,
+  "fileCount": 479,
+  "edgeCount": 1269,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -847,6 +847,7 @@
         "src/data/deckEssentialsTags.ts",
         "src/data/modelPolicy.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useOllamaLocalAutostart.ts",
         "src/utils/deckyCall.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
         "src/utils/pullModelCatalogRefresh.ts",
@@ -863,7 +864,8 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useOllamaLocalAutostart.ts"
       ]
     },
     "src/components/PermissionDenyAction.test.tsx": {
@@ -2663,6 +2665,15 @@
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
+    "src/hooks/useOllamaLocalAutostart.ts": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
+      ]
+    },
     "src/hooks/usePermHintNavTargets.ts": {
       "imports": [
         "src/utils/navFocusRegistry.ts"
@@ -4321,6 +4332,7 @@
         "src/hooks/useIntentPacks.ts",
         "src/hooks/useKidsLock.test.ts",
         "src/hooks/useKidsLock.ts",
+        "src/hooks/useOllamaLocalAutostart.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",

@@ -46,11 +46,6 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1348,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1327,
       "role": ""
@@ -58,6 +53,11 @@
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 1319,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1305,
       "role": ""
     },
     {

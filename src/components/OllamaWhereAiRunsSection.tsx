@@ -109,6 +109,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
 import type {
   MdnsOllamaHost,
   MdnsDiscoveryResult,
@@ -668,55 +669,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);
 
-  const refreshAutostartStatus = useCallback(() => {
-    callDeckyWithTimeout<[], OllamaLocalAutostartStatus>(
-      "get_ollama_local_autostart_status",
-      [],
-      DECKY_RPC_TIMEOUT_MS
-    )
-      .then(setAutostartStatus)
-      .catch(() => {
-        // Best-effort: the toggle itself still reflects the saved setting either way.
-      });
-  }, []);
-
-  // Mount-once: shows the real state (installed/enabled/running) under the toggle without
-  // waiting for the person to flip it first.
-  useEffect(() => {
-    refreshAutostartStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional one-shot on section mount
-  }, []);
-
-  const handleToggleAutostart = useCallback(
-    (next: boolean) => {
-      setOllamaLocalAutostart(next);
-      setAutostartBusy(true);
-      callDeckyWithTimeout<[boolean], { ok?: boolean; changed?: boolean; message?: string; reason?: string }>(
-        "apply_ollama_local_autostart",
-        [next],
-        DECKY_RPC_TIMEOUT_MS
-      )
-        .then((out) => {
-          toaster.toast({
-            title: next ? "Start the AI with the Deck" : "Startup entry turned off",
-            body: out?.message ?? out?.reason ?? "Done.",
-            duration: 5000,
-          });
-        })
-        .catch((e: unknown) => {
-          toaster.toast({
-            title: "Could not change the startup entry",
-            body: formatDeckyRpcError(e),
-            duration: 6000,
-          });
-        })
-        .finally(() => {
-          setAutostartBusy(false);
-          refreshAutostartStatus();
-        });
-    },
-    [refreshAutostartStatus, setOllamaLocalAutostart]
-  );
+  const { handleToggleAutostart } = useOllamaLocalAutostart({
+    setAutostartStatus,
+    setAutostartBusy,
+    setOllamaLocalAutostart,
+  });
 
   return (
       <PanelSection title="Where AI runs">

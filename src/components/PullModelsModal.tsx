@@ -125,6 +125,7 @@ import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelectio
 import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
 import { usePullModelPinForAsk } from "../hooks/usePullModelPinForAsk";
 import { usePullModelSubmitSelected } from "../hooks/usePullModelSubmitSelected";
+import { usePullModelCustomTagPull } from "../hooks/usePullModelCustomTagPull";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -784,48 +785,19 @@ export function PullModelsModal(props: PullModelsModalProps) {
     openWeightTierConfirmedRef,
   });
 
-  /**
-   * Type-any-tag pull. Deliberately a separate one-off RPC call rather than folding into
-   * `selectedTags` + "Pull selected" — that queue assumes every tag resolves to a `PullModelEntry`
-   * (size, license tier, blurb) for the confirm dialogs and the total-size footer, which a typed
-   * tag does not have. `pull_ollama_models` already validates the tag against the Ollama registry
-   * before starting anything (`_start_custom_ollama_pull` -> `partition_pull_tags_by_registry`,
-   * main.py:1799-1819) and returns an actionable `reason` when it is not published there — this
-   * just surfaces that reason in a toast instead of leaving a typo or a made-up name to fail silently.
-   */
-  const onPullCustomTag = useCallback(async () => {
-    const tag = customTagInput.trim();
-    if (!tag || !isPlausibleOllamaPullTag(tag) || customPullBusy || pullBusy) return;
-    setCustomPullBusy(true);
-    try {
-      const res = await callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
-        "pull_ollama_models",
-        [[tag]],
-        DECKY_RPC_TIMEOUT_MS
-      );
-      if (res.accepted) {
-        toaster.toast({
-          title: "Pull started",
-          body: `${tag} — watch progress in Settings.`,
-          duration: 5000,
-        });
-        setCustomTagInput("");
-        setCustomTagEntryOpen(false);
-        scheduleFocusFrame(() => focusCustomTagChip());
-        onPullAccepted();
-      } else {
-        toaster.toast({
-          title: "Pull not started",
-          body: res.reason || "Setup busy or local Ollama is off.",
-          duration: 6000,
-        });
-      }
-    } catch (e) {
-      toaster.toast({ title: "Pull failed", body: formatDeckyRpcError(e), duration: 5000 });
-    } finally {
-      setCustomPullBusy(false);
-    }
-  }, [customTagInput, customPullBusy, pullBusy, onPullAccepted, focusCustomTagChip]);
+  // Lifted into usePullModelCustomTagPull. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { onPullCustomTag } = usePullModelCustomTagPull({
+    customTagInput,
+    customPullBusy,
+    pullBusy,
+    onPullAccepted,
+    focusCustomTagChip,
+    setCustomPullBusy,
+    setCustomTagInput,
+    setCustomTagEntryOpen,
+    scheduleFocusFrame,
+  });
 
   const bindSelectRef =
     (rowIndex: number): RefCallback<HTMLElement> =>

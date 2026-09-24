@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 466,
-  "edgeCount": 1228,
+  "fileCount": 467,
+  "edgeCount": 1231,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -948,6 +948,7 @@
         "src/data/pullModelCatalog.ts",
         "src/data/storageKeys.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2648,6 +2649,15 @@
         "src/components/PullModelsModal.tsx"
       ]
     },
+    "src/hooks/usePullModelCustomTagPull.tsx": {
+      "imports": [
+        "src/utils/deckyCall.ts",
+        "src/utils/mergePullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
     "src/hooks/usePullModelDeleteConfirm.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
@@ -4190,6 +4200,7 @@
         "src/hooks/useKidsLock.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -4447,6 +4458,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/usePullModelCustomTagPull.tsx",
         "src/utils/mergePullModelCatalog.test.ts"
       ]
     },

@@ -106,7 +106,6 @@ import {
 } from "../data/pullModelCatalog";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
@@ -119,6 +118,7 @@ import { usePullModelSubmitSelected } from "../hooks/usePullModelSubmitSelected"
 import { usePullModelCustomTagPull } from "../hooks/usePullModelCustomTagPull";
 import { usePullModelTableData } from "../hooks/usePullModelTableData";
 import { usePullModelCatalogRefresh } from "../hooks/usePullModelCatalogRefresh";
+import { usePullModelOpenBookkeeping } from "../hooks/usePullModelOpenBookkeeping";
 import { isPlausibleOllamaPullTag } from "../utils/mergePullModelCatalog";
 import {
   computeUpdatedPullRecord,
@@ -126,7 +126,7 @@ import {
   PULL_MODEL_NEW_BADGE_WINDOW_MS,
   type PullModelPullRecord,
 } from "../utils/pullModelNewBadge";
-import type { PullModelsRoutingOrderSettings, PullModelsModalProps } from "./PullModelsModal.types";
+import type { PullModelsModalProps } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
 import {
   filterPanelRowAriaLabel,
@@ -248,45 +248,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
     setRefreshingMeta,
   });
 
-  // Seed "which model is Ask using" once on open, from the saved text try-order's first entry —
-  // the same field ModelRoutingOrderModal edits and merge_pulled_tags_into_routing_orders appends
-  // to. Best-effort: a failed load just leaves nothing pinned rather than blocking the picker.
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const settings = await callDeckyWithTimeout<[], PullModelsRoutingOrderSettings>(
-          "load_settings",
-          [],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        const order = Array.isArray(settings.text_model_routing_order) ? settings.text_model_routing_order : [];
-        const head = typeof order[0] === "string" ? order[0].trim() : "";
-        if (!cancelled) setPinnedAskTag(head || null);
-      } catch {
-        /* best-effort */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // "New" badge bookkeeping — see the block comment above computeUpdatedPullRecord.
-  useEffect(() => {
-    /* Nothing to record before the connection test answers, and writing an empty record here is
-       what caused the Deck failure described above — so do not write one. */
-    if (installedTags.size === 0) return;
-    try {
-      const raw = window.localStorage.getItem(PULL_MODEL_NEW_BADGE_STORAGE_KEY);
-      const stored: PullModelPullRecord | null = raw === null ? null : (JSON.parse(raw) as PullModelPullRecord);
-      const updated = computeUpdatedPullRecord(installedTags, stored, Date.now());
-      window.localStorage.setItem(PULL_MODEL_NEW_BADGE_STORAGE_KEY, JSON.stringify(updated));
-      setPullRecord(updated);
-    } catch {
-      /* localStorage unavailable or corrupt — the badge just doesn't show */
-    }
-  }, [installedTags]);
+  // Lifted into usePullModelOpenBookkeeping. It must stay at exactly this point in the hook
+  // list: React matches hooks by the order they run, not by name.
+  usePullModelOpenBookkeeping({ installedTags, setPinnedAskTag, setPullRecord });
 
   // Lifted into usePullModelTableData. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.

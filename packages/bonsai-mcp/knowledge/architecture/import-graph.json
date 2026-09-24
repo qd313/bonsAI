@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 469,
-  "edgeCount": 1244,
+  "fileCount": 470,
+  "edgeCount": 1248,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -950,12 +950,12 @@
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
-        "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelFilters.ts",
         "src/utils/pullModelNewBadge.ts",
@@ -979,6 +979,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
@@ -1656,7 +1657,8 @@
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
-        "src/hooks/useBonsaiPluginShell.test.ts"
+        "src/hooks/useBonsaiPluginShell.test.ts",
+        "src/hooks/usePullModelOpenBookkeeping.ts"
       ]
     },
     "src/data/strategyGuideFollowup.test.ts": {
@@ -2681,6 +2683,17 @@
       "imports": [
         "src/data/pullModelCatalog.ts",
         "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/hooks/usePullModelOpenBookkeeping.ts": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts",
+        "src/data/storageKeys.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/pullModelNewBadge.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -4214,7 +4227,6 @@
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/components/PullModelsModal.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
@@ -4235,6 +4247,7 @@
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/useReadAloud.ts",
@@ -4664,6 +4677,7 @@
       "imports": [],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/hooks/usePullModelTableData.ts"
       ]
     },

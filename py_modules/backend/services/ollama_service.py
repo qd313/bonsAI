@@ -409,7 +409,16 @@ def preload_ask_model_sync(
         if not model:
             logger.info("preload_ask_model: no eligible small model installed, skipping")
             return
-        body = json.dumps({"model": model, "prompt": ""}).encode("utf-8")
+        warm: dict[str, Any] = {"model": model, "prompt": ""}
+        # Load it with the room Ask will ask for. Without num_ctx the server loads at its own
+        # default (4,096 on the Deck), and the first Ask -- which asks for more -- reloads the
+        # model: measured on the Deck (plan 64 flow H, PRELOAD-01), warm and cold both took 9.8 s
+        # to first words, the journal showing a second load 2 s after the press. choose_window_tokens
+        # remembers its answer per server and model for the session, so Ask gets the same number.
+        window = choose_window_tokens(base_http, model, logger=logger)
+        if window > 0:
+            warm["options"] = {"num_ctx": window}
+        body = json.dumps(warm).encode("utf-8")
         gen_req = urllib.request.Request(
             f"{base_http.rstrip('/')}/api/generate",
             data=body,

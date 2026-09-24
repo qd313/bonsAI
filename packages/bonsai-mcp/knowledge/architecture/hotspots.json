@@ -47,7 +47,7 @@
     },
     {
       "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 1610,
+      "lines": 1619,
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {

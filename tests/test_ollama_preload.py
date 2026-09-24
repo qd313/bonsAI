@@ -158,6 +158,32 @@ class PickPreloadModelTryOrderTests(unittest.TestCase):
 
 
 class PreloadAskModelSyncTests(unittest.TestCase):
+    def setUp(self) -> None:
+        # The room calculation reads the server itself; keep these tests off the network. 0 means
+        # "say nothing", the old request shape. The test below that needs a number patches it again.
+        window = patch("backend.services.ollama_service.choose_window_tokens", return_value=0)
+        window.start()
+        self.addCleanup(window.stop)
+
+    @patch("backend.services.ollama_service.choose_window_tokens", return_value=16384)
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_warms_with_the_same_room_ask_will_ask_for(
+        self, mock_urlopen: MagicMock, mock_window: MagicMock
+    ) -> None:
+        """Deck, plan 64 flow H (PRELOAD-01): the warm-up loaded at the server's 4,096 default and
+        the first Ask, asking for 16,384, reloaded the model -- warm and cold both 9.8 s."""
+        tags_body = json.dumps(
+            {"models": [{"name": "qwen2.5:1.5b", "details": {"parameter_size": "1.5B"}}]}
+        ).encode("utf-8")
+        mock_urlopen.side_effect = [_Resp(tags_body), _Resp(b"{}")]
+
+        preload_ask_model_sync("http://127.0.0.1:11434", _Logger())
+
+        mock_window.assert_called_once()
+        self.assertEqual(mock_window.call_args.args[1], "qwen2.5:1.5b")
+        sent_body = json.loads(mock_urlopen.call_args_list[1].args[0].data.decode("utf-8"))
+        self.assertEqual(sent_body["options"], {"num_ctx": 16384})
+
     @patch("backend.services.ollama_service.urllib.request.urlopen")
     def test_warms_the_first_eligible_small_model(self, mock_urlopen: MagicMock) -> None:
         tags_body = json.dumps(
@@ -180,6 +206,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         sent_body = json.loads(gen_req.data.decode("utf-8"))
         self.assertEqual(sent_body["model"], "qwen2.5:3b")
         self.assertEqual(sent_body["prompt"], "")
+        self.assertNotIn("options", sent_body)  # nothing known about the room: say nothing
 
     @patch("backend.services.ollama_service.urllib.request.urlopen")
     def test_no_eligible_model_skips_without_a_warm_request(self, mock_urlopen: MagicMock) -> None:

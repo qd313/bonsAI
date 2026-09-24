@@ -51,11 +51,6 @@
       "role": ""
     },
     {
-      "path": "src/index.tsx",
-      "lines": 1427,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 1422,
       "role": ""
@@ -64,6 +59,11 @@
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1412,
       "role": ""
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1407,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

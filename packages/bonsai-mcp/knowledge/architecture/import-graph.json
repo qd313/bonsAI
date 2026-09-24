@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 443,
-  "edgeCount": 1165,
+  "fileCount": 444,
+  "edgeCount": 1166,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1441,9 +1441,9 @@
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
-        "src/index.tsx",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/bonsaiSessionSurvival.ts",
@@ -1618,8 +1618,8 @@
       "imports": [],
       "importedBy": [
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
-        "src/hooks/useSteamSettingsSearch.ts",
-        "src/index.tsx"
+        "src/features/plugin-shell/useExternalNavigationActions.ts",
+        "src/hooks/useSteamSettingsSearch.ts"
       ]
     },
     "src/data/storageKeys.ts": {
@@ -1984,6 +1984,15 @@
         "src/data/steam-input-lexicon.ts",
         "src/hooks/usePluginSettings.ts",
         "src/utils/steamInputJump.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useExternalNavigationActions.ts": {
+      "imports": [
+        "src/data/modelPolicy.ts",
+        "src/data/steamSettingsNavigation.ts"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -2853,10 +2862,8 @@
         "src/components/icons.tsx",
         "src/context/UiScaleContext.tsx",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/modelPolicy.ts",
         "src/data/presets.ts",
         "src/data/pullModelCatalog.ts",
-        "src/data/steamSettingsNavigation.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/PluginErrorBoundary.tsx",
@@ -2876,6 +2883,7 @@
         "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useDeveloperToolActions.ts",
+        "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",

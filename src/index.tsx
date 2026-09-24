@@ -58,7 +58,9 @@
  * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its read-aloud glue moved to
  * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
  * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
- * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts.
+ * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts; the two
+ * leave-the-panel navigation actions (and the SteamUrlApi type) moved to
+ * features/plugin-shell/useExternalNavigationActions.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -97,7 +99,7 @@
  */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, useQuickAccessVisible } from "@decky/api";
-import { Navigation, Tabs } from "@decky/ui";
+import { Tabs } from "@decky/ui";
 
 import { PLUGIN_VERSION } from "./pluginVersion";
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
@@ -116,7 +118,6 @@ import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/b
 import {
   BonsaiSvgIcon,
 } from "./components/icons";
-import { MODEL_POLICY_README_URL } from "./data/modelPolicy";
 import {
   ASK_LABEL_COLOR_50,
   BONSAI_FOREST_GREEN,
@@ -162,16 +163,12 @@ import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
 import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
-import { getSteamSettingsUrl } from "./data/steamSettingsNavigation";
 import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
-
-type SteamUrlApi = {
-  ExecuteSteamURL(url: string): void;
-};
+import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -835,24 +832,7 @@ const Content: React.FC = () => {
     showDisclaimerModalAgain,
   });
 
-  const openModelPolicyReadme = useCallback(() => {
-    try {
-      Navigation.NavigateToExternalWeb(MODEL_POLICY_README_URL);
-    } catch {
-      toaster.toast({ title: "README", body: MODEL_POLICY_README_URL, duration: 4000 });
-    }
-  }, []);
-
-  const onOpenControllerSettingsForShortcut = useCallback(() => {
-    try {
-      const steamUrlApi = SteamClient.URL as unknown as SteamUrlApi;
-      steamUrlApi.ExecuteSteamURL(getSteamSettingsUrl("Settings > Controller"));
-      toaster.toast({ title: "Opening settings", body: "Controller", duration: 2000 });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toaster.toast({ title: "Navigation failed", body: message, duration: 3000 });
-    }
-  }, []);
+  const { openModelPolicyReadme, onOpenControllerSettingsForShortcut } = useExternalNavigationActions();
 
   // --- Ask bar timers and persistence ---
   useSlowResponseWarningTimer({

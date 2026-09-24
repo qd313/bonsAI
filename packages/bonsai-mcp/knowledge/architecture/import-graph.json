@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 434,
-  "edgeCount": 1118,
+  "fileCount": 435,
+  "edgeCount": 1121,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1624,6 +1624,7 @@
       "imports": [],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -1782,6 +1783,15 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/initialSessionSnapshot.ts": {
+      "imports": [
+        "src/data/storageKeys.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": [
         "src/index.tsx"
       ]
     },
@@ -2733,6 +2743,7 @@
         "src/features/plugin-shell/PluginErrorBoundary.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
@@ -3502,6 +3513,7 @@
       "importedBy": [
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",

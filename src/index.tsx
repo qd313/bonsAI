@@ -48,6 +48,9 @@
  * ones too one-off to belong in any more specific hook. See main.py for the
  * backend side of everything this file wires up.
  *
+ * Split note (plan 65): the empty starting snapshot moved to
+ * features/plugin-shell/initialSessionSnapshot.ts.
+ *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
  *    and local-AI warning pop-ups, kids-lock, UI scale, chat slots, intent
@@ -88,6 +91,7 @@ import { definePlugin, toaster, call, useQuickAccessVisible } from "@decky/api";
 import { Navigation, Router, Tabs } from "@decky/ui";
 
 import { PLUGIN_VERSION } from "./pluginVersion";
+import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
 import { DEFAULT_LATENCY_WARNING_SECONDS, type BonsaiSettings } from "./data/bonsaiSettingsSchema";
 import { setFrozenTestChips } from "./data/presets";
 import { toBonsaiSettingsPayload } from "./utils/settingsPayload";
@@ -201,42 +205,7 @@ type SteamUrlApi = {
  *    Decky.
  */
 const Content: React.FC = () => {
-  const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(() => {
-    return {
-      currentTab: "main",
-      unifiedInput: "",
-      selectedIndex: -1,
-      navigationMessage: "",
-      selectedAttachment: null,
-      isScreenshotBrowserOpen: false,
-      mediaError: "",
-      recentScreenshots: [],
-      isLoadingRecentScreenshots: false,
-      pluginHelpDismissed: false,
-      ollamaIp: IP_DEFAULT,
-      settingsSnapshot: {},
-      ollamaResponse: "",
-      ollamaContext: { app_context: "inactive", app_id: "" },
-      lastExchange: null,
-      askThreadCollapsed: [],
-      askThreadDisplayQuestion: "",
-      expandedTurnKey: "live",
-      suggestedPrompts: [],
-      lastTransparency: null,
-      modelPolicyDisclosure: null,
-      strategyGuideBranches: null,
-      strategyChecklist: null,
-      elapsedSeconds: null,
-      lastApplied: null,
-      shortcutSetupVariant: null,
-      presetCarouselInject: null,
-      showSlowWarning: false,
-      lastRequestId: null,
-      thinkingSummary: null,
-      liveReasoning: null,
-      activeSlotId: null,
-    } as unknown as BonsaiSessionSurvivalSnapshot;
-  });
+  const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(buildInitialSessionSnapshot);
 
   /*
    * The modal-survival snapshot first, the stored pointer second.

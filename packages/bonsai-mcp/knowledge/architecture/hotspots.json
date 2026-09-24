@@ -21,14 +21,14 @@
       "role": ""
     },
     {
-      "path": "src/index.tsx",
-      "lines": 1811,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1787,
       "role": ""
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1780,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",

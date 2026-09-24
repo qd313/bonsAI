@@ -241,6 +241,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/hooks
 
+- **useAskMountRestore.ts** (src/hooks/useAskMountRestore.ts) — *Resume a pending Ask after remount*: On mount, ask the backend once whether a question was still running when the plugin panel last closed, and pick polling back up if it was.
 - **useBackgroundGameAi.ts** (src/hooks/useBackgroundGameAi.ts) — *Checking in on an answer that is still being worked on*: Once a question has been handed to the back end, the answer does not arrive all at once — it comes together over the next while. […]
 - **useBonsaiAskOrchestration.ts** (src/hooks/useBonsaiAskOrchestration.ts) — *The Ask flow*: Runs the whole life of one question, from the moment Ask is pressed to the moment an answer — or a refusal — is on screen. […]
 - **useBonsaiPluginShell.ts** (src/hooks/useBonsaiPluginShell.ts) — *Plugin shell — which tab is open, and surviving a popup*: Tracks which tab the plugin is showing (Ask, Chats, Settings, and so on), and fixes a Steam quirk: opening one of Steam's own popups on top of the plugin (a picker, a confirm dialog) throws the plugin's whole screen away and rebuilds it once the popup closes. […]

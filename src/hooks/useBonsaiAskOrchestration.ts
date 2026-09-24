@@ -68,7 +68,8 @@
  * This file's own argument type lives beside its return type, in
  * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask-bar footnote's
  * own running-game poll is useOllamaGameContextSync, and the Show-details refresh is
- * useInputTransparencyRefresh.
+ * useInputTransparencyRefresh. The mount-time restore effect itself (point 4 below) is
+ * useAskMountRestore.
  *
  * Gotchas:
  * - The mount-time restore effect runs exactly once (an empty dependency
@@ -155,6 +156,7 @@ import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
 import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
 import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
+import { useAskMountRestore } from "./useAskMountRestore";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -862,32 +864,14 @@ export function useBonsaiAskOrchestration(
   } = useBackgroundGameAi(applyBackgroundStatusToUi, onBackgroundPollError);
 
   // --- Mount restore: resume pending Ask after plugin remount ---
-  /**
-   * Mount-only restore. Must NOT re-run on dependency identity churn: callback deps change every
-   * render (hook args object), so depending on them re-fired this effect each render → status RPC
-   * → "completed" re-applied → setSuggestedPrompts(random) → render → loop (~15ms, proven by
-   * 19k dbg log entries). Latest callbacks are read through a ref instead.
-   */
-  const restoreFnsRef = useRef({ applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest });
-  restoreFnsRef.current = { applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest };
-  useEffect(() => {
-    const fns = restoreFnsRef.current;
-    const seq = fns.startNextRequest();
-
-    callDeckyWithTimeout<[], BackgroundRequestStatus>("get_background_game_ai_status", [])
-      .then((status) => {
-        const f = restoreFnsRef.current;
-        if (!f.isRequestActive(seq)) return;
-        f.applyBackgroundStatusToUi(status);
-        if (status.status === "pending") {
-          f.startBackgroundStatusPolling(seq, status.question ?? "");
-          startAskCompletionWatch();
-        }
-      })
-      .catch(() => {
-        // Best-effort restore only; keep startup quiet if backend status isn't available.
-      });
-  }, []);
+  // Lifted into useAskMountRestore. It must stay at exactly this point in the list: React
+  // matches hooks by the order they run, not by name.
+  useAskMountRestore({
+    applyBackgroundStatusToUi,
+    isRequestActive,
+    startBackgroundStatusPolling,
+    startNextRequest,
+  });
 
   // --- Reply rating + follow-up chips ---
   /*

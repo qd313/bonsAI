@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 432,
-  "edgeCount": 1109,
+  "fileCount": 433,
+  "edgeCount": 1113,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2163,6 +2163,16 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useAskMountRestore.ts": {
+      "imports": [
+        "src/types/backgroundAsk.ts",
+        "src/utils/bonsaiAskCompletionWatch.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
+      ]
+    },
     "src/hooks/useBackgroundGameAi.test.ts": {
       "imports": [
         "src/hooks/useBackgroundGameAi.ts",
@@ -2202,6 +2212,7 @@
         "src/data/presets.ts",
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
+        "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useInputTransparencyRefresh.ts",
         "src/hooks/useOllamaGameContextSync.ts",
@@ -3124,6 +3135,7 @@
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -3386,6 +3398,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/bonsaiAskCompletionWatch.test.ts"
       ]
@@ -3770,6 +3783,7 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/voice/useVoiceAskInput.ts",
+        "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useInputTransparencyRefresh.ts",

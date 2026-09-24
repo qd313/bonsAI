@@ -17,6 +17,10 @@
     {
       "name": "useInputTransparencyRefresh",
       "file": "src/hooks/useInputTransparencyRefresh.ts"
+    },
+    {
+      "name": "useAskMountRestore",
+      "file": "src/hooks/useAskMountRestore.ts"
     }
   ],
   "count": 82,

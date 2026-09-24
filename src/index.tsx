@@ -62,7 +62,8 @@
  * leave-the-panel navigation actions (and the SteamUrlApi type) moved to
  * features/plugin-shell/useExternalNavigationActions.ts; the desktop-log prefs, captured
  * frontend errors, and the tab-open log line moved to
- * features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts.
+ * features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts; the two small settings-driven guard
+ * effects moved to features/plugin-shell/useTabAndModeGuardEffects.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -171,6 +172,7 @@ import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotAct
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
+import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -610,19 +612,14 @@ const Content: React.FC = () => {
     uiScaleScopeStyle: uiScale.scopeStyle,
   });
 
-  useEffect(() => {
-    if (!settingsLoaded) return;
-    if (!showDeveloperTab && currentTab === "developer") {
-      setCurrentTab("main");
-      toaster.toast({ title: "Developer tab hidden", body: "Switched to Main.", duration: 2800 });
-    }
-  }, [showDeveloperTab, currentTab, settingsLoaded]);
-
-  useEffect(() => {
-    if (askMode !== "strategy") {
-      setStrategyGuideBranches(null);
-    }
-  }, [askMode, setStrategyGuideBranches]);
+  useTabAndModeGuardEffects({
+    settingsLoaded,
+    showDeveloperTab,
+    currentTab,
+    setCurrentTab,
+    askMode,
+    setStrategyGuideBranches,
+  });
 
   const { jumpToPermission, returnFromPermissionJump, permissionJumpReturnTab } = usePermissionJump({
     currentTab,

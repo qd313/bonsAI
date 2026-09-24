@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 445,
-  "edgeCount": 1168,
+  "fileCount": 446,
+  "edgeCount": 1171,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2104,6 +2104,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/useTabAndModeGuardEffects.ts": {
+      "imports": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useBonsaiPluginShell.ts"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
     "src/features/plugin-shell/useUnifiedInputBehaviors.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -2377,6 +2386,7 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
@@ -2405,6 +2415,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
@@ -2899,6 +2910,7 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/features/unified-input/constants.ts",
         "src/features/unified-input/useUnifiedInputSurface.ts",

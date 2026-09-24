@@ -721,6 +721,17 @@ after the last deploy), and the start-up log line (the screen half passed).
   A on the question box. Both stay open for the maintainer to close or keep watching.
 - Could not run: CHIP-BUTTON-09 (three pinned test chips in the way); the soft token limit (the model stops
   near 1,100 tokens); a note dropped for space (cannot be produced by asking).
+- Found by the maintainer after the Deck work ended (by hand, build `a224fb6`, about 23:55):
+  - The tab-bar ghost is back — both tab bars show at once after Show details → Session, and only a D-pad
+    move closes the big one, not a touch scroll. Recording `recordings/DeckRecord_20260923_235526_game.mkv`.
+  - After Session tab → Clear → Cancel, the plugin comes back "not in the same spot, back at the top,"
+    instead of on the Session tab's Clear.
+  - On one chat, the Session tab's Clear did nothing when pressed — maybe because that chat had only one
+    turn.
+  - Once, the Show details line did nothing when pressed; no details yet on which chat or when.
+  - The session's guess: all four are one family — closing a Decky popup rebuilds the plugin, and the
+    highlight lands on the top bar, which then opens. Each needs a Deck walk with the focus recorder before
+    any fix.
 
 **Decisions for the maintainer.**
 1. Screenshots: shrink with ffmpeg, which is already on the Deck (a 2.6 MB picture becomes 86 KB in 0.2 s), and

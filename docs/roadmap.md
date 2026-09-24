@@ -149,6 +149,28 @@ starts work outside this.
 - ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **OPEN, found on the
   Deck 2026-09-23 (flow H, VAC-03).** The reply's ban report is written as plain lines of pipes and dashes
   rather than drawn as an actual table. Evidence `docs/test-evidence/plan64-VAC-03-06.json`.
+- ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
+  maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
+  does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
+  chat had only one turn. **Reproduction plan, to try all four combinations:** on a one-turn chat's Session
+  tab, press Clear with A, and separately by tap; try each once right after opening the Clear confirm box,
+  and again after switching to that chat from another one. Needs a Deck walk with the focus recorder before
+  any fix — the session thinks this is the same family as the tab-bar ghost below.
+- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **OPEN, found by the maintainer by
+  hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** No details yet on which chat
+  or when; the maintainer does not remember whether they pressed A or tapped, or whether it was right after
+  the Clear confirm box or after switching chats. **Reproduction plan, to try all four combinations:** press
+  Show details with A, and separately by tap; try each once right after cancelling the Clear confirm box,
+  and again right after switching chats. Needs a Deck walk with the focus recorder before any fix — the
+  session thinks this is the same family as the tab-bar ghost below.
+- ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
+  **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
+  Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
+  and the big icon bar under it. Touch scrolling did not close the big one; the first D-pad move did.
+  Recording `recordings/DeckRecord_20260923_235526_game.mkv` (11 seconds, every frame shows both bars). Row
+  **TAB-BAR-GHOST-01**. The session's guess, shared with the two bugs above: closing a Decky popup rebuilds
+  the plugin, and the highlight lands on the top bar, which then opens — each of these three needs a Deck
+  walk with the focus recorder before any fix.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -468,10 +490,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
   whole details panel closed. **Could not run on the Deck 2026-09-23:** Claude Code's own permission check
   refused the walk to the Clear button before any press was sent, so nothing was tried (0 "clear" lines in
-  the log — confirms nothing was cleared either). **Owed: a by-hand check by the maintainer.** Open Show
-  details, the Session tab, then Clear — the ring should start on Cancel, and pressing Cancel should keep
-  the panel open on the Session tab with the ring back on Clear. Evidence
-  `docs/test-evidence/plan64-SESSION-CLEAR-BOX-01.json`.
+  the log — confirms nothing was cleared either). Evidence
+  `docs/test-evidence/plan64-SESSION-CLEAR-BOX-01.json`. **Checked by hand by the maintainer on the Deck
+  2026-09-23 (build `a224fb6`), after the Deck work ended: the "where you land" half still fails.** After
+  Clear then Cancel, the plugin came back "not in the same spot, back at the top," instead of staying on the
+  Session tab with the ring on Clear. Whether the box itself still opens on Cancel rather than Clear is
+  unconfirmed either way. Not fixed for this half yet.
 - ★★ `[focus]` **Walking a reply with the ring on the chat row while it streams carries the row off
   screen** — **VERIFY, found and fixed the same night, `ff62e8c`.** With the ring on the chat row and the
   answer still being written, the view followed the growing answer and carried the chat row off the top of
@@ -500,12 +524,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   maintainer**, from `docs/test-evidence/plan64-BYEYE-01-preset-chip.png`. This line is the chip's only
   highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
   stay clearly visible, not just calmer.
-- ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
-  **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
-  after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
-  can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
-  rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
-  **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed
   2026-08-27 and 2026-09-03; the orphan-chat half is a measured follow-up, not a regression. Only the
   mid-generation half is still owed: clearing while a reply is still being written. Row **CLEAR-CACHE-01**.

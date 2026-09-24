@@ -1761,3 +1761,78 @@ The calls made during the night, not raised in advance:
 - Raising a growth limit needs its own step with a written reason, closing a loophole where recording a
   new baseline could silently raise a limit too.
 
+### D118 — LOCKED 2026-09-24 (raised 2026-09-24) — Plan 68 the chat sums itself up: the calls from discovery
+
+Raised during a discovery session on 2026-09-24, before [plan 68](../planning/68-chat-sums-itself-up.md)
+was written. The five calls of 2026-09-20 in the roadmap entry still stand (the summary goes into the next
+question; it is written right before the next question, only when the chat outgrows its room; Compact
+replaces Clear; the spoiler standing goes with the summary; the summary shows in the Session tab under the
+button). These are the calls made on top of them. Every option was drawn at true size on the
+[mockup page](https://claude.ai/artifact/CrP6C7jACWBuWdKfLu7Em2) before it was picked; its first version
+holds the options side by side, its current version only the picks.
+
+**What it does**
+
+1. **Who writes the summary.** The Deck's own AI, the model that is about to answer, with thinking off.
+   Not picked: the plugin trimming turns without the AI (close to today), or the plugin first and the AI
+   only when trimming is not enough.
+2. **What the AI gets afterwards.** The summary plus the newest turns word for word, never fewer than
+   the newest two questions and answers. Not picked: the summary alone.
+3. **Pressing the button yourself** writes the summary right away, while you watch. Not picked: marking
+   the chat and writing it before the next question.
+4. **A game is running when the chat outgrows its room.** Sum up anyway. Not picked: waiting until the
+   game closes; asking first.
+5. **No setting** to turn automatic summing-up off.
+6. **No warning beforehand.** Not picked: a line saying "this chat will sum itself up in about 3 more
+   questions"; a fullness bar.
+7. **Stop during the summary** stops everything: no summary, no answer, the chat unchanged, and the next
+   question tries again. Not picked: skip the summary and still answer.
+8. **If the summary fails or times out**, the question is answered the way it is today, one line says
+   the summary did not happen, and the next question tries again. (Proposed as a default; not objected
+   to.)
+9. **Clear's two jobs.** The remembered strategy subject becomes part of each chat: a new chat starts
+   with none, and an older chat gets its own back. The running game's checklist ticks stay with the
+   game. Not picked: New chat also clearing the ticks; the summary clearing both.
+10. **Language.** The person's reply language. Not picked: always English.
+11. **Editing.** Read-only; pressing the button again writes a fresh one. Not picked: removing a line;
+    editing the text.
+12. **An old chat far too long for one pass** sums up only its newest part, in one wait, and says the
+    oldest turns were left out. Not picked: several passes over all of it.
+13. **A chat that changes game** needs nothing special: a question that names a game already wins over
+    the chat's memory. Not picked: suggesting a new chat; one summary part per game.
+14. **Spoiler chance** (the look-back rating) gets its own plan, later. This plan still makes sure a
+    summary never repeats a hidden note.
+
+**What it looks like**
+
+15. **How the chat tells you.** A note under the answer that came right after summing up: *"The chat
+    summed itself up before this answer. Press to read what it kept."* On the newest answer, pressing it
+    opens Show details on the Session tab. On older answers it is plain text. Not picked: the "earlier"
+    pill saying it; a summary card at the top of the chat.
+16. **The wait.** One line with a spinner and a live timer, *"Summing up the chat so far · 12 s"*. Not
+    picked: the summary's own words scrolling by under it.
+17. **Where the button goes.** At the top of the Session tab, the summary right under it, the turn list
+    below. Not picked: where Clear was, at the bottom; three buttons side by side.
+18. **No confirm box.** Nothing is deleted. Not picked: a "Sum up this chat?" box.
+19. **The button's words.** *Sum up this chat*, then *Sum up again*. Not picked: *Compact this chat*;
+    *Compact*.
+20. **No extra record on the answer.** The note is enough. Not picked: a *Chat summed up · 16 turns ·
+    24 s* chip in that answer's Show details.
+
+**Defaults proposed during discovery and not objected to:** the Session tab shows whenever the chat has
+a question in it (its label already does; its body now shows the button even when no turn attached
+anything extra; what its number counts is plan 68 § 8 question 4); the button is greyed out, with a reason, while an answer is being written or when the
+whole chat still fits; closing the plugin mid-summary does not stop it; the summary stays around 200
+words however many times it is rewritten; it is saved inside the chat's own file; the summary is never
+read aloud; Settings' own *Clear session* is unchanged.
+
+**The one gate.** The plan's first step measures the real wait on the Deck. If it is over a minute with a
+game running, the build stops and the number goes back to the maintainer before anything else is built.
+
+**Found during discovery:** since 2026-09-21 the Session tab's Clear box says "Start the next question
+fresh?", but the chat's own memory still goes with the next question, so the box promises more than it
+does. The plan removes Clear, which ends it.
+
+What these answers do to the roadmap: the entry "The chat sums itself up instead of being cleared" gets a
+link to plan 68 and loses its "Compact replacing Clear" wording in favour of *Sum up this chat*; its
+spoiler chance rating becomes a separate, later piece.

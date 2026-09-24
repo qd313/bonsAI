@@ -65,9 +65,7 @@ import type { AskModeId } from "../data/askMode";
 import {
   frozenTestChipsActive,
   getRandomPresetExcluding,
-  getRandomPresets,
   type PresetPrompt,
-  type PresetSamplerOptions,
 } from "../data/presets";
 import {
   advanceCarouselFocus,
@@ -111,48 +109,21 @@ import {
   PRESET_DECODE_CHAR_MS,
   PRESET_DECODE_CHURN_REFRESH_MS,
 } from "../features/preset-carousel/presetChipDecodeText";
+import {
+  normalizeThreeSeeds,
+  PRESET_CAROUSEL_ACTIVE_MS,
+  PRESET_CAROUSEL_FADE_IN_MS,
+  PRESET_CAROUSEL_FADE_OUT_MS,
+  type PresetChipAnimationMode,
+  prefersReducedMotion,
+  type SlotFade,
+  slotStaggerMs,
+} from "../features/preset-carousel/presetChipShared";
 
 // Re-exported so MainTabPresetAnimatedChips.test.tsx's existing imports keep working unchanged;
-// the real definitions now live in presetChipDecodeText.ts alongside the rest of the decode maths.
-export { composeDecodeText, PRESET_DECODE_CARET_CHAR };
-
-/*
- * Fade timings for chips side by side: while one chip fades, the other is still there, so a slow
- * out and a quicker in read as a calm swap rather than an empty row. They were cut to 500/500 while
- * the row was one chip (2026-08-31) because that chip left the row blank for three seconds per
- * cycle; restored 2026-09-01 with the second chip.
- */
-/** Fade-in duration (ms); must match the slot wrapper transition when opacity increases. */
-const PRESET_CAROUSEL_FADE_IN_MS = 1000;
-/** Fade-out duration (ms); must match the slot wrapper transition when opacity decreases. */
-const PRESET_CAROUSEL_FADE_OUT_MS = 2000;
-/** Carousel schedules new preset cycles for this long after mount/re-seed; in-flight fades still complete, then no more swaps until remount. */
-export const PRESET_CAROUSEL_ACTIVE_MS = 60_000;
-/** Stagger each slot's first appearance so the chips never move in lockstep. */
-const PRESET_SLOT_STAGGER_MS: readonly number[] = [750, 1300, 1700];
-function slotStaggerMs(slotIndex: number): number {
-  return PRESET_SLOT_STAGGER_MS[slotIndex] ?? PRESET_SLOT_STAGGER_MS[PRESET_SLOT_STAGGER_MS.length - 1]!;
-}
-
-type SlotFade = { opacity: number; transitionMs: number };
-
-/**
- * Three contextual seeds still arrive from upstream (and a frozen QA batch is applied at count
- * 3), even though PRESET_VISIBLE_SLOTS show at a time — the slot rotation queues the rest.
- */
-function normalizeThreeSeeds(
-  seeds: PresetPrompt[],
-  samplerOptions?: PresetSamplerOptions,
-): [PresetPrompt, PresetPrompt, PresetPrompt] {
-  const fallback = getRandomPresets(3, samplerOptions);
-  return [
-    seeds[0] ?? fallback[0]!,
-    seeds[1] ?? fallback[1]!,
-    seeds[2] ?? fallback[2]!,
-  ];
-}
-
-type PresetChipAnimationMode = "fade" | "carousel" | "static" | "decode";
+// the real definitions now live in presetChipDecodeText.ts / presetChipShared.ts alongside the
+// rest of the decode maths and the shared row timings, respectively.
+export { composeDecodeText, PRESET_CAROUSEL_ACTIVE_MS, PRESET_DECODE_CARET_CHAR };
 
 export type MainTabPresetAnimatedChipsProps = {
   /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
@@ -182,11 +153,6 @@ export type MainTabPresetAnimatedChipsProps = {
    */
   presetSingleChip?: boolean;
 };
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 /**
  * The prompt text. A prompt longer than its chip scrolls sideways through Steam's own Marquee —

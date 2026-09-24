@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 482,
-  "edgeCount": 1279,
+  "fileCount": 483,
+  "edgeCount": 1281,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -555,6 +555,7 @@
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
         "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetRowNav.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
@@ -1548,6 +1549,7 @@
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
         "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetSlotRotation.test.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
@@ -2224,6 +2226,14 @@
       ]
     },
     "src/features/preset-carousel/presetChipDecodeText.ts": {
+      "imports": [
+        "src/data/presets.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx"
+      ]
+    },
+    "src/features/preset-carousel/presetChipShared.ts": {
       "imports": [
         "src/data/presets.ts"
       ],

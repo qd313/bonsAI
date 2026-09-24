@@ -202,6 +202,7 @@ import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
+import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
 import { subscribeToSpoilerFenceOpenChange } from "./MainTabBonsaiAiMarkdownChunk";
 
@@ -598,15 +599,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
         }
       : null);
 
-  /*
-   * Which turn's reasoning block is open, if any. Closed by default, always: this starts at null
-   * on every mount, so a reopened saved chat and a panel closed and opened again both come back
-   * closed, and changing which turn is open closes it too.
-   */
-  const [reasoningOpenFor, setReasoningOpenFor] = useState<string | null>(null);
-  useEffect(() => {
-    setReasoningOpenFor(null);
-  }, [expandedTurnKey]);
+  /* The Show reasoning row's own open/closed state — lifted into its own hook, called from
+     exactly the spot this block occupied (tests/test_ask_hook_order.py). */
+  const { reasoningOpenFor, setReasoningOpenFor } = useReasoningFoldState(expandedTurnKey);
 
   /* Which turns have their "From the notes" block open, and scrolling a block's own header into
      view the moment it opens — lifted into its own hook, called from exactly the spot this block

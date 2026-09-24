@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 454,
-  "edgeCount": 1198,
+  "fileCount": 455,
+  "edgeCount": 1199,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -474,6 +474,7 @@
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/usePermHintNavTargets.ts",
         "src/hooks/useReadAloudAutoStop.ts",
+        "src/hooks/useReasoningFoldState.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
@@ -2695,6 +2696,12 @@
       "imports": [
         "src/hooks/useReadAloud.ts"
       ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
+    "src/hooks/useReasoningFoldState.ts": {
+      "imports": [],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx"
       ]

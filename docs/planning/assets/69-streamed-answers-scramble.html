@@ -1,0 +1,670 @@
+<title>Scramble Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --ground: #0a0f14;
+    --surface: #111922;
+    --surface-2: #17212c;
+    --line: rgba(160, 190, 220, 0.14);
+    --ink: #dfe7ee;
+    --muted: #8a9cae;
+    --accent: #6fbf93;
+    --accent-ink: #0b1a12;
+    --cyan: #38bdf8;
+    --deck-text: #d4dde6;
+    --ui: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    --deck-font: "Motiva Sans", Arial, "Segoe UI", sans-serif;
+  }
+  html, body { background: var(--ground); color: var(--ink); }
+  body { font-family: var(--ui); font-size: 14px; line-height: 1.5; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 16px 48px; display: grid; gap: 22px; }
+
+  header h1 { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 70ch; }
+  header p b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- controls ---------- */
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .group { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 14px; display: grid; gap: 10px; align-content: start; }
+  .group h2 { margin: 0; font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .row { display: grid; gap: 5px; }
+  .row > .lab { font-size: 12.5px; color: var(--ink); }
+  .row > .hint { font-size: 12px; color: var(--muted); }
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; border: 0; margin: 0; padding: 0; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label { font-size: 12.5px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); cursor: pointer; user-select: none; }
+  .seg input:checked + label { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 500; }
+  .seg input:focus-visible + label { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .slider { display: flex; align-items: center; gap: 10px; }
+  .slider input { flex: 1; accent-color: var(--accent); }
+  .slider output { font: 12px var(--mono); color: var(--ink); min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button.act { font: 500 13px var(--ui); padding: 8px 16px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); cursor: pointer; }
+  button.act.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button.act:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  button.act:disabled { opacity: 0.4; cursor: default; }
+
+  .strip { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: grid; gap: 6px; }
+  .strip .cap { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .strip canvas { width: 100%; height: 34px; display: block; }
+
+  /* ---------- the deck panes ---------- */
+  .stage { display: grid; gap: 10px; }
+  .stage > .cap { font-size: 12px; color: var(--muted); }
+  .panes { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  .pane { display: grid; gap: 8px; }
+  .pane-title { font-size: 13px; font-weight: 500; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .pane-title .tag { font: 500 10.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: var(--surface-2); color: var(--muted); }
+  .pane-title .tag.on { background: rgba(111, 191, 147, 0.18); color: var(--accent); }
+  .readout { font: 11.5px/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; max-width: 300px; }
+  .readout b { color: var(--ink); font-weight: 500; }
+
+  /* Deck-true block, measured on the Deck 2026-09-24: 300 px column, 267 px answer bubble, 12 px text, 1.4 line height, Steam colours copied from the stylesheet */
+  .deck {
+    width: 300px; max-width: 100%; height: 430px; overflow-y: auto; box-sizing: border-box;
+    background: linear-gradient(180deg, #1a222c 0%, #10161d 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px;
+    padding: 10px 8px; display: flex; flex-direction: column; gap: 6px;
+    font-family: var(--deck-font); scrollbar-width: thin;
+  }
+  .q-bubble {
+    align-self: flex-end; max-width: 92%; box-sizing: border-box; text-align: right;
+    padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(22, 34, 48, 0.78) 0%, rgba(14, 22, 34, 0.82) 100%);
+    color: #8fa8c4; font-size: 12px; line-height: 1.4;
+  }
+  .a-bubble {
+    align-self: flex-start; width: 267px; max-width: 100%; box-sizing: border-box; border-radius: 8px;
+    border: 1px solid rgba(46, 135, 83, 0.48);
+    background:
+      linear-gradient(0deg, rgba(130, 183, 152, 0.11), rgba(130, 183, 152, 0.11)),
+      linear-gradient(180deg, rgba(46, 135, 83, 0.12) 0%, rgba(18, 52, 34, 0.55) 100%);
+    color: var(--deck-text); font-size: 12px; line-height: 1.4; padding: 8px 10px;
+    white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .a-bubble.live { animation: pulse 2000ms ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.12); } 50% { box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.28); } }
+  .a-bubble .md-h { font-size: 13px; font-weight: 700; color: #eaf1f7; margin: 0 0 4px; white-space: pre-wrap; }
+  .a-bubble .md-p { margin: 0 0 6px; }
+  .a-bubble .md-ul { margin: 0 0 6px; padding-left: 16px; white-space: normal; }
+  .a-bubble .md-li { margin: 0 0 3px; white-space: pre-wrap; }
+  .a-bubble > :last-child { margin-bottom: 0; }
+  .a-bubble .b { font-weight: 700; color: #eef3f8; }
+  .a-bubble .code { font: 11px/1.45 Consolas, ui-monospace, monospace; background: rgba(0, 0, 0, 0.32); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; padding: 6px 8px; margin: 0 0 6px; white-space: pre-wrap; }
+  .a-bubble .spoiler { margin: 0 0 6px; padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(150, 187, 223, 0.45); background: rgba(24, 40, 58, 0.45); color: rgba(190, 205, 220, 0.9); font-size: 11.5px; }
+  .a-bubble .wait { display: inline-flex; align-items: center; gap: 8px; margin: 2px 0 6px; padding: 4px 10px; border-radius: 6px; border: 1px dashed rgba(56, 189, 248, 0.55); color: #9fd8f5; font-size: 11.5px; animation: waitpulse 2000ms ease-in-out infinite; }
+  .a-bubble .wait.sp { border-color: rgba(150, 187, 223, 0.45); color: rgba(190, 205, 220, 0.9); background: rgba(24, 40, 58, 0.45); }
+  .a-bubble .spin { width: 12px; height: 12px; border: 2px solid rgba(56, 189, 248, 0.25); border-top-color: #38bdf8; border-radius: 50%; animation: spin 2000ms linear infinite; box-sizing: border-box; }
+  @keyframes waitpulse { 50% { opacity: 0.55; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .a-bubble .endcaret { margin-left: 2px; opacity: 0.85; animation: blink 0.9s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0.15; } }
+  .a-bubble .thinking { color: #8fa8c4; font-style: italic; }
+  /* the scrambling tail */
+  .pane[data-tail="dim"] .s { opacity: 0.5; }
+  .pane[data-tail="green"] .s { color: #5b9e7e; }
+  .pane[data-tail="cyan"] .s { color: #7fd3f7; }
+  .devtag { font: 500 10px var(--mono); letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 5px; margin-left: 6px; border-radius: 4px; background: rgba(56, 189, 248, 0.14); color: #7fd3f7; white-space: nowrap; }
+  .decided { display: grid; gap: 4px; padding-top: 8px; border-top: 1px solid var(--line); }
+  .decided .lab { font-size: 12.5px; }
+  .decided ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 12px; display: grid; gap: 2px; }
+  body.paused .a-bubble, body.paused .a-bubble * { animation-play-state: paused !important; }
+  .state { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .state.paused { color: #f2c46d; }
+  .stopped { font-size: 11px; color: #8fa8c4; font-style: italic; padding-left: 4px; }
+
+  /* ---------- decode chip reference ---------- */
+  .chips { width: 300px; max-width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 8px; box-sizing: border-box; background: linear-gradient(180deg, #1a222c 0%, #10161d 100%); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.06); font-family: var(--deck-font); }
+  .chip { height: 30px; border-radius: 4px; padding: 0 8px; display: flex; align-items: center; font-size: 12px; line-height: 1.2; color: #c4d3e2; background: linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%); border: 1px solid rgba(255, 255, 255, 0.10); overflow: hidden; white-space: pre; text-overflow: ellipsis; min-width: 0; }
+  .chip span { overflow: hidden; text-overflow: ellipsis; white-space: pre; }
+
+  details.nums { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+  details.nums summary { cursor: pointer; font-size: 13px; font-weight: 500; }
+  details.nums ul { margin: 10px 0 2px; padding-left: 18px; color: var(--muted); font-size: 12.5px; display: grid; gap: 4px; }
+  details.nums b { color: var(--ink); font-weight: 500; }
+  details.nums code { font: 12px var(--mono); color: var(--ink); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Scramble Stream</h1>
+    <p>A working mockup for the roadmap item <b>“Streamed answers arrive with the same scramble as the decode chips.”</b>
+      Both panels below get the exact same answer, arriving the same way. The left one streams like bonsAI does today.
+      The right one adds the scramble on top. Nothing here is built into the plugin yet — every setting on this page is a choice we still have to make.</p>
+  </header>
+
+  <section class="controls" aria-label="Settings">
+    <div class="group">
+      <h2>The answer coming in</h2>
+      <div class="row"><span class="lab">Which answer</span>
+        <fieldset class="seg" id="f-answer">
+          <input type="radio" name="answer" id="ans-short" value="short"><label for="ans-short">Short tip</label>
+          <input type="radio" name="answer" id="ans-long" value="long" checked><label for="ans-long">List + spoiler</label>
+          <input type="radio" name="answer" id="ans-code" value="code"><label for="ans-code">Code box</label>
+        </fieldset></div>
+      <div class="row"><span class="lab">How fast the model writes</span>
+        <div class="slider"><input type="range" id="rate" min="4" max="60" step="1" value="16"><output id="rate-out" for="rate">16 a second</output></div>
+        <span class="hint">Starts at 16, measured on the Deck today for a real bonsAI question with a game running. A short question with a game: 20. A short question, no game: 35. Changes the stream as it runs.</span></div>
+      <div class="row"><span class="lab">How it reaches the panel</span>
+        <fieldset class="seg" id="f-delivery">
+          <input type="radio" name="delivery" id="dl-blocks" value="blocks" checked><label for="dl-blocks">Today · held back in blocks</label>
+          <input type="radio" name="delivery" id="dl-steady" value="steady"><label for="dl-steady">With the hold-up fixed</label>
+        </fieldset>
+        <span class="hint">Measured on the Deck: today the plugin passes text on only once about 30 pieces have piled up, so it arrives in lumps every 1.5–2 seconds with a game running.</span></div>
+    </div>
+
+    <div class="group">
+      <h2>The scramble (right panel)</h2>
+      <div class="row"><span class="lab">How letters settle <span class="devtag">Developer tab setting</span></span>
+        <fieldset class="seg" id="f-style">
+          <input type="radio" name="style" id="st-a" value="A"><label for="st-a">A · Chip pace</label>
+          <input type="radio" name="style" id="st-b" value="B" checked><label for="st-b">B · Settle after a moment</label>
+          <input type="radio" name="style" id="st-c" value="C"><label for="st-c">C · Fixed-width tail</label>
+        </fieldset>
+        <span class="hint" id="style-hint"></span></div>
+      <div class="row" id="row-dwell"><span class="lab">How long each letter scrambles</span>
+        <div class="slider"><input type="range" id="dwell" min="120" max="900" step="20" value="320"><output id="dwell-out" for="dwell">320 ms</output></div></div>
+      <div class="row" id="row-window" hidden><span class="lab">How many letters stay scrambled</span>
+        <div class="slider"><input type="range" id="win" min="3" max="30" step="1" value="10"><output id="win-out" for="win">10 letters</output></div></div>
+      <div class="row"><span class="lab">Colour of the scrambled letters <span class="devtag">Developer tab setting</span></span>
+        <fieldset class="seg" id="f-tail">
+          <input type="radio" name="tail" id="tl-same" value="same" checked><label for="tl-same">Same as text</label>
+          <input type="radio" name="tail" id="tl-dim" value="dim"><label for="tl-dim">Dimmer</label>
+          <input type="radio" name="tail" id="tl-green" value="green"><label for="tl-green">bonsAI green</label>
+          <input type="radio" name="tail" id="tl-cyan" value="cyan"><label for="tl-cyan">Streaming cyan</label>
+        </fieldset></div>
+      <div class="decided">
+        <span class="lab">Already decided</span>
+        <ul>
+          <li>No blinking block cursor while the scramble is on</li>
+          <li>Spaces between words stay real spaces</li>
+          <li>When the answer finishes, the last letters finish settling</li>
+          <li>The thinking lines above the answer never scramble</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>View</h2>
+      <div class="row"><span class="lab">Size</span>
+        <fieldset class="seg" id="f-zoom">
+          <input type="radio" name="zoom" id="z1" value="1" checked><label for="z1">True size</label>
+          <input type="radio" name="zoom" id="z15" value="1.5"><label for="z15">1.5×</label>
+          <input type="radio" name="zoom" id="z2" value="2"><label for="z2">2×</label>
+        </fieldset>
+        <span class="hint">True size matches the Deck's own screen: 12 px text, a 300 px wide panel, a 267 px answer bubble.</span></div>
+      <div class="row"><span class="lab">Deck frame rate while answering</span>
+        <fieldset class="seg" id="f-frames">
+          <input type="radio" name="frames" id="fr-deck" value="deck" checked><label for="fr-deck">As measured with a game</label>
+          <input type="radio" name="frames" id="fr-smooth" value="smooth"><label for="fr-smooth">Smooth</label>
+        </fieldset>
+        <span class="hint">Measured today: 90 frames a second before a question, about 38 while the model thinks, 8–40 while answer text appears (single frames up to 168 ms), back to 90 when it ends.</span></div>
+      <div class="row"><span class="lab">Playback speed</span>
+        <div class="slider"><input type="range" id="play" min="0.05" max="2" step="0.05" value="1"><output id="play-out" for="play">1×</output></div>
+        <span class="hint">Slows or speeds up everything on the page, the stream and the scramble together.</span></div>
+      <div class="row"><span class="lab">Replay</span>
+        <fieldset class="seg" id="f-loop">
+          <input type="radio" name="loop" id="lp-on" value="on" checked><label for="lp-on">Replay on its own</label>
+          <input type="radio" name="loop" id="lp-off" value="off"><label for="lp-off">Play once</label>
+        </fieldset></div>
+      <div class="actions">
+        <button class="act primary" id="pause" type="button" aria-pressed="false">Pause</button>
+        <button class="act" id="ask" type="button">Start over</button>
+        <button class="act" id="stop" type="button">Stop the answer</button>
+      </div>
+      <span class="hint" style="font-size:12px;color:var(--muted)">Space bar also pauses and plays. Every setting applies as it runs, except which answer, which starts on the next replay.</span>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Pieces arriving">
+    <div class="cap"><span>Pieces arriving at the panel — each bar is one delivery, taller means more text at once</span><span><span id="strip-stat"></span> <span class="state" id="state">Playing</span></span></div>
+    <canvas id="strip" height="34"></canvas>
+  </section>
+
+  <section class="stage" aria-label="Deck panels">
+    <div class="panes" id="panes">
+      <div class="pane" id="pane-off" data-tail="same">
+        <div class="pane-title">Toggle off <span class="tag">today</span></div>
+        <div class="deck" id="deck-off"></div>
+        <div class="readout" id="read-off"></div>
+      </div>
+      <div class="pane" id="pane-on" data-tail="same">
+        <div class="pane-title">Toggle on <span class="tag on">scramble</span></div>
+        <div class="deck" id="deck-on"></div>
+        <div class="readout" id="read-on"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage" aria-label="Decode chips for comparison">
+    <div class="cap">For comparison: the decode chips as they run today, with their real timings</div>
+    <div id="chip-zoom"><div class="chips" id="chips"><div class="chip"><span></span></div></div></div>
+  </section>
+
+  <details class="nums">
+    <summary>The numbers this mockup copies from the plugin</summary>
+    <ul>
+      <li><b>Decode chips:</b> one letter settles every <code>42 ms</code>; scrambled letters reshuffle every <code>55 ms</code>; the block cursor blinks every <code>450 ms</code>; scramble letters are plain keyboard symbols plus narrow Japanese katakana.</li>
+      <li><b>Streaming today:</b> the panel asks for new text every <code>150 ms</code>; the smoothing shows text at a steady rate, fast enough to catch up in about <code>0.18 s</code>, never slower than <code>40</code> letters a second; a finished code box reveals three times faster; when the answer ends, whatever is left appears at once.</li>
+      <li><b>Answer bubble:</b> 12 px text, line height 1.4, 92% of the chat width, the cyan glow and blinking end cursor while it streams. The waiting chip and spoiler box wording here is approximate.</li>
+      <li><b>Measured on the Deck, 24 September 2026</b>, with Deep Rock Galactic: Survivor running: the model writes a piece every 50 ms, but the plugin passes text on only in blocks of about 30 pieces, because it waits for 4 KB of the model's output before reading any of it. That is one lump of about 115 letters every 1.5–2 seconds. The panel drew 90 frames a second at rest, about 38 while the model was thinking, and 8–40 while answer text appeared.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+(() => {
+  // ---------- constants copied from the plugin ----------
+  const CHAR_MS = 42, CHURN_MS = 55, BLINK_MS = 450, POLL_MS = 150;
+  const DRAIN_S = 0.18, MIN_RATE = 40, COAST_FRAMES = 12, BURST_MULT = 3, BURST_TICKS = 45;
+  const CARET = "▋";
+  const POOL = (() => { let p = ""; for (let c = 0x21; c <= 0x7e; c++) p += String.fromCharCode(c); for (let c = 0xff66; c <= 0xff9d; c++) p += String.fromCharCode(c); return p; })();
+  const glyph = () => POOL[Math.floor(Math.random() * POOL.length)];
+  const esc = (s) => s.replace(/[&<>]/g, (c) => (c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"));
+
+  // ---------- example answers (examples only) ----------
+  const ANSWERS = {
+    short: {
+      q: "How do I beat Hornet?",
+      raw: "Hornet shows every attack before she makes it. When she pulls her arm back, she is about to throw her needle: jump over it, then hit her as it flies back to her. Stay close after her dash, and you can land two or three hits before she moves again. Heal only while she is stunned or in the air — healing is slow, and she will punish it anywhere else.",
+    },
+    long: {
+      q: "How do I beat Hornet in Greenpath?",
+      raw: [
+        "## Hornet in Greenpath",
+        "",
+        "She has four moves, and each one has a tell. Learn the tells and the fight gets much easier.",
+        "",
+        "- **Needle throw:** she pulls her arm back. Jump over the needle, then strike as it returns.",
+        "- **Dash:** a short pause, then she lunges straight at you. Jump, or dash under her.",
+        "- **Air dive:** she leaps and angles down. Walk away from where she will land.",
+        "- **Thread storm:** she spins in place. Back off until it stops.",
+        "",
+        "Heal only while she is stunned — about every fourth hit knocks her down.",
+        "",
+        "```spoiler",
+        "After the fight she runs off, and you get the Mothwing Cloak.",
+        "```",
+        "",
+        "If you keep dying, explore a little first: an extra mask makes this much easier.",
+      ].join("\n"),
+    },
+    code: {
+      q: "How do I add gold with the console in Skyrim?",
+      raw: [
+        "Open the console with the key under Escape, then type this and press Enter:",
+        "",
+        "```",
+        "player.additem f 1000",
+        "```",
+        "",
+        "Change **1000** to any amount. Achievements are switched off for that save once you use the console, so make a separate save first if you care about them.",
+      ].join("\n"),
+    },
+  };
+
+  // ---------- tiny markdown layout over the raw text ----------
+  function parse(raw) {
+    const blocks = [];
+    const vis = new Uint8Array(raw.length);
+    let s = 0, fence = null;
+    for (const line of raw.split("\n")) {
+      const e = s + line.length;
+      if (fence) {
+        if (line.trim() === "```") { if (fence.chars.length) fence.chars.pop(); fence.closeEnd = e; fence = null; }
+        else { for (let k = 0; k < line.length; k++) fence.chars.push({ i: s + k, ch: line[k] }); fence.chars.push({ i: e, ch: "\n" }); }
+      } else if (line.startsWith("```")) {
+        fence = { type: line.includes("spoiler") ? "spoiler" : "code", fence: true, start: s, chars: [], closeEnd: Infinity };
+        blocks.push(fence);
+      } else if (line.trim() !== "") {
+        let type = "p", off = 0;
+        if (line.startsWith("## ")) { type = "h"; off = 3; } else if (line.startsWith("- ")) { type = "li"; off = 2; }
+        const b = { type, start: s, chars: [] };
+        let bold = false;
+        for (let k = off; k < line.length; k++) {
+          if (line[k] === "*" && line[k + 1] === "*") { bold = !bold; k++; continue; }
+          b.chars.push({ i: s + k, ch: line[k], bold }); vis[s + k] = 1;
+        }
+        blocks.push(b);
+      }
+      s = e + 1;
+    }
+    const pre = new Int32Array(raw.length + 1);
+    for (let i = 0; i < raw.length; i++) pre[i + 1] = pre[i] + vis[i];
+    return { blocks, vis, pre, codeCloses: blocks.filter((b) => b.fence && b.type === "code").map((b) => b.closeEnd) };
+  }
+
+  // ---------- settings ----------
+  const $ = (id) => document.getElementById(id);
+  const radio = (name) => document.querySelector(`input[name="${name}"]:checked`).value;
+  const cfg = {};
+  function readCfg() {
+    // Decided by the maintainer: no cursor, spaces stay spaces, the tail finishes settling.
+    cfg.style = radio("style"); cfg.caret = "none"; cfg.keepSpaces = true;
+    cfg.tail = radio("tail"); cfg.finish = "decode"; cfg.zoom = +radio("zoom");
+    cfg.dwell = +$("dwell").value; cfg.win = +$("win").value;
+    cfg.rate = +$("rate").value; cfg.play = +$("play").value;
+    cfg.blocks = radio("delivery") === "blocks"; cfg.deckFrames = radio("frames") === "deck"; cfg.loop = radio("loop") === "on";
+    $("dwell-out").textContent = cfg.dwell + " ms"; $("win-out").textContent = cfg.win + " letters";
+    $("rate-out").textContent = cfg.rate + " a second";
+    $("play-out").textContent = (Math.round(cfg.play * 100) / 100) + "×";
+    $("row-dwell").hidden = cfg.style !== "B"; $("row-window").hidden = cfg.style !== "C";
+    $("style-hint").textContent = {
+      A: "Exactly the chip: one letter settles every 42 ms, whatever the model is doing. A fast model outruns it and the scramble grows.",
+      B: "Every letter scrambles for the same short time after it arrives, then settles. Keeps up with any speed; bursts show as a longer scrambled run.",
+      C: "Always the same number of scrambled letters at the end. When text stops coming, the tail keeps churning until more arrives.",
+    }[cfg.style];
+    $("pane-on").dataset.tail = cfg.tail;
+    $("panes").style.zoom = cfg.zoom; $("chip-zoom").style.zoom = cfg.zoom;
+    dirty = true;
+  }
+  document.querySelectorAll(".controls input").forEach((el) => el.addEventListener("input", readCfg));
+
+  // ---------- one ask ----------
+  let S = null, dirty = true;
+  function tokenize(raw) {
+    const toks = raw.match(/\s*[^\s]{1,5}|\s+/g) || [];
+    return toks;
+  }
+  function startAsk(now) {
+    const key = radio("answer");
+    const a = ANSWERS[key];
+    const P = parse(a.raw);
+    const tokEnd = [];
+    let end = 0;
+    for (const tk of tokenize(a.raw)) { end += tk.length; tokEnd.push(end); }
+    S = {
+      a, P, raw: a.raw, tokEnd, tokPtr: 0, nextTokAt: now + 700, replayAt: null, t0: now,
+      asking: true, done: false, stopped: false, target: 0, nextPollAt: now + POLL_MS,
+      disp: 0, sRunning: false, sLast: null, idle: 0, burst: 0,
+      arrival: new Float64Array(a.raw.length).fill(Infinity),
+      churn: Array.from({ length: a.raw.length }, glyph),
+      lock: 0, credit: 0, finishing: false, finishRate: 0,
+      lastChurn: 0, lastBlink: 0, caretOn: true, deliveries: [], doneAt: null, settledAt: null,
+    };
+    dirty = true; drawStrip();
+    $("stop").disabled = false;
+  }
+
+  // The model writes one piece at a time at whatever speed the slider says right now.
+  function producedLen(now) {
+    while (S.tokPtr < S.tokEnd.length && S.nextTokAt <= now) {
+      S.tokPtr++;
+      S.nextTokAt += (1000 / cfg.rate) * (0.6 + Math.random() * 0.8);
+    }
+    return S.tokPtr ? S.tokEnd[S.tokPtr - 1] : 0;
+  }
+  function setTarget(n, now) {
+    const prev = S.target;
+    if (n === prev) return;
+    if (S.P.codeCloses.some((c) => c > prev && c <= n)) S.burst = BURST_TICKS;
+    S.target = n;
+    S.deliveries.push({ t: now - S.t0, n: n - prev });
+    drawStrip();
+    if (!S.sRunning && S.target > S.disp) { S.sRunning = true; S.sLast = null; S.idle = 0; }
+  }
+  const BLOCK_PIECES = 30; // 4096-byte reads / about 135 bytes per streamed line, measured 2026-09-24
+  function poll(now) {
+    let produced = producedLen(now);
+    if (cfg.blocks) { const whole = Math.floor(S.tokPtr / BLOCK_PIECES) * BLOCK_PIECES; produced = whole ? S.tokEnd[whole - 1] : 0; }
+    if (S.tokPtr >= S.tokEnd.length) {
+      setTarget(S.raw.length, now);
+      finish(now, false);
+      return;
+    }
+    setTarget(produced, now);
+    S.nextPollAt = now + POLL_MS;
+  }
+  function finish(now, stopped) {
+    S.asking = false; S.done = true; S.stopped = stopped; S.doneAt = now;
+    S.disp = S.target; // today's behaviour: the rest appears at once
+    for (let i = 0; i < S.disp; i++) if (S.arrival[i] === Infinity) S.arrival[i] = now;
+    S.sRunning = false;
+    const remaining = S.P.pre[S.disp] - S.P.pre[Math.min(S.lock, S.disp)];
+    if (stopped || cfg.finish === "snap" || remaining === 0) { S.lock = S.disp; S.settledAt = now; }
+    else { S.finishing = true; S.credit = 0; S.finishRate = Math.max(1 / CHAR_MS, remaining / 600); }
+    $("stop").disabled = true;
+    dirty = true;
+  }
+
+  // copy of the plugin's smoothing
+  function smoothTick(now) {
+    if (!S.sRunning || S.done) return;
+    const prev = S.sLast ?? now; S.sLast = now;
+    const dt = Math.max(0, (now - prev) / 1000);
+    const backlog = S.target - S.disp;
+    if (backlog <= 0) { S.idle++; if (S.idle > COAST_FRAMES) { S.sRunning = false; S.sLast = null; } return; }
+    S.idle = 0;
+    let rate = Math.max(MIN_RATE, backlog / DRAIN_S);
+    if (S.burst > 0) { rate *= BURST_MULT; S.burst--; }
+    const step = Math.max(1, Math.floor(rate * dt) || 1);
+    const from = S.disp;
+    S.disp = Math.min(S.target, S.disp + step);
+    for (let i = from; i < S.disp; i++) S.arrival[i] = now;
+  }
+
+  function lockTick(now, dt) {
+    const L = S.disp, vis = S.P.vis;
+    const skipFree = () => { while (S.lock < L && !vis[S.lock]) S.lock++; };
+    if (S.finishing) {
+      S.credit += dt * S.finishRate;
+      skipFree();
+      while (S.lock < L && S.credit >= 1) { S.credit--; S.lock++; skipFree(); }
+      if (S.lock >= L) { S.finishing = false; S.settledAt = now; }
+      return;
+    }
+    if (S.done) return;
+    if (cfg.style === "A") {
+      skipFree();
+      if (S.lock >= L) { S.credit = 0; return; }
+      S.credit = Math.min(S.credit + dt / CHAR_MS, 10);
+      while (S.lock < L && S.credit >= 1) { S.credit--; S.lock++; skipFree(); }
+    } else if (cfg.style === "B") {
+      while (S.lock < L && (!vis[S.lock] || S.arrival[S.lock] + cfg.dwell <= now)) S.lock++;
+    } else {
+      const pre = S.P.pre;
+      while (S.lock < L && (!vis[S.lock] || pre[L] - pre[S.lock] > cfg.win)) S.lock++;
+    }
+  }
+
+  // ---------- rendering ----------
+  function renderBubble(lock, scramble) {
+    const L = S.disp, P = S.P;
+    if (L === 0 && S.asking) return `<span class="thinking">Thinking…</span>`;
+    let boundary = -1;
+    if (scramble) for (let i = lock; i < L; i++) if (P.vis[i]) { boundary = i; break; }
+    const showLockCaret = scramble && S.caretOn && (cfg.caret === "lock" || cfg.caret === "both");
+    const showEndCaret = S.asking && (!scramble || cfg.caret === "end" || cfg.caret === "both");
+    let html = "", inList = false, lastText = -1;
+    const parts = [];
+    for (const b of P.blocks) { if (b.start >= L) break; parts.push(b); }
+    parts.forEach((b, idx) => { if (!b.fence) lastText = idx; });
+    parts.forEach((b, idx) => {
+      if (b.type === "li" && !inList) { html += `<ul class="md-ul">`; inList = true; }
+      if (b.type !== "li" && inList) { html += `</ul>`; inList = false; }
+      if (b.fence) {
+        if (b.closeEnd > L) {
+          html += b.type === "spoiler"
+            ? `<div><span class="wait sp"><span class="spin"></span>A spoiler is coming…</span></div>`
+            : `<div><span class="wait"><span class="spin"></span>Waiting for the code box to finish…</span></div>`;
+        } else if (b.type === "spoiler") {
+          html += `<div class="spoiler">Spoiler hidden · press A to show</div>`;
+        } else {
+          html += `<div class="code">${esc(b.chars.filter((c) => c.i < L).map((c) => c.ch).join(""))}</div>`;
+        }
+        return;
+      }
+      let out = "", cls = null, buf = "";
+      const flush = () => { if (buf) out += cls ? `<span class="${cls}">${esc(buf)}</span>` : esc(buf); buf = ""; };
+      for (const c of b.chars) {
+        if (c.i >= L) break;
+        const scr = scramble && c.i >= lock;
+        let ch;
+        if (!scr) ch = c.ch;
+        else if (c.ch === " " && cfg.keepSpaces) ch = " ";
+        else if (c.i === boundary && showLockCaret) ch = CARET;
+        else ch = S.churn[c.i];
+        const k = [c.bold ? "b" : "", scr ? "s" : ""].join(" ").trim() || null;
+        if (k !== cls) { flush(); cls = k; }
+        buf += ch;
+      }
+      flush();
+      if (idx === lastText && idx === parts.length - 1 && showEndCaret) out += `<span class="endcaret">${CARET}</span>`;
+      const tag = b.type === "h" ? "md-h" : b.type === "li" ? "md-li" : "md-p";
+      html += b.type === "li" ? `<li class="${tag}">${out}</li>` : `<div class="${tag}">${out}</div>`;
+    });
+    if (inList) html += `</ul>`;
+    return html;
+  }
+
+  function renderPane(deck, lock, scramble) {
+    const live = S.asking;
+    deck.innerHTML =
+      `<div class="q-bubble">${esc(S.a.q)}</div>` +
+      `<div class="a-bubble${live ? " live" : ""}">${renderBubble(lock, scramble)}</div>` +
+      (S.stopped ? `<div class="stopped">Stopped — partial answer kept.</div>` : "");
+    if (live || S.finishing) deck.scrollTop = deck.scrollHeight;
+  }
+
+  function readouts(now) {
+    const pre = S.P.pre, L = S.disp;
+    const arrived = pre[L];
+    $("read-off").innerHTML = `Letters on screen <b>${arrived}</b>` + (S.doneAt ? ` · finished at <b>${((S.doneAt - S.t0) / 1000).toFixed(1)} s</b>` : "");
+    const settled = pre[Math.min(S.lock, L)];
+    let oldest = 0;
+    for (let i = S.lock; i < L; i++) if (S.P.vis[i]) { oldest = Math.max(0, now - S.arrival[i]); break; }
+    $("read-on").innerHTML =
+      `Settled <b>${settled}</b> · scrambling <b>${arrived - settled}</b> · oldest has waited <b>${(oldest / 1000).toFixed(2)} s</b>` +
+      (S.settledAt ? ` · all settled at <b>${((S.settledAt - S.t0) / 1000).toFixed(1)} s</b>` : "");
+    $("read-off").innerHTML += ` · panel drawing <b>${deckFrameTimes.length}</b> frames a second`;
+    const st = $("state");
+    const next = S.replayAt != null ? ` · next replay in ${Math.max(0, (S.replayAt - now) / 1000).toFixed(1)} s` : "";
+    st.textContent = paused ? "Paused" : (S.asking ? "Streaming" : S.finishing ? "Settling" : "Finished") + next;
+    st.classList.toggle("paused", paused);
+  }
+
+  // ---------- delivery strip ----------
+  function drawStrip() {
+    const cv = $("strip"); if (!S) return;
+    const w = cv.clientWidth || 600, h = 34, dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    const span = Math.max(8000, (S.deliveries.at(-1)?.t ?? 0) + 800);
+    g.strokeStyle = "rgba(160,190,220,0.18)"; g.beginPath(); g.moveTo(0, h - 0.5); g.lineTo(w, h - 0.5); g.stroke();
+    g.fillStyle = "#6fbf93";
+    let biggest = 0;
+    for (const d of S.deliveries) {
+      const x = (d.t / span) * (w - 4);
+      const bh = Math.max(2, Math.min(h - 2, d.n / 4));
+      biggest = Math.max(biggest, d.n);
+      g.fillRect(x, h - 1 - bh, 2.5, bh);
+    }
+    $("strip-stat").textContent = S.deliveries.length ? `${S.deliveries.length} deliveries · biggest ${biggest} letters at once` : "";
+  }
+  window.addEventListener("resize", drawStrip);
+
+  // ---------- decode chips (the real behaviour) ----------
+  const CHIP_PROMPTS = ["What should I do next here?", "How do I beat Hornet?", "Where is the Mothwing Cloak?", "Any tips for this area?", "Explain this boss's attacks", "Is there a map for Greenpath?"];
+  let chipPick = 0;
+  const chipEls = [...document.querySelectorAll("#chips .chip span")];
+  const chips = chipEls.map((el, i) => ({ el, text: "", start: 0, churn: [], resolved: true, holdEnd: 0, beginAt: performance.now() + i * 400 }));
+  function chipBegin(c, now) { c.text = CHIP_PROMPTS[chipPick++ % CHIP_PROMPTS.length]; c.start = now; c.churn = Array.from(c.text, glyph); c.resolved = false; c.el.textContent = compose(c.text, 0, c.churn, true); }
+  function compose(text, n, churn, caretOn) { if (n >= text.length) return text; return text.slice(0, n) + (caretOn ? CARET : churn[n] ?? " ") + churn.slice(n + 1).join(""); }
+  let chipChurnAt = 0, chipBlinkAt = 0, chipCaret = true;
+  function chipsTick(now) {
+    const churnDue = now - chipChurnAt >= CHURN_MS, blinkDue = now - chipBlinkAt >= BLINK_MS;
+    if (blinkDue) { chipCaret = !chipCaret; chipBlinkAt = now; }
+    for (const c of chips) {
+      if (c.resolved) { if (now >= Math.max(c.holdEnd, c.beginAt)) chipBegin(c, now); continue; }
+      const n = Math.min(c.text.length, Math.floor((now - c.start) / CHAR_MS));
+      if (n >= c.text.length) { c.resolved = true; c.holdEnd = now + 2600; c.el.textContent = c.text; continue; }
+      if (churnDue) c.churn = Array.from(c.text, glyph);
+      c.el.textContent = compose(c.text, n, c.churn, chipCaret);
+    }
+    if (churnDue) chipChurnAt = now;
+  }
+
+  // ---------- frame loop (with an optional slow-motion clock) ----------
+  const REPLAY_GAP_MS = 2500;
+  let realLast = null, simNow = performance.now(), lastKey = "", paused = false;
+  let nextDeckFrame = 0, lastDeckFrame = null;
+  const deckFrameTimes = [];
+  // Frame gaps measured on the Deck 2026-09-24 with Deep Rock Galactic: Survivor running.
+  function deckFrameGap() {
+    const r = Math.random();
+    if (!S || !S.asking) return 11;                                           // 90 fps at rest and after the answer
+    if (S.disp === 0) return r < 0.6 ? 20 + r * 30 : 45 + r * 55;              // thinking: about 38 fps
+    return r < 0.5 ? 20 + r * 40 : r < 0.85 ? 90 + (r - 0.5) * 100 : 125 + (r - 0.85) * 290; // text appearing
+  }
+  function frame(real) {
+    const realDt = realLast == null ? 0 : Math.min(100, real - realLast);
+    realLast = real;
+    const dt = paused ? 0 : realDt * cfg.play;
+    simNow += dt;
+    const now = simNow;
+    if (S && !paused) {
+      // Replay loop: once everything has settled, wait a moment and ask again.
+      if (S.done && !S.finishing) {
+        if (!cfg.loop) S.replayAt = null;
+        else if (S.replayAt == null) S.replayAt = now + REPLAY_GAP_MS;
+        else if (now >= S.replayAt) { startAsk(now); }
+        dirty = true;
+      }
+      // The model and the back end run on their own clock, whatever the panel's frame rate.
+      if (S.asking) producedLen(now);
+      if (S.asking && now >= S.nextPollAt) poll(now);
+      // The panel only draws on a Deck frame. "As measured" copies the frame gaps recorded today.
+      if (cfg.deckFrames && now < nextDeckFrame) { requestAnimationFrame(frame); return; }
+      const fdt = lastDeckFrame == null ? dt : now - lastDeckFrame;
+      lastDeckFrame = now;
+      nextDeckFrame = now + deckFrameGap();
+      deckFrameTimes.push(now);
+      while (deckFrameTimes.length && deckFrameTimes[0] < now - 1000) deckFrameTimes.shift();
+      chipsTick(now);
+      smoothTick(now);
+      lockTick(now, fdt);
+      if (now - S.lastChurn >= CHURN_MS) {
+        for (let i = Math.min(S.lock, S.disp); i < S.disp; i++) S.churn[i] = glyph();
+        S.lastChurn = now; dirty = true;
+      }
+      if (now - S.lastBlink >= BLINK_MS) { S.caretOn = !S.caretOn; S.lastBlink = now; dirty = true; }
+      const key = `${S.disp}|${S.lock}|${S.asking}|${S.stopped}`;
+      if (key !== lastKey) { dirty = true; lastKey = key; }
+      if (dirty) {
+        renderPane($("deck-off"), S.disp, false);
+        renderPane($("deck-on"), S.lock, true);
+        readouts(now);
+        dirty = false;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function setPaused(p) {
+    paused = p;
+    document.body.classList.toggle("paused", p);
+    const b = $("pause");
+    b.textContent = p ? "Play" : "Pause";
+    b.setAttribute("aria-pressed", String(p));
+    if (S) readouts(simNow);
+  }
+  $("pause").addEventListener("click", () => setPaused(!paused));
+  document.addEventListener("keydown", (e) => {
+    if (e.code !== "Space" || e.repeat) return;
+    const t = e.target;
+    if (t instanceof HTMLButtonElement || t instanceof HTMLInputElement) return;
+    e.preventDefault();
+    setPaused(!paused);
+  });
+  $("ask").addEventListener("click", () => startAsk(simNow));
+  $("stop").addEventListener("click", () => { if (S && S.asking) finish(simNow, true); });
+
+  readCfg();
+  startAsk(simNow);
+  requestAnimationFrame(frame);
+})();
+</script>

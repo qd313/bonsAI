@@ -1,0 +1,127 @@
+{
+ "row": "Scramble streaming discovery: how streamed text really reaches the panel on the Deck. A MEASUREMENT, no code changed.",
+ "deck_time": "2026-09-24 13:34-13:42 EDT",
+ "screen": "Deck's own screen (eDP-1 enabled, DP-1 disabled); page reports screen 853x533 at 1.5; plugin column 300 CSS px; answer bubble 267 CSS px; answer text 12px",
+ "model": "gemma4:e2b-it-qat (the Deck's only chat model), think on, ask_mode strategy, think effort medium",
+ "a_model_rhythm_over_ssh": {
+  "how": "scratchpad stream_rhythm.py piped over ssh: POST /api/chat stream=true, short Hollow Knight question (54 prompt tokens), every streamed line timed on the Deck",
+  "idle": {
+   "label": "idle-1",
+   "model": "gemma4:e2b-it-qat",
+   "first_piece_ms": 7940.8,
+   "first_answer_ms": 18456.9,
+   "answer_pieces": 430,
+   "answer_chars": 1914,
+   "thinking_pieces": 324,
+   "answer_span_ms": 12369.3,
+   "answer_gaps": {
+    "n": 429,
+    "median": 28.6,
+    "p90": 29.7,
+    "p99": 32.7,
+    "max": 40.1,
+    "over_300ms": 0
+   },
+   "ollama": {
+    "eval_count": 811,
+    "eval_duration": 23038814000,
+    "prompt_eval_count": 54,
+    "prompt_eval_duration": 458698000,
+    "load_duration": 7353597541,
+    "total_duration": 30855005540
+   }
+  },
+  "game_running_drg_survivor_menu": {
+   "label": "game-1",
+   "model": "gemma4:e2b-it-qat",
+   "first_piece_ms": 831.4,
+   "first_answer_ms": 19898.8,
+   "answer_pieces": 328,
+   "answer_chars": 1487,
+   "thinking_pieces": 464,
+   "answer_span_ms": 15671.0,
+   "answer_gaps": {
+    "n": 327,
+    "median": 49.9,
+    "p90": 53.7,
+    "p99": 59.8,
+    "max": 82.5,
+    "over_300ms": 0
+   },
+   "ollama": {
+    "eval_count": 854,
+    "eval_duration": 34888145000,
+    "prompt_eval_count": 54,
+    "prompt_eval_duration": 440435000,
+    "load_duration": 1604221,
+    "total_duration": 35622304051
+   }
+  },
+  "reading": "The model itself is even: a piece every 29 ms idle, every 50 ms with the game, never a gap over 83 ms."
+ },
+ "b_panel_path_game_running": {
+  "how": "Deep Rock Galactic: Survivor launched (deck_launchGame), bonsAI opened over it, question sent from the Ask button. Recorder 1 in SharedJSContext called get_background_game_ai_status every 150 ms (the panel's own cadence) and kept every change. Recorder 2 in the QAM page timed every animation frame and the live bubble's text length.",
+  "question": "What are good early weapon upgrades for the Driller in Deep Rock Galactic Survivor? Keep it to a short list.",
+  "status_changes_ms_since_recorder_start": [
+   [
+    0,
+    "idle",
+    0
+   ],
+   [
+    26676,
+    "pending, no text",
+    0
+   ],
+   [
+    75807,
+    "streaming",
+    59
+   ],
+   [
+    77605,
+    "streaming",
+    172
+   ],
+   [
+    79459,
+    "streaming",
+    275
+   ],
+   [
+    81439,
+    "streaming",
+    395
+   ],
+   [
+    83168,
+    "streaming",
+    520
+   ],
+   [
+    84859,
+    "streaming",
+    638
+   ],
+   [
+    86606,
+    "completed",
+    627
+   ]
+  ],
+  "status_call_ms": {
+   "median": 5,
+   "p90": 28,
+   "max": 160
+  },
+  "reading_delivery": "New answer text reached the panel every 1.7-2.0 s in steps of about 100-125 characters, although the recorder asked 555 times at 150 ms. Cause (read from the code and one streamed line's size): the back end reads Ollama's stream with resp.read(4096), which waits for a full 4 KB; one streamed line is about 135 bytes, so a block is about 30 pieces, about 1.5-1.8 s with a game running.",
+  "frames_per_250ms_window": {
+   "before the ask": "22-23 (90 fps, 11 ms frames)",
+   "thinking, no text changing": "7-12 (about 38 fps, worst frame 50-100 ms)",
+   "answer text appearing": "2-10 (8-40 fps, worst frame 168 ms)",
+   "after completion": "22-23 again"
+  },
+  "reading_frames": "While the model runs with a game, the panel already drops well below 60 fps; the reveal moments are the worst. Scrambling must be measured against this, not against 60 fps."
+ },
+ "cleanup": "Both recorders stopped and removed from the page; game exited (deck_exitGame, then checked over ssh); keep-awake released. One question and answer was added to whichever chat was open on the Main tab."
+}

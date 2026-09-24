@@ -125,7 +125,6 @@ import {
   buildReasoningOpenBlock,
 } from "../utils/buildReasoningFoldElement";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
@@ -203,6 +202,7 @@ import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloud } from "../hooks/useReadAloud";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
+import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
 import { subscribeToSpoilerFenceOpenChange } from "./MainTabBonsaiAiMarkdownChunk";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
@@ -797,24 +797,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     }
   }, [expandedTurnKey]);
 
-  /*
-   * Nav targets for the two permission-hint rows below the transcript — see
-   * `focusChatPermissionHintRow`'s comment above for why this replaced a registered button handle
-   * and `focusDeckOwner`. Registered for the lifetime of this component rather than only while the
-   * row is actually rendered: `takeNavFocus` already treats an unpopulated or stale holder as "not
-   * available" (`navFocusRegistry.ts`), which is exactly the state a conditionally-unmounted row
-   * leaves behind, so there is nothing to additionally guard here.
-   */
-  const troubleshootHintNavRef = useRef<NavRefHolder["current"]>(null);
-  const vacDenyRowNavRef = useRef<NavRefHolder["current"]>(null);
-  useEffect(() => {
-    registerNavFocus("chat-perm-hint-troubleshoot", troubleshootHintNavRef);
-    return () => unregisterNavFocus("chat-perm-hint-troubleshoot", troubleshootHintNavRef);
-  }, []);
-  useEffect(() => {
-    registerNavFocus("chat-perm-hint-deny", vacDenyRowNavRef);
-    return () => unregisterNavFocus("chat-perm-hint-deny", vacDenyRowNavRef);
-  }, []);
+  /* Nav targets for the two permission-hint rows below the transcript — lifted into its own
+     hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
+  const { troubleshootHintNavRef, vacDenyRowNavRef } = usePermHintNavTargets();
 
   const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
   /*

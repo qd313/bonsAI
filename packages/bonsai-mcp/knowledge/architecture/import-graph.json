@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 452,
-  "edgeCount": 1196,
+  "fileCount": 453,
+  "edgeCount": 1197,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -472,6 +472,7 @@
         "src/features/unified-input/constants.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useKbNotesFold.ts",
+        "src/hooks/usePermHintNavTargets.ts",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
@@ -497,7 +498,6 @@
         "src/utils/drgGlossaryAsk.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
-        "src/utils/navFocusRegistry.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/reasoningDisplay.ts",
         "src/utils/replyStopRegistry.ts",
@@ -2570,6 +2570,14 @@
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
+    "src/hooks/usePermHintNavTargets.ts": {
+      "imports": [
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/hooks/usePermissionJump.test.ts": {
       "imports": [
         "src/hooks/usePermissionJump.ts",
@@ -4340,7 +4348,6 @@
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
-        "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
@@ -4362,6 +4369,7 @@
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
+        "src/hooks/usePermHintNavTargets.ts",
         "src/index.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/liveTurnFocusGraph.ts",

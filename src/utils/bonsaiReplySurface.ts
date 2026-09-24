@@ -16,6 +16,7 @@
  * Does not: check whether a question has finished being answered — see useBackgroundGameAi and
  * bonsaiAskCompletionWatch for that. This file only tracks whether the screen for it is showing.
  */
+import { useLayoutEffect } from "react";
 import { Navigation, QuickAccessTab } from "@decky/ui";
 
 let replySurfaceVisible = false;
@@ -28,6 +29,24 @@ export function isReplySurfaceVisible(): boolean {
 
 export function setReplySurfaceVisible(visible: boolean): void {
   replySurfaceVisible = visible;
+}
+
+/**
+ * Keep the flag in step with the panel while it is mounted, and clear it when the panel goes.
+ *
+ * The clearing is the part that matters. Closing the Quick Access Menu, or backing out of bonsAI to
+ * Decky's list, unmounts the panel, and nothing mounted is left to write `false`. The flag then held
+ * its last value, true, so a reply finishing in the background read as "already on screen" and the
+ * notification skipped itself. On the Deck 2026-09-23 (plan 64) it never appeared in two tries,
+ * one closing the menu with the controller's shortcut and one backing out with B.
+ */
+export function useReplySurfaceVisibility(visible: boolean): void {
+  useLayoutEffect(() => {
+    replySurfaceVisible = visible;
+    return () => {
+      replySurfaceVisible = false;
+    };
+  }, [visible]);
 }
 
 /** Open Decky QAM from a toast tap; remounted Content should consume pending Main focus. */

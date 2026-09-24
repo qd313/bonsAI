@@ -124,6 +124,7 @@
     "src/utils/bonsaiAskCompletionWatch.test.ts",
     "src/utils/bonsaiPhaseToast.test.ts",
     "src/utils/bonsaiReplyReadyToast.test.ts",
+    "src/utils/bonsaiReplySurface.test.ts",
     "src/utils/bonsaiSessionSurvival.test.ts",
     "src/utils/buildAnswerBubbleElement.test.tsx",
     "src/utils/buildReplyActionsElement.test.tsx",

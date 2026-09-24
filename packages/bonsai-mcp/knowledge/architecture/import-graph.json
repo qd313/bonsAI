@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 423,
-  "edgeCount": 1082,
+  "fileCount": 424,
+  "edgeCount": 1083,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3361,13 +3361,20 @@
         "src/utils/bonsaiReplyReadyToast.test.ts"
       ]
     },
+    "src/utils/bonsaiReplySurface.test.ts": {
+      "imports": [
+        "src/utils/bonsaiReplySurface.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/bonsaiReplySurface.ts": {
       "imports": [],
       "importedBy": [
         "src/index.tsx",
         "src/utils/bonsaiAskCompletionWatch.test.ts",
         "src/utils/bonsaiReplyReadyToast.test.ts",
-        "src/utils/bonsaiReplyReadyToast.ts"
+        "src/utils/bonsaiReplyReadyToast.ts",
+        "src/utils/bonsaiReplySurface.test.ts"
       ]
     },
     "src/utils/bonsaiSessionSurvival.test.ts": {

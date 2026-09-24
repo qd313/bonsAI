@@ -109,7 +109,7 @@ import {
   shouldIgnoreRestoredSettingsSnapshot,
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
-import { consumePendingFocusMainTab, setReplySurfaceVisible } from "./utils/bonsaiReplySurface";
+import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
 import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
 import { clearBonsaiBrowserStorage } from "./utils/clearBonsaiBrowserStorage";
 import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
@@ -290,9 +290,7 @@ const Content: React.FC = () => {
 
   const quickAccessVisible = useQuickAccessVisible();
 
-  useLayoutEffect(() => {
-    setReplySurfaceVisible(quickAccessVisible && currentTab === "main");
-  }, [quickAccessVisible, currentTab]);
+  useReplySurfaceVisibility(quickAccessVisible && currentTab === "main");
 
   useLayoutEffect(() => {
     if (consumePendingFocusMainTab()) {

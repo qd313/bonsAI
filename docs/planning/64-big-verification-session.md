@@ -588,3 +588,42 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
   knowledge base was pointed back at its SD-card copy.
 - **Tooling:** the toast reader proved itself mid-flow, catching an unrelated "Pull started" notice on its
   first read before the real check needed it.
+
+### Flow G — the intermittent bugs, and the checks carried over from flow E, 2026-09-23 21:58 to 22:22 (Deck time), build `9fdb7a4`, the Deck's own screen
+
+- **Deploy:** experimental's tip at the time, `9fdb7a4` (carries `97cde97` and `a34be74`, tonight's two
+  latest fixes, along with everything flow E already proved).
+- **Two of tonight's fixes still failed on the Deck (2), real causes found and fixed the same night:** the
+  ring-on-finish fix did not change what the Deck showed — the ring still vanished at the finish and the
+  view still jumped to the end (evidence STREAM-WALK-REC-01-try3); the real cause was the answer bubble
+  changing shape at the exact moment it finished, fixed in `64b34a8`. The knowledge base still read "Not
+  installed" through the whole SD-card download (evidence TWO-TAPS-DOWNLOAD-try2); the real cause was
+  closing the storage picker rebuilding the tab and losing track of the running download, fixed in
+  `ba0bb0d`. Both Deck checks move to flow H.
+- **One carried-over check closed:** with the library installed on the SD card, turning a switch on and
+  pressing Done on the AI models screen no longer wrote the old, deleted location back over it (fix
+  `9fdb7a4`, evidence KB-PATH-KEPT-ON-DONE).
+- **A cause measured, not a pass/fail (the notes block's scroll):** a recorder caught the one scroll write
+  the plugin makes when a notes block opens and found it already landing exactly where it was asked to —
+  Steam's own scroll area keeps 116 pixels clear at its own top, and the request honoured that space
+  instead of ignoring it. Fixed the same night (`d305863`) by asking the pane directly instead; Deck check
+  moves to flow H. Side observation, not fixed: the ring lands on the Ollama tab's own icon after the
+  storage picker closes, the same tab-rebuild cause as the "Not installed" bug above.
+- **Two checks carried over from flow E:** the made-up-model-name check passed — the toast now names the
+  tag it could not find and suggests real ones, nothing downloaded, and a real typed name still downloads
+  normally (evidence PULL-MISSING-NAME-01-try3). The warm-up timing comparison still could not run: the
+  small model pulled to stand in for one under the cap had no row at all on the AI models screen, because
+  the default Essentials-only view was hiding every installed model outside the three essentials. Found and
+  fixed the same night (`b26f536`); both this check and the timing comparison move to flow H.
+- **Two measurements, neither a fix:** the chat-still-writing dot — one clean try, with a log captured for
+  the whole switch, did not show the bug (the dot read "pending" then turned green right at the log's own
+  finish line), but the window was short and it stays open on the maintainer's own call, having been seen
+  three times before. The stuck panel — one deliberate try under a recorder, its last known trigger (A on
+  the empty question box), did not reproduce on this build; stays open the same way.
+- **Two possible new sightings, both already-filed bugs, logged as sightings rather than new entries:** the
+  "No close match" line closing a Half-Life 2 answer that had three notes attached and its own note block
+  on screen; and a line of answer text showing under the "Context: no active game detected" line at the
+  bottom of the panel.
+- **Carried into flow H:** the four fixes above (`ba0bb0d`, `64b34a8`, `d305863`, `b26f536`), plus two
+  earlier same-night fixes from flow E (`017c4f8`, `2e6f6df`) — six Deck checks in total, none proven on
+  the device yet.

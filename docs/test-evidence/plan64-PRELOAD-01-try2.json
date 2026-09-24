@@ -1,0 +1,45 @@
+{
+ "row": "PRELOAD-01 - the warm-up timing (flow E row 5, run as flow G row G7)",
+ "file_note": "The runbook asked to overwrite plan64-PRELOAD-01.json. The driver's rule is never to overwrite an evidence file, so this run is written as -try2; flow E's file is untouched and copied in below as earlier_attempt.",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip, deployed 21:58)",
+ "deck_time": "2026-09-23 22:11:30-22:17:10 EDT",
+ "screen": "Deck's own screen (AI models screen in Big Picture; screenshot 1280x800)",
+ "setup": "Start: ollama list = nomic-embed-text:latest, gemma4:e2b-it-qat. text_model_routing_order [] (empty), vision_model_routing_order ['gemma4:e2b-it-qat'], dev_preload_ask_model false, model_allow_high_vram_fallbacks false.",
+ "pressed": [
+  "AI models screen: 'Type a model name by hand' A, deck_set_input.py --text 'qwen2.5:1.5b' VERIFIED, Left -> 'Pull custom model tag', A (about 22:11:40)",
+  "toast 'Pull started / qwen2.5:1.5b - watch progress in Settings.'; the AI models screen closed itself (ring back on 'Browse models...')",
+  "download: about 986 MB; speed fell to about 533 KB/s at 82% (log 22:15:46); ollama list showed qwen2.5:1.5b at 22:16:07 (read 22:16:10)",
+  "flow E row 5 step 1: ollama list shows qwen2.5:1.5b - OK",
+  "step 2: 'Browse models...' A -> AI models screen. Looked for the installed row of qwen2.5:1.5b and its star 'Use qwen2.5:1.5b for Ask'",
+  "second try of the same route: B to close the screen, A on 'Browse models...' again - same result"
+ ],
+ "seen": {
+  "after_pull_settings": {
+   "text_model_routing_order": [],
+   "vision_model_routing_order": [
+    "gemma4:e2b-it-qat"
+   ],
+   "dev_preload_ask_model": false
+  },
+  "ollama_ps_22:16:10": "gemma4:e2b-it-qat loaded (100% GPU, until 4 hours from now)",
+  "ai_models_screen": "Header 'Installed 3 · 5.0 GB' (5.3 GB on the second open), 'Filters · 2 on: Also try open-weight models, Essentials only'. Rows shown: DECK ESSENTIALS gemma4:e2b-it-qat (star, X), qwen3.5:4b, qwen2.5vl:3b; OTHER INSTALLED (NOT IN CURATED CATALOG) nomic-embed-text:latest (X). No row for qwen2.5:1.5b anywhere, and no element with an aria-label naming it. Only star labels present: 'Use gemma4:e2b-it-qat for Ask' and the nomic 'cannot answer questions' one.",
+  "why": "'Essentials only' is the picker's default view (src/components/PullModelsModal.test.tsx says so) and it lives inside the Filters panel; qwen2.5:1.5b is in the curated catalog but not an essential, so it is neither in the essentials list nor in 'Other installed'. Saved policy keys: model_policy_tier 'open_weight', model_policy_non_foss_unlocked false."
+ },
+ "not_done": "Steps 2-6 of flow E row 5 (star, cold run, warm run, restore) were not run: the runbook's route to the star does not exist on this screen, and turning the filter off would be a new route. The removal of qwen2.5:1.5b 'through the screen' could not be done either, for the same reason: it has no row, so no Remove from Deck.",
+ "left_behind": "qwen2.5:1.5b is STILL INSTALLED (986 MB). text_model_routing_order still [] (empty), dev_preload_ask_model still false. Nothing else changed.",
+ "possible_bug": "A model pulled by typed name, or any installed catalog model that is not one of the three essentials, has no row on the AI models screen in its default view: a person cannot star it for Ask or remove it without first finding 'Essentials only' inside Filters. The header still counts it ('Installed 3').",
+ "screenshot": "plan64-PRELOAD-01-try2-no-row.png",
+ "verdict": "COULD NOT RUN (past step 1). The pull worked; the installed qwen2.5:1.5b has no row on the AI models screen in its default 'Essentials only' view, so its star cannot be pressed. Tried twice (close and reopen). No timing measured.",
+ "earlier_attempt": {
+  "row": "PRELOAD-01 - the warm-up timing comparison (flow E row 5)",
+  "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+  "deck_time": "2026-09-23 21:45 EDT",
+  "screen": "Deck's own screen (Big Picture 854x534; QAM window 854x454, read 854x494 once at 21:39 before a reload)",
+  "setup": "qwen2.5:1.5b is not installed; gemma3:27b (17 GB) still installed with the high-VRAM switch on, so no questions may be asked.",
+  "pressed": [],
+  "seen": {
+   "blocker": "Since the pause (checked 21:39-21:45): on the Ollama tab the ring stops on 'Update AI & models' (or 'Install Ollama' after the reload) and Down and Up both do nothing; the page's own focus moves to 'Browse models...' but Steam's ring does not follow. document.hasFocus() reads false in both the Quick Access page and the Big Picture page. Tried: L3 wake, closing and reopening the menu, a plugin reload (21:43), the Steam button then B. None cleared it. Every row left needs 'Manage AI models...', which is below that point."
+  },
+  "verdict": "COULD NOT RUN - needs the AI models screen (to pull qwen2.5:1.5b and remove gemma3:27b first), which the ring cannot reach; and no question may be sent while gemma3:27b is installed."
+ }
+}

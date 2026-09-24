@@ -178,8 +178,16 @@ grew from 750 to 1,060 pixels as the answer kept arriving — the first real Dec
 the same recording, both filed separately: with the ring on the chat row instead of inside the answer, the
 view followed the growing answer and carried the row off the top of the screen (already fixed the same
 night); and at the exact moment an answer finishes while it is being walked, the ring can vanish completely
-and the view jumps to the very end (still open). Evidence
+and the view jumps to the very end. Evidence
 `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+
+**Run 2026-09-23 (try 3), the vanishing-ring half, with fix `97cde97` now on the build:** still FAILED —
+the ring vanished the same way at the finish and the view jumped to the end again. The real cause was found
+and fixed the same night, `64b34a8`: the answer bubble drew itself bare while streaming, then was wrapped
+with its Copy button once it finished, so the bubble changed shape at the exact moment the ring needed it
+to stay put and got rebuilt from scratch; its sections were also tracked by what kind of piece they were
+rather than where they sat. Both are fixed now. Owed: the same walk on the Deck, scheduled in flow H
+(**H4**). Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json` (+ screenshots).
 
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`

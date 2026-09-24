@@ -1,0 +1,81 @@
+{
+ "row": "G5 - who undoes the notes block's scroll? (a measurement)",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip, deployed 21:58)",
+ "deck_time": "2026-09-23 22:07:45-22:09:40 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshot 1280x800)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on (SD card, 2026.09.18), no game running. Question (VERIFIED): 'how do i get through ravenholm in half life 2 when i am low on ammo'. Log 22:07:47 'rules+cards=2310 (attached 1228 chars)'; completed 22:08:30 in 43.4 s. The answer got a notes block: 'Ravenholm (+2 more) · From the Half-Life wiki, show' - no game launch was needed.",
+ "pressed": [
+  "Up x2 from the (unowned) ring: question box, Test chip, then the notes block header - ring read on it, aria-expanded false, box top 204, 47 tall, fully visible",
+  "armed deck_scrollwrite_log.py at 22:08:56.1, waited about 1 s, A once, no presses for 6 s",
+  "screenshot at 22:09:08, read the recorder at about 22:09:17 (after its 20 s)",
+  "A again to close the block (aria-expanded false after)"
+ ],
+ "just_before_press": {
+  "scrollTop": 584,
+  "max": 598,
+  "paneTop": 88,
+  "dockTop": 289,
+  "blockTop": 204,
+  "blockBottom": 251,
+  "headerTop": 205
+ },
+ "timeline_ms_since_arm": {
+  "7": "frame: scrollTop 584 of 598, block 204-251 closed, ring on the block",
+  "2692": "scrollIntoView({block:'start'}) on the header's inner DIV, pane scrollTop before 584; stack: bonsAI dist/index.js line 42331 - the useEffect that scrolls the just-opened notes header, inside requestAnimationFrame",
+  "2694": "native scroll event, scrollTop 585",
+  "2695": "frame: scrollTop 585, max 1044, block 203-697 open, header top 204, ring still on the block",
+  "2695-20000": "nothing else: no other scroll write, no scroll event, no frame change"
+ },
+ "height_change_vs_scroll_request": "No frame was recorded between the closed state (ms 7) and ms 2695, so the block's height change and the scroll request happened in the same frame. By the next frame max had already grown from 598 to 1044, so the scroll request ran with the block already open (it measured the new height).",
+ "other_scroll_writes_after": "none",
+ "where_the_header_ended": "header top 204 vs pane top 88: 116 px below the top of the scroll area. Visible part of the open block: 203 to the dock at 289 = 86 px of 494 px (17%).",
+ "cause_found": "The scroll area (._TabContentsScroll) has CSS scroll-padding-top: 116px (read with getComputedStyle after the press). scrollIntoView({block:'start'}) aligns the element to the top of the scroll area PLUS that padding, i.e. 116 px down - exactly where the header already sat (204 - 88 = 116). So nothing undoes the scroll: the request asks for the position the header is already in, and the view moves 1 px. The header's own scroll-margin-top is 0 px; no inner scroll container sits between the block and the pane.",
+ "recorder_output": {
+  "armed": true,
+  "log": [
+   {
+    "top": 584,
+    "max": 598,
+    "paneTop": 88,
+    "dockTop": 289,
+    "blkTop": 204,
+    "blkBottom": 251,
+    "blkOpen": "false",
+    "hdrTop": 205,
+    "ring": "bonsai-kb-notes-block Panel Focusable gpfocus gpfocuswithin",
+    "ms": 7,
+    "kind": "frame"
+   },
+   {
+    "ms": 2692,
+    "kind": "scrollIntoView",
+    "opts": {
+     "block": "start"
+    },
+    "el": "DIV",
+    "paneTopBefore": 584,
+    "stack": "    at proto.scrollIntoView (<anonymous>:16:138) |     at http://127.0.0.1:1337/plugins/bonsAI/dist/index.js?t=1790215107444:42331:20"
+   },
+   {
+    "ms": 2694,
+    "kind": "scroll-event",
+    "top": 585
+   },
+   {
+    "top": 585,
+    "max": 1044,
+    "paneTop": 88,
+    "dockTop": 289,
+    "blkTop": 203,
+    "blkBottom": 697,
+    "blkOpen": "true",
+    "hdrTop": 204,
+    "ring": "bonsai-kb-notes-block Panel Focusable gpfocus gpfocuswithin",
+    "ms": 2695,
+    "kind": "frame"
+   }
+  ]
+ },
+ "screenshot": "plan64-NOTES-OPEN-SCROLL-rec.png",
+ "verdict": "MEASUREMENT. One scroll write (the plugin's own scrollIntoView 'start' on the header), made after the block had grown, moved the view 1 px; nothing wrote the scroll afterwards. The header ends 116 px below the top of the scroll area because the scroll area's scroll-padding-top is 116 px, which scrollIntoView honours. Only 17% of the open block shows above the dock - same as flow D."
+}

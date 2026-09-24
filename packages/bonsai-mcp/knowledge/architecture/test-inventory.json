@@ -195,6 +195,7 @@
     "tests/test_clear_plugin_data_voice_reset.py",
     "tests/test_clipboard_service.py",
     "tests/test_compat_topic_router.py",
+    "tests/test_delete_model_cleans_routing_orders.py",
     "tests/test_desktop_note_service.py",
     "tests/test_destructive_advice_guard.py",
     "tests/test_destructive_advice_wiring.py",

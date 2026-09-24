@@ -524,6 +524,46 @@ the closing note added at the end of each._
   tap 2, choosing SD card, started the download immediately. The library landed on the SD card, reading
   version 2026.09.18. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json` (+ two screenshots).
 
+### Typing a made-up model name and pressing Pull said the pull started, not that it was refused (closed 2026-09-23)
+
+- ★ `[ollama]` **Typing a made-up model name and pressing Pull says the pull started, not that it was
+  refused** — **VERIFY, fixed in `f65ccfe`.** Typing a name the Ollama library does not have and pressing
+  Pull showed the toast "Pull started — watch progress in Settings," not a refusal; the real cause was that
+  the registry check could not tell "no such model" (a 404 from the server) apart from "no internet
+  reached," so one made-up name read as an offline library and was waved through instead of refused. Row
+  **PULL-MISSING-NAME-01**. Owed: type a made-up name and confirm the toast now says it was not found.
+  **Could not run 2026-09-23 (flow E):** the name was typed into the box, but the session's usage-limit pause
+  hit before Pull was pressed, and after the pause Steam's own highlight froze on the Ollama tab and would
+  not move down far enough to reach it. Carried into flow G. Evidence
+  `docs/test-evidence/plan64-PULL-MISSING-NAME-01.json` (+ `.png`),
+  `docs/test-evidence/plan64-PULL-MISSING-NAME-01-try2.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow G):** typing `zzz-plan64-missing-model` and pressing Pull
+  showed the toast "Pull not started," naming the tag it could not find and suggesting real ones in its
+  place; nothing downloaded. The same run typed a real tag, `qwen2.5:1.5b`, and it downloaded normally,
+  proving the fix does not block a real name. Evidence `docs/test-evidence/plan64-PULL-MISSING-NAME-01-try3.json`
+  (+ `.png`).
+
+### Pressing Done on a popup could write old values back over something the back end had just changed, including a knowledge-base location (closed 2026-09-23)
+
+- ★★ `[ollama]` `[KB]` **Pressing Done on a popup could write old values back over something the back end
+  had just changed, including a knowledge-base location** — **VERIFY, found and fixed the same night,
+  `9fdb7a4`.** The AI models screen, the try-order screen, the AI character picker and the UI scale Apply
+  button each sent their whole copy of settings on save, so anything changed elsewhere since the screen last
+  read settings was overwritten with the old value. Measured on the Deck: after a knowledge-base download
+  saved its new SD-card location, pressing Done on the AI models screen wrote the old, already-deleted
+  internal location back over it, and the tab offered to download the library again — a data-loss-shaped
+  bug for anything saved between a screen opening and Done being pressed. Each popup now sends only what
+  changed on that screen. Owed: after a library download, change a switch on the AI models screen and press
+  Done, and confirm the Knowledge base section still reads Installed on the SD card. Evidence
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck (flow G, step 6 of the two-taps recheck):** without leaving the
+  Knowledge base's Ollama tab, "Allow high-VRAM models in routing" was turned on and Done pressed on the AI
+  models screen; the saved knowledge-base location still named the SD card and the section still read
+  Installed. The switch was turned back off and confirmed saved false, leaving the Deck as it started.
+  Evidence `docs/test-evidence/plan64-KB-PATH-KEPT-ON-DONE.json`.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

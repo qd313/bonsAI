@@ -1,0 +1,64 @@
+{
+ "row": "G4 steps 1-5 - the Knowledge base section shows Installed as soon as a download finishes (fix a34be74); flow E row 2 re-run",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip; deployed 21:58:04 Deck time, loader restarted 21:58:18, contains a34be74 - checked: on_installed is in the deployed main.py and rag_corpus_download_service.py)",
+ "deck_time": "2026-09-23 22:03:31-22:05:13 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshots 1280x800)",
+ "setup": "Ollama tab. Start: Installed - version 2026.09.18, /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag; settings rag_corpus_path = that path, rag_corpus_version 2026.09.18, use_local_knowledge_base true, model_allow_high_vram_fallbacks false, text_model_routing_order [].",
+ "pressed": [
+  "walk Down 7 -> 'Update knowledge base', Right 1 -> 'Remove', A",
+  "confirm box 'Remove knowledge base?' - ring read on 'Remove' - A (22:04:0x)",
+  "walk Down 8 -> 'Download knowledge base', A = tap 1",
+  "picker 'Choose download location': ring on 'Internal storage (~731 GB free)'; Down -> 'SD card (~1141 GB free)'",
+  "armed a 1-second reader of the section (22:04:33), A = tap 2 (22:04:33-34)",
+  "no other press until 22:05:13"
+ ],
+ "seen": {
+  "after_remove": {
+   "screen": "Not installed - download to enable grounded strategy help. / Download knowledge base",
+   "settings": {
+    "rag_corpus_path": "",
+    "rag_corpus_version": "",
+    "use_local_knowledge_base": false
+   },
+   "disk": "SD card rag folder gone",
+   "ring": "Ollama tab"
+  },
+  "tap_1": "picker opened at once: Internal storage (~731 GB free), SD card (~1141 GB free), Close",
+  "log": [
+   "22:04:34.927 rag_corpus_download: Downloading corpus.db.zlib from https://huggingface.co/datasets/qd313/bonsai-knowledge-base/resolve/main/corpus.(cut)",
+   "22:04:35.836 Decompressing corpus",
+   "22:04:35.861 Knowledge base installed at /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag (version 2026.09.18)."
+  ],
+  "settings_file_written": "22:04:35.862 (1 ms after the installed line): rag_corpus_path = SD card path, version 2026.09.18, use_local_knowledge_base true",
+  "screen_each_second_22:04:34-22:04:54": [
+   {
+    "wall": "22:04:34",
+    "state": "Not installed"
+   },
+   {
+    "wall": "22:04:35",
+    "state": "Not installed"
+   },
+   {
+    "wall": "22:04:36",
+    "state": "Not installed"
+   },
+   {
+    "wall": "22:04:37",
+    "state": "Not installed"
+   },
+   {
+    "wall": "22:04:38..22:04:54 (17 more reads, 1 s apart)",
+    "state": "Not installed - download to enable grounded strategy help. / Download knowledge base; ring on 'Ollama tab' every read"
+   }
+  ],
+  "screen_22:05:13": "still 'Not installed - download to enable grounded strategy help.' (37 s after the installed line), no tab switch",
+  "screen_22:06:13": "Installed - version 2026.09.18, SD card path, Update knowledge base, Remove - read after the AI models screen had been opened and closed (G4 step 6); it had not updated on its own before that",
+  "ring_after_picker_closed": "'Ollama tab' (the tab icon at the top), every read from 22:04:34; screenshot -stale.png shows it highlighted - same as flow E"
+ },
+ "screenshots": {
+  "confirm_box": "plan64-TWO-TAPS-DOWNLOAD-try2-confirm.png",
+  "stale_3s_after_install": "plan64-TWO-TAPS-DOWNLOAD-try2-stale.png"
+ },
+ "verdict": "FAIL. The download itself worked (tap 2 on SD card started it at once, it landed on the SD card, version 2026.09.18, settings saved 1 ms after install), but the section kept reading 'Not installed' with the Download button for at least 37 s after the log's 'Knowledge base installed at' line, with no tab switch (pass needed about 5 s). It showed Installed only after the AI models screen was opened and closed. The fix a34be74 is in the running back end, so the screen side is not picking up the change."
+}

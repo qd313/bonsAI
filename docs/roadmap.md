@@ -107,6 +107,8 @@ starts work outside this.
 - ★ `[layout]` **A thin strip of the answer shows through below the game-context line at the bottom of the
   Main panel** — **OPEN, found on the Deck 2026-09-23.** Visible in
   `docs/test-evidence/plan64-BYEYE-01-chat-row.png`, between the dock and Steam's own bottom bar.
+  **Sighting, 2026-09-23:** seen again under the "Context: no active game detected" line. Evidence
+  `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
 - ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
   **OPEN, back from Verify 2026-09-23: failed by measurement.** The move that was meant to hide the dots
   under the strip left no room — the gap between the chat name's letters and the dots measured 0.2 pixels, so
@@ -131,7 +133,14 @@ starts work outside this.
   the screen only once an answer completes, not during the half-written updates along the way — does not
   apply here; the chat's own name rides every update, including the half-written ones, and there is now a
   test proving it. Every step from the back end to the dot reads correctly in the code. What would settle it
-  is a log captured on the Deck while the fault is actually happening.
+  is a log captured on the Deck while the fault is actually happening. **One clean try on the Deck
+  2026-09-23, MEASUREMENT — did not appear:** with a log captured for the whole switch, the first chat's dot
+  read "pending" the moment the switch happened and turned green right when the log showed the answer
+  finishing; the whole answer was there on switching back. Two caveats: the switch happened only about 5
+  seconds after the first words appeared, a shorter window than earlier sightings, and the app log itself
+  wrote nothing new in the seconds around the switch. **Stays open** — seen three times before, so one clean
+  try is not enough to close it; the maintainer's call. Evidence `docs/test-evidence/plan64-BUSY-DOT-01.json`
+  (+ screenshots).
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
@@ -182,7 +191,12 @@ starts work outside this.
   question sent by night's end; only closing the whole Quick Access Menu and reopening it clears it. **Not
   seen at all on 2026-09-19** across about ten questions in four games. A separate, related fault (Down
   doing nothing while an answer arrives) was fixed 2026-09-20 and is now its own row, but this entry's own
-  symptoms were not seen that day, so it stays open. [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  symptoms were not seen that day, so it stays open. **One deliberate try on the Deck 2026-09-23, under a
+  recorder, DID NOT REPRODUCE:** pressed A once on the empty question box (its last known trigger), the
+  on-screen keyboard opened, B closed it, and Down, Right, Up and Down all moved the ring normally
+  afterward. **Stays open** — one clean build does not close a fault that has come and gone before; the
+  maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
+  [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Asking about a boss without naming it, in Hollow Knight or Hades, got it named
   and its tactics given in plain text with no cover — with nothing running, and with the game running and
@@ -425,42 +439,45 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
-- ★ `[ollama]` **Typing a made-up model name and pressing Pull says the pull started, not that it was
-  refused** — **VERIFY, fixed in `f65ccfe`.** Typing a name the Ollama library does not have and pressing
-  Pull showed the toast "Pull started — watch progress in Settings," not a refusal; the real cause was that
-  the registry check could not tell "no such model" (a 404 from the server) apart from "no internet
-  reached," so one made-up name read as an offline library and was waved through instead of refused. Row
-  **PULL-MISSING-NAME-01**. Owed: type a made-up name and confirm the toast now says it was not found.
-  **Could not run 2026-09-23 (flow E):** the name was typed into the box, but the session's usage-limit pause
-  hit before Pull was pressed, and after the pause Steam's own highlight froze on the Ollama tab and would
-  not move down far enough to reach it. Carried into flow G, still running. Evidence
-  `docs/test-evidence/plan64-PULL-MISSING-NAME-01.json` (+ `.png`),
-  `docs/test-evidence/plan64-PULL-MISSING-NAME-01-try2.json`.
 - ★ `[focus]` **The ring is lost when an answer finishes while you are walking it** — **VERIFY, fixed in
   `97cde97`.** Walking Down with the ring already inside an answer as it finishes used to vanish the ring
   completely and jump the view to the very end of the reply — the live answer was swapped for its saved
   copy, and the section holding the ring was destroyed with it. The saved answer now gets the ring on the
   matching section instead. A different, already-fixed case (`e241c5c`) kept the ring's own control and
-  brought it back into view; this fix does the same job for a ring that had vanished outright. Owed: the
-  same walk on the Deck. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+  brought it back into view; this fix does the same job for a ring that had vanished outright. Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`). **Still FAILED on the Deck 2026-09-23
+  (try 3), with the fix above already on the build:** the ring vanished the same way, nothing had it once
+  the answer finished, and the view jumped to the end again. **Real cause found and fixed the same night,
+  `64b34a8`:** the answer bubble drew itself bare while still being written, then got wrapped with its Copy
+  button once it finished — so at the exact moment it finished, the bubble changed shape underneath the
+  ring and was rebuilt from scratch, and its sections were also named by what kind of piece they were
+  rather than where they sat, so even a bubble that survived would have lost the ring anyway. Both are
+  fixed: the bubble keeps the same shape throughout, and its sections are named by position instead. Owed:
+  the same walk on the Deck, now scheduled in flow H (**H4**). Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json` (+ screenshots).
 - ★ `[KB]` **After downloading the knowledge base onto the SD card, the section still read "Not installed"
   for about a minute** — **VERIFY, found and fixed the same night, `a34be74`.** The download marked itself
   finished before the new SD-card path was saved to settings, and the screen checks whether the library is
   installed only once, right when the download's own state turns to done — so that one check found nothing
   saved yet. Measured on the Deck: the section stayed on "Not installed" for about 60 seconds until the
-  Ollama tab was left and reopened. Owed: remove the library, download it again, and watch the section read
-  Installed without leaving the tab. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`.
-- ★★ `[ollama]` `[KB]` **Pressing Done on a popup could write old values back over something the back end
-  had just changed, including a knowledge-base location** — **VERIFY, found and fixed the same night,
-  `9fdb7a4`.** The AI models screen, the try-order screen, the AI character picker and the UI scale Apply
-  button each sent their whole copy of settings on save, so anything changed elsewhere since the screen last
-  read settings was overwritten with the old value. Measured on the Deck: after a knowledge-base download
-  saved its new SD-card location, pressing Done on the AI models screen wrote the old, already-deleted
-  internal location back over it, and the tab offered to download the library again — a data-loss-shaped
-  bug for anything saved between a screen opening and Done being pressed. Each popup now sends only what
-  changed on that screen. Owed: after a library download, change a switch on the AI models screen and press
-  Done, and confirm the Knowledge base section still reads Installed on the SD card. Evidence
-  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
+  Ollama tab was left and reopened. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`. **Still
+  FAILED on the Deck 2026-09-23 (try 2), with the fix above already on the build:** the section kept
+  reading "Not installed" with a Download button the whole download, watched without leaving the tab.
+  **Real cause found and fixed the same night, `ba0bb0d`:** closing the storage-choice picker rebuilds the
+  whole tab underneath it, and the piece of state that remembers a download is running, plus the check that
+  polls for it, were both thrown away and never restarted — so the new tab read the library's status once,
+  before install finished, and never again. A download that started is now remembered across the rebuild.
+  Owed: remove the library, download it again, and watch the section read Installed within a few seconds
+  without leaving the tab, scheduled in flow H (**H5**). Evidence
+  `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`.
+- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off**
+  — **VERIFY, found and fixed the same night, `b26f536`.** Essentials only is meant to narrow the download
+  list to three starter models, but it also hid any other installed model — found while warming up a model
+  pulled for the PRELOAD-01 timing check (row above): the header's own count read "Installed 3" but the
+  model had no row, no star for Ask and no Remove, without opening Filters by hand. Installed models now
+  keep their row regardless of the switch. Owed: open AI models with a non-essential model installed and
+  confirm its row, star and Remove show without Filters, scheduled with PRELOAD-01 in flow H (**H7**).
+  Evidence `docs/test-evidence/plan64-PRELOAD-01-try2-no-row.png`.
 - ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
   Advanced switch change** — **VERIFY, found and fixed the same night, `2e6f6df`.** The screen holds the
   licence and Advanced switches as a draft until Done is pressed, but a typed-name pull closes the screen by
@@ -596,8 +613,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   model survives the Deck sleeping. **Could not run 2026-09-23 (flow E):** the large model from the
   ROUTING-MERGE-01 check above was still installed with the high-VRAM switch on, so no question could be
   asked to warm anything up, and Steam's own highlight froze on the Ollama tab after the session's
-  usage-limit pause, the same freeze blocking the row above. Carried into flow G, still running. Evidence
-  `docs/test-evidence/plan64-PRELOAD-01.json`.
+  usage-limit pause, the same freeze blocking the row above. Carried into flow G. **Could not run again
+  2026-09-23 (flow G):** a small model was pulled by typed name to stand in for one under the cap, but the
+  AI models screen's default view (Essentials only) shows no row for an installed model outside the three
+  essentials, so there was nothing to star for Ask and no way to remove it without opening Filters by hand.
+  **Found and fixed the same night, `b26f536`:** its own new entry below; Deck check scheduled with this
+  row in flow H (**H7**). Evidence `docs/test-evidence/plan64-PRELOAD-01-try2.json` (+ screenshot).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
@@ -735,21 +756,15 @@ ones from this month are D81 to D88.
   reading the code 2026-09-21 (plan 63, lane G).** Two pieces of code build a shared tip's own name
   differently, so the two never match and its source page never reaches the credit line. Rarely bites
   today, since almost no shared tips carry a source page. Not run on the Deck.
-- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **OPEN, found on
-  the Deck 2026-09-23.** Most of its words stay behind the chip and the question box; the header measured
-  33% visible once opened. Found while trying to check whether the chip ladder inside the open block can be
-  reached by D-pad — this reply's block held three shared Deck tips and no chip ladder at all, so that
-  question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`).
-  **Measured again 2026-09-23, still open:** a scroll to the block's top is asked for but never takes
-  effect, and the view had already moved 13 pixels the other way as the block grew while opening — only 86
-  of 493 pixels of the open block show, 17% visible. Evidence
-  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL.json` (+ `.png`).
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, failed on the
   Deck 2026-09-23; was fixed 2026-09-21 (plan 63, lane G, commit `c25456c`).** That fix made the line read
   the best score across every attached note instead of only the first one's, but a Hollow Knight reply built
   on the Broken Vessel note, attached second behind a generic "Starting out" note, still carried the line
   saying nothing close was found — the exact shape the fix was meant to cure. Evidence
-  `docs/test-evidence/plan64-NO-CLOSE-MATCH-HK.json`. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+  `docs/test-evidence/plan64-NO-CLOSE-MATCH-HK.json`. **Sighting, 2026-09-23:** the same wrong line closed a
+  Half-Life 2 answer that had a "Sandtraps (+2 more) · From the Half-Life wiki" block on screen and three
+  notes attached in the log (Sandtraps, Ravenholm, Strider). Evidence
+  `docs/test-evidence/plan64-BUSY-DOT-01.json`. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
@@ -818,6 +833,21 @@ ones from this month are D81 to D88.
   clean passes yet — the relevance floor and the follow-up check are each only half passed, so this entry
   stays open rather than moving to Done.
   [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
+- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **VERIFY, cause
+  found and fixed, `d305863`.** Most of its words used to stay behind the chip and the question box; the
+  header measured 33%, then 17%, visible once opened. Found while checking whether the chip ladder inside
+  the open block reaches by D-pad — that reply's block held three shared Deck tips and no ladder, so that
+  question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`),
+  `docs/test-evidence/plan64-NOTES-OPEN-SCROLL.json` (+ `.png`). **Cause measured 2026-09-23 with a
+  scroll-write recorder:** the plugin asked, once, to scroll the header to the top of the pane — and
+  Steam's own scroll area keeps 116 pixels clear at its own top, which that request honours, so the header
+  was already exactly where it had been asked to go; the request was asking for the wrong place, not
+  failing. Fixed by asking the pane directly to put the header's own top at the pane's own top, ignoring
+  that reserved space, since nothing of ours is pinned there. Owed: reopen the block and confirm its header
+  sits at the pane's top, about 40% of a three-note block showing instead of 17%, in flow H (**H6**).
+  Evidence `docs/test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json` (+ screenshot). **Also observed:** after
+  the storage picker closes on the download above, the ring lands on the Ollama tab's own icon rather than
+  inside the pane — same cause, not fixed, an observation only.
 - ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, ran for the first time and passed,
   2026-09-22,** once the answer-lines lane added the missing log line — recorded as impossible every
   earlier time. Row **KB-TRANSPARENCY-01**, full run in [testing.md](testing.md). **All three attached
@@ -960,15 +990,14 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
 Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
 line for line, nothing reworded, to keep this document under its size limit.
 
-**Closed 2026-09-23 (plan 64, flow E, proven on the Deck):**
+**Closed 2026-09-23 (plan 64, flow G, proven on the Deck):**
 
-- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **DONE,
-  confirmed on the Deck 2026-09-23:** the ring reaches the right switch and stays there, with at most a
-  100 ms flicker through "Back to Main" on the way. [Full detail](archive/roadmap-bugs-fixed.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
-- ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **DONE, confirmed
-  on the Deck 2026-09-23: this is how it is meant to work, not a bug.** Tap 1 opens the storage picker, tap
-  2 starts the download at once. [Full detail](archive/roadmap-bugs-fixed.md#download-knowledge-base-needed-two-taps-the-first-did-nothing-visible).
-- ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **DONE, confirmed on the Deck 2026-09-23:**
-  pressing Update knowledge base reached the public library, and downloading fresh pulled it from Hugging
-  Face and landed on the SD card. [Full detail](archive/roadmap-completed.md#ten-new-games-checked-on-the-deck-publish-owed).
+- ★ `[ollama]` **Typing a made-up model name and pressing Pull said the pull started, not that it was
+  refused** — **DONE, confirmed on the Deck 2026-09-23:** the toast now names the tag and suggests real
+  ones; nothing downloaded, and a real typed name still downloads. [Full
+  detail](archive/roadmap-bugs-fixed.md#typing-a-made-up-model-name-and-pressing-pull-said-the-pull-started-not-that-it-was-refused).
+- ★★ `[ollama]` `[KB]` **Pressing Done on a popup could write old values back over something the back end
+  had just changed** — **DONE, confirmed on the Deck 2026-09-23:** with a download saved to the SD card,
+  a switch and Done on the AI models screen no longer wrote the old, deleted location back over it. [Full
+  detail](archive/roadmap-bugs-fixed.md#pressing-done-on-a-popup-could-write-old-values-back-over-something-the-back-end-had-just-changed-including-a-knowledge-base-location).
 

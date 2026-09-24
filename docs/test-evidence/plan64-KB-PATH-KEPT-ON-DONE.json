@@ -1,0 +1,36 @@
+{
+ "row": "G4 step 6 - Done on the AI models screen no longer moves the library (fix 9fdb7a4)",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip; deployed 21:58:04 Deck time, loader restarted 21:58:18, contains a34be74 - checked: on_installed is in the deployed main.py and rag_corpus_download_service.py)",
+ "deck_time": "2026-09-23 22:05:30-22:06:41 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Straight after G4 step 5, without leaving the Ollama tab or reloading. The section still read 'Not installed' on screen (stale) while settings held the SD card path.",
+ "pressed": [
+  "walk Down 4 from 'Ollama tab' -> 'Browse models...' (Browse and pull Ollama models), A: AI models screen, ring on 'Advanced >'",
+  "A -> Advanced panel (switches: Tier 3 false, high-VRAM false)",
+  "Down -> Tier 3 switch (index 0), Down -> 'Allow high-VRAM models in routing' switch (index 1), A -> reads true",
+  "Down -> 'Read model policy (README)...', Down -> 'Done', A (22:06:06)",
+  "restore: 'Browse models...' A -> 'Advanced >' A -> Down, Down (high-VRAM switch, reads true), A -> false, Down, Down -> 'Done', A (22:06:38)"
+ ],
+ "seen": {
+  "after_done_on": {
+   "file_written": "22:06:06.822",
+   "rag_corpus_path": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag",
+   "rag_corpus_version": "2026.09.18",
+   "use_local_knowledge_base": true,
+   "model_allow_high_vram_fallbacks": true,
+   "text_model_routing_order": []
+  },
+  "section_22:06:13": "Installed - version 2026.09.18, /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag",
+  "after_done_off": {
+   "file_written": "22:06:38.444",
+   "rag_corpus_path": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag",
+   "rag_corpus_version": "2026.09.18",
+   "use_local_knowledge_base": true,
+   "model_allow_high_vram_fallbacks": false,
+   "text_model_routing_order": []
+  },
+  "disk": "SD card rag folder holds corpus.db, corpus-manifest.json, ATTRIBUTIONS.md"
+ },
+ "end_state": "matches the start: installed on the SD card, 2026.09.18, Use local knowledge base on, high-VRAM switch off, text order [] (empty)",
+ "verdict": "PASS. Done with the high-VRAM switch turned on kept the SD card path (the old build wrote the deleted internal folder back here), and the section then read Installed. Switch put back off; key reads false."
+}

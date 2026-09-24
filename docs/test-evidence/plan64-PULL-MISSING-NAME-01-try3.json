@@ -1,0 +1,48 @@
+{
+ "row": "PULL-MISSING-NAME-01 - a made-up name in the typed box (flow E row 3, run as flow G row G6)",
+ "file_note": "The runbook asked to overwrite plan64-PULL-MISSING-NAME-01-try2.json. The driver's rule is never to overwrite an evidence file, so this run is written here as -try3, and flow E's try2 file is left untouched and also copied in below as earlier_attempt.",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip, deployed 21:58; contains f65ccfe)",
+ "deck_time": "2026-09-23 22:10:10-22:11:50 EDT",
+ "screen": "Deck's own screen (AI models screen in Big Picture; screenshot 1280x800)",
+ "setup": "Ollama tab; ollama list before: nomic-embed-text:latest, gemma4:e2b-it-qat.",
+ "pressed": [
+  "'Browse models...' A -> AI models screen, ring on 'Advanced >'",
+  "Down -> 'Refresh model catalog', Down -> 'Filters, 2 on: ...', Right -> 'Type a model name by hand', A -> typed row opens (box empty, ring on the row's x button 'Close typing a model name by hand')",
+  "deck_set_input.py --text 'zzz-plan64-missing-model' -> VERIFIED; page read the box as exactly that",
+  "Left -> 'Pull custom model tag' (BUTTON), A (about 22:11:05)",
+  "Right -> x button, A -> row closed, box gone, ring on 'Type a model name by hand'"
+ ],
+ "seen": {
+  "toast": "Pull not started / Tag(s) not on Ollama library: zzz-plan64-missing-model. Try qwen2.5vl:3b or gemma4:e2b-it-qat.",
+  "ollama_list_after": [
+   "nomic-embed-text:latest",
+   "gemma4:e2b-it-qat"
+  ],
+  "screen_after": "AI models screen stayed open; header 'Queue 0 · < 0.1 GB'; no pull line in the plugin log",
+  "text_after_press": "still in the box: 'zzz-plan64-missing-model' (cleared only by the x button)",
+  "real_name_not_blocked": "Right after, the same typed row with 'qwen2.5:1.5b' and its own Pull button gave the toast 'Pull started / qwen2.5:1.5b - watch progress in Settings.' (about 22:11:40) and the download ran (G7, plan64-PRELOAD-01-try2.json). So the made-up-name check does not block a real name."
+ },
+ "screenshot": "plan64-PULL-MISSING-NAME-01-try3.png",
+ "verdict": "PASS. A toast titled 'Pull not started' says the name is not on the Ollama library, names zzz-plan64-missing-model and suggests two real models; nothing downloaded (ollama list unchanged, queue 0). The typed text stayed in the box until x was pressed. A real typed name still pulls.",
+ "earlier_attempt": {
+  "row": "PULL-MISSING-NAME-01 - a made-up name in the typed box (flow E row 3)",
+  "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+  "deck_time": "2026-09-23 20:32-20:33 and 21:37-21:45 EDT",
+  "screen": "Deck's own screen (Big Picture 854x534; QAM window 854x454, read 854x494 once at 21:39 before a reload)",
+  "setup": "AI models screen, Browse & pull, gemma3:27b downloading in the background.",
+  "pressed": [
+   "Manage AI models... A",
+   "Up to Filters, Right to 'Type a model name by hand', A -> ring landed on the row's Pull button, box empty",
+   "deck_set_input.py --text 'zzz-plan64-missing-model' -> VERIFIED, box read back the whole name",
+   "(session stopped by the usage limit here, before Pull was pressed)"
+  ],
+  "seen": {
+   "ollama_list_at_20_33": [
+    "nomic-embed-text:latest",
+    "gemma4:e2b-it-qat"
+   ],
+   "after_resume": "Since the pause (checked 21:39-21:45): on the Ollama tab the ring stops on 'Update AI & models' (or 'Install Ollama' after the reload) and Down and Up both do nothing; the page's own focus moves to 'Browse models...' but Steam's ring does not follow. document.hasFocus() reads false in both the Quick Access page and the Big Picture page. Tried: L3 wake, closing and reopening the menu, a plugin reload (21:43), the Steam button then B. None cleared it. Every row left needs 'Manage AI models...', which is below that point."
+  },
+  "verdict": "COULD NOT RUN - the name was in the box when the session was stopped; after the restart the Ollama tab's ring cannot get down to 'Manage AI models...' (see after_resume). No Pull press was made."
+ }
+}

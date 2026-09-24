@@ -244,6 +244,33 @@ All notable changes to this project are documented in this file.
   Ollama worked the whole time. The check now re-runs once settings say Ollama runs on this Deck, and only
   the newest check may set what the tab shows. `OllamaTab.tsx`. On-Deck row owed: plan 64 flow H, in
   `docs/roadmap.md`.
+- **After downloading the knowledge base onto the SD card, the section no longer gets stuck reading "Not
+  installed":** the earlier fix for this saved the new location sooner, but the Deck still showed "Not
+  installed" with a Download button the whole time a download ran. The real cause was that closing the
+  storage-choice picker rebuilds the whole tab underneath it, and the rebuilt copy threw away the piece of
+  state that remembers a download is running, along with the check that keeps polling for it — so it read
+  the library's status once, before the install finished, and never again. A download that started is now
+  remembered across the rebuild, so the new copy keeps checking until it lands. `KnowledgeBaseSection.tsx`.
+  On-Deck row owed: plan 64 flow H, in `docs/roadmap.md`.
+- **A model already installed on the Deck now keeps its row on the AI models screen with Essentials only
+  turned on:** that view is meant to narrow the download list to three starter models, but it was also
+  hiding any other model already on the Deck — installed ones included, with no star to use it for Ask and
+  no Remove unless Filters was opened by hand. Essentials only now only narrows what can be downloaded.
+  `PullModelsModal.tsx`. On-Deck row owed: plan 64 flow H, in `docs/roadmap.md`.
+- **Walking a reply with the D-pad while an answer finishes underneath it no longer loses the highlight:**
+  the earlier fix for this did not change what the Deck showed, because the answer bubble drew itself bare
+  while streaming and got wrapped with its Copy button once it finished — so the bubble changed shape right
+  at the moment it finished and was rebuilt from scratch, taking the highlight with it. The bubble now keeps
+  the same shape throughout, and its sections are tracked by where they sit rather than what kind they are,
+  so a kept bubble keeps the highlight too. `buildAnswerBubbleElement.tsx`, `MainTabChatTranscript.tsx`.
+  On-Deck row owed: plan 64 flow H, in `docs/roadmap.md`.
+- **Opening a "From the notes" block now brings its header to the top of the pane:** asking to scroll the
+  header to the top used to barely move the view, showing only 17% of the block. The request was not
+  broken — Steam's own scroll area keeps 116 pixels clear at its own top, and the header was already
+  sitting exactly there, so the request was asking for a place it already occupied. The block now scrolls
+  by asking the pane directly to put the header's own top at the pane's own top, ignoring that reserved
+  space. `chatPanelScroll.ts`, `MainTabChatTranscript.tsx`. On-Deck row owed: plan 64 flow H, in
+  `docs/roadmap.md`.
 
 ### Added
 - **Knowledge base release `2026.09.18` published (372 notes across 35 games, 159 Deck tips):** ten more

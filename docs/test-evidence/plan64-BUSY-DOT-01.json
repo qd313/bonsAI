@@ -1,0 +1,838 @@
+{
+ "row": "G1 - a chat that is still writing does not look busy from another chat (roadmap bug, found 2026-09-18). A MEASUREMENT.",
+ "build_commit": "9fdb7a46d7262fe4d9d161646a8ca9df398dd7ec (experimental tip, deployed 21:58)",
+ "deck_time": "2026-09-23 22:17:31-22:20:07 EDT (app log in UTC: 2026-09-24T02:18-02:19Z)",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshots 1280x800)",
+ "setup": "Main tab, chat 'wheatley fight' (second dot; the first dot is the '+' new-chat dot), Strategy, no game running, knowledge base on. desktop_app_log_level = 'verbose' (read 22:17:31, not changed). App log ~/Desktop/bonsAI_logs/bonsai-app-2026-09-24.log was 1,601,466 bytes before the ask.",
+ "pressed": [
+  "send-question script: 'give me a detailed walkthrough of the first three chapters of half life 2 with tips for each' (VERIFIED)",
+  "walk Down to 'ask'; armed an in-page recorder (every 0.5 s, logs on change: all chat dots' classes and colours, the active chat title, the Ask button's text/classes/disabled, the Stop generation button, busy-looking classes, last question, answer length, ring)",
+  "A on Ask at 22:18:17 (app log 02:18:17Z ask.start)",
+  "first words 22:18:55; Up x5 to the chat row (22:19:03)",
+  "RB once at about 22:19:06 -> chat 'how should i spend my first hour in a new open world game' (screenshot 22:19:09)",
+  "no presses until the finish (log 22:19:12.212, 54.4 s) and 20 s after",
+  "LB once at about 22:20:00 -> back to 'wheatley fight'"
+ ],
+ "seen_while_first_chat_wrote_from_other_chat": {
+  "22:19:07 (right after RB)": "title 'how should i spend my first hour in a new open world game'; first chat's dot class 'bonsai-chat-slot-dot--pending', background transparent (drawn as a hollow ring, see the at_switch screenshot); other chat's dot '--active' rgb(156,231,255); Ask button text 'ask', classes 'bonsai-ask-primary Disabled', disabled = true; Stop generation button present (1); busy marks: 'bonsai-chat-slot-ghost-spark' and the pending dot; a small hollow ring shows before the title in the chat row",
+  "note": "The first chat was writing for only about 5 s after the switch (switch 22:19:06-07, finish 22:19:12), so there are two recorder rows in that window (22:19:07 and 22:19:12); nothing changed between them."
+ },
+ "seen_at_and_after_finish": {
+  "22:19:12": "first chat's dot class 'bonsai-chat-slot-dot--unread', colour rgb(74,222,128) (green); Ask button classes 'bonsai-ask-primary' (no Disabled), disabled = false; no Stop button; no busy marks",
+  "22:19:21 and 22:19:36 screenshots": "green dot before the title and on the first chat's dot; Ask button reads ASK. No further change to 22:20:00."
+ },
+ "back_on_first_chat": "LB once: 'wheatley fight' shows the whole answer - last question is the walkthrough question, answer 1,604 characters ending '...Now, where you wanna head next? — No close match in my notes, this answer leans on the model's own knowledge.' Its dot is back to '--active' (the green unread mark cleared).",
+ "app_log_lines_since_step_2": [
+  "2026-09-24T02:18:17Z [default] ask.start background ask pending status=pending ask_mode=strategy app_id= attachment_count=0 question_len=92",
+  "2026-09-24T02:18:17Z [verbose] ask.rpc RPC start_background_game_ai ask_mode=strategy app_id= attachment_count=0 question_len=92",
+  "2026-09-24T02:18:18Z [verbose] ask.kb_search knowledge-base search kb_domain=strategy app_name= searched_count=3 searched_notes=Half-Life 2 — Sandtraps; Half-Life 2 — Ravenholm; Half-Life 2 — Strider attached_count=3 attached_notes=Half-Life 2 — Sandtraps; Half-Life 2 — Ravenholm; Half-Life 2 — Strider starved_by_context_budget=false top_keyword_score=5.2278805106341215 best_meaning_score=0.5820469847443327",
+  "2026-09-24T02:19:12Z [default] ask.background background ask completed status=completed success=true ask_mode=strategy app_id= attachment_count=0 question_len=92 elapsed_seconds=54.4"
+ ],
+ "plugin_log_lines_22_18_to_22_19": [
+  "[2026-09-23 22:18:17,792][INFO]: start_background_game_ai: RPC entry (arg type=dict)",
+  "[2026-09-23 22:18:17,854][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='' appid= question_len=92",
+  "[2026-09-23 22:18:18,450][INFO]: ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=)",
+  "[2026-09-23 22:18:18,451][INFO]: ask_ollama: budget room=16384 rules+cards=2268 (attached 1095 chars) memory=2230 thinking=512 answer=1600 (~8.0s to the first word) carried=30 turns, left behind=92, hidden notes removed=0",
+  "[2026-09-23 22:18:18,452][INFO]: ask_ollama: url=http://127.0.0.1:11434/api/chat game='' appid= attachments=0 question_len=92",
+  "[2026-09-23 22:18:18,456][INFO]: ask_ollama: POST http://127.0.0.1:11434/api/chat model=gemma4:e2b-it-qat payload_bytes=16375 num_predict=2112 think=True",
+  "[2026-09-23 22:19:12,207][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=1008 prompt_eval=3716 raw_len=1833 visible_len=1545 num_predict=2112 think=True",
+  "[2026-09-23 22:19:12,208][INFO]: ask_ollama: strategy fences branch_marker=True branch_parsed=True branch_options=2 checklist_marker=False checklist_parsed=False",
+  "[2026-09-23 22:19:12,208][INFO]: ask_ollama: OK model=gemma4:e2b-it-qat response_len=1545 soft_continues=0 done_reason=stop tokens_in=3716 tokens_out=1008 estimate_was=4030",
+  "[2026-09-23 22:19:12,209][INFO]: ask_game_ai: no TDP recommendation found in response",
+  "[2026-09-23 22:19:12,210][INFO]: run_game_ai_request: destructive advice guard ran flagged=False signals=0 backup_mention=False",
+  "[2026-09-23 22:19:12,211][INFO]: run_game_ai_request: answer checker ran rules_fired=0 warnings=[]",
+  "[2026-09-23 22:19:12,212][INFO]: run_game_ai_request: completed in 54.4s"
+ ],
+ "log_note": "The app log wrote nothing at the chat switch (no line for RB, LB or the dot); only ask.start, ask.rpc, ask.kb_search and ask.background completed. So the log alone could not explain the bug if it had appeared.",
+ "recorder": [
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active|rgba(200, 214, 230, 0.5)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary bonsai-ask-primary--ready",
+    "dis": false
+   },
+   "stopBtn": 0,
+   "busy": [],
+   "lastQ": "how do i get through ravenholm in half l",
+   "ansLen": 871,
+   "ring": "ask",
+   "ms": 501,
+   "wall": "22:18:17"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-status-line bonsai-chat-thinking-line",
+    "[object SVGAnimatedString]"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 0,
+   "ring": "",
+   "ms": 1501,
+   "wall": "22:18:18"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 0,
+   "ring": "",
+   "ms": 14531,
+   "wall": "22:18:31"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 13,
+   "ring": "",
+   "ms": 38009,
+   "wall": "22:18:54"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 113,
+   "ring": "",
+   "ms": 39529,
+   "wall": "22:18:56"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 123,
+   "ring": "",
+   "ms": 40001,
+   "wall": "22:18:56"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 206,
+   "ring": "",
+   "ms": 40527,
+   "wall": "22:18:57"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 234,
+   "ring": "",
+   "ms": 41001,
+   "wall": "22:18:57"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 334,
+   "ring": "",
+   "ms": 42016,
+   "wall": "22:18:58"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 350,
+   "ring": "",
+   "ms": 42507,
+   "wall": "22:18:59"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 362,
+   "ring": "",
+   "ms": 43022,
+   "wall": "22:18:59"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 477,
+   "ring": "Testhow do i beat the gonarch ",
+   "ms": 43519,
+   "wall": "22:19:00"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 487,
+   "ring": "Sandtraps (+2 more) · From the",
+   "ms": 44010,
+   "wall": "22:19:00"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 555,
+   "ring": "Sandtraps (+2 more) · From the",
+   "ms": 44529,
+   "wall": "22:19:01"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 625,
+   "ring": "Retry same prompt",
+   "ms": 45026,
+   "wall": "22:19:01"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 629,
+   "ring": "Retry same prompt",
+   "ms": 45501,
+   "wall": "22:19:02"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 707,
+   "ring": "61 earlier",
+   "ms": 46028,
+   "wall": "22:19:02"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 726,
+   "ring": "61 earlier",
+   "ms": 46501,
+   "wall": "22:19:03"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 726,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 47001,
+   "wall": "22:19:03"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 843,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 47521,
+   "wall": "22:19:04"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 859,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 48001,
+   "wall": "22:19:04"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 899,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 48528,
+   "wall": "22:19:05"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 974,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 49020,
+   "wall": "22:19:05"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 981,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 49501,
+   "wall": "22:19:06"
+  },
+  {
+   "title": "wheatley fight",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--active ",
+    "bonsai-chat-turn-row-header bonsai-chat-turn-row-h"
+   ],
+   "lastQ": "give me a detailed walkthrough of the fi",
+   "ansLen": 1042,
+   "ring": "LB[+]wheatley fight×how should",
+   "ms": 50033,
+   "wall": "22:19:06"
+  },
+  {
+   "title": "how should i spend my first hour in a new open world game",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--pending|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--active|rgb(156, 231, 255)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary Disabled",
+    "dis": true
+   },
+   "stopBtn": 1,
+   "busy": [
+    "bonsai-chat-slot-ghost-spark bonsai-chat-slot-ghos",
+    "bonsai-chat-slot-dot bonsai-chat-slot-dot--pending"
+   ],
+   "lastQ": "how should i spend my first hour in a ne",
+   "ansLen": 556,
+   "ring": "LBwheatley fighthow should i s",
+   "ms": 50501,
+   "wall": "22:19:07"
+  },
+  {
+   "title": "how should i spend my first hour in a new open world game",
+   "dots": [
+    "bonsai-chat-slot-dot--create|rgba(0, 0, 0, 0)",
+    "bonsai-chat-slot-dot--unread|rgb(74, 222, 128)",
+    "bonsai-chat-slot-dot--active|rgb(156, 231, 255)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)",
+    "|rgba(143, 168, 196, 0.3)"
+   ],
+   "ask": {
+    "t": "ask",
+    "cls": "bonsai-askbar-target bonsai-ask-primary",
+    "dis": false
+   },
+   "stopBtn": 0,
+   "busy": [],
+   "lastQ": "how should i spend my first hour in a ne",
+   "ansLen": 556,
+   "ring": "LBwheatley fighthow should i s",
+   "ms": 56002,
+   "wall": "22:19:12"
+  }
+ ],
+ "screenshots": {
+  "at_switch_22-19-09": "plan64-BUSY-DOT-01-at_switch_22-19-09.png",
+  "after_finish_22-19-21": "plan64-BUSY-DOT-01-after_finish_22-19-21.png",
+  "after_finish_22-19-36": "plan64-BUSY-DOT-01-after_finish_22-19-36.png",
+  "back_on_first_chat_22-20-07": "plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png"
+ },
+ "other_observations": [
+  "The answer's closing line says 'No close match in my notes, this answer leans on the model's own knowledge.' although ask.kb_search attached 3 notes (Sandtraps, Ravenholm, Strider) and a 'Sandtraps (+2 more) · From the Half-Life wiki' block shows on the turn.",
+  "In the back_on_first_chat screenshot a line of answer text shows below the 'Context: no active game detected' line, at the very bottom of the panel under the dock."
+ ],
+ "verdict": "MEASUREMENT - the bug did NOT appear this time. While the first chat was still writing and the other chat was on screen, the first chat's dot read 'pending' (hollow ring), the other chat's Ask was disabled with a Stop button showing; when the answer finished the dot turned green ('unread') and Ask became ready. The window after the switch was short (about 5 s of writing)."
+}

@@ -18,6 +18,21 @@ its size limit._
 _The plan 64 flow B, flow C and flow D blocks below were moved out the same way, during the same plan's
 flow E bookkeeping pass, for the same reason. The newer flow E block stayed in roadmap.md._
 
+_The plan 64 flow E block below was moved out the same way, during the same plan's flow G bookkeeping
+pass, for the same reason. The newer flow G block stayed in roadmap.md._
+
+**Closed 2026-09-23 (plan 64, flow E, proven on the Deck):**
+
+- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **DONE,
+  confirmed on the Deck 2026-09-23:** the ring reaches the right switch and stays there, with at most a
+  100 ms flicker through "Back to Main" on the way. [Full detail](archive/roadmap-bugs-fixed.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
+- ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **DONE, confirmed
+  on the Deck 2026-09-23: this is how it is meant to work, not a bug.** Tap 1 opens the storage picker, tap
+  2 starts the download at once. [Full detail](archive/roadmap-bugs-fixed.md#download-knowledge-base-needed-two-taps-the-first-did-nothing-visible).
+- ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **DONE, confirmed on the Deck 2026-09-23:**
+  pressing Update knowledge base reached the public library, and downloading fresh pulled it from Hugging
+  Face and landed on the SD card. [Full detail](archive/roadmap-completed.md#ten-new-games-checked-on-the-deck-publish-owed).
+
 **Closed 2026-09-23 (plan 64, flow A part 1, proven on the Deck):**
 
 - ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** —

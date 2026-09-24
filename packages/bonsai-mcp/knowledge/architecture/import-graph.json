@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 458,
-  "edgeCount": 1203,
+  "fileCount": 459,
+  "edgeCount": 1205,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3070,6 +3070,14 @@
       ],
       "importedBy": []
     },
+    "src/styles/sections/answerBubble.ts": {
+      "imports": [
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/section-6.ts"
+      ]
+    },
     "src/styles/sections/answerMarkdownFormatting.ts": {
       "imports": [],
       "importedBy": [
@@ -3177,6 +3185,7 @@
     "src/styles/sections/section-6.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
+        "src/styles/sections/answerBubble.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/uiScalePx.ts"
@@ -3219,6 +3228,7 @@
     "src/styles/sections/uiScalePx.ts": {
       "imports": [],
       "importedBy": [
+        "src/styles/sections/answerBubble.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",

@@ -61,11 +61,6 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1387,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 1319,
       "role": ""
@@ -73,6 +68,11 @@
     {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1171,
+      "role": ""
+    },
+    {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 1108,
       "role": ""
     },
     {

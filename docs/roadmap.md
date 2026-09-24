@@ -418,8 +418,10 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **PARTIAL: a chat remembers itself now (2026-09-21);
   the summing-up itself is not built.** Ask a follow-up that names nothing and the answer stays on the same game and subject.
   How much of the chat is carried is the plugin's decision, with a floor the answer cannot lose, a ceiling thinking cannot
-  cross and a limit on how long you wait. Left to do: the short summary for when a chat outgrows that, Compact replacing
-  Clear, and the spoiler chance rating. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+  cross and a limit on how long you wait. Left to do: the short summary for when a chat outgrows that, and
+  *Sum up this chat* in place of Clear — **planned 2026-09-24, calls locked (D118)**,
+  [plan 68](planning/68-chat-sums-itself-up.md). The spoiler chance rating is a later piece of its own.
+  [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids

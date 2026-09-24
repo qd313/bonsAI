@@ -312,6 +312,10 @@ has not changed and this block changes every turn.
 Still to build: the summing-up itself, for when a chat outgrows even that; Compact replacing Clear; and the spoiler
 chance rating.
 
+**Planned 2026-09-24:** [plan 68](planning/68-chat-sums-itself-up.md) builds the first two, with twenty
+more calls from a discovery session recorded as D118 in the decisions file. The button is named *Sum up
+this chat*. The spoiler chance rating is left for a later plan of its own.
+
 **Every call is in, 2026-09-20.** In the maintainer's own order:
 
 1. **The summary goes into the next question**, so the model answers with the chat behind it — not just a panel a person

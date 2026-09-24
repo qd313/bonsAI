@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 480,
-  "edgeCount": 1273,
+  "fileCount": 481,
+  "edgeCount": 1277,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -830,6 +830,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
     },
@@ -845,14 +846,12 @@
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/deckEssentialsTags.ts",
-        "src/data/modelPolicy.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/utils/deckyCall.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
-        "src/utils/pullModelCatalogRefresh.ts",
         "src/utils/settingsPanelScroll.ts"
       ],
       "importedBy": [
@@ -867,6 +866,7 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts"
       ]
@@ -1443,8 +1443,8 @@
     "src/data/deckEssentialsTags.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx"
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx"
       ]
     },
     "src/data/deprioritizedModels.ts": {
@@ -1491,7 +1491,6 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
@@ -1500,6 +1499,7 @@
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
@@ -2634,6 +2634,19 @@
       "importedBy": [
         "src/hooks/useKidsLock.test.ts",
         "src/index.tsx"
+      ]
+    },
+    "src/hooks/useLocalOllamaSetupFlow.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.constants.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/data/deckEssentialsTags.ts",
+        "src/data/modelPolicy.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/pullModelCatalogRefresh.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
       ]
     },
     "src/hooks/useMainTabAskBarFocus.test.ts": {
@@ -4345,6 +4358,7 @@
         "src/hooks/useIntentPacks.ts",
         "src/hooks/useKidsLock.test.ts",
         "src/hooks/useKidsLock.ts",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/hooks/usePluginSettings.ts",
@@ -4762,7 +4776,7 @@
     "src/utils/pullModelCatalogRefresh.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCatalog.ts"
       ]
     },

@@ -56,11 +56,6 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1249,
-      "role": ""
-    },
-    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1220,
       "role": ""
@@ -73,6 +68,11 @@
     {
       "path": "src/data/characterPlaceholderEmoticonGrids.ts",
       "lines": 1102,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1029,
       "role": ""
     },
     {

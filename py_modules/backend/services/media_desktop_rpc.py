@@ -152,7 +152,10 @@ async def append_app_log(self, payload: Any = None):
     event_level = str(payload.get("level", "default") or "default").strip().lower()
     if event_level not in ("default", "verbose"):
         event_level = "default"
-    if not self._desktop_app_log_level_allows(settings, event_level):
+    # Called through the class, as main.py always did: this helper is written without `self`, so a
+    # call through the instance passes one argument too many (plan 65 moved this body; the Deck
+    # check caught every activity-log line failing).
+    if not type(self)._desktop_app_log_level_allows(settings, event_level):
         return {"success": True, "skipped": True}
     if not capability_enabled(settings, "filesystem_write"):
         return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}

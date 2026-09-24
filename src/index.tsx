@@ -57,7 +57,8 @@
  * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
  * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its read-aloud glue moved to
  * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
- * features/plugin-shell/useDeveloperToolActions.ts.
+ * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
+ * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts.
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
@@ -112,7 +113,6 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
-import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import {
   BonsaiSvgIcon,
 } from "./components/icons";
@@ -152,6 +152,7 @@ import { usePermissionJump } from "./hooks/usePermissionJump";
 import { effectiveCapabilities, useKidsLock } from "./hooks/useKidsLock";
 import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
 import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToolActions";
+import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/plugin-shell/useUnifiedInputBehaviors";
 import { useRoutingOrderModal } from "./features/model-routing/useRoutingOrderModal";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
@@ -853,45 +854,21 @@ const Content: React.FC = () => {
     }
   }, []);
 
-  // --- Slow-response warning timer (suppress once token streaming begins) ---
-  useEffect(() => {
-    if (!isAsking) {
-      setShowSlowWarning(false);
-      return;
-    }
-    if (isStreamingPreview) {
-      setShowSlowWarning(false);
-      return;
-    }
-    const timer = setTimeout(() => setShowSlowWarning(true), effectiveLatencyWarningSeconds * 1000);
-    return () => clearTimeout(timer);
-  }, [isAsking, isStreamingPreview, effectiveLatencyWarningSeconds]);
+  // --- Ask bar timers and persistence ---
+  useSlowResponseWarningTimer({
+    isAsking,
+    isStreamingPreview,
+    effectiveLatencyWarningSeconds,
+    setShowSlowWarning,
+  });
 
-  useEffect(() => {
-    if (unifiedInputPersistenceMode === "persist_all") {
-      persistSearchQuery(unifiedInput);
-      return;
-    }
-    if (unifiedInputPersistenceMode === "persist_search_only") {
-      if (filteredSettings.length > 0) {
-        persistSearchQuery(unifiedInput);
-      } else {
-        persistSearchQuery("");
-      }
-      return;
-    }
-    persistSearchQuery("");
-  }, [unifiedInput, unifiedInputPersistenceMode, filteredSettings.length]);
-
-  const unifiedInputPersistenceModePrevRef = useRef<typeof unifiedInputPersistenceMode | null>(null);
-  useEffect(() => {
-    const prev = unifiedInputPersistenceModePrevRef.current;
-    unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
-    if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
-      setUnifiedInput("");
-      clearAskCameFromMicRef.current();
-    }
-  }, [unifiedInputPersistenceMode]);
+  useUnifiedInputPersistence({
+    unifiedInput,
+    unifiedInputPersistenceMode,
+    filteredSettingsCount: filteredSettings.length,
+    setUnifiedInput,
+    clearAskCameFromMicRef,
+  });
 
 
   const { resetPluginSession, onClearAllPluginData } = useSessionResetActions({

@@ -91,11 +91,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 877,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/screenshot_media.py",
       "lines": 873,
       "role": ""
@@ -113,6 +108,11 @@
     {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
       "lines": 787,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 775,
       "role": ""
     },
     {

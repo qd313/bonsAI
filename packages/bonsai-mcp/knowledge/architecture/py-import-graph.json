@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 82,
-  "edgeCount": 193,
+  "fileCount": 83,
+  "edgeCount": 194,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -327,6 +327,10 @@
     },
     {
       "path": "py_modules/backend/services/rag_corpus_status.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/reply_style_blocks.py",
       "count": 1
     },
     {
@@ -873,7 +877,7 @@
     "py_modules/backend/services/ollama_prompts.py": {
       "imports": [
         "py_modules/backend/services/ask_topic_instructions.py",
-        "py_modules/backend/services/reply_language_service.py",
+        "py_modules/backend/services/reply_style_blocks.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/strategy_spoiler_policy.py",
@@ -991,8 +995,16 @@
       "importedBy": [
         "py_modules/backend/services/media_desktop_rpc.py",
         "py_modules/backend/services/ollama_ask_service.py",
-        "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/reply_style_blocks.py",
         "py_modules/backend/services/settings_service.py"
+      ]
+    },
+    "py_modules/backend/services/reply_style_blocks.py": {
+      "imports": [
+        "py_modules/backend/services/reply_language_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_prompts.py"
       ]
     },
     "py_modules/backend/services/response_verify.py": {

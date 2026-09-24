@@ -547,3 +547,44 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
   without the quick gate noticing, since only six of them read files under `src/` and the quick check only
   runs Python tests when a `.py` file changed; and when the Deck and a code reading disagree, the Deck
   wins — this session reverted a fix on a code reading alone and the Deck showed the bug was real.
+
+### Flow E — re-checking tonight's fixes, and the knowledge base's public hosts, 2026-09-23 20:19 to 21:45 (Deck time), build `ff62e8c`, the Deck's own screen (854×454/534)
+
+- **Closed on the Deck (2):** the Open Permissions jump reaches the right switch and stays there, with at
+  most a 100 ms flicker through "Back to Main" on the way (fix `af53b7d`, timed to the millisecond); and
+  closing the Quick Access Menu with four B presses while an answer is still arriving now shows "Reply
+  ready — Tap to open" within a second of it finishing (fix `73be15f`, fourth try, after the toast reader
+  proved itself on the third).
+- **Knowledge base, publish owed, closed:** pressing Update knowledge base reached the public manifest and
+  read version 2026.09.18. Removing the library and downloading it again — proving the two-taps download
+  shape at the same time — pulled the file from huggingface.co and landed it on the SD card, also reading
+  2026.09.18. Both pieces this check was still owing are done, and the "download needed two taps" bug from
+  2026-09-16 is confirmed to be how the screen is meant to work, not a fault.
+- **New bugs found and fixed the same night (4):** after the SD-card download, the Knowledge base section
+  kept reading "Not installed" for about a minute until the tab was left and reopened, because the download
+  marked itself done before its new path was saved (fixed `a34be74`); pressing Done on the AI models screen
+  afterward wrote the old, already-deleted internal knowledge-base location back over the new SD-card one,
+  because the popup was saving its whole stale copy of settings instead of only what it changed — a
+  data-loss-shaped bug affecting every popup that saves this way (fixed `9fdb7a4`); pulling a typed model
+  name closed the AI models screen and dropped an unsaved "Allow high-VRAM models" switch change along with
+  it (fixed `2e6f6df`); and, found in passing, a plugin reload can leave the Ollama tab reading "Could not
+  reach Ollama" and offering to install it while Ollama is answering the whole time, because its one
+  automatic check can run before settings load and reads the placeholder address instead (fixed `017c4f8`).
+  Deck checks for all four are owed, scheduled in flow G (the first three) and flow H (the fourth).
+- **Still open, tried again (2):** the made-up-model-name row and the warm-up timing comparison both need
+  the AI models screen, to type a name and to swap which model is installed — neither could be reached (see
+  the freeze below). Both carry into flow G, still running.
+- **Could not fully run (1):** the large-model half of the pulled-model routing check. `gemma3:27b` was
+  pulled with the high-VRAM switch on as asked, but the saved text try order was an empty list the whole
+  time, and the plugin deliberately leaves an empty saved order alone rather than writing one — so there was
+  no list for a pulled model to move "to the top" of. A redo with an order saved first is planned for flow
+  H.
+- **The freeze, and how the session cleared it:** partway through, Steam's own on-screen highlight froze on
+  the Ollama tab — Down and Up did nothing, the page's own focus kept moving but Steam's ring did not follow
+  it, and neither waking the controller, closing and reopening the Quick Access Menu, nor a plugin reload
+  cleared it. The session restarted Steam itself over SSH, then one A press on the Quick Access Menu's own
+  tab icon brought the ring back. **The Deck's state was put right afterward, with the maintainer's
+  go-ahead:** the 17 GB `gemma3:27b` model was removed, the high-VRAM switch was turned back off, and the
+  knowledge base was pointed back at its SD-card copy.
+- **Tooling:** the toast reader proved itself mid-flow, catching an unrelated "Pull started" notice on its
+  first read before the real check needed it.

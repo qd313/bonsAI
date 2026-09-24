@@ -1,0 +1,128 @@
+{
+ "row": "PERM-JUMP-01 re-check after fix af53b7d (flow E step 0.1)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:20-20:23 EDT",
+ "screen": "Deck's own screen (Big Picture 854x534, QAM window 854x454)",
+ "setup": "Deployed ff62e8c at 20:19 (clean load line in plugin log). Main tab, chat 'wheatley fight', Strategy, no game running. Permission switched off through the Permissions tab switch (A), not the file.",
+ "settings_read": {
+  "before": {
+   "capabilities.media_library_access": true,
+   "capabilities.steam_logs_read": true
+  },
+  "after_switch_off": {
+   "capabilities.media_library_access": false,
+   "capabilities.steam_logs_read": false
+  },
+  "after_restore": {
+   "capabilities.media_library_access": true,
+   "capabilities.steam_logs_read": true
+  }
+ },
+ "pressed": [
+  "Main tab bar, RB x3 -> Permissions tab",
+  "Down 1 -> 'Read game & screenshot context' switch, A -> both keys false over SSH",
+  "LB x3 -> Main tab",
+  "deck_send_ask.py --text 'why is my game crashing on the deck after the latest update' (VERIFIED, whole text); Ask not pressed",
+  "hint row appeared with Open Permissions and Dismiss",
+  "Down x11 from tab bar -> Open Permissions (y 241, h 34, fully visible in 454 px window)",
+  "deck_focus_log.py --arm; A on Open Permissions",
+  "focus read at once (~0.5 s) and again ~5.5 s later",
+  "deck_focus_log.py --stop",
+  "A on the switch (ring was on it) -> both keys true over SSH",
+  "Up -> Back to Main, A",
+  "deck_send_ask.py --clear, --read -> empty"
+ ],
+ "seen": {
+  "focus_read_1": {
+   "approx_after_A_s": 0.5,
+   "tab": "Permissions tab",
+   "ring_on": "Read game & screenshot context switch",
+   "rect_y": 240,
+   "rect_h": 22,
+   "window_h": 454
+  },
+  "focus_read_2": {
+   "approx_after_A_s": 5.5,
+   "tab": "Permissions tab",
+   "ring_on": "Read game & screenshot context switch",
+   "rect_y": 240,
+   "rect_h": 22
+  },
+  "recorder_summary": "2635 ms: ring on the switch (y 270). 2657 ms: pulled to Back to Main (y 118), same as the old build. 2761 ms: put back on the switch (y 251), about 100 ms later. Nothing else moved in the remaining 11.6 s.",
+  "recorder_log": {
+   "armed": true,
+   "nowMs": 14406,
+   "log": [
+    {
+     "ms": 2635,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 270
+     }
+    },
+    {
+     "ms": 2642,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 270
+     }
+    },
+    {
+     "ms": 2657,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "Back to Main",
+      "perm": null,
+      "y": 118
+     }
+    },
+    {
+     "ms": 2660,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "Back to Main",
+      "perm": null,
+      "y": 118
+     }
+    },
+    {
+     "ms": 2761,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 251
+     }
+    },
+    {
+     "ms": 2764,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 251
+     }
+    }
+   ],
+   "stopped": true
+  }
+ },
+ "verdict": "PASS. The ring ends on the switch and stays there. Note: it still visits Back to Main for about 100 ms before the fix pulls it back; a person would at most see a flicker.",
+ "saveCheck": "not saved: replaying this walk would press A on a permission switch and change a setting"
+}

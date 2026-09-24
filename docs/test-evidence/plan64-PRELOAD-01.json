@@ -1,0 +1,12 @@
+{
+ "row": "PRELOAD-01 - the warm-up timing comparison (flow E row 5)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 21:45 EDT",
+ "screen": "Deck's own screen (Big Picture 854x534; QAM window 854x454, read 854x494 once at 21:39 before a reload)",
+ "setup": "qwen2.5:1.5b is not installed; gemma3:27b (17 GB) still installed with the high-VRAM switch on, so no questions may be asked.",
+ "pressed": [],
+ "seen": {
+  "blocker": "Since the pause (checked 21:39-21:45): on the Ollama tab the ring stops on 'Update AI & models' (or 'Install Ollama' after the reload) and Down and Up both do nothing; the page's own focus moves to 'Browse models...' but Steam's ring does not follow. document.hasFocus() reads false in both the Quick Access page and the Big Picture page. Tried: L3 wake, closing and reopening the menu, a plugin reload (21:43), the Steam button then B. None cleared it. Every row left needs 'Manage AI models...', which is below that point."
+ },
+ "verdict": "COULD NOT RUN - needs the AI models screen (to pull qwen2.5:1.5b and remove gemma3:27b first), which the ring cannot reach; and no question may be sent while gemma3:27b is installed."
+}

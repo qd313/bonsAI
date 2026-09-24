@@ -1,0 +1,25 @@
+{
+ "row": "CHAT-SLOTS-V3-06c - the 'Reply ready' notice after closing the menu with B (flow E step 0.3, re-check of fix 73be15f), try 4",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:22:20-20:23:13 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454; screenshots 1280x800)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, no game running. Answering model gemma4:e2b-it-qat (the only chat model installed).",
+ "reader_method": "deck_waitFor on the notificationtoasts_uid2 page, reading document.body.innerText every 200 ms for 'reply ready' (same reader as tries 2 and 3).",
+ "pressed": [
+  "send-question script: VERIFIED 'what are three good ways to explore a big map without getting lost' (whole text)",
+  "walk Down 2 presses from a Test chip to 'ask', A (log: ask start 20:22:21.3)",
+  "B #1 (~20:22:22): plugin panel still open",
+  "B #2 (~20:22:27): plugin panel gone (unmounted)",
+  "B #3 (~20:22:31), B #4 (~20:22:35): menu closed - screenshot 20:22:39 shows Steam Home, no menu",
+  "reader started ~20:22:46 and stopped on the first match"
+ ],
+ "seen": {
+  "b_presses_to_close_menu": 4,
+  "menu_closed_screenshot": "plan64-CHAT-SLOTS-V3-06c-try4-menu-closed.png (20:22:39)",
+  "reply_finished_log": "20:23:09.986 run_game_ai_request: completed in 48.6s",
+  "reply_ready_seen_at": "20:23:10 (70 reads, 23.9 s into the reader), under 1 s after the finish",
+  "notice_text": "Reply ready / Tap to open",
+  "notice_screenshot": "plan64-CHAT-SLOTS-V3-06c-try4-notice.png (20:23:13, notice at the bottom right over the Home screen)"
+ },
+ "verdict": "PASS - with the menu closed by 4 B presses, 'Reply ready - Tap to open' appeared within 1 s of the answer finishing."
+}

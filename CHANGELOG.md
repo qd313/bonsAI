@@ -213,6 +213,37 @@ All notable changes to this project are documented in this file.
   second showed the block the whole time, with no gap. On-Deck rows **NOTES-BLOCK-03**,
   **NOTES-BLOCK-06** in `docs/testing-manual.md` now pass.
 - **The line under the question box stops naming a game you have closed:** exit a game and it used to keep the old name, so a question that does not name its own game could pull in the wrong game's notes. **The cause first written down was wrong and the real one is worth knowing:** the ordinary keep-in-sync check does correct itself within about a second and a half; the hole was **reopening the panel** — after a popup, or leaving and coming back — which restored the remembered name without ever checking whether that game was still running. It now checks what is actually running at that moment. `useBonsaiAskOrchestration.ts`; 5 frontend tests. On-Deck **W2-R6**.
+- **Walking a reply while it finishes no longer loses the highlight:** walking Down into an answer that is
+  still being written puts the highlight on one of its sections; when the answer finished, that section was
+  swapped out for its saved copy and destroyed, so nothing on screen had the highlight any more and the view
+  jumped to the very end of the reply. The chat now remembers which section held the highlight and puts it
+  on the matching section of the saved answer once the swap happens. `chatSlotTurns.ts`,
+  `useBonsaiAskOrchestration.ts`. On-Deck row owed: **STREAM-WALK-REC-01**, plan 64 flow G, in
+  `docs/roadmap.md`.
+- **After downloading the knowledge base onto the SD card, the section no longer says "Not installed" for
+  a minute:** the download marked itself finished before the new SD-card location was saved to settings,
+  and the screen checks whether the library is installed only once, right when that happens — so the one
+  check found nothing saved yet and kept showing the old "Not installed" state until the tab was left and
+  reopened. The save now finishes before the download reports itself done. `knowledge_base_service.py`,
+  `main.py`. On-Deck row owed: plan 64 flow G, in `docs/roadmap.md`.
+- **Pressing Done on a popup no longer writes old values back over something the back end had just
+  changed:** the AI models screen, the try-order screen, the AI character picker and the UI scale Apply
+  button each used to send their whole copy of settings on save, so anything changed elsewhere in the
+  meantime — a knowledge-base location a download had just saved, for example — was overwritten with the
+  old value. Each popup now sends only what changed on its own screen. `usePluginSettings.ts`, `index.tsx`.
+  On-Deck row owed: plan 64 flow G, in `docs/roadmap.md`.
+- **Pulling a typed-in model name no longer drops an unsaved switch change on the AI models screen:** the
+  screen holds the licence and Advanced switches as a draft until Done is pressed, but pulling a name typed
+  by hand closes the screen on its own, and that close used to skip saving the draft — so turning on
+  "Allow high-VRAM models in routing" and then pulling a typed name left the switch reading off again on
+  reopening. The draft now saves first. `OllamaModelsHubModal.tsx`. On-Deck row owed: plan 64 flow H, in
+  `docs/roadmap.md`.
+- **The Ollama tab no longer says "Could not reach Ollama" right after a plugin reload while Ollama is
+  actually answering:** the tab's one automatic connection check could run before settings had loaded, so
+  it checked the saved network address instead of "this Deck" and failed — offering Install Ollama while
+  Ollama worked the whole time. The check now re-runs once settings say Ollama runs on this Deck, and only
+  the newest check may set what the tab shows. `OllamaTab.tsx`. On-Deck row owed: plan 64 flow H, in
+  `docs/roadmap.md`.
 
 ### Added
 - **Knowledge base release `2026.09.18` published (372 notes across 35 games, 159 Deck tips):** ten more

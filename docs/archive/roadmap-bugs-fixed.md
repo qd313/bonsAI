@@ -496,6 +496,34 @@ the closing note added at the end of each._
   completely and the view jumps to the very end (still open). Evidence
   `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
 
+### The Open Permissions jump lands one toggle above the one it was asked for (closed 2026-09-23)
+
+- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **VERIFY,
+  fixed in `af53b7d`.** Timed to the millisecond on the Deck 2026-09-23: the ring reached the right switch,
+  then was pulled off it 22 ms later by the tab's own first button and never came back. The fix keeps
+  re-taking the switch after that happens. Owed: the same timed walk on the Deck. Evidence
+  `docs/test-evidence/plan64-PERM-JUMP-01.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck with a second timed walk.** The ring reached the right switch
+  2,736 ms after the button press, was still pulled to Back to Main 22 ms later, and this time came back to
+  the switch about 100 ms after that — a brief flicker through "Back to Main," not a wrong landing. Evidence
+  `docs/test-evidence/plan64-PERM-JUMP-01-try2.json`.
+
+### Download knowledge base needed two taps; the first did nothing visible (closed 2026-09-23)
+
+- ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
+  2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
+  `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before
+  anything downloads, and the second tap is what ran the download. Needs a run with the plugin log on.
+  **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
+  there is no first-time download button to press. Still owed, on a Deck without the knowledge base
+  installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck: this is how it is meant to work, not a bug.** With the
+  knowledge base removed first, tap 1 opened the storage-choice picker (internal or SD card) at once, and
+  tap 2, choosing SD card, started the download immediately. The library landed on the SD card, reading
+  version 2026.09.18. Evidence `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json` (+ two screenshots).
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

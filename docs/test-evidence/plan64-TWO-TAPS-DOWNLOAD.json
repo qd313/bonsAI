@@ -1,0 +1,43 @@
+{
+ "row": "Two-taps download bug, and the SD card (flow E row 2)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:25-20:27:32 EDT",
+ "screen": "Deck's own screen (QAM window 854x454; screenshots 1280x800)",
+ "setup": "Ollama tab, Knowledge base section, library 2026.09.18 installed internally at /home/deck/.bonsai/rag. SD card mounted at /run/media/deck/3506ff22-... (1.9 TB, 1.2 TB free).",
+ "pressed": [
+  "RIGHT from Update knowledge base -> Remove, A",
+  "confirm box 'Remove knowledge base?' (ring on Remove), A",
+  "walk Down 8 -> 'Download knowledge base' (y 330, h 44, visible)",
+  "A = tap 1",
+  "DOWN -> 'SD card (~1141 GB free)'",
+  "A = tap 2 (~20:26:29)",
+  "after 60 s of 'Not installed' on screen: LB then RB (leave the Ollama tab and come back)"
+ ],
+ "seen": {
+  "after_remove": {
+   "screen": "Not installed - download to enable grounded strategy help. / Download knowledge base (no version line)",
+   "disk": "/home/deck/.bonsai/rag gone",
+   "settings": {
+    "rag_corpus_path": "",
+    "rag_corpus_version": "",
+    "use_local_knowledge_base": false
+   },
+   "ring_after": "Ollama tab (the Remove button it was on disappeared)"
+  },
+  "tap_1": "picker 'Choose download location' opened at once: 'Internal storage (~731 GB free)', 'SD card (~1141 GB free)', Close. Screenshot plan64-TWO-TAPS-DOWNLOAD-picker.png",
+  "tap_2_log": [
+   "20:26:30.252 Downloading corpus.db.zlib from https://huggingface.co/datasets/qd313/bonsai-knowledge-base/resolve/main/corpus.(cut)",
+   "20:26:31.206 Decompressing corpus",
+   "20:26:31.286 Knowledge base installed at /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag (version 2026.09.18)"
+  ],
+  "disk_after": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag/corpus.db 2732032 bytes, 20:26:31, sha256 f579159a...fe51e (same as the old internal copy)",
+  "settings_after": {
+   "rag_corpus_path": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag",
+   "rag_corpus_version": "2026.09.18",
+   "use_local_knowledge_base": true
+  },
+  "screen_after_install": "STALE: from 20:26:30 to 20:27:28 (about 60 s, 28 reads) the section still read 'Not installed - download to enable grounded strategy help' with the Download button, while the Use local knowledge base switch read on. Screenshot plan64-TWO-TAPS-DOWNLOAD-stale.png. Ring sat on the Ollama tab after the picker closed.",
+  "screen_after_tab_switch": "Installed - version 2026.09.18, /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag, Update knowledge base, Remove"
+ },
+ "verdict": "PASS on the row's own points: tap 1 opened the picker, tap 2 on SD card started the download at once (log 1 s later), it landed on the SD card, and the version reads 2026.09.18. Also a download-from-public-host proof for row 1: the log names huggingface.co. POSSIBLE NEW BUG: the section kept saying 'Not installed' for a minute after the install finished, until the tab was left and reopened."
+}

@@ -1163,3 +1163,27 @@ back reading as a fresh, unconfigured Deck, with nothing stale left over. Eviden
   knowing: pressing the back button to leave that browser closed the whole plugin panel rather than only the
   browser page, but reopening the panel landed back on the About tab with nothing lost. Evidence
   `docs/test-evidence/plan61-ABOUT-LINKS-01.json`.
+
+## Moved from the roadmap 2026-09-23
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow E bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+### Ten new games checked on the Deck, publish owed (closed 2026-09-23)
+
+- ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
+  2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
+  public download hosts. One question named each of the ten new games and all ten answered from that
+  game's own notes, the right wiki named every time. Per D116 #4 and #10, the maintainer said yes to
+  publishing and the library goes on the SD card. **The library itself was published to Hugging Face and
+  the GitHub release 2026-09-23** — both hosts read back as serving 2026.09.18. Still owed: pressing the
+  Update knowledge base button on the Deck so it pulls from those public hosts, and moving the library onto
+  the SD card; both scheduled for later in plan 64. Evidence
+  `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
+
+  **Closed 2026-09-23, both owed pieces confirmed on the Deck.** Pressing Update knowledge base read
+  version 2026.09.18 and reached the public manifest (it could only say "Version 2026.09.18 is the latest"
+  after reading it), though nothing needed downloading since the Deck already had that version. The
+  download-from-a-public-host proof came from the next check instead: removing the library and downloading
+  it again pulled `corpus.db.zlib` from huggingface.co, landed on the SD card, and read version 2026.09.18.
+  Evidence `docs/test-evidence/plan64-W1-R1.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`.

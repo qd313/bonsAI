@@ -1,0 +1,21 @@
+{
+ "row": "PULL-MISSING-NAME-01 - a made-up name in the typed box (flow E row 3)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:32-20:33 and 21:37-21:45 EDT",
+ "screen": "Deck's own screen (Big Picture 854x534; QAM window 854x454, read 854x494 once at 21:39 before a reload)",
+ "setup": "AI models screen, Browse & pull, gemma3:27b downloading in the background.",
+ "pressed": [
+  "Manage AI models... A",
+  "Up to Filters, Right to 'Type a model name by hand', A -> ring landed on the row's Pull button, box empty",
+  "deck_set_input.py --text 'zzz-plan64-missing-model' -> VERIFIED, box read back the whole name",
+  "(session stopped by the usage limit here, before Pull was pressed)"
+ ],
+ "seen": {
+  "ollama_list_at_20_33": [
+   "nomic-embed-text:latest",
+   "gemma4:e2b-it-qat"
+  ],
+  "after_resume": "Since the pause (checked 21:39-21:45): on the Ollama tab the ring stops on 'Update AI & models' (or 'Install Ollama' after the reload) and Down and Up both do nothing; the page's own focus moves to 'Browse models...' but Steam's ring does not follow. document.hasFocus() reads false in both the Quick Access page and the Big Picture page. Tried: L3 wake, closing and reopening the menu, a plugin reload (21:43), the Steam button then B. None cleared it. Every row left needs 'Manage AI models...', which is below that point."
+ },
+ "verdict": "COULD NOT RUN - the name was in the box when the session was stopped; after the restart the Ollama tab's ring cannot get down to 'Manage AI models...' (see after_resume). No Pull press was made."
+}

@@ -1,0 +1,35 @@
+{
+ "row": "W1-R1 - the Update knowledge base button, after publishing (flow E row 1)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:24-20:27 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Ollama tab, Knowledge base section. Before: screen read 'Installed - version 2026.09.18', path /home/deck/.bonsai/rag (internal). settings rag_corpus_version 2026.09.18. Files dated 2026-09-18 01:50 (the local install from plan 58); corpus.db sha256 f579159a...fe51e, 2732032 bytes.",
+ "flow_start_orders": {
+  "text_try_order_screen": [
+   "gemma4:e2b-it-qat",
+   "nomic-embed-text:latest (greyed: Tier blocked, Size unknown)"
+  ],
+  "text_try_order_saved_setting": [],
+  "vision_try_order_screen": [
+   "gemma4:e2b-it-qat"
+  ],
+  "vision_try_order_saved_setting": [
+   "gemma4:e2b-it-qat"
+  ],
+  "note": "Read at 20:24 through Set text/vision try order (both closed with B = Cancel, nothing saved). The saved text order is empty, so the screen shows the default order."
+ },
+ "pressed": [
+  "walk to 'Update knowledge base' (y 267, h 44, visible)",
+  "A at 20:24:45",
+  "A again at ~20:26:10 with the toast reader running"
+ ],
+ "seen": {
+  "toast": "'Already up to date' / 'Version 2026.09.18 is the latest.' (read from notificationtoasts page on the 2nd press; the 1st press showed the same screen state and no log lines, toast not caught)",
+  "version_line_after": "Installed - version 2026.09.18, /home/deck/.bonsai/rag",
+  "files_after": "unchanged: same dates (2026-09-18 01:50) and the same corpus.db sha256",
+  "plugin_log": "no lines at all for either press (the up-to-date path writes nothing)",
+  "public_manifest_read_from_deck": "curl of the Hugging Face manifest from the Deck: version 2026.09.18, chunk corpus.db.zlib, urls to huggingface.co and github.com release knowledge-base-v1",
+  "code_path": "main.py update_rag_corpus: fetches the remote manifest, and when remote version == local version and a corpus.db exists, returns updated=false without downloading"
+ },
+ "verdict": "Step 3 PASS (version reads 2026.09.18). Step 4 UNCLEAR: the button found the public manifest (it can only say 'Version 2026.09.18 is the latest' after reading it) but nothing was downloaded, because the Deck already had 2026.09.18 from the local install on 09-18. The log names no source. The download-from-public-host proof moves to row 2, which downloads fresh."
+}

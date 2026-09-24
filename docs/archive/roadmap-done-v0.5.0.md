@@ -13,7 +13,10 @@ copied line for line, nothing reworded, to keep that document under its size lim
 _The six blocks below (2026-09-21 through the first two halves of plan 64's flow A) were moved out of
 [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's docs-room bookkeeping pass, oldest of the
 remaining Done entries first, copied line for line, nothing reworded, again to keep that document under
-its size limit. The newest Done block (plan 64 flow B) stayed in roadmap.md._
+its size limit._
+
+_The plan 64 flow B, flow C and flow D blocks below were moved out the same way, during the same plan's
+flow E bookkeeping pass, for the same reason. The newer flow E block stayed in roadmap.md._
 
 **Closed 2026-09-23 (plan 64, flow A part 1, proven on the Deck):**
 
@@ -68,6 +71,63 @@ its size limit. The newest Done block (plan 64 flow B) stayed in roadmap.md._
   as Handheld — could not run on the Deck tonight, because Claude Code's own automatic permission check
   refused the edit needed to set that up; it is covered instead by a written test that pins the same result.
   [Full detail](archive/roadmap-bugs-fixed.md#the-ui-size-setting-barely-changes-anything).
+
+**Closed 2026-09-23 (plan 64, flow B, proven on the Deck):**
+
+- ★★ `[ollama]` `[layout]` **The AI models list could push Done and Cancel off screen, and did not use all
+  the room it had** — **DONE, confirmed on the Deck 2026-09-23:** Done and Cancel now stay fully on screen
+  with all 25 models listed, three rows showing at a time. [Full detail](archive/roadmap-bugs-fixed.md#the-ai-models-screens-done-and-cancel-button-could-fall-off-the-bottom-of-a-long-model-list-and-the-list-itself-did-not-use-all-the-room-it-had).
+- ★ `[ask]` `[focus]` **Down from the question box while a reply is arriving did nothing, and Stop was hard
+  to find by D-pad** — **DONE, confirmed on the Deck 2026-09-23:** Down, and Right-Right, both reach Stop
+  while a reply arrives; normal after it finishes. [Full detail](archive/roadmap-bugs-fixed.md#down-from-the-question-box-while-a-reply-is-arriving-used-to-do-nothing-and-stop-was-hard-to-find-by-d-pad).
+- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **DONE, closed 2026-09-23 as no
+  longer applying:** Retry now sits above the answer since the layout changed; Up/Down there now mirror each
+  other. [Full detail](archive/roadmap-bugs-fixed.md#up-from-the-retry-icon-does-not-return-to-the-answer).
+- ★ `[reply]` **The no-game branch menu leaks its template** — **DONE, confirmed on the Deck 2026-09-23:** a
+  no-game Strategy question got a real two-choice menu; the literal words "THIS GAME" never appear. [Full detail](archive/roadmap-bugs-fixed.md#the-no-game-branch-menu-leaks-its-template).
+- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **DONE,
+  confirmed on the Deck 2026-09-23:** all four new chats stayed empty from the first frame. A related bug
+  was found the same night, filed separately in Bugs: a new chat can briefly show the previous chat's
+  question instead. [Full detail](archive/roadmap-bugs-fixed.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **DONE, confirmed on the Deck 2026-09-23:**
+  the game's name shows above the title with the ring on it, gone on a chat with no game. [Full detail](archive/roadmap-completed.md#the-game-a-chat-belongs-to-above-its-title).
+- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
+  line** — **DONE, confirmed on the Deck 2026-09-23 for a stopped reply:** the speaker reads the kept
+  partial answer aloud and stops it again on a second press. [Full detail](archive/roadmap-completed.md#read-aloud-is-a-small-speaker-on-the-helpful-row-not-a-dividing-line).
+- ★★★ `[layout]` **Session context folds into Show details** — **DONE for steps 1 to 6, confirmed on the
+  Deck 2026-09-23:** both tabs, all 27 session rows and Clear all take the ring, fully visible. **Two new
+  focus bugs split out, filed separately in Bugs:** the confirm box's default and its Cancel path. [Full detail](archive/roadmap-completed.md#session-context-folds-into-show-details).
+
+**Closed 2026-09-23 (plan 64, flow C, proven on the Deck):**
+
+- ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
+  **DONE, confirmed on the Deck 2026-09-23:** under a Hades reply, the open notes block named each
+  hand-written note as "From bonsAI's own note"; the words "no source" never appear. A shared tip's own
+  source page still cannot be seen on screen, since no shipped tip has one yet. [Full detail](archive/roadmap-bugs-fixed.md#the-credit-line-under-a-reply-never-names-a-note-with-no-source-page-or-a-shared-tip).
+- ★★ `[KB]` **"Not in my notes" line** — **DONE, confirmed on the Deck 2026-09-23:** the line reads exactly
+  right, no note card or notes block shows alongside it, and the log confirms nothing was searched or
+  attached. [Full detail](archive/roadmap-bugs-fixed.md#not-in-my-notes-line).
+- ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **DONE, confirmed on the Deck 2026-09-23:** the
+  last two rows (the lazy status tag, and phases that are not all emoji) each got their fifth clean,
+  differently-worded try; all seven of this entry's rows now pass. [Full detail](archive/roadmap-bugs-fixed.md#thinking-line-fixes-from-2026-08-0708).
+
+**Closed 2026-09-23 (plan 64, flow D, proven on the Deck):**
+
+- ★★ `[chat]` **A brand-new chat shows the previous chat's question for about 40 seconds** — **DONE, fixed
+  in `996752c`, confirmed on the Deck 2026-09-23:** two new chats, each recorded every 50 ms for 60 seconds,
+  showed 0 wrong question rows across 49 and 43 recorded changes. [Full detail](archive/roadmap-bugs-fixed.md#a-brand-new-chat-shows-the-previous-chats-question-for-about-40-seconds).
+- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
+  start** — **DONE, fixed in `a5684c7`, confirmed on the Deck 2026-09-23:** two tall sections landed with
+  their first line at the top of the visible area walking Down; walking Up, each arrived showing its end
+  and then scrolled back to its first line. [Full detail](archive/roadmap-bugs-fixed.md#walking-onto-an-answer-section-taller-than-the-view-shows-its-end-not-its-start).
+- ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
+  highlight** — **DONE, confirmed on the Deck 2026-09-23:** a recorded walk with the ring inside an answer
+  held its position still while the answer grew, the first real Deck proof that the `7b9447e` fix holds.
+  Two narrower problems split out of this one, tracked separately: the ring being carried off screen when it
+  sits on the chat row instead, and the ring vanishing at the moment an answer finishes. [Full detail](archive/roadmap-bugs-fixed.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
+- ★★★★ `[ollama]` **The plugin owns its token numbers** — **DONE, confirmed on the Deck 2026-09-23:**
+  Strategy and Expert replies with thinking on both ended on complete sentences (72 and 50 seconds), with no
+  clamping line in the log and normal stops well under the token limit. [Full detail](archive/roadmap-completed.md#the-plugin-owns-its-token-numbers).
 
 **Closed 2026-09-22 (plan 63, verification pass):**
 

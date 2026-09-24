@@ -1,0 +1,33 @@
+{
+ "row": "ROUTING-MERGE-01, the large-model half (flow E row 4)",
+ "build_commit": "ff62e8cc5b67f1f1e695550815b13bfca603dc42",
+ "deck_time": "2026-09-23 20:28-20:38 and 21:37-21:45 EDT",
+ "screen": "Deck's own screen (Big Picture 854x534; QAM window 854x454, read 854x494 once at 21:39 before a reload)",
+ "setup": "Disk 732 GB free on /home (models live in ~/.ollama, 4.3 GB before). High-VRAM switch off, saved text order [] (empty) at the start. gemma3:27b answers 200 at registry.ollama.ai.",
+ "pressed": [
+  "Manage AI models... -> Advanced -> 'Allow high-VRAM models in routing' A: screen read aria-checked=true, settings file still false (the screen keeps it as a draft until Done)",
+  "'< Browse & pull', Up to Filters, Right to 'Type a model name by hand', A; deck_set_input.py --text 'gemma3:27b' VERIFIED",
+  "There is no 'Pull selected' button for a typed name (footer read 'Done'), so A on the row's own Pull button (aria-label 'Pull custom model tag') at 20:30:16",
+  "Toast 'Pull started / gemma3:27b - watch progress in Settings.'; the AI models screen closed itself",
+  "Settings file still read model_allow_high_vram_fallbacks=false; reopened the screen: Advanced switch read OFF again",
+  "Turned it on again and pressed Done at 20:31:48 -> file read true"
+ ],
+ "seen": {
+  "download": "started 20:30:16, 38-39 MB/s, 17 GB, log 'success' and 'Local Ollama setup finished' at 20:38:00 (about 7.7 minutes)",
+  "high_vram_after_done": true,
+  "text_model_routing_order_file": [],
+  "ollama_list_21_45": [
+   "gemma3:27b 17 GB",
+   "nomic-embed-text:latest",
+   "gemma4:e2b-it-qat"
+  ],
+  "step_4_order_screen": "not read - see after_resume",
+  "after_resume": "Since the pause (checked 21:39-21:45): on the Ollama tab the ring stops on 'Update AI & models' (or 'Install Ollama' after the reload) and Down and Up both do nothing; the page's own focus moves to 'Browse models...' but Steam's ring does not follow. document.hasFocus() reads false in both the Quick Access page and the Big Picture page. Tried: L3 wake, closing and reopening the menu, a plugin reload (21:43), the Steam button then B. None cleared it. Every row left needs 'Manage AI models...', which is below that point.",
+  "note_on_merge": "main.py leaves an empty saved order alone when a model is pulled, so with the saved text order empty no merge to the top can happen in the file; only the screen's derived order could show it."
+ },
+ "possible_bugs": [
+  "A typed-name Pull closes the AI models screen and throws away an unsaved Advanced switch change. A person who turns on high-VRAM then pulls by name ends with the switch still off.",
+  "Done on the AI models screen at 20:31:48 wrote the knowledge base location back to /home/deck/.bonsai/rag (the old internal folder, deleted in row 2) over the SD-card path saved at 20:26:31. The file now reads rag_corpus_path=/home/deck/.bonsai/rag, version 2026.09.18, and the folder does not exist; the Ollama tab says 'Download knowledge base'. The screen had not re-read settings after the download."
+ ],
+ "verdict": "Steps 1-3 done (download finished). Steps 4-5 COULD NOT RUN (see after_resume). gemma3:27b is still installed and the high-VRAM switch is still on."
+}

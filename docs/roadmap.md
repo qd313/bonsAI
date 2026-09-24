@@ -295,6 +295,11 @@ replace it with a specific issue when one exists.
   one short sentence that carries the point and gives nothing away. **The 2026-09-12 count:** only 2 of 10
   answers already opened that way and 0 of 10 gave anything away — by the maintainer's own rule that means
   build it, but they read the count and said not yet. [Detail](roadmap-details.md#headline-first-every-answer-opens-with-one-line-that-stands-alone).
+- ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **OPEN, asked for by the maintainer
+  2026-09-23.** A Developer tab toggle: when on, each streamed piece settles into place the way a suggestion chip does in decode
+  mode, its unsettled tail churning through placeholder glyphs that lock into the real letters, smooth and without bursts, like
+  the Ghost in the Shell titles. Off by default. Reuse the decode chip's animation and timings (`MainTabPresetAnimatedChips.tsx`,
+  `MainTabChatTranscript.tsx`). Related to the accepted bug about streamed text arriving in bursts.
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
   answer finishes while the menu is closed, the toast says only *Reply ready*. It would read *bonsAI* over the first lines of
   the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.
@@ -438,6 +443,11 @@ replace it with a specific issue when one exists.
   itself, to avoid an anti-cheat ban. **Bench result, 2026-09-12: the panel works** — a sample answer
   appeared inside the headset view with no plugin code at all. **Still unknown:** pointing at the panel
   (needs a real headset) and whether the notification card SteamVR accepted actually drew on screen. [Detail](roadmap-details.md#the-floating-panel-inside-steamvr).
+- ★★★★★ `[QA]` `[platform]` **Stand-in Decks on the maintainer's PC** — **OPEN, planned 2026-09-23, nothing built.** Up to
+  four virtual Decks (Bazzite, one Steam account, all but one offline) so several AI sessions test at once instead of queuing
+  for the one Deck. A test lead splits the work; one rig lead per machine. Phase 0 first: one stand-in on Windows, screens
+  drawn without the graphics card; if that fails, a Linux dual boot. Driving several machines is a Deck test tools item,
+  not bonsAI code. [Plan 67](planning/67-stand-in-decks.md).
 - ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
   Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
   folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose

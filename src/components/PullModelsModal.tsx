@@ -127,6 +127,7 @@ import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
 import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
 import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelection";
 import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
+import { usePullModelPinForAsk } from "../hooks/usePullModelPinForAsk";
 import {
   getCatalogTags,
   isCatalogModelTagInList,
@@ -757,49 +758,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
     stretchConfirmedRef,
   });
 
-  /**
-   * "Use for Ask" — moves this tag to the front of the saved text try-order (and the vision one
-   * too, for a tag the catalog already knows is vision-capable), the same field
-   * ModelRoutingOrderModal reorders and resolve_routing_order() reads first. Reuses the existing
-   * `load_settings` / `save_settings` RPCs directly rather than adding a new one — `save_settings`
-   * merges a partial payload into the settings already on disk (main.py:784-799), so only the
-   * changed order(s) need to be sent.
-   */
-  const pinModelForAsk = useCallback(
-    async (entry: PullModelEntry | null, tag: string) => {
-      if (pinBusyTag) return;
-      setPinBusyTag(tag);
-      try {
-        const current = await callDeckyWithTimeout<[], PullModelsRoutingOrderSettings>(
-          "load_settings",
-          [],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        const textOrder = Array.isArray(current.text_model_routing_order) ? current.text_model_routing_order : [];
-        const patch: PullModelsRoutingOrderSettings = {
-          text_model_routing_order: [tag, ...textOrder.filter((t) => t !== tag)],
-        };
-        if (entry?.tags.includes("vision")) {
-          const visionOrder = Array.isArray(current.vision_model_routing_order)
-            ? current.vision_model_routing_order
-            : [];
-          patch.vision_model_routing_order = [tag, ...visionOrder.filter((t) => t !== tag)];
-        }
-        await callDeckyWithTimeout<[PullModelsRoutingOrderSettings], unknown>(
-          "save_settings",
-          [patch],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        setPinnedAskTag(tag);
-        toaster.toast({ title: "Now used for Ask", body: tag, duration: 3000 });
-      } catch (e) {
-        toaster.toast({ title: "Could not pin model", body: formatDeckyRpcError(e), duration: 4000 });
-      } finally {
-        setPinBusyTag(null);
-      }
-    },
-    [pinBusyTag]
-  );
+  // Lifted into usePullModelPinForAsk. It must stay at exactly this point in the hook list:
+  // React matches hooks by the order they run, not by name.
+  const { pinModelForAsk } = usePullModelPinForAsk({ pinBusyTag, setPinBusyTag, setPinnedAskTag });
 
   // Lifted into usePullModelDeleteConfirm. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.

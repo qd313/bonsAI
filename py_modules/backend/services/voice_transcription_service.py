@@ -27,6 +27,11 @@ voice_whisper_daemon is available, this file prefers it over spawning its
 own whisper-cli process for every decode pass; see that file for how that
 shared engine is started and stopped.
 
+Split (2026-09-24): finding and opening the microphone moved to
+voice_audio_capture_service.py. Every name it took (`env_for_audio_capture`
+included) is still imported back in here, so nothing outside this file had to
+change.
+
 How it works:
 
 How a few seconds of audio become one growing line of text:
@@ -88,7 +93,6 @@ Gotchas:
 from __future__ import annotations
 
 import asyncio
-import math
 import os
 import re
 import shutil
@@ -104,6 +108,15 @@ from typing import Any, Callable, Optional
 
 from backend.services.local_ollama_setup_service import _env_for_host_system_tools
 from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.services.voice_audio_capture_service import (
+    _discover_session_runtime_dir,
+    _parse_proc_environ,
+    _pcm_rms,
+    _resolve_capture_command,
+    _resolve_pipewire_mic_target,
+    _runtime_dir_usable,
+    env_for_audio_capture,
+)
 from backend.services.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
@@ -326,19 +339,6 @@ def _voice_binary_ready_for_inference(
     return None
 
 
-def _pcm_rms(chunk: bytes) -> float:
-    if len(chunk) < SAMPLE_WIDTH:
-        return 0.0
-    count = len(chunk) // SAMPLE_WIDTH
-    if count <= 0:
-        return 0.0
-    samples = struct.unpack(f"<{count}h", chunk[: count * SAMPLE_WIDTH])
-    if not samples:
-        return 0.0
-    mean_sq = sum(s * s for s in samples) / len(samples)
-    return math.sqrt(mean_sq)
-
-
 def _normalize_whisper_word(word: str) -> str:
     return (word or "").strip().lower().strip(".,!?;:\"'()[]")
 
@@ -374,151 +374,6 @@ def _is_stale_word_fragment(fragment: str, continuation: str) -> bool:
     if not frag_norm or not first_norm or len(frag_norm) < 3:
         return False
     return first_norm.startswith(frag_norm) and len(first_norm) > len(frag_norm)
-
-
-def _parse_proc_environ(pid: int) -> dict[str, str]:
-    try:
-        with open(f"/proc/{pid}/environ", "rb") as f:
-            blob = f.read()
-    except OSError:
-        return {}
-    out: dict[str, str] = {}
-    for part in blob.split(b"\0"):
-        if b"=" not in part:
-            continue
-        key, val = part.split(b"=", 1)
-        try:
-            out[key.decode(errors="replace")] = val.decode(errors="replace")
-        except Exception:
-            continue
-    return out
-
-
-def _runtime_dir_usable(path: str) -> bool:
-    if not path or not os.path.isdir(path):
-        return False
-    return any(
-        os.path.exists(os.path.join(path, name))
-        for name in ("pipewire-0", os.path.join("pulse", "native"))
-    )
-
-
-def _discover_session_runtime_dir() -> str:
-    """PipeWire/Pulse live under the interactive session's XDG_RUNTIME_DIR (gamescope/Steam)."""
-    uid = os.getuid()
-    default = f"/run/user/{uid}"
-    if _runtime_dir_usable(default):
-        return default
-
-    host_env = _env_for_host_system_tools()
-    pids: list[int] = []
-    for name in ("gamescope", "gamescope-wl", "steam", "plasmashell", "kwin_wayland"):
-        try:
-            out = subprocess.run(
-                ["pgrep", "-x", name],
-                capture_output=True,
-                text=True,
-                timeout=3,
-                env=host_env,
-            )
-            if out.returncode != 0:
-                continue
-            for line in (out.stdout or "").splitlines():
-                line = line.strip()
-                if line.isdigit():
-                    pids.append(int(line))
-        except Exception:
-            continue
-
-    seen: set[str] = set()
-    for pid in pids:
-        rd = _parse_proc_environ(pid).get("XDG_RUNTIME_DIR", "")
-        if rd and rd not in seen and _runtime_dir_usable(rd):
-            return rd
-
-    return default if os.path.isdir(default) else ""
-
-
-def env_for_audio_capture() -> dict[str, str]:
-    """Child env with the Deck user's PipeWire/Pulse session sockets (plugin_loader often lacks these).
-
-    Public (renamed from ``_env_for_audio_capture`` 2026-09-12): the read-aloud service reuses this
-    same session-socket discovery for playback rather than duplicating it — see
-    voice_read_aloud_service.py.
-    """
-    env = dict(_env_for_host_system_tools())
-    rd = _discover_session_runtime_dir()
-    if rd:
-        env["XDG_RUNTIME_DIR"] = rd
-        pulse_sock = os.path.join(rd, "pulse", "native")
-        if os.path.exists(pulse_sock):
-            env["PULSE_SERVER"] = f"unix:{pulse_sock}"
-    return env
-
-
-def _resolve_pipewire_mic_target(env: Optional[dict[str, str]] = None) -> str:
-    """Best-effort default PipeWire/Pulse capture source (Deck internal mic)."""
-    capture_env = env or env_for_audio_capture()
-    try:
-        proc = subprocess.run(
-            ["pactl", "list", "sources", "short"],
-            capture_output=True,
-            text=True,
-            timeout=5,
-            env=capture_env,
-        )
-        if proc.returncode != 0:
-            return ""
-        fallback = ""
-        for line in (proc.stdout or "").splitlines():
-            parts = line.split()
-            if len(parts) < 2:
-                continue
-            name = parts[1]
-            if ".monitor" in name:
-                continue
-            if "Internal_Mic" in name:
-                return name
-            lower = name.lower()
-            if "mic" in lower and "input" in lower:
-                fallback = name
-        return fallback
-    except Exception:
-        return ""
-
-
-def _resolve_capture_command() -> tuple[list[str], str, dict[str, str]]:
-    capture_env = env_for_audio_capture()
-    mic_target = _resolve_pipewire_mic_target(capture_env)
-    if shutil.which("pw-record"):
-        cmd = [
-            "pw-record",
-            "--rate",
-            str(SAMPLE_RATE),
-            "--channels",
-            str(CHANNELS),
-            "--format",
-            "s16",
-            "--raw",
-            "-",
-        ]
-        if mic_target:
-            cmd[1:1] = ["--target", mic_target]
-        return cmd, "pipewire", capture_env
-    for cmd, backend in (
-        (
-            ["parecord", f"--rate={SAMPLE_RATE}", "--channels=1", "--format=s16le", "--raw"]
-            + (["--device=" + mic_target] if mic_target else []),
-            "pulse",
-        ),
-        (["arecord", "-f", "S16_LE", "-r", str(SAMPLE_RATE), "-c", "1", "-t", "raw", "-q"], "alsa"),
-    ):
-        if shutil.which(cmd[0]):
-            return cmd, backend, capture_env
-    raise RuntimeError(
-        "No audio capture tool found (tried pw-record, parecord, arecord). "
-        "Install PipeWire or PulseAudio capture utilities."
-    )
 
 
 _WHISPER_TS_LINE = re.compile(

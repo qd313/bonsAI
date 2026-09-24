@@ -26,7 +26,9 @@ clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the knowledge base's download/update/
 remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`;
-the voice-input and read-aloud buttons are in `backend/services/voice_rpc.py`.
+the voice-input and read-aloud buttons are in `backend/services/voice_rpc.py`;
+screenshots, the Desktop debug/chat/app logs, clipboard and the small
+transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`.
 
 How it works:
 
@@ -142,7 +144,6 @@ from backend.services.chat_slot_service import (
     wipe_all_slots,
 )
 from backend.services import chat_slot_rpc
-from backend.services.reply_language_service import reply_language_snapshot
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
@@ -159,9 +160,8 @@ from backend.services.capabilities import (
 from backend.services.desktop_note_service import (
     append_app_log_sync,
     append_desktop_ask_transparency_sync,
-    append_desktop_chat_event_sync,
-    append_desktop_debug_note_sync,
 )
+from backend.services import media_desktop_rpc
 from backend.services.input_sanitizer_service import (
     apply_input_sanitizer_lane,
     classify_sanitizer_command,
@@ -177,14 +177,8 @@ from backend.services.screenshot_media import (
     MAX_ATTACHMENT_FILE_BYTES,
     MAX_ATTACHMENT_INLINE_BYTES,
     SUPPORTED_IMAGE_EXTENSIONS,
-    build_screenshot_preview_data_uri,
-    extract_app_id_from_screenshot_path,
     lookup_screenshot_vdf_metadata,
     lookup_steam_app_name,
-    resolve_recent_screenshot_paths,
-    resolve_plugin_capture_paths,
-    merge_recent_screenshot_paths,
-    take_steam_game_screenshot,
 )
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.async_background_job import (
@@ -1641,134 +1635,19 @@ class Plugin:
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""
-        try:
-            settings = await self.load_settings()
-            if not capability_enabled(settings, "media_library_access"):
-                return {
-                    "success": False,
-                    "items": [],
-                    "error": "Media library access is disabled. Enable it in the Permissions tab.",
-                }
-            items = []
-            runtime_dir = decky.DECKY_PLUGIN_RUNTIME_DIR
-            plugin_paths = resolve_plugin_capture_paths(runtime_dir, limit)
-            steam_paths = resolve_recent_screenshot_paths(app_id, limit)
-            merged_paths = merge_recent_screenshot_paths(steam_paths, plugin_paths, limit)
-            for path in merged_paths:
-                try:
-                    mtime = os.path.getmtime(path)
-                except OSError:
-                    mtime = 0
-                is_plugin_capture = path in plugin_paths or "/captures/" in path.replace("\\", "/")
-                items.append(
-                    {
-                        "path": path,
-                        "name": os.path.basename(path),
-                        "mtime": mtime,
-                        "size_bytes": os.path.getsize(path) if os.path.isfile(path) else 0,
-                        "source": "capture" if is_plugin_capture else "steam_recent",
-                        "app_id": extract_app_id_from_screenshot_path(path),
-                        "preview_data_uri": build_screenshot_preview_data_uri(path),
-                    }
-                )
-            return {"success": True, "items": items}
-        except Exception:
-            logger.exception("list_recent_screenshots failed")
-            return {"success": False, "items": [], "error": "Could not load recent screenshots."}
+        return await media_desktop_rpc.list_recent_screenshots(self, app_id, limit)
 
     async def append_desktop_debug_note(self, payload: Any = None):
         """Append timestamped Q&A markdown under ~/Desktop/bonsAI_logs/<name>.md (append-only)."""
-        settings = await self.load_settings()
-        if not capability_enabled(settings, "filesystem_write"):
-            await self._maybe_app_log(
-                "capability.denied",
-                "filesystem_write denied for append_desktop_debug_note",
-                level="verbose",
-            )
-            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
-        if not isinstance(payload, dict):
-            return {"success": False, "error": "Invalid request."}
-        stem = str(payload.get("stem", "") or "").strip()
-        question = str(payload.get("question", "") or "").strip()
-        response = str(payload.get("response", "") or "").strip()
-        if not stem:
-            return {"success": False, "error": "Note name is required."}
-        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
-        loop = asyncio.get_running_loop()
-
-        def _run() -> dict:
-            return append_desktop_debug_note_sync(home, stem, question, response)
-
-        result = await loop.run_in_executor(None, _run)
-        if result.get("ok"):
-            return {"success": True, "path": result.get("path", "")}
-        return {"success": False, "error": str(result.get("error", "Write failed."))}
+        return await media_desktop_rpc.append_desktop_debug_note(self, payload)
 
     async def append_desktop_chat_event(self, payload: Any = None):
         """Append Ask or AI response lines to daily UTC chat file under ~/Desktop/bonsAI_logs/."""
-        settings = await self.load_settings()
-        if not capability_enabled(settings, "filesystem_write"):
-            await self._maybe_app_log(
-                "capability.denied",
-                "filesystem_write denied for append_desktop_chat_event",
-                level="verbose",
-            )
-            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
-        if not isinstance(payload, dict):
-            return {"success": False, "error": "Invalid request."}
-        event = str(payload.get("event", "") or "").strip().lower()
-        question = str(payload.get("question", "") or "").strip()
-        response_text = str(payload.get("response_text", "") or "").strip()
-        screenshot_paths = payload.get("screenshot_paths")
-        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
-        loop = asyncio.get_running_loop()
-
-        def _run() -> dict:
-            return append_desktop_chat_event_sync(
-                home,
-                event,
-                question=question,
-                response_text=response_text,
-                screenshot_paths=screenshot_paths if isinstance(screenshot_paths, list) else [],
-            )
-
-        result = await loop.run_in_executor(None, _run)
-        if result.get("ok"):
-            return {"success": True, "path": result.get("path", "")}
-        return {"success": False, "error": str(result.get("error", "Write failed."))}
+        return await media_desktop_rpc.append_desktop_chat_event(self, payload)
 
     async def append_app_log(self, payload: Any = None):
         """Append one app-activity line to ~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log."""
-        settings = await self.load_settings()
-        if not isinstance(payload, dict):
-            return {"success": False, "error": "Invalid request."}
-        event_level = str(payload.get("level", "default") or "default").strip().lower()
-        if event_level not in ("default", "verbose"):
-            event_level = "default"
-        if not Plugin._desktop_app_log_level_allows(settings, event_level):
-            return {"success": True, "skipped": True}
-        if not capability_enabled(settings, "filesystem_write"):
-            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
-        category = str(payload.get("category", "") or "app").strip() or "app"
-        message = str(payload.get("message", "") or "").strip()
-        fields_raw = payload.get("fields")
-        fields = fields_raw if isinstance(fields_raw, dict) else None
-        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
-        loop = asyncio.get_running_loop()
-
-        def _run() -> dict:
-            return append_app_log_sync(
-                home,
-                level=event_level,
-                category=category,
-                message=message,
-                fields=fields,
-            )
-
-        result = await loop.run_in_executor(None, _run)
-        if result.get("ok"):
-            return {"success": True, "path": result.get("path", "")}
-        return {"success": False, "error": str(result.get("error", "Write failed."))}
+        return await media_desktop_rpc.append_app_log(self, payload)
 
     async def _persist_input_transparency(self, snapshot: dict) -> None:
         """Store last transparency for ``get_input_transparency``; optionally append verbose Desktop trace."""
@@ -1901,18 +1780,11 @@ class Plugin:
 
     async def get_input_transparency(self):
         """Return the last Ask transparency snapshot (full prompts; fetch after terminal completion)."""
-        from backend.services.transparency_service import ensure_context_chips_on_snapshot
-
-        snap = self._last_input_transparency
-        if not isinstance(snap, dict) or not snap:
-            return {"available": False}
-        enriched = ensure_context_chips_on_snapshot(dict(snap))
-        return {"available": True, "snapshot": enriched}
+        return await media_desktop_rpc.get_input_transparency(self)
 
     async def get_reply_language_snapshot(self):
         """Return Steam client language, persisted override, and effective Ask reply language."""
-        settings = await self.load_settings()
-        return reply_language_snapshot(settings.get("reply_language"))
+        return await media_desktop_rpc.get_reply_language_snapshot(self)
 
     async def save_ask_feedback(
         self,
@@ -1923,70 +1795,21 @@ class Plugin:
         chip_id: str = "",
     ):
         """Persist thumbs up/down locally (JSONL under plugin settings); no network."""
-        from backend.services.feedback_service import append_ask_feedback
-
-        rid = int(request_id) if request_id else None
-        return append_ask_feedback(
-            decky.DECKY_PLUGIN_SETTINGS_DIR,
-            request_id=rid,
-            rating=str(rating or ""),
-            question_len=int(question_len or 0),
-            success=success is True,
-            chip_id=str(chip_id or ""),
+        return await media_desktop_rpc.save_ask_feedback(
+            self, rating, request_id, question_len, success, chip_id
         )
 
     async def read_host_clipboard_text(self):
         """Read clipboard via host script when the WebView cannot use ``navigator.clipboard``."""
-        from backend.services.clipboard_service import read_host_clipboard_text
-
-        return read_host_clipboard_text(logger)
+        return await media_desktop_rpc.read_host_clipboard_text(self)
 
     async def write_host_clipboard_text(self, text: str = ""):
-        """Write clipboard via host script (wl-copy/xclip); last-resort fallback behind the
-        frontend's own navigator.clipboard.writeText and execCommand('copy') attempts."""
-        from backend.services.clipboard_service import write_host_clipboard_text
-
-        return write_host_clipboard_text(text, logger)
+        """Write clipboard via host script; see media_desktop_rpc.py for the fallback order."""
+        return await media_desktop_rpc.write_host_clipboard_text(self, text)
 
     async def take_steam_screenshot(self, app_id: str = ""):
         """Close-QAM flow: capture game into Steam screenshots (not auto-attached to Ask)."""
-        try:
-            settings = await self.load_settings()
-            from backend.services.capabilities import capability_enabled
-
-            if not (
-                capability_enabled(settings, "media_library_access")
-                or capability_enabled(settings, "filesystem_write")
-            ):
-                return {
-                    "success": False,
-                    "error": (
-                        "Screenshot capture is disabled. Enable Read game & screenshot context "
-                        "in the Permissions tab."
-                    ),
-                }
-            clean_env = Plugin._clean_env()
-            loop = asyncio.get_running_loop()
-            result = await loop.run_in_executor(
-                None,
-                lambda: take_steam_game_screenshot(str(app_id or ""), clean_env),
-            )
-            if result.get("success") and isinstance(result.get("item"), dict):
-                item = dict(result["item"])
-                path = str(item.get("path", ""))
-                if path:
-                    try:
-                        item["size_bytes"] = os.path.getsize(path)
-                    except OSError:
-                        item["size_bytes"] = 0
-                    preview = build_screenshot_preview_data_uri(path)
-                    if preview:
-                        item["preview_data_uri"] = preview
-                result["item"] = item
-            return result
-        except Exception:
-            logger.exception("take_steam_screenshot failed")
-            raise
+        return await media_desktop_rpc.take_steam_screenshot(self, app_id)
 
     async def _execute_game_ai_request(
         self,

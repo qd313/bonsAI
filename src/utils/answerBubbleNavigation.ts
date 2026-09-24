@@ -236,6 +236,37 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
   return focusPanelEl(el);
 }
 
+/**
+ * Put the ring back on a specific section, by its position rather than the element itself — used
+ * when a turn's whole bubble subtree has just been replaced by a new one (the live answer becoming
+ * an archived turn; see the comment on this in MainTabChatTranscript.tsx). The old stop is gone, so
+ * there is nothing to hand focus from; this is the same "enter this bubble's own section" shape as
+ * `focusFirstAnswerChunk`, only landing on `stops[index]` instead of `stops[0]`.
+ *
+ * Clamped to the last stop: a finished answer can split into fewer sections than the streaming
+ * version did (different chunking function — see buildAnswerBubbleElement.tsx), so the remembered
+ * index can point past the end of the new list.
+ *
+ * Looks the bubble up by its key only, unlike `focusFirstAnswerChunk`: the element that held the
+ * ring was just destroyed, so "the bubble around the ring" can only name the old, detached one.
+ */
+export function focusAnswerChunkAtIndex(answerKey: string, index: number): boolean {
+  if (index < 0) return false;
+  const el = findAnswerBubbleByKey(answerKey);
+  if (!el) return false;
+  registerAnswerBubbleEl(answerKey, el);
+  takeAnswerBubbleNavFocus(answerKey);
+  const stops = orderedAnswerStops(answerKey, el);
+  if (!stops.length) return focusPanelEl(el);
+  const target = stops[Math.min(index, stops.length - 1)]!;
+  if (focusAnswerStop(target)) {
+    const scroll = findScrollablePanel(el);
+    if (scroll) revealBelowDock(target, scroll);
+    return true;
+  }
+  return focusPanelEl(el);
+}
+
 export function resolveAnswerBubbleEl(
   answerKey?: string,
   hint?: HTMLElement | null

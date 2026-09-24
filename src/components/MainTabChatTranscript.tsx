@@ -185,7 +185,9 @@ import {
   queryLiveTurnSlot,
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
-import { focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
+import { focusAnswerChunkAtIndex, focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
+import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
+import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
 import { questionLooksLikeTroubleshootingAsk } from "../utils/troubleshootingAskHeuristic";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
@@ -1374,6 +1376,50 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     Boolean(liveQuestion) ||
     (isAsking && !isForeignPendingAsk) ||
     (showLiveResponse && expandedTurnKey === "live");
+
+  /*
+   * Roadmap: "the ring is lost when an answer finishes while you walk it." Walking Down into a
+   * still-streaming answer parks the ring on one of its stops, registered under answerKey "live".
+   * The instant the Ask completes, the slot reload archives the turn and points `expandedTurnKey`
+   * at the newest archived id — `showLiveTurn` goes false and the WHOLE "live" Focusable subtree
+   * below (key="live") unmounts, replaced by a brand-new turn slot (key=turn.id) in the archived
+   * map above. That takes whatever stop held the ring with it: nothing on screen carries Steam's
+   * ring class afterwards, and useStreamScrollPin's own delivery pass — which would otherwise bring
+   * a surviving ring back into view — finds no ring to move and drags the pane to the very end
+   * instead. Measured on device 2026-09-23 (docs/test-evidence/plan64-STREAM-WALK-REC-01.json,
+   * try 2): ring on a live answer stop, answer finishes, "no focus event recorded", scrollTop jumps
+   * to 1333 of 1333.
+   *
+   * The fix remembers WHICH stop (by position — the element itself is about to be destroyed) held
+   * the ring while the live turn was still showing, and the moment it is replaced by its archived
+   * twin, hands the ring to the same position in the new bubble's own stops
+   * (`focusAnswerChunkAtIndex`). Recorded on every render rather than once at completion, because
+   * nothing here is told when the ring moves — Steam moves it without touching React state — so the
+   * only reliable reading is "whatever it was on the last commit before the swap". A ring recorded
+   * as -1 (on Ask, Stop, the header, or anywhere outside the live answer) is left alone, matching
+   * the rest of this file's rule that a restore only ever returns the ring to where it already was.
+   */
+  const liveAnswerRingStopIndexRef = useRef(-1);
+  useLayoutEffect(() => {
+    if (!showLiveTurn) return;
+    const bubble = getRegisteredAnswerBubble("live");
+    const stops = bubble ? orderedAnswerStops("live", bubble) : [];
+    liveAnswerRingStopIndexRef.current = focusedAnswerStopIndex(stops);
+  });
+
+  const wasLiveTurnShowingRef = useRef(showLiveTurn);
+  useLayoutEffect(() => {
+    const wasShowing = wasLiveTurnShowingRef.current;
+    wasLiveTurnShowingRef.current = showLiveTurn;
+    if (!wasShowing || showLiveTurn) return; // only the live -> archived edge
+    const stopIndex = liveAnswerRingStopIndexRef.current;
+    liveAnswerRingStopIndexRef.current = -1;
+    if (stopIndex < 0) return; // the ring was not in the live answer — nothing to restore
+    const newestTurn = askThreadCollapsed[askThreadCollapsed.length - 1];
+    if (!newestTurn) return;
+    focusAnswerChunkAtIndex(newestTurn.id, stopIndex);
+  }, [showLiveTurn, askThreadCollapsed]);
+
   const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 
   const [earlierExpanded, setEarlierExpanded] = useState(false);

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 425,
-  "edgeCount": 1090,
+  "fileCount": 428,
+  "edgeCount": 1098,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -937,6 +937,7 @@
     "src/components/PullModelsModal.tsx": {
       "imports": [
         "src/components/BonsaiModalScope.tsx",
+        "src/components/PullModelsModal.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
@@ -945,6 +946,8 @@
         "src/hooks/usePullModelCatalog.ts",
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
+        "src/utils/pullModelFilters.ts",
+        "src/utils/pullModelNewBadge.ts",
         "src/utils/pullModelRecommendations.ts"
       ],
       "importedBy": [
@@ -955,6 +958,16 @@
         "src/components/PullModelsModal.formSubmit.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.test.tsx"
+      ]
+    },
+    "src/components/PullModelsModal.types.ts": {
+      "imports": [
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx",
+        "src/utils/pullModelFilters.ts"
       ]
     },
     "src/components/ReplyCopyButton.test.tsx": {
@@ -1421,6 +1434,7 @@
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsModal.types.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
@@ -1431,7 +1445,8 @@
         "src/types/backgroundAsk.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/inputTransparency.ts",
-        "src/utils/modelRoutingOrder.ts"
+        "src/utils/modelRoutingOrder.ts",
+        "src/utils/pullModelFilters.ts"
       ]
     },
     "src/data/ollamaKeepAlive.ts": {
@@ -1494,6 +1509,7 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsModal.types.ts",
         "src/data/pullModelCatalog.test.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/usePullModelCatalog.ts",
@@ -1501,6 +1517,7 @@
         "src/utils/mergePullModelCatalog.test.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/modelRoutingOrder.ts",
+        "src/utils/pullModelFilters.ts",
         "src/utils/pullModelRecommendations.test.ts",
         "src/utils/pullModelRecommendations.ts"
       ]
@@ -4099,6 +4116,22 @@
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/hooks/usePullModelCatalog.ts"
+      ]
+    },
+    "src/utils/pullModelFilters.ts": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts",
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/utils/pullModelNewBadge.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
       ]
     },
     "src/utils/pullModelRecommendations.test.ts": {

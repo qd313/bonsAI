@@ -21,11 +21,6 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1978,
-      "role": ""
-    },
-    {
       "path": "src/index.tsx",
       "lines": 1811,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -33,6 +28,11 @@
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1803,
+      "role": ""
+    },
+    {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1787,
       "role": ""
     },
     {

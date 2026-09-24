@@ -18,9 +18,11 @@
  * Does not: Decide the order bonsAI tries installed models in when
  * answering — see ModelRoutingOrderModal for that. This screen only
  * installs and removes models, and can mark one as the current pick.
- * The New-badge record math lives in utils/pullModelNewBadge.ts, and the
- * shared request/prop types live in PullModelsModal.types.ts — both are
- * re-exported below so nothing else needs to change its imports.
+ * The New-badge record math lives in utils/pullModelNewBadge.ts, the
+ * shared request/prop types live in PullModelsModal.types.ts, and the
+ * table/Filters-panel matching and row model live in
+ * utils/pullModelFilters.ts — the first two are re-exported below so
+ * nothing else needs to change its imports.
  *
  * How it works:
  *
@@ -114,11 +116,9 @@ import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
-import type { ModelPolicyTierId } from "../data/modelPolicy";
 import {
   disclosureSummaryForSourceClass,
   MODEL_POLICY_PERMISSIONS_INTRO,
-  MODEL_POLICY_TIER_IDS,
   MODEL_POLICY_TIER_LABELS_PLAIN,
 } from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
@@ -145,6 +145,21 @@ import type {
   PullModelsModalProps,
 } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
+import {
+  entryMatchesLicenceTier,
+  entryMatchesModeFilters,
+  filterPanelRowAriaLabel,
+  filterPanelRowGroupHeading,
+  filterPanelRowKey,
+  filterPanelRowLabel,
+  findUnavailableRegistryTags,
+  isTagInstalled,
+  normalizeInstalledSet,
+  resolveRowSizeGb,
+  FILTER_PANEL_ROWS,
+  type FilterPanelRow,
+} from "../utils/pullModelFilters";
+export { findUnavailableRegistryTags };
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
@@ -160,115 +175,6 @@ export {
 };
 export { PULL_MODEL_NEW_BADGE_STORAGE_KEY };
 
-/** Minimal shape this modal needs from `load_settings` / `save_settings` — see bonsaiSettingsSchema.ts for the rest. */
-/**
- * Which of the requested tags the Ollama registry does not actually publish.
- *
- * `pull_ollama_models` (`main.py:_start_custom_ollama_pull`) already runs this exact check on the
- * back end before starting anything, but when the request mixes good and bad names it starts the
- * good ones and only logs the bad ones -- the screen used to say "Pull started" for every name
- * with no sign one was dropped. Running the same live-registry lookup here first means the queued
- * "Pull selected" request can leave the bad name out and say so, instead of the person finding out
- * only when that model is never there to use. Mirrors `partition_pull_tags_by_registry`
- * (`ollama_catalog_service.py`): a tag missing from the response, or without `exists: true`, counts
- * as unavailable; an offline check (no live source) cannot tell either way, so nothing is flagged.
- */
-export function findUnavailableRegistryTags(
-  tags: string[],
-  meta: CatalogMetadataResponse | null | undefined
-): string[] {
-  if (!meta || meta.source !== "live") return [];
-  const tagMeta = meta.tags ?? {};
-  return tags.filter((tag) => tagMeta[tag]?.exists !== true);
-}
-
-function normalizeInstalledSet(models: string[]): Set<string> {
-  const s = new Set<string>();
-  for (const m of models) {
-    const t = (m || "").trim();
-    if (t) s.add(t);
-  }
-  return s;
-}
-
-function isTagInstalled(tag: string, installed: Set<string>): boolean {
-  if (installed.has(tag)) return true;
-  if (installed.has(`${tag}:latest`)) return true;
-  const base = tag.split(":")[0];
-  for (const inst of installed) {
-    if (inst === tag || inst.startsWith(`${tag}:`)) return true;
-    if (tag.includes(":") && inst.split(":")[0] === base && inst === tag) return true;
-  }
-  return false;
-}
-
-function resolveRowSizeGb(entry: PullModelEntry, liveSizes: Record<string, number | undefined>): number {
-  const live = liveSizes[entry.tag];
-  if (typeof live === "number" && live > 0) return live;
-  return entry.sizeGb;
-}
-
-function entryMatchesModeFilter(entry: PullModelEntry, mode: PullModelModeFilterId): boolean {
-  if (mode === "speed") return entry.tags.includes("chat");
-  if (mode === "strategy") return entry.tags.includes("strategy");
-  if (mode === "expert") return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
-  return entry.tags.includes("vision") || entry.tags.includes("ocr");
-}
-
-/** No mode ticked shows everything; one or more ticked shows anything that fits *any* of them. */
-function entryMatchesModeFilters(entry: PullModelEntry, modes: ReadonlySet<PullModelModeFilterId>): boolean {
-  if (modes.size === 0) return true;
-  for (const mode of modes) {
-    if (entryMatchesModeFilter(entry, mode)) return true;
-  }
-  return false;
-}
-
-/**
- * The Licence filter, replacing the old standalone Policy tier buttons (plan 62, § 3d) — it is
- * the point of the change, so it filters the list exactly the way the three tiers read: Tier 1
- * shows only FOSS tags, Tier 2 adds open-weight, Tier 3 ("Any installed model") holds nothing
- * back. Each tier is a superset of the one before it.
- */
-function entryMatchesLicenceTier(entry: PullModelEntry, tier: ModelPolicyTierId): boolean {
-  if (tier === "open_source_only") return entry.licenseClass === "foss";
-  if (tier === "open_weight") return entry.licenseClass === "foss" || entry.licenseClass === "open_weight";
-  return true;
-}
-
-/**
- * One row in the Filters panel (plan 62, § 3d) — the six filters, grouped under three headings.
- * Licence is a three-way pick (like the old Policy buttons); the rest are independent toggles.
- * A flat, ordered array rather than nested objects because every piece of D-pad wiring below
- * (Up/Down between rows, and the panel's own entry/exit) walks it by a single row index.
- */
-type FilterPanelRow =
-  | { kind: "licence"; tier: ModelPolicyTierId }
-  | { kind: "mode"; id: PullModelModeFilterId }
-  | { kind: "installedOnly" }
-  | { kind: "essentialsOnly" }
-  | { kind: "recentlyAdded" };
-
-const FILTER_PANEL_ROWS: readonly FilterPanelRow[] = [
-  ...MODEL_POLICY_TIER_IDS.map((tier): FilterPanelRow => ({ kind: "licence", tier })),
-  ...PULL_MODEL_MODE_FILTER_OPTIONS.map((opt): FilterPanelRow => ({ kind: "mode", id: opt.id })),
-  { kind: "installedOnly" },
-  { kind: "essentialsOnly" },
-  { kind: "recentlyAdded" },
-];
-
-function filterPanelRowKey(row: FilterPanelRow): string {
-  if (row.kind === "licence") return `licence-${row.tier}`;
-  if (row.kind === "mode") return `mode-${row.id}`;
-  return row.kind;
-}
-
-function filterPanelRowGroupHeading(row: FilterPanelRow): string {
-  if (row.kind === "licence") return "Licence";
-  if (row.kind === "mode") return "Matches Ask mode";
-  return "Show";
-}
-
 /**
  * `.focus()` then `.scrollIntoView()` if the element actually has one — jsdom (this repo's unit
  * test DOM) never implements scrollIntoView, so an unguarded call throws the moment a test drives
@@ -282,22 +188,6 @@ function focusAndReveal(el: HTMLElement | null | undefined): boolean {
     el.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
   return true;
-}
-
-function filterPanelRowLabel(row: FilterPanelRow): string {
-  if (row.kind === "licence") return MODEL_POLICY_TIER_LABELS_PLAIN[row.tier];
-  if (row.kind === "mode") {
-    return PULL_MODEL_MODE_FILTER_OPTIONS.find((opt) => opt.id === row.id)?.label ?? row.id;
-  }
-  if (row.kind === "installedOnly") return "Installed only";
-  if (row.kind === "essentialsOnly") return "Essentials only";
-  return "Recently added";
-}
-
-/** Same text as filterPanelRowLabel, except Essentials only keeps its longer spoken description. */
-function filterPanelRowAriaLabel(row: FilterPanelRow): string {
-  if (row.kind === "essentialsOnly") return "Essentials only — show Tier 1 and Tier 2 one-model presets";
-  return filterPanelRowLabel(row);
 }
 
 /**

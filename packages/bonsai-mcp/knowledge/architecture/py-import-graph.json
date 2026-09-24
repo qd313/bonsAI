@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 86,
-  "edgeCount": 200,
+  "fileCount": 87,
+  "edgeCount": 202,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -127,6 +127,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_cards.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "count": 3
     },
@@ -180,10 +184,6 @@
     },
     {
       "path": "py_modules/backend/services/kb_not_in_notes_notice.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_cards.py",
       "count": 2
     },
     {
@@ -276,6 +276,10 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_game_match.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_search.py",
       "count": 1
     },
     {
@@ -715,6 +719,7 @@
       ],
       "importedBy": [
         "py_modules/backend/services/knowledge_base_game_match.py",
+        "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
@@ -741,12 +746,21 @@
         "py_modules/backend/services/rag_corpus_status.py"
       ]
     },
+    "py_modules/backend/services/knowledge_base_search.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_cards.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/knowledge_base_service.py"
+      ]
+    },
     "py_modules/backend/services/knowledge_base_service.py": {
       "imports": [
         "py_modules/backend/services/compat_topic_router.py",
         "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/knowledge_base_schema.py",
+        "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_prompts.py"
       ],

@@ -11,11 +11,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1809,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabChatTranscript.tsx",
       "lines": 1760,
       "role": ""
@@ -28,6 +23,11 @@
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1586,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1452,
       "role": ""
     },
     {

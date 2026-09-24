@@ -442,6 +442,21 @@ All notable changes to this project are documented in this file.
 - **Install voice engine:** Podman build compiles `whisper-cli` + `whisper-server` in one pass; **VOICE-05**–**VOICE-07** QA rows in `docs/testing.md`.
 - **RPC calls now time out (behavior change):** Frontend RPCs go through `callDeckyWithTimeout` (15s, `DECKY_RPC_TIMEOUT_MS`) instead of raw `call()` — settings load/save, Ask submit, background-ask status/abort, intent packs, strategy checklist, reply language, screenshots, voice status, desktop debug notes. **A hung backend now surfaces a timeout error where the UI previously waited indefinitely.** Four long-running calls deliberately stay unbounded and are commented in place: `clear_plugin_data`, `install_rag_corpus_local`, `start_voice_transcription`, `stop_voice_transcription`. On-Deck QA: **RPC-TIMEOUT-01** in `docs/testing.md`.
 - **Agent architecture snapshots:** `module-map.json` renamed `hotspots.json` (it is a size ranking, not a dependency graph) and a real `import-graph.json` added — importers/imports for every `src/` TS file, plus cycle and orphan detection. Both regenerate via the existing pre-commit hook. Anything reading `module-map.json` must be updated.
+- **Fourteen long code files split into smaller ones, and four of the big background documents trimmed
+  (no user-visible change):** behind the scenes only — nothing a person using the plugin would notice.
+  Fourteen files that had grown past a comfortable size — the back end's front door, the chat transcript,
+  the model download window, the plugin's main screen, the Ask logic, the style sheet, the Ask bar, the
+  where-the-AI-runs settings, the animated chips row, the knowledge-base service, the prompt builder, the
+  AI service, voice transcription and the question builder — went from 18,767 lines of code to 11,521
+  overall; most came out between a tenth and two thirds smaller, not half, because their screen-drawing
+  code and one long question-building function cannot move without a rewrite. The testing rows, the
+  manual Deck checks, the locked-decisions file and the long notes behind roadmap entries went from
+  975,989 to 417,563 bytes together, 57% less to read before any work is marked done. A new check now
+  stops any code file over 800 lines from growing back. Confirmed on the Deck 2026-09-24 (build
+  `cabda5dd`, later `b56de863`): deploy, the load log, a free-use pass, the chip row, the reply buttons,
+  voice, the AI models screen, Where the AI runs and Settings all still work. One real regression from
+  the move was found and fixed the same night — the Desktop activity log had stopped writing any lines —
+  and a re-check on the fixed build confirmed it writes again. `docs/planning/65-trim-docs-split-long-files.md`.
 
 ### Removed
 - **Two re-export shims (no user-visible change):** `refactor_helpers.py` and `src/utils/settingsAndResponse.ts` held no logic — only forwarding — and hid which module a consumer actually depended on. Their 9 and 22 importers now name `backend.ollama_routing` / `ollama_urls` / `tdp_intent` and `bonsaiSettingsSchema` / `bonsaiSettingsNormalizers` / `settingsPayload` directly. Deploy scripts and the zip verifier no longer ship or require `refactor_helpers.py`. Tests follow their subjects: `test_refactor_helpers.py` → `test_backend_helpers.py`, `settingsAndResponse.test.ts` → `settingsContracts.test.ts`. `settingsPayload.ts` also gives up its reply-text formatting to a new `appliedTuningText.ts`.

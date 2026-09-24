@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 457,
-  "edgeCount": 1201,
+  "fileCount": 458,
+  "edgeCount": 1203,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3099,6 +3099,14 @@
         "src/styles/sections/gamepadAndPullModels.test.ts"
       ]
     },
+    "src/styles/sections/questionBubble.ts": {
+      "imports": [
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/section-6.ts"
+      ]
+    },
     "src/styles/sections/scopeBase.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
@@ -3170,6 +3178,7 @@
       "imports": [
         "src/features/unified-input/constants.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
+        "src/styles/sections/questionBubble.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -3210,6 +3219,7 @@
     "src/styles/sections/uiScalePx.ts": {
       "imports": [],
       "importedBy": [
+        "src/styles/sections/questionBubble.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
         "src/styles/sections/section-4.ts",

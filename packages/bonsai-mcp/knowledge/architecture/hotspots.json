@@ -41,11 +41,6 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1578,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1506,
       "role": ""
@@ -64,6 +59,11 @@
       "path": "src/index.tsx",
       "lines": 1398,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
+    },
+    {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 1387,
+      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

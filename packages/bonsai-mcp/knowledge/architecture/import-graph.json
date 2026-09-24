@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 448,
-  "edgeCount": 1182,
+  "fileCount": 449,
+  "edgeCount": 1189,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -147,8 +147,8 @@
       ],
       "importedBy": [
         "src/components/ContextChipLadder.test.tsx",
-        "src/components/MainTabChatTranscript.tsx",
-        "src/components/SessionContextStrip.tsx"
+        "src/components/SessionContextStrip.tsx",
+        "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
     "src/components/DesktopNoteSaveModal.tsx": {
@@ -459,7 +459,6 @@
     "src/components/MainTabChatTranscript.tsx": {
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
-        "src/components/ContextChipLadder.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/PermissionDenyAction.tsx",
         "src/components/SessionContextStrip.tsx",
@@ -484,6 +483,7 @@
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/askThinkingPhases.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -494,7 +494,6 @@
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
         "src/utils/focusNavigation.ts",
-        "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
@@ -1017,7 +1016,8 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
-        "src/components/SessionContextStrip.test.tsx"
+        "src/components/SessionContextStrip.test.tsx",
+        "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
     "src/components/SettingsTab.mdns.test.ts": {
@@ -3378,6 +3378,7 @@
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/askOrchestrationRestore.ts",
         "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/chatSlotTurns.ts",
         "src/utils/reasoningDisplay.ts",
         "src/utils/strategyChecklist.ts",
@@ -3737,6 +3738,21 @@
         "src/utils/buildAnswerBubbleElement.test.tsx"
       ]
     },
+    "src/utils/buildDetailsPanelElement.tsx": {
+      "imports": [
+        "src/components/ContextChipLadder.tsx",
+        "src/components/SessionContextStrip.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/buildKbNotesBlockElement.tsx",
+        "src/utils/focusNavigation.ts",
+        "src/utils/focusPerTurnRow.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/liveTurnFocusGraph.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/utils/buildKbNotesBlockElement.tsx": {
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
@@ -3748,7 +3764,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx"
+        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
     "src/utils/buildReasoningFoldElement.tsx": {
@@ -4093,6 +4110,7 @@
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -4106,7 +4124,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/liveTurnFocusGraph.ts"
       ]
@@ -4154,6 +4172,7 @@
         "src/utils/archivedTurnTransparency.test.ts",
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/chatSlotsApi.ts",
         "src/utils/contextChipsFromSnapshot.test.ts",
@@ -4210,6 +4229,7 @@
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",

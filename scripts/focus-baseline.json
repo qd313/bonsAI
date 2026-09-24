@@ -8,9 +8,6 @@
     "src/components/KnowledgeBaseSection.tsx": {
       "page-search": 1
     },
-    "src/components/MainTabChatTranscript.tsx": {
-      "page-search": 1
-    },
     "src/components/MainTabUnifiedAskBar.tsx": {
       "ring-question": 1
     },
@@ -56,6 +53,9 @@
     },
     "src/utils/answerStopRegistry.ts": {
       "tabindex-removal": 1
+    },
+    "src/utils/buildDetailsPanelElement.tsx": {
+      "page-search": 1
     },
     "src/utils/drgGlossaryTermRegistry.ts": {
       "tabindex-removal": 1

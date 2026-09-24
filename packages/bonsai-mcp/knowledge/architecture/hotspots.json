@@ -11,13 +11,13 @@
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2176,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 2008,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2008,
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1921,
       "role": ""
     },
     {

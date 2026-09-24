@@ -87,7 +87,7 @@
  * MainTabUnifiedAskBar.types.ts now (re-exported below, so nothing that
  * imports them from here needs to change).
  */
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
@@ -127,13 +127,11 @@ import {
   ASK_MODE_LABELS,
 } from "../data/askMode";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
-import {
-  MainTabAttachMenuPopover,
-  type AttachMenuActionId,
-} from "./MainTabAttachMenuPopover";
+import { MainTabAttachMenuPopover } from "./MainTabAttachMenuPopover";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
 import { useAskBarSettingsCardRows } from "../hooks/useAskBarSettingsCardRows";
+import { useAskBarMenuToggles } from "../hooks/useAskBarMenuToggles";
 import {
   registerNavFocus,
   takeNavFocus,
@@ -370,44 +368,25 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     };
   }, []);
 
-  const toggleAskModeMenu = useCallback(() => {
-    if (askModeToggleOnceRef.current) return;
-    askModeToggleOnceRef.current = true;
-    setAttachMenuOpen(false);
-    setAskModeMenuOpen((o) => !o);
-    queueMicrotask(() => {
-      askModeToggleOnceRef.current = false;
-    });
-  }, []);
-  const closeAskModeMenu = useCallback(() => setAskModeMenuOpen(false), []);
-  const toggleAttachMenu = useCallback(() => {
-    if (attachMenuToggleOnceRef.current) return;
-    attachMenuToggleOnceRef.current = true;
-    setAskModeMenuOpen(false);
-    setAttachMenuOpen((o) => !o);
-    queueMicrotask(() => {
-      attachMenuToggleOnceRef.current = false;
-    });
-  }, []);
-  const closeAttachMenu = useCallback(() => setAttachMenuOpen(false), []);
-  const onAttachMenuSelect = useCallback(
-    (action: AttachMenuActionId) => {
-      if (action === "take_screenshot") void onTakeScreenshot();
-      else void onOpenScreenshotBrowser();
-    },
-    [onTakeScreenshot, onOpenScreenshotBrowser],
-  );
-
-  useLayoutEffect(() => {
-    const hostEl =
-      unifiedInputHostRef && typeof unifiedInputHostRef === "object" && "current" in unifiedInputHostRef
-        ? (unifiedInputHostRef as React.RefObject<HTMLDivElement | null>).current
-        : null;
-    const scope = hostEl?.closest(".bonsai-scope");
-    if (!scope) return;
-    scope.classList.toggle("bonsai-ask-menu-open-scope", askModeMenuOpen || attachMenuOpen);
-    return () => scope.classList.remove("bonsai-ask-menu-open-scope");
-  }, [askModeMenuOpen, attachMenuOpen, unifiedInputHostRef]);
+  // The two menus' toggle/close handlers, and the effect that marks the bar's scope while
+  // either is open, live in useAskBarMenuToggles now (src/hooks) -- see that file.
+  const {
+    toggleAskModeMenu,
+    closeAskModeMenu,
+    toggleAttachMenu,
+    closeAttachMenu,
+    onAttachMenuSelect,
+  } = useAskBarMenuToggles({
+    unifiedInputHostRef,
+    askModeMenuOpen,
+    attachMenuOpen,
+    setAskModeMenuOpen,
+    setAttachMenuOpen,
+    askModeToggleOnceRef,
+    attachMenuToggleOnceRef,
+    onTakeScreenshot,
+    onOpenScreenshotBrowser,
+  });
 
   /*
    * Computed here, ahead of the box's own JSX below, because the box's Up handler (onMoveUp on the

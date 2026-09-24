@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 473,
-  "edgeCount": 1256,
+  "fileCount": 474,
+  "edgeCount": 1258,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -276,7 +276,8 @@
         "src/features/unified-input/constants.ts"
       ],
       "importedBy": [
-        "src/components/MainTabUnifiedAskBar.tsx"
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useAskBarMenuToggles.ts"
       ]
     },
     "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx": {
@@ -671,6 +672,7 @@
         "src/components/icons.tsx",
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useAskBarMenuToggles.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/useSteamSettingsSearch.ts",
@@ -2343,6 +2345,14 @@
       ],
       "importedBy": [
         "src/index.tsx"
+      ]
+    },
+    "src/hooks/useAskBarMenuToggles.ts": {
+      "imports": [
+        "src/components/MainTabAttachMenuPopover.tsx"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
     "src/hooks/useAskBarSettingsCardRows.ts": {

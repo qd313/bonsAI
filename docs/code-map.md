@@ -260,6 +260,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/hooks
 
+- **useAskBarMenuToggles.ts** (src/hooks/useAskBarMenuToggles.ts) — *Ask bar menu toggles*: The open/close functions for the Ask bar's two popover menus (the Ask-mode picker and the attach menu), and the effect that marks the nearest `.bonsai-scope` ancestor while either one is open.
 - **useAskBarSettingsCardRows.ts** (src/hooks/useAskBarSettingsCardRows.ts) — *Ask bar settings-results card rows*: Everything about how many rows of the settings-search results card can actually fit above the question box, and how the ring gets handed to (and back out of) whichever row is nearest the box.
 - **useAskMountRestore.ts** (src/hooks/useAskMountRestore.ts) — *Resume a pending Ask after remount*: On mount, ask the backend once whether a question was still running when the plugin panel last closed, and pick polling back up if it was.
 - **useBackgroundGameAi.ts** (src/hooks/useBackgroundGameAi.ts) — *Checking in on an answer that is still being worked on*: Once a question has been handed to the back end, the answer does not arrive all at once — it comes together over the next while. […]

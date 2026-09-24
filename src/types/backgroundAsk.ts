@@ -31,7 +31,7 @@ import type {
   StrategyChecklistPayload,
   TurnReasoning,
 } from "./bonsaiUi";
-import type { KbAttachedNote } from "../utils/inputTransparency";
+import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 type ShortcutSetupKind = "deck" | "stadia";
@@ -210,6 +210,29 @@ export type LiveThinkingSnapshot = {
   summary: string | null;
   reasoning: LiveReasoningSnapshot | null;
   kbAttachedNotes?: KbAttachedNote[] | null;
+};
+
+/**
+ * A finished turn waiting to be written into `askThreadCollapsed`, held between the moment it
+ * finishes and the moment the next Ask (or a Strategy branch pick) flushes it in. Named here so
+ * the Ask hook and the pieces lifted out of it can share the same ref type.
+ */
+export type PendingArchiveTurn = {
+  question: string;
+  answer: string;
+  transparency?: TransparencySnapshot | null;
+  appId?: string;
+  appName?: string;
+  askedEntity?: string;
+  spoilerConsentEffective?: boolean;
+  /**
+   * The chat this turn belongs to, captured at write time. The submit path's flush-on-next-ask
+   * must only replay a turn into the chat it came from — a plain chat switch deliberately leaves
+   * this ref alone, so without this tag a turn archived in chat A was still sitting here when the
+   * first question in a brand-new chat B ran, and got appended above B's own question: "the
+   * previous chat's last question shows in a brand-new chat".
+   */
+  slotId?: string | null;
 };
 
 export type ReplyFollowUpPending = {

@@ -41,14 +41,14 @@
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1647,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1619,
       "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 1586,
+      "role": ""
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",

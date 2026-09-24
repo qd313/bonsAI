@@ -69,7 +69,8 @@
  * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask-bar footnote's
  * own running-game poll is useOllamaGameContextSync, and the Show-details refresh is
  * useInputTransparencyRefresh. The mount-time restore effect itself (point 4 below) is
- * useAskMountRestore.
+ * useAskMountRestore, and the Strategy Guide branch-pick and checklist-toggle callbacks are
+ * useStrategyBranchActions.
  *
  * Gotchas:
  * - The mount-time restore effect runs exactly once (an empty dependency
@@ -92,11 +93,7 @@ import type { UseBonsaiAskOrchestrationArgs } from "../types/askOrchestrationArg
 import { type AskModeId } from "../data/bonsaiSettingsSchema";
 import { buildResponseText } from "../utils/appliedTuningText";
 import { detectPromptCategory } from "../data/presets";
-import {
-  CUSTOM_RESOLUTION_INPUT_PREFIX,
-  isStrategyCustomResolutionBranch,
-  STRATEGY_FOLLOWUP_PREFIX,
-} from "../data/strategyGuideFollowup";
+import { STRATEGY_FOLLOWUP_PREFIX } from "../data/strategyGuideFollowup";
 import { normalizeStrategyGuideBranches } from "../utils/strategyGuideBranches";
 import {
   mergeStrategyChecklistState,
@@ -119,6 +116,7 @@ import type {
   BackgroundStartResponse,
   LastExchangeSnapshot,
   LiveReasoningSnapshot,
+  PendingArchiveTurn,
   PresetCarouselInjectPayload,
   ReplyFollowUpPending,
 } from "../types/backgroundAsk";
@@ -126,7 +124,6 @@ import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type {
   OllamaContextUi,
   StrategyGuideBranchesPayload,
-  StrategyChecklistState,
   AskThreadCollapsedTurn,
   AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
@@ -157,6 +154,7 @@ import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
 import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
 import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
 import { useAskMountRestore } from "./useAskMountRestore";
+import { useStrategyBranchActions } from "./useStrategyBranchActions";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -271,26 +269,9 @@ export function useBonsaiAskOrchestration(
   }>({ attachments: [], askMode: "speed", rawQuestion: "" });
 
   // --- Ask thread archive refs ---
-  const pendingArchiveTurnRef = useRef<{
-    question: string;
-    answer: string;
-    transparency?: TransparencySnapshot | null;
-    appId?: string;
-    appName?: string;
-    askedEntity?: string;
-    spoilerConsentEffective?: boolean;
-    /**
-     * The chat this turn belongs to, captured at write time. `onAskOllama`'s flush-on-next-ask
-     * below must only replay a turn into the chat it came from — a plain chat switch, selectSlot,
-     * deliberately leaves this ref alone, so without this tag a turn archived in chat A was still
-     * sitting here when the first question in a brand-new chat B ran, and got appended above B's
-     * own question: "the previous chat's last question shows in a brand-new chat".
-     *
-     * No round brackets anywhere in this comment: it sits inside useRef's type argument, and
-     * tests/test_ask_hook_order.py finds each hook by a pattern that stops at the first one.
-     */
-    slotId?: string | null;
-  } | null>(null);
+  // The shape moved to PendingArchiveTurn in ../types/backgroundAsk.ts, so it can be shared
+  // with useStrategyBranchActions below without a second, drifting copy of it.
+  const pendingArchiveTurnRef = useRef<PendingArchiveTurn | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
   /** Last request_id whose completion already re-seeded suggested prompts (reseed is randomized). */
   const promptsReseededForRequestRef = useRef<number | null>(null);
@@ -1384,64 +1365,22 @@ export function useBonsaiAskOrchestration(
   );
 
   // --- Strategy branches + checklist toggles ---
-  const onStrategyBranchPick = useCallback(
-    (opt: { id: string; label: string }) => {
-      if (isStrategyCustomResolutionBranch(opt)) {
-        setStrategyGuideBranches(null);
-        a.setUnifiedInput(CUSTOM_RESOLUTION_INPUT_PREFIX);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            const root = a.unifiedInputFieldLayerRef.current ?? a.unifiedInputHostRef.current;
-            if (!root) return;
-            const field = root.querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
-            if (!field) return;
-            field.focus();
-            const len = field.value.length;
-            try {
-              field.setSelectionRange(len, len);
-            } catch {
-              // decky field quirks
-            }
-          });
-        });
-        return;
-      }
-      if (lastExchange?.question?.trim() && lastExchange?.answer?.trim()) {
-        const qn = lastExchange.question.trim();
-        if (lastFlushedExchangeQuestionRef.current !== qn) {
-          pendingArchiveTurnRef.current = {
-            question: lastExchange.question,
-            answer: lastExchange.answer,
-            slotId: a.activeSlotIdRef?.current ?? null,
-          };
-        }
-      }
-      const prior = lastStrategyAskQuestionRef.current.trim();
-      const composed = [
-        `${STRATEGY_FOLLOWUP_PREFIX} I'm at: ${opt.label}.`,
-        prior ? `Earlier I asked: ${prior}` : "",
-        "",
-        "Give controller-friendly coaching for this exact point, then end with **If you want to cheat…** as instructed.",
-      ]
-        .filter((line) => line.length > 0)
-        .join("\n");
-      a.setUnifiedInput(composed);
-      void onAskOllama(composed, { threadQuestionDisplay: `I'm at: ${opt.label}` });
-    },
-    [a, lastExchange, onAskOllama],
-  );
-
-  const onStrategyChecklistToggle = useCallback((itemId: string, checked: boolean) => {
-    setStrategyChecklist((prev) => {
-      if (!prev) return prev;
-      const set = new Set(prev.checkedIds);
-      if (checked) set.add(itemId);
-      else set.delete(itemId);
-      const next: StrategyChecklistState = { ...prev, checkedIds: [...set] };
-      scheduleStrategyChecklistSessionSave(next);
-      return next;
-    });
-  }, []);
+  // Lifted into useStrategyBranchActions. It must stay at exactly this point in the list,
+  // after onAskOllama is declared above: React matches hooks by the order they run, not by
+  // name, and this closes over onAskOllama rather than reading it through a ref.
+  const { onStrategyBranchPick, onStrategyChecklistToggle } = useStrategyBranchActions({
+    lastExchange,
+    setStrategyGuideBranches,
+    setStrategyChecklist,
+    setUnifiedInput: a.setUnifiedInput,
+    unifiedInputFieldLayerRef: a.unifiedInputFieldLayerRef,
+    unifiedInputHostRef: a.unifiedInputHostRef,
+    activeSlotIdRef: a.activeSlotIdRef,
+    lastFlushedExchangeQuestionRef,
+    pendingArchiveTurnRef,
+    lastStrategyAskQuestionRef,
+    onAskOllama,
+  });
 
   // --- Retry the last reply (rating and the chips live in useReplyFeedbackChips) ---
   const onRetryLastResponse = useCallback(() => {

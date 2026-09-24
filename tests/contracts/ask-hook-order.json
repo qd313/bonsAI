@@ -21,6 +21,10 @@
     {
       "name": "useAskMountRestore",
       "file": "src/hooks/useAskMountRestore.ts"
+    },
+    {
+      "name": "useStrategyBranchActions",
+      "file": "src/hooks/useStrategyBranchActions.ts"
     }
   ],
   "count": 82,

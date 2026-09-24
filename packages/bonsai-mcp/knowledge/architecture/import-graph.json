@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 433,
-  "edgeCount": 1113,
+  "fileCount": 434,
+  "edgeCount": 1118,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1640,7 +1640,8 @@
       "imports": [],
       "importedBy": [
         "src/data/strategyGuideFollowup.test.ts",
-        "src/hooks/useBonsaiAskOrchestration.ts"
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useStrategyBranchActions.ts"
       ]
     },
     "src/data/uiScaleProfile.test.ts": {
@@ -2218,6 +2219,7 @@
         "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useSmoothStreamReveal.ts",
+        "src/hooks/useStrategyBranchActions.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",
         "src/types/askOrchestration.ts",
@@ -2578,6 +2580,17 @@
         "src/hooks/useSteamSettingsSearch.test.ts",
         "src/index.tsx",
         "src/styles/sections/section-4.ts"
+      ]
+    },
+    "src/hooks/useStrategyBranchActions.ts": {
+      "imports": [
+        "src/data/strategyGuideFollowup.ts",
+        "src/types/backgroundAsk.ts",
+        "src/types/bonsaiUi.ts",
+        "src/utils/strategyChecklistPersistence.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
     "src/hooks/useStrategyChecklistSession.ts": {
@@ -3143,6 +3156,7 @@
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.test.ts",
         "src/hooks/useReplyFeedbackChips.ts",
+        "src/hooks/useStrategyBranchActions.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/rpcFixtures.ts",
         "src/types/askOrchestration.ts",
@@ -3181,6 +3195,7 @@
         "src/hooks/useChatSlots.ts",
         "src/hooks/useOllamaGameContextSync.ts",
         "src/hooks/useScreenshotBrowser.ts",
+        "src/hooks/useStrategyBranchActions.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",
         "src/types/askOrchestration.ts",
@@ -4422,6 +4437,7 @@
       ],
       "importedBy": [
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useStrategyBranchActions.ts",
         "src/hooks/useStrategyChecklistSession.ts"
       ]
     },

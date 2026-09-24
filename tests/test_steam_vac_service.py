@@ -96,6 +96,8 @@ class VacCheckCommandsTests(unittest.TestCase):
     def test_response_permission_off(self):
         md = response_for_vac_check("76561198000000000", api_key="k", capability_ok=False)
         self.assertIn("Steam Web API is off", md)
+        # Name the switch the way the Permissions tab labels it (Deck, plan 64 flow H: VAC-06).
+        self.assertIn("Permissions → Steam ban lookup", md)
 
     def test_response_no_key(self):
         md = response_for_vac_check("76561198000000000", api_key="", capability_ok=True)

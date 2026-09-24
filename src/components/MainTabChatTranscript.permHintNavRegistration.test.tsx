@@ -24,7 +24,7 @@ import type { TransparencySnapshot } from "../utils/inputTransparency";
 import * as navFocusRegistry from "../utils/navFocusRegistry";
 
 const VAC_DENY_RESPONSE =
-  "**Steam Web API is off for bonsAI.** Enable Permissions → Steam Web API to use this command.";
+  "**Steam Web API is off for bonsAI.** Enable Permissions → Steam ban lookup to use this command.";
 
 function renderTranscript(overrides: Partial<MainTabChatTranscriptProps> = {}) {
   const props: MainTabChatTranscriptProps = {

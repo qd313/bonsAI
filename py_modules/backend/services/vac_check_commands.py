@@ -63,7 +63,7 @@ def response_for_vac_check(
     if not capability_ok:
         return (
             "**Steam Web API is off for bonsAI.**\n\n"
-            f"Enable **Permissions → Steam Web API**, add your Web API key under **{DEVELOPER_TAB_INTEGRATIONS}**, "
+            f"Enable **Permissions → Steam ban lookup**, add your Web API key under **{DEVELOPER_TAB_INTEGRATIONS}**, "
             "then run:\n\n"
             "`bonsai:vac-check 7656119…`\n\n"
             "This command skips the AI and queries Valve **GetPlayerBans** for **account-level** ban flags only."

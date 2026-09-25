@@ -128,6 +128,10 @@ export function useStreamScrollPin(
   const wasEnabledRef = useRef(false);
   /** Wall-clock end of the post-Ask delivery window; 0 when no delivery is owed. */
   const deliverUntilRef = useRef(0);
+  /** The latest pass, for the observer below to call; set by the follow effect each commit. */
+  const followRef = useRef<() => void>(() => {});
+  /** True while the observer below is the one following the stream, so commits need not. */
+  const observerFollowsRef = useRef(false);
 
   /*
    * Computed during render, consumed by the effects of this same commit: the commit where enabled
@@ -148,6 +152,31 @@ export function useStreamScrollPin(
    */
   useLayoutEffect(() => {
     pinnedTopRef.current = null;
+  }, [anchorRef, enabled]);
+
+  /*
+   * While an answer streams, one observer on the transcript does the following, for the whole
+   * answer. It fires after the browser has laid the page out and only when the transcript's
+   * height changed -- a new line, not every letter -- so reading the tail's position there is
+   * free. Following from the commit instead, on every step of the reveal, read positions in the
+   * middle of React's commit and forced the whole panel to be laid out early each time: profiled on
+   * the Deck 2026-09-24 with a game running (scripts/probe_deck_cpu_profile.py --callers
+   * getBoundingClientRect), those reads were the largest single cost while answer text appeared.
+   * It also used to be rebuilt on every commit and to defer each pass to the next frame, by which
+   * time React had changed the page again. Declared before the follow effect, so on the commit
+   * where streaming starts the follow already knows the observer has it. A runtime with no
+   * ResizeObserver (the test runner) keeps following from every commit, as before.
+   */
+  useLayoutEffect(() => {
+    const anchor = anchorRef.current;
+    if (!enabled || !anchor || typeof ResizeObserver === "undefined") return;
+    observerFollowsRef.current = true;
+    const ro = new ResizeObserver(() => followRef.current());
+    ro.observe(anchor);
+    return () => {
+      observerFollowsRef.current = false;
+      ro.disconnect();
+    };
   }, [anchorRef, enabled]);
 
   useEffect(() => {
@@ -267,28 +296,16 @@ export function useStreamScrollPin(
       selfWroteTopRef.current = scroll.scrollTop;
     };
 
+    followRef.current = follow;
+    /*
+     * While streaming, the observer above follows: it also catches the frames after a commit in
+     * which markdown, spoiler fences and glossary chips expand the bubble, which the text prop
+     * alone never signalled. Without an observer, follow from this commit.
+     */
+    if (enabled && observerFollowsRef.current) return;
     follow();
 
-    if (enabled) {
-      /*
-       * The text prop is not a reliable signal that the ANSWER has finished laying out. On the
-       * commit where it lands, the bubble is often still short — markdown, spoiler fences and
-       * glossary chips expand it over the frames that follow — so the one pass above can measure a
-       * pane that does not overflow yet and never run again, because nothing changes the prop
-       * afterwards. Watching the anchor closes that gap for free while the height is steady.
-       */
-      if (typeof ResizeObserver === "undefined") return;
-      let raf = 0;
-      const ro = new ResizeObserver(() => {
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(follow);
-      });
-      ro.observe(anchor);
-      return () => {
-        cancelAnimationFrame(raf);
-        ro.disconnect();
-      };
-    }
+    if (enabled) return;
 
     /*
      * Delivery passes, timed rather than observed: the slot reload's own expand-turn

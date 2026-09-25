@@ -1,7 +1,54 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, renderHook } from "@testing-library/react";
 
 import { useStreamScrollPin } from "./useStreamScrollPin";
+
+/*
+ * On the Deck the follow is driven by a ResizeObserver on the transcript, not by every commit:
+ * reading the tail's position during React's commit forced the whole panel to be laid out early on
+ * every step of the text reveal -- the largest single cost while answer text appeared (profiled
+ * 2026-09-24). The test setup's own ResizeObserver never fires, so this file stands in one it can
+ * fire: `layout()` is the browser finishing a layout, which is when a real one reports.
+ */
+type WatchedBy = { callback: () => void; observed: Element[]; disconnected: boolean };
+let watchers: WatchedBy[] = [];
+
+class ControllableResizeObserver {
+  private readonly record: WatchedBy;
+  constructor(callback: () => void) {
+    this.record = { callback, observed: [], disconnected: false };
+    watchers.push(this.record);
+  }
+  observe(el: Element) {
+    this.record.observed.push(el);
+  }
+  unobserve() {}
+  disconnect() {
+    this.record.disconnected = true;
+  }
+}
+
+beforeEach(() => {
+  watchers = [];
+  vi.stubGlobal("ResizeObserver", ControllableResizeObserver);
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+/** The browser laid the page out: every observer still watching reports once. */
+function layout() {
+  act(() => {
+    for (const w of watchers) if (!w.disconnected) w.callback();
+  });
+}
+
+/** A commit, then the layout that follows it -- what one step of a streaming answer is. */
+function commit<P>(rerender: (props: P) => void, props: P) {
+  act(() => rerender(props));
+  layout();
+}
 
 const VIEWPORT_BOTTOM = 250;
 
@@ -97,10 +144,12 @@ function rect(top: number, bottom: number): DOMRect {
 }
 
 function mount(t: ReturnType<typeof makeTranscript>, enabled = true) {
-  return renderHook(
+  const hook = renderHook(
     ({ text }: { text: string }) => useStreamScrollPin(t.anchorRef, text, enabled),
     { initialProps: { text: "" } }
   );
+  layout();
+  return hook;
 }
 
 describe("stream scroll follow", () => {
@@ -114,7 +163,7 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "first tokens" }));
+    commit(rerender, { text: "first tokens" });
 
     // 150px of transcript was below the fold; the tail now sits on the bottom edge.
     expect(t.scrollTop).toBe(150);
@@ -124,9 +173,9 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
     t.grow(120);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(270);
   });
@@ -135,7 +184,7 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 200 });
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "short" }));
+    commit(rerender, { text: "short" });
 
     expect(t.scrollTop).toBe(0);
     expect(t.scrollIntoView).not.toHaveBeenCalled();
@@ -152,9 +201,9 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "first tokens" }));
+    commit(rerender, { text: "first tokens" });
     t.grow(120);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(270); // it moved...
     expect(t.directWrites).toBe(0); // ...and not by writing scrollTop
@@ -168,11 +217,11 @@ describe("stream scroll follow", () => {
   it("holds position once the user scrolls up", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
 
     act(() => t.userScrollTo(20));
     t.grow(120);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(20);
   });
@@ -185,19 +234,19 @@ describe("stream scroll follow", () => {
   it("holds still while the gamepad ring is on something inside the transcript", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
     expect(t.scrollTop).toBe(150);
 
     const control = document.createElement("div");
     control.className = "gpfocus";
     t.anchor.appendChild(control);
     t.grow(120);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
     expect(t.scrollTop).toBe(150);
 
     control.className = "";
     t.grow(60);
-    act(() => rerender({ text: "first second third" }));
+    commit(rerender, { text: "first second third" });
     expect(t.scrollTop).toBe(330);
   });
 
@@ -213,7 +262,7 @@ describe("stream scroll follow", () => {
     t.scroll.appendChild(dock);
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "first tokens" }));
+    commit(rerender, { text: "first tokens" });
 
     expect(t.scrollTop).toBe(150);
   });
@@ -223,14 +272,14 @@ describe("stream scroll follow", () => {
   it("holds still while the ring is on the chat row above the transcript", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
     expect(t.scrollTop).toBe(150);
 
     const chatRow = document.createElement("div");
     chatRow.className = "gpfocus";
     t.scroll.insertBefore(chatRow, t.anchor);
     t.grow(120);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(150);
   });
@@ -242,11 +291,11 @@ describe("stream scroll follow", () => {
   it("treats a small gap from the bottom as still watching", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
 
     act(() => t.userScrollTo(120)); // tail sits 30px below the fold, inside the slack
     t.grow(100);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(250);
   });
@@ -254,12 +303,12 @@ describe("stream scroll follow", () => {
   it("resumes following when the user scrolls back down", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
     act(() => t.userScrollTo(0));
 
     act(() => t.userScrollTo(150));
     t.grow(100);
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
 
     expect(t.scrollTop).toBe(250);
   });
@@ -275,13 +324,13 @@ describe("stream scroll follow", () => {
   it("does not mistake its own scroll for the user's when it arrives late", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t);
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
     expect(t.scrollTop).toBe(150);
 
     t.grow(200);
     act(() => t.emitScroll());
 
-    act(() => rerender({ text: "first second" }));
+    commit(rerender, { text: "first second" });
     expect(t.scrollTop).toBe(350);
   });
 
@@ -294,7 +343,7 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 400, scrollHeight: 300 });
     const { rerender } = mount(t);
 
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
 
     expect(t.scrollTop).toBe(50); // clamped at the container's maximum
     expect(t.scrollIntoView).toHaveBeenCalledWith({ block: "end", behavior: "auto" });
@@ -309,11 +358,11 @@ describe("stream scroll follow", () => {
       { initialProps: { text: "", on: true } }
     );
     act(() => t.userScrollTo(0));
-    act(() => rerender({ text: "first", on: true }));
+    commit(rerender, { text: "first", on: true });
     expect(t.scrollTop).toBe(0); // pinned, as it should be
 
-    act(() => rerender({ text: "first", on: false })); // the answer finished
-    act(() => rerender({ text: "new answer", on: true })); // the next one starts
+    commit(rerender, { text: "first", on: false }); // the answer finished
+    commit(rerender, { text: "new answer", on: true }); // the next one starts
 
     expect(t.scrollTop).toBe(150);
   });
@@ -322,7 +371,7 @@ describe("stream scroll follow", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mount(t, false);
 
-    act(() => rerender({ text: "first" }));
+    commit(rerender, { text: "first" });
 
     expect(t.scrollTop).toBe(0);
     expect(t.scrollIntoView).not.toHaveBeenCalled();
@@ -357,10 +406,12 @@ describe("post-answer delivery", () => {
   });
 
   function mountAsk(t: ReturnType<typeof makeTranscript>) {
-    return renderHook(
+    const hook = renderHook(
       ({ text, on }: { text: string; on: boolean }) => useStreamScrollPin(t.anchorRef, text, on),
       { initialProps: { text: "streaming", on: true } }
     );
+    layout();
+    return hook;
   }
 
   it("delivers the tail on the commit that ends the Ask", () => {
@@ -370,7 +421,7 @@ describe("post-answer delivery", () => {
 
     // Growth the streaming passes never saw: the final text and "follow off" land together.
     t.grow(200);
-    act(() => rerender({ text: "final answer text", on: false }));
+    commit(rerender, { text: "final answer text", on: false });
 
     expect(t.scrollTop).toBe(350);
   });
@@ -380,7 +431,7 @@ describe("post-answer delivery", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
 
-    act(() => rerender({ text: "final answer text", on: false }));
+    commit(rerender, { text: "final answer text", on: false });
     expect(t.scrollTop).toBe(150);
 
     // The rebuild: Steam lands the pane at 0. Not the user, and must not pin.
@@ -400,7 +451,7 @@ describe("post-answer delivery", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
 
-    act(() => rerender({ text: "final answer text", on: false }));
+    commit(rerender, { text: "final answer text", on: false });
     // The rebuild lands the pane at the top, and the person walks onto a control up there.
     act(() => t.userScrollTo(0));
     const control = document.createElement("div");
@@ -418,16 +469,59 @@ describe("post-answer delivery", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
 
-    act(() => rerender({ text: "final answer text", on: false }));
+    commit(rerender, { text: "final answer text", on: false });
     act(() => vi.advanceTimersByTime(2000));
     const callsAfterWindow = t.scrollIntoView.mock.calls.length;
 
     // Idle life goes on: a slot switch swaps the text while the follow is off.
     act(() => t.userScrollTo(0));
     t.grow(300);
-    act(() => rerender({ text: "a different slot's answer", on: false }));
+    commit(rerender, { text: "a different slot's answer", on: false });
 
     expect(t.scrollIntoView.mock.calls.length).toBe(callsAfterWindow);
     expect(t.scrollTop).toBe(0);
+  });
+});
+
+describe("the observer, not every commit, follows the stream", () => {
+  afterEach(() => {
+    cleanup();
+    document.body.innerHTML = "";
+  });
+
+  function countLayoutReads(t: ReturnType<typeof makeTranscript>) {
+    const count = { n: 0 };
+    const real = t.anchor.getBoundingClientRect;
+    t.anchor.getBoundingClientRect = () => {
+      count.n += 1;
+      return real.call(t.anchor);
+    };
+    return count;
+  }
+
+  it("does not read the page's layout on a commit that only changed the text", () => {
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = mount(t);
+    const reads = countLayoutReads(t);
+
+    act(() => rerender({ text: "first" }));
+    act(() => rerender({ text: "first second" }));
+    act(() => rerender({ text: "first second third" }));
+
+    expect(reads.n).toBe(0);
+  });
+
+  it("keeps one observer for the whole answer, on the transcript, and drops it at the end", () => {
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender, unmount } = mount(t);
+
+    commit(rerender, { text: "a" });
+    commit(rerender, { text: "a b" });
+    commit(rerender, { text: "a b c" });
+
+    expect(watchers).toHaveLength(1);
+    expect(watchers[0]!.observed).toEqual([t.anchor]);
+    unmount();
+    expect(watchers[0]!.disconnected).toBe(true);
   });
 });

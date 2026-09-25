@@ -140,12 +140,11 @@ from backend.services.intent_pack_service import (
 )
 from backend.services import intent_pack_rpc
 from backend.services.chat_slot_service import (
-    append_turn as chat_append_turn,
-    ensure_slot as chat_ensure_slot,
     load_slot as chat_load_slot,
     wipe_all_slots,
 )
 from backend.services import chat_slot_rpc
+from backend.services import chat_turn_recorder
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
@@ -951,123 +950,6 @@ class Plugin:
     def _chat_slots_settings_dir() -> str:
         return decky.DECKY_PLUGIN_SETTINGS_DIR
 
-    @staticmethod
-    def _parse_chat_slot_id(question: Any) -> str:
-        if isinstance(question, dict):
-            return str(question.get("chat_slot_id") or question.get("chatSlotId") or "").strip()
-        return ""
-
-    @staticmethod
-    def _parse_chat_slot_display_question(question: Any) -> str:
-        """What the user saw as their question when it differs from the composed prompt sent to
-        the model (a branch pick shows "I'm at: …" but sends "[Strategy follow-up] I'm at: …").
-        Persisted per turn so a reopened chat's header shows the friendly caption, not internal
-        plumbing. "" means no separate display form."""
-        if isinstance(question, dict):
-            return str(
-                question.get("display_question") or question.get("displayQuestion") or ""
-            ).strip()
-        return ""
-
-    async def _chat_slots_record_user_turn(
-        self,
-        *,
-        slot_id: str,
-        question: str,
-        request_id: int,
-        attachments: list,
-        app_id: str,
-        app_name: str,
-        display_question: str = "",
-    ) -> None:
-        sid = str(slot_id or "").strip()
-        if not sid or not str(question or "").strip():
-            return
-        settings_dir = Plugin._chat_slots_settings_dir()
-        refs = [
-            {
-                "path": str(a.get("path", "") or ""),
-                "name": str(a.get("name", "") or ""),
-                "source": str(a.get("source", "unknown") or "unknown"),
-            }
-            for a in (attachments or [])
-            if isinstance(a, dict) and str(a.get("path", "") or "").strip()
-        ]
-
-        def _run() -> None:
-            chat_ensure_slot(
-                settings_dir,
-                sid,
-                origin_app_id=app_id,
-                first_question=question,
-                app_name=app_name,
-                logger=logger,
-            )
-            chat_append_turn(
-                settings_dir,
-                sid,
-                role="user",
-                text=question,
-                request_id=request_id,
-                attachment_refs=refs,
-                app_id=app_id,
-                app_name=app_name,
-                display_text=display_question,
-                logger=logger,
-            )
-
-        async with self._chat_slots_store_lock:
-            await asyncio.to_thread(_run)
-
-    @staticmethod
-    def _reasoning_payload_for_chat_slot(result: dict) -> Optional[dict]:
-        """Plan 57: the ``{text, seconds, tokens}`` shape a saved turn keeps, or ``None`` when the
-        Ask's result carried no thinking (thinking Off, or a model that cannot think) -- absent,
-        not an empty dict, so ``_normalize_turn`` leaves the ``reasoning`` key off the turn.
-        """
-        text = str(result.get("reasoning_text") or "")
-        if not text:
-            return None
-        return {
-            "text": text,
-            "seconds": result.get("reasoning_seconds"),
-            "tokens": int(result.get("reasoning_tokens") or 0),
-        }
-
-    async def _chat_slots_record_assistant_turn(
-        self,
-        *,
-        slot_id: str,
-        response_text: str,
-        transparency: Optional[dict] = None,
-        app_id: str = "",
-        app_name: str = "",
-        asked_entity: str = "",
-        reasoning: Optional[dict] = None,
-    ) -> None:
-        sid = str(slot_id or "").strip()
-        body = str(response_text or "").strip()
-        if not sid or not body:
-            return
-        settings_dir = Plugin._chat_slots_settings_dir()
-
-        def _run() -> None:
-            chat_append_turn(
-                settings_dir,
-                sid,
-                role="assistant",
-                text=body,
-                transparency=transparency,
-                app_id=app_id,
-                app_name=app_name,
-                asked_entity=asked_entity,
-                reasoning=reasoning,
-                logger=logger,
-            )
-
-        async with self._chat_slots_store_lock:
-            await asyncio.to_thread(_run)
-
     async def list_chat_slots(self):
         """Return recent chat slot summaries (newest first)."""
         return await chat_slot_rpc.list_chat_slots(self)
@@ -1388,7 +1270,8 @@ class Plugin:
         )
         await self._persist_input_transparency(snapshot)
         if chat_slot_id:
-            await self._chat_slots_record_user_turn(
+            await chat_turn_recorder.record_user_turn(
+                self,
                 slot_id=chat_slot_id,
                 question=parsed_question,
                 request_id=request_id,
@@ -1396,7 +1279,8 @@ class Plugin:
                 app_id=app_id,
                 app_name=app_name,
             )
-            await self._chat_slots_record_assistant_turn(
+            await chat_turn_recorder.record_assistant_turn(
+                self,
                 slot_id=chat_slot_id,
                 response_text=resp,
                 transparency=transparency_snapshot_for_chat_slot(snapshot),
@@ -1638,14 +1522,15 @@ class Plugin:
             # A cancelled request's response_text is overwritten above with the cancel message,
             # so the underlying ask's transparency (whatever it was mid-flight) would describe a
             # reply that was never shown — only attach it for a real terminal answer.
-            await self._chat_slots_record_assistant_turn(
+            await chat_turn_recorder.record_assistant_turn(
+                self,
                 slot_id=slot_id,
                 response_text=response_text,
                 transparency=None if cancelled_rq else result.get("transparency"),
                 app_id=app_id,
                 app_name=app_name,
                 asked_entity=result.get("strategy_spoiler_asked_entity") or "",
-                reasoning=None if cancelled_rq else self._reasoning_payload_for_chat_slot(result),
+                reasoning=None if cancelled_rq else chat_turn_recorder.reasoning_payload_for_chat_slot(result),
             )
         await self._maybe_app_log(
             "ask.background",
@@ -1729,7 +1614,7 @@ class Plugin:
             pre_settings = await self.load_settings()
         # Parsed once here (rather than only further down, on the normal path) so the local-command
         # branches below can persist to the same active slot before they return.
-        chat_slot_id = Plugin._parse_chat_slot_id(question)
+        chat_slot_id = chat_turn_recorder.parse_chat_slot_id(question)
 
         async with self._background_lock:
             if (
@@ -1835,14 +1720,15 @@ class Plugin:
                 app_name=app_name,
             )
             if chat_slot_id:
-                await self._chat_slots_record_user_turn(
+                await chat_turn_recorder.record_user_turn(
+                    self,
                     slot_id=chat_slot_id,
                     question=parsed_question,
                     request_id=request_id,
                     attachments=attachments,
                     app_id=app_id,
                     app_name=app_name,
-                    display_question=Plugin._parse_chat_slot_display_question(question),
+                    display_question=chat_turn_recorder.parse_chat_slot_display_question(question),
                 )
                 self._chat_slot_by_request[request_id] = chat_slot_id
             self._background_task = asyncio.create_task(
@@ -1981,7 +1867,8 @@ class Plugin:
                 if isinstance(rid, int):
                     slot_id = self._chat_slot_by_request.pop(rid, None)
                     if slot_id is not None:
-                        await self._chat_slots_record_assistant_turn(
+                        await chat_turn_recorder.record_assistant_turn(
+                            self,
                             slot_id=slot_id,
                             response_text=cancel_response,
                             # The game the cancelled ask was about, off the state dict this

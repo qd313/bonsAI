@@ -28,6 +28,8 @@
  * measurement has run.
  */
 import {
+  UNIFIED_CARET_GAP_PX,
+  UNIFIED_CARET_WIDTH_PX,
   UNIFIED_TEXT_FONT_PX,
   UNIFIED_TEXT_INSET_BOTTOM_PX,
   UNIFIED_TEXT_INSET_LEFT_PX,
@@ -199,21 +201,39 @@ export function buildSection5Section(): string {
           width: var(--bonsai-unified-field-width, 100%) !important;
         }
 
-        /* Fake Caret Animation */
+        /*
+         * The blinking cursor. The real field underneath is invisible, so the cursor is drawn: a
+         * thin bar that sits IN the line of text, never at a fixed spot in the box. Whatever
+         * places the text -- the field's padding, the text size, the line height, the UI scale --
+         * places the cursor too, so a later change to any of them cannot leave it behind.
+         *
+         * It came loose exactly that way, more than once (roadmap bug, 2026-09-24). On the empty
+         * box it was pinned to the overlay's corner (position absolute, left 0, top 0), which is
+         * outside the overlay's 8px/6px padding, while the hint text starts inside it: measured on
+         * the Deck, 5px left of the "D" and 4px above it. The fix before that matched font sizes,
+         * and the check that closed it compared sizes, not positions, so it could not see this.
+         *
+         * It takes no room -- the negative right margin cancels its own width -- so nothing
+         * beside it shifts or re-wraps when it appears or blinks, and the drawn text keeps
+         * wrapping exactly where the real field underneath wraps. The em height is the fallback
+         * for a runtime without the lh unit.
+         */
         .bonsai-scope .bonsai-unified-input-fake-caret {
           display: inline-block;
-          margin-left: 1px;
+          width: ${UNIFIED_CARET_WIDTH_PX}px;
+          height: ${UNIFIED_TEXT_LINE_HEIGHT}em;
+          height: 1lh;
+          margin: 0 -${UNIFIED_CARET_WIDTH_PX}px 0 0;
+          vertical-align: top;
+          background: currentColor;
           opacity: 0.9;
-          transform: translateY(1px);
+          transform: translateX(${UNIFIED_CARET_GAP_PX}px);
           animation: bonsai-caret-blink 1s step-end infinite;
         }
 
-        /* Strategy empty placeholder: overlay caret so placeholder text does not reflow on focus */
-        .bonsai-scope .bonsai-unified-input-fake-caret--overlay {
-          position: absolute;
-          left: 0;
-          top: 0;
-          margin-left: 0;
+        /* Before the empty box's hint: its right edge the same half pixel clear of the "D". */
+        .bonsai-scope .bonsai-unified-input-fake-caret--before-hint {
+          transform: translateX(calc(-100% - ${UNIFIED_CARET_GAP_PX}px));
         }
         @keyframes bonsai-caret-blink {
           0%, 45% { opacity: 0.9; }

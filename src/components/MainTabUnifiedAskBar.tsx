@@ -478,17 +478,17 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         >
           {!unifiedInput.trim() && askMode === "strategy" ? (
             <>
+              {isUnifiedInputFocused && (
+                <span className="bonsai-unified-input-fake-caret bonsai-unified-input-fake-caret--before-hint" aria-hidden />
+              )}
               <span className="bonsai-unified-input-strategy-placeholder">
                 Describe the level, boss, or puzzle you're stuck on.
               </span>
-              {isUnifiedInputFocused && (
-                <span className="bonsai-unified-input-fake-caret bonsai-unified-input-fake-caret--overlay" aria-hidden>|</span>
-              )}
             </>
           ) : (
             <>
               {unifiedInput}
-              {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
+              {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden />}
             </>
           )}
         </div>

@@ -181,3 +181,38 @@ describe("fresh mount -> claiming the question box for the ring", () => {
     expect(document.activeElement).toBe(alreadyFocused);
   });
 });
+
+describe("the drawn cursor in the question box (roadmap: the cursor sits up and to the left of the hint)", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("sits in the line of text right before the empty box's hint, not pinned to a spot in the box", () => {
+    const { container } = render(
+      <MainTabUnifiedAskBar
+        {...buildProps({ askMode: "strategy", usesNativeMultilineField: false, isUnifiedInputFocused: true })}
+      />
+    );
+    const hint = container.querySelector(".bonsai-unified-input-strategy-placeholder");
+    expect(hint).toBeTruthy();
+    const caret = hint!.previousElementSibling;
+    expect(caret?.classList.contains("bonsai-unified-input-fake-caret--before-hint")).toBe(true);
+    expect(caret?.textContent).toBe("");
+  });
+
+  it("follows the last letter once something is typed", () => {
+    const { container } = render(
+      <MainTabUnifiedAskBar
+        {...buildProps({
+          askMode: "strategy",
+          usesNativeMultilineField: false,
+          isUnifiedInputFocused: true,
+          unifiedInput: "How do I",
+        })}
+      />
+    );
+    const overlay = container.querySelector(".bonsai-unified-input-text-overlay");
+    expect(overlay?.textContent).toBe("How do I");
+    expect(overlay?.lastElementChild?.className).toBe("bonsai-unified-input-fake-caret");
+  });
+});

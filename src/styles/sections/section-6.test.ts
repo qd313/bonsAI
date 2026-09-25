@@ -58,7 +58,7 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
 
 describe("strategy placeholder font size matches the real caret (section 6 CSS, roadmap: blinking cursor does not line up with the placeholder)", () => {
   // The strategy-mode placeholder span used to hard-code font-size: 10px while the blinking
-  // caret beside it (`.bonsai-unified-input-fake-caret--overlay`) inherits the overlay div's own
+  // caret beside it (`.bonsai-unified-input-fake-caret--before-hint`) inherits the overlay div's own
   // 12px (UNIFIED_TEXT_FONT_PX, set inline in MainTabUnifiedAskBar.tsx), so the two could never
   // line up. The fix makes the placeholder span read the same font size as the real typed text.
   const css = buildSection6Section();

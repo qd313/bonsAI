@@ -16,6 +16,13 @@ export const UNIFIED_TEXT_BODY_MIN_PX = 42;
 /** Unified search typography — must match `TextField` and the measure/overlay nodes or the caret misaligns from the painted text. */
 export const UNIFIED_TEXT_FONT_PX = 12;
 export const UNIFIED_TEXT_LINE_HEIGHT = 1.2;
+/**
+ * The drawn blinking cursor: a bar this wide, this far clear of the letter beside it. A hairline,
+ * so it does not follow the UI scale (design-tokens.md). The maintainer's ask, 2026-09-24: the
+ * cursor sits right against the "D" of the empty box's hint, about half a pixel clear of it.
+ */
+export const UNIFIED_CARET_WIDTH_PX = 1.5;
+export const UNIFIED_CARET_GAP_PX = 0.5;
 /** Max text-body height: total cap minus icon strip. */
 export const UNIFIED_TEXT_BODY_MAX_PX = UNIFIED_INPUT_HEIGHT_MAX_PX - UNIFIED_INPUT_ICON_STRIP_PX;
 /** Padding between measured text and text-body height (matches overlay + field chrome). */

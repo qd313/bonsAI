@@ -17,6 +17,7 @@
  * or the row of buttons underneath the bubble (still in section-6.ts).
  */
 import { uiScalePx } from "./uiScalePx";
+import { ANSWER_LINE_HEIGHT } from "./answerMarkdownFormatting";
 
 /**
  * In: nothing -- every value here is a fixed string or read from a CSS
@@ -43,19 +44,19 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable,
         .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable > div {
           font-size: 12px !important;
-          line-height: 1.4 !important;
+          line-height: ${ANSWER_LINE_HEIGHT} !important;
         }
         .bonsai-scope .bonsai-ai-response-plain-stream {
           white-space: pre-wrap !important;
           word-break: break-word !important;
           overflow-wrap: anywhere !important;
           font-size: 12px !important;
-          line-height: 1.4 !important;
+          line-height: ${ANSWER_LINE_HEIGHT} !important;
           color: inherit !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble {
           font-size: 12px !important;
-          line-height: 1.4 !important;
+          line-height: ${ANSWER_LINE_HEIGHT} !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble-inner {
           padding: 8px 10px !important;

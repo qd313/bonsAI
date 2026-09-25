@@ -15,6 +15,14 @@
  */
 
 /**
+ * The answer's line spacing, as a multiple of its 12px text: 15px from one line to the next.
+ * Was 1.4 (16.8px, measured on the Deck 2026-09-25) until the maintainer asked for tighter lines
+ * the same night -- "we're fighting for space" -- which gives a 20-line answer back about two
+ * lines of room. Shared with answerBubble.ts, whose rules set it again inside the bubble.
+ */
+export const ANSWER_LINE_HEIGHT = 1.25;
+
+/**
  * In: nothing — every value here is a fixed string.
  * Out: a block of CSS text.
  * Can go wrong: nothing — this always returns the same fixed string.
@@ -50,7 +58,7 @@ export function buildAnswerMarkdownFormattingSection(): string {
           word-break: break-word;
           overflow-wrap: anywhere;
           font-size: 12px;
-          line-height: 1.4;
+          line-height: ${ANSWER_LINE_HEIGHT};
         }
         .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p {
           margin: 0 0 0.5em 0;

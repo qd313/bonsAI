@@ -10,6 +10,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildAnswerBubbleSection } from "./answerBubble";
+import { ANSWER_LINE_HEIGHT, buildAnswerMarkdownFormattingSection } from "./answerMarkdownFormatting";
 
 function ruleBody(css: string, selector: string): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -17,6 +18,22 @@ function ruleBody(css: string, selector: string): string {
   expect(match, `no rule for ${selector}`).toBeTruthy();
   return match![1]!;
 }
+
+describe("the answer's line spacing (the maintainer's call, 2026-09-25: tighter lines)", () => {
+  const css = buildAnswerBubbleSection();
+
+  it("spaces answer lines at 1.25 of the text size, not the old 1.4, in every rule that sets it", () => {
+    expect(ANSWER_LINE_HEIGHT).toBe(1.25);
+    for (const selector of [
+      ".bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble",
+      ".bonsai-scope .bonsai-ai-response-plain-stream",
+    ]) {
+      expect(ruleBody(css, selector)).toMatch(/line-height:\s*1\.25 !important/);
+    }
+    expect(css).not.toMatch(/line-height:\s*1\.4 !important/);
+    expect(buildAnswerMarkdownFormattingSection()).toMatch(/line-height:\s*1\.25;/);
+  });
+});
 
 describe("the streamed-answer scramble's stylesheet (plan 69)", () => {
   const css = buildAnswerBubbleSection();

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 504,
-  "edgeCount": 1338,
+  "edgeCount": 1340,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3500,12 +3500,14 @@
     },
     "src/styles/sections/answerBubble.test.ts": {
       "imports": [
-        "src/styles/sections/answerBubble.ts"
+        "src/styles/sections/answerBubble.ts",
+        "src/styles/sections/answerMarkdownFormatting.ts"
       ],
       "importedBy": []
     },
     "src/styles/sections/answerBubble.ts": {
       "imports": [
+        "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -3516,6 +3518,8 @@
     "src/styles/sections/answerMarkdownFormatting.ts": {
       "imports": [],
       "importedBy": [
+        "src/styles/sections/answerBubble.test.ts",
+        "src/styles/sections/answerBubble.ts",
         "src/styles/sections/section-6.ts"
       ]
     },

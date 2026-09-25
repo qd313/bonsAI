@@ -68,6 +68,7 @@ Gotchas:
 """
 
 import json
+import math
 import os
 import re
 from typing import Any, Callable
@@ -123,6 +124,37 @@ def _enum(options: frozenset[str], default: str, *, strip: bool = False, lower: 
             if candidate in options:
                 return candidate
         return default
+
+    return _coerce
+
+
+def _clamped_whole_number(default: int, minimum: int, maximum: int):
+    """A whole number clamped to ``[minimum, maximum]``, or ``default`` for anything that is not
+    a finite number.
+
+    ``bool`` is checked first because ``bool`` is a subclass of ``int`` in Python -- without that
+    check, a hand-edited ``true``/``false`` would silently become ``1``/``0`` instead of falling
+    back to the default. A float is truncated towards zero (matching the frontend's
+    ``Math.trunc``), and ``math.isfinite`` rejects ``NaN`` and the infinities before that
+    truncation runs. The final clamp is wrapped against ``OverflowError`` so a pathological input
+    can never escape this as an exception instead of a default.
+    """
+
+    def _coerce(value: Any) -> int:
+        if isinstance(value, bool):
+            return default
+        if isinstance(value, int):
+            whole = value
+        elif isinstance(value, float):
+            if not math.isfinite(value):
+                return default
+            whole = int(value)
+        else:
+            return default
+        try:
+            return max(minimum, min(maximum, whole))
+        except OverflowError:
+            return default
 
     return _coerce
 
@@ -198,6 +230,16 @@ DEFAULT_TAB_RESUME_MODE = "resume"
 # costs latency and tokens, and an unrecognised value must not turn it on.
 _VALID_ASK_THINK_EFFORTS = frozenset({"off", "low", "medium", "high"})
 DEFAULT_ASK_THINK_EFFORT = "off"
+
+# How a streaming answer's newest letters look before they settle (roadmap "Streamed answers
+# arrive with the same scramble as the decode chips", plan 69). Off by default -- see D119.
+_VALID_STREAM_SCRAMBLE_STYLES = frozenset({"settle", "chip", "tail"})
+DEFAULT_STREAM_SCRAMBLE_STYLE = "settle"
+_VALID_STREAM_SCRAMBLE_COLORS = frozenset({"same", "dim", "green", "cyan"})
+DEFAULT_STREAM_SCRAMBLE_COLOR = "green"
+DEFAULT_STREAM_SCRAMBLE_SETTLE_MS = 400
+MIN_STREAM_SCRAMBLE_SETTLE_MS = 100
+MAX_STREAM_SCRAMBLE_SETTLE_MS = 1000
 
 
 def sanitize_preset_chip_animation(value: Any, legacy_fade: Any) -> str:
@@ -447,6 +489,18 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     "voice_reply_mode": _enum(frozenset({"off", "voice_only", "always"}), "off", strip=True),
     # Credentials.
     "steam_web_api_key": _bounded_str(STEAM_WEB_API_KEY_MAX_LEN),
+    # Developer-tab switch: a streaming answer's newest text scrambles for a moment before
+    # settling, the way a decode chip does. Off by default (plan 69).
+    "stream_scramble_enabled": _bool_default_false,
+    "stream_scramble_style": _enum(
+        _VALID_STREAM_SCRAMBLE_STYLES, DEFAULT_STREAM_SCRAMBLE_STYLE, strip=True
+    ),
+    "stream_scramble_color": _enum(
+        _VALID_STREAM_SCRAMBLE_COLORS, DEFAULT_STREAM_SCRAMBLE_COLOR, strip=True
+    ),
+    "stream_scramble_settle_ms": _clamped_whole_number(
+        DEFAULT_STREAM_SCRAMBLE_SETTLE_MS, MIN_STREAM_SCRAMBLE_SETTLE_MS, MAX_STREAM_SCRAMBLE_SETTLE_MS
+    ),
 }
 
 

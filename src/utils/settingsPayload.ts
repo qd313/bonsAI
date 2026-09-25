@@ -97,6 +97,10 @@ export function toBonsaiSettingsPayload(
     rag_hybrid_retrieval_enabled: input.ragHybridRetrievalEnabled,
     rag_corpus_path: input.ragCorpusPath,
     rag_corpus_version: input.ragCorpusVersion,
+    stream_scramble_enabled: input.streamScrambleEnabled,
+    stream_scramble_style: input.streamScrambleStyle,
+    stream_scramble_color: input.streamScrambleColor,
+    stream_scramble_settle_ms: input.streamScrambleSettleMs,
   };
   return patch ? { ...base, ...patch } : base;
 }

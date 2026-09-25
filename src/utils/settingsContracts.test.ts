@@ -8,6 +8,10 @@ import {
   DEFAULT_REPLY_VERBOSITY,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+  DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
+  STREAM_SCRAMBLE_SETTLE_MS_CHOICES,
+  STREAM_SCRAMBLE_SETTLE_MS_MAX,
+  STREAM_SCRAMBLE_SETTLE_MS_MIN,
   type DesktopAppLogLevel,
   type AskThinkEffortId,
   type TabResumeMode,
@@ -23,6 +27,15 @@ import { buildResponseText, formatAppliedTuningBannerText } from "./appliedTunin
 
 /** Regression tests for normalization bounds and response formatting behavior. */
 describe("settings contracts", () => {
+  it("the Developer tab's settle-time buttons are all inside the clamp range and include the default", () => {
+    for (const choice of STREAM_SCRAMBLE_SETTLE_MS_CHOICES) {
+      expect(choice).toBeGreaterThanOrEqual(STREAM_SCRAMBLE_SETTLE_MS_MIN);
+      expect(choice).toBeLessThanOrEqual(STREAM_SCRAMBLE_SETTLE_MS_MAX);
+    }
+    expect(STREAM_SCRAMBLE_SETTLE_MS_CHOICES).toContain(DEFAULT_STREAM_SCRAMBLE_SETTLE_MS);
+  });
+
+
   it("normalizeSettings: ui scale defaults and manual profile", () => {
     const defaults = normalizeSettings({});
     expect(defaults.ui_scale_auto_enabled).toBe(true);
@@ -309,6 +322,10 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
       ragCorpusVersion: "",
+      streamScrambleEnabled: false,
+      streamScrambleStyle: "settle",
+      streamScrambleColor: "green",
+      streamScrambleSettleMs: 400,
       textModelRoutingOrder: [],
       visionModelRoutingOrder: [],
     });
@@ -374,6 +391,10 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
       ragCorpusVersion: "",
+      streamScrambleEnabled: false,
+      streamScrambleStyle: "settle" as const,
+      streamScrambleColor: "green" as const,
+      streamScrambleSettleMs: 400,
       textModelRoutingOrder: [],
       visionModelRoutingOrder: [],
     };
@@ -522,6 +543,10 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: normalized.rag_hybrid_retrieval_enabled,
       ragCorpusPath: normalized.rag_corpus_path,
       ragCorpusVersion: normalized.rag_corpus_version,
+      streamScrambleEnabled: normalized.stream_scramble_enabled,
+      streamScrambleStyle: normalized.stream_scramble_style,
+      streamScrambleColor: normalized.stream_scramble_color,
+      streamScrambleSettleMs: normalized.stream_scramble_settle_ms,
       textModelRoutingOrder: normalized.text_model_routing_order ?? [],
       visionModelRoutingOrder: normalized.vision_model_routing_order ?? [],
     });

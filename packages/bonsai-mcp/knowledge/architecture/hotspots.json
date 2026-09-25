@@ -7,7 +7,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2056,
+      "lines": 2060,
       "role": ""
     },
     {
@@ -131,6 +131,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 660,
+      "role": "Load/save/merge settings.json"
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 651,
       "role": ""
@@ -151,9 +156,9 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/settings_service.py",
-      "lines": 606,
-      "role": "Load/save/merge settings.json"
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 584,
+      "role": ""
     },
     {
       "path": "src/components/DeveloperTab.tsx",
@@ -181,6 +186,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 560,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 550,
       "role": ""
@@ -188,16 +198,6 @@
     {
       "path": "py_modules/backend/services/ai_character_service.py",
       "lines": 544,
-      "role": ""
-    },
-    {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 535,
-      "role": ""
-    },
-    {
-      "path": "src/utils/answerBubbleNavigation.test.ts",
-      "lines": 532,
       "role": ""
     }
   ]

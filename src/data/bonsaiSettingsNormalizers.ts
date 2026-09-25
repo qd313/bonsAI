@@ -27,6 +27,14 @@
  * is — see bonsaiSettingsSchema for the list of settings and their
  * starting values. This file only cleans up whatever value already
  * arrived.
+ *
+ * How it works: Most settings are declared as one row in the `SIMPLE_FIELDS` table near the
+ * bottom, built from one of a handful of shared field-kind functions near the top of the file
+ * (`boolDefaultFalse`, `enumOf`, `boundedString`, `clampedWholeNumber`, and the rest) — mirroring
+ * `_SIMPLE_FIELDS` in settings_service.py row for row. `normalizeSettings()` runs every row
+ * through its coercer, then layers the handful of settings that need something a table row
+ * cannot express — a legacy key, another field's value, or a nested structure — on top by
+ * calling their own named function directly.
  */
 import {
   AI_CHARACTER_ACCENT_INTENSITY_IDS,
@@ -66,6 +74,9 @@ import {
   DEFAULT_PRESET_CHIP_ANIMATION,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
+  DEFAULT_STREAM_SCRAMBLE_COLOR,
+  DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
+  DEFAULT_STREAM_SCRAMBLE_STYLE,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_VOICE_REPLY_MODE,
   VOICE_REPLY_MODE_OPTIONS,
@@ -81,6 +92,10 @@ import {
   PRESET_CHIP_ANIMATION_OPTIONS,
   REQUEST_TIMEOUT_STEP_SECONDS,
   STEAM_WEB_API_KEY_MAX_LEN,
+  STREAM_SCRAMBLE_COLOR_OPTIONS,
+  STREAM_SCRAMBLE_SETTLE_MS_MAX,
+  STREAM_SCRAMBLE_SETTLE_MS_MIN,
+  STREAM_SCRAMBLE_STYLE_OPTIONS,
   TAB_RESUME_MODE_OPTIONS,
   DEFAULT_TAB_RESUME_MODE,
   VOICE_STT_MODEL_OPTIONS,
@@ -90,6 +105,8 @@ import {
   type NamedOllamaHost,
   type PresetChipAnimation,
   type ScreenshotAttachmentPreset,
+  type StreamScrambleColor,
+  type StreamScrambleStyle,
   type TabResumeMode,
   type UnifiedInputPersistenceMode,
   type VoiceReplyMode,
@@ -235,6 +252,24 @@ function enumOf<T extends string>(
 /** Trimmed and length-capped. A non-string is rejected outright, not stringified. */
 function boundedString(maxLength: number): (value: unknown) => string {
   return (value: unknown): string => (typeof value === "string" ? value.trim().slice(0, maxLength) : "");
+}
+
+/**
+ * A whole number clamped to `[minimum, maximum]`, or `fallback` for anything that is not a
+ * finite number. Mirrors Python's `_clamped_whole_number` in settings_service.py: a non-whole
+ * number is cut to its whole part with `Math.trunc` (matching Python's `int()` truncation
+ * towards zero), and `Number.isFinite` rejects `NaN` and the infinities before that runs.
+ */
+function clampedWholeNumber(
+  fallback: number,
+  minimum: number,
+  maximum: number,
+): (value: unknown) => number {
+  return (value: unknown): number => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
+    const whole = Math.trunc(value);
+    return Math.max(minimum, Math.min(maximum, whole));
+  };
 }
 
 /**
@@ -475,6 +510,24 @@ const SIMPLE_FIELDS = {
     trim: true,
   }),
   steam_web_api_key: boundedString(STEAM_WEB_API_KEY_MAX_LEN),
+  // Developer-tab switch: a streaming answer's newest text scrambles before settling. Off by
+  // default (plan 69).
+  stream_scramble_enabled: boolDefaultFalse,
+  stream_scramble_style: enumOf<StreamScrambleStyle>(
+    STREAM_SCRAMBLE_STYLE_OPTIONS,
+    DEFAULT_STREAM_SCRAMBLE_STYLE,
+    { trim: true },
+  ),
+  stream_scramble_color: enumOf<StreamScrambleColor>(
+    STREAM_SCRAMBLE_COLOR_OPTIONS,
+    DEFAULT_STREAM_SCRAMBLE_COLOR,
+    { trim: true },
+  ),
+  stream_scramble_settle_ms: clampedWholeNumber(
+    DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
+    STREAM_SCRAMBLE_SETTLE_MS_MIN,
+    STREAM_SCRAMBLE_SETTLE_MS_MAX,
+  ),
 } as const satisfies { [K in keyof BonsaiSettings]?: (value: unknown) => BonsaiSettings[K] };
 
 type SimpleFieldKey = keyof typeof SIMPLE_FIELDS;

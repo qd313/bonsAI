@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from backend.services.settings_service import (
+    _clamped_whole_number,
     load_settings,
     sanitize_preset_chip_animation,
     sanitize_settings,
@@ -676,6 +677,46 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
             loaded = load_settings(str(settings_path), sanitize_fn, logger)
             self.assertEqual(loaded["latency_warning_seconds"], 42)
+
+
+class ClampedWholeNumberFieldKindTests(unittest.TestCase):
+    """Direct tests of `_clamped_whole_number`, the field kind behind `stream_scramble_settle_ms`."""
+
+    def setUp(self) -> None:
+        self.coerce = _clamped_whole_number(default=400, minimum=100, maximum=1000)
+
+    def test_a_value_in_range_passes_through(self):
+        self.assertEqual(self.coerce(500), 500)
+
+    def test_a_value_below_the_minimum_clamps_up(self):
+        self.assertEqual(self.coerce(1), 100)
+
+    def test_a_value_above_the_maximum_clamps_down(self):
+        self.assertEqual(self.coerce(999999), 1000)
+
+    def test_a_non_whole_number_is_cut_to_its_whole_part(self):
+        self.assertEqual(self.coerce(400.9), 400)
+        self.assertEqual(self.coerce(100.1), 100)
+
+    def test_a_bool_is_not_treated_as_an_int_even_though_it_is_one_in_python(self):
+        self.assertEqual(self.coerce(True), 400)
+        self.assertEqual(self.coerce(False), 400)
+
+    def test_a_string_gives_the_default(self):
+        self.assertEqual(self.coerce("400"), 400)
+
+    def test_none_gives_the_default(self):
+        self.assertEqual(self.coerce(None), 400)
+
+    def test_a_list_gives_the_default(self):
+        self.assertEqual(self.coerce([400]), 400)
+
+    def test_nan_gives_the_default(self):
+        self.assertEqual(self.coerce(float("nan")), 400)
+
+    def test_infinity_gives_the_default(self):
+        self.assertEqual(self.coerce(float("inf")), 400)
+        self.assertEqual(self.coerce(float("-inf")), 400)
 
 
 if __name__ == "__main__":

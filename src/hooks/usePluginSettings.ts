@@ -167,6 +167,10 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   ragHybridRetrievalEnabled: "rag_hybrid_retrieval_enabled",
   ragCorpusPath: "rag_corpus_path",
   ragCorpusVersion: "rag_corpus_version",
+  streamScrambleEnabled: "stream_scramble_enabled",
+  streamScrambleStyle: "stream_scramble_style",
+  streamScrambleColor: "stream_scramble_color",
+  streamScrambleSettleMs: "stream_scramble_settle_ms",
 };
 
 const SETTINGS_FIELD_KEYS = Object.keys(SETTINGS_FIELD_BACKEND_KEY) as (keyof BonsaiSettingsSnapshotInput)[];

@@ -456,5 +456,121 @@
     "expected": {
       "voice_reply_mode": "always"
     }
+  },
+  {
+    "name": "scramble style is trimmed before matching",
+    "input": {
+      "stream_scramble_style": " chip "
+    },
+    "expected": {
+      "stream_scramble_style": "chip"
+    }
+  },
+  {
+    "name": "scramble style stays case-sensitive",
+    "input": {
+      "stream_scramble_style": "CHIP"
+    },
+    "expected": {
+      "stream_scramble_style": "settle"
+    }
+  },
+  {
+    "name": "an unknown scramble style falls back to settle",
+    "input": {
+      "stream_scramble_style": "bounce"
+    },
+    "expected": {
+      "stream_scramble_style": "settle"
+    }
+  },
+  {
+    "name": "an unknown scramble colour falls back to green",
+    "input": {
+      "stream_scramble_color": "purple"
+    },
+    "expected": {
+      "stream_scramble_color": "green"
+    }
+  },
+  {
+    "name": "scramble colour stays case-sensitive",
+    "input": {
+      "stream_scramble_color": "SAME"
+    },
+    "expected": {
+      "stream_scramble_color": "green"
+    }
+  },
+  {
+    "name": "scramble settle time clamps below the minimum",
+    "input": {
+      "stream_scramble_settle_ms": 1
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 100
+    }
+  },
+  {
+    "name": "scramble settle time clamps above the maximum",
+    "input": {
+      "stream_scramble_settle_ms": 999999
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 1000
+    }
+  },
+  {
+    "name": "a non-whole scramble settle time is cut down to its whole part",
+    "input": {
+      "stream_scramble_settle_ms": 450.9
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 450
+    }
+  },
+  {
+    "name": "a string scramble settle time gives the default",
+    "input": {
+      "stream_scramble_settle_ms": "400"
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "a bool scramble settle time gives the default, not true's numeric value",
+    "input": {
+      "stream_scramble_settle_ms": true
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "a null scramble settle time gives the default",
+    "input": {
+      "stream_scramble_settle_ms": null
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "an old settings file predating the streaming scramble loads all four settings at their defaults and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "stream_scramble_enabled": false,
+      "stream_scramble_style": "settle",
+      "stream_scramble_color": "green",
+      "stream_scramble_settle_ms": 400,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
   }
 ]

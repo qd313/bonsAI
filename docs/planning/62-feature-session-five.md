@@ -1,6 +1,19 @@
 # 62 — The fifth feature session: four screen changes, built and checked at the same time
 
-**Written 2026-09-20. Nothing starts until the maintainer says "go".**
+**Written 2026-09-20.**
+
+**Status, corrected 2026-09-24: FINISHED; three of the four features are proven on the Deck.** The last
+line of the progress log (§ 10) says nothing was proved because deploying was blocked. That was true on
+2026-09-20 only. Plan 63 fixed the deploy and proved it end to end on 2026-09-21 (its § 8, block 0).
+After that, these passed on the Deck:
+- The game name shown only while focused: CHAT-SLOTS-V3-14c, 2026-09-21.
+- The session box as a tab in Show details: SESSION-TAB-01, 2026-09-23.
+- Every filter behind one Filters button: MODELS-FILTERS-01, 2026-09-23.
+- The list using its full room: MODELS-LIST-CAP-01, on the third try, 2026-09-23.
+
+Still owed: Read aloud as a speaker on the Helpful row. READ-ALOUD-02, 05 and 06 have not run since the
+button changed shape ([testing.md](../testing.md)). The licence-filter call was closed on the
+maintainer's word on 2026-09-21 (commit `5a10ad17`).
 
 Four features the maintainer picked from a drawing board on 2026-09-20. Each one was drawn at the
 Deck's own sizes before anything was chosen, so the shape is settled and this plan is about building

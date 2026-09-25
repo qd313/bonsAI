@@ -1213,6 +1213,10 @@ That closes the read the row had waited for since 12 September. The roadmap entr
 back from a Steam setting opened through the card. D106's open item is closed; nothing about the card
 is owed.
 
+*Correction 2026-09-24: this closed the card's one open call, not its Deck checks. Rows SETTINGS-CARD-06
+and 07 had never been run and still have not; they are on the roadmap's Verify list. Reading "nothing is
+owed" as "every check passed" is how the card reached Done with two checks missing.*
+
 **3. The honesty line, seen on the Deck's own screen.** The check D106 said was owed ran the same
 afternoon on the plan 56 build, with nothing running: *black mesa how do i tame a horse* ends with
 "— No close match in my notes, this answer leans on the model's own knowledge." and *how do i beat the

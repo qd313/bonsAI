@@ -1,6 +1,17 @@
 # Plan 63 — the fourth bug-fixing session, and the verification pass that follows
 
-**Written 2026-09-21. Status: running.**
+**Written 2026-09-21. Status, corrected 2026-09-24: FINISHED 2026-09-22.** Blocks 0 to 6 ran over
+2026-09-21 and 22 (§ 8). The last bookkeeping commit is `6d60aca5` ("Plan 63 final bookkeeping"). Block
+7 was never written up, so this line kept saying "running". Plan 64 took over the next night and
+proved most of these fixes on the Deck. The three focus fixes that did not land here were all settled
+there on 2026-09-23:
+- The Permissions jump: fixed in `af53b7d` and proven on a second timed walk.
+- The streaming highlight: fixed in `7b9447ed` and proven.
+- Up from Retry: closed as no longer applying, because Retry now sits above the answer.
+
+All three are in [archive/roadmap-bugs-fixed.md](../archive/roadmap-bugs-fixed.md). The one fix from
+here that later failed on the Deck is the dots under the chat name (lane F). That is an open roadmap
+bug, waiting on the maintainer's pick.
 
 What this is for: one long session that clears as much of the open bug list as it can, then proves
 the result on the Deck with the automated rig, and closes out the checks that have been waiting.

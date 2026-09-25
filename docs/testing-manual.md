@@ -290,18 +290,14 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 ### VAC / `bonsai:vac-check`
 
-- [ ] **VAC-03** Valid key + SteamID
-- [ ] **VAC-04** Profile URL
-- [ ] **VAC-05** Vanity `/id/…` unsupported note
-- [ ] **VAC-06** Permission off after key saved — no network
+All checks in this block passed on the Deck and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
+VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 
 ### Open regression IDs (bugs / recent ships)
 
 - [ ] **PRESET-GAME-01** With a game running, tap a preset chip — Ask field shows chip text only (no `— {Game}` append; “this game” unchanged)
 - [ ] **STRATEGY-PLACEHOLDER-01** Strategy mode, empty Ask — focus field; italic placeholder does not shift when fake caret appears
 - [ ] **ASK-CARET-CHAR-01** AI character on — focus empty Ask field; native caret aligns with placeholder/text (not left of `?` badge); D-pad Up from paperclip → avatar, Right → field; character-off path unchanged
-- [ ] **CONTEXT-LADDER-03** D-pad: Show details / Retry **Down** → ladder focus (not session strip skip); **Left/Right** cycles chips; all chips visible when ≤6; **Up** from first chip → utility row; **Down** from last chip → session strip; **Developer details** chip reachable
-- [ ] **MICRO-04** Strategy live-turn D-pad: branches → feedback → utilities
 - [ ] **STRAT-SPOIL-DRG-01** DRG Survivor boss names not false-positive spoilers — ship gate is the three **required** rows below; acceptance is *no spoiler fence rendered for the entity named in the question* (display-level, not a claim about model behavior). Plan 54 landed 2026-09-15; the three new sub-rows below cover it. All rows in this block run in plan 55's Deck pass.
   (DRG-01, DRG-01d, DRG-01-STREAM-01, HADES-NAMED-01, STRAT-SPOIL-FIRST-01 and STRAT-SPOIL-TEXT-01 passed and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).)
   - [x] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)* — **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent five times out of six tries, so the reply was never seen. Evidence `docs/test-evidence/plan61-DRG-01b.json`. **DRG-01c not tried on purpose** 2026-09-18 — it would mean removing the library from the Deck, which was out of scope tonight. Still owed, not failed. **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence `docs/test-evidence/plan61-DRG-01b-retry.json`. **DRG-01b PASS (Deck) 2026-09-23:** with the game running, the knowledge base off, masking on and no consent phrase, the boss tactics came back plain, no cover, no notes block, and no knowledge-base search logged. Moved to Done. DRG-01c (corpus absent) is still not tried. Evidence `docs/test-evidence/plan64-DRG-01b.json`.

@@ -6,7 +6,17 @@ what cannot run side by side and should be dropped, and what needs their decisio
 that the one running the session use the Deck for checks the whole time the helpers are building,
 the way the third bug-fixing session did ([plan 55](55-bugfix-session-three.md)).
 
-**Status 2026-09-15: questions answered and locked as D105, waiting for the maintainer's "go".**
+**Status, corrected 2026-09-24: FINISHED 2026-09-16.** The session ran over 2026-09-15 and 16 (§ 10).
+The Steam settings card ([plan 45](45-settings-shortcut-card.md)) and the other features it built landed
+and were checked on the Deck in § 10. What is still owed is on [testing.md](../testing.md): the settings
+card's rows 06 and 07, and two halves of the Spy check (SPY-REVEAL-01). The two features it set aside
+for a drawing were built later. The thinking display came in
+[plan 57](57-reasoning-display-build.md). The session history became a tab in Show details in
+[plan 62](62-feature-session-five.md), and it passed on the Deck 2026-09-23 (SESSION-TAB-01). The
+reclaimed height above the box is still an open roadmap entry. Everything below is the plan as it
+stood before it ran.
+
+**Before it ran, 2026-09-15: questions answered and locked as D105, waiting for the maintainer's "go".**
 The answers are in § 8. Two of the nine are dropped from the build by the maintainer's choice and go
 into a drawn mockup page at the end of the session instead (§ 9). Nothing in § 5 starts until they
 say go.

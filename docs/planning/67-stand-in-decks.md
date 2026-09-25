@@ -6,6 +6,10 @@ nothing run. Phase 0 is next, and it starts only when the maintainer says so.
 **Related:** [plan 21](21-ai-owned-testing-program.md), the wider AI-owned testing program, and
 [plan 19](19-controller-macro-test-rig.md), the controller test rig. This plan adds more machines to
 test on. It does not replace either.
+**Order, set 2026-09-24:** the maintainer made finishing the controller test rig priority 1 (see the top of
+[plan 19](19-controller-macro-test-rig.md)). The rig is already built. What is left there makes each
+machine's testing trustworthy without a person watching; this plan then multiplies machines. So this plan
+comes after it.
 **Stars and models:** ★★★★★ because it spans hardware, a second operating system, a change to the Deck
 test tools in their own project, and a new way of running sessions. Phase 0 is mostly the maintainer's
 hands plus one Opus xhigh session. Which model fills each role later is an open question (section 11).

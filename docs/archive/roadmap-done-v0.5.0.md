@@ -25,6 +25,53 @@ _The plan 64 flow G block, and the first two entries of its flow H block, were m
 on 2026-09-24 during plan 65's bookkeeping pass, oldest of the remaining Done entries first, for the
 same reason. The rest of the flow H block stayed in roadmap.md._
 
+_The rest of plan 64's flow H block below was moved out of [roadmap.md](../roadmap.md) on 2026-09-24,
+during the planning-folder review, for the same reason. Words unchanged; only the link paths were
+adjusted for this folder._
+
+**Closed 2026-09-23 (plan 64, flow H, proven on the Deck):**
+
+- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **DONE,
+  confirmed on the Deck 2026-09-23:** opening the block now brings its header right to the top of the pane,
+  showing about 40% of a three-note block instead of 17%. [Full
+  detail](roadmap-bugs-fixed.md#opening-the-from-the-notes-block-does-not-scroll-it-into-view).
+- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off** —
+  **DONE, confirmed on the Deck 2026-09-23:** with a non-essential model installed, its row, star and
+  Remove now show on the AI models screen without opening Filters. [Full
+  detail](roadmap-bugs-fixed.md#a-model-already-installed-on-the-deck-had-no-row-unless-essentials-only-was-turned-off).
+- ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
+  Advanced switch change** — **DONE, confirmed on the Deck 2026-09-23:** turning the high-VRAM switch on,
+  then pulling a typed name, now keeps the switch on when the screen is reopened. [Full
+  detail](roadmap-bugs-fixed.md#pulling-a-typed-in-model-name-closed-the-ai-models-screen-and-threw-away-an-unsaved-advanced-switch-change).
+- ★ `[ollama]` **Pulled models join the model try order** — **DONE, confirmed on the Deck 2026-09-23:** a
+  pulled model joins the bottom of the saved order normally, and with the high-VRAM switch on and an order
+  already saved, a large pulled model now goes to the top of it, the rest kept behind it. One open question
+  for the maintainer: the try-order screen showed the big model last and greyed as licence-blocked, while
+  the saved order itself had it first — the two disagree and nobody has said which should win. [Full
+  detail](roadmap-completed.md#pulled-models-join-the-model-try-order).
+- ★ `[ollama]` **Removing a model did not take it out of the saved try order** — **DONE, found, fixed and
+  confirmed on the Deck the same night, 2026-09-23:** removing a model through its row now drops it from
+  the saved order too, instead of leaving Ask's first choice pointing at a model that is gone. [Full
+  detail](roadmap-bugs-fixed.md#removing-a-model-did-not-take-it-out-of-the-saved-try-order).
+- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **DONE, confirmed on the Deck
+  2026-09-23:** all four remaining checks passed with the maintainer's own Steam key — a real account
+  number, a profile link, and a vanity link that correctly asks for the number instead; with the permission
+  off, it says so and names the switch. The "nothing reached Valve" half is a weaker proof than it sounds —
+  the plugin log never names that request even when it is made, on or off. [Full
+  detail](roadmap-completed.md#vac-check-bonsaivac-check-on-device-qa).
+- ★★ `[ollama]` **After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install
+  Ollama while Ollama was answering questions the whole time** — **DONE, confirmed on the Deck 2026-09-23:**
+  after a reload the tab reads Update AI & models, never Install Ollama, on every read. The plugin's own log
+  still writes one false connection-failed line right at start-up, before settings finish loading — filed
+  as its own small bug, above. [Full
+  detail](roadmap-bugs-fixed.md#after-a-plugin-reload-the-ollama-tab-said-could-not-reach-ollama-and-offered-install-ollama-while-ollama-was-answering-questions-the-whole-time).
+- ★★★★ `[ollama]` **Speed-mode VRAM preload** — **DONE for the timing check, confirmed on the Deck
+  2026-09-23:** with the warm-up switch on, an Ask model under the size cap now loads ahead of time and
+  answers 2.3 seconds sooner (7.72s against a cold 10.05s), with no second load of it. Still owed and not
+  covered by this: the memory-pressure case and whether a warmed model survives the Deck sleeping
+  (`testing.md`'s PRELOAD-02 row, still open). [Full
+  detail](roadmap-completed.md#speed-mode-vram-preload).
+
 **Closed 2026-09-23 (plan 64, flow G, proven on the Deck):**
 
 - ★ `[ollama]` **Typing a made-up model name and pressing Pull said the pull started, not that it was
@@ -319,11 +366,13 @@ same reason. The rest of the flow H block stayed in roadmap.md._
   line, and a real question about that game does not, both directions confirmed. Row
   **HONESTY-TEXT-GAME-01**; evidence `docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`.
 - ★★★ `[ask]` `[focus]` **Steam settings shortcuts: the card floats, the D-pad walks in and out, tap outside
-  to close** — **DONE 2026-09-16 (D107).** All six steps of plan 45 are confirmed on the Deck: the floating
-  card, its six-row cap, the D-pad wiring in and out of it, and opening a Steam setting from a row. The one
-  open call left — whether the typed words survive a jump back from Steam — is settled: the card keeps
-  working the way it does today, so the box is left empty when you come back. Nothing about the card is owed
-  any more. Rows **SETTINGS-CARD-01** through **07**. [Plan](planning/45-settings-shortcut-card.md) ·
+  to close** — **DONE 2026-09-16 (D107), corrected 2026-09-24.** Confirmed on the Deck: the floating card,
+  its six-row cap with a one-line box, the D-pad wiring in and out of it, and opening a Steam setting from a
+  row. The one open call left — whether the typed words survive a jump back from Steam — is settled: the card
+  keeps working the way it does today, so the box is left empty when you come back. Rows **SETTINGS-CARD-01**
+  through **05** passed. **Correction 2026-09-24:** this line used to say "nothing about the card is owed any
+  more" and named rows 01 through 07, but rows **06** (a one-result search) and **07** (the card rising as the
+  box grows) were never run. They are back on the roadmap's Verify list. [Plan](planning/45-settings-shortcut-card.md) ·
   [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 - ★ `[reply]` **The slow-reply footnote reads as a broken sentence — not a bug, 2026-09-16 (D107).** The
   sentence was always whole on screen: "150.8s (>60s): prefer GPU for Ollama, not CPU" reads in full on the

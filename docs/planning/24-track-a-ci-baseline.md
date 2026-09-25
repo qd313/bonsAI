@@ -4,10 +4,15 @@ Track A of [21-ai-owned-testing-program.md](21-ai-owned-testing-program.md) § 3
 gates that already exist into CI. Implemented 2026-08-25 as
 [`.github/workflows/tests.yml`](../../.github/workflows/tests.yml).
 
-**Status: advisory.** Gates run and report on every push and pull request; a red gate
-annotates the run but does not block a merge. That was the agreed first-session behaviour.
-Milestone **M1** ("CI rejects a pull request because a test failed") is reached when
-`ADVISORY` in that file flips to `false` — a one-line change, deliberately.
+**Status, corrected 2026-09-24: blocking since 2026-08-26.** The one-line flip happened in commit
+`8ff2b00e` ("flip the ratchet to blocking"), and the workflow file now sets `ADVISORY: "false"`, so a
+red gate fails the run. Milestone **M1** ("CI rejects a pull request because a test failed") is
+reached. That was item 2 of § 5. The other four items there, deferred on purpose, are still as
+written on 2026-09-24: `package.json` has no `packageManager` field, `packages/bonsai-mcp` still uses npm
+(`package-lock.json`, `npm ci` in `validate-mcp.yml`), the old `pnpm.peerDependencyRules` block is
+still in `package.json`, and the `pretest` hook still runs the version sync. They are now one roadmap
+entry. Until 2026-09-24 this line said "Status: advisory", which was the agreed first-session
+behaviour: a red gate annotated the run but did not block a merge.
 
 ---
 

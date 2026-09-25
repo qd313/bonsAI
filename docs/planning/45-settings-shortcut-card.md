@@ -1,6 +1,16 @@
 # Plan 45 — The Steam settings shortcuts move above the question box
 
-**Status:** planned 2026-09-06, nothing built. Every call locked the same day (D79).
+**Status, corrected 2026-09-24: built 2026-09-16 during [plan 56](56-feature-session-four.md); five of
+the seven Deck checks in § 7 are done, and two are owed.** Rows SETTINGS-CARD-01 to 04 passed on the
+Deck 2026-09-16 ([archive/testing-closed-2026.md](../archive/testing-closed-2026.md)). Row 05's jump
+passed. Its return (the box comes back empty) is the intended behaviour since D107, so row 05 is done.
+Row 06 (a one-result search at four words) has never run on the Deck. Row 07 has run only in part. On
+2026-09-16, with a one-line box, the card showed six rows, read "Steam settings · 65 more" and stopped
+19 px below the tab bar (`docs/test-evidence/plan56-SETTINGS-CARD-01.json`). The card rising as the box
+grows taller has never been checked. Both rows are on [testing.md](../testing.md) and the roadmap's
+Verify list. The Done line written 2026-09-16 said nothing was owed. That was wrong, and it was
+corrected 2026-09-24. Until 2026-09-24 this line said "planned 2026-09-06, nothing built"; every call
+was locked that day (D79).
 **Roadmap entry:** ★★★ `[ask]` *Steam settings shortcuts float above the question box*, in Features.
 **Mockups and the live rule tester:** [The settings list, moved up](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 

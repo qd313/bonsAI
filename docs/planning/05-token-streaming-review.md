@@ -1,6 +1,13 @@
 # 05 — Token streaming: architecture review, risks, ship readiness
 
-Status: **Phase A implemented 2026-08-07** (P1–P5); Phase B (multi-stop navigation) not started.
+**Status, corrected 2026-09-24: both phases built, and passed on the Deck.** Phase A (P1–P5) and
+Phase B (multi-stop navigation) both landed 2026-08-07 (commit `765de858` records Phase B) and passed on
+the Deck 2026-09-04 (the "Token streaming Phase A/B" line in
+[archive/roadmap-done-v0.5.0.md](../archive/roadmap-done-v0.5.0.md)). One check is still owed: STREAM-04,
+on the streaming row of [testing.md](../testing.md). P6 (§ 5) was never decided; it is now its own
+roadmap entry. The bursts this review called R3 were accepted 2026-09-04 and their cause found 2026-09-24;
+that work is [plan 69](69-streamed-answers-scramble.md). Until 2026-09-24 this line said Phase B had not
+started.
 Written 2026-08-03 from static reading of `main.py`, `py_modules/backend/services/`, `src/`.
 Every claim is a `file:line` citation or marked **UNKNOWN**.
 

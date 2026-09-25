@@ -4,6 +4,35 @@ Planning record for the roadmap entry of the same name. **Discovery locked 2026-
 maintainer Q&A session; the calls in § 2 are decided, everything marked UNKNOWN or *spike* is
 not. Recon and design only — **no implementation**. Effort uses the roadmap GTA scale.
 
+**Status, 2026-09-24: built and in daily use; four pieces left, and the maintainer's priority 1.**
+Until today the roadmap still said "board ordered, next: spikes S1 to S3". That was a month out of
+date:
+- **S1 and S2 are done.** The board is plugged into the Deck and read on the PC's COM7
+  (`deck_status` reports `bridgeReady: true`; see `docs/test-evidence/plan65-DEPLOY.json`). Its
+  button map was measured and fixed on 2026-08-25
+  ([archive/22-xinput-near-miss-and-button-map.md](../archive/22-xinput-near-miss-and-button-map.md)).
+  The Guide chord opens the Quick Access Menu from it.
+- **P1 is done except the stream.** Pressing, chords, walks, sequences and a stop switch exist as
+  `deck_pressButton`, `deck_pressChord`, `deck_walkTo`, `deck_runSequence`, `deck_stopAutomation` and
+  `deck_automationStatus`.
+- **P2's acceptance run passed in practice.** A nine-step walk drove the menu with nobody at the Deck
+  on 2026-08-26 (plan 21, milestone M3). The full ask, wait and read-back ran unattended on
+  2026-08-28 ([roadmap-details](../roadmap-details.md), this entry's status).
+- **S5 is answered in practice, not by the plugin.** Sessions wait for a reply by watching the
+  screen with `deck_waitFor`. No signal from the plugin itself was ever picked.
+
+Still left:
+1. **S3: one recording that is also a live view,** with its cost to the Deck measured. `deck_record`
+   only saves a file.
+2. **S4: checking the highlight from the video.**
+3. **Handheld runs over Bluetooth** (P3). Nothing found shows they were tried.
+4. **P4: the nightly run with nobody present.** It first needs the saved-walk replay to work right
+   after a deploy; today it cannot, which is an open roadmap bug.
+
+What none of this fixes: the checks that need a finger on the screen, a game that is not on the
+Recent Games row, or ears. Those are the rest of what still waits on a person.
+[Plan 67](67-stand-in-decks.md) (stand-in Decks) comes after this. It adds machines, not abilities.
+
 **One sentence:** a bridge board the Deck sees as a real controller, a macro runner whose steps
 are verified against real UI state, and one capture pipeline that yields the QA recording and a
 live analyzer stream at the same time — closing the last missing capability for unattended

@@ -309,6 +309,11 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](planning/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+- ★ `[platform]` **Four small build-setup tidy-ups, deferred on purpose in 2026-08** — **OPEN, carried over
+  2026-09-24 from plan 24 when it was archived.** Nothing a person would notice: name the package manager's
+  version in `package.json` (the workflow repeats it by hand today), move `packages/bonsai-mcp` off npm so the
+  repo uses one package manager, drop the old `pnpm.peerDependencyRules` block that warns on every install, and
+  stop `pretest` leaving the tree dirty. [Plan § 5](archive/24-track-a-ci-baseline.md).
 - ★ `[ui]` **A leftover piece of state from the deleted settings-card keyboard marker** — **OPEN, found
   2026-09-16 while landing the settings card's real D-pad wiring.** The plugin's main file still keeps a
   `selectedIndex` value that only the old fake on-screen marker ever read, and two other files still pass it
@@ -321,11 +326,21 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
+- ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
+  (plan 55, D104), carried over 2026-09-24 when that plan was archived.** About fifty settings, and the screen
+  side names every one of them by hand in seven places in one file. Miss one when adding a setting and it looks
+  fine but quietly resets after a restart; that already happened once, to four settings together. Fix: write
+  the list once and have the other six read it. Nothing is broken today. [Why](archive/55-bugfix-session-three.md).
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed
   2026-09-08. Not yet (D99, 2026-09-12): it waits for its own go.** The model would open every answer with
   one short sentence that carries the point and gives nothing away. **The 2026-09-12 count:** only 2 of 10
   answers already opened that way and 0 of 10 gave anything away — by the maintainer's own rule that means
   build it, but they read the count and said not yet. [Detail](roadmap-details.md#headline-first-every-answer-opens-with-one-line-that-stands-alone).
+- ★★ `[reply]` **Should a streamed answer keep its layout when it finishes?** — **OPEN, a decision, carried over
+  2026-09-24 from plan 05 when it was archived.** Plan 05 called this "the one design question worth deciding
+  soon" on 2026-08-07 (its P6): today an answer is laid out one way while it arrives and re-laid out when it
+  finishes, and two ways of drawing it can drift apart. Written before September's reply changes: check today's
+  code first, it may be moot. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md).
 - ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **OPEN, asked for by the maintainer
   2026-09-23.** A Developer tab toggle: when on, each streamed piece settles into place the way a suggestion chip does in decode
   mode, its unsettled tail churning through placeholder glyphs that lock into the real letters, smooth and without bursts, like
@@ -436,6 +451,11 @@ replace it with a specific issue when one exists.
   [llama-cpp-provider.md](archive/spikes/llama-cpp-provider.md).
 - ★★★★ `[platform]` **Steam Input layout parse** — **OPEN.** Parse controller VDF configs for control context. Not in scope: writing
   configs.
+- ★★★★ `[QA]` `[platform]` **Finish the controller test rig** — **PRIORITY 1 (maintainer, 2026-09-24). PARTIAL: built and
+  driving every Deck session since 2026-08-26.** Was ★★★★★ with "board ordered, next: S1 to S3", a month stale. Left from
+  [plan 19](planning/19-controller-macro-test-rig.md): a recording that is also a live view (S3), the highlight checked from the
+  video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which first needs the saved-walk replay bug above
+  fixed. Comes before stand-in Decks. [Program](planning/21-ai-owned-testing-program.md).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -453,9 +473,6 @@ replace it with a specific issue when one exists.
   of timings answers the gate over time. Whether this line retires is D75. **First input, 2026-09-05:** the desk survey of this
   quarter's models in [41-deck-model-survey.md](planning/41-deck-model-survey.md); the calls are D72.
 - ★★★★★ `[perms]` **VAC Phase 2: opponent IDs** — **OPEN, research.** Surface live opponent identities for ban checks when metadata allows.
-- ★★★★★ `[platform]` **Controller macro test rig and live view** — **OPEN, discovery locked 2026-08-23, board ordered.** A bridge board
-  the Deck sees as a real controller, a macro runner gated on real UI state, and one recording pipeline. Primitives land upstream in
-  decky-plugin-studio. Next: spikes S1 to S3. [Plan](planning/19-controller-macro-test-rig.md), [program](planning/21-ai-owned-testing-program.md).
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
 - ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; first step is a ★★
   test to find out.** bonsAI's panel floating over any VR game, drawn by a small PC program, not a Decky
@@ -466,8 +483,8 @@ replace it with a specific issue when one exists.
 - ★★★★★ `[QA]` `[platform]` **Stand-in Decks on the maintainer's PC** — **OPEN, planned 2026-09-23, nothing built.** Up to
   four virtual Decks (Bazzite, one Steam account, all but one offline) so several AI sessions test at once instead of queuing
   for the one Deck. A test lead splits the work; one rig lead per machine. Phase 0 first: one stand-in on Windows, screens
-  drawn without the graphics card; if that fails, a Linux dual boot. Driving several machines is a Deck test tools item,
-  not bonsAI code. [Plan 67](planning/67-stand-in-decks.md).
+  drawn without the graphics card; if that fails, a Linux dual boot. Adds machines, not abilities, so it comes after the
+  controller test rig (priority 1, 2026-09-24). [Plan 67](planning/67-stand-in-decks.md).
 - ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
   Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
   folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose
@@ -526,6 +543,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Clear then Cancel, the plugin came back "not in the same spot, back at the top," instead of staying on the
   Session tab with the ring on Clear. Whether the box itself still opens on Cancel rather than Clear is
   unconfirmed either way. Not fixed for this half yet.
+- ★ `[perms]` **The ban lookup's "turned off" message names the switch the way the screen does** — **VERIFY,
+  fixed in `ec6f87ab` on 2026-09-23, after that night's last deploy.** With the permission off it said "Enable
+  Permissions → Steam Web API", but the switch is labelled "Steam ban lookup"; it now says that. The four ban
+  lookup checks passed the same night on the old wording. Owed: VAC-06 once more on a build that has the fix.
+  Found 2026-09-24; until then this was written only in plan 64's report.
 - ★★ `[focus]` **Walking a reply with the ring on the chat row while it streams carries the row off
   screen** — **VERIFY, found and fixed the same night, `ff62e8c`.** With the ring on the chat row and the
   answer still being written, the view followed the growing answer and carried the chat row off the top of
@@ -565,6 +587,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 ### Features that need verification
 
+- ★ `[ask]` **The Steam settings card: two checks never run** — **VERIFY, landed 2026-09-16 (plan 56).** The
+  card was moved to Done on 2026-09-16 with all seven rows named, but two were never run on the Deck (found
+  2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
+  and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
+  box was measured). Rows 01 to 05 passed. [Plan](planning/45-settings-shortcut-card.md).
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
   Until now a chat kept 200 questions and answers on disk and almost none of it reached the AI, so a follow-up meant saying
   everything again. Measured on the Deck: *"and what about the boots?"* got **"please tell me which game you are referring
@@ -959,6 +986,9 @@ Plan 64's flow G block, and the first two entries of its flow H block, were move
 2026-09-24 during plan 65's bookkeeping pass, oldest of the remaining Done entries first, again to keep
 this document under its size limit.
 
+The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
+review, again to keep this document under its size limit.
+
 **Closed 2026-09-24 (plan 65, trim and split — nothing a person using the plugin would notice):**
 
 - ★★★ `[platform]` **Trim the five documents that are still big** — **DONE, plan 65 2026-09-24:** the
@@ -969,47 +999,3 @@ this document under its size limit.
   fourteen long files split, code lines 18,767 to 11,521 overall (39% moved out); a check now stops any
   file over 800 lines of code from growing back. [Full
   detail](archive/roadmap-completed.md#the-eleven-long-files-left-long-on-purpose).
-
-**Closed 2026-09-23 (plan 64, flow H, proven on the Deck):**
-
-- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **DONE,
-  confirmed on the Deck 2026-09-23:** opening the block now brings its header right to the top of the pane,
-  showing about 40% of a three-note block instead of 17%. [Full
-  detail](archive/roadmap-bugs-fixed.md#opening-the-from-the-notes-block-does-not-scroll-it-into-view).
-- ★ `[ollama]` **A model already installed on the Deck had no row unless Essentials only was turned off** —
-  **DONE, confirmed on the Deck 2026-09-23:** with a non-essential model installed, its row, star and
-  Remove now show on the AI models screen without opening Filters. [Full
-  detail](archive/roadmap-bugs-fixed.md#a-model-already-installed-on-the-deck-had-no-row-unless-essentials-only-was-turned-off).
-- ★ `[ollama]` **Pulling a typed-in model name closed the AI models screen and threw away an unsaved
-  Advanced switch change** — **DONE, confirmed on the Deck 2026-09-23:** turning the high-VRAM switch on,
-  then pulling a typed name, now keeps the switch on when the screen is reopened. [Full
-  detail](archive/roadmap-bugs-fixed.md#pulling-a-typed-in-model-name-closed-the-ai-models-screen-and-threw-away-an-unsaved-advanced-switch-change).
-- ★ `[ollama]` **Pulled models join the model try order** — **DONE, confirmed on the Deck 2026-09-23:** a
-  pulled model joins the bottom of the saved order normally, and with the high-VRAM switch on and an order
-  already saved, a large pulled model now goes to the top of it, the rest kept behind it. One open question
-  for the maintainer: the try-order screen showed the big model last and greyed as licence-blocked, while
-  the saved order itself had it first — the two disagree and nobody has said which should win. [Full
-  detail](archive/roadmap-completed.md#pulled-models-join-the-model-try-order).
-- ★ `[ollama]` **Removing a model did not take it out of the saved try order** — **DONE, found, fixed and
-  confirmed on the Deck the same night, 2026-09-23:** removing a model through its row now drops it from
-  the saved order too, instead of leaving Ask's first choice pointing at a model that is gone. [Full
-  detail](archive/roadmap-bugs-fixed.md#removing-a-model-did-not-take-it-out-of-the-saved-try-order).
-- ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **DONE, confirmed on the Deck
-  2026-09-23:** all four remaining checks passed with the maintainer's own Steam key — a real account
-  number, a profile link, and a vanity link that correctly asks for the number instead; with the permission
-  off, it says so and names the switch. The "nothing reached Valve" half is a weaker proof than it sounds —
-  the plugin log never names that request even when it is made, on or off. [Full
-  detail](archive/roadmap-completed.md#vac-check-bonsaivac-check-on-device-qa).
-- ★★ `[ollama]` **After a plugin reload, the Ollama tab said "Could not reach Ollama" and offered Install
-  Ollama while Ollama was answering questions the whole time** — **DONE, confirmed on the Deck 2026-09-23:**
-  after a reload the tab reads Update AI & models, never Install Ollama, on every read. The plugin's own log
-  still writes one false connection-failed line right at start-up, before settings finish loading — filed
-  as its own small bug, above. [Full
-  detail](archive/roadmap-bugs-fixed.md#after-a-plugin-reload-the-ollama-tab-said-could-not-reach-ollama-and-offered-install-ollama-while-ollama-was-answering-questions-the-whole-time).
-- ★★★★ `[ollama]` **Speed-mode VRAM preload** — **DONE for the timing check, confirmed on the Deck
-  2026-09-23:** with the warm-up switch on, an Ask model under the size cap now loads ahead of time and
-  answers 2.3 seconds sooner (7.72s against a cold 10.05s), with no second load of it. Still owed and not
-  covered by this: the memory-pressure case and whether a warmed model survives the Deck sleeping
-  (`testing.md`'s PRELOAD-02 row, still open). [Full
-  detail](archive/roadmap-completed.md#speed-mode-vram-preload).
-

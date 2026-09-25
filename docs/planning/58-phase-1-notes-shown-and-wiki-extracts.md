@@ -6,7 +6,13 @@ for a year and a half. Two of those lessons land squarely on this plugin, and th
 both fixed **before** the wave-four session runs. That session is now
 [58 phase 2](58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
 
-**Status, 2026-09-19: built, landed and checked on the Deck; the read-aloud row and the publish call
+**Status, corrected 2026-09-24: FINISHED.** The library this phase built, 2026.09.18, was published
+2026-09-23 to both download sites and read back afterwards (the roadmap's knowledge-base section,
+"Published 2026-09-23"). One check is still owed: the read-aloud row, NOTES-BLOCK-07, which needs ears
+([testing-manual.md](../testing-manual.md)). Rows 02 and 04 still cannot run, for reasons outside this
+phase. Phase 2 has not started.
+
+**As of 2026-09-19: built, landed and checked on the Deck; the read-aloud row and the publish call
 owed; phase 2 can start.** The block shipped (closed by default), ten games' notes were written from
 fetched pages after the maintainer chose rewording over word-for-word ("just reword"), the 2026.09.18
 library is installed on the maintainer's Deck from a local folder and not yet published, and ten of ten

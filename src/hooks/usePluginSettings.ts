@@ -68,7 +68,10 @@
  * 8. Everything is handed back together at the end: every setting, every
  *    function that changes one, and the loading/saving controls above —
  *    built by spreading `settings` and the generated setters, not by
- *    naming all fifty again.
+ *    naming all fifty again. `settings` itself is also handed back once
+ *    more as `settingsSnapshot`, so a caller that needs the whole object
+ *    (the session-survival snapshot) can take it as-is instead of copying
+ *    every field into its own object by hand.
  *
  * Gotchas:
  * - The list of every setting used to be written out by hand in about six
@@ -423,5 +426,11 @@ export function usePluginSettings() {
     buildChangedSettingsPayload,
     flushSettingsSnapshotNow,
     syncSettingsFromDisk,
+    /**
+     * The same object already spread onto this return value above, handed back once more under
+     * its own name so a caller that needs every setting as one `BonsaiSettingsSnapshotInput` (the
+     * session-survival snapshot) can take it directly instead of rebuilding it field by field.
+     */
+    settingsSnapshot: settings,
   };
 }

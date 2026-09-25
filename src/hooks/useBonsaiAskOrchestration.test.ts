@@ -696,6 +696,54 @@ describe("useBonsaiAskOrchestration", () => {
     });
 
     /*
+     * Plan 69, 2026-09-24: every 150 ms poll used to hand React a fresh game-context object, a
+     * fresh thinking record and a fresh notes list even when nothing in them had changed, and each
+     * one re-rendered the whole plugin -- 85 to 100 ms a time on the Deck with a game running. A
+     * poll that brings nothing new must not render at all.
+     */
+    it("does not re-render for a poll that brings nothing new", async () => {
+      // No streaming text here on purpose: the text reveal runs on real animation frames, which
+      // the fake clock does not drive, so it would finish at an unpredictable moment of the test.
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "wheatley fight",
+        request_id: 11,
+        app_name: "Portal 2",
+        strategy_spoiler_asked_entity: "Wheatley",
+        reasoning_partial: "The bombs come from the pipes.",
+        reasoning_seconds: 3,
+        kb_attached_notes: [{ name: "Wheatley", card: "Three phases." }],
+      }));
+
+      let renders = 0;
+      const { result } = renderHook(() => {
+        renders += 1;
+        return useBonsaiAskOrchestration(makeArgs());
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3000);
+      });
+      const settled = renders;
+      const context = result.current.ollamaContext;
+      const notes = result.current.kbAttachedNotes;
+      const reasoning = result.current.liveReasoning;
+      expect(notes).toHaveLength(1);
+
+      // Four more polls at the 1.2 s pending cadence, each bringing exactly the same status.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+
+      expect(renders).toBe(settled);
+      expect(result.current.ollamaContext).toBe(context);
+      expect(result.current.kbAttachedNotes).toBe(notes);
+      expect(result.current.liveReasoning).toBe(reasoning);
+      vi.useRealTimers();
+    });
+
+    /*
      * Plan 57: the model's own newest thinking has to reach the screen on EVERY poll, not only
      * when the answer finishes. A fact that only arrives at completion flickers into place at the
      * end instead of filling the wait — plan 54 needed a whole extra commit for exactly that.

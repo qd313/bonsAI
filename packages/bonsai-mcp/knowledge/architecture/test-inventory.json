@@ -147,6 +147,7 @@
     "src/utils/intentPackSearch.test.ts",
     "src/utils/joinPresetWithRunningGame.test.ts",
     "src/utils/kbNoteUsedByAnswer.test.ts",
+    "src/utils/keepIfUnchanged.test.ts",
     "src/utils/liveTurnFocusGraph.test.ts",
     "src/utils/localOnlyAskCommands.test.ts",
     "src/utils/mergePullModelCatalog.test.ts",

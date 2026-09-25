@@ -130,10 +130,8 @@ import type {
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
-import type {
-  KbAttachedNote,
-  TransparencySnapshot,
-} from "../utils/inputTransparency";
+import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
+import { keepIfUnchanged } from "../utils/keepIfUnchanged";
 import { THINKING_BLURB_PLACEHOLDER, sanitizeThinkingSummary } from "../utils/thinkingSummaryText";
 import { reasoningFromFinishedStatus } from "../utils/reasoningDisplay";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
@@ -470,14 +468,16 @@ export function useBonsaiAskOrchestration(
       );
 
       if (status.status === "pending") {
-        setOllamaContext({
+        // keepIfUnchanged: this arrives as a new object on every 150 ms poll; the same one must
+        // not re-render the whole plugin (keepIfUnchanged.ts has the Deck measurement).
+        setOllamaContext((prev) => keepIfUnchanged(prev, {
           app_id: appId,
           app_context: appContext,
           // Plan 54 gap 1/2: the pending poll is the only source of these while the answer is
           // still streaming — lastExchange stays empty until completion.
           app_name: status.app_name ?? "",
           asked_entity: status.strategy_spoiler_asked_entity ?? "",
-        });
+        }));
         setIsAsking(true);
         setIsForeignPendingAsk(paintsForeignSlot);
         a.onGeneratingSlotChange?.(payloadSlotId);
@@ -538,7 +538,7 @@ export function useBonsaiAskOrchestration(
             ? status.reasoning_seconds
             : null;
         if (polledReasoning.trim() || polledReasoningSeconds !== null) {
-          setLiveReasoning((prev) => ({
+          setLiveReasoning((prev) => keepIfUnchanged(prev, {
             partial: polledReasoning.trim() ? polledReasoning : prev?.partial ?? "",
             seconds: polledReasoningSeconds ?? prev?.seconds ?? null,
           }));
@@ -551,7 +551,7 @@ export function useBonsaiAskOrchestration(
          * correct, current fact ("nothing attached this turn"), not a gap to paper over.
          */
         if (Array.isArray(status.kb_attached_notes)) {
-          setKbAttachedNotes(status.kb_attached_notes);
+          setKbAttachedNotes((prev) => keepIfUnchanged(prev, status.kb_attached_notes ?? []));
         }
         const partialRaw =
           typeof status.partial_response === "string" ? status.partial_response : "";

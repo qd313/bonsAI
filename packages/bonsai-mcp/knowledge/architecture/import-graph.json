@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 491,
-  "edgeCount": 1307,
+  "fileCount": 493,
+  "edgeCount": 1309,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2550,6 +2550,7 @@
         "src/utils/deckyCall.ts",
         "src/utils/desktopChatAutosave.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/keepIfUnchanged.ts",
         "src/utils/localOnlyAskCommands.ts",
         "src/utils/presetCarouselInject.ts",
         "src/utils/reasoningDisplay.ts",
@@ -4672,6 +4673,19 @@
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/kbNoteUsedByAnswer.test.ts"
+      ]
+    },
+    "src/utils/keepIfUnchanged.test.ts": {
+      "imports": [
+        "src/utils/keepIfUnchanged.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/keepIfUnchanged.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/utils/keepIfUnchanged.test.ts"
       ]
     },
     "src/utils/liveTurnFocusGraph.test.ts": {

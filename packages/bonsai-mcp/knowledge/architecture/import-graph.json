@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 504,
-  "edgeCount": 1340,
+  "fileCount": 505,
+  "edgeCount": 1344,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2395,6 +2395,7 @@
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/liveScrambleMemo.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/features/stream-scramble/streamScrambleMath.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
@@ -2461,11 +2462,13 @@
     "src/features/stream-scramble/streamScrambleMath.ts": {
       "imports": [
         "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/utils/streamBeat.ts",
         "src/utils/streamMarkdownPrepare.ts"
       ],
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/liveScrambleMemo.test.ts",
         "src/features/stream-scramble/liveScrambleMemo.ts",
@@ -3168,12 +3171,14 @@
     },
     "src/hooks/useSmoothStreamReveal.test.ts": {
       "imports": [
-        "src/hooks/useSmoothStreamReveal.ts"
+        "src/hooks/useSmoothStreamReveal.ts",
+        "src/utils/streamBeat.ts"
       ],
       "importedBy": []
     },
     "src/hooks/useSmoothStreamReveal.ts": {
       "imports": [
+        "src/utils/streamBeat.ts",
         "src/utils/streamMarkdownPrepare.ts"
       ],
       "importedBy": [
@@ -5290,6 +5295,14 @@
       ],
       "importedBy": [
         "src/hooks/useBonsaiAskOrchestration.ts"
+      ]
+    },
+    "src/utils/streamBeat.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/stream-scramble/streamScrambleMath.ts",
+        "src/hooks/useSmoothStreamReveal.test.ts",
+        "src/hooks/useSmoothStreamReveal.ts"
       ]
     },
     "src/utils/streamMarkdownPrepare.test.ts": {

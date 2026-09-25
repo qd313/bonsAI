@@ -5,8 +5,10 @@
  * the settle point is for each of the three styles, how fast the last letters settle once the
  * answer has ended, which symbol each unsettled character shows, where in the settled text the
  * churning span goes, and how a finished answer finds the stretch the stream left unsettled. The
- * same shape as the decode chips' own maths file, which this reuses for its symbols and its two
- * timings, so the answer and the chips churn alike.
+ * same shape as the decode chips' own maths file, which this reuses for its symbols and its letter
+ * pace, so the answer and the chips churn alike. The reshuffle keeps the answer's beat
+ * (streamBeat.ts) rather than the chips' 55 ms: on the Deck, every extra frame the answer changed
+ * in was a frame the panel could not keep while the model wrote.
  *
  * Used for: ScrambledAnswerText.tsx, which owns the timer and the DOM writes; this file only
  * computes numbers and strings.
@@ -22,23 +24,21 @@
  *   tail   -- the last 10 letters are always scrambled.
  * Spaces and line breaks never scramble and never count as letters, so words keep their shape.
  */
-import { makeDecodeChurn, PRESET_DECODE_CHAR_MS, PRESET_DECODE_CHURN_REFRESH_MS } from "../preset-carousel/presetChipDecodeText";
+import { makeDecodeChurn, PRESET_DECODE_CHAR_MS } from "../preset-carousel/presetChipDecodeText";
 import { normalizeIncompleteInline } from "../../utils/streamMarkdownPrepare";
+import { STREAM_BEAT_MS } from "../../utils/streamBeat";
 
 /** Chip pace: one letter settles every this many ms -- the decode chips' own number. */
 export const SCRAMBLE_CHAR_MS = PRESET_DECODE_CHAR_MS;
-/** The scrambled letters reshuffle this often, ms -- the decode chips' own number. */
-export const SCRAMBLE_CHURN_MS = PRESET_DECODE_CHURN_REFRESH_MS;
+/**
+ * The scrambled letters reshuffle once per beat of the answer, together with the text moving on,
+ * and the settled letters are handed to the markdown renderer on the same beat.
+ */
+export const SCRAMBLE_CHURN_MS = STREAM_BEAT_MS;
 /** "Fixed tail" keeps this many letters scrambled (plan 69). */
 const SCRAMBLE_TAIL_LETTERS = 10;
 /** Once an answer has ended, its last scrambled letters are all real within this long. */
 export const SCRAMBLE_FINISH_MS = 600;
-/**
- * The settled text is handed to the markdown renderer at most this often. The letters themselves
- * settle on every reshuffle, inside the churning span; the renderer catches up in steps, which is
- * what keeps the scramble cheaper than today's reveal, which renders on every frame.
- */
-export const SCRAMBLE_MARKDOWN_STEP_MS = 110;
 /** Chip pace never banks more than this many letters, so a stall does not end in a burst. */
 const CHIP_CREDIT_CAP = 10;
 /** How much text either side of the settle point the stream's end hands over to be found again. */

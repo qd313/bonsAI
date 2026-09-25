@@ -1,9 +1,24 @@
-import { describe, expect, it, vi, afterEach } from "vitest";
+import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useSmoothStreamReveal, FENCE_BURST_RATE_MULTIPLIER } from "./useSmoothStreamReveal";
+import { STREAM_BEAT_MS } from "../utils/streamBeat";
+
+/** Beats of the reveal, each its own act() so React renders between them the way the page does. */
+function beats(count: number) {
+  for (let i = 0; i < count; i += 1) {
+    act(() => {
+      vi.advanceTimersByTime(STREAM_BEAT_MS);
+    });
+  }
+}
 
 describe("useSmoothStreamReveal", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -16,56 +31,60 @@ describe("useSmoothStreamReveal", () => {
     expect(result.current).toBe("Hello world");
   });
 
-  it("does not shrink display when target grows", () => {
-    let rafCb: FrameRequestCallback | null = null;
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      rafCb = cb;
-      return 1;
+  /*
+   * Deck, 2026-09-25: moving the text on every frame held the panel at about 20 frames a second
+   * while the model wrote; once per beat, about 55. Nothing may move between beats.
+   */
+  it("moves the text on once per beat, never between beats", () => {
+    const frames = vi.spyOn(window, "requestAnimationFrame");
+    const { result } = renderHook(() =>
+      useSmoothStreamReveal({ targetText: "x".repeat(200), enabled: true, done: false })
+    );
+    act(() => {
+      vi.advanceTimersByTime(STREAM_BEAT_MS - 1);
     });
+    expect(result.current).toBe("");
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    const first = result.current.length;
+    expect(first).toBeGreaterThan(0);
+    act(() => {
+      vi.advanceTimersByTime(STREAM_BEAT_MS - 1);
+    });
+    expect(result.current.length).toBe(first);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(result.current.length).toBeGreaterThan(first);
+    expect(frames).not.toHaveBeenCalled();
+  });
+
+  it("does not shrink display when target grows", () => {
     const { result, rerender } = renderHook(
       ({ target, enabled, done }) => useSmoothStreamReveal({ targetText: target, enabled, done }),
       { initialProps: { target: "ab", enabled: true, done: false } }
     );
-    act(() => {
-      rafCb?.(16);
-    });
+    beats(1);
     const lenAfterFirst = result.current.length;
     rerender({ target: "abcdef", enabled: true, done: false });
-    act(() => {
-      rafCb?.(32);
-    });
+    beats(1);
     expect(result.current.length).toBeGreaterThanOrEqual(lenAfterFirst);
   });
 
   it("restarts reveal after display catches up and target grows again", () => {
-    let rafId = 0;
-    const callbacks: FrameRequestCallback[] = [];
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      callbacks.push(cb);
-      return ++rafId;
-    });
-    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
     const { result, rerender } = renderHook(
       ({ target, enabled, done }) => useSmoothStreamReveal({ targetText: target, enabled, done }),
       { initialProps: { target: "Hi", enabled: true, done: false } }
     );
-    // Drain until caught up
-    for (let i = 0; i < 20 && result.current.length < 2; i++) {
-      const cb = callbacks.pop();
-      if (!cb) break;
-      act(() => {
-        cb(16 * (i + 1));
-      });
-    }
-    expect(result.current.length).toBe(2);
-    // New partial arrives after catch-up — RAF must restart
+    // Drain until caught up, then let the coast run out so the loop has parked.
+    beats(10);
+    expect(result.current).toBe("Hi");
+    expect(vi.getTimerCount()).toBe(0);
+    // New partial arrives after catch-up -- the beat must restart.
     rerender({ target: "Hi there friend", enabled: true, done: false });
     const before = result.current.length;
-    const cb = callbacks.pop();
-    expect(cb).toBeTruthy();
-    act(() => {
-      cb?.(1000);
-    });
+    beats(1);
     expect(result.current.length).toBeGreaterThan(before);
   });
 
@@ -74,49 +93,26 @@ describe("useSmoothStreamReveal", () => {
    * reveal permanently behind and T3 dumped the remainder in one frame.
    */
   it("drains a large backlog in about one poll interval instead of at a fixed cap", () => {
-    const callbacks: FrameRequestCallback[] = [];
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      callbacks.push(cb);
-      return callbacks.length;
-    });
-    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
-
     const long = "x".repeat(1000);
     const { result } = renderHook(() =>
       useSmoothStreamReveal({ targetText: long, enabled: true, done: false })
     );
 
-    act(() => {
-      callbacks.pop()?.(0);
-    });
-    act(() => {
-      callbacks.pop()?.(180);
-    });
+    beats(2);
 
-    // At the old cap this frame could only move ~28 characters.
-    expect(result.current.length).toBe(1000);
+    // At the old cap two beats could only move ~35 characters.
+    expect(result.current.length).toBeGreaterThan(800);
   });
 
-  it("keeps the frame loop alive after catching up so the next partial starts immediately", () => {
-    const callbacks: FrameRequestCallback[] = [];
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      callbacks.push(cb);
-      return callbacks.length;
-    });
-    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
-
+  it("keeps the beat alive after catching up so the next partial starts immediately", () => {
     const { result } = renderHook(() =>
       useSmoothStreamReveal({ targetText: "ab", enabled: true, done: false })
     );
 
-    for (let i = 0; i < 5; i++) {
-      act(() => {
-        callbacks.pop()?.(16 * (i + 1));
-      });
-    }
+    beats(2);
     expect(result.current).toBe("ab");
-    // Caught up, but still scheduled: an idle frame must not tear the loop down.
-    expect(callbacks.length).toBeGreaterThan(0);
+    // Caught up, but still scheduled: an idle beat must not tear the loop down.
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
   });
 
   it("returns target immediately when disabled", () => {

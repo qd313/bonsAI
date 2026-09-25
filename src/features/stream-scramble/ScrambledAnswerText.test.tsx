@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScrambledAnswerText } from "./ScrambledAnswerText";
 import { StreamScrambleContext, type StreamScrambleContextValue } from "./streamScrambleContext";
 import { resetLiveScrambleMemoForTests } from "./liveScrambleMemo";
+import { SCRAMBLE_CHURN_MS } from "./streamScrambleMath";
 
 /* The markdown renderer's spoiler fences use Decky's Focusable; a real DOM stand-in keeps refs working. */
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
@@ -56,14 +57,14 @@ describe("ScrambledAnswerText, switch off", () => {
 });
 
 describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
-  it("shows new letters as symbols, keeps spaces, and settles them after the chosen moment", () => {
+  it("shows new letters as symbols, keeps spaces, and settles them on the first beat after the chosen moment", () => {
     const { container } = render(view("Hello world", true));
     expect(realText(container)).toBe("");
     expect(churnText(container)).toHaveLength(11);
     expect(churnText(container)[5]).toBe(" ");
     advance(390);
     expect(realText(container)).toBe("");
-    advance(60);
+    advance(SCRAMBLE_CHURN_MS);
     expect(realText(container)).toBe("Hello world");
     expect(churnText(container)).toBe("");
   });
@@ -86,7 +87,7 @@ describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
     const before = letters();
     const symbolsBefore = before.map((el) => el.getAttribute("data-s"));
     expect(symbolsBefore.every((s) => s !== null && s.length === 1)).toBe(true);
-    advance(100);
+    advance(SCRAMBLE_CHURN_MS + 30);
     const after = letters();
     expect(after).toEqual(before);
     expect(after.map((el) => el.textContent).join("")).toBe("Helloworld");
@@ -107,12 +108,31 @@ describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
   });
 
   it("stops its timer once every letter is real and the markdown has caught up", () => {
-    const started = vi.spyOn(window, "setInterval");
-    const cleared = vi.spyOn(window, "clearInterval");
     render(view("Hello world", true));
-    expect(started).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(1);
     advance(700);
-    expect(cleared).toHaveBeenCalledWith(started.mock.results[0]!.value);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  /*
+   * Deck, 2026-09-25: the reveal's text and the scramble's symbols changing in separate frames
+   * cost the panel a redraw each. A render that brings new text is the beat: it reshuffles there
+   * and then, and the timer, which only covers a beat the reveal is late for, waits a full beat
+   * again instead of reshuffling in a frame of its own.
+   */
+  it("reshuffles in the render that brings new text, and holds its own timer back", () => {
+    const { container, rerender } = render(view("Hello", true));
+    const symbols = () =>
+      Array.from(container.querySelectorAll(".bonsai-stream-scramble-char")).map((el) => el.getAttribute("data-s"));
+    advance(SCRAMBLE_CHURN_MS - 10);
+    const beforeBeat = symbols();
+    rerender(view("Hello world", true));
+    expect(symbols().slice(0, 5)).not.toEqual(beforeBeat);
+    const afterBeat = symbols();
+    advance(SCRAMBLE_CHURN_MS);
+    expect(symbols()).toEqual(afterBeat);
+    advance(40);
+    expect(symbols()).not.toEqual(afterBeat);
   });
 });
 
@@ -126,7 +146,9 @@ describe("ScrambledAnswerText, the other two styles", () => {
 
   it("Chip pace settles one letter every 42 ms, whatever the model is doing", () => {
     const { container } = render(view("abcdefghijklmnopqrstuvwxyz", true, { ...ON, style: "chip" }));
-    advance(550);
+    /* Beats at 130 ms (the timer waits out the slack after the first render), then every 110: by
+       the beat at 570 ms, 13 letters' worth of 42 ms has gone by. */
+    advance(580);
     expect(realText(container)).toBe("abcdefghijklm");
   });
 });
@@ -171,7 +193,7 @@ describe("ScrambledAnswerText, when the answer ends", () => {
 
   it("settles text the stream never showed along with it, rather than popping it in", () => {
     const { container, rerender } = render(view("Hello world, miners", true));
-    advance(450);
+    advance(400 + SCRAMBLE_CHURN_MS - 30);
     expect(realText(container)).toBe("Hello world, miners");
     rerender(view("Hello world, miners. Dig deep.", false));
     expect(realText(container)).toBe("Hello world, miners");

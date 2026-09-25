@@ -2,11 +2,15 @@
  * Title: Smooth stream reveal hook
  * Purpose: Reveal streamed assistant tokens at a capped prose rate with fence burst after close.
  * Used for: MainTab live answer bubble while background Ask polls partial_response.
- * Solves: Blocky token jumps during streaming without delaying final settle (T3 snap on done).
+ * Solves: Blocky token jumps during streaming without delaying final settle (T3 snap on done), and
+ * without costing the panel its frame rate: the text moves on the answer's beat (streamBeat.ts),
+ * about 9 times a second, not on every frame -- every frame it moved was a frame the Deck had to
+ * redraw while the model held the graphics chip (about 20 frames a second instead of about 55).
  * Does not: Parse markdown fences — see streamMarkdownPrepare and splitResponseIntoChunks.
  */
 import { useEffect, useRef, useState } from "react";
 import { didNonSpoilerFenceJustClose } from "../utils/streamMarkdownPrepare";
+import { STREAM_BEAT_MS } from "../utils/streamBeat";
 
 type UseSmoothStreamRevealArgs = {
   targetText: string;
@@ -28,21 +32,24 @@ const PROSE_RATE_MIN = 40;
  */
 const TARGET_DRAIN_SECONDS = 0.18;
 /**
- * Frames to keep the loop alive after catching up — about one poll interval at 60fps, so a partial
- * that drains early is still animating when the next one lands. Bounded on purpose: an
+ * Beats to keep the loop alive after catching up — about one poll interval, so a partial that
+ * drains early is still being revealed when the next one lands. Bounded on purpose: an
  * unconditional reschedule never terminates, which spins forever under test fake timers.
  */
-const IDLE_COAST_FRAMES = 12;
+const IDLE_COAST_BEATS = 2;
 /** After a non-spoiler fence closes, reveal backlog at this multiple (C2; may change). */
 const FENCE_BURST_RATE_MULTIPLIER = 3;
+/** How long that burst lasts: the 0.75 s the 45 frames it was counted in used to take. */
+const FENCE_BURST_BEATS = Math.round(750 / STREAM_BEAT_MS);
 
 function proseRevealRate(backlog: number): number {
   return Math.max(PROSE_RATE_MIN, backlog / TARGET_DRAIN_SECONDS);
 }
 
 /**
- * Reveals streamed assistant text at a steady rate so polls feel continuous (Claude-style).
- * Snaps to full target when streaming ends (T3 settle). Fence body bursts at ~3× after close.
+ * Reveals streamed assistant text at a steady rate so polls feel continuous (Claude-style), one
+ * step per beat. Snaps to full target when streaming ends (T3 settle). Fence body bursts at ~3×
+ * after close.
  */
 export function useSmoothStreamReveal({
   targetText,
@@ -53,38 +60,38 @@ export function useSmoothStreamReveal({
   const displayRef = useRef("");
   const targetRef = useRef(targetText);
   const prevTargetRef = useRef(targetText);
-  const rafRef = useRef<number | null>(null);
+  const timerRef = useRef<number | null>(null);
   const lastTsRef = useRef<number | null>(null);
   const burstTicksRef = useRef(0);
   const idleTicksRef = useRef(0);
 
-  const ensureRaf = () => {
+  const ensureTicking = () => {
     if (!enabled || done) return;
-    if (rafRef.current != null) return;
+    if (timerRef.current != null) return;
     if (targetRef.current.length <= displayRef.current.length) return;
-    lastTsRef.current = null;
+    lastTsRef.current = performance.now();
     idleTicksRef.current = 0;
-    const tick = (ts: number) => {
-      const prev = lastTsRef.current ?? ts;
-      lastTsRef.current = ts;
-      const dt = Math.max(0, (ts - prev) / 1000);
+    const tick = () => {
+      const now = performance.now();
+      const dt = Math.max(0, (now - (lastTsRef.current ?? now)) / 1000);
+      lastTsRef.current = now;
       const target = targetRef.current;
       const cur = displayRef.current;
       const backlog = target.length - cur.length;
       if (backlog <= 0) {
         /*
-         * Coast briefly instead of tearing the loop down on the first caught-up frame. Exiting
+         * Coast briefly instead of tearing the loop down on the first caught-up beat. Exiting
          * immediately meant the next partial had to wait for a React round trip before any
          * character moved, so draining a partial faster than the 150ms poll showed a visible pause
          * — the other half of the startup hitch. Coasting spans that gap; parking after it keeps
          * the loop finite, which an unconditional reschedule was not.
          */
         idleTicksRef.current += 1;
-        if (idleTicksRef.current > IDLE_COAST_FRAMES) {
-          rafRef.current = null;
+        if (idleTicksRef.current > IDLE_COAST_BEATS) {
+          timerRef.current = null;
           return;
         }
-        rafRef.current = requestAnimationFrame(tick);
+        timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
         return;
       }
       idleTicksRef.current = 0;
@@ -97,15 +104,15 @@ export function useSmoothStreamReveal({
       displayRef.current = merged;
       setDisplayText(merged);
       if (bursting) burstTicksRef.current -= 1;
-      rafRef.current = requestAnimationFrame(tick);
+      timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
     };
-    rafRef.current = requestAnimationFrame(tick);
+    timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
   };
 
   useEffect(() => {
     const prev = prevTargetRef.current;
     if (didNonSpoilerFenceJustClose(prev, targetText)) {
-      burstTicksRef.current = 45;
+      burstTicksRef.current = FENCE_BURST_BEATS;
     }
     prevTargetRef.current = targetText;
     targetRef.current = targetText;
@@ -126,24 +133,24 @@ export function useSmoothStreamReveal({
       setDisplayText("");
       return;
     }
-    // Critical: restart RAF when new partials arrive after display caught up.
-    ensureRaf();
+    // Critical: restart the beat when new partials arrive after display caught up.
+    ensureTicking();
   }, [targetText, enabled, done]);
 
   useEffect(() => {
     if (!enabled || done) {
-      if (rafRef.current != null) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
+      if (timerRef.current != null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
       lastTsRef.current = null;
       return;
     }
-    ensureRaf();
+    ensureTicking();
     return () => {
-      if (rafRef.current != null) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
+      if (timerRef.current != null) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
       lastTsRef.current = null;
     };

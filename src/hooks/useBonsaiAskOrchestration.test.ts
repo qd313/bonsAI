@@ -706,8 +706,8 @@ describe("useBonsaiAskOrchestration", () => {
      * poll that brings nothing new must not render at all.
      */
     it("does not re-render for a poll that brings nothing new", async () => {
-      // No streaming text here on purpose: the text reveal runs on real animation frames, which
-      // the fake clock does not drive, so it would finish at an unpredictable moment of the test.
+      // No streaming text here on purpose: the text reveal renders on every beat of its own
+      // (streamBeat.ts), and those renders would be counted as the poll's.
       vi.useFakeTimers();
       setRpcHandler("get_background_game_ai_status", () => ({
         ...idleBackgroundStatusFixture(),

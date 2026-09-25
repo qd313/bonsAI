@@ -201,6 +201,7 @@ import {
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
+import { useTitleOverflow } from "../hooks/useTitleOverflow";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
@@ -720,21 +721,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askThreadCollapsed,
   });
 
-  /*
-   * Whether an OPEN question's title really overflows its five-line cap (roadmap: "A short
-   * question fades out at its right edge as if there were more to read"). CSS alone cannot tell
-   * a short question from a cut one, so the title span's own ref (passed to
-   * buildTurnHeaderElement, one instance per open turn) measures scrollHeight against the
-   * clientHeight the max-height cap enforces — the same shape of check ChatSlotRow.tsx uses for
-   * its own title overflow. Keyed by turn id ("live" for the live turn) so switching which turn
-   * is open never reads a stale measurement left by the one before it.
-   */
-  const [overflowingTitles, setOverflowingTitles] = useState<Record<string, boolean>>({});
-  const measureTitleOverflow = (key: string) => (el: HTMLSpanElement | null) => {
-    if (!el) return;
-    const overflowing = el.scrollHeight - el.clientHeight > 1;
-    setOverflowingTitles((prev) => (prev[key] === overflowing ? prev : { ...prev, [key]: overflowing }));
-  };
+  /* Whether an OPEN question's title really overflows its five-line cap — lifted into its own
+     hook, called from exactly the spot this block occupied (see useTitleOverflow.ts). */
+  const { overflowingTitles, measureTitleOverflow } = useTitleOverflow();
 
   /*
    * Roadmap: "Pressing A on an open question closes it and drops the highlight" — the answer

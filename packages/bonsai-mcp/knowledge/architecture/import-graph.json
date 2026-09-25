@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 489,
-  "edgeCount": 1305,
+  "fileCount": 490,
+  "edgeCount": 1306,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -478,6 +478,7 @@
         "src/hooks/useReasoningFoldState.ts",
         "src/hooks/useSpoilerFenceRecheck.ts",
         "src/hooks/useStreamScrollPin.ts",
+        "src/hooks/useTitleOverflow.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/answerBubbleElRegistry.ts",
@@ -3186,6 +3187,12 @@
       "importedBy": [
         "src/components/OllamaTab.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx"
+      ]
+    },
+    "src/hooks/useTitleOverflow.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
       ]
     },
     "src/hooks/useUiScaleProfile.ts": {

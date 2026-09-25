@@ -17,6 +17,9 @@ Does not: Press anything or change the page. Profiling slows the page a little w
 Run on the Deck with the plugin open, then start an answer within a few seconds:
 
     ssh deck@<ip> 'python3 - --seconds 60' < scripts/probe_deck_cpu_profile.py
+    ssh deck@<ip> 'python3 - --seconds 7 --callers getBoundingClientRect' < scripts/probe_deck_cpu_profile.py
+
+--callers NAME adds who called NAME (usually a browser call that forces a layout), three deep.
 
 Transport (ws_connect / ws_send / ws_recv) is lifted verbatim from deck_send_ask.py: every probe runs
 as a single file piped over ssh, so it cannot import a shared copy.
@@ -172,6 +175,23 @@ def summarize(profile, top):
     print("\nTop counting everything they called (ms), roots and React internals left in:")
     for k, v in sorted(total_ms.items(), key=lambda kv: -kv[1])[:top]:
         print("  %8.0f  %s" % (v, k))
+    callers_of = arg("--callers", "")
+    if callers_of:
+        # For samples whose own function is the named one (usually a browser call such as
+        # getBoundingClientRect), the chain of callers above it, three deep.
+        chains = {}
+        for i, node_id in enumerate(samples):
+            if nodes[node_id]["callFrame"].get("functionName", "") != callers_of:
+                continue
+            dt = (deltas[i + 1] if i + 1 < len(deltas) else 0) / 1000.0
+            chain, cur = [], parent.get(node_id)
+            while cur is not None and len(chain) < 3:
+                chain.append(key(cur))
+                cur = parent.get(cur)
+            chains[" <- ".join(chain)] = chains.get(" <- ".join(chain), 0.0) + dt
+        print("\nWho called %s (ms), three callers deep:" % callers_of)
+        for k, v in sorted(chains.items(), key=lambda kv: -kv[1])[:top]:
+            print("  %8.0f  %s" % (v, k))
 
 
 def main():

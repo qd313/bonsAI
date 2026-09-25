@@ -168,6 +168,11 @@ starts work outside this.
 - ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **OPEN, found by
   plan 65 2026-09-24.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was not touched
   that night. Widen its slack, or make it wait on an event instead of a clock.
+- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
+  **OPEN, found on the Deck 2026-09-25, a return of the no-game bug closed 2026-09-23.** Under a Deep Rock
+  Galactic Survivor answer the choices read "A. <a place early in Deep Rock Galactic Survivor>" and
+  "B. <a place later in Deep Rock Galactic Survivor>": the model kept the example's wording and brackets and
+  only swapped in the title, which the fix of the 23rd does not catch. Screenshot `screenshots/DeckCapture_20260925_002145_game.png`.
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —

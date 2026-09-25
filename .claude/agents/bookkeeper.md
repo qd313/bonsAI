@@ -24,7 +24,10 @@ Ground rules, all of them non-negotiable:
      plugin will notice. You move roadmap entries between sections (Bugs / Features / Verify / Knowledge
      base and RAG / Done) in place, never with a strike-through; add or update testing rows; add changelog
      lines; tick plan checklists. **Never invent a device result.** If the brief does not say a row passed
-     on the Deck, it stays owed, and you say so in the row.
+     on the Deck, it stays owed, and you say so in the row. **For every row you close, search for its ID
+     across `docs/`** (`git grep -n "ROW-ID" -- docs`) and close it everywhere it still reads open: the
+     testing.md status, and the unticked box in testing-manual.md, which moves to the closed archive. A
+     closing entry that leaves part of a check owed must say "still owed" next to that row's ID.
    - **Writing tests.** The brief names the behavior and the files. Test behavior, not implementation
      shape. A test that would fail on a harmless rename is the wrong test.
    - **Code changes from a known plan.** The brief names the cause, the files and the change. Stay inside

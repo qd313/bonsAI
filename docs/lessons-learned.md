@@ -384,6 +384,16 @@ nothing was lost or double-listed.
 are edited where they sit — never struck through. Something parked keeps its entry, tagged and
 dimmed, rather than being deleted.
 
+**A check's result is written in up to four places; close it in all of them.** The roadmap's Done
+list, its archive files, the testing.md table and the tick boxes in testing-manual.md each carry
+the same status. On 2026-09-23 the ban lookup's four checks passed and were closed on the roadmap and
+in testing.md, but their boxes stayed empty. On 2026-09-16 the settings card went to Done naming
+rows 01 through 07, because a decision said "nothing about the card is owed", while rows 06 and 07
+had never run. Closing an open *question* is not closing the *checks*. Search every document for the
+row's ID before calling it closed. `scripts/closed_rows_check.py` (run by `verify.py`) now fails a
+change that closes a row in one place and leaves it open in another. Replayed over September's 271
+bookkeeping commits, it catches both misses.
+
 **Write the questions for the maintainer into a file, not into chat.** Chat gets lost. There is a
 decisions file for exactly this, and it holds the reasoning as well as the answer.
 

@@ -258,7 +258,11 @@ Before marking Deck-facing work done — a feature, a plan step, or a bug fix �
 2. **[docs/testing.md](docs/testing.md).** Add or update the coverage row, with the test's status
    left open until it has run on the device. Add steps when the change needs new ones. For a bug
    fix, note which check now passes, or add a row that would catch it coming back.
-3. **[docs/troubleshooting.md](docs/troubleshooting.md)** — whenever setup, permissions or what the
+3. **[docs/testing-manual.md](docs/testing-manual.md).** When a check there passes, tick it and move it to
+   the closed archive in the same change. A pass written only in the roadmap or testing.md leaves the box
+   looking owed; that happened to the ban lookup's four checks on 2026-09-23. The closed-rows check in
+   `scripts/verify.py` now fails a change that closes a row in one place and leaves it open in another.
+4. **[docs/troubleshooting.md](docs/troubleshooting.md)** — whenever setup, permissions or what the
    user sees has changed.
 
 A documents-only change needs no matching code change. The reverse is not true.

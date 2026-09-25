@@ -32,7 +32,8 @@ How it works:
        description, a large file with no walkthrough, or a header naming something that is not
        there; the ratchet check; the growth-limit check, which fails on any app file over 800
        lines of code that has grown past its recorded size (or past 800 lines with no recorded
-       size at all).
+       size at all); the closed-rows check, which fails when the change closes a Deck test row
+       in one document but leaves it open in testing.md or testing-manual.md.
     3. Full mode runs all of the above, then the whole JS test suite, the whole Python suite
        again (matching the documented `npm run test:py`), the production build, and the
        architecture-snapshot check.
@@ -348,6 +349,10 @@ def run(mode: str) -> tuple[list[StepResult], float]:
     # size it had when scripts/growth_limits.json was last recorded, and no other app file may
     # cross 800 at all. See scripts/growth_limit.py.
     steps.append(step_optional_script("scripts/growth_limit.py", ["--json"], "growth_limit"))
+    # A change that closes a Deck test row in one document must not leave it open in the live test
+    # lists. Only rows this change closes for the first time are checked. See
+    # scripts/closed_rows_check.py.
+    steps.append(step_optional_script("scripts/closed_rows_check.py", ["--json"], "closed_rows"))
 
     if mode == "full":
         steps.append(step_npm("test", "npm_test", kind="tests"))

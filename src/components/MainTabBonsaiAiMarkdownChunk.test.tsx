@@ -9,6 +9,7 @@ import {
   subscribeToSpoilerFenceOpenChange,
 } from "./MainTabBonsaiAiMarkdownChunk";
 import { DRG_SURVIVOR_APP_ID } from "../data/drgGlossaryTerms";
+import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
 
 /*
  * `@decky/ui`'s `Focusable` has to render as a real DOM node with a working `ref`, or this suite
@@ -203,5 +204,28 @@ describe("the open-spoiler tally other files read", () => {
 
     fireEvent.click(container.querySelectorAll(".bonsai-spoiler-expanded button")[0]);
     expect(anySpoilerFenceOpen()).toBe(false);
+  });
+});
+
+describe("MainTabBonsaiAiMarkdownChunk, the scramble's slot (plan 69)", () => {
+  it("swaps the slot mark for an empty span inside the bold the text ends in, and hands it to the ref", () => {
+    const slotRef = vi.fn();
+    const { container } = render(
+      <MainTabBonsaiAiMarkdownChunk source={`Use **the ${SCRAMBLE_SLOT_MARK}**`} scrambleSlotRef={slotRef} />
+    );
+    const slot = container.querySelector("strong > .bonsai-stream-scramble");
+    expect(slot).not.toBeNull();
+    expect(slot!.childNodes).toHaveLength(0);
+    expect(slotRef).toHaveBeenCalledWith(slot);
+    expect(container.textContent).toBe("Use the ");
+  });
+
+  it("puts the slot inside the list item the text ends in, not on a line after the list", () => {
+    const { container } = render(
+      <MainTabBonsaiAiMarkdownChunk source={`- one\n- tw${SCRAMBLE_SLOT_MARK}`} scrambleSlotRef={vi.fn()} />
+    );
+    const items = container.querySelectorAll("li");
+    expect(items).toHaveLength(2);
+    expect(items[1]!.querySelector(".bonsai-stream-scramble")).not.toBeNull();
   });
 });

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 497,
-  "edgeCount": 1318,
+  "fileCount": 503,
+  "edgeCount": 1337,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -302,6 +302,7 @@
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/data/drgGlossaryTerms.ts",
+        "src/features/stream-scramble/streamScrambleMath.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
@@ -310,6 +311,7 @@
       "imports": [
         "src/components/DrgGlossaryTermChip.tsx",
         "src/data/drgGlossaryTerms.ts",
+        "src/features/stream-scramble/streamScrambleMath.ts",
         "src/utils/drgGlossaryTermMatch.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/spoilerFenceRegistry.ts"
@@ -317,8 +319,8 @@
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/hooks/useSpoilerFenceRecheck.ts",
-        "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx"
       ]
     },
@@ -2267,7 +2269,8 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
-        "src/features/preset-carousel/presetDecodeSlots.tsx"
+        "src/features/preset-carousel/presetDecodeSlots.tsx",
+        "src/features/stream-scramble/streamScrambleMath.ts"
       ]
     },
     "src/features/preset-carousel/presetChipShared.ts": {
@@ -2277,7 +2280,8 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
-        "src/features/preset-carousel/presetDecodeSlots.tsx"
+        "src/features/preset-carousel/presetDecodeSlots.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx"
       ]
     },
     "src/features/preset-carousel/presetDecodeSlots.tsx": {
@@ -2386,6 +2390,46 @@
         "src/utils/sessionRagChipCandidates.ts"
       ]
     },
+    "src/features/stream-scramble/ScrambledAnswerText.test.tsx": {
+      "imports": [
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/features/stream-scramble/ScrambledAnswerText.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/features/preset-carousel/presetChipShared.ts",
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/features/stream-scramble/streamScrambleMath.ts"
+      ],
+      "importedBy": [
+        "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/utils/buildAnswerBubbleElement.tsx"
+      ]
+    },
+    "src/features/stream-scramble/liveScrambleMemo.test.ts": {
+      "imports": [
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleMath.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/stream-scramble/liveScrambleMemo.ts": {
+      "imports": [
+        "src/features/stream-scramble/streamScrambleMath.ts"
+      ],
+      "importedBy": [
+        "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
+        "src/features/stream-scramble/liveScrambleMemo.test.ts",
+        "src/utils/buildAnswerBubbleElement.test.tsx"
+      ]
+    },
     "src/features/stream-scramble/streamScrambleContext.test.ts": {
       "imports": [
         "src/features/stream-scramble/streamScrambleContext.ts"
@@ -2401,8 +2445,31 @@
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/streamScrambleContext.test.ts",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/utils/buildAnswerBubbleElement.test.tsx"
+      ]
+    },
+    "src/features/stream-scramble/streamScrambleMath.test.ts": {
+      "imports": [
+        "src/features/stream-scramble/streamScrambleMath.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/stream-scramble/streamScrambleMath.ts": {
+      "imports": [
+        "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/utils/streamMarkdownPrepare.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
+        "src/features/stream-scramble/liveScrambleMemo.test.ts",
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleMath.test.ts"
       ]
     },
     "src/features/unified-input/constants.ts": {
@@ -3714,6 +3781,7 @@
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/test-harness/setup.ts",
         "src/utils/buildReplyActionsElement.test.tsx"
@@ -4172,6 +4240,8 @@
     },
     "src/utils/buildAnswerBubbleElement.test.tsx": {
       "imports": [
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -4183,10 +4253,10 @@
     },
     "src/utils/buildAnswerBubbleElement.tsx": {
       "imports": [
-        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/ReplyCopyButton.tsx",
         "src/components/StreamFenceWaitChip.tsx",
         "src/data/drgGlossaryTerms.ts",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.ts",
@@ -5220,6 +5290,7 @@
     "src/utils/streamMarkdownPrepare.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/stream-scramble/streamScrambleMath.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",

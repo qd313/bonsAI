@@ -59,7 +59,7 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
-import { MainTabBonsaiAiMarkdownChunk } from "../components/MainTabBonsaiAiMarkdownChunk";
+import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import { StreamFenceWaitChip } from "../components/StreamFenceWaitChip";
 import { ReplyCopyButton } from "../components/ReplyCopyButton";
@@ -273,8 +273,10 @@ function renderStreamMarkdownStack(
         ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, i, el)}
         {...stopAttrs(stopNav, i)}
       >
-        <MainTabBonsaiAiMarkdownChunk
-          source={block}
+        <ScrambledAnswerText
+          plain={block}
+          raw={block}
+          streaming={false}
           spoilerMaskingEnabled={spoilerMaskingEnabled}
           spoilerDefaultExpanded={spoilerDefaultExpanded}
           appId={appId}
@@ -309,8 +311,10 @@ function renderStreamMarkdownStack(
         ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, tailIndex, el)}
         {...stopAttrs(stopNav, tailIndex, { "data-bonsai-stream-preview": "true" })}
       >
-        <MainTabBonsaiAiMarkdownChunk
-          source={prepared.liveTail}
+        <ScrambledAnswerText
+          plain={prepared.liveTail}
+          raw={prepared.liveTailRaw ?? prepared.liveTail}
+          streaming
           spoilerMaskingEnabled={spoilerMaskingEnabled}
           spoilerDefaultExpanded={spoilerDefaultExpanded}
           appId={appId}
@@ -581,8 +585,10 @@ export function buildAnswerBubbleElement(
                       : undefined
                   )}
                 >
-                  <MainTabBonsaiAiMarkdownChunk
-                    source={chunk}
+                  <ScrambledAnswerText
+                    plain={chunk}
+                    raw={chunk}
+                    streaming={false}
                     spoilerMaskingEnabled={spoilerMaskingEnabled}
                     spoilerDefaultExpanded={spoilerDefaultExpanded}
                     appId={appId}

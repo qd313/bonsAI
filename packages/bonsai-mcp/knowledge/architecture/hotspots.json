@@ -72,7 +72,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 902,
+      "lines": 943,
       "role": ""
     },
     {
@@ -136,13 +136,18 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 657,
+      "role": ""
+    },
+    {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 653,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 651,
+      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+      "lines": 636,
       "role": ""
     },
     {
@@ -179,11 +184,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 567,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
-      "lines": 562,
-      "role": ""
     },
     {
       "path": "src/utils/settingsContracts.test.ts",

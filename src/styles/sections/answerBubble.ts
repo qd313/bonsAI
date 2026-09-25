@@ -309,5 +309,25 @@ export function buildAnswerBubbleSection(): string {
           50% {
             opacity: 0.15;
           }
+        }
+        /* Plan 69's scramble (ScrambledAnswerText.tsx): no end cursor while letters churn -- the
+           churn marks the edge -- and line breaks inside the unsettled stretch stay line breaks,
+           so a new line or list item starts where the markdown will put it once it settles. The
+           two cursor selectors cover the preview mark on the section itself and on a parent. */
+        .bonsai-scope [data-bonsai-stream-preview="true"]:has(.bonsai-stream-scramble) .bonsai-ai-response-chunk::after,
+        .bonsai-scope [data-bonsai-stream-preview="true"].bonsai-ai-response-chunk:has(.bonsai-stream-scramble)::after {
+          content: none;
+        }
+        .bonsai-scope .bonsai-stream-scramble {
+          white-space: pre-wrap;
+        }
+        .bonsai-scope .bonsai-stream-scramble-churn--dim {
+          opacity: 0.5;
+        }
+        .bonsai-scope .bonsai-stream-scramble-churn--green {
+          color: #5b9e7e;
+        }
+        .bonsai-scope .bonsai-stream-scramble-churn--cyan {
+          color: #7fd3f7;
         }`;
 }

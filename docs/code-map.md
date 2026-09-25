@@ -277,7 +277,10 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/features/stream-scramble
 
+- **ScrambledAnswerText.tsx** (src/features/stream-scramble/ScrambledAnswerText.tsx) — *An answer's text, scrambling into place as it streams*: Draws one section of an answer the way the markdown renderer always has, except that, with the Developer tab's Scramble animation switch on, the newest letters churn through symbols for a moment before settling into the real ones -- the decode chips' look, on the live answer…
+- **liveScrambleMemo.ts** (src/features/stream-scramble/liveScrambleMemo.ts) — *What the scramble remembers between one mount of the answer and the next*: The streaming answer's scramble lives in a component that is thrown away and built again at two moments: when the answer ends (the bubble switches from its streaming layout to its finished one, and moments later the chat reloads and draws the answer as a saved turn), and when…
 - **streamScrambleContext.ts** (src/features/stream-scramble/streamScrambleContext.ts) — *The streamed-answer scramble setting, as one bundle*: Four settings decide whether a streaming answer's newest text scrambles through symbols for a moment before settling into real letters, and if so how. […]
+- **streamScrambleMath.ts** (src/features/stream-scramble/streamScrambleMath.ts) — *Streamed-answer scramble maths*: The pure, timing-free core of the scramble on a streaming answer (plan 69 step 3): where the settle point is for each of the three styles, how fast the last letters settle once the answer has ended, which symbol each unsettled character shows, where in the settled text the…
 
 ## src/features/unified-input
 

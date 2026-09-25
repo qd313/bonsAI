@@ -21,6 +21,8 @@ export type StreamMarkdownPrepareResult = {
   closedBlocks: string[];
   /** Live open prose tail (stay-open inline normalized); null when wait chip owns the open region. */
   liveTail: string | null;
+  /** The same tail before the inline closers are added -- what the scramble times letter by letter. */
+  liveTailRaw: string | null;
   waitChip: StreamWaitChip | null;
 };
 
@@ -93,7 +95,7 @@ export function prepareStreamMarkdown(
 ): StreamMarkdownPrepareResult {
   const text = source;
   if (!text.trim()) {
-    return { closedBlocks: [], liveTail: null, waitChip: null };
+    return { closedBlocks: [], liveTail: null, liveTailRaw: null, waitChip: null };
   }
 
   const lines = text.split("\n");
@@ -137,25 +139,26 @@ export function prepareStreamMarkdown(
     if (fenceIsSpoiler) {
       const openFenceText = fenceLines.join("\n");
       if (opts.unwrapOpenSpoilerFence?.(openFenceText)) {
-        const body = fenceLines.slice(1).join("\n");
-        const liveTail = body.trim().length > 0 ? normalizeIncompleteInline(body.trim()) : null;
-        return { closedBlocks, liveTail, waitChip: null };
+        const body = fenceLines.slice(1).join("\n").trim();
+        const liveTail = body.length > 0 ? normalizeIncompleteInline(body) : null;
+        return { closedBlocks, liveTail, liveTailRaw: liveTail ? body : null, waitChip: null };
       }
       return {
         closedBlocks,
         liveTail: null,
+        liveTailRaw: null,
         waitChip: { kind: "spoiler", label: SPOILER_STREAM_MASK_LABEL },
       };
     }
     return {
       closedBlocks,
       liveTail: null,
+      liveTailRaw: null,
       waitChip: { kind: "fence", label: FENCE_STREAM_WAIT_LABEL },
     };
   }
 
-  const tailRaw = proseBuffer.join("\n");
-  const liveTail =
-    tailRaw.trim().length > 0 ? normalizeIncompleteInline(tailRaw.trim()) : null;
-  return { closedBlocks, liveTail, waitChip: null };
+  const tailRaw = proseBuffer.join("\n").trim();
+  const liveTail = tailRaw.length > 0 ? normalizeIncompleteInline(tailRaw) : null;
+  return { closedBlocks, liveTail, liveTailRaw: liveTail ? tailRaw : null, waitChip: null };
 }

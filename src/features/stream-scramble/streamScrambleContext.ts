@@ -52,4 +52,11 @@ export const STREAM_SCRAMBLE_OFF: StreamScrambleSettings = {
   settleMs: DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
 };
 
-export const StreamScrambleContext = React.createContext<StreamScrambleSettings>(STREAM_SCRAMBLE_OFF);
+/**
+ * What the context carries: the four settings, plus whether the answer on screen was stopped --
+ * a stopped answer's scrambled letters turn real at once instead of finishing their settle (plan
+ * 69; MainTab reads it from the Ask state it already receives).
+ */
+export type StreamScrambleContextValue = StreamScrambleSettings & { stopped?: boolean };
+
+export const StreamScrambleContext = React.createContext<StreamScrambleContextValue>(STREAM_SCRAMBLE_OFF);

@@ -51,6 +51,15 @@ describe("prepareStreamMarkdown", () => {
     expect(r.waitChip).toBeNull();
   });
 
+  it("hands the scramble the live tail as written, before the stay-open closers are added", () => {
+    expect(prepareStreamMarkdown("**Hello wor").liveTailRaw).toBe("**Hello wor");
+    expect(prepareStreamMarkdown("Before.\n\n```json\n{").liveTailRaw).toBeNull();
+    const spoiler = "Hint.\n\n```bonsai-spoiler\nFocus *the weak";
+    expect(prepareStreamMarkdown(spoiler, { unwrapOpenSpoilerFence: () => true }).liveTailRaw).toBe(
+      "Focus *the weak"
+    );
+  });
+
   it("streams an open spoiler fence as prose when the caller says it qualifies", () => {
     const t = "Hint.\n\n```bonsai-spoiler\nFocus fire the weak point while kiting";
     const r = prepareStreamMarkdown(t, { unwrapOpenSpoilerFence: () => true });

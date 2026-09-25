@@ -50,6 +50,7 @@ import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import {
   STREAM_SCRAMBLE_OFF,
   StreamScrambleContext,
+  type StreamScrambleContextValue,
   type StreamScrambleSettings,
 } from "../features/stream-scramble/streamScrambleContext";
 
@@ -252,9 +253,10 @@ export function MainTab(props: MainTabProps) {
     [slotRowAtCreate, onChatSlotCreate, submitAsk],
   );
 
-  const streamScrambleContextValue: StreamScrambleSettings = useMemo(
-    () => resolveStreamScrambleSettings(props.streamScramble),
-    [props.streamScramble],
+  /* Plus whether the answer on screen was stopped: its scrambled letters then turn real at once. */
+  const streamScrambleContextValue: StreamScrambleContextValue = useMemo(
+    () => ({ ...resolveStreamScrambleSettings(props.streamScramble), stopped: props.askStopped === true }),
+    [props.streamScramble, props.askStopped],
   );
 
   return (

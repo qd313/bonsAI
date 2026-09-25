@@ -8,6 +8,8 @@ import { registerAnswerBubbleEl } from "./answerBubbleElRegistry";
 import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { SPOILER_STREAM_MASK_LABEL } from "./streamMarkdownPrepare";
+import { StreamScrambleContext } from "../features/stream-scramble/streamScrambleContext";
+import { resetLiveScrambleMemoForTests } from "../features/stream-scramble/liveScrambleMemo";
 
 const ANSWER_KEY = "live";
 
@@ -897,5 +899,44 @@ describe("Copy in the answer bubble's corner", () => {
       helpful.remove();
       readAloud.remove();
     }
+  });
+});
+
+describe("the streamed-answer scramble in the bubble (plan 69)", () => {
+  const SCRAMBLE_ON = { enabled: true, style: "settle" as const, color: "green" as const, settleMs: 400 };
+
+  beforeEach(() => {
+    resetAnswerStopRegistry();
+    resetLiveScrambleMemoForTests();
+  });
+
+  afterEach(() => {
+    cleanup();
+    resetLiveScrambleMemoForTests();
+  });
+
+  function renderWithScramble(body: string, streaming: boolean) {
+    const el = buildAnswerBubbleElement({
+      body,
+      streaming,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    return render(<StreamScrambleContext.Provider value={SCRAMBLE_ON}>{el}</StreamScrambleContext.Provider>);
+  }
+
+  it("scrambles the live tail only -- never the closed sections or the code box above it", () => {
+    const { container } = renderWithScramble(FENCED_BODY, true);
+    const slots = container.querySelectorAll(".bonsai-stream-scramble");
+    expect(slots).toHaveLength(1);
+    expect(slots[0]!.closest("[data-bonsai-stream-preview='true']")).not.toBeNull();
+    expect(container.querySelector(".bonsai-md-fenced-pre .bonsai-stream-scramble")).toBeNull();
+  });
+
+  it("draws a finished answer with no scramble when nothing was left settling", () => {
+    const { container } = renderWithScramble(FENCED_BODY, false);
+    expect(container.querySelector(".bonsai-stream-scramble")).toBeNull();
+    expect(container.textContent).toContain("Tail text");
   });
 });

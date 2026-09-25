@@ -61,6 +61,7 @@ import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { isDrgSurvivorAppId, splitTextForDrgGlossaryTerms } from "../utils/drgGlossaryTermMatch";
 import { DrgGlossaryTermChip } from "./DrgGlossaryTermChip";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
+import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
 
 /** Per-mount counter for spoiler fence ids; only needs to be unique among mounted fences. */
 let spoilerFenceSeq = 0;
@@ -121,6 +122,13 @@ export type MainTabBonsaiAiMarkdownChunkProps = {
   appId?: string | null;
   /** Wired to onAskOllama by MainTabChatTranscript; starts a new Ask turn about the tapped term. */
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
+  /**
+   * Plan 69's scramble: when set, the first SCRAMBLE_SLOT_MARK character in `source` becomes an
+   * empty `<span class="bonsai-stream-scramble">` handed to this ref, right where the mark sits --
+   * at the end of whatever bold, list item or heading the settled text ends in. The scramble writes
+   * the churning letters into that span itself; React never touches its contents.
+   */
+  scrambleSlotRef?: (el: HTMLSpanElement | null) => void;
 };
 
 type MdArgs = {
@@ -129,7 +137,47 @@ type MdArgs = {
   depth: number;
   drgGlossaryEnabled: boolean;
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
+  scrambleSlotRef?: (el: HTMLSpanElement | null) => void;
 };
+
+/** The class the slot mark's span carries in the tree, so the `span` renderer can tell it apart. */
+const SCRAMBLE_SLOT_CLASS = "bonsai-stream-scramble-slot";
+
+/** The little of a markdown tree node this file touches: text carries a value, elements children. */
+type TreeNode = {
+  type: string;
+  value?: string;
+  tagName?: string;
+  properties?: Record<string, unknown>;
+  children?: TreeNode[];
+};
+
+/**
+ * A rehype step that swaps the scramble's slot mark, wherever it landed in the parsed text, for an
+ * empty span carrying SCRAMBLE_SLOT_CLASS -- done on the tree rather than on the source because the
+ * mark has to end up INSIDE the block its text belongs to, and only the parsed tree knows which.
+ */
+function rehypeScrambleSlot() {
+  const walk = (node: TreeNode): void => {
+    if (!node.children) return;
+    const out: TreeNode[] = [];
+    for (const child of node.children) {
+      if (child.type === "text" && child.value?.includes(SCRAMBLE_SLOT_MARK)) {
+        const [before, ...rest] = child.value.split(SCRAMBLE_SLOT_MARK);
+        if (before) out.push({ type: "text", value: before });
+        out.push({ type: "element", tagName: "span", properties: { className: [SCRAMBLE_SLOT_CLASS] }, children: [] });
+        const after = rest.join("");
+        if (after) out.push({ type: "text", value: after });
+        continue;
+      }
+      walk(child);
+      out.push(child);
+    }
+    node.children = out;
+  };
+  return (tree: TreeNode) => walk(tree);
+}
+const SCRAMBLE_SLOT_PLUGINS = [rehypeScrambleSlot];
 
 /**
  * Wrap curated DRG Survivor glossary terms inside already-parsed markdown children with a tappable
@@ -193,8 +241,14 @@ function linkifyDrgGlossaryNode(
  * not worth the added complexity.
  */
 function buildMdComponents(args: MdArgs): Components {
-  const { spoilerMaskingEnabled, spoilerDefaultExpanded, depth, drgGlossaryEnabled, onDrgGlossaryExplainFurther } =
-    args;
+  const {
+    spoilerMaskingEnabled,
+    spoilerDefaultExpanded,
+    depth,
+    drgGlossaryEnabled,
+    onDrgGlossaryExplainFurther,
+    scrambleSlotRef,
+  } = args;
   const linkify = (children: ReactNode): ReactNode =>
     drgGlossaryEnabled ? linkifyDrgGlossaryNode(children, onDrgGlossaryExplainFurther) : children;
 
@@ -303,6 +357,16 @@ function buildMdComponents(args: MdArgs): Components {
     strong: ({ children }) => <strong className="bonsai-md-strong">{children}</strong>,
     em: ({ children }) => <em className="bonsai-md-em">{children}</em>,
   };
+  if (scrambleSlotRef) {
+    /* Markdown never makes a span of its own here (raw HTML is off), so while the scramble runs
+       the only span is its slot; it renders empty and the scramble fills it (see scrambleSlotRef). */
+    base.span = ({ className, children }) =>
+      typeof className === "string" && className.includes(SCRAMBLE_SLOT_CLASS) ? (
+        <span className="bonsai-stream-scramble" ref={scrambleSlotRef} />
+      ) : (
+        <span className={className}>{children}</span>
+      );
+  }
 
   return base;
 }
@@ -542,6 +606,7 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
   const defaultEx = props.spoilerDefaultExpanded === true;
   const drgGlossaryEnabled = isDrgSurvivorAppId(props.appId);
   const onDrgGlossaryExplainFurther = props.onDrgGlossaryExplainFurther;
+  const scrambleSlotRef = props.scrambleSlotRef;
   const components = useMemo(
     () =>
       buildMdComponents({
@@ -550,12 +615,21 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
         depth: 0,
         drgGlossaryEnabled,
         onDrgGlossaryExplainFurther,
+        scrambleSlotRef,
       }),
     // `onDrgGlossaryExplainFurther` should be a stable callback from the caller (useCallback keyed
     // on onAskOllama) — see the memoisation note above this component. A fresh function identity
     // per render would defeat that memo for every DRG Survivor reply, not just correctness here.
-    [masking, defaultEx, drgGlossaryEnabled, onDrgGlossaryExplainFurther]
+    // The same holds for `scrambleSlotRef`, which the scramble keeps stable for its whole life.
+    [masking, defaultEx, drgGlossaryEnabled, onDrgGlossaryExplainFurther, scrambleSlotRef]
   );
 
-  return <ReactMarkdown components={components}>{props.source}</ReactMarkdown>;
+  return (
+    <ReactMarkdown
+      components={components}
+      rehypePlugins={scrambleSlotRef ? SCRAMBLE_SLOT_PLUGINS : undefined}
+    >
+      {props.source}
+    </ReactMarkdown>
+  );
 });

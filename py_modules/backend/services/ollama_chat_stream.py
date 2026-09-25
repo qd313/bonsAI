@@ -41,7 +41,12 @@ from backend.services.ollama_window_fit import (
     prompt_window_warning,
 )
 
-# Smaller than 64KiB so Stop re-checks ``cancel_requested`` more often while ``read()`` blocks on slow streams.
+# The most one read takes from the stream. The loop reads with ``read1``, which hands back whatever
+# the model has already sent, up to this cap, instead of ``read``, which waits for the whole cap to
+# fill. One streamed piece is about 135 bytes, so ``read(4096)`` held about 30 pieces back before
+# passing any on: measured on the Deck 2026-09-24 (plan 69), text reached the panel in lumps of about
+# 115 letters every 1.5 to 2 seconds with a game running, although the model wrote a piece every
+# 50 ms. Stop is re-checked after every read, so short reads also make Stop answer sooner.
 OLLAMA_CHAT_READ_CHUNK = 4096
 
 # Minimum gap between partial-text parses while a stream is running.
@@ -331,7 +336,7 @@ def _stream_ollama_chat_once(
                     if done_flag:
                         break
                     try:
-                        chunk = resp.read(OLLAMA_CHAT_READ_CHUNK)
+                        chunk = resp.read1(OLLAMA_CHAT_READ_CHUNK)
                     except Exception as exc:
                         if _should_cancel():
                             logger.info("ask_ollama: read interrupted by cancel model=%s (%s)", model_name, exc)

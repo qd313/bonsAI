@@ -90,7 +90,7 @@ class OllamaServiceTests(unittest.TestCase):
         idx = {"i": 0}
 
         class _Rsp:
-            def read(self, n: int):
+            def read1(self, n: int):
                 chunk = body[idx["i"] : idx["i"] + n]
                 idx["i"] += len(chunk)
                 return chunk
@@ -673,12 +673,12 @@ class OllamaServiceTests(unittest.TestCase):
 
     @staticmethod
     def _ndjson_response(lines: list[str]):
-        """Fake urlopen response replaying NDJSON through the same chunked read the real one uses."""
+        """Fake urlopen response replaying NDJSON through the same read call the real stream uses."""
         body = ("\n".join(lines) + "\n").encode("utf-8")
         idx = {"i": 0}
 
         class _Rsp:
-            def read(self, n: int):
+            def read1(self, n: int):
                 chunk = body[idx["i"] : idx["i"] + n]
                 idx["i"] += len(chunk)
                 return chunk
@@ -694,7 +694,7 @@ class OllamaServiceTests(unittest.TestCase):
 
         return _Rsp()
 
-    def _run_chat_collecting_deltas(self, lines: list[str]) -> list[tuple[str, bool]]:
+    def _run_chat_collecting_deltas(self, lines: list[str], on_delta=None) -> list[tuple[str, bool]]:
         seen: list[tuple[str, bool]] = []
         post_ollama_chat(
             "http://127.0.0.1:11434/api/chat",
@@ -709,7 +709,7 @@ class OllamaServiceTests(unittest.TestCase):
             "speed",
             "5m",
             cancel_requested=lambda: False,
-            on_delta=lambda text, done, _thinking=None, **_kw: seen.append((text, done)),
+            on_delta=on_delta or (lambda text, done, _thinking=None, **_kw: seen.append((text, done))),
         )
         return seen
 
@@ -756,6 +756,107 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(partials, ["a", "abc"])
         self.assertEqual([d for d in seen if d[1]], [("abc", True)])
 
+    @staticmethod
+    def _paced_ndjson_response(lines: list[str], clock: dict, gap_s: float):
+        """Fake urlopen response that plays NDJSON back at a model's pace, on a fake clock.
+
+        One line arrives every ``gap_s`` seconds of ``clock["t"]``, and the clock moves only when a
+        line arrives. ``read(n)`` waits the way the real one does, until ``n`` bytes have arrived or
+        the stream ends; ``read1(n)`` waits for one line at most and returns what has arrived. Both
+        are here so that putting ``read`` back into the stream fails the test below by timing, not
+        by a missing method.
+        """
+        waiting = [(line + "\n").encode("utf-8") for line in lines]
+        buf = {"b": b""}
+
+        def _arrive_one() -> bool:
+            if not waiting:
+                return False
+            clock["t"] += gap_s
+            buf["b"] += waiting.pop(0)
+            return True
+
+        def _take(n: int) -> bytes:
+            out, buf["b"] = buf["b"][:n], buf["b"][n:]
+            return out
+
+        class _Rsp:
+            def read(self, n: int):
+                while len(buf["b"]) < n and _arrive_one():
+                    pass
+                return _take(n)
+
+            def read1(self, n: int):
+                if not buf["b"]:
+                    _arrive_one()
+                return _take(n)
+
+            def close(self) -> None:
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                pass
+
+        return _Rsp()
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_post_ollama_chat_passes_each_piece_on_without_waiting_for_4_kb(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """Plan 69 step 1: text reaches the panel as the model writes it, not in 4 KB lumps.
+
+        Shaped like the Deck's own stream (gemma4, measured 2026-09-24): one line of about 135 bytes
+        every 50 ms or so. The stream used to read with ``read(4096)``, which waits for 4 KB -- about
+        30 lines -- before handing anything over, so the first words were published nearly two
+        seconds after the model wrote them, and the rest came in lumps.
+        """
+        pieces = [f" w{i:02d}" for i in range(40)]
+        lines = [
+            json.dumps(
+                {
+                    "model": "gemma4:e2b-it-qat",
+                    "created_at": "2026-09-24T17:34:12.123456789Z",
+                    "message": {"role": "assistant", "content": piece},
+                    "done": False,
+                },
+                separators=(",", ":"),
+            )
+            for piece in pieces
+        ]
+        lines.append('{"message":{"role":"assistant","content":""},"done":true,"done_reason":"stop"}')
+        self.assertGreater(sum(len(line) + 1 for line in lines[:30]), 4096)
+        # A power of two keeps the fake clock's sums exact, so the throttle's comparisons are too.
+        gap_s = 0.0625
+        clock = {"t": 1000.0}
+        mock_urlopen.return_value = self._paced_ndjson_response(lines, clock, gap_s)
+        published: list[tuple[float, str, bool]] = []
+
+        with patch.object(ollama_service.time, "monotonic", side_effect=lambda: clock["t"]):
+            self._run_chat_collecting_deltas(
+                lines,
+                on_delta=lambda text, done, _thinking=None, **_kw: published.append(
+                    (clock["t"] - 1000.0, text, done)
+                ),
+            )
+
+        partials = [(t, text) for t, text, done in published if not done]
+        self.assertTrue(partials, "no text was published while the answer streamed")
+        first_t, first_text = partials[0]
+        self.assertEqual(first_text, "w00")
+        self.assertLessEqual(
+            first_t,
+            gap_s,
+            f"the first words were published {first_t:.2f} s in; the model wrote them at {gap_s:.2f} s",
+        )
+        worst_gap = max(later[0] - earlier[0] for earlier, later in zip(partials, partials[1:]))
+        self.assertLessEqual(
+            worst_gap, 0.25, f"text was held back for {worst_gap:.2f} s between two hand-overs"
+        )
+        self.assertEqual(published[-1][1:], ("".join(pieces).strip(), True))
+
     @patch("backend.services.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_fails_when_stream_eof_without_done(
         self, mock_urlopen: MagicMock
@@ -765,7 +866,7 @@ class OllamaServiceTests(unittest.TestCase):
         idx = {"i": 0}
 
         class _Rsp:
-            def read(self, n: int):
+            def read1(self, n: int):
                 chunk = body[idx["i"] : idx["i"] + n]
                 idx["i"] += len(chunk)
                 return chunk

@@ -194,11 +194,18 @@ describe("the live thinking under the question reads as ordinary text (the maint
     expect(css).not.toContain("bonsai-chat-reasoning-live-line");
   });
 
-  it("keeps the newest six lines in view, older ones leaving at the top", () => {
+  it("keeps the newest eight lines in view, older ones leaving at the top", () => {
     const body = match![1]!;
     expect(body).toMatch(/justify-content:\s*flex-end/);
     expect(body).toMatch(/overflow:\s*hidden/);
-    expect(body).toMatch(/max-height:\s*calc\(6 \* 1\.4em/);
-    expect(body).toMatch(/line-height:\s*1\.4/);
+    expect(body).toMatch(/max-height:\s*calc\(8 \* 1\.3em/);
+    expect(body).toMatch(/line-height:\s*1\.3/);
+  });
+
+  it("is small, dim and italic, so it reads as the model thinking, not as the answer", () => {
+    const body = match![1]!;
+    expect(body).toMatch(/font-style:\s*italic/);
+    expect(body).toMatch(/font-size:[^;]*\b10px/);
+    expect(body).toMatch(/color:\s*rgba\(180, 198, 217, 0\.6\)/);
   });
 });

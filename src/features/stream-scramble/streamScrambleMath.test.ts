@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   SCRAMBLE_FINISH_MS,
   SCRAMBLE_SLOT_MARK,
-  churnSymbols,
+  churnCellKind,
+  churnSymbol,
   finishProbeAt,
   lettersSettledInFinish,
   locateSettlePoint,
@@ -13,17 +14,16 @@ import {
   withoutInlineMarks,
 } from "./streamScrambleMath";
 
-describe("churnSymbols", () => {
-  it("keeps spaces and line breaks, drops bold and code marks, and gives every other character one symbol", () => {
-    const text = "ab c\n**d`e`";
-    const symbols = churnSymbols(text);
-    expect(symbols).toHaveLength(text.length);
-    expect(symbols[2]).toBe(" ");
-    expect(symbols[4]).toBe("\n");
-    for (const i of [5, 6, 8, 10]) expect(symbols[i]).toBe("");
-    for (const i of [0, 1, 3, 7, 9]) {
-      expect(symbols[i]).toHaveLength(1);
-      expect(symbols[i]!.trim()).toBe(symbols[i]);
+describe("churnCellKind and churnSymbol", () => {
+  it("keeps spaces and line breaks as they are, drops bold and code marks, and scrambles the rest", () => {
+    expect([..."a \n*`Z9"].map(churnCellKind)).toEqual(["letter", "blank", "blank", "mark", "mark", "letter", "letter"]);
+  });
+
+  it("draws one visible symbol per scrambled letter", () => {
+    for (let i = 0; i < 20; i += 1) {
+      const symbol = churnSymbol();
+      expect(symbol).toHaveLength(1);
+      expect(symbol.trim()).toBe(symbol);
     }
   });
 });

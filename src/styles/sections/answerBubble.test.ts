@@ -42,6 +42,16 @@ describe("the streamed-answer scramble's stylesheet (plan 69)", () => {
     expect(body).not.toMatch(/display:\s*none/);
   });
 
+  it("keeps each unsettled letter in the line, invisible, with its symbol drawn over it", () => {
+    const letter = ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-char");
+    expect(letter).toMatch(/-webkit-text-fill-color:\s*transparent/);
+    expect(letter).toMatch(/position:\s*relative/);
+    const symbol = ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-char::before");
+    expect(symbol).toMatch(/content:\s*attr\(data-s\)/);
+    expect(symbol).toMatch(/position:\s*absolute/);
+    expect(symbol).toMatch(/-webkit-text-fill-color:\s*currentColor/);
+  });
+
   it("gives each colour choice its own look", () => {
     expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--dim")).toMatch(/opacity:\s*0\.5/);
     expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--green")).toMatch(/color:\s*#5b9e7e/);

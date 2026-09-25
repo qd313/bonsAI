@@ -321,6 +321,26 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope .bonsai-stream-scramble {
           white-space: pre-wrap;
         }
+        /* Each unsettled letter is itself, invisible, with its symbol drawn over it: the line is
+           laid out exactly as it will read once the letter is real, so a reshuffle moves nothing
+           and a word never hops to the next line as it settles. The symbol takes the letter's
+           colour (or the chosen scramble colour, set on the churn span below) through
+           currentColor, since only the letter's fill is made invisible. */
+        .bonsai-scope .bonsai-stream-scramble-char {
+          position: relative;
+          -webkit-text-fill-color: transparent;
+        }
+        .bonsai-scope .bonsai-stream-scramble-char::before {
+          content: attr(data-s);
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          line-height: normal;
+          text-align: center;
+          -webkit-text-fill-color: currentColor;
+          pointer-events: none;
+        }
         /* The Copy corner waits for the last letters to settle (plan 69, up to 0.6 s after the
            end): the slot exists only while any are unsettled. Hidden rather than removed, so the
            D-pad's stops and the page's layout stay exactly as they are when it appears. */

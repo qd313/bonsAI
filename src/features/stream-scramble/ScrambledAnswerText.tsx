@@ -27,8 +27,9 @@
  * 1. While streaming, every letter's arrival is timed when a render first shows it. The settle
  *    point moves forward per the chosen style (streamScrambleMath.ts); letters before it are real.
  * 2. The span holds, in order: letters settled since the markdown last caught up (as plain text),
- *    then the unsettled letters as symbols. The symbols reshuffle every 55 ms; a letter arriving
- *    between reshuffles gets its own symbol without reshuffling the rest.
+ *    then the unsettled letters, each invisible with a symbol drawn over it, so the line never
+ *    re-wraps as symbols change. The symbols reshuffle every 55 ms; a letter arriving between
+ *    reshuffles gets its own symbol without reshuffling the rest.
  * 3. A remount in the middle of an answer (the Quick Access Menu closed and reopened) shows what
  *    was already on screen as plain text; only letters that arrive after it scramble.
  * 4. When the stream ends -- this section stops streaming, or is thrown away while it still was --
@@ -49,7 +50,8 @@ import {
   SCRAMBLE_CHAR_MS,
   SCRAMBLE_CHURN_MS,
   SCRAMBLE_MARKDOWN_STEP_MS,
-  churnSymbols,
+  churnCellKind,
+  churnSymbol,
   finishProbeAt,
   lettersSettledInFinish,
   locateSettlePoint,
@@ -78,6 +80,69 @@ function commonPrefixLength(a: string, b: string): number {
   let i = 0;
   while (i < n && a.charCodeAt(i) === b.charCodeAt(i)) i += 1;
   return i;
+}
+
+/**
+ * What the churn span holds: one node per unsettled character from `start` to `end` of `basis`
+ * (a letter is a span, a space or line break a text node, a bold or code mark nothing). `basis`
+ * null means the nodes no longer match anything and must be built again.
+ */
+type ChurnCells = { basis: string | null; start: number; end: number; list: Array<{ index: number; node: Node }> };
+
+function freshCells(): ChurnCells {
+  return { basis: null, start: 0, end: 0, list: [] };
+}
+
+/**
+ * Brings the churn span in line with `text` settled up to `from`, touching only what changed:
+ * settled letters leave from the front, arriving ones join at the back. Each letter stays in the
+ * line as itself -- invisible, with its symbol drawn over it (answerBubble.ts) -- so the line is
+ * laid out exactly as it will be once the letter is real, and a reshuffle only swaps the symbols
+ * (`reshuffle`), which moves nothing. A symbol wider or narrower than its letter used to re-wrap
+ * the last line on every reshuffle, and every re-wrap set the chat's size watchers measuring the
+ * whole panel again (Deck profile, 2026-09-24: the page never went idle while an answer arrived).
+ */
+function syncChurnCells(churn: HTMLSpanElement, cells: ChurnCells, text: string, from: number, reshuffle: boolean) {
+  if (cells.basis === null || !text.startsWith(cells.basis) || from < cells.start) {
+    churn.replaceChildren();
+    cells.list = [];
+    cells.start = from;
+    cells.end = from;
+  }
+  let settled = 0;
+  while (settled < cells.list.length && cells.list[settled]!.index < from) {
+    churn.removeChild(cells.list[settled]!.node);
+    settled += 1;
+  }
+  if (settled > 0) cells.list.splice(0, settled);
+  cells.start = from;
+  const doc = churn.ownerDocument;
+  const arriving = doc.createDocumentFragment();
+  for (let i = Math.max(cells.end, from); i < text.length; i += 1) {
+    const ch = text[i]!;
+    const kind = churnCellKind(ch);
+    if (kind === "mark") continue;
+    let node: Node;
+    if (kind === "blank") {
+      node = doc.createTextNode(ch);
+    } else {
+      const letter = doc.createElement("span");
+      letter.className = "bonsai-stream-scramble-char";
+      letter.textContent = ch;
+      letter.setAttribute("data-s", churnSymbol());
+      node = letter;
+    }
+    arriving.appendChild(node);
+    cells.list.push({ index: i, node });
+  }
+  if (arriving.firstChild) churn.appendChild(arriving);
+  cells.end = text.length;
+  cells.basis = text;
+  if (reshuffle) {
+    for (const cell of cells.list) {
+      if (cell.node.nodeType === 1) (cell.node as Element).setAttribute("data-s", churnSymbol());
+    }
+  }
 }
 
 /*
@@ -113,8 +178,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   const timerRef = useRef<number | null>(null);
   const realNodeRef = useRef<Text | null>(null);
   const churnNodeRef = useRef<HTMLSpanElement | null>(null);
-  /** The symbols on screen, one per character of the text from `from` on. */
-  const churnRef = useRef<{ from: number; symbols: string[] }>({ from: 0, symbols: [] });
+  const cellsRef = useRef<ChurnCells>(freshCells());
   const settingsRef = useRef(scramble);
   const onRef = useRef(on);
   const wasStreamingRef = useRef(false);
@@ -125,9 +189,10 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   finishRef.current = finish;
 
   /**
-   * Writes the span: the letters settled since the markdown last caught up, then the symbols.
-   * `reshuffle` draws new symbols for every unsettled letter (the 55 ms tick); otherwise only
-   * letters new since the last write get one (a render, which can come every frame).
+   * Writes the span: the letters settled since the markdown last caught up, then the unsettled
+   * ones under their symbols (syncChurnCells). `reshuffle` draws new symbols (the timer's tick);
+   * a render, which can come every frame, only adds and removes letters. The settled text is
+   * written only when it changed: every write makes the page lay the line out again.
    */
   const paint = useCallback((reshuffle: boolean) => {
     const real = realNodeRef.current;
@@ -139,17 +204,9 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     const from = f
       ? f.start + lettersSettledInFinish(text.length - f.start, performance.now() - f.startedAt)
       : settledRef.current;
-    real.data = withoutInlineMarks(text.slice(shownFrom, from));
-    const prev = churnRef.current;
-    let symbols: string[];
-    if (reshuffle || from < prev.from) {
-      symbols = churnSymbols(text.slice(from));
-    } else {
-      const kept = prev.symbols.slice(from - prev.from, from - prev.from + text.length - from);
-      symbols = kept.concat(churnSymbols(text.slice(from + kept.length)));
-    }
-    churnRef.current = { from, symbols };
-    churn.textContent = symbols.join("");
+    const nextReal = withoutInlineMarks(text.slice(shownFrom, from));
+    if (real.data !== nextReal) real.data = nextReal;
+    syncChurnCells(churn, cellsRef.current, text, from, reshuffle);
     const className = `bonsai-stream-scramble-churn bonsai-stream-scramble-churn--${settingsRef.current.color}`;
     if (churn.className !== className) churn.className = className;
   }, []);
@@ -167,6 +224,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
       el.replaceChildren(real, churn);
       realNodeRef.current = real;
       churnNodeRef.current = churn;
+      cellsRef.current = freshCells();
       paint(false);
     },
     [paint]
@@ -188,7 +246,9 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     const f = finishRef.current;
     if (f) {
       const total = rawRef.current.length - f.start;
-      if (lettersSettledInFinish(total, now - f.startedAt) >= total) {
+      /* Ends on the last tick before the finish is due, not the first one after it, so the last
+         letters are never late: a tick can be a whole reshuffle apart from the due time. */
+      if (lettersSettledInFinish(total, now + SCRAMBLE_CHURN_MS - f.startedAt) >= total) {
         stopTimer();
         setFinish(null);
         return;
@@ -247,7 +307,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
       arrivalsRef.current = new Array<number>(raw.length).fill(now);
       settledRef.current = continuesShownAnswer(raw) ? raw.length : 0;
       creditRef.current = 0;
-      churnRef.current = { from: 0, symbols: [] };
+      cellsRef.current = freshCells();
       markdownStepAtRef.current = now;
       setMarkdownSettled(settledRef.current);
     } else if (raw.startsWith(previous)) {
@@ -259,7 +319,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
       arrivalsRef.current.length = same;
       for (let i = same; i < raw.length; i += 1) arrivalsRef.current.push(now);
       settledRef.current = Math.min(settledRef.current, same);
-      churnRef.current = { from: 0, symbols: [] };
+      cellsRef.current = freshCells();
       if ((markdownSettledRef.current ?? 0) > settledRef.current) {
         markdownStepAtRef.current = now;
         setMarkdownSettled(settledRef.current);
@@ -295,7 +355,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     }
     const current = finishRef.current;
     if (!current || current.start !== start || current.startedAt !== pending.startedAt) {
-      churnRef.current = { from: 0, symbols: [] };
+      cellsRef.current = freshCells();
       setFinish({ start, startedAt: pending.startedAt });
     }
     startTimer();

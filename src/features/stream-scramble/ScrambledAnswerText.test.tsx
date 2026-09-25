@@ -79,6 +79,20 @@ describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
     expect(realText(container)).toBe("Hello world, miner");
   });
 
+  it("keeps each unsettled letter in the line under its symbol, and a reshuffle swaps only the symbols", () => {
+    const { container } = render(view("Hello world", true));
+    const letters = () => Array.from(container.querySelectorAll<HTMLElement>(".bonsai-stream-scramble-char"));
+    expect(letters().map((el) => el.textContent).join("")).toBe("Helloworld");
+    const before = letters();
+    const symbolsBefore = before.map((el) => el.getAttribute("data-s"));
+    expect(symbolsBefore.every((s) => s !== null && s.length === 1)).toBe(true);
+    advance(100);
+    const after = letters();
+    expect(after).toEqual(before);
+    expect(after.map((el) => el.textContent).join("")).toBe("Helloworld");
+    expect(after.map((el) => el.getAttribute("data-s"))).not.toEqual(symbolsBefore);
+  });
+
   it("colours the symbols by the chosen colour", () => {
     const { container } = render(view("Hello world", true, { ...ON, color: "cyan" }));
     expect(container.querySelector(".bonsai-stream-scramble-churn--cyan")).not.toBeNull();

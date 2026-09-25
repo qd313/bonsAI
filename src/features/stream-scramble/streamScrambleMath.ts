@@ -51,7 +51,7 @@ const FINISH_PROBE_MIN_LETTERS = 6;
  * span sits at the end of whatever block the settled text ends in -- inside the bold, the list
  * item or the heading -- rather than on a line of its own after the answer.
  */
-export const SCRAMBLE_SLOT_MARK = "";
+export const SCRAMBLE_SLOT_MARK = "\uE000";
 
 function isBlank(ch: string): boolean {
   return ch === " " || ch === "\n" || ch === "\t" || ch === "\r";
@@ -72,17 +72,17 @@ function countLetters(text: string): number {
 }
 
 /**
- * One churn symbol per character of `text`, index for index: spaces and line breaks as
- * themselves, a bold, italic or code mark as nothing, anything else a random symbol.
+ * How the span draws one character of the unsettled stretch: a space or line break as itself, a
+ * bold, italic or code mark not at all, and a letter as itself, invisible, with a symbol drawn
+ * over it -- so the line is laid out exactly as it will be once the letter is real.
  */
-export function churnSymbols(text: string): string[] {
-  const pool = makeDecodeChurn(text.length);
-  const out: string[] = [];
-  for (let i = 0; i < text.length; i += 1) {
-    const ch = text[i]!;
-    out.push(isBlank(ch) ? ch : isInlineMark(ch) ? "" : pool[i]!);
-  }
-  return out;
+export function churnCellKind(ch: string): "blank" | "mark" | "letter" {
+  return isBlank(ch) ? "blank" : isInlineMark(ch) ? "mark" : "letter";
+}
+
+/** A fresh symbol for one scrambled letter, from the decode chips' own set. */
+export function churnSymbol(): string {
+  return makeDecodeChurn(1)[0]!;
 }
 
 /** Real text for the span: as written, minus the bold, italic and code marks (see isInlineMark). */

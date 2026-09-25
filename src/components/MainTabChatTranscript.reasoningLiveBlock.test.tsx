@@ -1,16 +1,15 @@
 /**
  * Title: The model's own thinking, live under the question
  * Purpose: Pin what fills the space under your question while a thinking model works — the stock
- *          waiting phrase before its first thought, then the model's own newest three sentences,
- *          never four, with the newest one brighter — and prove the block gets out of the way the
- *          moment the answer starts.
+ *          waiting phrase before its first thought, then the model's own newest thinking as
+ *          ordinary wrapping text — and prove the block gets out of the way the moment the answer
+ *          starts.
  * Used for: MainTabChatTranscript.tsx's live turn (plan 57 step 3, the first of the three states).
- * Solves: The three-line cap and the "the phrase steps aside" rule are drawing decisions from the
- *         plan that nothing else would notice breaking. On the device a fourth line would push the
- *         answer off the bottom of the visible chat: the built-in screen leaves about 61 pixels
- *         for the answer with the block on screen (measured 2026-09-17).
- * Does not: Prove the block's real height, or anything about the fold row above the answer — the
- *           height needs a device and the fold row has tests of its own.
+ * Solves: The "the phrase steps aside" rule and the maintainer's 2026-09-24 call ("let it display
+ *         the thinking normally" -- it had been three cut-off one-line sentences) are drawing
+ *         decisions nothing else would notice breaking.
+ * Does not: Prove the block's real height, or that the newest lines stay in view — the stylesheet
+ *           does that (section-6.ts) and a stylesheet test pins it; the look needs a device.
  */
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
@@ -44,10 +43,8 @@ function baseProps(overrides: Partial<MainTabChatTranscriptProps> = {}): MainTab
   };
 }
 
-function lines(container: HTMLElement): string[] {
-  return Array.from(
-    container.querySelectorAll<HTMLElement>(".bonsai-chat-reasoning-live-line"),
-  ).map((el) => el.textContent ?? "");
+function drawn(container: HTMLElement): string | null {
+  return container.querySelector<HTMLElement>(".bonsai-chat-reasoning-live")?.textContent ?? null;
 }
 
 describe("the space under the question while a thinking model works", () => {
@@ -76,52 +73,22 @@ describe("the space under the question while a thinking model works", () => {
     expect(container.querySelector(".bonsai-chat-reasoning-live")).toBeNull();
   });
 
-  it("shows one line for one sentence", () => {
+  it("draws the model's thinking as it wrote it, line breaks kept", () => {
     const { container } = render(
       <MainTabChatTranscript
         {...baseProps({
           liveThinking: {
             summary: "Reading the wiki.",
-            reasoning: { partial: "The armour is on the front.", seconds: 2 },
+            reasoning: { partial: "The armour is on the front.\nSo flank it.", seconds: 2 },
           },
         })}
       />,
     );
 
-    expect(lines(container)).toEqual(["The armour is on the front."]);
+    expect(drawn(container)).toBe("The armour is on the front.\nSo flank it.");
   });
 
-  it("shows two lines for two sentences", () => {
-    const { container } = render(
-      <MainTabChatTranscript
-        {...baseProps({
-          liveThinking: {
-            summary: null,
-            reasoning: { partial: "The armour is on the front. So flank it.", seconds: 3 },
-          },
-        })}
-      />,
-    );
-
-    expect(lines(container)).toEqual(["The armour is on the front.", "So flank it."]);
-  });
-
-  it("shows three lines for three sentences", () => {
-    const { container } = render(
-      <MainTabChatTranscript
-        {...baseProps({
-          liveThinking: {
-            summary: null,
-            reasoning: { partial: "One thing. Then another. Then a third.", seconds: 5 },
-          },
-        })}
-      />,
-    );
-
-    expect(lines(container)).toEqual(["One thing.", "Then another.", "Then a third."]);
-  });
-
-  it("never draws a fourth line, and keeps the newest three", () => {
+  it("no longer stops at three sentences", () => {
     const ten = "a one. b two. c three. d four. e five. f six. g seven. h eight. i nine. j ten.";
     const { container } = render(
       <MainTabChatTranscript
@@ -129,26 +96,19 @@ describe("the space under the question while a thinking model works", () => {
       />,
     );
 
-    expect(lines(container)).toHaveLength(3);
-    expect(lines(container)).toEqual(["h eight.", "i nine.", "j ten."]);
+    expect(drawn(container)).toBe(ten);
+    expect(container.querySelector(".bonsai-chat-reasoning-live-line")).toBeNull();
   });
 
-  /* A class, not a colour: the colour lives in the stylesheet and is not applied in a test render. */
-  it("marks the newest line as the bright one and leaves the two older ones plain", () => {
+  it("does not open on the half word a long think's slice starts with", () => {
+    const slice = ("ing at the health bar. " + "Then I check the wiki. ".repeat(30)).slice(0, 600);
     const { container } = render(
       <MainTabChatTranscript
-        {...baseProps({
-          liveThinking: { summary: null, reasoning: { partial: "one. two. three.", seconds: 4 } },
-        })}
+        {...baseProps({ liveThinking: { summary: null, reasoning: { partial: slice, seconds: 9 } } })}
       />,
     );
 
-    const drawn = Array.from(
-      container.querySelectorAll<HTMLElement>(".bonsai-chat-reasoning-live-line"),
-    );
-    expect(drawn[0]?.className).not.toContain("--newest");
-    expect(drawn[1]?.className).not.toContain("--newest");
-    expect(drawn[2]?.className).toContain("bonsai-chat-reasoning-live-line--newest");
+    expect(drawn(container)?.startsWith("Then I check the wiki.")).toBe(true);
   });
 
   it("draws no spinner inside the block", () => {

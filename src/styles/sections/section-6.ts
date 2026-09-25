@@ -417,13 +417,15 @@ ${buildAnswerBubbleSection()}
           cursor: default !important;
         }
         /*
-         * The model's own thinking while it works: three lines where the stock waiting phrase
-         * used to be (plan 57, the mockup's own sizes).
+         * The model's own thinking while it works, where the stock waiting phrase used to be.
          *
-         * Three rows of 16.8px, one line each, cut with an ellipsis rather than wrapping — the
-         * whole block is about 50px, the room three lines of an answer take, and a fourth line
-         * would push the answer off the bottom of the visible chat. The cut at one line each is
-         * why the no-wrap rule is here and not negotiable: the sentences are long.
+         * Ordinary wrapping text, line breaks kept (the maintainer's call, 2026-09-24: "let it
+         * display the thinking normally"; it was three one-line sentences cut with an ellipsis).
+         * At most six lines show, the newest at the bottom: flex-end pushes older lines up and
+         * out of the top as the model writes, instead of pushing the newest down behind the
+         * question box -- the visible chat above it is small on the built-in screen. The height
+         * is exactly six lines plus the padding, so no half line ever shows at the top. The block
+         * goes the moment the answer starts.
          *
          * The left rule stays a raw 2px. It is a hairline, and hairlines do not follow the user's
          * UI scale (design-tokens.md).
@@ -431,25 +433,20 @@ ${buildAnswerBubbleSection()}
         .bonsai-scope .bonsai-chat-reasoning-live {
           display: flex !important;
           flex-direction: column !important;
+          justify-content: flex-end !important;
           width: 100% !important;
           box-sizing: border-box !important;
+          max-height: calc(6 * 1.4em + ${uiScalePx(4)}) !important;
+          overflow: hidden !important;
           padding: ${uiScalePx(2)} ${uiScalePx(4)} ${uiScalePx(2)} ${uiScalePx(8)} !important;
           border-left: 2px solid rgba(159, 183, 213, 0.55) !important;
           margin-bottom: ${uiScalePx(8)} !important;
           min-width: 0 !important;
-        }
-        .bonsai-scope .bonsai-chat-reasoning-live-line {
           font-size: ${uiScalePx(12)} !important;
           line-height: 1.4 !important;
-          color: #9fb7d5 !important;
-          overflow: hidden !important;
-          white-space: nowrap !important;
-          text-overflow: ellipsis !important;
-          min-width: 0 !important;
-        }
-        /* The newest line is the one being written, so it is the brighter of the three. */
-        .bonsai-scope .bonsai-chat-reasoning-live-line--newest {
-          color: #c9d6e4 !important;
+          color: #b4c6d9 !important;
+          white-space: pre-wrap !important;
+          overflow-wrap: anywhere !important;
         }
         /*
          * The whole thinking, once the fold row above it has been opened. The answer chunk's own

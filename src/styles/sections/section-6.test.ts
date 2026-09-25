@@ -178,3 +178,27 @@ describe("suggestion chip surface at rest (section 6 CSS, plan 60 board B)", () 
     expect(body).toMatch(/0 2px 3px rgba\(0, 0, 0, 0\.4\) !important;/);
   });
 });
+
+describe("the live thinking under the question reads as ordinary text (the maintainer's call, 2026-09-24)", () => {
+  // It used to be three one-line sentences cut with an ellipsis, which read as a list of broken
+  // lines. Now it wraps like any text, and the newest lines stay in view at the bottom.
+  const css = buildSection6Section();
+  const match = css.match(/\.bonsai-scope \.bonsai-chat-reasoning-live\s*\{([^}]*)\}/);
+
+  it("wraps instead of cutting each line with an ellipsis", () => {
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toMatch(/white-space:\s*pre-wrap/);
+    expect(body).not.toMatch(/nowrap/);
+    expect(body).not.toMatch(/text-overflow:\s*ellipsis/);
+    expect(css).not.toContain("bonsai-chat-reasoning-live-line");
+  });
+
+  it("keeps the newest six lines in view, older ones leaving at the top", () => {
+    const body = match![1]!;
+    expect(body).toMatch(/justify-content:\s*flex-end/);
+    expect(body).toMatch(/overflow:\s*hidden/);
+    expect(body).toMatch(/max-height:\s*calc\(6 \* 1\.4em/);
+    expect(body).toMatch(/line-height:\s*1\.4/);
+  });
+});

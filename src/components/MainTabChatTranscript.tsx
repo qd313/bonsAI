@@ -119,7 +119,7 @@ import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 import {
   BONSAI_CHAT_AI_MAX_WIDTH_CSS,
 } from "../features/unified-input/constants";
-import { newestReasoningLines } from "../utils/reasoningDisplay";
+import { liveReasoningText } from "../utils/reasoningDisplay";
 import {
   buildReasoningFoldRow,
   buildReasoningOpenBlock,
@@ -568,17 +568,17 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const liveReasoningPartial = liveThinking?.reasoning?.partial ?? "";
   const hasLiveReasoning = liveReasoningPartial.trim().length > 0;
-  const liveReasoningLines = hasLiveReasoning ? newestReasoningLines(liveReasoningPartial) : [];
+  const liveReasoningShown = hasLiveReasoning ? liveReasoningText(liveReasoningPartial) : "";
   const liveQuestion = askThreadDisplayQuestion.trim();
   const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
   const showLiveResponse =
     Boolean(liveResponseBody.trim()) &&
     !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));
   /*
-   * The three live lines show only while the wait is still a wait. The moment the first of the
-   * answer arrives the block goes, because the answer needs the room: with the question header
-   * and a 50px block at the top of the visible chat, about 61px are left for the answer, which is
-   * under four lines (measured on the built-in screen 2026-09-17,
+   * The live thinking shows only while the wait is still a wait. The moment the first of the
+   * answer arrives the block goes, because the answer needs the room: the visible chat above the
+   * question box is small on the built-in screen (with the question header and a 50px block at
+   * its top, about 61px were left for the answer -- measured 2026-09-17,
    * docs/test-evidence/plan57-M-fold-row-and-live-block.json).
    */
   const showLiveReasoningBlock =
@@ -1362,26 +1362,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
             })}
             {showLiveReasoningBlock ? (
               /*
-               * The model's own newest sentences, where the stock waiting phrase would be.
-               *
-               * No spinner: the lines change by themselves, which is the only "still working"
-               * signal this needs, and the spinner's 14px would break the three-row height the
-               * block is sized to. Never more than three lines — `newestReasoningLines` caps it,
-               * and a test proves a ten-sentence slice still draws three.
+               * The model's own newest thinking, where the stock waiting phrase would be, drawn as
+               * ordinary wrapping text (the maintainer's call, 2026-09-24; it used to be three
+               * cut-off one-line sentences). The stylesheet keeps the newest lines in view
+               * (section-6.ts). No spinner: the text changing is the only "still working" signal
+               * this needs.
                */
               <div className="bonsai-chat-reasoning-live" role="status" aria-live="polite">
-                {liveReasoningLines.map((line, index) => (
-                  <div
-                    key={`${index}-${line}`}
-                    className={`bonsai-chat-reasoning-live-line${
-                      index === liveReasoningLines.length - 1
-                        ? " bonsai-chat-reasoning-live-line--newest"
-                        : ""
-                    }`}
-                  >
-                    {line}
-                  </div>
-                ))}
+                {liveReasoningShown}
               </div>
             ) : null}
             {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning ? (

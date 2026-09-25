@@ -1,85 +1,59 @@
 /**
  * Title: Reading the model's own thinking for the screen
- * Purpose: Pin the small pieces the reasoning display is built from — how the live slice is cut
- *          into sentences, how many of them ever show, what the fold row's seconds read, and what
- *          counts as "this turn has no thinking at all".
+ * Purpose: Pin the small pieces the reasoning display is built from — what of the live slice is
+ *          drawn, what the fold row's seconds read, and what counts as "this turn has no thinking
+ *          at all".
  * Used for: reasoningDisplay.ts, which the chat transcript and the ask hook both read.
- * Solves: the "never a fourth line" rule and the "under a second reads 1 s" rule are drawing rules
- *         from the plan, easy to lose in a later edit and invisible until someone is on a Deck.
+ * Solves: the "never open on half a word" rule and the "under a second reads 1 s" rule are drawing
+ *         rules, easy to lose in a later edit and invisible until someone is on a Deck.
  * Does not: prove anything about how the lines look — that is the transcript's own tests.
  */
 import { describe, expect, it } from "vitest";
 import {
   formatReasoningSeconds,
-  newestReasoningLines,
+  liveReasoningText,
   normalizeTurnReasoning,
   reasoningFoldLabel,
   reasoningFromFinishedStatus,
-  splitReasoningSentences,
 } from "./reasoningDisplay";
 
-describe("splitting the live thinking into sentences", () => {
-  it("ends a sentence at a full stop followed by a space", () => {
-    expect(splitReasoningSentences("The boss has two phases. The second one starts at half.")).toEqual([
-      "The boss has two phases.",
-      "The second one starts at half.",
-    ]);
+describe("the live thinking drawn as ordinary text (the maintainer's call, 2026-09-24)", () => {
+  it("draws a short think whole, line breaks kept, only trimmed", () => {
+    expect(liveReasoningText("  The boss has two phases.\nThe second starts at half.  ")).toBe(
+      "The boss has two phases.\nThe second starts at half."
+    );
   });
 
-  it("ends a sentence at a question mark and an exclamation mark too", () => {
-    expect(splitReasoningSentences("Which weapon? The drill! Probably.")).toEqual([
-      "Which weapon?",
-      "The drill!",
-      "Probably.",
-    ]);
+  it("does not cap the number of sentences any more", () => {
+    const ten = "a. b. c. d. e. f. g. h. i. j.";
+    expect(liveReasoningText(ten)).toBe(ten);
   });
 
-  it("keeps a decimal number inside one sentence", () => {
-    expect(splitReasoningSentences("It takes 3.5 times longer.")).toEqual(["It takes 3.5 times longer."]);
+  it("drops the half-word fragment a full 600-character slice starts with", () => {
+    const slice = ("ing at the health bar. " + "Then I check the wiki. ".repeat(30)).slice(0, 600);
+    expect(slice).toHaveLength(600);
+    expect(liveReasoningText(slice).startsWith("Then I check the wiki.")).toBe(true);
   });
 
-  it("treats a line break as the end of a sentence", () => {
-    expect(splitReasoningSentences("first thought\nsecond thought")).toEqual([
-      "first thought",
-      "second thought",
-    ]);
+  it("cuts the fragment at a line break too", () => {
+    const slice = "ysis of the request**\n" + "x".repeat(600);
+    expect(liveReasoningText(slice)).toBe("x".repeat(600));
   });
 
-  it("drops blank pieces and trims what is left", () => {
-    expect(splitReasoningSentences("  \n\n  one.   \n\n  two.  \n")).toEqual(["one.", "two."]);
+  it("keeps a decimal number whole when looking for the first sentence end", () => {
+    const slice = ("takes 3.5 times longer. " + "Next thought here. ".repeat(40)).slice(0, 600);
+    expect(liveReasoningText(slice).startsWith("Next thought here.")).toBe(true);
+  });
+
+  it("draws a full slice with no sentence end at all rather than nothing", () => {
+    const slice = "x".repeat(600);
+    expect(liveReasoningText(slice)).toBe(slice);
   });
 
   it("gives nothing back for nothing", () => {
-    expect(splitReasoningSentences("")).toEqual([]);
-    expect(splitReasoningSentences(null)).toEqual([]);
-    expect(splitReasoningSentences(undefined)).toEqual([]);
-  });
-
-  it("keeps the cut-off opening fragment, which is what the newest slice always starts with", () => {
-    expect(splitReasoningSentences("ing at the health bar. Then I check the wiki.")).toEqual([
-      "ing at the health bar.",
-      "Then I check the wiki.",
-    ]);
-  });
-});
-
-describe("how many lines ever show", () => {
-  it("shows one when there is one", () => {
-    expect(newestReasoningLines("only this.")).toEqual(["only this."]);
-  });
-
-  it("shows two when there are two", () => {
-    expect(newestReasoningLines("one. two.")).toEqual(["one.", "two."]);
-  });
-
-  it("shows three when there are three", () => {
-    expect(newestReasoningLines("one. two. three.")).toEqual(["one.", "two.", "three."]);
-  });
-
-  it("never gives back a fourth, and keeps the newest three", () => {
-    const ten = "a. b. c. d. e. f. g. h. i. j.";
-    expect(newestReasoningLines(ten)).toEqual(["h.", "i.", "j."]);
-    expect(newestReasoningLines(ten)).toHaveLength(3);
+    expect(liveReasoningText("")).toBe("");
+    expect(liveReasoningText(null)).toBe("");
+    expect(liveReasoningText(undefined)).toBe("");
   });
 });
 

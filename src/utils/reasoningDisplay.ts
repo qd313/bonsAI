@@ -3,7 +3,7 @@
  *
  * Purpose: When a model that can think is asked a question, it writes out its thinking before it
  * writes the answer. This file turns that raw thinking into the small pieces the chat draws: the
- * newest few sentences while the answer is still being made, the "41 s" on the fold row above a
+ * newest thinking while the answer is still being made, the "41 s" on the fold row above a
  * finished answer, and a tidy record of a turn's thinking to keep with the saved chat.
  *
  * Used for: the Main tab chat transcript (the live lines and the fold row), the hook that polls a
@@ -16,62 +16,36 @@
  * Does not: draw anything, decide when the fold row shows, or talk to the computer side.
  *
  * Gotchas:
- *   - The live text is the newest 600 characters, not the whole thinking, so its first sentence is
- *     usually cut off mid-word. That is deliberate and it is still worth showing: it is the line
- *     that scrolls away next.
+ *   - The live text is the newest 600 characters, not the whole thinking, so once the model has
+ *     thought for a while it starts mid-word; liveReasoningText drops that opening fragment.
  *   - A gap of under a second still reads "1 s". A row that says "0 s" looks broken.
  */
 import type { TurnReasoning } from "../types/bonsaiUi";
 
-/** How many of the newest sentences the live block ever shows. The drawing says three. */
-const REASONING_LIVE_LINE_COUNT = 3;
+/**
+ * The most of the live thinking the computer side ever sends: the newest this many characters
+ * (REASONING_LIVE_CHARS in ollama_chat_stream.py). A slice this long was cut from a longer think.
+ */
+const REASONING_LIVE_SLICE_CHARS = 600;
 
 /**
- * Feature: the three live lines under a question.
- * In: the newest slice of the model's thinking. Out: that slice as trimmed sentences, in order.
+ * Feature: the model's thinking under the question while it works, drawn as ordinary text.
+ * In: the newest slice of the thinking. Out: the text to draw, trimmed.
  *
- * A sentence ends at a full stop, an exclamation mark or a question mark that is followed by a
- * space or by nothing at all, and a line break always ends one. The "followed by a space" part is
- * what keeps "the boss has 3.5 times the health" as one sentence instead of two.
- */
-export function splitReasoningSentences(partial: string | null | undefined): string[] {
-  if (!partial) return [];
-  const pieces: string[] = [];
-  let current = "";
-  for (let i = 0; i < partial.length; i += 1) {
-    const ch = partial[i];
-    if (ch === "\n" || ch === "\r") {
-      pieces.push(current);
-      current = "";
-      continue;
-    }
-    current += ch;
-    if (ch === "." || ch === "!" || ch === "?") {
-      const next = partial[i + 1];
-      if (next === undefined || next === " " || next === "\t" || next === "\n" || next === "\r") {
-        pieces.push(current);
-        current = "";
-      }
-    }
-  }
-  pieces.push(current);
-  return pieces.map((piece) => piece.trim()).filter((piece) => piece.length > 0);
-}
-
-/**
- * Feature: the live block never grows a fourth line.
- * In: the newest slice of thinking. Out: at most three sentences, oldest first, newest last.
+ * The maintainer's call, 2026-09-24: "let it display the thinking normally". It used to be the
+ * newest three sentences, each cut to one line with an ellipsis, which read as a list of broken
+ * lines. Now it is the slice as the model wrote it, line breaks kept, and the stylesheet keeps the
+ * newest lines in view.
  *
- * The cap lives here rather than in the drawing code so it cannot be missed by a second caller:
- * the block is sized for exactly three rows and a fourth would push the answer off screen.
+ * Once the thinking is longer than the slice, the slice starts part way through a word. That
+ * fragment -- everything up to the first sentence end or line break -- is dropped, so the block
+ * never opens on half a word. A slice with no sentence end at all is drawn whole.
  */
-export function newestReasoningLines(
-  partial: string | null | undefined,
-  limit: number = REASONING_LIVE_LINE_COUNT,
-): string[] {
-  const sentences = splitReasoningSentences(partial);
-  if (sentences.length <= limit) return sentences;
-  return sentences.slice(sentences.length - limit);
+export function liveReasoningText(partial: string | null | undefined): string {
+  const text = partial ?? "";
+  if (text.length < REASONING_LIVE_SLICE_CHARS) return text.trim();
+  const firstEnd = /[.!?](?=\s)|\n/.exec(text);
+  return (firstEnd ? text.slice(firstEnd.index + 1) : text).trim();
 }
 
 /**

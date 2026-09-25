@@ -422,13 +422,13 @@ ${buildAnswerBubbleSection()}
          * Ordinary wrapping text, line breaks kept (the maintainer's call, 2026-09-24: "let it
          * display the thinking normally"; it was three one-line sentences cut with an ellipsis).
          * Small, dim and italic -- the maintainer's calls the same night: "dimmer, italics,
-         * smaller font, then you can fit more lines", then "even smaller thinking font" -- so nine
-         * 9px lines, spaced tight at the maintainer's third call ("the line spacing to be tighter"),
-         * take 93px where six lines of 12px text took 101px (9 x 10.35px against 6 x 16.8px). The newest line sits at the bottom: flex-end pushes older lines up and out of
-         * the top as the model writes, instead of pushing the newest down behind the question box
-         * -- the visible chat above it is small on the built-in screen. The height is exactly nine
-         * lines plus the padding, so no half line ever shows at the top. The block goes the moment
-         * the answer starts.
+         * smaller font", then "even smaller thinking font", then tighter line spacing, then "go
+         * from like 8 lines to 6 lines and see how it is". Six 9px lines at 1.15 take 62px, where
+         * six lines of the old 12px text took 101px. The newest line sits at the bottom: flex-end
+         * pushes older lines up and out of the top as the model writes, instead of pushing the
+         * newest down behind the question box -- the visible chat above it is small on the
+         * built-in screen. The height is exactly six lines plus the padding, so no half line ever
+         * shows at the top. The block goes the moment the answer starts.
          *
          * The left rule stays a raw 2px. It is a hairline, and hairlines do not follow the user's
          * UI scale (design-tokens.md).
@@ -439,7 +439,7 @@ ${buildAnswerBubbleSection()}
           justify-content: flex-end !important;
           width: 100% !important;
           box-sizing: border-box !important;
-          max-height: calc(9 * 1.15em + ${uiScalePx(4)}) !important;
+          max-height: calc(6 * 1.15em + ${uiScalePx(4)}) !important;
           overflow: hidden !important;
           padding: ${uiScalePx(2)} ${uiScalePx(4)} ${uiScalePx(2)} ${uiScalePx(8)} !important;
           border-left: 2px solid rgba(159, 183, 213, 0.4) !important;

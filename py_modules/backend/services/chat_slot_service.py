@@ -88,6 +88,16 @@ MAX_KB_NOTE_TRUST_TIER_LEN = 40
 MAX_KB_NOTE_SOURCE_HOST_LEN = 120
 MAX_KB_NOTE_SOURCE_LICENSE_LEN = 60
 MAX_KB_NOTE_GAME_TITLE_LEN = 120
+# Plan 68 step 2: the chat's own summary of its older turns, written just before it would
+# otherwise outgrow its room, and the remembered subject of its last follow-up question -- now
+# kept per chat instead of for the whole plugin. Caps here mirror the rest of this file: generous
+# enough for what the feature actually writes, tight enough that a malformed file cannot balloon.
+MAX_SUMMARY_TEXT_LEN = 2_000
+MAX_SUMMARY_TURN_ID_LEN = 64
+MAX_SUMMARY_MODEL_LEN = 120
+MAX_SUMMARY_WRITTEN_AT_LEN = 40
+MAX_SUBJECT_GAME_KEY_LEN = 200
+MAX_SUBJECT_TEXT_LEN = 200
 SLOTS_SUBDIR = "chat_slots"
 
 
@@ -222,6 +232,65 @@ def _normalize_turn_reasoning(raw: Any) -> dict[str, Any] | None:
     }
 
 
+def _normalize_summary(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a chat's own summary of its older turns (plan 68 step 2).
+
+    ``text`` is the only field that has to be there for a summary to mean anything -- a summary
+    with no words is not a summary. The rest are clamped rather than required: a bad or missing
+    ``covers_through_turn_id`` just means "covers nothing on the next read" once the id is compared
+    against the chat's actual turns (that comparison is not this function's job), not a reason to
+    throw the whole summary away.
+    """
+    if not isinstance(raw, dict):
+        return None
+    text = str(raw.get("text") or "")
+    if not text.strip():
+        return None
+
+    def _clamped_int(value: Any) -> int:
+        try:
+            return max(0, int(value))
+        except (TypeError, ValueError):
+            return 0
+
+    def _clamped_seconds(value: Any) -> float:
+        try:
+            return max(0.0, float(value))
+        except (TypeError, ValueError):
+            return 0.0
+
+    return {
+        "text": text[:MAX_SUMMARY_TEXT_LEN],
+        "covers_through_turn_id": str(raw.get("covers_through_turn_id") or "").strip()[
+            :MAX_SUMMARY_TURN_ID_LEN
+        ],
+        "turns_covered": _clamped_int(raw.get("turns_covered")),
+        "oldest_turns_unread": _clamped_int(raw.get("oldest_turns_unread")),
+        "hidden_notes_left_out": _clamped_int(raw.get("hidden_notes_left_out")),
+        "written_at": str(raw.get("written_at") or "")[:MAX_SUMMARY_WRITTEN_AT_LEN],
+        "seconds": _clamped_seconds(raw.get("seconds")),
+        "model": str(raw.get("model") or "")[:MAX_SUMMARY_MODEL_LEN],
+    }
+
+
+def _normalize_subject(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a chat's own remembered follow-up subject (plan 68 step 2) -- the same
+    ``{game_key, subject}`` pair ``kb_followup_memory`` keeps today, now stored per chat. Both
+    parts are required: a game with no remembered subject, or a subject with no game to attach it
+    to, is not something a reader could ever use, so it is dropped here rather than kept half-full.
+    """
+    if not isinstance(raw, dict):
+        return None
+    game_key = str(raw.get("game_key") or "").strip()
+    subject = str(raw.get("subject") or "").strip()
+    if not game_key or not subject:
+        return None
+    return {
+        "game_key": game_key[:MAX_SUBJECT_GAME_KEY_LEN],
+        "subject": subject[:MAX_SUBJECT_TEXT_LEN],
+    }
+
+
 def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     if not isinstance(raw, dict):
         return None
@@ -273,6 +342,13 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     reasoning = _normalize_turn_reasoning(raw.get("reasoning"))
     if reasoning is not None:
         turn["reasoning"] = reasoning
+    # Plan 68 step 2: whether this answer summed the chat up first, so the screen can draw the
+    # note or the warning line straight off the saved turn. Only ever set on an assistant turn,
+    # and only to one of these two exact words -- absent otherwise, the same "absent, not empty"
+    # rule ``reasoning`` follows above, never "" and never a stored ``None``.
+    chat_summary = raw.get("chat_summary")
+    if role == "assistant" and chat_summary in ("written", "failed"):
+        turn["chat_summary"] = chat_summary
     return turn
 
 
@@ -297,6 +373,13 @@ def sanitize_slot(raw: Any) -> dict[str, Any] | None:
         "updated_at": int(raw.get("updated_at") or time.time()),
         "origin_app_id": str(raw.get("origin_app_id", "") or "").strip()[:32],
         "origin_app_name": str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
+        # Plan 68 step 2: the chat's own summary of its older turns, and its remembered follow-up
+        # subject. Always present as a key, ``None`` when there is none yet -- the same "always a
+        # key, sometimes null" shape ``_normalize_turn_transparency`` gives a turn, not the
+        # "absent, not null" shape ``reasoning`` gets, because every slot file already has a fixed
+        # set of top-level keys and an old file without these two simply loads with both null.
+        "summary": _normalize_summary(raw.get("summary")),
+        "subject": _normalize_subject(raw.get("subject")),
         "turns": turns,
     }
 
@@ -538,6 +621,7 @@ def append_turn(
     asked_entity: str = "",
     display_text: str = "",
     reasoning: dict[str, Any] | None = None,
+    chat_summary: str = "",
     label: str | None = None,
     logger: Any = None,
 ) -> dict[str, Any] | None:
@@ -557,6 +641,7 @@ def append_turn(
             "asked_entity": asked_entity,
             "display_text": display_text,
             "reasoning": reasoning,
+            "chat_summary": chat_summary,
             "created_at": int(time.time()),
         }
     )
@@ -600,8 +685,47 @@ def slot_to_rpc_payload(slot: dict[str, Any]) -> dict[str, Any]:
         "updated_at": slot.get("updated_at"),
         "origin_app_id": slot.get("origin_app_id", ""),
         "origin_app_name": slot.get("origin_app_name", ""),
+        # Plan 68 step 2: the chat's own summary of its older turns, so the Session tab's card can
+        # draw straight from the loaded chat. ``subject`` deliberately stays off this payload --
+        # it is the same in-process-only bookkeeping ``kb_followup_memory`` already keeps, never
+        # shown to a reader, now just stored per chat instead of for the whole plugin.
+        "summary": slot.get("summary"),
         "turns": slot.get("turns") or [],
     }
+
+
+def save_slot_summary(
+    settings_dir: str, slot_id: str, summary: dict[str, Any] | None, logger: Any = None
+) -> dict[str, Any] | None:
+    """Set a chat's own summary of its older turns and save it. ``None`` returned unchanged means
+    the chat does not exist -- this never creates one, the same rule ``update_slot_label`` follows.
+
+    Deliberately does not touch ``updated_at`` or the index row (contrast ``update_slot_label``,
+    which does): writing a summary is bookkeeping the plugin does on the chat's behalf, not
+    something the person did to it, and must not reorder the chat switcher or refresh a chat's
+    place in it the way an actual rename does. In the ordinary case a real turn is appended around
+    the same time anyway (that already updates the index), so this only matters for the "Sum up
+    this chat" button pressed on an otherwise-idle chat, and there it is on purpose: the button is
+    maintenance, not a new thing said in the chat.
+    """
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    slot["summary"] = summary
+    return save_slot(settings_dir, slot, logger)
+
+
+def save_slot_subject(
+    settings_dir: str, slot_id: str, subject: dict[str, Any] | None, logger: Any = None
+) -> dict[str, Any] | None:
+    """Set a chat's own remembered follow-up subject and save it. Same rules as
+    ``save_slot_summary`` above: never creates a chat, never touches ``updated_at`` or the index.
+    """
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    slot["subject"] = subject
+    return save_slot(settings_dir, slot, logger)
 
 
 def wipe_all_slots(settings_dir: str, logger: Any = None) -> None:

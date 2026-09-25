@@ -12,6 +12,8 @@ from backend.services.chat_slot_service import (
     list_slot_summaries,
     load_slot,
     save_slot,
+    save_slot_subject,
+    save_slot_summary,
     update_slot_label,
     wipe_all_slots,
 )
@@ -505,6 +507,163 @@ class ChatSlotServiceTests(unittest.TestCase):
         reloaded = load_slot(self.settings_dir, sid)
         assert reloaded is not None
         self.assertEqual([t["asked_entity"] for t in reloaded["turns"]], ["", ""])
+
+    # --- Plan 68 step 2: the chat's own summary and remembered subject ---
+
+    def test_old_file_with_neither_summary_nor_subject_loads_as_none(self):
+        """A slot file written before this existed has no ``summary`` or ``subject`` key at all --
+        it must load as "none yet" on both, not fail."""
+        slot = create_slot(self.settings_dir, label="pre-summary chat")
+        legacy = {k: v for k, v in slot.items() if k not in ("summary", "subject")}
+        save_slot(self.settings_dir, legacy)
+        reloaded = load_slot(self.settings_dir, slot["id"])
+        assert reloaded is not None
+        self.assertIsNone(reloaded["summary"])
+        self.assertIsNone(reloaded["subject"])
+
+    def test_a_turn_appended_after_a_summary_was_saved_still_has_the_summary(self):
+        """The field-list trap (plan 68 § 9): every load and save rebuilds a chat from a fixed
+        list of known fields, so a field not carried all the way through ``append_turn`` vanishes
+        the next time a question is saved into the chat. This is exactly that sequence.
+        """
+        slot = create_slot(self.settings_dir, label="summarised chat")
+        sid = slot["id"]
+        summary = {
+            "text": "The player is fighting Wheatley and has tried the rocket turret twice.",
+            "covers_through_turn_id": "t-9",
+            "turns_covered": 12,
+            "oldest_turns_unread": 0,
+            "hidden_notes_left_out": 0,
+            "written_at": "2026-09-25T00:00:00Z",
+            "seconds": 4.5,
+            "model": "qwen2.5:7b",
+        }
+        saved = save_slot_summary(self.settings_dir, sid, summary)
+        assert saved is not None
+        self.assertEqual(saved["summary"], summary)
+
+        after_turn = append_turn(self.settings_dir, sid, role="user", text="what about now")
+        assert after_turn is not None
+        self.assertEqual(after_turn["summary"], summary)
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["summary"], summary)
+
+    def test_a_subject_survives_an_appended_turn_too(self):
+        """Same field-list trap, the other new field."""
+        slot = create_slot(self.settings_dir, label="subject chat")
+        sid = slot["id"]
+        subject = {"game_key": "appid:548430", "subject": "Wheatley"}
+        saved = save_slot_subject(self.settings_dir, sid, subject)
+        assert saved is not None
+        self.assertEqual(saved["subject"], subject)
+
+        after_turn = append_turn(self.settings_dir, sid, role="assistant", text="an answer")
+        assert after_turn is not None
+        self.assertEqual(after_turn["subject"], subject)
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["subject"], subject)
+
+    def test_delete_removes_the_file_and_so_both_fields(self):
+        slot = create_slot(self.settings_dir, label="doomed chat")
+        sid = slot["id"]
+        save_slot_summary(self.settings_dir, sid, {"text": "a summary", "covers_through_turn_id": "t1"})
+        save_slot_subject(self.settings_dir, sid, {"game_key": "appid:1", "subject": "a boss"})
+        self.assertTrue(delete_slot(self.settings_dir, sid))
+        self.assertIsNone(load_slot(self.settings_dir, sid))
+
+    def test_save_slot_summary_never_creates_a_chat(self):
+        self.assertIsNone(
+            save_slot_summary(self.settings_dir, "does-not-exist", {"text": "x", "covers_through_turn_id": "t1"})
+        )
+        self.assertIsNone(load_slot(self.settings_dir, "does-not-exist"))
+
+    def test_save_slot_subject_never_creates_a_chat(self):
+        self.assertIsNone(
+            save_slot_subject(self.settings_dir, "does-not-exist", {"game_key": "appid:1", "subject": "x"})
+        )
+
+    def test_a_malformed_summary_is_sanitised_not_crashed_on(self):
+        slot = create_slot(self.settings_dir, label="malformed summary")
+        sid = slot["id"]
+        saved = save_slot_summary(
+            self.settings_dir,
+            sid,
+            {
+                "text": 12345,  # not a string
+                "covers_through_turn_id": "t1",
+                "turns_covered": -7,
+                "oldest_turns_unread": -1,
+                "hidden_notes_left_out": "not a number",
+                "seconds": "not a number either",
+                "written_at": None,
+                "model": None,
+            },
+        )
+        assert saved is not None
+        summary = saved["summary"]
+        assert summary is not None
+        self.assertEqual(summary["text"], "12345")
+        self.assertEqual(summary["turns_covered"], 0)
+        self.assertEqual(summary["oldest_turns_unread"], 0)
+        self.assertEqual(summary["hidden_notes_left_out"], 0)
+        self.assertEqual(summary["seconds"], 0.0)
+        self.assertEqual(summary["written_at"], "")
+        self.assertEqual(summary["model"], "")
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["summary"], summary)
+
+    def test_a_summary_with_no_text_is_dropped_entirely(self):
+        slot = create_slot(self.settings_dir, label="blank summary")
+        sid = slot["id"]
+        saved = save_slot_summary(self.settings_dir, sid, {"text": "   ", "covers_through_turn_id": "t1"})
+        assert saved is not None
+        self.assertIsNone(saved["summary"])
+
+    def test_a_subject_missing_either_half_is_dropped_entirely(self):
+        slot = create_slot(self.settings_dir, label="half subject")
+        sid = slot["id"]
+        saved = save_slot_subject(self.settings_dir, sid, {"game_key": "", "subject": "Wheatley"})
+        assert saved is not None
+        self.assertIsNone(saved["subject"])
+        saved2 = save_slot_subject(self.settings_dir, sid, {"game_key": "appid:1", "subject": "   "})
+        assert saved2 is not None
+        self.assertIsNone(saved2["subject"])
+
+    def test_chat_summary_round_trips_on_an_assistant_turn(self):
+        slot = create_slot(self.settings_dir, label="chat-summary mark")
+        sid = slot["id"]
+        saved = append_turn(
+            self.settings_dir, sid, role="assistant", text="an answer", chat_summary="written"
+        )
+        assert saved is not None
+        self.assertEqual(saved["turns"][-1]["chat_summary"], "written")
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["turns"][-1]["chat_summary"], "written")
+
+    def test_chat_summary_is_dropped_on_a_user_turn(self):
+        slot = create_slot(self.settings_dir, label="user chat-summary")
+        sid = slot["id"]
+        saved = append_turn(self.settings_dir, sid, role="user", text="a question", chat_summary="written")
+        assert saved is not None
+        self.assertNotIn("chat_summary", saved["turns"][-1])
+
+    def test_chat_summary_is_dropped_for_any_other_value(self):
+        slot = create_slot(self.settings_dir, label="bogus chat-summary")
+        sid = slot["id"]
+        for bogus in ("", "maybe", "Written", None):
+            saved = append_turn(
+                self.settings_dir, sid, role="assistant", text=f"answer {bogus}", chat_summary=bogus or ""
+            )
+            assert saved is not None
+            self.assertNotIn("chat_summary", saved["turns"][-1])
 
 
 if __name__ == "__main__":

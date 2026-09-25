@@ -168,11 +168,6 @@ starts work outside this.
 - ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **OPEN, found by
   plan 65 2026-09-24.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was not touched
   that night. Widen its slack, or make it wait on an event instead of a clock.
-- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
-  **OPEN, found on the Deck 2026-09-25, a return of the no-game bug closed 2026-09-23.** Under a Deep Rock
-  Galactic Survivor answer the choices read "A. <a place early in Deep Rock Galactic Survivor>" and
-  "B. <a place later in Deep Rock Galactic Survivor>": the model kept the example's wording and brackets and
-  only swapped in the title, which the fix of the 23rd does not catch. Screenshot `screenshots/DeckCapture_20260925_002145_game.png`.
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
@@ -537,6 +532,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
+- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
+  **VERIFY, fixed 2026-09-25.** Seen on the Deck that night under a Deep Rock Galactic Survivor answer: the
+  choices read "A. <a place early in Deep Rock Galactic Survivor>", a return of the no-game bug closed
+  2026-09-23 with the title swapped in. A menu still carrying the brackets or that wording is now dropped,
+  whatever the title. Row **BRANCH-TEMPLATE-02**. Screenshot `screenshots/DeckCapture_20260925_002145_game.png`.
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the

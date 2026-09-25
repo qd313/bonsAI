@@ -160,6 +160,12 @@ _WORKED_EXAMPLE_OPTION_LABELS_PLACEHOLDER = {
     "a place later in this game",
 }
 _WORKED_EXAMPLE_MARKERS_PLACEHOLDER = ("this game",)
+# The same placeholders with a real title swapped in: "<a place early in Deep Rock Galactic
+# Survivor>" (Deck, 2026-09-25) -- the model filled in the title and kept the rest, which the
+# exact-words check above cannot see. A bracketed phrase starting with a letter never belongs in a
+# real menu, and neither does the example's own wording in front of any title.
+_PLACEHOLDER_BRACKETS = re.compile(r"<[a-z][^<>]*>")
+_PLACEHOLDER_LABEL_OPENINGS = ("a place early in ", "a place later in ")
 
 
 def drop_branch_menu_copying_the_worked_example(
@@ -190,6 +196,10 @@ def drop_branch_menu_copying_the_worked_example(
         if low in _WORKED_EXAMPLE_OPTION_LABELS_PLACEHOLDER:
             return True
         if any(marker in low for marker in _WORKED_EXAMPLE_MARKERS_PLACEHOLDER):
+            return True
+        if _PLACEHOLDER_BRACKETS.search(low):
+            return True
+        if low.strip("<> ").startswith(_PLACEHOLDER_LABEL_OPENINGS):
             return True
         if is_half_life_2:
             return False

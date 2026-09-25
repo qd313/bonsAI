@@ -112,6 +112,46 @@ class DropBranchMenuCopyingTheWorkedExampleTests(unittest.TestCase):
         )
         self.assertIsNone(drop_branch_menu_copying_the_worked_example(menu, ""))
 
+    def test_a_menu_that_filled_the_title_into_the_placeholder_is_dropped(self):
+        """Roadmap: "The branch menu still copies its own template, now with the game's name
+
+        filled in" (Deck, 2026-09-25, screenshots/DeckCapture_20260925_002145_game.png): the
+        choices read "<a place early in Deep Rock Galactic Survivor>" -- the title swapped in,
+        the brackets and the example's wording kept.
+        """
+        menu = self._menu(
+            "Where are you at in Deep Rock Galactic Survivor?",
+            "<a place early in Deep Rock Galactic Survivor>",
+            "<a place later in Deep Rock Galactic Survivor>",
+        )
+        self.assertIsNone(
+            drop_branch_menu_copying_the_worked_example(menu, "Deep Rock Galactic: Survivor")
+        )
+
+    def test_the_placeholder_wording_is_dropped_even_without_its_brackets(self):
+        menu = self._menu(
+            "Where are you at in Hades?",
+            "A place early in Hades",
+            "A place later in Hades",
+        )
+        self.assertIsNone(drop_branch_menu_copying_the_worked_example(menu, "Hades"))
+
+    def test_a_heading_still_wrapping_the_title_in_brackets_is_dropped(self):
+        menu = self._menu(
+            "Where are you at in <Hades>?",
+            "Tartarus",
+            "Asphodel",
+        )
+        self.assertIsNone(drop_branch_menu_copying_the_worked_example(menu, "Hades"))
+
+    def test_real_choices_that_happen_to_start_alike_are_kept(self):
+        menu = self._menu(
+            "Where are you at in Fallout 3?",
+            "A place called Megaton",
+            "Health below 50% (<50%)",
+        )
+        self.assertEqual(drop_branch_menu_copying_the_worked_example(menu, "Fallout 3"), menu)
+
 
 if __name__ == "__main__":
     unittest.main()

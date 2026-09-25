@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 490,
-  "edgeCount": 1306,
+  "fileCount": 491,
+  "edgeCount": 1307,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3189,10 +3189,17 @@
         "src/hooks/useThinkingNoticeGate.test.tsx"
       ]
     },
+    "src/hooks/useTitleOverflow.test.ts": {
+      "imports": [
+        "src/hooks/useTitleOverflow.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useTitleOverflow.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx"
+        "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useTitleOverflow.test.ts"
       ]
     },
     "src/hooks/useUiScaleProfile.ts": {

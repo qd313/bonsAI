@@ -321,6 +321,12 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope .bonsai-stream-scramble {
           white-space: pre-wrap;
         }
+        /* The Copy corner waits for the last letters to settle (plan 69, up to 0.6 s after the
+           end): the slot exists only while any are unsettled. Hidden rather than removed, so the
+           D-pad's stops and the page's layout stay exactly as they are when it appears. */
+        .bonsai-scope .bonsai-chat-ai-bubble:has(.bonsai-stream-scramble) + .bonsai-reply-copy-corner-slot {
+          visibility: hidden !important;
+        }
         .bonsai-scope .bonsai-stream-scramble-churn--dim {
           opacity: 0.5;
         }

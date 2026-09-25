@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 503,
-  "edgeCount": 1337,
+  "fileCount": 504,
+  "edgeCount": 1338,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3498,11 +3498,18 @@
       ],
       "importedBy": []
     },
+    "src/styles/sections/answerBubble.test.ts": {
+      "imports": [
+        "src/styles/sections/answerBubble.ts"
+      ],
+      "importedBy": []
+    },
     "src/styles/sections/answerBubble.ts": {
       "imports": [
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
+        "src/styles/sections/answerBubble.test.ts",
         "src/styles/sections/section-6.ts"
       ]
     },

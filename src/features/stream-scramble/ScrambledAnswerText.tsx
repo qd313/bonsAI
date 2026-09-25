@@ -20,8 +20,8 @@
  *
  * Does not: Decide when an answer streams or ends -- it is told. Scramble code boxes, hidden
  * spoilers, the waiting chips or the thinking lines: those never reach it as the live tail. Hold
- * the Copy button back while the last letters settle -- the bubble shows it when the answer ends,
- * as before.
+ * the Copy button back itself -- the stylesheet hides it while this component's slot exists
+ * (answerBubble.ts), so it appears when the last letter settles.
  *
  * How it works:
  * 1. While streaming, every letter's arrival is timed when a render first shows it. The settle

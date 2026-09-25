@@ -116,6 +116,7 @@
     "src/index.test.tsx",
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/presetChipFocusRing.test.ts",
+    "src/styles/sections/answerBubble.test.ts",
     "src/styles/sections/gamepadAndPullModels.test.ts",
     "src/styles/sections/section-4.test.ts",
     "src/styles/sections/section-5.test.ts",

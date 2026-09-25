@@ -6,7 +6,7 @@ stays after "go" is the public push of the release (§ 5, wave 4).
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md) § 3; the roadmap's
 [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag); the status report
-[37](37-rag-status-report.md); wave one [46](../archive/46-kb-wave-one-session.md), whose § 11 is the record this
+[37](../planning/37-rag-status-report.md); wave one [46](46-kb-wave-one-session.md), whose § 11 is the record this
 wave starts from.
 
 ---

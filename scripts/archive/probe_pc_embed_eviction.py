@@ -3,7 +3,7 @@
 
 Purpose: Find out, on the maintainer's PC, whether asking the chat model something pushes the
          embedding model out of Ollama's memory, so that the next search has to reload it.
-Used for: docs/planning/48-kb-wave-three-session.md, lane w3-speedcheck, part two — a candidate
+Used for: docs/archive/48-kb-wave-three-session.md, lane w3-speedcheck, part two — a candidate
           explanation for runs/plan48-R6-time-budget.json, where a Deck search that should take
           tens of milliseconds took over a second right after the chat model had just answered.
 Solves: Nothing on its own — this is a measurement, not a fix. It reads what Ollama says it has

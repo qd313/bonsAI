@@ -3,7 +3,7 @@
 Written 2026-08-30 against branch `experimental`. Source: the handoff bundle
 `Named Chat Slots Design(3).zip` (`README.md` v3, `Named chat slots.dc.html` turn 8,
 `github.md` sync log). **Supersedes
-[27-named-chat-slots-v2-implementation-plan.md](../archive/27-named-chat-slots-v2-implementation-plan.md)**
+[27-named-chat-slots-v2-implementation-plan.md](27-named-chat-slots-v2-implementation-plan.md)**
 — every open question in 27 is now closed; two of its locked decisions were reversed in the
 turn-8 review (reserved pill gutters → literal removal; flat wash colour → lifted 40% toward
 white). Where 27 and this file disagree, this file wins.
@@ -47,7 +47,7 @@ Rules for the implementing model. These are not suggestions.
    - Steam's own chrome: **never target a hashed Steam class name** (design-language.md
      Rule 5). The modal work (W14) styles the body we own, nothing else.
 5. **Stop condition:** if on-device QA row `CHAT-SLOTS-V2-05` (bumper suppression, the P-0
-   spike in [major-redesign.md](../archive/major-redesign.md) §4.1) fails, stop after the current
+   spike in [major-redesign.md](major-redesign.md) §4.1) fails, stop after the current
    commit and report. The carousel gets re-planned as a sixth *Chats* tab (option 2b/g) and
    W5–W10, W16 move with it. W0–W2, W11–W15, W17 survive either way. Run `-05` right after
    W0 lands on a Deck — W0 is what makes the row exist on device at all, so the spike has

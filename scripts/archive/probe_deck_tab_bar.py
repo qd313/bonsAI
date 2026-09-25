@@ -4,7 +4,7 @@
 Purpose: Measure, on device, everything plan 30 (the collapsing tab bar) sizes itself against:
          Steam's header row, the six title leaves, the shoulder hints, the TabContentsScroll top,
          the two height variables, and the transcript's reading area.
-Used for: docs/planning/30-collapsing-tab-bar.md § 8 — the baseline before W1 and the re-reads
+Used for: docs/archive/30-collapsing-tab-bar.md § 8 — the baseline before W1 and the re-reads
           after W3 and W5. Run it before and after every deploy that touches the strip.
 Solves: A screenshot cannot say which element owns the 85px above the body, and the height hooks
         write CSS variables nobody can see. This prints the numbers, and names the header row's

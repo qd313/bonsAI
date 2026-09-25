@@ -688,7 +688,7 @@ when it comes back.
 ### D98 — LOCKED 2026-09-12 — Follow-up questions: tell the model the subject, and call it a partial fix
 
 **Raised** by the device check on 2026-09-07 that closed out wave three's follow-up work
-([planning/48-kb-wave-three-session.md](../planning/48-kb-wave-three-session.md) § 8, row W3-R4).
+([../archive/48-kb-wave-three-session.md](../archive/48-kb-wave-three-session.md) § 8, row W3-R4).
 Evidence `runs/plan48-R4-followup-memory.json`. This entry needs the maintainer's answer before the
 second half can be built; nothing is being built in the meantime.
 
@@ -1024,7 +1024,7 @@ the rows that have sat unticked since August plus the two new ones in plan 54. A
 
 ### D104 — LOCKED 2026-09-15 — The third bug-fixing session: what is in, what waits, and the Deck pass that follows
 
-Eleven calls from [plan 55](../planning/55-bugfix-session-three.md), ten answered, one still open.
+Eleven calls from [plan 55](../archive/55-bugfix-session-three.md), ten answered, one still open.
 The session does not start until the maintainer says go. It runs in a fresh session on **Fable 5.1 at
 extra-high effort, by the maintainer's choice**, with Sonnet 5 lanes at high. The routing table asks
 for Opus here, since nothing in the session is above three stars; the maintainer knows that and chose
@@ -1074,7 +1074,7 @@ finished, and the pass needs the Deck to itself.
 
 ### D105 — LOCKED 2026-09-15 — The fourth feature session: two features drawn instead of built, the Spy's reveal, the lighter Clear, and the wipe
 
-Eight calls from [plan 56](../planning/56-feature-session-four.md), all answered the same evening.
+Eight calls from [plan 56](../archive/56-feature-session-four.md), all answered the same evening.
 The session does not start until the maintainer says go. It runs on **Fable 5.1 at extra-high
 effort, by the maintainer's choice**, with Sonnet 5 lanes at high, five at most at once, the same
 shape as plan 55. With the five-star entry dropped (below), nothing left in the session is above three
@@ -1146,7 +1146,7 @@ Spy trick.
 
 ### D106 — LOCKED 2026-09-16 — After the fourth feature session: the plain reasoning fold first, the session as a tab, the card's six rows, a Read aloud button, and one call left open
 
-The maintainer's answers to the session's closing report ([plan 56](../planning/56-feature-session-four.md)
+The maintainer's answers to the session's closing report ([plan 56](../archive/56-feature-session-four.md)
 § 10, entry 4), given in chat on 2026-09-16 with the mockup page open
 (https://claude.ai/artifact/2De58qirE34754PEZVPmdb). Six items; five are calls, one is a question the
 maintainer chose to leave open on purpose.
@@ -1268,7 +1268,7 @@ advice-first read and the honesty line close.
 
 ### D108 — LOCKED 2026-09-16 (raised 2026-09-16) — Building the reasoning display: five small calls before the build session
 
-Raised from [plan 57](../planning/57-reasoning-display-build.md) § 7, the build plan for the plain
+Raised from [plan 57](../archive/57-reasoning-display-build.md) § 7, the build plan for the plain
 first version of the reasoning display (the shape is already locked: D70, D71, D106). The plan had
 six open items with defaults. The maintainer closed the first the same day: the Deck has its Ollama
 and its models back after the plan 56 wipe, so the Deck rows can run on the Deck's own model. One
@@ -1361,7 +1361,7 @@ entry is unchanged (still ready to build, calls locked).
 
 ### D109 — LOCKED 2026-09-16 (raised 2026-09-16) — The open tab strip redesign (Claude Design board 2a): approve the drawing, and three small calls
 
-Raised from [plan 59](../planning/59-tab-strip-redesign-build.md), the build plan for the design
+Raised from [plan 59](../archive/59-tab-strip-redesign-build.md), the build plan for the design
 Claude Design handed back on 16 September, answering the brief of 14 September
 ([design/handoffs/tab-bar-open-strip/](../design/handoffs/tab-bar-open-strip/)). The returned files
 are in that folder under `return-2026-09-16/`. Board 2a is the one the design says to build: six
@@ -1443,7 +1443,7 @@ other character.**
 
 ### D110 — LOCKED 2026-09-16 (raised 2026-09-16) — The suggestion chips as real buttons (Claude Design board B): six calls before the build
 
-Raised from [plan 60](../planning/60-chip-button-restyle.md), the build plan for the design Claude
+Raised from [plan 60](../archive/60-chip-button-restyle.md), the build plan for the design Claude
 Design handed back on 16 September, answering the brief of 14 September
 ([design/handoffs/preset-chips/](../design/handoffs/preset-chips/)). The returned files are in that
 folder under `return-2026-09-16/`. Board B, "a real button", is the locked direction, with the
@@ -1496,7 +1496,7 @@ under the maintainer's "build now"; either can be reversed from the device eveni
 
 ### D111 — LOCKED 2026-09-17 (raised 2026-09-17) — 58 phase 1: the note's own words on screen, and wiki notes taken without rewriting — nine calls before the build
 
-Raised from [the phase 1 plan](../planning/58-phase-1-notes-shown-and-wiki-extracts.md), written the
+Raised from [the phase 1 plan](../archive/58-phase-1-notes-shown-and-wiki-extracts.md), written the
 same day after a read of the knowledge base against the production RAG lessons. The maintainer
 answered all nine the same day; nothing is built.
 
@@ -1532,7 +1532,7 @@ answered all nine the same day; nothing is built.
 
 ### D113 — LOCKED 2026-09-19 (raised 2026-09-18) — Plan 61 automated verification session: the thirteen questions
 
-Raised from [the plan 61 session](../planning/61-automated-verification-session.md) § 8, written before the
+Raised from [the plan 61 session](../archive/61-automated-verification-session.md) § 8, written before the
 device work began. The maintainer answered all thirteen on 2026-09-19. D112 is left to the 58 phase 2 plan
 and is not written here.
 
@@ -1590,7 +1590,7 @@ What each answer does to the roadmap:
 
 Raised from [the drawing board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq), which drew all four
 features at the Deck's own sizes before anything was chosen, and from
-[the plan](../planning/62-feature-session-five.md) § 8. The maintainer picked four shapes on 2026-09-20 and
+[the plan](../archive/62-feature-session-five.md) § 8. The maintainer picked four shapes on 2026-09-20 and
 answered the three remaining calls the same day. Nothing was built first.
 
 1. **The game a chat belongs to.** Chosen: **the name shows only while the ring is on the row.** The empty
@@ -1661,7 +1661,7 @@ runs before a commit being red on a clean tree, found while writing the plan.
 
 ### D115 — LOCKED 2026-09-21 (raised 2026-09-21) — Plan 63 bug-fixing session: the ten calls before block 0
 
-Raised from [the plan 63 session](../planning/63-bugfix-session-four.md) § 2, written before the session
+Raised from [the plan 63 session](../archive/63-bugfix-session-four.md) § 2, written before the session
 began. The maintainer answered all ten on 2026-09-21.
 
 1. **The failing pre-commit check.** Trim the three documents back under their limits. Not a new baseline,
@@ -1693,7 +1693,7 @@ What these answers do to the roadmap:
 
 ### D116 — LOCKED 2026-09-23 (raised 2026-09-23) — Plan 64 big verification session: the ten calls before flow 0
 
-Raised from [the plan 64 session plan](../planning/64-big-verification-session.md) § 10, written before the
+Raised from [the plan 64 session plan](../archive/64-big-verification-session.md) § 10, written before the
 session began. The maintainer answered all ten on 2026-09-23, the first four while the plan was being
 written and the other six just after.
 
@@ -1728,7 +1728,7 @@ What these answers do to the roadmap:
 
 ### D117 — LOCKED 2026-09-24 (raised 2026-09-23) — Plan 65 trim and split: the seven calls before go, and the calls made during the night
 
-Raised from [plan 65](../planning/65-trim-docs-split-long-files.md) § 9, written before the session began
+Raised from [plan 65](../archive/65-trim-docs-split-long-files.md) § 9, written before the session began
 (while plan 64 was still running on the Deck). The maintainer answered all seven the same day,
 2026-09-23, before "go".
 

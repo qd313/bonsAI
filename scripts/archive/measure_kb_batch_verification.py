@@ -4,7 +4,7 @@
 Purpose: Check, against today's library and today's code, what each candidate sentence in the
          wave-three device-evening batch actually does -- so the row can be written true before
          the maintainer is asked to approve pinning it, or the sentence can be dropped.
-Used for: docs/planning/48-kb-wave-three-session.md, the lane W3-deckcheck brief. Produces
+Used for: docs/archive/48-kb-wave-three-session.md, the lane W3-deckcheck brief. Produces
           runs/plan48-deck-batch-verification.json. Not itself a test; nothing here is asserted,
           only measured and reported.
 Solves: Every sentence on the candidate list was drafted before this wave's floor (D87) and its

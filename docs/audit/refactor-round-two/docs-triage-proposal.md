@@ -76,35 +76,35 @@ Nothing to decide here — listed so the full picture is in one place.
 
 **Plans and studies for work that is not finished:**
 
-- `planning/04-strategy-spoiler-false-positive.md` — the investigation behind a still-open bug where spoiler warnings sometimes show up wrongly.
-- `planning/05-token-streaming-review.md` — review of how answers stream onto the screen; part of it was built, part is still on the shelf and tracked as unfinished.
-- `planning/06-thinking-blurbs-review.md` — review of the short "thinking" notes shown while the AI works; most landed, a few small ideas are still open.
+- `../../archive/04-strategy-spoiler-false-positive.md` — the investigation behind a still-open bug where spoiler warnings sometimes show up wrongly.
+- `../../archive/05-token-streaming-review.md` — review of how answers stream onto the screen; part of it was built, part is still on the shelf and tracked as unfinished.
+- `../../archive/06-thinking-blurbs-review.md` — review of the short "thinking" notes shown while the AI works; most landed, a few small ideas are still open.
 - `planning/10-wake-word-listening-feasibility.md` — the feasibility study for saying a wake word to start listening. Feature not built yet; this is still the reference.
 - `planning/11-native-qam-tile-feasibility.md` — feasibility study for giving bonsAI its own entry in Steam's quick menu. Not built yet.
 - `planning/12-deep-mod-ai-hints-feasibility.md` — feasibility study for AI hints that are aware of installed game mods. Not built yet.
-- `planning/16-soft-num-predict-thinking-budget.md` — the rulebook for how long the AI is allowed to keep "thinking" before answering. Still in force.
+- `../../archive/16-soft-num-predict-thinking-budget.md` — the rulebook for how long the AI is allowed to keep "thinking" before answering. Still in force.
 - `planning/17-kb-online-versus-strategy-content.md` — plan for adding online multiplayer content to the knowledge base. Not started yet.
 - `planning/19-controller-macro-test-rig.md` — the design for a robot controller rig that presses real buttons for automated testing. Still describes the rig in use today.
 - `planning/21-ai-owned-testing-program.md` — the plan for having an AI run its own tests end to end, without a person at the Deck. Still the guiding plan.
-- `planning/28-named-chat-slots-v3-implementation-plan.md` — the final build plan for named chat slots. Built, but still being checked on the Deck.
+- `../../archive/28-named-chat-slots-v3-implementation-plan.md` — the final build plan for named chat slots. Built, but still being checked on the Deck.
 - `planning/28-phase5-corpus-depth.md` — plan for adding more depth to the games already in the knowledge base. Still open work.
-- `planning/29-preset-row-three-thirds-plan.md` — plan for the row of suggestion chips above the question box. Built, with a couple of checks still owed.
-- `planning/30-collapsing-tab-bar.md` — plan for the tab bar that hides itself when not needed. Built, with a few on-screen checks still owed.
+- `../../archive/29-preset-row-three-thirds-plan.md` — plan for the row of suggestion chips above the question box. Built, with a couple of checks still owed.
+- `../../archive/30-collapsing-tab-bar.md` — plan for the tab bar that hides itself when not needed. Built, with a few on-screen checks still owed.
 - `planning/30-kb-answer-quality-plan.md` — the plan for making the knowledge base's answers better. Still guiding that work.
-- `planning/31-deck-verification-round.md` — the run-order for a round of on-Deck testing. A later round still points back to its results.
+- `../../archive/31-deck-verification-round.md` — the run-order for a round of on-Deck testing. A later round still points back to its results.
 - `planning/33-model-routing.md` — today's rule for which AI model, and how much effort, to use for a given job. This is the current policy.
-- `planning/34-feature-verification-round.md` — a later round of on-Deck checks, still tracking what is closed and what is owed.
-- `planning/35-bugfix-session.md` — plan for a bug-fixing session; still linked from the live bug list as the source of one fix that is under discussion.
+- `../../archive/34-feature-verification-round.md` — a later round of on-Deck checks, still tracking what is closed and what is owed.
+- `../../archive/35-bugfix-session.md` — plan for a bug-fixing session; still linked from the live bug list as the source of one fix that is under discussion.
 - `planning/37-rag-status-report.md` — a plain-language summary of where the whole knowledge-base project stands, rewritten after each wave of work.
 - `planning/38-toast-answer-lines.md` — plan for showing the first line of an answer in the notification popup. Not built yet.
 - `planning/39-connection-doctor.md` — plan for a one-button connection health check. Not built yet.
-- `planning/40-reasoning-display.md` — plan for showing the AI's reasoning and giving it a second use. Not built yet.
+- `../../archive/40-reasoning-display.md` — plan for showing the AI's reasoning and giving it a second use. Not built yet.
 - `planning/41-deck-model-survey.md` — results of comparing different AI models on the Deck. Still the comparison used to choose models today.
 - `planning/42-read-aloud-feasibility.md` — the study that led to the read-aloud feature shipping. Still cited as the reason a related, bigger voice feature is on the list.
 - `planning/43-model-speed-readout.md` — plan for a one-time "how fast is this model here" reading. Not built yet.
-- `planning/45-settings-shortcut-card.md` — plan for moving the Steam settings shortcuts higher on the screen. Not built yet.
-- `planning/47-kb-wave-two-session.md` — plan for the second wave of knowledge-base work. Shipped, but one on-Deck evening check is still owed.
-- `planning/48-kb-wave-three-session.md` — plan for the third wave of knowledge-base work. Still has open threads.
+- `../../archive/45-settings-shortcut-card.md` — plan for moving the Steam settings shortcuts higher on the screen. Not built yet.
+- `../../archive/47-kb-wave-two-session.md` — plan for the second wave of knowledge-base work. Shipped, but one on-Deck evening check is still owed.
+- `../../archive/48-kb-wave-three-session.md` — plan for the third wave of knowledge-base work. Still has open threads.
 - `planning/49-steam-frame-features.md` — nine possible features for the upcoming Steam Frame headset. Several are still open items on the list.
 - `planning/50-steamvr-pc-setup.md` — steps for testing headset features on a regular PC before the headset exists. Still the setup guide in use.
 - `planning/52-frame-features-second-look.md` — a closer look at three of the headset features. Still open items.

@@ -4,7 +4,7 @@ Written 2026-09-17, before any code was started, at the maintainer's request. It
 the knowledge base against a list of lessons from someone running this kind of system in production
 for a year and a half. Two of those lessons land squarely on this plugin, and the maintainer asked for
 both fixed **before** the wave-four session runs. That session is now
-[58 phase 2](58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
+[58 phase 2](../planning/58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
 
 **Status, corrected 2026-09-24: FINISHED.** The library this phase built, 2026.09.18, was published
 2026-09-23 to both download sites and read back afterwards (the roadmap's knowledge-base section,
@@ -25,7 +25,7 @@ Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../A
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts
 and § 4 on briefing helpers; the roadmap's
 [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag) section; and
-[the status report](37-rag-status-report.md). Phase 2's § 1 holds the device state and still applies.
+[the status report](../planning/37-rag-status-report.md). Phase 2's § 1 holds the device state and still applies.
 
 ---
 

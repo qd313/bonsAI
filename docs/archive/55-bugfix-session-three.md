@@ -7,7 +7,7 @@ what order, what runs side by side, how each fix is proven on the Deck, and what
 code commits from `9188e725` to `f34de8a1` (§ 10), and the Deck pass was written up in `8b643746`. What it
 left owed was finished by later sessions. The three wipe checks passed 2026-09-16, during plan 56's wipe
 (CLEAR-ALL-PREFIX-01, PULL-NEW-BADGE-01 and VOICE-CLEAR-01 in
-[archive/testing-closed-2026.md](../archive/testing-closed-2026.md)). The knowledge base it held back was
+[archive/testing-closed-2026.md](testing-closed-2026.md)). The knowledge base it held back was
 published 2026-09-23 (the roadmap's knowledge-base section). One thing was deferred on purpose: the
 settings list written out seven times (§ 2b, and question 2 in § 8). That is now its own roadmap entry.
 Everything below is the plan as it stood before it ran.

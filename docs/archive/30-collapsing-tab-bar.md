@@ -57,7 +57,7 @@ Every claim below carries a `file:line` checked 2026-09-01. Where the code canno
   presses. The bar's own classes are build-hashed and change with Steam updates
   ([audit/decky-tab-strip-classes.md](../audit/decky-tab-strip-classes.md)).
 - The carousel window is about 188px wide against 362px of content
-  ([03-lbrb-tab-flicker.md § 10.2](../archive/03-lbrb-tab-flicker.md)), so roughly three of the six icons show at
+  ([03-lbrb-tab-flicker.md § 10.2](03-lbrb-tab-flicker.md)), so roughly three of the six icons show at
   once and the active tab can scroll out of sight entirely (noted on **TAB-MARKER-01**,
   [testing.md:275](../testing.md)).
 
@@ -129,10 +129,10 @@ the tabs root is `overflow: clip` on both axes, which is the LB/RB flicker fix a
 
 ### 2.5 Prior decisions this plan touches
 
-- **R5** ([major-redesign.md:340](../archive/major-redesign.md), re-confirmed at [:357-358](../archive/major-redesign.md)):
+- **R5** ([major-redesign.md:340](major-redesign.md), re-confirmed at [:357-358](major-redesign.md)):
   filled active glyph only, no micro labels, no width change, no height cost. Its consequences are at
-  [:360-368](../archive/major-redesign.md). Reopened here as **D44**.
-- **Track D** of the flicker recon ([03-lbrb-tab-flicker.md § 5](../archive/03-lbrb-tab-flicker.md)) rejected
+  [:360-368](major-redesign.md). Reopened here as **D44**.
+- **Track D** of the flicker recon ([03-lbrb-tab-flicker.md § 5](03-lbrb-tab-flicker.md)) rejected
   replacing Steam's `Tabs` with a custom strip as high risk. **This plan is not Track D.** Steam's `Tabs`
   stays mounted and keeps owning LB/RB and the tab bodies. Only its bar is hidden.
 
@@ -236,7 +236,7 @@ Drawn at the real 300px width. Heights are CSS px before `--bonsai-ui-scale`.
   [constants.ts:61, 89, 94](../../src/features/unified-input/constants.ts)), in a 36px box, so the
   glyphs look the same as they do now.
 - **Active cell:** `rgba(255,255,255,.10)` fill plus a 2px accent ring, the fill R5's own board 2b
-  specified ([major-redesign.md:66-80](../archive/major-redesign.md)). Inactive glyphs `rgba(168,182,198,.62)`,
+  specified ([major-redesign.md:66-80](major-redesign.md)). Inactive glyphs `rgba(168,182,198,.62)`,
   inactive labels `rgba(168,182,198,.5)`, from the same table.
 
 ### 4.3 Behaviour, state by state

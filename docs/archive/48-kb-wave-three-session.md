@@ -8,7 +8,7 @@ about the reply shape changes.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md) § 3; the roadmap's
 [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag); the status report
-[37](37-rag-status-report.md) (fourth pass); wave two [47](47-kb-wave-two-session.md), whose § 11 is
+[37](../planning/37-rag-status-report.md) (fourth pass); wave two [47](47-kb-wave-two-session.md), whose § 11 is
 the record this wave starts from and whose § 8 is the Deck evening that runs before this plan does.
 
 ---
@@ -269,7 +269,7 @@ both paths, in one lane, in two commits.
 domain) **and the note path** (`_search_sections` and the strategy branch of the fusion step), its
 tests, and the transparency payload so "routed, nothing fit" is a distinct signal on both paths.
 **Forbidden:** the held-back rows of `tests/fixtures/kb_eval_v2.json` (`split: holdout`, and every
-`V2-W2-SYM-*` row), `docs/planning/47-kb-wave-two-session.md`, the compat router rules,
+`V2-W2-SYM-*` row), `docs/archive/47-kb-wave-two-session.md`, the compat router rules,
 `data/kb/compat_patterns.json`, and `kb_not_in_notes_notice.py` (lane F's file — this lane changes
 what feeds it, never the line itself).
 

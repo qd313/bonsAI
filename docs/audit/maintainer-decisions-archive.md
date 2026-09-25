@@ -690,7 +690,7 @@ Router sentences 1/4 → **4/4**; compat tune top-3 81% → **100%**. Works with
 
 **Raised and locked 2026-08-15**, while implementing Thinking effort control Phase 1.
 Supersedes the wire mapping locked in
-[16-soft-num-predict-thinking-budget.md](../planning/16-soft-num-predict-thinking-budget.md).
+[16-soft-num-predict-thinking-budget.md](../archive/16-soft-num-predict-thinking-budget.md).
 
 **The question, plainly.** When you pick Brief / Balanced / Deep, what should bonsAI ask the
 model for? Some models understand "think a little" vs "think a lot" as named levels. Most
@@ -2629,7 +2629,7 @@ from the rotation.
 ### D43 — LOCKED 2026-09-01 — Two chips across the preset row, or three? (option 1, two across)
 
 The one-chip preset row (`fc1b245`) is being redone to the drawing: chips side by side in one row,
-long labels scrolling sideways ([planning/29-preset-row-three-thirds-plan.md](../planning/29-preset-row-three-thirds-plan.md)).
+long labels scrolling sideways ([../archive/29-preset-row-three-thirds-plan.md](../archive/29-preset-row-three-thirds-plan.md)).
 The drawing says **three** ([major-redesign.md:149](../archive/major-redesign.md), "three chips, not four").
 The maintainer asked, 2026-09-01, whether **two** would be better given how narrow the QAM column is.
 
@@ -2663,7 +2663,7 @@ Whichever is chosen, the first deploy measures the button padding and the real c
 the live page and writes them into the plan's § 3b.
 
 **Locked 2026-09-01 by the maintainer: option 1, two across.** Build per
-[planning/29-preset-row-three-thirds-plan.md](../planning/29-preset-row-three-thirds-plan.md); the
+[../archive/29-preset-row-three-thirds-plan.md](../archive/29-preset-row-three-thirds-plan.md); the
 first deploy writes the measured padding and character counts back into that plan's § 3b.
 
 ### D44 — LOCKED 2026-09-02 — Reopen R5: the tab strip collapses to a thin bar and gets names (option 1, the discovery answer)
@@ -2672,7 +2672,7 @@ first deploy writes the measured padding and character counts back into that pla
 2026-08-29/30) locked the tab strip as *filled active glyph only, no micro labels, no width change, no
 height cost*. Two things have moved since. The maintainer set the vertical-space goal on 2026-08-30 and
 filed *the tab names never appear* as a bug the same day. And the collapsing bar was workshopped on
-2026-09-01: [planning/30-collapsing-tab-bar.md](../planning/30-collapsing-tab-bar.md), twelve decisions,
+2026-09-01: [../archive/30-collapsing-tab-bar.md](../archive/30-collapsing-tab-bar.md), twelve decisions,
 all taken.
 
 What R5 protected, and what the plan does to each:
@@ -2703,7 +2703,7 @@ handheld, is a device check in the plan (**TAB-BAR-07**), not a paper decision.
 rule, RB ×5 and LB ×5 from inside the body switched every tab and `currentTab` followed each press, both
 with no game running and with Half-Life 2 running (the rig launched and exited the game itself);
 evidence `runs/TAB-BAR-W1a-no-game.json` and `runs/TAB-BAR-W1a-with-game-2.json`, numbers in
-[planning/30-collapsing-tab-bar.md § 8](../planning/30-collapsing-tab-bar.md). The body gained the full
+[../archive/30-collapsing-tab-bar.md § 8](../archive/30-collapsing-tab-bar.md). The body gained the full
 80px (616 → 696px). What the spike also found — Steam's hidden tab button stays a focus stop — is a
 separate call, **D55** below.
 
@@ -2826,7 +2826,7 @@ session and will be copied here with the answer.
 
 ### D55 — LOCKED 2026-09-03 (option 1, via D57 #8) — Steam's hidden tab buttons stay focus stops: route around them, or stop plan 30?
 
-Plan 30's spike (§ 8 of [planning/30-collapsing-tab-bar.md](../planning/30-collapsing-tab-bar.md))
+Plan 30's spike (§ 8 of [../archive/30-collapsing-tab-bar.md](../archive/30-collapsing-tab-bar.md))
 hid Steam's tab header and then walked the D-pad. LB/RB kept working (that was the gate, and it
 passed). But the **active tab's hidden button is still a focus stop**: from a fresh open, Down lands
 on Decky's Back button, then on the invisible tab button, then on the body; Up from the top of a tab
@@ -2875,7 +2875,7 @@ for every user and was not what anyone asked for. Reopen here if the wrap turns 
 
 ### D57 — LOCKED 2026-09-03 (raised 2026-09-02) — The Deck verification round: nine calls before "go"
 
-[Plan 31](../planning/31-deck-verification-round.md) sorts every roadmap **Verify** row by what it needs
+[Plan 31](../archive/31-deck-verification-round.md) sorts every roadmap **Verify** row by what it needs
 from the device and puts them in a run order. Nothing in the code blocks the round. Checked over SSH on
 2026-09-02 at 23:42, without pressing a button: the Deck already runs this checkout (`main.py` and
 `dist/index.js` are byte-identical to the local build of 19:15, which post-dates the last code commit
@@ -3093,7 +3093,7 @@ Both halves are on the roadmap as two-star chat entries — the cut question und
 ### D61 — LOCKED 2026-09-05 (raised 2026-09-05) — The feature verification round: what is in scope, and what waits
 
 Raised at the start of the round planned in
-[planning/34-feature-verification-round.md](../planning/34-feature-verification-round.md). The Verify list
+[../archive/34-feature-verification-round.md](../archive/34-feature-verification-round.md). The Verify list
 had 23 entries owing a device check and the round needed its edges drawn before anything was pressed.
 
 **Answers, 2026-09-05, all eight locked** (the maintainer answered in chat):
@@ -3124,7 +3124,7 @@ entry. They close in the morning in one short block.
 ### D62 — LOCKED 2026-09-05 (raised 2026-09-05) — The second bug-fixing session: four calls before "go"
 
 Raised at the start of the session planned in
-[planning/35-bugfix-session.md](../planning/35-bugfix-session.md). Seventeen entries sat in the bug list;
+[../archive/35-bugfix-session.md](../archive/35-bugfix-session.md). Seventeen entries sat in the bug list;
 five of them were already settled one way or another, and the rest needed their edges drawn before any
 code was written.
 
@@ -3470,7 +3470,7 @@ button on the Ollama tab is a small later addition, noted in the plan's out-of-s
 Numbered 70 on purpose: the feature-building chat's branch already holds D65 to D69, so this skips past
 them to avoid two entries with one number when the branches meet.
 
-Raised while planning [planning/40-reasoning-display.md](../planning/40-reasoning-display.md), the third of
+Raised while planning [../archive/40-reasoning-display.md](../archive/40-reasoning-display.md), the third of
 the six features the maintainer picked on 2026-09-05. Today the plugin asks a thinking model to think, pays
 the reserved budget for it, and throws the thinking away: the streaming reader never looks at that field.
 The line under your question shows a stock phrase for the whole wait, which was 212 seconds on the Deck's
@@ -3533,7 +3533,7 @@ shows for anyone who turns thinking on.
 
 ### D71 — LOCKED 2026-09-05 (raised 2026-09-05) — The folded line's wording, and how far the spoiler verdict reaches
 
-Raised from the maintainer's answers to D70, plan [40](../planning/40-reasoning-display.md).
+Raised from the maintainer's answers to D70, plan [40](../archive/40-reasoning-display.md).
 
 1. **What the folded line says** once the answer starts. Seconds only, no token count, and not "Thought
    for". Candidates, with the opened block's label after the slash:
@@ -3690,7 +3690,7 @@ already on screen or scrolls the panel, which is the behaviour that was already 
 ### D79 — LOCKED 2026-09-06 (raised the same day) — The Steam settings shortcuts move above the question box
 
 Raised while planning the ★★★ `[ask]` `[focus]` entry *Steam settings shortcuts float above the question box*, and
-built against measured sizes rather than a drawing. Plan [45](../planning/45-settings-shortcut-card.md), mockups and
+built against measured sizes rather than a drawing. Plan [45](../archive/45-settings-shortcut-card.md), mockups and
 the live rule tester at
 [The settings list, moved up](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 
@@ -3880,7 +3880,7 @@ that nothing intends to meet.
 
 ### D85 — LOCKED 2026-09-07 — Knowledge-base wave two: four calls answered before a line of code
 
-Raised and answered the same day while planning [47](../planning/47-kb-wave-two-session.md). Two of the four
+Raised and answered the same day while planning [47](../archive/47-kb-wave-two-session.md). Two of the four
 were the maintainer's own questions; the other two came out of checks run while writing the plan, and both
 changed what a lane will do.
 
@@ -3961,7 +3961,7 @@ blind, before anyone touches the tips.
 
 ### D86 — LOCKED 2026-09-07 — Knowledge-base wave three: fourteen calls from one discovery round
 
-Raised and answered the same evening while planning [48](../planning/48-kb-wave-three-session.md),
+Raised and answered the same evening while planning [48](../archive/48-kb-wave-three-session.md),
 after wave two landed. Twelve were questions put to the maintainer about scope, what a person sees,
 edge cases and trade-offs; two were calls the roadmap had been holding open.
 

@@ -2,7 +2,7 @@
  * Title: Collapsing tab bar — rest state and the hiding rule
  * Purpose: Pin what the thin bar shows for a given tab list and active tab, and that Steam's header
  *          is hidden by a rule scoped to our own markup with no build-hashed class in it.
- * Used for: plan 30 W3 (docs/planning/30-collapsing-tab-bar.md § 5).
+ * Used for: plan 30 W3 (docs/archive/30-collapsing-tab-bar.md § 5).
  * Solves: The two ways this can rot silently — a dash count that stops following the mounted tabs,
  *         and a hiding selector that quietly grows a Steam hash and stops matching after a client
  *         update (docs/audit/decky-tab-strip-classes.md is the prior art for that failure).
@@ -69,7 +69,7 @@ function hasHashedToken(selector: string): boolean {
 }
 
 describe("plan 59 — the open strip's new tokens, pinned before W4 wires them into the stylesheet", () => {
-  it("matches the values board 2a drew (docs/planning/59-tab-strip-redesign-build.md § 3)", () => {
+  it("matches the values board 2a drew (docs/archive/59-tab-strip-redesign-build.md § 3)", () => {
     expect(TAB_BAR_CELL_HEIGHT_PX).toBe(44);
     expect(TAB_BAR_CELL_ICON_PX).toBe(22);
     expect(TAB_BAR_CELL_BUG_ICON_PX).toBe(26);

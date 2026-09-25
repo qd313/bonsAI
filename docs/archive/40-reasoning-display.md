@@ -10,8 +10,8 @@ Nothing in § 6 starts until § 3 has run on the PC.
 Read first: [CLAUDE.md](../../CLAUDE.md); the model and effort table in [AGENTS.md](../../AGENTS.md) § 3;
 [06-thinking-blurbs-review.md](06-thinking-blurbs-review.md) for how today's thinking line came to be;
 [16-soft-num-predict-thinking-budget.md](16-soft-num-predict-thinking-budget.md) for the thinking
-budget; [30-kb-answer-quality-plan.md](30-kb-answer-quality-plan.md) § 4 for the spoiler-fence misfire
-numbers; [41-deck-model-survey.md](41-deck-model-survey.md) for which models on the Deck can think.
+budget; [30-kb-answer-quality-plan.md](../planning/30-kb-answer-quality-plan.md) § 4 for the spoiler-fence misfire
+numbers; [41-deck-model-survey.md](../planning/41-deck-model-survey.md) for which models on the Deck can think.
 
 **One sentence:** while a thinking model works, the space under your question shows what it is actually
 thinking, three lines at a time; when the answer lands that folds to one line you can open; and the
@@ -187,7 +187,7 @@ Frozen chips, to confirm before pinning: *how do i kill the big armoured bug bos
 Summarising the reasoning with a second model call; masking words inside the reasoning; showing
 reasoning on the toast; changing the thinking levels or budgets; building the tiered spoiler setting
 itself, which has its own entry and needs its prompt wording measured first; choosing new models, which
-is [plan 41](41-deck-model-survey.md).
+is [plan 41](../planning/41-deck-model-survey.md).
 
 ## 10. Progress log
 

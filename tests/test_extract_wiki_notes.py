@@ -6,7 +6,7 @@ section finding, table/infobox-to-labelled-line conversion, whole-sentence lengt
 the licence allow-list gate, and the verbatim guarantee itself.
 Used for: scripts/extract_wiki_notes.py.
 Solves: Every wiki note shipped before this phase was an AI rewrite, not the wiki's own
-words -- see docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
+words -- see docs/archive/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
 test suite for the reader that replaces that rewrite step.
 Does not: Hit the network -- every fixture here is a short, hand-written page. The five real
 samples for the maintainer are generated separately and written to

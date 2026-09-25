@@ -2,9 +2,9 @@
 
 Written 2026-09-16 by the planning session, before any code. This is the build plan for the design
 Claude Design handed back on 16 September, answering the brief the maintainer took to it on
-14 September ([docs/design/handoffs/tab-bar-open-strip/](../design/handoffs/tab-bar-open-strip/)).
+14 September ([docs/design/handoffs/tab-bar-open-strip/](../design/handoffs/tab-bar-open-strip)).
 The returned files are stored beside that brief, in
-[return-2026-09-16/](../design/handoffs/tab-bar-open-strip/return-2026-09-16/). Nothing here is
+[return-2026-09-16/](../design/handoffs/tab-bar-open-strip/return-2026-09-16). Nothing here is
 built. The maintainer asked for the plan in one session and the build in another.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), the table under "Which model

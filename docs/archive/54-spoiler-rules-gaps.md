@@ -1,6 +1,6 @@
 # 54 — Spoiler rules: closing the gaps between the rulebook and the code
 
-Written 2026-09-14 from a read of the code against [spoiler-constitution.md](spoiler-constitution.md).
+Written 2026-09-14 from a read of the code against [spoiler-constitution.md](../planning/spoiler-constitution.md).
 The rulebook is mostly in the code and working. Four gaps remain, all at the edges. This document says
 what a person notices for each one, what causes it, how to close it, and in what order. No code is
 written yet. The calls at the end wait for the maintainer and get a number in the decisions file when

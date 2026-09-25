@@ -18,7 +18,7 @@ import { scrollElementTopToPaneTop } from "../utils/chatPanelScroll";
 /*
  * The "From the notes" block (plan 58 phase 1), under a reply that used a note from the
  * knowledge base or a shared troubleshooting tip. The maintainer has not yet picked open or
- * closed by default (the mockup page at docs/planning/assets/58-phase-1-block-mockups.html is
+ * closed by default (the mockup page at docs/archive/assets/58-phase-1-block-mockups.html is
  * what they are picking from) — this lane's own recommendation and the session's are both
  * closed, so that is what ships behind this one constant. Flipping it to `true` is meant to be
  * the entire change once an answer comes back.

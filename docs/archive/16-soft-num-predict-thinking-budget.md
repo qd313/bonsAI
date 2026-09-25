@@ -125,4 +125,4 @@ When someone picks up the bug (not this docs change):
 
 - [05-token-streaming-review.md](05-token-streaming-review.md) — streaming made truncation visible; STREAM-04 Stop behavior
 - [06-thinking-blurbs-review.md](06-thinking-blurbs-review.md) — blurb writers; Phase 2 one-liners stay on this path
-- [13-roadmap-feature-ideas.md](../archive/13-roadmap-feature-ideas.md) — Reply verbosity remains prompt-only per this lock
+- [13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) — Reply verbosity remains prompt-only per this lock

@@ -14,7 +14,7 @@ model does which work"; [lessons-learned.md](../lessons-learned.md) § 3 (checki
 § 5 (design work, especially "check that two effects survive each other"); the brief that went out,
 [docs/design/handoffs/preset-chips/README.md](../design/handoffs/preset-chips/README.md); and the
 boards that came back, in
-[docs/design/handoffs/preset-chips/return-2026-09-16/](../design/handoffs/preset-chips/return-2026-09-16/)
+[docs/design/handoffs/preset-chips/return-2026-09-16/](../design/handoffs/preset-chips/return-2026-09-16)
 (open `Board B - Real Button.dc.html` in a browser; its README is the designer's own spec).
 
 **One sentence:** each suggestion chip gets a top-lit, bottom-dark surface with a hairline on its top

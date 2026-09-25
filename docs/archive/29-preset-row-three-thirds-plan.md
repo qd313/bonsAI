@@ -14,7 +14,7 @@ sideways carousel, help chip owns the row until dismissed, every chip scrolls sl
 
 On 2026-08-31 the three stacked suggestion chips under the chat were squeezed into one row. That saved
 the height it was meant to save, but the row shows **one chip at a time**. The drawing in
-[major-redesign.md § 2.3](../archive/major-redesign.md) shows **three chips next to each other** in that one
+[major-redesign.md § 2.3](major-redesign.md) shows **three chips next to each other** in that one
 row, each a third of the width, with long labels **scrolling sideways** inside their third instead of
 being cut off.
 
@@ -202,7 +202,7 @@ So:
 
 | | Three across | Two across |
 |---|---|---|
-| Matches the drawing | Yes ([major-redesign.md:149](../archive/major-redesign.md), "three chips, not four") | No. Two was never drawn. Needs a recorded decision. |
+| Matches the drawing | Yes ([major-redesign.md:149](major-redesign.md), "three chips, not four") | No. Two was never drawn. Needs a recorded decision. |
 | Suggestions on screen | 3 | 2 |
 | Distinct suggestions seen per minute (fade, rough) | ~13 to 15 | ~9 to 10 |
 | Seeds arrive in threes | All three show | One always waits. The one-chip queue is generalised to two slots instead of deleted. |
@@ -277,7 +277,7 @@ So the "8 px" row of the table is the real one, by construction.
 
 ## 5. What the drawing says, and what is built
 
-| | Drawing ([major-redesign.md § 2.3](../archive/major-redesign.md)) | Built (`fc1b245`, 2026-08-31) |
+| | Drawing ([major-redesign.md § 2.3](major-redesign.md)) | Built (`fc1b245`, 2026-08-31) |
 |---|---|---|
 | Chips on screen | 3, side by side | 1 |
 | Width each | a third (`flex: 1 1 0`) | full width |
@@ -404,8 +404,8 @@ pinned test chips first, and the list is confirmed before pinning.
 
 - Bug: [roadmap.md:26-38](../roadmap.md). Backlog record of what `fc1b245` did:
   [roadmap.md:437-449](../roadmap.md).
-- Drawing: [major-redesign.md:133-153](../archive/major-redesign.md) (§ 2.3), [line 244](../archive/major-redesign.md)
-  (§ 4.4, "four chips to three"), [line 287](../archive/major-redesign.md) (§ 5, marquee is new work).
+- Drawing: [major-redesign.md:133-153](major-redesign.md) (§ 2.3), [line 244](major-redesign.md)
+  (§ 4.4, "four chips to three"), [line 287](major-redesign.md) (§ 5, marquee is new work).
 - Component: [MainTabPresetAnimatedChips.tsx](../../src/components/MainTabPresetAnimatedChips.tsx)
   (786 lines). Pre-change multi-slot version: `git show fc1b245^:src/components/MainTabPresetAnimatedChips.tsx`.
 - Row host: [MainTabPresetRow.tsx:63-125](../../src/components/MainTabPresetRow.tsx).

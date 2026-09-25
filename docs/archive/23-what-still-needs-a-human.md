@@ -4,8 +4,8 @@ Reference for the question *"if the rig works, what is left for me to do?"*
 Written 2026-08-25 after the controller bridge opened the QAM unattended.
 
 Consolidates and makes concrete what
-[21-ai-owned-testing-program.md](21-ai-owned-testing-program.md) § 6–7 and
-[01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § 4–5 already establish.
+[21-ai-owned-testing-program.md](../planning/21-ai-owned-testing-program.md) § 6–7 and
+[01-qa-automation-plan.md](01-qa-automation-plan.md) § 4–5 already establish.
 Nothing here is new policy; it is the same policy in one place, with the reason
 attached to each line, because the reasons differ and they age differently.
 

@@ -308,7 +308,7 @@ replace it with a specific issue when one exists.
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
-  that finding into this entry. [Detail](planning/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+  that finding into this entry. [Detail](archive/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
 - ★ `[platform]` **Four small build-setup tidy-ups, deferred on purpose in 2026-08** — **OPEN, carried over
   2026-09-24 from plan 24 when it was archived.** Nothing a person would notice: name the package manager's
   version in `package.json` (the workflow repeats it by hand today), move `packages/bonsai-mcp` off npm so the
@@ -591,7 +591,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   card was moved to Done on 2026-09-16 with all seven rows named, but two were never run on the Deck (found
   2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
-  box was measured). Rows 01 to 05 passed. [Plan](planning/45-settings-shortcut-card.md).
+  box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
   Until now a chat kept 200 questions and answers on disk and almost none of it reached the AI, so a follow-up meant saying
   everything again. Measured on the Deck: *"and what about the boots?"* got **"please tell me which game you are referring
@@ -607,7 +607,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   right subject (Sandtraps) and gave two lines on it — the same deflect-then-recover shape seen with nothing
   running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
 
-- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](archive/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
@@ -686,7 +686,7 @@ shows the branch menu when due **98.6**, and comes out clean on all three runs *
 the check could mark a right answer wrong for using different words than it expected, and it could miss a reply
 that flatly said the opposite of its own note. The search test had also been reading a copy of the library from
 31 August for weeks. Every answer and search number quoted before wave three carries one of those faults. The full
-before and after is in [wave three's report](planning/48-kb-wave-three-session.md).
+before and after is in [wave three's report](archive/48-kb-wave-three-session.md).
 
 **Getting to the troubleshooting tips is where the wave fell short.** The tips themselves are much better — crash went
 from 2 to 9, sound 1 to 8, picture 1 to 8, performance 2 to 10, controller 6 to 10, and the top crash tip no longer
@@ -696,7 +696,7 @@ wording someone imagined and miss the neighbour.
 
 **Pick up here, in order.**
 
-**Wave three ran on 2026-09-07** ([48](planning/48-kb-wave-three-session.md)), after wave two's own Deck
+**Wave three ran on 2026-09-07** ([48](archive/48-kb-wave-three-session.md)), after wave two's own Deck
 evening ran the same evening, once the Deck was free.
 
 1. ~~**Finish the device evening.**~~ **Done 2026-09-15.** The two checks that had never run — the honesty
@@ -723,7 +723,7 @@ evening ran the same evening, once the Deck was free.
    the drift from August to September, and whether keeping two models loaded causes trouble with a game
    running (a repeat of this same reading is planned with a game running). Evidence
    `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
-6. **Then 58 phase 1** — two fixes before wave four. [The plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md)
+6. **Then 58 phase 1** — two fixes before wave four. [The plan](archive/58-phase-1-notes-shown-and-wiki-extracts.md)
    shows the note's own words under a reply instead of the model's rewrite of it, and reads a wiki's own
    sentences into notes with no AI rewrite, tried first against Hollow Knight and then on ten more games from
    sources already cleared. Nothing started; waiting on the maintainer's nine answers (locking as D111) and
@@ -737,7 +737,7 @@ evening ran the same evening, once the Deck was free.
    is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
 
 **Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
-in [wave two's report](planning/47-kb-wave-two-session.md) § 8 and [wave three's](planning/48-kb-wave-three-session.md).
+in [wave two's report](archive/47-kb-wave-two-session.md) § 8 and [wave three's](archive/48-kb-wave-three-session.md).
 The five optional August rows were not run, and New Vegas still is not installed.
 
 **A library point release went out 2026-09-07** carrying the corrected Black Mesa water note and nothing else — 293
@@ -747,7 +747,7 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
 
 ### Calls waiting on you
 
-- **58 phase 1, nine questions** ([§ 8](planning/58-phase-1-notes-shown-and-wiki-extracts.md)): answered
+- **58 phase 1, nine questions** ([§ 8](archive/58-phase-1-notes-shown-and-wiki-extracts.md)): answered
   2026-09-17 and locked as D111. Two things are still open: the block's look waits on lane A's drawings,
   and trim-only for wiki notes stands unless the maintainer overturns it.
 - **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
@@ -877,7 +877,7 @@ ones from this month are D81 to D88.
 - ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add one** — **OPEN, agreed by the maintainer 2026-09-21 for a follow-up session.** Today the plugin tells the model to hide spoilers and then trusts it. Nothing reads the reply back to see whether it did. That is why the same name-withheld boss question comes back covered some times and bare others: the follow-up menu's rule is repeated and stressed all through the instructions and that one holds, while the spoiler rule is said once. A device log from 2026-09-18 rules out the obvious explanation — the instructions fitted the model's window with room to spare, and the model's own thinking mentions wrapping the answer, yet the answer came back bare. Build the same kind of safety net the follow-up menu already has: when a reply names a protected thing in plain text and the turn's rules required a cover, hold it back or wrap it after the fact. Found while fixing the menu bug; full reasoning and the five causes ruled out are in that lane's landing commit. Blocks the ★★★ bug "a name-withheld boss question comes back with no spoiler box".
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
-  run includes — planned as wave three ([48](planning/48-kb-wave-three-session.md)).
+  run includes — planned as wave three ([48](archive/48-kb-wave-three-session.md)).
 - ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
   agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
   the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
@@ -891,7 +891,7 @@ ones from this month are D81 to D88.
   silent. Promoted out of Phase 7. One to two days.
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
   one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
-  regression fails a check instead of relying on luck. Planned as wave three ([48](planning/48-kb-wave-three-session.md)).
+  regression fails a check instead of relying on luck. Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
 - ★★ `[KB]` **A measured context-window experiment** — **OPEN, research, added 2026-09-05, re-measured 2026-09-06.** The
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
@@ -901,7 +901,7 @@ ones from this month are D81 to D88.
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
   screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
   that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
-  none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](planning/48-kb-wave-three-session.md)).
+  none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a

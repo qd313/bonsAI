@@ -463,7 +463,7 @@ Two notes worth keeping:
 - **Two tests failed on the item-2 pick and were rewritten, not accommodated.**
   `test_format_thinking_phase_woven_tdp_read` and `..._model_retry` pinned one hardcoded `request_id`
   and asserted a specific template came back — implementation shape, the failure mode
-  [audit/00-phase0.md](../archive/00-phase0.md) flags. They now sample a range of ids and assert what the
+  [audit/00-phase0.md](00-phase0.md) flags. They now sample a range of ids and assert what the
   pool actually promises: prose lines weave the question snippet, emoji-only lines are allowed.
 
 ### 10.2 Maintainer decisions, 2026-08-08

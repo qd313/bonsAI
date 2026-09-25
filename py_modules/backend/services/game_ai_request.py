@@ -816,7 +816,7 @@ async def run_game_ai_request(
         # nothing there matched either. "Not in my notes" would be true but misleading -- the
         # search never looked in the notes this turn -- so it is suppressed whenever "no tip for
         # this" applies. See TheTwoLinesNeverBothAppearTests in test_kb_not_in_notes_notice.py
-        # for the case proven, and D87 (docs/planning/48-kb-wave-three-session.md § 6) for why
+        # for the case proven, and D87 (docs/archive/48-kb-wave-three-session.md § 6) for why
         # the tip sheet needed this line at all.
         if ollama_result.get("success"):
             show_no_tip_for_this = should_show_no_tip_for_this_notice(

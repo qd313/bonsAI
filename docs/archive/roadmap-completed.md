@@ -138,7 +138,7 @@ for line from this session's Verify entry, nothing reworded, with the closing no
   Evidence `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
   `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`,
   `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`, `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
-  [Plan](../planning/40-reasoning-display.md) · [Build plan](../planning/57-reasoning-display-build.md).
+  [Plan](40-reasoning-display.md) · [Build plan](57-reasoning-display-build.md).
 
   **Closed 2026-09-18:** six of the seven Deck rows pass, plus the focus-graph checklist and the free-play
   sweep. The one piece left, REASONING-05's body-text half, is not a fresh owed check of its own — it rides
@@ -151,7 +151,7 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the rig's own check
 line from this session's Verify entry, with the Deck results added at the end._
 
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
-  **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](../planning/05-token-streaming-review.md).
+  **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](05-token-streaming-review.md).
 
   **Passed on the Deck 2026-09-04, everything the rig can drive:** **STREAM-09** — three answer sections on one
   reply each took the ring going Down in turn, no dead end (Up skipping them on the way back is a separate,
@@ -170,7 +170,7 @@ line from this session's Verify entry, with the closing note added at the end._
   20px bar with the active tab's name at rest, opening to a strip that labels all six. Steam's header 81px to 20px. Rows 01 to 06,
   09 and 10 pass; owed **TAB-BAR-08** (touch). **TAB-BAR-07** (legibility by eye) was retired
   2026-09-17, replaced by **TAB-STRIP-2A-03** (plan 59). Closes the "tab names never appear" bug and D44.
-  [Plan](../planning/30-collapsing-tab-bar.md).
+  [Plan](30-collapsing-tab-bar.md).
 
   **Closed 2026-09-18:** **TAB-BAR-11**'s three rig-drivable remount paths all pass — the Clear cache modal
   return and two QAM chord close/reopens (2026-09-04), then a full loader restart (2026-09-05). The one path
@@ -203,7 +203,7 @@ from this session's Verify entry, with the closing note added at the end._
   and one in Expert both worked as expected. Evidence `docs/test-evidence/plan61-tier1-speed.json`,
   `docs/test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
   game running, scheduled for the games block. Round in progress:
-  [plan 31](planning/31-deck-verification-round.md).
+  [plan 31](31-deck-verification-round.md).
 
   **Closed 2026-09-18:** the third Tier 1 extra passed too — asked with Half-Life 2 running and focused, the
   plugin named the game correctly and gave real Half-Life 2 advice with a note card attached. All three Tier 1
@@ -759,7 +759,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
 ### Preset row: one line, then two chips across with scrolling labels (D43)
 
 - ★★★★ **Preset chips on a single line** — **rebuilt 2026-09-01 as two chips side by side (D43); on-Deck confirmation owed** — see
-  *The preset chips* under [Bugs](#bugs) and [planning/29-preset-row-three-thirds-plan.md](planning/29-preset-row-three-thirds-plan.md).
+  *The preset chips* under [Bugs](#bugs) and [29-preset-row-three-thirds-plan.md](29-preset-row-three-thirds-plan.md).
   The 2026-08-31 build showed one chip; the mockup ([major-redesign.md § 2.3](major-redesign.md)) has three side by side; the
   maintainer chose two after the width research. The height gain stays. The paragraph below records what `fc1b245` actually did, and
   stands only as the measurement baseline. The chip block went from 118px (three
@@ -786,7 +786,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
 - ★★★★ **The tab icon bar collapses when it is not in use**
   - **Goal:** The tab strip stops holding full height while nobody is using it, while still answering *which tab am I on?* at a glance —
     the sketch on the table is a thin bar of dashes showing your position in the carousel. Interacting with it opens the fuller strip.
-  - **Workshopped and planned 2026-09-01:** [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md). Twelve
+  - **Workshopped and planned 2026-09-01:** [30-collapsing-tab-bar.md](30-collapsing-tab-bar.md). Twelve
     discovery decisions are recorded there (our own thin bar of dashes plus the active tab's name, opening to a floating strip only
     while the ring is on it; Steam's `Tabs` stays underneath for LB/RB). **Build is gated on the device spike in its § 5 W1**: if
     LB/RB stop working with Steam's bar hidden, work stops and comes back to the maintainer. Reopens R5 as **D44**. Folds in
@@ -869,7 +869,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
 - ★★★★★ **Named chat slots** (labeled threads — redesign only)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Up to 8 named, persistent chats with Main-tab LB/RB carousel (option C). Do not re-ship old mini-list picker.
-  - **Status:** Code landed 2026-08-09 (storage, RPC, row UI). **The row never rendered in the composed plugin between `dba34e7` (2026-08-03, step-8 payload-hook extraction) and 2026-08-30** — `useMainTabPayload` dropped all six chat-slot props, both nested-modal callbacks and `askStopped`; W0 of [28-named-chat-slots-v3-implementation-plan.md](planning/28-named-chat-slots-v3-implementation-plan.md) threads them through, so the V2 QA rows are runnable on device for the first time. **Redesign v3 landed 2026-08-30** ([28-named-chat-slots-v3-implementation-plan.md](planning/28-named-chat-slots-v3-implementation-plan.md)) — the Main tab layout inverts to slot row → transcript → presets → Ask bar → context line, and the background status payload now carries `chat_slot_id` so a mid-stream slot switch can never paint one slot's tokens into another. All 19 commits W0–W18 are in; every gate green. **What is left is device QA:** run **CHAT-SLOTS-V2-05** (the P-0 bumper spike, never yet run) first, then the rest of V2 and all of **CHAT-SLOTS-V3-01…08**. Follow-up 2026-08-30 after the first on-device look: the Main tab column now stretches to the scroll viewport's bottom edge and pins presets + Ask bar there (`useMainTabColumnFill` + `.bonsai-main-tab-dock`), matching the mockups' bottom-anchored Ask bar. **On-Deck QA open** — all **CHAT-SLOTS-V2-01…06** and the **CHAT-SLOTS-V3** rows must pass before Completed. **P-0 bumper spike** result still pending on device ([major-redesign.md](major-redesign.md) § 7 R1).
+  - **Status:** Code landed 2026-08-09 (storage, RPC, row UI). **The row never rendered in the composed plugin between `dba34e7` (2026-08-03, step-8 payload-hook extraction) and 2026-08-30** — `useMainTabPayload` dropped all six chat-slot props, both nested-modal callbacks and `askStopped`; W0 of [28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md) threads them through, so the V2 QA rows are runnable on device for the first time. **Redesign v3 landed 2026-08-30** ([28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md)) — the Main tab layout inverts to slot row → transcript → presets → Ask bar → context line, and the background status payload now carries `chat_slot_id` so a mid-stream slot switch can never paint one slot's tokens into another. All 19 commits W0–W18 are in; every gate green. **What is left is device QA:** run **CHAT-SLOTS-V2-05** (the P-0 bumper spike, never yet run) first, then the rest of V2 and all of **CHAT-SLOTS-V3-01…08**. Follow-up 2026-08-30 after the first on-device look: the Main tab column now stretches to the scroll viewport's bottom edge and pins presets + Ask bar there (`useMainTabColumnFill` + `.bonsai-main-tab-dock`), matching the mockups' bottom-anchored Ask bar. **On-Deck QA open** — all **CHAT-SLOTS-V2-01…06** and the **CHAT-SLOTS-V3** rows must pass before Completed. **P-0 bumper spike** result still pending on device ([major-redesign.md](major-redesign.md) § 7 R1).
   - **Unblocked 2026-08-16** (`d167f8e`). The data-loss bug that made all six rows unrunnable — every turn dropped before it reached `chat_slots/` — is fixed; run the one-Ask persistence check in [Verify](#verify) before starting 01…06.
   - **Design:** [major-redesign.md](major-redesign.md), [07-named-chat-slots-postmortem.md](planning/07-named-chat-slots-postmortem.md).
 
@@ -885,7 +885,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
     writing the CSS.
   - **Closed 2026-09-02, folded into plan 30:** the labels shipped on the open strip (8px caps under every icon) and the active
     tab's name sits on the thin bar at rest; the wide active cell was dropped by the maintainer in discovery. R5 is superseded by D44.
-  - **Folded into [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) on 2026-09-01.** The labels ship on
+  - **Folded into [30-collapsing-tab-bar.md](30-collapsing-tab-bar.md) on 2026-09-01.** The labels ship on
     that plan's open strip; the wide active cell is dropped (maintainer call in discovery). R5 is reopened there as **D44**. Do not
     build this separately.
 
@@ -958,7 +958,7 @@ Both entries tested **TDP apply**, which the permissions cleanup of 2026-07-30 r
 
 ## Moved from the roadmap 2026-09-03
 
-Verify entries that passed on the Deck during [plan 31](../planning/31-deck-verification-round.md), moved out of the roadmap the same day, verbatim as they read there. The roadmap keeps a one-line **Done** entry for each.
+Verify entries that passed on the Deck during [plan 31](31-deck-verification-round.md), moved out of the roadmap the same day, verbatim as they read there. The roadmap keeps a one-line **Done** entry for each.
 
 - ★★ `[tabs]` **Your tab is remembered when you leave and reopen** — **VERIFY.** Shipped 2026-08-04 with a three-way Developer choice
   (D15). Rows **TAB-RESUME-01** (Partial), **TAB-RESUME-MODE-01**, **TAB-RESUME-FOCUS-01**.
@@ -1000,8 +1000,8 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 - ★ **British spellings found nothing** — *armour* returned nothing while *armor* returned the card. Fixed 2026-08-19 by searching for **both** spellings rather than rewriting the question, so a British spelling can never lose a result an American one finds. **KB-SPELLING-01** owed on device.
 - ★ **Static seed tells you to enable KB when it is already on** — fixed 2026-08-07 (Wave 2 F); **PRESET-KB-SEED-01**.
 - ★ **Thinking blurb italicizes emojis** — fix landed 2026-08-07 (Wave 1 A); **THINKING-EMOJI-01**. [wave1.md](wave1.md).
-- ★ **Thinking line vanishes mid-Ask (lazy status tag)** — fix landed 2026-08-08; **THINKING-SANITIZE-01**. [06-thinking-blurbs-review.md § 10.1](planning/06-thinking-blurbs-review.md#101-landed-2026-08-08--7-items-13).
-- ★ **Token streaming stutters once at start** — fix landed 2026-08-07 (Phase A); **STREAM-REVEAL-01**. [05-token-streaming-review.md § 3.1](planning/05-token-streaming-review.md).
+- ★ **Thinking line vanishes mid-Ask (lazy status tag)** — fix landed 2026-08-08; **THINKING-SANITIZE-01**. [06-thinking-blurbs-review.md § 10.1](06-thinking-blurbs-review.md#101-landed-2026-08-08--7-items-13).
+- ★ **Token streaming stutters once at start** — fix landed 2026-08-07 (Phase A); **STREAM-REVEAL-01**. [05-token-streaming-review.md § 3.1](05-token-streaming-review.md).
 - ★ **VAC / `bonsai:vac-check` (Phase 1) — on-device QA** — implementation complete; finish **VAC-02…06** after Tier 0 **SMOKE-F** passes.
 - ★ **~22% of Asks show bare emoji for every phase change** — fix landed 2026-08-08; **THINKING-EMOJI-CLUSTER-01**.
 - ★★ **Asked-entity extraction (player typing patterns)** — fixed 2026-08-09; **STRAT-ENTITY-01**.
@@ -1020,7 +1020,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
   typecheck, build) when it shipped; **confirmed on device the same day — DIAG-FOLD-01 Verified.** No button matching "diagnostics"
   survives anywhere, and the raw JSON is where it should be, on chip 6 of 6. The verbose-logging-**off** half was not re-run.
   [testing.md](testing.md).
-- ★★ **Thinking blurbs — three writers disagree** — fix landed 2026-08-08; re-verify **THINKING-COPY-01**, **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [06-thinking-blurbs-review.md § 10](planning/06-thinking-blurbs-review.md#10-implementation-log).
+- ★★ **Thinking blurbs — three writers disagree** — fix landed 2026-08-08; re-verify **THINKING-COPY-01**, **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [06-thinking-blurbs-review.md § 10](06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ **Wave 4 G slider direction handlers** — Deck-check: **ONBUTTONDOWN-AUDIT-01** (distinguish nothing happens vs double-step; cover Ollama keep-alive, Reply verbosity, Connection timeout sliders).
 - ★★ **Your tab is not remembered when you leave and reopen** — **TAB-RESUME-01** Partial (tab + scroll restore; focus-after-reopen separate).
 - ★★★ **D11 legacy-loader shim removal** — **D11-SHIM-01** Partial (RPC probe ok; Main-tab Ask UI pass open).
@@ -1040,7 +1040,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 - **Reply-language snapshot RPC (2026-08-03 fix)** — verified via `probe_deck_rpc_surface.py`; UI translation spot-check optional.
 - **Session RAG / routing merge RPCs (2026-08-02)** — **SESSION-RAG-CHIPS-01** Verified; **ROUTING-MERGE-01** Open.
 - **Shell state + tab payload extractions (step 8)** — **SHELL-PAYLOAD-01** Open. Smoke: six tabs, one Ask, Ollama tab after Clear all plugin data.
-- **Token streaming Phase B — multi-stop navigation + scroll follow (2026-08-07)** — **STREAM-09**, **STREAM-FOLLOW-01** Open. [05-token-streaming-review.md § 3.2](planning/05-token-streaming-review.md).
+- **Token streaming Phase B — multi-stop navigation + scroll follow (2026-08-07)** — **STREAM-09**, **STREAM-FOLLOW-01** Open. [05-token-streaming-review.md § 3.2](05-token-streaming-review.md).
 - **Voice input `status()` missing (2026-08-03 fix)** — on-Deck retry of live recording still needed. [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 
 
@@ -1275,7 +1275,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   149,062 to 100,450 bytes, the manual Deck checks from 141,611 to 58,918, the maintainer-decisions file
   from 429,015 to 124,027, and the long notes behind roadmap entries from 256,301 to 134,168 — 975,989 to
   417,563 bytes together, 57% less to read before any work is marked done. [Plan
-  65](../planning/65-trim-docs-split-long-files.md).
+  65](65-trim-docs-split-long-files.md).
 
 ### The eleven long files, left long on purpose (closed 2026-09-24, plan 65)
 
@@ -1292,4 +1292,4 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   split, code lines going from 18,767 to 11,521 overall — most files came out between a tenth and two
   thirds smaller, not half, because the screen-drawing code and the one long question-building function
   cannot move without a rewrite. A new check now stops any file over 800 lines of code from growing back.
-  [Plan 65](../planning/65-trim-docs-split-long-files.md).
+  [Plan 65](65-trim-docs-split-long-files.md).

@@ -366,7 +366,7 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 Run **CHAT-SLOTS-V2-05** (P-0 bumper suppression) first — it has never run on device, and
 everything below assumes it passes. Plan:
-[28-named-chat-slots-v3-implementation-plan.md](planning/28-named-chat-slots-v3-implementation-plan.md).
+[28-named-chat-slots-v3-implementation-plan.md](archive/28-named-chat-slots-v3-implementation-plan.md).
 
 
 
@@ -374,7 +374,7 @@ everything below assumes it passes. Plan:
   **30px** tall, radius 4; a label longer than its chip scrolls sideways inside it with a soft fade at the edges, and short labels do
   not move. **Read the geometry from the live page** (`getBoundingClientRect` on the two `.bonsai-preset-glass` buttons and their
   `.bonsai-preset-chip-text` children), not from a screenshot, and **record the button's computed side padding** — it is the one
-  number the width research in [planning/29-preset-row-three-thirds-plan.md § 3b](planning/29-preset-row-three-thirds-plan.md) could
+  number the width research in [archive/29-preset-row-three-thirds-plan.md § 3b](archive/29-preset-row-three-thirds-plan.md) could
   not know, and it decides whether "~20 characters at a glance" is really 18 or 23. Write the numbers back into that plan.
   **PASS on device 2026-09-01, read from the live page:** two chips **148 × 30 px** with a **4 px** gap on the 300 px column
   (x=48, w=300), radius 4, side padding **8 px** (now set by the plugin, so the label room is known by construction), label room
@@ -425,7 +425,7 @@ everything below assumes it passes. Plan:
 
 ### CHIP-BUTTON — Suggestion chips as real buttons (plan 60)
 
-Plan [60](planning/60-chip-button-restyle.md), decision D110. Landed 2026-09-17 as merge `b3c0d52`
+Plan [60](archive/60-chip-button-restyle.md), decision D110. Landed 2026-09-17 as merge `b3c0d52`
 (seven commits on `refactor/lane60-chips`) and checked on the Deck the same day. Each chip now has a
 raised look (a top hairline and a soft shadow), the two chips sit 6px apart instead of 4, the row
 leaves room below the chips so the shadow is not cut off, the Tip word became a small dot, the tag and
@@ -453,7 +453,7 @@ reached" entry.
 
 ### TAB-BAR — Collapsing tab bar (P0)
 
-Plan [30](planning/30-collapsing-tab-bar.md), decisions D44/D55/D56. Steam's tab header is hidden by one
+Plan [30](archive/30-collapsing-tab-bar.md), decisions D44/D55/D56. Steam's tab header is hidden by one
 structural rule; a 20px bar above the tabs root shows the tab and is the strip's one focus stop; the
 full strip floats over the panel while the bar holds the ring. All rows are on-Deck. Evidence files
 under `docs/test-evidence/`; numbers in the plan's § 8.
@@ -473,7 +473,7 @@ the header hidden — `docs/test-evidence/TAB-BAR-W1a-*.json` show ten clean swi
 
 ### TAB-STRIP-2A — The open tab strip redesign (plan 59)
 
-Plan [59](planning/59-tab-strip-redesign-build.md), decision D109. Landed 2026-09-17 in commits
+Plan [59](archive/59-tab-strip-redesign-build.md), decision D109. Landed 2026-09-17 in commits
 `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. Six equal cells, one 22px icon
 family, only the current tab's name shown, a solid 66px bar with a shadow. **Run on the Deck
 2026-09-18:** rows 01, 02, 04, 05 and 06 pass, 03 is captured for the maintainer's own look, and 07
@@ -489,7 +489,7 @@ Rows 01, 02, 04, 05 and 06 passed on the Deck and moved to
 
 ### NOTES-BLOCK — The "From the notes" block (plan 58 phase 1)
 
-Plan [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md), decision D111. Landed
+Plan [58 phase 1](archive/58-phase-1-notes-shown-and-wiki-extracts.md), decision D111. Landed
 2026-09-17 as two commits (`6dbf9c9` backend, `4c036f5` frontend; tip `8395841` on experimental). A
 line under a finished Strategy or troubleshooting reply that used a note or a shared tip names it and
 where it came from, and opens to show the note's own words. Starts closed behind one switch. **Two

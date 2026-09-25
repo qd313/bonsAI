@@ -1,5 +1,8 @@
 # Planning folder review: what to archive, what to keep
 
+**Approved and carried out 2026-09-24. What was done, and two corrections to this review, are in the last
+section.** The rest is the proposal as the maintainer reviewed it.
+
 This is a proposal only. Nothing has been moved, archived or edited. It is a list for the maintainer to
 read once and approve, so a later pass can do the moving without asking "can this go?" plan by plan.
 
@@ -195,3 +198,55 @@ These are not about moving files, but the moving pass should fix them or file th
 - "Plan 58 phase 1's drawing file is linked from nowhere." A code comment links to it.
 - "The session-history-in-Show-details idea from plan 56 has no owner." Plan 62 built it, and it passed
   on the Deck 2026-09-23 (SESSION-TAB-01).
+
+## What happened next (2026-09-24, after the maintainer's review)
+
+The maintainer approved both lists and the rule, and asked for four things. All four were done the
+same day. This file above is left as it was reviewed; two things in it turned out wrong, and are
+corrected here.
+
+**Two corrections to this review.**
+
+- *"The controller button rig has not moved since late August."* Wrong. Only the roadmap's one-line
+  summary had not moved. The board has driven every Deck session since 2026-08-26, and the full
+  unattended ask ran on 2026-08-28. What is left is a live view, the highlight checked from video,
+  Bluetooth handheld runs and the nightly run. The maintainer made finishing it priority 1; plan 19,
+  the roadmap and its detail entry now say so, and stand-in Decks (plan 67) come after it.
+- *Plan 63: "the Open Permissions jump did not land and is open on the roadmap."* Wrong. It was fixed
+  in plan 64 (`af53b7d`) and proven on the Deck 2026-09-23. So were the other two focus fixes plan 63
+  left: the streaming highlight (`7b9447ed`), and Up from Retry, which no longer applies. testing.md
+  still said SMOKE-C was blocked by it; that line is corrected too.
+
+**The settings card: the test list was right, the Done line was wrong.** Rows 01 to 04 passed on
+2026-09-16. Row 05's jump passed, and its return was settled by decision D107 that afternoon. Rows 06
+and 07 were never run. The only measurement near them, `plan56-SETTINGS-CARD-01.json`, checked the
+six-row cap, the "65 more" heading and the gap to the tab bar with a one-line box, not a growing one.
+The Done line (commit `04bfb6d3`) turned D107's "nothing about the card is owed", which meant *no open
+question*, into "every check passed". Row 05 is now closed, rows 06 and 07 have a Verify entry, and
+the Done line and D107 each carry a dated correction.
+
+**The ban lookup's empty tick boxes.** Nobody forgot to run them. The checks passed on 2026-09-23 with
+evidence, and the bookkeeping that night (`7f0e0a16`) closed them on the roadmap and in testing.md. It
+never ticked the boxes in testing-manual.md, because the "before marking work done" list in AGENTS.md
+named the roadmap and testing.md but not testing-manual.md, and neither did the bookkeeper's
+instructions. The same thing had happened twice before, to CONTEXT-LADDER-03 (passed 2026-09-05) and
+MICRO-04 (passed 2026-08-28). All six boxes are now ticked and moved to the closed checklist.
+
+**Prevention.** `scripts/closed_rows_check.py` now runs in `verify.py`. It fails a change that closes
+a test row for the first time while leaving that row open elsewhere. Replayed over the 271 commits
+since 2026-09-01 that touched the closed lists, it flags both misses above (`7f0e0a16`, `04bfb6d3`)
+and 14 commits in all. About half are the same kind of real miss; the rest closed half a check without
+saying the other half was owed, which the error tells the writer to fix. AGENTS.md, the bookkeeper's
+instructions and lessons-learned.md name the checklist too.
+
+**The eight status lines** now say how each plan ended, with commits and test rows: 05, 24, 45, 55,
+56, 58 phase 1, 62 and 63.
+
+**The four pieces of work that lived only in plans** each have a roadmap entry: the settings list
+written out seven times (plan 55), plan 05's layout question, plan 64's re-check of the ban lookup's
+reworded message, and plan 24's four build-setup tidy-ups.
+
+**The move.** 28 plans and 2 drawings moved to the archive, one index row each. 62 files had their
+references rewritten, including code comments and the older archive files; 75 links that were
+already broken now point at the right place. Broken links across the docs fell from 363 to 331, and
+none are new. The three that look new were broken before the move, under the plans' old path.

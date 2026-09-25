@@ -3,10 +3,10 @@
 Living product rulebook for when bonsAI should fence, unwrap, or (later) omit
 spoiler-sensitive Strategy guidance.
 
-- Bug slice that enforces named-entity display: [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md)
+- Bug slice that enforces named-entity display: [../archive/04-strategy-spoiler-false-positive.md](../archive/04-strategy-spoiler-false-positive.md)
 - **Runtime encoding (shipped 2026-08-07):** built-in title profiles, subtractive prompt policy, display unwrap — see **Runtime encoding** below.
 - Related Planned: **Spoiler coverage as a tiered setting** (★★★, open, [roadmap](../roadmap.md#knowledge-base-and-rag)), **Unfenced spoiler feedback** (soft-omit parked)
-- Last checked against the code 2026-09-14. Gaps and the plan to close them: [54-spoiler-rules-gaps.md](54-spoiler-rules-gaps.md).
+- Last checked against the code 2026-09-14. Gaps and the plan to close them: [../archive/54-spoiler-rules-gaps.md](../archive/54-spoiler-rules-gaps.md).
 
 Draft locked from maintainer planning chat 2026-08-04. Rules 1–13 remain the product contract; the **Runtime encoding** section describes what code enforces today.
 
@@ -177,7 +177,7 @@ adjustable fencing — not the false-positive bug fix.
 
 ## Relationship to the false-positive bug
 
-[04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md)
+[../archive/04-strategy-spoiler-false-positive.md](../archive/04-strategy-spoiler-false-positive.md)
 ships the **named-entity display slice** (options 1+2+4). Constitution runtime encoding (profiles, consent history unwrap, Speed+KB inject) landed separately 2026-08-07; **STRAT-SPOIL-DRG-01** on-Deck QA remains its own gate.
 
 The three required Deck rows under that gate are still unticked as of 2026-09-14. The false

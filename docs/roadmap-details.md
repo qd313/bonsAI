@@ -38,7 +38,7 @@ several panel reopens.
 `round34-BUG-empty-chat-input-trap.json` (trapped, empty chat), then
 `round34-BUG-down-walk-after-loader-restart.json` and `round34-BUG-input-to-ask-final-check.json` (both clean after the
 restart). All under `docs/test-evidence/`. Also `docs/test-evidence/round35-trap-*.json` and
-[plan 35](planning/35-bugfix-session.md) § 7.
+[plan 35](archive/35-bugfix-session.md) § 7.
 
 **Reproduced on demand 2026-09-15, which the entry had been waiting for.** It happened twice in one
 sitting, both times within seconds of starting a brand new, empty chat while the panel was showing a
@@ -506,7 +506,7 @@ the choice does not have to be re-litigated when the QA row is finally run.
 
 - ★★★ **KB download Cancel** — shipped 2026-08-05; **KB-CANCEL-01 — not testable as written, and that is the blocker.** Attempted on-Deck 2026-08-16 and abandoned: at 758502 bytes the whole download-decompress-install cycle takes **~0.9 s** (Deck log `Downloading…` 23:32:37.711 → `Knowledge base installed` 23:32:38.610), so there is no cancel window to press. What looked like a Cancel pass was the **storage picker** (`onPrimaryClick = installed ? runUpdate : openStoragePicker`, [KnowledgeBaseSection.tsx:527](../src/components/KnowledgeBaseSection.tsx)) — press one opens the internal/SD modal, press two starts the download. **To run this row at all the download has to be slowed** — throttle the link (`tc qdisc`), point the fetch at a stalled host, or add a dev-only delay. Until then the six frontend tests are the only coverage and the D-pad-reach half (the part unit tests cannot judge) is unproven.
 
-- ★★★ **Soft** `num_predict` **+ thinking budget** — shipped 2026-08-10; **02 Verified, 01/03/04 Partial (automated, on-Deck confirm owed), 05 Open** (needs a real thinking model). Caps Speed 800 / Expert 1200 / Strategy 1600; soft continue on `done_reason=length` (max 2) with ephemeral **`Continuing…`**; C1 budgets in `ollama_ask_budgets.py` (`think: false` default). **Fixed 2026-08-15:** the cap table was keyed `deep` — the mode's pre-2026-06-26 name — so Expert silently ran on the Speed cap (800, not 1200) since the caps shipped; **EXPERT-CAP-01**. **Fixed 2026-08-15:** Stop landing within 120ms of the cue could persist `Continuing…` into the saved reply — `_update_partial_response`'s throttle dropped the cue-clear write; now a shrinking partial always bypasses the throttle, plus a client-side `stripSoftContinueCue` backstop. Unblocks **Thinking effort control**. Detail: [16-soft-num-predict-thinking-budget.md](planning/16-soft-num-predict-thinking-budget.md).
+- ★★★ **Soft** `num_predict` **+ thinking budget** — shipped 2026-08-10; **02 Verified, 01/03/04 Partial (automated, on-Deck confirm owed), 05 Open** (needs a real thinking model). Caps Speed 800 / Expert 1200 / Strategy 1600; soft continue on `done_reason=length` (max 2) with ephemeral **`Continuing…`**; C1 budgets in `ollama_ask_budgets.py` (`think: false` default). **Fixed 2026-08-15:** the cap table was keyed `deep` — the mode's pre-2026-06-26 name — so Expert silently ran on the Speed cap (800, not 1200) since the caps shipped; **EXPERT-CAP-01**. **Fixed 2026-08-15:** Stop landing within 120ms of the cue could persist `Continuing…` into the saved reply — `_update_partial_response`'s throttle dropped the cue-clear write; now a shrinking partial always bypasses the throttle, plus a client-side `stripSoftContinueCue` backstop. Unblocks **Thinking effort control**. Detail: [16-soft-num-predict-thinking-budget.md](archive/16-soft-num-predict-thinking-budget.md).
 
 - ★★★ **Source attribution on knowledge chips** — shipped 2026-08-09; **KB-ATTRIB-01 Partial after on-Deck 2026-08-16 — one sub-check looks like a fail.** The positive case passes: a Portal 2 (`620`) Strategy Ask surfaced `theportalwiki.com · CC-BY-4.0 · as of 2026-08-09` under Show details with the card beneath it, credit accent on the block and a capture date that is not today's. **What did not pass:** the row requires the credit accent be *visibly distinct* from the amber an `open_weight` model chip uses, with both on screen — they were (`Routed gemma4:e2b-it-qat` four rows above), and in `DeckCapture_20260816_233808_game` **the two ambers read as the same colour**. Needs a maintainer eye on the panel and then most likely a token change in [design-tokens.md](design-tokens.md). Also still owed: the negative case (a maintainer-authored-only reply must show no accent and no credit block). **KB-ATTRIB-02** (published corpus ships `ATTRIBUTIONS.md`) is Verified on Deck.
 
@@ -634,7 +634,7 @@ See also [Ordinary phrases attach game cards](#ordinary-phrases-attach-game-card
   backlog entry **Tab-strip micro labels + wide active cell** records as deliberately not built. So the fix is to **reopen R5** in
   [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md) first, and it needs settling alongside the collapsing tab
   bar below, which wants the active tab readable at a glance and is the natural place for a name to live. **Planned 2026-09-01:**
-  settled inside [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) — the thin bar names the active tab at rest
+  settled inside [archive/30-collapsing-tab-bar.md](archive/30-collapsing-tab-bar.md) — the thin bar names the active tab at rest
   and the open strip names all six. R5 is reopened as **D44**. **Fixed 2026-09-02:** the bar shows the active tab's name at rest
   (11px caps in the character accent) and the open strip labels all six tabs (8px caps, PERMS and DEV as the short forms while
   Developer is mounted). D44 locked. Rows **TAB-BAR-01…06** pass on the Deck; the by-eye legibility check (**TAB-BAR-07**) is the
@@ -694,7 +694,7 @@ alphabetical order the rest of the Backlog uses.
 ## Thinking tips replace the status blurb (Thinking effort Phase 2)
 
 **Retired 2026-09-05 (D70 #6).** Real thinking replaces the composed phrases wherever thinking is on, under
-**Reasoning display** ([40-reasoning-display.md](planning/40-reasoning-display.md)); the phrases stay as they are with thinking Off.
+**Reasoning display** ([40-reasoning-display.md](archive/40-reasoning-display.md)); the phrases stay as they are with thinking Off.
 The roadmap entry is removed; this note is what remains of it.
 
 - ★★ **Thinking effort control** — **Phase 1 shipped 2026-08-15; Phase 2 Backlog**
@@ -1130,8 +1130,8 @@ worse answers with nothing on screen to say why.
   rows take 311 of the 454 pixels before any chat: Steam's header (64), the tab bar plus its reserve (24), the chat slot
   row (54), a 12-pixel gap, and the dock (157). Getting more chat on this screen means shrinking or hiding one of those
   rows, which is a design call for the maintainer, not a fix. External-monitor record:
-  [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8 ·
-  [plan 56 block 0](planning/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
+  [archive/30-collapsing-tab-bar.md](archive/30-collapsing-tab-bar.md) § 8 ·
+  [plan 56 block 0](archive/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -1345,7 +1345,7 @@ worse answers with nothing on screen to say why.
   `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Still owed tonight:** STRAT-SPOIL-NAME-01 (Doom
   64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). On 2026-09-19
   the maintainer said Doom 64 is not readily available, so STRAT-SPOIL-NAME-01 stays blocked until it is.
-  [Plan 54](planning/54-spoiler-rules-gaps.md). **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock
+  [Plan 54](archive/54-spoiler-rules-gaps.md). **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock
   Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence
   `docs/test-evidence/plan61-DRG-01b-retry.json`.
 
@@ -1358,7 +1358,7 @@ worse answers with nothing on screen to say why.
   notes instead of the model's memory: about the top 1000 Steam titles, the top 100 on Deck, and an emulated slice. Months:
   it cannot be hand-written (161 cards took six weeks), so it needs an ingestion pipeline from wiki dumps, per-source
   licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8. The first step is
-  planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md): a reader that takes a wiki's own
+  planned as [58 phase 1](archive/58-phase-1-notes-shown-and-wiki-extracts.md): a reader that takes a wiki's own
   sentences without rewriting them, ten games from sources already cleared, and a study of which sources cover many
   games under one licence. That [source study](archive/research/kb-catalog-sources-2026-09.md) landed 2026-09-17
   and recommends the Super Mario Wiki first, the per-wiki Fandom check second, and the walkthrough wiki third
@@ -1422,7 +1422,7 @@ worse answers with nothing on screen to say why.
   commits `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. **Deck run 2026-09-18: rows 01, 02,
   04, 05 and 06 all pass; 03 is captured and waits on the maintainer's own look; 07 failed and is filed as its
   own Bugs entry, above.** The free-play sweep has run once (the after-finished half); the streaming half is
-  still owed. [Plan](planning/59-tab-strip-redesign-build.md) ·
+  still owed. [Plan](archive/59-tab-strip-redesign-build.md) ·
   [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
@@ -1434,7 +1434,7 @@ worse answers with nothing on screen to say why.
   fix closed 2026-09-12.** Ask about a boss, then *"what about its second phase"*, and you now get the right boss two
   times in three, where it used to be wrong every time. The remaining third still names the rival boss. DOOM Eternal
   is wrong every time, and no amount of work on the search can close that one. This is the half the shipped fix did
-  not cover, kept visible on purpose rather than archived with it. [Numbers](planning/48-kb-wave-three-session.md).
+  not cover, kept visible on purpose rather than archived with it. [Numbers](archive/48-kb-wave-three-session.md).
   (D98) **Sighting, 2026-09-19, Hades:** a different shape of the same family — a follow-up question about a
   boss's second phase found the right boss's note again, but the written reply asked which boss was meant
   instead of using her name. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`.

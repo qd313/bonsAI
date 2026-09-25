@@ -9,7 +9,7 @@ there on 2026-09-23:
 - The streaming highlight: fixed in `7b9447ed` and proven.
 - Up from Retry: closed as no longer applying, because Retry now sits above the answer.
 
-All three are in [archive/roadmap-bugs-fixed.md](../archive/roadmap-bugs-fixed.md). The one fix from
+All three are in [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md). The one fix from
 here that later failed on the Deck is the dots under the chat name (lane F). That is an open roadmap
 bug, waiting on the maintainer's pick.
 

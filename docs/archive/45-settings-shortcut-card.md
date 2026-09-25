@@ -2,7 +2,7 @@
 
 **Status, corrected 2026-09-24: built 2026-09-16 during [plan 56](56-feature-session-four.md); five of
 the seven Deck checks in § 7 are done, and two are owed.** Rows SETTINGS-CARD-01 to 04 passed on the
-Deck 2026-09-16 ([archive/testing-closed-2026.md](../archive/testing-closed-2026.md)). Row 05's jump
+Deck 2026-09-16 ([archive/testing-closed-2026.md](testing-closed-2026.md)). Row 05's jump
 passed. Its return (the box comes back empty) is the intended behaviour since D107, so row 05 is done.
 Row 06 (a one-result search at four words) has never run on the Deck. Row 07 has run only in part. On
 2026-09-16, with a one-line box, the card showed six rows, read "Steam settings · 65 more" and stopped

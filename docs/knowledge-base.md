@@ -383,7 +383,7 @@ on device (**KB-SMOKE-01**).
 
 The first study of sources that cover many games under one licence is at
 [kb-catalog-sources-2026-09.md](archive/research/kb-catalog-sources-2026-09.md) (2026-09-17), and the
-first step is planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
+first step is planned as [58 phase 1](archive/58-phase-1-notes-shown-and-wiki-extracts.md).
 
 ### Transparency retrieval labels
 
@@ -545,7 +545,7 @@ means); it prints pass or over-budget against the first-word number, timed by ha
 **Searching the notes.** In Strategy or Expert mode, where the meaning search runs, this has been
 measured twice on the Deck, both times with Deep Rock Galactic: Survivor running and the same
 three questions: 1078.87, 1094.34 and 1090.17 milliseconds one evening
-(`docs/planning/34-feature-verification-round.md`, backed by
+(`docs/archive/34-feature-verification-round.md`, backed by
 `runs/round34-drg-q1-open-show-details.json`, `runs/round34-drg-q2-open-show-details.json` and
 `runs/round34-drg-q3-to-details.json`), then 1103.03, 1230.22 and 1193.75 milliseconds the next
 (`runs/plan46-R2-strategy-half.json`). A person feels this as roughly a one-second beat before an

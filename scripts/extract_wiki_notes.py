@@ -3,7 +3,7 @@
 Title: Wiki note reader (maintainer tool)
 Purpose: Turn one fetched wiki page into note-shaped records by cutting the page's own
          tactics/use section to length, with no word changed and no sentence added. This is
-         the D111 "trim only" rule (docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md
+         the D111 "trim only" rule (docs/archive/58-phase-1-notes-shown-and-wiki-extracts.md
          Section 8, item 2): an AI may never write a sentence into a wiki note. It may only cut.
 Used for: Reading a sample page per wiki for the maintainer before any note enters
           data/kb/strategy_seed.json (that file is never written by this script -- it prints).

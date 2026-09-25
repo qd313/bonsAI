@@ -114,7 +114,7 @@ on pull requests and pushes.
 **Status 2026-08-25 — implemented, advisory.** [`.github/workflows/tests.yml`](../../.github/workflows/tests.yml).
 The clean-runner failure predicted above did **not** happen: 1,427 tests pass from a bare
 clone. The baseline, the three tests that will execute for the first time on Linux, and what
-is still unverified are recorded in [24-track-a-ci-baseline.md](24-track-a-ci-baseline.md).
+is still unverified are recorded in [../archive/24-track-a-ci-baseline.md](../archive/24-track-a-ci-baseline.md).
 
 **Status 2026-08-27 — the predicted clean-runner failure did happen, just one flip later, and
 is now fixed.** Every `Tests` run went red from the moment `ADVISORY` was set to `false` —
@@ -304,7 +304,7 @@ rig is being used as a faster way to find bugs rather than to prevent them.
 politeness — an agent should refuse to pass them even when it could:
 
 1. **Taste.** Whether a game's boss names deserve a spoiler fence needs someone who knows
-   the game and the player. [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md)
+   the game and the player. [../archive/04-strategy-spoiler-false-positive.md](../archive/04-strategy-spoiler-false-positive.md)
    is full of calls no oracle produces.
 2. **Value decisions.** The whole D-series exists because those are tradeoffs, not facts —
    retrieval floors, kids lock, corpus licensing. What the product owes its users is yours.

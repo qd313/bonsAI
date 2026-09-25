@@ -51,7 +51,7 @@ export type BackgroundStartResponse = {
   /**
    * Opening thinking blurb, composed by the backend at accept time. The client renders it and
    * never composes its own — two composers on two request-id spaces rewrote the line for no
-   * reason within the first poll. See docs/planning/06-thinking-blurbs-review.md § 2.1.
+   * reason within the first poll. See docs/archive/06-thinking-blurbs-review.md § 2.1.
    */
   thinking_summary?: string | null;
   /** When set, this start finished without Ollama (e.g. sanitizer keyword command). */

@@ -8,7 +8,7 @@
  * The answer bubble hides spoilers by collapsing a ```bonsai-spoiler fence, which needs somewhere
  * to collapse to. A one-line status has nowhere, so this redacts in place instead: the sentence
  * stays readable and only the marked span becomes blocks. See
- * docs/planning/06-thinking-blurbs-review.md § 2.7.
+ * docs/archive/06-thinking-blurbs-review.md § 2.7.
  */
 
 const SPOILER_SPAN_RE = /\[\[\s*spoiler\s*\]\]([\s\S]*?)\[\[\s*\/\s*spoiler\s*\]\]/gi;

@@ -372,7 +372,7 @@ adjusted for this folder._
   keeps working the way it does today, so the box is left empty when you come back. Rows **SETTINGS-CARD-01**
   through **05** passed. **Correction 2026-09-24:** this line used to say "nothing about the card is owed any
   more" and named rows 01 through 07, but rows **06** (a one-result search) and **07** (the card rising as the
-  box grows) were never run. They are back on the roadmap's Verify list. [Plan](planning/45-settings-shortcut-card.md) ·
+  box grows) were never run. They are back on the roadmap's Verify list. [Plan](45-settings-shortcut-card.md) ·
   [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 - ★ `[reply]` **The slow-reply footnote reads as a broken sentence — not a bug, 2026-09-16 (D107).** The
   sentence was always whole on screen: "150.8s (>60s): prefer GPU for Ollama, not CPU" reads in full on the

@@ -5,7 +5,7 @@ read from the code or measured on the Deck on 2026-09-02. If the code disagrees,
 
 What is being redesigned: **the open strip only**. The thin bar at rest stays exactly as it is.
 The plugin's own name for the whole thing is the collapsing tab bar, from
-[planning/30-collapsing-tab-bar.md](../../../planning/30-collapsing-tab-bar.md).
+[../../../archive/30-collapsing-tab-bar.md](../../../archive/30-collapsing-tab-bar.md).
 
 ## Files in this folder
 

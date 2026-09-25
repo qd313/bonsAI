@@ -306,7 +306,7 @@ test can actually assert, rather than a claim about model behaviour.
 ## 7. Decisions (maintainer planning chat 2026-08-04)
 
 Locked before implementation plan draft. Constitution lives separately:
-[spoiler-constitution.md](spoiler-constitution.md). This bug ships **one
+[spoiler-constitution.md](../planning/spoiler-constitution.md). This bug ships **one
 enforceable slice** of that rulebook, not the whole thing.
 
 ### Scope
@@ -359,7 +359,7 @@ Full recon matrix in §5 is coverage debt, not the minimum to close the bug.
 
 ### Related docs
 
-- Constitution draft: [spoiler-constitution.md](spoiler-constitution.md)
+- Constitution draft: [spoiler-constitution.md](../planning/spoiler-constitution.md)
 - Roadmap bug + Planned constitution feature: [roadmap.md](../roadmap.md)
 
 ---
@@ -386,7 +386,7 @@ them as implementation gospel, verify against current code and on-Deck behavior:
       scenario `STREAM-03-strategy-spoiler` stays PASS (opposite polarity — an ineligible open fence
       must still mask with no body flash), plus **DRG-01-STREAM-01** / **HADES-UNNAMED-STREAM-01**
       in [testing-manual.md](../testing-manual.md)
-- [ ] Constitution ★★★★ roadmap item exists and links here / to [spoiler-constitution.md](spoiler-constitution.md) — encoding work is **not** part of this bug fix
+- [ ] Constitution ★★★★ roadmap item exists and links here / to [spoiler-constitution.md](../planning/spoiler-constitution.md) — encoding work is **not** part of this bug fix
 - [ ] Option 3 only reconsidered if Deck still fails after 1+2+4
 
 **NEEDS VERIFICATION**

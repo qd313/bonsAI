@@ -95,7 +95,7 @@ export const TAB_TITLE_DEBUG_TAB_ICON_PX = 36;
 /** the open strip's solid bar, plan 59 board 2a; the lifted accent is computed against it */
 export const TAB_BAR_STRIP_BG_HEX = "#141c24";
 /**
- * Plan 30 — the collapsing tab bar (docs/planning/30-collapsing-tab-bar.md § 4.8). CSS px before
+ * Plan 30 — the collapsing tab bar (docs/archive/30-collapsing-tab-bar.md § 4.8). CSS px before
  * `--bonsai-ui-scale`; every use goes through `uiScalePx()`. The two heights are the point of the
  * plan: Steam's strip cost 80.66px (measured 2026-09-02), the bar at rest costs 20.
  */
@@ -122,7 +122,7 @@ export const TAB_BAR_SHOULDER_MARK_PX = 9;
 export const TAB_BAR_CELL_GAP_PX = 2;
 
 /**
- * Plan 59 — the open tab strip redesign (docs/planning/59-tab-strip-redesign-build.md § 3, § 5):
+ * Plan 59 — the open tab strip redesign (docs/archive/59-tab-strip-redesign-build.md § 3, § 5):
  * six equal-width cells, one matching icon each, only the lit cell's name shown under it.
  */
 /** Plan 59: each cell's fixed height in the open strip. */

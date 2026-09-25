@@ -57,7 +57,7 @@ class SearchTimeVerdictTests(unittest.TestCase):
 
     def test_strategy_current_readings_are_over_budget(self):
         # The regression this budget exists to catch: round-34's three readings (1078.87,
-        # 1094.34, 1090.17 ms, docs/planning/34-feature-verification-round.md) already sit above
+        # 1094.34, 1090.17 ms, docs/archive/34-feature-verification-round.md) already sit above
         # the August band and above this budget — this test documents that today's real numbers
         # fail the written-down figure, which is the point of writing it down.
         for embed_ms in (1078.87, 1094.34, 1090.17):

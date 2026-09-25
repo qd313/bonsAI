@@ -7,7 +7,7 @@ Nothing in § 3 starts until they are answered.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the ground rules and the focus law at the top of
 [26-thursday-bugfix-sesh.md](26-thursday-bugfix-sesh.md); the rig notes in
-[31-deck-verification-round.md](../planning/31-deck-verification-round.md) § 1 and § 11 before touching the Deck.
+[31-deck-verification-round.md](31-deck-verification-round.md) § 1 and § 11 before touching the Deck.
 
 ## 1. What is true today (checked 2026-09-04 around 17:00, nothing pressed)
 

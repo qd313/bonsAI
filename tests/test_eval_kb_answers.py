@@ -317,7 +317,7 @@ class EvalKbAnswersHarnessTests(unittest.TestCase):
         self.assertFalse(self.mod.claim_group_hit(reply, ["there is a day limit"]))
 
     def test_claim_group_hit_known_miss_not_only_is_there_a_day_limit(self):
-        # Named in plan 48 (docs/planning/48-kb-wave-three-session.md, section 10) as a phrasing a
+        # Named in plan 48 (docs/archive/48-kb-wave-three-session.md, section 10) as a phrasing a
         # negation-aware check on a fixed lookback can be fooled by: "not" sits just before "there"
         # here, so it reads as a negation of the claim even though "not only" does not actually
         # deny that a day limit exists -- the opposite of what the sentence means. Documented as a

@@ -192,7 +192,7 @@ it to the two public hosts is still the maintainer's call, not yet made.
 **Owed on the Deck.**
 
 - ★★★★ **Wave two's own evening — ran 7 September.** Rows **W2-R1** through **W2-R7** in
-  [plan 47](47-kb-wave-two-session.md) § 8: installing the release, the twelve new games and the filled
+  [plan 47](../archive/47-kb-wave-two-session.md) § 8: installing the release, the twelve new games and the filled
   gaps passed, the troubleshooting tips half-passed (one of eight got the wrong tip), the "not in my notes"
   line failed outright (it had no way to fire), and the two bug fixes both failed on a closer look. **R8**,
   the five optional August rows, was skipped.
@@ -298,7 +298,7 @@ them straight; what remains is coverage, follow-up memory, and the things the te
 
 ## 6. What is blocking, in one list
 
-1. **Wave four now waits on [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
+1. **Wave four now waits on [58 phase 1](../archive/58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
    to land first: showing a note's own words under a reply instead of the model's rewrite of it, and
    reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
    maintainer's answers before either can start. Started 2026-09-17: the drawings, the blind questions
@@ -380,7 +380,7 @@ carrying the same stars they carry here.
 - [kb-embed-bakeoff-2026-09-06-arms.md](../archive/research/kb-embed-bakeoff-2026-09-06-arms.md) — latest search numbers, on all 266 cards
 - [kb-answer-eval-2026-09-06-before-wave1.md](../archive/research/kb-answer-eval-2026-09-06-before-wave1.md) and [kb-answer-eval-2026-09-06-after-wave1-landed.md](../archive/research/kb-answer-eval-2026-09-06-after-wave1-landed.md) — answer numbers either side of the prompt work
 - [46-kb-wave-one-session.md](../archive/46-kb-wave-one-session.md) — the wave that produced everything dated 6 September, with its progress log
-- [47-kb-wave-two-session.md](47-kb-wave-two-session.md) — wave two, landed: the 27 gap-filling notes, the troubleshooting path widened, two bugs fixed, the index guarantee shipped, the "not in my notes" line, and the `2026.09.07` release
+- [../archive/47-kb-wave-two-session.md](../archive/47-kb-wave-two-session.md) — wave two, landed: the 27 gap-filling notes, the troubleshooting path widened, two bugs fixed, the index guarantee shipped, the "not in my notes" line, and the `2026.09.07` release
 - `runs/plan46-*.json` — the device evidence behind the 6 September Deck readings
-- [34-feature-verification-round.md](34-feature-verification-round.md), [35-bugfix-session.md](35-bugfix-session.md), [36-feature-session.md](../archive/36-feature-session.md) — this week's Deck findings and who owns which files
+- [../archive/34-feature-verification-round.md](../archive/34-feature-verification-round.md), [../archive/35-bugfix-session.md](../archive/35-bugfix-session.md), [36-feature-session.md](../archive/36-feature-session.md) — this week's Deck findings and who owns which files
 - `data/kb/strategy_seed.json`, `tests/fixtures/kb_eval_v2.json`, `tests/fixtures/kb_answer_eval.json` — counted directly

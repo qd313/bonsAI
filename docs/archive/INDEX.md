@@ -78,6 +78,50 @@ maintainer approved (`docs/audit/refactor-round-two/docs-triage-proposal.md`). O
 | 51-refactor-round-two.md | Finished | 2026-09-15 | — | The plan for the seven-phase clean-up. All seven phases ran between 13 and 15 September 2026. Kept as the record of what was intended; the postmortem holds what actually happened, including the three places this plan turned out to be wrong. |
 | refactor-plan-round-one.md | Replaced | 2026-09-15 | — | The first clean-up plan, from the repo root. Its finished items are recorded in it; everything still open was carried into round two, which then finished. |
 
+## Plans moved in on 2026-09-24
+
+Twenty-eight plans from the planning folder, and two drawings that belong to them, following the
+list the maintainer approved on 2026-09-24
+([audit/planning-folder-review-2026-09-24.md](../audit/planning-folder-review-2026-09-24.md), which
+holds the evidence for each). The rule was agreed with it: a plan is put away once its build is
+done and every Deck check it still owes is carried by the live roadmap, the test lists, or the
+maintainer's checks page. So "Finished" here does not always mean every check passed. The Why
+column says which ones did. Before moving, eight of these had their status line corrected to say how
+they really ended.
+
+| File | Reason | Archived | Delete after | Why |
+|---|---|---|---|---|
+| 04-strategy-spoiler-false-positive.md | Replaced | 2026-09-24 | — | Why a spoiler box covered things the player had already named. Plan 54 and the spoiler rulebook carried the fixes on; the problem still open is a roadmap bug. |
+| 05-token-streaming-review.md | Finished | 2026-09-24 | — | A review of how answers appear word by word. Both phases built and passed on the Deck; one check owed on testing.md; its open design question is now a roadmap entry. |
+| 06-thinking-blurbs-review.md | Finished | 2026-09-24 | — | A review of the short "thinking…" line. Its fixes landed and passed on the Deck under newer test names; one umbrella row stays open on testing.md. |
+| 16-soft-num-predict-thinking-budget.md | Finished | 2026-09-24 | — | Stopped long replies being cut off with nothing shown. Built 2026-08-10; four of five checks passed; the fifth has never managed to trigger and is on the roadmap. |
+| 23-what-still-needs-a-human.md | Replaced | 2026-09-24 | — | A short page on what a person still has to do. Plan 21 sections 6 and 7 say the same; nothing linked to it. |
+| 24-track-a-ci-baseline.md | Finished | 2026-09-24 | — | Put the tests into a check on every push. Live and blocking since 2026-08-26. Fully done; its four deferred tidy-ups are a roadmap entry. |
+| 28-named-chat-slots-v3-implementation-plan.md | Finished | 2026-09-24 | — | The third build plan for named chat slots. All 19 commits in; most rows passed; one bug it found is open on the roadmap. |
+| 29-preset-row-three-thirds-plan.md | Finished | 2026-09-24 | — | Put two suggestion chips back side by side. Built; halves of two checks still owed, in testing-manual.md. |
+| 30-collapsing-tab-bar.md | Finished | 2026-09-24 | — | The thin tab bar that opens when the ring reaches it. Built; the touch check and one opener still owed, in testing-manual.md. Plan 59 later redrew the open strip. |
+| 31-deck-verification-round.md | Finished | 2026-09-24 | — | The first Deck checking round's running order and log. Ran 2026-09-03/04; carried on by plan 34. |
+| 34-feature-verification-round.md | Finished | 2026-09-24 | — | The second Deck checking round. Ran 2026-09-05/06; its leftovers went to plans 61 and 64. |
+| 35-bugfix-session.md | Finished | 2026-09-24 | — | The second bug-fixing session. Every fix passed on the Deck. Fully proven. |
+| 40-reasoning-display.md | Replaced | 2026-09-24 | — | The first plan for showing the model's thinking. Its own log says plan 57 is the build plan. |
+| 45-settings-shortcut-card.md | Finished | 2026-09-24 | — | The Steam settings card above the question box. Built 2026-09-16; five of seven checks done; rows 06 and 07 are a roadmap Verify entry. Its Done line had claimed nothing was owed (corrected). |
+| 47-kb-wave-two-session.md | Finished | 2026-09-24 | — | Knowledge base wave two. Its two failures on the night were fixed and proven later. Fully proven. |
+| 48-kb-wave-three-session.md | Finished | 2026-09-24 | — | Knowledge base wave three. Built; two gaps it found (the "No tip" line never firing, a follow-up naming the wrong boss) are roadmap entries. |
+| 54-spoiler-rules-gaps.md | Finished | 2026-09-24 | — | Four gaps between the spoiler rulebook and the code. Built; one check waits on a game the maintainer does not have yet. |
+| 55-bugfix-session-three.md | Finished | 2026-09-24 | — | The third bug-fixing session. Everything it left owed was closed later. Fully proven; its deferred settings-list clean-up is a roadmap entry. |
+| 56-feature-session-four.md | Finished | 2026-09-24 | — | The fourth feature session. Built and mostly proven; the settings card's two rows and half the Spy check still owed on testing.md. |
+| 57-reasoning-display-build.md | Finished | 2026-09-24 | — | The build plan for showing the model's thinking. Six of seven rows passed; the last is blocked by a D-pad bug on the roadmap. |
+| 58-phase-1-notes-shown-and-wiki-extracts.md | Finished | 2026-09-24 | — | Show a note's own words, and read wikis without rewriting. Built; the library published 2026-09-23; the read-aloud row needs ears. |
+| 59-tab-strip-redesign-build.md | Finished | 2026-09-24 | — | The redrawn open tab strip. Built; the maintainer's look at five screenshots and the chat-name dots are still open. |
+| 60-chip-button-restyle.md | Finished | 2026-09-24 | — | Suggestion chips as raised buttons. Built; four checks owed in testing-manual.md. |
+| 61-automated-verification-session.md | Finished | 2026-09-24 | — | The overnight automated Deck round. Ran 2026-09-18/19; eleven entries closed; what it found is on the roadmap. |
+| 62-feature-session-five.md | Finished | 2026-09-24 | — | The fifth feature session. Three of four features proven on the Deck; Read aloud's new shape still owed on testing.md. |
+| 63-bugfix-session-four.md | Finished | 2026-09-24 | — | The fourth bug-fixing session. Ran 2026-09-21/22; plan 64 proved most of it; one fix (the chat-name dots) failed later and is a roadmap bug. |
+| 64-big-verification-session.md | Finished | 2026-09-24 | — | The big Deck verification night. 23 fixes, 18 proven; the other five and its six calls are on the roadmap or the checks page. |
+| 65-trim-docs-split-long-files.md | Finished | 2026-09-24 | — | Made the big documents and long files smaller. Fully proven on the Deck the same night. |
+| assets/58-phase-1-block-mockups.html | Finished | 2026-09-24 | — | The drawings of the "From the notes" block for plan 58 phase 1, moved with it. A code comment in useKbNotesFold.ts points here. |
+| assets/62-feature-board.html | Finished | 2026-09-24 | — | The repo copy of plan 62's drawing board, moved with it. |
+
 ## Helper scripts
 
 Moved into `scripts/archive/`. Same three reasons, same rules on delete dates.

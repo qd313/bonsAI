@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 506,
-  "edgeCount": 1351,
+  "fileCount": 507,
+  "edgeCount": 1352,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -238,6 +238,12 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/MainTab.dockClass.test.ts": {
+      "imports": [
+        "src/components/MainTab.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.streamScramble.test.tsx": {
       "imports": [
         "src/components/MainTab.tsx",
@@ -267,6 +273,7 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]

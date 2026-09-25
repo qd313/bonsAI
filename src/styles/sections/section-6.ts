@@ -135,6 +135,15 @@ export function buildSection6Section(): string {
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {
           animation: bonsai-ask-input-breathe 3.4s ease-in-out infinite;
         }
+        /* While the answer's text is arriving, the glow holds steady -- the look reduced motion
+           gets -- and breathes again for the next question's thinking. Measured on the Deck,
+           2026-09-25: this breathing and the answer bubble's pulse cost the panel about 5 frames a
+           second while an answer streamed in, and nothing while the model was only thinking. */
+        .bonsai-scope .bonsai-main-tab-dock--answer-arriving .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
+          animation: none;
+          border-color: var(--bonsai-ask-breathe-high, var(--bonsai-ask-mode-accent, #4ade80)) !important;
+          box-shadow: 0 0 0 1px var(--bonsai-ask-glow-high, rgba(74, 222, 128, 0.2));
+        }
         @media (prefers-reduced-motion: reduce) {
           .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel,
           .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {

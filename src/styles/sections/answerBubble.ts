@@ -2,7 +2,7 @@
  * Title: The answer bubble in the conversation
  *
  * Purpose: Styles the glass-panel bubble that holds the AI's answer: its
- * background and border, the pulsing border and blinking cursor while an
+ * background and border, the steady glow and blinking cursor while an
  * answer is still streaming in, the dashed "waiting on a code block to
  * finish" chip, each answer section's own D-pad outline, the spoiler
  * reveal box, and the Copy icon tucked into the bubble's bottom-right
@@ -248,17 +248,12 @@ export function buildAnswerBubbleSection(): string {
           mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
         }
         /* Streaming keeps the accent border: it reads as the cyan glow plus the caret, not as a
-           border swap (item 12). The fence-wait sub-state drops its swap for the same reason. */
+           border swap (item 12). The fence-wait sub-state drops its swap for the same reason.
+           A steady glow, not the pulse it was: measured on the Deck, 2026-09-25, this pulse and
+           the question box's breathing cost the panel about 5 frames a second while an answer
+           streamed in (about 44 with them, 49 without) -- a pulse redraws the bubble every frame. */
         .bonsai-scope .bonsai-chat-ai-bubble--stream-preview.bonsai-glass-panel {
-          animation: bonsai-stream-preview-pulse var(--bonsai-stream-pulse-ms, 2000ms) ease-in-out infinite;
-        }
-        @keyframes bonsai-stream-preview-pulse {
-          0%, 100% {
-            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.12);
-          }
-          50% {
-            box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.28);
-          }
+          box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.2);
         }
         .bonsai-scope .bonsai-stream-fence-wait {
           display: inline-flex !important;

@@ -209,3 +209,27 @@ describe("the live thinking under the question reads as ordinary text (the maint
     expect(body).toMatch(/color:\s*rgba\(180, 198, 217, 0\.6\)/);
   });
 });
+
+describe("the question box's glow while an answer's text arrives (Deck frame rate, 2026-09-25)", () => {
+  // Breathing redraws the box every frame. With the model writing on the graphics chip that cost
+  // the panel about 5 frames a second while an answer streamed in, and nothing while it only thought.
+  const css = buildSection6Section();
+
+  it("still breathes while asking, so the thinking keeps its sign of life", () => {
+    const match = css.match(
+      /\.bonsai-scope \.bonsai-unified-input-host\.bonsai-unified-input--asking\.bonsai-glass-panel,[^{]*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/animation:\s*bonsai-ask-input-breathe/);
+  });
+
+  it("holds steady once the dock is marked as the answer arriving, with a selector that outranks the breathing", () => {
+    const match = css.match(
+      /\.bonsai-scope \.bonsai-main-tab-dock--answer-arriving \.bonsai-unified-input-host\.bonsai-unified-input--asking\.bonsai-glass-panel\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toMatch(/animation:\s*none/);
+    expect(body).toMatch(/border-color:[^;]*!important/);
+  });
+});

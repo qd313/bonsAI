@@ -201,7 +201,8 @@ export type MainTabProps = {
  *    answer bubble inside it can read the scramble setting without it being threaded
  *    through as a prop — both the transcript and the Ask hook that feeds it are already
  *    at their size limit, with no room for one more.
- * 5. Draw the dock: the suggestion row, the Ask bar (which hands its own
+ * 5. Draw the dock (marked while an answer's text is arriving, see
+ *    mainTabDockClassName): the suggestion row, the Ask bar (which hands its own
  *    focus-jump functions back up through onFocusHandlersReady), a
  *    mic-permission notice if the microphone was refused, the screenshot
  *    browser if it is open, a plain navigation message, and a footnote
@@ -220,6 +221,16 @@ export function resolveStreamScrambleSettings(
   streamScramble: StreamScrambleSettings | undefined,
 ): StreamScrambleSettings {
   return streamScramble ?? STREAM_SCRAMBLE_OFF;
+}
+
+/**
+ * The dock's class: marked while an answer's text is arriving, which holds the question box's glow
+ * steady instead of breathing (section-6.ts). The thinking before the text keeps the breathing --
+ * on the Deck it cost nothing there, and about 5 frames a second with the answer's text arriving.
+ */
+export function mainTabDockClassName(isStreamingPreview: boolean | undefined, streamDisplayText: string | undefined): string {
+  const answerArriving = isStreamingPreview === true && Boolean(streamDisplayText?.trim());
+  return answerArriving ? "bonsai-main-tab-dock bonsai-main-tab-dock--answer-arriving" : "bonsai-main-tab-dock";
 }
 
 /** The Main tab itself — assembles the chat-slot row, transcript and dock. See the file header above for the full flow. */
@@ -283,7 +294,7 @@ export function MainTab(props: MainTabProps) {
         <StreamScrambleContext.Provider value={streamScrambleContextValue}>
           <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} />
         </StreamScrambleContext.Provider>
-        <div className="bonsai-main-tab-dock">
+        <div className={mainTabDockClassName(props.isStreamingPreview, props.streamDisplayText)}>
         <PanelSectionRow>
           <MainTabPresetRow
             suggestedPrompts={props.suggestedPrompts}

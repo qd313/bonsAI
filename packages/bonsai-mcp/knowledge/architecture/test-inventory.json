@@ -8,6 +8,7 @@
     "src/components/DrgGlossaryTermChip.test.tsx",
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",
+    "src/components/MainTab.dockClass.test.ts",
     "src/components/MainTab.streamScramble.test.tsx",
     "src/components/MainTabAskModeMenuPopover.test.tsx",
     "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",

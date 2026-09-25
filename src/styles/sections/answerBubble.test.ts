@@ -75,3 +75,16 @@ describe("the streamed-answer scramble's stylesheet (plan 69)", () => {
     expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--cyan")).toMatch(/color:\s*#7fd3f7/);
   });
 });
+
+describe("the streaming bubble's glow (Deck frame rate, 2026-09-25)", () => {
+  // A pulse redraws the bubble every frame; with the model writing on the graphics chip it and the
+  // question box's breathing cost the panel about 5 frames a second while an answer streamed in.
+  const css = buildAnswerBubbleSection();
+
+  it("is steady, not a pulse", () => {
+    const body = ruleBody(css, ".bonsai-scope .bonsai-chat-ai-bubble--stream-preview.bonsai-glass-panel");
+    expect(body).toMatch(/box-shadow:\s*0 0 8px 1px rgba\(56, 189, 248, 0\.2\)/);
+    expect(body).not.toMatch(/animation/);
+    expect(css).not.toContain("bonsai-stream-preview-pulse");
+  });
+});

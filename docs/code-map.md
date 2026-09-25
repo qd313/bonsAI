@@ -130,6 +130,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **CharacterRoleplayEmoticon.tsx** (src/components/CharacterRoleplayEmoticon.tsx) — *Character roleplay emoticon*: Render preset or synthetic character avatars, as pixel grids or prop emblems, with an optional badge letter.
 - **ContextChipLadder.tsx** (src/components/ContextChipLadder.tsx) — *Context chip ladder*: The row of small colored chips that appears once you open Session context" above the chat, or inside a turn's own "Show details" panel — one chip per kind of extra material attached to a question (files read, a screenshot, remembered notes, developer info…). […]
 - **DesktopNoteSaveModal.tsx** (src/components/DesktopNoteSaveModal.tsx) — *Save this exchange to a Desktop note*: The popup that appears when someone chooses to save the current question and answer to a file. It asks for a file name, shows where the note will be saved and that new saves are added to the end of the file rather than overwriting it, and hands the name back once the person…
+- **DeveloperOptionRow.tsx** (src/components/DeveloperOptionRow.tsx) — *Developer tab option row*: One row of pill buttons on the Developer tab — a title, an optional line describing the active choice, and a strip of buttons where exactly one is highlighted. […]
 - **DeveloperTab.tsx** (src/components/DeveloperTab.tsx) — *Developer tab*: The Developer tab, only visible once Developer Mode is turned on. It is for troubleshooting and testing bonsAI itself, not for changing how the AI answers: captured crash logs, which tab reopens the plugin, whether app activity gets written to Desktop as a log file, a Steam Web…
 - **DrgGlossaryTermChip.tsx** (src/components/DrgGlossaryTermChip.tsx) — *DRG glossary term chip*: One underlined word inside an AI reply, for a Deep Rock Galactic Survivor term the game does not explain well on its own (like "kiting"). […]
 - **KnowledgeBaseSection.tsx** (src/components/KnowledgeBaseSection.tsx) — *Knowledge base section*: The "Knowledge base (offline)" panel on the Ollama tab. A toggle turns on grounding Strategy and troubleshooting answers with a downloaded set of offline strategy cards; below it, a status line and a button that reads Download, Update, or Downloading… depending on what is…
@@ -273,6 +274,10 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **presetRowNav.ts** (src/features/preset-carousel/presetRowNav.ts) — *Preset row D-pad handlers*: The four move handlers a chip button carries: Left/Right walk the chips, Down hands the ring to the Ask field, Up hands it to the transcript.
 - **presetSlotRotation.ts** (src/features/preset-carousel/presetSlotRotation.ts) — *Preset slot rotation*: Choose the next prompt for one of the visible preset slots: a pinned QA batch walks in order, then contextual seeds not yet shown, then the sampled pool.
 - **sessionRagComposer.ts** (src/features/preset-carousel/sessionRagComposer.ts) — *Deciding which suggestion chips come from the game's own knowledge base*: Given the row of static preset chips and a list of chips pulled from the running game's own knowledge base, decides which of the row's slots actually show a knowledge-base chip instead of the static one — both when the row is first built, and each time the carousel rotates in a…
+
+## src/features/stream-scramble
+
+- **streamScrambleContext.ts** (src/features/stream-scramble/streamScrambleContext.ts) — *The streamed-answer scramble setting, as one bundle*: Four settings decide whether a streaming answer's newest text scrambles through symbols for a moment before settling into real letters, and if so how. […]
 
 ## src/features/unified-input
 

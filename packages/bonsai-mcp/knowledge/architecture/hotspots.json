@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1289,
+      "lines": 1325,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -136,6 +136,11 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 653,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 651,
       "role": ""
@@ -167,11 +172,6 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 573,
-      "role": ""
-    },
-    {
-      "path": "src/components/DeveloperTab.tsx",
       "lines": 573,
       "role": ""
     },

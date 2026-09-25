@@ -147,6 +147,7 @@ import { UiScaleProvider } from "./context/UiScaleContext";
 import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
 import { callDeckyWithTimeout } from "./utils/deckyCall";
 import { usePluginSettings } from "./hooks/usePluginSettings";
+import type { StreamScrambleSettings } from "./features/stream-scramble/streamScrambleContext";
 import { useReplyLanguage } from "./hooks/useReplyLanguage";
 import { useIntentPacks } from "./hooks/useIntentPacks";
 import { useScreenshotBrowser } from "./hooks/useScreenshotBrowser";
@@ -368,6 +369,14 @@ const Content: React.FC = () => {
     ragHybridRetrievalEnabled,
     setRagHybridRetrievalEnabled,
     ragCorpusVersion,
+    streamScrambleEnabled,
+    setStreamScrambleEnabled,
+    streamScrambleStyle,
+    setStreamScrambleStyle,
+    streamScrambleColor,
+    setStreamScrambleColor,
+    streamScrambleSettleMs,
+    setStreamScrambleSettleMs,
     settingsLoaded,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
@@ -1051,6 +1060,31 @@ const Content: React.FC = () => {
     syncSettingsFromDisk,
   });
 
+  /*
+   * Grouped into one value and one change function, rather than the four settings and four
+   * setters travelling separately, so the Developer tab (and later the Main tab) each cost this
+   * screen one thing to hand down instead of four -- see streamScrambleContext.ts for why that
+   * count matters here.
+   */
+  const streamScramble: StreamScrambleSettings = useMemo(
+    () => ({
+      enabled: streamScrambleEnabled,
+      style: streamScrambleStyle,
+      color: streamScrambleColor,
+      settleMs: streamScrambleSettleMs,
+    }),
+    [streamScrambleEnabled, streamScrambleStyle, streamScrambleColor, streamScrambleSettleMs],
+  );
+  const onStreamScrambleChange = useCallback(
+    (patch: Partial<StreamScrambleSettings>) => {
+      if (patch.enabled !== undefined) setStreamScrambleEnabled(patch.enabled);
+      if (patch.style !== undefined) setStreamScrambleStyle(patch.style);
+      if (patch.color !== undefined) setStreamScrambleColor(patch.color);
+      if (patch.settleMs !== undefined) setStreamScrambleSettleMs(patch.settleMs);
+    },
+    [setStreamScrambleEnabled, setStreamScrambleStyle, setStreamScrambleColor, setStreamScrambleSettleMs],
+  );
+
   const developerTab = useDeveloperTabPayload({
     capturedErrors,
     setCapturedErrors,
@@ -1082,6 +1116,8 @@ const Content: React.FC = () => {
     setTabResumeMode,
     installSeedKnowledgeBase,
     showDeveloperTab,
+    streamScramble,
+    onStreamScrambleChange,
   });
 
   const aboutTab = useAboutTabPayload({

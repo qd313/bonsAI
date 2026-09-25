@@ -32,9 +32,13 @@
  *     │                             plugin (A/B/C buttons)    │
  *     │ Logging & exports        <- Desktop log level,        │
  *     │                             auto-save chat, verbose   │
- *     │                             Ask log, preset animation,│
- *     │                             QA session-RAG + frozen   │
- *     │                             test chips                │
+ *     │                             Ask log, QA session-RAG   │
+ *     │                             + frozen test chips       │
+ *     │ Animations               <- preset chip animation,    │
+ *     │                             scramble switch + its     │
+ *     │                             settle style, settle time │
+ *     │                             and colour rows (shown    │
+ *     │                             only while it is on)      │
  *     │ Integrations             <- Steam Web API key         │
  *     └────────────────────────────────────────────────────────┘
  *
@@ -44,14 +48,26 @@
  * 2. The "Tab to open on" and "App activity logging" rows are each a
  *    horizontal row of buttons built from a fixed option list
  *    (TAB_RESUME_MODE_OPTIONS, DESKTOP_APP_LOG_LEVEL_OPTIONS) — press one
- *    to select it, styled to show which is active.
+ *    to select it, styled to show which is active. The Animations section's
+ *    button rows are the same idea, built through the shared
+ *    `DeveloperOptionRow` component instead of repeating the style block.
  * 3. runInstallSeedKb() drives the one asynchronous action on this tab: it
  *    disables its own button while running, calls the passed-in
  *    onInstallSeedKnowledgeBase, and shows a toast only if that fails.
  * 4. Everything else here reads and writes one setting directly — a
  *    toggle, a text field, or a small button row — with no local state of
  *    its own; every change goes straight back out through the setter it
- *    was handed.
+ *    was handed. The four scramble settings are the one exception: they
+ *    arrive as a single `streamScramble` object and change through a single
+ *    `onStreamScrambleChange(patch)` function, so the plugin's main screen
+ *    hands this tab one value and one function for the whole group instead
+ *    of four of each — see streamScrambleContext.ts for why.
+ * 5. The Animations section's "How letters settle" and "Scrambled letter
+ *    colour" rows only render while the Scramble animation switch is on,
+ *    and "How long each letter scrambles" only while it is on **and** the
+ *    settle style is picked — a row that is not drawn is not focusable, so
+ *    turning the switch off while the ring sits on it leaves the ring on
+ *    the switch rather than stranding it on a row that just vanished.
  */
 import React from "react";
 import {
@@ -68,14 +84,21 @@ import {
   DESKTOP_APP_LOG_LEVEL_OPTIONS,
   PRESET_CHIP_ANIMATION_OPTIONS,
   STEAM_WEB_API_KEY_MAX_LEN,
+  STREAM_SCRAMBLE_COLOR_OPTIONS,
+  STREAM_SCRAMBLE_SETTLE_MS_CHOICES,
+  STREAM_SCRAMBLE_STYLE_OPTIONS,
   TAB_RESUME_MODE_OPTIONS,
   TAB_RESUME_RECENT_WINDOW_MS,
   type DesktopAppLogLevel,
+  type StreamScrambleColor,
+  type StreamScrambleStyle,
   type TabResumeMode,
 } from "../data/bonsaiSettingsSchema";
 import { formatDeckyRpcError } from "../utils/deckyCall";
+import { DeveloperOptionRow } from "./DeveloperOptionRow";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import type { StreamScrambleSettings } from "../features/stream-scramble/streamScrambleContext";
 
 const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
   off: "Off",
@@ -101,6 +124,30 @@ const tabResumeModeDescription: Record<TabResumeMode, string> = {
   always_main: "Every reopen starts on Main, whatever tab you left from.",
   resume: "Reopen lands on the tab you left. Shipped default.",
   resume_recent: `Reopen resumes the tab within ${TAB_RESUME_RECENT_WINDOW_MINUTES} minutes, then falls back to Main.`,
+};
+
+const streamScrambleStyleLabel: Record<StreamScrambleStyle, string> = {
+  settle: "Settle",
+  chip: "Chip pace",
+  tail: "Fixed tail",
+};
+const streamScrambleStyleDescription: Record<StreamScrambleStyle, string> = {
+  settle: "Each letter scrambles for a moment after it arrives, then settles.",
+  chip: "Letters settle one at a time at the decode chips' pace, so a long answer stays scrambled until near the end.",
+  tail: "The last 10 letters are always scrambled.",
+};
+
+const streamScrambleColorLabel: Record<StreamScrambleColor, string> = {
+  same: "Same",
+  dim: "Dimmer",
+  green: "Green",
+  cyan: "Cyan",
+};
+const streamScrambleColorAriaLabel: Record<StreamScrambleColor, string> = {
+  same: "Same as text",
+  dim: "Dimmer",
+  green: "bonsAI green",
+  cyan: "Streaming cyan",
 };
 
 export type DeveloperConnectionStatus = {
@@ -154,6 +201,11 @@ export type DeveloperTabProps = {
   setTabResumeMode: (v: TabResumeMode) => void;
   /** Dev/QA: install seed KB from Deck path (build.ps1 deploy). */
   onInstallSeedKnowledgeBase?: () => Promise<void>;
+
+  /** Streamed answers scramble their newest text before settling, like the decode chips. Off by default. */
+  streamScramble: StreamScrambleSettings;
+  /** Changes whichever fields the patch names; fields left out are untouched. */
+  onStreamScrambleChange: (patch: Partial<StreamScrambleSettings>) => void;
 };
 
 /**
@@ -198,6 +250,8 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   tabResumeMode,
   setTabResumeMode,
   onInstallSeedKnowledgeBase,
+  streamScramble,
+  onStreamScrambleChange,
 }) => {
   const [seedKbBusy, setSeedKbBusy] = React.useState(false);
 
@@ -468,38 +522,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
         </PanelSectionRow>
         <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Preset suggestions</div>
-            <Focusable flow-children="horizontal" style={{ display: "flex", gap: 6, width: "100%" }}>
-              {PRESET_CHIP_ANIMATION_OPTIONS.map((mode) => (
-                <Button
-                  key={mode}
-                  onClick={() => setPresetChipAnimation(mode)}
-                  style={{
-                    flex: 1,
-                    minHeight: 32,
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border:
-                      mode === presetChipAnimation
-                        ? "1px solid rgba(56,189,248,0.55)"
-                        : "1px solid rgba(255,255,255,0.12)",
-                    background:
-                      mode === presetChipAnimation
-                        ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                    color: mode === presetChipAnimation ? "#e0f2fe" : "#9fb0c0",
-                  }}
-                  aria-label={`Preset animation: ${mode}`}
-                >
-                  {mode}
-                </Button>
-              ))}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
             <ToggleField
               label="Force session RAG chips (QA)"
               description="Always fill preset carousel slots from the knowledge base instead of a 30% chance each, and reseed the chips immediately. For verifying SESSION-RAG-CHIPS-01 without waiting on the roll. Needs Use local knowledge base on and a covered game running."
@@ -547,6 +569,64 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
             </div>
           </div>
         </PanelSectionRow>
+      </PanelSection>
+
+      <PanelSection title="Animations">
+        <DeveloperOptionRow
+          title="Preset suggestions"
+          options={PRESET_CHIP_ANIMATION_OPTIONS.map((mode) => ({
+            value: mode,
+            label: mode,
+            ariaLabel: `Preset animation: ${mode}`,
+          }))}
+          activeValue={presetChipAnimation}
+          onSelect={setPresetChipAnimation}
+        />
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Scramble animation"
+              description="New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default."
+              checked={streamScramble.enabled}
+              onChange={(checked) => onStreamScrambleChange({ enabled: checked })}
+            />
+          </div>
+        </PanelSectionRow>
+        {streamScramble.enabled ? (
+          <DeveloperOptionRow
+            title="How letters settle"
+            description={streamScrambleStyleDescription[streamScramble.style]}
+            options={STREAM_SCRAMBLE_STYLE_OPTIONS.map((style) => ({
+              value: style,
+              label: streamScrambleStyleLabel[style],
+            }))}
+            activeValue={streamScramble.style}
+            onSelect={(style) => onStreamScrambleChange({ style })}
+          />
+        ) : null}
+        {streamScramble.enabled && streamScramble.style === "settle" ? (
+          <DeveloperOptionRow
+            title={`How long each letter scrambles: ${streamScramble.settleMs} ms`}
+            options={STREAM_SCRAMBLE_SETTLE_MS_CHOICES.map((ms) => ({
+              value: ms,
+              label: String(ms),
+            }))}
+            activeValue={streamScramble.settleMs}
+            onSelect={(settleMs) => onStreamScrambleChange({ settleMs })}
+          />
+        ) : null}
+        {streamScramble.enabled ? (
+          <DeveloperOptionRow
+            title="Scrambled letter colour"
+            options={STREAM_SCRAMBLE_COLOR_OPTIONS.map((color) => ({
+              value: color,
+              label: streamScrambleColorLabel[color],
+              ariaLabel: streamScrambleColorAriaLabel[color],
+            }))}
+            activeValue={streamScramble.color}
+            onSelect={(color) => onStreamScrambleChange({ color })}
+          />
+        ) : null}
       </PanelSection>
 
       <PanelSection title="Integrations">

@@ -11,9 +11,26 @@
  *           the screen side is ready for it: given the same shape a poll would carry, the block
  *           renders before the reply is done.
  */
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
+
+/*
+ * Nearly every case here is about how the block draws and where the ring goes, not about which
+ * notes an answer used -- that rule has its own tests on real saved answers
+ * (kbNoteUsedByAnswer.test.ts). So the rule counts every attached note as used here, which is what
+ * the block did before the rule existed, except in the one describe below that turns it back on to
+ * prove the transcript really applies it.
+ */
+const usedRule = vi.hoisted(() => ({ countEveryNote: true }));
+vi.mock("../utils/kbNoteUsedByAnswer", async (importOriginal) => {
+  const real = await importOriginal<typeof import("../utils/kbNoteUsedByAnswer")>();
+  return {
+    ...real,
+    kbNotesUsedByAnswer: (...args: Parameters<typeof real.kbNotesUsedByAnswer>) =>
+      usedRule.countEveryNote ? args[0] : real.kbNotesUsedByAnswer(...args),
+  };
+});
 
 import {
   MainTabChatTranscript,
@@ -782,5 +799,47 @@ describe("Up from the session context strip's own header row", () => {
     );
     expect(focusUpPastSessionContextStripKbNotesBlock("live")).toBe(true);
     expect(document.activeElement).toBe(block(container));
+  });
+});
+
+describe("the block shows only notes the answer used (roadmap: the gold notes block sits under every answer)", () => {
+  beforeEach(() => {
+    usedRule.countEveryNote = false;
+  });
+  afterEach(() => {
+    usedRule.countEveryNote = true;
+  });
+
+  function turnAnswering(answer: string): AskThreadCollapsedTurn {
+    return {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer,
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [],
+        overflow_skips: [],
+        kb_attached_notes: [
+          note({ card: "Pikmin 2 drops the day limit. The goal is repaying the company's debt of ten thousand pokos." }),
+        ],
+      },
+    };
+  }
+
+  it("stays away from an answer that never said anything from the note", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turnAnswering("Yes, Pikmin 2 keeps the day limit from the first game."))} />
+    );
+    expect(block(container)).toBeNull();
+  });
+
+  it("shows under an answer that repeats the note", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnAnswering("No. You are repaying the company's debt, ten thousand pokos, with no clock."))}
+      />
+    );
+    expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
   });
 });

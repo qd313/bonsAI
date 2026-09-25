@@ -128,7 +128,7 @@ import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
-  kbNotesBlockedBySpoiler,
+  kbNotesToShow,
   focusKbNotesBlock,
   focusUpPastLiveKbNotesBlock,
   focusUpPastSessionContextStripKbNotesBlock,
@@ -1240,9 +1240,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   }
                   const downPastUtilityRow = () =>
                     focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
-                  const kbNotesHere = kbNotesBlockedBySpoiler(turn.answer, strategySpoilerMaskingEnabled)
-                    ? []
-                    : kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex));
+                  const kbNotesHere = kbNotesToShow(turn, strategySpoilerMaskingEnabled,
+                    kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)));
                   const actionsEl = buildReplyActionsElement({
                     replyKey: turn.id,
                     rating: showFeedbackHere ? liveReplyFeedbackRating : null,
@@ -1515,12 +1514,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const answerTextForFenceCheck = isAsking
                     ? liveResponseBody
                     : lastExchange?.answer ?? "";
-                  const kbNotesHere = kbNotesBlockedBySpoiler(
-                    answerTextForFenceCheck,
-                    strategySpoilerMaskingEnabled
-                  )
-                    ? []
-                    : notes;
+                  const kbNotesHere = kbNotesToShow(
+                    { question: liveQuestion, answer: answerTextForFenceCheck },
+                    strategySpoilerMaskingEnabled,
+                    notes
+                  );
                   return buildKbNotesBlockElement({
                     turnKey: "live",
                     notes: kbNotesHere,

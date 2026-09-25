@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1760,
+      "lines": 1758,
       "role": ""
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 787,
+      "lines": 846,
       "role": ""
     },
     {

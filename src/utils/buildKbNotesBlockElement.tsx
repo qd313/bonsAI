@@ -24,6 +24,7 @@ import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "./focusNavigat
 import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "./liveTurnFocusGraph";
 import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "./inputTransparency";
 import { anySpoilerFenceOpen } from "../components/MainTabBonsaiAiMarkdownChunk";
+import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../features/unified-input/constants";
 
 /**
@@ -129,7 +130,7 @@ const BONSAI_SPOILER_FENCE_MARKER = "```bonsai-spoiler";
  * MainTabBonsaiAiMarkdownChunk.tsx for why it is safe as a single flag rather than one tracked
  * per turn.
  */
-export function kbNotesBlockedBySpoiler(
+function kbNotesBlockedBySpoiler(
   answerText: string | null | undefined,
   maskingEnabled: boolean | undefined
 ): boolean {
@@ -137,6 +138,22 @@ export function kbNotesBlockedBySpoiler(
   const isFenced = Boolean(answerText && answerText.includes(BONSAI_SPOILER_FENCE_MARKER));
   if (!isFenced) return false;
   return !anySpoilerFenceOpen();
+}
+
+/**
+ * The notes the block shows for one turn: none while a closed spoiler cover still hides the
+ * answer (above), otherwise only the notes the answer actually used, judged on as much of it as
+ * has arrived -- so on a live answer the block appears once the answer says something from a note
+ * (kbNoteUsedByAnswer.ts; the maintainer's rule, 2026-09-24). Show details still lists every note
+ * that was attached.
+ */
+export function kbNotesToShow(
+  turn: { question?: string | null; answer?: string | null },
+  maskingEnabled: boolean | undefined,
+  notes: KbAttachedNote[]
+): KbAttachedNote[] {
+  if (kbNotesBlockedBySpoiler(turn.answer, maskingEnabled)) return [];
+  return kbNotesUsedByAnswer(notes, turn.answer, turn.question);
 }
 
 /**

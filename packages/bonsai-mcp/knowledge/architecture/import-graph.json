@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 487,
-  "edgeCount": 1300,
+  "fileCount": 489,
+  "edgeCount": 1305,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -366,7 +366,8 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
-        "src/utils/inputTransparency.ts"
+        "src/utils/inputTransparency.ts",
+        "src/utils/kbNoteUsedByAnswer.ts"
       ],
       "importedBy": []
     },
@@ -4171,6 +4172,7 @@
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/kbNoteUsedByAnswer.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -4605,7 +4607,9 @@
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/chatSlotsApi.ts",
         "src/utils/contextChipsFromSnapshot.test.ts",
-        "src/utils/contextChipsFromSnapshot.ts"
+        "src/utils/contextChipsFromSnapshot.ts",
+        "src/utils/kbNoteUsedByAnswer.test.ts",
+        "src/utils/kbNoteUsedByAnswer.ts"
       ]
     },
     "src/utils/intentPackSearch.test.ts": {
@@ -4637,6 +4641,23 @@
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/utils/joinPresetWithRunningGame.test.ts"
+      ]
+    },
+    "src/utils/kbNoteUsedByAnswer.test.ts": {
+      "imports": [
+        "src/utils/inputTransparency.ts",
+        "src/utils/kbNoteUsedByAnswer.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/kbNoteUsedByAnswer.ts": {
+      "imports": [
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+        "src/utils/buildKbNotesBlockElement.tsx",
+        "src/utils/kbNoteUsedByAnswer.test.ts"
       ]
     },
     "src/utils/liveTurnFocusGraph.test.ts": {

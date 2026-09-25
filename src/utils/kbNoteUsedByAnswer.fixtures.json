@@ -1,0 +1,210 @@
+[
+ {
+  "source": "maintainer's Deck, saved chat 351b2838#5, 2026-09-24",
+  "why": "Driller upgrades: repeats the upgrades note's advice and names the Exploder; never mentions Nitra",
+  "question": "What are good early weapon upgrades for the Driller in Deep Rock Galactic Survivor? Keep it to a short list.",
+  "answer": "Alright, listen up, you wanna know about those early weapon upgrades for the Driller? It ain't about grabbin' every shiny thing, mate. You gotta be smart.\n\nFirst thing, you pick *one* weapon you wanna carry for the whole run. Don't try to be a jack-of-all-trades right out of the gate. That's a recipe for a messy end.\n\nSecond, once you pick that main weapon, you spend the rest of your upgrades on survivability. You want to make sure you don't get blown up by those Exploder bugs. Keep an eye on those upgrades and see what makes you tougher.\n\nSo, the short list is: Pick one weapon, then stack survivability. Simple as that.",
+  "notes": [
+   {
+    "name": "Nitra",
+    "kind": "item",
+    "domain": "strategy",
+    "card": "Summary: The resource that pays for weapons rather than for your dwarf.\nUses: Buys weapon upgrade cards at the between-stage shop and rerolls the artifact choice from the Supply Pod.\nTips: No nitra means an underleveled weapon however much gold you mined, so keep mining it for whichever weapon carries the run."
+   },
+   {
+    "name": "Upgrades and overclocks",
+    "kind": "mechanic",
+    "domain": "strategy",
+    "card": "Levelling offers a choice of upgrades, and taking a little of everything is the common way to lose. Pick one weapon to carry the run and feed it, then spend the rest on survivability. Overclocks change what a weapon is for rather than making it bigger, so read what one removes as well as what it adds."
+   },
+   {
+    "name": "Exploder",
+    "kind": "enemy",
+    "domain": "strategy",
+    "card": "Summary: Large orange glyphids that walk into you and detonate in a wide blast.\nWeak points: Fragile, and the blasts chain, so one popped early clears the group behind it.\nTips: Weapons fire themselves, so it dies where you stand - keep distance and the blast lands in the swarm instead."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#11, 2026-09-24",
+  "why": "taming a horse: three Half-Life notes attached, none used",
+  "question": "how do i tame a horse in half life 2",
+  "answer": "Alright, listen up. Taming horses in Half-Life 2 ain't exactly the main event, mate. You gotta keep your eyes on the action and figure out what the game is actually asking you to do. You ain't gonna find a big 'Tame Horse' button just sitting there. You gotta be looking for specific missions or maybe some weird side quests, depending on where you are in the game.\n\nRight now, we gotta figure out where you are so I can give you the right angle.\n\n—\n*No close match in my notes, this answer leans on the model's own knowledge.*",
+  "notes": [
+   {
+    "name": "Strider",
+    "kind": "boss",
+    "domain": "strategy",
+    "card": "RPG only, and roughly seven rockets on Normal. The rocket stays laser-guided the whole flight, so steer it wide and bring it in off-axis rather than straight up the barrel. Its warp cannon does splash damage, so keep moving between shots. A crate of rockets nearby means the fight is a long one."
+   },
+   {
+    "name": "Ravenholm",
+    "kind": "area",
+    "domain": "strategy",
+    "card": "Ammo is scarce on purpose, so fight with the town instead of your guns. Levers drop car traps and reset them; waist-high blade traps shred zombies while you duck under; propane spray ignites from a single shot. Poison zombies switch traps off, so deal with those first. Loose blades are gravity gun ammunition."
+   },
+   {
+    "name": "Hunter-Chopper (helicopter)",
+    "kind": "boss",
+    "domain": "strategy",
+    "card": "Fought from the airboat once its gun is mounted. Hold fire on it and pieces break away until it goes down. It drops contact mines and charges a pulse turret between passes; nearly dead, it makes one bombing run, so steer between the lines of falling bombs rather than trying to outrun them."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#19, 2026-09-24",
+  "why": "electrified water: only the waste-pools note is used",
+  "question": "black mesa how do i get across the electrified water",
+  "answer": "Alright, listen up, you wanna cross that electrified water? Don't be a mug and just stand there waiting for the current to stop. That water is straight-up lava, see? It’s constant shock damage until you get out or you’re toast. You gotta treat it like you’re wading through hot sludge, not some slow-motion puddle.\n\nHere’s the skinny: don't try to time it. You gotta find something *above* the water. Look up! Desks, cabinets, shelves, those floating crates, even overhead pipes—anything that’s not submerged is your ticket across. If the gap is too wide to jump, don't sweat it; just grab those loose wooden crates and use 'em as stepping stones. Simple as that. Or, if you see a red wall switch or a breaker anywhere near the pool, cut the power. That’ll make the water safe for good.",
+  "notes": [
+   {
+    "name": "Starting out in Black Mesa",
+    "kind": "mechanic",
+    "domain": "strategy",
+    "card": "Black Mesa is Half-Life rebuilt from the ground up on the Source engine, with new art, sound and voice work but the original's chapters, weapons and enemies kept on purpose rather than added to. The one exception is Xen: those chapters are mostly new work and far longer than the 1998 originals, so budget more time for the alien world than veterans remember. Expect the same shape of game throughout: no cutscenes, scripted scenes you walk through, a crowbar for crates and vents, and fights that go better from a doorway than from the middle of a room. There are 25 achievements, Workshop support and a separate deathmatch mode; the campaign itself is single-player only."
+   },
+   {
+    "name": "The opening tram ride and where it leads",
+    "kind": "mechanic",
+    "domain": "strategy",
+    "card": "Black Mesa opens with a long tram ride that needs no input beyond looking around; it carries you from the surface entrance through checkpoints and cargo bays into the underground facility, and doubles as an unskippable loading screen for the level ahead. Step off at the platform, badge through the checkpoint, and follow the corridor signs to the locker room, where you change into the orange HEV suit before the day's work — the path there is linear, so a door that will not open yet is one you have not reached the switch for. Anomalous Materials, the lab down the following hall, is where the real gameplay opens up: once things go wrong there, the crowbar on the floor nearby is the first weapon in the game, and from then on every locked vent or wooden crate is worth swinging at before hunting for another way around."
+   },
+   {
+    "name": "Crossing the electrified waste pools",
+    "kind": "mechanic",
+    "domain": "strategy",
+    "card": "The waste-treatment area has stretches of standing water with live wiring dropped into it, and the current is constant — there is no safe moment and no warning cycle to wait for. Stepping in deals continuous shock damage until you get out or die, so treat the flooded floor like lava rather than something to time. Cross on anything above the water: desks, cabinets, shelves, floating crates and overhead pipes all work, and the route is usually built into the room once you look up. Better still, cut the power — a red wall switch, breaker or lever, usually just outside the flooded area or at its far end, makes the water safe for good. Where a gap is too wide to jump, push or carry loose wooden crates into the water and use them as stepping stones."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#95, 2026-09-24",
+  "why": "a crash question that got three Half-Life strategy notes",
+  "question": "my game keeps stuttering and then crashing after the latest update what should i check",
+  "answer": "Right, listen up, mate! You're getting the stutter and the crash right after that update, eh? Sounds like the game's having a proper kerfuffle, see? Don't just sit there and sweat it; we gotta sort this out.\n\nFirst thing, you gotta check your drivers. Make sure your graphics drivers are the latest and greatest. If you're on a Steam Deck, sometimes the OS updates can mess with the game's setup, so a clean reinstall of the game files can sort a lot of this out.\n\nThen, you need to check those logs. If you're on Linux, look at the Proton logs. That's where you'll find the real dirt on what's going wrong. It tells you exactly where the game is throwing a tantrum.",
+  "notes": [
+   {
+    "name": "Sandtraps",
+    "kind": "area",
+    "domain": "strategy",
+    "card": "The coastal chapter that teaches the sand. Rock to rock on the way out; after the Antlion Guard you keep the pheropod and use antlions to break the Combine bunkers guarding the road to Nova Prospekt."
+   },
+   {
+    "name": "Gravity Gun",
+    "kind": "item",
+    "domain": "strategy",
+    "card": "Secondary pulls and holds, primary punts. Explosive barrels hit hardest, sawblades cut zombies apart, and a held radiator works as a shield you can walk behind. It will not lift most enemies, but manhacks and scanners are fair game, and thrown grenades can go back where they came from."
+   },
+   {
+    "name": "Ravenholm",
+    "kind": "area",
+    "domain": "strategy",
+    "card": "Ammo is scarce on purpose, so fight with the town instead of your guns. Levers drop car traps and reset them; waist-high blade traps shred zombies while you duck under; propane spray ignites from a single shot. Poison zombies switch traps off, so deal with those first. Loose blades are gravity gun ammunition."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#25, 2026-09-24",
+  "why": "the boss past the crystal spike area: the answer names Broken Vessel, the question never did",
+  "question": "what should i know about the boss past the crystal spike area in hollow knight, the one that looks just like me",
+  "answer": "Alright, listen up, you wanna know about that boss past the Crystal Spike area? You're talkin' about the Broken Vessel, yeah? This fella is a proper headache. He’s got a knack for messing with the portals and throwing bombs everywhere, so you gotta keep your wits about you, mate. The trick is simple: let him try to shield himself, then you gotta hit him with that bomb. You want that bomb to break the conversion gel pipe, get some paint going on the wall… it’s all about timing that hit right when he’s vulnerable.\n\n—\n*No close match in my notes, this answer leans on the model's own knowledge.*",
+  "notes": [
+   {
+    "name": "Starting out in Hollow Knight",
+    "kind": "mechanic",
+    "domain": "strategy",
+    "card": "A side-scrolling metroidvania: a huge connected kingdom under the town of Dirtmouth that opens piece by piece as you find abilities. There is no map of an area until you find Cornifer, the humming cartographer, and buy his copy, and it only fills in as you rest at benches once you own a quill from his wife in Dirtmouth. Benches are everything: they save, restore your masks, and are the only place charms can be swapped. Your nail is short, so learn early to bounce off enemies and spikes with a downward slash. Hitting enemies fills the soul meter; hold Focus to spend it healing one mask at a time, or tap it for spells. Dying is not the end: your Shade waits where you fell, holding your Geo."
+   },
+   {
+    "name": "Broken Vessel",
+    "kind": "boss",
+    "domain": "strategy",
+    "card": "The infected husk shaped like you, far west in the Ancient Basin past a gap that needs the Crystal Heart. It dashes with slashes that cover most of the arena, flails its nail overhead, leaps to slam down and throw four arcs of infection, shakes out a cascade of blobs that covers nearly everything when its health gets low, and spawns weak balloons that drift at you. It is one of the few bosses that gets knocked back, so Vengeful Spirit can hit it twice; Desolate Dive during the cascade both damages it and keeps you safe. A longer nail (Mark of Pride or Longnail) matches its reach, and Defender's Crest quietly clears the balloons. Heal when it staggers, head weighed down and shaking."
+   },
+   {
+    "name": "Watcher Knights",
+    "kind": "boss",
+    "domain": "strategy",
+    "card": "Six armoured husks at the top of the Watcher's Spire, fought at most two at a time; a new one wakes twenty seconds after the last, or two together if you kill fast. Each does a double slash, rolls as a ball along the floor and bounces after you, and is immune to the nail while rolling (spells still land). Their only answer to attacks from above is that bouncing roll, so fight from the air and never let them corner you. Before the fight, break the hidden wall on the approach and cut the chandelier's support: it drops on the second husk from the left and you fight five instead of six. Quick Focus matters here; Desolate Dive with Shaman Stone kills one in three casts while keeping you untouchable."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#9, 2026-09-24",
+  "why": "the antlion guard: the answer names the pheropod; Antlions is only the question's own word",
+  "question": "how do i beat the antlion guard",
+  "answer": "Listen up, mate! You wanna take down that Antlion Guard? It ain't about shooting it like some proper soldier. You gotta use the trick. You find that pheropod from the Antlion Guard, and then you throw it. When you do that, the whole bunch of Antlions flips their script. They start seeing you as a guard, and they'll swarm whatever you marked. Simple as that.",
+  "notes": [
+   {
+    "name": "Pheropod (bugbait)",
+    "kind": "item",
+    "domain": "strategy",
+    "card": "Once you have the pheropod from the Antlion Guard the antlions reverse: throw it and they read you as a guard and swarm whatever you marked."
+   },
+   {
+    "name": "Sandtraps",
+    "kind": "area",
+    "domain": "strategy",
+    "card": "The coastal chapter that teaches the sand. Rock to rock on the way out; after the Antlion Guard you keep the pheropod and use antlions to break the Combine bunkers guarding the road to Nova Prospekt."
+   },
+   {
+    "name": "Antlions",
+    "kind": "enemy",
+    "domain": "strategy",
+    "card": "Antlions are blind and hunt vibration, so on the coast the rocks are safe and the sand is not — step off and they come up."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#47, 2026-09-24",
+  "why": "a crash question with three shared troubleshooting tips, two of them used",
+  "question": "what settings should i check if a game keeps crashing after i alt tab out of it",
+  "answer": "Alright, listen up, mate. You wanna know what's goin' on when your game decides to quit after you hit that alt-tab button? Look, I ain't got a specific game name right now, so I can't tell you the exact settings, but I can tell you the general skinny on how to stop that digital meltdown.\n\nFirst thing, you gotta check if your storage is full. If your drive is packed tighter than a sardine can, the game can't breathe, and it'll crash like a cheap suit. Second, make sure your game files are sound. Sometimes a download gets messed up, and that's a recipe for trouble. You gotta verify those files from the Steam library. And if you're running any extra stuff—like Steam overlay or those third-party overlays—try turning 'em off when the crash happens. That can clear the air.\n\nBut listen, I need to know what game you're talkin' about so I can give you the real dirt. We gotta know the scene before we can map out the moves.",
+  "notes": [
+   {
+    "name": "crash",
+    "kind": "tip",
+    "domain": "compat",
+    "card": "Check free storage space -- a nearly full drive can crash a game at launch or while saving."
+   },
+   {
+    "name": "crash",
+    "kind": "tip",
+    "domain": "compat",
+    "card": "Verify the game's files from the Steam library; a broken download is a common crash cause."
+   },
+   {
+    "name": "crash",
+    "kind": "tip",
+    "domain": "compat",
+    "card": "Disable Steam overlay and third-party overlays when crashes happen at launch."
+   }
+  ]
+ },
+ {
+  "source": "maintainer's Deck, saved chat d2aa6252#137, 2026-09-24",
+  "why": "the shotgun question answered with the Gravity Gun note's facts, under the no-close-match footer",
+  "question": "what does the shotgun do in half life 2",
+  "answer": "The shotgun in Half-Life 2 is a powerful weapon that can be used to pull and hold enemies, pummel them with explosive barrels, cut through zombies with sawblades, and shield you with a radiator. It’s effective against most enemies but can’t lift them, so it’s best to keep a distance and use it strategically.\n\n—\n*No close match in my notes, this answer leans on the model's own knowledge.*",
+  "notes": [
+   {
+    "name": "Gravity Gun",
+    "kind": "item",
+    "domain": "strategy",
+    "card": "Secondary pulls and holds, primary punts. Explosive barrels hit hardest, sawblades cut zombies apart, and a held radiator works as a shield you can walk behind. It will not lift most enemies, but manhacks and scanners are fair game, and thrown grenades can go back where they came from."
+   },
+   {
+    "name": "Ravenholm",
+    "kind": "area",
+    "domain": "strategy",
+    "card": "Ammo is scarce on purpose, so fight with the town instead of your guns. Levers drop car traps and reset them; waist-high blade traps shred zombies while you duck under; propane spray ignites from a single shot. Poison zombies switch traps off, so deal with those first. Loose blades are gravity gun ammunition."
+   },
+   {
+    "name": "Combine soldiers",
+    "kind": "enemy",
+    "domain": "strategy",
+    "card": "They move in squads of four to six and will flank you while the rest lay down covering fire, so holding one angle gets you surrounded. A grenade breaks them out of cover and into the open — and you can throw theirs back. Kill the shotgun one first and keep your distance from the rest; up close they club you."
+   }
+  ]
+ }
+]

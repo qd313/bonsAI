@@ -153,7 +153,7 @@ MEASURE_JS = r"""
     inkOffset: -m.actualBoundingBoxLeft,
     caret: { left: c.left, right: c.right, top: c.top, bottom: c.bottom, width: c.width },
     caretClass: caret.className,
-    screen: { width: window.innerWidth, height: window.innerHeight, dpr: window.devicePixelRatio }
+    screen: { width: window.screen.width, height: window.screen.height, dpr: window.devicePixelRatio }
   });
 })()
 """

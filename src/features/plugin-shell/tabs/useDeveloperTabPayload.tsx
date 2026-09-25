@@ -52,8 +52,6 @@ export function useDeveloperTabPayload({
   desktopAppLogLevel,
   setDesktopAppLogLevel,
   filesystemWrite,
-  presetChipFadeAnimationEnabled,
-  setPresetChipFadeAnimationEnabled,
   presetChipAnimation,
   setPresetChipAnimation,
   steamWebApiKey,
@@ -91,8 +89,6 @@ export function useDeveloperTabPayload({
         setDesktopAppLogLevel={setDesktopAppLogLevel}
         filesystemWrite={filesystemWrite}
         onJumpToPermission={onJumpToPermission}
-        presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
-        setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
         presetChipAnimation={presetChipAnimation}
         setPresetChipAnimation={setPresetChipAnimation}
         steamWebApiKey={steamWebApiKey}
@@ -120,7 +116,6 @@ export function useDeveloperTabPayload({
       desktopAskVerboseLogging,
       desktopAppLogLevel,
       filesystemWrite,
-      presetChipFadeAnimationEnabled,
       presetChipAnimation,
       steamWebApiKey,
       showOnscreenDebugHud,

@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1294,
+      "lines": 1289,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -161,17 +161,17 @@
       "role": ""
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 579,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 579,
       "role": ""
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 573,
+      "role": ""
+    },
+    {
+      "path": "src/components/DeveloperTab.tsx",
       "lines": 573,
       "role": ""
     },

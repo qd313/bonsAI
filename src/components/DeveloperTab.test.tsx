@@ -23,8 +23,6 @@ function baseProps(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProp
     desktopAppLogLevel: "default",
     setDesktopAppLogLevel: () => {},
     filesystemWrite: false,
-    presetChipFadeAnimationEnabled: false,
-    setPresetChipFadeAnimationEnabled: () => {},
     presetChipAnimation: "fade",
     setPresetChipAnimation: () => {},
     steamWebApiKey: "",

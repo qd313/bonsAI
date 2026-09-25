@@ -34,7 +34,6 @@ export type MainTabPresetRowProps = {
   suggestedPrompts: PresetPrompt[];
   showPluginHelpChip: boolean;
   onOpenPluginHelp: () => void;
-  presetChipFadeAnimationEnabled?: boolean;
   presetChipAnimation?: "fade" | "carousel" | "static" | "decode";
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   onPresetPreferAskMode?: (mode: AskModeId) => void;
@@ -75,7 +74,6 @@ export function MainTabPresetRow({
   suggestedPrompts,
   showPluginHelpChip,
   onOpenPluginHelp,
-  presetChipFadeAnimationEnabled = true,
   presetChipAnimation = "fade",
   setUnifiedInput,
   onPresetPreferAskMode,
@@ -125,9 +123,7 @@ export function MainTabPresetRow({
       ref={presetCarouselHostRef}
       className={
         "bonsai-full-bleed-row bonsai-preset-row-host" +
-        (presetChipAnimation === "fade" && presetChipFadeAnimationEnabled
-          ? " bonsai-preset-row-host--fade-anim"
-          : "")
+        (presetChipAnimation === "fade" ? " bonsai-preset-row-host--fade-anim" : "")
       }
       style={{ display: "grid", minWidth: 0, width: "100%", boxSizing: "border-box" }}
     >
@@ -161,7 +157,7 @@ export function MainTabPresetRow({
         <MainTabPresetAnimatedChips
           seeds={suggestedPrompts}
           setUnifiedInput={setUnifiedInput}
-          fadeAnimationEnabled={presetChipAnimation === "fade" && presetChipFadeAnimationEnabled}
+          fadeAnimationEnabled={presetChipAnimation === "fade"}
           animationMode={presetChipAnimation}
           onPreferAskMode={onPresetPreferAskMode}
           onCarouselExitDown={focusUnifiedTextField}

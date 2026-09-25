@@ -156,7 +156,6 @@ export function useMainTabPayload({
     showPluginHelpChip,
     useLocalKnowledgeBase,
     onOpenPluginHelp,
-    presetChipFadeAnimationEnabled,
     presetChipAnimation,
     presetSingleChip,
     onRetryLastResponse,
@@ -271,7 +270,6 @@ export function useMainTabPayload({
         showPluginHelpChip={showPluginHelpChip}
         useLocalKnowledgeBase={useLocalKnowledgeBase}
         onOpenPluginHelp={onOpenPluginHelp}
-        presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
         presetChipAnimation={presetChipAnimation}
         presetSingleChip={presetSingleChip}
         onRetryLastResponse={onRetryLastResponse}
@@ -387,7 +385,6 @@ export function useMainTabPayload({
       suggestedPrompts,
       showPluginHelpChip,
       useLocalKnowledgeBase,
-      presetChipFadeAnimationEnabled,
       presetChipAnimation,
       presetSingleChip,
       unifiedInput,

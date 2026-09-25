@@ -132,8 +132,6 @@ export type DeveloperTabProps = {
   filesystemWrite: boolean;
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
 
-  presetChipFadeAnimationEnabled: boolean;
-  setPresetChipFadeAnimationEnabled: (v: boolean) => void;
   presetChipAnimation: import("../data/bonsaiSettingsSchema").PresetChipAnimation;
   setPresetChipAnimation: (v: import("../data/bonsaiSettingsSchema").PresetChipAnimation) => void;
 
@@ -183,7 +181,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   setDesktopAppLogLevel,
   filesystemWrite,
   onJumpToPermission,
-  setPresetChipFadeAnimationEnabled,
   presetChipAnimation,
   setPresetChipAnimation,
   steamWebApiKey,
@@ -476,10 +473,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               {PRESET_CHIP_ANIMATION_OPTIONS.map((mode) => (
                 <Button
                   key={mode}
-                  onClick={() => {
-                    setPresetChipAnimation(mode);
-                    setPresetChipFadeAnimationEnabled(mode === "fade");
-                  }}
+                  onClick={() => setPresetChipAnimation(mode)}
                   style={{
                     flex: 1,
                     minHeight: 32,

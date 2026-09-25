@@ -55,7 +55,6 @@ export type MainTabProps = {
   showPluginHelpChip: boolean;
   useLocalKnowledgeBase?: boolean;
   onOpenPluginHelp: () => void;
-  presetChipFadeAnimationEnabled?: boolean;
   presetChipAnimation?: "fade" | "carousel" | "static" | "decode";
   /** "One suggestion chip" setting: the row shows one chip with the whole column. Off by default. */
   presetSingleChip?: boolean;
@@ -256,7 +255,6 @@ export function MainTab(props: MainTabProps) {
             showPluginHelpChip={props.showPluginHelpChip}
             useLocalKnowledgeBase={props.useLocalKnowledgeBase}
             onOpenPluginHelp={props.onOpenPluginHelp}
-            presetChipFadeAnimationEnabled={props.presetChipFadeAnimationEnabled}
             presetChipAnimation={props.presetChipAnimation}
             presetSingleChip={props.presetSingleChip}
             setUnifiedInput={props.setUnifiedInput}

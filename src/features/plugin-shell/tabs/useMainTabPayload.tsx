@@ -253,6 +253,7 @@ export function useMainTabPayload({
     isForeignPendingAsk,
     generatingSlotId,
     unreadSlotIds,
+    streamScramble,
   } = props;
 
   // Dependency list preserved from index.tsx, with the names it depended on translated to the
@@ -373,6 +374,7 @@ export function useMainTabPayload({
         isForeignPendingAsk={isForeignPendingAsk}
         generatingSlotId={generatingSlotId}
         unreadSlotIds={unreadSlotIds}
+        streamScramble={streamScramble}
       />
     ),
     // ANY NEW PROP MUST BE ADDED TO THIS LIST. It is hand-maintained and nothing
@@ -387,6 +389,7 @@ export function useMainTabPayload({
       useLocalKnowledgeBase,
       presetChipAnimation,
       presetSingleChip,
+      streamScramble,
       unifiedInput,
       unifiedInputSurfacePx,
       usesNativeMultilineField,

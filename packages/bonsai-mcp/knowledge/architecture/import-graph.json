@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 496,
-  "edgeCount": 1315,
+  "fileCount": 497,
+  "edgeCount": 1318,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -238,6 +238,13 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/MainTab.streamScramble.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/stream-scramble/streamScrambleContext.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -250,6 +257,7 @@
         "src/data/presets.ts",
         "src/data/replyMicroActions.ts",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/stream-scramble/streamScrambleContext.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useMainTabColumnFill.ts",
         "src/types/backgroundAsk.ts",
@@ -259,6 +267,7 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.streamScramble.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
     },
@@ -2390,6 +2399,8 @@
       "importedBy": [
         "src/components/DeveloperTab.test.tsx",
         "src/components/DeveloperTab.tsx",
+        "src/components/MainTab.streamScramble.test.tsx",
+        "src/components/MainTab.tsx",
         "src/features/stream-scramble/streamScrambleContext.test.ts",
         "src/index.tsx"
       ]

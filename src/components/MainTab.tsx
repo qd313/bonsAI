@@ -19,7 +19,7 @@
  * path between controls — see MainTabUnifiedAskBar and MainTabChatTranscript
  * for those.
  */
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { PanelSection, PanelSectionRow, Button } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type {
@@ -47,6 +47,11 @@ import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
 import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
 import type { ChatSlotSummary } from "../utils/chatSlotsApi";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import {
+  STREAM_SCRAMBLE_OFF,
+  StreamScrambleContext,
+  type StreamScrambleSettings,
+} from "../features/stream-scramble/streamScrambleContext";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -165,6 +170,8 @@ export type MainTabProps = {
   generatingSlotId?: string | null;
   /** Slots that finished an answer while the user was elsewhere. Drives the solid green dot. */
   unreadSlotIds?: ReadonlySet<string>;
+  /** Streamed answers scramble their newest text before settling, like the decode chips. Undefined or omitted is the same as the switch being off. */
+  streamScramble?: StreamScrambleSettings;
 };
 
 /*
@@ -189,13 +196,32 @@ export type MainTabProps = {
  *    instead of landing behind the tab the person started on — see the
  *    comment on this wrapper for the bug it fixes.
  * 3. Draw the row of chat tabs, when all four chat-slot callbacks are given.
- * 4. Draw the chat transcript.
+ * 4. Draw the chat transcript, wrapped in `StreamScrambleContext.Provider` so the
+ *    answer bubble inside it can read the scramble setting without it being threaded
+ *    through as a prop — both the transcript and the Ask hook that feeds it are already
+ *    at their size limit, with no room for one more.
  * 5. Draw the dock: the suggestion row, the Ask bar (which hands its own
  *    focus-jump functions back up through onFocusHandlersReady), a
  *    mic-permission notice if the microphone was refused, the screenshot
  *    browser if it is open, a plain navigation message, and a footnote
  *    naming the game bonsAI thinks it is talking about.
  */
+
+/**
+ * In: the one `streamScramble` prop `MainTab` received — undefined for a caller that never heard
+ * of the setting (an older test fixture, one built before this shipped).
+ * Out: the `StreamScrambleSettings` object the context provides: the given value as-is when
+ * there is one, or the shared `STREAM_SCRAMBLE_OFF` constant (switch off, schema defaults)
+ * otherwise.
+ * Can go wrong: nothing — a missing prop is exactly the same as the switch being off.
+ */
+export function resolveStreamScrambleSettings(
+  streamScramble: StreamScrambleSettings | undefined,
+): StreamScrambleSettings {
+  return streamScramble ?? STREAM_SCRAMBLE_OFF;
+}
+
+/** The Main tab itself — assembles the chat-slot row, transcript and dock. See the file header above for the full flow. */
 export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = useRef<HTMLDivElement | null>(null);
   const [focusUnifiedTextField, setFocusUnifiedTextField] = useState(() => () => false);
@@ -226,6 +252,11 @@ export function MainTab(props: MainTabProps) {
     [slotRowAtCreate, onChatSlotCreate, submitAsk],
   );
 
+  const streamScrambleContextValue: StreamScrambleSettings = useMemo(
+    () => resolveStreamScrambleSettings(props.streamScramble),
+    [props.streamScramble],
+  );
+
   return (
     <>
       <PanelSection>
@@ -247,7 +278,9 @@ export function MainTab(props: MainTabProps) {
             />
           </PanelSectionRow>
         ) : null}
-        <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} />
+        <StreamScrambleContext.Provider value={streamScrambleContextValue}>
+          <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} />
+        </StreamScrambleContext.Provider>
         <div className="bonsai-main-tab-dock">
         <PanelSectionRow>
           <MainTabPresetRow

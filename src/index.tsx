@@ -857,6 +857,31 @@ const Content: React.FC = () => {
   // TAB CONTENT
   // =====================================================================
 
+  /*
+   * Grouped into one value and one change function, rather than the four settings and four
+   * setters travelling separately, so the Main tab and the Developer tab below each cost this
+   * screen one thing to hand down instead of four -- see streamScrambleContext.ts for why that
+   * count matters here.
+   */
+  const streamScramble: StreamScrambleSettings = useMemo(
+    () => ({
+      enabled: streamScrambleEnabled,
+      style: streamScrambleStyle,
+      color: streamScrambleColor,
+      settleMs: streamScrambleSettleMs,
+    }),
+    [streamScrambleEnabled, streamScrambleStyle, streamScrambleColor, streamScrambleSettleMs],
+  );
+  const onStreamScrambleChange = useCallback(
+    (patch: Partial<StreamScrambleSettings>) => {
+      if (patch.enabled !== undefined) setStreamScrambleEnabled(patch.enabled);
+      if (patch.style !== undefined) setStreamScrambleStyle(patch.style);
+      if (patch.color !== undefined) setStreamScrambleColor(patch.color);
+      if (patch.settleMs !== undefined) setStreamScrambleSettleMs(patch.settleMs);
+    },
+    [setStreamScrambleEnabled, setStreamScrambleStyle, setStreamScrambleColor, setStreamScrambleSettleMs],
+  );
+
   const mainTab = useMainTabPayload({
     suggestedPrompts,
     showPluginHelpChip: !pluginHelpDismissed,
@@ -864,6 +889,7 @@ const Content: React.FC = () => {
     onOpenPluginHelp: openPluginHelpModal,
     presetChipAnimation,
     presetSingleChip,
+    streamScramble,
     onRetryLastResponse,
     liveReplyFeedbackRating,
     onReplyFeedback,
@@ -1059,31 +1085,6 @@ const Content: React.FC = () => {
   const { onSteamInputPhase1Jump, installSeedKnowledgeBase } = useDeveloperToolActions({
     syncSettingsFromDisk,
   });
-
-  /*
-   * Grouped into one value and one change function, rather than the four settings and four
-   * setters travelling separately, so the Developer tab (and later the Main tab) each cost this
-   * screen one thing to hand down instead of four -- see streamScrambleContext.ts for why that
-   * count matters here.
-   */
-  const streamScramble: StreamScrambleSettings = useMemo(
-    () => ({
-      enabled: streamScrambleEnabled,
-      style: streamScrambleStyle,
-      color: streamScrambleColor,
-      settleMs: streamScrambleSettleMs,
-    }),
-    [streamScrambleEnabled, streamScrambleStyle, streamScrambleColor, streamScrambleSettleMs],
-  );
-  const onStreamScrambleChange = useCallback(
-    (patch: Partial<StreamScrambleSettings>) => {
-      if (patch.enabled !== undefined) setStreamScrambleEnabled(patch.enabled);
-      if (patch.style !== undefined) setStreamScrambleStyle(patch.style);
-      if (patch.color !== undefined) setStreamScrambleColor(patch.color);
-      if (patch.settleMs !== undefined) setStreamScrambleSettleMs(patch.settleMs);
-    },
-    [setStreamScrambleEnabled, setStreamScrambleStyle, setStreamScrambleColor, setStreamScrambleSettleMs],
-  );
 
   const developerTab = useDeveloperTabPayload({
     capturedErrors,

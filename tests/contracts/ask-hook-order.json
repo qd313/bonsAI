@@ -25,6 +25,10 @@
     {
       "name": "useStrategyBranchActions",
       "file": "src/hooks/useStrategyBranchActions.ts"
+    },
+    {
+      "name": "useAskSessionSnapshotActions",
+      "file": "src/hooks/useAskSessionSnapshotActions.ts"
     }
   ],
   "count": 82,

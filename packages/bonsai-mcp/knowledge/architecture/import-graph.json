@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 505,
-  "edgeCount": 1344,
+  "fileCount": 506,
+  "edgeCount": 1351,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1523,6 +1523,7 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -1580,6 +1581,7 @@
         "src/features/preset-carousel/presetSlotRotation.ts",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
         "src/features/preset-carousel/sessionRagComposer.ts",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useSuggestedPromptChips.ts",
         "src/index.tsx",
@@ -2598,6 +2600,19 @@
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
+    "src/hooks/useAskSessionSnapshotActions.ts": {
+      "imports": [
+        "src/data/modelPolicy.ts",
+        "src/data/presets.ts",
+        "src/types/backgroundAsk.ts",
+        "src/types/bonsaiUi.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
+      ]
+    },
     "src/hooks/useBackgroundGameAi.test.ts": {
       "imports": [
         "src/hooks/useBackgroundGameAi.ts",
@@ -2638,6 +2653,7 @@
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
         "src/hooks/useAskMountRestore.ts",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useInputTransparencyRefresh.ts",
         "src/hooks/useOllamaGameContextSync.ts",
@@ -3872,6 +3888,7 @@
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useAskMountRestore.ts",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -3914,6 +3931,7 @@
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",
         "src/hooks/useEarlierTurnsPill.ts",
@@ -4237,6 +4255,7 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -4735,6 +4754,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useInputTransparencyRefresh.ts",
         "src/types/askOrchestration.ts",

@@ -136,10 +136,7 @@ import { THINKING_BLURB_PLACEHOLDER, sanitizeThinkingSummary } from "../utils/th
 import { reasoningFromFinishedStatus } from "../utils/reasoningDisplay";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
 import { useSmoothStreamReveal } from "./useSmoothStreamReveal";
-import {
-  peekBonsaiSessionPendingRestore,
-  type BonsaiSessionSurvivalSnapshot,
-} from "../utils/bonsaiSessionSurvival";
+import { peekBonsaiSessionPendingRestore } from "../utils/bonsaiSessionSurvival";
 import {
   initialExpandedTurnKeyFromSurvival,
   resolveInitialOllamaContext,
@@ -153,6 +150,7 @@ import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
 import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
 import { useAskMountRestore } from "./useAskMountRestore";
 import { useStrategyBranchActions } from "./useStrategyBranchActions";
+import { useAskSessionSnapshotActions } from "./useAskSessionSnapshotActions";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -1399,114 +1397,43 @@ export function useBonsaiAskOrchestration(
   }, [lastExchange?.question, a.unifiedInput, askThreadDisplayQuestion, onAskOllama]);
 
   // --- Session survival snapshot restore / reset ---
-  const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
-    setOllamaResponse(snap.ollamaResponse);
-    /*
-     * Not a blind `setOllamaContext(snap.ollamaContext)`. The snapshot was captured while a
-     * modal was open (or the panel was closed) and can name a game that has since been closed —
-     * the exact way the Ask-bar footnote kept naming a game after it was exited. Re-derived from
-     * the running game right now (the same source `syncOllamaContextFromRunningApp` reads),
-     * rather than trusting whatever the snapshot says, so a game that closed while the panel was
-     * away is not resurrected on the way back.
-     */
-    syncOllamaContextFromRunningApp();
-    setLastExchange(snap.lastExchange);
-    setAskThreadCollapsed(snap.askThreadCollapsed);
-    setAskThreadDisplayQuestion(snap.askThreadDisplayQuestion);
-    setExpandedTurnKey(snap.expandedTurnKey ?? "live");
-    setSuggestedPrompts(snap.suggestedPrompts);
-    setLastTransparency(snap.lastTransparency);
-    setModelPolicyDisclosure(snap.modelPolicyDisclosure);
-    // Same ownership tag the poll path writes: a restored branch block belongs to whichever
-    // slot was active when the snapshot was taken, not to whatever slot restores it.
-    strategyGuideBranchesOwnerSlotIdRef.current = snap.strategyGuideBranches
-      ? snap.activeSlotId ?? null
-      : null;
-    setStrategyGuideBranches(snap.strategyGuideBranches);
-    setStrategyChecklist(snap.strategyChecklist ?? null);
-    setElapsedSeconds(snap.elapsedSeconds);
-    setLastApplied(snap.lastApplied);
-    setShortcutSetupVariant(snap.shortcutSetupVariant);
-    setPresetCarouselInject(snap.presetCarouselInject);
-    setShowSlowWarning(snap.showSlowWarning);
-    setLastRequestId(snap.lastRequestId);
-    setThinkingSummary(snap.thinkingSummary);
-    /* Closing the panel mid-think and opening it again keeps the model's own lines on screen. */
-    setLiveReasoning(snap.liveReasoning ?? null);
-  }, [syncOllamaContextFromRunningApp]);
-
-  const resetAskSessionSlice = useCallback(() => {
-    if (isAsking) {
-      invalidateRequests();
-      stopAskCompletionWatch();
-      setIsAsking(false);
-    }
-    setIsStreamingPreview(false);
-    setIsStreamSettling(false);
-    setThinkingSummary(null);
-    setLiveReasoning(null);
-    setOllamaResponse("");
-    syncOllamaContextFromRunningApp();
-    setLastApplied(null);
-    setLastExchange(null);
-    setStrategyGuideBranches(null);
-    setStrategyChecklist(null);
-    setElapsedSeconds(null);
-    setShowSlowWarning(false);
-    setAskThreadCollapsed([]);
-    setExpandedTurnKey("live");
-    setAskThreadDisplayQuestion("");
-    setLastTransparency(null);
-    setModelPolicyDisclosure(null);
-    setPresetCarouselInject(null);
-    setShortcutSetupVariant(null);
-    pendingArchiveTurnRef.current = null;
-    pendingThreadQuestionDisplayRef.current = null;
-    pendingReplyFollowUpRef.current = null;
-    lastFlushedExchangeQuestionRef.current = "";
-    resetReplyFeedback();
-  }, [invalidateRequests, isAsking, syncOllamaContextFromRunningApp, resetReplyFeedback]);
-
-  /*
-   * The narrower twin of resetAskSessionSlice, for switching to a different saved chat rather
-   * than a full detach (Clear cache / QAM restore). It blanks only the LIVE ANSWER a person can
-   * see under the question box — the just-finished reply's text, its Helpful/Not really/Read
-   * aloud buttons, its thinking fold, the Strategy Guide branch block — so a different chat never
-   * draws the one you just left. Roadmap: "A new chat shows the previous chat's last reply until
-   * the panel is reopened" — the new chat's own saved file was already empty and correct; nothing
-   * had ever cleared THIS state on a plain switch.
-   *
-   * Deliberately does NOT touch:
-   *  - isAsking / invalidateRequests(): a reply still being written in the chat you just left has
-   *    to keep going. Stopping it here would silence the busy dot on the slot row and throw away
-   *    a real, in-progress answer.
-   *  - askThreadCollapsed / askThreadDisplayQuestion / expandedTurnKey: useChatSlots.ts's own
-   *    selectSlot() sets these from the slot actually being switched to, right around this call —
-   *    overwriting them here would race that and could blank a chat that has real history.
-   *  - pendingArchiveTurnRef / pendingThreadQuestionDisplayRef: the turn a foreign in-flight
-   *    request is still assembling for the chat you left has to survive so it archives correctly
-   *    once that answer completes.
-   *  - the ask bar itself (unifiedInput, selectedIndex, selectedAttachment): switching chats is
-   *    not the same gesture as clearing the question box.
-   */
-  const resetLiveAskPresentation = useCallback(() => {
-    setOllamaResponse("");
-    setIsStreamingPreview(false);
-    setIsStreamSettling(false);
-    setThinkingSummary(null);
-    setLiveReasoning(null);
-    setAskStopped(false);
-    setLastApplied(null);
-    setLastExchange(null);
-    setElapsedSeconds(null);
-    setStrategyGuideBranches(null);
-    setStrategyChecklist(null);
-    setModelPolicyDisclosure(null);
-    setPresetCarouselInject(null);
-    setShortcutSetupVariant(null);
-    setLastTransparency(null);
-    resetReplyFeedback();
-  }, [resetReplyFeedback]);
+  // Lifted into useAskSessionSnapshotActions. It must stay at exactly this point in the list:
+  // React matches hooks by the order they run, not by name.
+  const { restoreSessionSnapshot, resetAskSessionSlice, resetLiveAskPresentation } =
+    useAskSessionSnapshotActions({
+      setOllamaResponse,
+      syncOllamaContextFromRunningApp,
+      setLastExchange,
+      setAskThreadCollapsed,
+      setAskThreadDisplayQuestion,
+      setExpandedTurnKey,
+      setSuggestedPrompts,
+      setLastTransparency,
+      setModelPolicyDisclosure,
+      strategyGuideBranchesOwnerSlotIdRef,
+      setStrategyGuideBranches,
+      setStrategyChecklist,
+      setElapsedSeconds,
+      setLastApplied,
+      setShortcutSetupVariant,
+      setPresetCarouselInject,
+      setShowSlowWarning,
+      setLastRequestId,
+      setThinkingSummary,
+      setLiveReasoning,
+      isAsking,
+      invalidateRequests,
+      stopAskCompletionWatch,
+      setIsAsking,
+      setIsStreamingPreview,
+      setIsStreamSettling,
+      resetReplyFeedback,
+      pendingArchiveTurnRef,
+      pendingThreadQuestionDisplayRef,
+      pendingReplyFollowUpRef,
+      lastFlushedExchangeQuestionRef,
+      setAskStopped,
+    });
 
   /*
    * The read-side half of CHAT-SLOTS-V3-05a's fix: hide the branch block the instant its owning

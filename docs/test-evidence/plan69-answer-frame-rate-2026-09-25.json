@@ -1,0 +1,59 @@
+{
+  "what": "The Quick Access panel's frame rate while an answer streams in, what was costing it, and the two fixes (plan 69, the maintainer's ask: 'it should be 60, 45 min').",
+  "date": "2026-09-25",
+  "device": "Steam Deck, Quick Access Menu on the external monitor, no game running, model gemma4:e2b-it-qat on the graphics chip, answers with thinking on.",
+  "method": {
+    "frame_rate": "requestAnimationFrame callbacks per second in the Quick Access page, over alternating segments of 2.5 s inside ONE streaming answer (first 0.3 s of each segment dropped), so every comparison shares the same answer and model load. Single segments vary by about +-5 frames a second; compare pairs, not single numbers.",
+    "switches": "Test builds only (never committed): window.__bonsaiRevealStepMs (reveal and scramble on a shared timer grid instead of every frame), window.__bonsaiStreamPollMs (text arrival rate), window.__bonsaiScrambleOff. Glows paused through the page's own Animation objects. Stylesheet variants injected with CSS.createStyleSheet and removed after.",
+    "real_changes": "Frames that followed a DOM mutation inside the panel, with attribute writes that left the value unchanged filtered out (imperfectly: a set-and-reset inside one task still counts once).",
+    "probes": "Scratchpad scripts probe_step_ab.py .. probe_step_ab7.py and probe_beat_check.py, run on the Deck over ssh; not kept in the repo."
+  },
+  "findings": [
+    {
+      "question": "Is the model sharing the graphics chip the limit by itself?",
+      "answer": "No. During the thinking phase (model generating, thinking box changing 6-7 times a second, glows running) the panel held 59-60 frames a second.",
+      "numbers": { "thinking_glows_on": [59.1, 58.9], "thinking_glows_paused": [60.0] }
+    },
+    {
+      "question": "How much does moving the answer's text on every frame cost?",
+      "answer": "Most of it. With the text and scramble stepping on a 110 ms grid instead of every frame, the panel roughly doubled its frame rate.",
+      "numbers": {
+        "every_frame_as_shipped": [21.6, 21.1, 23.0, 23.7, 19.0, 19.7],
+        "grid_110ms_scramble_on_glows_on": [36.2, 35.2, 35.4],
+        "grid_55ms_scramble_on_glows_on": [26.5],
+        "grid_110ms_scramble_on_glows_paused": [39.3, 42.7, 38.4, 41.2, 43.3, 46.8, 39.1, 47.4, 42.2],
+        "grid_110ms_scramble_off_glows_paused": [57.2, 53.4, 55.3],
+        "grid_220ms_scramble_off_glows_paused": [59.5],
+        "grid_220ms_scramble_on_glows_paused": [48.1],
+        "every_frame_scramble_off_glows_paused": [27.8]
+      }
+    },
+    {
+      "question": "Ruled out on the way",
+      "answer": "Slowing the model's text arrivals from 7 to 2 a second (41.9 / 39.1 vs 42.7 / 38.4): no gain. Giving the chat's scroller its own layer (44.1 / 39.2 vs 41.2 / 43.3): no gain; the chat scrolls under once a second during an answer. In the small hours of the same day: pausing all animations, removing the blur, and switching off the 38 contains rules each made no difference while the text still moved every frame.",
+      "numbers": {}
+    },
+    {
+      "question": "Why did the scramble cost extra even on the grid?",
+      "answer": "Its own reshuffle timer and its markdown step landed in frames of their own, so each beat cost two or three redraws (about 20 changed frames a second at a 9-a-second beat). Fixed in bb8d7e5b: the reveal's render takes the scramble's beat in the same commit; after it, about 13 changed frames a second, and hiding the symbols' drawing made little difference (50.7 / 47.2 / 47.2 drawn vs 54.0 / 48.1 / 47.3 not drawn).",
+      "numbers": {}
+    },
+    {
+      "question": "What do the two glows cost?",
+      "answer": "About 5 frames a second while an answer streams (the bubble's box-shadow pulse and the question box's breathing each redraw every frame), nothing while thinking. Fixed in aae5add6: both hold steady while the answer's text arrives.",
+      "numbers": { "beat_build_glows_on": [46.8, 40.9, 44.9], "beat_build_glows_paused": [51.5, 46.1, 49.5] }
+    }
+  ],
+  "result_after_fixes": {
+    "build": "experimental aae5add6 (bb8d7e5b + aae5add6)",
+    "scramble_off_default": { "frames_per_second": [56.5, 56.5, 56.7, 58.1, 57.2, 56.8], "worst_frame_ms": [50.1, 34.8, 33.8, 33.6, 33.5, 33.5] },
+    "scramble_on_400ms_settle": { "frames_per_second": [46.5, 46.9, 50.0, 44.8, 43.6, 47.0], "worst_frame_ms": [66.7, 67.6, 50.2, 51.2, 66.7, 50.5] },
+    "animations_running_during_answer": ["bonsai-caret-blink (the question box's cursor, two changes a second)"],
+    "before_fixes_same_conditions": "about 19-24 frames a second"
+  },
+  "not_measured": "With a game running (the plan's own frame-rate rows use Deep Rock Galactic: Survivor); the Deck's own screen; the game's own frame rate.",
+  "side_notes": [
+    "Every root render rewrites the question box input's name and type attributes and the Decky pane's class to the same values (Steam's own components); harmless to the frame rate as far as measured, but it makes naive change counters over-count.",
+    "The Deck's screensaver came on once between runs; a controller press cleared it."
+  ]
+}

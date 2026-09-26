@@ -613,11 +613,30 @@ class Plugin:
                 character_preset_id=character_preset_id,
             ),
         )
+        # Plan 68 step 4: remembered beside the line so the status poll can tell "summing_up"
+        # apart from every other phase without re-deriving it from the text. Stashed on every
+        # phase key publish, not only "summing_up" -- the next real phase (e.g. "connecting_model"
+        # once the summary is done) must overwrite this too, or the poll would keep reading the
+        # summary's own timer rule for a phase that has already moved on.
+        with self._partial_response_lock:
+            snap = self._partial_stream_snapshot
+            if snap.get("request_id") == request_id:
+                snap["thinking_phase_key"] = phase
 
     def _merge_partial_into_background_status(self, state: dict) -> dict:
+        """Graft the live streaming snapshot onto a copy of ``state`` for one status poll.
+
+        Only touches a state that is still ``"pending"`` for the same request id the snapshot
+        belongs to -- everything else (a terminal state, or a snapshot for a request that has
+        already moved on) is left with the partial-only fields cleared. The waiting-line text
+        itself has three sources, tried in this order: the chat-summing timer (plan 68 step 4,
+        never escalated), the model's own live status line (escalated once it has gone stale),
+        and a deterministic fallback once no live line has arrived yet at all.
+        """
         from backend.services.bonsai_stream_tags import (
             deterministic_thinking_phase_fallback,
             escalate_static_thinking_line,
+            summing_up_line,
         )
 
         out = dict(state)
@@ -643,17 +662,25 @@ class Plugin:
             out["kb_attached_notes"] = snap.get("kb_attached_notes") or []
             thinking = snap.get("thinking_summary")
             if isinstance(thinking, str) and thinking.strip():
-                # Escalate a line that has gone stale. Once the last prep phase publishes, nothing
-                # else fires unless the model emits a <bonsai-status> tag, and small models often
-                # do not -- so this is what stops the line freezing for a whole generation.
                 set_at = float(snap.get("thinking_summary_monotonic") or 0.0)
                 static_for = max(0.0, time.monotonic() - set_at) if set_at else 0.0
-                out["thinking_summary"] = escalate_static_thinking_line(
-                    thinking,
-                    static_seconds=static_for,
-                    request_id=rid if isinstance(rid, int) else 0,
-                    tone=str(snap.get("thinking_tone") or "witty"),  # type: ignore[arg-type]
-                )
+                if snap.get("thinking_phase_key") == "summing_up":
+                    # Plan 68 step 4: this phase counts up instead of escalating -- the person is
+                    # watching a real timer, not a stale line the model went quiet on, so it is
+                    # never handed to escalate_static_thinking_line no matter how long it sits.
+                    out["thinking_summary"] = summing_up_line(static_for)
+                    out["summing_up_seconds"] = max(0, int(static_for))
+                else:
+                    # Escalate a line that has gone stale. Once the last prep phase publishes,
+                    # nothing else fires unless the model emits a <bonsai-status> tag, and small
+                    # models often do not -- so this is what stops the line freezing for a whole
+                    # generation.
+                    out["thinking_summary"] = escalate_static_thinking_line(
+                        thinking,
+                        static_seconds=static_for,
+                        request_id=rid if isinstance(rid, int) else 0,
+                        tone=str(snap.get("thinking_tone") or "witty"),  # type: ignore[arg-type]
+                    )
             else:
                 started = float(out.get("started_at") or 0.0)
                 elapsed = max(0.0, time.time() - started) if started else 0.0

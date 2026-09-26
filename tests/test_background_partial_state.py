@@ -364,6 +364,67 @@ class BackgroundPartialStateTests(unittest.TestCase):
         merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
         self.assertEqual(merged.get("thinking_summary"), "Checking your GPU driver")
 
+    def test_summing_up_line_counts_up_and_is_never_escalated(self) -> None:
+        """Plan 68 step 4: the chat's own summary is a real timer, not a stale line -- it must
+        never be swapped for a "still on it" line no matter how long it sits, unlike every other
+        phase (proven for those above by test_a_line_that_goes_quiet_is_escalated_on_later_polls).
+        """
+        import time as _time
+
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 60,
+            "response": "Thinking...",
+            "started_at": _time.time(),
+        }
+        self.plugin._reset_partial_stream_snapshot(60)
+        self.plugin._publish_thinking_phase_key(60, "summing_up")
+        with self.plugin._partial_response_lock:
+            self.plugin._partial_stream_snapshot["thinking_summary_monotonic"] = (
+                _time.monotonic() - 12.4
+            )
+
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("thinking_summary"), "Summing up the chat so far · 12 s")
+        self.assertEqual(merged.get("summing_up_seconds"), 12)
+
+        # Well past the escalation thresholds every other phase rotates through by now.
+        with self.plugin._partial_response_lock:
+            self.plugin._partial_stream_snapshot["thinking_summary_monotonic"] = (
+                _time.monotonic() - 30.0
+            )
+        merged_late = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged_late.get("thinking_summary"), "Summing up the chat so far · 30 s")
+        self.assertEqual(merged_late.get("summing_up_seconds"), 30)
+
+    def test_summing_up_seconds_is_absent_outside_the_summing_up_phase(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 61,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(61)
+        self.plugin._publish_thinking_phase_key(61, "connecting_model")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertNotIn("summing_up_seconds", merged)
+
+    def test_a_later_phase_clears_the_summing_up_timer_and_reads_normally_again(self) -> None:
+        """Once the answer's own phases start, today's lines come back -- the stored phase key is
+        overwritten by the next publish, whatever it is."""
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 62,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(62)
+        self.plugin._publish_thinking_phase_key(62, "summing_up")
+        self.plugin._publish_thinking_phase_key(62, "connecting_model")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("thinking_summary"), "Connecting to model…")
+        self.assertNotIn("summing_up_seconds", merged)
+
     def test_merge_omits_partial_when_not_pending(self) -> None:
         self.plugin._background_state = {"status": "completed", "request_id": 7}
         self.plugin._reset_partial_stream_snapshot(7)

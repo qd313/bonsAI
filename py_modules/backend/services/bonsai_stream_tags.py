@@ -108,6 +108,18 @@ AskThinkingPhase = Literal[
 # pass so far"). The maintainer picked this exact wording.
 SUMMING_UP_LINE = "Summing up the chat so far"
 
+
+def summing_up_line(seconds: float) -> str:
+    """The wait line while the chat's own summary is being written, with whole seconds counted
+    since that line first went up appended (plan 68 step 4): "Summing up the chat so far · 12 s".
+
+    Unlike every other pending-Ask line, this one is never handed to
+    ``escalate_static_thinking_line()`` -- the caller (main.py's status merge) must skip that
+    call outright for this phase, however long it sits on screen. Seconds are always shown, even
+    at zero, so the counter is visibly live from the first poll.
+    """
+    return f"{SUMMING_UP_LINE} · {max(0, int(seconds))} s"[:_PHASE_MAX_LEN]
+
 _PHASE_MAX_LEN = 240
 _APP_NAME_MAX_LEN = 40
 _SNIPPET_MAX_LEN = 56
@@ -794,8 +806,6 @@ def format_thinking_phase(
         text = _pick_template(pool, request_id, salt=str(phase))
         return text[:_PHASE_MAX_LEN]
 
-    if phase == "building_context" and elapsed_seconds > _BUILDING_CONTEXT_MAX_SECONDS:
-        return "Still preparing…"[:_PHASE_MAX_LEN]
     game = _sanitize_app_name(app_name)
     game_clause = f" for {game}" if game else ""
 

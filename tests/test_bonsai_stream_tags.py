@@ -16,6 +16,7 @@ from backend.services.bonsai_stream_tags import (
     format_thinking_phase,
     partial_stream_has_content,
     sanitize_thinking_summary,
+    summing_up_line,
 )
 
 _BANNED_PREFIXES = ("yeah", "fine.", "sure.", "oh joy", "right.")
@@ -233,6 +234,16 @@ class BonsaiStreamTagsTests(unittest.TestCase):
         ):
             self.assertEqual(format_thinking_phase("summing_up", **kwargs), SUMMING_UP_LINE)
 
+    def test_summing_up_line_appends_whole_seconds(self):
+        """Plan 68 step 4: the wait line while the chat sums itself up counts up in whole
+        seconds, in the exact words the drawing shows -- "Summing up the chat so far · 12 s"."""
+        self.assertEqual(summing_up_line(12.4), "Summing up the chat so far · 12 s")
+        self.assertEqual(summing_up_line(0), "Summing up the chat so far · 0 s")
+        self.assertEqual(summing_up_line(0.9), "Summing up the chat so far · 0 s")
+
+    def test_summing_up_line_never_shows_a_negative_count(self):
+        self.assertEqual(summing_up_line(-3), "Summing up the chat so far · 0 s")
+
     def test_format_thinking_phase_with_game(self):
         self.assertEqual(
             format_thinking_phase("proton_logs", app_name="Elden Ring"),
@@ -257,15 +268,17 @@ class BonsaiStreamTagsTests(unittest.TestCase):
         self.assertLessEqual(len(out), 240)
         self.assertIn("Building context for", out)
 
-    def test_building_context_short_vs_long_elapsed(self):
-        self.assertIn(
-            "Building context",
-            format_thinking_phase("building_context", elapsed_seconds=0),
-        )
+    def test_building_context_elapsed_with_no_question_still_reads_ordinary(self):
+        """Plan 68 step 4: the no-question "Still preparing..." branch that used to sit here was
+        dead code -- no caller of format_thinking_phase for building_context ever passes a
+        nonzero elapsed_seconds without also passing a question, so it could never fire in
+        production. Removed rather than wired up; this locks in that a long elapsed_seconds alone,
+        with no question, now reads exactly like a fresh one."""
         self.assertEqual(
+            format_thinking_phase("building_context", elapsed_seconds=0),
             format_thinking_phase("building_context", elapsed_seconds=2),
-            "Still preparing…",
         )
+        self.assertIn("Building context", format_thinking_phase("building_context", elapsed_seconds=2))
 
     def test_extract_question_snippet(self):
         self.assertIn("shrine", extract_question_snippet("stuck on the shrine puzzle? help"))

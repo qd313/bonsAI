@@ -171,4 +171,10 @@ def new_partial_stream_snapshot(request_id: Optional[int]) -> dict[str, Any]:
         # write happens directly on this snapshot rather than through a named Plugin method, and
         # on the one line still needed in main.py's own merge step to carry this into a poll.
         "kb_attached_notes": [],
+        # Plan 68 step 4: which phase key last published `thinking_summary`, stashed alongside it
+        # so the status poll can single out "summing_up" (which counts up on its own and is never
+        # escalated) without re-parsing the line's own text. `None` until the first phase key
+        # publish; any later phase key publish overwrites it, which is what makes today's lines
+        # come back once the summary is done.
+        "thinking_phase_key": None,
     }

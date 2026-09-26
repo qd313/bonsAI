@@ -261,6 +261,8 @@ class TestPartialStreamSnapshot(unittest.TestCase):
                 "reasoning_seconds",
                 # Plan 58 phase 1: published before the model call, same reason as asked_entity.
                 "kb_attached_notes",
+                # Plan 68 step 4: which phase key last published thinking_summary.
+                "thinking_phase_key",
             },
         )
         self.assertEqual(snap["request_id"], 5)
@@ -274,6 +276,7 @@ class TestPartialStreamSnapshot(unittest.TestCase):
         self.assertIsNone(snap["reasoning_partial"])
         self.assertIsNone(snap["reasoning_seconds"])
         self.assertEqual(snap["kb_attached_notes"], [])
+        self.assertIsNone(snap["thinking_phase_key"])
 
     def test_cleared_form_is_the_same_shape_with_a_null_request_id(self):
         """The cleared snapshot used to be a second hand-written literal; it is now this call."""

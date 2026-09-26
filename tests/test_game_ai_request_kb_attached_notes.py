@@ -32,7 +32,11 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.game_ai_request import _parse_kb_attached_notes, run_game_ai_request
+from backend_module_stubs import install_pwd_stub  # noqa: E402
+
+install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
+
+from backend.services.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import (
     _COMPAT_GAME_TITLE,
     KnowledgeCard,

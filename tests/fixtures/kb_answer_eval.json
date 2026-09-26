@@ -1075,9 +1075,9 @@
      "back off when he slams"
     ]
    ],
-   "expect_fence": false,
+   "expect_fence": null,
    "expect_branches": true,
-   "note": "Boss described by look, not name, on a protect_progression title; a boss mechanic isn't a story beat. 2026-09-06 write-up."
+   "note": "Boss described by look, not name, on a protect_progression title; a boss mechanic isn't a story beat. 2026-09-06 write-up. Expectation changed 2026-09-26 (plan 70): under D112 #7 a boss name the question did not type is covered whenever the reply names it, so a cover is now correct when the reply names the False Knight and absent when it only describes the fight; not scored either way."
   },
   {
    "id": "A-HK-02",

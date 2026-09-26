@@ -22,6 +22,7 @@ import zlib
 from pathlib import Path
 from unittest import mock
 
+from backend.services.knowledge_base_schema import CORPUS_SCHEMA_VERSION
 from backend.services.rag_corpus_download_service import (
     fetch_remote_manifest,
     install_corpus_from_manifest,
@@ -317,6 +318,61 @@ class RagCorpusDownloadVerificationTests(unittest.TestCase):
                 (Path(root) / "ATTRIBUTIONS.md").read_text(encoding="utf-8"),
                 "# Only From Manifest\n",
             )
+
+
+class RagCorpusDownloadSchemaVersionGateTests(unittest.TestCase):
+    """A library built with a format number newer than this plugin reads is refused before
+
+    any byte is downloaded, rather than installed and misread (or, today, installed and
+    simply not fully used — see Part 4 of plan 70 helper E's brief for what the previously
+    shipped reader actually did with no such check at all)."""
+
+    def test_a_future_schema_version_is_refused_before_any_download(self):
+        db_bytes = _minimal_sqlite_bytes()
+        compressed, compressed_sha, db_sha = _make_zlib_chunk(db_bytes)
+        manifest = _base_manifest("corpus.db.zlib", compressed_sha, db_sha, len(compressed))
+        manifest["schema_version"] = CORPUS_SCHEMA_VERSION + 1
+
+        def _fake_open(req, timeout=None):
+            raise AssertionError("must not reach the network for a future schema version")
+
+        with tempfile.TemporaryDirectory() as home_tmp:
+            fake_home = Path(home_tmp)
+            install_dir = fake_home / ".bonsai" / "rag"
+            with mock.patch("pathlib.Path.home", return_value=fake_home), mock.patch(
+                f"{MODULE_PATH}.urllib.request.urlopen", side_effect=_fake_open
+            ):
+                with self.assertRaises(RuntimeError) as ctx:
+                    install_corpus_from_manifest(
+                        manifest,
+                        str(install_dir),
+                        cancel_event=threading.Event(),
+                        log=lambda *_a, **_k: None,
+                    )
+        self.assertIn("newer version of bonsAI", str(ctx.exception))
+
+    def test_the_same_or_an_older_schema_version_installs_normally(self):
+        db_bytes = _minimal_sqlite_bytes()
+        compressed, compressed_sha, db_sha = _make_zlib_chunk(db_bytes)
+        manifest = _base_manifest("corpus.db.zlib", compressed_sha, db_sha, len(compressed))
+        manifest["schema_version"] = CORPUS_SCHEMA_VERSION
+
+        def _fake_open(req, timeout=None):
+            return _FakeHTTPResponse(compressed)
+
+        with tempfile.TemporaryDirectory() as home_tmp:
+            fake_home = Path(home_tmp)
+            install_dir = fake_home / ".bonsai" / "rag"
+            with mock.patch("pathlib.Path.home", return_value=fake_home), mock.patch(
+                f"{MODULE_PATH}.urllib.request.urlopen", side_effect=_fake_open
+            ):
+                root = install_corpus_from_manifest(
+                    manifest,
+                    str(install_dir),
+                    cancel_event=threading.Event(),
+                    log=lambda *_a, **_k: None,
+                )
+            self.assertTrue((Path(root) / "corpus.db").is_file())
 
 
 if __name__ == "__main__":

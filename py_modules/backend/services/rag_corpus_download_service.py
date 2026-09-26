@@ -51,6 +51,7 @@ from backend.services.knowledge_base_schema import (
     CORPUS_ATTRIBUTIONS_FILENAME,
     CORPUS_DB_FILENAME,
     CORPUS_MANIFEST_FILENAME,
+    CORPUS_SCHEMA_VERSION,
     DEFAULT_MANIFEST_GITHUB_URL,
     DEFAULT_MANIFEST_HF_URL,
     corpus_install_root,
@@ -176,6 +177,26 @@ def _verify_sqlite(path: str) -> None:
         conn.close()
 
 
+def _refuse_future_schema(manifest: dict[str, Any]) -> None:
+    """Refuse a manifest built by a format number newer than this copy of bonsAI reads.
+
+    Today's format number (schema_version) is free text on every row it touches, so nothing
+    in this plugin actually needs it to be able to install a corpus one number ahead -- but
+    there is no guarantee of that for every future bump (a real schema change, a table this
+    reader does not know to open), so this checks before any byte is downloaded rather than
+    finding out partway through an install. A manifest with no `schema_version` at all (older
+    than this field existing) or one no higher than what this copy knows about passes through
+    unchanged.
+    """
+    version = manifest.get("schema_version")
+    if isinstance(version, int) and version > CORPUS_SCHEMA_VERSION:
+        raise RuntimeError(
+            f"This knowledge base needs a newer version of bonsAI (its format is {version}; "
+            f"this copy reads up to {CORPUS_SCHEMA_VERSION}). Update the plugin, then download "
+            "the knowledge base again."
+        )
+
+
 def install_corpus_from_manifest(
     manifest: dict[str, Any],
     install_dir: str,
@@ -185,6 +206,7 @@ def install_corpus_from_manifest(
     on_progress: Optional[Callable[[int, int], None]] = None,
 ) -> str:
     """Download compressed chunk(s), decompress to corpus.db, verify checksums."""
+    _refuse_future_schema(manifest)
     root = corpus_install_root(install_dir)
     if not root:
         raise RuntimeError("Install path is required.")

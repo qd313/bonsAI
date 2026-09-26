@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 258,
+  "edgeCount": 259,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -91,6 +91,10 @@
       "count": 5
     },
     {
+      "path": "py_modules/backend/services/settings_service.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "count": 5
     },
@@ -124,10 +128,6 @@
     },
     {
       "path": "py_modules/backend/services/screenshot_media.py",
-      "count": 4
-    },
-    {
-      "path": "py_modules/backend/services/settings_service.py",
       "count": 4
     },
     {
@@ -912,7 +912,8 @@
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/ollama_embed_service.py",
-        "py_modules/backend/services/ollama_prompts.py"
+        "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/settings_service.py"
       ],
       "importedBy": [
         "py_modules/backend/services/game_ai_request.py",
@@ -1302,6 +1303,7 @@
         "main.py",
         "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/chat_sum_up_job.py",
+        "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_ask_service.py"
       ]
     },

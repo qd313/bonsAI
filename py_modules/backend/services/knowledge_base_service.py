@@ -132,6 +132,7 @@ from backend.services.compat_topic_router import (
     question_targets_compat_corpus,
 )
 from backend.services.ollama_prompts import question_matches_troubleshooting_log_context
+from backend.services.settings_service import sanitize_ollama_keep_alive
 
 from backend.services.knowledge_base_cards import (
     KnowledgeCard,
@@ -1082,6 +1083,7 @@ def retrieve_knowledge_context(
                     [format_embed_query(expanded, model=DEFAULT_EMBEDDING_MODEL)],
                     model=DEFAULT_EMBEDDING_MODEL,
                     timeout_s=3.0,
+                    keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
                 )
                 query_vector = query_vectors[0]
                 embed_ms = round((time.perf_counter() - t_embed) * 1000, 2)
@@ -1132,6 +1134,7 @@ def retrieve_knowledge_context(
                                 [format_embed_query(stripped_question, model=DEFAULT_EMBEDDING_MODEL)],
                                 model=DEFAULT_EMBEDDING_MODEL,
                                 timeout_s=3.0,
+                                keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
                             )
                             best_meaning_without_game_name = _best_meaning_score(
                                 vectors_by_id, stripped_vectors[0]

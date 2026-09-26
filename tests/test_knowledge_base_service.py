@@ -981,6 +981,44 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertEqual(result.retrieval_method, "hybrid")
     self.assertIn("Dreadnought", result.text_block)
 
+  def test_hybrid_retrieval_keeps_the_embed_model_loaded_like_the_answer_model(self):
+    """KB-SPEED-02: the note-search model was evicting after 5 minutes (Ollama's own default)
+    while the answer model stayed loaded for the "Keep models loaded" duration, because
+    embed_texts was never told what that duration was. retrieve_knowledge_context must pass
+    the same setting through so both models share one keep-alive."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+      "ollama_keep_alive": "240m",
+    }
+    with mock.patch(
+      "backend.services.knowledge_base_service.nomic_embed_available",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.embed_texts",
+      return_value=[[1.0, 0.0] + [0.0] * 766],
+    ) as embed, mock.patch(
+      "backend.services.knowledge_base_service._load_section_vectors",
+      return_value={
+        3: [1.0, 0.0] + [0.0] * 766,
+        4: [0.0, 1.0] + [0.0] * 766,
+      },
+    ):
+      retrieve_knowledge_context(
+        settings,
+        ask_mode="strategy",
+        question="Glyphid Dreadnought weak point",
+        app_id="2321470",
+        app_name="Deep Rock Galactic: Survivor",
+        domain="strategy",
+        pc_ip="127.0.0.1:11434",
+      )
+    embed.assert_called_once()
+    self.assertEqual(embed.call_args.kwargs.get("keep_alive"), "240m")
+
   def test_speed_mode_never_pays_for_the_meaning_search(self):
     """D62 #2: Speed does the cheap keyword lookup and nothing else.
 

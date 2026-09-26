@@ -128,13 +128,23 @@ def embed_texts(
     model: str = DEFAULT_EMBEDDING_MODEL,
     timeout_s: float = 3.0,
     base_http: str = "",
+    keep_alive: str = "",
 ) -> list[list[float]]:
-    """Embed one or more strings via ``POST /api/embed``. Raises ``OllamaEmbedError`` on failure."""
+    """Embed one or more strings via ``POST /api/embed``. Raises ``OllamaEmbedError`` on failure.
+
+    ``keep_alive`` is left out of the request body when not given (Ollama then falls back to
+    its own 5-minute default) so callers that never had an opinion keep behaving exactly as
+    before. Callers that do have one -- knowledge_base_service passes the same "Keep models
+    loaded" duration the answer model gets -- keep the note-search model resident as long as
+    the answer model, instead of it evicting after 5 minutes of no questions.
+    """
     inputs = [str(t or "") for t in texts]
     if not inputs:
         return []
     url = build_ollama_embed_url(base_http or ollama_http_base_from_pc_ip_field(pc_ip))
     payload: dict[str, Any] = {"model": model, "input": inputs[0] if len(inputs) == 1 else inputs}
+    if keep_alive:
+        payload["keep_alive"] = keep_alive
     body = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         url,

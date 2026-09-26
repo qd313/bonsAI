@@ -109,6 +109,21 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 - The maintainer confirms the "must fix" list and sets the last-call date.
 - New bugs found along the way go through the same line, not straight into the fix list.
 - This is also where the visible rough edges get fixed — the "jank" — within the room the rule allows.
+- **Say where every download goes, and let the player switch the internet off (the maintainer,
+  2026-09-26).** Built as one lane inside the bug session. Two parts:
+  - **A clear notice before any download starts** — installing or updating Ollama, downloading a model,
+    the voice models, the knowledge library. In plain words: "bonsAI will connect to https://ollama.com
+    to download Ollama (about … GB)." Recommended: shown the first time for each site, as the
+    maintainer suggested; after that, only the size shows, on the button itself. The real address and
+    size are read from the code for each button, never typed from memory.
+  - **An Internet permission** in the permissions list, beside the Steam and microphone ones. Off on a
+    fresh install. While it is off, nothing reaches the internet — including the recommended-models
+    list, which today refreshes itself from GitHub without asking. The first download notice doubles
+    as the question "turn on internet downloads?", so a new player is not sent hunting for a switch.
+    The kids lock forces it off, like the planned web-search permission.
+  - **Not the same as the planned web-search permission.** That one (live answers from the web) stays
+    after 0.6.0. Recommended: this new switch is named for what it does today — downloads — so the
+    later one can sit beside it without confusion.
 - **Stop adding new screenshots and recordings to the repo** (question 3): the Deck tools write pictures and
   videos to a folder the repo ignores; written reports keep going in. Done before the session starts, so
   its own evidence follows the new rule.
@@ -133,10 +148,31 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
   Steam lookup, only if you give it your own key. No tracking or usage reporting was found. The security review and licence check in
   Stage E confirm every sentence of this before it ships.
 - **Pictures and video (the maintainer, 2026-09-26):** short looping clips (GIFs) of the best features,
-  one per feature; one real-time video of a normal session, not sped up, so people see how fast it
-  really is on a Deck; and new screenshots of today's screens to replace the old ones. Captured on
-  the Deck after the bug session, so they show the fixed screens. Screenshots and clips are shot at the
-  Deck's own size and not stretched.
+  one per feature, for the README; new screenshots of today's screens to replace the old ones; and the
+  videos below. Everything is captured on the Deck after the bug session, so it shows the fixed
+  screens, at the Deck's own size and not stretched.
+- **The videos, with the maintainer's voice-over.** The session writes, for each video, what it covers
+  and a script with timestamps for the maintainer to read over it. Scripts are written *after* the
+  footage is recorded, timed to the real footage, so every line matches what is on screen. Draft lineup:
+  - **One long video, about 7 to 8 minutes, at real speed.** A normal session, not sped up, so people see
+    how fast it really is on a Deck. Chapters, so it can be cut into pieces: what bonsAI is, and that it
+    is free, open and runs on your own hardware · installing it and the first run · asking about the game
+    you are playing, with notes from the game's wiki · spoilers hidden until you ask · finding a setting
+    and performance help · chats you can name, keep and sum up · talking to it and hearing answers read
+    aloud · choosing where the AI runs, the Deck or your PC · what leaves the Deck, and what never does ·
+    where to get it and how to help.
+  - **The same chapters as short pieces, landscape**, one to two minutes each, for people who want one
+    feature.
+  - **Five or six vertical shorts, 15 to 45 seconds**, showing only the plugin's panel — it is already tall
+    and narrow, so it fills a phone screen well. Candidates: ask while you play · no spoilers unless you ask
+    · talk to it · it runs on your Deck, not a cloud · fix a stutter or find a setting · your chats, saved
+    and summed up.
+  - The final list is picked with the maintainer once the footage exists; a feature that is not solid on
+    the Deck by then is left out rather than shown.
+- **Every setting's starting value, for the maintainer to go through (2026-09-26).** Part of the
+  first-impression check: a plain list of every setting, what a fresh install sets it to, and what that
+  means for a new player, with the session's suggestion beside any that look wrong for a re-launch. The
+  maintainer goes down the list once; the changes land before the README is written.
 - **The first-impression check (item 3 in section 6) comes before the README is written**, so the README
   describes what a new player will actually see.
 - **A bug-report form and a short "how to help" page** on GitHub (item 8 in section 6). The form asks for
@@ -230,9 +266,15 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 
 ## 6. Also needed — found 2026-09-26
 
-**Answered 2026-09-26:** 3 (yes), 4 (yes: GIFs of the best features, a real-time video, better
-screenshots), 8 (yes), 9 (yes, and lead with the free-and-open, self-hosted, privacy-first spirit). All
-four are folded into Stage D. **Still open:** 1, 2, 5, 6, 7, and where to announce (part of 4).
+**Answered 2026-09-26:** 2 (yes, the library passes on the Deck first), 3 (yes), 4 (yes: GIFs, a long
+real-time video with the maintainer's voice-over, short pieces, vertical shorts, better screenshots),
+6 (keep "qwert" for now), 7 (yes, a fix goes out as 0.6.1 when needed), 8 (yes), 9 (yes, and lead with
+the free-and-open, self-hosted, privacy-first spirit). **Still open:** 1 (what ships), 5 (the Decky
+store — see below), and where to announce.
+
+**On the Decky store (5):** the maintainer is not sure the store would take a plugin written largely
+with AI help. Before deciding, someone reads the store's own submission rules and recent review threads
+for anything on AI-written code, and reports back in plain words. No application is made until then.
 
 1. **What is in 0.6.0?** Recommended: everything landed by the freeze ships; plan 70's work ships if it lands
    and passes on the Deck by then. Anything half-built that a player could stumble on is hidden, not shipped

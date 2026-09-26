@@ -173,6 +173,18 @@ starts work outside this.
   turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
+- ★ `[layout]` **The preset chip sits too far above the question box** — **OPEN, from the maintainer
+  2026-09-26.** The gap between the chip and the question box should equal the gap between the question
+  box and the Ask button. Measure both gaps on the Deck first, at every UI size. Plan 72 must-fix.
+- ★ `[layout]` **The question bubble has too much empty space on the left, and uneven line edges** —
+  **OPEN, from the maintainer 2026-09-26.** Right-aligned text leaves every line's left edge ragged, and a
+  wrapped question stretches the bubble to its widest. The text can also sit closer to the Retry arrow.
+  Options drawn: [Question Bubble Spacing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF). Plan 72 must-fix.
+- ★ `[ui]` **The feedback chips under an answer are too loose** — **OPEN, from the maintainer
+  2026-09-26.** Make them tighter and closer together. Plan 72 must-fix.
+- ★ `[ui]` **The chat name's scroll doesn't match the chip scroll** — **OPEN, from the maintainer
+  2026-09-26.** A long chat name should scroll at the same speed and with the same pauses as a long chip
+  label; then slow both slightly so the panel feels less busy. Plan 72 must-fix.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -309,6 +321,10 @@ replace it with a specific issue when one exists.
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
   is added and nothing shifts. The same fade already sits in the stylesheet with no user, written for cut-off answer bubbles.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
+- ★★ `[chat]` **Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon** — **OPEN,
+  from the maintainer 2026-09-26.** "Save chat to Desktop" moves from its own row under the answer to a
+  save icon in the chat tab; the "+" (new chat) gets a clearer, more obvious icon. Draw the options at
+  true size first, which also settles exactly where the icon sits. Plan 72, for 0.6.0.
 - ★★ `[chat]` **Summing up offers a fresher title** — **OPEN, asked for by the maintainer 2026-09-25.** Each
   *Sum up this chat* also hands the AI the chat's current title; when the AI judges it stale, the person is
   offered its suggestion and chooses to rename or keep. [Detail](roadmap-details.md#summing-up-offers-a-fresher-title).
@@ -381,6 +397,11 @@ replace it with a specific issue when one exists.
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
   **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
   night. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+- ★★★ `[perms]` **Say where a download goes before it starts, and an Internet permission to gate it** —
+  **OPEN, from the maintainer 2026-09-26, wanted before 0.6.0.** Install/update Ollama, model downloads,
+  voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
+  https://… to download …"), at least the first time per site. A new permission, off by default, gates
+  every download and the automatic model-list refresh. Plan 71 § 3, Stage B.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up

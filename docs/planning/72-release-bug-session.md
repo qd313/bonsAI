@@ -68,6 +68,19 @@ section 2 with the date, and go into their group. Nothing jumps the queue becaus
 | The spoiler family: a withheld boss name leaking in the answer, the thinking line, and the suggestion menu | Spoiler shown | Already fixed. Must pass its Deck re-check before release. |
 | The troubleshooting hint's Dismiss can't be reached by D-pad | Traps the player | Already fixed. Deck check only. |
 
+### Must fix — the maintainer's own polish list (2026-09-26)
+
+The maintainer asked for these before the release. They count as line 5 (plainly broken on the main
+screen), and every one is a layout change, so each is measured on the Deck before and after.
+
+| Item | What "done" looks like |
+|---|---|
+| The preset chip sits too far above the question box | The chip-to-box gap equals the box-to-Ask-button gap, measured on the Deck at every UI size. |
+| The question bubble: empty space on the left, ragged line edges, text too far from the Retry arrow | The option the maintainer picks from [the drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF), checked with a Deck screenshot, because the Deck's own font can break lines a word differently from the drawing. |
+| The feedback chips under an answer are too loose | Tighter and closer together; before-and-after screenshots on the maintainer's checks page. |
+| The chat name's scroll doesn't match the chip scroll | Same speed and same pauses as a long chip label, then both slowed slightly. The chip scroll today: 25 pixels a second, 1.5 seconds before it starts, 1.5 seconds at the end. Where the chat name's scroll lives in the code is not yet found — a first job in flow 0. |
+| Save chat to Desktop becomes a save icon in the chat tab; the "+" gets a clearer icon | A true-size drawing of the options first (it also settles exactly where the icon sits), then built. The D-pad path changes, so the free-play walk covers it. |
+
 ### Must try once, then sort
 
 These were seen but never reproduced. Each gets a set number of tries on the Deck (flow G). If it
@@ -134,6 +147,11 @@ player meets in the first ten minutes gets its pass in this session; the rest st
 | **Fix helpers**, up to three | Sonnet 5, high | Fix bugs whose cause is already known, each in its own copy of the repo. |
 | **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. |
 
+**Also built during this session, as one lane:** the download notices and the Internet permission from
+plan 71 (Stage B there). It touches the permissions screen and adds pop-ups, so it gets its own Deck rows:
+each notice's words, the D-pad path through each pop-up, and that nothing downloads with the permission
+off.
+
 The D-pad and layout bugs are most of "must fix". By the house rules they are never handed to a helper
 without a Deck measurement first, so the session measures first and fixes those itself or with the
 measurement in the brief.
@@ -155,6 +173,9 @@ measurement in the brief.
   and every UI size. Also the gap between the dots and the chat name. **Pass: every dot's centre on the same
   line within 0.1 pixel, on every screen, before and after.** The before and after crops go on the
   maintainer's checks page for a look by eye, because the maintainer is the final judge of "sloppy".
+- **Flow P — the polish list, measured.** One pass of screenshots and gap measurements for the
+  maintainer's polish list before any change, and again after. Same rule as the dots: measure what is
+  painted, not just the boxes.
 - **Fixing, in parallel.** The session takes the D-pad and layout fixes; helpers take the known-cause ones
   (the thinking line, Clear during an answer, the try-order join, the small layout items once measured).
 - **Flow F — re-checks after each batch**, with every saved walk replayed so a new fix cannot quietly break
@@ -180,7 +201,8 @@ measurement in the brief.
 
 ## 6. Questions for the maintainer
 
-1. The calls in section 2 — all answered 2026-09-26.
+1. The calls in section 2 — all answered 2026-09-26. New: which question-bubble option (A to D in the
+   drawing), and a true-size drawing still owed for the save icon and the new "+".
 2. Is the "must fix" list right? Anything missing that you have hit yourself?
 3. The last-call date — not decided yet (2026-09-26).
 4. One long session like plan 64, or two shorter ones (D-pad and layout first, everything else second)?

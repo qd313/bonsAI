@@ -144,6 +144,7 @@ from backend.services.chat_slot_service import (
     wipe_all_slots,
 )
 from backend.services import chat_slot_rpc
+from backend.services import chat_sum_up_job
 from backend.services import chat_turn_recorder
 from backend.services.settings_service import (
     clamp_int,
@@ -996,6 +997,11 @@ class Plugin:
     async def rename_chat_slot(self, payload: Any = None):
         """Rename a chat slot label."""
         return await chat_slot_rpc.rename_chat_slot(self, payload)
+
+    async def sum_up_chat_slot(self, slot_id: str = ""):
+        """The Session tab's *Sum up this chat* button: sums the chat up right away, as its own
+        job through the same one-question-at-a-time slot an Ask uses. See chat_sum_up_job.py."""
+        return await chat_sum_up_job.sum_up_chat_slot(self, slot_id)
 
     # --- Strategy checklist session RPC ---
 

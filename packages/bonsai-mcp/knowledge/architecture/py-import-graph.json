@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 254,
+  "edgeCount": 255,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -196,6 +196,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/chat_sum_up_job.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/chat_summary_service.py",
       "count": 2
     },
@@ -289,10 +293,6 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_rpc.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/chat_sum_up_job.py",
       "count": 1
     },
     {
@@ -467,6 +467,7 @@
         "py_modules/backend/services/capabilities.py",
         "py_modules/backend/services/chat_slot_rpc.py",
         "py_modules/backend/services/chat_slot_service.py",
+        "py_modules/backend/services/chat_sum_up_job.py",
         "py_modules/backend/services/chat_turn_recorder.py",
         "py_modules/backend/services/desktop_note_service.py",
         "py_modules/backend/services/game_ai_request.py",
@@ -710,6 +711,7 @@
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
+        "main.py",
         "py_modules/backend/services/chat_slot_rpc.py"
       ]
     },

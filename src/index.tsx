@@ -111,6 +111,7 @@ import { setFrozenTestChips } from "./data/presets";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
 import { PULL_MODEL_CATALOG } from "./data/pullModelCatalog";
+import { activeOllamaRoutingTag } from "./utils/activeOllamaRoutingTag";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
   getPluginDataClearedGeneration,
@@ -819,7 +820,7 @@ const Content: React.FC = () => {
     setModelPolicyTier,
     setModelPolicyNonFossUnlocked,
     setModelAllowHighVramFallbacks,
-    activeRoutingTag: modelPolicyDisclosure?.model ?? null,
+    activeRoutingTag: activeOllamaRoutingTag(isAsking, modelPolicyDisclosure),
     buildSettingsPayload,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,

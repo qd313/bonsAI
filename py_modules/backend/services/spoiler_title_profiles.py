@@ -50,6 +50,9 @@ LOW_NARRATIVE_APP_IDS = frozenset(
         # 2026-09-05 tranche (D69): a campaign with named bosses, but nothing that reads as
         # a reveal -- the demons and their weak points are the whole conversation.
         "782330",  # DOOM Eternal
+        # Plan 70 helper F (2026-09-26): wave-survival with no story at all -- the wave-20
+        # bosses are just tough fights, nothing to spoil.
+        "1942280",  # Brotato
     }
 )
 
@@ -77,6 +80,10 @@ PROTECT_PROGRESSION_APP_IDS = frozenset(
         "271590",  # Grand Theft Auto V Legacy
         "12210",  # Grand Theft Auto IV: The Complete Edition
         "22380",  # Fallout: New Vegas
+        # Plan 70 helper F (2026-09-26): the Tower fights are against named Faction Leaders
+        # who gate real story progression (one is a hard prerequisite for the Breeding Farm),
+        # the same shape as the boss identities already protected above.
+        "1623730",  # Palworld
     }
 )
 
@@ -144,6 +151,10 @@ _PROTECT_PROGRESSION_TITLES = (
     # which all carry both an AppID entry and a name entry.
     "grand theft auto iii",
     "gta iii",
+    # Plan 70 helper F (2026-09-26): the maintainer's own copy runs from a non-Steam shortcut
+    # named "Palworld" with no real Steam AppID, so the name is the only handle, like the
+    # emulated titles above.
+    "palworld",
 )
 
 

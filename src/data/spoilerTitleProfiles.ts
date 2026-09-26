@@ -44,6 +44,7 @@ export const LOW_NARRATIVE_APP_IDS = new Set([
   "550", // Left 4 Dead 2
   "1222670", // The Sims 4
   "782330", // DOOM Eternal — named bosses, no reveal (2026-09-05 tranche, D69)
+  "1942280", // Brotato — wave-survival, no story (plan 70 helper F, 2026-09-26)
 ]);
 
 /** Keep in sync with PROTECT_PROGRESSION_APP_IDS in spoiler_title_profiles.py */
@@ -63,6 +64,7 @@ export const PROTECT_PROGRESSION_APP_IDS = new Set([
   "271590", // Grand Theft Auto V Legacy
   "12210", // Grand Theft Auto IV: The Complete Edition
   "22380", // Fallout: New Vegas
+  "1623730", // Palworld — Tower fights gate real story progression (plan 70 helper F, 2026-09-26)
 ]);
 
 /**
@@ -123,6 +125,9 @@ const PROTECT_PROGRESSION_TITLES = [
   // all carry both an AppID entry and a name entry.
   "grand theft auto iii",
   "gta iii",
+  // The maintainer's own copy runs from a non-Steam shortcut named "Palworld" with no real
+  // Steam AppID, so the name is the only handle (plan 70 helper F, 2026-09-26).
+  "palworld",
 ];
 
 function normalizeTitle(name: string): string {

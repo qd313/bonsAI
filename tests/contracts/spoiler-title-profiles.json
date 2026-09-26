@@ -4,7 +4,8 @@
     "2321470",
     "550",
     "1222670",
-    "782330"
+    "782330",
+    "1942280"
   ],
   "protect_progression_app_ids": [
     "1086940",
@@ -20,7 +21,8 @@
     "3240220",
     "271590",
     "12210",
-    "22380"
+    "22380",
+    "1623730"
   ],
   "cases": [
     {
@@ -219,6 +221,24 @@
       "name": "58 phase 1 lane G: gta iii definitive edition protects progression by name like its siblings",
       "app_id": "",
       "app_name": "Grand Theft Auto III - The Definitive Edition",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper F: brotato appid is low narrative (2026-09-26)",
+      "app_id": "1942280",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "plan 70 helper F: palworld appid protects progression (2026-09-26)",
+      "app_id": "1623730",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper F: palworld protects progression by name on a non-Steam shortcut with no appid",
+      "app_id": "",
+      "app_name": "Palworld",
       "expected": "protect_progression"
     }
   ],

@@ -12,7 +12,7 @@ import json
 import re
 import urllib.error
 import urllib.request
-from typing import Any, Optional
+from typing import Any, Optional, Sequence
 
 _MAX_VERIFY_EXCERPT_CHARS = 1500
 _VERIFY_NUM_PREDICT = 64
@@ -218,6 +218,214 @@ def drop_branch_menu_copying_the_worked_example(
         if isinstance(opt, dict) and _copies_the_example(str(opt.get("label", ""))):
             return None
     return branches
+
+
+# Plan 70 helper A (D112 #7, the spoiler safety net). The prompt already tells the model to
+# keep spoilery detail behind ```bonsai-spoiler``` fences on a turn that needs it
+# (strategy_spoiler_policy.py); nothing ever checked whether it did, and a question that
+# describes a boss without naming it ("the boss past the crystal spike area" in Hollow Knight)
+# came back with the boss named -- and its fake death spoiled -- in plain text (measured on the
+# Deck, 83 reads during streaming, never covered). This is that check: find every sentence that
+# names something the caller says is protected, and fence it, leaving anything already fenced
+# (a real cover, a doubled block from the bug plan 68's 6843f8e1 found, the strategy-branches
+# menu) completely alone.
+_PROTECTED_NAME_RE_CACHE: dict[str, "re.Pattern[str]"] = {}
+
+
+def _protected_name_pattern(name: str) -> "re.Pattern[str]":
+    pat = _PROTECTED_NAME_RE_CACHE.get(name)
+    if pat is None:
+        pat = re.compile(rf"(?<![a-z0-9]){re.escape(name.lower())}s?(?![a-z0-9])")
+        _PROTECTED_NAME_RE_CACHE[name] = pat
+    return pat
+
+
+def _unit_mentions_protected_name(unit: str, names: Sequence[str]) -> bool:
+    low = unit.lower()
+    return any(_protected_name_pattern(n).search(low) for n in names)
+
+
+# A fence marker is only ever recognised at the very start of a line -- matches how every real
+# fence in this codebase is written (an opening ```bonsai-spoiler or ```bonsai-strategy-branches
+# line, a closing ``` on its own line) and keeps this from ever matching three backticks that
+# happen to sit mid-sentence.
+_FENCE_OPEN_RE = re.compile(r"(?:(?<=\n)|^)```[^\n]*\n")
+_FENCE_CLOSE_RE = re.compile(r"\n```(?=\n|$)")
+
+
+def _split_fenced_segments(text: str) -> list[tuple[str, str]]:
+    """Split ``text`` into ("text", chunk) / ("fence", chunk) pieces that concatenate back to
+    ``text`` exactly.
+
+    A fence -- closed, or (mid-stream) still open with no closing ``` yet -- is opaque from
+    here on: the sentence-covering below never looks inside one, so a sentence already covered,
+    a doubled ```bonsai-spoiler``` block, and the ```bonsai-strategy-branches``` menu are all
+    left completely alone, wherever they already are in the reply.
+    """
+    segments: list[tuple[str, str]] = []
+    pos = 0
+    n = len(text)
+    while pos < n:
+        m = _FENCE_OPEN_RE.search(text, pos)
+        if not m:
+            segments.append(("text", text[pos:]))
+            break
+        if m.start() > pos:
+            segments.append(("text", text[pos : m.start()]))
+        close = _FENCE_CLOSE_RE.search(text, m.end())
+        if close:
+            segments.append(("fence", text[m.start() : close.end()]))
+            pos = close.end()
+        else:
+            segments.append(("fence", text[m.start() :]))
+            pos = n
+    return segments
+
+
+# Sentences are found one line at a time first -- a bulleted tactic list rarely ends a line in
+# a full stop -- then each line is split further on a sentence-ending mark followed by
+# whitespace. Every piece keeps its own trailing whitespace, so joining them back together
+# reproduces the original text exactly.
+_SENTENCE_TAIL_RE = re.compile(r"(?<=[.!?])(\s+)")
+
+
+def _split_sentence_units(text: str) -> list[str]:
+    units: list[str] = []
+    for line in text.splitlines(keepends=True):
+        parts = _SENTENCE_TAIL_RE.split(line)
+        i = 0
+        while i < len(parts):
+            piece = parts[i]
+            if i + 1 < len(parts):
+                piece += parts[i + 1]
+                i += 2
+            else:
+                i += 1
+            if piece:
+                units.append(piece)
+    return units
+
+
+def _cover_sentences_in_text(text: str, names: Sequence[str]) -> str:
+    """Wrap each contiguous run of protected sentences in one ```bonsai-spoiler``` fence.
+
+    Consecutive protected sentences share a single fence rather than one each -- two fences
+    back to back, wrapping the same reply, is exactly the doubled-block shape plan 68 found and
+    filed as a bug; this is what keeps this checker from ever producing that shape itself.
+    """
+    units = _split_sentence_units(text)
+    out: list[str] = []
+    buffer: list[str] = []
+
+    def _flush() -> None:
+        if not buffer:
+            return
+        body = "".join(buffer).strip()
+        buffer.clear()
+        if not body:
+            return
+        out.append(f"\n```bonsai-spoiler\n{body}\n```\n")
+
+    for unit in units:
+        if _unit_mentions_protected_name(unit, names):
+            buffer.append(unit)
+        else:
+            _flush()
+            out.append(unit)
+    _flush()
+    return "".join(out)
+
+
+_WORD_START_RE = re.compile(r"\b\w")
+
+
+def _could_be_growing_into_a_protected_name(unit: str, names: Sequence[str]) -> bool:
+    """True when the still-being-typed tail of ``unit`` could still turn into a protected name
+    once more characters arrive -- "Soul Ma" does not yet match ``_unit_mentions_protected_name``
+    against "Soul Master", so without this check it would show on screen, uncovered, for exactly
+    as long as it takes the rest of the word to arrive.
+
+    Tries every word-boundary-starting suffix of ``unit`` (not just its last single word, so a
+    name's *second* word forming -- "Soul Ma" against "Soul Master" -- is caught too) against
+    being a prefix of a protected name; a suffix already as long as the full name is skipped,
+    since a real match there would already have been caught above.
+    """
+    low = re.sub(r"\s+", " ", unit.strip().lower())
+    if not low:
+        return False
+    for name in names:
+        name_low = re.sub(r"\s+", " ", (name or "").strip().lower())
+        if not name_low:
+            continue
+        for wm in _WORD_START_RE.finditer(low):
+            suffix = low[wm.start() :]
+            if len(suffix) >= len(name_low):
+                continue
+            if name_low.startswith(suffix):
+                return True
+    return False
+
+
+def _trailing_unit_is_terminated(unit: str) -> bool:
+    return bool(re.search(r"[.!?]\s*$", unit)) or unit.endswith("\n")
+
+
+def cover_named_spoilers(
+    response_text: str,
+    protected_names: Sequence[str],
+    *,
+    hold_back_incomplete_trailing: bool = False,
+) -> str:
+    """Wrap the whole sentence(s) naming a protected thing in a ```bonsai-spoiler``` fence.
+
+    "Protected" is decided entirely by the caller (normally
+    ``strategy_spoiler_policy.protected_spoiler_names``) -- this function only finds every
+    sentence naming one of ``protected_names`` and fences it. Anything already inside a fence
+    (a real cover, a doubled block, the branch menu) is left completely alone: a fence is never
+    split, never looked inside, never re-wrapped -- so running this twice over the same text
+    changes nothing the second time.
+
+    ``hold_back_incomplete_trailing`` is set only by the live streaming path
+    (``ollama_ask_service.py``'s ``_on_delta``), where the reply so far can end mid-sentence and
+    a protected name can be forming one word at a time. A sentence that already contains the
+    full name is covered immediately, exactly as for the finished reply; a trailing sentence
+    that is *not yet* sentence-terminated, and whose last word(s) could still grow into a
+    protected name, is held back from the return value entirely -- chosen over showing it bare,
+    because there is no way to un-show a name that already flashed up. The next flush either
+    finishes it (covered) or the words diverged (shown plain, nothing was ever hidden for it).
+    An ordinary trailing word with no such risk ("Continuing…", a bullet with no full stop yet)
+    is never held back.
+    """
+    if not response_text or not protected_names:
+        return response_text
+    names = [n.strip() for n in protected_names if (n or "").strip()]
+    if not names:
+        return response_text
+    segments = _split_fenced_segments(response_text)
+    if not segments:
+        return response_text
+    hold_back_len = 0
+    if hold_back_incomplete_trailing and segments[-1][0] == "text":
+        trailing_units = _split_sentence_units(segments[-1][1])
+        if trailing_units:
+            last_unit = trailing_units[-1]
+            if (
+                not _trailing_unit_is_terminated(last_unit)
+                and not _unit_mentions_protected_name(last_unit, names)
+                and _could_be_growing_into_a_protected_name(last_unit, names)
+            ):
+                hold_back_len = len(last_unit)
+    out: list[str] = []
+    last_index = len(segments) - 1
+    for i, (kind, chunk) in enumerate(segments):
+        if kind == "fence":
+            out.append(chunk)
+            continue
+        text = chunk
+        if hold_back_len and i == last_index:
+            text = chunk[: len(chunk) - hold_back_len]
+        out.append(_cover_sentences_in_text(text, names))
+    return "".join(out)
 
 
 def maybe_append_verifier_notice(response_text: str, verify_result: dict[str, Any]) -> str:

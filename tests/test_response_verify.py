@@ -4,6 +4,7 @@ import unittest
 
 from backend.services.response_verify import (
     _parse_yes_no_verdict,
+    cover_named_spoilers,
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
@@ -151,6 +152,114 @@ class DropBranchMenuCopyingTheWorkedExampleTests(unittest.TestCase):
             "Health below 50% (<50%)",
         )
         self.assertEqual(drop_branch_menu_copying_the_worked_example(menu, "Fallout 3"), menu)
+
+
+class CoverNamedSpoilersTests(unittest.TestCase):
+    """D112 #7, the spoiler safety net: roadmap entry "A name-withheld boss question on a
+    story-protected game comes back with no spoiler box" (measured on the Deck 2026-09-22 and
+    2026-09-23, 83 reads during streaming, never covered)."""
+
+    def test_a_sentence_naming_a_protected_thing_is_fenced(self):
+        text = (
+            "Soul Master will use projectile attacks. He also dashes across the arena. "
+            "Watch your footing near the edges."
+        )
+        out = cover_named_spoilers(text, ["Soul Master"])
+        self.assertIn("```bonsai-spoiler", out)
+        self.assertIn("Soul Master will use projectile attacks.", out)
+        self.assertIn("He also dashes across the arena.", out)
+        # Only the sentence that actually names the protected thing is fenced -- exactly one
+        # fence, and the very next sentence sits in plain text right after its closing ```.
+        self.assertEqual(out.count("```bonsai-spoiler"), 1)
+        self.assertIn("```\nHe also dashes across the arena.", out)
+
+    def test_no_protected_name_present_leaves_the_reply_untouched(self):
+        text = "Keep an eye on your stamina and dodge to the side."
+        self.assertEqual(cover_named_spoilers(text, ["Soul Master"]), text)
+
+    def test_no_protected_names_at_all_leaves_the_reply_untouched(self):
+        text = "Soul Master will fake its death partway through the fight."
+        self.assertEqual(cover_named_spoilers(text, []), text)
+
+    def test_consecutive_protected_sentences_share_one_fence_not_two(self):
+        """A checker that fenced each sentence on its own would write two ```bonsai-spoiler```
+        blocks back to back -- the exact doubled-block shape plan 68's 6843f8e1 found and filed
+        as a bug. This is what proves this checker never produces that shape itself."""
+        text = "Soul Master appears first. Soul Master then splits into a shade. The fight ends there."
+        out = cover_named_spoilers(text, ["Soul Master"])
+        self.assertEqual(out.count("```bonsai-spoiler"), 1)
+        self.assertIn("Soul Master appears first.", out)
+        self.assertIn("Soul Master then splits into a shade.", out)
+
+    def test_a_doubled_spoiler_block_is_treated_as_already_covered(self):
+        """Plan 68's own bug (6843f8e1): a saved answer with the SAME ```bonsai-spoiler``` block
+        written twice in a row. The safety net must leave it exactly as it found it -- not
+        collapse it, not wrap it again, not touch what is already inside either copy."""
+        doubled = (
+            "Before the fight.\n\n"
+            "```bonsai-spoiler\nSoul Master fakes its death.\n```\n\n"
+            "```bonsai-spoiler\nSoul Master fakes its death.\n```\n\n"
+            "After the fight."
+        )
+        self.assertEqual(cover_named_spoilers(doubled, ["Soul Master"]), doubled)
+
+    def test_text_already_inside_a_fence_is_left_alone(self):
+        text = "```bonsai-spoiler\nSoul Master returns as Soul Tyrant.\n```\nGeneral advice follows."
+        self.assertEqual(cover_named_spoilers(text, ["Soul Master"]), text)
+
+    def test_running_it_twice_changes_nothing_the_second_time(self):
+        text = "Soul Master will fake its death partway through the fight."
+        once = cover_named_spoilers(text, ["Soul Master"])
+        twice = cover_named_spoilers(once, ["Soul Master"])
+        self.assertEqual(once, twice)
+
+    def test_a_branch_menu_fence_at_the_end_is_never_touched_or_moved(self):
+        text = (
+            "Soul Master hits hard early on.\n\n"
+            "```bonsai-strategy-branches\n"
+            '{"question":"Where are you at?","options":[]}\n'
+            "```"
+        )
+        out = cover_named_spoilers(text, ["Soul Master"])
+        self.assertTrue(out.endswith("```bonsai-strategy-branches\n"
+                                      '{"question":"Where are you at?","options":[]}\n'
+                                      "```"))
+        self.assertIn("```bonsai-spoiler", out)
+
+    def test_a_growing_name_is_held_back_from_the_live_snapshot(self):
+        """The "start of a name" case: without this, "Soul Ma" would flash on screen bare for
+        the handful of tokens it takes the model to finish typing "Soul Master"."""
+        out = cover_named_spoilers(
+            "The next boss is Soul Ma",
+            ["Soul Master"],
+            hold_back_incomplete_trailing=True,
+        )
+        self.assertEqual(out, "")
+
+    def test_a_completed_name_is_covered_immediately_even_mid_sentence(self):
+        out = cover_named_spoilers(
+            "The next boss is Soul Master and he",
+            ["Soul Master"],
+            hold_back_incomplete_trailing=True,
+        )
+        self.assertIn("```bonsai-spoiler", out)
+        self.assertIn("Soul Master", out)
+
+    def test_an_ordinary_trailing_word_is_never_held_back(self):
+        out = cover_named_spoilers(
+            "Continuing…",
+            ["Soul Master"],
+            hold_back_incomplete_trailing=True,
+        )
+        self.assertEqual(out, "Continuing…")
+
+    def test_finished_replies_are_not_held_back(self):
+        out = cover_named_spoilers(
+            "The next boss is Soul Ma",
+            ["Soul Master"],
+            hold_back_incomplete_trailing=False,
+        )
+        self.assertEqual(out, "The next boss is Soul Ma")
 
 
 if __name__ == "__main__":

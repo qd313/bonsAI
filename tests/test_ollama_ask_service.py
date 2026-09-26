@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
 import sys
+import threading
 import types
 import unittest
 from typing import Any
@@ -534,3 +536,133 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
             {"role": "assistant", "text": "Use the Longshot."},
         ])
         self.assertTrue(sent["system"].startswith("system prompt"))
+
+
+class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 68 step 3: run_ask_ollama sums a chat up first when it has outgrown its room, before
+    building the question's own memory. Uses a real chat-slot file on disk (a temp dir) so a
+    written summary's save, and a failed one's non-save, are proven against the real store rather
+    than a mock of it.
+    """
+
+    def setUp(self) -> None:
+        import tempfile
+
+        from backend.services.chat_slot_service import append_turn, create_slot, load_slot
+        from backend.services.token_accounting_service import reset_token_accounting
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+        self._append_turn = append_turn
+        self._load_slot = load_slot
+        self.tmp = tempfile.mkdtemp()
+        slot = create_slot(self.tmp, first_question="q0", app_name="Half-Life 2")
+        self.slot_id = slot["id"]
+
+    def _grow_chat(self, n: int) -> None:
+        """``n`` question/answer pairs, long enough that a tiny fallback room cannot hold them
+        all -- reliably "outgrown" however the test environment's own network unreachability
+        happens to resolve the fallback window."""
+        for i in range(n):
+            self._append_turn(self.tmp, self.slot_id, role="user", text=f"question {i}")
+            self._append_turn(
+                self.tmp, self.slot_id, role="assistant", text=f"answer number {i} " * 30
+            )
+
+    def _chat(self) -> dict:
+        slot = self._load_slot(self.tmp, self.slot_id)
+        return {"id": slot["id"], "turns": slot["turns"], "summary": slot.get("summary")}
+
+    def _plugin(self) -> "_FakePlugin":
+        plugin = _FakePlugin(active_request_id=1)
+        plugin._chat_slots_settings_dir = lambda: self.tmp
+        plugin._chat_slots_store_lock = asyncio.Lock()
+        plugin._abort_current_ollama_chat = threading.Event()
+        plugin._abort_ollama_chat_check = lambda: plugin._abort_current_ollama_chat.is_set()
+        return plugin
+
+    async def _run(self, plugin, chat, *, summary_stream_result):
+        answer_calls: list[str] = []
+
+        def _fake_post(url, model_name, messages, *a, **k):
+            answer_calls.append(model_name)
+            return {
+                "success": True, "status": 200, "model": model_name,
+                "response": "the answer", "assistant_raw": "the answer",
+            }
+
+        with (
+            patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
+                  return_value=["qwen2.5:3b"]),
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.services.screenshot_media.prepare_attachment_images",
+                  return_value=([], [], [])),
+            patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+            patch("backend.services.chat_summary_service._stream_ollama_chat_once",
+                  return_value=summary_stream_result) as summary_mock,
+        ):
+            out = await run_ask_ollama(
+                plugin, "and what about that", "127.0.0.1:11434", "", "Half-Life 2",
+                request_timeout_seconds=30, chat=chat,
+            )
+        return out, answer_calls, summary_mock
+
+    async def test_an_outgrown_chat_sums_up_first_and_saves_the_summary(self):
+        self._grow_chat(80)
+        out, answer_calls, summary_mock = await self._run(
+            self._plugin(), self._chat(),
+            summary_stream_result={
+                "success": True, "visible_raw": "Notes about Half-Life 2.",
+                "assistant_raw": "Notes about Half-Life 2.",
+            },
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "written")
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNotNone(saved.get("summary"))
+        self.assertEqual(saved["summary"]["text"], "Notes about Half-Life 2.")
+
+    async def test_a_chat_that_fits_calls_the_model_once_and_saves_nothing(self):
+        self._grow_chat(1)  # one short exchange -- nowhere near outgrowing any real room
+        plugin = self._plugin()
+        out, answer_calls, summary_mock = await self._run(
+            plugin, self._chat(), summary_stream_result={"success": True, "visible_raw": "x"},
+        )
+        self.assertEqual(summary_mock.call_count, 0)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "")
+        self.assertNotIn("summing_up", plugin.published_phases)
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))
+
+    async def test_a_failed_summary_still_answers_with_todays_memory(self):
+        self._grow_chat(80)
+        plugin = self._plugin()
+        out, answer_calls, summary_mock = await self._run(
+            plugin, self._chat(),
+            summary_stream_result={"success": False, "response": "model error"},
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "failed")
+        self.assertEqual(out.get("response"), "the answer")  # unchanged -- no warning appended
+        self.assertIn("summing_up", plugin.published_phases)
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))
+
+    async def test_a_stopped_summary_makes_no_answer_call_and_saves_nothing(self):
+        self._grow_chat(80)
+        out, answer_calls, summary_mock = await self._run(
+            self._plugin(), self._chat(),
+            summary_stream_result={
+                "success": False, "response": "Request stopped (connection closed).",
+                "cancelled": True,
+            },
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 0)
+        self.assertTrue(out.get("cancelled"))
+        self.assertFalse(out.get("success"))
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))

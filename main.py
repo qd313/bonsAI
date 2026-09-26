@@ -2088,6 +2088,7 @@ class Plugin:
         strategy_checklist_state: Optional[dict] = None,
         preferred_model: Optional[str] = None,
         chat_turns: Optional[list] = None,
+        chat: Optional[dict] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         return await run_ask_ollama(
@@ -2114,6 +2115,7 @@ class Plugin:
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,
             chat_turns=chat_turns,
+            chat=chat,
         )
 
     def chat_for_request(self, request_id: Any) -> dict:

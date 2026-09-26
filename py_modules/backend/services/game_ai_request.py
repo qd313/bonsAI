@@ -734,21 +734,17 @@ async def run_game_ai_request(
             title_profile=strategy_title_profile,
         )
 
-        # What this chat has already covered, so a follow-up does not have to repeat itself. The
-        # question being asked now is not in here: the user turn is written after the answer comes
-        # back. How much of it actually reaches the AI is decided by the budget, not here.
-        chat_turns = (
-            plugin.chat_turns_for_request(active_rid)
-            if hasattr(plugin, "chat_turns_for_request")
-            else []
-        )
-
+        # `request_chat`, loaded once near the top, goes to the model call too: its turns, its own
+        # summary and its id (plan 68). The question being asked now IS its newest turn -- it is
+        # written to the chat when the Ask is accepted, before this runs -- and the memory builder
+        # drops that trailing turn itself. How much of the chat actually reaches the AI, and
+        # whether it needs summing up first, is decided inside ask_ollama, not here.
         ollama_result = await plugin.ask_ollama(
             question_for_model,
             pc_ip,
             app_id,
             app_name,
-            chat_turns=chat_turns,
+            chat=request_chat,
             request_timeout_seconds=request_timeout_seconds,
             attachments=atts,
             ask_mode=ask_mode,
@@ -1024,6 +1020,10 @@ async def run_game_ai_request(
             "reasoning_text": str(ollama_result.get("reasoning_text") or ""),
             "reasoning_seconds": ollama_result.get("reasoning_seconds"),
             "reasoning_tokens": int(ollama_result.get("reasoning_tokens") or 0),
+            # Plan 68 step 3: whether this answer summed the chat up first -- "written",
+            # "failed", or "" when the chat had not outgrown its room. Carried through exactly
+            # as ollama_ask_service.run_ask_ollama reports it.
+            "chat_summary": str(ollama_result.get("chat_summary") or ""),
             # Mirrors "transparency.kb_attached_notes" at the top level too, alongside the other
             # per-turn facts this dict already carries flat (strategy_spoiler_asked_entity and so
             # on) -- see _publish_kb_attached_notes_live's docstring for the one thing reading

@@ -278,47 +278,47 @@
     {
       "name": "get_voice_engine_status",
       "domain": "voice",
-      "line": 2173
+      "line": 2175
     },
     {
       "name": "install_voice_engine",
       "domain": "voice",
-      "line": 2177
+      "line": 2179
     },
     {
       "name": "get_voice_install_status",
       "domain": "voice",
-      "line": 2181
+      "line": 2183
     },
     {
       "name": "start_voice_transcription",
       "domain": "voice",
-      "line": 2185
+      "line": 2187
     },
     {
       "name": "stop_voice_transcription",
       "domain": "voice",
-      "line": 2189
+      "line": 2191
     },
     {
       "name": "get_voice_transcription_status",
       "domain": "voice",
-      "line": 2193
+      "line": 2195
     },
     {
       "name": "start_voice_read_aloud",
       "domain": "voice",
-      "line": 2197
+      "line": 2199
     },
     {
       "name": "stop_voice_read_aloud",
       "domain": "voice",
-      "line": 2201
+      "line": 2203
     },
     {
       "name": "get_voice_read_aloud_status",
       "domain": "voice",
-      "line": 2205
+      "line": 2207
     }
   ]
 }

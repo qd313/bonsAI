@@ -84,9 +84,14 @@ describe("no standalone Policy section, and no section-button row, any more", ()
     expect(link.textContent).toBe("Advanced ›");
   });
 
-  it('initialSection "policy" lands on Browse with the Filters panel already open, not a missing section', () => {
+  it('initialSection "policy" lands on Browse, panel closed, same as "browse" -- not a missing section', () => {
+    // Used to force the Filters panel open with the ring on the first licence row: measured on
+    // the Deck 3 of 3 tries through "Manage AI models...", never through "Browse models..."
+    // (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json), one A press away from changing the
+    // licence filter with nothing pressed to put the ring there. Both buttons open the same
+    // screen now, the same way.
     render(<OllamaModelsHubModal {...buildProps({ initialSection: "policy" })} />);
-    expect(hoisted.pullModelsProps?.initialFiltersOpen).toBe(true);
+    expect(hoisted.pullModelsProps?.initialFiltersOpen).toBe(false);
   });
 
   it('initialSection "browse" does not force the Filters panel open', () => {

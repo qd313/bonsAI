@@ -99,11 +99,16 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   } = props;
 
   // "policy" used to be its own section; it is now the Filters panel's Licence group, inside
-  // Browse. A caller still asking for it lands on Browse with that panel already open.
+  // Browse. A caller still asking for it lands on plain Browse now -- this used to also force
+  // the Filters panel open with the ring on the first licence row (a "jump straight to the
+  // licence pick" shortcut), but measured on the Deck that left the ring one press away from
+  // changing the licence filter with nothing pressed to put it there, reproducing 3 of 3 tries
+  // through "Manage AI models..." and never through "Browse models..." even though both open the
+  // same screen (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
+  // same way: panel closed, ring on "Advanced ›".
   const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
     initialSection === "policy" ? "browse" : initialSection
   );
-  const openedOnLicenceShortcut = useRef(initialSection === "policy");
   const { draftTier, draftTierRef, setDraft } = useModelPolicyTierDraft(modelPolicyTier);
   const {
     draftNonFossUnlocked,
@@ -253,7 +258,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onCancel={() => handleHubClose("browseCancel")}
               onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
-              initialFiltersOpen={openedOnLicenceShortcut.current}
+              initialFiltersOpen={false}
             />
           ) : null}
           {section === "advanced" ? (

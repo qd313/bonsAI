@@ -72,6 +72,7 @@ Canonical: `src/utils/buildReplyActionsElement.tsx`, `src/utils/replyStopRegistr
 | `querySelector` / aria / `data-*` / class to find sibling for `onMove*` | `found: false` on Deck; Steam spatial nav steals hop (wrong diagonal) |
 | Cross-column fallback when primary target “misses” | Helpful↓ lands on Show details “successfully” |
 | Gate `onMove*` success on `document.activeElement` | Focus attempted but handler returns `false`; spatial nav overwrites |
+| A route-specific flag pre-opens a sub-panel and moves the ring into it before anything was pressed | Ring lands one press from an unintended change (`OllamaModelsHubModal`'s old `initialFiltersOpen` shortcut for the "policy" route: 3 of 3 tries, plan70-RING-ON-FILTER-2c1.json) |
 
 ## Ship checklist
 

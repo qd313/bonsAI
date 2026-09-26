@@ -22,7 +22,8 @@
     "271590",
     "12210",
     "22380",
-    "1623730"
+    "1623730",
+    "489830"
   ],
   "cases": [
     {
@@ -239,6 +240,18 @@
       "name": "plan 70 helper F: palworld protects progression by name on a non-Steam shortcut with no appid",
       "app_id": "",
       "app_name": "Palworld",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper G: skyrim appid protects progression",
+      "app_id": "489830",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper G: skyrim protects progression by name, having no appid",
+      "app_id": "",
+      "app_name": "The Elder Scrolls V: Skyrim Special Edition",
       "expected": "protect_progression"
     }
   ],

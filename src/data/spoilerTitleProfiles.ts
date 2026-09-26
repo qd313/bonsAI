@@ -65,6 +65,7 @@ export const PROTECT_PROGRESSION_APP_IDS = new Set([
   "12210", // Grand Theft Auto IV: The Complete Edition
   "22380", // Fallout: New Vegas
   "1623730", // Palworld — Tower fights gate real story progression (plan 70 helper F, 2026-09-26)
+  "489830", // The Elder Scrolls V: Skyrim Special Edition — story-driven main quest (plan 70 helper G)
 ]);
 
 /**
@@ -128,6 +129,8 @@ const PROTECT_PROGRESSION_TITLES = [
   // The maintainer's own copy runs from a non-Steam shortcut named "Palworld" with no real
   // Steam AppID, so the name is the only handle (plan 70 helper F, 2026-09-26).
   "palworld",
+  // Plan 70 helper G: Skyrim has a Steam AppID too; the name matches its story-driven siblings.
+  "skyrim",
 ];
 
 function normalizeTitle(name: string): string {

@@ -460,6 +460,19 @@
         "creature-collector",
         "open-world"
       ]
+    },
+    {
+      "game_id": 38,
+      "app_id": "489830",
+      "igdb_id": null,
+      "canonical_title": "The Elder Scrolls V: Skyrim Special Edition",
+      "edition": "SE",
+      "platform": "Steam",
+      "genres": [
+        "rpg",
+        "open-world",
+        "action-adventure"
+      ]
     }
   ],
   "aliases": [
@@ -858,6 +871,38 @@
     {
       "alias": "pal world",
       "game_id": 37
+    },
+    {
+      "alias": "skyrim",
+      "game_id": 38
+    },
+    {
+      "alias": "skyrim special edition",
+      "game_id": 38
+    },
+    {
+      "alias": "the elder scrolls v skyrim",
+      "game_id": 38
+    },
+    {
+      "alias": "elder scrolls v skyrim",
+      "game_id": 38
+    },
+    {
+      "alias": "elder scrolls v",
+      "game_id": 38
+    },
+    {
+      "alias": "elder scrolls 5",
+      "game_id": 38
+    },
+    {
+      "alias": "tesv",
+      "game_id": 38
+    },
+    {
+      "alias": "skyrim se",
+      "game_id": 38
     }
   ],
   "sections": [
@@ -4857,7 +4902,7 @@
     {
       "section_id": 402,
       "game_id": 36,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Brotato",
       "card": "Brotato is a top-down arena shooter roguelite: you play as a potato fighting off hordes of aliens with up to six weapons equipped at once, surviving until help arrives rather than following any real story. A run is built from twenty short waves back to back, with the green materials enemies drop spent between waves in a shop that refreshes every time. Each of Brotato's many playable characters carries its own starting gear, stat bonuses and penalties, changing how a run should be played more than any single item does, so it is worth reading a new character's card before diving into a wave.",
       "source_url": "https://brotato.wiki.spellsandguns.com/Brotato_Wiki",
@@ -4989,7 +5034,7 @@
     {
       "section_id": 414,
       "game_id": 37,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Palworld",
       "card": "Palworld is an open-world survival crafting game set on the Palpagos Islands, where fantastical creatures called Pals can be captured to help along the way rather than facing everything alone. An early priority is throwing a basic Pal Sphere at a weakened wild Pal to add it to the party, since low-level Pals compatible with the starter sphere are what most early progress depends on. From there, a first base built around a Palbox lets caught Pals work automatically at assigned jobs, turning raw materials into gear while the player explores, fights hostile human factions, and works toward tougher creatures and better gear further out on the islands.",
       "source_url": "https://palworld.wiki.gg/",
@@ -5117,6 +5162,203 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 450,
+      "game_id": 38,
+      "section_type": "starting_out",
+      "name": "Starting out in Skyrim",
+      "card": "Skyrim opens with your character as a prisoner at Helgen; after escaping, you follow a companion toward the town of Riverwood. On the road you will pass a small ring of Standing Stones, and activating one grants a bonus tied to a whole group of related skills, though only one stone's effect works at a time. It is worth picking one weapon type and one armor weight early and sticking with them until combat feels comfortable, and dropping the difficulty to Novice or Apprentice for the first few hours helps too. Early money comes from selling loot in Riverwood or Falkreath, chopping wood, mining, and small favor quests for townsfolk, and a recruited follower can carry extra gear and help in a fight you are not ready for alone.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:First_Time_Players",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 451,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Leveling in Skyrim",
+      "card": "Skyrim's character level rises from skill experience rather than from killing enemies directly. Using a skill, such as swinging a sword, casting a spell, or sneaking past a guard, earns that skill experience, and each skill level-up feeds a smaller or larger amount of experience toward your next character level, depending on how advanced the skill already is. Every character level grants a point to raise Health, Magicka or Stamina by ten, plus one perk point to spend in any of the eighteen skill trees, regardless of which skill you actually used to level up. Because raising a high-level skill grants more character experience per level-up than raising a low-level one, but each skill also needs more use to level up the higher it climbs, how fast a character gains levels keeps shifting as their skills mature rather than staying constant.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Leveling",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 452,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Skills and perks in Skyrim",
+      "card": "Eighteen skills cover Skyrim's magic, combat and stealth playstyles, from Alteration and Destruction to One-Handed, Smithing and Sneak. Every skill starts around a base value that a character's race nudges up or down, and each one can also be raised early by reading the right skill book, training with an NPC, or finishing certain quests. Every character level-up grants one perk point that can be spent in any of these eighteen trees, and higher-tier perks are gated behind both a minimum skill level and the perks beneath them, so a tree has to be climbed roughly in order rather than raided at the top first. Because perk points are earned slowly and cannot normally be reclaimed, it is worth using a handful of skills for a while before committing points to their trees.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Skills",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 453,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Dragon Shouts in Skyrim",
+      "card": "Dragon Shouts, called the Thu'um or the Voice, are three-word dragon phrases that unlock powerful effects and, unlike ordinary magic, cost no mana or stat to use, only a cooldown between casts. The ability to shout is granted after an early main-quest dragon encounter, and from then on killing a dragon lets you absorb its soul, which is spent to unlock a word of power at a word wall already found. Tapping the shout button briefly uses only its first learned word; holding the button charges it further, unlocking a longer, stronger version once the second and third words of that shout are known. Word walls carrying shouts are scattered through dragon lairs and dungeons, and the main quest and a few faction quests also point toward specific ones directly.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dragon_Shouts",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 454,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Standing Stones in Skyrim",
+      "card": "Standing Stones are wilderness landmarks, thirteen in total, that grant a passive ability or buff once activated, and only one stone's effect is active at a time unless a rare late-game item lets two be combined. The three most commonly found first are the Guardian Stones (Mage, Thief and Warrior), clustered together beside the road to Riverwood, each one boosting experience gained in a broad group of related skills. You can change which stone is active at any time by activating a different one, so the choice is never permanent.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Standing_Stone",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 455,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Enchanting in Skyrim",
+      "card": "Enchanting lets a character bind a magical effect to a weapon, armor piece or piece of jewelry, and the skill has its own perk tree of nine perks. Raising the Enchanting skill increases both how many charges a newly enchanted item holds and how strong its enchantment can be, scaling up toward a maximum bonus at the skill's top level. Which effects can go on a given item depends on the item's type, since a weapon and a piece of armor cannot take the same effect list, and learning a new enchantment usually means disenchanting an existing enchanted item first to study its effect before it can be applied elsewhere. Enchanting pairs closely with Smithing: a well-forged, well-enchanted weapon or armor set is one of the strongest ways to raise a character's effective power without touching combat skills directly.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Enchanting",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 456,
+      "game_id": 38,
+      "section_type": "mechanic",
+      "name": "Werewolves and vampirism in Skyrim",
+      "card": "Skyrim lets a character become a werewolf partway through a well-known early companion questline, or contract vampirism from a rarer disease-based encounter, and the two conditions cannot be held at the same time. As a werewolf, Beast Form can be triggered once per day for a limited window; in that form you hit far harder and move faster, and gain immunity to disease, but lose the passive bonus from resting and cannot use equipment, spells or shouts until you change back. Feeding on a fresh humanoid corpse while transformed extends the time left in Beast Form and restores health, and an official add-on's werewolf perk tree further improves damage, health and stamina in beast form. Both lycanthropy and vampirism can later be cured through their own separate quests if the drawbacks come to outweigh the power.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Lycanthropy",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 457,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Smithing and gear tiers in Skyrim",
+      "card": "Smithing lets a character forge new weapons and armor from raw ore and hides, and separately temper existing gear to sharpen or polish it back to, or past, its original quality, with a higher Smithing skill unlocking bigger improvements. The skill has ten perks, mostly unlocking the ability to forge and improve one material tier at a time: leather and hide gear first, then iron and steel, on up through orcish, dwarven, glass, ebony and daedric equipment, with dragonbone gear unlocked separately once a relevant add-on's smithing perk and dragon bones are both in hand. A weapon or armor piece carrying an enchantment needs the Arcane Blacksmith perk before it can be tempered at all, and building an early mine-smelt-forge-temper loop is one of the more reliable ways to gear up without relying purely on dungeon loot.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Smithing",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 458,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Daedric artifacts in Skyrim",
+      "card": "Daedric Artifacts are scattered through Skyrim, each a unique item tied to a quest given directly by one of the Daedric Princes rather than through an ordinary quest-giver NPC. Most of these quests are pointed to by a smaller pointer miscellaneous objective first, though a few can be started simply by visiting the Prince's shrine or finding one of their worshippers out in the world. None of these Daedric quests count as an ordinary side quest, and several can be permanently failed rather than just abandoned; killing the wrong quest-giver, for instance, can close off an artifact for that save.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Daedric_Quests",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 459,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Dragon Priest Masks in Skyrim",
+      "card": "Dragon Priest Masks are unique enchanted headgear worn by the Dragon Priests met as high-level guardian bosses inside Nordic ruins, and each mask is a one-of-a-kind reward for defeating the priest wearing it. Masks replace a helmet slot and carry a fixed enchantment rather than a random one, and, like other artifact-tier gear, cannot be disenchanted to learn their effect for use elsewhere, though several can still be improved with a high Smithing skill. One mask, Konahrik, is different: instead of coming from a single priest, it is granted for bringing every other base-game mask to one sanctuary, making it a reward for collecting the full set.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Armor_Artifacts",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 460,
+      "game_id": 38,
+      "section_type": "boss",
+      "name": "Dragon Priests in Skyrim",
+      "card": "Dragon Priests were once powerful servants of Skyrim's ancient dragons, and in the present day they rest sealed inside coffins in Nordic ruins, bursting out the moment their tomb is disturbed. They fight almost entirely at range with staves and destructive spells while constantly backing away, which makes them dangerous to fight and awkward to close in on with a melee weapon; cornering one or interrupting its retreat is usually the key to landing hits. Each named Dragon Priest carries its own unique enchanted mask as a guaranteed reward for defeating it, though a few other high-level named enemies can also appear using a generic Dragon Priest in the same role without dropping a mask. They sit at the very high end of the game's leveled encounters, so meeting one significantly under-leveled is a genuinely dangerous fight.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dragon_Priest",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 461,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Dragons in Skyrim",
+      "card": "Dragons are intelligent, immortal, flying reptiles that return to Skyrim as part of the main quest and afterward keep spawning in the wild at word-wall dragon lairs, showing up even inside large walled cities shortly after fast-traveling there. A dragon encounter is announced by a distinctive roar, and not every dragon circling overhead is immediately hostile; some simply fly off if left alone. In a fight, dragons alternate fire or frost breath from the air with a bite and tail-swipe once they land, which tends to happen once their health drops roughly to half; keeping health topped up and staying to one side of a grounded dragon reduces how often its bite and breath both land. Killing a dragon lets you absorb its soul for Dragon Shouts, and its remains can be looted for scales and bones used in high-tier armor and weapons.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dragon",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 462,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Draugr in Skyrim",
+      "card": "Draugr are reanimated Nordic warriors, most of whom once served the Dragon Priests, now sealed inside the barrows and tombs scattered across Skyrim and left to periodically wake and stand guard. Weaker draugr near the start of the game carry gear roughly as strong as steel weapons and iron armor, while stronger draugr encountered deeper in ruins fight with ebony equipment and can use Dragon Shouts of their own, including Unrelenting Force and Disarm. Most draugr are immune to poison and take reduced frost damage, so a mage leaning on flame and shock spells fares better than one relying on frost. Many draugr sleep in wall alcoves until disturbed and are briefly unable to act while climbing out to fight, which makes an opening sneak attack or a couple of free hits a reliable way to remove one before it gets moving.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Draugr",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 463,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Falmer in Skyrim",
+      "card": "Falmer were once the Snow Elves, an ancient people the game's lore says were driven underground, blinded and enslaved over centuries until they became the disfigured, feral creatures found today living deep in Dwemer ruins alongside chaurus, whose chitin they use for crude weapons and armor. Every Falmer is completely blind and hunts by sound instead, which their sharp hearing partly makes up for; moving quietly or attacking from range takes real advantage of that blindness. They fight as melee fighters, archers or shamans depending on the type encountered, coat their weapons in a chaurus- or spider-venom poison that deals a burst of damage on hit, and often ambush from hidden hive traps.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Falmer",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 464,
+      "game_id": 38,
+      "section_type": "boss",
+      "name": "Alduin",
+      "card": "Alduin, known to the people of Skyrim as the World-Eater, is an immensely powerful dragon and the main antagonist of the main quest, believed by Nord legend to periodically bring ruin to the world. He appears across several main-quest encounters rather than in one single fixed location, and fights with the same Fire Breath, Frost Breath and Unrelenting Force shouts other dragons use, plus a Storm Call shout unique to him. Unlike most dragons he is treated as essential for a long stretch of the main story, so early encounters with him are built to be survived and escaped rather than won outright. His full role in the story only becomes clear well into the main quest; this note stops short of the ending.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Alduin",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 465,
+      "game_id": 8,
+      "section_type": "starting_out",
+      "name": "Starting out in Cyberpunk 2077",
+      "card": "Cyberpunk 2077 starts with a life path choice, Streetkid, Nomad or Corpo, which colors your character's background and ties into some of the game's dialogue options. Character creation also sets five key attributes (Body, Cool, Intelligence, Reflexes and Technical Ability), which rise through leveling and installing cyberware alongside separate skills and perks. Early sessions are mostly spent taking on jobs tracked in the in-game journal, and it is worth getting comfortable with the scanner early, since it marks nearby enemies, interactive objects, job-related objects, lootable items and hackable devices in different colors. Installed cyberware adds another big axis of character build variety alongside skills and perks, so it is worth checking what is available once spare money comes in.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 466,
+      "game_id": 5,
+      "section_type": "starting_out",
+      "name": "Starting out in Fallout 4",
+      "card": "Fallout 4 begins with your character's Pip-Boy as the hub for maps, stats and inventory, and the V.A.T.S. targeting system lets you pause into a slowed-down view to line up called shots at an enemy's head, legs or weapon in exchange for action points. Early on it is worth grabbing every piece of junk you can carry, not just weapons and armor, since junk breaks down into components used for crafting, mods and building settlements, so almost nothing is truly worthless. Settlements let you scrap the buildings around them for resources and construct housing, defenses, water and power, and merchants and other NPCs can move in to help keep a settlement running. Power armor runs on fusion cores that drain while worn, and no longer needs special training to use the way it did in earlier Fallout games.",
+      "source_url": "https://fallout.fandom.com/wiki/Fallout_4",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 467,
+      "game_id": 11,
+      "section_type": "starting_out",
+      "name": "Starting out in Red Dead Redemption 2",
+      "card": "Red Dead Redemption 2 opens with a lengthy, linear snowbound chapter before the world opens up, so the first hours are more about learning the game's systems than freedom to roam. It is worth getting comfortable early with the Dead Eye targeting system, the horse bonding meter that unlocks new mounted abilities the more time spent with a horse, and the honor system, tracked as a bar in the pause menu, which shifts with how strangers are treated and nudges some dialogue and prices over time. Camp donations keep the camp's upgrades and supplies going, and a clean kill on a good animal, with a weapon suited to its size, matters more for a perfect pelt than the skinning itself; pristine pelts sell for more than damaged ones. None of this needs to be optimized in the first sitting.",
+      "source_url": "",
+      "source_license": "bonsAI-maintainer",
+      "source_version": null
     }
   ],
   "genre_patterns": [

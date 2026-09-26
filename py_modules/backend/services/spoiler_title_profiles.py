@@ -84,6 +84,9 @@ PROTECT_PROGRESSION_APP_IDS = frozenset(
         # who gate real story progression (one is a hard prerequisite for the Breeding Farm),
         # the same shape as the boss identities already protected above.
         "1623730",  # Palworld
+        # Plan 70 helper G: the main quest is a discovered story built around Alduin's
+        # return, so this stays conservative like its story-driven shelf-mates above.
+        "489830",  # The Elder Scrolls V: Skyrim Special Edition
     }
 )
 
@@ -155,6 +158,9 @@ _PROTECT_PROGRESSION_TITLES = (
     # named "Palworld" with no real Steam AppID, so the name is the only handle, like the
     # emulated titles above.
     "palworld",
+    # Plan 70 helper G: Skyrim has a Steam AppID too; the name matches its story-driven
+    # siblings above, which carry both an AppID entry and a name entry.
+    "skyrim",
 )
 
 

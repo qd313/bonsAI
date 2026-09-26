@@ -51,9 +51,9 @@ class SpoilerTitleProfilesTests(unittest.TestCase):
         # 3 + 8 until 2026-09-05; the new-titles tranche (D69) added DOOM Eternal to the
         # low-narrative set and six story titles (GTA V twice, one per Steam build). Plan 70
         # helper F (2026-09-26) added one to each set: Brotato (low narrative) and Palworld
-        # (protect progression).
+        # (protect progression); helper G added Skyrim (protect progression).
         self.assertEqual(len(LOW_NARRATIVE_APP_IDS), 5)
-        self.assertEqual(len(PROTECT_PROGRESSION_APP_IDS), 15)
+        self.assertEqual(len(PROTECT_PROGRESSION_APP_IDS), 16)
 
     def test_every_corpus_title_has_a_spoiler_profile(self):
         """A game in the corpus with no profile silently resolves to ``unknown``.

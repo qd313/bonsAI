@@ -208,6 +208,37 @@ class SpoilerCoverWiringTests(unittest.TestCase):
 
         self.assertNotIn("```bonsai-spoiler", result.get("response", ""))
 
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_the_models_own_thinking_is_covered_too(self, mock_should, mock_retrieve):
+        """D112 #7 leak fix: THINKING-SPOILER-01. The saved reasoning shown in the fold
+        afterwards must not name a protected boss either -- the thinking text below is the
+        literal capture from the session's scratchpad L1-2-HK-C.jsonl (t=9268)."""
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = _attached_result(_soul_master_card())
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Watch his attack patterns and strike when he is open.",
+            "model": "test-model",
+            "reasoning_text": (
+                'The context is clearly Hollow Knight, and the specific boss described '
+                'matches the "Soul Master" from the local knowledge base.'
+            ),
+            "reasoning_seconds": 12,
+            "reasoning_tokens": 40,
+        }
+
+        result = _run(
+            plugin,
+            "How do I beat the boss past the crystal spike area?",
+            ask_mode="strategy",
+            app_name="Hollow Knight",
+        )
+
+        self.assertNotIn("Soul Master", result.get("reasoning_text", ""))
+        self.assertIn("[hidden]", result.get("reasoning_text", ""))
+
 
 if __name__ == "__main__":
     unittest.main()

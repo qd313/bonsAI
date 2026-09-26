@@ -354,9 +354,9 @@ async def run_ask_ollama(
                     character_enabled=bool(settings.get("ai_character_enabled")),
                     character_preset_id=rp_meta.resolved_preset_id,
                 )
-            # D112 #7, the spoiler safety net -- the live half. `text` is the whole reply so far,
-            # not just this delta, and this call recomputes the cover from scratch every flush.
-            display_text = cover_live_spoilers(text, done)
+            # D112 #7, the spoiler safety net -- the live half, both the answer and the thinking.
+            display_text = cover_live_spoilers.answer(text, done)
+            covered_reasoning = cover_live_spoilers.thinking(reasoning_partial, done)
             # Plan 57: the model's own thinking, kept in the same poll snapshot the screen already
             # reads every second — so the live lines can move before any answer text exists.
             plugin_inst._update_partial_response(
@@ -364,7 +364,7 @@ async def run_ask_ollama(
                 display_text,
                 done,
                 thinking_summary,
-                reasoning_partial=reasoning_partial,
+                reasoning_partial=covered_reasoning,
                 reasoning_seconds=reasoning_seconds,
             )
 

@@ -5,6 +5,7 @@ import unittest
 from backend.services.response_verify import (
     _parse_yes_no_verdict,
     cover_named_spoilers,
+    cover_thinking_text,
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
@@ -309,6 +310,53 @@ class MidlineFenceLeakTests(unittest.TestCase):
         out = cover_named_spoilers(raw, ["Soul Master"], hold_back_incomplete_trailing=False)
         self.assertEqual(out.count("```bonsai-spoiler"), 1)
         self.assertIn("Outro line.", out)
+
+
+class CoverThinkingTextTests(unittest.TestCase):
+    """D112 #7 leak fix: THINKING-SPOILER-01, measured live on the Deck 2026-09-26. The live
+    thinking line and the saved reasoning shown in the fold afterwards both named a protected
+    boss in plain words in 4 of 6 tries, plus raw ```bonsai-spoiler``` marker text twice. The
+    fragments below are the literal text captured in the session's scratchpad
+    L1-2-HK-C.jsonl and L1-2-HK-named.jsonl, not a hand-typed approximation.
+    """
+
+    def test_a_real_captured_thinking_line_naming_the_boss_is_redacted(self):
+        # L1-2-HK-C.jsonl t=8237, verbatim.
+        thinking = (
+            '2.  **Identify Context/Game:** The context is clearly Hollow Knight, and the '
+            'specific boss described matches the "Soul Master" from the local knowledge base.\n'
+            '3.  **Determine Mode:**'
+        )
+        out = cover_thinking_text(thinking, ["Soul Master"])
+        self.assertNotIn("Soul Master", out)
+        self.assertIn("[hidden]", out)
+        self.assertIn("3.  **Determine Mode:**", out)
+
+    def test_a_real_captured_raw_fence_marker_is_stripped(self):
+        # L1-2-HK-C.jsonl t=11594, verbatim -- the model's own thinking quoting its
+        # instructions' fence syntax back at itself.
+        thinking = (
+            "ential), and exact puzzle solutions in plain text unless essential for branching.\n"
+            "    *   If a spoiler is unavoidable, wrap it in ```bonsai-spoiler ... ```.\n"
+            "    *   NAMED-ENTITY CONS"
+        )
+        out = cover_thinking_text(thinking, ["Soul Master"])
+        self.assertNotIn("```", out)
+
+    def test_a_growing_name_in_thinking_is_held_back_while_streaming(self):
+        out = cover_thinking_text(
+            "3.  **Consult Knowledge Base:** Boss: Soul Ma",
+            ["Soul Master"],
+            hold_back_incomplete_trailing=True,
+        )
+        self.assertNotIn("Soul Ma", out)
+
+    def test_no_protected_names_leaves_thinking_untouched(self):
+        thinking = "1.  **Analyze the Request:** The user wants general performance tips."
+        self.assertEqual(cover_thinking_text(thinking, ["Soul Master"]), thinking)
+
+    def test_empty_thinking_is_returned_unchanged(self):
+        self.assertEqual(cover_thinking_text("", ["Soul Master"]), "")
 
 
 if __name__ == "__main__":

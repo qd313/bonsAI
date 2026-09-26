@@ -12,7 +12,7 @@ import json
 import re
 import urllib.error
 import urllib.request
-from typing import Any, Callable, Optional, Sequence
+from typing import Any, Callable, NamedTuple, Optional, Sequence
 
 from backend.services.strategy_spoiler_policy import (
     boss_like_card_names,
@@ -23,6 +23,15 @@ from backend.services.strategy_spoiler_policy import (
     protected_spoiler_names,
     spoiler_cover_required,
 )
+
+
+class LiveSpoilerCover(NamedTuple):
+    """The pair of live-cover functions ``build_live_spoiler_cover`` hands back for one turn --
+    ``answer`` for the markdown-rendered reply, ``thinking`` for the plain-text thinking line."""
+
+    answer: Callable[[str, bool], str]
+    thinking: Callable[[Optional[str], bool], Optional[str]]
+
 
 _MAX_VERIFY_EXCERPT_CHARS = 1500
 _VERIFY_NUM_PREDICT = 64
@@ -460,6 +469,66 @@ def cover_named_spoilers(
     return "".join(out)
 
 
+# The model's thinking is drawn as plain text, never markdown (reasoningDisplay.ts's own words:
+# "drawn as ordinary text") -- a ```bonsai-spoiler``` fence would not hide anything there, only
+# add backtick noise, and the model's own thinking sometimes quotes that exact fence syntax back
+# at itself (it is reading its own instructions). Strip any ``` run, with or without a language
+# tag, on sight.
+_RAW_FENCE_MARKER_RE = re.compile(r"```[a-zA-Z0-9_-]*")
+
+_THINKING_REDACTION = "[hidden]"
+
+
+def cover_thinking_text(
+    text: str,
+    protected_names: Sequence[str],
+    *,
+    hold_back_incomplete_trailing: bool = False,
+) -> str:
+    """D112 #7 in the model's own thinking, not just its answer.
+
+    Measured on the Deck (THINKING-SPOILER-01): the live thinking line and the saved reasoning
+    shown in the fold afterwards both named a protected boss/enemy in plain words in 4 of 6
+    tries, plus raw ```bonsai-spoiler``` marker text twice. Sentence-finding and the
+    still-forming-name holdback are shared with ``cover_named_spoilers`` above; the only
+    difference is what happens to a sentence that names a protected thing -- there is no
+    markdown fence to hide it behind here, so it is replaced with a short placeholder instead of
+    wrapped.
+    """
+    if not text:
+        return text
+    text = _RAW_FENCE_MARKER_RE.sub("", text)
+    if not protected_names:
+        return text
+    names = [n.strip() for n in protected_names if (n or "").strip()]
+    if not names:
+        return text
+    units = _split_sentence_units(text)
+    if not units:
+        return text
+    hold_back_len = 0
+    if hold_back_incomplete_trailing:
+        last_unit = units[-1]
+        if (
+            not _trailing_unit_is_terminated(last_unit)
+            and not _unit_mentions_protected_name(last_unit, names)
+            and _could_be_growing_into_a_protected_name(last_unit, names)
+        ):
+            hold_back_len = len(last_unit)
+    out: list[str] = []
+    last_index = len(units) - 1
+    for i, unit in enumerate(units):
+        if hold_back_len and i == last_index:
+            continue
+        if _unit_mentions_protected_name(unit, names):
+            stripped = unit.rstrip()
+            trailing_ws = unit[len(stripped) :]
+            out.append(f"{_THINKING_REDACTION}{trailing_ws}" if stripped else unit)
+        else:
+            out.append(unit)
+    return "".join(out)
+
+
 def build_live_spoiler_cover(
     *,
     consent: bool,
@@ -469,11 +538,12 @@ def build_live_spoiler_cover(
     title_profile: str = "",
     question: str,
     system_content: str,
-) -> Callable[[str, bool], str]:
+) -> LiveSpoilerCover:
     """One call, at turn setup, folding the whole D112 #7 policy lookup (was a cover promised
-    this turn, and on which names) plus ``cover_named_spoilers`` itself behind a single function
+    this turn, and on which names) plus the two coverers themselves behind a pair of functions
     the caller runs every flushed chunk through -- so ``ollama_ask_service.py``'s own `_on_delta`
-    needs only this call plus one line per flush, not the policy lookup inlined there too.
+    needs only this call plus one line per flush for the answer and one for the thinking, not
+    the policy lookup inlined there too.
     """
     cover_needed = spoiler_cover_required(
         consent,
@@ -484,12 +554,17 @@ def build_live_spoiler_cover(
     )
     names = protected_spoiler_names(question, boss_like_card_names(system_content)) if cover_needed else []
 
-    def _cover(text: str, done: bool) -> str:
+    def _answer(text: str, done: bool) -> str:
         if not cover_needed or not text:
             return text
         return cover_named_spoilers(text, names, hold_back_incomplete_trailing=not done)
 
-    return _cover
+    def _thinking(text: Optional[str], done: bool) -> Optional[str]:
+        if text is None or not cover_needed or not text:
+            return text
+        return cover_thinking_text(text, names, hold_back_incomplete_trailing=not done)
+
+    return LiveSpoilerCover(answer=_answer, thinking=_thinking)
 
 
 def maybe_append_verifier_notice(response_text: str, verify_result: dict[str, Any]) -> str:

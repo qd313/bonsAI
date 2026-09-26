@@ -128,6 +128,7 @@ from backend.services.ollama_service import (
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
 from backend.services.response_verify import (
     cover_named_spoilers,
+    cover_thinking_text,
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
@@ -933,6 +934,11 @@ async def run_game_ai_request(
         # this" applies. See TheTwoLinesNeverBothAppearTests in test_kb_not_in_notes_notice.py
         # for the case proven, and D87 (docs/archive/48-kb-wave-three-session.md § 6) for why
         # the tip sheet needed this line at all.
+        # D112 #7, the spoiler safety net: filled in below, once, and reused after the honesty
+        # footers both to cover `response_text` and to cover the model's own saved thinking
+        # (`reasoning_text`) near the end of this function -- the same protected names apply to
+        # both, since both come from the same turn.
+        spoiler_protected_names_for_turn: list[str] = []
         if ollama_result.get("success"):
             show_no_tip_for_this = should_show_no_tip_for_this_notice(
                 kb_attached=bool(kb_transparency.get("kb_attached")),
@@ -1023,9 +1029,13 @@ async def run_game_ai_request(
                 app_name=app_name,
                 title_profile=strategy_title_profile,
             ):
-                protected_names = protected_spoiler_names(question, boss_like_card_names(kb_text))
-                if protected_names:
-                    response_text = cover_named_spoilers(response_text, protected_names)
+                spoiler_protected_names_for_turn = protected_spoiler_names(
+                    question, boss_like_card_names(kb_text)
+                )
+                if spoiler_protected_names_for_turn:
+                    response_text = cover_named_spoilers(
+                        response_text, spoiler_protected_names_for_turn
+                    )
 
             # Plan 70 helper K, finish 3 (the maintainer's pick, on unless send_prev_qa_enabled()
             # is turned off): now that this turn's own answer is finished -- and covered, just
@@ -1052,6 +1062,17 @@ async def run_game_ai_request(
         if not ollama_result.get("success"):
             err_tail = base_response_text[:8000]
 
+        # D112 #7, the spoiler safety net in the model's own thinking, not just its answer:
+        # measured on the Deck (THINKING-SPOILER-01), a protected name showed in plain words in
+        # the live thinking line and in the saved reasoning shown in the fold afterwards, in 4 of
+        # 6 tries. One covered copy, reused below for the "Show details" transparency snapshot
+        # and for the finished result's own `reasoning_text` -- both the saved chat turn
+        # (chat_turn_recorder.reasoning_payload_for_chat_slot) and the live poll's merged status
+        # read that same finished-result field, via main.py's `result`.
+        covered_reasoning_text = cover_thinking_text(
+            str(ollama_result.get("reasoning_text") or ""), spoiler_protected_names_for_turn
+        )
+
         ollama_route_snapshot = build_ollama_route_snapshot(
             raw_question=question,
             sanitizer_action=str(lane.action),
@@ -1066,6 +1087,7 @@ async def run_game_ai_request(
                 "spoiler_risk_signals": spoiler_risk_signals,
                 "spy_lying_active": spy_lying_active,
                 "spy_lies": spy_lies,
+                "reasoning_text": covered_reasoning_text,
             },
             base_response_text=base_response_text,
             response_text=response_text,
@@ -1119,7 +1141,7 @@ async def run_game_ai_request(
             },
             "model": ollama_result.get("model"),
             "thinking_unsupported": bool(ollama_result.get("thinking_unsupported", False)),
-            "reasoning_text": str(ollama_result.get("reasoning_text") or ""),
+            "reasoning_text": covered_reasoning_text,
             "reasoning_seconds": ollama_result.get("reasoning_seconds"),
             "reasoning_tokens": int(ollama_result.get("reasoning_tokens") or 0),
             # Plan 68 step 3: whether this answer summed the chat up first -- "written",

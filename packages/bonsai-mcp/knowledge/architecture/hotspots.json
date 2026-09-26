@@ -42,7 +42,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1169,
+      "lines": 1191,
       "role": ""
     },
     {
@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/response_verify.py",
+      "lines": 582,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 579,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 550,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/ai_character_service.py",
-      "lines": 544,
       "role": ""
     }
   ]

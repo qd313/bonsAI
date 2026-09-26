@@ -92,6 +92,10 @@ class _SpoilerFakePlugin(_FakePlugin):
         super().__init__(active_request_id=active_request_id)
         self._kb_block = kb_block
         self.partial_updates: list[tuple[Any, ...]] = []
+        # One entry per call, the `reasoning_partial` kwarg only -- kept separate from
+        # `partial_updates` (positional args only) so existing tests reading that list by
+        # position are untouched.
+        self.reasoning_partials: list[Any] = []
 
     def _build_system_prompt(self, *args: Any, **kwargs: Any) -> str:
         base = super()._build_system_prompt(*args, **kwargs)
@@ -99,6 +103,7 @@ class _SpoilerFakePlugin(_FakePlugin):
 
     def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
         self.partial_updates.append(args)
+        self.reasoning_partials.append(kwargs.get("reasoning_partial"))
 
 
 class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
@@ -618,6 +623,115 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
 
         texts = [call[1] for call in plugin.partial_updates]
         self.assertEqual(texts, ["The next boss is The Hi", "The next boss is The Hive."])
+
+
+class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
+    """D112 #7 leak fix: THINKING-SPOILER-01, measured live on the Deck 2026-09-26. The live
+    thinking line named a protected boss in plain words in 4 of 6 tries. The thinking text
+    below is the literal capture from the session's scratchpad L1-2-HK-C.jsonl (t=5849
+    through t=9167 of L1-2-HK-named.jsonl's own run, trimmed to the sentence that matters).
+    """
+
+    def _patched(self, fake_post_ollama_chat) -> ExitStack:
+        stack = ExitStack()
+        stack.enter_context(
+            patch(
+                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen2.5:3b"],
+            )
+        )
+        stack.enter_context(
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+        )
+        stack.enter_context(
+            patch(
+                "backend.services.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            )
+        )
+        stack.enter_context(
+            patch(
+                "backend.services.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            )
+        )
+        return stack
+
+    async def test_a_real_captured_thinking_line_never_reaches_the_snapshot_bare(self) -> None:
+        plugin = _SpoilerFakePlugin(
+            active_request_id=11, kb_block="[Hollow Knight / boss: Soul Master]"
+        )
+        # Verbatim from L1-2-HK-C.jsonl t=9268 (trimmed to the sentence naming the boss).
+        thinking_line = (
+            'The context is clearly Hollow Knight, and the specific boss described matches '
+            'the "Soul Master" from the local knowledge base.'
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("", False, None, reasoning_partial=thinking_line, reasoning_seconds=4)
+                on_delta(
+                    "Here is the answer.", True, None,
+                    reasoning_partial=thinking_line, reasoning_seconds=6,
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "the boss past the crystal spike area",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=11,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        for reasoning in plugin.reasoning_partials:
+            self.assertNotIn("Soul Master", reasoning or "")
+
+    async def test_no_protected_names_leaves_the_thinking_line_untouched(self) -> None:
+        plugin = _SpoilerFakePlugin(active_request_id=12, kb_block="")
+        thinking_line = "The user wants general performance tips."
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta(
+                    "Here is the answer.", True, None,
+                    reasoning_partial=thinking_line, reasoning_seconds=2,
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what class should I play",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=12,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        self.assertEqual(plugin.reasoning_partials, [thinking_line])
 
 
 if __name__ == "__main__":

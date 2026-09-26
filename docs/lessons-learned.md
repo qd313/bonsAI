@@ -47,7 +47,13 @@ check simply failed with a message about the wrong `tsc`. Before deleting a copy
 junction inside it first (`rmdir <path>` with no `/s` removes the link and never the target), then
 delete what is left, and count the main `node_modules` before and after as a canary. The repair is
 easy once you know — delete `node_modules` the same junction-safe way and run
-`pnpm install --frozen-lockfile` — but finding the cause is not.
+`pnpm install --frozen-lockfile` — but finding the cause is not. It happened again on 2026-09-26 to
+a session that knew all this and removed one copy with a plain `git worktree remove --force`: use
+`python scripts/worktree.py prune`, which unlinks first, and never git's own command. A lighter
+repair that worked that night, with no delete: pnpm answers "Already up to date" (even with
+`--force`) because it trusts `node_modules/.pnpm-workspace-state-v1.json`, so move that file aside
+and run `pnpm install --frozen-lockfile --offline --force`. It relinked the whole store from the
+local cache in five seconds.
 
 **Check whether a copy is in use before removing it, and check again afterwards.** Other sessions
 create their own copies while you work. One appeared partway through a clear-out, was removed, and

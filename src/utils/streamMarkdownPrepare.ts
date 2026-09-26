@@ -80,6 +80,39 @@ export function didNonSpoilerFenceJustClose(prevTarget: string, nextTarget: stri
   return added.includes("```");
 }
 
+/**
+ * Where the letter-by-letter reveal may stop in `target`, given it wants to stop at `cut`.
+ *
+ * Never half-way through a fence marker line: a half-typed "```bonsa" is read below as an
+ * ordinary code fence and draws a "Code block incoming…" chip, so the cut moves to the end of that
+ * line. Never inside a ```bonsai-spoiler fence the target has already closed: the cut moves past
+ * its closer, so a cover is drawn as a finished cover from the moment it shows -- the back end's
+ * live cover moves that closer on every flush as the covered sentence grows (plan 70), and a cut
+ * inside it would drop the cover back to "hidden until complete" each time. A spoiler fence still
+ * open in the target, and any ordinary code fence's body, are left to their wait chips below.
+ */
+export function settleRevealCut(target: string, cut: number): number {
+  let end = Math.max(0, Math.min(cut, target.length));
+  let open: { start: number; spoiler: boolean } | null = null;
+  let pos = 0;
+  while (pos < target.length && (pos < end || open)) {
+    const nl = target.indexOf("\n", pos);
+    const next = nl === -1 ? target.length : nl + 1;
+    const line = target.slice(pos, nl === -1 ? target.length : nl);
+    if (isFenceLine(line)) {
+      if (end > pos && end < next) end = next;
+      if (!open) {
+        open = { start: pos, spoiler: isSpoilerFenceOpenLine(line) };
+      } else {
+        if (open.spoiler && end > open.start && end < next) end = next;
+        open = null;
+      }
+    }
+    pos = next;
+  }
+  return end;
+}
+
 function flushProseBuffer(buffer: string[], closedBlocks: string[]): void {
   const joined = buffer.join("\n").trim();
   if (joined) closedBlocks.push(joined);

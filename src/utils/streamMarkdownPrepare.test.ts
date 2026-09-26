@@ -4,6 +4,7 @@ import {
   FENCE_STREAM_WAIT_LABEL,
   normalizeIncompleteInline,
   prepareStreamMarkdown,
+  settleRevealCut,
   SPOILER_STREAM_MASK_LABEL,
 } from "./streamMarkdownPrepare";
 
@@ -111,5 +112,49 @@ describe("didNonSpoilerFenceJustClose", () => {
     const prev = "text\n\n```json\n";
     const next = "text\n\n```json\n{\"a\":";
     expect(didNonSpoilerFenceJustClose(prev, next)).toBe(false);
+  });
+});
+
+/*
+ * Plan 70, SPOILER-COVER-01: the reveal must never stop half-way through a fence marker line (a
+ * half-typed "```bonsa" is read as an ordinary code fence) or inside a spoiler fence the snapshot
+ * has already closed (a finished cover would drop back to "hidden until complete" on every flush).
+ */
+describe("settleRevealCut", () => {
+  const covered = "Intro.\n\n```bonsai-spoiler\nThe Soul Master teleports.\n```\nKeep moving.";
+  const coverEnd = covered.indexOf("Keep");
+
+  it("leaves a cut in ordinary prose where it is", () => {
+    expect(settleRevealCut(covered, 3)).toBe(3);
+    expect(settleRevealCut(covered, coverEnd + 2)).toBe(coverEnd + 2);
+  });
+
+  it("moves a cut inside a closed spoiler fence's opener past its closer", () => {
+    expect(settleRevealCut(covered, covered.indexOf("```") + 5)).toBe(coverEnd);
+  });
+
+  it("moves a cut inside a closed spoiler fence's body past its closer", () => {
+    expect(settleRevealCut(covered, covered.indexOf("Soul"))).toBe(coverEnd);
+    expect(settleRevealCut(covered, coverEnd - 2)).toBe(coverEnd);
+  });
+
+  it("finishes the opener line of a spoiler fence that is still open, and no more", () => {
+    const open = "Intro.\n```bonsai-spoiler\nThe Soul";
+    const opener = open.indexOf("```");
+    expect(settleRevealCut(open, opener + 4)).toBe(open.indexOf("The"));
+    expect(settleRevealCut(open, open.length - 2)).toBe(open.length - 2);
+  });
+
+  it("finishes an ordinary fence's marker line but leaves its body to the wait chip", () => {
+    const code = "Run:\n```bash\necho hi\n```\nDone.";
+    expect(settleRevealCut(code, code.indexOf("```") + 2)).toBe(code.indexOf("echo"));
+    expect(settleRevealCut(code, code.indexOf("hi"))).toBe(code.indexOf("hi"));
+  });
+
+  it("covers the back end's own sentence cover, which starts with a blank line", () => {
+    const own = "\n```bonsai-spoiler\nWhen fighting the Soul Master, the k\n```\n";
+    expect(settleRevealCut(own, 3)).toBe(own.length);
+    expect(settleRevealCut(own, 0)).toBe(0);
+    expect(settleRevealCut(own, 1)).toBe(1);
   });
 });

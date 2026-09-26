@@ -9,7 +9,7 @@
  * Does not: Parse markdown fences — see streamMarkdownPrepare and splitResponseIntoChunks.
  */
 import { useEffect, useRef, useState } from "react";
-import { didNonSpoilerFenceJustClose } from "../utils/streamMarkdownPrepare";
+import { didNonSpoilerFenceJustClose, settleRevealCut } from "../utils/streamMarkdownPrepare";
 import { STREAM_BEAT_MS } from "../utils/streamBeat";
 
 type UseSmoothStreamRevealArgs = {
@@ -106,8 +106,8 @@ export function useSmoothStreamReveal({
       const bursting = burstTicksRef.current > 0;
       const rate = bursting ? baseRate * FENCE_BURST_RATE_MULTIPLIER : baseRate;
       const step = Math.max(1, Math.floor(rate * dt) || 1);
-      const next = target.slice(cur.length, cur.length + step);
-      const merged = cur + next;
+      // Never half a fence marker, never part of a finished spoiler cover (settleRevealCut).
+      const merged = target.slice(0, settleRevealCut(target, cur.length + step));
       displayRef.current = merged;
       setDisplayText(merged);
       if (bursting) burstTicksRef.current -= 1;
@@ -153,7 +153,7 @@ export function useSmoothStreamReveal({
      */
     const shown = displayRef.current;
     if (!targetText.startsWith(shown)) {
-      const agreed = targetText.slice(0, sharedStartLength(shown, targetText));
+      const agreed = targetText.slice(0, settleRevealCut(targetText, sharedStartLength(shown, targetText)));
       displayRef.current = agreed;
       setDisplayText(agreed);
     }

@@ -2,6 +2,7 @@ import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useSmoothStreamReveal, FENCE_BURST_RATE_MULTIPLIER } from "./useSmoothStreamReveal";
 import { STREAM_BEAT_MS } from "../utils/streamBeat";
+import { prepareStreamMarkdown } from "../utils/streamMarkdownPrepare";
 
 /** Beats of the reveal, each its own act() so React renders between them the way the page does. */
 function beats(count: number) {
@@ -162,6 +163,40 @@ describe("useSmoothStreamReveal", () => {
       expect(result.current).toBe(rewritten);
     }
   );
+
+  /*
+   * The back end's cover grows with the sentence: every flush moves the fence's closer, so each
+   * snapshot rewrites the one before. Walked beat by beat, what the bubble draws must never be
+   * the name outside a closed cover, never a wait chip (a half-typed "```bonsa" reads as an
+   * ordinary code fence; an unfinished cover reads "hidden until complete") -- the cover stays a
+   * cover from the moment it first shows.
+   */
+  it("shows the back end's growing cover as one finished cover at every beat (HK-A)", () => {
+    const snapshots = [
+      "\n```bonsai-spoiler\nWhen fighting the Soul Master, t\n```\n",
+      "\n```bonsai-spoiler\nWhen fighting the Soul Master, the k\n```\n",
+      "\n```bonsai-spoiler\nWhen fighting the Soul Master, the key is timing your attacks around his movement.\n```\nHe tele",
+    ];
+    const { result, rerender } = renderHook(
+      ({ target }) => useSmoothStreamReveal({ targetText: target, enabled: true, done: false }),
+      { initialProps: { target: snapshots[0]! } }
+    );
+    const check = () => {
+      const drawn = prepareStreamMarkdown(result.current);
+      expect(drawn.waitChip).toBeNull();
+      const plain = [...drawn.closedBlocks.filter((b) => !b.startsWith("```bonsai-spoiler")), drawn.liveTail ?? ""];
+      expect(plain.join("\n")).not.toContain("Soul Master");
+    };
+    for (const snap of snapshots) {
+      rerender({ target: snap });
+      check();
+      for (let i = 0; i < 4; i += 1) {
+        beats(1);
+        check();
+      }
+    }
+    expect(result.current).toBe(snapshots[2]);
+  });
 
   it("drops text the back end has taken back (a held-back word) rather than keep showing it", () => {
     const { result, rerender } = renderHook(

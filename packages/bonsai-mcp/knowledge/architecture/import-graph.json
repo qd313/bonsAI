@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 523,
-  "edgeCount": 1406,
+  "edgeCount": 1407,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3336,7 +3336,8 @@
     "src/hooks/useSmoothStreamReveal.test.ts": {
       "imports": [
         "src/hooks/useSmoothStreamReveal.ts",
-        "src/utils/streamBeat.ts"
+        "src/utils/streamBeat.ts",
+        "src/utils/streamMarkdownPrepare.ts"
       ],
       "importedBy": []
     },
@@ -5531,6 +5532,7 @@
       "imports": [],
       "importedBy": [
         "src/features/stream-scramble/streamScrambleMath.ts",
+        "src/hooks/useSmoothStreamReveal.test.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",

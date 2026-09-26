@@ -87,6 +87,7 @@ starts work outside this.
   **REPLY-STOPS-MIRROR-01**. Evidence `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
   **Sighting 2026-09-26 (plan 70):** a branch menu's two buttons were reachable walking Down from above,
   but walking Up from below skipped both. Evidence `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
+  **Sighting again, 2026-09-26 (flow L1):** walking Up, the question row was skipped, same as before.
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -132,11 +133,13 @@ starts work outside this.
   in flight, instead of staying disabled forever after a model's first answer. Evidence
   `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`. **Deck check owed:** row **PRELOAD-RM-01** in
   [testing.md](testing.md).
-- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper I).** A 17 GB model said it would free "< 0.1 GB" — the screen only asked
-  sizes for its own bundled catalog. It now learns what is actually installed first. Evidence
-  `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`. **Deck check owed:** row
-  **ROUTING-MERGE-SIZE-01** in [testing.md](testing.md).
+- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **OPEN, FAILED on
+  the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper I).** A 17 GB model said it would free
+  "< 0.1 GB" — the screen only asked sizes for its own bundled catalog; it now learns what is actually
+  installed first, but the one installed model outside the curated catalog (the note-search model) still
+  shows "?" for its size, and the header's own total leaves it out (4.0 GB shown, 4.3 GB real). Row
+  **ROUTING-MERGE-SIZE-01** in [testing.md](testing.md), evidence
+  `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`.
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
@@ -149,8 +152,10 @@ starts work outside this.
 - ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **VERIFY, fixed
   2026-09-26 (plan 70, helper I).** The ban report was built as a markdown table the Deck's renderer
   cannot draw, so it showed as one line of pipe characters; each account's facts are now one plain bullet
-  line instead. Evidence `docs/test-evidence/plan64-VAC-03-06.json`. **Deck check owed:** row
-  **VAC-03-07** in [testing.md](testing.md).
+  line instead. Evidence `docs/test-evidence/plan64-VAC-03-06.json`. **Could not run on the Deck 2026-09-26
+  (plan 70, flow L1):** no Steam Web API key is saved, and the runbook forbids setting one by hand. **Deck
+  check owed, on the maintainer's own list (their key needed):** row **VAC-03-07** in
+  [testing-manual.md](testing-manual.md).
 - ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
   maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
   does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
@@ -224,7 +229,8 @@ starts work outside this.
   helper J).** A big, barely-compressed picture crashed the model's graphics chip, since bonsAI only ever
   shrank a picture when an image library not present on the Deck was installed. Per the maintainer's D112
   call, `ffmpeg` (already on the Deck) now does the shrinking, or refuses the picture with a message if it
-  can't. **Deck check owed:** row **SCREENSHOT-SHRINK-01** in [testing.md](testing.md).
+  can't. **Could not run on the Deck 2026-09-26** (plan 70, flow L1): the screenshot chord took no picture.
+  **Deck check owed:** row **SCREENSHOT-SHRINK-01** in [testing.md](testing.md).
   [Detail](roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
@@ -292,11 +298,10 @@ starts work outside this.
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **VERIFY, fixed in code 2026-09-26 (plan 70, helper A).** A safety net now covers any protected name the
-  reply uses that the question itself did not, both while it streams in and once it finishes. Answer test:
-  covered 5 of 5 on Hollow Knight, 4 of 5 on Hades, no false cover 97.3% of the time. **Known gap:** a
-  spoiler that never uses a note's own name (a paraphrase) is not caught. **Deck check owed:** row
-  **SPOILER-COVER-01** in [testing.md](testing.md).
+  **OPEN, FAILED live on the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper A).** Finished answers
+  are covered correctly; a cover forming mid-stream can still show plain text and raw marker text for a few
+  seconds first. Row **SPOILER-COVER-01** in [testing.md](testing.md), evidence
+  `docs/test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
   [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 - ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **OPEN,
   found 2026-09-25 (plan 68).** The chat memory now copes with the doubling (`6843f8e1`), but why it happens
@@ -533,11 +538,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
   we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
-  **As of 2026-09-23, eleven of the twelve have real evidence behind them now.** The knowledge-base update
-  button check, the 12 September follow-up-memory re-run, model eviction on the Deck, and the wave-three
-  Deck evening all closed since. **One remains:** the spoiler-reveal reachability check, still blocked by
-  the name-withheld-boss bug (see Bugs) — there is nothing hidden to reach yet. The table in
-  [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
+  **All twelve now have real evidence behind them.** The knowledge-base update button check, the 12
+  September follow-up-memory re-run, model eviction on the Deck, and the wave-three Deck evening all
+  closed earlier. **The last one, the spoiler-reveal reachability check, passed on the Deck 2026-09-26**
+  (plan 70, flow L1): with a covered answer on screen, the cover took the ring one D-pad press at a time,
+  stayed fully visible, and A opened it. Evidence `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
+  The table in [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved)
+  already says this row by row.
 
 ### Bugs that need verification
 - ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
@@ -784,9 +791,8 @@ ones from this month are D81 to D88.
   leftover words against the attached notes' titles only — "the boss past the crystal spike area" shares
   no word with "Broken Vessel", so the real match was thrown away and the line appeared anyway. The check
   now also reads each attached note's own text, where the matching word usually lives, plus a small
-  tolerance for plurals. A 104-question sweep after the fix: 1 answer changed, for the better. Wiring this
-  into the real Ask is still in progress. **Deck check owed:** row **KB-NOCLOSE-TEXT-01** in
-  [testing.md](testing.md).
+  tolerance for plurals. **Now wired into real answers (commit `e4c24bdd`).** **Deck check owed:** row
+  **KB-NOCLOSE-TEXT-01** in [testing.md](testing.md).
   [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
@@ -823,8 +829,9 @@ ones from this month are D81 to D88.
   so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
   nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
   losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
-  note is still attached. **Found again 2026-09-18:** a Hades boss question attached the wrong area's note
-  and the reply named the wrong bosses. [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
+  note is still attached. **Found again 2026-09-18 and again 2026-09-26 (plan 70, flow L1):** a Hades boss
+  question attaches the wrong area's note and the reply names the wrong bosses.
+  [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
   notes are named underneath it instead of the real electrified-water note, which does exist in the
@@ -871,9 +878,10 @@ ones from this month are D81 to D88.
 ### Next
 
 - ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add
-  one** — **VERIFY, built 2026-09-26 (plan 70, helper A).** Built as the safety net described in the ★★★
-  bug "a name-withheld boss question comes back with no spoiler box" above — same fix, same Deck check
-  owed, full detail there. [Detail](roadmap-details.md#check-that-a-spoiler-cover-actually-happened).
+  one** — **OPEN, built 2026-09-26, FAILED live on the Deck (plan 70, flow L1), being fixed (helper A).**
+  Same safety net as the ★★★ bug "a name-withheld boss question comes back with no spoiler box" above —
+  covers every finished answer, but not everything while it streams in. Same result, full detail there.
+  [Detail](roadmap-details.md#check-that-a-spoiler-cover-actually-happened).
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
   run includes — planned as wave three ([48](archive/48-kb-wave-three-session.md)). Planned in plan 70.

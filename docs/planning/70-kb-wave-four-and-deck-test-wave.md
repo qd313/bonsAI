@@ -319,6 +319,10 @@ only if the reading with a game running says memory is tight.
   call after `27fd9aee`, so Skyrim's 15 notes (from the Unofficial Elder Scrolls Pages, share-alike 2.5)
   can ship. Fits D20: share-alike 2.5 lets an adaptation use a later version, which is what rewording the
   page in bonsAI's own words under the newer share-alike 4.0 the rest of the library uses already does.
+- **Row VAC-03-07 (the ban-report wording fix) needs your own Steam Web API key to run** — none is saved
+  on the Deck, and the runbook does not set one by hand. The one try 2026-09-26 got the plain "no key
+  saved" message rather than a report to read. Whenever you have your key in, one `bonsai:vac-check` with
+  a real account number closes this row.
 
 ## 9. Found while planning, and logged in the roadmap (2026-09-25)
 

@@ -1226,6 +1226,19 @@ note before being written. The Hollow Knight described-boss row that used to exp
 (`b2f1933a`) now expects "not scored" instead, since covering that name is the fix working, not a
 regression — 1 run in 5 named the boss and was covered.
 
+**SPOILER-REVEAL reachability itself passed on the Deck 2026-09-26** (plan 70, flow L1), closed: once
+a finished answer had a cover on screen, the cover took the ring one D-pad press at a time and A
+opened it. Evidence `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
+
+**FAILED live on the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper A).** The fix above covers
+every *finished* answer correctly: in the same session, Hollow Knight and Hades both named the right
+things and were covered, and Deep Rock never covered (nothing to cover). But not everything live: one
+Hollow Knight answer showed "The Soul Master fight is all about timing his movements" plus raw
+`` ```bonsai-spoiler `` marker text in plain sight for about 4.7 seconds, when the model opened its own
+fence mid-line, before the finished cover formed correctly. Row **SPOILER-COVER-01** in
+[testing.md](testing.md), evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
+**Known gap, still open:** a spoiler that never uses a note's own name (a paraphrase) is not caught.
+
 
 ## Headline first: every answer opens with one line that stands alone
 
@@ -1404,6 +1417,10 @@ limit (word for word):**
   attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered
   by the top note (`docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`).
 
+  **Sighting, 2026-09-26 (plan 70, flow L1):** Hades "who is the first boss" and "the boss at the end of
+  Tartarus" both attached the same wrong note (Theseus and Asterius) and the reply talked about them,
+  twice. Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`.
+
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 
@@ -1419,6 +1436,12 @@ limit (word for word):**
   notes genuinely do not cover got the warning line for the first time, but a note card naming three notes
   showed underneath it at the same time, contradicting the line. Evidence
   `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`.
+
+**Fixed 2026-09-26 (plan 70, helper B, commit `58f60c0a`).** The check now also reads each attached
+note's own text, where the matching word usually lives, not just its title, plus a small tolerance for
+plurals. A 104-question sweep after the fix: 1 answer changed, for the better. **Now wired into real
+answers (commit `e4c24bdd`)**, tested through the real path: a Hollow Knight-shaped note stops showing
+the line, and a note sharing no word still shows it. Deck check owed: row **KB-NOCLOSE-TEXT-01**.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -1654,6 +1677,10 @@ sending the full-size file that caused the crash. Tests built against a fake `ff
 line the code runs) cover a successful shrink, a shrink failure, a timeout, `ffmpeg` missing, and an
 already-small picture passing through untouched; the fix was broken on purpose first (reverted to the
 old raw-bytes fallback) and confirmed exactly two tests catch it, then restored.
+
+**Could not run on the Deck 2026-09-26 (plan 70, flow L1).** The rig's own screenshot chord (Steam+R1)
+took no picture, tried twice, so the fix has not yet been checked with a real attachment. Retried in
+flow L2 with a workaround file. Row **SCREENSHOT-SHRINK-01** stays Deck check owed.
 
 ## Measure how well the AI reads a screenshot
 

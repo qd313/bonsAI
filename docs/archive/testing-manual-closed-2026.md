@@ -355,3 +355,30 @@ testing-manual.md. Found by the planning-folder review
   Down from above — filed under the Down/Up mirror bug. Evidence
   `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
 
+### Plan 70 flow L1 (2026-09-26)
+
+- [x] **KB-NOTIP-FLOOR-01** A stray question like "what time is it" no longer gets a troubleshooting
+  tip. **PASS (Deck) 2026-09-26:** asked in Speed, Strategy and Expert with nothing running — no tip in
+  any reply, Show details logged "attached 0 chars" each time. Evidence
+  `docs/test-evidence/plan70-KB-NOTIP-FLOOR-01.json`.
+- [x] **SPOILER-REVEAL reachability** — long-owed row, closed. **PASS (Deck) 2026-09-26:** with a
+  covered, finished answer on screen, the cover was reached one D-pad press at a time walking both up
+  and down, stayed 100% visible the whole way, and A opened it to the hidden sentence. Evidence
+  `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
+- [x] **NOTES-BLOCK-02** (finished-answer half) A story-protected game's cover stays closed with no
+  notes block showing until the cover is opened. **PASS (Deck) 2026-09-26:** before reveal, no notes
+  block existed anywhere on the page; after reveal, a closed "Soul Master — From the Hollow Knight wiki"
+  block appeared below Show details, outside the spoiler's own box. Caveat: in a separate live-answer
+  try the same block was seen for about 4.7 s while the sentence was still uncovered — row
+  SPOILER-COVER-01, still owed, still open below. Evidence `docs/test-evidence/plan70-NOTES-BLOCK-02.json`.
+- [x] **PRELOAD-RM-01** Remove stops greying out once an answer finishes. **PASS (Deck) 2026-09-26:**
+  right after an answer, the model's Remove control read enabled, with no "Switch Ask mode first" text,
+  and both models were still shown installed afterward with nothing removed. Evidence
+  `docs/test-evidence/plan70-PRELOAD-RM-01.json` (+ `.png`).
+- [x] **OLLAMA-TAB-AFTER-RELOAD-02** No false connection failure right after a plugin reload. **PASS
+  (Deck) 2026-09-26:** reloaded the plugin, watched the plugin log for 45 seconds after — zero
+  "test_ollama_connection failed" lines, and the Ollama tab read "Connected" with its real model count.
+  Note: opening the plugin itself still failed twice before working on the third try, the known
+  one-failure-after-a-deploy quirk, now seen twice in a row. Evidence
+  `docs/test-evidence/plan70-OLLAMA-TAB-AFTER-RELOAD-02.json`.
+

@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **A chat no longer sums itself up again right after a stopped question:** a stopped answer is
+  skipped when the chat's memory is built, but was still counted as "left behind," which is read as
+  the chat having outgrown its room — so the very next question summed the whole chat up again just
+  to fold in that one stopped exchange. This showed up as the "chat summed up" message appearing far
+  more often than it should. It should now happen only every five or six questions in a long chat.
+  `chat_memory_service.py`. On-Deck check owed.
+- **A saved answer with a doubled hidden-spoiler marker could leak its hidden text into later
+  questions:** if an answer's hidden block had its opening or closing marker written twice, the code
+  that strips hidden text out before the AI reads the chat stopped at the second marker and let the
+  rest through — on screen the block still looked normal and closed, but the hidden words reached
+  every later question's memory and any summary since 2026-09-21. Doubled markers are now handled
+  correctly; why an answer ends up with doubled markers in the first place is still unknown.
+  `chat_memory_service.py`. On-Deck check owed.
 - **The ban-lookup permission message now names the switch the way the Permissions tab does:** with
   Steam ban lookup turned off, asking for a ban check used to say "Enable Permissions -> Steam Web
   API" — a name that switch has never had on screen; it reads "Steam ban lookup." The message now

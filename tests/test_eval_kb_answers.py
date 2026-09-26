@@ -14,6 +14,7 @@ Does not: Run the real Ask pipeline or touch Ollama — every test here is pure 
 import asyncio
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import types
@@ -960,6 +961,67 @@ class EvalKbAnswersFollowupPairTests(unittest.TestCase):
                 (True, "Glyphid Dreadnought"),            # turn 2: "what about ..." does
             ],
         )
+
+
+class ApplyFollowupShapeEnvTests(unittest.TestCase):
+    """Plan 70 helper K: --followup-shape drop_runnerup/send_prev_qa each flip exactly one real
+    kb_followup_memory environment switch on, and every other shape leaves both off -- including
+    clearing one a previous run in the same shell might have left set.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    def setUp(self):
+        from backend.services import kb_followup_memory
+
+        self.kb_followup_memory = kb_followup_memory
+        os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
+        os.environ.pop(kb_followup_memory.SEND_PREV_QA_ENV, None)
+
+    def tearDown(self):
+        os.environ.pop(self.kb_followup_memory.DROP_RUNNERUP_ENV, None)
+        os.environ.pop(self.kb_followup_memory.SEND_PREV_QA_ENV, None)
+
+    def test_shipped_leaves_both_switches_off(self):
+        self.mod.apply_followup_shape_env("shipped", kb_followup_memory=self.kb_followup_memory)
+        self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
+        self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled())
+
+    def test_drop_runnerup_turns_on_only_that_switch(self):
+        self.mod.apply_followup_shape_env(
+            "drop_runnerup", kb_followup_memory=self.kb_followup_memory
+        )
+        self.assertTrue(self.kb_followup_memory.drop_runnerup_notes_enabled())
+        self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled())
+
+    def test_send_prev_qa_turns_on_only_that_switch(self):
+        self.mod.apply_followup_shape_env(
+            "send_prev_qa", kb_followup_memory=self.kb_followup_memory
+        )
+        self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
+        self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
+
+    def test_switching_shapes_clears_a_previous_choice(self):
+        self.mod.apply_followup_shape_env(
+            "drop_runnerup", kb_followup_memory=self.kb_followup_memory
+        )
+        self.mod.apply_followup_shape_env(
+            "send_prev_qa", kb_followup_memory=self.kb_followup_memory
+        )
+        self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
+        self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
+
+    def test_no_subject_note_and_narrow_notes_also_leave_both_off(self):
+        for shape in ("no_subject_note", "narrow_notes"):
+            self.mod.apply_followup_shape_env(shape, kb_followup_memory=self.kb_followup_memory)
+            self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled(), shape)
+            self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled(), shape)
 
 
 if __name__ == "__main__":

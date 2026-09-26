@@ -33,6 +33,17 @@ measurable because a before-and-after nobody can re-run is a number nobody can c
 strips the shipped sentence, so it stays an isolated measurement of narrowing alone rather than
 narrowing-plus-the-sentence.
 
+Plan 70 helper K's own two candidates (still measured, not yet built into any commit's default):
+``drop_runnerup`` turns on ``kb_followup_memory.drop_runnerup_notes_enabled()`` for the run,
+which -- when the remembered subject names one of the attached cards -- drops every other card
+before the prompt is built, on top of the shipped sentence (unlike ``narrow_notes`` above, it
+leaves every card in place when the subject names none of them, rather than attaching nothing).
+``send_prev_qa`` turns on ``kb_followup_memory.send_prev_qa_enabled()``, which hands the model the
+previous turn's own question and a trimmed copy of its answer alongside the shipped sentence.
+Both are real production switches (off unless the matching environment variable is set), not a
+monkeypatch -- this flag only sets that variable for the process, the same way a maintainer would
+to try one on the Deck.
+
 Usage:
   python scripts/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
   python scripts/eval_kb_answers.py --only A-DRG-01 --samples 1
@@ -1016,6 +1027,24 @@ async def run_sample(
 # All wired through the same monkeypatch machinery the ``--variant``/``--kb-placement`` hooks
 # already use above -- neither touches a production file.
 
+def apply_followup_shape_env(shape: str, *, kb_followup_memory: Any) -> None:
+    """Set (or clear) the plan 70 helper K environment switches for ``--followup-shape``.
+
+    A separate, directly testable function rather than inline code in ``main()``: the switches
+    themselves (``kb_followup_memory.DROP_RUNNERUP_ENV`` / ``SEND_PREV_QA_ENV``) are real
+    production code, off unless set to exactly ``"1"``; this only decides, for this process,
+    which one (if any) ``--followup-shape`` asked for. Always clears both first, so a leftover
+    value from an earlier run in the same shell -- or the other switch, when only one shape was
+    asked for -- can never leak into a "shipped"/"no_subject_note"/"narrow_notes" run.
+    """
+    os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
+    os.environ.pop(kb_followup_memory.SEND_PREV_QA_ENV, None)
+    if shape == "drop_runnerup":
+        os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
+    elif shape == "send_prev_qa":
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "1"
+
+
 _KB_BLOCK_SENTINEL_MARKER = "--- End local knowledge base ---"  # knowledge_base_service._BLOCK_SENTINEL
 
 
@@ -1508,12 +1537,26 @@ def main() -> int:
     parser.add_argument(
         "--followup-shape",
         default="shipped",
-        choices=("shipped", "no_subject_note", "narrow_notes"),
+        choices=(
+            "shipped",
+            "no_subject_note",
+            "narrow_notes",
+            "drop_runnerup",
+            "send_prev_qa",
+        ),
         help="D98: what to measure against the shipped follow-up-subject sentence, on a turn "
         "that used the remembered subject. 'shipped' (default) changes nothing -- it is exactly "
-        "today's code. 'no_subject_note' strips the shipped sentence back out, reproducing the "
-        "pre-fix prompt. 'narrow_notes' is the rejected, never-shipped alternative (also with "
-        "the shipped sentence stripped, so it stays an isolated measurement).",
+        "today's code, and already measures the plan 70 helper K brief's 'carry the subject into "
+        "the model's instructions' idea, which shipped unconditionally as part of this. "
+        "'no_subject_note' strips the shipped sentence back out, reproducing the pre-fix prompt. "
+        "'narrow_notes' is the rejected, never-shipped alternative (also with the shipped "
+        "sentence stripped, so it stays an isolated measurement). 'drop_runnerup' and "
+        "'send_prev_qa' are helper K's own two new candidates: each sets the matching "
+        "kb_followup_memory environment switch (BONSAI_KB_FOLLOWUP_DROP_RUNNERUP / "
+        "BONSAI_KB_FOLLOWUP_SEND_PREV_QA) for this run only, on top of the shipped sentence -- "
+        "the switch is real production code, gated off by default; this flag only flips it on "
+        "for the duration of the process so the two can be measured the same way as the other "
+        "shapes.",
     )
     args = parser.parse_args()
 
@@ -1596,6 +1639,8 @@ def main() -> int:
     kb_followup_memory.augment_search_words = _wrap_augment_search_words_for_capture(
         kb_followup_memory.augment_search_words
     )
+
+    apply_followup_shape_env(args.followup_shape, kb_followup_memory=kb_followup_memory)
 
     variant_fn = VARIANTS[args.variant] if args.variant != "baseline" else None
     if args.followup_shape in ("no_subject_note", "narrow_notes"):

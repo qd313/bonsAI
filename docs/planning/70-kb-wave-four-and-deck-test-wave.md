@@ -433,6 +433,20 @@ only if the reading with a game running says memory is tight.
   anything after the reset; the maintainer's "continue" at 09:05 did. Resumed: the Deck helper mid-way through the
   landed checks (deployed 83a6ae2e at 02:07, the tip cut-off check passed), the bookkeeper mid-way through recording
   the first Deck results, and helper B's wiring.
+- **13:40 — `py_modules/backend/services/game_ai_request.py` grew to 809 lines against its 800-line limit**,
+  from this wave's same-day landings (helper A's spoiler-cover, thinking-cover and suggestion-menu fixes all
+  touch it). `verify --quick` has read red since about 13:40. Helper M is moving the new blocks out into
+  their own file; fix pending, not yet landed.
+- **13:55 — helper M's three follow-ups landed, resolving the file-size item above.** The spoiler-cover
+  block, the follow-up "remember this turn" block, and the notes-text wiring feeding the "no close match"
+  check each moved into a single function in the module it actually belongs to; behaviour identical, every
+  existing test still passes unchanged. `game_ai_request.py` is back to 782 lines, under its 800-line
+  limit — `verify --quick` reads green again (`89558ef5`). Alongside that: the named-entity fix now cuts
+  the resolved game's own name out of the question before either matching pass runs, so a game's name can
+  never by itself be read as naming one of its notes (`679452e5`); and the spoiler-risk band now also
+  reads this turn's own knowledge-base routing as a troubleshooting signal, not only the fixed word list,
+  so a hardware-wear question with none of those words still reads "low" (`7b2bc753`). Both close the
+  gaps the first Deck pass found; Deck re-check owed on both.
 
 ## 11. Report
 

@@ -408,6 +408,19 @@ All notable changes to this project are documented in this file.
   there in full, live and in the saved reasoning shown afterward. The sentence naming a protected thing is
   now replaced with "[hidden]" instead, and any raw spoiler-marker text is stripped on sight.
   `ollama_ask_service.py`, `game_ai_request.py`. On-Deck check owed.
+- **The suggestion menu under an answer can no longer name a protected boss either:** the menu's own
+  question and its buttons are drawn straight from the model's finished reply, so a name the answer's own
+  spoiler cover had already caught could still show up in plain view underneath it. A protected name
+  inside the menu's question or a button's own label is now swapped for a plain "this boss" (or "the
+  boss") whenever a cover is owed. `strategy_spoiler_policy.py`, `game_ai_request.py`. On-Deck check owed.
+- **"Manage AI models…" now opens the AI models screen the same way "Browse models…" does:** it used to
+  open with the Filters panel already open and the highlight sitting one press from changing a licence
+  filter, with nothing pressed to put it there. A leftover shortcut from before that filter moved into
+  the panel is gone; both buttons now open the same way. `OllamaModelsHubModal.tsx`. On-Deck check owed.
+- **With the AI models screen's Filters panel open, the D-pad can now reach Done:** walking down through
+  the filter choices used to stop dead at "Close filters" and go no further, even with Done sitting right
+  below it on screen. That button now hands the next press on instead of swallowing it forever, the same
+  way the model list's own last row already did. `PullModelsModal.tsx`. On-Deck check owed.
 
 ### Added
 - **A knowledge-base question asked a while after the last one no longer pays extra time to search:** the

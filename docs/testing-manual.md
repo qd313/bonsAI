@@ -403,6 +403,14 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
   the model's own thinking is now blanked to "[hidden]", live and in the saved reasoning fold, and any raw
   fence marker is stripped on sight. **Deck re-check owed:** the same 6-try described-boss setup, no
   protected name or raw marker text in the thinking line or its saved fold.
+- [ ] **NO-CLOSE-MATCH-HK-02 re-check** Fixed in code 2026-09-26 (plan 70, helper A, `7c93d5e8`), Deck
+  re-check owed. **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** Hollow Knight's spell-casting-boss
+  question got a correctly covered answer, but the suggestion menu underneath read "Are you currently
+  struggling with the Soul Master's movement or damage output?" in plain view. Evidence
+  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`. **Fixed:** a protected name inside the menu's
+  question or a button's own label is now swapped for "this boss" (or "the boss") whenever a cover is
+  owed. **Deck re-check owed:** the same question again, watching the menu's own text as well as the
+  answer.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big

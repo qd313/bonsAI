@@ -1173,7 +1173,7 @@ worse answers with nothing on screen to say why.
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 
-## Spoiler cover leak family
+## Spoiler leak family
 
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
@@ -1262,13 +1262,24 @@ purpose: 3 named tests failed as expected, restored afterward. **Deck re-check o
 described-boss setup — no protected name in plain words in the live thinking line or the saved reasoning
 fold, and no raw fence marker text.
 
-**A third leak found 2026-09-26 (plan 70, flow L2), being fixed (helper A): the suggestion menu itself
-can name a protected boss.** Beside the live-text and thinking leaks above, the branch menu's own
-question line under a Hollow Knight answer read "Are you currently struggling with the Soul Master's
-movement or damage output?" in plain view, fully visible, not inside any spoiler element — even though
-the player's own question never named the boss. Screenshot
-`plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png`. Evidence
+**A third leak found 2026-09-26 (plan 70, flow L2): the suggestion menu itself can name a protected
+boss.** Beside the live-text and thinking leaks above, the branch menu's own question line under a
+Hollow Knight answer read "Are you currently struggling with the Soul Master's movement or damage
+output?" in plain view, fully visible, not inside any spoiler element — even though the player's own
+question never named the boss. The menu's question and its buttons are drawn straight from the model's
+own words and never ran through the spoiler cover, because fencing a button would just print backticks
+on it instead of hiding anything. Screenshot `plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png`. Evidence
 `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+
+**Fixed 2026-09-26 (plan 70, helper A, commit `7c93d5e8`).** When a cover is owed this turn, a protected
+name inside the menu's question or any button's own label is swapped for a neutral phrase ("this boss",
+or "the boss" when the sentence already carried "the"/"a"/"an" — a naive substitution first tried made
+"the Soul Master's" into the double-article "the this boss's"). This is the only place the menu is ever
+built, from the finished reply only, never a partial one, so the same fix covers both the live poll and
+the saved turn. Proved by breaking the substitution on purpose: 4 named tests failed as expected,
+restored afterward. **Deck re-check owed:** the same Hollow Knight spell-casting-boss question as row
+NO-CLOSE-MATCH-HK-02, watching the suggestion menu's own question and button text as well as the answer
+itself.
 
 
 ## Headline first: every answer opens with one line that stands alone
@@ -1435,7 +1446,7 @@ limit (word for word):**
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 
-## Four questions still get notes about the wrong subject
+## Wrong-subject notes
 
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say so,
   found 2026-09-07.** Asking Black Mesa how to tame a horse, asking Portal 2 where to buy a house, and asking about
@@ -1452,12 +1463,19 @@ limit (word for word):**
   Tartarus" both attached the same wrong note (Theseus and Asterius) and the reply talked about them,
   twice. Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`.
 
-**Regression found 2026-09-26 (plan 70, flow L2), being fixed (helper B).** After the "no close match"
-wiring fix landed (`e4c24bdd`), the Black Mesa horse-taming control question — still a wrong-subject
-question with nothing that matches — no longer shows the "no close match" line at all, on screen or in
-the saved chat file. The model instead says in its own words that it has no information on the subject,
-inside its own spoiler cover around otherwise harmless general mechanics. The line is meant to still
-appear here, since nothing genuinely matches. Evidence `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+**Checked 2026-09-26 (plan 70, flow L2): borderline, known fragile, not a regression.** After the "no
+close match" wiring fix landed (`e4c24bdd`), the Black Mesa horse-taming control question — still a
+wrong-subject question with nothing that matches — no longer showed the "no close match" line at all, on
+screen or in the saved chat file. The model instead said in its own words that it had no information on
+the subject, inside its own spoiler cover around otherwise harmless general mechanics. Evidence
+`docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+
+**Measured the same day with the real code and the current library, on the PC.** Once the game's own
+name is removed from the question, none of "tame" or "horse" appears in any of the three attached notes
+— the note-text fix changes nothing here either way. The line is decided by the older score that judges
+closeness without the game's name, and that score landed at 0.6508 against the 0.65 cut-off: on the
+edge, close enough that ordinary differences between the PC's and the Deck's own embedding numbers can
+flip it. A measured cut-off is not retuned for one question; no code change made.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -1985,7 +2003,7 @@ attached, none dropped, with a roughly 16,000-character prompt. Evidence
 **Sighting, 2026-09-23:** searching the notes by meaning took about 1,070 milliseconds with a game
 running, against 22 to 60 milliseconds measured elsewhere with nothing running.
 
-## The spoiler-risk band reads "med" on every answer
+## Spoiler-risk band fixes
 
 Long version of the roadmap entry. Moved here 2026-09-26 to keep the roadmap under its size limit.
 
@@ -2004,6 +2022,20 @@ no note of its own no longer names "Starting out in Hollow Knight" (the fix work
 "False Knight" instead — a different wrong boss, since there is still no note for this fight. Evidence
 `docs/test-evidence/plan70-L1-8-HELPER-M.json`.
 
+**Both gaps closed 2026-09-26 (plan 70, helper M).** **Named entity, commit `679452e5`:** excluding the
+one onboarding note was not the whole fix — Hollow Knight is both the game's own name and its final
+boss's name, and the word "knight" in the game's name alone was enough to satisfy a different note's own
+shortened-name check ("False Knight" shortens to "Knight"). The resolved game's name is now cut out of
+the question before either matching pass runs, so a question that merely names the game is never read
+as naming a note just because that note's title contains the game's own name. The exact worked question
+now names nothing at all — the safe direction, since a missed name over-protects rather than a wrong one
+under-protecting something nobody asked about. **Spoiler band, commit `7b2bc753`:** "my deck fan gets
+very loud while sitting idle" got a troubleshooting tip attached (the knowledge-base search itself routed
+it to the shared tip sheet), but still read "med" because the troubleshooting check was a fixed word
+list that question does not match. This turn's own routing decision is now read alongside the word list,
+not instead of it — either one being true counts as troubleshooting. Both evidence questions from the
+same Deck pass now read "low". Deck re-check owed for both.
+
 ## Model size fix and re-check
 
 Long version of the roadmap entry. Moved here 2026-09-26 to keep the roadmap under its size limit.
@@ -2018,7 +2050,7 @@ after live sizes load; the header must count it. Row **ROUTING-MERGE-SIZE-02**, 
 **ROUTING-MERGE-SIZE-01** (the Deck result that found this, evidence
 `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`).
 
-## AI models filters panel focus bugs
+## Filters panel focus bugs
 
 Long version of two roadmap entries. Moved here 2026-09-26 to keep the roadmap under its size limit.
 
@@ -2033,8 +2065,16 @@ Planned in plan 70.
 models…" reproduces it every time (3 of 3) — the screen opens with the Filters panel already open and
 the ring on "Open source only (recommended)". Opening through "Browse models…" never does (0 of 13),
 whatever way the screen was last closed. Both buttons open the same screen; the difference is which
-button opened it. Being fixed (helper I). Evidence `docs/test-evidence/plan70-RING-ON-FILTER-2c1.json`
+button opened it. Evidence `docs/test-evidence/plan70-RING-ON-FILTER-2c1.json`
 (+ screenshot `plan70-RING-ON-FILTER-manage-open1.png`).
+
+**Fixed 2026-09-26 (plan 70, helper I, commit `3ac00226`).** The two buttons open the same screen
+through the same `initialSection` prop ("policy" vs "browse"); "policy" carried a leftover shortcut from
+before the licence pick moved into the Filters panel, forcing that panel open and handing it the ring.
+Removed: both routes now open plain Browse, panel closed, the ring on "Advanced ›". Added a focus-graph
+anti-pattern entry for the shape (a route-specific flag pre-opening a sub-panel and moving the ring into
+it before anything was pressed). **Deck re-check owed:** row **RING-ON-FILTER-2c2** — open through both
+"Manage AI models…" and "Browse models…" and confirm both land on "Advanced ›" with the panel closed.
 
 **Note on B, 2026-09-26:** with the Filters panel open, B does two different things depending on where
 the ring is — on the Filters button, B closes the whole screen; inside the panel, B only folds the panel
@@ -2049,4 +2089,15 @@ and goes no further, even though Done is visible on screen the whole time; the t
 shut by itself, as a side effect. With the panel closed, the same walk reaches Done and back with
 nothing skipped. Evidence `docs/test-evidence/plan70-HUB-EDGE-01.json` (+ screenshot
 `plan70-HUB-EDGE-01-panel-folded-after-up.png`).
+
+**Fixed 2026-09-26 (plan 70, helper I, commit `6355eb9a`).** "Close filters" is the panel's own last
+stop, not the whole screen's — its `onMoveDown` was unconditionally returning `true`, which claims every
+further Down press forever instead of handing the move back to Steam. The model list's own last row a
+few lines above it in the same file already does this correctly (returns `false`, so Steam carries the
+ring on to the dialog's footer); "Close filters" now does the same. **"Any installed model" never being
+a stop is by design, not a bug:** that row is deliberately disabled until the Tier 3 unlock switch in
+Advanced is turned on, which existing tests already pin — a re-check with the switch on would confirm it
+becomes a real stop then. Added a matching focus-graph anti-pattern entry. **Deck re-check owed:** row
+**HUB-EDGE-02** — with the Filters panel open, walking Down must reach Done (or the model list) instead
+of stalling at "Close filters".
 

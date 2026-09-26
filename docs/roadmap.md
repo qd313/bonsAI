@@ -239,13 +239,13 @@ starts work outside this.
   choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
   visible area, with the panel half blank.
 - ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
-  already sitting on a filter** — **OPEN, now with a reliable trigger, being fixed (helper I).**
-  "Manage AI models…" reproduces it 3 of 3; "Browse models…" never does (0 of 13).
-  [Detail](roadmap-details.md#ai-models-filters-panel-focus-bugs).
+  already sitting on a filter** — **VERIFY, fixed 2026-09-26 (helper I, `3ac00226`).** A leftover
+  shortcut forced the panel open on one route; both routes now open alike. **Deck re-check owed:** row
+  **RING-ON-FILTER-2c2**. [Detail](roadmap-details.md#filters-panel-focus-bugs).
 - ★★ `[ollama]` `[focus]` **With the AI models screen's Filters panel open, the D-pad cannot reach Done or
-  the model list below it** — **OPEN, found 2026-09-26, being fixed (helper I).** Row **HUB-EDGE-01**
-  (filters-open half). Walking Down stops at "Close filters" and goes no further.
-  [Detail](roadmap-details.md#ai-models-filters-panel-focus-bugs).
+  the model list below it** — **VERIFY, fixed 2026-09-26 (helper I, `6355eb9a`).** "Close filters" now
+  hands the Down press back instead of claiming it forever. **Deck re-check owed:** row **HUB-EDGE-02**.
+  [Detail](roadmap-details.md#filters-panel-focus-bugs).
 - ★ `[ollama]` **"Reset to defaults" in the try-order picker saves an explicit list where there used to be
   none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
   writes an explicit list instead. Same order shown, a paper difference today. Evidence
@@ -294,22 +294,17 @@ starts work outside this.
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **VERIFY, fixed 2026-09-26 (plan 70, helper A, commit `59bb4dd6`).** The live-leak cause: a spoiler cover
-  the model glued straight onto the sentence before it, with no line break, was not recognised as a real
-  cover. **Deck re-check owed:** row **SPOILER-COVER-01** in [testing.md](testing.md).
-  [Detail](roadmap-details.md#spoiler-cover-leak-family).
+  **VERIFY, fixed 2026-09-26 (helper A, `59bb4dd6`).** The live-leak cause: a spoiler cover the model
+  glued straight onto the sentence before it, with no line break, was not recognised as a real cover.
+  **Deck re-check owed:** row **SPOILER-COVER-01**. [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper A, commit `4b975316`).** Thinking is drawn as plain text, so a protected name
-  there was never covered by the answer's own spoiler fence. **Deck re-check owed:** row
-  **THINKING-SPOILER-01** in [testing.md](testing.md).
-  [Detail](roadmap-details.md#spoiler-cover-leak-family).
-- ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** — **OPEN,
-  found 2026-09-26, being fixed (helper A).** A third leak in the same family as the two above.
-  [Detail](roadmap-details.md#spoiler-cover-leak-family).
-- ★ `[reply]` **A reply can echo one of its own instruction lines back to the player** — **OPEN, found
-  2026-09-26.** A Hollow Knight answer opened with "Strategy guide mode active. I will keep the coaching
-  spoiler-minimized" — meant to steer the model, spoken to the player instead. Evidence
-  `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+  2026-09-26 (helper A, `4b975316`).** Thinking is drawn as plain text, so a protected name there was
+  never covered by the answer's own spoiler fence. **Deck re-check owed:** row **THINKING-SPOILER-01**.
+  [Detail](roadmap-details.md#spoiler-leak-family).
+- ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** —
+  **VERIFY, fixed 2026-09-26 (helper A, `7c93d5e8`).** A third leak in the same family as the two above.
+  **Deck re-check owed:** row **NO-CLOSE-MATCH-HK-02** re-check.
+  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **OPEN,
   found 2026-09-25 (plan 68).** The chat memory now copes with the doubling (`6843f8e1`), but why it happens
   has not been found. Deck check owed.
@@ -324,6 +319,10 @@ starts work outside this.
 `[layout]` entry serves it. Items rated ★★★★★ or above carry a placeholder link to [bonsAI Issues](https://github.com/qd313/bonsAI/issues) in the archive;
 replace it with a specific issue when one exists.
 
+- ★ `[reply]` **A reply can quote one of its own steering instructions back to the player** — **OPEN,
+  needs the maintainer's call.** Not a spoiler leak — the plugin's own prompt deliberately tells the model
+  to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like machine text.
+  Decide: drop it, soften it, or leave it. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -778,10 +777,9 @@ ones from this month are D81 to D88.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
   2026-09-26, not fixed.** `knowledge_base_service.py` line ~946. [Detail](roadmap-details.md#speed-mode-tip-gap).
 - ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
-  thing** — **VERIFY, both halves fixed 2026-09-26 (plan 70, helper M), partly re-checked on the Deck.**
-  Both fixes work as intended but do not fully close the gap. **Not fixed:** a game's own name can still
-  count as naming a note in general. Deck check owed.
-  [Detail](roadmap-details.md#the-spoiler-risk-band-reads-med-on-every-answer).
+  thing** — **VERIFY, both gaps closed 2026-09-26 (helper M, `679452e5`, `7b2bc753`).** A game's own name
+  is now cut from the question before matching; a routed-to-tips turn now reads as troubleshooting even
+  off the word list. Deck re-check owed. [Detail](roadmap-details.md#spoiler-risk-band-fixes).
 - ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
   `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
   time. A fallback to the plain page would cover it for good.
@@ -823,9 +821,10 @@ ones from this month are D81 to D88.
   nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
   losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
   note is still attached. **Found again 2026-09-18 and 2026-09-26 (plan 70, flow L1):** a Hades boss
-  question attaches the wrong area's note. **Regression found 2026-09-26 (flow L2), being fixed (helper
-  B):** the "no close match" line now goes missing on this bug's own control question.
-  [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
+  question attaches the wrong area's note. **Wrong-subject half, borderline, known fragile (checked
+  2026-09-26):** the Black Mesa control's own "no close match" line came out missing once, not a
+  regression — its score landed at 0.6508 against a 0.65 cut-off. No code change.
+  [Detail](roadmap-details.md#wrong-subject-notes).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
   notes are named underneath it instead of the real electrified-water note, which does exist in the
@@ -872,9 +871,8 @@ ones from this month are D81 to D88.
 ### Next
 
 - ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add
-  one** — **OPEN, built 2026-09-26, FAILED live on the Deck (plan 70, flow L1), being fixed (helper A).**
-  Same safety net as the ★★★ bug "a name-withheld boss question comes back with no spoiler box" above —
-  covers every finished answer, but not everything while it streams in. Same result, full detail there.
+  one** — **VERIFY, same safety net as the ★★★ bug "a name-withheld boss question comes back with no
+  spoiler box" above, fixed the same way, Deck re-check owed.** Same result, full detail there.
   [Detail](roadmap-details.md#check-that-a-spoiler-cover-actually-happened).
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement

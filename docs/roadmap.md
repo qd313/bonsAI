@@ -300,11 +300,11 @@ replace it with a specific issue when one exists.
   the maintainer's call 2026-09-26: soften it.** Not a spoiler leak — the plugin's own prompt deliberately
   tells the model to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like
   machine text. Plan 72 must-fix. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
-- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, needs the
-  maintainer's call, found 2026-09-26 (plan 70, helper A2).** Not filed as a bug: pressing Show details is
-  already a deliberate choice to see more, unlike the answer, Copy or Read aloud, which the spoiler cover
-  now protects. Decide whether the credit line should also hide a protected name until asked, or whether
-  a deliberate press is enough. [Detail](roadmap-details.md#spoiler-leak-family).
+- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, the
+  maintainer's call 2026-09-26: hide it like the notes block.** The protected note's tag reads "Boss note
+  (spoiler)" until the answer's cover or the notes block is opened, then the real name; no new button.
+  Drawing: [Show Details Credit Line](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). Plan 72 must-fix.
+  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words

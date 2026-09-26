@@ -61,6 +61,7 @@ section 2 with the date, and go into their group. Nothing jumps the queue becaus
 | A thin strip of the answer shows through under the game line at the bottom | Plainly broken | Small. Measure first. |
 | The dots under the chat name don't line up — the active dot looks a hair above or below the rest | Plainly broken; the maintainer wants it exact, not "close enough" | Keep the dots (the maintainer's call 2026-09-26). How to measure is in section 4, flow D. |
 | A Strategy answer can open by quoting one of bonsAI's own instructions back | Plainly broken — reads like machine text | The maintainer's call 2026-09-26: soften it. A known-cause fix in the question wording. |
+| Show details' credit line prints a protected boss's name in plain view | Spoiler shown | The maintainer's call 2026-09-26: hide it like the notes block. The tag reads "Boss note (spoiler)" until the player opens the answer's spoiler or the notes block, then shows the real name. No new button, so the D-pad path is unchanged. [The drawing](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). |
 | Stop unloads the model, so the next question starts slow | Plainly broken feel: every question after a Stop is slow | The maintainer's call 2026-09-26: Stop must not unload the model. Close the connection instead. Check on the Deck that a stopped answer really stops, and that the next question starts warm. |
 | A model downloaded from the first-run picker never joins the list that picks who answers | Possibly the first ten minutes | Check first whether a new player's first answer actually suffers. If not, it drops to "if there is room". |
 | Clearing a session while an answer is being written may lose that answer | Loses a chat | Found by reading the code. Check it can still happen now the Session tab changed; if it can, fix. |
@@ -112,14 +113,9 @@ Remove greying out after a model answers; the false connection failure at start-
 
 ### Calls only the maintainer can make
 
-Answered 2026-09-26: the dots stay and must line up exactly; soften the Strategy answer's opening; Stop
-must not unload the model. All three are now in **Must fix** above.
-
-Still open:
-
-- **Show details' credit line still names a protected boss** — the player pressed Show details, so it is
-  not filed as a leak. Recommended: cover it the same way the answer is covered. If left, it may cross
-  line 3.
+All answered 2026-09-26: the dots stay and must line up exactly; soften the Strategy answer's opening;
+Stop must not unload the model; hide the protected name in Show details' credit line like the notes
+block does. All four are now in **Must fix** above.
 
 ### Big features never fully checked on the Deck
 
@@ -184,7 +180,7 @@ measurement in the brief.
 
 ## 6. Questions for the maintainer
 
-1. The one call still open in section 2: Show details' credit line.
+1. The calls in section 2 — all answered 2026-09-26.
 2. Is the "must fix" list right? Anything missing that you have hit yourself?
 3. The last-call date — not decided yet (2026-09-26).
 4. One long session like plan 64, or two shorter ones (D-pad and layout first, everything else second)?

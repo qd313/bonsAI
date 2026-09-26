@@ -122,7 +122,25 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 ### Stage D — README and release notes (high priority; can start now, finished before the merge)
 
 - **README:** written for someone meeting bonsAI for the first time. What it is and why, what it does,
-  screenshots of today's screens, what you need, how to install, the knowledge library, how to get help.
+  what you need, how to install, the knowledge library, how to get help.
+- **The spirit it was built in comes first (the maintainer, 2026-09-26):** free and open source,
+  self-hosted, privacy first. Near the top, in plain words: your questions go only to your own AI, on
+  your Deck or your own PC (or wherever you point it); no account, no cloud service, nothing collected;
+  every line of code is open to read. Then a plain list of everything that does reach the internet —
+  so the claim can be checked, not just trusted. Checked against the code 2026-09-26, that list is:
+  installing Ollama and downloading models (Ollama, GitHub); the knowledge library and voice models
+  (Hugging Face, GitHub); the recommended-models list, which refreshes itself from GitHub; and the
+  Steam lookup, only if you give it your own key. No tracking or usage reporting was found. The security review and licence check in
+  Stage E confirm every sentence of this before it ships.
+- **Pictures and video (the maintainer, 2026-09-26):** short looping clips (GIFs) of the best features,
+  one per feature; one real-time video of a normal session, not sped up, so people see how fast it
+  really is on a Deck; and new screenshots of today's screens to replace the old ones. Captured on
+  the Deck after the bug session, so they show the fixed screens. Screenshots and clips are shot at the
+  Deck's own size and not stretched.
+- **The first-impression check (item 3 in section 6) comes before the README is written**, so the README
+  describes what a new player will actually see.
+- **A bug-report form and a short "how to help" page** on GitHub (item 8 in section 6). The form asks for
+  the bonsAI version, the Deck model, SteamOS version, where the AI runs, and the plugin's log.
 - **Release notes for 0.6.0:** a short re-introduction a player can read in a minute, then the highlights,
   then "Known issues" from Stage B. The long changelog list goes below it, not at the top.
 - **One line for past 0.4.9 users:** what to expect if they install over the old version.
@@ -210,7 +228,11 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 
 ---
 
-## 6. Also needed — found 2026-09-26, waiting for the maintainer
+## 6. Also needed — found 2026-09-26
+
+**Answered 2026-09-26:** 3 (yes), 4 (yes: GIFs of the best features, a real-time video, better
+screenshots), 8 (yes), 9 (yes, and lead with the free-and-open, self-hosted, privacy-first spirit). All
+four are folded into Stage D. **Still open:** 1, 2, 5, 6, 7, and where to announce (part of 4).
 
 1. **What is in 0.6.0?** Recommended: everything landed by the freeze ships; plan 70's work ships if it lands
    and passes on the Deck by then. Anything half-built that a player could stumble on is hidden, not shipped
@@ -220,8 +242,9 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 3. **What a brand-new player sees first.** Review every setting's starting value, the first-run notice, the
    first model suggested for a Deck, and that the Developer tab and test chips stay hidden. This is the
    re-launch's first impression, so it gets its own check before the README is written.
-4. **Where the re-launch is announced**, and what goes with it: a few screenshots of today's screens and
-   perhaps a short clip. The README has one picture today.
+4. **Where the re-launch is announced**, and what goes with it. What goes with it is agreed (GIFs of the
+   best features, a real-time video, better screenshots); where to announce it is still open. The README
+   has one picture today.
 5. **The Decky plugin store.** bonsAI is not in it; players download a zip from the GitHub page. A re-launch
    is the natural moment to decide whether to apply. Recommended: decide now, apply after 0.6.0 has been
    out a week without a serious bug.

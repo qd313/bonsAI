@@ -1493,3 +1493,43 @@ sent before.
 if the shrink itself ever fails. Planned in plan 70.
 
 
+
+## Measure how well the AI reads a screenshot
+
+**Added 2026-09-25 by the maintainer: "an ignored part of the app".** Attaching a screenshot is a headline
+feature, and nothing measures it. Every answer and search number in this project comes from typed questions.
+
+**What is true today, read from the code.** A screenshot goes to a picture-capable model with the question.
+The prompt asks it to look at the game world rather than the Steam overlay, and to say what it is looking at.
+Steam's own screenshot file sometimes adds a game name. The note search never sees the picture: it runs on
+the typed words and the running game only. So a screenshot of a boss, with *"how do I beat this?"*, searches
+the notes for "how do I beat this" — the right boss note can only be found by luck. The plan to feed the
+picture's guess into the search (*vision to entity*) was sketched in knowledge-base.md § Phase 7 and never
+built or measured.
+
+**Step 1 — a scored screenshot set (the measurement).**
+- 40–60 real screenshots from the Deck, across games that have notes and a few that do not. Each labelled
+  by hand with three answers: the game, the area or dungeon, and the boss or enemy if one is on screen.
+- Mix of easy and hard: title screens and menus, plain play, a boss fight, a dark cave, a loading screen, a
+  game with no notes at all. Some taken with the game running and its name known, some with it unknown
+  (as if the picture were attached later).
+- A scoring script that asks each question, reads the reply, and marks three things: right game, right area,
+  right boss — plus "said it did not know" as its own, better-than-wrong result.
+- Run it on every picture model the Deck offers, and record time to first word, because a picture is slow.
+- Report three plain figures per model: out of a hundred screenshots, how often it named the game, the
+  area, the boss.
+
+**Step 2 — improvements, each measured against step 1.**
+- **Feed the picture's guess into the note search.** Ask the model first what game, place and enemy it sees,
+  then search the notes with that as well as the typed words. The earlier sketch wanted no extra call;
+  measure whether one short extra call is worth its time.
+- **Notes that say what things look like.** A boss note today says how to beat it, not what it looks like.
+  A one-line "looks like" field on boss, area and enemy notes (colours, shape, a landmark) gives the
+  search something to match the picture's description against. Rides a library release.
+- **Use the running game's name as a strong hint.** When a game is running the game is already known; the
+  picture only has to find the place and the boss, a much easier task. Measure both cases separately.
+- **Later, if the above stalls:** match the picture itself against reference pictures per note, with a
+  picture-matching model. Bigger, needs pictures in the library and a size budget.
+
+**Connected:** the big-screenshot crash (plan 70 shrinks them first — this set should use the shrunk size),
+the Phase 7 entry's "a screenshot feeding the search", and the visual-maps idea.

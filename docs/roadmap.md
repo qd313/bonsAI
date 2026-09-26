@@ -960,6 +960,11 @@ ones from this month are D81 to D88.
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get cards; today they get nothing specific. New card kinds and a spoiler table update, Left 4
   Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md).
+- ★★★★ `[KB]` `[QA]` **Measure how well the AI reads a screenshot: which game, which area, which boss** — **OPEN, added
+  2026-09-25.** Nobody has ever measured it: no test question attaches a picture, and the notes are only ever searched
+  by the typed words, never by what is on screen. First a scored set of real Deck screenshots (game named, then area,
+  then boss), run on each picture model the Deck offers; then fixes where it fails — the picture's guess fed into the
+  note search, and notes that say what a place or boss looks like. [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still matters: a
   thumbs-down that stops a wrong card coming back (three days), add-on packs before any large catalog (five days or more),
   a screenshot feeding the search (a short test to find out first). A nearest-neighbour index buys nothing until the corpus

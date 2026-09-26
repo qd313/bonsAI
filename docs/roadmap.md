@@ -190,6 +190,12 @@ starts work outside this.
   try is not enough to close it; the maintainer's call. Evidence `docs/test-evidence/plan64-BUSY-DOT-01.json`
   (+ screenshots).
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
+- ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
+  **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Clear resets the waiting state
+  first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
+  question is waiting. Deck check owed.
+- ★★ `[chat]` **Deleting a chat whose file is already missing leaves its row in the list** —
+  **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Deck check owed.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
@@ -408,13 +414,9 @@ replace it with a specific issue when one exists.
   **Save a report** inside it, and a typed command, write a read-only report of the setup to the Desktop: the former
   **Deck health snapshot**, folded in here. [Plan](planning/39-connection-doctor.md).
 - ★★★★ `[ask]` **Session context and user stash** — **OPEN.** Live session facts plus user-editable notes for Ask. No embeddings, no cloud.
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **PARTIAL: a chat remembers itself now (2026-09-21);
-  the summing-up itself is not built.** Ask a follow-up that names nothing and the answer stays on the same game and subject.
-  How much of the chat is carried is the plugin's decision, with a floor the answer cannot lose, a ceiling thinking cannot
-  cross and a limit on how long you wait. Left to do: the short summary for when a chat outgrows that, and
-  *Sum up this chat* in place of Clear — **planned 2026-09-24, calls locked (D118)**,
-  [plan 68](planning/68-chat-sums-itself-up.md). The spoiler chance rating is a later piece of its own.
-  [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+- ★★★★ `[ask]` **A spoiler-chance rating for the chat's own summary** — **OPEN, not started (D118 call 14).** The
+  chat now sums itself up on its own (see Verify, plan 68); rating how likely that summary swept up a spoiler is
+  a later plan of its own. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids
@@ -576,21 +578,23 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
   box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
-  Until now a chat kept 200 questions and answers on disk and almost none of it reached the AI, so a follow-up meant saying
-  everything again. Measured on the Deck: *"and what about the boots?"* got **"please tell me which game you are referring
-  to"** before, and **"keep the Iron Boots off during the fight in Ocarina of Time…"** after. Anything the AI hid behind a
-  spoiler fence is stripped before a word is carried. Row **CHAT-MEMORY-01**. **Tried on the Deck 2026-09-23 with
-  nothing running, FAIL:** asking about Megaera in Hades, then "what about her second phase" — the reply knew "her"
-  meant Megaera but gave only generic fight advice, and Show details said no search ran at all ("No game is running,
-  so there is nothing to look up"). A third question, "what weapon works best against her", lost track of who "her"
-  was entirely and asked which game and character were meant. Evidence
-  `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`. **Tried again 2026-09-23 with Hades running,
-  still FAIL by this row's own rule:** 34 earlier turns were carried, but the reply still opened with "I
-  ain't got no idea what you're talkin' about without a name… tell me which part" before it guessed the
-  right subject (Sandtraps) and gave two lines on it — the same deflect-then-recover shape seen with nothing
-  running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
+  A follow-up that names nothing of its own now stays on the chat's own subject instead of asking which game.
+  Row **CHAT-MEMORY-01**. **Failed on the Deck twice, 2026-09-23:** once with nothing running (no search ran
+  at all) and once with a game running (the reply asked "tell me which part" before recovering). **The first
+  failure has a fix landed 2026-09-25 (plan 68); rerun owed. The second is exactly what row SUMUP-01 checks**
+  (see Features, below). [Detail](roadmap-details.md#a-chat-carries-what-it-has-already-covered-into-the-next-question).
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **VERIFY, built 2026-09-25 (plan 68).**
+  A chat that has grown too long to carry whole now gets a short summary of the older part right before the
+  next answer, so a vague follow-up still lands on the same subject; *Sum up this chat* does the same by hand,
+  at the top of the Session tab, in place of Clear. Rows **SUMUP-01** to **SUMUP-10** and **CHAT-MEMORY-01**
+  (rerun) all owed on the Deck. [Plan 68](planning/68-chat-sums-itself-up.md) ·
+  [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 
-- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](archive/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
+  (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
+  instead of the old outline. Rows 02 to 06 and 08 passed by measurement; row 09 failed and is filed as its
+  own bug, below. Owed: the maintainer's own look at rows 01, 05 and 07, and at the help and agent chips.
+  [Plan](archive/60-chip-button-restyle.md) · [Detail](roadmap-details.md#make-the-preset-chips-look-more-like-chips).
 
 - ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **VERIFY, built
   2026-09-24/25.** A Developer tab switch, *Scramble animation*, off by default, churns a live answer's

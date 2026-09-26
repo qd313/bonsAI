@@ -270,6 +270,29 @@ Terse ships without them.
 
 ---
 
+## A chat carries what it has already covered into the next question
+
+Row **CHAT-MEMORY-01**. Built 2026-09-21: a question now carries what its chat has already covered instead
+of almost none of it, sized by the plugin's own budget rather than by whatever happens to be on disk.
+
+**Tried on the Deck 2026-09-23 with nothing running, FAIL:** asking about Megaera in Hades, then "what
+about her second phase" — the reply knew "her" meant Megaera but gave only generic fight advice, and Show
+details said no search ran at all ("No game is running, so there is nothing to look up"). A third question,
+"what weapon works best against her", lost track of who "her" was entirely and asked which game and
+character were meant. Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
+
+**Tried again 2026-09-23 with Hades running, still FAIL by this row's own rule:** 34 earlier turns were
+carried, but the reply still opened with "I ain't got no idea what you're talkin' about without a name…
+tell me which part" before guessing the right subject (Sandtraps) and giving two lines on it — the same
+deflect-then-recover shape as with nothing running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
+
+**The no-game half has a fix landed 2026-09-25 (plan 68):** with nothing running and the question naming no
+game, a follow-up now searches the chat's own game instead of finding nothing to look up. Rerun on the Deck
+is owed. **The second failure — the reply asking "tell me which part" before recovering — is exactly what
+plan 68's row SUMUP-01 checks**, since it is the case a chat that has outgrown its room is built for.
+
+---
+
 ## The chat sums itself up instead of being cleared
 
 Asked for by the maintainer 2026-09-20. Two parts, and the second needs the first: **a chat keeps a short summary of what
@@ -309,12 +332,20 @@ is the slow part, so the memory is held to what is worth waiting for rather than
 of what the AI is told, behind the rules and the cards, because the server skips re-reading the front of a question that
 has not changed and this block changes every turn.
 
-Still to build: the summing-up itself, for when a chat outgrows even that; Compact replacing Clear; and the spoiler
-chance rating.
+Still to build (its own later plan): the spoiler-chance rating.
 
-**Planned 2026-09-24:** [plan 68](planning/68-chat-sums-itself-up.md) builds the first two, with twenty
-more calls from a discovery session recorded as D118 in the decisions file. The button is named *Sum up
-this chat*. The spoiler chance rating is left for a later plan of its own.
+**Built 2026-09-25:** [plan 68](planning/68-chat-sums-itself-up.md), from twenty calls recorded as D118 in
+the decisions file. A chat that has outgrown its room now gets a short summary of the older part right
+before the next answer, written by the same AI, thinking off, about 200 words. The AI then carries that
+summary plus the newest turns word for word. A note under the answer says a summary happened; on the newest
+answer it opens Show details on the Session tab. *Sum up this chat* at the top of the Session tab does the
+same by hand, in place of Clear, with a card showing what the AI kept; Clear and its confirm box are gone.
+Each chat keeps its own summary and its own remembered subject now, in its own file, rather than the whole
+plugin sharing one subject. Stop during a summary stops everything and saves nothing; a failure or time-out
+answers the way it did before, with one warning line, and the next question tries again. Hidden spoiler
+text is stripped before the AI ever reads the chat, checked by a unit test. Deck rows **SUMUP-01** to
+**SUMUP-10** and a rerun of **CHAT-MEMORY-01** are owed (see [testing.md](testing.md)); the spoiler-chance
+rating is left for a later plan of its own.
 
 **Every call is in, 2026-09-20.** In the maintainer's own order:
 
@@ -487,6 +518,25 @@ What is wanted instead is flexible with guard rails:
 Related: the four-star **Session context and user stash** entry in the roadmap's Features list is the other half of the
 same idea (live session facts plus notes the person can edit); if both are built, they should share one store rather
 than each keeping their own.
+
+---
+
+## Make the preset chips look more like chips
+
+Shipped 2026-09-17 under plan 60 (D110). Each chip now looks raised: a thin light line along its top edge and a soft
+shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now
+8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open
+and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label
+is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue
+outline — a ring around the chip that nobody could actually see is gone too.
+
+Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the
+Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug on the roadmap.
+Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and
+row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not
+on screen during this run. Italics were tried earlier for the label and turned down.
+
+[Plan](archive/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
 ## Shipped, QA owed — why each was built this way
 

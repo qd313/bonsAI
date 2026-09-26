@@ -178,10 +178,13 @@ starts work outside this.
   box and the Ask button. Measure both gaps on the Deck first, at every UI size. Plan 72 must-fix.
 - ★ `[layout]` **The question bubble has too much empty space on the left, and uneven line edges** —
   **OPEN, from the maintainer 2026-09-26.** Right-aligned text leaves every line's left edge ragged, and a
-  wrapped question stretches the bubble to its widest. The text can also sit closer to the Retry arrow.
-  Options drawn: [Question Bubble Spacing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF). Plan 72 must-fix.
-- ★ `[ui]` **The feedback chips under an answer are too loose** — **OPEN, from the maintainer
-  2026-09-26.** Make them tighter and closer together. Plan 72 must-fix.
+  wrapped question stretches the bubble to its widest. **The maintainer picked option D 2026-09-26:** keep
+  right-aligned text, split it into lines of about equal length, shrink the bubble to its longest line, 3px
+  from Retry. [Drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF). Plan 72 must-fix.
+- ★ `[ui]` **The "Not helpful" reason chips sit almost one to a row** — **OPEN, from the maintainer
+  2026-09-26.** Under "What went wrong?", Bad information, Misidentified game/problem, Unfenced spoiler,
+  Too long and Too short mostly each take a whole row. Make the chips tighter and closer together so
+  they share rows. Measure each chip's width and padding on the Deck first. Plan 72 must-fix.
 - ★ `[ui]` **The chat name's scroll doesn't match the chip scroll** — **OPEN, from the maintainer
   2026-09-26.** A long chat name should scroll at the same speed and with the same pauses as a long chip
   label; then slow both slightly so the panel feels less busy. Plan 72 must-fix.

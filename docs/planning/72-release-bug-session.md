@@ -76,8 +76,8 @@ screen), and every one is a layout change, so each is measured on the Deck befor
 | Item | What "done" looks like |
 |---|---|
 | The preset chip sits too far above the question box | The chip-to-box gap equals the box-to-Ask-button gap, measured on the Deck at every UI size. |
-| The question bubble: empty space on the left, ragged line edges, text too far from the Retry arrow | The option the maintainer picks from [the drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF), checked with a Deck screenshot, because the Deck's own font can break lines a word differently from the drawing. |
-| The feedback chips under an answer are too loose | Tighter and closer together; before-and-after screenshots on the maintainer's checks page. |
+| The question bubble: empty space on the left, ragged line edges, text too far from the Retry arrow | **Option D from [the drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF), the maintainer's pick 2026-09-26:** right-aligned text split into lines of about equal length, the bubble shrunk to its longest line, text 3 pixels from the Retry arrow. Two things to check on the Deck first: whether Steam's browser can even out the lines by itself (if not, the plugin measures and does it), and a screenshot with Steam's own font, which can break lines a word differently from the drawing. |
+| The "Not helpful" reason chips sit almost one to a row | The five chips under "What went wrong?" share rows instead of taking one each. Measure first what makes each chip so wide (its padding, a minimum width, the 8-pixel gaps), then tighten. Before-and-after screenshots on the maintainer's checks page. |
 | The chat name's scroll doesn't match the chip scroll | Same speed and same pauses as a long chip label, then both slowed slightly. The chip scroll today: 25 pixels a second, 1.5 seconds before it starts, 1.5 seconds at the end. Where the chat name's scroll lives in the code is not yet found — a first job in flow 0. |
 | Save chat to Desktop becomes a save icon in the chat tab; the "+" gets a clearer icon | A true-size drawing of the options first (it also settles exactly where the icon sits), then built. The D-pad path changes, so the free-play walk covers it. |
 
@@ -201,8 +201,8 @@ measurement in the brief.
 
 ## 6. Questions for the maintainer
 
-1. The calls in section 2 — all answered 2026-09-26. New: which question-bubble option (A to D in the
-   drawing), and a true-size drawing still owed for the save icon and the new "+".
+1. The calls in section 2 — all answered 2026-09-26. The question bubble is option D (2026-09-26). Still owed:
+   a true-size drawing for the save icon and the new "+".
 2. Is the "must fix" list right? Anything missing that you have hit yourself?
 3. The last-call date — not decided yet (2026-09-26).
 4. One long session like plan 64, or two shorter ones (D-pad and layout first, everything else second)?

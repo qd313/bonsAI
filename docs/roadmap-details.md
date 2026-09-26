@@ -1703,3 +1703,48 @@ together. Measured at the title screen, not during a mission, so a real level ma
 1.8 GB was still free with the game at its title screen and both models loaded, so under D112's rule
 the memory safety check stays unbuilt — the room did not actually run tight.
 
+## No tip line numbers
+
+**Numbers in 2026-09-26 (plan 70).** Four cut-offs tried on the topic sorter's pull, measured on 35
+tuning questions plus the eight wave-two device sentences, twelve junk phrases and the five hardest:
+none made the line appear on any sentence; narrowing the pull changed nothing; removing it lost 6 right
+tips (33 → 27 right, 1 → 7 wrong). Why: every hard sentence gets its tip from the plain word search, not
+the topic sorter, so the line can only appear if the word search for tips gets its own cut-off — not
+built this wave.
+
+## Tip cut-off fix
+
+**Fixed 2026-09-26 (`27fd9aee`).** The tip cut-off's own note said it sat just above the worst junk
+phrase's score, but it actually equalled that score, and the check only turns away scores below the
+cut-off — so that exact phrase could still get a tip. The cut-off moved from 0.5044 to 0.5050, just
+above it; the weakest right tip on the tuning rows scores 0.5804, so no right tip is lost. Proven by a
+test that was broken on purpose, failed, then restored
+(`test_compat_meaning_floor_rejects_a_score_at_the_old_junk_ceiling`).
+
+## Blind questions done
+
+**Landed 2026-09-26 (commit `2a47880e`).** 20 of the games with real notes had never had a real player
+question written against them to check search with, and the three games due to get notes this wave
+(Brotato, Palworld, Skyrim) plus new "where do I start" asks for six games had none either. Adds 107
+rows to the search-testing file, written without reading any note or card so the questions cannot
+accidentally copy a note's own wording: 80 rows across 20 games that had none (of 23 the session
+listed; Donkey Kong 64, Diddy Kong Racing and Yoshi's Story already had rows from an earlier wave and
+were skipped), 18 rows for the three new games, and 9 "where do I start" rows for six games. 72 are
+scored questions, 35 are for tuning. They change no score until labelled — the search test leaves
+unlabelled rows out. Every game in the library now has blind test questions.
+
+## Speed mode tip gap
+
+**Found 2026-09-26 (plan 70, helper C), not fixed this wave.** Speed is the default mode, and only plain
+word matching runs there for a troubleshooting tip — the meaning check that would catch a stray word
+match never gets a turn. Dormant today because the junk phrases already found never reach the tip sheet
+at all, but a question that does reach it in Speed mode has nothing stopping a wrong tip from a stray
+word match.
+
+## Lan word-boundary fix
+
+**Fixed 2026-09-26 (`ab0a6e40`).** The network topic's "lan" rule matched inside longer words too, so a
+question ending in a word like "land," "language" or "lane" could be sorted as a network problem — a
+Paper Mario question ending "right before they land" was the one found. Test
+`test_lan_does_not_match_inside_a_longer_word`.
+

@@ -669,7 +669,8 @@ Kong 64, Yoshi's Story, Diddy Kong Racing, Super Smash Bros. 1999 and Grand Thef
 Edition — written by two helpers in their own words from wiki pages read that same day, with the page, licence
 and day recorded on every note. The library was built as version 2026.09.18 with every note and tip indexed and
 its publish check passing. **Published 2026-09-23:** both Hugging Face and the GitHub release now serve
-2026.09.18, read back after publishing to confirm it.
+2026.09.18, read back after publishing to confirm it. **Blind test-question coverage finished 2026-09-26,**
+107 more added. [Detail](roadmap-details.md#blind-questions-done).
 
 **Finding the right note.** On the held-back questions nobody tuned against (177 rows), the search puts the
 right note in the top three **85.3 times in a hundred**. Every one of the 21 notes written in wave two is found
@@ -761,10 +762,10 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
-- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **OPEN, found reading the code
-  2026-09-25 while planning plan 70.** The tip cut-off's own note says it sits just above the worst junk
-  phrase's score, but it actually equals that score, and the check only turns away scores below the
-  cut-off — so that exact phrase may still get a tip. Planned in plan 70.
+- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **VERIFY, fixed 2026-09-26.**
+  Deck check owed: row **KB-NOTIP-FLOOR-01** in [testing.md](testing.md). [Detail](roadmap-details.md#tip-cut-off-fix).
+- ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
+  2026-09-26, not fixed.** `knowledge_base_service.py` line ~946. [Detail](roadmap-details.md#speed-mode-tip-gap).
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, failed on the
   Deck 2026-09-23; was fixed 2026-09-21 (plan 63, lane G, commit `c25456c`).** That fix made the line read
   the best score across every attached note instead of only the first one's, but a Hollow Knight reply built
@@ -808,12 +809,8 @@ ones from this month are D81 to D88.
   which boss was meant instead of using her name. **Unblocked 2026-09-25** — plan 68's per-chat remembered
   subject landed (`cfa5537c`). Plan 70 measures three ways to finish it on the PC and brings the maintainer
   the numbers before building one. [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
-- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
-  device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
-  sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
-  routes nowhere, so no line. The floor this wave added changed nothing on the tip side — 14 right, 1 wrong, 2
-  nothing, before and after. Either the floor bites on tips or the line is decoration. Planned in plan 70 — make
-  the tip cut-off actually bite, or bring the maintainer the numbers to retire the line.
+- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
+  2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
   so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
   nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
@@ -1023,6 +1020,11 @@ this document under its size limit.
 
 The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
 review, again to keep this document under its size limit.
+
+**Closed 2026-09-26 (plan 70, helper C's landing):**
+
+- ★ `[KB]` **A network troubleshooting tip could fire on ordinary words starting with "lan"** — **DONE,
+  fixed 2026-09-26.** [Detail](roadmap-details.md#lan-word-boundary-fix).
 
 **Closed 2026-09-25 (plan 68 Deck pass):**
 

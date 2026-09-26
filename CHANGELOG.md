@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **A stray question like "what time is it" could still get a troubleshooting tip:** the tip floor's
+  own cut-off sat exactly on the score of the worst junk phrase it was built to catch, instead of just
+  above it, so that one phrase could still slip a tip in. The cut-off now sits just above it, and no
+  real tip's score is anywhere close, so no real tip is lost. `knowledge_base_service.py`. On-Deck check
+  owed.
+- **A network troubleshooting tip could fire on ordinary words like "land":** the network topic's "lan"
+  rule matched inside any longer word starting with those three letters, so a Paper Mario question
+  ending "right before they land" got a networking tip stapled on for no reason. The rule now needs a
+  clean word boundary, so it still catches "lan party" but leaves everyday words alone.
+  `compat_topic_router.py`.
 - **A chat no longer sums itself up again right after a stopped question:** a stopped answer is
   skipped when the chat's memory is built, but was still counted as "left behind," which is read as
   the chat having outgrown its room — so the very next question summed the whole chat up again just

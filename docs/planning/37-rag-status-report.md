@@ -66,6 +66,8 @@ was meant to have an answer now has one.
 | 7 Sep | ★★★ | Corpus release `2026.09.07` published (293 notes, 156 tips) | Nothing yet on the Deck — the release is live on both channels but the maintainer's device still runs the 6 September build |
 | 15 Sep | ★★ | The spoiler box now opens on a game known only by name and on a name-first boss question, and the prompt matches the risk chip for a game named in the question | Fewer harmless boss tips hidden behind a box, and no more chip saying low over a fenced answer |
 | 17 Sep | ★★ | The "From the notes" block, landed as two commits | A line under a finished Strategy or troubleshooting reply now names the note or tip it used and where it came from, and opens to show its own words; nothing shows when nothing was attached |
+| 26 Sep | ★★ | 107 more blind test questions: 20 games that had none get 4 each, Brotato/Palworld/Skyrim get 7 each, and Cyberpunk/Fallout 4/Red Dead 2 each get 2 "where do I start" questions — every game in the library now has blind questions | Nothing a person sees yet: 27 of the 107 wait on their notes and a labeller before they count toward any score |
+| 26 Sep | ★ | The troubleshooting tip floor's cut-off moved from sitting exactly on the worst junk phrase's score to just above it, so that phrase stops getting a tip; the weakest real tip still clears it with room to spare | A stray sentence with nothing to do with the game (like "what time is it") stops getting a troubleshooting tip it has no business getting; Deck check owed |
 
 Chip work that touches the knowledge base also shipped in this window: corpus chips no longer vanish
 after 21 seconds, the rotation no longer favours the top three, and the pinned test-chip batches exist
@@ -108,7 +110,9 @@ top three 20 times.
 rules, 6 reached the tips before this wave's tip rewrite and 8 after. The tips themselves are much deeper
 now — crash went from 2 to 9, sound 1 to 8, picture 1 to 8, performance 2 to 10, controller 6 to 10.
 **Since then, both the tip search and the note search gained a floor**, so each can say "none of these
-fit" when its best match is too weak to trust, rather than attaching something wrong.
+fit" when its best match is too weak to trust, rather than attaching something wrong. **Fixed 2026-09-26:**
+the tip floor's own cut-off sat exactly on the score of the worst junk phrase it was meant to catch, so
+that one phrase still got through; moved just above it, with no real tip lost. Deck check owed.
 
 **The Deck.** The note search has kept getting slower since August — the same three questions took 793 to
 900 milliseconds in August and 1.1 to 1.2 seconds in early September, about thirty per cent slower — and

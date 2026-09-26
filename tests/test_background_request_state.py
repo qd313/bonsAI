@@ -48,6 +48,9 @@ EXPECTED_KEYS = {
     "reasoning_tokens",
     # Plan 58 phase 1: the notes the search attached to this turn, in their own words.
     "kb_attached_notes",
+    # Plan 68 step 4: "ask" for an ordinary question, "sum_up" for the Session tab's own
+    # *Sum up this chat* button running as a job of its own through the same slot.
+    "kind",
 }
 
 
@@ -81,6 +84,7 @@ class TestBackgroundStateShape(unittest.TestCase):
         self.assertEqual(state["reasoning_text"], "")
         self.assertEqual(state["reasoning_tokens"], 0)
         self.assertEqual(state["kb_attached_notes"], [])
+        self.assertEqual(state["kind"], "ask")
 
     def test_every_constructor_agrees_on_the_key_set(self):
         """The regression this module exists to prevent.
@@ -172,6 +176,22 @@ class TestPendingState(unittest.TestCase):
         self.assertIsNone(state["partial_response"])
         self.assertIs(state["streaming"], False)
         self.assertIsNone(state["thinking_summary"])
+
+    def test_pending_kind_defaults_to_ask(self):
+        """An ordinary Ask never names a kind -- it must still say "ask", the same default the
+        idle state carries, so every existing call site keeps saying so for free."""
+        state = pending_background_state(
+            request_id=1, question="q", app_id="", app_context="none", started_at=0.0
+        )
+        self.assertEqual(state["kind"], "ask")
+
+    def test_pending_kind_can_be_overridden(self):
+        """The Session tab's own *Sum up this chat* button (plan 68 step 4) is the one caller
+        that passes something other than the default."""
+        state = pending_background_state(
+            request_id=1, question="", app_id="", app_context="none", started_at=0.0, kind="sum_up"
+        )
+        self.assertEqual(state["kind"], "sum_up")
 
 
 class TestCompletedLocalCommandState(unittest.TestCase):

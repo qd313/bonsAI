@@ -157,6 +157,35 @@ class AbortBusyGateTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.plugin._background_state.get("status"), "cancelled")
         self.assertEqual(self.plugin._background_state.get("response"), "Half an answer")
 
+    async def test_an_ordinary_asks_pending_and_completed_status_both_say_kind_ask(self) -> None:
+        """Plan 68 step 4: every existing Ask must keep reading "ask" once the button's own
+        "sum_up" jobs start sharing this same state shape -- proven both at accept (pending) and
+        once `_run_background_request`'s terminal write has spread the pending state through."""
+        from backend.services.background_request_state import pending_background_state
+
+        request_id = 71
+        pending = pending_background_state(
+            request_id=request_id,
+            question="how do I beat this boss",
+            app_id="",
+            app_context="none",
+            started_at=0.0,
+        )
+        self.assertEqual(pending["kind"], "ask")
+        self.plugin._background_state = pending
+        self.plugin._reset_partial_stream_snapshot(request_id)
+
+        async def _fake_execute(*_args, **_kwargs):
+            return {"success": True, "response": "done", "elapsed_seconds": 0.01}
+
+        with patch.object(Plugin, "_execute_game_ai_request", _fake_execute):
+            await self.plugin._run_background_request(
+                request_id, "how do I beat this boss", "127.0.0.1:11434", "", ""
+            )
+
+        self.assertEqual(self.plugin._background_state.get("status"), "completed")
+        self.assertEqual(self.plugin._background_state.get("kind"), "ask")
+
     async def test_cancelled_text_falls_back_when_only_markup_debris_arrived(self) -> None:
         """Stop on the first frame must not show a stray bracket as the answer."""
         request_id = 9

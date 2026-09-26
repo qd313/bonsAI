@@ -68,6 +68,12 @@ def new_background_state() -> dict[str, Any]:
         # anything the model wrote. Empty on every turn with nothing attached. Defaulted here so
         # a poll response always carries the key, matching the live snapshot's own field below.
         "kb_attached_notes": [],
+        # Plan 68 step 4: which kind of background request this is -- an ordinary Ask, or the
+        # Session tab's own *Sum up this chat* button running as a job of its own through the
+        # same one-at-a-time slot. "ask" by default so every existing pending and terminal state
+        # keeps saying so without every one of their call sites having to name it. The button's
+        # own accept path is the only place that ever passes "sum_up" -- see chat_sum_up_job.py.
+        "kind": "ask",
     }
 
 
@@ -81,8 +87,10 @@ def pending_background_state(
     response: str = "Thinking...",
     chat_slot_id: Optional[str] = None,
     app_name: str = "",
+    kind: str = "ask",
 ) -> dict[str, Any]:
-    """State published when an Ask is admitted and a background task is about to run."""
+    """State published when an Ask -- or, since plan 68 step 4, the *Sum up this chat* button
+    running as a job of its own -- is admitted and a background task is about to run."""
     state = new_background_state()
     state.update(
         {
@@ -95,6 +103,7 @@ def pending_background_state(
             "response": response,
             "started_at": started_at,
             "chat_slot_id": chat_slot_id,
+            "kind": kind,
         }
     )
     return state

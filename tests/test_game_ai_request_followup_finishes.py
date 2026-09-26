@@ -11,25 +11,17 @@ question_for_model -- the first positional argument, not a kwarg.
 
 import asyncio
 import os
-import sys
-import types
 import unittest
 from unittest.mock import patch
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 
-from backend.services import kb_followup_memory
-from backend.services.game_ai_request import run_game_ai_request
-from backend.services.knowledge_base_service import KnowledgeRetrievalResult
+install_fcntl_and_decky_stubs()
+install_pwd_stub()
+
+from backend.services import kb_followup_memory  # noqa: E402
+from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 
 _DRG_APP_ID = "548430"
 _DRG_APP_NAME = "Deep Rock Galactic: Survivor"

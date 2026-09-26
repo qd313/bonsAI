@@ -431,3 +431,31 @@ testing-manual.md. Found by the planning-folder review
   Hollow Knight follow-up about a second Hornet fight said the notes don't mention one, true of the notes
   rather than the game. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
 
+### Plan 70 flow L3 + 2d (2026-09-26)
+
+- [x] **THINKING-SPOILER-01** (name rule) The model's own thinking never shows a protected name in plain
+  words. **PASS (Deck) 2026-09-26, closed:** across 6 fresh described-boss tries, no protected name showed
+  anywhere in the live thinking line or the saved reasoning, live or opened; "[hidden]" appeared in all
+  six. The separate backtick question (single inline marks around a quoted tag or note title, seen in 3 of
+  6) is not part of this row — folded into the "live thinking line shows the model's own rule checklist"
+  idea on the roadmap instead. Evidence `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
+- [x] **NO-CLOSE-MATCH-HK-02 re-check** The suggestion menu under an answer cannot name a protected boss.
+  **PASS (Deck) 2026-09-26, closed:** the same Hollow Knight spell-casting-boss question came back with a
+  correctly covered answer, and the menu underneath read "Are you currently facing the boss boss?" with
+  no protected name and no backticks. Side finding, being fixed: the stand-in phrase doubled into "the
+  boss boss". Evidence `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02-try2.json`.
+- [x] **RING-ON-FILTER-2c2** The AI models screen opens the same way from both buttons. **PASS (Deck)
+  2026-09-26:** three opens through "Manage AI models…" and one through "Browse models…" all landed on
+  "Advanced ›" with the Filters panel closed. Evidence `docs/test-evidence/plan70-RING-ON-FILTER-2c2.json`.
+- [x] **HUB-EDGE-02** With the Filters panel open, Down reaches Done. **PASS (Deck) 2026-09-26:** 28
+  presses down then up, every stop visible, no cycling; Down from "Close filters" now goes straight to
+  Done. Saved walk `checks/plan70-HUB-EDGE-02.json`. Evidence `docs/test-evidence/plan70-HUB-EDGE-02.json`.
+- [x] **ROUTING-MERGE-SIZE-02** An installed model's size comes from the Deck's own Ollama first. **PASS
+  (Deck) 2026-09-26:** across four opens, the header settled on "Installed 2 · 4.3 GB" once live sizes
+  loaded and stayed there, matching Ollama's own reported sizes. Small note: for the first ~2 seconds of
+  every open, before live sizes arrive, the note-search model still shows "?" — too brief to count against
+  the row. Evidence `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-02.json` (+ screenshot).
+- [x] **VAC-06** The ban lookup's "turned off" message names the switch the way the screen does. **PASS
+  (Deck) 2026-09-26:** with the permission off, the reply named "Permissions → Steam ban lookup", the same
+  words as the switch's own label. Evidence `docs/test-evidence/plan70-VAC-06.json`.
+

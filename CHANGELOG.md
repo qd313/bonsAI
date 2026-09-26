@@ -421,6 +421,21 @@ All notable changes to this project are documented in this file.
   the filter choices used to stop dead at "Close filters" and go no further, even with Done sitting right
   below it on screen. That button now hands the next press on instead of swallowing it forever, the same
   way the model list's own last row already did. `PullModelsModal.tsx`. On-Deck check owed.
+- **The waiting line and Show details no longer quote a hidden follow-up reminder instead of your own
+  question:** from the third question in a chat on, "Model's warming up for…" and the saved question in
+  Show details used to show the reminder text sent to the model behind the scenes rather than what was
+  actually typed. Both now show your own words; the model still gets the reminder it needs to answer
+  well. `game_ai_request.py`, `ollama_ask_service.py`. On-Deck check owed.
+- **The ring stays on the question's own Retry icon once its answer finishes, instead of vanishing:**
+  when an answer finished, the question row it belonged to was swapped for its saved copy, and nothing
+  told the ring to follow along, so it dropped and the screen slid down to the end of the answer. The
+  ring now moves to the same spot on the saved version. `useLiveTurnHeaderRingRestore.ts`. On-Deck check
+  owed.
+- **A preset suggestion chip no longer loses the ring when its question changes underneath it:** in the
+  fade and static chip styles, the chip holding the ring used to be replaced by a new one every time its
+  question changed, taking the ring with it into nothing. The chip now keeps its own place and only its
+  words change, the same way the decode style already worked; a chip holding the ring also waits to fade
+  until the ring has moved on. `MainTabPresetAnimatedChips.tsx`. On-Deck check owed.
 
 ### Added
 - **A knowledge-base question asked a while after the last one no longer pays extra time to search:** the

@@ -81,20 +81,27 @@ starts work outside this.
   keyboard on the question box — worth trying on this hidden-block case too.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, sighted three
   more times.** Row **REPLY-STOPS-MIRROR-01**. [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **The ring is dropped again when an answer finishes** — **OPEN, FAILED 2026-09-26, being
-  fixed (F2).** Row **QA-FREE-PLAY-01**. [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **OPEN, found
-  2026-09-26, being fixed (F2), fade and static only.** [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, found
-  2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **The ring is dropped again when an answer finishes** — **VERIFY, fixed 2026-09-26 (F2,
+  `f87a962c`), not a regression.** Row **QA-FREE-PLAY-01** re-check. [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **VERIFY, fixed
+  2026-09-26 (F2, `42d6eb48`), fade and static only.** Row **PRESET-ONE-LINE-03** re-check.
+  [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, not fixed,
+  needs one more reading.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[layout]` **The decode chip's typing caret is pale, not the accent green** — **OPEN, FAILED
-  2026-09-26, not fixed this wave.** Row **PRESET-STREAM-ANIM-01**. [Detail](roadmap-details.md#flow-2b-bugs).
+  2026-09-26.** Row **PRESET-STREAM-ANIM-01**. [Detail](roadmap-details.md#flow-2b-bugs).
 - ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
-  question** — **OPEN, found 2026-09-26, being fixed (K), a regression.** [Detail](roadmap-details.md#flow-2b-bugs).
+  question** — **VERIFY, fixed 2026-09-26 (helper K, commit `5fe0800a`).** Deck check owed: row
+  **KB-FOLLOWUP-QUOTE-01**. [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **D-pad Left on the chat row leaves the plugin for Steam's side rail** — **OPEN, measured
   2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **OPEN, FAILED 2026-09-26, being
+  fixed (F2).** Row **PERMS-CLEAN-06**. [Detail](roadmap-details.md#l3-and-2d-findings)
+- ★ `[reply]` `[focus]` **Three more sightings, 2026-09-26, not reproduced on purpose yet:** the
+  "Was this helpful?" row goes missing after a reload; the chip ladder only lets Up leave one chip at a
+  time; two confidently wrong answers. [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -140,11 +147,6 @@ starts work outside this.
   in flight, instead of staying disabled forever after a model's first answer. Evidence
   `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`. **Deck check owed:** row **PRELOAD-RM-01** in
   [testing.md](testing.md).
-- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper I, commit `86a148a7`).** An already-installed model's size now comes from
-  the Deck's own Ollama first; the online library is only asked about a model not yet installed. **Deck
-  re-check owed:** row **ROUTING-MERGE-SIZE-02** in [testing.md](testing.md), replacing
-  **ROUTING-MERGE-SIZE-01**. [Detail](roadmap-details.md#model-size-fix-and-re-check).
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
@@ -233,14 +235,6 @@ starts work outside this.
   the tabs row straight to the notes block, 3 of 3 tries. With details closed, Up from there skips the
   choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
   visible area, with the panel half blank.
-- ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
-  already sitting on a filter** — **VERIFY, fixed 2026-09-26 (helper I, `3ac00226`).** A leftover
-  shortcut forced the panel open on one route; both routes now open alike. **Deck re-check owed:** row
-  **RING-ON-FILTER-2c2**. [Detail](roadmap-details.md#filters-panel-focus-bugs).
-- ★★ `[ollama]` `[focus]` **With the AI models screen's Filters panel open, the D-pad cannot reach Done or
-  the model list below it** — **VERIFY, fixed 2026-09-26 (helper I, `6355eb9a`).** "Close filters" now
-  hands the Down press back instead of claiming it forever. **Deck re-check owed:** row **HUB-EDGE-02**.
-  [Detail](roadmap-details.md#filters-panel-focus-bugs).
 - ★ `[ollama]` **"Reset to defaults" in the try-order picker saves an explicit list where there used to be
   none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
   writes an explicit list instead. Same order shown, a paper difference today. Evidence
@@ -268,7 +262,12 @@ starts work outside this.
   found from the maintainer's own screenshot 2026-09-26.** Lines like "Direct and concise? Yes" show while
   a reply is written — the model checking its own rules out loud, re-sent and re-checked every question.
   Noise to a person, and Deck time for no benefit they see. Screenshot
-  `docs/test-evidence/plan70-THINKING-CHECKLIST.png`. [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
+  `docs/test-evidence/plan70-THINKING-CHECKLIST.png`. **Same family, seen again 2026-09-26 (flow L3):**
+  single inline backtick marks around a quoted tag or a note title showed in the thinking line in 3 of 6
+  tries (row THINKING-SPOILER-01's own re-check) — not a spoiler leak, since nothing protected is named,
+  just more of the model quoting its own instructions back at itself. Evidence
+  `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
+  [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
   Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
@@ -283,15 +282,18 @@ starts work outside this.
   maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots). **Sighting
   2026-09-26:** ring stuck in the question box after an answer finished, no evidence file — reported by
   the Deck helper. **Seen again 2026-09-26 (plan 70 flows 1+2a), twice more:** the ring sat in the question
-  box on its own after an answer, with nobody pressing anything.
+  box on its own after an answer, with nobody pressing anything. **Seen again 2026-09-26 (plan 70, flows
+  L3 + 2d), a related shape:** right after pressing Ask, the ring moved onto the question box on its own
+  while the answer was still streaming in — an A there would have opened the on-screen keyboard instead
+  of doing nothing.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **VERIFY, fixed 2026-09-26 (helper A, `59bb4dd6`).** The live-leak cause: a spoiler cover the model
-  glued straight onto the sentence before it, with no line break, was not recognised as a real cover.
-  **Deck re-check owed:** row **SPOILER-COVER-01**. [Detail](roadmap-details.md#spoiler-leak-family).
+  **OPEN, FAILED again on the Deck 2026-09-26 (plan 70, flow L3), escalated to the stronger model
+  (helper A2).** The 2026-09-26 fix did not hold on a second try. Row **SPOILER-COVER-01**.
+  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **VERIFY, fixed
   2026-09-26 (helper A, `4b975316`).** Thinking is drawn as plain text, so a protected name there was
   never covered by the answer's own spoiler fence. **Deck re-check owed:** row **THINKING-SPOILER-01**.
@@ -566,11 +568,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   unconfirmed either way. Not fixed for this half yet. **Retired 2026-09-25 (plan 68):** the Clear button
   itself is gone, replaced by "Sum up this chat," so this box and its "where you land" bug can no longer be
   reproduced as written. The button was replaced, not fixed.
-- ★ `[perms]` **The ban lookup's "turned off" message names the switch the way the screen does** — **VERIFY,
-  fixed in `ec6f87ab` on 2026-09-23, after that night's last deploy.** With the permission off it said "Enable
-  Permissions → Steam Web API", but the switch is labelled "Steam ban lookup"; it now says that. The four ban
-  lookup checks passed the same night on the old wording. Owed: VAC-06 once more on a build that has the fix.
-  Found 2026-09-24; until then this was written only in plan 64's report.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **VERIFY, fixed
   2026-09-24 (`341841d3`).** The plugin waited for a full 4 KB before passing on any of the model's words;
   with a game running that meant lumps of about 115 letters every 1.5–2 seconds. It now passes on whatever
@@ -1019,6 +1016,22 @@ review, again to keep this document under its size limit.
   boss."** [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
 - ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **DONE, fixed 2026-09-26 (helper J),
   passed on the Deck 2026-09-26.** [Detail](roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
+
+**Closed 2026-09-26 (plan 70, flow L3, third Deck pass):**
+
+- ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
+  already sitting on a filter** — **DONE, fixed 2026-09-26 (helper I, `3ac00226`), passed on the Deck
+  2026-09-26.** Row **RING-ON-FILTER-2c2**. [Detail](roadmap-details.md#filters-panel-focus-bugs).
+- ★★ `[ollama]` `[focus]` **With the AI models screen's Filters panel open, the D-pad cannot reach Done or
+  the model list below it** — **DONE, fixed 2026-09-26 (helper I, `6355eb9a`), passed on the Deck
+  2026-09-26.** Row **HUB-EDGE-02**. [Detail](roadmap-details.md#filters-panel-focus-bugs).
+- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **DONE, fixed
+  2026-09-26 (helper I, `86a148a7`), passed on the Deck 2026-09-26.** Row **ROUTING-MERGE-SIZE-02**.
+  [Detail](roadmap-details.md#model-size-fix-and-re-check).
+- ★ `[perms]` **The ban lookup's "turned off" message names the switch the way the screen does** —
+  **DONE, fixed in `ec6f87ab` on 2026-09-23, passed on the Deck 2026-09-26.** Row **VAC-06**: the reply
+  named "Permissions → Steam ban lookup", the same words as the switch's own label. Evidence
+  `docs/test-evidence/plan70-VAC-06.json`.
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 

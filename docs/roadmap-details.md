@@ -1250,6 +1250,20 @@ line-start fix on purpose: 4 named tests failed as expected, restored afterward.
 the same live-answer setup — the teleporting-boss question again, watching the reply while it is still
 arriving for a plain name or raw fence text before the cover forms.
 
+**FAILED again on the Deck 2026-09-26 (plan 70, flow L3), the fix did not hold, escalated to the
+stronger model (helper A2).** Six fresh questions, watched live every 250 ms. Finished answers are still
+correct: 4 of 6 never named a boss at all, and 2 of 6 did — both fully covered once finished. But of
+those two, both leaked while streaming. HK-A ("the teleporting boss that throws orbs in the sanctum"):
+"When fighting the Soul Master, the key is timing your attacks around his movement" was readable in
+plain text from 26.3 s to about 32.0 s (about 6 s), with "Code block incoming…" showing below it the
+whole time. HK-MENU ("the spell casting boss at the top of the sanctum"): the opening spoiler fence
+showed a garbled repeat of its own first sentence in plain text for about 9 s, and a second fence near
+the end of the answer showed raw "```bonsai-spoiler" for about 3.3 s before its own content ("Hitting him
+from below while he conjures orbs…") streamed in plain for a few more seconds. Pattern: a spoiler fence
+placed at the very start of the answer (or a second one near the end) streams its own content uncovered
+until the whole answer finishes, even with the line-start fix in place. Evidence
+`docs/test-evidence/plan70-SPOILER-COVER-01-try2.json` (+ screenshot).
+
 **The model's own thinking can leak the same way, fixed 2026-09-26 (plan 70, helper A, commit
 `4b975316`).** Measured live on the Deck (THINKING-SPOILER-01): the live thinking line, and the saved
 reasoning shown in the fold afterwards, both named a protected boss in plain words in 4 of 6 tries, plus
@@ -1261,6 +1275,15 @@ saved reasoning shown in the fold and the "Show details" panel. Proved by breaki
 purpose: 3 named tests failed as expected, restored afterward. **Deck re-check owed:** the same 6-try
 described-boss setup — no protected name in plain words in the live thinking line or the saved reasoning
 fold, and no raw fence marker text.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L3), name rule, closed.** Across six fresh described-boss
+tries, no protected name showed in plain words anywhere in the live thinking line or the saved reasoning,
+live or opened; "[hidden]" appeared in all six. **Not part of this row, folded into the "live thinking
+line shows the model's own rule checklist" idea instead:** single inline backtick marks around a quoted
+tag (like `` `<bonsai-status>` ``) or a note title showed in the live thinking and the opened reasoning in
+3 of 6 tries. These are not a spoiler fence and name nothing protected — the model is quoting its own
+instructions back at itself, the same family of "thinking shows its own rule checklist" already on the
+roadmap, not a new spoiler leak. Evidence `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
 
 **A third leak found 2026-09-26 (plan 70, flow L2): the suggestion menu itself can name a protected
 boss.** Beside the live-text and thinking leaks above, the branch menu's own question line under a
@@ -2064,6 +2087,15 @@ after live sizes load; the header must count it. Row **ROUTING-MERGE-SIZE-02**, 
 **ROUTING-MERGE-SIZE-01** (the Deck result that found this, evidence
 `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`).
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L3), closed.** Across four opens of the AI models screen,
+the header always started at "Installed 2 · 4.3 GB" (offline sizes), then settled on "Live catalog ·
+Live sizes" after 2.1 to 2.4 seconds — the note-search model reading "0.3 GB", the answer model "4.0 GB",
+the header total "4.3 GB", matching Ollama's own reported sizes (4.04 + 0.26 GiB) — and stayed that way.
+Small note, kept open as its own tiny item rather than reopening this bug: for the first ~2 seconds of
+every open, before live sizes arrive, the note-search model still shows "?" under "Offline sizes"; the
+owner judged that short a gap does not count against the row. Evidence
+`docs/test-evidence/plan70-ROUTING-MERGE-SIZE-02.json` (+ screenshot).
+
 ## Filters panel focus bugs
 
 Long version of two roadmap entries. Moved here 2026-09-26 to keep the roadmap under its size limit.
@@ -2090,6 +2122,11 @@ anti-pattern entry for the shape (a route-specific flag pre-opening a sub-panel 
 it before anything was pressed). **Deck re-check owed:** row **RING-ON-FILTER-2c2** — open through both
 "Manage AI models…" and "Browse models…" and confirm both land on "Advanced ›" with the panel closed.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L3), closed.** Three opens through "Manage AI models…"
+and one through "Browse models…" all landed on "Advanced ›" with the Filters panel closed and nothing on
+screen changed underneath (the same "2 on" filters read the same before and after). Evidence
+`docs/test-evidence/plan70-RING-ON-FILTER-2c2.json`.
+
 **Note on B, 2026-09-26:** with the Filters panel open, B does two different things depending on where
 the ring is — on the Filters button, B closes the whole screen; inside the panel, B only folds the panel
 and puts the ring back on the Filters button. Worth knowing when reading any walk through this screen,
@@ -2114,6 +2151,13 @@ Advanced is turned on, which existing tests already pin — a re-check with the 
 becomes a real stop then. Added a matching focus-graph anti-pattern entry. **Deck re-check owed:** row
 **HUB-EDGE-02** — with the Filters panel open, walking Down must reach Done (or the model list) instead
 of stalling at "Close filters".
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L3), closed.** With the Filters panel open, walking Down
+28 presses reached Done cleanly (no longer stuck on "Close filters"), every stop visible, and walking
+back Up returned to the top with no cycling; the model rows themselves are still not on the path while
+the panel stays open, which the row does not require. Walking Up out of the panel still folds it shut by
+itself, unchanged. Saved walk `checks/plan70-HUB-EDGE-02.json`, evidence
+`docs/test-evidence/plan70-HUB-EDGE-02.json`.
 
 ## Flow 2b bugs
 
@@ -2146,16 +2190,41 @@ a second of the finish still kept the ring in place. Row **QA-FREE-PLAY-01** in
 [testing-manual.md](testing-manual.md), evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`
 (+ screenshots).
 
+**Fixed 2026-09-26 (helper F2, commit `f87a962c`), not a regression.** The 2026-09-23 fixes (keeping the
+ring's control in view, handing the ring to the same answer section) only ever covered a ring inside the
+answer. A ring on the question row above it had nothing to bring it back: when the answer finishes, the
+whole "live" turn — Retry icon and question text included — is replaced by a new one under the turn's
+own id, a case those fixes never touched. A small hook beside the answer-section restore now notices
+whether the ring sits on the live question's Retry or its text, and once that element is gone, hands the
+ring to the same stop on the header that now shows the finished turn. Proved by breaking the hand-over on
+purpose: two tests that check the ring reaches the archived question's Retry, and its text, both failed
+as expected, restored after. **Deck re-check owed:** the same setup as before — an answer finishing while
+the ring sits on the question's Retry or text — confirming the ring now stays in view.
+
 **A preset chip loses the ring when its question changes underneath it.** Found on the Deck 2026-09-26
 (plan 70, flow 2b.9), being fixed (helper F2). In the fade and static chip styles, when the single chip
 swaps to a new question while it holds the ring, the ring is lost outright — nothing on the panel is
 focused afterward. The decode style and the two-chip layout do not have this problem; the chip keeps the
 ring through the swap there. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots).
 
+**Fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Decode style keeps one button per slot and only
+changes its words; fade and static instead keyed the button by its own question text, so every swap
+destroyed the button under the ring and put a new, unfocused one in its place. Fade had a second trap: a
+chip fading out stops being a focus stop at all, so even a kept button would have lost the ring at the
+start of each fade. Both styles now keep one button per slot like decode; in fade, a chip holding the
+ring holds off starting its own fade until the ring has moved on. Proved by breaking each fix in turn:
+static keyed-by-text again fails its own test; the fade hold switched off fails its test; a third test
+confirms the hold does let go once the ring actually leaves. **Sighting, same Deck pass:** in fade style,
+walking Up from the question box can skip a chip that is mid-fade. **Deck re-check owed:** row
+**PRESET-ONE-LINE-03** re-check — hold the ring on a fade or static chip through a question swap and
+confirm it stays.
+
 **In carousel style, Down from "Save chat to Desktop" can land on a chip slid mostly off screen.** Found
 on the Deck 2026-09-26 (plan 70, flow 2b.9). The ring landed on a chip showing only about 4% of itself at
 the left edge, with the fully visible chip beside it holding no ring; Right moved the ring onto the
-visible chip. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot).
+visible chip. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot). **Not fixed
+this wave — helper F2's guess:** Steam may be ignoring a chip's own change to "focusable" after it first
+appears on screen. Needs one more Deck reading (flow L4.2) before a fix is attempted.
 
 **The decode chip's typing caret is pale, not the accent green.** FAILED on the Deck 2026-09-26 (plan 70,
 flow 2b.10), not fixed this wave. The caret is there and moves left to right correctly; its colour
@@ -2172,6 +2241,15 @@ system reminder, not something the…'" — the hidden reminder text the follow-
 not what the player typed. The second question in the same chat still showed the question correctly.
 Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`.
 
+**Fixed 2026-09-26 (helper K, commit `5fe0800a`).** The model still gets the reminder it needs — only
+what gets shown back to a person changed. The saved `text_after_sanitizer` field (feeding Show details
+and the desktop trace log) now uses the same clean text the search already worked from; every live
+progress line and the live spoiler-cover check now read a new, clean `question_for_display` value instead
+of the reminder-laden one. The saved turn header and the "first line quotes your question" opener were
+checked too and never saw the reminder, so nothing there needed changing. Tests prove the exact reported
+shape reaches the waiting line clean while the model still receives the reminder. **Deck check owed:**
+row **KB-FOLLOWUP-QUOTE-01** — the same third-question setup, watching the waiting line and Show details.
+
 **D-pad Left on the chat row leaves the plugin for Steam's side rail.** Found and measured on the Deck
 2026-09-26 (plan 70, flow 2b.12). From the first chat, a middle one, or the [+] button, Left moves the
 ring off the chat row entirely, onto Steam's own Quick Access side rail (the Decky icon) — from a middle
@@ -2184,4 +2262,33 @@ on purpose:** the newest answer's turn folded shut by itself after switching tab
 pressing Clear, nothing held the ring afterward; after picking a new character Accent, the ring landed on
 "Show Developer tab" and the first LB press did not switch tabs. Recorded to check for a pattern next
 time, not measured closely enough yet to fix.
+
+## L3 and 2d findings
+
+Long version of four roadmap entries found during plan 70's flow L3 + 2d Deck pass (2026-09-26). Moved
+here to keep the roadmap under its size limit.
+
+**The troubleshooting hint's Dismiss button cannot be reached by D-pad.** FAILED on the Deck 2026-09-26
+(plan 70, flow 2d.3), being fixed (helper F2). With all four permission switches off, a troubleshooting
+question showed the hint with its "Open Permissions" and "Dismiss" buttons, but Dismiss could not be
+reached: Right from "Open Permissions" did nothing, tried twice, and Up/Down from elsewhere skip the hint
+row entirely — only Down from Show details reaches "Open Permissions" itself. Walking Up from the
+suggestion chip also skips "Open Permissions"; the same fix should cover both. Row **PERMS-CLEAN-06**.
+Evidence `docs/test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot
+`-hint-dismiss-unreachable.png`).
+
+**After a plugin reload, older answers lose their "Was this helpful?" row, leaving just the speaker
+icon.** Sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
+before a reload. Not yet reproduced on purpose. Evidence `docs/test-evidence/plan70-READ-ALOUD-02-06.json`.
+
+**In Show details, the chip ladder only lets Up leave one chip at a time.** Sighted on the Deck
+2026-09-26 (plan 70, flow L3/2d). Not yet reproduced on purpose; worth checking against the chip-ladder
+bugs already on the roadmap (the ones about the chip row and its counter sitting above the visible area).
+
+**Two confidently wrong answers, 2026-09-26.** Not yet reproduced on purpose. A Hades question answered
+about "heat management", a mechanic Hades does not have. Separately, asked in Hollow Knight which boss
+"waits past the crystal spike area", the model said it had no information on a boss with that name —
+reading the description as if it were meant to be a literal title, when the very same area is correctly
+answered (naming Soul Master) when asked a different way in the same session. Evidence
+`docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`.
 

@@ -83,7 +83,12 @@ on that new bug. **Still owed:** the touch-screen half, which needs a person, no
 fresh tries, nobody held the ring once the answer finished, and within about 3 seconds the view slid to
 the end of the text, leaving the control the ring had been on 196 to 356 px above what was visible. Only
 a Down pressed within about half a second of the finish kept the ring on its control, in view, as before.
-Being fixed (helper F2). Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json` (+ screenshots).
+Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json` (+ screenshots).
+
+**Fixed 2026-09-26 (helper F2, commit `f87a962c`), not a regression** — a case the 2026-09-23 fix never
+covered (a ring on the question row itself, not inside the answer). The ring is now handed to the same
+stop on the header once the live question is replaced by its finished copy. **Deck re-check owed:** the
+same setup, ring on the question's Retry or its text when the answer finishes.
 
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
@@ -200,7 +205,7 @@ right toggle — see PERM-JUMP-01 below for the timing. History (the 2026-09-03 
 2026-09-16 wrong-row failure):
 [testing-manual-history-2026.md § SMOKE-C](archive/testing-manual-history-2026.md#smoke-c).
 
-- [ ] Turn a capability **off** → blocked action → **Open Permissions** (or troubleshooting hint button) → lands on matching toggle → **Back to …** returns → no crash
+- [x] Turn a capability **off** → blocked action → **Open Permissions** (or troubleshooting hint button) → lands on matching toggle → **Back to …** returns → no crash. **PASS (Deck) 2026-09-26 (plan 70, flow 2d.2), reworded:** with Steam ban lookup off, `bonsai:vac-check` was denied at once with no model call (confirmed by Ollama's own last-use times, unchanged); "Open Permissions" landed on the right switch both times it was tried (from the deny row and from the troubleshooting hint); the page has no plain "Back to …" button that returns from the Permissions tab — the working return is walking up to "Back to Main" and pressing A, which comes back to Main cleanly with the ring on "Open Permissions" and the panel never closing. A bare B press only moves the ring to the tab bar; it does not return by itself. Evidence `docs/test-evidence/plan70-SMOKE-C.json`.
 - [ ] Re-enable before Tier 1
 
 ### PERM-JUMP-01 — Permission jump D-pad (P0)
@@ -378,7 +383,7 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 | **Context ladder / micro-actions** | CONTEXT-LADDER-01…03; MICRO-01…05 (open bugs) |
 | **D-pad scroll / tabs** | D-PAD-SCROLL-02 (choppy Strategy scroll bug); TAB-SWITCH-01 (LB/RB strip shuffle) |
 | **Data clear** | DATA-CLEAR-01 (permissions/settings wipe survives reopen) |
-| **Reply language** | LANG-01…03 (**LANG-01** Follow system on load — code fix Jul 2026; on-Deck confirm) |
+| **Reply language** | LANG-01…03 (**LANG-01** Follow system on load — passed (Deck) 2026-09-26; LANG-02/03 still owed) |
 
 ### VAC / `bonsai:vac-check`
 
@@ -421,35 +426,25 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     launch tool can search, so it could not be started. Someone needs to play it once by hand first, or the
     launch tool needs to reach the full Library grid. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
-- [ ] **SPOILER-COVER-01** Fixed in code 2026-09-26 (plan 70, helper A), Deck re-check owed. On Hollow Knight, a
-  story-protected game, describe a boss without naming it ("the boss past the crystal spike area") — a
-  sentence naming it must sit in a spoiler box, both while the reply arrives and once it finishes. Ask the
-  same thing but name the boss yourself — the reply stays plain. On Deep Rock Galactic: Survivor, the same
-  kind of question never shows a spoiler box at all. Known gap, not testable by this row: a spoiler that
-  never uses a note's own name at all (a paraphrase) is not caught. **FAILED (Deck) 2026-09-26 (plan 70,
-  flow L1):** finished answers passed in full. But one live answer showed the boss name plain, plus raw
-  spoiler-marker text, for about 4.7 seconds while still streaming, before the finished cover formed
-  correctly. Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`. **Fixed 2026-09-26 (helper A,
-  `59bb4dd6`):** a fence marker glued straight onto running prose now gets its own line, its whole body is
-  held back while still being written, and a half-typed opener is never shown raw. **Deck re-check owed:**
-  the same teleporting-boss question again, watching the live answer for a plain name or raw fence text
-  before the cover forms.
-- [ ] **THINKING-SPOILER-01** Fixed in code 2026-09-26 (plan 70, helper A, `4b975316`), Deck re-check owed.
-  **FAILED (Deck) 2026-09-26 (plan 70, flow L1):** across 6 described-boss tries (Hollow Knight and Hades),
-  the live thinking line and the saved reasoning fold showed a protected name in plain words in 4 of 6
-  tries, and raw spoiler-fence marker text in 2 tries. Evidence
-  `docs/test-evidence/plan70-THINKING-SPOILER-01.json`. **Fixed:** the sentence naming a protected thing in
-  the model's own thinking is now blanked to "[hidden]", live and in the saved reasoning fold, and any raw
-  fence marker is stripped on sight. **Deck re-check owed:** the same 6-try described-boss setup, no
-  protected name or raw marker text in the thinking line or its saved fold.
-- [ ] **NO-CLOSE-MATCH-HK-02 re-check** Fixed in code 2026-09-26 (plan 70, helper A, `7c93d5e8`), Deck
-  re-check owed. **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** Hollow Knight's spell-casting-boss
-  question got a correctly covered answer, but the suggestion menu underneath read "Are you currently
-  struggling with the Soul Master's movement or damage output?" in plain view. Evidence
-  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`. **Fixed:** a protected name inside the menu's
-  question or a button's own label is now swapped for "this boss" (or "the boss") whenever a cover is
-  owed. **Deck re-check owed:** the same question again, watching the menu's own text as well as the
-  answer.
+- [ ] **SPOILER-COVER-01** FAILED again (Deck) 2026-09-26 (plan 70, flow L3), escalated to the stronger
+  model (helper A2). On Hollow Knight, a story-protected game, describe a boss without naming it ("the
+  boss past the crystal spike area") — a sentence naming it must sit in a spoiler box, both while the
+  reply arrives and once it finishes. Ask the same thing but name the boss yourself — the reply stays
+  plain. On Deep Rock Galactic: Survivor, the same kind of question never shows a spoiler box at all.
+  Known gap, not testable by this row: a spoiler that never uses a note's own name at all (a paraphrase)
+  is not caught. **FAILED (Deck) 2026-09-26 (plan 70, flow L1):** finished answers passed in full. But
+  one live answer showed the boss name plain, plus raw spoiler-marker text, for about 4.7 seconds while
+  still streaming, before the finished cover formed correctly. Evidence
+  `docs/test-evidence/plan70-SPOILER-COVER-01.json`. **Fixed 2026-09-26 (helper A, `59bb4dd6`):** a fence
+  marker glued straight onto running prose now gets its own line, its whole body is held back while
+  still being written, and a half-typed opener is never shown raw. **FAILED again (Deck) 2026-09-26 (flow
+  L3), the fix did not hold:** six fresh questions watched live — finished answers stayed correct, but of
+  the two that named a boss, both leaked while streaming: one name readable in plain text for about 6
+  seconds, and in a second answer a raw fence marker readable for about 3.3 seconds plus a garbled repeat
+  of the opening sentence in plain text for about 9 seconds. A spoiler fence placed at the very start or
+  near the end of an answer still streams its own content uncovered until the answer finishes. Escalated
+  to the stronger model (helper A2). Evidence `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`
+  (+ screenshot).
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
@@ -481,7 +476,6 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 - [ ] **KB-NOMIC-OFFER-01** Built 2026-09-26 (plan 70, helper D), Deck check owed, flow R. Remove the library and the meaning-search model (allowed once, D112), install the library from the plugin's own button, then watch for a confirm box asking "Also download the meaning-search model (about 270 MB)? Better note matching." Download must behave like the existing pull button; Update afterwards must not ask again.
 - [ ] **REPLY-VERB-01** Reply style: set **Caveman** → Ask → Input handling shows `Reply style: caveman` and reply is terse; **Balanced** → no `REPLY VERBOSITY` block vs baseline; **Detailed** → paragraphs; with **AI characters** on + Caveman, character voice (not caveman grammar); Strategy + Detailed still ends with `bonsai-strategy-branches`. **Tried 2026-09-26 (plan 70), UNCLEAR:** labels correct in all three modes, Balanced added nothing, Strategy + Detailed kept its branch menu, but the maintainer's AI character was on the whole time, which drops the Caveman instruction by design and left Detailed and Balanced almost the same length — needs a re-run with characters off. Evidence `docs/test-evidence/plan70-REPLY-VERB-01.json`.
 - [ ] **OLLAMA-KEEPALIVE-FOCUS-01** **Keep models loaded** slider thumb: white gpfocus ring vertically centered on the dot (no ~1px high offset). **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** measured, not centred — the ring's own box sits 3.5 css px (4.5 screen px) above the dot's middle, where a pass needs under 1 px; the ring's own right side also reaches about 17 px past the slider card's right edge. ★ layout, not fixed this wave. Evidence `docs/test-evidence/plan70-OLLAMA-KEEPALIVE-FOCUS-01.json` (+ `.png`, cropped `.png`).
-- [ ] **ROUTING-MERGE-SIZE-02** An installed model's size comes from the Deck's own Ollama first; the online library is only asked about a model not yet installed. Fixed 2026-09-26 (plan 70, helper I, `86a148a7`), replacing ROUTING-MERGE-SIZE-01. With the note-search model (or any model outside the built-in list) installed, its size must show a real number, not "?", and stay after live sizes load; the header must count it. Deck check owed.
 - [ ] **ROUTING-FOCUS-01** Try-order modal chrome matches Pull Models / Character picker (deferred bug). **The D-pad half is no longer a question** — it failed on 2026-08-28, see PICKER-REORDER-01
 - [ ] **SOFT-PREDICT-04** Strategy mode, an answer long enough to continue mid-branch (opens a `bonsai-strategy-branches` fence before hitting the length wall): confirm no half-rendered fence or stray JSON appears at any point in the stream, including right at the continue boundary — **BLOCKED 2026-09-18:** the long Hades walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`. **Tried again 2026-09-23, still unclear:** the finished text read clean — no half-rendered fence, no stray JSON, at any point — but the reply stopped on its own at 1,117 tokens against a 2,112-token limit in the log, so it never had to continue and the join point this row actually checks never happened. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04.json`. **Tried a second time 2026-09-23, still unclear, same shape:** a Half-Life 2 walkthrough question asked for a very long answer on purpose; the model still stopped itself at 1,050 tokens, well under the 2,112 limit. Asking for more length does not reach the wall — the row needs another way to bring the limit down rather than the question up. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04-try2.json`.
 - [ ] **EXPERT-CAP-01** Expert-mode Ask with a long answer: it now runs to ~1200 tokens before a soft continue rather than ~800. Expert was silently capped at the Speed budget until 2026-08-15, so a long Expert reply should visibly need fewer `Continuing…` cues than before the fix. **Tried 2026-09-26 (plan 70), inconclusive:** the answer stopped on its own at 326 words, well under where the cap would bite, so this run does not show whether the fix works — needs a question long enough to actually reach the cap. Evidence `docs/test-evidence/plan70-EXPERT-CAP-01.json`.
@@ -544,9 +538,16 @@ everything below assumes it passes. Plan:
   worked the same way. **Fade — FAILED and static — FAILED, same shape:** when the single chip swaps to
   a new question while it holds the ring, the ring is lost — nothing on the panel is focused afterward,
   confirmed twice each with a bare screenshot showing no ring anywhere. Once in fade, Up from the box also
-  skipped the chip entirely and landed on the avatar. Being fixed (helper F2). Evidence
+  skipped the chip entirely and landed on the avatar. Evidence
   `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots), saved walk
   `checks/plan70-PRESET-ONE-LINE-03-decode.json`.
+
+  **Fade and static fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Both styles now keep one button
+  per slot, like decode, and only its words change; a chip holding the ring in fade style also waits to
+  fade out until the ring has moved on. Sighting from the same pass: in fade style, walking Up from the
+  question box can skip a chip that is mid-fade. **Deck re-check owed:** hold the ring on a fade or
+  static chip through a question swap and confirm it stays. The carousel off-screen-chip finding below is
+  not fixed this wave.
 - [ ] **PRESET-ONE-LINE-04** (the scrolling is calm and cheap) With the knowledge base on and a covered game running (Half-Life 2 has
   the longest label, 59 characters): both labels crawl slowly with a fade at the edges, the **Tip** badge stays pinned at the left
   while the text scrolls, and a chip does not rotate away before its label has scrolled through once. Judge the speed by eye — "slow

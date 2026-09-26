@@ -305,6 +305,13 @@ only if the reading with a game running says memory is tight.
   nothing running. Plan 68 added the chat's own game as a fallback. The Deck helper re-checks it after plan
   68's deploy.
 - **The commit-hook bug is being handled by a separate cloud session.** Helpers use the workaround meanwhile.
+- **Claude Code's own automatic permission check refused the test rig's button presses** during plan 68's
+  Deck block on 2026-09-25 (at 22:33, then every time from 23:17), calling them "changing shared resources".
+  If that happens to this session, the automated Deck wave cannot press anything. The session will not work
+  around it or change permission settings on its own; the maintainer decides before "go" whether to allow
+  the rig's press tools.
+- **The pinned test chips are still pinned** from plan 68's block. The maintainer said they will clear them;
+  two owed chip checks wait on that.
 
 ## 9. Found while planning, and logged in the roadmap (2026-09-25)
 
@@ -331,6 +338,10 @@ only if the reading with a game running says memory is tight.
   Palworld were opened once on the Deck — flow 0 reads the Recent Games row to confirm, and whether Skyrim is
   now installed too. Items 3 to 6 accepted, including the follow-up bug (helper K: measure three finishes,
   the maintainer picks). Said "don't go yet".
+- **2026-09-25, 23:28** — Plan 68 finished its Deck block and released the lock: chats restored, no game
+  running, the latest build deployed. It reported two things: answers are sometimes saved with doubled spoiler
+  markers (now in helper A's brief), and Claude Code's permission check refused its rig presses as "changing
+  shared resources" — a blocker for this plan's Deck wave until the maintainer decides (§ 8).
 
 ## 11. Report
 
@@ -345,7 +356,7 @@ Read at tip `386aad5e` on 2026-09-25; each brief re-checks against the tip it is
 
 | Helper | Owns | Reads only | Notes for the brief |
 |---|---|---|---|
-| A | `py_modules/backend/services/strategy_spoiler_policy.py` (an explicit per-turn "cover required" value, from the branch choice at 144-260 plus consent), `response_verify.py` (a new checker beside `drop_branch_menu_copying_the_worked_example`, 171-220), `game_ai_request.py` (carry the value; apply the checker after the branch-menu check, near 930), the live-stream path the screen reads while an answer arrives (find it; plan 68 landed the summary and wait-line changes there tonight — keep its `request_chat` and `chat_summary` untouched), tests, new rows in `tests/fixtures/kb_answer_eval.json` for name-withheld boss questions (Hollow Knight, Hades) | `src/.../unwrapAskedEntitySpoilerFences.ts`, `MainTabBonsaiAiMarkdownChunk.tsx` 291-337 (the fence is a code block labelled `bonsai-spoiler`) | Protected = a name from an attached boss or story note, or from the spoiler table, that the question did not contain. Wrap the sentence(s) that contain it; keep the branch menu last; do not fight the screen's own un-hide of what the person asked about. Break the guard on purpose once and say so in the commit. |
+| A | `py_modules/backend/services/strategy_spoiler_policy.py` (an explicit per-turn "cover required" value, from the branch choice at 144-260 plus consent), `response_verify.py` (a new checker beside `drop_branch_menu_copying_the_worked_example`, 171-220), `game_ai_request.py` (carry the value; apply the checker after the branch-menu check, near 930), the live-stream path the screen reads while an answer arrives (find it; plan 68 landed the summary and wait-line changes there tonight — keep its `request_chat` and `chat_summary` untouched), tests, new rows in `tests/fixtures/kb_answer_eval.json` for name-withheld boss questions (Hollow Knight, Hades) | `src/.../unwrapAskedEntitySpoilerFences.ts`, `MainTabBonsaiAiMarkdownChunk.tsx` 291-337 (the fence is a code block labelled `bonsai-spoiler`) | Protected = a name from an attached boss or story note, or from the spoiler table, that the question did not contain. Wrap the sentence(s) that contain it; keep the branch menu last; do not fight the screen's own un-hide of what the person asked about. Break the guard on purpose once and say so in the commit. Plan 68's `6843f8e1` found answers saved with their `bonsai-spoiler` markers written twice (cause unknown, filed as a roadmap bug): the checker must treat a doubled block as covered, and must never produce one itself. |
 | B | `kb_not_in_notes_notice.py` (the guard at 257-276 and 332-344: read note text, not only titles), `knowledge_base_service.py` (the ranking function, 644-745, only), `knowledge_base_search.py`, tests | `game_ai_request.py` 849-855 | Measure on the search test and the answer test (PC lock). Wave 2 part (B2): once E's "starting out" kind lands, rank it below specific notes unless the question asks how to start. Report numbers, not only pass/fail. |
 | C | `compat_topic_router.py` (a cut-off on the topic sorter's own pull, near 340), `knowledge_base_service.py` (`COMPAT_MEANING_FLOOR` at 370 and the compat pool only), tests | `kb_not_in_notes_notice.py` 111-136, `knowledge_base_search.py` 61, 180, 366-370 | Tuning sentences only; never tune on held-back rows. Outcome is either a shipped cut-off that loses no right tip, or a numbers table for the maintainer. |
 | D | `src/components/KnowledgeBaseSection.tsx` (the install at 428, the hint at 343-350, the pull button at 458-474), `rag_corpus_download_service.py` if needed, tests | `ollama_embed_service.py` | Reuse the existing pull call; `main.py` may not grow. A new control needs its D-pad wiring and a testing row; the Deck check needs the model removed first (allowed, D112). |

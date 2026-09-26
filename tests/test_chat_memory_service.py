@@ -72,6 +72,36 @@ class HidingWhatWasHiddenTests(unittest.TestCase):
         self.assertNotIn("ending", cleaned)
         self.assertEqual(removed, 1)
 
+    def test_a_hidden_block_with_its_markers_written_twice_stays_hidden(self):
+        """Seen on the Deck 2026-09-25: a saved answer had its hidden block's opening marker twice
+        and its closing marker twice. The screen still drew one closed block, but the old pattern
+        stopped at the second opening marker and let the hidden text through as plain words -- into
+        the chat's memory for every later question, and into its summary."""
+        fence = "`" * 3
+        shapes = {
+            "both doubled": (
+                f"Here is the fight.\n\n{fence}bonsai-spoiler\n{fence}bonsai-spoiler\n"
+                f"The boss is your father.\n{fence}\n{fence}\n\nGood luck."
+            ),
+            "opening doubled": (
+                f"Here is the fight.\n{fence}bonsai-spoiler\n{fence}bonsai-spoiler\n"
+                f"The boss is your father.\n{fence}\nGood luck."
+            ),
+            "closing doubled": (
+                f"Here is the fight.\n{fence}bonsai-spoiler\nThe boss is your father.\n"
+                f"{fence}\n{fence}\nGood luck."
+            ),
+        }
+        for name, answer in shapes.items():
+            with self.subTest(name):
+                cleaned, removed = strip_fenced_blocks(answer)
+                self.assertNotIn("father", cleaned)
+                self.assertNotIn("bonsai-spoiler", cleaned)
+                self.assertNotIn(fence, cleaned)
+                self.assertEqual(removed, 1)
+                self.assertIn("Here is the fight.", cleaned)
+                self.assertIn("Good luck.", cleaned)
+
     def test_an_answer_with_no_fence_is_left_exactly_alone(self):
         plain = "Put the Iron Boots on to sink, then take them off."
         cleaned, removed = strip_fenced_blocks(plain)

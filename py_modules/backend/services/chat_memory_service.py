@@ -57,7 +57,19 @@ from backend.services.token_accounting_service import estimate_tokens_from_chars
 
 # Every block the plugin fences off with three backticks and a bonsai- name. A spoiler is the one
 # that matters; the others are instructions for the screen rather than anything a person said.
-_FENCED_BLOCK = re.compile(r"```bonsai-[a-z-]+\b.*?(?:```|\Z)", re.DOTALL | re.IGNORECASE)
+# Hardened 2026-09-25 (plan 68 Deck pass): an answer saved with its hidden block's markers written
+# twice -- the opening marker twice, then the text, then the closing marker twice -- used to match
+# only as far as the second opening marker, so the hidden text itself came through as plain words.
+# The screen still drew one closed block, so nobody could see it happen. Repeated opening markers
+# are now part of the opening, the block ends only at a bare closing marker (one not followed by a
+# name), and repeated closing markers go with it. When in doubt this hides more, never less.
+_FENCED_BLOCK = re.compile(
+    r"```bonsai-[a-z-]+\b"  # the opening marker
+    r"(?:\s*```bonsai-[a-z-]+\b)*"  # the same marker written again
+    r".*?"  # what the block hides
+    r"(?:```(?![a-z-])(?:[ \t]*\n?[ \t]*```(?![a-z-]))*|\Z)",  # the closing marker, and any repeat
+    re.DOTALL | re.IGNORECASE,
+)
 
 # What is left where a hidden note was, so the conversation still reads sensibly and the AI is
 # not told the thing the person chose not to see.

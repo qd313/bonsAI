@@ -47,6 +47,11 @@
  *    Ask host; pullNomicEmbed() only offers a one-press fix when Ask is
  *    routed to this Deck's own Ollama, since the pull command always
  *    targets this Deck.
+ * 6. A fresh install (never an Update) that lands with the embed model
+ *    still missing on this Deck's own Ollama is asked about once, with a
+ *    Steam confirm dialog (Download / Not now) — never a silent gap, and
+ *    never on its own. Skipped the same way the standing hint is when Ask
+ *    is routed elsewhere.
  *
  * Gotchas:
  * - The version shown prefers whatever the status poll just reported over
@@ -142,6 +147,16 @@ const KB_ACTION_ROW_MIN_HEIGHT = 44;
 let kbDownloadStartedAtMs: number | null = null;
 const KB_DOWNLOAD_RESUME_WINDOW_MS = 10 * 60 * 1000;
 
+/**
+ * Set the instant a fresh install (never an Update — that starts already installed) is
+ * accepted; consumed the first time that download's completion is seen, whichever
+ * component instance is mounted then. Module scope for the same reason
+ * `kbDownloadStartedAtMs` is: picking a storage location closes a Decky modal, which
+ * remounts this section, so a component-local ref would forget the download was ever
+ * a fresh install and the ask would never fire.
+ */
+let kbInstallNomicOfferPending = false;
+
 function kbDownloadLikelyInFlight(): boolean {
   return kbDownloadStartedAtMs != null && Date.now() - kbDownloadStartedAtMs < KB_DOWNLOAD_RESUME_WINDOW_MS;
 }
@@ -149,6 +164,7 @@ function kbDownloadLikelyInFlight(): boolean {
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
   kbDownloadStartedAtMs = null;
+  kbInstallNomicOfferPending = false;
 }
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
@@ -441,6 +457,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         body: "Offline strategy corpus — small download, should finish quickly.",
         duration: 6000,
       });
+      // Only a fresh install (this branch) offers the meaning-search model once it
+      // lands; an Update starts already installed and never sets this.
+      kbInstallNomicOfferPending = true;
     } catch (e: unknown) {
       kbDownloadStartedAtMs = null;
       setDownloadBusy(false);
@@ -491,6 +510,46 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         toaster.toast({ title: "Pull failed", body: formatDeckyRpcError(e), duration: 8000 });
       });
   };
+
+  /**
+   * A fresh install that finishes with the meaning-search model still missing on this
+   * Deck's own Ollama gets asked once, right here — never a silent gap. Reuses the same
+   * pull call and status poll as the standing hint's own button, so a failed pull shows
+   * the same message either way. Skipped when Ask is routed to another computer's own
+   * Ollama: `pull_ollama_models` only ever pulls onto this Deck, so offering it there
+   * would install the model on the wrong machine — the standing hint's own wording for
+   * that case already explains it, and stays exactly as it was.
+   */
+  useEffect(() => {
+    if (downloadBusy) return;
+    if (!kbInstallNomicOfferPending) return;
+    kbInstallNomicOfferPending = false;
+    if (!status?.installed) return;
+    if (!ollamaLocalOnDeck) return;
+    if (status.embeddings_populated !== true) return;
+    if (status.embed_model_available !== false) return;
+    onBeforeDeckyModal();
+    const handle = showModal(
+      <ConfirmModal
+        strTitle="Also download the meaning-search model (about 270 MB)?"
+        strDescription={
+          <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+            Better note matching for your questions.
+          </div>
+        }
+        strOKButtonText="Download"
+        strCancelButtonText="Not now"
+        onOK={() => {
+          onCompleteDeckyModalClose(() => handle.Close());
+          pullNomicEmbed();
+        }}
+        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+      />,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- pullNomicEmbed is a fresh
+    // closure every render; including it would fire this effect on every render instead
+    // of only when downloadBusy/status change, which is what actually decides the ask.
+  }, [downloadBusy, status, ollamaLocalOnDeck, onBeforeDeckyModal, onCompleteDeckyModalClose]);
 
   /**
    * Asks the backend to set its cancel event. The download does not stop here — the

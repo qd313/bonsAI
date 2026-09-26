@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 516,
-  "edgeCount": 1384,
+  "fileCount": 517,
+  "edgeCount": 1387,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -212,6 +212,14 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
       ]
     },
+    "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -233,6 +241,7 @@
         "src/utils/settingsPanelScroll.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/OllamaTab.tsx"
@@ -3835,6 +3844,7 @@
         "src/types/backgroundAsk.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
@@ -3869,6 +3879,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
+        "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",

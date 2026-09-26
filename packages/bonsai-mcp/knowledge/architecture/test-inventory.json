@@ -6,6 +6,7 @@
     "src/components/ContextChipLadder.test.tsx",
     "src/components/DeveloperTab.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",
+    "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",
     "src/components/MainTab.dockClass.test.ts",

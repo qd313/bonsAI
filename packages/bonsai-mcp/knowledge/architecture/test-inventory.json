@@ -177,6 +177,7 @@
     "src/utils/reasoningDisplay.test.ts",
     "src/utils/redactThinkingBlurbSpoilers.test.ts",
     "src/utils/replyStopRegistry.test.ts",
+    "src/utils/revealOpenedDetails.test.tsx",
     "src/utils/runningGameCharacterSuggestions.test.ts",
     "src/utils/settingsContracts.test.ts",
     "src/utils/splitResponseIntoChunks.test.ts",

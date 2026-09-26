@@ -142,3 +142,27 @@ export function scrollElementTopToPaneTop(el: HTMLElement, padPx = 4): boolean {
   pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), pane.scrollTop + delta));
   return true;
 }
+
+/**
+ * Scroll down just enough that `el` (something that has just opened) clears the bottom dock,
+ * without pushing its own top, or `keep` (the control holding the ring, above it), off the top of
+ * the pane. Plain scrollTop arithmetic, for the scroll-padding reason on scrollElementTopToPaneTop.
+ * Plan 70 flow 4.2 (docs/test-evidence/plan70-F4-SHOW-DETAILS.json): Show details opened its panel
+ * with the tab row at y 617 behind the dock (top 600) and no scroll, so nothing seemed to happen.
+ * Returns true when it moved the pane.
+ */
+export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, padPx = 8): boolean {
+  const pane = findScrollablePanel(el);
+  if (!pane) return false;
+  const rect = el.getBoundingClientRect();
+  const paneTop = pane.getBoundingClientRect().top;
+  let delta = rect.bottom + padPx - readableBottomOf(pane);
+  delta = Math.min(delta, rect.top - paneTop - padPx);
+  if (keep && keep !== el && pane.contains(keep)) {
+    delta = Math.min(delta, keep.getBoundingClientRect().top - paneTop - padPx);
+  }
+  if (delta <= 0) return false;
+  const before = pane.scrollTop;
+  pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), before + delta));
+  return pane.scrollTop !== before;
+}

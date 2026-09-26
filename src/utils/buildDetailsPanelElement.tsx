@@ -19,6 +19,8 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
+import { revealBelowKeeping } from "./chatPanelScroll";
+import { uiGamepadFocusElement } from "./uiDocument";
 import { focusPerTurnRow } from "./focusPerTurnRow";
 import { focusKbNotesBlock } from "./buildKbNotesBlockElement";
 import {
@@ -99,6 +101,23 @@ export function focusChipLadderRow(turnKey: string): boolean {
   return focusPerTurnRow(chipLadderEls, turnKey);
 }
 
+/** Panels already brought into view once; a later render of the same open panel leaves it be. */
+const revealedPanels = new WeakSet<HTMLElement>();
+
+/**
+ * Bring a just-opened panel out from behind the dock, once per opening (plan 70 flow 4.2,
+ * docs/test-evidence/plan70-F4-SHOW-DETAILS.json: the tab row opened at y 617 behind the dock at
+ * 600, with no scroll, so only the words "Hide details" changed). A frame later, so the panel's
+ * content has laid out; never past the control holding the ring.
+ */
+function revealWhenOpened(panel: HTMLElement | null): void {
+  if (!panel || revealedPanels.has(panel)) return;
+  revealedPanels.add(panel);
+  requestAnimationFrame(() => {
+    if (panel.isConnected) revealBelowKeeping(panel, uiGamepadFocusElement());
+  });
+}
+
 /**
  * Focus graph, written before the control existed per AGENTS.md ("The Steam Deck focus graph") and
  * design-language.md Rule 8:
@@ -177,7 +196,10 @@ export function buildDetailsPanelElement(args: {
       <ContextChipLadder
         snapshot={snapshot}
         collapsedHint={false}
-        rootRef={(el) => registerChipLadderEl(turnKey, el)}
+        rootRef={(el) => {
+          registerChipLadderEl(turnKey, el);
+          revealWhenOpened(el?.parentElement ?? null);
+        }}
         onMoveUpFromLadder={upPastPanel}
         onMoveDownFromLadder={() => focusSessionContextStrip()}
         devDiagnostics={devDiagnostics}
@@ -202,7 +224,10 @@ export function buildDetailsPanelElement(args: {
       <Focusable
         className="bonsai-details-tabs-row"
         flow-children="horizontal"
-        ref={(el: HTMLElement | null) => registerDetailsTabsRowEl(turnKey, el)}
+        ref={(el: HTMLElement | null) => {
+          registerDetailsTabsRowEl(turnKey, el);
+          revealWhenOpened(el?.parentElement ?? null);
+        }}
         {...({
           onMoveUp: upPastPanel,
           onMoveDown: focusFirstTabContent,

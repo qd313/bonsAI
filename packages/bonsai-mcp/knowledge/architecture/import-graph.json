@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 524,
-  "edgeCount": 1413,
+  "fileCount": 525,
+  "edgeCount": 1418,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3973,7 +3973,8 @@
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/test-harness/setup.ts",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
-        "src/utils/buildReplyActionsElement.test.tsx"
+        "src/utils/buildReplyActionsElement.test.tsx",
+        "src/utils/revealOpenedDetails.test.tsx"
       ]
     },
     "src/test-harness/renderWithHarness.tsx": {
@@ -4493,13 +4494,16 @@
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/buildKbNotesBlockElement.tsx",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
-        "src/utils/liveTurnFocusGraph.ts"
+        "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx"
+        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/revealOpenedDetails.test.tsx"
       ]
     },
     "src/utils/buildKbNotesBlockElement.tsx": {
@@ -4615,8 +4619,10 @@
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/utils/answerBubbleNavigation.ts",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatPanelScroll.test.ts",
+        "src/utils/revealOpenedDetails.test.tsx",
         "src/utils/settingsPanelScroll.ts"
       ]
     },
@@ -5359,6 +5365,14 @@
         "src/utils/replyStopRegistry.test.ts"
       ]
     },
+    "src/utils/revealOpenedDetails.test.tsx": {
+      "imports": [
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
+        "src/utils/chatPanelScroll.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/runningGameCharacterSuggestions.test.ts": {
       "imports": [
         "src/utils/runningGameCharacterSuggestions.ts"
@@ -5650,6 +5664,7 @@
         "src/utils/answerStopRegistry.test.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",

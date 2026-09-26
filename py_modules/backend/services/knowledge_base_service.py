@@ -137,6 +137,7 @@ from backend.services.knowledge_base_cards import (
     KnowledgeCard,
     _BLOCK_SENTINEL,
     _COMPAT_GAME_TITLE,
+    _compat_row_to_card,
     _format_block,
     _get_connection,
     _section_row_to_card,
@@ -759,6 +760,54 @@ def _fuse_cards_by_rrf(
     return [pool[i] for i in order[:top_k]]
 
 
+def _compat_app_keys_for_game(conn: sqlite3.Connection, game_id: int) -> list[str]:
+    """The key(s) a per-game tip's ``app_id`` column would carry for this resolved game.
+
+    A title's own Steam AppID when it has one, else the ``igdb_id`` strategy_seed.json
+    already gives a title Steam never assigned one to (Ocarina of Time, played through an
+    emulator shortcut) -- the same per-game key the corpus's own `games` table uses either
+    way, so a per-game tip never needs a Steam AppID a title does not have.
+    """
+    row = conn.execute(
+        "SELECT app_id, igdb_id FROM games WHERE game_id = ?", (game_id,)
+    ).fetchone()
+    if not row:
+        return []
+    return [str(v).strip() for v in (row["app_id"], row["igdb_id"]) if str(v or "").strip()]
+
+
+def _compat_tips_for_app_keys(
+    conn: sqlite3.Connection,
+    *,
+    app_keys: list[str],
+    exclude_ids: set[int],
+    top_k: int,
+) -> list[KnowledgeCard]:
+    """A resolved game's own tips (D29 / Phase 4 track 3's per-game field), whether or not
+
+    they share a word with the Ask -- the same recall-path shape as the routed-topic pull
+    just above it in the compat branch, and preferred the same way (RRF_W_TOPIC, not a new
+    weight) per planning/18-phase4-track3-per-game-compat-tips.md: measure before adding a
+    second weight, and reuse ``preferred_ids`` rather than a new mechanism until then.
+    """
+    if not app_keys:
+        return []
+    placeholders = ",".join("?" for _ in app_keys)
+    rows = conn.execute(
+        "SELECT pattern_id, topic, platforms, card, source_url, source_license "
+        f"FROM compat_patterns WHERE app_id IN ({placeholders}) ORDER BY pattern_id",
+        app_keys,
+    ).fetchall()
+    out: list[KnowledgeCard] = []
+    for row in rows:
+        if int(row["pattern_id"]) in exclude_ids:
+            continue
+        out.append(_compat_row_to_card(row))
+        if len(out) >= top_k:
+            break
+    return out
+
+
 def retrieve_knowledge_context(
     settings: dict,
     *,
@@ -862,6 +911,19 @@ def retrieve_knowledge_context(
                 for c in cards + topic_cards
                 if _compat_topic_of(conn, c.section_id) in compat_topics
             }
+            # D29: a resolved game's own tips (Fallout 4's launch option, Deep Rock Galactic:
+            # Survivor's UI-scale quirk, ...) join the pool preferred the same way a routed
+            # topic's tips are -- see _compat_tips_for_app_keys's own docstring for why this
+            # reuses preferred_ids rather than a stronger, unmeasured weight.
+            if game_id is not None:
+                game_tips = _compat_tips_for_app_keys(
+                    conn,
+                    app_keys=_compat_app_keys_for_game(conn, game_id),
+                    exclude_ids={c.section_id for c in cards + topic_cards},
+                    top_k=COMPAT_TOPIC_RECALL_K,
+                )
+                topic_cards = topic_cards + game_tips
+                preferred_ids |= {c.section_id for c in game_tips}
             fts_ms = round((time.perf_counter() - t_fts) * 1000, 2)
             resolution = "compat_tips"
         else:

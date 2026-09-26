@@ -120,13 +120,11 @@ starts work outside this.
   `docs/test-evidence/plan64-BYEYE-01-chat-row.png`, between the dock and Steam's own bottom bar.
   **Sighting, 2026-09-23:** seen again under the "Context: no active game detected" line. Evidence
   `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
-- ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
-  **OPEN, back from Verify 2026-09-23: failed by measurement.** The move that was meant to hide the dots
-  under the strip left no room — the gap between the chat name's letters and the dots measured 0.2 pixels, so
-  they touch. Screenshot `docs/test-evidence/plan64-BYEYE-01-chat-row.png`. **Needs the maintainer's pick,**
-  three ways out: (a) leave it as is; (b) move the dots back 1 pixel, which then just meets the strip's edge,
-  about 1 pixel of gap; (c) hide the dots while the tab strip is open and put them back where they were
-  before, about 10 pixels clear. The session recommends (c).
+- ★ `[tabs]` `[layout]` **The dots under the chat name don't line up: the active dot looks a hair above or
+  below the rest** — **OPEN, the maintainer's call 2026-09-26: keep the dots, make them line up exactly.**
+  Every dot has the same box, so the offset is in the painted pixels (about 1.28 screen pixels per page
+  pixel). Measure each dot's lit-pixel centre in full-size screenshots, every state, both screens; also the
+  0.2px gap to the chat name. Plan 72 must-fix. Screenshot `docs/test-evidence/plan64-BYEYE-01-chat-row.png`.
 - ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** —
   **OPEN, split off 2026-09-23.** Ticking the first tickable model in a fresh download picker now correctly
   only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
@@ -208,8 +206,8 @@ starts work outside this.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **OPEN,
-  found on the Deck 2026-09-26, row STOP-PARTIAL-01.** Deliberate, so a stuck answer truly stops, but worth
-  revisiting: close the connection first, only unload if still generating a few seconds later. Maintainer's call.
+  found on the Deck 2026-09-26, row STOP-PARTIAL-01. The maintainer's call 2026-09-26: Stop must not unload
+  the model.** Close the connection instead; the next question should start warm. Plan 72 must-fix.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -299,9 +297,9 @@ starts work outside this.
 replace it with a specific issue when one exists.
 
 - ★ `[reply]` **A reply can quote one of its own steering instructions back to the player** — **OPEN,
-  needs the maintainer's call.** Not a spoiler leak — the plugin's own prompt deliberately tells the model
-  to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like machine text.
-  Decide: drop it, soften it, or leave it. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+  the maintainer's call 2026-09-26: soften it.** Not a spoiler leak — the plugin's own prompt deliberately
+  tells the model to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like
+  machine text. Plan 72 must-fix. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
 - ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, needs the
   maintainer's call, found 2026-09-26 (plan 70, helper A2).** Not filed as a bug: pressing Show details is
   already a deliberate choice to see more, unlike the answer, Copy or Read aloud, which the spoiler cover

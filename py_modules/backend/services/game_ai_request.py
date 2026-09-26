@@ -525,6 +525,19 @@ async def run_game_ai_request(
                 await chat_turn_recorder.save_chat_subject(plugin, chat_id, None)
 
         followup_subject_for_prompt = ""
+        # Plan 70 helper K, finish 3: set below when send_prev_qa_enabled() has something to send,
+        # but not spliced into question_for_model until right before the ask_ollama call further
+        # down -- after strategy_spoiler_asked_entity, spoiler_risk_signals and the person's own
+        # spoiler consent are all read off question_for_model. Splicing it in here, where an
+        # earlier commit did, let the previous turn's own boss name (a system reminder, not
+        # anything the person typed) get picked up by extract_strategy_asked_entity as if the
+        # person had named it themselves on *this* turn -- unfencing spoilers nobody asked to
+        # unfence, and reproduced by
+        # FollowupMemoryPromptSubjectWiringTests.test_the_remembered_subject_never_reaches_the_spoiler_consent_kwargs
+        # once this switch defaulted on. build_previous_turn_context_block's own template already
+        # says "a system reminder, not something the user typed"; the code has to actually keep it
+        # out of the person's-own-words checks too, not just say so in the prompt.
+        finish3_prev_turn_block = ""
         if settings.get("use_local_knowledge_base") is not True:
             await _forget_this_chats_subject()
         elif kb_domain == "compat":
@@ -541,11 +554,11 @@ async def run_game_ai_request(
                     question_for_retrieval, remembered_subject=remembered_subject
                 )
                 followup_subject_for_prompt = remembered_subject
-                # Plan 70 helper K, finish 3 (off unless send_prev_qa_enabled()): hand the model
-                # the previous turn's own question and a trimmed copy of its answer, on the same
-                # bare-follow-up turn the subject note above is carried on. A measurement switch
-                # only -- see kb_followup_memory.py's module comment for why this is not on by
-                # default and what the maintainer's numbers will decide.
+                # Plan 70 helper K, finish 3 (the maintainer's pick, on unless
+                # send_prev_qa_enabled() is turned off): hand the model the previous turn's own
+                # question and a trimmed copy of its answer, on the same bare-follow-up turn the
+                # subject note above is carried on. Computed here, spliced into question_for_model
+                # later -- see finish3_prev_turn_block's own comment above for why.
                 if kb_followup_memory.send_prev_qa_enabled():
                     prev_question, prev_answer = kb_followup_memory.recall_previous_turn(
                         app_id=app_id,
@@ -553,11 +566,9 @@ async def run_game_ai_request(
                         text_resolved_title=text_resolved_title,
                         chat_id=chat_id,
                     )
-                    prev_turn_block = kb_followup_memory.build_previous_turn_context_block(
+                    finish3_prev_turn_block = kb_followup_memory.build_previous_turn_context_block(
                         prev_question, prev_answer
                     )
-                    if prev_turn_block:
-                        question_for_model = f"{prev_turn_block}\n{question_for_model}"
 
         if should_kb:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
@@ -764,6 +775,12 @@ async def run_game_ai_request(
             kb_entity_match=strategy_spoiler_kb_entity_match,
             title_profile=strategy_title_profile,
         )
+
+        # Plan 70 helper K, finish 3: spliced in only now, after every spoiler-safety read of
+        # question_for_model above (asked-entity extraction, the person's own consent phrasing,
+        # the risk signals) -- see finish3_prev_turn_block's own comment near where it is set.
+        if finish3_prev_turn_block:
+            question_for_model = f"{finish3_prev_turn_block}\n{question_for_model}"
 
         # `request_chat`, loaded once near the top, goes to the model call too: its turns, its own
         # summary and its id (plan 68). The question being asked now IS its newest turn -- it is
@@ -998,12 +1015,13 @@ async def run_game_ai_request(
                 if protected_names:
                     response_text = cover_named_spoilers(response_text, protected_names)
 
-            # Plan 70 helper K, finish 3 (off unless send_prev_qa_enabled()): now that this
-            # turn's own answer is finished -- and covered, just above, so what is remembered is
-            # what the person saw -- remember it (trimmed) alongside whatever subject is
-            # already stored for this chat's game, so the *next* bare follow-up can send it back.
-            # Onto an existing subject record only -- kb_followup_memory.remember_previous_turn
-            # is a no-op when this chat's game has changed since the subject was last set.
+            # Plan 70 helper K, finish 3 (the maintainer's pick, on unless send_prev_qa_enabled()
+            # is turned off): now that this turn's own answer is finished -- and covered, just
+            # above, so what is remembered is what the person saw -- remember it (trimmed)
+            # alongside whatever subject is already stored for this chat's game, so the *next*
+            # bare follow-up can send it back. Onto an existing subject record only --
+            # kb_followup_memory.remember_previous_turn is a no-op when this chat's game has
+            # changed since the subject was last set.
             if (
                 kb_memory_eligible
                 and kb_domain == "strategy"

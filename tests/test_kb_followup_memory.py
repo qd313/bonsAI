@@ -253,9 +253,11 @@ class AugmentSearchWordsTests(unittest.TestCase):
         self.assertEqual(out, "what about her second phase")
 
 
-class FollowupSwitchesDefaultOffTests(unittest.TestCase):
-    """Plan 70 helper K: both measurement switches read straight from the environment and must
-    default to off so a plain checkout behaves exactly as it does today."""
+class FollowupSwitchDefaultsTests(unittest.TestCase):
+    """Plan 70 helper K: the maintainer picked finish 3 (send the previous question and a short
+    answer) from the numbers, so it is on by default -- its environment variable now only ever
+    turns it back *off*. Finish 2 (drop every attached note but the one asked about) was a real
+    improvement but still asked "which boss?" too often, so it stays off unless turned on."""
 
     def setUp(self):
         os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
@@ -268,8 +270,8 @@ class FollowupSwitchesDefaultOffTests(unittest.TestCase):
     def test_drop_runnerup_is_off_when_unset(self):
         self.assertFalse(kb_followup_memory.drop_runnerup_notes_enabled())
 
-    def test_send_prev_qa_is_off_when_unset(self):
-        self.assertFalse(kb_followup_memory.send_prev_qa_enabled())
+    def test_send_prev_qa_is_on_when_unset(self):
+        self.assertTrue(kb_followup_memory.send_prev_qa_enabled())
 
     def test_drop_runnerup_turns_on_only_for_the_literal_value_one(self):
         os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "true"
@@ -277,11 +279,13 @@ class FollowupSwitchesDefaultOffTests(unittest.TestCase):
         os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
         self.assertTrue(kb_followup_memory.drop_runnerup_notes_enabled())
 
-    def test_send_prev_qa_turns_on_only_for_the_literal_value_one(self):
-        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "yes"
-        self.assertFalse(kb_followup_memory.send_prev_qa_enabled())
+    def test_send_prev_qa_turns_off_only_for_the_literal_value_zero(self):
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "no"
+        self.assertTrue(kb_followup_memory.send_prev_qa_enabled())
         os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "1"
         self.assertTrue(kb_followup_memory.send_prev_qa_enabled())
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "0"
+        self.assertFalse(kb_followup_memory.send_prev_qa_enabled())
 
 
 class PreviousTurnMemoryTests(unittest.TestCase):

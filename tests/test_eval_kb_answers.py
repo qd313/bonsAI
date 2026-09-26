@@ -964,9 +964,10 @@ class EvalKbAnswersFollowupPairTests(unittest.TestCase):
 
 
 class ApplyFollowupShapeEnvTests(unittest.TestCase):
-    """Plan 70 helper K: --followup-shape drop_runnerup/send_prev_qa each flip exactly one real
-    kb_followup_memory environment switch on, and every other shape leaves both off -- including
-    clearing one a previous run in the same shell might have left set.
+    """Plan 70 helper K: the maintainer picked send_prev_qa, so it is now on by default in real
+    code, and --followup-shape's "shipped" (real defaults) must show that -- while the two older,
+    pre-finish-3 comparison shapes (no_subject_note/narrow_notes) must still turn it off, or the
+    now-default finish would leak into what used to be a clean, single-variable comparison.
     """
 
     @classmethod
@@ -988,36 +989,34 @@ class ApplyFollowupShapeEnvTests(unittest.TestCase):
         os.environ.pop(self.kb_followup_memory.DROP_RUNNERUP_ENV, None)
         os.environ.pop(self.kb_followup_memory.SEND_PREV_QA_ENV, None)
 
-    def test_shipped_leaves_both_switches_off(self):
+    def test_shipped_matches_todays_real_defaults(self):
         self.mod.apply_followup_shape_env("shipped", kb_followup_memory=self.kb_followup_memory)
         self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
-        self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled())
+        self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
 
-    def test_drop_runnerup_turns_on_only_that_switch(self):
+    def test_drop_runnerup_turns_on_that_switch_on_top_of_the_real_defaults(self):
         self.mod.apply_followup_shape_env(
             "drop_runnerup", kb_followup_memory=self.kb_followup_memory
         )
         self.assertTrue(self.kb_followup_memory.drop_runnerup_notes_enabled())
-        self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled())
+        self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
 
-    def test_send_prev_qa_turns_on_only_that_switch(self):
+    def test_send_prev_qa_names_the_default_explicitly(self):
         self.mod.apply_followup_shape_env(
             "send_prev_qa", kb_followup_memory=self.kb_followup_memory
         )
         self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
         self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
 
-    def test_switching_shapes_clears_a_previous_choice(self):
+    def test_switching_from_drop_runnerup_back_to_shipped_clears_it(self):
         self.mod.apply_followup_shape_env(
             "drop_runnerup", kb_followup_memory=self.kb_followup_memory
         )
-        self.mod.apply_followup_shape_env(
-            "send_prev_qa", kb_followup_memory=self.kb_followup_memory
-        )
+        self.mod.apply_followup_shape_env("shipped", kb_followup_memory=self.kb_followup_memory)
         self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled())
         self.assertTrue(self.kb_followup_memory.send_prev_qa_enabled())
 
-    def test_no_subject_note_and_narrow_notes_also_leave_both_off(self):
+    def test_no_subject_note_and_narrow_notes_turn_send_prev_qa_off(self):
         for shape in ("no_subject_note", "narrow_notes"):
             self.mod.apply_followup_shape_env(shape, kb_followup_memory=self.kb_followup_memory)
             self.assertFalse(self.kb_followup_memory.drop_runnerup_notes_enabled(), shape)

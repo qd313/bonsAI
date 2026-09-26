@@ -48,16 +48,20 @@ _FOLLOWUP_MAX_WORDS = 8
 _lock = threading.Lock()
 
 
-# Plan 70 helper K: two ways of finishing "a follow-up still names the wrong boss", each measured
-# by scripts/eval_kb_answers.py against the fixture's follow-up pairs before the maintainer picks
-# one to keep. Both read straight from the environment so a measuring run can flip one on without
-# touching any file, and both are OFF unless the variable is exactly "1" -- nothing here changes
-# what remember()/recall()/augment_search_words() above already do unconditionally, and neither
-# switch is on in any commit this lane makes. A third candidate finish, "carry the remembered
-# subject into the model's instructions", is not a new switch here: it already shipped
-# unconditionally in plan 48 (D98, ollama_prompts.FOLLOWUP_SUBJECT_NOTE_TEMPLATE) whenever
-# recall() finds a subject, so today's plain baseline already measures it -- see this lane's
-# report for why building a duplicate switch for it would not measure anything new.
+# Plan 70 helper K: two ways of finishing "a follow-up still names the wrong boss", both measured
+# by scripts/eval_kb_answers.py against the fixture's follow-up pairs, three runs each, every
+# reply read by hand. The maintainer picked finish 3 (send the previous question and a short
+# answer along with the follow-up): it named the right boss more than five times as often as
+# today's code and almost never made the model stop and ask "which boss do you mean?", the
+# biggest problem with every other shape, including doing nothing. So `send_prev_qa_enabled()` is
+# on by default -- the environment variable now only ever turns it *off* (set it to "0"), for a
+# measuring run that wants the old, pre-pick behaviour back. Finish 2 (drop every attached note
+# but the one asked about) was a real improvement over doing nothing but still asked "which boss?"
+# about a third of the time, so it stays off unless explicitly turned on the opposite way (set the
+# variable to "1"). A third candidate finish, "carry the remembered subject into the model's
+# instructions", was never a new switch here: it already shipped unconditionally in plan 48 (D98,
+# ollama_prompts.FOLLOWUP_SUBJECT_NOTE_TEMPLATE) whenever recall() finds a subject, so both
+# defaults above sit on top of that, unchanged.
 DROP_RUNNERUP_ENV = "BONSAI_KB_FOLLOWUP_DROP_RUNNERUP"
 SEND_PREV_QA_ENV = "BONSAI_KB_FOLLOWUP_SEND_PREV_QA"
 
@@ -68,8 +72,10 @@ def drop_runnerup_notes_enabled() -> bool:
 
 
 def send_prev_qa_enabled() -> bool:
-    """Finish 3: off unless ``BONSAI_KB_FOLLOWUP_SEND_PREV_QA=1`` is set in the environment."""
-    return os.environ.get(SEND_PREV_QA_ENV, "").strip() == "1"
+    """Finish 3: the maintainer's pick, on by default. Set
+    ``BONSAI_KB_FOLLOWUP_SEND_PREV_QA=0`` in the environment to turn it back off for a run that
+    wants to measure without it; any other value, or leaving it unset, keeps it on."""
+    return os.environ.get(SEND_PREV_QA_ENV, "").strip() != "0"
 
 
 @dataclass

@@ -33,16 +33,20 @@ measurable because a before-and-after nobody can re-run is a number nobody can c
 strips the shipped sentence, so it stays an isolated measurement of narrowing alone rather than
 narrowing-plus-the-sentence.
 
-Plan 70 helper K's own two candidates (still measured, not yet built into any commit's default):
-``drop_runnerup`` turns on ``kb_followup_memory.drop_runnerup_notes_enabled()`` for the run,
-which -- when the remembered subject names one of the attached cards -- drops every other card
-before the prompt is built, on top of the shipped sentence (unlike ``narrow_notes`` above, it
-leaves every card in place when the subject names none of them, rather than attaching nothing).
-``send_prev_qa`` turns on ``kb_followup_memory.send_prev_qa_enabled()``, which hands the model the
-previous turn's own question and a trimmed copy of its answer alongside the shipped sentence.
-Both are real production switches (off unless the matching environment variable is set), not a
-monkeypatch -- this flag only sets that variable for the process, the same way a maintainer would
-to try one on the Deck.
+Plan 70 helper K's own two candidates, both measured the same way (three runs, every reply read
+by hand): ``drop_runnerup`` turns on ``kb_followup_memory.drop_runnerup_notes_enabled()`` for the
+run, which -- when the remembered subject names one of the attached cards -- drops every other
+card before the prompt is built (unlike ``narrow_notes`` above, it leaves every card in place when
+the subject names none of them, rather than attaching nothing). ``send_prev_qa`` turns on
+``kb_followup_memory.send_prev_qa_enabled()``, which hands the model the previous turn's own
+question and a trimmed copy of its answer. The maintainer picked ``send_prev_qa``: it named the
+right boss more than five times as often as the shipped sentence alone and almost never made the
+model stop and ask which boss was meant, so it is now on by default in real code -- ``"shipped"``
+measures it already, and this flag's ``send_prev_qa`` choice only exists so a run can still name
+it explicitly. ``drop_runnerup`` stays off by default (a real improvement over nothing, but it
+still asked which boss too often to pick). Both are real production switches, not a monkeypatch --
+this flag only sets the matching environment variable for the process, the same way a maintainer
+would to try one on the Deck.
 
 Usage:
   python scripts/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
@@ -1030,12 +1034,21 @@ async def run_sample(
 def apply_followup_shape_env(shape: str, *, kb_followup_memory: Any) -> None:
     """Set (or clear) the plan 70 helper K environment switches for ``--followup-shape``.
 
-    A separate, directly testable function rather than inline code in ``main()``: the switches
-    themselves (``kb_followup_memory.DROP_RUNNERUP_ENV`` / ``SEND_PREV_QA_ENV``) are real
-    production code, off unless set to exactly ``"1"``; this only decides, for this process,
-    which one (if any) ``--followup-shape`` asked for. Always clears both first, so a leftover
-    value from an earlier run in the same shell -- or the other switch, when only one shape was
-    asked for -- can never leak into a "shipped"/"no_subject_note"/"narrow_notes" run.
+    A separate, directly testable function rather than inline code in ``main()``. The maintainer
+    picked finish 3 from the measured numbers, so ``kb_followup_memory.send_prev_qa_enabled()`` is
+    now on by default (its variable only ever turns it back off); ``drop_runnerup_notes_enabled()``
+    stays off unless turned on. Always clears both variables first, so a leftover value from an
+    earlier run in the same shell can never leak into this one:
+
+    - ``"shipped"``: leaves both variables unset, i.e. today's real defaults -- drop-runner-up off,
+      send-the-previous-turn on. This is what a real Ask does now, so "shipped" measures it too.
+    - ``"drop_runnerup"``: turns drop-runner-up on for this run, on top of that same default.
+    - ``"send_prev_qa"``: sets send-the-previous-turn to ``"1"`` explicitly -- redundant with the
+      default, kept so the flag still names the shape being asked for.
+    - ``"no_subject_note"`` / ``"narrow_notes"``: these two predate finish 3 and exist to isolate
+      one older prompt-level substitution each (D98) from everything shipped since. Explicitly
+      turns send-the-previous-turn *off* for them, or the now-default finish 3 would be mixed into
+      what used to be a clean, single-variable comparison.
     """
     os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
     os.environ.pop(kb_followup_memory.SEND_PREV_QA_ENV, None)
@@ -1043,6 +1056,8 @@ def apply_followup_shape_env(shape: str, *, kb_followup_memory: Any) -> None:
         os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
     elif shape == "send_prev_qa":
         os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "1"
+    elif shape in ("no_subject_note", "narrow_notes"):
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "0"
 
 
 _KB_BLOCK_SENTINEL_MARKER = "--- End local knowledge base ---"  # knowledge_base_service._BLOCK_SENTINEL
@@ -1544,19 +1559,15 @@ def main() -> int:
             "drop_runnerup",
             "send_prev_qa",
         ),
-        help="D98: what to measure against the shipped follow-up-subject sentence, on a turn "
-        "that used the remembered subject. 'shipped' (default) changes nothing -- it is exactly "
-        "today's code, and already measures the plan 70 helper K brief's 'carry the subject into "
-        "the model's instructions' idea, which shipped unconditionally as part of this. "
-        "'no_subject_note' strips the shipped sentence back out, reproducing the pre-fix prompt. "
-        "'narrow_notes' is the rejected, never-shipped alternative (also with the shipped "
-        "sentence stripped, so it stays an isolated measurement). 'drop_runnerup' and "
-        "'send_prev_qa' are helper K's own two new candidates: each sets the matching "
-        "kb_followup_memory environment switch (BONSAI_KB_FOLLOWUP_DROP_RUNNERUP / "
-        "BONSAI_KB_FOLLOWUP_SEND_PREV_QA) for this run only, on top of the shipped sentence -- "
-        "the switch is real production code, gated off by default; this flag only flips it on "
-        "for the duration of the process so the two can be measured the same way as the other "
-        "shapes.",
+        help="What to measure against today's real code. 'shipped' (default) changes nothing -- "
+        "it is exactly today's code, which now includes both the D98 follow-up-subject sentence "
+        "and the maintainer's picked finish, send_prev_qa (on by default). 'no_subject_note' "
+        "strips the D98 sentence back out and turns send_prev_qa off, reproducing the old, "
+        "pre-fix prompt for comparison. 'narrow_notes' is the rejected, never-shipped alternative "
+        "(also with both stripped, so it stays an isolated measurement). 'drop_runnerup' turns on "
+        "the other plan 70 helper K candidate on top of today's real defaults; 'send_prev_qa' "
+        "names today's default explicitly (BONSAI_KB_FOLLOWUP_SEND_PREV_QA=1) rather than adding "
+        "anything new. Every shape sets its variables for this process only.",
     )
     args = parser.parse_args()
 

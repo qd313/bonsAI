@@ -35,6 +35,14 @@ Mesa note, and **was published to both places it publishes to on 2026-09-23.** *
 maintainer's Deck too** — installed from the plugin's own button and checked by asking about the flooded
 rooms, which came back correct.
 
+**Update 2026-09-26 (plan 70).** The library is now **38 games, 414 notes** (Brotato, Palworld and
+Skyrim added), plus per-game Deck tips and a new "starting out" note kind with its own chip. The format
+bumped to 4 for this, so every installed library goes stale until it re-downloads; an old plugin
+degrades gracefully instead of crashing, and a too-new library now refuses on an old plugin with a plain
+message instead of half-working. A safety net now covers a boss's name in the reply if the question only
+described it — previously that could come back named in plain text with no spoiler cover at all, on a
+story-protected game. None of this has been confirmed on the Deck yet.
+
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
 the other eight were written on purpose to have none, and stay blank as a control, so every question that
@@ -135,7 +143,9 @@ nothing already installed goes stale. **2026-09-18:** the `2026.09.18` library w
 maintainer's own Deck from the plugin's own folder rather than downloaded from either public host; the
 install moved it onto the device's internal storage, and the `2026.09.08` copy still sat on the SD card.
 **Published 2026-09-23:** `2026.09.18` is now live on both Hugging Face and the GitHub release, read back
-after publishing to confirm it.
+after publishing to confirm it. **Update 2026-09-26:** 38 games, 414 notes, 159 shared Deck tips plus new
+per-game ones. Schema bumped 3 → 4 for the per-game tip column, so this release makes every installed
+library stale until it re-downloads. Not yet built, published or read back on the Deck.
 
 ## 4. What is open right now
 

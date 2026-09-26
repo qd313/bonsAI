@@ -312,6 +312,10 @@ only if the reading with a game running says memory is tight.
   the rig's press tools. **Decided 2026-09-25: allowed**, in the maintainer's own settings.
 - **The pinned test chips are still pinned** from plan 68's block. The maintainer said they will clear them;
   two owed chip checks wait on that.
+- **CC BY-SA 2.5 was added to the allowed licences** (the release check and the wiki reader), a session
+  call after `27fd9aee`, so Skyrim's 15 notes (from the Unofficial Elder Scrolls Pages, share-alike 2.5)
+  can ship. Fits D20: share-alike 2.5 lets an adaptation use a later version, which is what rewording the
+  page in bonsAI's own words under the newer share-alike 4.0 the rest of the library uses already does.
 
 ## 9. Found while planning, and logged in the roadmap (2026-09-25)
 

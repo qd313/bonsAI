@@ -91,6 +91,13 @@ staged those into the copy's own commit — every copy's full checks then failed
 even staged stale generated files into a real commit. Commit in a copy with
 `git -c core.hooksPath=.githooks commit` so the copy's own hook runs instead.
 
+**Cut a helper's own copy only when the tests pass at that exact commit.** Two helpers were cut in the
+gap between two landings that depended on each other — the first landing's commit was on the branch,
+but something it needed from a second, related commit was not there yet, so both new copies started
+on a red baseline without either helper knowing it. Their own work then looked broken when it was not;
+the real fault was already there before they began. Read the tests at the commit a copy is about to be
+cut from, not just at "the latest commit on the branch", before handing it to a helper.
+
 ---
 
 ## 2. Proving a change is really a change
@@ -137,6 +144,15 @@ a screen-side change to be able to turn a Python test red with no warning from `
 Splitting a file can pull a block out next to another block that already reads almost the same, and the
 count goes up even though nothing was duplicated on purpose. Share the common part instead of leaving
 both, and never just re-record the new, higher number as the baseline.
+
+**An AI reworded a wiki page in its own words picks up small invented details.** Wording a game's notes
+"in bonsAI's own words" from a source page, rather than quoting it, gave two new games' worth of notes
+nine small claims the page never made — a word like "small" added to a group size, one game's own
+naming borrowed for another's items, a location invented for something the source never places. A
+line-by-line check of every sentence against the page it was written from, done after the fact, caught
+them: one helper fixed 8 such claims, another fixed claims in 14 of 18 notes. Read every reworded
+sentence against its source page before it ships, not just for tone but for whether the page actually
+says that.
 
 **Tests reach a moved name in more ways than `patch(...)`.** `patch.object(module, ...)` and a plain
 assignment from a script (`module.NAME = ...`) both still point at the old location and miss code that

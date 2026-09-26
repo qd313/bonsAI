@@ -5,6 +5,41 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **A boss the question only described, never named, is now hidden if the reply names it anyway:** a
+  story-protected game's rules told the model to keep a boss's name hidden, but nothing ever checked
+  that it actually did — so a question like "the boss past the crystal spike area" could come back with
+  the boss named outright, in plain text, twist and all. A safety net now covers any protected name the
+  reply uses that the question itself did not, both while the answer is still arriving and once it is
+  finished. `response_verify.py`, `game_ai_request.py`, `ollama_ask_service.py`. On-Deck check owed.
+- **Removing a model no longer stays greyed out forever after it has answered a question:** once a model
+  had ever answered anything, its Remove button read "Switch Ask mode first to remove this model" and
+  stayed disabled until the whole plugin reloaded, even though nothing was actually using it any more.
+  Remove is now clickable again the moment the answer finishes. `AiModelsSection.tsx`. On-Deck check
+  owed.
+- **A big model installed outside the built-in list now shows its real size:** removing a 17 GB model
+  said it would free "< 0.1 GB," and the models list's own total undercounted it the same way, because
+  the screen only asked for sizes of models already in its own bundled catalog. It now asks for sizes of
+  everything actually installed. `AiModelsSection.tsx`. On-Deck check owed.
+- **The Ollama tab no longer logs a false connection failure right after opening or reloading the
+  plugin:** its first connection check used to run before the saved settings had finished loading, so it
+  checked the wrong, still-default host and logged a failure even though Ollama was answering normally
+  the whole time. The check now waits for settings to finish loading first. `OllamaSetupSection.tsx`.
+  On-Deck check owed.
+- **A Steam ban-lookup report now reads as a list instead of a wall of pipe characters:** the report was
+  built as a markdown table, which the Deck's answer screen cannot draw as a table, so it showed up as
+  one run-on line of `|` and `-` characters. Each account's facts are now written as a plain line
+  instead. `vac_check_commands.py`. On-Deck check owed.
+- **A big, barely-compressed screenshot no longer crashes the AI:** attaching one could crash the
+  model's graphics chip, because the picture only ever got shrunk before sending when a certain picture
+  library was installed, and that library is never present on the Deck. `ffmpeg`, already on the Deck,
+  now does the shrinking instead; if it is missing or the shrink itself fails, the picture is refused
+  with a plain message instead of being sent at full size. `screenshot_media.py`. On-Deck check owed.
+- **A reply that used one of the notes no longer wrongly says "nothing close matched":** the line that
+  warns an answer was not grounded in the local notes could show up under a reply that clearly used one
+  — describing a boss instead of naming it, or asking a multi-part walkthrough question, both used to
+  trip this false warning. The check now also reads each note's own words, not just its title, to decide
+  whether it was really used. `knowledge_base_service.py`. Wiring into the real Ask is still in progress;
+  On-Deck check owed once it lands.
 - **In the Session tab, Down from the last row of turns now reaches that turn's chips instead of jumping
   out of the tab:** on a long chat, pressing Down from the very last turn row used to skip past its own
   chips and land on "Save chat to Desktop" outside the tab, even though the chips were right there on
@@ -363,6 +398,23 @@ All notable changes to this project are documented in this file.
   breathes normally while the model is thinking. `answerBubble.ts`, `section-6.ts`.
 
 ### Added
+- **A new player now gets a "How do I get started" chip and note:** a covered game with a starting-out
+  note now offers a *"How do I get started in <game>?"* suggestion chip, and typing "where do I start"
+  or "how do I get started" reaches that note the same way asking about a boss reaches a boss note.
+  `knowledge_base_chips.py`, `knowledge_base_search.py`. On-Deck check owed.
+- **A troubleshooting question about a running game can now get that game's own tip, not just shared
+  advice:** a Deck tip can now belong to one game instead of only ever being generic. Five tips ship this
+  way: the maintainer's own Fallout 4 launch-option and GTA San Andreas: The Definitive Edition display
+  option, plus two researched (not yet confirmed on real hardware) tips for Deep Rock Galactic: Survivor
+  and Ocarina of Time. `knowledge_base_service.py`, `build_rag_db.py`. On-Deck check owed.
+- **Installing a knowledge-base library too new for this build of the plugin now refuses with a plain
+  message instead of half-working:** nothing used to check the library's own format number before
+  installing it. It now compares that number first and asks the person to update the plugin if it is
+  too new, before a single byte downloads. `knowledge_base_service.py`. On-Deck check owed.
+- **Brotato, Palworld and Skyrim now get real answers from the knowledge base:** the library is now 38
+  games and 414 notes, up from 35 and 372. Brotato has no story to protect, so its tactics show right
+  away; Palworld's Tower boss fights and Skyrim's story are kept behind a spoiler box until asked about
+  directly. On-Deck check owed.
 - **A long chat now sums itself up instead of quietly forgetting the older part:** once a chat has grown too
   long to carry whole, the AI writes a short summary of the older part right before answering, then answers
   using that summary plus the newest turns, so a vague follow-up like "and what about that" still lands on

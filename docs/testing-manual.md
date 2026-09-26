@@ -333,6 +333,11 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 All checks in this block passed on the Deck and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
 VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 
+- [ ] **VAC-03-07** Fixed 2026-09-26 (plan 70, helper I): the ban report used to be written as a markdown
+  table, which the Deck's answer renderer showed as one run-on line of pipe characters. Run a ban lookup
+  with a real account number — each account's facts must read as a plain bullet line, same facts and
+  wording, no pipe or dash characters anywhere. Deck check owed.
+
 ### Open regression IDs (bugs / recent ships)
 
 - [ ] **PRESET-GAME-01** With a game running, tap a preset chip — Ask field shows chip text only (no `— {Game}` append; “this game” unchanged)
@@ -361,6 +366,12 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     launch tool can search, so it could not be started. Someone needs to play it once by hand first, or the
     launch tool needs to reach the full Library grid. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
+- [ ] **SPOILER-COVER-01** Fixed in code 2026-09-26 (plan 70, helper A), Deck check owed. On Hollow Knight, a
+  story-protected game, describe a boss without naming it ("the boss past the crystal spike area") — a
+  sentence naming it must sit in a spoiler box, both while the reply arrives and once it finishes. Ask the
+  same thing but name the boss yourself — the reply stays plain. On Deep Rock Galactic: Survivor, the same
+  kind of question never shows a spoiler box at all. Known gap, not testable by this row: a spoiler that
+  never uses a note's own name at all (a paraphrase) is not caught.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
@@ -386,11 +397,34 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 - [ ] **KB-FOCUS-01** Ollama KB Update/Remove: Left/Right between pair; both Up → KB toggle; both Down → Reply style; **equal row height** (Update not taller than Remove)
 - [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the roadmap's Shelved list until a throttle or a slower test copy exists.
 - [ ] **KB-NOTIP-FLOOR-01** Fixed 2026-09-26 (`27fd9aee`): the troubleshooting tip floor's cut-off sat exactly on the worst junk phrase's score instead of just above it. Setup: nothing running. Do: ask "what time is it", then "one sentence", once each in Speed, Strategy and Expert. Pass when: no reply carries a troubleshooting tip in any mode and Show details says no tip attached. Deck check owed.
+- [ ] **KB-NOCLOSE-TEXT-01** Fixed in code 2026-09-26 (plan 70, helper B, `58f60c0a`), wiring in progress, Deck check owed. Hollow Knight, Strategy mode, knowledge base on. Describe a boss without naming it ("the boss past the crystal spike area") and read Show details — the "no close match" line must not appear, since the reply is built on the Broken Vessel note. Also try a Half-Life 2 walkthrough question built on real chapter notes; same pass condition.
+- [ ] **KB-NEWGAMES-01** Built 2026-09-26 (plan 70, helpers F and G), Deck check owed, flow R. Brotato, Palworld and Skyrim in the library. Launch Brotato, ask about the shop or the wave-20 bosses; launch Palworld, ask about catching a Pal or a Tower fight; ask about Skyrim by name (not installed on this Deck). Each game's own notes must attach, and Palworld's Tower-fight and Skyrim's story questions must open behind a spoiler box while Brotato's never do.
+- [ ] **STARTING-OUT-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. A covered game with a starting-out note, nothing running. Open the suggestion chips and confirm a "How do I get started in <game>?" chip appears; separately type "where do I start". Both must reach the game's own starting-out note.
+- [ ] **KB-TIP-PERGAME-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. Fallout 4 or GTA San Andreas: The Definitive Edition running. Ask a troubleshooting question that game's own tip answers (a launch or display option). The game's own tip must attach, credited as that game's tip, not a shared one.
+- [ ] **KB-FORMAT-REFUSE-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. An older build of the plugin trying to install the new (format 4) library must refuse before downloading, with a plain message asking to update the plugin, rather than downloading and half-working.
 - [ ] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows **Update AI & models** (quiet auto-probe)
 - [ ] **OLLAMA-FOCUS-02** Run AI on this Deck: D-pad vertical — toggle → Install/Update → Browse models → Install options… → Test connection → KB toggle
 - [ ] **OLLAMA-FOCUS-03** Up from Test connection lands on **Install options…** (or last Install-options submenu row when open)
 - [ ] **REPLY-VERB-01** Reply style: set **Caveman** → Ask → Input handling shows `Reply style: caveman` and reply is terse; **Balanced** → no `REPLY VERBOSITY` block vs baseline; **Detailed** → paragraphs; with **AI characters** on + Caveman, character voice (not caveman grammar); Strategy + Detailed still ends with `bonsai-strategy-branches`
 - [ ] **OLLAMA-KEEPALIVE-FOCUS-01** **Keep models loaded** slider thumb: white gpfocus ring vertically centered on the dot (no ~1px high offset)
+- [ ] **OLLAMA-TAB-AFTER-RELOAD-02** Fixed 2026-09-26 (plan 70, helper I): the Ollama tab's first connection
+  check used to run before settings finished loading, logging a false failure at start-up even though
+  Ollama was reachable. Reload the plugin, open the Ollama tab right away, and read the plugin log — no
+  false "non-loopback" connection failure should appear, and a genuine unreachable host must still log
+  one. Deck check owed.
+- [ ] **PRELOAD-RM-01** Fixed 2026-09-26 (plan 70, helper I): a model's Remove button used to stay greyed
+  out ("Switch Ask mode first to remove this model") after it had ever answered a question, until the
+  whole plugin reloaded. Ask a question with a model, wait for the answer to finish, then open that
+  model's row — Remove must be clickable again without a reload. Deck check owed.
+- [ ] **ROUTING-MERGE-SIZE-01** Fixed 2026-09-26 (plan 70, helper I): a model installed outside the
+  curated catalog (typed by name) used to show as "< 0.1 GB" in its own remove box and was left out of the
+  models list's own installed-size total. Install or use such a model, open its remove box and the models
+  list header — both must show its real size. Deck check owed.
+- [ ] **SCREENSHOT-SHRINK-01** Fixed 2026-09-26 (plan 70, helper J, `c625a03b`): a big, barely-compressed
+  screenshot used to crash the model's graphics chip; `ffmpeg` now shrinks it first. Attach a big
+  screenshot (the one that crashed it before is in `docs/test-evidence/plan64-SCREENSHOT-CRASH-*`) — the
+  answer must come back normally, the picture actually sent must be small, and the plugin log must show
+  the `ffmpeg` shrink path. Deck check owed.
 - [ ] **ROUTING-01** Set text/vision try order opens picker listing installed tags without requiring a prior Test connection tap
 - [ ] **ROUTING-02** Reorder + Done persists; reopen modal shows saved order
 - [ ] **ROUTING-FOCUS-01** Try-order modal chrome matches Pull Models / Character picker (deferred bug). **The D-pad half is no longer a question** — it failed on 2026-08-28, see PICKER-REORDER-01

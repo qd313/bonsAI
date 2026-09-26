@@ -907,6 +907,15 @@ The roadmap entry is removed; this note is what remains of it.
   this is a new `section_type` (which is a schema and chip-wording change) or lives as `mechanic` with a naming convention. Not smuggled in
   under D39, which was only about four existing cards' kinds.
 
+**Built 2026-09-26 (plan 70, helper E, commit `83cd1d78`).** Settled as its own `section_type`,
+`starting_out`. A new player asking a game's suggestion chips now sees "How do I get started in
+<game>?" for every title with one, and typing "where do I start" or "how do I get started" reaches
+that game's own note the same way "the boss" already reaches a boss note. `scripts/build_rag_db.py`
+now refuses to build the library if a note named "Starting out in ..." is not typed `starting_out`,
+so a future note left mistyped is caught at build time. All 28 starting-out notes now carry the kind:
+the 22 original rows re-typed, plus 6 new ones (Cyberpunk 2077, Fallout 4, Red Dead Redemption 2, and
+one each for Brotato, Palworld, Skyrim). No corpus format change was needed for this part, since the
+kind is free text.
 
 ## Eval fixture cannot see a recall failure
 
@@ -1166,6 +1175,41 @@ worse answers with nothing on screen to say why.
   worth recording. Evidence `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
+
+**The rest of the bug's history, moved here 2026-09-26 to keep the roadmap under its size limit.**
+Five possible causes were ruled out 2026-09-21, each by its own measurement, including the most
+promising one: a device log from 2026-09-18 showed the model's own instructions fitted its memory
+window with room to spare, and its own thinking even mentioned wrapping the answer, yet the answer
+still came back with no cover. Still reproduced 2026-09-22, uncovered in the first sentence. A
+measurement warning, not a fix: repeating the identical question came back cached, 1 second against
+the first run's 27, word for word the same — a warning about the counts already taken, not proof
+they were wrong, since counting by repeating a question counts nothing. Evidence
+`docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`. Reproduced again 2026-09-23 with fresh
+wording, Hollow Knight, game running: asking about the boss behind the crystal spike area attached
+the Soul Master's own note and Show details read "Spoiler risk: med," yet no spoiler cover appeared
+at any of 83 reads taken while the reply streamed in. The reply named "the Soul Master" outright and
+gave away its fake death and second round in plain text. The SPOILER-REVEAL reachability check
+stayed owed for a different reason: with no cover ever appearing, there was no hidden block to walk
+to and reach. Evidence `docs/test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
+
+**Fixed 2026-09-26 (plan 70, helper A), commits `d4b3062e`, `d41b47c7`, `301abc56`, `147cf5fa`.**
+`d4b3062e` works out, once per turn, whether a cover is owed and which names it protects
+(`spoiler_cover_required`, `protected_spoiler_names`, `boss_like_card_names`) as one shared answer
+instead of every caller working it out fresh. `d41b47c7` adds the checker itself
+(`cover_named_spoilers`): it finds the sentence or sentences naming a protected thing and wraps just
+those in a spoiler box, leaving anything already covered alone (including an accidental doubled
+cover from an earlier bug) and never producing a doubled cover itself — proved by breaking the
+name-matching check on purpose (4 tests failed as expected) and restoring it. `301abc56` wires it
+into the real Ask: once the honesty footers are appended, every attached boss or enemy name the
+player did not type is covered wherever it shows up, before the saved/"Show details" copy is built,
+so the two never disagree about what got covered. `147cf5fa` covers a name while it is still
+streaming in too: a name already fully typed is covered immediately; a name only half-typed is held
+back from the screen until the next flush either completes it (covered) or shows the words were
+something else (never hidden). Answer-test rows added for a boss described but never named:
+A-HK-03 (Hollow Knight, Soul Master) and A-HADES-04 (Hades, Megaera), each confirmed to have a real
+note before being written. The Hollow Knight described-boss row that used to expect no cover
+(`b2f1933a`) now expects "not scored" instead, since covering that name is the fix working, not a
+regression — 1 run in 5 named the boss and was covered.
 
 
 ## Headline first: every answer opens with one line that stands alone
@@ -1580,7 +1624,14 @@ sent before.
 **The maintainer's decision, 2026-09-25 (D112):** shrink with `ffmpeg`, and refuse a picture with a message
 if the shrink itself ever fails. Planned in plan 70.
 
-
+**Fixed 2026-09-26 (plan 70, helper J, commit `c625a03b`).** `ffmpeg` now does the shrinking whenever
+Pillow is missing: it scales the picture down to the same Low/Mid/Max longest-side limit Pillow already
+used and re-encodes it as a compact JPEG. A picture already small enough is sent as it is. If `ffmpeg` is
+missing, the shrink fails, or it times out, the picture is refused with a plain message instead of
+sending the full-size file that caused the crash. Tests built against a fake `ffmpeg` (the exact command
+line the code runs) cover a successful shrink, a shrink failure, a timeout, `ffmpeg` missing, and an
+already-small picture passing through untouched; the fix was broken on purpose first (reverted to the
+old raw-bytes fallback) and confirmed exactly two tests catch it, then restored.
 
 ## Measure how well the AI reads a screenshot
 
@@ -1748,4 +1799,47 @@ word match.
 question ending in a word like "land," "language" or "lane" could be sorted as a network problem — a
 Paper Mario question ending "right before they land" was the one found. Test
 `test_lan_does_not_match_inside_a_longer_word`.
+
+## Three new games and their notes
+
+**Landed 2026-09-26 (plan 70, helpers F and G).** Brotato (12 notes: starting a run, the shop and reroll
+pricing, materials/gold/experience, danger levels, elite and horde waves, characters and item tags, the
+two wave-20 bosses, tougher elite enemies, early common enemies, item rarity, the guaranteed legendary
+drop) and Palworld (12 notes: starting a run, catching Pals, building and running a base, keeping Pals
+fit to work, breeding, technology points, the five kinds of boss fight, Tower fights against Faction
+Leaders, roaming Alpha world bosses, the starting Pal Sphere, weapons and ammo), both reworded in
+bonsAI's own words from their wikis (CC BY-SA 4.0). Skyrim Special Edition (15 notes, from the
+Unofficial Elder Scrolls Pages, share-alike 2.5, every sentence checked against its page) plus
+starting-out notes for Cyberpunk 2077, Fallout 4 and Red Dead Redemption 2 (bonsAI's own words; its
+wiki is not usable). Spoiler profiles: Brotato has no story to protect, so its boxes open right away,
+like Deep Rock Galactic and DOOM Eternal; Palworld's Tower fights against named Faction Leaders gate
+real story progress, so it keeps a box closed until tapped, like Hades; Skyrim also protects story
+progress. **A line-by-line check of every sentence against its source page, done after the fact, found
+invented details in most of the new notes** — see the lesson in docs/lessons-learned.md. Fixed before
+landing: 8 sentences in the Brotato/Palworld notes (`cc48166d`), and claims in 14 of Skyrim's 18 notes.
+The two helpers' note lists collided on landing (both had appended to the same lists) and were merged
+by content, not by discarding either. The library is now 38 games, 414 notes.
+
+## Library format bump and per-game Deck tips
+
+**Built 2026-09-26 (plan 70, helper E).** `compat_patterns` gains an optional per-game column (schema
+3 → 4); every installed library goes stale until it downloads the new one. Two safety nets ride with
+the bump: `e43fc91d` compares a library manifest's own format number against what this copy of bonsAI
+understands and refuses before a single byte downloads, with a plain message asking the person to
+update the plugin, if the library is too new; and an old plugin's own download check never looks at
+the format number and reads columns by name, so it degrades to the old behaviour instead of crashing.
+Five tips ship keyed to one game rather than shared (`ff37ea26`): the maintainer's own Fallout 4
+mod-launcher option and GTA San Andreas: The Definitive Edition's DirectX 12 option, exactly as given
+from their own Deck, plus two more for Deep Rock Galactic: Survivor and Ocarina of Time, each labelled
+"Researched, unconfirmed" since nobody has checked them on real hardware the way the first two are.
+Once a game is resolved, its own tips now join the search pool ahead of an equally-good shared tip
+(`bbad8e00`), reusing the same preferred-tip weight a routed topic already gets.
+
+## The live thinking line shows the model's own rule checklist
+
+**Found 2026-09-26, from the maintainer's own screenshot** (`docs/test-evidence/plan70-THINKING-CHECKLIST.png`).
+Every rule sent to the model is re-checked this way on every single question. **Options, not yet chosen
+between:** show a short status line instead of the checklist; send the model only the rules that
+actually fit the question (needs measuring first, since fewer rules could change answers); turn
+thinking off by default in Speed mode.
 

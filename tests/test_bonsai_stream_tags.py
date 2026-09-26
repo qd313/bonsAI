@@ -18,6 +18,7 @@ from backend.services.bonsai_stream_tags import (
     sanitize_thinking_summary,
     summing_up_line,
 )
+from backend.services.kb_followup_memory import build_previous_turn_context_block
 
 _BANNED_PREFIXES = ("yeah", "fine.", "sure.", "oh joy", "right.")
 _EMOJI_ONLY_LINES = ("🙄", "😮‍💨", "🫠", "🌳")
@@ -233,6 +234,20 @@ class BonsaiStreamTagsTests(unittest.TestCase):
             {"question": "help", "app_name": "Elden Ring", "request_id": 7},
         ):
             self.assertEqual(format_thinking_phase("summing_up", **kwargs), SUMMING_UP_LINE)
+
+    def test_summing_up_never_shows_the_follow_up_reminder(self):
+        """The summing-up step is handed the question as it goes to the model, and on a bare
+        follow-up that text starts with a hidden reminder the person never typed (plan 70's
+        follow-up fix). The line must still be the fixed one, never quoting that reminder. Built
+        the same way game_ai_request.py builds it: the reminder block, a line break, the question."""
+        reminder = build_previous_turn_context_block(
+            "how do I beat the hollow knight", "Dodge the lunge, then punish."
+        )
+        self.assertTrue(reminder.strip().startswith("FOLLOW-UP CONTEXT (a system reminder"))
+        model_bound = f"{reminder}\nand what about that"
+        line = format_thinking_phase("summing_up", question=model_bound, request_id=3)
+        self.assertEqual(line, SUMMING_UP_LINE)
+        self.assertNotIn("FOLLOW-UP", line)
 
     def test_summing_up_line_appends_whole_seconds(self):
         """Plan 68 step 4: the wait line while the chat sums itself up counts up in whole

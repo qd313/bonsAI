@@ -109,7 +109,7 @@ from backend.services.kb_not_in_notes_notice import (
     append_no_close_match_notice,
     append_no_tip_for_this_notice,
     append_not_in_notes_notice,
-    should_show_no_close_match_notice,
+    should_show_no_close_match_notice_for_turn,
     should_show_no_tip_for_this_notice,
     should_show_not_in_notes_notice,
 )
@@ -134,10 +134,8 @@ from backend.services.response_verify import (
 )
 from backend.services.spy_confession_service import parse_spy_lies_tag
 from backend.services.strategy_spoiler_policy import (
-    boss_like_card_names,
     neutralize_protected_names_in_branch_menu,
-    protected_spoiler_names,
-    spoiler_cover_required,
+    resolve_turn_spoiler_protected_names,
 )
 from backend.services.knowledge_base_service import (
     kb_coverage_to_transparency,
@@ -962,107 +960,60 @@ async def run_game_ai_request(
             # written -- they require nothing to have attached and this requires something to
             # have, so the three are mutually exclusive by construction.
             #
-            # HONESTY-TEXT-GAME-01 (plan 56 lane J, part two lane K): the extra arguments below
-            # let the check catch a keyword score, and separately a meaning score, that only
-            # look like a real match because the game's own name was typed as part of the
-            # question -- see kb_not_in_notes_notice.py's comment above
-            # should_show_no_close_match_notice. They are filled in only when `text_resolved_title`
-            # is the reason a game is in play at all, i.e. nothing was running and the question
-            # named it (D19, just above) -- a running game's name is not the failure this guards,
-            # so every other turn leaves them blank and gets the old behaviour unchanged.
-            close_match_question = ""
-            close_match_game_name = ""
-            close_match_source_titles: tuple[str, ...] = ()
-            close_match_source_texts: tuple[str, ...] = ()
-            if text_resolved_title:
-                close_match_question = question_for_kb_search
-                close_match_game_name = text_resolved_title
-                close_match_source_titles = tuple(
-                    str(source.get("title") or "")
-                    for source in (kb_transparency.get("kb_sources") or [])
-                )
-                # Plan 70 helper B, bug 1: the notes' own text, not just their title, so a
-                # question that describes a note instead of naming it (a boss card's own
-                # wording, not its two-word title) still counts as a real match. `kb_attached_notes`
-                # is built above (`_parse_kb_attached_notes`) from the exact text the model saw,
-                # so its "card" field is that note's own body -- see kb_not_in_notes_notice.py's
-                # module comment above `_keyword_score_reflects_the_question` for the Hollow
-                # Knight and Half-Life 2 replies this was found from.
-                close_match_source_texts = tuple(
-                    str(note.get("card") or "") for note in kb_attached_notes
-                )
-            show_no_close_match = should_show_no_close_match_notice(
+            # Plan 70 helper B, bug 1: `kb_attached_notes` (built above by
+            # `_parse_kb_attached_notes`) carries each note's own card text alongside its title,
+            # so a question that describes a note instead of naming it still counts as a real
+            # match -- see should_show_no_close_match_notice_for_turn's own doc for the rest of
+            # this (moved out of this file, plan 70, growth-limit fix).
+            show_no_close_match = should_show_no_close_match_notice_for_turn(
                 ask_mode=ask_mode,
-                kb_attached=bool(kb_transparency.get("kb_attached")),
-                kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
-                kb_domain=str(kb_transparency.get("kb_domain") or ""),
-                kb_best_meaning=kb_transparency.get("kb_best_meaning"),
-                kb_top_card_keyword_score=float(
-                    kb_transparency.get("kb_top_card_keyword_score") or 0.0
-                ),
-                question=close_match_question,
-                kb_game_name=close_match_game_name,
-                kb_source_titles=close_match_source_titles,
-                kb_source_texts=close_match_source_texts,
-                # HONESTY-TEXT-GAME-01, part two (plan 56 lane K): the meaning half of the same
-                # fix as the three arguments above. Also blank on every turn but the D19 one --
-                # `kb_best_meaning_without_game_name` is only ever filled in when
-                # `text_resolved_title` was set, so this reads the same None everywhere else and
-                # the ceiling check falls back to the raw score exactly as before this field
-                # existed.
-                kb_best_meaning_without_game_name=kb_transparency.get(
-                    "kb_best_meaning_without_game_name"
-                ),
+                kb_transparency=kb_transparency,
+                kb_coverage_transparency=kb_coverage_transparency,
+                text_resolved_title=text_resolved_title,
+                question_for_kb_search=question_for_kb_search,
+                kb_attached_notes=kb_attached_notes,
             )
             response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
             response_text = append_no_tip_for_this_notice(response_text, show_no_tip_for_this)
             response_text = append_no_close_match_notice(response_text, show_no_close_match)
 
-            # D112 #7, the spoiler safety net: the prompt already told the model to keep a
-            # boss/story spoiler behind a ```bonsai-spoiler``` fence whenever
-            # `spoiler_cover_required` says this turn needed one -- nothing ever checked whether
-            # it actually did, and a question describing a boss without naming it came back
-            # with the boss named in plain text (measured on the Deck, 83 reads never covered).
-            # Run last, after the honesty footers above, so a footer line is covered the same
-            # way ordinary prose is on the rare turn one happens to name a protected thing; run
-            # before `ollama_route_snapshot` below so the saved/"Show details" copy and the
-            # copy the person reads never disagree about what got covered.
-            strategy_domain = strategy_domain_guidance or ask_mode == "strategy"
-            if spoiler_cover_required(
-                strategy_spoiler_consent_effective,
-                strategy_domain=strategy_domain,
+            # D112 #7, the spoiler safety net. Run last, after the honesty footers above, so a
+            # footer line is covered the same way ordinary prose is on the rare turn one happens
+            # to name a protected thing; run before `ollama_route_snapshot` below so the
+            # saved/"Show details" copy and the copy the person reads never disagree about what
+            # got covered. See resolve_turn_spoiler_protected_names's own doc (moved out of this
+            # file, plan 70, growth-limit fix) for what it decides and why.
+            spoiler_protected_names_for_turn = resolve_turn_spoiler_protected_names(
+                question,
+                kb_text,
+                spoiler_consent_effective=strategy_spoiler_consent_effective,
+                strategy_domain_guidance=strategy_domain_guidance,
+                ask_mode=ask_mode,
                 app_id=app_id,
                 app_name=app_name,
                 title_profile=strategy_title_profile,
-            ):
-                spoiler_protected_names_for_turn = protected_spoiler_names(
-                    question, boss_like_card_names(kb_text)
+            )
+            if spoiler_protected_names_for_turn:
+                response_text = cover_named_spoilers(
+                    response_text, spoiler_protected_names_for_turn
                 )
-                if spoiler_protected_names_for_turn:
-                    response_text = cover_named_spoilers(
-                        response_text, spoiler_protected_names_for_turn
-                    )
 
-            # Plan 70 helper K, finish 3 (the maintainer's pick, on unless send_prev_qa_enabled()
-            # is turned off): now that this turn's own answer is finished -- and covered, just
-            # above, so what is remembered is what the person saw -- remember it (trimmed)
-            # alongside whatever subject is already stored for this chat's game, so the *next*
-            # bare follow-up can send it back. Onto an existing subject record only --
-            # kb_followup_memory.remember_previous_turn is a no-op when this chat's game has
-            # changed since the subject was last set.
-            if (
-                kb_memory_eligible
-                and kb_domain == "strategy"
-                and kb_followup_memory.send_prev_qa_enabled()
-            ):
-                kb_followup_memory.remember_previous_turn(
-                    app_id=app_id,
-                    app_name=app_name,
-                    text_resolved_title=text_resolved_title,
-                    chat_id=chat_id,
-                    question=question_for_retrieval,
-                    answer=response_text,
-                )
+            # Plan 70 helper K, finish 3: now that this turn's own answer is finished -- and
+            # covered, just above, so what is remembered is what the person saw -- remember it
+            # (trimmed) alongside whatever subject is already stored for this chat's game, so
+            # the *next* bare follow-up can send it back. See
+            # remember_previous_turn_if_eligible's own doc (moved out of this file, plan 70,
+            # growth-limit fix) for the three-way eligibility guard.
+            kb_followup_memory.remember_previous_turn_if_eligible(
+                kb_memory_eligible=kb_memory_eligible,
+                kb_domain=kb_domain,
+                app_id=app_id,
+                app_name=app_name,
+                text_resolved_title=text_resolved_title,
+                chat_id=chat_id,
+                question=question_for_retrieval,
+                answer=response_text,
+            )
 
         err_tail = ""
         if not ollama_result.get("success"):

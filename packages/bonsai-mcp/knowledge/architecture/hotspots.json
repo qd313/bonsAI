@@ -42,7 +42,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1211,
+      "lines": 1162,
       "role": ""
     },
     {
@@ -171,6 +171,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "lines": 597,
+      "role": ""
+    },
+    {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
       "lines": 584,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 560,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "lines": 559,
       "role": ""
     }
   ]

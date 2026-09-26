@@ -410,6 +410,44 @@ def protected_spoiler_names(question: str, kb_card_titles: Iterable[str]) -> lis
     return out
 
 
+def resolve_turn_spoiler_protected_names(
+    question: str,
+    kb_text: str,
+    *,
+    spoiler_consent_effective: bool,
+    strategy_domain_guidance: bool,
+    ask_mode: str,
+    app_id: str,
+    app_name: str,
+    title_profile: str,
+) -> list[str]:
+    """This turn's protected names, or ``[]`` when the spoiler safety net was not needed at all.
+
+    D112 #7: the prompt already tells the model to fence a boss/story spoiler whenever
+    `spoiler_cover_required` says this turn needed the net -- nothing checked whether it
+    actually did, and a question describing a boss without naming it could come back with the
+    boss named in plain text (measured on the Deck, 83 replies never covered). This combines
+    that check with `protected_spoiler_names` (scored against `boss_like_card_names` over
+    whatever knowledge-base text reached the model this turn) into the one call a caller needs;
+    a non-empty result is the caller's own signal to run the reply through `cover_named_spoilers`
+    (response_verify.py -- kept out of this module to avoid a circular import, since that module
+    already imports from this one).
+
+    Moved out of game_ai_request.py (plan 70, growth-limit fix) so that file keeps one call for
+    the "is this needed, and for whom" decision.
+    """
+    strategy_domain = strategy_domain_guidance or ask_mode == "strategy"
+    if not spoiler_cover_required(
+        spoiler_consent_effective,
+        strategy_domain=strategy_domain,
+        app_id=app_id,
+        app_name=app_name,
+        title_profile=title_profile,
+    ):
+        return []
+    return protected_spoiler_names(question, boss_like_card_names(kb_text))
+
+
 # Plan 70 helper A (D112 #7 leak fix, SPOILER-COVER-01): the model sometimes glues a fence
 # marker to the end of running prose ("The```bonsai-spoiler"), which neither this checker's own
 # fence-open pattern nor the screen's own line-by-line scanner (streamMarkdownPrepare.ts's

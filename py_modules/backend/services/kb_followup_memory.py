@@ -299,6 +299,37 @@ def remember_previous_turn(
         mem.prev_answer = a
 
 
+def remember_previous_turn_if_eligible(
+    *,
+    kb_memory_eligible: bool,
+    kb_domain: str,
+    app_id: str,
+    app_name: str,
+    text_resolved_title: str,
+    chat_id: str = "",
+    question: str,
+    answer: str,
+) -> None:
+    """Runs `remember_previous_turn` only when this turn actually qualifies for it: Strategy or
+    Expert (`kb_memory_eligible`, gated the same way the search-words augmentation is), a
+    strategy-domain KB search this turn (`kb_domain`), and the global switch
+    (`send_prev_qa_enabled`). `remember_previous_turn` itself stays unguarded on purpose -- see
+    its own docstring, a test calls it directly without setting the environment.
+
+    Moved out of game_ai_request.py (plan 70, growth-limit fix) so that file keeps one call for
+    this instead of writing the three-way guard out inline.
+    """
+    if kb_memory_eligible and kb_domain == "strategy" and send_prev_qa_enabled():
+        remember_previous_turn(
+            app_id=app_id,
+            app_name=app_name,
+            text_resolved_title=text_resolved_title,
+            chat_id=chat_id,
+            question=question,
+            answer=answer,
+        )
+
+
 def recall_previous_turn(
     *, app_id: str, app_name: str, text_resolved_title: str, chat_id: str = ""
 ) -> tuple[str, str]:

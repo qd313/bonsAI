@@ -405,6 +405,68 @@ def should_show_no_close_match_notice(
     return effective_meaning < _THIN_MATCH_MEANING_CEILING
 
 
+def should_show_no_close_match_notice_for_turn(
+    *,
+    ask_mode: str,
+    kb_transparency: dict,
+    kb_coverage_transparency: dict,
+    text_resolved_title: str,
+    question_for_kb_search: str,
+    kb_attached_notes: list,
+) -> bool:
+    """Wraps `should_show_no_close_match_notice`, building its close-match-only arguments
+    (question, game name, source titles, source texts) from a turn's already-computed state
+    instead of asking every caller to assemble them by hand.
+
+    HONESTY-TEXT-GAME-01 (plan 56 lane J, part two lane K): those four arguments let the check
+    catch a keyword score, and separately a meaning score, that only look like a real match
+    because the game's own name was typed as part of the question -- see the module comment
+    above `_keyword_score_reflects_the_question`. They are filled in only when
+    `text_resolved_title` is the reason a game is in play at all, i.e. nothing was running and
+    the question named it (D19) -- a running game's name is not the failure this guards, so
+    every other turn leaves them blank and gets the old behaviour unchanged.
+
+    `kb_source_texts` (the bug found on the Deck 2026-09-23) is each attached note's own card
+    text, alongside its title in `kb_source_titles` -- a question that describes a boss instead
+    of naming it shares nothing with a short title but often shares a word with the note's own
+    description of it.
+
+    Moved out of game_ai_request.py (plan 70, growth-limit fix) so that file keeps one call for
+    this instead of building these four arguments inline.
+    """
+    close_match_question = ""
+    close_match_game_name = ""
+    close_match_source_titles: tuple[str, ...] = ()
+    close_match_source_texts: tuple[str, ...] = ()
+    if text_resolved_title:
+        close_match_question = question_for_kb_search
+        close_match_game_name = text_resolved_title
+        close_match_source_titles = tuple(
+            str(source.get("title") or "")
+            for source in (kb_transparency.get("kb_sources") or [])
+        )
+        close_match_source_texts = tuple(
+            str(note.get("card") or "") for note in kb_attached_notes
+        )
+    return should_show_no_close_match_notice(
+        ask_mode=ask_mode,
+        kb_attached=bool(kb_transparency.get("kb_attached")),
+        kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
+        kb_domain=str(kb_transparency.get("kb_domain") or ""),
+        kb_best_meaning=kb_transparency.get("kb_best_meaning"),
+        kb_top_card_keyword_score=float(
+            kb_transparency.get("kb_top_card_keyword_score") or 0.0
+        ),
+        question=close_match_question,
+        kb_game_name=close_match_game_name,
+        kb_source_titles=close_match_source_titles,
+        kb_source_texts=close_match_source_texts,
+        kb_best_meaning_without_game_name=kb_transparency.get(
+            "kb_best_meaning_without_game_name"
+        ),
+    )
+
+
 def append_no_close_match_notice(response_text: str, should_show: bool) -> str:
     """Append the fixed "no close match" line when `should_show`; unchanged otherwise.
 

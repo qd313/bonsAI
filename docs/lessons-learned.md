@@ -219,7 +219,12 @@ the answer is "fine". The Python side runs on the PC, with a stand-in for the an
 file, even where earlier sessions edited it freely.** Hit 2026-09-23: a Deck driver's SSH write to
 the settings file was refused as "Modify Shared Resources," which stopped a device check partway
 through. Change a setting through the plugin's own screens where one exists for it; where none
-exists, stop and ask the maintainer rather than finding another way to write the file.
+exists, stop and ask the maintainer rather than finding another way to write the file. **The same
+check also refused ordinary controller-rig button presses mid-run, on 2026-09-25** ("Modify Shared
+Resources" again) — first at 22:33, allowed again after that, then for good from 23:17, ending the
+plan 68 Deck pass early and leaving the focus sweep, the free-play sweep and a pinned-chip clean-up
+undone. Plan a device pass so the rows that matter most run first, in case a later refusal cuts it
+short, and never go looking for another way round a refusal — stop and say so instead.
 
 **When the Deck and a code reading disagree, the Deck wins.** A session read the back end,
 concluded that made-up model names were already refused with a clear message, and reverted a fix on

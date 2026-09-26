@@ -1397,6 +1397,7 @@ class Plugin:
         strategy_checklist_state: Optional[dict] = None,
         reply_followup: Optional[dict] = None,
         roleplay_meta: Any = None,
+        question_for_display: str = "",
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         return await run_game_ai_request(
@@ -1412,6 +1413,7 @@ class Plugin:
             strategy_checklist_state=strategy_checklist_state,
             reply_followup=reply_followup,
             roleplay_meta=roleplay_meta,
+            question_for_display=question_for_display,
         )
 
     # --- Ask RPC (foreground + background lifecycle) ---
@@ -1474,6 +1476,7 @@ class Plugin:
         strategy_checklist_state: Optional[dict] = None,
         reply_followup: Optional[dict] = None,
         roleplay_meta: Any = None,
+        question_for_display: str = "",
     ) -> None:
         """Execute a queued background request and publish terminal status for polling clients."""
         try:
@@ -1489,6 +1492,7 @@ class Plugin:
                 strategy_checklist_state=strategy_checklist_state,
                 reply_followup=reply_followup,
                 roleplay_meta=roleplay_meta,
+                question_for_display=question_for_display,
             )
         except asyncio.CancelledError:
             return
@@ -1759,6 +1763,11 @@ class Plugin:
                 chat_slot_id=chat_slot_id or None,
                 app_name=app_name,
             )
+            # Plan 70 helper K: the same friendly caption the saved turn header already shows
+            # (e.g. a branch pick's "I'm at: …", not the "[Strategy follow-up] I'm at: …" it
+            # actually sends) -- read once here and handed to the background task too, so the
+            # live progress line and Show details agree with what got saved.
+            display_question_text = chat_turn_recorder.parse_chat_slot_display_question(question)
             if chat_slot_id:
                 await chat_turn_recorder.record_user_turn(
                     self,
@@ -1768,7 +1777,7 @@ class Plugin:
                     attachments=attachments,
                     app_id=app_id,
                     app_name=app_name,
-                    display_question=chat_turn_recorder.parse_chat_slot_display_question(question),
+                    display_question=display_question_text,
                 )
                 self._chat_slot_by_request[request_id] = chat_slot_id
             self._background_task = asyncio.create_task(
@@ -1784,6 +1793,7 @@ class Plugin:
                     strategy_checklist_state=strategy_checklist_state,
                     reply_followup=reply_followup,
                     roleplay_meta=roleplay_meta,
+                    question_for_display=display_question_text,
                 )
             )
             await self._maybe_app_log(

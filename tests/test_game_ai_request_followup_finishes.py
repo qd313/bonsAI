@@ -12,6 +12,7 @@ run_game_ai_request hands to ask_ollama, since finish 3's context block is splic
 question_for_model, the first positional argument, not a kwarg.
 """
 
+import asyncio
 import os
 import unittest
 from unittest.mock import patch
@@ -22,6 +23,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
+from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from test_game_ai_request_followup_memory import (  # noqa: E402
     _DRG_APP_ID,
@@ -285,6 +287,81 @@ class SavedQuestionNeverLeaksTheReminderTests(_SwitchTestCase):
             "what about its second phase",
         )
         self.assertIn("FOLLOW-UP CONTEXT", plugin.ask_ollama_args[-1][0])
+
+
+class BranchPickDisplayQuestionTests(_SwitchTestCase):
+    """The same leak, a second way to trigger it: picking a branch from the suggestion menu
+    sends the model "[Strategy follow-up] I'm at: …", but the live progress line and Show
+    details must show the friendly "I'm at: …" the saved turn header already does -- caught on
+    the Deck, docs/test-evidence/plan70-L5-FLOW3-DRG.json. main.py's accept step already has that
+    friendly text on hand (the same one it saves) and now hands it down as
+    run_game_ai_request's own ``question_for_display`` argument -- a single self-contained turn,
+    not a two-turn follow-up, so this calls run_game_ai_request directly rather than through the
+    ``_run`` helper the wiring tests above share.
+    """
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_question_for_display_overrides_the_composed_prompt(self, mock_retrieve):
+        mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result("Here's how to approach the early campaign.")
+
+        composed = (
+            "[Strategy follow-up] I'm at: Just starting the campaign.\n"
+            "Earlier I asked: how do I beat the glyphid dreadnought\n\n"
+            "Give controller-friendly coaching for this exact point, then end with "
+            "**If you want to cheat…** as instructed."
+        )
+        asyncio.run(
+            run_game_ai_request(
+                plugin,
+                composed,
+                "127.0.0.1:11434",
+                app_id=_DRG_APP_ID,
+                app_name=_DRG_APP_NAME,
+                ask_mode="strategy",
+                question_for_display="I'm at: Just starting the campaign",
+            )
+        )
+
+        # The progress-line half.
+        display_sent = plugin.ask_ollama_calls[-1].get("question_for_display") or ""
+        self.assertEqual(display_sent, "I'm at: Just starting the campaign")
+        self.assertNotIn("[Strategy follow-up]", display_sent)
+        # The saved-question half (Show details, the desktop trace log).
+        self.assertEqual(
+            plugin.transparency_snapshots[-1].get("text_after_sanitizer"),
+            "I'm at: Just starting the campaign",
+        )
+        # The model itself still receives the full composed text, brackets and all.
+        self.assertIn("[Strategy follow-up]", plugin.ask_ollama_args[-1][0])
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_with_no_question_for_display_it_falls_back_to_the_sanitized_text(self, mock_retrieve):
+        """An ordinary question, or an older caller that predates this argument: unchanged."""
+        mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        asyncio.run(
+            run_game_ai_request(
+                plugin,
+                "how do i beat the glyphid dreadnought",
+                "127.0.0.1:11434",
+                app_id=_DRG_APP_ID,
+                app_name=_DRG_APP_NAME,
+                ask_mode="strategy",
+            )
+        )
+
+        self.assertEqual(
+            plugin.ask_ollama_calls[-1].get("question_for_display"),
+            "how do i beat the glyphid dreadnought",
+        )
+        self.assertEqual(
+            plugin.transparency_snapshots[-1].get("text_after_sanitizer"),
+            "how do i beat the glyphid dreadnought",
+        )
 
 
 if __name__ == "__main__":

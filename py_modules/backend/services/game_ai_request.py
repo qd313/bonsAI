@@ -231,8 +231,20 @@ async def run_game_ai_request(
     strategy_checklist_state: Optional[dict] = None,
     reply_followup: Optional[dict] = None,
     roleplay_meta: Any = None,
+    question_for_display: str = "",
 ) -> dict:
     """Run one full ask lifecycle, including Ollama call timing and optional TDP application.
+
+    ``question_for_display`` (plan 70 helper K): the friendly caption the caller already worked
+    out for this turn, when it differs from ``question`` itself -- e.g. a branch pick sends
+    ``"[Strategy follow-up] I'm at: …"`` but the caller (main.py's background accept step) already
+    has ``"I'm at: …"`` on hand, the same text the saved turn header shows. Preferred over the
+    plain sanitized text (``question_for_retrieval``) everywhere a person-facing quote is built --
+    the live progress line and the saved "text_after_sanitizer" field -- so neither shows internal
+    plumbing a bare follow-up's own reminder wasn't the only way to trigger (caught on the Deck,
+    docs/test-evidence/plan70-L5-FLOW3-DRG.json, right after picking a branch from the suggestion
+    menu). Blank when the caller has nothing better than the sanitized text, which is the same as
+    not passing it at all.
 
     ``roleplay_meta`` is a pre-resolved ``build_roleplay_system_suffix_meta`` result. The
     background Ask path resolves it at accept time so the opening thinking blurb can be composed
@@ -361,6 +373,11 @@ async def run_game_ai_request(
         # their previous Ask ..." — boilerplate identical on every follow-up, and nothing of
         # what was asked. The model still receives the header; the index does not.
         question_for_retrieval = lane.text
+        # Plan 70 helper K: prefer the caller's own friendly caption (a branch pick's "I'm at:
+        # …", the same text the saved turn header shows) over the plain sanitized text for
+        # anything a person reads back as "the question" -- see question_for_display's own
+        # parameter doc above for why.
+        effective_display_question = question_for_display.strip() or question_for_retrieval
 
         if reply_followup:
             followup_block = build_reply_followup_context_block(
@@ -814,11 +831,12 @@ async def run_game_ai_request(
             request_timeout_seconds=request_timeout_seconds,
             attachments=atts,
             ask_mode=ask_mode,
-            # Plan 70 helper K: the person's own words, before either a reply_followup chip
-            # header or finish3's own reminder text was ever spliced in above -- for every
-            # status line and safety check downstream that quotes "the question" rather than
-            # sending it to the model. See question_for_display's own doc in ollama_ask_service.py.
-            question_for_display=question_for_retrieval,
+            # Plan 70 helper K: the person's own words -- the caller's own friendly caption when
+            # it gave one, else the plain sanitized text, but never a reply_followup chip header
+            # or finish 3's own reminder text spliced in above. For every status line and safety
+            # check downstream that quotes "the question" rather than sending it to the model.
+            # See question_for_display's own doc in ollama_ask_service.py.
+            question_for_display=effective_display_question,
             read_tdp=read_tdp,
             tdp_grounding_requested=tdp_grounding_requested,
             tdp_cap_w=pre_cap,
@@ -1036,14 +1054,13 @@ async def run_game_ai_request(
             raw_question=question,
             sanitizer_action=str(lane.action),
             sanitizer_reason_codes=list(lane.reason_codes),
-            # The sanitizer's own output, not question_for_model: that field name is "the
-            # question after the sanitizer", read back on Show details, the saved turn header and
+            # The friendly caption when the caller has one (a branch pick's "I'm at: …"), else the
+            # sanitizer's own output -- never question_for_model: that field name is "the question
+            # after the sanitizer", read back on Show details, the saved turn header and
             # desktop_note_service -- never the text a reply_followup chip header or finish 3's
             # own reminder later added on top for the model's benefit (plan 70 helper K; caught on
-            # the Deck, docs/test-evidence/plan70-QA-FREE-PLAY-01.json, from the third question in
-            # a chat reading "FOLLOW-UP CONTEXT (a system reminder..." where the person's own
-            # words belonged).
-            text_after_sanitizer=question_for_retrieval,
+            # the Deck, docs/test-evidence/plan70-QA-FREE-PLAY-01.json and -L5-FLOW3-DRG.json).
+            text_after_sanitizer=effective_display_question,
             ollama_result={
                 **ollama_result,
                 **kb_transparency,

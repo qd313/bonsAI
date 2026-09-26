@@ -408,3 +408,76 @@ def protected_spoiler_names(question: str, kb_card_titles: Iterable[str]) -> lis
             continue
         out.append(name)
     return out
+
+
+# Plan 70 helper A (D112 #7 leak fix, SPOILER-COVER-01): the model sometimes glues a fence
+# marker to the end of running prose ("The```bonsai-spoiler"), which neither this checker's own
+# fence-open pattern nor the screen's own line-by-line scanner (streamMarkdownPrepare.ts's
+# isFenceLine) will ever recognise as a fence-open -- both require a fence marker to start its
+# own line. Measured on the Deck: the marker itself showed as raw backtick text, and the
+# model's own later, well-formed closing ``` was misread as *opening* a fresh, unlabelled fence
+# instead of closing the intended one. The three small helpers below fix that at the text level,
+# shared by response_verify.py's live and finished-reply coverers alike.
+_ANY_FENCE_MARKER_RE = re.compile(r"```")
+
+
+def move_midline_fence_openers_to_line_start(text: str) -> str:
+    """Give every ``` a line of its own, wherever the model glued one to running prose.
+
+    Fixes three things at once: the marker stops showing as raw backtick text, a real
+    ```bonsai-spoiler``` fence the model DID try to write gets recognised (rather than the
+    caller wrapping a second, redundant cover around the same sentence), and a later closing
+    ``` stops being misread as the opener of a fresh fence neither side meant to start.
+    """
+    if "```" not in text:
+        return text
+    out: list[str] = []
+    pos = 0
+    for m in _ANY_FENCE_MARKER_RE.finditer(text):
+        start = m.start()
+        out.append(text[pos:start])
+        if start > 0 and text[start - 1] != "\n":
+            out.append("\n")
+        pos = start
+    out.append(text[pos:])
+    return "".join(out)
+
+
+# A line that has started with one to three backticks but has not reached its own closing
+# newline yet -- "```bon" at the very end of the reply so far -- is a fence opener still being
+# typed, one character at a time. Anchored the same way a real opener is (start of the text, or
+# right after a newline), so this never fires on an ordinary word that merely contains a
+# backtick mid-line.
+_PARTIAL_FENCE_TAIL_RE = re.compile(r"(?:(?<=\n)|^)`{1,3}[^\n`]*$")
+
+
+def partial_fence_tail_match(text: str):
+    """A still-forming fence-opener at the very end of ``text``, or ``None``."""
+    return _PARTIAL_FENCE_TAIL_RE.search(text)
+
+
+# Mirrors response_verify.py's own ``_FENCE_CLOSE_RE`` (a closing ``` on its own line) exactly;
+# kept as its own small copy here rather than imported, since that name is private to the file
+# that owns the rest of the fence-segment machinery.
+_FENCE_CLOSE_TAIL_RE = re.compile(r"\n```(?=\n|$)")
+
+
+def fence_segment_is_closed(fence_chunk: str) -> bool:
+    """True when a ("fence", chunk) piece from response_verify.py's own segment split reached
+    its own closing ``` -- i.e. it is not still being written."""
+    m = _FENCE_CLOSE_TAIL_RE.search(fence_chunk)
+    return bool(m and m.end() == len(fence_chunk))
+
+
+def fence_opener_is_spoiler(fence_chunk: str) -> bool:
+    """True when a fence segment's own opener line reads ```bonsai-spoiler -- the same test
+    the screen's own live parser uses (streamMarkdownPrepare.ts's isSpoilerFenceOpenLine), so
+    this only ever holds back a spoiler fence's body, never an ordinary code sample or the
+    ```bonsai-strategy-branches``` menu."""
+    line_end = fence_chunk.find("\n")
+    opener_line = fence_chunk[:line_end] if line_end != -1 else fence_chunk
+    info = opener_line.strip()
+    if not info.startswith("```"):
+        return False
+    info = info[3:].strip().lower()
+    return info == "bonsai-spoiler" or info.startswith("bonsai-spoiler")

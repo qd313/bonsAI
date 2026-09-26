@@ -16,6 +16,10 @@ from typing import Any, Callable, Optional, Sequence
 
 from backend.services.strategy_spoiler_policy import (
     boss_like_card_names,
+    fence_opener_is_spoiler,
+    fence_segment_is_closed,
+    move_midline_fence_openers_to_line_start,
+    partial_fence_tail_match,
     protected_spoiler_names,
     spoiler_cover_required,
 )
@@ -400,31 +404,53 @@ def cover_named_spoilers(
     because there is no way to un-show a name that already flashed up. The next flush either
     finishes it (covered) or the words diverged (shown plain, nothing was ever hidden for it).
     An ordinary trailing word with no such risk ("Continuing…", a bullet with no full stop yet)
-    is never held back.
+    is never held back. The same holding-back applies to a fence marker itself, both a half-typed
+    opener ("```bon", never shown raw) and a fully-opened ```bonsai-spoiler``` fence with no
+    closing ``` yet (its body held back entirely rather than shown while it forms) -- measured
+    on the Deck (SPOILER-COVER-01): a name inside one of these read plain for 4.7 s before the
+    finished-reply cover caught up.
     """
     if not response_text or not protected_names:
         return response_text
     names = [n.strip() for n in protected_names if (n or "").strip()]
     if not names:
         return response_text
+    response_text = move_midline_fence_openers_to_line_start(response_text)
     segments = _split_fenced_segments(response_text)
     if not segments:
         return response_text
     hold_back_len = 0
-    if hold_back_incomplete_trailing and segments[-1][0] == "text":
-        trailing_units = _split_sentence_units(segments[-1][1])
-        if trailing_units:
-            last_unit = trailing_units[-1]
-            if (
-                not _trailing_unit_is_terminated(last_unit)
-                and not _unit_mentions_protected_name(last_unit, names)
-                and _could_be_growing_into_a_protected_name(last_unit, names)
-            ):
-                hold_back_len = len(last_unit)
+    drop_open_spoiler_fence = False
+    if hold_back_incomplete_trailing:
+        last_kind, last_chunk = segments[-1]
+        if last_kind == "fence":
+            if not fence_segment_is_closed(last_chunk) and fence_opener_is_spoiler(last_chunk):
+                drop_open_spoiler_fence = True
+        else:
+            partial = partial_fence_tail_match(last_chunk)
+            if partial:
+                hold_back_len = len(last_chunk) - partial.start()
+            else:
+                trailing_units = _split_sentence_units(last_chunk)
+                if trailing_units:
+                    last_unit = trailing_units[-1]
+                    if (
+                        not _trailing_unit_is_terminated(last_unit)
+                        and not _unit_mentions_protected_name(last_unit, names)
+                        and _could_be_growing_into_a_protected_name(last_unit, names)
+                    ):
+                        hold_back_len = len(last_unit)
     out: list[str] = []
     last_index = len(segments) - 1
     for i, (kind, chunk) in enumerate(segments):
         if kind == "fence":
+            if drop_open_spoiler_fence and i == last_index:
+                # Keep only the opener's own line -- the screen's own "Spoiler hidden until
+                # complete…" chip still has enough to draw from -- and hold back every
+                # character of the still-forming body itself.
+                opener_end = chunk.find("\n")
+                out.append(chunk[: opener_end + 1] if opener_end != -1 else "")
+                continue
             out.append(chunk)
             continue
         text = chunk

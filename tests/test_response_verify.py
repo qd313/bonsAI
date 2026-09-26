@@ -262,5 +262,54 @@ class CoverNamedSpoilersTests(unittest.TestCase):
         self.assertEqual(out, "The next boss is Soul Ma")
 
 
+class MidlineFenceLeakTests(unittest.TestCase):
+    """D112 #7 leak fix: SPOILER-COVER-01, measured live on the Deck 2026-09-26 (Hollow
+    Knight, "tips for the teleporting boss that throws orbs in the sanctum"). The raw reads
+    are in the session's scratchpad L1-2-HK-C.jsonl; the fragments below are reconstructed
+    from what those reads actually showed on screen, not an idealized guess at the shape.
+
+    The model glued its own ```bonsai-spoiler fence to the end of a word ("The```bonsai-
+    spoiler"), which neither this checker nor the screen's own scanner recognises as a fence
+    opener (both require one to start its own line) -- so "The Soul Master fight is all about
+    timing his movements." showed bare for about 4.7 s, next to raw ```bonsai-spoiler / ```bon
+    text and a "Code block incoming…" chip, until the finished-reply cover caught up.
+    """
+
+    def test_a_midline_glued_opener_never_leaves_the_name_readable_while_streaming(self):
+        # Reconstructed from L1-2-HK-C.jsonl t=29386..30486: the model wrote "The" then its own
+        # fence opener with no newline between them, and had not reached a closing ``` yet.
+        raw = (
+            "He comes back through the roof for a faster second round with far less time to "
+            "heal, so learn the dodges in round one.\n\n"
+            "The```bonsai-spoiler\nThe Soul Master fight is all about timing his movements."
+        )
+        out = cover_named_spoilers(raw, ["Soul Master"], hold_back_incomplete_trailing=True)
+        self.assertNotIn("Soul Master", out)
+        self.assertNotIn("timing his movements", out)
+
+    def test_a_half_typed_opener_never_shows_raw(self):
+        # Reconstructed from L1-2-HK-C.jsonl t=33065, the literal captured tail: "```bon".
+        raw = (
+            "He comes back through the roof. When he deflates and gasps, there is a brief "
+            "moment where you can land a hit to stagger him.\n\n```bon"
+        )
+        out = cover_named_spoilers(raw, ["Soul Master"], hold_back_incomplete_trailing=True)
+        self.assertNotIn("```bon", out)
+        self.assertIn("land a hit to stagger him.", out)
+
+    def test_the_same_glued_opener_is_recognised_once_the_reply_finishes(self):
+        """Once the model's own fence actually closes, the finished-reply pass (no holdback)
+        recognises it as a real cover -- after the midline marker is moved to its own line --
+        rather than wrapping a second, redundant fence around the same sentence."""
+        raw = (
+            "Intro line.\n\n"
+            "The```bonsai-spoiler\nThe Soul Master fight is all about timing his movements.\n```\n"
+            "Outro line."
+        )
+        out = cover_named_spoilers(raw, ["Soul Master"], hold_back_incomplete_trailing=False)
+        self.assertEqual(out.count("```bonsai-spoiler"), 1)
+        self.assertIn("Outro line.", out)
+
+
 if __name__ == "__main__":
     unittest.main()

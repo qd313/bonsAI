@@ -159,6 +159,7 @@
     "src/utils/drgGlossaryAsk.test.ts",
     "src/utils/drgGlossaryTermMatch.test.ts",
     "src/utils/focusNavigation.test.ts",
+    "src/utils/handRingOnWhenGone.test.ts",
     "src/utils/i18n.test.ts",
     "src/utils/intentPackSearch.test.ts",
     "src/utils/joinPresetWithRunningGame.test.ts",

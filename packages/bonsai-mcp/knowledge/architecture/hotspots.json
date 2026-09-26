@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1617,
+      "lines": 1618,
       "role": ""
     },
     {
@@ -137,7 +137,7 @@
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 685,
+      "lines": 674,
       "role": ""
     },
     {

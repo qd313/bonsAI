@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 527,
-  "edgeCount": 1425,
+  "fileCount": 529,
+  "edgeCount": 1431,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4587,6 +4587,7 @@
         "src/utils/chatPanelScroll.ts",
         "src/utils/drgGlossaryTermRegistry.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/handRingOnWhenGone.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -4685,12 +4686,14 @@
       "imports": [
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/focusNavigation.ts",
+        "src/utils/handRingOnWhenGone.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/utils/handRingOnWhenGone.test.ts",
         "src/utils/permHintRowNav.test.ts"
       ]
     },
@@ -4944,6 +4947,23 @@
         "src/utils/liveTurnFocusGraph.ts"
       ]
     },
+    "src/utils/handRingOnWhenGone.test.ts": {
+      "imports": [
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/handRingOnWhenGone.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts"
+      ]
+    },
     "src/utils/i18n.test.ts": {
       "imports": [
         "src/utils/i18n.ts"
@@ -5194,6 +5214,7 @@
         "src/hooks/usePermHintNavTargets.ts",
         "src/index.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/handRingOnWhenGone.test.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.remount.test.ts",
         "src/utils/navFocusRegistry.test.ts",
@@ -5700,6 +5721,8 @@
         "src/utils/focusNavigation.test.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
+        "src/utils/handRingOnWhenGone.test.ts",
+        "src/utils/handRingOnWhenGone.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/settingsPanelScroll.ts",

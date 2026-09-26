@@ -18,6 +18,7 @@ import {
 import { isDeckDirectionLeftEvent } from "./focusNavigation";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
+import { pressThenHandRingOn } from "./handRingOnWhenGone";
 
 /**
  * Hand the ring to whichever permission-hint row is mounted below the transcript — the
@@ -133,4 +134,23 @@ export function troubleshootHintRowNavHandlers(buttons: {
  */
 export function vacDenyRowMoveUp(): boolean {
   return takeNavFocus("chat-perm-hint-troubleshoot") || focusUpPastLiveKbNotesBlock();
+}
+
+/**
+ * A on the troubleshooting hint's Dismiss removes the whole hint, button included, and left the ring
+ * on nothing (plan70-L5-PERMS-CLEAN-06.json). Once the hint is gone, hand the ring to the next row
+ * down through Steam's own transfer: the ban-lookup row when it shows, else Save chat to Desktop,
+ * else the suggestion chips.
+ */
+export function dismissHintKeepingRing(
+  buttons: { current: (HTMLElement | null)[] },
+  dismiss: () => void,
+): void {
+  pressThenHandRingOn(buttons.current[1], dismiss, () => {
+    void (
+      takeNavFocus("chat-perm-hint-deny") ||
+      takeNavFocus("save-chat-desktop") ||
+      takeNavFocus("preset-carousel")
+    );
+  });
 }

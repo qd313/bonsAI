@@ -145,6 +145,7 @@ import {
   firstArchivedHeaderMoveUp,
   troubleshootHintRowNavHandlers,
   vacDenyRowMoveUp,
+  dismissHintKeepingRing,
 } from "../utils/chatTranscriptNavHelpers";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
@@ -1533,7 +1534,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
           <Button
             focusable
             ref={troubleshootHintButtonRefs[1]}
-            onClick={() => setTroubleshootingPermHintDismissed(true)}
+            onClick={() => dismissHintKeepingRing(troubleshootHintButtonEls, () => setTroubleshootingPermHintDismissed(true))}
             style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
           >
             Dismiss

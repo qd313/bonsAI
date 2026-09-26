@@ -493,9 +493,11 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
   landed on the chip row, fully visible, and a saved 14-step walk passed too. **SUMUP-10 passes** — the
   waiting line counted up, then the answer arrived with the note under it, and the card's "too long to read
   in one go" footer showed correctly. **SUMUP-07 passes on its remaining half** — with no game running, a
-  vague follow-up asked which game instead of guessing, with no summary line. **All Deck checks plan 68
-  needed are done; plan 68 is finished.** Open follow-ups, each its own roadmap entry: the summary card
-  sitting behind the dock, the summary's own wording, the doubled-marker cause, a few small D-pad slips, the
+  vague follow-up asked which game instead of guessing, with no summary line. **Every testing row plan 68
+  needed has passed; plan 68 is finished.** Two small D-pad checks in the manual testing document's plan 68
+  list are still unticked: A on a greyed-out button does nothing, and a Session tab with no turn rows keeps
+  Down in the tab. Both are for the next time the Deck is free. Open follow-ups, each its own roadmap
+  entry: the summary card sitting behind the dock, the summary's own wording, the doubled-marker cause, a few small D-pad slips, the
   "N earlier" flood, and a fresher card title.
 
 ---

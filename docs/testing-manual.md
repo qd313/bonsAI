@@ -107,7 +107,9 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
 **Sum up this chat, the summary card and the note (plan 68, step 5 — Deck passes 2026-09-25 and 2026-09-26):**
 
-- [ ] Down from the tabs row lands on the *Sum up this chat* button.
+- [x] Down from the tabs row lands on the *Sum up this chat* button. **PASS (Deck) 2026-09-26**, in the
+      second pass's focus sweep (`docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`) and again in the third
+      pass's walk down to the last row (`docs/test-evidence/plan68-SUMUP-13-p3.json`).
 - [x] Down from the button reaches the summary card, since it is taller than the room below the button and
       needs its own stop to be scrolled into view; Down again from the card reaches the first turn row.
       **PASS (Deck) 2026-09-25**, row SUMUP-03: walking down to the card and the first turn row, everything
@@ -119,12 +121,17 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
       visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`. **Extended (Deck) 2026-09-26:** walking
       all the way back up from the last of the 73 turn rows, everything stayed visible too.
 - [ ] A on the button starts the summary and the ring stays on it; a greyed-out button still takes the ring
-      and A on it does nothing.
+      and A on it does nothing. **Mostly PASS (Deck):** A started the summary and the ring stayed on the
+      button until it finished (2026-09-25, row SUMUP-03, `docs/test-evidence/plan68-SUMUP-03.json`); a
+      greyed-out button took the ring, visible, three times on 2026-09-26 (`plan68-SUMUP-02-p2.json`,
+      `plan68-SUMUP-07-p3.json`, `plan68-SUMUP-13-p3.json`). **Still owed:** nobody has pressed A on a
+      greyed-out button on the Deck to see that nothing happens.
 - [x] B from anywhere in the tab closes the whole panel. **PASS (Deck) 2026-09-25**, row SUMUP-04a: B closed
       the panel. Evidence `docs/test-evidence/plan68-SUMUP-04a.json`. **Extended (Deck) 2026-09-26:** B also
       closed the panel from the *Sum up this chat* button, from the summary card, and from a turn row, each
       time landing the ring back on Show details. Evidence `checks/plan68-session-tab-B-closes.json`.
 - [ ] With no turn rows at all, Down from the last stop in the tab stays put rather than falling into the dock.
+      **Not yet run on the Deck.** A new chat's first answer is the easy place to try it.
 - [x] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
       the button at the top. **PASS (Deck) 2026-09-26:** Up from the dock landed on the last turn row's
       chips, visible. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.

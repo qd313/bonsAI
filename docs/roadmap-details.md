@@ -2225,6 +2225,11 @@ then Right to "Dismiss" and back; every stop fully visible. A on Dismiss removed
 after Dismiss, nothing holds the ring until the next press. Evidence
 `docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
 
+**Fixed 2026-09-26 (helper F2, commit `6116f33c`).** Dismiss removes the whole hint, the button the ring
+was on included, and nothing handed the ring on — the same shape as the Helpful fix above. The ring now
+moves to the row below (the ban-lookup row, else "Save chat to Desktop", else the chips). Deck re-check
+owed.
+
 **A screen test that opens the Filters panel failed once under load, passed alone.** Found 2026-09-26,
 `PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's. **Kept failing 2026-09-26,**
 seen 5 more times in full test runs, always passing when run alone — being fixed (helper F2). **Cause
@@ -2263,6 +2268,11 @@ starting the campaign" under a Deep Rock Galactic: Survivor answer, the waiting 
 model up for "[Strategy follow-up] I'm at: Just starting the campaign" in Deep Rock Galactic: Survivor… —
 the internal "[Strategy follow-up]" tag shows to the person instead of the friendly "I'm at: …" wording
 used elsewhere. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+
+**Fixed 2026-09-26 (helper K, commit `2e13421d`).** The plugin's accept step already works out the
+friendly "I'm at: …" caption once, to save on the chat turn; it now hands that same value down to the
+waiting line and Show details too, instead of each one separately reading the raw internal text. The
+model itself still gets the full text either way. Row **KB-FOLLOWUP-QUOTE-02**. Deck re-check owed.
 
 ## Flow 4 findings
 

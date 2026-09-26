@@ -89,13 +89,6 @@ starts work outside this.
   2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **OPEN, found
-  2026-09-26 (plan 70, flow L5.2), being fixed (helper F2).** The next Down does recover it, onto the
-  ban-lookup row. [Detail](roadmap-details.md#l3-and-2d-findings).
-- ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
-  **OPEN, found 2026-09-26 (plan 70, flow L5.4), being fixed (helper K).** The waiting line reads the raw
-  "[Strategy follow-up] I'm at: …" tag instead of the friendly "I'm at: …" wording.
-  [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
   speaker icon** — **OPEN, seen twice now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
@@ -526,6 +519,15 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   already says this row by row.
 
 ### Bugs that need verification
+- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **VERIFY, fixed
+  2026-09-26 (helper F2, commit `6116f33c`).** The ring now moves to the row below (the ban-lookup row,
+  else "Save chat to Desktop", else the chips) the same way the Helpful fix already works. **Deck re-check
+  owed:** press A on Dismiss and confirm the next press lands on that row, not nowhere.
+  [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
+  **VERIFY, fixed 2026-09-26 (helper K, commit `2e13421d`).** The waiting line and Show details now show the
+  friendly "I'm at: …" wording; the model still gets the full internal text behind the scenes. Row
+  **KB-FOLLOWUP-QUOTE-02**. [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the

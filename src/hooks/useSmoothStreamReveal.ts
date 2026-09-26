@@ -46,6 +46,13 @@ function proseRevealRate(backlog: number): number {
   return Math.max(PROSE_RATE_MIN, backlog / TARGET_DRAIN_SECONDS);
 }
 
+function sharedStartLength(a: string, b: string): number {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a.charCodeAt(i) === b.charCodeAt(i)) i += 1;
+  return i;
+}
+
 /**
  * Reveals streamed assistant text at a steady rate so polls feel continuous (Claude-style), one
  * step per beat. Snaps to full target when streaming ends (T3 settle). Fence body bursts at ~3×
@@ -132,6 +139,23 @@ export function useSmoothStreamReveal({
       displayRef.current = "";
       setDisplayText("");
       return;
+    }
+    /*
+     * A snapshot is not always the last one plus more letters. The back end's live spoiler cover
+     * rewrites text already sent -- it wraps a sentence in a ```bonsai-spoiler fence once a
+     * protected name arrives, moves that fence's closer as the sentence grows, and takes back a
+     * word that could still become a name. Appending the new snapshot from the old length then
+     * spliced the two ("When fight" + "-spoiler\nWhen fighting the Soul Master…"): the opener
+     * was eaten, the name read in plain text for up to 9 s on the Deck (plan 70,
+     * SPOILER-COVER-01), and the closer, left over, opened a "Code block incoming…" chip. So
+     * whenever the shown text is no longer the start of the new snapshot, fall back to the part
+     * both agree on and reveal the rest from there.
+     */
+    const shown = displayRef.current;
+    if (!targetText.startsWith(shown)) {
+      const agreed = targetText.slice(0, sharedStartLength(shown, targetText));
+      displayRef.current = agreed;
+      setDisplayText(agreed);
     }
     // Critical: restart the beat when new partials arrive after display caught up.
     ensureTicking();

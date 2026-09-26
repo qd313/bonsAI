@@ -122,6 +122,58 @@ describe("useSmoothStreamReveal", () => {
     expect(result.current).toBe("full text");
   });
 
+  /*
+   * Deck, plan 70 flow L3 (SPOILER-COVER-01 try 2): the back end's live spoiler cover wraps a
+   * sentence in a ```bonsai-spoiler fence once the protected name arrives -- so the new snapshot
+   * REWRITES text the screen had already revealed, it does not just grow. The reveal used to keep
+   * its old characters and append the new snapshot from the old length: "When fight" + the new
+   * text from character 10 on read "When fight-spoiler\nWhen fighting the Soul Master..." -- the
+   * opener eaten, the name in plain text for about 6 s, the fence's closer left over as an
+   * orphan that opened a "Code block incoming…" chip. These are the snapshots the Deck read.
+   */
+  it.each([
+    [
+      "HK-A",
+      "When fight",
+      "\n```bonsai-spoiler\nWhen fighting the Soul Master, the ke\n```\n",
+      "fight-spoiler",
+    ],
+    [
+      "HK-MENU",
+      "I'll give you the run",
+      "\n```bonsai-spoiler\nI'll give you the rundown on how to handle the Soul Master f\n```\n",
+      "runll",
+    ],
+  ])(
+    "re-syncs to a snapshot that rewrote earlier text instead of splicing (%s)",
+    (_label, first, rewritten, splice) => {
+      const { result, rerender } = renderHook(
+        ({ target }) => useSmoothStreamReveal({ targetText: target, enabled: true, done: false }),
+        { initialProps: { target: first } }
+      );
+      beats(6);
+      expect(result.current).toBe(first);
+      rerender({ target: rewritten });
+      for (let i = 0; i < 12; i += 1) {
+        expect(rewritten.startsWith(result.current)).toBe(true);
+        expect(result.current).not.toContain(splice);
+        beats(1);
+      }
+      expect(result.current).toBe(rewritten);
+    }
+  );
+
+  it("drops text the back end has taken back (a held-back word) rather than keep showing it", () => {
+    const { result, rerender } = renderHook(
+      ({ target }) => useSmoothStreamReveal({ targetText: target, enabled: true, done: false }),
+      { initialProps: { target: "Keep moving.\n\nThe Soul" } }
+    );
+    beats(6);
+    expect(result.current).toBe("Keep moving.\n\nThe Soul");
+    rerender({ target: "Keep moving.\n\n" });
+    expect(result.current).toBe("Keep moving.\n\n");
+  });
+
   it("exports fence burst multiplier at 3×", () => {
     expect(FENCE_BURST_RATE_MULTIPLIER).toBe(3);
   });

@@ -292,9 +292,10 @@ only if the reading with a game running says memory is tight.
   own words, labelled that way, like the 99 notes already written like that.
 - **Skyrim is not installed on the Deck,** so its notes get a search check on this PC but no Deck check unless
   you install it and open it once. **Brotato and Palworld need opening once by hand** so they appear on the
-  Recent Games row the rig launches from.
+  Recent Games row the rig launches from. **Done by the maintainer 2026-09-25**; flow 0 confirms the row.
 - **The Deck tools project has two commits you have not pushed,** including the saved-walk replay fix. The
   session cannot push; please push them when convenient. The old saved walks get re-saved either way.
+  **Done by the maintainer 2026-09-25.**
 - **Even with the fix, a replay after a new build never reads as a clean pass,** by the tools' design; the
   overnight report lists what differed instead.
 - **The 18 places the documents disagree** are fixed in block 0, before any new result is written.
@@ -325,6 +326,11 @@ only if the reading with a game running says memory is tight.
 - **2026-09-25 evening** — Planning. Four read-only helpers re-read the code, the owed Deck checks, the test
   tools and the game library; § 1 rewritten from them. Twelve questions answered (D112). The planning
   findings logged in the roadmap. Plan 68 contacted; lock files agreed. Waiting for "go".
+- **2026-09-25, later** — The maintainer answered the "things that need you" list: the Deck tools project is
+  pushed (its main branch matches the online copy, so the saved-walk replay fix is published); Brotato and
+  Palworld were opened once on the Deck — flow 0 reads the Recent Games row to confirm, and whether Skyrim is
+  now installed too. Items 3 to 6 accepted, including the follow-up bug (helper K: measure three finishes,
+  the maintainer picks). Said "don't go yet".
 
 ## 11. Report
 

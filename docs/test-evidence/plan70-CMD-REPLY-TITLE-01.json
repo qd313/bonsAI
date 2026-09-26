@@ -1,0 +1,20 @@
+{
+  "row": "CMD-REPLY-TITLE-01 - a command reply saves to its chat",
+  "plan": "70, flow 2.2",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:30:30 to 01:31:45 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Steam ban lookup (Permissions tab) was ON; turned OFF through the screen for this row only (settings file read back steam_web_api: false), turned back on afterwards. New chat from [+] (chat 5 of this block, slot aaf10bc2).",
+  "pressed": "Command text 'bonsai:vac-check' put in with the send-question script (VERIFIED). Down x3 from the chat row (chip, box, Ask; no A on the box). A on Ask. Then Quick Access closed and reopened with the GUIDE+A chord.",
+  "seen": {
+    "reply": "'Steam Web API is off for bonsAI. Enable Permissions -> Steam ban lookup, add your Web API key under Developer -> Integrations, then run: bonsai:vac-check 7656119... This command skips the AI...' plus an 'Enable Steam ban lookup in Permissions' line and an 'Open Permissions' button.",
+    "reply_time": "under 1 s (command, no AI)",
+    "turn_header_before_reopen": "bonsai:vac-check",
+    "chat_row_title_before_reopen": "bonsai:vac-check",
+    "saved_chat_label": "bonsai:vac-check (index.json and slot file)",
+    "turn_header_after_reopen": "bonsai:vac-check",
+    "chat_row_title_after_reopen": "bonsai:vac-check"
+  },
+  "screenshot": "plan70-CMD-REPLY-TITLE-01.png (after reopen)",
+  "verdict": "PASS"
+}

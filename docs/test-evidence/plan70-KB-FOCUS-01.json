@@ -1,0 +1,27 @@
+{
+  "row": "KB-FOCUS-01",
+  "plan": "70, flow 1.1",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "pc_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:08-01:09 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px at devicePixelRatio 1.28",
+  "setup": "Nothing running. bonsAI open, Ollama tab. Knowledge base on, version 2026.09.18 installed.",
+  "pressed": "Walked Down from the top of the Ollama tab to 'Update knowledge base' (7 presses). Then RIGHT, LEFT, UP, DOWN, DOWN, UP, RIGHT, UP, DOWN, RIGHT, DOWN. Never pressed A.",
+  "seen": {
+    "update_to_remove_right": "Update -> Remove",
+    "remove_to_update_left": "Remove -> Update",
+    "up_from_update": "Use local knowledge base (switch)",
+    "up_from_remove": "Use local knowledge base (switch)",
+    "down_from_update": "Reply style slider",
+    "down_from_remove": "Reply style slider",
+    "right_from_remove": "did not move (end of row)",
+    "button_heights_px": {"Update knowledge base": 43.99, "Remove": 43.99},
+    "button_tops_px": {"Update knowledge base": 456.49, "Remove": 456.49},
+    "button_widths_px": {"Update knowledge base": 166.42, "Remove": 93.60},
+    "every_stop_visible": "11 of 11 stops 100 percent visible",
+    "side_note": "Up from Reply style lands on the inner Update button element; Left from there leaves the panel for Steam's Quick Access side rail (then Up moved the rail to its Help tab). Standard Steam behaviour for the leftmost control; the row does not cover Left from Update. The first saved check (checks/plan70-KB-FOCUS-01.json) captured that wandering walk by mistake and is NOT a good record; use checks/plan70-KB-FOCUS-01-v2.json."
+  },
+  "rig_run": "runs/plan70-KB-FOCUS-01.json",
+  "saved_check": "checks/plan70-KB-FOCUS-01-v2.json",
+  "screenshot": "plan70-KB-FOCUS-01.png",
+  "verdict": "PASS"
+}

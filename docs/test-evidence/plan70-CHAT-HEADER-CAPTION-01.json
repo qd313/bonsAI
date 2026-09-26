@@ -1,0 +1,18 @@
+{
+  "row": "CHAT-HEADER-CAPTION-01 - the reopened chat's header after a branch pick",
+  "plan": "70, flow 2.7",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:42:30 to 01:45:10 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode (set back from Expert). My test chat 4 (slot 5512a79d). A reloaded chat does not redraw an old branch menu, so a fresh Strategy question was asked first: 'in hollow knight where is a good place to farm geo early on' -> menu 'Where are you at in Hollow Knight?' A. Starting out in Dirtmouth / B. Exploring the surrounding areas.",
+  "pressed": "Walked Down to 'A. Starting out in Dirtmouth' (7 presses), A. Waited for the follow-up answer (53 s). Quick Access closed and reopened with the GUIDE+A chord.",
+  "seen": {
+    "header_live": "I'm at: Starting out in Dirtmouth",
+    "header_after_reopen": "I'm at: Starting out in Dirtmouth",
+    "saved_turn_text_start": "[Strategy follow-up] I'm at: Starting out in Dirtmouth.\\nEarlier I asked: in hollow knight where is a good place to farm ...",
+    "saved_turn_display_text": "I'm at: Starting out in Dirtmouth"
+  },
+  "side_note": "Walking Up from below, the ring skipped both branch buttons (Mark reply helpful -> Show reasoning); walking Down from above it reached them. The buttons were only reachable one way.",
+  "screenshot": "plan70-CHAT-HEADER-CAPTION-01.png (after reopen)",
+  "verdict": "PASS"
+}

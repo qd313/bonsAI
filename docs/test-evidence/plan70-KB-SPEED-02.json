@@ -1,0 +1,25 @@
+{
+  "row": "KB-SPEED-02 (changed expectation for plan 70: both models stay in memory)",
+  "plan": "70, flow 1.2",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:09:47 to 01:11:33 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode. New chat made from the [+] spot (chat 1 of this block). AI character Ali G on, accent heavy (maintainer's setting, not changed). Knowledge base on, 2026.09.18. Ollama keep-alive setting 240m.",
+  "pressed": "Question put in with the send-question script (VERIFIED, full text): 'in hollow knight how do I beat the false knight'. Walked Down to Ask (chip, then Ask; the box was never focused). Pressed A once.",
+  "timings": {"ask_pressed_approx": "01:10:48", "first_words_on_screen": "01:11:16", "answer_complete": "01:11:25", "reasoning_shown": "Show reasoning 21 s"},
+  "readings": {
+    "before (01:09:47 and 01:10:47)": [{"model": "gemma4:e2b-it-qat (answer model)", "expires_at": "2026-09-26T04:57:15-04:00", "size_vram": 2247066909}],
+    "during (01:11:19, after the first words)": [
+      {"model": "gemma4:e2b-it-qat", "expires_at": "2026-09-26T04:57:15-04:00", "size_vram": 2247066909},
+      {"model": "nomic-embed-text:latest (note-search model)", "expires_at": "2026-09-26T01:15:47-04:00", "size_vram": 488825159}
+    ],
+    "after (01:11:33)": [
+      {"model": "gemma4:e2b-it-qat", "expires_at": "2026-09-26T05:11:24-04:00", "size_vram": 2247066909},
+      {"model": "nomic-embed-text:latest", "expires_at": "2026-09-26T01:15:47-04:00", "size_vram": 488825159}
+    ],
+    "two_second_log": "36 samples 01:10:47-01:11:58: 1 sample answer model only (before Ask), then 35 samples with both, no gap. Raw log in the session scratch folder (kbspeed02-ps-log.txt)."
+  },
+  "seen_on_screen": "Answer in the character's voice about the False Knight, a two-choice branch menu, and a 'From the Hollow Knight wiki' notes block titled False Knight.",
+  "reading": "No eviction happened: once the note-search model loaded it stayed alongside the answer model for the whole answer and after it. But the note-search model is held for only 5 minutes after use (expires_at = last use + 5 min), while the answer model is held for 4 hours. So before a question asked more than 5 minutes after the last one, the note-search model is not in memory and must load first. The row's stated pass needs both at all three readings; the before reading had only one.",
+  "verdict": "FAIL (by the stated condition: note-search model missing at the before reading). No eviction seen; the cause is its 5-minute hold, not the two models pushing each other out. Owner to judge."
+}

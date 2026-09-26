@@ -1,0 +1,20 @@
+{
+  "row": "SPOILER-RISK-CHIP-01 - the spoiler-risk band (toggle half skipped per the runbook)",
+  "plan": "70, flow 2.5",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:38 to 01:41 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Mode changed through the mode button for each ask (Speed, Strategy, Expert). Asked in my test chat 5 (slot aaf10bc2). AI character on. Spoiler masking on (maintainer's setting).",
+  "blank_watch": "Answer text length sampled every 150 ms from Ask to done; a 'blank' would be the text dropping below half its longest length.",
+  "asks": [
+    {"mode": "Speed", "q": "is the hornet fight in greenpath hard in hollow knight", "band": "Spoiler risk: med", "details_bullets": ["Estimated band: med", "Ask mode: speed", "Title profile: protect_progression", "KB sections: boss", "Named entity: Hornet in Greenpath", "KB covers asked entity"], "samples": 103, "max_chars": 858, "final_chars": 858, "blank_drops": 0, "elapsed_s": 33.0},
+    {"mode": "Strategy", "q": "in hollow knight what tactics work against the broken vessel", "band": "Spoiler risk: med", "details_bullets": ["Estimated band: med", "Ask mode: strategy", "Title profile: protect_progression", "KB sections: boss, mechanic", "Named entity: Broken Vessel", "KB covers asked entity"], "samples": 124, "max_chars": 1070, "final_chars": 1048, "blank_drops": 0, "elapsed_s": 42.1},
+    {"mode": "Expert", "q": "in hollow knight how should I prepare for the fight against the hollow knight at the end", "band": "Spoiler risk: med", "details_bullets": ["Estimated band: med", "Ask mode: expert", "Title profile: protect_progression", "KB sections: mechanic, boss", "Named entity: Starting out in Hollow Knight", "KB covers asked entity"], "samples": 118, "max_chars": 990, "final_chars": 990, "blank_drops": 0, "elapsed_s": 36.8}
+  ],
+  "how_read": "Band read from each answer's saved details record (the same chips Show details draws; the on-screen chip ladder showed 'Spoiler risk: med' labels during this session too).",
+  "side_notes": [
+    "Every answer this session showed 'med', including the R4 troubleshooting sentences with no game at all (title profile 'unknown').",
+    "For the final-boss question the recorded named thing is 'Starting out in Hollow Knight' (a note title), not the Hollow Knight boss. The mothwing cloak prompt earlier made the same substitution in its NAMED-ENTITY CONSENT line."
+  ],
+  "verdict": "PASS - each of the three modes shows a band, and no answer went blank mid-stream."
+}

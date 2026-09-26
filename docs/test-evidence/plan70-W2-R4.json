@@ -1,0 +1,26 @@
+{
+  "row": "W2-R4 Plain problems reach the tips",
+  "plan": "70, flow 1.3",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:13:30 to 01:20:30 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Speed mode (changed from Strategy through the mode button; put back at the end). New chat from [+] (chat 2 of this block, slot 08a1dd67). AI character Ali G on (maintainer's setting). Knowledge base on, 2026.09.18. All nine asked in the same new chat, one after another.",
+  "pressed": "Each sentence put in with the send-question script (VERIFIED, full text read back), Down to Ask (focus read before A every time; never on the box), A. Show details opened on screen for sentence 1 and matched the saved chat record; the other eight read from the saved chat record, which is what Show details draws.",
+  "reworded": {"R4-01": "I'm -> I am (apostrophe)"},
+  "cache_check": "No answer under 3 s (fastest 16 s from Ask to done), so none came from the answer cache.",
+  "results": [
+    {"id": "R4-01", "q": "the game is really stuttering and skipping around the whole time I am trying to play it", "elapsed_s": 28.3, "tip": "Give the game a minute after launch -- shaders compiling for the first time cause stutter that goes away.", "card": "Shared troubleshooting - performance", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-02", "q": "no sound at all coming out", "elapsed_s": 24.7, "tip": "If there is no sound at all, check the in-game audio settings too, not just the Deck's.", "card": "Shared troubleshooting - audio", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-03", "q": "storage full cant install anything else", "elapsed_s": 21.8, "tip": "Internal storage full: uninstall large shaders and unused games first.", "card": "Shared troubleshooting - storage", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-04", "q": "screen looks torn and glitchy", "elapsed_s": 23.9, "tip": "If the screen looks torn while moving the camera, turn on V-Sync in the game's display settings.", "card": "Shared troubleshooting - display", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-05", "q": "it gets really hot and battery drains so fast", "elapsed_s": 31.4, "tip": "Lower the TDP limit in Quick Settings if the Deck feels hot or the fan is loud.", "card": "Shared troubleshooting - performance", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-06", "q": "it gets uncomfortably warm in my hands after a little while and the battery seems to drain a lot quicker than it used to", "elapsed_s": 27.7, "tip": "TDP cap in QAM affects CPU/GPU together; lowering reduces heat.", "card": "Shared troubleshooting - performance", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-07", "q": "update stuck wont finish installing", "elapsed_s": 21.0, "tip": "SteamOS update stuck: reboot and retry; recovery image if boot loop.", "card": "Shared troubleshooting - updates", "source_line": "Source: shared troubleshooting tips", "on_subject": true},
+    {"id": "R4-08", "q": "when I plug it into the television the menus show up in the wrong spot on the screen and are hard to read", "elapsed_s": 26.9, "tip": "Big Picture Mode is default on Deck; Desktop Mode for Konsole and file fixes.", "card": "Shared troubleshooting - bpm", "source_line": "Source: shared troubleshooting tips", "on_subject": false, "note": "Same wrong tip as 2026-09-07. The question is about menus in the wrong place on a TV; the tip does not address it."},
+    {"id": "control", "q": "thank you very much", "elapsed_s": 17.4, "tip": null, "kb_chip": "absent", "on_subject": "n/a - nothing attached, as the control asks"}
+  ],
+  "counts": {"problem_sentences_with_a_tip": "8 of 8", "on_subject": "7 of 8", "control_attached": 0},
+  "comparison_with_2026_09_07": "Identical tip for every one of the nine sentences.",
+  "screenshot": "plan70-W2-R4.png (sentence 1 with Show details open)",
+  "verdict": "FAIL - 7 of 8 problems get a tip on their subject; the TV sentence (R4-08) still gets an off-subject Big Picture Mode tip. Control passes."
+}

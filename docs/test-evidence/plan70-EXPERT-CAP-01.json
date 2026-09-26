@@ -1,0 +1,20 @@
+{
+  "row": "EXPERT-CAP-01 - Expert answers can run longer",
+  "plan": "70, flow 2.6",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:41:05 to 01:41:51 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Expert mode (set through the mode button). Reply style Balanced. AI character Ali G on. Asked in my test chat 5 (slot aaf10bc2).",
+  "question": "explain every weapon class in fallout 4 and when to use each",
+  "seen": {
+    "elapsed_s": 44.3,
+    "reasoning": "20 s, ~508 tokens",
+    "answer_words_saved_chat": 326,
+    "continuing_cues": 0,
+    "notes_attached": "Fallout 4 - SPECIAL points; Choosing a build; Legendary enemies; Power armor and fusion cores; Perks",
+    "ended": "on its own, with a closing summary paragraph"
+  },
+  "reading": "The answer stopped by itself at 326 words, far below the ~800-word mark the row is about, so the longer Expert cap was never reached and this run does not show whether it works.",
+  "side_note": "The answer is wrong on the facts: it gives Fallout 4 a 'Magic' weapon class ('throw some serious flair ... elemental chaos'). Fallout 4 has no magic. The attached notes were about SPECIAL, builds and perks, none about weapon classes.",
+  "verdict": "PASS by the runbook's written rule (finished without a continue cue). Note for the owner: at 326 words the cap was not exercised."
+}

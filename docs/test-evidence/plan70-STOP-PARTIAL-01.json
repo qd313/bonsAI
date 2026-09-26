@@ -1,0 +1,32 @@
+{
+  "row": "STOP-PARTIAL-01 - Stop keeps a readable answer",
+  "plan": "70, flow 2.3",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:32:40 to 01:34:22 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode. Asked in my own test chat 5 (the vac-check chat, slot aaf10bc2). AI character on.",
+  "route_to_stop": "During an answer the ring sits in the question box; one Down lands on the 'Stop generation' corner button (x 327, y 687, 20x20). A on it.",
+  "half_1_mid_answer": {
+    "question": "explain in detail how to build a strong early game economy in stardew valley",
+    "stopped_after": "about 250+ characters on screen when I started moving; about 4 short paragraphs (~230 words) streamed by the time Stop landed",
+    "text_kept": "yes - all streamed text stayed on screen, ending mid-sentence ('...sit around like a busted pipe')",
+    "small_line": "Stopped — partial answer kept.",
+    "line_position": "directly under the question, above the kept answer",
+    "question_back_in_box": "no (box empty)",
+    "request_cancelled_shown": false
+  },
+  "half_2_instant": {
+    "question": "what are the best ways to earn money fast in terraria early on",
+    "stopped_after": "about 6 s after Ask, only a tree icon in the answer area, no readable text",
+    "text_kept": "none",
+    "small_line": "Request cancelled.",
+    "thinking_blurb_shown": "no",
+    "question_back_in_box": "yes - box read 'what are the best ways to earn money fast in terraria early on'"
+  },
+  "side_notes": [
+    "Stopping unloads models: after the mid-answer stop the answer model (gemma4) was gone and only the note-search model stayed (overlay VRAM 6.9 -> 1.1 GiB); after the instant stop, the engine held no model at all (01:34:17). The next question after a Stop starts with a cold load.",
+    "After the mid-answer stop, the ring was left on the Voice input corner button (one A away from turning the microphone on)."
+  ],
+  "screenshots": ["plan70-STOP-PARTIAL-01-mid.png", "plan70-STOP-PARTIAL-01-instant.png"],
+  "verdict": "PASS - both halves behave as written."
+}

@@ -1,0 +1,28 @@
+{
+  "row": "SCR-05 - close and reopen mid-answer (scrambled answer)",
+  "plan": "70, flow 2.4 (steps and pass written in the runbook)",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:35 to 01:37 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode. Scramble effect on (settle, green, 400 ms - maintainer's settings). Asked in my test chat 5 (slot aaf10bc2). AI character on.",
+  "try_1": {
+    "question": "explain the four damage classes in terraria and how to choose one for a first playthrough",
+    "what_happened": "At ~220 characters I sent the Quick Access close chord; the rig refused it ('controller bridge is not available ... could not open port' on COM7). The panel never closed and the answer finished. Nothing tested. deck_status straight after showed the port open again; no other bridge process was running; lock file unchanged; focus had not moved on its own."
+  },
+  "try_2": {
+    "question": "walk me through the main bosses of the first hardmode week in terraria and how to prepare for each",
+    "first_words": "about 26 s after Ask",
+    "closed_at": "05:36:24Z with ~210 characters (about three lines) on screen",
+    "panel_closed_confirmed": "QAM page hidden, plugin root unmounted",
+    "reopened_at": "05:36:32Z (3 s wait plus tool time, about 8 s closed)",
+    "on_reopen": "bonsAI Main tab, same chat, answer still streaming, 1234 characters on screen, readable, no frozen scrambled letters",
+    "finished": "05:36:42Z normally, with its branch menu ('Where are you at in Terraria hardmode?' A/B)",
+    "compare_with_saved_chat": "Screen text equals the saved chat's copy word for word. The only difference is the spoiler section: saved as a bonsai-spoiler fence, drawn on screen as 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide)'. Nothing repeated, nothing missing."
+  },
+  "side_notes": [
+    "Overlay frame time maximum read 7612 ms in the finished screenshot (433 ms in the reopened one), so the Deck's screen stalled for up to ~7.6 s at some point between them.",
+    "This answer drew a spoiler cover, which the runbook lists as the missing precondition for THINKING-SPOILER-01 / CONST-SPOIL-CONSENT-01 (not run, per runbook)."
+  ],
+  "screenshots": ["plan70-SCR-05-reopened.png", "plan70-SCR-05-finished.png"],
+  "verdict": "PASS (try 2). Try 1 did not run because the rig refused the close chord once."
+}

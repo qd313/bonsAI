@@ -1,0 +1,33 @@
+{
+  "row": "NOTES-BLOCK-LADDER - the notes block's chip ladder",
+  "plan": "70, flow 1.4",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:21:30 to 01:24:40 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode (set back from Speed through the mode button). New chat from [+] (chat 3 of this block). AI character Ali G on. Knowledge base on.",
+  "tries": [
+    {
+      "question": "in half life 2 how do I deal with the sand areas full of antlions",
+      "answer_time_s": 33,
+      "block_closed_label": "Antlions (+1 more) - From the Half-Life wiki",
+      "block_open_contents": ["Antlions - From the Half-Life wiki: Antlions are blind and hunt vibration, so on the coast the rocks are safe and the sand is not - step off and they come up.", "Pheropod (bugbait) - From the Half-Life wiki: Once you have the pheropod from the Antlion Guard the antlions reverse..."],
+      "chip_ladder_inside": false,
+      "focusable_controls_inside": 0,
+      "presses_on_open_block": {"RIGHT": "did not move", "LEFT": "left the panel to Steam's side rail (bonsAI tab icon); RIGHT brought it back to the block, still open", "DOWN": "Save chat to Desktop"},
+      "open_block_box_px": {"top": 323, "height": 225, "bottom": 548, "chip_row_top": 600, "ask_top": 711, "window_height": 766},
+      "visibility": "fully on screen after opening (the 2026-09-23 side finding, block opening behind the chip and box, did not show this time)"
+    },
+    {
+      "question": "in half life 2 what is the best way to handle striders and gunships near the end",
+      "answer_time_s": 35,
+      "block_closed_label": "Strider (+1 more) - From the Half-Life wiki",
+      "block_open_contents": ["Strider - From the Half-Life wiki: RPG only, roughly seven rockets on Normal...", "Hunter-Chopper (helicopter) - From the Half-Life wiki: Fought from the airboat..."],
+      "chip_ladder_inside": false,
+      "focusable_controls_inside": 0,
+      "open_block_box_px": {"top": 195, "height": 353, "bottom": 548}
+    }
+  ],
+  "side_note": "The antlion answer included a line voiced as a second speaker ('Ricochet: Yeah, simple...') inside the Ali G answer.",
+  "screenshot": "plan70-NOTES-BLOCK-LADDER.png (antlion block open)",
+  "verdict": "UNCLEAR - two different multi-note blocks both opened to plain text with no chip ladder, so the Left/Right-on-chips question cannot be asked of them (same as 2026-09-23)."
+}

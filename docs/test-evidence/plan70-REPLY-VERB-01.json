@@ -1,0 +1,28 @@
+{
+  "row": "REPLY-VERB-01 - reply style (characters step skipped per the runbook)",
+  "plan": "70, flow 2.1",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:25 to 01:30 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode for all three asks. New chat from [+] (chat 4 of this block, slot 5512a79d). IMPORTANT: the maintainer's AI character (Ali G, accent heavy, 'Ricochet' asides) was ON in settings at the start and was left on, so every answer is in character voice. Reply style changed on the Ollama tab slider through the screen: Balanced -> Caveman -> Balanced -> Detailed (old value Balanced; restored after this row).",
+  "asks": [
+    {"style": "Caveman", "q": "in hollow knight where do I find the mothwing cloak", "details_label": "Reply style: caveman", "prompt_reply_block": "none - the prompt holds the CHARACTER VOICE block and no REPLY VERBOSITY / caveman wording", "answer_words": 62, "paragraphs": 1, "voice": "Ali G, not caveman grammar", "ended_with_branch_menu": true, "elapsed_s": 28.3},
+    {"style": "Balanced", "q": "in hollow knight how do I get past the mantis lords", "details_label": "Reply style: balanced", "prompt_reply_block": "none (0 REPLY VERBOSITY blocks in every Balanced prompt today, 13 asks)", "answer_words": 196, "paragraphs": 3, "elapsed_s": 45.4},
+    {"style": "Detailed (and Strategy + Detailed)", "q": "in hollow knight what is the best way to beat the soul master", "details_label": "Reply style: detailed (read on screen with Show details open)", "prompt_reply_block": "REPLY VERBOSITY + DETAILED REPLY STYLE: 'Use paragraphs with rationale and context; soft cap ~500 words...' plus 'When character brevity conflicts with this verbosity setting, prioritize paragraph depth'", "answer_words": 201, "paragraphs": 4, "ended_with_branch_menu": "yes - raw reply ends with the bonsai-strategy-branches fence; screen shows 'Where are you at in Hollow Knight?' A/B", "elapsed_s": 38.0}
+  ],
+  "cache_check": "All three took 28-45 s: none cached.",
+  "against_expectations": {
+    "Caveman shows 'Reply style: caveman' in details": "yes",
+    "Caveman reply is terse": "not judgeable: character on. 62 words, shortest of the three, but in Ali G voice. The row's own line for characters-on + Caveman (character voice, not caveman grammar) is what happened, and the prompt shows why: with a character on, no caveman block is sent at all.",
+    "Balanced adds no reply-length block vs baseline": "yes (0 blocks)",
+    "Detailed gives paragraphs": "4 paragraphs / 201 words vs Balanced 3 / 196 - barely different, with the character on",
+    "Strategy + Detailed still ends with bonsai-strategy-branches": "yes"
+  },
+  "side_notes": [
+    "After the Detailed answer the ring was already in the question box before any press (the known 'ring in the box after an answer' sighting). No A was pressed there.",
+    "With Show details open under the last answer, the details panel sits mostly below the chip row and Ask bar; only its 'This answer / Session' tabs show. See screenshot.",
+    "Tripwire (THINKING-OPENER-01), Balanced ask: first readable line quoted the question ('\"in hollow knight how do I get past the mantis lords\" is in good hands now...'); next sample (150 ms later) showed a bare 'Thinking' line, then reasoning text streamed."
+  ],
+  "screenshot": "plan70-REPLY-VERB-01.png (Detailed answer, details open)",
+  "verdict": "UNCLEAR - labels right in all three, Balanced adds nothing, Strategy + Detailed keeps its branch menu; but the Caveman-is-terse and Detailed-is-deeper halves cannot be judged because the AI character was on (it replaces the Caveman block entirely)."
+}

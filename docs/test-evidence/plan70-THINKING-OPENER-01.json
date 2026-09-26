@@ -1,0 +1,13 @@
+{
+  "row": "THINKING-OPENER-01 - tripwire only (observed during flow 2a, not run on its own)",
+  "plan": "70, flow 2.9",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:27 to 01:46 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "observations": [
+    "Balanced ask 'in hollow knight how do I get past the mantis lords' (sampled every 150 ms): first readable line quoted the question - '\"in hollow knight how do I get past the mantis lords\" is in good hands now...'; the next sample showed a bare 'Thinking' line on its own; then 'Thinking Process: 1. **Analyze the Request...' reasoning streamed.",
+    "SMOKE-H ask 'in hollow knight which charms should I buy first from salubra': first line seen was 'Searching knowledge base for \"in hollow knight which charms should I buy first from s...\".' (quotes the question).",
+    "Sampling was 150-200 ms, so a 'Thinking' line that showed in one sample lasted between about 0 and 300 ms."
+  ],
+  "verdict": "Observation only: the first readable line quoted the question both times; a bare 'Thinking' line was caught once as its own line, for one 150 ms sample."
+}

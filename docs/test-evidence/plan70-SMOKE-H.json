@@ -1,0 +1,24 @@
+{
+  "row": "SMOKE-H - reopen while thinking",
+  "plan": "70, flow 2.8",
+  "build": {"commit": "21b11cec (PC checkout)", "installed_dist_index_js_sha256": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698", "match": true},
+  "deck_time": "2026-09-26 01:45:30 to 01:47:46 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px",
+  "setup": "Nothing running. Strategy mode. My test chat 4 (slot 5512a79d). AI character on.",
+  "half_1": {
+    "question": "in hollow knight which charms should I buy first from salubra",
+    "state_when_closed": "05:45:57Z: turn showed the question and 'Searching knowledge base for \"in hollow knight which charms should I buy first from s...\".' - no answer text",
+    "closed_at": "05:46:01Z (QAM hidden, plugin unmounted)",
+    "reopened_at": "05:46:07Z (about 6 s closed, including tool time; the reopen chord was sent at once)",
+    "question_visible": "in all 80 samples (every 200 ms) from reopen to the finished answer at 05:46:36Z; 0 samples without it",
+    "after_reopen": "reasoning text streamed under the question, then the answer and a branch menu"
+  },
+  "half_2": {
+    "next_question": "in hollow knight how many charm notches can I get in total",
+    "turns_showing_it": "1 in every one of 99 samples from Ask to done",
+    "times_in_panel_text_at_end": 1,
+    "times_in_saved_chat": 1
+  },
+  "screenshot": "plan70-SMOKE-H.png (after the next question finished)",
+  "verdict": "PASS"
+}

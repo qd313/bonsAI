@@ -1,4 +1,4 @@
-# 37 — The knowledge base, zoomed out (status report, 2026-09-07, fifth pass, wave three landed)
+# 37 — The knowledge base, zoomed out (status report, 2026-09-25, sixth pass, plan 70 planned)
 
 Written from the roadmap, the knowledge-base architecture doc, the answer-quality plan, the locked
 decisions, the last eval reports, the last three session plans and the code. Plain language on
@@ -30,10 +30,10 @@ both, and took the numbers again on the shape that ships today — a Strategy an
 now gives the note's own advice first, then the same menu, instead of a short bit of orientation first.
 On that shape, the small model on the Deck keeps the notes' facts 79.5 times in a hundred and almost
 never contradicts them, 90.7 times in a hundred. **Nobody has read that new shape on the device yet.**
-Release `2026.09.08` carries the newest notes, the rewritten troubleshooting tips and a corrected Black
-Mesa note, and is live on both places it publishes to. **It is now on the maintainer's Deck too** —
-installed from the plugin's own button and checked by asking about the flooded rooms, which came back
-correct.
+Release `2026.09.18` carries the newest notes, the rewritten troubleshooting tips and a corrected Black
+Mesa note, and **was published to both places it publishes to on 2026-09-23.** **It is now on the
+maintainer's Deck too** — installed from the plugin's own button and checked by asking about the flooded
+rooms, which came back correct.
 
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
@@ -126,12 +126,12 @@ is fine with a heavy game running.
 
 **The library.** 372 notes over 35 games, 159 shared Deck tips, **every one of them indexed** — the build
 now refuses to finish if any note or tip is missing its meaning index, where it used to only print a
-warning. Library version `2026.09.18` is built and checked against that guarantee, but has not been
-published yet; the release actually out on both hosts is still `2026.09.08`. Schema stays at 3, so nothing
-already installed goes stale. **2026-09-18:** the `2026.09.18` library is now on the maintainer's own Deck,
-installed by hand from the plugin's own folder rather than downloaded from either public host; the install
-moved it onto the device's internal storage, and the `2026.09.08` copy still sits on the SD card. Publishing
-it to the two public hosts is still the maintainer's call, not yet made.
+warning. Library version `2026.09.18` is built and checked against that guarantee. Schema stays at 3, so
+nothing already installed goes stale. **2026-09-18:** the `2026.09.18` library was installed by hand on the
+maintainer's own Deck from the plugin's own folder rather than downloaded from either public host; the
+install moved it onto the device's internal storage, and the `2026.09.08` copy still sat on the SD card.
+**Published 2026-09-23:** `2026.09.18` is now live on both Hugging Face and the GitHub release, read back
+after publishing to confirm it.
 
 ## 4. What is open right now
 
@@ -313,7 +313,11 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    upward walk and the ladder walk both now pass on the Deck, and the reason the block sometimes
    arrived late is found, fixed on the branch, and confirmed passing on the Deck too; what is left
    is the read-aloud row and the maintainer's publish call on the library. Wave four (phase 2) can
-   start.
+   start. **Update 2026-09-25:** wave four is now [plan 70](70-kb-wave-four-and-deck-test-wave.md), with
+   the maintainer's answers locked as D112: three new games (Brotato, Palworld and Skyrim), the
+   starting-out notes, the per-game Deck tips, one release the session may publish once its Deck check
+   passes, a spoiler safety net that hides the sentences naming the protected thing, and the thumbs-down
+   demote for a wrong note, drawn and planned only for now.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

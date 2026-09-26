@@ -128,16 +128,11 @@ starts work outside this.
 - ★ `[ollama]` **Remove greys out once a model has answered a question, until the plugin reloads** —
   **OPEN, found on the Deck 2026-09-23 (flow H).** After a model has answered a question, its row's Remove
   button reads "Switch Ask mode first to remove this model" and stays disabled; only a plugin reload clears
-  it. Evidence `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`.
-- ★ `[ollama]` **The AI models screen can open with Filters already showing, and the ring on a filter** —
-  **OPEN, found on the Deck 2026-09-23 (flow H).** Manage AI models… opened with its Filters panel already
-  open and the ring already on "Open source only (recommended)," with nothing pressed to open it. Evidence
-  `docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot
-  `plan64-PRELOAD-01-try3-filters-open.png`).
+  it. Evidence `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`. Planned in plan 70.
 - ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **OPEN, found on the
   Deck 2026-09-23 (flow H).** Removing a 17 GB model, the confirm box said it would free "< 0.1 GB," and
   the list's own header read "Installed 3 · 4.3 GB" while that model was installed. Evidence
-  `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+  `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`. Planned in plan 70.
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
@@ -145,10 +140,10 @@ starts work outside this.
 - ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** —
   **OPEN, found on the Deck 2026-09-23 (flow H).** The Ollama tab's first connection check runs before
   settings finish loading and always fails and logs an error, even though Ollama then answers questions
-  normally right after. Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
+  normally right after. Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`. Planned in plan 70.
 - ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **OPEN, found on the
   Deck 2026-09-23 (flow H, VAC-03).** The reply's ban report is written as plain lines of pipes and dashes
-  rather than drawn as an actual table. Evidence `docs/test-evidence/plan64-VAC-03-06.json`.
+  rather than drawn as an actual table. Evidence `docs/test-evidence/plan64-VAC-03-06.json`. Planned in plan 70.
 - ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
   maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
   does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
@@ -167,7 +162,7 @@ starts work outside this.
   plan 65 Deck check 2026-09-24.**
 - ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **OPEN, found by
   plan 65 2026-09-24.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was not touched
-  that night. Widen its slack, or make it wait on an event instead of a clock.
+  that night. Widen its slack, or make it wait on an event instead of a clock. Planned in plan 70.
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
@@ -204,30 +199,12 @@ starts work outside this.
   on the device. Needs a reproduction with an empty download queue.
   [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
 - ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **OPEN, found on the Deck 2026-09-23,
-  needs a second try.** A 2.6 MB screenshot attached to a question; after 14 seconds the reply said "Ollama
-  returned an incomplete stream". The Deck's own system log shows the model's process crashed with a
-  graphics-chip error ("ErrorDeviceLost") and wrote a crash dump. Ollama recovered on its own and later
-  questions worked. **Crashed again 2026-09-23, 2 of 2 with the same 2.6 MB PNG**: the same graphics-chip
-  error, the same "incomplete stream" message after about 14 seconds, and Ollama answering again about 10
-  seconds later. A smaller picture (a 177 KB JPG) is the next thing to try, to see whether size is what
-  triggers it. Evidence `docs/test-evidence/plan64-THINKING-05.json`,
-  `docs/test-evidence/plan64-SCREENSHOT-CRASH-try2.json`. **Cause found 2026-09-23, needs the maintainer's
-  pick:** a smaller picture (a 1280×800 JPG, 177 KB) answered normally in 49.7 seconds with a correct
-  description of the screen; the crashing file is a 1920×1080 PNG at 2.6 MB. bonsAI only shrinks a picture
-  before sending it when the Pillow image library is present, and Pillow is not installed on the Deck, so
-  the full-size file goes to the model untouched. Three ways to fix it, the maintainer's call: ship the
-  image library with the plugin, shrink pictures some other way, or refuse pictures over a size limit with a
-  message. Evidence `docs/test-evidence/plan64-SCREENSHOT-CRASH-small.json` (+ `.png`). **The maintainer's
-  own lean: shrink the picture a simpler way, not by shipping the Pillow library.** A measured comparison
-  backs this up: the unshrunk crash picture was a 2.6 MB file, 3.6 MB once packaged for sending; shrinking it
-  with `ffmpeg`, already on the Deck, brought it to 86 KB, 114 KB sent, in 0.2 seconds, still fully readable.
-  The Deck's own picture library was tried too, but it cannot be loaded inside Decky's own, older Python, so
-  using it would mean shipping a separate program instead. Recommendation: shrink with `ffmpeg`, and refuse a
-  picture with a message if the shrink itself ever fails. **Why this only showed up tonight:** the fallback
-  that sends a picture untouched has worked this way, unchanged, since 2026-04-13; tonight's picture was the
-  first large, barely-compressed one ever attached — a screenshot taken while the Deck was plugged into an
-  external monitor, about six times bigger than anything sent before. [The measured comparison and size
-  table](test-evidence/plan64-SCREENSHOT-SHRINK-COMPARISON.md). **Waiting on the maintainer's yes.**
+  reproduced 2 of 2 with the same large screenshot.** A big, barely-compressed picture crashes the model's
+  graphics chip; a smaller picture answers normally. Cause: bonsAI only shrinks a picture before sending it
+  when a certain image library is installed, and that library is not on the Deck, so the full-size file goes
+  through untouched. **The maintainer said yes 2026-09-25 (D112): shrink the picture with `ffmpeg`, already on
+  the Deck, and refuse with a message if the shrink itself fails. Planned in plan 70.**
+  [Detail](roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
@@ -243,17 +220,26 @@ starts work outside this.
   the tabs row straight to the notes block, 3 of 3 tries. With details closed, Up from there skips the
   choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
   visible area, with the panel half blank.
-- ★★ `[focus]` **"Manage AI models" can open with the ring already sitting on a licence filter** —
-  **OPEN, found by the plan 65 Deck check 2026-09-24.** The ring lands one press away from changing the
-  filter, with nothing pressed to put it there.
+- ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
+  already sitting on a filter** — **OPEN, found on the Deck 2026-09-23 (flow H) and again by the plan 65
+  Deck check 2026-09-24.** Once, Manage AI models… opened with its Filters panel already open and the
+  ring already on "Open source only (recommended)"; separately, the ring has landed one press away from
+  changing a licence filter — both times with nothing pressed to put it there. Evidence
+  `docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot `plan64-PRELOAD-01-try3-filters-open.png`).
+  Planned in plan 70.
 - ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
   found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
   shared checkout, so a copy's own generated files go stale and its full checks fail one step.
-  Workaround: commit with `git -c core.hooksPath=.githooks commit`.
+  Workaround: commit with `git -c core.hooksPath=.githooks commit`. **Cause:** the shared setting points
+  hooks at the main checkout's path, where setup uses a relative one; a separate cloud session ("Fix
+  pre-commit hook analyzing wrong worktree") is working on it.
 - ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
   after a deploy** — **OPEN, found by the plan 65 Deck check 2026-09-24.** Every saved walk was recorded
   against an older build, so 0 walks compared that night. The check's own fingerprint of a build includes
-  Python cache files, which change on every run.
+  Python cache files, which change on every run. **The fix is already written** in the Deck tools project
+  (commit `556ffcb`, 2026-09-23), but not pushed, and the tools were still on the old code that night.
+  Left: re-save the walks on a current build and push the tools project — even then, a replay across
+  builds shows differences rather than a pass. Planned in plan 70.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
   Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
@@ -286,6 +272,7 @@ starts work outside this.
   "the Soul Master" outright and gives away its fake death and second round in plain text. The
   SPOILER-REVEAL reachability check stays owed for a different reason: with no cover ever appearing, there
   is no hidden block to walk to and reach. Evidence `docs/test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
+  The safety net that should fix it is planned in plan 70 (D112: hide the sentences that name it).
   [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 
 ---
@@ -440,7 +427,8 @@ replace it with a specific issue when one exists.
   driving every Deck session since 2026-08-26.** Was ★★★★★ with "board ordered, next: S1 to S3", a month stale. Left from
   [plan 19](planning/19-controller-macro-test-rig.md): a recording that is also a live view (S3), the highlight checked from the
   video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which first needs the saved-walk replay bug above
-  fixed. Comes before stand-in Decks. [Program](planning/21-ai-owned-testing-program.md).
+  fixed. Comes before stand-in Decks. Plan 70 takes two of the four pieces: getting the saved-walk replay working again, and a
+  first slice of the nightly run — replay and report, run by hand. [Program](planning/21-ai-owned-testing-program.md).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -731,7 +719,8 @@ evening ran the same evening, once the Deck was free.
    every one of four reads across three questions, with no load or unload logged in between. Still open:
    the drift from August to September, and whether keeping two models loaded causes trouble with a game
    running (a repeat of this same reading is planned with a game running). Evidence
-   `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
+   `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`. Only the game-running reading is left
+   (plan 70).
 6. **Then 58 phase 1** — two fixes before wave four. [The plan](archive/58-phase-1-notes-shown-and-wiki-extracts.md)
    shows the note's own words under a reply instead of the model's rewrite of it, and reads a wiki's own
    sentences into notes with no AI rewrite, tried first against Hollow Knight and then on ten more games from
@@ -742,8 +731,9 @@ evening ran the same evening, once the Deck was free.
    reason the block sometimes arrived late is found, fixed on the branch, and confirmed passing on
    the Deck too; what is left is the read-aloud row and the maintainer's publish call; phase 2 can
    start.
-7. **Then wave four, now 58 phase 2** — writing more notes. [The plan for it](planning/58-phase-2-kb-session-wave-four.md)
-   is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
+7. **Then wave four, now plan 70** — writing more notes. 58 phase 2 was replaced 2026-09-25 by
+   [plan 70](planning/70-kb-wave-four-and-deck-test-wave.md), which re-read § 1 against the code and took
+   its answers as D112.
 
 **Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
 in [wave two's report](archive/47-kb-wave-two-session.md) § 8 and [wave three's](archive/48-kb-wave-three-session.md).
@@ -759,8 +749,8 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
 - **58 phase 1, nine questions** ([§ 8](archive/58-phase-1-notes-shown-and-wiki-extracts.md)): answered
   2026-09-17 and locked as D111. Two things are still open: the block's look waits on lane A's drawings,
   and trim-only for wiki notes stands unless the maintainer overturns it.
-- **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
-  wave-four plan. Locks as D112, after phase 1.
+- **58 phase 2, seven questions:** answered 2026-09-25 as D112, for
+  [plan 70](planning/70-kb-wave-four-and-deck-test-wave.md), which replaces 58 phase 2.
 
 A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
@@ -768,10 +758,10 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
-- ★ `[KB]` **A shared troubleshooting tip that has a source page never gets it shown** — **OPEN, found
-  reading the code 2026-09-21 (plan 63, lane G).** Two pieces of code build a shared tip's own name
-  differently, so the two never match and its source page never reaches the credit line. Rarely bites
-  today, since almost no shared tips carry a source page. Not run on the Deck.
+- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **OPEN, found reading the code
+  2026-09-25 while planning plan 70.** The tip cut-off's own note says it sits just above the worst junk
+  phrase's score, but it actually equals that score, and the check only turns away scores below the
+  cut-off — so that exact phrase may still get a tip. Planned in plan 70.
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, failed on the
   Deck 2026-09-23; was fixed 2026-09-21 (plan 63, lane G, commit `c25456c`).** That fix made the line read
   the best score across every attached note instead of only the first one's, but a Hollow Knight reply built
@@ -780,7 +770,12 @@ ones from this month are D81 to D88.
   `docs/test-evidence/plan64-NO-CLOSE-MATCH-HK.json`. **Sighting, 2026-09-23:** the same wrong line closed a
   Half-Life 2 answer that had a "Sandtraps (+2 more) · From the Half-Life wiki" block on screen and three
   notes attached in the log (Sandtraps, Ravenholm, Strider). Evidence
-  `docs/test-evidence/plan64-BUSY-DOT-01.json`. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+  `docs/test-evidence/plan64-BUSY-DOT-01.json`. **Cause found 2026-09-25:** when a question names the game
+  but describes a boss without naming it, a check compares the question's leftover words with the notes'
+  titles only. "The boss past the crystal spike area" shares no word with "Broken Vessel", so the real
+  match is thrown away and the line appears anyway. The 21 September fix mended a different path. Planned
+  in plan 70.
+  [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
@@ -807,12 +802,15 @@ ones from this month are D81 to D88.
   follow-up fix closed 2026-09-12.** A follow-up now gets the right boss two times in three, where it used
   to be wrong every time; DOOM Eternal is wrong every time and no amount of search work closes that one.
   (D98) **Sighting, 2026-09-19, Hades:** the search found the right boss again, but the written reply asked
-  which boss was meant instead of using her name. [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
+  which boss was meant instead of using her name. **Unblocked 2026-09-25** — plan 68's per-chat remembered
+  subject landed (`cfa5537c`). Plan 70 measures three ways to finish it on the PC and brings the maintainer
+  the numbers before building one. [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
   device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
   sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
   routes nowhere, so no line. The floor this wave added changed nothing on the tip side — 14 right, 1 wrong, 2
-  nothing, before and after. Either the floor bites on tips or the line is decoration.
+  nothing, before and after. Either the floor bites on tips or the line is decoration. Planned in plan 70 — make
+  the tip cut-off actually bite, or bring the maintainer the numbers to retire the line.
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
   so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
   nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
@@ -836,10 +834,14 @@ ones from this month are D81 to D88.
   ranks behind generic ones. Evidence `docs/test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again
   2026-09-23 with Black Mesa running: no change.** The notes, their order, the scores and the answer all
   matched the game-not-running run exactly — having the game running did not affect this bug either way.
-  Evidence `docs/test-evidence/plan64-BLACKMESA-WATER-running.json`.
+  Evidence `docs/test-evidence/plan64-BLACKMESA-WATER-running.json`. Nothing ranks a general "Starting
+  out" note below a specific one today; planned in plan 70 with the "no close match" fix.
 
 ### Deck check owed
 
+- ★ `[KB]` **A shared troubleshooting tip that has a source page never gets it shown** — **VERIFY, fixed
+  in code 2026-09-23 (commit `4ce37bcf`, moved in `c6f0c94d`); the roadmap had not caught up.** Owed: one
+  Deck check that a shared tip with a source page shows that page in its credit line. Planned in plan 70.
 - ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
   retire.** Covers the corpus format gate, the relevance floor, follow-ups, transparency, and the
   Developer kill-switch. **Update 2026-09-22:** four of the five now have real answers — the transparency
@@ -883,21 +885,29 @@ ones from this month are D81 to D88.
   no gap at all. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
 ### Next
 
-- ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add one** — **OPEN, agreed by the maintainer 2026-09-21 for a follow-up session.** Today the plugin tells the model to hide spoilers and then trusts it. Nothing reads the reply back to see whether it did. That is why the same name-withheld boss question comes back covered some times and bare others: the follow-up menu's rule is repeated and stressed all through the instructions and that one holds, while the spoiler rule is said once. A device log from 2026-09-18 rules out the obvious explanation — the instructions fitted the model's window with room to spare, and the model's own thinking mentions wrapping the answer, yet the answer came back bare. Build the same kind of safety net the follow-up menu already has: when a reply names a protected thing in plain text and the turn's rules required a cover, hold it back or wrap it after the fact. Found while fixing the menu bug; full reasoning and the five causes ruled out are in that lane's landing commit. Blocks the ★★★ bug "a name-withheld boss question comes back with no spoiler box".
+- ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add
+  one** — **OPEN, agreed by the maintainer 2026-09-21 for a follow-up session.** Today the plugin tells the
+  model to hide spoilers and then trusts it; nothing checks that it did, which is why the same
+  name-withheld boss question comes back covered some times and bare others. Blocks the ★★★ bug "a
+  name-withheld boss question comes back with no spoiler box" above. **Planned in plan 70. The maintainer
+  chose 2026-09-25 (D112): hide just the sentences that name the protected thing, and also while the
+  answer is still arriving, so the name never shows first.**
+  [Detail](roadmap-details.md#check-that-a-spoiler-cover-actually-happened).
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
-  run includes — planned as wave three ([48](archive/48-kb-wave-three-session.md)).
+  run includes — planned as wave three ([48](archive/48-kb-wave-three-session.md)). Planned in plan 70.
 - ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
   agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
   the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
   answers. No row uses the second-answer option yet. One to two days. (D51, D68)
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, one measurement owed.** The
   slice of questions the word search cannot answer at all was 3 rows when last counted, before 36 more blind rows landed.
-  Re-count it on the next search run before calling this closed. [Detail](roadmap-details.md#eval-fixture-cannot-see-a-recall-failure).
+  Re-count it on the next search run before calling this closed. No code needed — the search test already reports that
+  slice; it only needs a run (plan 70). [Detail](roadmap-details.md#eval-fixture-cannot-see-a-recall-failure).
 - ★★ `[KB]` **Pull the embedding model as part of installing the library** — **OPEN, added 2026-09-05.** A person who
   installs the library but never presses the pull button silently gets word search only, the weaker half by every
   measurement. A button and a one-time hint exist today; make the pull part of the download flow, with consent, never
-  silent. Promoted out of Phase 7. One to two days.
+  silent. Promoted out of Phase 7. One to two days. Planned in plan 70.
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
   one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
   regression fails a check instead of relying on luck. Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
@@ -918,7 +928,9 @@ ones from this month are D81 to D88.
 - ★★★ `[KB]` **"Starting out" cards get their own kind** — **OPEN, decided 2026-09-05, nothing built.** A new player gets
   a *"How do I get started in Fallout 4?"* chip and *"where do I start"* finds the card. One new kind in the validator and
   the two kind lists, one chip wording, a rescue phrase list, a rebuild; then re-type the three cards filed as mechanics and
-  write the Cyberpunk, Fallout 4 and Red Dead ones you asked for. Rides the bundled release. (D65)
+  write the Cyberpunk, Fallout 4 and Red Dead ones you asked for. Rides the bundled release. (D65) Planned
+  in plan 70 as one release carrying the starting-out notes, the per-game Deck tips and three new games
+  (Brotato, Palworld, Skyrim); the session may publish it once its Deck check passes (D112).
   [Detail](roadmap-details.md#the-corpus-has-no-starting-out-card).
 - ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the 139 prose cards as labelled short
   lines, the shape the 16 structured cards use. Facts kept is already 92%, so the ceiling is low; do it only if the answer
@@ -928,7 +940,8 @@ ones from this month are D81 to D88.
   questions no card can answer, scored for an honest "I don't know", and a read by a person of ten replies a month.
 - ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **OPEN, added 2026-09-05.** Any format
   change makes every installed library stale until re-downloaded, so per-game tips, the starting-out kind and the style pass
-  ride one release rather than three. Same format as today for anything that can wait.
+  ride one release rather than three. Same format as today for anything that can wait. This is the plan 70 release above
+  (D112).
 - ★★★ `[KB]` **KB visual maps** — **OPEN.** Two shapes you named 2026-08-29: a dungeon map, and a boss outline with weak
   points marked. Nothing draws anything in a reply today. A dungeon map has to be authored, which sits behind the source
   policy and a corpus rebuild. Research first. [Detail](roadmap-details.md#kb-visual-maps).
@@ -937,18 +950,21 @@ ones from this month are D81 to D88.
 - ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL.** The chip guarantee and 16 structured cards shipped
   2026-08-19; the split was accepted 2026-08-21 and prose replies were accepted 2026-09-05 (D67). Left: per-game Deck tips (content for seven titles collected, two quirks from
   your own Deck), which need a format bump and a release — see the release entry above. Two to three days. The chip
-  clipping check waits on the preset-row work. [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
-- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. Eleven of the
-  thirteen titles still have no enemy or item cards, so "how do I deal with X" works for two games. Next: 40–60 entity cards
-  in tranches with a quality read from you after the first; then chip ranking by meaning. Card authors cannot write blind
-  test questions, so content and eval rows go in separate sessions. [Plan](planning/28-phase5-corpus-depth.md).
+  clipping check waits on the preset-row work. Also rides the plan 70 release above (D112).
+  [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. **Counted
+  2026-09-25:** only four of the original titles still have no enemy or item cards — Baldur's Gate 3, GTA San Andreas,
+  The Sims 4 and Portal 2 — not eleven of thirteen as this entry used to say. Next: 40–60 entity cards in tranches with
+  a quality read from you after the first; then chip ranking by meaning. Card authors cannot write blind test questions,
+  so content and eval rows go in separate sessions. [Plan](planning/28-phase5-corpus-depth.md).
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get cards; today they get nothing specific. New card kinds and a spoiler table update, Left 4
   Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md).
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still matters: a
   thumbs-down that stops a wrong card coming back (three days), add-on packs before any large catalog (five days or more),
   a screenshot feeding the search (a short test to find out first). A nearest-neighbour index buys nothing until the corpus
-  is thousands of cards. The embedding-model pull is its own entry above. [knowledge-base.md](knowledge-base.md) § Phase 7.
+  is thousands of cards. The embedding-model pull is its own entry above. The thumbs-down that stops a wrong note coming
+  back is drawn and planned in plan 70, not built (D112). [knowledge-base.md](knowledge-base.md) § Phase 7.
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's

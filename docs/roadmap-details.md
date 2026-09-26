@@ -1441,4 +1441,55 @@ worse answers with nothing on screen to say why.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
+## Check that a spoiler cover actually happened
+
+Long version of the roadmap entry. Moved here 2026-09-25 by the plan 70 bookkeeping pass; the roadmap keeps
+the short summary and the decision.
+
+Today the plugin tells the model to hide spoilers and then trusts it. Nothing reads the reply back to see
+whether it did. That is why the same name-withheld boss question comes back covered some times and bare
+others: the follow-up menu's rule is repeated and stressed all through the instructions and that one
+holds, while the spoiler rule is said once. A device log from 2026-09-18 rules out the obvious explanation
+— the instructions fitted the model's window with room to spare, and the model's own thinking mentions
+wrapping the answer, yet the answer came back bare.
+
+Build the same kind of safety net the follow-up menu already has: when a reply names a protected thing in
+plain text and the turn's rules required a cover, hold it back or wrap it after the fact. Found while
+fixing the menu bug; full reasoning and the five causes ruled out are in that lane's landing commit.
+
+## Attaching a screenshot crashed the model once
+
+Long version of the roadmap entry. Moved here 2026-09-25 by the plan 70 bookkeeping pass; the roadmap keeps
+the short summary and the decision.
+
+**First sighting, 2026-09-23.** A 2.6 MB screenshot attached to a question; after 14 seconds the reply said
+"Ollama returned an incomplete stream". The Deck's own system log shows the model's process crashed with a
+graphics-chip error ("ErrorDeviceLost") and wrote a crash dump. Ollama recovered on its own and later
+questions worked. **Crashed again 2026-09-23, 2 of 2 with the same 2.6 MB PNG:** the same graphics-chip
+error, the same "incomplete stream" message after about 14 seconds, and Ollama answering again about 10
+seconds later. Evidence `docs/test-evidence/plan64-THINKING-05.json`,
+`docs/test-evidence/plan64-SCREENSHOT-CRASH-try2.json`.
+
+**Cause found 2026-09-23.** A smaller picture (a 1280×800 JPG, 177 KB) answered normally in 49.7 seconds
+with a correct description of the screen; the crashing file is a 1920×1080 PNG at 2.6 MB. bonsAI only
+shrinks a picture before sending it when the Pillow image library is present, and Pillow is not installed
+on the Deck, so the full-size file goes to the model untouched. Evidence
+`docs/test-evidence/plan64-SCREENSHOT-CRASH-small.json` (+ `.png`).
+
+**Three ways to fix it were put to the maintainer:** ship the image library with the plugin, shrink
+pictures some other way, or refuse pictures over a size limit with a message. A measured comparison backed
+the second option: the unshrunk crash picture was a 2.6 MB file, 3.6 MB once packaged for sending; shrinking
+it with `ffmpeg`, already on the Deck, brought it to 86 KB, 114 KB sent, in 0.2 seconds, still fully
+readable. The Deck's own picture library was tried too, but it cannot be loaded inside Decky's own, older
+Python, so using it would mean shipping a separate program instead. [The measured comparison and size
+table](test-evidence/plan64-SCREENSHOT-SHRINK-COMPARISON.md).
+
+**Why this only showed up that night:** the fallback that sends a picture untouched has worked this way,
+unchanged, since 2026-04-13; that picture was the first large, barely-compressed one ever attached — a
+screenshot taken while the Deck was plugged into an external monitor, about six times bigger than anything
+sent before.
+
+**The maintainer's decision, 2026-09-25 (D112):** shrink with `ffmpeg`, and refuse a picture with a message
+if the shrink itself ever fails. Planned in plan 70.
+
 

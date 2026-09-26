@@ -358,6 +358,9 @@ function MainTabPresetSidewaysCarousel(
   );
 }
 
+/** How often a fade-mode chip holding the ring checks whether it may fade out yet. */
+const PRESET_RING_HOLD_RECHECK_MS = 500;
+
 /**
  * PRESET_VISIBLE_SLOTS preset suggestion chips with independent fade in/out cycles — or, in static
  * mode, plain swaps. Hold time after each appearance scales with prompt length and is never shorter
@@ -409,6 +412,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   const reducedMotion = prefersReducedMotion();
   const slotCount = effectivePresetVisibleSlots(presetSingleChip);
   const nav = usePresetRowNav(slotCount, onCarouselExitDown);
+  const { chipHasRing } = nav;
 
   const [slots, setSlots] = useState<PresetPrompt[]>(() =>
     normalizeThreeSeeds(seeds, samplerOptions).slice(0, slotCount),
@@ -490,14 +494,24 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
           setFadeFor(slotIndex, { opacity: 1, transitionMs: PRESET_CAROUSEL_FADE_IN_MS });
 
           pushTimeout(() => {
-            pushTimeout(() => {
+            /*
+             * A chip holding the ring does not fade out: a fading chip stops being a focus stop,
+             * so Steam dropped the ring with nothing to take it (plan70-PRESET-ONE-LINE-03.json,
+             * 7.6 s after the ring landed). It waits, and fades once the ring has moved on.
+             */
+            const fadeOut = () => {
+              if (chipHasRing(slotIndex)) {
+                pushTimeout(fadeOut, PRESET_RING_HOLD_RECHECK_MS);
+                return;
+              }
               setFadeFor(slotIndex, { opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_OUT_MS });
 
               pushTimeout(() => {
                 if (!mayStartNextCycle()) return;
                 loop(pickNext(prompt), 0);
               }, PRESET_CAROUSEL_FADE_OUT_MS);
-            }, presetHoldMs(prompt.text));
+            };
+            pushTimeout(fadeOut, presetHoldMs(prompt.text));
           }, PRESET_CAROUSEL_FADE_IN_MS);
         }, firstDelay);
       };
@@ -513,7 +527,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     // askRestartToken restarts this whole effect on every completed Ask (D58 #3) even when
     // seedsKey is unchanged, which is exactly what happens under a pinned QA batch: it always
     // resolves to the same three chips, so seedsKey alone never signals that an Ask happened.
-  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken]);
+  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken, chipHasRing]);
 
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">
@@ -530,8 +544,10 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
               transition: `opacity ${slotFade[i]?.transitionMs ?? PRESET_CAROUSEL_FADE_IN_MS}ms ease-in-out`,
             }}
           >
+            {/* No key of its own: one button per slot, only its words change -- decode mode's
+                shape. Keyed by its text, a swap destroyed the button holding the ring and nothing
+                took it over (plan70-PRESET-ONE-LINE-03.json, static and fade). */}
             <PresetChipButton
-              key={`${i}-${p.text}`}
               preset={p}
               setUnifiedInput={setUnifiedInput}
               onPreferAskMode={onPreferAskMode}

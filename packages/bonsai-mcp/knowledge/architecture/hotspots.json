@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 595,
+      "role": ""
+    },
+    {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
       "lines": 584,
       "role": ""
@@ -183,11 +188,6 @@
     {
       "path": "py_modules/backend/services/response_verify.py",
       "lines": 582,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 579,
       "role": ""
     },
     {

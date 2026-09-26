@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 521,
-  "edgeCount": 1398,
+  "fileCount": 522,
+  "edgeCount": 1401,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -588,6 +588,13 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/data/presets.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetAnimatedChips.test.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -614,6 +621,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.tsx"
       ]
@@ -1604,6 +1612,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
@@ -2425,7 +2434,8 @@
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetRowNav.ts",
         "src/utils/liveTurnFocusGraph.ts",
-        "src/utils/navFocusRegistry.ts"
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -5595,6 +5605,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",

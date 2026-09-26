@@ -23,6 +23,7 @@ import { buildChipNavHandlers } from "./presetRowNav";
 import { PRESET_CHIP_BLOCKED_EDGE_FLASH_MS } from "./presetRowLayout";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { focusBottomOfNewestReply } from "../../utils/liveTurnFocusGraph";
+import { elementHasGamepadFocus } from "../../utils/uiDocument";
 
 /**
  * The row's focus container, shared by every mode. Steam treats it as one navigation container;
@@ -174,5 +175,7 @@ export function usePresetRowNav(
   );
   /** True for the one chip that should carry the edge-cue class right now. */
   const isBlockedEdge = useCallback((index: number) => blockedEdgeChip?.index === index, [blockedEdgeChip]);
-  return { setButtonRef, handlersFor, focusChip, isBlockedEdge };
+  /** Steam's ring sits on this chip right now (fade mode holds a chip's fade-out while it does). */
+  const chipHasRing = useCallback((index: number) => elementHasGamepadFocus(buttonRefs.current[index]), []);
+  return { setButtonRef, handlersFor, focusChip, isBlockedEdge, chipHasRing };
 }

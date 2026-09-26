@@ -249,6 +249,43 @@ the reply-ready toast or spoken answers; any change to the decode chips themselv
 ## 9. Progress log
 
 - 2026-09-24 — Discovery, the Deck measurement and this plan. Nothing built.
+- 2026-09-24 — Step 1 built and landed: the plugin now passes on the model's words as they arrive instead
+  of waiting for a full 4 KB (`341841d3`). Small fixes the same day: the question box's blinking cursor
+  moved to sit against the first letter instead of a fixed corner (`e7c06738`, probe fix `a8bfe0e7`); the
+  "From the notes" credit line now shows only under an answer that actually used the note, instead of
+  every answer with a note attached (`45e2dd81`); the question title's overflow check now only measures
+  when the title changed, fixing a real slowdown a profile found — it was costing about a third of the
+  panel's script time while an answer streamed (`1288c936`, `46fbce4e`); a poll that brings back nothing
+  new no longer re-renders the panel (`bd61af8d`); two Deck profiling probes were built and used to find
+  these causes (`0af099ae`, `91108fd2`).
+- 2026-09-24/25 — Step 2 built: the live thinking box now shows as ordinary wrapping text instead of three
+  cut-off lines (`63a0421f`), later made smaller, dimmer and in italics to fit more of it in the same
+  space, settling at six lines (`15d46c1f`, `d0dca6db`, `9be07861`). The transcript's scroll-follow moved
+  from watching every screen update to one size observer for the whole answer, another real slowdown a
+  profile found (`76922d55`). Room was freed in the plugin's settings wiring (`e71655ab`), the four
+  scramble settings were added (`8f8273d2`), an old redundant setting was retired (`110bc445`), and the
+  new *Animations* section landed on the Developer tab with the *Scramble animation* switch, off by
+  default (`bc6ab55c`, `c38ead49`).
+- 2026-09-25 — Step 3 built: the scramble itself, drawing a live answer's newest letters as churning
+  placeholder symbols that settle into place (`d1ab2929`); the Copy button now waits for the last
+  scrambled letter to settle (`b44a5459`); each placeholder symbol is now drawn over its real letter
+  instead of replacing it, which stopped a re-wrap that had been keeping the panel busy every single frame
+  (`e0fa7f6c`). A returning bug was caught and fixed: the branch menu could still show its own placeholder
+  wording with the game's title swapped into it (`3d3c424a`, `4a275fea`).
+- 2026-09-25 — The frame-rate investigation. With no game running, the panel was drawing about 19 to 24
+  frames a second while an answer streamed in — well under the maintainer's floor of 45. Moving the
+  streaming text (and the scramble, when on) onto a steady beat about nine times a second, instead of
+  redrawing on every single frame, and holding the answer's glow and the question box's glow steady while
+  text arrives instead of redrawing those every frame too, brought that up to 56 to 58 frames a second
+  with the scramble off (the default for everyone) and 44 to 50 with it on (`bb8d7e5b`, `aae5add6`). The
+  thinking phase held 59 to 60 the whole time, which showed the model sharing the graphics chip was never
+  the real limit — every frame the panel changed in was a frame it had to redraw. Recorded in
+  `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json` (`dd1913ea`).
+- **What is still owed:** the maintainer's own look at the scramble's style and colour choices (SCR-01);
+  the game's own frame rate, with the scramble off and on (SCR-03, FIX-03); closing and reopening the
+  panel mid-answer (SCR-05); reduced motion (SCR-07); the text-arrival and frame-rate checks with a game
+  actually running (FIX-01, FIX-02); and an on-Deck check of the question box cursor fix (ASK-CARET-01).
+  Full rows in `docs/testing.md`.
 
 ---
 

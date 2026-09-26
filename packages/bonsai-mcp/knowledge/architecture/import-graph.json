@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 519,
-  "edgeCount": 1391,
+  "fileCount": 521,
+  "edgeCount": 1398,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -389,6 +389,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -511,6 +520,7 @@
         "src/features/unified-input/constants.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useKbNotesFold.ts",
+        "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/usePermHintNavTargets.ts",
         "src/hooks/useReadAloudAutoStop.ts",
         "src/hooks/useReasoningFoldState.ts",
@@ -554,6 +564,7 @@
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+        "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
@@ -2943,6 +2954,15 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useLiveTurnHeaderRingRestore.ts": {
+      "imports": [
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/hooks/useLocalOllamaSetupFlow.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
@@ -3906,6 +3926,7 @@
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+        "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
@@ -4196,6 +4217,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
@@ -5286,6 +5308,7 @@
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
+        "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
@@ -5557,6 +5580,7 @@
         "src/components/BonsaiPluginShell.test.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
+        "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -5574,6 +5598,7 @@
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/preview/replyLayoutReport.test.ts",

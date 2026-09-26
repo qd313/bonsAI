@@ -69,6 +69,14 @@ export type BuildTurnHeaderElementArgs = {
    * receives one, so it keeps landing on the header above it exactly as before.
    */
   onMoveUp?: () => boolean;
+  /**
+   * Steam's nav node for the OUTER header, and the question-text stop inside it. Only the finish
+   * restore uses them (useLiveTurnHeaderRingRestore): when the live turn is archived, the ring that
+   * sat on its Retry or text is handed to the same stop of the archived header, through this nav
+   * node first, since the old header and everything in it are gone.
+   */
+  headerNavRef?: { current: unknown };
+  bodyRef?: (el: HTMLElement | null) => void;
 };
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
@@ -86,6 +94,8 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     titleOverflowing = false,
     headerRef,
     onMoveUp,
+    headerNavRef,
+    bodyRef,
   } = args;
 
   const headerClass = [
@@ -138,6 +148,8 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
    * gets none here and keeps Steam's own default Up, onto the sibling header above it.
    */
   if (onMoveUp) headerNavHandlers.onMoveUp = () => onMoveUp();
+  /* `navRef` is a real Steam Focusable prop that Decky's types omit, so it rides the same cast. */
+  if (headerNavRef) headerNavHandlers.navRef = headerNavRef;
 
   const titleClassName = [
     "bonsai-chat-turn-row-title",
@@ -227,6 +239,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         className="bonsai-chat-turn-row-body"
         ref={(el: HTMLElement | null) => {
           bodyEl.current = el;
+          bodyRef?.(el);
         }}
         onActivate={onActivate}
         onOKButton={onActivate}

@@ -158,6 +158,7 @@ import { buildAnswerBubbleElement } from "../utils/buildAnswerBubbleElement";
 import { buildAnswerCopyText } from "../utils/answerCopyText";
 import { buildThinkingBlurbTextElement } from "../utils/buildThinkingBlurbTextElement";
 import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
+import { useLiveTurnHeaderRingRestore } from "../hooks/useLiveTurnHeaderRingRestore";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
 import { type SessionContextTurn } from "./SessionContextStrip";
 import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
@@ -700,6 +701,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * transcript's own column for some reason, this does nothing rather than reaching outside it.
    */
   const turnHeaderElRefs = useRef<Record<string, HTMLElement | null>>({});
+  /* The ring on the live question's Retry or text, kept across the archive swap (plan 70). */
+  const headerRingProps = useLiveTurnHeaderRingRestore(
+    showLiveTurn,
+    askThreadCollapsed[askThreadCollapsed.length - 1]?.id,
+    turnHeaderElRefs,
+  );
   const prevExpandedTurnKeyRef = useRef<AskThreadExpandedTurnKey>(expandedTurnKey ?? null);
   useLayoutEffect(() => {
     const prevKey = prevExpandedTurnKeyRef.current;
@@ -1079,6 +1086,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnHeaderElRefs.current[turn.id] = el;
               },
               onMoveUp: firstArchivedHeaderMoveUp(turnIndex),
+              ...headerRingProps(turn.id),
               onActivate: () => onTurnActivate?.(turn.id),
               /*
                * Retry rides on the newest question's bubble now (D77) instead of the row under the
@@ -1318,6 +1326,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               },
               isStreaming: isStreamingPreview,
               onActivate: () => onTurnActivate?.("live"),
+              ...headerRingProps("live"),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,
             })}

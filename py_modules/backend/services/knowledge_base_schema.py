@@ -162,12 +162,7 @@ CREATE TABLE IF NOT EXISTS compat_patterns (
     card TEXT NOT NULL,
     source_url TEXT,
     source_license TEXT,
-    -- Schema v4 (D29 / Phase 4 track 3). Null means the tip is shared, which is every tip
-    -- that existed before this column -- additive, no re-authoring needed. Not the numeric
-    -- Steam AppID for every row: a title with no Steam AppID (an emulated shortcut, like
-    -- Ocarina of Time) stores its `games.igdb_id` value here instead, since that is the
-    -- corpus's own per-game key for a title Steam never assigned one to. See
-    -- knowledge_base_service.py's per-game compat pull for the read side.
+    -- Schema v4: the tip's own game; null = shared. See _migrate_compat_patterns_v4.
     app_id TEXT
 );
 
@@ -414,7 +409,14 @@ def _migrate_compat_patterns_v2(conn: Any) -> None:
 
 
 def _migrate_compat_patterns_v4(conn: Any) -> None:
-    """Add the per-game ``app_id`` column (schema v4, D29) when opening an older corpus.db."""
+    """Add the per-game ``app_id`` column (schema v4, D29) when opening an older corpus.db.
+
+    Null means the tip is shared, which is every tip that existed before this column --
+    additive, no re-authoring needed. Not the numeric Steam AppID for every row: a title with
+    no Steam AppID (an emulated shortcut, like Ocarina of Time) stores its ``games.igdb_id``
+    value here instead, since that is the corpus's own per-game key for a title Steam never
+    assigned one to. See knowledge_base_service.py's per-game compat pull for the read side.
+    """
     row = conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='compat_patterns'"
     ).fetchone()

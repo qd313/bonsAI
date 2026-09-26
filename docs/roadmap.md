@@ -184,7 +184,8 @@ starts work outside this.
 - ★ `[ui]` **The "Not helpful" reason chips sit almost one to a row** — **OPEN, from the maintainer
   2026-09-26.** Under "What went wrong?", Bad information, Misidentified game/problem, Unfenced spoiler,
   Too long and Too short mostly each take a whole row. Make the chips tighter and closer together so
-  they share rows. Measure each chip's width and padding on the Deck first. Plan 72 must-fix.
+  they share rows. Measure each chip's width and padding on the Deck first. Option: shorter labels
+  ("Wrong game or topic", "Showed a spoiler"), drawn beside spacing-only for the maintainer to pick. Plan 72.
 - ★ `[ui]` **The chat name's scroll doesn't match the chip scroll** — **OPEN, from the maintainer
   2026-09-26.** A long chat name should scroll at the same speed and with the same pauses as a long chip
   label; then slow both slightly so the panel feels less busy. Plan 72 must-fix.

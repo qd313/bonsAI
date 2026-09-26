@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 255,
+  "edgeCount": 258,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -176,6 +176,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/tdp_service.py",
       "count": 3
     },
@@ -249,6 +253,10 @@
     },
     {
       "path": "py_modules/backend/services/reply_style_blocks.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/response_verify.py",
       "count": 2
     },
     {
@@ -400,10 +408,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/response_verify.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/steam_vac_service.py",
       "count": 1
     },
@@ -413,10 +417,6 @@
     },
     {
       "path": "py_modules/backend/services/strategy_entity_extraction.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "count": 1
     },
     {
@@ -794,6 +794,7 @@
         "py_modules/backend/services/spoiler_risk_service.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
         "py_modules/backend/services/spy_confession_service.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
         "py_modules/backend/tdp_intent.py"
@@ -1010,8 +1011,10 @@
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/reply_language_service.py",
+        "py_modules/backend/services/response_verify.py",
         "py_modules/backend/services/screenshot_media.py",
-        "py_modules/backend/services/settings_service.py"
+        "py_modules/backend/services/settings_service.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py"
       ],
       "importedBy": [
         "main.py"
@@ -1272,7 +1275,8 @@
     "py_modules/backend/services/response_verify.py": {
       "imports": [],
       "importedBy": [
-        "py_modules/backend/services/game_ai_request.py"
+        "py_modules/backend/services/game_ai_request.py",
+        "py_modules/backend/services/ollama_ask_service.py"
       ]
     },
     "py_modules/backend/services/screenshot_media.py": {
@@ -1383,6 +1387,8 @@
         "py_modules/backend/services/strategy_guide_parse.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/game_ai_request.py",
+        "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_prompts.py"
       ]
     },

@@ -24,8 +24,34 @@ low-narrative-risk in the first place -- those come in as arguments, resolved by
 strategy_entity_extraction.py and spoiler_title_profiles.py respectively.
 """
 
+import re
+from typing import Iterable
+
 from backend.services.spoiler_title_profiles import title_profile_is_low_narrative
 from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+
+# Plan 70 helper A (D112 #7, the spoiler safety net): a name is "named" in the question the
+# same tolerant way strategy_entity_extraction.py's own known-entity matcher already treats a
+# corpus title as present -- case-insensitive, word-boundary anchored, one trailing plural "s"
+# allowed ("exploders" for the card "Exploder"). Kept here rather than imported, since that
+# matcher lives inside a private closure this lane's file list marks read-only.
+_NAME_PATTERN_CACHE: dict[str, "re.Pattern[str]"] = {}
+
+
+def _name_pattern(name: str) -> "re.Pattern[str]":
+    pat = _NAME_PATTERN_CACHE.get(name)
+    if pat is None:
+        pat = re.compile(rf"(?<![a-z0-9]){re.escape(name.lower())}s?(?![a-z0-9])")
+        _NAME_PATTERN_CACHE[name] = pat
+    return pat
+
+
+def name_appears_in_text(haystack: str, name: str) -> bool:
+    """True when ``name`` (case-insensitive, plural-tolerant) shows up in ``haystack``."""
+    n = (name or "").strip()
+    if not n:
+        return False
+    return bool(_name_pattern(n).search((haystack or "").lower()))
 
 
 def user_consents_strategy_spoilers(question: str) -> bool:
@@ -291,3 +317,94 @@ def _strategy_spoiler_constitution_compact_block(
         "This is not a Strategy Guide branch turn — do not emit ```bonsai-strategy-branches``` "
         "or ```bonsai-strategy-checklist``` fences.\n"
     )
+
+
+def spoiler_cover_required(
+    consent: bool,
+    *,
+    strategy_domain: bool,
+    app_id: str = "",
+    app_name: str = "",
+    title_profile: str = "",
+) -> bool:
+    """True when this turn's own prompt (built above) told the model to keep coaching
+    spoiler-minimized -- the one branch that puts spoilery detail behind ```bonsai-spoiler```
+    fences at all.
+
+    D112 #7, the spoiler safety net: nothing has ever checked whether the model actually did
+    that once told to (the roadmap bug this answers: a question describing a boss without
+    naming it came back with the boss named in plain text). This is the one place both the
+    streaming safety net (ollama_ask_service.py) and the finished-reply one
+    (game_ai_request.py) ask "was a cover promised this turn at all" -- mirroring the exact
+    branch ``_strategy_spoiler_policy_block`` above chose, so the safety net can never disagree
+    with the prompt about whether hiding was asked for.
+
+    False on every turn the prompt never asked for a cover: the player opted in
+    (``consent``), the title reads as routine gameplay rather than story
+    (``_strategy_title_is_low_spoiler_risk``), or this is not a Strategy/Expert-with-KB-cards
+    turn at all (``strategy_domain`` -- the same test ``ollama_prompts.build_system_prompt``
+    uses to decide whether to inject any spoiler policy in the first place).
+    """
+    if not strategy_domain:
+        return False
+    if consent:
+        return False
+    return not _strategy_title_is_low_spoiler_risk(
+        app_id=app_id, app_name=app_name, title_profile=title_profile
+    )
+
+
+# Only these two card kinds count as "an attached boss or story note" for the safety net --
+# an item, a mechanic, an area or a general tip is not, and treating one as protected is not
+# the harmless occasional miss the docstring below accepts elsewhere. Measured 2026-09-26
+# against the eval fixture: scoping this to every attached card, not just these two kinds,
+# fenced an attached WEAPON's own card ("Shield of Chaos", kind "item") on a Hades turn that
+# named neither it nor any fence-worthy thing -- fence-not-misfired on the two existing rows
+# that name their own boss fell from 100% to 44% before this was narrowed. "enemy" is included
+# alongside "boss" because a notable named enemy can carry the same kind of reveal a boss does;
+# "story" is not a kind this corpus uses today (data/kb/strategy_seed.json's section_type
+# values, checked the same day: mechanic, boss, item, area, enemy, quest, dungeon), so nothing
+# is dropped from that other than the wording of D112 #7 itself suggesting it might exist.
+_BOSS_LIKE_KINDS = frozenset({"boss", "enemy"})
+
+# The same header shape knowledge_base_service.py's `_card_lines` writes for a real strategy
+# card (kb_attached_notes.py's `_KB_NOTE_HEADER_RE` reads the same thing, with the trust tier
+# too, which this does not need). A plain regex on the raw text rather than a structured list,
+# on purpose: it works the same way whether the caller has retrieval's own `kb_text` (finished
+# reply, game_ai_request.py) or only the assembled prompt (live streaming,
+# ollama_ask_service.py), which carries the identical card block verbatim.
+_CARD_HEADER_RE = re.compile(r"\[(?P<game>[^\]/]+)/\s*(?P<kind>[^:\]]+):\s*(?P<name>[^\]]+)\]")
+
+
+def boss_like_card_names(kb_text: str) -> list[str]:
+    """Names of attached boss/enemy cards only -- read straight off the card block's own header
+    line, ``[Game / kind: Name]``, so this needs no structured note list from either caller."""
+    names: list[str] = []
+    for m in _CARD_HEADER_RE.finditer(kb_text or ""):
+        kind = (m.group("kind") or "").strip().lower()
+        if kind not in _BOSS_LIKE_KINDS:
+            continue
+        name = (m.group("name") or "").strip()
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def protected_spoiler_names(question: str, kb_card_titles: Iterable[str]) -> list[str]:
+    """Attached boss/enemy note titles the player's own question did not name.
+
+    ``kb_card_titles`` is normally ``boss_like_card_names`` run over whatever knowledge-base
+    text actually reached the model this turn. A title the question DID name is the thing the
+    player already chose to know about (the "NAMED-ENTITY CONSENT" carve-out above covers that
+    one on purpose); every other attached boss or enemy is "protected" for the safety net,
+    whether or not the model remembers to fence it.
+    """
+    out: list[str] = []
+    for title in kb_card_titles or ():
+        name = (title or "").strip()
+        if not name or name in out:
+            continue
+        if name_appears_in_text(question, name):
+            continue
+        out.append(name)
+    return out

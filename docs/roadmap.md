@@ -150,14 +150,18 @@ starts work outside this.
   chat had only one turn. **Reproduction plan, to try all four combinations:** on a one-turn chat's Session
   tab, press Clear with A, and separately by tap; try each once right after opening the Clear confirm box,
   and again after switching to that chat from another one. Needs a Deck walk with the focus recorder before
-  any fix — the session thinks this is the same family as the tab-bar ghost below.
+  any fix — the session thinks this is the same family as the tab-bar ghost below. **Retired 2026-09-25
+  (plan 68):** the Clear button this reproduction plan presses is gone, replaced by "Sum up this chat," so
+  this exact repro can no longer be run. The button was replaced, not fixed.
 - ★ `[focus]` **Once, the Show details line did nothing when pressed** — **OPEN, found by the maintainer by
   hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** No details yet on which chat
   or when; the maintainer does not remember whether they pressed A or tapped, or whether it was right after
   the Clear confirm box or after switching chats. **Reproduction plan, to try all four combinations:** press
   Show details with A, and separately by tap; try each once right after cancelling the Clear confirm box,
   and again right after switching chats. Needs a Deck walk with the focus recorder before any fix — the
-  session thinks this is the same family as the tab-bar ghost below.
+  session thinks this is the same family as the tab-bar ghost below. **The "after cancelling Clear" half
+  is retired 2026-09-25 (plan 68):** that confirm box is gone, replaced by "Sum up this chat." The "after
+  switching chats" half still stands and can still be tried.
 - ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **OPEN, found by
@@ -169,10 +173,11 @@ starts work outside this.
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
   and the big icon bar under it. Touch scrolling did not close the big one; the first D-pad move did.
-  Recording `recordings/DeckRecord_20260923_235526_game.mkv` (11 seconds, every frame shows both bars). Row
-  **TAB-BAR-GHOST-01**. The session's guess, shared with the two bugs above: closing a Decky popup rebuilds
-  the plugin, and the highlight lands on the top bar, which then opens — each of these three needs a Deck
-  walk with the focus recorder before any fix.
+  Recording `recordings/DeckRecord_20260923_235526_game.mkv` (11 seconds, every frame shows both bars) —
+  this recording lives only on the maintainer's own computer; the recordings folder is not saved with the
+  project. Row **TAB-BAR-GHOST-01**. The session's guess, shared with the two bugs above: closing a Decky
+  popup rebuilds the plugin, and the highlight lands on the top bar, which then opens — each of these three
+  needs a Deck walk with the focus recorder before any fix.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -521,9 +526,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
   we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
-  **As of 2026-09-18, seven of the twelve have real evidence behind them now.** Five remain: the spoiler-reveal
-  reachability check, the knowledge-base update button check, the 12 September follow-up-memory re-run, model
-  eviction on the Deck, and the wave-three Deck evening. All five are scheduled in plan 64. The table in
+  **As of 2026-09-23, eleven of the twelve have real evidence behind them now.** The knowledge-base update
+  button check, the 12 September follow-up-memory re-run, model eviction on the Deck, and the wave-three
+  Deck evening all closed since. **One remains:** the spoiler-reveal reachability check, still blocked by
+  the name-withheld-boss bug (see Bugs) — there is nothing hidden to reach yet. The table in
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
@@ -542,25 +548,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-23 (build `a224fb6`), after the Deck work ended: the "where you land" half still fails.** After
   Clear then Cancel, the plugin came back "not in the same spot, back at the top," instead of staying on the
   Session tab with the ring on Clear. Whether the box itself still opens on Cancel rather than Clear is
-  unconfirmed either way. Not fixed for this half yet.
+  unconfirmed either way. Not fixed for this half yet. **Retired 2026-09-25 (plan 68):** the Clear button
+  itself is gone, replaced by "Sum up this chat," so this box and its "where you land" bug can no longer be
+  reproduced as written. The button was replaced, not fixed.
 - ★ `[perms]` **The ban lookup's "turned off" message names the switch the way the screen does** — **VERIFY,
   fixed in `ec6f87ab` on 2026-09-23, after that night's last deploy.** With the permission off it said "Enable
   Permissions → Steam Web API", but the switch is labelled "Steam ban lookup"; it now says that. The four ban
   lookup checks passed the same night on the old wording. Owed: VAC-06 once more on a build that has the fix.
   Found 2026-09-24; until then this was written only in plan 64's report.
-- ★★ `[focus]` **Walking a reply with the ring on the chat row while it streams carries the row off
-  screen** — **VERIFY, found and fixed the same night, `ff62e8c`.** With the ring on the chat row and the
-  answer still being written, the view followed the growing answer and carried the chat row off the top of
-  the screen (its position went from 14 pixels down to 183 pixels above the top). Owed: the same walk on the
-  Deck. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
-- ★★ `[focus]` `[layout]` **The view jumps to the end of an answer as it finishes, and the ring's place
-  goes off screen** — **VERIFY, fixed in `e241c5c`.** About 0.8 seconds after an answer finished, Down from
-  the chat row put the ring on "40 earlier" as expected, but the view had already jumped to the very end of
-  the answer, leaving the ring 656 pixels above the visible area — 0% visible. The fix makes the view bring
-  the ring's own control back into view once an answer ends, instead of the end of the text. **A related,
-  separate case is still open** — the ring itself vanishing while it is walked mid-answer, its own bug
-  above, since this fix was not built for that shape. Owed: the same walk on the Deck. Evidence
-  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **VERIFY, fixed
   2026-09-24 (`341841d3`).** The plugin waited for a full 4 KB before passing on any of the model's words;
   with a game running that meant lumps of about 115 letters every 1.5–2 seconds. It now passes on whatever
@@ -640,7 +635,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named;
   the strip is taller so the chat row's dots no longer show under it. **Deck run 2026-09-18:** rows 01, 02,
   04, 05 and 06 pass; 03 waits on the maintainer's own look; 07 failed and is filed as its own bug above.
-  The free-play sweep's streaming half is still owed. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named).
+  **The free-play sweep's streaming half closed 2026-09-23** (fourth try of the recorded walk); that same
+  pass found a new, unrelated bug instead — two tall answer sections only 33% visible on landing — tracked
+  on its own. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
@@ -852,8 +849,10 @@ ones from this month are D81 to D88.
   check joined them that night, once the log finally named the attached notes (see the row below). Only
   the corpus-format check still cannot run, since that means replacing the library it tests. **Per D116
   #7, the corpus-format check is retired, covered by its own unit tests.** The other four are not all
-  clean passes yet — the relevance floor and the follow-up check are each only half passed, so this entry
-  stays open rather than moving to Done.
+  clean passes yet — **the follow-up check passed in full on the Deck 2026-09-23** (Megaera's note came
+  first for both the parent question and its follow-up); the relevance floor is still half passed — its
+  on-topic half is a real pass, its off-topic half is waiting on the maintainer to retire or reword it
+  against an earlier accepted decision. This entry stays open until that half is settled.
   [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
 - ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, ran for the first time and passed,
   2026-09-22,** once the answer-lines lane added the missing log line — recorded as impossible every

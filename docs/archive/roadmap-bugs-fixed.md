@@ -497,9 +497,37 @@ the closing note added at the end of each._
   from 750 to 1,060 pixels — the first real Deck proof that the fix holds. **Two narrower problems split out
   of this same recording, each tracked as its own entry:** with the ring on the chat row instead, the view
   followed the answer and carried the row off the top of the screen (already fixed the same night,
-  `ff62e8c`); and at the exact moment an answer finishes while it is being walked, the ring can vanish
-  completely and the view jumps to the very end (still open). Evidence
+  `ff62e8c`, closed below); and at the exact moment an answer finishes while it is being walked, the ring
+  can vanish completely and the view jumps to the very end (closed below, and again in its own fuller
+  entry further down this file). Evidence
   `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+
+### Walking a reply with the ring on the chat row while it streams carries the row off screen (closed 2026-09-23)
+
+- ★★ `[focus]` **Walking a reply with the ring on the chat row while it streams carries the row off
+  screen** — **VERIFY, found and fixed the same night, `ff62e8c`.** With the ring on the chat row and the
+  answer still being written, the view followed the growing answer and carried the chat row off the top of
+  the screen (its position went from 14 pixels down to 183 pixels above the top). Evidence
+  `docs/test-evidence/plan64-STREAM-WALK-REC-01.json` (+ `.png`).
+
+  **Closed 2026-09-23, confirmed on the Deck.** The fourth try of the same recorded streaming walk
+  (`STREAM-WALK-REC-01`, flow H) held the view's scroll position steady while an answer kept growing and
+  then finished, and testing-manual.md's free-play sweep row now treats this streaming case as fixed and
+  closed. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
+
+### The view jumps to the end of an answer as it finishes, and the ring's place goes off screen (closed 2026-09-23)
+
+- ★★ `[focus]` `[layout]` **The view jumps to the end of an answer as it finishes, and the ring's place
+  goes off screen** — **VERIFY, fixed in `e241c5c`.** About 0.8 seconds after an answer finished, Down from
+  the chat row put the ring on "40 earlier" as expected, but the view had already jumped to the very end of
+  the answer, leaving the ring 656 pixels above the visible area — 0% visible. The fix makes the view bring
+  the ring's own control back into view once an answer ends, instead of the end of the text. Evidence
+  `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck.** The fourth try of the recorded streaming walk
+  (`STREAM-WALK-REC-01`, flow H) held the ring on its own section right through the answer finishing, with
+  no jump to the end and no moment where the ring went missing — see the fuller "ring is lost" entry
+  further down this file for the root cause. Evidence `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
 
 ### The Open Permissions jump lands one toggle above the one it was asked for (closed 2026-09-23)
 

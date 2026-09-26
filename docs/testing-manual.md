@@ -290,7 +290,7 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 ### Tier 1 extras
 
-- [ ] "What game am I playing?" with game focused — still owed; needs a game running, scheduled for the games block.
+- [x] "What game am I playing?" with game focused — **PASS (Deck) 2026-09-18:** asked with Half-Life 2 running and focused, the plugin named the game correctly and gave real Half-Life 2 advice with a note card attached. Evidence `docs/test-evidence/plan61-tier1-what-game.json`.
 
 ---
 
@@ -397,7 +397,7 @@ everything below assumes it passes. Plan:
 
 
 
-- [ ] **PRESET-ONE-LINE-02** (the row matches the decision) One row, **two chips side by side**, each half the width less a 4px gap,
+- [ ] **PRESET-ONE-LINE-02** (the row matches the decision) — **geometry PASSED on device 2026-09-01; the help-chip half is still owed** (the help chip was already dismissed on that device, so it was never exercised). One row, **two chips side by side**, each half the width less a 4px gap,
   **30px** tall, radius 4; a label longer than its chip scrolls sideways inside it with a soft fade at the edges, and short labels do
   not move. **Read the geometry from the live page** (`getBoundingClientRect` on the two `.bonsai-preset-glass` buttons and their
   `.bonsai-preset-chip-text` children), not from a screenshot, and **record the button's computed side padding** — it is the one
@@ -492,7 +492,7 @@ Rows 01–07 and 10–11 passed on the Deck (07 is retired, replaced by TAB-STRI
 |---|---|---|---|
 | **TAB-BAR-08** | Touch | Tap on the thin bar opens the strip; a tab tap switches and closes it; a tap outside closes it | ⏳ needs a finger on the screen — the rig cannot tap |
 | **TAB-BAR-09** | Modal return | After the character picker closes on a non-Main tab, the ring lands on the opener or on the bar, never nowhere (re-runs PICKER-FOCUS-01's three openers) | ✅ 2026-09-02 for the character picker, the models hub and the chat-slot rename — all return to the opener (`docs/test-evidence/TAB-BAR-09-*.json`); ⏳ the desktop-note opener needs the *Save files to Desktop* permission on · ⏳ 2026-09-03: the Clear cache confirmation is a fourth opener and its return lands on the hidden Settings tab button (roadmap Bugs, filed 2026-09-03) |
-| **TAB-BAR-GHOST-01** | Touch, ghost strip | With a game running full screen, open the panel, put the ring on the tab bar so the strip opens, then touch a suggestion chip with a finger; the strip must disappear completely — no faint icons, no dotted row — however long you wait | ⏳ **needs a finger on the screen — the rig cannot touch.** Fixed at the desk 2026-09-15: a plain timer now force-hides the strip a fraction of a second after it closes, whatever its fade animation is doing, so a stalled fade can no longer leave a see-through copy over the chips. The exact reason the fade stalls was not pinned down. On the maintainer's own checklist ([Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4)).
+| **TAB-BAR-GHOST-01** | Touch, ghost strip | With a game running full screen, open the panel, put the ring on the tab bar so the strip opens, then touch a suggestion chip with a finger; the strip must disappear completely — no faint icons, no dotted row — however long you wait | ❌ **regressed — failed by hand 2026-09-23** (build `a224fb6`, found by the maintainer after the Deck work ended): after Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar and the big icon bar under it. Touch scrolling did not close the big one; only the first D-pad move did. Recording `recordings/DeckRecord_20260923_235526_game.mkv` (11 seconds, every frame shows both bars) — this recording lives only on the maintainer's own computer; the recordings folder is not saved with the project. Back in Bugs on the roadmap as **TAB-BAR-GHOST-01**. The desk fix from 2026-09-15 (a plain timer that force-hides the strip) did not hold against this case. ⏳ still needs a finger on the screen to confirm any new fix — the rig cannot touch. On the maintainer's own checklist ([Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4)).
 
 Also re-run because their landing spot changed: **DOC-SWEEP-01** (Settings Up → the bar now),
 **CHAT-SLOTS-V3-01** (the walk starts at the bar), **TAB-SWITCH-01** (the flicker fix must hold with
@@ -522,8 +522,8 @@ line under a finished Strategy or troubleshooting reply that used a note or a sh
 where it came from, and opens to show the note's own words. Starts closed behind one switch. **Two
 pieces are short of the plan, a follow-up in progress in the same lane:** the block should appear
 before the model's first word rather than only once the reply finishes (row 06), and should sit inside
-the spoiler box on a fenced reply rather than being hidden entirely (row 02). **None of the seven rows
-below have run on the Deck yet.** Every row that walks the D-pad onto the block's own header must check
+the spoiler box on a fenced reply rather than being hidden entirely (row 02). **Four of the seven rows
+below have passed on the Deck (01, 03, 05, 06); the rest — 02, 04, 07 — are still to run, below.** Every row that walks the D-pad onto the block's own header must check
 that the ring is actually visible on the header, its rectangle read against where the dock starts, not
 merely that the header has focus — the repo's own lesson from a control that passed a focus walk while
 sitting hidden behind the dock. Save each row's evidence to `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-0N.json`
@@ -569,11 +569,11 @@ Rows 01, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 
 **On-Deck (Tier 3 — QA backlog):**
 
-- [ ] **QAMP-DECK-01** Per-game profile ON: TDP apply + guidance
-- [ ] **QAMP-DECK-02** Per-game profile OFF: same
-- [ ] **QAMP-DECK-03** Close/reopen QAM Performance: cap reflects write
-- [ ] **QAMP-DECK-04** After Steam restart: OS default (not plugin regression)
-- [ ] **QAMP-DECK-05** After full reboot: same
+- [ ] **QAMP-DECK-01** Per-game profile ON: TDP apply + guidance — **withdrawn 2026-09-02**, TDP apply was removed 2026-07-30, nothing left to test
+- [ ] **QAMP-DECK-02** Per-game profile OFF: same — **withdrawn 2026-09-02**, same reason
+- [ ] **QAMP-DECK-03** Close/reopen QAM Performance: cap reflects write — **withdrawn 2026-09-02**, same reason
+- [ ] **QAMP-DECK-04** After Steam restart: OS default (not plugin regression) — **withdrawn 2026-09-02**, same reason
+- [ ] **QAMP-DECK-05** After full reboot: same — **withdrawn 2026-09-02**, same reason
 
 ---
 

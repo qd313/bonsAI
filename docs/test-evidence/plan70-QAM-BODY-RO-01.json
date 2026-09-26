@@ -1,0 +1,15 @@
+{
+ "row": "QAM-BODY-RO-01, tab switches don't stick the panel height (plan 70 flow 2b.11)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 14:04-14:05 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; pane y 88-765",
+ "pressed": "from Main: RB, RB, then LB/RB alternately - 12 tab switches (Ollama, Settings x6), ending on Settings; then Down one press at a time until the ring stopped (2 still presses)",
+ "switches": "12 of 12 landed (Ollama tab -> 'Run AI on this Deck', Settings tab -> 'Adjust UI automatically'), run file runs/plan70-QAM-BODY-RO-01-switches.json",
+ "after_switches": {
+  "pane_clientHeight": 677,
+  "css --bonsai-tab-body-height": "677px",
+  "pane_scrollHeight": 2081
+ },
+ "walk_down": "15 stops, 16 presses, every stop visible; last stop 'Clear cache...' at y 687-725 with scrollTop 1404 = the pane's maximum (2081 - 677). 'Clear all data...' sits beside it on the same row. run file runs/plan70-QAM-BODY-RO-01-settings-down.json",
+ "verdict": "PASS - the walk reaches the true last row, visible, after 12 switches; the height value still matches the live pane"
+}

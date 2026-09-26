@@ -1,0 +1,127 @@
+{
+ "row": "REPLY-DOWN-01 + D-PAD-SCROLL-01/02, the walk below a long answer, rewritten form (plan 70 flow 2b.8)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:40-13:44 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; transcript pane y 88-765; dock top y 600",
+ "setup": "test chat, Strategy, Ali G on. Question 'explain every class in baldurs gate 3 for a beginner' (deck_send_ask.py VERIFIED), answered in 48 s: 349 words in 3 answer sections (Talkers / Healers / Fixers / Damage Dealers), a branch picker (A/B), Helpful row, notes block. Pane scrollHeight 1520.",
+ "method": "deck_sweep from the question row: Down until the ring stopped moving (2 still presses), then Up back until it stopped; every stop's box and the pane's scrollTop recorded. Run file runs/plan70-REPLY-DOWN-01-sweep.json",
+ "down_leg": [
+  {
+   "stop": "question row (start)",
+   "y": 190,
+   "h": 29,
+   "scrollTop": 0,
+   "note": "78% visible - the Retry icon covers its element box; known false alarm, checked: the question's text lines start at x 115, the icon ends at x 102"
+  },
+  {
+   "stop": "Show reasoning",
+   "y": 235,
+   "scrollTop": 0
+  },
+  {
+   "stop": "answer section 1",
+   "y": 212,
+   "h": 276,
+   "scrollTop": 55
+  },
+  {
+   "stop": "answer section 2",
+   "y": 243,
+   "h": 357,
+   "scrollTop": 299
+  },
+  {
+   "stop": "answer section 3 (last)",
+   "y": 423,
+   "h": 177,
+   "scrollTop": 476,
+   "note": "89% - Copy icon over its element box; known false alarm, checked: none of its 12 text lines overlaps the icon (last line x 70-135, icon x 292-312)"
+  },
+  {
+   "stop": "A. Starting in the city/outer regions",
+   "y": 481,
+   "scrollTop": 658
+  },
+  {
+   "stop": "B. Deep into the wilderness/dungeons",
+   "y": 521,
+   "scrollTop": 658
+  },
+  {
+   "stop": "Helpful",
+   "y": 481,
+   "scrollTop": 788
+  },
+  {
+   "stop": "Show details",
+   "y": 525,
+   "scrollTop": 788
+  },
+  {
+   "stop": "notes block 'Party composition (+1 more)'",
+   "y": 501,
+   "h": 47,
+   "scrollTop": 842
+  },
+  {
+   "stop": "Save chat to Desktop",
+   "y": 562,
+   "h": 38,
+   "scrollTop": 842
+  },
+  {
+   "stop": "chip",
+   "y": 600,
+   "scrollTop": 842
+  },
+  {
+   "stop": "question box",
+   "y": 639,
+   "scrollTop": 842
+  },
+  {
+   "stop": "Ask (last control)",
+   "y": 711,
+   "scrollTop": 842
+  }
+ ],
+ "up_leg": [
+  "paperclip 687",
+  "avatar 641",
+  "chip 600",
+  "notes block 501",
+  "Show details 470",
+  "Helpful 426 (scrollTop 842)",
+  "answer section 3 y 417 (scrollTop 482)",
+  "section 2 y 204 (338)",
+  "section 1 y 204 (63)",
+  "Show reasoning y 204 (31)",
+  "Retry y 201 (0)",
+  "'5 earlier' y 146",
+  "chat row y 88",
+  "Main tab",
+  "Decky back button"
+ ],
+ "numbers": {
+  "presses": 34,
+  "stops_recorded": 29,
+  "dead_presses_inside_the_walk": 0,
+  "extra_presses": "2 at each end, used to confirm the ring had stopped; 1 press retried because the bridge port was busy",
+  "focused_not_visible": "0 real (3 flagged, all the two known false alarms above)",
+  "view_step_per_down_inside_the_answer_px": [
+   55,
+   244,
+   177,
+   182
+  ],
+  "view_step_per_up_inside_the_answer_px": [
+   360,
+   144,
+   275,
+   32
+  ]
+ },
+ "differences_from_the_written_steps": "'Session context' is gone as the runbook says, but 'Save chat to Desktop' is still a stop (a full-width button just above the chip, y 562-600).",
+ "possible_bug": "Up from Helpful goes straight to the last answer section and skips the branch picker (A/B) that sits between them; the picker is reachable only going Down. Seen twice (here and at 13:39 on the Dead Cells answer). Also, on three earlier walks, Down from the Copy icon went straight to Helpful, skipping the same picker.",
+ "verdict": "PASS for the stated conditions (no dead press, every stop visible, reaches the bottom and comes back). Scroll steps inside the answer are uneven (55 to 360 px); the session judges 'smooth'. Branch-picker skip on the way up is reported as a possible bug."
+}

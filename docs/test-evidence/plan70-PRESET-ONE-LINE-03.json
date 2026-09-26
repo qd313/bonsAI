@@ -1,0 +1,55 @@
+{
+ "row": "PRESET-ONE-LINE-03 in fade, static and decode; plus the two-chip setting (plan 70 flow 2b.9)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:42-13:48 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; chip row y 600-630",
+ "settings_changed": {
+  "preset_chip_animation": "decode -> fade -> carousel -> static -> decode (back)",
+  "preset_chip_fade_animation_enabled": "false -> true while fade was chosen (the plugin set it) -> false (back)",
+  "preset_single_chip": "true -> false for the two-chip walk -> true (back)",
+  "how": "Developer tab 'Preset suggestions' buttons and the Settings tab 'Show one chip instead of two' switch, with A; file read back afterwards: decode / false / true"
+ },
+ "fade": {
+  "try1": "box -> Up -> chip (visible). Right: ring did not move (one chip). Left: the ring vanished - no element anywhere held focus. Screenshot: no ring on the panel, the chip now shows a different question.",
+  "try2_hold_test": "ring put on the chip ('What settings should I use?'); without any press, 7.6 s later the chip changed to 'What are the best FSR settings?' and no element held focus",
+  "try3": "chip -> Down -> box OK; box -> Up went to the avatar, not the chip; Up again went to 'Save chat to Desktop' - the chip was skipped",
+  "run_files": [
+   "runs/plan70-PRESET-ONE-LINE-03-fade.json",
+   "runs/plan70-PRESET-ONE-LINE-03-fade-try2.json"
+  ],
+  "screenshots": [
+   "plan70-PRESET-ONE-LINE-03-fade-ring-lost.png",
+   "plan70-PRESET-ONE-LINE-03-fade-ring-lost-2.png"
+  ],
+  "verdict": "FAIL - when the chip swaps to a new question while it holds the ring, the ring is lost (nothing focused); once the Up from the box skipped the chip"
+ },
+ "static": {
+  "try1": "ring on chip; Right and Left did not move it (one chip); by the next step (about 3 s later) no element held focus",
+  "hold_test": "ring put on the chip; 7.6 s later the chip showed 'What should I do if Ask times out?' and no element held focus",
+  "try2_quick": "chip -> Down -> box -> Up -> chip -> Up -> notes block: all visible, passed when done inside the swap interval",
+  "run_files": [
+   "runs/plan70-PRESET-ONE-LINE-03-static.json",
+   "runs/plan70-PRESET-ONE-LINE-03-static-try2.json"
+  ],
+  "verdict": "FAIL - same as fade: the chip changes question under the ring and the ring is lost"
+ },
+ "decode": {
+  "walk": "chip Right (no move, one chip) -> Left (no move) -> Down -> box -> Up -> chip -> Up -> notes block; every stop visible; the chip changed question while holding the ring and the ring stayed on it",
+  "run_file": "runs/plan70-PRESET-ONE-LINE-03-decode.json",
+  "saved_walk": "plan70-PRESET-ONE-LINE-03-decode",
+  "verdict": "PASS"
+ },
+ "two_chips_decode": {
+  "chips": "two chips side by side, x 48 and 201, 147 wide each",
+  "walk": "Save chat -> Down -> left chip -> Right -> right chip -> Left -> left chip -> Right -> right chip -> Down -> box -> Up -> right chip; all visible, 7 of 7",
+  "run_file": "runs/plan70-PRESET-two-chips.json",
+  "verdict": "PASS"
+ },
+ "carousel_side_check_for_DOC_SWEEP_box3": {
+  "note": "carousel is not in this row's list (it passed 2026-09-01); switched to it only for the DOC-SWEEP box 3 pause check",
+  "seen": "Down from 'Save chat to Desktop' put the ring on a chip that had slid off the left edge (x -240 to 60, the panel starts at 48, so about 4% of it on screen); the visible chip next to it had no ring. The ring stayed there 30 s (the carousel did pause - box 3 holds). Right then moved the ring to the visible chip (x 48).",
+  "screenshot": "plan70-PRESET-ONE-LINE-03-carousel-offscreen-ring.png",
+  "verdict_box3": "PASS (the carousel paused while a chip held the ring); new visibility problem noted"
+ },
+ "verdict": "FAIL - fade and static lose the ring when the single chip swaps; decode and two chips pass"
+}

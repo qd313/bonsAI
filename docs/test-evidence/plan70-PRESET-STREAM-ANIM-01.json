@@ -1,0 +1,32 @@
+{
+ "row": "PRESET-STREAM-ANIM-01, the decode chips box by box (plan 70 flow 2b.10)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:48-13:52 and 14:01-14:03 EDT (a usage-limit stop in between)",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "setup": "chip style decode, one chip (the saved settings); Main tab, test chat",
+ "box_block_of_symbols_settling_left_to_right": {
+  "how": "a single screenshot is too slow (the settle is over in about 1.5 s), so a 14 s screen recording was taken and the chip area cut out at 10 frames a second",
+  "seen": "each new question arrives as a full-width line of scrambled symbols; the real words lock in from the left behind a solid block caret, over about 15 frames (1.5 s): e.g. 'How <symbols>' -> 'How can I opti[caret] <symbols>' -> 'How can I optimize for Hr<symbols>' -> 'How can I optimize for battery li[caret] T' -> 'How can I optimize for battery life?'",
+  "strip": "plan70-PRESET-STREAM-ANIM-01-settling.png (10 frames top to bottom, two settles)",
+  "recording": "recordings/DeckRecord_20260926_134843_auto.mkv",
+  "verdict": "PASS"
+ },
+ "box_green_blinking_caret": {
+  "measured": "the caret block's colour in the frames is about RGB 214,228,236 - a pale white-blue, the same as the settled letters - not green (the answer scramble colour setting is 'green', but the chip caret did not use it)",
+  "verdict": "FAIL on 'green' as written (the caret is there and moves left to right; its colour is not green)"
+ },
+ "box_chip_takes_the_ring_while_settling": {
+  "seen": "with the ring on the chip, the chip churned to a new question and the ring stayed on it (13:47 and 14:01); page read: ring on the chip, text 'How can I opti[caret]<symbols>'",
+  "verdict": "PASS"
+ },
+ "box_A_selects_the_full_prompt": {
+  "pressed": "A on the chip about half a second after its churn was seen starting ('How can I opti[caret]...'); done once",
+  "box_text_after": "'How can I optimize for battery life?' - the whole prompt, no symbols",
+  "cleared_with": "the screen's own Clear (X) button next to Ask: box empty afterwards (note: after Clear, no control held the ring until the next press)",
+  "caveat": "the press could not be timed to the exact frame; the churn lasts about 1.5 s and the press landed inside that window by the timing of the reads",
+  "verdict": "PASS"
+ },
+ "box_reduced_motion": "not run here - flow 5",
+ "side_observation": "at 13:49-13:52 the chip stopped changing for over 3 minutes; the Steam screensaver page had come up (seen at 14:00), which freezes panel animations - not a plugin fault",
+ "verdict": "PASS for the settle, ring-while-settling and A-gives-the-whole-prompt boxes; FAIL on the caret being green"
+}

@@ -1,0 +1,42 @@
+{
+ "row": "ONBUTTONDOWN-AUDIT-01, the slider half (plan 70 flow 2b.6)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:33-13:37 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "sliders": [
+  {
+   "name": "Reply style (verbosity), Ollama tab",
+   "before": "Balanced",
+   "left": "Caveman, ring stayed on the slider (y 322)",
+   "right": "Balanced, ring stayed",
+   "after": "Balanced"
+  },
+  {
+   "name": "Keep models loaded (unload delay), Ollama tab",
+   "before": "240m",
+   "left": "120m, ring stayed (y 657)",
+   "right": "240m, ring stayed",
+   "after": "240m"
+  },
+  {
+   "name": "Connection timeout (two handles), Ollama tab",
+   "setup": "turned 'Custom timeouts' on with A to show the slider (was off), turned it off again at the end",
+   "before": "warning 60s, timeout 180s",
+   "without_A": "Left on the warning handle: no change and the ring stayed on the handle (did not leave for Steam's side rail); Right on it jumped the ring to the timeout handle (x 77 -> 126), value unchanged. This is the designed behaviour written at the top of the slider's code: a handle needs A first ('editing'), then Left/Right step it.",
+   "timeout_handle_after_A": "Left 180 -> 170s, Right 170 -> 180s, ring stayed on the handle",
+   "warning_handle_after_A": "Left 60 -> 55s, Right 55 -> 60s, ring stayed on the handle",
+   "after": "warning 60s, timeout 180s; A pressed again to leave editing"
+  },
+  {
+   "name": "UI size manual slider, Settings tab",
+   "setup": "'Adjust UI automatically' switched off with A (pending only, Apply never pressed) to show the slider; switched back on after",
+   "before": "Handheld",
+   "left_first": "no change (Handheld is the lowest of two sizes), ring stayed on the slider",
+   "right": "Couch, ring stayed",
+   "left": "Handheld, ring stayed",
+   "after": "Handheld; slider hidden again, header still 'Handheld (1.00x)'"
+  }
+ ],
+ "settings_file_after": "latency_timeouts_custom_enabled false, latency_warning_seconds 60, request_timeout_seconds 180, ollama_keep_alive 240m, reply_verbosity balanced, ui_scale_auto_enabled true, ui_scale_manual_profile handheld - all the same as before the row",
+ "verdict": "PASS - on all four sliders Left and Right each change the value by one step and the ring never left the slider for Steam's Quick Access rail. Note for the session: the two-handle timeout slider only steps after A (by design); without A, Left stays put and Right hops to the other handle."
+}

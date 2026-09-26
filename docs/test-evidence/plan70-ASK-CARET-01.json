@@ -1,0 +1,21 @@
+{
+ "row": "ASK-CARET-01 (plan 70 flow 2b.3)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:26-13:27 EDT",
+ "screen": "monitor live: page window 855x766 at dpr 1.28 (the probe itself reports 1500x843 CSS px at 1.28 for the whole screen)",
+ "setup": "Main tab, test chat, Strategy, Ali G character on, ring walked onto the question box with D-pad Down (never A)",
+ "empty_box": {
+  "tool": "scripts/probe_deck_ask_caret.py piped over ssh",
+  "output": "cursor x=78.76..80.25 (1.49 wide), y=645.13..659.52; first letter 'D' starts at x=80.75; gap 0.50 px (wanted 0.0-1.5); top vs letter +0.78 px, bottom +0.33 px (wanted within 1.5); PASS"
+ },
+ "with_text": {
+  "how": "text 'hollow knight' put in with deck_send_ask.py (VERIFIED); the probe only measures the empty box, so measured with the page reader: text width from the input's own font (12px Motiva Sans) plus the input's left edge and 8 px padding",
+  "text_end_x": 156.22,
+  "cursor": "x=156.73..158.21, y=645.13..659.52 (the text line is 645.14..659.54: input top 639.14 + 6 px padding, line height 14.4)",
+  "gap_px": 0.5,
+  "vertical_offset_px": 0.0,
+  "screenshot": "plan70-ASK-CARET-01-with-text.png (cursor drawn right after 'knight')"
+ },
+ "box_emptied_after": "deck_send_ask.py --clear",
+ "verdict": "PASS - empty: cursor 0.5 px before the D and level with it; with text: cursor 0.5 px after the last letter and level with the line. Not 5 px left and 4 px above."
+}

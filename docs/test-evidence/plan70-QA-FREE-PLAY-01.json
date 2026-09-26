@@ -1,0 +1,67 @@
+{
+ "row": "QA-FREE-PLAY-01 streaming try (plan 70 flow 2b.1)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, same on Deck and PC); repo HEAD fbfbb7ab",
+ "deck_time": "2026-09-26 13:18-13:24 EDT",
+ "screen": "monitor live: page window 855x766, devicePixelRatio 1.28; transcript pane y 88-765, dock top y 600",
+ "setup": "Main tab, new test chat made with the chat row's [+] (first question 'in celeste what is the best way to learn wavedashing'), Strategy mode, Ali G character on (heavy), nothing running",
+ "method": "each try: question put in with deck_send_ask.py (VERIFIED), Down to Ask, A, Up to the live turn's Retry icon (a control in the reply area) while the answer was still arriving; waited for the finish (Ask button no longer Disabled and the turn no longer marked live, polled every 200 ms), then read focus",
+ "tries": [
+  {
+   "try": 1,
+   "question": "in celeste what is the best way to learn wavedashing",
+   "read_about_1s_after_finish": {
+    "ring_owner": "none (no element has Steam focus; document focus on BODY)",
+    "scrollTop": 337,
+    "scrollTop_max": 337,
+    "retry_icon_y": -174,
+    "px_above_visible_top": 262
+   },
+   "screenshot": "plan70-QA-FREE-PLAY-01-try1-after-finish.png (no ring anywhere on the panel; view at the end of the answer)",
+   "then": "Down about 18 s later: ring appeared on Copy reply text at y 248, visible"
+  },
+  {
+   "try": 2,
+   "question": "in hades which weapon should a beginner use for the first escape",
+   "read_about_1s_after_finish": {
+    "ring_owner": "none",
+    "scrollTop": 307,
+    "scrollTop_max": 308,
+    "retry_icon_y": -108,
+    "px_above_visible_top": 196
+   },
+   "then": "Down about 3.5 s after the finish: ring on Copy reply text at y 204, visible"
+  },
+  {
+   "try": 3,
+   "question": "in stardew valley what crops make the most money in spring",
+   "pressed_down_about_0_5s_after_finish": true,
+   "read_after": {
+    "ring_owner": "Retry same prompt (the same control it was on)",
+    "y": 201,
+    "scrollTop": 0,
+    "visible": true
+   },
+   "note": "a Down pressed within about half a second of the finish kept the ring on its own control and the view stayed at the top"
+  },
+  {
+   "try": 4,
+   "question": "in terraria how do I prepare for the eye of cthulhu",
+   "read_at_about_0_3s_after_finish": {
+    "ring_owner": "none",
+    "scrollTop": 0,
+    "retry_icon_y": 201
+   },
+   "read_at_about_3_5s_after_finish": {
+    "ring_owner": "none",
+    "scrollTop": 470,
+    "scrollTop_max": 470,
+    "retry_icon_y": -268,
+    "px_above_visible_top": 356
+   },
+   "screenshot": "plan70-QA-FREE-PLAY-01-try4-after-finish.png (no ring; view at the end of the answer, on the branch menu and Helpful row)"
+  }
+ ],
+ "seen_summary": "In 3 of 4 tries nobody held the ring after the answer finished, and within about 3 s the view slid to the end of the answer, leaving the control the ring had been on 196-356 px above the visible area. Only when Down was pressed within about half a second (try 3) did the ring stay on its control, in view.",
+ "also_seen": "Possible new bug: while the model was waking up, the waiting line on tries 3 and 4 (the 3rd and 4th questions in this chat) read: Model's warming up for \"FOLLOW-UP CONTEXT (a system reminder, not something the...\". Hang in there... -- it quotes a hidden instruction instead of the person's question. On try 2 (2nd question) it read 'Waking the model up for \"in hades which weapon should a ...' -- the question, as expected.",
+ "verdict": "FAIL - the lit control is not kept in view: the ring is dropped when the answer finishes and the view jumps to the end of the text (0% visible, 196-356 px above). The old symptom (view jumps to the end) is still there; the difference from 2026-09-23 is that now no control holds the ring at all."
+}

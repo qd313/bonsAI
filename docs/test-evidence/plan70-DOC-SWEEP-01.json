@@ -1,0 +1,38 @@
+{
+ "row": "DOC-SWEEP-01 light re-check, boxes 1, 3, 4, 5, 6 (plan 70 flow 2b.5)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:29-13:32 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "setup": "plugin reloaded (deck_reloadPlugin) at about 13:29; first open failed as expected, second opened it on Main, test chat 'in celeste...' resumed; Strategy; Ali G on; chip style decode, one chip",
+ "box1_first_ask_after_reload": {
+  "question": "in dead cells which starting weapon is easiest for a new player (deck_send_ask.py VERIFIED)",
+  "pressed": "chip -> Down (question box, document focus on the input) -> Down (Ask, document focus moved to the Ask button) -> A",
+  "seen": "the question was sent on the first try, the box emptied, the answer arrived normally (33 s). Right after the press document focus was back on the question box (the ring also sat on the box when the answer ended).",
+  "not_observable": "the 'field blurs before send' moment itself: the only way to send while the field holds focus is the on-screen keyboard's Enter, which the rules forbid (never A on the question box). With the D-pad route the field had already lost focus to the Ask button before the press.",
+  "verdict": "PASS for the first-Ask case (sent correctly, no wrong-page failure); the blur moment UNCLEAR - not reachable by the allowed route"
+ },
+ "box3_chip_pauses_under_the_ring": {
+  "style_in_use": "decode (not carousel)",
+  "unfocused": "chip text changed after 4.6 s ('How do I enable token streaming?' -> 'Can you set a quiet fan profile?')",
+  "ring_on_chip": "ring put on the chip at 13:29:41; its text changed at about 13:29:42 ('Describe what you see in this screenshot' -> 'What are the best FSR settings?') and again about 6 s later (a new scrambled prompt started decoding) - the ring stayed on the chip the whole time",
+  "verdict": "UNCLEAR - in decode style the chip keeps sampling new prompts while it holds the ring. The box was written for the carousel style; the decode row (PRESET-STREAM-ANIM-01) says a held chip clears and samples a new prompt, so this may be by design. The carousel style is checked under PRESET-ONE-LINE-03 (2b.9)."
+ },
+ "box4_about_up_from_github": {
+  "pressed": "Up from GitHub",
+  "landed": "Follow system (the reply-language dropdown), visible",
+  "then": "Up again -> About tab strip",
+  "verdict": "PASS"
+ },
+ "box5_up_at_panel_top": {
+  "ollama": "tab strip -> Down -> 'Run AI on this Deck' -> Up -> Ollama tab strip",
+  "settings": "tab strip -> Down -> 'Adjust UI automatically' -> Up -> Settings tab strip",
+  "saved_walk": "plan70-DOC-SWEEP-01-settings-top-up",
+  "verdict": "PASS"
+ },
+ "box6_expand_history_turn": {
+  "pressed": "A on '4 earlier' (showed four collapsed turns at y 144, 180, 216, 252), Down x3 to 'in terraria...' header, A",
+  "seen": "the turn expanded (next header moved from y 288 to 869); the expanded header stayed at y 252, fully in view, ring still on it; scrollTop 0 before and after",
+  "verdict": "PASS"
+ },
+ "verdict": "boxes 4, 5, 6 PASS; box 1 PASS for the first Ask, blur moment not observable; box 3 UNCLEAR in decode style"
+}

@@ -1,0 +1,53 @@
+{
+ "row": "STRATEGY-PLACEHOLDER-01 (plan 70 flow 2b.4)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:27-13:28 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "setup": "Main tab, Strategy mode, box empty, Ali G character on; A never pressed on the box",
+ "pressed": [
+  "(ring on box) Down -> Ask",
+  "Up -> Attach screenshot (paperclip)",
+  "Up -> Choose AI character (avatar)",
+  "Right -> question box"
+ ],
+ "placeholder_box": {
+  "focused_before": [
+   80.75,
+   644.35,
+   226.51,
+   29.24
+  ],
+  "unfocused_ring_on_Ask": [
+   80.75,
+   644.35,
+   226.51,
+   29.24
+  ],
+  "focused_again": [
+   80.75,
+   644.35,
+   226.51,
+   29.24
+  ],
+  "first_letter_box_all_three": [
+   80.75,
+   644.35,
+   8.24,
+   14.84
+  ],
+  "cursor_when_focused": [
+   78.76,
+   645.13,
+   1.49,
+   14.39
+  ],
+  "cursor_when_unfocused": "not drawn"
+ },
+ "shift_px": 0,
+ "screenshots": [
+  "plan70-STRATEGY-PLACEHOLDER-01-focused.png",
+  "plan70-STRATEGY-PLACEHOLDER-01-unfocused.png",
+  "plan70-STRATEGY-PLACEHOLDER-01-refocused.png"
+ ],
+ "verdict": "PASS - the hint does not move at all (0 px) when the cursor appears"
+}

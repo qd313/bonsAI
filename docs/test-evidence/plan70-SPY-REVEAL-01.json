@@ -1,0 +1,12 @@
+{
+ "row": "SPY-REVEAL-01, Balanced half only (plan 70 flow 2e)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 14:43-14:47 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "settings_changed": "ai_character_preset_id alig_ali_g -> tf2_spy, ai_character_accent_intensity heavy -> balanced (menu item 'Default - Balanced voice without burying facts'), both through the screen; both put back through the screen (Strong, then Ali G + OK); final settings file identical to the start copy",
+ "question": "in hollow knight how do I beat hornet the first time on my deck (Strategy, deck_send_ask.py VERIFIED), asked in the test chat 'what is on this screen' - no new chat made",
+ "answer": "arrived in about 30 s, plain voice ('Listen up. This fight is all about timing...')",
+ "show_details": "opened with A on 'Show details': shows Hornet in Greenpath note, 'This answer' / 'Session · 2' tabs, Reply style: balanced, Local knowledge base (hollowknight.wiki), retrieval and timing lines. The word 'Spy' appears nowhere in the turn's page content (text and markup searched).",
+ "screenshot": "plan70-SPY-REVEAL-01-details.png",
+ "verdict": "PASS - at Balanced accent, Show details has no Spy entry"
+}

@@ -1,0 +1,34 @@
+{
+ "row": "NEW - Left on the chat row (plan 70 flow 2b.12), measured for the bug entry",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 14:40-14:45 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; chat row y 88-137",
+ "results": [
+  {
+   "from": "first chat ('in celeste...', slot 1 of 8)",
+   "pressed": "Left",
+   "ring_went_to": "Steam's Quick Access side rail - the Decky icon (#quickaccess_tab_999, x 0, y 543, 48x64); the bonsAI panel stayed open",
+   "recover": "Right -> back on the chat row, same chat"
+  },
+  {
+   "from": "middle chat ('in hollow knight...', slot 3 of 8)",
+   "pressed": "Left",
+   "ring_went_to": "the same Decky icon on the side rail (x 0, y 543)",
+   "recover": "B was tried here instead of Right: B closed the whole Quick Access menu (plugin unmounted); reopening needed the open-plugin steps. Right is the working recovery."
+  },
+  {
+   "from": "[+] (new chat)",
+   "pressed": "Left",
+   "ring_went_to": "the same Decky icon on the side rail",
+   "recover": "Right -> back on the chat row, still on [+]"
+  }
+ ],
+ "shoulder_buttons_on_the_row": {
+  "RB": "slides the row one chat to the right (dots +*....... -> +.*......), the ring stays on the row, the transcript below switches to that chat",
+  "LB": "slides one chat to the left; from the first chat it moves to [+] (dots *........); the ring stays on the row",
+  "note": "earlier in the block, LB/RB pressed with the ring anywhere else switch tabs; on the chat row they slide chats instead"
+ },
+ "also": "earlier walk reports seemed to show the chat row skipped going Up; the full sweeps show it is reached (it has no name of its own, so the walk tool left it out of its list) - not a bug",
+ "left_as": "chat row put back on 'what is on this screen' (slot 2)",
+ "verdict": "Measured (no pass condition): Left from any chat, and from [+], leaves the plugin for Steam's side rail; Right brings it back; B there closes the whole menu."
+}

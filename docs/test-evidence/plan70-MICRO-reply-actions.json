@@ -1,0 +1,25 @@
+{
+ "row": "Reply-actions row, new shape (MICRO-01/02/03/05) (plan 70 flow 2b.7)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:38-13:40 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; dock top y 600",
+ "setup": "Main tab, test chat, finished answer to 'in dead cells which starting weapon is easiest for a new player' (expanded with A on its header). A never pressed on Helpful, Not really or the speaker.",
+ "walk": [
+  "Helpful -> Right -> Not really (aria 'Mark reply not helpful'), visible 100%",
+  "Not really -> Right -> Read aloud (the small speaker at the row's right end), visible 100%",
+  "speaker -> Left -> Not really, visible",
+  "Not really -> Left -> Helpful, visible",
+  "Helpful -> Down -> Show details, visible",
+  "Show details -> Up -> Helpful, visible"
+ ],
+ "numbers": {
+  "row_y": 481,
+  "row_h": 32,
+  "stops_focused_but_not_visible": 0,
+  "steps_passed": "6 of 6"
+ },
+ "run_file": "runs/plan70-MICRO-row.json",
+ "saved_walk": "plan70-MICRO-reply-actions-row",
+ "side_observation": "Up from Helpful went to the answer's last section (y 474-594), skipping the 'Where are you at in Dead Cells?' branch picker (A/B buttons, y 621-740 after the scroll) that sits between the answer and the Helpful row. The branch buttons are reachable going Down from the question row. See the REPLY-DOWN-01 file.",
+ "verdict": "PASS - all three reachable and visible; Down goes to Show details and Up comes back"
+}

@@ -1,0 +1,72 @@
+{
+ "row": "SETTINGS-CARD-06 and SETTINGS-CARD-07 (plan 70 flow 2b.2)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:25-13:28 EDT",
+ "screen": "monitor live: page window 855x766, dpr 1.28; tab bar bottom edge y 84",
+ "setup": "Main tab, test chat, Strategy, Ali G on, nothing running. The 'settings search box' is the question box itself (typing there shows the Steam settings card); there is no separate search box on the Settings tab. Text put in with deck_send_ask.py (each VERIFIED); no on-screen keyboard used; Ask never pressed; box emptied afterwards with deck_send_ask.py --clear",
+ "SETTINGS-CARD-06": {
+  "typed": "steam client update channel",
+  "card": "heading 'Steam settings', one row 'Steam Client Update Channel / Settings > System', card y 573-638",
+  "screenshot": "plan70-SETTINGS-CARD-06.png",
+  "verdict": "PASS - the four-word search shows its one result"
+ },
+ "SETTINGS-CARD-07": {
+  "measurements": [
+   {
+    "typed": "en",
+    "box_lines": 1,
+    "box_top": 639,
+    "box_h": 44,
+    "card_top": 349,
+    "card_bottom": 638,
+    "rows": 8,
+    "heading": "Steam settings · 63 more",
+    "gap_to_tab_bar": 265
+   },
+   {
+    "typed": "steam client update channel",
+    "box_lines": 1,
+    "box_top": 639,
+    "box_h": 44,
+    "card_top": 573,
+    "card_bottom": 638,
+    "rows": 1,
+    "gap_to_tab_bar": 489
+   },
+   {
+    "typed": "play a sound when a notification toast is displayed",
+    "box_lines": 2,
+    "box_top": 624,
+    "box_h": 59,
+    "card_top": 525.8,
+    "card_bottom": 623,
+    "rows": 2,
+    "gap_to_tab_bar": 441.9
+   },
+   {
+    "typed": "Settings > Notifications > Play a sound when a notification toast is displayed",
+    "box_lines": 2,
+    "box_top": 624,
+    "box_h": 59,
+    "card_top": 525.8,
+    "card_bottom": 623,
+    "rows": 2,
+    "gap_to_tab_bar": 441.9
+   },
+   {
+    "typed": "Settings > Friends & Chat > Open a new window for new chats (rather than a tab)",
+    "box_lines": 2,
+    "box_top": 624,
+    "box_h": 59,
+    "card_top": 557.8,
+    "card_bottom": 623,
+    "rows": 1,
+    "gap_to_tab_bar": 473.9
+   }
+  ],
+  "rise": "one-row card: 1-line box top 573 / bottom 638 -> 2-line box top 557.8 / bottom 623; the card rose 15 px, exactly the box's growth (44 -> 59)",
+  "three_lines": "could not be made with the card showing: the card only shows past three words when the text is an exact piece of a setting's name, and the longest name (81 characters) fits on two lines on the monitor. A longer non-matching phrase hides the card by design.",
+  "screenshot": "plan70-SETTINGS-CARD-07-two-lines.png",
+  "verdict": "PASS for one and two lines (gap always positive, card rises with the box); three lines UNCLEAR - not reachable with a card on this screen"
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "row": "ASK-CARET-CHAR-01 (plan 70 flow 2e)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 13:27-13:28 (character on) and 14:41-14:42 EDT (character off)",
+ "screen": "monitor live: page window 855x766, dpr 1.28",
+ "character_on": {
+  "caret": "empty box, Strategy: cursor x 78.76-80.25, the hint's 'D' starts at 80.75 (gap 0.5 px), level within 0.8 px; the avatar sits at x 50.8-68.8, so the cursor is right of the badge, not left of it",
+  "path": "Ask -> Up -> paperclip -> Up -> avatar ('Choose AI character') -> Right -> question box; saved walk plan70-STRATEGY-PLACEHOLDER-01 replays it"
+ },
+ "character_off": {
+  "how": "Settings -> 'AI voice & personality' switched off with A, then back on at the end (file read back: ai_character_enabled true)",
+  "caret": "probe_deck_ask_caret.py: cursor x 54.79-56.27, 'D' at 56.77, gap 0.50 px, top +0.78 / bottom +0.33 px - PASS",
+  "path": "no avatar; the box is full width (x 49-347); Ask -> Up -> paperclip -> Up -> question box"
+ },
+ "A_on_the_box": "never pressed",
+ "verdict": "PASS - caret aligned with the hint start with the character on and off; Up from the paperclip goes to the avatar and Right to the box when on; the off path goes straight from the paperclip to the box"
+}

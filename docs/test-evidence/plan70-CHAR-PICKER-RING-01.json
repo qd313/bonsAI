@@ -1,0 +1,46 @@
+{
+ "row": "CHAR-PICKER-RING-01 (plan 70 flow 2e)",
+ "build": "7a5991d3 installed (dist/index.js sha256 f724d7ca...c8840, matches PC)",
+ "deck_time": "2026-09-26 14:40-14:41 EDT",
+ "screen": "monitor live; the picker opens as a Steam dialog in the Big Picture page (1500x843 CSS px at 1.28)",
+ "setup": "characters on (Ali G, heavy - the maintainer's setting, unchanged). Settings tab -> 'Ali G - Other' -> A opened the picker. D-pad only inside; left with B (Cancel). No tile was chosen: settings read back afterwards still alig_ali_g / heavy / enabled.",
+ "ring_style": "2 px solid white ring plus a 5 px faint white halo (box-shadow), 1.6 px outline",
+ "left_edge_tile": {
+  "tile": "Jackie Welles (first column)",
+  "tile_box": [
+   469.5,
+   253.6,
+   593.6,
+   291.6
+  ],
+  "column_clip_box": [
+   464,
+   222,
+   600,
+   725
+  ],
+  "room_left_px": 5.5,
+  "room_right_px": 6.4,
+  "column_padding": "6px each side, overflow hidden",
+  "screenshot": "plan70-CHAR-PICKER-RING-01-left.png"
+ },
+ "right_edge_tile": {
+  "tile": "Nick Valentine (last column)",
+  "tile_box": [
+   902.2,
+   253.6,
+   1026.5,
+   297.5
+  ],
+  "column_clip_box": [
+   896,
+   222,
+   1032,
+   655
+  ],
+  "room_left_px": 6.2,
+  "room_right_px": 5.5,
+  "screenshot": "plan70-CHAR-PICKER-RING-01-right.png"
+ },
+ "verdict": "PASS - the 2 px ring has 5.5 px or more of room on every side at both edge columns; screenshots show the ring whole. (The faint 5 px halo fits with 0.5 px to spare.)"
+}

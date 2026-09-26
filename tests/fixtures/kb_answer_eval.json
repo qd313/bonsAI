@@ -1850,6 +1850,171 @@
     }
    ],
    "note": "Third pair for D98's measurement: Ocarina of Time has six boss cards. Morpha's card has no phase language at all (a single-stage fight), while Twinrova ('First phase...') and Phantom Ganon ('Phases: only one of the two riders is real') both do. app_id \"\" mimics an EmuDeck shortcut, same convention as A-OOT-01/02."
+  },
+  {
+   "id": "P-HADES-PHASE-01",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat megaera",
+     "expect_card": "Megaera",
+     "must_mention": [
+      ["dash", "dash patterns", "dash pattern"],
+      ["recovery window", "recovery windows", "punish the recovery"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about her second phase",
+     "expect_card": "Megaera",
+     "must_mention": [],
+     "must_not_say": [
+      ["asterius", "the bull", "telegraphs a long charge"],
+      ["theseus throws his spear", "a god's power", "briefly stuck"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Required by plan 70 helper K: the Hades sighting (2026-09-19) where search found the right boss but the reply asked which boss was meant instead of naming Megaera. Only two boss cards in this corpus (Megaera; Theseus and Asterius), so the confound is the only other boss in the game -- must_not_say on turn 2 flags Theseus/Asterius content leaking into a Megaera answer."
+  },
+  {
+   "id": "P-L4D2-PHASE-01",
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the tank",
+     "expect_card": "Tank",
+     "must_mention": [
+      ["fight him in the open", "open area", "in the open"],
+      ["projectile", "punch", "throwing concrete", "chunks of concrete"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Tank",
+     "must_mention": [],
+     "must_not_say": [
+      ["flashlight wakes her", "standing too close", "the growl is a warning"],
+      ["fire kills her in about fifteen seconds", "already startled", "keeps full speed"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Fourth pair for D98-style measurement (plan 70 helper K): Left 4 Dead 2 has two boss cards, Tank and The Witch, with no shared vocabulary at all -- a clean confound. must_not_say on turn 2 flags Witch content leaking into a Tank answer."
+  },
+  {
+   "id": "P-BLACKMESA-PHASE-01",
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the gonarch",
+     "expect_card": "Gonarch",
+     "must_mention": [
+      ["egg sac", "pale egg sac", "the sac"],
+      ["headcrab", "headcrabs", "baby headcrabs"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Gonarch",
+     "must_mention": [],
+     "must_not_say": [
+      ["energy spheres", "orange energy spheres", "break every crystal"],
+      ["vortigaunts", "alien controllers", "green orbs that teleport"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Fifth pair (plan 70 helper K): Black Mesa has three boss cards (Tentacles, Gonarch, Nihilanth). Gonarch's own card never mentions crystals or energy spheres -- that is Nihilanth's fight -- so must_not_say on turn 2 flags Nihilanth content leaking into a Gonarch answer."
+  },
+  {
+   "id": "P-HL2-PHASE-01",
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the strider",
+     "expect_card": "Strider",
+     "must_mention": [
+      ["rpg", "rocket", "rockets"],
+      ["laser-guided", "steer it wide", "off-axis"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Strider",
+     "must_mention": [],
+     "must_not_say": [
+      ["fought from the airboat", "contact mines", "pulse turret"],
+      ["bombing run", "falling bombs"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Sixth pair (plan 70 helper K): Half-Life 2's other boss card, the Hunter-Chopper, is fought entirely differently (from the airboat, bombing runs) -- must_not_say on turn 2 flags it leaking into a Strider answer."
+  },
+  {
+   "id": "P-HK-PHASE-01",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the mantis lords",
+     "expect_card": "Mantis Lords",
+     "must_mention": [
+      ["dodge", "lance dash", "spinning boomerang"],
+      ["heal during the boomerang", "boomerang", "slowest attack"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about their second phase",
+     "expect_card": "Mantis Lords",
+     "must_mention": [],
+     "must_not_say": [
+      ["soul master", "teleports between every attack", "homing soul orb"],
+      ["watcher knights", "rolls as a ball", "immune to the nail while rolling"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Seventh pair (plan 70 helper K): Hollow Knight has six boss cards. Mantis Lords already reads as two phases in its own card (one sister, then two together), so this pair checks whether a bare follow-up still stays on Mantis Lords rather than drifting to Soul Master or Watcher Knights, both of which the corpus also describes across stages/rounds."
   }
  ]
 }

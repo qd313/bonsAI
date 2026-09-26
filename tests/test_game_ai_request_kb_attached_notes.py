@@ -480,6 +480,103 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         self.assertEqual(plugin._partial_stream_snapshot["kb_attached_notes"], [])
 
 
+class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
+    """Plan 70 helper B, bug 1, wired end to end: `close_match_source_texts` (built above from
+    `kb_attached_notes`' own "card" field) reaches `should_show_no_close_match_notice` alongside
+    the titles, through the real `run_game_ai_request` path -- not just the unit-level checks in
+    test_kb_not_in_notes_notice.py.
+
+    `resolve_title_from_question` and `summarize_kb_coverage` are mocked because neither test
+    settings here point at a real corpus database; every other knowledge-base call goes through
+    `retrieve_knowledge_context`, mocked the same way every other test in this file mocks it.
+    """
+
+    @patch("backend.services.game_ai_request.summarize_kb_coverage")
+    @patch("backend.services.game_ai_request.resolve_title_from_question")
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_hollow_knight_shaped_note_no_longer_shows_the_notice(
+        self, mock_should, mock_retrieve, mock_resolve_title, mock_coverage
+    ):
+        from backend.services.knowledge_base_chips import KbCoverageSummary
+
+        mock_should.return_value = (True, "strategy")
+        mock_resolve_title.return_value = "Hollow Knight"
+        mock_coverage.return_value = KbCoverageSummary(status="sections", section_count=3)
+
+        # Title alone ("Broken Vessel") shares no word with a question that describes the boss
+        # instead of naming it; the note's own text -- copied from the real corpus entry,
+        # data/kb/strategy_seed.json -- says "past a gap that needs the Crystal Heart", which
+        # does. `best_meaning` is set below the notice's ceiling on purpose, and the keyword
+        # score nonzero, so only the title-vs-text check below decides the outcome.
+        card = _card(
+            name="Broken Vessel",
+            card=(
+                "The infected husk shaped like you, far west in the Ancient Basin past a gap "
+                "that needs the Crystal Heart. It dashes with slashes that cover most of the "
+                "arena, flails its nail overhead, leaps to slam down and throw four arcs of "
+                "infection."
+            ),
+        )
+        result = _attached_result(card)
+        result.best_meaning = 0.60
+        result.top_card_keyword_score = 24.76
+        mock_retrieve.return_value = result
+
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        out = _run(
+            plugin,
+            question=(
+                "What should I know about the boss past the crystal spike area in Hollow "
+                "Knight, the one that looks just like me?"
+            ),
+            ask_mode="strategy",
+        )
+
+        self.assertNotIn("No close match in my notes", out["response"])
+
+    @patch("backend.services.game_ai_request.summarize_kb_coverage")
+    @patch("backend.services.game_ai_request.resolve_title_from_question")
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_without_the_matching_text_the_notice_still_shows(
+        self, mock_should, mock_retrieve, mock_resolve_title, mock_coverage
+    ):
+        """Same turn, but the note's own text is rewritten so nothing in it -- title or body --
+        shares a real word with the question. Guards against a test that would pass no matter
+        what `close_match_source_texts` actually carries."""
+        from backend.services.knowledge_base_chips import KbCoverageSummary
+
+        mock_should.return_value = (True, "strategy")
+        mock_resolve_title.return_value = "Hollow Knight"
+        mock_coverage.return_value = KbCoverageSummary(status="sections", section_count=3)
+
+        card = _card(
+            name="Broken Vessel",
+            card="Broken Vessel requires a longer nail and quick healing to survive its dash attacks.",
+        )
+        result = _attached_result(card)
+        result.best_meaning = 0.60
+        result.top_card_keyword_score = 24.76
+        mock_retrieve.return_value = result
+
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        out = _run(
+            plugin,
+            question=(
+                "What should I know about the boss past the crystal spike area in Hollow "
+                "Knight, the one that looks just like me?"
+            ),
+            ask_mode="strategy",
+        )
+
+        self.assertIn("No close match in my notes", out["response"])
+
+
 class KbSearchAppLogTests(unittest.TestCase):
     """Task 3, plan 63 lane G: the app-activity log line naming what the knowledge-base search
     found and what actually reached the model. Off by default (desktop_app_log_level starts

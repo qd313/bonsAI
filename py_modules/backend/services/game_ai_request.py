@@ -961,12 +961,23 @@ async def run_game_ai_request(
             close_match_question = ""
             close_match_game_name = ""
             close_match_source_titles: tuple[str, ...] = ()
+            close_match_source_texts: tuple[str, ...] = ()
             if text_resolved_title:
                 close_match_question = question_for_kb_search
                 close_match_game_name = text_resolved_title
                 close_match_source_titles = tuple(
                     str(source.get("title") or "")
                     for source in (kb_transparency.get("kb_sources") or [])
+                )
+                # Plan 70 helper B, bug 1: the notes' own text, not just their title, so a
+                # question that describes a note instead of naming it (a boss card's own
+                # wording, not its two-word title) still counts as a real match. `kb_attached_notes`
+                # is built above (`_parse_kb_attached_notes`) from the exact text the model saw,
+                # so its "card" field is that note's own body -- see kb_not_in_notes_notice.py's
+                # module comment above `_keyword_score_reflects_the_question` for the Hollow
+                # Knight and Half-Life 2 replies this was found from.
+                close_match_source_texts = tuple(
+                    str(note.get("card") or "") for note in kb_attached_notes
                 )
             show_no_close_match = should_show_no_close_match_notice(
                 ask_mode=ask_mode,
@@ -980,6 +991,7 @@ async def run_game_ai_request(
                 question=close_match_question,
                 kb_game_name=close_match_game_name,
                 kb_source_titles=close_match_source_titles,
+                kb_source_texts=close_match_source_texts,
                 # HONESTY-TEXT-GAME-01, part two (plan 56 lane K): the meaning half of the same
                 # fix as the three arguments above. Also blank on every turn but the D19 one --
                 # `kb_best_meaning_without_game_name` is only ever filled in when

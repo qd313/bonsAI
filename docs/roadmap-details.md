@@ -1266,6 +1266,30 @@ worse answers with nothing on screen to say why.
 
 ## Named chat slots
 
+**Deck runs of 2026-09-18 to 2026-09-23, moved here from the roadmap 2026-09-25 to keep it under its size
+limit (word for word):**
+
+- ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
+  transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
+  still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
+  failed (filed as its own bug above). **15d passed on the Deck 2026-09-23:** a fresh chat's title changed
+  from "New chat" to the question 35 seconds after Ask, with the panel staying open and no reload — though the
+  chat row was scrolled out of view at that exact moment, so nobody would actually have seen it change.
+  **06c FAILED on the Deck 2026-09-23:** closing the Quick Access Menu (by the rig's GUIDE+A chord) while the
+  answer was still arriving, then watching Steam's own toast window every 200 milliseconds for 150 seconds
+  after the reply finished — no "Reply ready" notice ever showed, and reopening the panel showed none either.
+  The rig has not yet proven its own toast-reading can see a toast at all, so the next run adds a control
+  question before re-testing this row. **06c tried again 2026-09-23 with the control run first: still FAIL,
+  cause found and fixed in `73be15f`.** The control confirmed the toast reader works (it caught an unrelated
+  notice on its first read). Closing the menu properly took four B presses this time — the plugin's own
+  panel was already closed after the second — and the reply finished 20 seconds later with the notice
+  window read every 200 ms for 90 seconds; "Reply ready" never showed. Cause: the flag saying "a reply is on
+  screen" was only written while the panel was open and was never cleared once it closed, so a reply that
+  finished in the background read as already seen. **06c tried a fourth time on the Deck 2026-09-23 (flow
+  E), PASS:** with the menu closed by four B presses, "Reply ready — Tap to open" appeared within 1 second
+  of the answer finishing. Evidence `docs/test-evidence/plan64-CHAT-SLOTS-V3-06c-try4.json` (+ two
+  screenshots). [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
   Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
   showed the question and the partial text at once, nothing missing. Evidence
@@ -1619,4 +1643,31 @@ this list grows with them (a chat keeps up to 200 turns).
 
 **Connected:** plan 68 (the chat sums itself up); "Give the reclaimed height to the transcript", since the
 chat area is small to begin with on the Deck's own screen.
+
+## Summing up offers a fresher title
+
+Asked for by the maintainer 2026-09-25, while plan 68 was being tested on the Deck.
+
+**What a person would see.** A chat is named after its first question, and a long chat drifts: the Deck's
+longest chat is still called "wheatley fight" while it has spent its last forty questions on Half-Life 2
+weapons. Every time the person presses *Sum up this chat*, the AI also looks at the chat's current title. If it
+judges the title stale, the summary card offers its suggestion — for example *Rename to "Half-Life 2 weapons"?*
+— with a choice to rename or keep. If the title still fits, nothing extra shows. The chat is never renamed
+without the person saying yes.
+
+**How it would work.** The same summary request carries the current title and asks for one more line at the
+end: a suggested title, or "keep". One call, not two — plan 68 measured each summary call on the Deck at 13 to
+40 seconds with a game running, and the extra line costs a few words of output, well under a second. The
+suggestion is stored with the summary, not applied, so a reopened chat still shows the offer until it is
+answered. Renaming goes through the existing rename path, so the chat list and the chat row update as they
+do today.
+
+**Before building.** A desk test of the instruction wording on the real chats, the way plan 68 tested its
+summary wording: does the AI say "keep" for a title that still fits, and suggest something short and plain
+when it does not? And the maintainer's calls on three things: whether an *automatic* summary (the one that
+happens on its own before an answer) may also offer a title, or only the button; where the offer sits (on the
+summary card, or as its own line under the button); and whether a title the person has renamed by hand is
+ever second-guessed.
+
+**Connected:** plan 68 (the chat sums itself up); the chat rename box.
 

@@ -310,6 +310,9 @@ replace it with a specific issue when one exists.
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
   is added and nothing shifts. The same fade already sits in the stylesheet with no user, written for cut-off answer bubbles.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
+- ★★ `[chat]` **Summing up offers a fresher title** — **OPEN, asked for by the maintainer 2026-09-25.** Each
+  *Sum up this chat* also hands the AI the chat's current title; when the AI judges it stale, the person is
+  offered its suggestion and chooses to rename or keep. [Detail](roadmap-details.md#summing-up-offers-a-fresher-title).
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
 - ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
@@ -633,23 +636,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
-  failed (filed as its own bug above). **15d passed on the Deck 2026-09-23:** a fresh chat's title changed
-  from "New chat" to the question 35 seconds after Ask, with the panel staying open and no reload — though the
-  chat row was scrolled out of view at that exact moment, so nobody would actually have seen it change.
-  **06c FAILED on the Deck 2026-09-23:** closing the Quick Access Menu (by the rig's GUIDE+A chord) while the
-  answer was still arriving, then watching Steam's own toast window every 200 milliseconds for 150 seconds
-  after the reply finished — no "Reply ready" notice ever showed, and reopening the panel showed none either.
-  The rig has not yet proven its own toast-reading can see a toast at all, so the next run adds a control
-  question before re-testing this row. **06c tried again 2026-09-23 with the control run first: still FAIL,
-  cause found and fixed in `73be15f`.** The control confirmed the toast reader works (it caught an unrelated
-  notice on its first read). Closing the menu properly took four B presses this time — the plugin's own
-  panel was already closed after the second — and the reply finished 20 seconds later with the notice
-  window read every 200 ms for 90 seconds; "Reply ready" never showed. Cause: the flag saying "a reply is on
-  screen" was only written while the panel was open and was never cleared once it closed, so a reply that
-  finished in the background read as already seen. **06c tried a fourth time on the Deck 2026-09-23 (flow
-  E), PASS:** with the menu closed by four B presses, "Reply ready — Tap to open" appeared within 1 second
-  of the answer finishing. Evidence `docs/test-evidence/plan64-CHAT-SLOTS-V3-06c-try4.json` (+ two
-  screenshots). [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+  failed (filed as its own bug above). **15d passed** and **06c passed on its fourth try** on the Deck
+  2026-09-23 ("Reply ready" now shows within a second; fixed in `73be15f`); the runs are in the detail.
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
 
 ---
 

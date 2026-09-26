@@ -24,10 +24,6 @@ from backend.services.voice_read_aloud_service import (
 )
 
 
-# Slack for comparing two timestamps taken on different threads (see the read-ahead test).
-THREAD_CLOCK_SLACK_S = 0.005
-
-
 # --- Sentence splitting ---
 
 
@@ -114,21 +110,38 @@ class SplitIntoSentencesTests(unittest.TestCase):
 class FakeMaker:
     """Records call order/timing; writes a real (tiny) file so deletion can be checked."""
 
-    def __init__(self, tmp_root: str, delay: float = 0.0, fail_on: Optional[str] = None):
+    def __init__(
+        self,
+        tmp_root: str,
+        delay: float = 0.0,
+        fail_on: Optional[str] = None,
+        hold_call_index: Optional[int] = None,
+        hold_event: Optional[threading.Event] = None,
+    ):
         self.tmp_root = tmp_root
         self.delay = delay
         self.fail_on = fail_on
+        # When hold_event is given, the call whose 0-based index equals hold_call_index blocks
+        # right here -- after recording that it started, before it is allowed to finish -- until
+        # the test sets hold_event. That turns "sentence 2 started being made before sentence 1
+        # finished playing" from a guess about two threads' timestamps into something the test
+        # holds open and can see directly. See test_makes_the_next_sentence_while_the_current_one_plays.
+        self.hold_call_index = hold_call_index
+        self.hold_event = hold_event
         self.calls: list[str] = []
         self.starts: list[float] = []
         self.made_paths: list[str] = []
         self._n = 0
 
     def make(self, sentence: str) -> str:
+        call_index = len(self.calls)
         self.starts.append(time.monotonic())
         self.calls.append(sentence)
         if self.fail_on is not None and sentence == self.fail_on:
             raise RuntimeError("could not make that sentence")
-        if self.delay:
+        if self.hold_event is not None and call_index == self.hold_call_index:
+            self.hold_event.wait(timeout=5)
+        elif self.delay:
             time.sleep(self.delay)
         self._n += 1
         path = os.path.join(self.tmp_root, f"fake_{self._n}.wav")
@@ -141,27 +154,38 @@ class FakeMaker:
 class FakePlayer:
     """Blocks in ``play`` until ``stop`` is called or ``auto_finish_delay`` elapses."""
 
-    def __init__(self, auto_finish_delay: Optional[float] = 0.02):
+    def __init__(self, auto_finish_delay: Optional[float] = 0.02, hold_first_call: bool = False):
         self.played: list[str] = []
         self.play_starts: list[float] = []
         self.play_ends: list[float] = []
         self.stop_calls = 0
         self.auto_finish_delay = auto_finish_delay
+        # When true, the first play() call ignores auto_finish_delay and blocks until the test
+        # calls release() itself -- so the test can hold sentence 1's "playback" open for as
+        # long as it needs to look at the state, instead of guessing a delay long enough to look
+        # in time. Every later call still uses auto_finish_delay as before.
+        self.hold_first_call = hold_first_call
         self._unblock = threading.Event()
         self._fail = False
 
     def fail_next(self) -> None:
         self._fail = True
 
+    def release(self) -> None:
+        """Manually unblock whichever play() call is currently held open."""
+        self._unblock.set()
+
     def play(self, path: str) -> None:
+        call_index = len(self.played)
         self.play_starts.append(time.monotonic())
         self.played.append(path)
         if self._fail:
             self._fail = False
             raise RuntimeError("could not play that file")
         self._unblock.clear()
+        held_manually = self.hold_first_call and call_index == 0
         timer = None
-        if self.auto_finish_delay is not None:
+        if not held_manually and self.auto_finish_delay is not None:
             timer = threading.Timer(self.auto_finish_delay, self._unblock.set)
             timer.daemon = True
             timer.start()
@@ -238,23 +262,52 @@ class VoiceReadAloudServiceTests(unittest.TestCase):
         self.assertEqual(player.played, maker.made_paths)
 
     def test_makes_the_next_sentence_while_the_current_one_plays(self):
-        maker = FakeMaker(self.tmp_dir, delay=0.01)
-        player = FakePlayer(auto_finish_delay=0.15)
+        """Read-ahead: sentence 2 must start being made before sentence 1 finishes playing.
+
+        This used to compare two threads' wall-clock timestamps against a hand-picked slack
+        constant -- and failed 1 run in 11 under CPU load (docs/roadmap.md, "A read-aloud timing
+        test fails now and then when the PC is busy"; read-aloud itself was never touched that
+        night, only the machine was busy). A guessed slack cannot account for how much a busy
+        machine delays two independently-scheduled threads relative to each other.
+
+        Instead of guessing a delay and hoping it was long enough (or short enough), this holds
+        sentence 1's "playback" open on a real threading.Event that only the test controls, and
+        separately holds sentence 2's "make" call open the same way. Both wait_until calls below
+        poll real state (never a fixed sleep), so the test only ever waits as long as the actual
+        pipeline actually takes, on any machine, under any load, with no chance of the ordering
+        check itself racing.
+        """
+        maker_release = threading.Event()
+        # Sentence 2 is call index 1 (0-based): hold it open right after it starts, so its start
+        # can be observed before it is allowed to finish.
+        maker = FakeMaker(self.tmp_dir, hold_call_index=1, hold_event=maker_release)
+        # Sentence 1's playback (call index 0) is held open until this test releases it.
+        player = FakePlayer(hold_first_call=True)
         service, maker, player = self._service(maker=maker, player=player)
 
         service.start("First. Second. Third.")
+
+        # Sentence 1 has started playing, and play() has not returned yet (it is blocked on
+        # hold_first_call) -- a real, currently-true fact, not a timestamp.
+        self.assertTrue(_wait_until(lambda: len(player.play_starts) >= 1))
+        self.assertEqual(len(player.play_ends), 0)
+
+        # While sentence 1's playback is still held open, sentence 2's make() must already have
+        # been entered -- proven by waiting for it to actually happen (with a generous timeout),
+        # not by asserting it "should" have happened by some deadline.
+        self.assertTrue(_wait_until(lambda: len(maker.starts) >= 2))
+        # And it has not finished either: it is itself held open right now, so this is a genuine
+        # overlap in progress, not a coincidence of scheduling.
+        self.assertEqual(len(maker.made_paths), 1)
+
+        # Let the rest of the pipeline run to completion.
+        maker_release.set()
+        player.release()
         self.assertTrue(_wait_until(lambda: service.status()["state"] == "done"))
 
-        # Sentence 2 ("Second.") is made while sentence 1 ("First.") is still playing.
-        self.assertGreaterEqual(len(maker.starts), 2)
-        self.assertGreaterEqual(len(player.play_starts), 1)
-        self.assertGreater(len(player.play_ends), 0)
-        self.assertLess(maker.starts[1], player.play_ends[0])
-        # Two threads and one clock: "started after" can read a few microseconds early
-        # when the timestamps are taken either side of a thread hand-off. The build
-        # server saw 49 microseconds of it. The point of the check is the ordering, so
-        # allow a slack far smaller than any real overlap and far larger than clock noise.
-        self.assertGreaterEqual(maker.starts[1], player.play_starts[0] - THREAD_CLOCK_SLACK_S)
+        self.assertEqual(maker.calls, ["First.", "Second.", "Third."])
+        self.assertEqual(len(player.played), 3)
+        self.assertEqual(player.played, maker.made_paths)
 
     def test_status_transitions_idle_speaking_done(self):
         maker = FakeMaker(self.tmp_dir, delay=0.0)

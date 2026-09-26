@@ -79,15 +79,22 @@ starts work outside this.
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
   (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
   keyboard on the question box — worth trying on this hidden-block case too.
-- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, re-measured on
-  the Deck 2026-09-23.** With the details panel both closed and open, going down visits the question row and
-  the question box, but going up skips both and stops instead on Attach screenshot and Choose AI character;
-  everything else matches. A 22-line answer section shows only a third of itself on landing because the
-  question box covers it — expected for a section taller than the screen, not a new fault. Row
-  **REPLY-STOPS-MIRROR-01**. Evidence `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
-  **Sighting 2026-09-26 (plan 70):** a branch menu's two buttons were reachable walking Down from above,
-  but walking Up from below skipped both. Evidence `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
-  **Sighting again, 2026-09-26 (flow L1):** walking Up, the question row was skipped, same as before.
+- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, sighted three
+  more times.** Row **REPLY-STOPS-MIRROR-01**. [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **The ring is dropped again when an answer finishes** — **OPEN, FAILED 2026-09-26, being
+  fixed (F2).** Row **QA-FREE-PLAY-01**. [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **OPEN, found
+  2026-09-26, being fixed (F2), fade and static only.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, found
+  2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[layout]` **The decode chip's typing caret is pale, not the accent green** — **OPEN, FAILED
+  2026-09-26, not fixed this wave.** Row **PRESET-STREAM-ANIM-01**. [Detail](roadmap-details.md#flow-2b-bugs).
+- ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
+  question** — **OPEN, found 2026-09-26, being fixed (K), a regression.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **D-pad Left on the chat row leaves the plugin for Steam's side rail** — **OPEN, measured
+  2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
+  [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -190,21 +197,9 @@ starts work outside this.
   popup rebuilds the plugin, and the highlight lands on the top bar, which then opens — each of these three
   needs a Deck walk with the focus recorder before any fix.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
-  2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
-  other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
-  tries. The code already tracks a generating state, so it is not reaching the row on the device — not yet
-  explained. **Ruled out 2026-09-21:** the shape that has bitten this repo before — a per-turn fact reaching
-  the screen only once an answer completes, not during the half-written updates along the way — does not
-  apply here; the chat's own name rides every update, including the half-written ones, and there is now a
-  test proving it. Every step from the back end to the dot reads correctly in the code. What would settle it
-  is a log captured on the Deck while the fault is actually happening. **One clean try on the Deck
-  2026-09-23, MEASUREMENT — did not appear:** with a log captured for the whole switch, the first chat's dot
-  read "pending" the moment the switch happened and turned green right when the log showed the answer
-  finishing; the whole answer was there on switching back. Two caveats: the switch happened only about 5
-  seconds after the first words appeared, a shorter window than earlier sightings, and the app log itself
-  wrote nothing new in the seconds around the switch. **Stays open** — seen three times before, so one clean
-  try is not enough to close it; the maintainer's call. Evidence `docs/test-evidence/plan64-BUSY-DOT-01.json`
-  (+ screenshots).
+  2026-09-18, seen three times, stays open — the maintainer's call.** Switch away from a chat that is
+  still writing and nothing says so; the code looks right on paper. One clean measured try on the Deck
+  2026-09-23 did not reproduce it, which is not enough to close a bug seen three times before.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Clear resets the waiting state

@@ -1639,6 +1639,20 @@ the line, and a note sharing no word still shows it. Deck check owed: row **KB-N
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
+**Ruled out 2026-09-21:** the shape that has bitten this repo before — a per-turn fact reaching the
+screen only once an answer completes, not during the half-written updates along the way — does not apply
+here; the chat's own name rides every update, including the half-written ones, and there is now a test
+proving it. Every step from the back end to the dot reads correctly in the code. What would settle it is
+a log captured on the Deck while the fault is actually happening.
+
+**One clean try on the Deck 2026-09-23, MEASUREMENT — did not appear:** with a log captured for the whole
+switch, the first chat's dot read "pending" the moment the switch happened and turned green right when
+the log showed the answer finishing; the whole answer was there on switching back. Two caveats: the
+switch happened only about 5 seconds after the first words appeared, a shorter window than earlier
+sightings, and the app log itself wrote nothing new in the seconds around the switch. **Stays open** —
+seen three times before, so one clean try is not enough to close it; the maintainer's call. Evidence
+`docs/test-evidence/plan64-BUSY-DOT-01.json` (+ screenshots).
+
 
 ## The open tab strip redrawn: six equal cells, one icon family, only the current tab named
 
@@ -2100,4 +2114,74 @@ Advanced is turned on, which existing tests already pin — a re-check with the 
 becomes a real stop then. Added a matching focus-graph anti-pattern entry. **Deck re-check owed:** row
 **HUB-EDGE-02** — with the Filters panel open, walking Down must reach Done (or the model list) instead
 of stalling at "Close filters".
+
+## Flow 2b bugs
+
+Long version of seven roadmap entries found or sighted during plan 70's flow 2b + 2e D-pad walks
+(2026-09-26). Moved here to keep the roadmap under its size limit.
+
+**Walking down a reply and walking back up visit different stops.** Re-measured on the Deck 2026-09-23:
+with the details panel both closed and open, going down visits the question row and the question box,
+but going up skips both and stops instead on Attach screenshot and Choose AI character; everything else
+matches. A 22-line answer section shows only a third of itself on landing because the question box
+covers it — expected for a section taller than the screen, not a new fault. Row
+**REPLY-STOPS-MIRROR-01**. Evidence `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
+
+**Sighting 2026-09-26 (plan 70):** a branch menu's two buttons were reachable walking Down from above,
+but walking Up from below skipped both. Evidence `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
+
+**Sighting again, 2026-09-26 (flow L1):** walking Up, the question row was skipped, same as before.
+
+**Confirmed 2026-09-26 (plan 70, flow 2b), same shape as the branch menu above:** Up from Helpful skips
+the branch picker between the answer and the Helpful row, straight to the last answer section (seen 4
+times); Down from the Copy icon also skips the same picker, straight to Helpful (seen 3 times). The
+picker is reached only walking Down from above it. Evidence `docs/test-evidence/plan70-REPLY-DOWN-01.json`,
+`docs/test-evidence/plan70-MICRO-reply-actions.json`.
+
+**The ring is dropped again when an answer finishes, and the view jumps to its end.** FAILED on the Deck
+2026-09-26 (plan 70, flow 2b.1), being fixed (helper F2). The 2026-09-23 fix no longer holds: in 3 of 4
+tries, nobody held the ring once the answer finished, and within about 3 seconds the view slid to the end
+of the reply, leaving the control 196 to 356 px above what was visible. A Down pressed within about half
+a second of the finish still kept the ring in place. Row **QA-FREE-PLAY-01** in
+[testing-manual.md](testing-manual.md), evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`
+(+ screenshots).
+
+**A preset chip loses the ring when its question changes underneath it.** Found on the Deck 2026-09-26
+(plan 70, flow 2b.9), being fixed (helper F2). In the fade and static chip styles, when the single chip
+swaps to a new question while it holds the ring, the ring is lost outright — nothing on the panel is
+focused afterward. The decode style and the two-chip layout do not have this problem; the chip keeps the
+ring through the swap there. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots).
+
+**In carousel style, Down from "Save chat to Desktop" can land on a chip slid mostly off screen.** Found
+on the Deck 2026-09-26 (plan 70, flow 2b.9). The ring landed on a chip showing only about 4% of itself at
+the left edge, with the fully visible chip beside it holding no ring; Right moved the ring onto the
+visible chip. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot).
+
+**The decode chip's typing caret is pale, not the accent green.** FAILED on the Deck 2026-09-26 (plan 70,
+flow 2b.10), not fixed this wave. The caret is there and moves left to right correctly; its colour
+measures about RGB 214,228,236, a pale white-blue the same as the settled letters, not the "green" the
+answer-scramble colour setting names. A design check for the maintainer's own eye too, not only the
+measurement. Row **PRESET-STREAM-ANIM-01** in [testing-manual.md](testing-manual.md), evidence
+`docs/test-evidence/plan70-PRESET-STREAM-ANIM-01.json`.
+
+**From the third question on, the waiting line quotes the follow-up reminder instead of the person's
+question.** Found on the Deck 2026-09-26 (plan 70, flow 2b.1), being fixed (helper K), a regression from
+today's follow-up fix. The line is meant to read "Model's warming up for '<the question you asked>'";
+from the third question in a chat onward it instead read "Model's warming up for 'FOLLOW-UP CONTEXT (a
+system reminder, not something the…'" — the hidden reminder text the follow-up fix now sends the model,
+not what the player typed. The second question in the same chat still showed the question correctly.
+Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`.
+
+**D-pad Left on the chat row leaves the plugin for Steam's side rail.** Found and measured on the Deck
+2026-09-26 (plan 70, flow 2b.12). From the first chat, a middle one, or the [+] button, Left moves the
+ring off the chat row entirely, onto Steam's own Quick Access side rail (the Decky icon) — from a middle
+chat, B there closes the whole Quick Access menu instead of the plugin. Right always brings the ring back
+to the chat row. Expected: Left/Right move along the row itself, the same as LB/RB already do (which
+slide the row's own chats and keep the ring). Evidence `docs/test-evidence/plan70-CHAT-ROW-LEFT-01.json`.
+
+**Three more one-off focus sightings from free play, 2026-09-26 (plan 70, flow 2b/2e), not yet reproduced
+on purpose:** the newest answer's turn folded shut by itself after switching tabs and back; after
+pressing Clear, nothing held the ring afterward; after picking a new character Accent, the ring landed on
+"Show Developer tab" and the first LB press did not switch tabs. Recorded to check for a pattern next
+time, not measured closely enough yet to fix.
 

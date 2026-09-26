@@ -79,6 +79,12 @@ on that new bug. **Still owed:** the touch-screen half, which needs a person, no
 2026-09-05, the LB/RB carousel note, and the earlier streaming failures this fix replaced):
 [testing-manual-history-2026.md § QA-FREE-PLAY-01](archive/testing-manual-history-2026.md#qa-free-play-01).
 
+**FAILED again (Deck) 2026-09-26 (plan 70, flow 2b.1): the 2026-09-23 fix no longer holds.** In 3 of 4
+fresh tries, nobody held the ring once the answer finished, and within about 3 seconds the view slid to
+the end of the text, leaving the control the ring had been on 196 to 356 px above what was visible. Only
+a Down pressed within about half a second of the finish kept the ring on its control, in view, as before.
+Being fixed (helper F2). Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json` (+ screenshots).
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that
@@ -252,23 +258,48 @@ manual profile bridge** (the last bullet in the row above). It was the second ou
 `onButtonDown` to double-step. Deck check owed: re-run the slider half of this row and confirm Left
 stays on the slider on all four.
 
+**PASS (Deck) 2026-09-26 (plan 70, flow 2b.6), closed.** All four sliders (Reply style, Keep models
+loaded, Connection timeout, UI size manual) — Left and Right each changed the value by one step and
+the ring never left the slider for Steam's own Quick Access rail. Note: the two-handle Connection
+timeout slider only steps a handle after A picks it first (by design, written at the top of its own
+code); without A, Left holds still and Right just moves the ring to the other handle. Every setting
+read back unchanged afterward. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+
 ### DOC-SWEEP-01 — global document realm fixes (P1)
 
 Wave 4 H — confirm each path works on-Deck (SharedJSContext vs QAM popup document).
 
 Re-run 2026-09-03 after plan 30: Settings Up lands on the bar; full sweep every stop visible (`docs/test-evidence/DOC-SWEEP-01-settings-free-play.json`).
 
-- [ ] Submit Ask: focused field blurs before send (keyboard focus does not stick mid-Ask)
+- [ ] Submit Ask: focused field blurs before send (keyboard focus does not stick mid-Ask). **PASS for
+      the send itself, blur moment UNCLEAR (Deck) 2026-09-26 (plan 70, flow 2b.5):** right after a fresh
+      plugin reload, the first question sent correctly on the first try, no wrong-page failure, the box
+      emptied and the answer arrived normally. The exact blur-before-send moment itself could not be
+      watched: the only way to send while the field still holds keyboard focus is the on-screen
+      keyboard's Enter, which the rig's own rules forbid pressing on the question box; by the D-pad
+      route the field had already lost focus to the Ask button before the press. Evidence
+      `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [ ] Attachment row: **Right** from preview → remove button; **Left** back
-- [ ] Preset carousel: auto-advance pauses while a chip has D-pad focus
-- [ ] About → GitHub link: **Up** focuses reply-language dropdown
-- [ ] Settings/Ollama: **Up** at panel top returns to active tab strip
+- [ ] Preset carousel: auto-advance pauses while a chip has D-pad focus. **Checked in decode style
+      (Deck) 2026-09-26:** the chip kept sampling new prompts while it held the ring — the pause only
+      applies to the carousel style this box was written for, checked separately under
+      **PRESET-ONE-LINE-03** (passed there). Not itself a fail. Evidence
+      `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
+- [x] About → GitHub link: **Up** focuses reply-language dropdown. **PASS (Deck) 2026-09-26:** Up from
+      GitHub landed on the reply-language dropdown ("Follow system"), visible; Up again reached the
+      About tab strip. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
+- [x] Settings/Ollama: **Up** at panel top returns to active tab strip. **PASS (Deck) 2026-09-26:** on
+      both the Ollama tab ("Run AI on this Deck") and the Settings tab ("Adjust UI automatically"), Up
+      returned to that tab's own strip. Saved walk `checks/plan70-DOC-SWEEP-01-settings-top-up.json`.
+      Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [ ] **Do the blur and attachment-row checks on the very first Ask of a fresh plugin open**, before
       any answer has rendered. Until 2026-08-07 the document was learned only from the answer-bubble /
       answer-stop / spoiler-fence registries, so everything above worked from the second Ask onward
       and silently used the wrong document on the first. `BonsaiPluginShell` now seeds it at mount;
       this is the check that proves it.
-- [ ] Expand collapsed history turn: header scrolls into view
+- [x] Expand collapsed history turn: header scrolls into view. **PASS (Deck) 2026-09-26:** opened "4
+      earlier", walked down three collapsed headers and expanded one — its header stayed fully in view,
+      ring on it, with no scroll of the pane itself. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 
 ### PRESET-STREAM-ANIM-01 — decode preset chip animation (P1)
 
@@ -276,14 +307,22 @@ Ghost in the Shell chip decode (2026-08-28) — replaces the old `stream` typewr
 kept its id since it is testing the same slot in the mode list. Developer tab → Preset
 suggestions → **decode**.
 
-- [ ] Each chip arrives as a full-width block of scrambled green glyphs (not a growing/reflowing
-      string — the chip's width should look settled from the first frame, not still catching up)
+- [x] Each chip arrives as a full-width block of scrambled green glyphs (not a growing/reflowing
+      string — the chip's width should look settled from the first frame, not still catching up).
+      **PASS (Deck) 2026-09-26:** a screen recording cut to 10 frames a second shows the real words
+      locking in from the left behind a solid block caret over about 1.5 seconds, full width from the
+      first frame. Evidence `docs/test-evidence/plan70-PRESET-STREAM-ANIM-01.json` (+ strip screenshot).
 - [ ] Glyphs lock into the real prompt left to right behind a blinking block caret, green (accent
-      colour, not a different hardcoded green)
-- [ ] Chips stay D-pad focusable while glyphs are still churning (A selects the full prompt, not
-      whatever is on screen mid-churn)
+      colour, not a different hardcoded green). **FAILED (Deck) 2026-09-26, not fixed this wave:** the
+      caret is there and moves left to right, but its colour measures about RGB 214,228,236 — a pale
+      white-blue, the same as the settled letters, not green. New bug filed on the roadmap.
+- [x] Chips stay D-pad focusable while glyphs are still churning (A selects the full prompt, not
+      whatever is on screen mid-churn). **PASS (Deck) 2026-09-26:** with the ring on the chip, it
+      churned to a new question and the ring stayed; A pressed mid-churn filled the Ask field with the
+      whole finished prompt, no symbols.
 - [ ] After hold, chip clears and samples a new prompt
-- [ ] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret)
+- [ ] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret). Not run
+      this pass.
 
 **Judged good by the maintainer 2026-09-14**, which is what this row was waiting on. The boxes above that
 are still empty were never walked one by one; the measurement on 2026-08-28 covered the frame rate and the
@@ -444,7 +483,6 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 - [ ] **OLLAMA-KEEPALIVE-FOCUS-01** **Keep models loaded** slider thumb: white gpfocus ring vertically centered on the dot (no ~1px high offset). **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** measured, not centred — the ring's own box sits 3.5 css px (4.5 screen px) above the dot's middle, where a pass needs under 1 px; the ring's own right side also reaches about 17 px past the slider card's right edge. ★ layout, not fixed this wave. Evidence `docs/test-evidence/plan70-OLLAMA-KEEPALIVE-FOCUS-01.json` (+ `.png`, cropped `.png`).
 - [ ] **ROUTING-MERGE-SIZE-02** An installed model's size comes from the Deck's own Ollama first; the online library is only asked about a model not yet installed. Fixed 2026-09-26 (plan 70, helper I, `86a148a7`), replacing ROUTING-MERGE-SIZE-01. With the note-search model (or any model outside the built-in list) installed, its size must show a real number, not "?", and stay after live sizes load; the header must count it. Deck check owed.
 - [ ] **ROUTING-FOCUS-01** Try-order modal chrome matches Pull Models / Character picker (deferred bug). **The D-pad half is no longer a question** — it failed on 2026-08-28, see PICKER-REORDER-01
-- [ ] **QAM-BODY-RO-01** Switch tabs repeatedly (10+, through the taller Settings/Ollama panels), then D-pad to the **bottom** of a long panel: the pane must still reach its end and not be pinned to a stale height. Steam replaces the scroll node on every switch, so this is specifically about the 2nd switch onward — one switch proves nothing. Fixed 2026-08-08; if it regresses, `--bonsai-tab-body-height` will stop matching the live pane's `clientHeight` after a switch. **Re-run QAM-BAZZITE-01 and D-PAD-SCROLL-01 with this** — same measurement chain
 - [ ] **SOFT-PREDICT-04** Strategy mode, an answer long enough to continue mid-branch (opens a `bonsai-strategy-branches` fence before hitting the length wall): confirm no half-rendered fence or stray JSON appears at any point in the stream, including right at the continue boundary — **BLOCKED 2026-09-18:** the long Hades walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`. **Tried again 2026-09-23, still unclear:** the finished text read clean — no half-rendered fence, no stray JSON, at any point — but the reply stopped on its own at 1,117 tokens against a 2,112-token limit in the log, so it never had to continue and the join point this row actually checks never happened. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04.json`. **Tried a second time 2026-09-23, still unclear, same shape:** a Half-Life 2 walkthrough question asked for a very long answer on purpose; the model still stopped itself at 1,050 tokens, well under the 2,112 limit. Asking for more length does not reach the wall — the row needs another way to bring the limit down rather than the question up. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04-try2.json`.
 - [ ] **EXPERT-CAP-01** Expert-mode Ask with a long answer: it now runs to ~1200 tokens before a soft continue rather than ~800. Expert was silently capped at the Speed budget until 2026-08-15, so a long Expert reply should visibly need fewer `Continuing…` cues than before the fix. **Tried 2026-09-26 (plan 70), inconclusive:** the answer stopped on its own at 326 words, well under where the cap would bite, so this run does not show whether the fix works — needs a question long enough to actually reach the cap. Evidence `docs/test-evidence/plan70-EXPERT-CAP-01.json`.
 
@@ -498,6 +536,17 @@ everything below assumes it passes. Plan:
   one-off — if it recurs, a press in the tail of the 550 ms slide is the first suspect. Fade / static / decode share the same handler code and were not driven on device. The rig also reports the
   ring "partially visible" for one settle after a slide — the 550 ms transition is still running when it measures; the next step
   always reads 100 %.
+
+  **Fade / static / decode driven on device 2026-09-26 (plan 70, flow 2b.9), mixed.** **Decode — PASS:**
+  chip Right/Left held still (one chip), Down reached the box, Up returned to the chip, Up again reached
+  the notes block; every stop visible, and the chip changed its question while holding the ring without
+  losing it. **Two chips, decode — PASS (7 of 7):** Left/Right stepped between both chips and Down/Up
+  worked the same way. **Fade — FAILED and static — FAILED, same shape:** when the single chip swaps to
+  a new question while it holds the ring, the ring is lost — nothing on the panel is focused afterward,
+  confirmed twice each with a bare screenshot showing no ring anywhere. Once in fade, Up from the box also
+  skipped the chip entirely and landed on the avatar. Being fixed (helper F2). Evidence
+  `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots), saved walk
+  `checks/plan70-PRESET-ONE-LINE-03-decode.json`.
 - [ ] **PRESET-ONE-LINE-04** (the scrolling is calm and cheap) With the knowledge base on and a covered game running (Half-Life 2 has
   the longest label, 59 characters): both labels crawl slowly with a fade at the edges, the **Tip** badge stays pinned at the left
   while the text scrolls, and a chip does not rotate away before its label has scrolled through once. Judge the speed by eye — "slow

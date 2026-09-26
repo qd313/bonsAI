@@ -382,6 +382,15 @@ testing-manual.md. Found by the planning-folder review
   one-failure-after-a-deploy quirk, now seen twice in a row. Evidence
   `docs/test-evidence/plan70-OLLAMA-TAB-AFTER-RELOAD-02.json`.
 
+### Plan 70 flow 2b + 2e (2026-09-26)
+
+- [x] **QAM-BODY-RO-01** Switch tabs repeatedly (10+, through the taller Settings/Ollama panels), then
+  D-pad to the **bottom** of a long panel: the pane must still reach its end and not be pinned to a
+  stale height. **PASS (Deck) 2026-09-26:** 12 tab switches (Ollama, Settings ×6), then walked Down 15
+  stops to the true last row ("Clear cache…"), every stop visible, scrollTop at the pane's real maximum;
+  the height variable still matched the live pane after all those switches. Evidence
+  `docs/test-evidence/plan70-QAM-BODY-RO-01.json`.
+
 ### Plan 70 flow L2 + 2c (2026-09-26)
 
 - [x] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows

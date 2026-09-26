@@ -379,6 +379,27 @@ describe("buildReplyActionsElement Up from the thumbs row into the answer", () =
     expect(document.activeElement).toBe(branchButton);
   });
 
+  /* Plan 68: the summed-up note sits between the answer and the thumbs, so Up reaches it first. */
+  it("reaches the summed-up note before the bubble's last section, when the answer has one", () => {
+    registerBubbleWithStops(2);
+    const note = document.createElement("div");
+    note.tabIndex = -1;
+    document.body.appendChild(note);
+    registerReplyStop("summary-note", note);
+    try {
+      const el = buildReplyActionsElement({
+        replyKey: "live",
+        rating: null,
+        onRate: () => {},
+        showFeedback: true,
+      });
+      expect(moveUpFromReplyOf(el)()).toBe(true);
+      expect(document.activeElement).toBe(note);
+    } finally {
+      registerReplyStop("summary-note", null);
+    }
+  });
+
   /* No branch picker or checklist mounted at all: CHAT-REPLY-ENTRY-01's shape is unchanged. */
   it("still lands on the bubble's last section when no branch picker or checklist exists", () => {
     const stops = registerBubbleWithStops(2);

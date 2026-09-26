@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1676,
+      "lines": 1696,
       "role": ""
     },
     {
@@ -61,6 +61,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 983,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/bonsai_stream_tags.py",
       "lines": 988,
       "role": ""
@@ -68,11 +73,6 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 946,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 943,
       "role": ""
     },
     {
@@ -121,6 +121,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 725,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 713,
       "role": ""
@@ -131,18 +136,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 704,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 660,
       "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 657,
+      "lines": 660,
       "role": ""
     },
     {
@@ -157,7 +157,7 @@
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 632,
+      "lines": 635,
       "role": ""
     },
     {

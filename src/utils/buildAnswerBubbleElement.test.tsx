@@ -280,6 +280,46 @@ describe("answer bubble section stops", () => {
   });
 
   /* Same fixture, thumbs live: unchanged from today, Down lands on Helpful. */
+  /*
+   * Plan 68: the "The chat summed itself up before this answer" note sits directly under the answer
+   * bubble, on the newest answer only, and is the first thing Down reaches -- ahead of Helpful.
+   */
+  it("Down from the last section reaches the summed-up note before Helpful, when the answer has one", () => {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const bubbleMount = document.createElement("div");
+    slot.appendChild(bubbleMount);
+
+    const el = buildAnswerBubbleElement({
+      body: "Just one short paragraph.",
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    render(el!, { container: bubbleMount });
+
+    const note = document.createElement("div");
+    note.tabIndex = -1;
+    slot.appendChild(note);
+    const helpful = document.createElement("button");
+    helpful.type = "button";
+    slot.appendChild(helpful);
+    registerReplyStop("summary-note", note);
+    registerReplyStop("helpful", helpful);
+
+    try {
+      const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(note);
+    } finally {
+      registerReplyStop("summary-note", null);
+      registerReplyStop("helpful", null);
+      slot.remove();
+    }
+  });
+
   it("Down from the last section still lands on Helpful when the thumbs are live", () => {
     const slot = document.createElement("div");
     slot.className = "bonsai-chat-turn-slot";

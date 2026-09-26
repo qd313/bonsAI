@@ -426,4 +426,93 @@ describe("the This answer / Session tabs, on the newest answer", () => {
     });
   });
 
+  /*
+   * Plan 68: the note under the answer that came right after the chat summed itself up, and the
+   * warning line when summing up failed. Both are read straight off the saved answer's own
+   * `chatSummary`, on an open archived turn -- the shape a finished answer has once the chat
+   * reloads. (Clear's confirm box, and the plan 64 bug E test that kept the panel open across the
+   * remount it caused, went with Clear: nothing in this panel opens a Decky modal any more.)
+   */
+  describe("the summed-up note and the warning line (plan 68)", () => {
+    const summedTurn = (id: string, question: string, chatSummary?: "written" | "failed"): AskThreadCollapsedTurn => ({
+      id,
+      question,
+      answer: "Keep your distance and strafe.",
+      transparency: snapshot(),
+      ...(chatSummary ? { chatSummary } : {}),
+    });
+    const archivedOnly = {
+      transparencySnapshot: null,
+      askThreadDisplayQuestion: "",
+      lastExchange: null,
+    } as const;
+
+    it("the newest answer's note is a D-pad stop with the drawn words", () => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "newest-1",
+        askThreadCollapsed: [summedTurn("older-1", "an older question"), summedTurn("newest-1", "how do i dodge", "written")],
+      });
+      expect(container.textContent).toContain(
+        "The chat summed itself up before this answer. Press to read what it kept."
+      );
+      expect(latestPropsFor("bonsai-chat-summary-note")?.onOKButton).toBeTypeOf("function");
+    });
+
+    it("an older answer's note is plain text, not a stop", () => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "older-1",
+        askThreadCollapsed: [summedTurn("older-1", "an older question", "written"), summedTurn("newest-1", "how do i dodge")],
+      });
+      expect(container.textContent).toContain("The chat summed itself up here.");
+      expect(latestPropsFor("bonsai-chat-summary-note")).toBeUndefined();
+    });
+
+    it("A on the note opens Show details on the Session tab and moves the ring to Sum up this chat", () => {
+      vi.useFakeTimers();
+      try {
+        const { container } = renderTranscript({
+          ...archivedOnly,
+          expandedTurnKey: "newest-1",
+          askThreadCollapsed: [summedTurn("newest-1", "how do i dodge", "written")],
+        });
+        expect(container.querySelector(".bonsai-details-session-body")).toBeNull();
+        act(() => {
+          (latestPropsFor("bonsai-chat-summary-note")?.onOKButton as () => void)();
+        });
+        expect(activeTabText(container)).toBe("Session · 1");
+        const button = container.querySelector(".bonsai-sumup-btn");
+        expect(button).not.toBeNull();
+        act(() => {
+          vi.advanceTimersByTime(100);
+        });
+        expect(document.activeElement).toBe(button);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("a failed summary draws the warning line and no note", () => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "newest-1",
+        askThreadCollapsed: [summedTurn("newest-1", "how do i dodge", "failed")],
+      });
+      expect(container.textContent).toContain(
+        "Couldn't sum up the chat this time, so this answer only knows the newest turns. It will try again on your next question."
+      );
+      expect(container.textContent).not.toContain("summed itself up");
+    });
+
+    it("an ordinary answer has neither", () => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "newest-1",
+        askThreadCollapsed: [summedTurn("newest-1", "how do i dodge")],
+      });
+      expect(container.textContent).not.toContain("summed itself up");
+      expect(container.textContent).not.toContain("Couldn't sum up");
+    });
+  });
 });

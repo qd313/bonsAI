@@ -206,6 +206,11 @@ import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
 import { useSpoilerFenceRecheck } from "../hooks/useSpoilerFenceRecheck";
+import {
+  buildChatSummaryNoteElement,
+  buildChatSummaryWarningElement,
+  focusSumUpButtonWhenMounted,
+} from "../features/chat-sum-up/buildChatSummaryNoteElement";
 import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
@@ -489,6 +494,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   };
 
   const onToggleTransparencyDetails = makeToggleTransparencyDetails("live");
+
+  /** Plan 68: A on the summed-up note opens Show details on the Session tab, ring on Sum up. */
+  const openSessionTabFromNote = () => {
+    setSessionHighlightTurnId(null);
+    setDetailsTab("session");
+    setTransparencyDetailsOpen(true);
+    focusSumUpButtonWhenMounted();
+  };
 
   const archivedTransparencyFor = (turn: AskThreadCollapsedTurn, index: number) =>
     archivedTurnTransparency({
@@ -1118,6 +1131,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     Stopped — partial answer kept.
                   </div>
                 ) : null}
+                {buildChatSummaryWarningElement(turn.chatSummary)}
                 {renderReasoningFold(turn.id, turn.reasoning)}
                 {renderAnswerBubble(
                   turn.answer,
@@ -1129,6 +1143,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   turn.askedEntity ?? null,
                   turn.spoilerConsentEffective === true
                 )}
+                {buildChatSummaryNoteElement({
+                  turnKey: turn.id,
+                  chatSummary: turn.chatSummary,
+                  isNewest: isNewestArchivedTurn,
+                  onOpen: openSessionTabFromNote,
+                })}
                 {/*
                  * Same placement as in the live turn — between the answer bubble and the reply
                  * actions — so the D-pad walk down the slot is unchanged. Gated to the newest

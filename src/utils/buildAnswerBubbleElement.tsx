@@ -403,6 +403,8 @@ export function buildAnswerBubbleElement(
      * `queryLiveTurnSlot` for a caller that never marked it — so this reaches a restored turn's
      * chrome exactly the way it already reached the live turn's.
      */
+    /* Plan 68: the summed-up note sits directly under the answer, before any other stop. */
+    if (focusRegisteredReplyStop("summary-note")) return true;
     const slot = queryTurnSlot(answerKey) ?? queryLiveTurnSlot();
     const hasStrategyChrome = Boolean(
       slot?.querySelector(".bonsai-strategy-branch-picker, .bonsai-strategy-checklist-panel")
@@ -472,12 +474,13 @@ export function buildAnswerBubbleElement(
    * runs/reply-block-copy-trap.json. Naming the next stop removes the guess.
    */
   /*
-   * Down out of the Copy corner: the thumbs when they render, else the Read aloud line, else Show
-   * details. Read aloud was missing here when it shipped, so on an answer with no thumbs (a
+   * Down out of the Copy corner: the summed-up note when this answer has one (plan 68), then the
+   * thumbs when they render, else the Read aloud line, else Show details. Read aloud was missing here when it shipped, so on an answer with no thumbs (a
    * restored one) the D-pad went from Copy straight to Show details and the new line could not be
    * reached from above at all — measured on the Deck 2026-09-12, first walk after the deploy.
    */
   const downOutOfCopy = () =>
+    focusRegisteredReplyStop("summary-note") ||
     focusRegisteredReplyStop("helpful") ||
     focusRegisteredReplyStop("read-aloud") ||
     focusRegisteredReplyStop("show-details");

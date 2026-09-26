@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 512,
-  "edgeCount": 1371,
+  "fileCount": 513,
+  "edgeCount": 1378,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -496,6 +496,7 @@
         "src/data/drgGlossaryTerms.ts",
         "src/data/modelPolicy.ts",
         "src/data/replyMicroActions.ts",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
@@ -1839,7 +1840,21 @@
       ],
       "importedBy": [
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/utils/buildDetailsPanelElement.tsx"
+      ]
+    },
+    "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx": {
+      "imports": [
+        "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/utils/answerBubbleNavigation.ts",
+        "src/utils/focusNavigation.ts",
+        "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
       ]
     },
     "src/features/chat-sum-up/chatSumUpModel.test.ts": {
@@ -4071,6 +4086,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -4768,6 +4784,7 @@
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
@@ -4923,6 +4940,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
@@ -5209,6 +5227,7 @@
       "importedBy": [
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
@@ -5488,6 +5507,7 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",

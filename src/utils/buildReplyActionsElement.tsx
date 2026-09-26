@@ -92,7 +92,7 @@ import {
   focusUpFromReplyActions,
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
-import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
+import { focusRegisteredReplyStop, registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
 import {
   isDeckDirectionDownEvent,
@@ -318,6 +318,8 @@ export function buildReplyActionsElement(
     if (onMoveUpFromReply?.()) return true;
     const slot = liveSlot();
     if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
+    /* Plan 68: the summed-up note sits between the answer and this row. */
+    if (focusRegisteredReplyStop("summary-note")) return true;
     if (upIntoGlossaryChip()) return true;
     return focusLastAnswerChunk(replyKey);
   };
@@ -458,6 +460,7 @@ export function buildReplyActionsElement(
     /* No thumbs row and no speaker (a restored answer, say) — same branch/checklist hand-off as
        moveUpFromReply above, for the same reason. */
     if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
+    if (focusRegisteredReplyStop("summary-note")) return true;
     if (upIntoGlossaryChip()) return true;
     return focusLastAnswerChunk(replyKey);
   };

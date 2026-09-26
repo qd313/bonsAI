@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 523,
-  "edgeCount": 1410,
+  "fileCount": 524,
+  "edgeCount": 1413,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3972,6 +3972,7 @@
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/test-harness/setup.ts",
+        "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.test.tsx"
       ]
     },
@@ -4530,6 +4531,14 @@
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
+    "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx": {
+      "imports": [
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/buildReplyActionsElement.test.tsx": {
       "imports": [
         "src/test-harness/fakeDeckyUi.tsx",
@@ -4558,6 +4567,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.test.tsx"
       ]
     },
@@ -5642,6 +5652,7 @@
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReasoningFoldElement.tsx",
+        "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",

@@ -144,6 +144,7 @@
     "src/utils/bonsaiReplySurface.test.ts",
     "src/utils/bonsaiSessionSurvival.test.ts",
     "src/utils/buildAnswerBubbleElement.test.tsx",
+    "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
     "src/utils/buildReplyActionsElement.test.tsx",
     "src/utils/buildTurnHeaderElement.test.tsx",
     "src/utils/chatPanelScroll.test.ts",

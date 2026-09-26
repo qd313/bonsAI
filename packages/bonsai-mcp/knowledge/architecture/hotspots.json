@@ -136,6 +136,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 685,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 664,
       "role": ""
@@ -153,11 +158,6 @@
     {
       "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
       "lines": 636,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 635,
       "role": ""
     },
     {

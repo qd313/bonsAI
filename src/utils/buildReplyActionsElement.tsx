@@ -92,8 +92,13 @@ import {
   focusUpFromReplyActions,
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
-import { focusRegisteredReplyStop, registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
-import { elementHasGamepadFocus } from "./uiDocument";
+import {
+  focusRegisteredReplyStop,
+  getReplyStop,
+  registerReplyStop,
+  setReplyStopUnavailable,
+} from "./replyStopRegistry";
+import { elementHasGamepadFocus, getUiDocument, uiGamepadFocusElement } from "./uiDocument";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
@@ -157,6 +162,17 @@ export type BuildReplyActionsElementArgs = {
   /** D-pad Down from utility row (Retry / Show details) → context hint / session strip. */
   onMoveDownFromUtility?: () => boolean;
 };
+
+/**
+ * Steam's nav node for each reply's thumbs row, kept by reply key so a press handler from an earlier
+ * render reads the node Steam filled in on the latest one (the answer bubble's registry does the
+ * same, answerBubbleElRegistry.ts).
+ */
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null };
+const thumbsRowNavByKey = new Map<string, SteamNavHolder>();
+/** How often, and how many times, a press on a thumb checks that its button has been replaced. */
+const RATED_RING_CHECK_MS = 50;
+const RATED_RING_CHECKS = 10;
 
 function renderChipRow(
   chipIds: ReplyMicroActionId[],
@@ -332,6 +348,39 @@ export function buildReplyActionsElement(
 
   const downFromThumbsRow = () => downFromThumbs();
 
+  const thumbsRowNav: SteamNavHolder = { current: null };
+  thumbsRowNavByKey.set(replyKey, thumbsRowNav);
+  /*
+   * Plan 70 flow 4.1 (docs/test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3): Helpful swaps both
+   * thumbs for "Saved on this Deck", so the button the ring was on is gone and nothing holds the
+   * ring. Once the pressed button has been replaced -- and only if the ring was on it and nothing
+   * else has it now -- hand the ring to the speaker in the same row: the row's nav node first
+   * (Steam's own transfer), then the speaker inside it. With no speaker, the row's own Down.
+   * Not really keeps its (greyed) button, which still holds the ring, so nothing moves there.
+   */
+  const rateKeepingRing = (value: "up" | "down") => {
+    const pressed = getReplyStop(value === "up" ? "helpful" : "not-really");
+    const hadRing = Boolean(pressed) && elementHasGamepadFocus(pressed);
+    onRate(value);
+    if (!pressed || !hadRing) return;
+    let checks = 0;
+    const settle = () => {
+      if (pressed.isConnected) {
+        if (++checks < RATED_RING_CHECKS) window.setTimeout(settle, RATED_RING_CHECK_MS);
+        return;
+      }
+      const owner = uiGamepadFocusElement();
+      if (owner && owner.isConnected && owner !== getUiDocument().body) return;
+      try {
+        thumbsRowNavByKey.get(replyKey)?.current?.TakeFocus?.(true);
+      } catch {
+        /* the focus + check below decides */
+      }
+      if (!focusRegisteredReplyStop("read-aloud")) downFromThumbs();
+    };
+    window.setTimeout(settle, 0);
+  };
+
 
   /*
    * Row elements, captured at mount so a press handler can ask "is focus still mine?".
@@ -499,6 +548,7 @@ export function buildReplyActionsElement(
               thumbsRowEl.current = el;
             }}
             {...({
+              navRef: thumbsRowNav,
               onMoveUp: moveUpFromReply,
               onMoveDown: downFromThumbsRow,
               onMoveLeft: swallowThumbsSideways,
@@ -515,7 +565,7 @@ export function buildReplyActionsElement(
               <>
                 <BonsaiChatSecondaryButton
                   disabled={feedbackDisabled || thumbsLocked}
-                  onClick={() => onRate("up")}
+                  onClick={() => rateKeepingRing("up")}
                   aria-label="Mark reply helpful"
                   replyStop="helpful"
                 >
@@ -524,7 +574,7 @@ export function buildReplyActionsElement(
                 </BonsaiChatSecondaryButton>
                 <BonsaiChatSecondaryButton
                   disabled={feedbackDisabled || thumbsLocked}
-                  onClick={() => onRate("down")}
+                  onClick={() => rateKeepingRing("down")}
                   aria-label="Mark reply not helpful"
                   replyStop="not-really"
                 >

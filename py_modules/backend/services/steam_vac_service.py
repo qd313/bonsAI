@@ -234,13 +234,16 @@ def format_vac_report_markdown(
         )
         return "\n".join(lines)
 
-    lines.append("| SteamID (64) | VAC | #VAC | Game bans | Days since last ban | Community | Trade |")
-    lines.append("| --- | --- | --- | --- | --- | --- | --- |")
-
+    # A GFM pipe table, not plain bullets: the Deck's answer renderer
+    # (MainTabBonsaiAiMarkdownChunk.tsx) is react-markdown with no remark-gfm plugin loaded, so
+    # table syntax was never parsed as a table -- it came out as one run-on line of literal pipes
+    # and dashes (docs/test-evidence/plan64-VAC-03-06.json: "the reply has 0 table elements...
+    # reads as a run of pipes on the Deck"). A bullet per account is plain CommonMark, which that
+    # renderer already draws correctly.
     for pl in rows:
         sid = str(pl.get("SteamId") or pl.get("steamid") or "")
         if pl.get("_bonsai_missing"):
-            lines.append(f"| `{sid}` | — | — | — | — | — | — |")
+            lines.append(f"- **SteamID** `{sid}` — no data returned.")
             continue
         vac = pl.get("VACBanned")
         nvac = pl.get("NumberOfVACBans")
@@ -249,7 +252,8 @@ def format_vac_report_markdown(
         comm = pl.get("CommunityBanned")
         econ = pl.get("EconomyBan")
         lines.append(
-            f"| `{sid}` | {vac} | {nvac} | {ngame} | {dsb} | {comm} | {econ} |"
+            f"- **SteamID** `{sid}` — VAC: {vac} · #VAC bans: {nvac} · Game bans: {ngame} · "
+            f"Days since last ban: {dsb} · Community banned: {comm} · Trade ban: {econ}"
         )
 
     if api_warnings:

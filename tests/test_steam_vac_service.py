@@ -86,6 +86,42 @@ class SteamVacServiceTests(unittest.TestCase):
         self.assertIn("Skipped inputs", md)
         self.assertIn("bad", md)
 
+    def test_format_report_rows_render_without_gfm_table_syntax(self):
+        # The Deck's answer renderer (react-markdown, MainTabBonsaiAiMarkdownChunk.tsx) has no
+        # remark-gfm plugin loaded, so a GFM pipe table is never parsed as a table -- it comes
+        # out as one run-on paragraph of literal pipes and dashes (docs/test-evidence/
+        # plan64-VAC-03-06.json: "the reply has 0 table elements... reads as a run of pipes").
+        # A fix here has to stop emitting that syntax, not add a table the renderer cannot draw.
+        rows = [
+            {
+                "SteamId": "76561197983599210",
+                "VACBanned": False,
+                "NumberOfVACBans": 0,
+                "NumberOfGameBans": 0,
+                "DaysSinceLastBan": 0,
+                "CommunityBanned": False,
+                "EconomyBan": "none",
+            }
+        ]
+        md = format_vac_report_markdown(rows, [], [])
+        self.assertNotIn("| ---", md)
+        self.assertNotIn("| SteamID", md)
+        for line in md.splitlines():
+            stripped = line.strip()
+            self.assertFalse(
+                stripped.startswith("|") and stripped.endswith("|"),
+                f"still a pipe-table line: {line!r}",
+            )
+        # The same facts have to still be there, just not in table syntax.
+        self.assertIn("76561197983599210", md)
+        self.assertIn("VAC", md)
+        self.assertIn("False", md)
+
+    def test_format_report_missing_row_still_readable(self):
+        md = format_vac_report_markdown([{"SteamId": "1", "_bonsai_missing": True}], [], [])
+        self.assertNotIn("| `1`", md)
+        self.assertIn("1", md)
+
 
 class VacCheckCommandsTests(unittest.TestCase):
     def test_parse_prefix_optional_slash(self):

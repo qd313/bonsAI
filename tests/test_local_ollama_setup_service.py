@@ -3,13 +3,22 @@
 from __future__ import annotations
 
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 from unittest.mock import patch
 
-from backend.services.local_ollama_setup_service import (
+# So this file also runs on its own on Windows (matches scripts/run_python_tests.py, which puts
+# the repo root and py_modules on sys.path the same way Decky Loader does), not only after
+# unittest discover has already loaded another file that put them there first.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+for _path in (str(REPO_ROOT), str(REPO_ROOT / "py_modules")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
+from backend.services.local_ollama_setup_service import (  # noqa: E402
     _bash_exe,
     _env_for_host_system_tools,
     _env_for_ollama_cli,

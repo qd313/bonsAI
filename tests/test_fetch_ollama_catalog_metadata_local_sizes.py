@@ -18,12 +18,26 @@ pulled it" for a tag not yet on this Deck; it should never be asked about one th
 Does not: Run ollama or reach the real registry. Both are faked.
 """
 
+import sys
 import unittest
+from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
-from plugin_settings_file_harness import PluginSettingsFileMixin
+# So this file also runs on its own on Windows (matches scripts/run_python_tests.py, which puts
+# the repo root and py_modules on sys.path the same way Decky Loader does), not only after
+# unittest discover has already loaded another file that put them there first.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+for _path in (str(REPO_ROOT), str(REPO_ROOT / "py_modules")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
 
-import main
+from backend_module_stubs import install_pwd_stub  # noqa: E402
+
+install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
+
+from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
+
+import main  # noqa: E402
 
 
 class FetchOllamaCatalogMetadataLocalSizesTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):

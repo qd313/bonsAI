@@ -135,6 +135,7 @@ from backend.services.response_verify import (
 from backend.services.spy_confession_service import parse_spy_lies_tag
 from backend.services.strategy_spoiler_policy import (
     boss_like_card_names,
+    neutralize_protected_names_in_branch_menu,
     protected_spoiler_names,
     spoiler_cover_required,
 )
@@ -1108,6 +1109,22 @@ async def run_game_ai_request(
         ollama_route_snapshot = {**ollama_route_snapshot, "kb_attached_notes": kb_attached_notes}
         await plugin._persist_input_transparency(ollama_route_snapshot)
 
+        # D112 #7, the spoiler safety net's third leak: the branch menu's own question and
+        # option labels are buttons the screen draws, never spoiler-fenced (fencing would break
+        # them), and cover_named_spoilers deliberately never looks inside this menu at all. A
+        # protected name still reached one in plain view -- "Are you currently struggling with
+        # the Soul Master's movement..." on a question that never named him (Deck,
+        # NO-CLOSE-MATCH-HK-02) -- so it needs its own, non-fencing cover: a neutral phrase in
+        # place of the name. This is the only place `strategy_guide_branches` is ever set (there
+        # is no earlier, partial version of it -- extract_strategy_guide_branches runs once, on
+        # the finished reply), so fixing it here covers the live poll and the saved turn alike.
+        covered_strategy_guide_branches = neutralize_protected_names_in_branch_menu(
+            drop_branch_menu_copying_the_worked_example(
+                ollama_result.get("strategy_guide_branches"), app_name
+            ),
+            spoiler_protected_names_for_turn,
+        )
+
         logger.info("run_game_ai_request: completed in %.1fs", elapsed)
         return {
             "success": bool(ollama_result.get("success", False)),
@@ -1118,9 +1135,7 @@ async def run_game_ai_request(
             "app_context": app_context,
             "applied": applied,
             "elapsed_seconds": elapsed,
-            "strategy_guide_branches": drop_branch_menu_copying_the_worked_example(
-                ollama_result.get("strategy_guide_branches"), app_name
-            ),
+            "strategy_guide_branches": covered_strategy_guide_branches,
             "strategy_checklist": ollama_result.get("strategy_checklist"),
             "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
             "strategy_spoiler_consent_effective": bool(

@@ -25,7 +25,7 @@ strategy_entity_extraction.py and spoiler_title_profiles.py respectively.
 """
 
 import re
-from typing import Iterable
+from typing import Any, Iterable, Optional, Sequence
 
 from backend.services.spoiler_title_profiles import title_profile_is_low_narrative
 from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
@@ -481,3 +481,78 @@ def fence_opener_is_spoiler(fence_chunk: str) -> bool:
         return False
     info = info[3:].strip().lower()
     return info == "bonsai-spoiler" or info.startswith("bonsai-spoiler")
+
+
+# D112 #7's third leak (SPOILER-COVER-01's own side finding, NO-CLOSE-MATCH-HK-02): the branch
+# menu's question and option labels are buttons the screen draws from `strategy_guide_branches`
+# directly, never markdown-rendered and never looked at by cover_named_spoilers (fencing one
+# would break the button). Measured on the Deck: "Are you currently struggling with the Soul
+# Master's movement or damage output?" in plain view, on a question that never named him.
+# Case-insensitive, unlike ``_name_pattern`` above, which is written to run against
+# already-lowercased text for a yes/no check, not to substitute inside real-case button text.
+_NEUTRALIZING_NAME_RE_CACHE: dict[str, "re.Pattern[str]"] = {}
+_NEUTRAL_BOSS_PHRASE = "this boss"
+
+
+def _neutralizing_pattern(name: str) -> "re.Pattern[str]":
+    """Matches a protected name, plus a leading "the"/"a"/"an" when the name has one, so the
+    replacement can keep exactly one article -- without this, "the Soul Master's" became "the
+    this boss's" (measured while building this fix): the name's own replacement phrase already
+    carries "this", so a leading "the" has to be absorbed into the match, not left in place.
+    """
+    pat = _NEUTRALIZING_NAME_RE_CACHE.get(name)
+    if pat is None:
+        pat = re.compile(
+            rf"(?<![a-z0-9])(?:(the|an?)\s+)?{re.escape(name.lower())}s?(?![a-z0-9])",
+            re.IGNORECASE,
+        )
+        _NEUTRALIZING_NAME_RE_CACHE[name] = pat
+    return pat
+
+
+def neutralize_protected_names_in_branch_menu(
+    branches: Optional[dict[str, Any]], protected_names: Sequence[str]
+) -> Optional[dict[str, Any]]:
+    """Replace a protected name inside the branch menu's question or an option's label with a
+    neutral phrase ("this boss"/"the boss") -- never a spoiler fence, which the screen draws as
+    a button and would render as literal backtick text, not a cover.
+    """
+    if not branches or not protected_names:
+        return branches
+    names = [n.strip() for n in protected_names if (n or "").strip()]
+    if not names:
+        return branches
+
+    def _replace(m: "re.Match[str]") -> str:
+        article = (m.group(1) or "").lower()
+        return "the boss" if article == "the" else _NEUTRAL_BOSS_PHRASE
+
+    def _neutralize(text: str) -> str:
+        out = text
+        for name in names:
+            out = _neutralizing_pattern(name).sub(_replace, out)
+        return out
+
+    changed = False
+    question = branches.get("question")
+    new_question = question
+    if isinstance(question, str):
+        new_question = _neutralize(question)
+        changed = changed or new_question != question
+
+    options = branches.get("options")
+    new_options = options
+    if isinstance(options, list):
+        rebuilt = []
+        for opt in options:
+            if isinstance(opt, dict) and isinstance(opt.get("label"), str):
+                new_label = _neutralize(opt["label"])
+                if new_label != opt["label"]:
+                    opt = {**opt, "label": new_label}
+                    changed = True
+            rebuilt.append(opt)
+        new_options = rebuilt
+
+    if not changed:
+        return branches
+    return {**branches, "question": new_question, "options": new_options}

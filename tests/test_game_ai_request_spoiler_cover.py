@@ -239,6 +239,46 @@ class SpoilerCoverWiringTests(unittest.TestCase):
         self.assertNotIn("Soul Master", result.get("reasoning_text", ""))
         self.assertIn("[hidden]", result.get("reasoning_text", ""))
 
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_the_branch_menu_is_neutralized_not_fenced(self, mock_should, mock_retrieve):
+        """D112 #7's third leak: NO-CLOSE-MATCH-HK-02, measured live on the Deck. The menu's
+        own question read "Are you currently struggling with the Soul Master's movement or
+        damage output?" in plain view -- the screen draws it as a button, so a fence would
+        show as literal backtick text rather than hide anything."""
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = _attached_result(_soul_master_card())
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Watch his attack patterns and strike when he is open.",
+            "model": "test-model",
+            "strategy_guide_branches": {
+                "question": (
+                    "Are you currently struggling with the Soul Master's movement or damage "
+                    "output?"
+                ),
+                "options": [
+                    {"id": "a", "label": "His movement is the problem"},
+                    {"id": "b", "label": "His damage is the problem"},
+                ],
+            },
+        }
+
+        result = _run(
+            plugin,
+            "How do I beat the boss past the crystal spike area?",
+            ask_mode="strategy",
+            app_name="Hollow Knight",
+        )
+
+        branches = result.get("strategy_guide_branches") or {}
+        self.assertNotIn("Soul Master", branches.get("question", ""))
+        self.assertNotIn("```", branches.get("question", ""), "never fence a button's own text")
+        for opt in branches.get("options") or []:
+            self.assertNotIn("Soul Master", opt.get("label", ""))
+            self.assertNotIn("```", opt.get("label", ""))
+
 
 if __name__ == "__main__":
     unittest.main()

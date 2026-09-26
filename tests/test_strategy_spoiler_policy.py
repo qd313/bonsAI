@@ -13,6 +13,7 @@ from backend.services.strategy_spoiler_policy import (
     fence_segment_is_closed,
     move_midline_fence_openers_to_line_start,
     name_appears_in_text,
+    neutralize_protected_names_in_branch_menu,
     partial_fence_tail_match,
     protected_spoiler_names,
     spoiler_cover_required,
@@ -158,6 +159,64 @@ class PartialFenceTailMatchTests(unittest.TestCase):
 
     def test_a_backtick_not_at_a_line_start_does_not_match(self):
         self.assertIsNone(partial_fence_tail_match("some prose with a ` mid-line"))
+
+
+class NeutralizeProtectedNamesInBranchMenuTests(unittest.TestCase):
+    """D112 #7's third leak: the branch menu is drawn as buttons, never fenced, so a protected
+    name inside it needs substitution instead. Measured live on the Deck
+    (NO-CLOSE-MATCH-HK-02): the menu's own question read "Are you currently struggling with
+    the Soul Master's movement or damage output?" in plain view, on a question that never
+    named him. Screenshot: docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png.
+    """
+
+    def test_the_real_captured_question_line_is_neutralized(self):
+        branches = {
+            "question": (
+                "Are you currently struggling with the Soul Master's movement or damage "
+                "output?"
+            ),
+            "options": [
+                {"id": "a", "label": "Movement is the problem"},
+                {"id": "b", "label": "Damage is the problem"},
+            ],
+        }
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertNotIn("Soul Master", out["question"])
+        self.assertEqual(
+            out["question"],
+            "Are you currently struggling with the boss's movement or damage output?",
+        )
+        # A single article, not a doubled one ("the this boss's").
+        self.assertNotIn("the this boss", out["question"])
+
+    def test_an_option_label_naming_the_boss_is_neutralized(self):
+        branches = {
+            "question": "Where are you stuck?",
+            "options": [
+                {"id": "a", "label": "Fighting Soul Master now"},
+                {"id": "b", "label": "Somewhere else entirely"},
+            ],
+        }
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertEqual(out["options"][0]["label"], "Fighting this boss now")
+        self.assertEqual(out["options"][1]["label"], "Somewhere else entirely")
+
+    def test_no_article_reads_naturally_too(self):
+        branches = {"question": "Are you struggling with Soul Master directly?", "options": []}
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertEqual(out["question"], "Are you struggling with this boss directly?")
+
+    def test_a_menu_naming_nothing_protected_is_untouched(self):
+        branches = {"question": "Where are you stuck?", "options": [{"id": "a", "label": "Early on"}]}
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertEqual(out, branches)
+
+    def test_no_protected_names_returns_the_same_object(self):
+        branches = {"question": "Fighting Soul Master?", "options": []}
+        self.assertIs(neutralize_protected_names_in_branch_menu(branches, []), branches)
+
+    def test_no_branches_passes_through(self):
+        self.assertIsNone(neutralize_protected_names_in_branch_menu(None, ["Soul Master"]))
 
 
 if __name__ == "__main__":

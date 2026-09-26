@@ -228,7 +228,10 @@ command, written in the report.
 
 The measuring tests re-taken on everything that landed, the report at the end of this plan, the roadmap and
 status report brought up to date, the maintainer's page updated, settings and chats put back on the Deck and
-read off disk to prove it, the locks released.
+read off disk to prove it, the locks released. **Remove this session's repo copies only with
+`python scripts/worktree.py prune`, never plain `git worktree remove --force`:** each copy's packages folder is a
+link into the shared checkout, and on 2026-09-26 a plain forced remove followed the link and deleted part of the
+shared packages (plan 68, repaired the same night).
 
 ## 6. Rules for this session
 

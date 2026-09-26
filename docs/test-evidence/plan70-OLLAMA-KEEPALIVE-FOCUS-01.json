@@ -1,0 +1,23 @@
+{
+  "row": "OLLAMA-KEEPALIVE-FOCUS-01 - Keep models loaded slider, ring against the dot",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T10:01:29-04:00",
+  "setup": "Ollama tab, ring moved Up once from 'Manage AI models…' onto the 'Keep models loaded' slider (Unload delay: 240m, dot at the right end). Monitor live: Quick Access page 855x766 CSS at devicePixelRatio 1.28; screenshot 1920x1080.",
+  "pressed": "UP once (from Manage AI models…). Nothing else.",
+  "seen": {
+    "page_boxes_css_px": {
+      "focused_element (the ring's box, div.Panel.Focusable.gpfocus inside .bonsai-ollama-keepalive-slider)": "x 300.22 y 403.43 w 41.99 h 28.10 -> vertical centre 417.48",
+      "dot (its child, border 1.56px solid rgb(156,231,255), radius 999px)": "x 310.66 y 410.41 w 21.12 h 21.12 -> vertical centre 420.97",
+      "difference": "3.49 css px (dot lower)"
+    },
+    "screenshot_px": {
+      "ring (grey rectangle)": "rows 563-606, columns 1855-1916 -> vertical centre 584.5, horizontal centre 1885.5",
+      "dot (blue circle)": "rows 576-602, columns 1872-1898 -> vertical centre 589.0, horizontal centre 1885.0",
+      "vertical_difference": "4.5 screen px (dot below the ring's middle)",
+      "horizontal_difference": "0.5 screen px"
+    },
+    "also": "the ring's right side reaches x 1916, about 17 px past the slider card's right edge (about 1899) and 4 px from the screen edge"
+  },
+  "screenshot": "plan70-OLLAMA-KEEPALIVE-FOCUS-01.png (crop x5: plan70-OLLAMA-KEEPALIVE-FOCUS-01-crop.png)",
+  "verdict": "FAIL - the ring is not centred on the dot vertically: 3.5 css px / 4.5 screen px apart, where the pass line is under 1 px."
+}

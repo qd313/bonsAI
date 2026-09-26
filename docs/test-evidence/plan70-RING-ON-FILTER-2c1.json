@@ -1,0 +1,34 @@
+{
+  "row": "2c.1 ring-on-a-filter bug - measured walk for the fix (no row id; roadmap Bugs entry)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:49-10:00 -04:00",
+  "setup": "Monitor live (Big Picture window 1500x844 CSS at 1.28; the AI models screen is a dialog in the Big Picture page). Ollama tab. No game. Filters at start: '2 on: Also try open-weight models, Essentials only' - never changed during the walk (read after every panel close).",
+  "how_read": "After each open, before any other press: the focused element (gpfocus) text/tag/role/classes/box, the Filters button's aria-expanded, and whether an 'Open source only' licence row is visible.",
+  "table": [
+    {"try": 1,  "opened_by": "A on Browse models…", "previous_close": "(first open after deploy)", "filters_open": false, "focused": "Advanced › button (bonsai-models-hub-advanced-link) box 961,255 70x21"},
+    {"try": 2,  "opened_by": "A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 3,  "opened_by": "A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 4,  "opened_by": "A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 5,  "opened_by": "A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 6,  "opened_by": "A on Browse models…", "previous_close": "Done", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 7,  "opened_by": "A on Browse models…", "previous_close": "Done", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 8,  "opened_by": "A on Browse models…", "previous_close": "Done", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 9,  "opened_by": "A on Browse models…", "previous_close": "B with the Filters panel open (ring on the Filters button) - B closed the whole screen", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 10, "opened_by": "A on Browse models…", "previous_close": "B with the Filters panel open (ring on the Filters button) - B closed the whole screen", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 11, "opened_by": "A on Browse models…", "previous_close": "panel open, ring moved onto 'Open source only', B (folded the panel only), B (closed the screen)", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 12, "opened_by": "plugin reload, plugin reopened (2nd try), A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box; watched 8 s at 0.2 s steps: the ring never moved"},
+    {"try": 13, "opened_by": "plugin reload, plugin reopened (4th try), A on Browse models…", "previous_close": "B", "filters_open": false, "focused": "Advanced ›, same box"},
+    {"try": 14, "opened_by": "A on Manage AI models… (Ollama tab, Models & routing)", "previous_close": "B (Browse screen)", "filters_open": true, "focused": "'Open source only (recommended)' licence row (button.bonsai-pullmodels-filterpanel-row, aria-pressed false) box 463,279 568x25", "screenshot": "plan70-RING-ON-FILTER-manage-open1.png"},
+    {"try": 15, "opened_by": "A on Manage AI models…", "previous_close": "B (folded the panel), B (closed the screen)", "filters_open": true, "focused": "'Open source only (recommended)', same box"},
+    {"try": 16, "opened_by": "A on Manage AI models…", "previous_close": "B, B", "filters_open": true, "focused": "'Open source only (recommended)', same box"}
+  ],
+  "which_sequence_reproduces": "A on 'Manage AI models…' reproduces it every time (3 of 3): the screen opens with the Filters panel open and the ring on 'Open source only (recommended)', one A away from changing the licence filter. 'Browse models…' never did (0 of 13), whatever way the screen was last closed (B, Done, B with the panel open) and after two plugin reloads. Both buttons open the same 'AI models' dialog.",
+  "other_observations": [
+    "The header differs by route: Browse showed 'Installed 2 · 4.3 GB · Live catalog · Offline sizes'; Manage showed 'Installed 2 · 4.0 GB · Live catalog · Live sizes'.",
+    "B does two different things with the panel open: ring on the Filters button -> B closes the whole screen; ring inside the panel -> B folds only the panel and puts the ring back on the Filters button.",
+    "Walking Up out of the open panel folds it shut by itself (screenshot plan70-HUB-EDGE-01-panel-folded-after-up.png).",
+    "A on the Filters button (Browse route): the ring stayed on the Filters button for 6 s (read every 0.1 s). One sweep's first recorded stop was 'Open source only' right after opening the panel; that sweep also reported one press retried because the port was busy, so a Down probably landed before its first read. Recorded, not counted as the bug."
+  ],
+  "filters_changed": "none (still '2 on: Also try open-weight models, Essentials only' after every close)",
+  "verdict": "MEASURED (no pass/fail row). Reproduces 3 of 3 through 'Manage AI models…'; never through 'Browse models…'."
+}

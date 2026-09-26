@@ -1,0 +1,15 @@
+{
+  "row": "OLLAMA-FOCUS-01 - Ollama tab open, no prior Test",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:33:41-04:00",
+  "setup": "Straight after the L2 deploy (loader restarted) and the first plugin open; no Test connection press since the deploy. Live screen = monitor (1500x844 CSS at 1.28, about 1920x1080). No game running.",
+  "pressed": "RB once from the Main tab (question box) -> Ollama tab. Nothing else.",
+  "seen": {
+    "primary_button_text": "Update AI & models (button aria-label 'Update AI engine and installed models'), box x64 y373 w268 h36 (CSS px)",
+    "status_line_under_test": "Connected · Ollama v0.34.1 · 2 models (filled by the quiet check, no press)",
+    "setup_summary": "Local Ollama setup  Installed: 2",
+    "ring_after_tab_switch": "on the 'Run AI on this Deck' toggle row"
+  },
+  "screenshot": "plan70-OLLAMA-FOCUS-01.png",
+  "verdict": "PASS"
+}

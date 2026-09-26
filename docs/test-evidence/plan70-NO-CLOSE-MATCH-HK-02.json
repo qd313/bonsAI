@@ -1,0 +1,43 @@
+{
+  "row": "NO-CLOSE-MATCH-HK-02 (plan 70 flow L2, L1.6) - the 'no close match' line after helper B's wiring (e4c24bdd)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:34-09:40 -04:00",
+  "setup": "Monitor live (1500x844 CSS at 1.28). No game running. Strategy mode. AI characters OFF (turned off through Settings for this block). Knowledge base on. One new chat per question.",
+  "pressed": "chat row LB to [+], A (new chat); question put in with deck_send_ask.py (VERIFIED, whole text each time); D-pad to Ask, A; after finish, D-pad Up to Show details, A",
+  "tries": [
+    {
+      "question": "in hollow knight what is the best way to beat the boss beyond the crystal spikes",
+      "seconds_to_finish": 27.5,
+      "show_details_notes": ["Hollow Knight — Watcher Knights", "Hollow Knight — Starting out in Hollow Knight", "Hollow Knight — False Knight"],
+      "note_matches_the_boss": "no (none of the listed notes is the boss meant; the model asked which boss)",
+      "no_close_match_line": "absent",
+      "counts_for_the_row": "no - the row's condition (a matching note is listed) did not arise"
+    },
+    {
+      "question": "in hollow knight how do I beat the spell casting boss at the top of the sanctum in the city of tears",
+      "seconds_to_finish": 33.3,
+      "show_details_notes": ["Hollow Knight — Starting out in Hollow Knight", "Hollow Knight — Soul Master", "Hollow Knight — Soul, Focus and spells"],
+      "note_matches_the_boss": "yes - Soul Master, listed second",
+      "answer": "two spoiler covers plus plain tactics (teleports, orbs, approach from below); ends with the branch menu",
+      "no_close_match_line": "absent",
+      "counts_for_the_row": "yes - PASS for this half"
+    },
+    {
+      "question": "in black mesa how do I tame a horse (wrong-subject control)",
+      "seconds_to_finish": 29.9,
+      "show_details_notes": ["Black Mesa — Starting out in Black Mesa", "Black Mesa — The opening tram ride and where it leads", "Black Mesa — Houndeye"],
+      "answer_saved_text": "I don't have specific information on taming horses in Black Mesa documented in my current knowledge base. [spoiler fence: The game mechanics are generally focused on navigating the facility, using tools like the crowbar, and dealing with alien enemies like the Houndeye.] If you are looking for general progression advice, we can focus on how to navigate the initial areas or handle specific enemy encounters.",
+      "no_close_match_line": "ABSENT - not on screen and not in the saved chat file (checked inside the spoiler cover too). The model said it in its own words instead.",
+      "expected": "the line still appears",
+      "counts_for_the_row": "FAIL for this half"
+    }
+  ],
+  "side_observations": [
+    "Try 2: the branch menu question under the answer reads 'Are you currently struggling with the Soul Master's movement or damage output?' in plain view (computed visibility visible, opacity 1, not inside any spoiler element), though the question never named the boss. Screenshot plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png. Looks like a third way the name escapes the spoiler net (the menu line), beside the two known ones.",
+    "Black Mesa try: the model wrapped harmless general mechanics in a spoiler cover.",
+    "Black Mesa try: Show details 'Spoiler risk: med' (title profile protect_progression)."
+  ],
+  "chats_made": ["in hollow knight what is the best way to beat the boss beyond the crystal spikes (ff238171)", "in hollow knight how do I beat the spell casting boss at the top of the sanctum in the city of tears (73cf2a8f)", "in black mesa how do I tame a horse (dbe544bf)"],
+  "screenshot": "plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png",
+  "verdict": "FAIL - the matching half passes (Soul Master note listed, no line), but the wrong-subject control no longer shows the line at all, where the runbook expects it to still appear."
+}

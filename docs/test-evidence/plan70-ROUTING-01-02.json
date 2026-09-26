@@ -1,0 +1,25 @@
+{
+  "row": "ROUTING-01 (try-order picker opens without a prior Test) and ROUTING-02 (reorder and persist)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T10:02-10:05 -04:00",
+  "setup": "Ollama tab after two plugin reloads; Test connection never pressed since the deploy. Monitor live (1500x844 CSS at 1.28). Old setting (from settings-before-L2.json): text_model_routing_order [] (empty = defaults); vision_model_routing_order ['gemma4:e2b-it-qat'] (not touched).",
+  "pressed": [
+    "A on 'Set text model try order…'",
+    "Right (gemma4 Up -> gemma4 Down), A (move gemma4 down one step)",
+    "Down (Reset to defaults), Down (Done), A",
+    "ssh read of the settings file",
+    "A on 'Set text model try order…' again (reopen), read the rows",
+    "Down x2 to Reset to defaults, A; Down to Done, A (put back)"
+  ],
+  "seen": {
+    "routing_01_opened_rows": ["gemma4:e2b-it-qat", "nomic-embed-text:latest (Tier blocked · Size unknown — may be too large)"],
+    "routing_01_first_ring": "Move gemma4:e2b-it-qat up",
+    "after_one_step": "rows nomic-embed-text, gemma4; the ring followed gemma4 to its new row (on its Down button)",
+    "saved_after_done": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"],
+    "reopen_rows": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"],
+    "after_reset_to_defaults_and_done": ["gemma4:e2b-it-qat", "nomic-embed-text:latest"],
+    "note": "'Reset to defaults' + Done saves an explicit two-model list, not the empty list the setting held before. The screen cannot store an empty list, so the old value is not restored exactly through the screen (the try order it gives is the same, gemma4 first)."
+  },
+  "screenshot": "plan70-ROUTING-01.png (picker as first opened)",
+  "verdict": "ROUTING-01 PASS (opens and lists the installed models with no prior Test). ROUTING-02 PASS (new order saved and shown on reopen). Put-back: order restored to gemma4 first; the saved value differs from the old one (explicit list instead of empty) - see the end-of-block settings note."
+}

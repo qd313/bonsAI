@@ -1,0 +1,27 @@
+{
+  "row": "L2.0 deploy the tip (plan 70 flow L2)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:32:43-04:00",
+  "setup": "Deck lock bonsai-50 (flow L2 + 2c); keep-awake already held from the earlier block (systemd-inhibit 'sleep 28800', DPS-HOLD-AWAKE bonsai-50, expires about 21:05 UTC); live screen = monitor (Big Picture window 1500x844 CSS px at devicePixelRatio 1.28 = about 1920x1080; Quick Access page 855x766). No game running. Settings copy saved to the scratch folder as settings-before-L2.json.",
+  "commits_present": {
+    "helperB_wiring": "e4c24bdd 'Knowledge base: wire the note-text fix into the actual reply' - present",
+    "helperK_followup_default_on": "e1bf3324 'Turn on the fix for a follow-up naming the wrong boss' - present",
+    "helperM_keepalive": "409de9f6 'Keep the note-search model loaded as long as the answer model' - present",
+    "helperM_spoiler_band": "804bd004 'Stop troubleshooting questions from always showing Spoiler risk: med' - present",
+    "helperM_named_entity": "f14de761 'Stop a Starting out note from being picked as the named boss' - present",
+    "note": "all five touch only Python back-end files (py_modules/backend/services), so dist/index.js and main.py are unchanged from 83a6ae2e; the Python modules folder is the fingerprint that proves this deploy"
+  },
+  "pressed": "plugin_build (ok), deck_deploy (remote, loader ready after 267 ms), deck_openPlugin once (opened on the FIRST try this time, confirmed by .bonsai-scope)",
+  "seen": {
+    "pc_dist_index_js_sha256": "f724d7ca209226b6edd0a1fe1bf336412fe9b035aa6b0485729ed5bbe0bc8840",
+    "deck_dist_index_js_sha256": "f724d7ca209226b6edd0a1fe1bf336412fe9b035aa6b0485729ed5bbe0bc8840",
+    "pc_main_py_sha256": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "deck_main_py_sha256": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "pc_py_modules_all_py_concat_sha256": "2af0042d6d5da2934fccc3f2c917f30a35bc21b8c538599322c68840dee245da",
+    "deck_py_modules_all_py_concat_sha256": "2af0042d6d5da2934fccc3f2c917f30a35bc21b8c538599322c68840dee245da",
+    "spot_check": "Deck copy of ollama_embed_service.py has the keep_alive parameter (lines 131-147); strategy_entity_extraction.py has _STARTING_OUT_NAME_PREFIX (line 132)",
+    "plugin_log_after_deploy": "new log file '2026-09-26 09.32.38.log', one line: 'bonsAI plugin loaded!'; no errors",
+    "panel_on_open": "Main tab, last chat shows the bonsai:vac-check turn (reply 'No Steam Web API key saved.'); ring on the question box"
+  },
+  "verdict": "PASS (deploy matches the PC on all three fingerprints; log clean)"
+}

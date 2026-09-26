@@ -1,0 +1,26 @@
+{
+  "row": "L1.8 (plan 70 flow L2) - helper M's three fixes: note-search model keep-alive (409de9f6), troubleshooting spoiler band (804bd004), 'Starting out' never the named entity (f14de761)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:47-09:53 and 13:05-13:10 -04:00",
+  "setup": "Monitor live (1500x844 CSS at 1.28). No game. Strategy mode. AI characters off. New chat per question. Keep-alive setting 240m (unchanged).",
+  "keep_alive": {
+    "pressed": "last question (Hornet follow-up) finished about 09:47; no questions after it until 13:05 (2c walks only)",
+    "api_ps_0947_23": "gemma4:e2b-it-qat expires 13:47:19, size_vram 2247066909; nomic-embed-text:latest expires 13:46:47, size_vram 488825159",
+    "api_ps_0953_23": "both still loaded, same expiries (the note-search model last used 09:46:47, so 6 min 36 s idle; the old 5-minute default would have dropped it at 09:51:47)",
+    "verdict": "PASS"
+  },
+  "spoiler_band": {
+    "try_1": {"question": "my deck fan gets very loud while sitting idle on the home screen, how do I fix that", "tip_attached": "Source: shared troubleshooting tips (compat_tips)", "show_details": "Spoiler risk: med (Title profile unknown, Named entity: deck, KB covers asked entity)"},
+    "try_2": {"question": "why is my game crashing a few minutes after I start it on my deck", "tip_attached": "Source: shared troubleshooting tips; notes block 'Crash (+1 more) · From the shared Deck tips'", "show_details": "Spoiler risk: low (Title profile unknown)"},
+    "why_they_differ": "the fix only skips the mode bump when the question matches the plugin's troubleshooting word list (crash, Proton, stutter, black screen ...); 'fan loud while idle' does not match, though it also got a troubleshooting tip attached",
+    "verdict": "UNCLEAR - PASS for crash wording (low), still 'med' for a hardware troubleshooting question the word list does not cover"
+  },
+  "named_entity": {
+    "question": "in hollow knight how should I prepare for the fight against the hollow knight at the end",
+    "seconds": 39.3,
+    "notes_attached": ["Starting out in Hollow Knight", "Watcher Knights", "False Knight"],
+    "show_details_named_entity": "False Knight (chat subject also 'False Knight')",
+    "verdict": "PASS on the row's wording (it is not 'Starting out in Hollow Knight'), but it names a different wrong boss: the question is about the final Hollow Knight fight, which has no note"
+  },
+  "chats_made": ["my deck fan gets very loud ... (9e46eb02)", "why is my game crashing ... (f76290e2)", "in hollow knight how should I prepare ... (b1af1015)"]
+}

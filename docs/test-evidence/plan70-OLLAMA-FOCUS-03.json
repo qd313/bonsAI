@@ -1,0 +1,10 @@
+{
+  "row": "OLLAMA-FOCUS-03 - Up from Test connection",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:48-09:49 -04:00",
+  "setup": "Ollama tab, Install options submenu closed, monitor live (1500x844 CSS at 1.28), no game.",
+  "pressed": "With the ring on Test connection, Up (inside the OLLAMA-FOCUS-02 walk, done twice: the recorded run and the saved-check replay)",
+  "seen": "both times the ring moved Test connection -> 'Install model bundles' (the Install options… button), visible 100%",
+  "not_covered": "the variant with an Install-options submenu row open was not tried",
+  "verdict": "PASS"
+}

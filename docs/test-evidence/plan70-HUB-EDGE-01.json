@@ -1,0 +1,22 @@
+{
+  "row": "HUB-EDGE-01 (rewritten for today's screen) - AI models screen D-pad walk, Filters closed and open",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:50-09:55 -04:00",
+  "setup": "AI models screen opened with Browse models…; monitor live (1500x844 CSS at 1.28). No game.",
+  "pressed": "deck_sweep, directions only (Down until the ring stops, then Up until it stops). Raw: runs/plan70-HUB-EDGE-01-filters-closed.json, runs/plan70-HUB-EDGE-01-filters-open.json",
+  "filters_closed": {
+    "down_stops": ["Advanced ›", "Refresh model catalog", "Filters, 2 on", "Use gemma4:e2b-it-qat for Ask (star)", "Select qwen3.5:4b to pull", "Select qwen2.5vl:3b to pull", "nomic-embed-text row (cannot be used for Ask)", "Done"],
+    "up_stops": ["nomic-embed-text row", "qwen2.5vl:3b", "qwen3.5:4b", "gemma4 star", "Filters", "Refresh", "Advanced ›"],
+    "reaches_done": true, "comes_back_to_top": true, "stops_not_visible": 0, "presses_leaving_ring_on_nothing": 0,
+    "not_on_the_vertical_path": "'Type a name' chip (right of Filters), the red X 'Remove from Deck' buttons (right end of the gemma4 and nomic rows) and Cancel (right of Done) are reached with Left/Right, not Up/Down - not walked (the runbook forbids pressing near Remove)"
+  },
+  "filters_open": {
+    "down_stops": ["Open source only (recommended)", "Also try open-weight models", "Speed", "Strategy", "Expert", "Vision", "Installed only", "Essentials only", "Recently added", "Close filters"],
+    "down_leg_end": "stalled on 'Close filters' (2 more Down presses did not move the ring). The model rows and Done are NOT reached, though Done is visible on screen below the panel (screenshot plan70-RING-ON-FILTER-manage-open1.png shows Done at the bottom with the panel open).",
+    "up_stops": ["Recently added", "Essentials only", "Installed only", "Vision", "Expert", "Strategy", "Speed", "Also try open-weight models", "Open source only", "Filters", "Refresh", "Advanced ›"],
+    "not_reached_by_up_down": "'Any installed model' licence row (third licence choice) - not a stop in either direction; not walked with Left/Right",
+    "stops_not_visible": 0,
+    "side_effect": "walking Up out of the panel folded it shut by itself"
+  },
+  "verdict": "FAIL - with the Filters panel open, walking Down stops at 'Close filters' and never reaches Done (or the model list), and 'Any installed model' is not a stop. With the panel closed the walk passes: every stop visible, reaches Done and back."
+}

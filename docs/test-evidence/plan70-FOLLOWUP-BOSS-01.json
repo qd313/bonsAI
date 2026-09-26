@@ -1,0 +1,42 @@
+{
+  "row": "FOLLOWUP-BOSS-01 (plan 70 flow L2, L1.7) - follow-up after helper K's default-on commit (e1bf3324)",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:41-09:47 -04:00",
+  "setup": "Monitor live (1500x844 CSS at 1.28). No game running. Strategy mode. AI characters OFF. One new chat per try; first question then follow-up in the same chat.",
+  "pressed": "chat row LB to [+], A; question via deck_send_ask.py (VERIFIED, whole text); Down to Ask, A; wait; follow-up via deck_send_ask.py (VERIFIED); one Down to Ask, A",
+  "tries": [
+    {
+      "chat": "50b1f818", "first": "in hades how do I beat megaera", "first_seconds": 31.1,
+      "followup": "what about her second phase", "followup_seconds": 29.7,
+      "followup_answer_start": "When you move into the second phase, the focus usually shifts from just punishing the initial dash patterns ... timing her recovery windows ...",
+      "asks_which_boss": false, "names_a_boss_in_words": "no - only 'her'", "wrong_boss_named": false,
+      "notes_block_under_followup": "Megaera · From bonsAI's own note"
+    },
+    {
+      "chat": "76578302", "first": "in hades what is the trick to beating megaera", "first_seconds": 24.2,
+      "followup": "and how about her second phase", "followup_seconds": 30.9,
+      "followup_answer_start": "When moving into a second phase, the core principle remains the same: focus on pattern recognition and exploiting the openings she presents ...",
+      "asks_which_boss": false, "names_a_boss_in_words": "no - only 'her'/'she'", "wrong_boss_named": false,
+      "notes_block_under_followup": "Megaera (+1 more) · From bonsAI's own note"
+    },
+    {
+      "chat": "e884df66", "first": "in hades any tips for the megaera fight", "first_seconds": 23.0,
+      "followup": "what changes in her second phase", "followup_seconds": 30.9,
+      "followup_answer_start": "[spoiler cover: The second phase of Megaera usually shifts the focus ...] You need to keep an eye on how she transitions ... Mirror of Night ... Death Defiance",
+      "asks_which_boss": false, "names_a_boss_in_words": "yes - 'Megaera', but inside a spoiler cover (the user had named her)", "wrong_boss_named": false
+    },
+    {
+      "chat": "9e30421f", "first": "in hollow knight how do I beat hornet in greenpath", "first_seconds": 12.7,
+      "followup": "is there a second fight with her", "followup_seconds": 29.8,
+      "followup_answer": "Based on the information available, the guide only details the fight for the dash at the Lake of Unn end of Greenpath. There is no mention of a second encounter with Hornet in that specific area.",
+      "asks_which_boss": false, "names_a_boss_in_words": "yes - Hornet", "wrong_boss_named": false,
+      "note": "factually thin: the game does have a second Hornet fight (Kingdom's Edge); the reply only says the notes do not mention one"
+    }
+  ],
+  "chat_file_asked_entity": "first answer of each chat carries asked_entity Megaera / Hornet in Greenpath; every follow-up turn has asked_entity empty",
+  "side_observations": [
+    "Hollow Knight first answer opens with 'Strategy guide mode active. I will keep the coaching spoiler-minimized.' - an instruction line spoken aloud to the player",
+    "Hades try 3: the boss the user named is put inside a spoiler cover in the follow-up"
+  ],
+  "verdict": "UNCLEAR - no follow-up asked which boss and none named a wrong boss (the bug is gone in 4 of 4). But the row says the follow-up 'names the right boss': 2 of 4 do (Hades try 3 inside a cover, Hollow Knight), 2 of 4 only say 'her'. PASS if staying on the right boss is enough; the owner decides."
+}

@@ -1,0 +1,16 @@
+{
+  "row": "OLLAMA-FOCUS-02 - Run AI on this Deck, vertical walk",
+  "build_commit": "7a5991d3",
+  "deck_time": "2026-09-26T09:48-09:49 -04:00",
+  "setup": "Ollama tab, Ollama reachable, no game, monitor live (1500x844 CSS at 1.28). Ring started on the 'Run AI on this Deck' switch.",
+  "pressed": "Down x8 then Up x8, one at a time, focus read after each (deck_runSequence run 'plan70-OLLAMA-FOCUS-02', raw file runs/plan70-OLLAMA-FOCUS-02.json)",
+  "seen": {
+    "down_stops_in_order": ["Run AI on this Deck (switch)", "Start the AI with the Deck (switch)", "Update AI & models", "Browse models…", "Install options…", "Test connection", "Use local knowledge base (switch)", "Update knowledge base", "Reply style: Balanced"],
+    "up_stops_in_order": ["Update knowledge base", "Use local knowledge base", "Test connection", "Install options…", "Browse models…", "Update AI & models", "Start the AI with the Deck", "Run AI on this Deck"],
+    "skips": "none",
+    "stops_not_visible": 0,
+    "difference_from_row": "one extra stop the row does not list: the 'Start the AI with the Deck' switch between the first switch and Update AI & models (a control added after the row was written)"
+  },
+  "saved_check": "checks/plan70-OLLAMA-FOCUS-02.json (12 presses, visible required; replayed once cleanly when saved)",
+  "verdict": "PASS (every listed stop in order both ways, nothing skipped, all visible; plus one newer switch)"
+}

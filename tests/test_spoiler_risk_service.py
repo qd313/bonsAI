@@ -109,6 +109,50 @@ class SpoilerRiskServiceTests(unittest.TestCase):
             compute_heuristic_spoiler_risk_score(boss_signals),
         )
 
+    def test_troubleshooting_with_no_game_scores_low_not_med(self):
+        """SPOILER-RISK-CHIP-01: every reply showed "Spoiler risk: med" tonight, including a
+        troubleshooting question asked with no game running. With no game and no notes there
+        was no real signal behind that "med" at all -- the Ask mode's flat bump alone put it
+        there. A troubleshooting question is not about game content, so it must not inherit
+        that bump."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="speed",
+            app_id="",
+            question="My game keeps crashing after I resume from sleep, black screen on the Deck",
+            game_genres="",
+            kb_text="",
+        )
+        self.assertTrue(signals["is_troubleshooting"])
+        band = compute_spoiler_risk_band(signals)
+        self.assertEqual(band, "low")
+
+    def test_low_story_game_still_scores_low(self):
+        """A game the profile table already knows has little story to spoil stays low, same
+        as before this fix -- the troubleshooting change must not touch this path."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="strategy",
+            app_id="2321470",
+            question="How do I beat the Glyphid Dreadnought?",
+            game_genres="Action Roguelike",
+            title_profile="low_narrative",
+        )
+        self.assertFalse(signals["is_troubleshooting"])
+        self.assertEqual(compute_spoiler_risk_band(signals), "low")
+
+    def test_boss_note_on_a_story_game_scores_high(self):
+        """A real signal -- a boss card attached for a story-protective title -- must still
+        drive the band up to high; the troubleshooting change only touches the no-signal case."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="strategy",
+            app_id="1145360",
+            question="How do I beat the final boss?",
+            game_genres="Adventure, Story Rich",
+            kb_text="\n[Hades / boss: Hades]\nWeak point is the dash-strike window.",
+            title_profile="protect_progression",
+        )
+        self.assertFalse(signals["is_troubleshooting"])
+        self.assertEqual(compute_spoiler_risk_band(signals), "high")
+
     def test_extract_kb_section_types(self):
         kb = "\n[Zelda / boss: Ganon]\nTips\n\n[Zelda / area: Temple]\nGo east."
         self.assertEqual(extract_kb_section_types_from_text(kb), ["boss", "area"])

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 259,
+  "edgeCount": 260,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -191,6 +191,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/ask_topic_instructions.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/background_request_state.py",
       "count": 2
     },
@@ -284,10 +288,6 @@
     },
     {
       "path": "py_modules/backend/services/ask_local_commands.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/ask_topic_instructions.py",
       "count": 1
     },
     {
@@ -608,7 +608,8 @@
         "py_modules/backend/constants.py"
       ],
       "importedBy": [
-        "py_modules/backend/services/ollama_prompts.py"
+        "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/spoiler_risk_service.py"
       ]
     },
     "py_modules/backend/services/async_background_job.py": {
@@ -1318,6 +1319,7 @@
     },
     "py_modules/backend/services/spoiler_risk_service.py": {
       "imports": [
+        "py_modules/backend/services/ask_topic_instructions.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/spoiler_title_profiles.py"
       ],

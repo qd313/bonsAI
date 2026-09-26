@@ -34,6 +34,7 @@ from backend.services.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_text_covers_asked_entity,
 )
+from backend.services.ask_topic_instructions import question_matches_troubleshooting_log_context
 
 SpoilerRiskBand = Literal["low", "med", "high"]
 
@@ -117,6 +118,10 @@ def build_spoiler_risk_signals(
         "kb_entity_match": kb_match,
         "kb_section_types": extract_kb_section_types_from_text(kb_text),
         "title_profile": profile,
+        # A troubleshooting question (crashes, Proton, stutter, ...) is not about game content
+        # at all, so it must not inherit the Ask mode's spoiler bump below -- see the comment
+        # on that bump in compute_heuristic_spoiler_risk_score.
+        "is_troubleshooting": question_matches_troubleshooting_log_context(question),
     }
 
 
@@ -141,7 +146,16 @@ def compute_heuristic_spoiler_risk_score(signals: dict[str, Any]) -> float:
     score = 35.0
 
     mode = str(signals.get("ask_mode") or "speed").strip().lower()
-    if mode == "strategy":
+    if signals.get("is_troubleshooting"):
+        # A troubleshooting question ("my game keeps crashing", "black screen after sleep")
+        # is not asking about game content at all. Before this, it inherited the same +8/+15/+25
+        # bump every other question gets purely from its Ask mode, so a troubleshooting
+        # question with no game running and no notes attached -- nothing left to raise or
+        # lower the score -- landed on a flat 43 every time: always "med", never "low", with
+        # zero signal actually behind it. Real signals (a resolved title's profile, an
+        # attached note's kind) still apply below and can still pull the score back up.
+        score -= 10.0
+    elif mode == "strategy":
         score += 25.0
     elif mode == "expert":
         score += 15.0

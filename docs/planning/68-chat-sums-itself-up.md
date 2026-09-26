@@ -403,11 +403,10 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
   `composeThinkingBlurb.ts`, a client-side file that was deleted a while back when Python became the
   only writer of that line — is fixed now, its own commit (`47ae1fd8`).**
 - **The "still preparing" branch of the waiting-line builder can never fire**, because nothing passes it
-  the elapsed seconds. Step 4 is the natural place to either use it or remove it. **Checked 2026-09-25:
-  this is still true. Step 4's commits (`794917c5`, `7ec03479`) added the new "summing up" phase but did
-  not touch this branch — nothing calls the waiting-line builder for the `building_context` phase with a
-  non-zero elapsed time, so the branch still cannot fire. Left as a decision for whoever picks it up:
-  wire it up, or remove it.**
+  the elapsed seconds. Step 4 is the natural place to either use it or remove it. **Removed 2026-09-25 in
+  step 4's timer commit (`e7d9801a`): the `building_context` branch that returned a bare "Still
+  preparing…" is gone. The "Still preparing …" wording that remains in the file is an ordinary line in
+  one of the waiting-line phrase pools, which does show.**
 - **The old stand-alone Session box's D-pad target is still called from five places and always finds
   nothing**, since the box itself was removed on 2026-09-20. Harmless today; step 5 tidies it where it
   touches the same code. **Checked 2026-09-25: still true.** The five calls are still there

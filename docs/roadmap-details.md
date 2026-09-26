@@ -333,6 +333,21 @@ question used to make the chat re-sum itself far too often (fixed, `f008470c`), 
 hidden block's markers written twice could leak that hidden text into memory (fixed, `6843f8e1`, cause
 still unknown).
 
+**Second Deck pass 2026-09-26:** SUMUP-02's re-run, SUMUP-11, the free-play sweep and the focus-graph walk
+all pass. The focus-graph walk found one D-pad slip, fixed the same night (`23ec6949`): the last turn row's
+Down used to jump over its own chips to "Save chat to Desktop" outside the tab.
+
+**Third Deck pass 2026-09-26 — all remaining Deck checks now done.** The `23ec6949` fix passed as its own
+row, **SUMUP-13**: on a 14-turn chat, Down from the last Session row landed on the chip row, fully visible.
+**SUMUP-10 passed:** the waiting line counted up, then the answer arrived with the note under it, and the
+card's "too long to read in one go" footer showed correctly — tested by making a chat three times longer by
+hand and restoring it afterwards, since no real chat on the Deck was long enough. **SUMUP-07 now passes on
+both halves:** with no game running, a vague follow-up question asked which game instead of guessing, with
+no summary line and a greyed Session button. Every row plan 68 needed is now closed, passed or unit-only by
+design (see [archive/testing-closed-2026.md](archive/testing-closed-2026.md)). Still open, each as its own roadmap entry: the
+summary card sitting behind the dock, the summary's own wording, the doubled-marker cause, a few small
+D-pad slips, the "N earlier" flood, and a fresher card title.
+
 **Every call is in, 2026-09-20.** In the maintainer's own order:
 
 1. **The summary goes into the next question**, so the model answers with the chat behind it — not just a panel a person

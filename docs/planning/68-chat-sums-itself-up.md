@@ -487,6 +487,16 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
   `docs/test-evidence/plan68-SUMUP-02-p2.json`, `plan68-SUMUP-11-p2.json`, `plan68-FREE-PLAY-p2.json`,
   `plan68-FOCUS-SWEEP-p2.json` (+ `.png`), `plan68-CHIPS-RESET-p2.json` (+ `.png`),
   `checks/plan68-session-tab-B-closes.json`.
+- **2026-09-26** — The third Deck pass, 01:54–02:04, external monitor, build `fe059aaa` (installed files
+  matched, no refusals, chats and settings restored and compared identical). Three results close the plan's
+  last owed Deck checks: **SUMUP-13 passes** (the `23ec6949` chips fix) — Down from the last Session row
+  landed on the chip row, fully visible, and a saved 14-step walk passed too. **SUMUP-10 passes** — the
+  waiting line counted up, then the answer arrived with the note under it, and the card's "too long to read
+  in one go" footer showed correctly. **SUMUP-07 passes on its remaining half** — with no game running, a
+  vague follow-up asked which game instead of guessing, with no summary line. **All Deck checks plan 68
+  needed are done; plan 68 is finished.** Open follow-ups, each its own roadmap entry: the summary card
+  sitting behind the dock, the summary's own wording, the doubled-marker cause, a few small D-pad slips, the
+  "N earlier" flood, and a fresher card title.
 
 ---
 

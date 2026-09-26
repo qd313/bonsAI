@@ -43,7 +43,7 @@ All notable changes to this project are documented in this file.
 - **In the Session tab, Down from the last row of turns now reaches that turn's chips instead of jumping
   out of the tab:** on a long chat, pressing Down from the very last turn row used to skip past its own
   chips and land on "Save chat to Desktop" outside the tab, even though the chips were right there on
-  screen. `SessionContextStrip.tsx`. On-Deck check owed.
+  screen. `SessionContextStrip.tsx`. (Proved on the Deck 2026-09-26.)
 - **A stray question like "what time is it" could still get a troubleshooting tip:** the tip floor's
   own cut-off sat exactly on the score of the worst junk phrase it was built to catch, instead of just
   above it, so that one phrase could still slip a tip in. The cut-off now sits just above it, and no

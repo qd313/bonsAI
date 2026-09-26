@@ -128,10 +128,13 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 - [x] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
       the button at the top. **PASS (Deck) 2026-09-26:** Up from the dock landed on the last turn row's
       chips, visible. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
-- [ ] Down from the Session tab's last turn row reaches that row's own chips, not something outside the tab
+- [x] Down from the Session tab's last turn row reaches that row's own chips, not something outside the tab
       (**SUMUP-13**). **FAILED (Deck) 2026-09-26:** it jumped over the chips to "Save chat to Desktop"
-      outside the tab, with the chips on screen right there. **Fixed the same night (`23ec6949`); Deck
-      check owed.** Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
+      outside the tab, with the chips on screen right there. **Fixed the same night (`23ec6949`).**
+      **PASS (Deck) 2026-09-26, third pass:** on a 14-turn chat, Down from the last row landed on the chip
+      row, fully visible (282-600, dock top 600, touching, not overlapping). A saved 14-step walk also
+      passed. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`,
+      `docs/test-evidence/plan68-SUMUP-13-p3.json` (+ `.png`), saved check `checks/plan68-SUMUP-13.json`.
 - [x] On a turn row's own chips, Down steps through every chip and then stays on the last one, rather than
       moving elsewhere. **PASS (Deck) 2026-09-26:** Down stepped through all 7 chips and then stayed put.
       Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.

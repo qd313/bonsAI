@@ -1,0 +1,41 @@
+{
+  "row": "SUMUP-13",
+  "title": "Down from the last Session row reaches the chips (fix 23ec6949)",
+  "session": "bonsai-03, plan 68, runbook part 3",
+  "build_commit": "fe059aaa (deployed by the session; not redeployed by the driver)",
+  "deck_time": "2026-09-26 01:55-01:57 EDT",
+  "screen": "external monitor: Big Picture 1500x844; Quick Access page 855x766",
+  "setup": {
+    "chat": "in hollow knight where do I find the mothwing cloak (5512a79d, 14 turns, '6 earlier' pill + newest answer shown)",
+    "game_running": "none",
+    "session_tab": "already the active details tab when the panel opened (remembered); button greyed with 'The whole chat still fits, so there's nothing to sum up yet.'; 7 turn rows; no card",
+    "dock_top_px": 600
+  },
+  "pressed": [
+    "Down x7 from nothing to Show details (walkTo)",
+    "A on Show details -> Hide details",
+    "Down -> KB notes block 'Charms and notches' (sits between Hide details and the tabs row)",
+    "Down -> tabs row 'This answer / Session 7'",
+    "Right -> no move (Session already active)",
+    "Down x8 -> button, then rows 1..7",
+    "Down (step 4) -> chip ladder",
+    "Down (step 5) -> stayed on chip ladder",
+    "Up -> DID NOT MOVE (stayed on chip ladder)",
+    "Up again (runbook route once more) -> last row",
+    "B -> panel closed, ring on Show details"
+  ],
+  "seen": {
+    "last_row": {"text": "in hollow knight how many charm notches can I ge", "top": 484, "bottom": 513, "dock_top": 600, "visible": "100%"},
+    "step4_landing": {"element": ".bonsai-chip-ladder", "text_start": "Chip 1 of 7 / Keyword + meaning", "rect_top": 282, "rect_bottom": 600, "dock_top": 600, "overlap_with_dock_px": 0, "active_chip": "Keyword + meaning", "active_chip_top": 303, "active_chip_bottom": 328, "visible": "100% (9 of 9 sample points)"},
+    "step5_down": "stayed on .bonsai-chip-ladder (no move)",
+    "step5_up_first_press": "no move; ring stayed on the chip ladder; active chip unchanged",
+    "step5_up_second_press": "moved to last row 'in hollow knight how many charm notches can I ge'",
+    "b": "closed panel, ring on 'Show details' (visible)",
+    "replay": "saved check plan68-SUMUP-13 re-ran the full walk from Show details: 14 of 14 steps passed, and there Up from the chips reached the last row on the FIRST press (no extra Down before it)"
+  },
+  "screenshot": "plan68-SUMUP-13-p3.png (ring on the chip ladder at step 4)",
+  "raw_runs": ["runs/plan68-SUMUP-13-p3-walk-to-last-row.json", "runs/plan68-SUMUP-13-p3-step4.json", "runs/plan68-SUMUP-13-p3-step5.json", "runs/plan68-SUMUP-13-p3-step5-up-try2.json", "checks/plan68-SUMUP-13.json"],
+  "verdict": "PASS",
+  "verdict_reason": "Down from the last row lands on the chip ladder under the Session rows, fully visible (bottom 600 = dock top 600, no overlap). Down again stays. Note: after that extra Down that did not move, the first Up was swallowed; a second Up reached the last row. Without the extra Down, Up works first time (replay).",
+  "side_note_for_owner": "One Up press lost after a Down that could not move, on the chip ladder. Small, but a person would feel one dead press."
+}

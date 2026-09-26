@@ -1,0 +1,549 @@
+{
+  "formatVersion": 2,
+  "name": "plan68-SUMUP-13",
+  "tool": "deck_runSequence",
+  "savedAt": "2026-09-26T05:57:10.499Z",
+  "buildHash": "sha256:c9dadbb9339511a5b8b8d72bc28392894405f89e6c7633c5dcaaf97853db3fd2",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "bin/README.md",
+    "defaults/defaults.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/ask_payload.py",
+    "py_modules/backend/services/ask_topic_instructions.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_memory_service.py",
+    "py_modules/backend/services/chat_memory_step.py",
+    "py_modules/backend/services/chat_slot_rpc.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/chat_sum_up_job.py",
+    "py_modules/backend/services/chat_summary_service.py",
+    "py_modules/backend/services/chat_turn_recorder.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_rpc.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_attached_notes.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/knowledge_base_cards.py",
+    "py_modules/backend/services/knowledge_base_chips.py",
+    "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_search.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/media_desktop_rpc.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_extras.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_chat_stream.py",
+    "py_modules/backend/services/ollama_connection_test.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_local_setup_rpc.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_preload_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_window_fit.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/prompt_budget_service.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/rag_corpus_local_install.py",
+    "py_modules/backend/services/rag_corpus_rpc.py",
+    "py_modules/backend/services/rag_corpus_status.py",
+    "py_modules/backend/services/reply_followup_blocks.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/reply_style_blocks.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/spy_confession_service.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_rpc.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_entity_extraction.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/strategy_spoiler_policy.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_audio_capture_service.py",
+    "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_model_download_service.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_rpc.py",
+    "py_modules/backend/services/voice_transcript_decode_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/services/voice_whisper_runtime.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "steps": [
+      {
+        "press": "A",
+        "label": "A on Show details"
+      },
+      {
+        "press": "DOWN",
+        "label": "KB notes"
+      },
+      {
+        "press": "DOWN",
+        "label": "tabs row",
+        "expect": ".bonsai-details-tabs-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "button"
+      },
+      {
+        "press": "DOWN",
+        "label": "row1",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row2",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row3",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row4",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row5",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row6",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "row7 last",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "DOWN",
+        "label": "chips",
+        "expect": ".bonsai-chip-ladder",
+        "requireVisible": true
+      },
+      {
+        "press": "UP",
+        "label": "back to last row",
+        "expect": ".bonsai-details-session-row"
+      },
+      {
+        "press": "B",
+        "label": "close",
+        "expect": ".bonsai-chat-details-divider"
+      }
+    ],
+    "stopOnFailure": true,
+    "mustReachText": [],
+    "requireVisible": false,
+    "acquireFocus": false
+  },
+  "expected": {
+    "ok": true,
+    "ranSteps": 14,
+    "totalSteps": 14,
+    "passed": 14,
+    "failed": 0,
+    "visited": [
+      "<DIV> \"Show details\"",
+      "<DIV> \"Hide details\"",
+      "<DIV> \"Charms and notches · From the Hollow Knight wiki, show\"",
+      "<DIV> \"This answerSession · 7\"",
+      "<DIV> \"Sum up this chat\"",
+      "<DIV> \"in hollow knight where do I find the mothwing cl\"",
+      "<DIV> \"in hollow knight how do I get past the mantis lo\"",
+      "<DIV> \"in hollow knight what is the best way to beat th\"",
+      "<DIV> \"in hollow knight where is a good place to farm g\"",
+      "<DIV> \"[Strategy follow-up] I'm at: Starting out in Dir\"",
+      "<DIV> \"in hollow knight which charms should I buy first\"",
+      "<DIV> \"in hollow knight how many charm notches can I ge\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)"
+    ],
+    "cycle": {
+      "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+      "seenAt": [
+        0,
+        1,
+        14
+      ],
+      "loop": [
+        "<DIV> \"Show details\"",
+        "<DIV> \"Hide details\"",
+        "<DIV> \"Charms and notches · From the Hollow Knight wiki, show\"",
+        "<DIV> \"This answerSession · 7\"",
+        "<DIV> \"Sum up this chat\"",
+        "<DIV> \"in hollow knight where do I find the mothwing cl\"",
+        "<DIV> \"in hollow knight how do I get past the mantis lo\"",
+        "<DIV> \"in hollow knight what is the best way to beat th\"",
+        "<DIV> \"in hollow knight where is a good place to farm g\"",
+        "<DIV> \"[Strategy follow-up] I'm at: Starting out in Dir\"",
+        "<DIV> \"in hollow knight which charms should I buy first\"",
+        "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "<DIV> \"Show details\""
+      ],
+      "escaped": false,
+      "stepsAfterLoop": 0
+    },
+    "neverReached": [],
+    "stopsFocusedButNotVisible": 0,
+    "notVisibleStops": [],
+    "steps": [
+      {
+        "index": 1,
+        "label": "A on Show details",
+        "press": [
+          "A"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": false,
+        "matched": null,
+        "from": "<DIV> \"Show details\"",
+        "to": "<DIV> \"Hide details\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 2,
+        "label": "KB notes",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Hide details\"",
+        "to": "<DIV> \"Charms and notches · From the Hollow Knight wiki, show\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 3,
+        "label": "tabs row",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-tabs-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Charms and notches · From the Hollow Knight wiki, show\"",
+        "to": "<DIV> \"This answerSession · 7\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 4,
+        "label": "button",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"This answerSession · 7\"",
+        "to": "<DIV> \"Sum up this chat\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 5,
+        "label": "row1",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Sum up this chat\"",
+        "to": "<DIV> \"in hollow knight where do I find the mothwing cl\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 6,
+        "label": "row2",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight where do I find the mothwing cl\"",
+        "to": "<DIV> \"in hollow knight how do I get past the mantis lo\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 7,
+        "label": "row3",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight how do I get past the mantis lo\"",
+        "to": "<DIV> \"in hollow knight what is the best way to beat th\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 8,
+        "label": "row4",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight what is the best way to beat th\"",
+        "to": "<DIV> \"in hollow knight where is a good place to farm g\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 9,
+        "label": "row5",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight where is a good place to farm g\"",
+        "to": "<DIV> \"[Strategy follow-up] I'm at: Starting out in Dir\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 10,
+        "label": "row6",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"[Strategy follow-up] I'm at: Starting out in Dir\"",
+        "to": "<DIV> \"in hollow knight which charms should I buy first\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(8)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 11,
+        "label": "row7 last",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight which charms should I buy first\"",
+        "to": "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(9)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 12,
+        "label": "chips",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(10)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 13,
+        "label": "back to last row",
+        "press": [
+          "UP"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(9)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 14,
+        "label": "close",
+        "press": [
+          "B"
+        ],
+        "expect": ".bonsai-chat-details-divider",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"in hollow knight how many charm notches can I ge\"",
+        "to": "<DIV> \"Show details\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      }
+    ]
+  }
+}

@@ -599,12 +599,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
   box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **VERIFY, built 2026-09-25 (plan 68).**
-  **Second Deck pass 2026-09-26:** SUMUP-02's re-run, SUMUP-11, the free-play sweep and the focus-graph walk
-  all pass, with one focus step fixed (`23ec6949`). Still owed: the Deck check of that fix, SUMUP-07's
-  no-game half, and SUMUP-10 (needs a longer chat). [Plan 68](planning/68-chat-sums-itself-up.md) ·
-  [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
-
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
   (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
   instead of the old outline. Rows 02 to 06 and 08 passed by measurement; row 09 failed and is filed as its
@@ -1009,6 +1003,11 @@ this document under its size limit.
 
 The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
 review, again to keep this document under its size limit.
+
+**Closed 2026-09-26 (plan 68, third Deck pass):**
+
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **DONE, built 2026-09-25, all Deck
+  checks passed 2026-09-26 (plan 68).** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 

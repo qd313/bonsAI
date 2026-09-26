@@ -1,0 +1,45 @@
+{
+  "row": "SUMUP-10",
+  "title": "The 'too long to read in one go' note",
+  "session": "bonsai-03, plan 68, runbook part 3",
+  "build_commit": "fe059aaa (deployed by the session; not redeployed by the driver)",
+  "deck_time": "2026-09-26 01:57-02:02 EDT",
+  "screen": "external monitor: Big Picture 1500x844; Quick Access page 855x766; dock top 600",
+  "setup": {
+    "backup": "~/p68-chat-slots-backup-p3-0154",
+    "build_long_chat": "printed 'd2aa6252-0814-4f46-92fe-dd158d073fe2: 144 -> 432 turns' (as expected); file read back 432 turns, no summary",
+    "reload": "deck_reloadPlugin ok; first openPlugin failed (expected after reload), second opened",
+    "chat_on_screen_after_switch": "wheatley fight, pill '99 earlier', 1 turn shown, dots +.......* (RB x7 from the mothwing chat on the chat row)",
+    "game_running": "none",
+    "mode": "Strategy"
+  },
+  "pressed": [
+    "send-question script: 'any tips for the zombies in ravenholm' -> VERIFIED, whole text",
+    "walkTo Down to the Ask button (13 presses, never A on the box), A on Ask",
+    "walkTo Up to the note (4 presses), Up into answer, Down to note, A on note",
+    "Down from the button onto the card",
+    "B"
+  ],
+  "seen": {
+    "waiting_line": ["Summing up the chat so far · 0 s", "Summing up the chat so far · 14 s (12 s later)"],
+    "answer_done_after_s": "about 54 s after Ask",
+    "answer_first_words": "Right, listen up, mate! You wanna know how to deal with those zombies in Ravenholm? (Ali G voice, on subject)",
+    "note_under_answer": "The chat summed itself up before this answer. Press to read what it kept. (rect top 401, bottom 433, dock top 600, visible)",
+    "log_summary_line": "[2026-09-26 01:59:39,119][INFO]: chat_summary: written in 32.0 s — covered 131 turns, 50 unread, ~9086 input tokens, model gemma4:e2b-it-qat",
+    "log_budget_line": "[2026-09-26 01:59:39,166][INFO]: ask_ollama: budget room=16384 rules+cards=1933 (attached 0 chars) memory=1641 thinking=512 answer=1600 (~8.0s to the first word) carried=18 turns, left behind=0, hidden notes removed=0",
+    "a_on_note": "Show details opened on the Session tab ('Session · 98' active), ring on the button 'Sum up again' (drawn off: class bonsai-sumup-btn--off, aria-disabled=true)",
+    "card_header": "What the AI remembers | 66 turns · 1 min ago",
+    "card_footer_exact": "Too long to read in one go: this covers the newest 66 turns. The oldest 25 are not in it.",
+    "card_full_text": "What the AI remembers\n66 turns · 1 min ago\nGame topics include Half-Life 2 walkthroughs, Hollow Knight boss strategies (Broken Vessel), Hades boss fights (Megaera, Bone Hydra), Black Mesa traversal (electrified water), survival game tips (desert/winter), and general game advice.\nPlayer is stuck on general advice for new games, specific boss tactics, and resource management.\nPlayer asked for advice on leveling up quickly, first boss strategies, and general exploration tips.\nPlayer asked for specific walkthroughs/tips for Half-Life 2 chapters and Hollow Knight bosses.\nPlayer asked for tips on surviving specific scenarios like antlion swarms and navigating hazards.\nPlayer asked for advice on managing resources (food/water) in survival games.\nPlayer asked about game mechanics like the Gravity Gun and weapon usage in Half-Life 2.\nPlayer asked about game technical issues (crashing, stuttering) and save file syncing.\nPlayer asked for information on specific game elements like the shotgun and crowbar in Half-Life 2.\nPlayer asked about Steam ban checks for a specific account.\nToo long to read in one go: this covers the newest 66 turns. The oldest 25 are not in it.",
+    "card_rect_after_down": {"top": 9, "bottom": 513, "dock_top": 600, "note": "card taller than the visible area; after the Down its footer (470-504) is on screen, its header (18-32) and first line are above the panel's content top (~88) and hidden. Rig: 67% visible."},
+    "stored_summary_fields": {"turns_covered": 131, "oldest_turns_unread": 50, "seconds": 32.0, "hidden_notes_left_out": 2, "model": "gemma4:e2b-it-qat", "written_at": "2026-09-26T05:59:39Z"},
+    "chat_file_turns_after_ask": 200,
+    "numbers_compared": "card C=66, U=25; log C=131, U=50. The card's numbers are the log's halved (the card seems to count question+answer pairs, the log single messages). U=50 in the log is far below the runbook's expected 260-290."
+  },
+  "why_u_is_small": "The chat code keeps at most 200 turns per chat (MAX_TURNS_PER_SLOT = 200). On load, sanitize_slot keeps turns_raw[:200] -- the OLDEST 200 of the 432. On save after the new answer, it keeps turns[-200:]. So the tripled chat became the first 200 turns of the prepended copies plus the new question and answer (file now 200 turns; first turn 'what does the pickaxe do', last the ravenholm question/answer). Only ~200 turns ever reached the summary step, not 432.",
+  "screenshot": "plan68-SUMUP-10-p3.png (card footer on screen, ring on card)",
+  "raw_runs": ["runs/plan68-SUMUP-10-p3-note-to-card.json"],
+  "verdict": "UNCLEAR",
+  "verdict_reason": "The footer is the 'Too long to read in one go' form, word for word, not the 'Plus the newest N turns' form. But C and U on the card (66, 25) do not equal the log line (131, 50) -- they are exactly half -- and U is 50 in the log, not about 260-290, because the plugin cut the tripled chat to 200 turns when it loaded it. Owner to decide whether halved numbers are the intended units and whether the setup counts.",
+  "possible_bug_for_owner": "Loading a chat with more than 200 turns keeps the oldest 200 and drops the newest (load uses [:200], save uses [-200:]). In normal use a chat cannot pass 200, so only a hand-edited or old file would hit it."
+}

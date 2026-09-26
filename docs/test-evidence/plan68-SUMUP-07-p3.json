@@ -1,0 +1,35 @@
+{
+  "row": "SUMUP-07 (no-game half)",
+  "title": "A new chat carries nothing",
+  "session": "bonsai-03, plan 68, runbook part 3",
+  "build_commit": "fe059aaa (deployed by the session; not redeployed by the driver)",
+  "deck_time": "2026-09-26 02:01-02:04 EDT",
+  "screen": "external monitor: Big Picture 1500x844; Quick Access page 855x766; dock top 600",
+  "setup": {
+    "game_running": "none (footnote 'Context: no active game detected')",
+    "mode": "Strategy",
+    "chat_row_before": "wheatley fight had moved to first place after SUMUP-10's question, so [+] was one LB away (the runbook said LB until [+])",
+    "chat_removed_by_new_chat": "351b2838 'what is a good way to practice parrying in action games' (the oldest); the restore puts it back",
+    "new_chat_id": "f1c2a851"
+  },
+  "pressed": [
+    "walkTo Up to the chat row (7 presses)",
+    "LB -> chat row title '[+]'",
+    "A on [+] -> 'New chat', 0 turns",
+    "send-question script: 'what about her second phase' -> VERIFIED, whole text",
+    "walkTo Down to Ask (3 presses), A on Ask",
+    "walkTo Up to Show details (2 presses), A, Down -> tabs row ('This answer' active), Right -> Session, Down -> button"
+  ],
+  "seen": {
+    "summing_up_line": "none (polled every 250 ms for 15 s after Ask; never appeared)",
+    "answer_text": "Alright, listen up. I ain't got no game running, no screenshots, so I don't know what \"her second phase\" you're talking about. You gotta tell me what game we're talkin' about first, see? But if we gotta guess, we gotta pick a lane. We gotta figure out where you are in this whole mess.",
+    "answer_names_a_game": false,
+    "log_budget_line": "[2026-09-26 02:02:32,329][INFO]: ask_ollama: budget room=16384 rules+cards=1562 (attached 0 chars) memory=0 thinking=512 answer=1600 (~2.7s to the first word) carried=0 turns, left behind=0, hidden notes removed=0",
+    "log_chat_summary_line_for_this_question": "none",
+    "session_tab": {"tabs": "This answer | *Session · 1", "button": "Sum up this chat", "button_class": "bonsai-sumup-btn bonsai-sumup-btn--off", "aria_disabled": "true", "reason_line": "The whole chat still fits, so there's nothing to sum up yet.", "card_present": false, "button_top": 501, "button_bottom": 534, "dock_top": 600, "visible": "100%"},
+    "while_streaming_oddity": "About 15 s after Ask, before the answer finished, the transcript area showed planning-style text ('*   Start with the status line. *   Adopt the Ali G voice. *   Address the ambiguity (I don't know the game). ... *Self-Correction: The instructions demand I infer the game ...*') where the answer goes. About 13 s later it was replaced by the real answer and a 'Show reasoning · 24 s' fold."
+  },
+  "screenshot": "plan68-SUMUP-07-p3.png (Session tab, ring on the greyed button, no card)",
+  "verdict": "PASS",
+  "verdict_reason": "No 'Summing up' line; the answer asks which game and names none; the log shows carried=0 turns, memory=0 and no summary line; the Session tab shows the greyed button with the 'still fits' line and no card."
+}

@@ -779,6 +779,7 @@ async def run_game_ai_request(
             asked_entity=strategy_spoiler_asked_entity,
             kb_entity_match=strategy_spoiler_kb_entity_match,
             title_profile=strategy_title_profile,
+            kb_domain=kb_domain,
         )
 
         # Plan 70 helper K, finish 3: spliced in only now, after every spoiler-safety read of

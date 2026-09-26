@@ -1,5 +1,6 @@
 import unittest
 
+from backend.services.ask_topic_instructions import question_matches_troubleshooting_log_context
 from backend.services.spoiler_risk_service import (
     build_spoiler_risk_signals,
     compute_heuristic_spoiler_risk_score,
@@ -125,6 +126,68 @@ class SpoilerRiskServiceTests(unittest.TestCase):
         self.assertTrue(signals["is_troubleshooting"])
         band = compute_spoiler_risk_band(signals)
         self.assertEqual(band, "low")
+
+    def test_a_troubleshooting_tip_routes_low_even_off_the_word_list(self):
+        """Follow-up measured on the Deck (docs/test-evidence/plan70-L1-8-HELPER-M.json): "my
+        deck fan gets very loud while sitting idle on the home screen" got a troubleshooting tip
+        attached (this turn's own KB routing sent it to the shared tip sheet, kb_domain
+        "compat") but names none of the word list's crash/Proton/stutter/black-screen words, so
+        it still read "med". The turn's own routing decision is a stronger signal than the word
+        list and must be read too."""
+        question = "my deck fan gets very loud while sitting idle on the home screen"
+        self.assertFalse(
+            question_matches_troubleshooting_log_context(question),
+            "fixture question must not already match the word list",
+        )
+        signals = build_spoiler_risk_signals(
+            ask_mode="speed",
+            app_id="",
+            question=question,
+            game_genres="",
+            kb_text="",
+            kb_domain="compat",
+        )
+        self.assertTrue(signals["is_troubleshooting"])
+        self.assertEqual(compute_spoiler_risk_band(signals), "low")
+
+    def test_a_crash_question_still_scores_low_the_old_way_too(self):
+        """The second evidence question from the same Deck pass -- this one already matched the
+        word list before this fix, and must still resolve exactly the same way now that
+        kb_domain is read as well (an "or", not a replacement)."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="speed",
+            app_id="",
+            question="why is my game crashing a few minutes after I start it on my deck",
+            game_genres="",
+            kb_text="",
+            kb_domain="compat",
+        )
+        self.assertTrue(signals["is_troubleshooting"])
+        self.assertEqual(compute_spoiler_risk_band(signals), "low")
+
+    def test_kb_domain_alone_is_not_required_the_word_list_still_works(self):
+        """Backward compatible: a troubleshooting question is still recognised with no
+        kb_domain at all (e.g. no corpus installed, so nothing routed anywhere)."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="speed",
+            app_id="",
+            question="My game keeps crashing after I resume from sleep, black screen on the Deck",
+            game_genres="",
+            kb_text="",
+        )
+        self.assertTrue(signals["is_troubleshooting"])
+
+    def test_a_strategy_kb_domain_is_not_read_as_troubleshooting(self):
+        """kb_domain "strategy" (a game's own notes) must not itself flip a question into the
+        troubleshooting bucket -- only "compat" (the shared tip sheet) does."""
+        signals = build_spoiler_risk_signals(
+            ask_mode="strategy",
+            app_id="1145360",
+            question="Where should I go next?",
+            game_genres="Adventure, Story Rich",
+            kb_domain="strategy",
+        )
+        self.assertFalse(signals["is_troubleshooting"])
 
     def test_low_story_game_still_scores_low(self):
         """A game the profile table already knows has little story to spoil stays low, same

@@ -763,5 +763,33 @@ class NamedEntityGameNameStrippingWiringTests(unittest.TestCase):
         self.assertEqual(named, "")
 
 
+class SpoilerBandReadsKbDomainWiringTests(unittest.TestCase):
+    """Plan 70 helper M follow-up (docs/test-evidence/plan70-L1-8-HELPER-M.json): "my deck fan
+    gets very loud while sitting idle on the home screen" got a troubleshooting tip attached
+    (this turn routed to the shared tip sheet, kb_domain "compat") but names none of the
+    troubleshooting word list's words, so Show details still read "Spoiler risk: med". Proven
+    end to end here: through run_game_ai_request, reading the same "Spoiler risk" chip label a
+    person actually sees in Show details.
+    """
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_compat_tip_turn_reads_low_even_off_the_word_list(self, mock_should, mock_retrieve):
+        mock_should.return_value = (True, "compat")
+        mock_retrieve.return_value = _attached_result(_tip_card(), domain="compat")
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        result = _run(
+            plugin,
+            question="my deck fan gets very loud while sitting idle on the home screen",
+            ask_mode="speed",
+        )
+
+        chips = result["transparency"]["context_chips"]
+        spoiler_chip = next(c for c in chips if c["id"] == "spoiler_risk")
+        self.assertEqual(spoiler_chip["label"], "Spoiler risk: low")
+
+
 if __name__ == "__main__":
     unittest.main()

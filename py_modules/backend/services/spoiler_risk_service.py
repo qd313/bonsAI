@@ -99,12 +99,18 @@ def build_spoiler_risk_signals(
     kb_entity_match: bool = False,
     title_profile: str = "",
     app_name: str = "",
+    kb_domain: str = "",
 ) -> dict[str, Any]:
     """Collect inputs for band scoring before or after the model reply.
 
     `app_name` matters only when no `title_profile` is supplied: profile resolution falls back
     to the title name when the AppID is absent or unlisted, so omitting it silently downgrades
     a name-matched title to `unknown`.
+
+    `kb_domain` is this turn's own knowledge-base routing decision (``"compat"`` for the shared
+    troubleshooting tip sheet, ``"strategy"`` for a game's notes, ``""`` when nothing was
+    retrieved) -- see the `is_troubleshooting` comment below for why it is read here too, not
+    only the word list.
     """
     entity = (asked_entity or "").strip() or extract_strategy_asked_entity(question)
     kb_match = bool(kb_entity_match) or kb_text_covers_asked_entity(kb_text, entity)
@@ -120,8 +126,19 @@ def build_spoiler_risk_signals(
         "title_profile": profile,
         # A troubleshooting question (crashes, Proton, stutter, ...) is not about game content
         # at all, so it must not inherit the Ask mode's spoiler bump below -- see the comment
-        # on that bump in compute_heuristic_spoiler_risk_score.
-        "is_troubleshooting": question_matches_troubleshooting_log_context(question),
+        # on that bump in compute_heuristic_spoiler_risk_score. The word list alone missed a
+        # real one: "my deck fan gets very loud while sitting idle" got a troubleshooting tip
+        # attached (kb_domain == "compat") but names no listed crash/Proton/stutter keyword, so
+        # it still read "med" on the Deck (docs/test-evidence/plan70-L1-8-HELPER-M.json). This
+        # turn's own KB routing already decided the question is a troubleshooting one whenever
+        # it routed to the shared tip sheet, whatever words it used to get there, so that
+        # decision counts here too -- it is a stronger, wording-independent signal, not a
+        # replacement for the word list (a troubleshooting question with nothing installed to
+        # match, e.g. no corpus, still has only the words to go on).
+        "is_troubleshooting": (
+            question_matches_troubleshooting_log_context(question)
+            or str(kb_domain or "").strip().lower() == "compat"
+        ),
     }
 
 
@@ -256,4 +273,5 @@ def spoiler_risk_signals_from_snapshot(snapshot: dict[str, Any]) -> dict[str, An
         app_name=str(snapshot.get("app_name") or ""),
         question=str(snapshot.get("text_after_sanitizer") or snapshot.get("raw_question") or ""),
         kb_text="",
+        kb_domain=str(snapshot.get("kb_domain") or ""),
     )

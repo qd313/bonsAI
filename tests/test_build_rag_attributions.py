@@ -114,6 +114,14 @@ class BuildRagAttributionsTests(unittest.TestCase):
         )
         self.assertEqual(build_rag_db.licence_deed_url("bonsAI-maintainer"), "")
 
+    def test_share_alike_2_5_links_its_own_deed_not_4_0(self):
+        # The Skyrim notes (plan 70) are BY-SA 2.5; before this mapping existed the generic
+        # BY-SA fallback linked them to the 4.0 deed in the published attributions.
+        self.assertEqual(
+            build_rag_db.licence_deed_url("CC-BY-SA-2.5"),
+            "https://creativecommons.org/licenses/by-sa/2.5/",
+        )
+
     def test_licence_string_includes_version(self):
         self.assertTrue(build_rag_db.licence_string_includes_version("CC-BY-SA-3.0"))
         self.assertTrue(build_rag_db.licence_string_includes_version("CC BY 4.0"))

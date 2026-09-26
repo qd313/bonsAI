@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 523,
-  "edgeCount": 1407,
+  "edgeCount": 1410,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -554,7 +554,8 @@
         "src/utils/reasoningDisplay.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/troubleshootingAskHeuristic.ts",
-        "src/utils/uiDocument.ts"
+        "src/utils/uiDocument.ts",
+        "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -3252,7 +3253,8 @@
         "src/types/backgroundAsk.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/bonsaiPhaseToast.ts",
-        "src/utils/deckyCall.ts"
+        "src/utils/deckyCall.ts",
+        "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
@@ -4954,7 +4956,8 @@
         "src/utils/contextChipsFromSnapshot.test.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/kbNoteUsedByAnswer.test.ts",
-        "src/utils/kbNoteUsedByAnswer.ts"
+        "src/utils/kbNoteUsedByAnswer.ts",
+        "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ]
     },
     "src/utils/intentPackSearch.test.ts": {
@@ -5683,9 +5686,12 @@
     },
     "src/utils/unwrapAskedEntitySpoilerFences.ts": {
       "imports": [
-        "src/data/spoilerTitleProfiles.ts"
+        "src/data/spoilerTitleProfiles.ts",
+        "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useReadAloud.ts",
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",

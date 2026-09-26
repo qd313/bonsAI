@@ -30,6 +30,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../utils/deckyCall";
 import { showPhaseToast } from "../utils/bonsaiPhaseToast";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
+import { protectedNamesFromNotes } from "../utils/unwrapAskedEntitySpoilerFences";
 import { DEFAULT_VOICE_REPLY_MODE, type VoiceReplyMode } from "../data/bonsaiSettingsSchema";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
 
@@ -326,6 +327,8 @@ export function handleAskTerminalForReadAloud(status: BackgroundRequestStatus): 
     appName: status.app_name,
     askedEntity: status.strategy_spoiler_asked_entity,
     spoilerConsentEffective: status.strategy_spoiler_consent_effective === true,
+    /* Never read a protected boss's name aloud either (D112 #7, plan 70). */
+    protectedNames: protectedNamesFromNotes(status.kb_attached_notes),
   });
 
   const shouldRead = shouldReadAloudOnCompletion({

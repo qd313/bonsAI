@@ -28,6 +28,8 @@ export type BuildAnswerCopyTextArgs = {
   /** The thing the backend worked out the question named (plan 54 gap 2). */
   askedEntity?: string | null;
   spoilerConsentEffective?: boolean;
+  /** This turn's protected names (D112 #7): a cover naming one is never opened. */
+  protectedNames?: readonly string[] | null;
 };
 
 /**
@@ -44,6 +46,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     appName = null,
     askedEntity = null,
     spoilerConsentEffective = false,
+    protectedNames = null,
   } = args;
 
   let text = stripAssistantDisplayTags(body || "");
@@ -54,6 +57,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     appName,
     askedEntity,
     spoilerConsentEffective,
+    protectedNames,
   };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 

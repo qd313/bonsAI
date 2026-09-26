@@ -114,6 +114,8 @@ export type BuildAnswerBubbleElementArgs = {
   askedEntity?: string | null;
   /** When true, unwrap every spoiler fence for this turn (explicit consent). */
   spoilerConsentEffective?: boolean;
+  /** This turn's protected names (D112 #7): a cover naming one is never opened. */
+  protectedNames?: readonly string[] | null;
   /** DRG Survivor glossary "explain further" chip — starts a new Ask turn about the tapped term. */
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
   /**
@@ -346,6 +348,7 @@ export function buildAnswerBubbleElement(
     appName = null,
     askedEntity = null,
     spoilerConsentEffective = false,
+    protectedNames = null,
     onDrgGlossaryExplainFurther,
     getAnswerCopyText,
   } = args;
@@ -358,6 +361,7 @@ export function buildAnswerBubbleElement(
     appName,
     askedEntity,
     spoilerConsentEffective,
+    protectedNames,
   };
   let displayBody = stripAssistantDisplayTags(body);
   if (spoilerUnwrapEligible) {

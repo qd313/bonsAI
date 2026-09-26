@@ -319,6 +319,32 @@ describe("handleAskTerminalForReadAloud", () => {
     expect(String(call!.args[0])).toContain("Dodge left, then strike.");
   });
 
+  // Plan 70 (D112 #7): a cover the screen would have opened by word overlap must not be read out.
+  it("never reads out a protected boss's name the question only described", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("always", true);
+    handleAskTerminalForReadAloud(
+      completedStatus({
+        request_id: 60,
+        question: "in hollow knight how do I beat the spell casting boss at the top of the sanctum",
+        response:
+          "Hit him from below.\n\n```bonsai-spoiler\nThe spell casting boss at the top of the Soul Sanctum is the Soul Master.\n```",
+        kb_attached_notes: [
+          {
+            name: "Soul Master", kind: "boss", card: "Teleports.", trust_tier: "wiki_verified",
+            source_host: "hollowknight.wiki", source_license: "", domain: "strategy",
+            game_title: "Hollow Knight", spoiler_protected: true,
+          },
+        ],
+      })
+    );
+    await Promise.resolve();
+    const call = getRpcCallLog().find((c) => c.method === "start_voice_read_aloud");
+    expect(call).toBeDefined();
+    expect(String(call!.args[0])).toContain("Hit him from below.");
+    expect(String(call!.args[0])).not.toContain("Soul Master");
+  });
+
   it("does nothing when the setting is off", async () => {
     resetReadAloudCompletionState();
     setReadAloudCompletionContext("off", true);

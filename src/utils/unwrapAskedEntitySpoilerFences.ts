@@ -7,6 +7,7 @@
  */
 
 import { titleProfileIsLowNarrative } from "../data/spoilerTitleProfiles";
+import type { KbAttachedNote } from "./inputTransparency";
 
 const SPOILER_FENCE_RE = /```bonsai-spoiler\s*\n([\s\S]*?)```/gi;
 
@@ -55,7 +56,59 @@ export type UnwrapSpoilerOpts = {
   askedEntity?: string | null;
   /** When true, unwrap every spoiler fence for this turn (explicit consent). */
   spoilerConsentEffective?: boolean;
+  /**
+   * This turn's protected names (D112 #7, plan 70): boss or enemy notes the question did not
+   * name, on a turn whose spoilers are covered -- read off the notes the back end marked
+   * (`protectedNamesFromNotes`). A cover naming one is never opened by the asked-about rules.
+   */
+  protectedNames?: readonly string[] | null;
 };
+
+/** One turn's facts every spoiler un-hide reads, in the answer builders' own field names. */
+export type TurnSpoilerFacts = {
+  askQuestion: string;
+  appId: string | null;
+  appName: string | null;
+  askedEntity: string | null;
+  spoilerConsentEffective: boolean;
+  protectedNames: string[];
+};
+
+/** The protected names of one turn, from its attached notes' own marks (see buildKbNotesBlockElement). */
+export function protectedNamesFromNotes(notes: readonly KbAttachedNote[] | null | undefined): string[] {
+  return (notes ?? []).filter((n) => n.spoiler_protected === true).map((n) => n.name);
+}
+
+function squash(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, " ");
+}
+
+/** Whether `text` names `name` as a whole word or phrase ("Soul Master", not "Soul Mastery"). */
+function namesInText(text: string, name: string): boolean {
+  const n = squash(name).trim();
+  if (!n) return false;
+  const h = squash(text);
+  let at = h.indexOf(n);
+  while (at !== -1) {
+    const before = at === 0 ? "" : h[at - 1]!;
+    const after = h[at + n.length] ?? "";
+    if (!/[a-z0-9]/.test(before) && !/[a-z0-9]/.test(after)) return true;
+    at = h.indexOf(n, at + 1);
+  }
+  return false;
+}
+
+/**
+ * The thing this turn asked about: the back end's own reading, but only when the question really
+ * contained it -- a back-end name the person never typed is exactly what the cover exists to
+ * hide (plan 70) -- otherwise the local reading of the question.
+ */
+function askedEntityFor(opts: UnwrapSpoilerOpts): string {
+  const question = opts.question || "";
+  const backend = (opts.askedEntity || "").trim();
+  if (backend && namesInText(question, backend)) return backend;
+  return extractAskedBeatEntity(question);
+}
 
 /**
  * True when a single ```bonsai-spoiler fence (opener + body, closed or still open) should
@@ -65,13 +118,14 @@ export type UnwrapSpoilerOpts = {
  * prepareStreamMarkdown, so the two never drift on what "qualifies" means.
  */
 export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerOpts): boolean {
-  const question = opts.question || "";
+  /* Never, whatever else holds: this cover names a protected thing the person did not type. */
+  if ((opts.protectedNames ?? []).some((name) => namesInText(fenceText, name))) return false;
   const appId = String(opts.appId || "").trim();
   const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   if (consent) return true;
   if (titleProfileIsLowNarrative(appId, appName)) return true;
-  const entity = (opts.askedEntity || "").trim() || extractAskedBeatEntity(question);
+  const entity = askedEntityFor(opts);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
 }
@@ -88,12 +142,11 @@ export function unwrapAskedEntitySpoilerFences(
 ): string {
   const opts: UnwrapSpoilerOpts =
     typeof questionOrOpts === "string" ? { question: questionOrOpts } : questionOrOpts;
-  const question = opts.question || "";
   const appId = String(opts.appId || "").trim();
   const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   const lowNarrativeTitle = titleProfileIsLowNarrative(appId, appName);
-  const entity = (opts.askedEntity || "").trim() || extractAskedBeatEntity(question);
+  const entity = askedEntityFor(opts);
   if (!text) return text;
   if (!consent && !lowNarrativeTitle && !entity) return text;
   return text.replace(SPOILER_FENCE_RE, (full, body: string) => {

@@ -910,6 +910,20 @@ describe("a protected boss note (the answer has no cover of its own)", () => {
     expect(block(container)?.textContent).not.toContain("Soul Master");
   });
 
+  // Risk 2: the screen's own un-hide used to open this cover by word overlap with the question.
+  it("keeps a cover shut that restates the description and names the boss", () => {
+    const covered = {
+      ...turn,
+      answer:
+        "Hit him from below.\n\n```bonsai-spoiler\nThe spell casting boss at the top of the Soul Sanctum is the Soul Master.\n```",
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(covered, { strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(container.textContent).toContain("Hit him from below.");
+    expect(container.textContent).not.toContain("Soul Master");
+  });
+
   it("names it as usual when the person has spoiler covers switched off", () => {
     const { container } = render(
       <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />

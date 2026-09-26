@@ -202,6 +202,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
+import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { useTitleOverflow } from "../hooks/useTitleOverflow";
@@ -411,33 +412,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * itself now — see useReadAloudAutoStop.ts.
    */
   const readAloud = useReadAloudAutoStop(isAsking);
-  const buildTurnReadableText = (
-    body: string,
-    askQuestion: string,
-    appId: string | null,
-    appName: string | null,
-    askedEntity: string | null,
-    spoilerConsentEffective = false
-  ) =>
-    buildAnswerReadableText({
-      body,
-      spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
-      askQuestion,
-      appId,
-      appName,
-      askedEntity,
-      spoilerConsentEffective,
-    });
   /** Read aloud props for one turn's reply-actions row: same shape at every call site. */
-  const readAloudRowProps = (
-    key: string,
-    body: string,
-    askQuestion: string,
-    appId: string | null,
-    appName: string | null,
-    askedEntity: string | null,
-    spoilerConsentEffective = false
-  ) => {
+  const readAloudRowProps = (key: string, body: string, facts: TurnSpoilerFacts) => {
     /*
      * A reading that started on its own (Voice replies set to Always or By voice) is keyed "live"
      * by the hook, because the hook cannot know which block will draw the newest answer. Measured
@@ -457,10 +433,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           readAloud.stop();
           return;
         }
-        readAloud.start(
-          key,
-          buildTurnReadableText(body, askQuestion, appId, appName, askedEntity, spoilerConsentEffective)
-        );
+        const spoilerMaskingEnabled = strategySpoilerMaskingEnabled;
+        readAloud.start(key, buildAnswerReadableText({ body, spoilerMaskingEnabled, ...facts }));
       },
     };
   };
@@ -513,6 +487,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       total: askThreadCollapsed.length,
       liveSnapshot: transparencySnapshot,
     });
+  /* What the spoiler un-hide reads for one turn; protectedNames comes off its notes' marks (D112 #7). */
+  const archivedSpoilerFacts = (turn: AskThreadCollapsedTurn, index: number): TurnSpoilerFacts => ({
+    askQuestion: turn.question, appId: turn.appId ?? null, appName: turn.appName ?? null,
+    askedEntity: turn.askedEntity ?? null, spoilerConsentEffective: turn.spoilerConsentEffective === true,
+    protectedNames: protectedNamesFromNotes(kbAttachedNotesFrom(archivedTransparencyFor(turn, index))),
+  });
 
   /* The stock waiting phrase. Unchanged behaviour; it just arrives in the same parcel now. */
   const thinkingSummary = liveThinking?.summary ?? null;
@@ -528,6 +508,16 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const liveReasoningShown = hasLiveReasoning ? liveReasoningText(liveReasoningPartial) : "";
   const liveQuestion = askThreadDisplayQuestion.trim();
   const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
+  /* The live turn's notes: the poll's while asking, then the fetched snapshot once it lands (see the notes block). */
+  const liveKbNotes = isAsking || !transparencySnapshot
+    ? liveThinking?.kbAttachedNotes ?? [] : kbAttachedNotesFrom(transparencySnapshot);
+  const liveSpoilerFacts: TurnSpoilerFacts = {
+    askQuestion: liveQuestion || lastExchange?.question || "", appId: ollamaContext?.app_id ?? null,
+    appName: ollamaContext?.app_name || lastExchange?.appName || null,
+    askedEntity: ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
+    spoilerConsentEffective: lastExchange?.spoilerConsentEffective === true,
+    protectedNames: protectedNamesFromNotes(liveKbNotes),
+  };
   const showLiveResponse =
     Boolean(liveResponseBody.trim()) &&
     !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));
@@ -821,16 +811,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     [onAskOllama]
   );
 
-  const renderAnswerBubble = (
-    body: string,
-    streaming: boolean,
-    answerKey: string,
-    askQuestion: string,
-    appId: string | null,
-    appName: string | null,
-    askedEntity: string | null,
-    spoilerConsentEffective = false
-  ) =>
+  const renderAnswerBubble = (body: string, streaming: boolean, answerKey: string, facts: TurnSpoilerFacts) =>
     buildAnswerBubbleElement({
       body,
       streaming,
@@ -838,14 +819,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       spoilerDefaultExpanded:
         answerKey === "live" &&
         strategySpoilerAutoRevealAfterConsent &&
-        spoilerConsentEffective,
+        facts.spoilerConsentEffective,
       maxWidthCss: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
       answerKey,
-      askQuestion,
-      appId,
-      appName,
-      askedEntity,
-      spoilerConsentEffective,
+      ...facts,
       onDrgGlossaryExplainFurther: onAskOllama ? onDrgGlossaryExplainFurther : undefined,
       /*
        * Copy moved into this bubble's corner (D77). Everything buildAnswerCopyText needs is already
@@ -858,15 +835,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       getAnswerCopyText:
         !streaming && body.trim()
           ? () =>
-              buildAnswerCopyText({
-                body,
-                spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
-                askQuestion,
-                appId,
-                appName,
-                askedEntity,
-                spoilerConsentEffective,
-              })
+              buildAnswerCopyText({ body, spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
     });
 
@@ -1144,16 +1113,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 ) : null}
                 {buildChatSummaryWarningElement(turn.chatSummary)}
                 {renderReasoningFold(turn.id, turn.reasoning)}
-                {renderAnswerBubble(
-                  turn.answer,
-                  false,
-                  turn.id,
-                  turn.question,
-                  turn.appId ?? null,
-                  turn.appName ?? null,
-                  turn.askedEntity ?? null,
-                  turn.spoilerConsentEffective === true
-                )}
+                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex))}
                 {buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1223,15 +1183,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     onChip: showFeedbackHere ? onReplyMicroAction : undefined,
                     askInFlight: isAsking,
                     ...(readAloudAvailableHere
-                      ? readAloudRowProps(
-                          turn.id,
-                          turn.answer,
-                          turn.question,
-                          turn.appId ?? null,
-                          turn.appName ?? null,
-                          turn.askedEntity ?? null,
-                          turn.spoilerConsentEffective === true
-                        )
+                      ? readAloudRowProps(turn.id, turn.answer, archivedSpoilerFacts(turn, turnIndex))
                       : {}),
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
                        one is attached, then the details panel's own tabs row when the panel is open,
@@ -1391,16 +1343,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               ? renderReasoningFold("live", liveTurnReasoning)
               : null}
             {expandedTurnKey === "live" && showLiveResponse
-              ? renderAnswerBubble(
-                  liveResponseBody,
-                  isStreamingPreview,
-                  "live",
-                  liveQuestion || lastExchange?.question || "",
-                  ollamaContext?.app_id ?? null,
-                  ollamaContext?.app_name || lastExchange?.appName || null,
-                  ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
-                  lastExchange?.spoilerConsentEffective === true
-                )
+              ? renderAnswerBubble(liveResponseBody, isStreamingPreview, "live", liveSpoilerFacts)
               : null}
             {expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null}
             {expandedTurnKey === "live" ? renderStrategyChecklist("live") : null}
@@ -1423,15 +1366,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   onChip: onReplyMicroAction,
                   askInFlight: isAsking,
                   ...(lastExchange?.answer?.trim()
-                    ? readAloudRowProps(
-                        "live",
-                        lastExchange.answer,
-                        liveQuestion || lastExchange?.question || "",
-                        ollamaContext?.app_id ?? null,
-                        ollamaContext?.app_name || lastExchange?.appName || null,
-                        ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
-                        lastExchange?.spoilerConsentEffective === true
-                      )
+                    ? readAloudRowProps("live", lastExchange.answer, liveSpoilerFacts)
                     : {}),
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
@@ -1456,11 +1391,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                    * snapshot once it exists (an empty list counts as landed, so a genuinely
                    * note-free turn still clears).
                    */
-                  const notes = isAsking
-                    ? liveThinking?.kbAttachedNotes ?? []
-                    : transparencySnapshot
-                    ? kbAttachedNotesFrom(transparencySnapshot)
-                    : liveThinking?.kbAttachedNotes ?? [];
+                  const notes = liveKbNotes;
                   const answerTextForFenceCheck = isAsking
                     ? liveResponseBody
                     : lastExchange?.answer ?? "";

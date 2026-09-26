@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1709,
+      "lines": 1640,
       "role": ""
     },
     {
@@ -81,13 +81,13 @@
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 926,
+      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+      "lines": 934,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 920,
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 926,
       "role": ""
     },
     {
@@ -136,14 +136,14 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 664,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 660,
       "role": "Load/save/merge settings.json"
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 660,
-      "role": ""
     },
     {
       "path": "src/components/DeveloperTab.tsx",

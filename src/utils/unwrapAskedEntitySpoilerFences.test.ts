@@ -197,3 +197,63 @@ describe("shouldUnwrapSpoilerFence", () => {
     ).toBe(true);
   });
 });
+
+/*
+ * Plan 70 (D112 #7): the screen's own un-hide could open a cover the back end made on purpose.
+ * The question only DESCRIBED the boss, the local reading of it ("spell casting boss at the top
+ * of the sanctum") shares enough words with a cover that restates the description, and the cover
+ * came off with the boss's name inside it.
+ */
+describe("a cover naming a protected boss the person never typed", () => {
+  const question = "in hollow knight how do I beat the spell casting boss at the top of the sanctum";
+  const cover = [
+    "```bonsai-spoiler",
+    "The spell casting boss at the top of the Soul Sanctum is the Soul Master.",
+    "```",
+  ].join("\n");
+
+  it("was opened by word overlap before this fix (the leak this guards)", () => {
+    expect(unwrapAskedEntitySpoilerFences(cover, { question })).not.toContain("```bonsai-spoiler");
+  });
+
+  it("stays shut once the turn's protected names are known", () => {
+    const opts = { question, protectedNames: ["Soul Master", "Soul Tyrant"] };
+    expect(unwrapAskedEntitySpoilerFences(cover, opts)).toContain("```bonsai-spoiler");
+    expect(shouldUnwrapSpoilerFence(cover, opts)).toBe(false);
+  });
+
+  it("stays shut mid-stream too, whatever case the name arrives in", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nThe spell casting boss at the top is the SOUL MASTER", {
+        question,
+        protectedNames: ["Soul Master"],
+      })
+    ).toBe(false);
+  });
+
+  it("still opens a cover that names only what the person typed", () => {
+    const named = "```bonsai-spoiler\nSoul Master teleports between attacks.\n```";
+    const out = unwrapAskedEntitySpoilerFences(named, {
+      question: "how do I beat soul master",
+      askedEntity: "Soul Master",
+      protectedNames: ["Soul Tyrant"],
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+  });
+
+  it("ignores a back-end 'asked about' name the question never contained", () => {
+    const out = unwrapAskedEntitySpoilerFences(
+      "```bonsai-spoiler\nSoul Master teleports between attacks.\n```",
+      { question: "how do I beat the mage boss", askedEntity: "Soul Master" }
+    );
+    expect(out).toContain("```bonsai-spoiler");
+  });
+
+  it("does not reopen a word that only contains the name (Soul Mastery)", () => {
+    const out = unwrapAskedEntitySpoilerFences(
+      "```bonsai-spoiler\nThe spell casting boss rewards Soul Mastery at the top of the sanctum.\n```",
+      { question, protectedNames: ["Soul Master"] }
+    );
+    expect(out).not.toContain("```bonsai-spoiler");
+  });
+});

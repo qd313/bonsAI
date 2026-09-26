@@ -36,6 +36,8 @@ export type BuildAnswerReadableTextArgs = {
   /** The thing the backend worked out the question named (plan 54 gap 2). */
   askedEntity?: string | null;
   spoilerConsentEffective?: boolean;
+  /** This turn's protected names (D112 #7): a cover naming one is never opened. */
+  protectedNames?: readonly string[] | null;
 };
 
 function isTableRowLine(line: string): boolean {
@@ -106,6 +108,7 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
     appName = null,
     askedEntity = null,
     spoilerConsentEffective = false,
+    protectedNames = null,
   } = args;
 
   let text = stripAssistantDisplayTags(body || "");
@@ -117,6 +120,7 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
     appName,
     askedEntity,
     spoilerConsentEffective,
+    protectedNames,
   };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 

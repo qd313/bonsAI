@@ -1709,6 +1709,46 @@
    "expect_fence": false,
    "expect_branches": true,
    "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-HK-03",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "question": "How do I beat the boss at the top of the Soul Sanctum in the City of Tears?",
+   "expect_card": "Soul Master",
+   "must_mention": [
+    [
+     "teleport",
+     "teleports"
+    ],
+    [
+     "orb",
+     "orbs"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "D112 #7, the spoiler safety net (plan 70 helper A): the boss is described by location, never named. The card's own text plays dead once and comes back through the roof for round two -- the reply must not name Soul Master, or say that, in plain text. Confirmed against data/kb/strategy_seed.json 2026-09-26 that this note exists (section_id 184)."
+  },
+  {
+   "id": "A-HADES-04",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "the whip-wielding fury with fast dashes in Tartarus keeps punishing me, how do I punish her recovery windows instead",
+   "expect_card": "Megaera",
+   "must_mention": [
+    [
+     "dash",
+     "recovery"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "D112 #7, the spoiler safety net (plan 70 helper A): the Fury is described by role and location, never named. Confirmed against data/kb/strategy_seed.json 2026-09-26 that this note exists (section_id 13)."
   }
  ],
  "followup_pairs": [

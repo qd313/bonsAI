@@ -336,6 +336,16 @@ All notable changes to this project are documented in this file.
   breathes normally while the model is thinking. `answerBubble.ts`, `section-6.ts`.
 
 ### Added
+- **A long chat now sums itself up instead of quietly forgetting the older part:** once a chat has grown too
+  long to carry whole, the AI writes a short summary of the older part right before answering, then answers
+  using that summary plus the newest turns, so a vague follow-up like "and what about that" still lands on
+  the same subject. A note under the answer says it happened, and pressing it opens what the AI kept.
+  *Sum up this chat*, at the top of the Session tab, does the same by hand, in place of Clear, and shows a
+  card with what the AI remembers. Each chat now remembers its own subject on its own, and a follow-up asked
+  with nothing running now searches the chat's own game instead of finding nothing to look up. Measured on
+  the Deck with a game running, a summary took 13 to 40 seconds. `chat_summary_service.py`,
+  `chat_slot_service.py`, `kb_followup_memory.py`, `SessionContextStrip.tsx`, `MainTabChatTranscript.tsx`.
+  On-Deck rows **SUMUP-01** to **SUMUP-10** owed.
 - **Knowledge base release `2026.09.18` published (372 notes across 35 games, 159 Deck tips):** ten more
   games get real notes instead of the model's memory — the five Mario Party games, Donkey Kong 64, Yoshi's
   Story, Diddy Kong Racing, Super Smash Bros. 1999 and Grand Theft Auto III: The Definitive Edition. Live in

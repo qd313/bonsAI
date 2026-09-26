@@ -235,6 +235,17 @@ describe("SessionContextTabBody -- D-pad through the top of the tab", () => {
     expect(document.activeElement).toBe(second.container.querySelector(".bonsai-sumup-btn"));
   });
 
+  it("Down from the last row lands on the chips, not past them (Deck 2026-09-26)", () => {
+    const second = { ...ARCHIVED_TURN, id: "turn-2", question: "What about the second phase" };
+    const { container } = render(
+      <SessionContextTabBody archivedTurns={[ARCHIVED_TURN, second]} sumUp={sumUpState()} />
+    );
+    const rowProps = hoisted.focusableProps.filter((p) => p.className === "bonsai-details-session-row");
+    const lastRow = rowProps[rowProps.length - 1];
+    expect((lastRow?.onMoveDown as () => boolean)()).toBe(true);
+    expect(document.activeElement).toBe(container.querySelector(".bonsai-chip-ladder"));
+  });
+
   it("the card's Up goes back to the button", () => {
     const { container } = render(<SessionContextTabBody sumUp={sumUpState({ summary: SUMMARY })} />);
     expect((latestPropsFor("bonsai-sumup-card")?.onMoveUp as () => boolean)()).toBe(true);

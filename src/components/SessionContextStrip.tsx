@@ -49,7 +49,12 @@ import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
 import { ContextChipLadder } from "./ContextChipLadder";
 import { chipsFromSnapshot } from "../utils/contextChipsFromSnapshot";
-import { isOkDeckButtonEvent, isDeckDirectionUpEvent } from "../utils/focusNavigation";
+import {
+  isOkDeckButtonEvent,
+  isDeckDirectionDownEvent,
+  isDeckDirectionUpEvent,
+} from "../utils/focusNavigation";
+import { focusRowElement } from "../utils/focusPerTurnRow";
 import { focusDeckOwner } from "../utils/liveTurnFocusGraph";
 import { getUiDocument } from "../utils/uiDocument";
 import { SessionSumUpSection, focusLastSumUpStop } from "../features/chat-sum-up/SessionSumUpSection";
@@ -163,6 +168,15 @@ export function SessionContextTabBody({
 
   /* Up off the first row goes to the summary card or the button above it, then the tabs row. */
   const upFromFirstRow = () => focusLastSumUpStop() || (onMoveUpFromTop?.() ?? false);
+  /*
+   * Down off the last row goes to the active row's chips, by the chips' own registered root, and is
+   * consumed either way. Left to Steam's own guess it jumped over the chips to "Save chat to Desktop"
+   * outside the tab, with the chips on screen right there (measured on the Deck 2026-09-26,
+   * plan68-FOCUS-SWEEP-p2: chips at 250-548, dock top 600). The chips' root is one of our own bare
+   * rows, so it is focused the same measured way the "This answer" tab's chips are
+   * (buildDetailsPanelElement.tsx, focusChipLadderRow), never by a page search.
+   */
+  const downFromLastRow = () => (sessionLadderEl ? focusRowElement(sessionLadderEl) : false) || true;
 
   return (
     <Focusable
@@ -199,7 +213,10 @@ export function SessionContextTabBody({
         onMoveUpFromButton={() => onMoveUpFromTop?.() ?? false}
         onMoveDownPastSection={() => focusDeckOwner(firstSessionRowEl)}
       />
-      {rows.map((row, index) => (
+      {rows.map((row, index) => {
+        const isFirst = index === 0;
+        const isLast = index === rows.length - 1;
+        return (
         <Focusable
           key={row.id}
           className="bonsai-details-session-row"
@@ -220,16 +237,18 @@ export function SessionContextTabBody({
             onHighlightClear?.();
             return true;
           }}
-          {...(index === 0
+          {...(isFirst || isLast
             ? ({
-                onMoveUp: upFromFirstRow,
+                ...(isFirst ? { onMoveUp: upFromFirstRow } : {}),
+                ...(isLast ? { onMoveDown: downFromLastRow } : {}),
                 onButtonDown: (evt: unknown) => {
                   if (isOkDeckButtonEvent(evt)) {
                     setActiveId(row.id);
                     onHighlightClear?.();
                     return true;
                   }
-                  if (isDeckDirectionUpEvent(evt)) return upFromFirstRow();
+                  if (isFirst && isDeckDirectionUpEvent(evt)) return upFromFirstRow();
+                  if (isLast && isDeckDirectionDownEvent(evt)) return downFromLastRow();
                   return false;
                 },
               } as Record<string, unknown>)
@@ -248,11 +267,15 @@ export function SessionContextTabBody({
         >
           {row.label}
         </Focusable>
-      ))}
+        );
+      })}
       {activeRow?.snapshot ? (
         <ContextChipLadder
           snapshot={activeRow.snapshot}
           collapsedHint={false}
+          rootRef={(el) => {
+            sessionLadderEl = el;
+          }}
           onMoveUpFromLadder={() => focusLastSessionTabRow() || upFromFirstRow()}
           /*
            * The ladder is the last thing in the tab now that Clear is gone. Down past it stays put:
@@ -277,6 +300,9 @@ export function SessionContextTabBody({
 
 /** This body's first turn row, for Down off the Sum up section — a ref, never a page search. */
 let firstSessionRowEl: HTMLElement | null = null;
+
+/** The active row's chips, for Down off the last row — the chips' own root, registered. */
+let sessionLadderEl: HTMLElement | null = null;
 
 /**
  * The last row inside THIS body specifically — see the component doc above for why an unscoped

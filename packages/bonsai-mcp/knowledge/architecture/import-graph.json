@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 513,
-  "edgeCount": 1378,
+  "edgeCount": 1379,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1091,6 +1091,7 @@
         "src/types/bonsaiUi.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/uiDocument.ts"
@@ -4802,6 +4803,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/SessionContextStrip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",

@@ -1,0 +1,14 @@
+{
+  "row": "PRELOAD-RM-01 (flow L1.4)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:24 -04:00",
+  "setup": "Last answer (gemma4:e2b-it-qat, Strategy) finished at about 09:23; no plugin reload since 09:07 (deploy). Monitor live.",
+  "pressed": "RB (swallowed once) RB to Ollama tab; D-pad down 12 to 'Manage AI models', A; the screen opened with its filter panel open: D-pad down 9 to 'Close filters', A; DOWN 1 to gemma4 row ('Use gemma4:e2b-it-qat for Ask'); RIGHT 1 to its Remove control; read; LEFT 1; DOWN 4 to Done; RIGHT to Cancel; A. Never A on a model row or Remove.",
+  "seen": {
+    "focused_control": "aria-label 'Remove from Deck', text 'X', disabled=false, aria-disabled=false, box 24x24 at x1002 y400 (CSS px), no tooltip",
+    "switch_ask_mode_text": "absent",
+    "models_after": "nomic-embed-text:latest and gemma4:e2b-it-qat both still installed (api/tags)"
+  },
+  "screenshot": "plan70-PRELOAD-RM-01.png",
+  "verdict": "PASS"
+}

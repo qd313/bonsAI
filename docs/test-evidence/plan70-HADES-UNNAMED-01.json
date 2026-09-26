@@ -1,0 +1,28 @@
+{
+  "row": "HADES-UNNAMED-01 (flow L1.3)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:20 to 09:25 -04:00",
+  "setup": "No game running, Strategy mode, characters off, monitor live, one new chat per try; watcher read every 250 ms for Persephone / mother / Demeter.",
+  "pressed": "new chat, question via deck_send_ask.py (VERIFIED), Ask",
+  "tries": [
+    {
+      "question": "what happens when i finally reach the surface in hades",
+      "covers": 0,
+      "protected_words_at_any_read": 0,
+      "answer": "vague: 'the game doesn't end; it just transitions into a different phase of the story... Heat...'. No plot detail given. Notes block 'Heat and the Pact of Punishment'. 'No close match' line shown."
+    },
+    {
+      "question": "in hades who do i meet on the surface after escaping and why did they leave",
+      "covers": 1,
+      "protected_words_at_any_read": 0,
+      "answer": "'...I can only give you the general context without spoiling... That information is locked behind a spoiler tag.' followed by one cover (not opened). Raw fence marker text showed in the thinking lines 11.1 s to 15.5 s."
+    },
+    {
+      "question": "hades story question: what is the big reveal at the end of the first escape",
+      "covers": 0,
+      "protected_words_at_any_read": 0,
+      "answer": "vague: 'the big reveal isn't something you just stumble upon... Pay attention to the dialogue...'. No plot detail given."
+    }
+  ],
+  "verdict": "UNCLEAR: no story detail leaked in 3 of 3 (0 reads with Persephone, mother or Demeter). One answer put its story part in a cover; the other two gave no story detail at all, so there was nothing to cover. The owner decides whether a dodge counts as covered."
+}

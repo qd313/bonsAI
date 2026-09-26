@@ -1,0 +1,91 @@
+{
+  "row": "SPOILER-COVER-01 (the spoiler safety net), flow L1.2",
+  "build_commit": "83a6ae2e (dist/index.js f724d7ca..., main.py e75cd9dd...)",
+  "deck_time": "2026-09-26 09:07 to 09:18 -04:00 (void try at 02:14)",
+  "setup": "No game running. Strategy mode. AI characters off. Live screen: monitor (Steam window 1500x844 CSS px at scale 1.28 = 1920x1080; screenshots 1920x1080). One new chat per question. A watcher script read the panel's text every 250 ms from before Ask until 4 s after the answer finished (raw reads kept in the session scratch folder as L1-2-*.jsonl). Covered text is not drawn at all, so a name found anywhere in the panel's text outside an opened cover means a person could read it.",
+  "library_upgrade_check": "First game question (02:14, void try): log shows 'attached 2566 chars' of notes, no error, traceback or migration line in the plugin log. Library opened and was used without error.",
+  "pressed": "per try: chat row, LB to [+], A; question put in with deck_send_ask.py (VERIFIED); D-pad down to Ask, A. Nothing pressed while answers streamed.",
+  "tries": [
+    {
+      "id": "void",
+      "question": "in hollow knight how do I beat the boss past the crystal spike area",
+      "note": "asked 02:14 just before a usage-limit stop; the session owner ruled it void. Recorded only: the answer asked which boss (Watcher Knights / False Knight), never named Soul Master, 0 covers."
+    },
+    {
+      "id": "HK-A",
+      "question": "in hollow knight how do I beat the boss in the soul sanctum",
+      "answer_named_boss": true,
+      "covered_when_finished": true,
+      "answer_body_uncovered_at_any_read": false,
+      "thinking_line_uncovered": "yes: 'Reviewing the strategy for the Soul Master boss in the Soul Sanctum' shown plain from 13.1 s to 17.6 s (23 reads)",
+      "first_name_read_ms": 13064,
+      "covers_final": 1,
+      "hidden_sentence": "The Soul Master fight in the Soul Sanctum involves specific timing with his teleporting attacks.",
+      "screenshot": "plan70-SPOILER-COVER-01-covered.png"
+    },
+    {
+      "id": "HK-B",
+      "question": "in hollow knight how do i beat the mage boss in the city of tears",
+      "answer_named_boss": false,
+      "covers_final": 0,
+      "thinking_line_uncovered": "yes: 'I have info on Soul Master and Watcher Knights' plain from 9.7 s to 14.1 s (18 reads)",
+      "notes_block": "Starting out in Hollow Knight (plain)"
+    },
+    {
+      "id": "HK-C",
+      "question": "hollow knight tips for the teleporting boss that throws orbs in the sanctum",
+      "answer_named_boss": true,
+      "covered_when_finished": true,
+      "answer_body_uncovered_at_any_read": true,
+      "detail": "from 29.4 s to 34.1 s (19 reads, about 4.7 s) the live answer showed 'The Soul Master fight is all about timing his movements.' in plain text, with the raw marker text '`bonsai-spoiler' then '```bon' visible and a 'Code block incoming...' chip, and a 'Soul Master - From the Hollow Knight wiki' notes block visible. At 34.3 s the answer finished and the sentence became a cover; the notes block disappeared.",
+      "thinking_line_uncovered": "yes: 'matches the \"Soul Master\" from the local knowledge base' plain from 7.7 s",
+      "covers_final": 1
+    },
+    {
+      "id": "HK-named",
+      "question": "in hollow knight how do I beat soul master",
+      "expect": "plain, not covered",
+      "covers_at_any_read": 0,
+      "answer": "To beat Soul Master, you need to focus on timing his teleportation... (4 numbered tips) ... notes block Soul Master",
+      "screenshot": "plan70-SPOILER-COVER-01-plain.png",
+      "result": "plain as expected"
+    },
+    {
+      "id": "HADES-A",
+      "question": "in hades who is the first boss and how do I beat them",
+      "fury_names_uncovered_reads": 0,
+      "covers_final": 2,
+      "answer": "talks about Asterius and Theseus (the wrong boss for 'first boss') with two covers; 'No close match in my notes' line",
+      "thinking": "thinking named 'Theseus and Asterius' plain and showed raw marker text '```bonsai-spoiler```' from 13.1 s to 24.8 s"
+    },
+    {
+      "id": "HADES-B",
+      "question": "in hades how do i beat the boss at the end of tartarus",
+      "answer_named_boss": false,
+      "covers_final": 0,
+      "thinking_line_uncovered": "yes: 'bosses (Thesus and Asterius, Megaera)' plain from 7.2 s to 11.5 s (18 reads)"
+    },
+    {
+      "id": "HADES-C",
+      "question": "hades tips for the whip boss who guards the exit from tartarus",
+      "fury_names_uncovered_reads": 0,
+      "covers_final": 0,
+      "answer": "about Asterius and Theseus in plain text (wrong boss), notes block 'Theseus and Asterius - From bonsAI's own note', and the 'No close match in my notes' line under it"
+    },
+    {
+      "id": "DRG",
+      "question": "in deep rock galactic survivor how do I beat the big armored bug boss",
+      "expect": "no cover",
+      "covers_at_any_read": 0,
+      "answer": "names Glyphid Dreadnought plainly; notes block Glyphid Dreadnought; 'No close match' line also shown",
+      "result": "no cover as expected"
+    }
+  ],
+  "summary_numbers": {
+    "HK described tries": "3 counted: finished answer correct in all 3 (2 covered, 1 never named); live answer showed the name uncovered in 1 of 3 (HK-C, 4.7 s); thinking lines showed the name uncovered in 3 of 3",
+    "Hades described tries": "3: no Fury name ever shown; thinking showed Megaera plain in 1 of 3; 2 of 3 answers were about the wrong boss",
+    "named": "plain, pass",
+    "DRG": "no cover, pass"
+  },
+  "verdict": "FAIL. The finished answers are right, and the named-boss and Deep Rock halves pass, but the runbook's test is 'at no read does Soul Master appear outside a cover': the live answer in HK-C showed it plain for about 4.7 s with raw marker text, and the thinking lines showed protected names plain in 4 of 6 described tries."
+}

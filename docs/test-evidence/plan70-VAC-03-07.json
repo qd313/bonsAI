@@ -1,0 +1,12 @@
+{
+  "row": "VAC-03-07 (flow L1.4)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:29 -04:00",
+  "setup": "Permissions: Steam ban lookup ON (settings capabilities.steam_web_api=true). Developer > Integrations > Steam Web API key field: 0 characters (settings steam_web_api_key=\"\"). Runbook says read the key, do not change it. New chat.",
+  "pressed": "new chat; 'bonsai:vac-check 76561197983599210' put in with deck_send_ask.py (VERIFIED); Ask",
+  "seen": {
+    "reply": "No Steam Web API key saved. / Register a key at Steam Web API (see README), paste it under Developer > Integrations > Steam Web API key, save, then try again: / bonsai:vac-check 7656119...",
+    "grid_of_pipes": "none in this reply, but this is the no-key message, not the report"
+  },
+  "verdict": "COULD NOT RUN: no Steam Web API key is saved on the Deck, and the runbook forbids setting one. The one real try got the plain no-key message (no pipes)."
+}

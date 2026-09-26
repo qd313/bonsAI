@@ -1,0 +1,16 @@
+{
+  "row": "SPOILER-REVEAL reach (flow L1.3)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:08 -04:00",
+  "setup": "Covered answer from try HK-A (plan70-SPOILER-COVER-01.json) finished and on screen; monitor live; Quick Access page 855x805 CSS px.",
+  "pressed": "from the question box: UP x7 one at a time (rig run file runs/plan70-SPOILER-REVEAL-reach-walk.json), then DOWN x3 one at a time back to the cover, then A",
+  "seen": {
+    "walk_up": "box -> chip -> Show details -> Helpful -> answer text (89% visible, the known Copy-icon overlap) -> cover (100% visible) -> Retry -> chat row",
+    "walk_down": "chat row -> question row -> cover",
+    "focused_cover": "class bonsai-spoiler-reveal-target, text 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide).', box x70 y209 w238 h55, inside the visible scroll area y88-805, visibility 100%",
+    "after_A": "cover replaced by opened box 'Spoiler - tap to hide' holding 'The Soul Master fight in the Soul Sanctum involves specific timing with his teleporting attacks.'; ring moved to the hide control (bonsai-spoiler-collapse-target)",
+    "also": "Hades try A's two covers were both passed by the D-pad on a later walk up (labels 'Spoiler - tap to show' in the walk)"
+  },
+  "not_saved_as_check": "deck_saveCheck reruns the walk; the cover is gone once opened, so the walk was not saved as a replayable check",
+  "verdict": "PASS"
+}

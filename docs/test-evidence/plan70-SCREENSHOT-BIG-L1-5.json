@@ -1,0 +1,13 @@
+{
+  "row": "L1.5 the big screenshot (helper J, ffmpeg shrink)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:27 to 09:29 -04:00",
+  "setup": "Monitor live (1920x1080). bonsAI open on Main in the Quick Access panel, no game running.",
+  "pressed": "deck_pressChord hold GUIDE tap RB (Steam + R1), twice, about 1 minute apart",
+  "seen": {
+    "new_files_under_userdata_760_after_each_try": 0,
+    "newest_screenshot_on_disk": "20260712-001253.jpg (180,842 bytes, from July)",
+    "screen_after_chord": "nothing visible changed; Steam main menu stayed hidden; ring stayed on the question box"
+  },
+  "verdict": "COULD NOT RUN: the rig's Steam + R1 chord did not produce a screenshot (tried twice). The attach, the answer and the ffmpeg log line were not tested. I did not fall back to an older file, since the row asks for a fresh 1920x1080 capture; the owner can decide whether to attach the 2.6 MB 20260627-165914.png used on 2026-09-23 instead."
+}

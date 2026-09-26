@@ -1,0 +1,14 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01 (flow L1.3)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:26 -04:00",
+  "setup": "No game, Strategy mode, characters off, monitor live, new chat. Setting strategy_spoiler_auto_reveal_after_consent=false, strategy_spoiler_masking_enabled=true (unchanged).",
+  "pressed": "question 'in hollow knight spoilers are okay, how do I beat the boss past the crystal spike area' via deck_send_ask.py, Ask; after finish: to the question row (chat row DOWN to Retry, RIGHT to the row), A (fold), A (open again)",
+  "seen": {
+    "live": "0 covers at every 250 ms read (110 changed reads); raw fence marker text showed in the thinking lines 11.9 s to 13.4 s",
+    "finished_answer": "general advice, did not name any boss ('Since you didn't specify which boss...'); notes block 'Watcher Knights (+1 more)'",
+    "after_fold": "header class --collapsed, 0 covers",
+    "after_open_from_history": "header --expanded, 0 covers, 0 opened covers, same text"
+  },
+  "verdict": "PASS as written (no covers live or from history). Weak proof: the answer named no boss, so a cover had nothing to hold."
+}

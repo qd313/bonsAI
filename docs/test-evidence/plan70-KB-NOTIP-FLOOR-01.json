@@ -1,0 +1,42 @@
+{
+  "row": "KB-NOTIP-FLOOR-01 (tip cut-off)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26T02:10-02:13 -04:00",
+  "setup": "No game running. AI characters off. Monitor live. Three new chats, one per question.",
+  "pressed": "chat row LB to [+], A (new chat); mode button A, pick mode, A; question put in with deck_send_ask.py (VERIFIED each time); D-pad to Ask, A; after finish, D-pad to Show details, A",
+  "seen": [
+    {
+      "mode": "Speed",
+      "question": "what time is it",
+      "answer": "I cannot tell you the current time as I do not have access to real-time system information.",
+      "seconds": 3.4,
+      "streamed_live": true,
+      "tip_in_reply": false,
+      "show_details": "Session 1 / Chip 1 of 5 / KB: no game running / Reply style: balanced / Spoiler risk: med / Routed gemma4:e2b-it-qat / Knowledge base coverage: No game is running, so there is nothing to look up.",
+      "tip_source_line": false,
+      "log": "rules+cards=734 (attached 0 chars)"
+    },
+    {
+      "mode": "Strategy",
+      "question": "one sentence",
+      "answer": "I require a game title or some context ... What game are you playing? A. I haven't picked a game yet. B. Tell me the name of the game.",
+      "seconds": 24.1,
+      "tip_in_reply": false,
+      "show_details": "... KB: no game running / Thinking: Balanced 17 s ~505 tokens / Spoiler risk: med ...",
+      "tip_source_line": false,
+      "log": "rules+cards=1279 (attached 0 chars)"
+    },
+    {
+      "mode": "Expert",
+      "question": "what time is it right now",
+      "answer": "I do not have access to the current time. You will need to check the clock on your Steam Deck or another device.",
+      "seconds": 13.5,
+      "tip_in_reply": false,
+      "show_details": "... KB: no game running / Thinking: Balanced 10 s ~306 tokens / Spoiler risk: med ...",
+      "tip_source_line": false,
+      "log": "rules+cards=637 (attached 0 chars)"
+    }
+  ],
+  "not_cached": "first answer streamed (thinking line then words over about 1 s) and took 3.4 s in the log; the other two took 13 to 24 s",
+  "verdict": "PASS"
+}

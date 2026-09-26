@@ -1,0 +1,41 @@
+{
+  "row": "THINKING-SPOILER-01 (protected names in the thinking lines)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:07 to 09:18 -04:00",
+  "setup": "Same answers as plan70-SPOILER-COVER-01.json, read every 250 ms. Strategy mode, no game, characters off, monitor live.",
+  "pressed": "nothing during streaming",
+  "seen": [
+    {
+      "try": "HK-A",
+      "thinking_line": "Reviewing the strategy for the Soul Master boss in the Soul Sanctum",
+      "shown": "plain words, 13.1 s to 17.6 s"
+    },
+    {
+      "try": "HK-B",
+      "thinking_line": "*Local Knowledge Base Check:* I have info on Soul Master and Watcher Knights, but not specifically the Mage boss",
+      "shown": "plain, 9.7 s to 14.1 s"
+    },
+    {
+      "try": "HK-C",
+      "thinking_line": "the specific boss described matches the \"Soul Master\" from the local knowledge base",
+      "shown": "plain, from 7.7 s"
+    },
+    {
+      "try": "HADES-B",
+      "thinking_line": "I have specific knowledge about *Hades* bosses (Thesus and Asterius, Megaera)",
+      "shown": "plain, 7.2 s to 11.5 s"
+    },
+    {
+      "try": "HADES-A",
+      "thinking_line": "Use ```bonsai-spoiler``` if necessary (though the boss name is generally safe...)",
+      "shown": "raw fence marker text plain, 13.1 s to 24.8 s"
+    },
+    {
+      "try": "DRG",
+      "thinking_line": "raw fence marker text also shown 14.7 s to 16.0 s",
+      "shown": "plain"
+    }
+  ],
+  "blocks_or_hidden_seen": "never; no protected name was ever drawn as blocks or hidden in a thinking line",
+  "verdict": "FAIL (protected names shown plain in the thinking lines in 4 of 6 described-boss tries; raw fence markup shown in 2 tries; no '[[spoiler]]' form seen)"
+}

@@ -1,0 +1,21 @@
+{
+  "row": "ROUTING-MERGE-SIZE-01 (flow L1.4)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:24 -04:00",
+  "setup": "AI models screen opened from the Ollama tab, filters unchanged (2 on: also try open-weight, essentials only), monitor live.",
+  "pressed": "as in plan70-PRELOAD-RM-01.json (read only)",
+  "seen": {
+    "screen_header_first_read": "Installed 2 - 4.3 GB (while it said 'Offline sizes')",
+    "screen_header_after_live_sizes": "Installed 2 - 4.0 GB ('Live catalog - Live sizes')",
+    "gemma4:e2b-it-qat_shown": "4.0 GB",
+    "nomic-embed-text:latest_shown": "'?' in the size column (listed under 'Other installed (not in curated catalog)')",
+    "ollama_api_tags": {
+      "gemma4:e2b-it-qat": "4336358185 bytes = 4.04 GiB",
+      "nomic-embed-text:latest": "274302450 bytes = 0.26 GiB",
+      "total": "4610660635 bytes = 4.29 GiB"
+    }
+  },
+  "model_outside_builtin_list": "yes, nomic-embed-text:latest (the note-search model), 0.26 GiB",
+  "verdict": "FAIL: the one installed model outside the built-in list shows '?' instead of about 0.3 GB, and the header total (4.0 GB) is gemma alone, not the sum (4.3 GB). The header was right (4.3 GB) only before live sizes loaded.",
+  "screenshot": "plan70-PRELOAD-RM-01.png (same screen)"
+}

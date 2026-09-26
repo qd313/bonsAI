@@ -1,0 +1,17 @@
+{
+  "row": "OLLAMA-TAB-AFTER-RELOAD-02 (flow L1.4)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "reload 2026-09-26 09:26:01-09:26:10 -04:00; log read 09:26:55",
+  "setup": "Plugin last on the Ollama tab; tab_resume_mode resume_recent; Ollama running on the Deck; monitor live.",
+  "pressed": "deck_reloadPlugin; deck_openPlugin three times: 1st could not reach the debug connection (no press sent), 2nd sent the Quick Access chord but no menu appeared, 3rd opened bonsAI (panel came back on the Ollama tab)",
+  "seen": {
+    "new_log_file": "2026-09-26 09.26.10.log",
+    "log_lines_in_first_45_s": [
+      "[2026-09-26 09:26:11,088][INFO]: bonsAI plugin loaded!"
+    ],
+    "count_of_test_ollama_connection_failed": 0,
+    "tab_status_line": "Connected - Ollama v0.34.1 - 2 models"
+  },
+  "verdict": "PASS",
+  "note": "opening the plugin failed twice after this reload before working on the third try (the runbook expects one failure)"
+}

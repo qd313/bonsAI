@@ -1,0 +1,26 @@
+{
+  "row": "L1.0 deploy the tip",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26T02:07:19-04:00",
+  "setup": "Deck lock bonsai-50; keep-awake held 480 min (expires 2026-09-26T14:06:24Z); live screen = monitor (Big Picture window 1500x845 CSS px at devicePixelRatio 1.28 = about 1920x1080; Quick Access page 855x766).",
+  "commits_present": {
+    "helperB_no_close_match_first_commit": "58f60c0a present, but its own message says the new check is off by default and nothing passes note text yet; no later commit wiring it into answers found in the last 80 commits",
+    "helperK_followup_default_on": "absent; only f889be01 'Add two off-by-default ways to try fixing a follow-up naming the wrong boss'",
+    "helperM_keepalive_spoilerband_named_entity": "absent"
+  },
+  "pressed": "plugin_build, deck_deploy (loader ready after 268 ms), deck_openPlugin twice (first failed as expected after deploy: no quick access pane after chord; second opened the panel, confirmed by .bonsai-scope)",
+  "seen": {
+    "pc_dist_index_js_sha256": "f724d7ca209226b6edd0a1fe1bf336412fe9b035aa6b0485729ed5bbe0bc8840",
+    "deck_dist_index_js_sha256": "f724d7ca209226b6edd0a1fe1bf336412fe9b035aa6b0485729ed5bbe0bc8840",
+    "pc_main_py_sha256": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "deck_main_py_sha256": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "note": "both hashes were already identical before the deploy (commits after fe059aaa touch only docs)",
+    "plugin_log_after_deploy": "one line: 'bonsAI plugin loaded!'; no errors",
+    "library_upgrade": "see plan70-SPOILER-COVER-01.json for the log read after the first game question (a question with no game never opens the library)"
+  },
+  "settings_changed_for_flow": {
+    "ai_character_enabled": "true -> false (through Settings tab toggle 'AI voice & personality'); preset alig_ali_g and accent heavy unchanged",
+    "ask_mode": "strategy (changed through the mode menu during checks; to be put back)"
+  },
+  "verdict": "PASS (deploy matches PC on both files; log clean)"
+}

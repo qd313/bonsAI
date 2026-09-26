@@ -1,0 +1,14 @@
+{
+  "row": "NOTES-BLOCK-02 (flow L1.3)",
+  "build_commit": "83a6ae2e",
+  "deck_time": "2026-09-26 09:08 -04:00",
+  "setup": "Runbook variant: no game running (the row text says a story game running; the runbook says to use a covered answer from L1.2). Covered answer HK-A, Strategy mode, monitor live.",
+  "pressed": "D-pad to the cover, A",
+  "seen": {
+    "before_reveal": "0 elements with class bonsai-kb-notes-block; no 'From the' text anywhere in the panel; 1 cover",
+    "after_reveal": "1 notes block: 'Soul Master / From the Hollow Knight wiki', aria-label 'Soul Master - From the Hollow Knight wiki, show', aria-expanded=false (closed)",
+    "placement": "below Show details, outside the spoiler's own box",
+    "side_note": "in try HK-C the same notes block DID show for about 4.7 s while the answer was still arriving and its sentence was not yet covered (see plan70-SPOILER-COVER-01.json); it vanished when the cover formed"
+  },
+  "verdict": "PASS (for a finished answer)"
+}

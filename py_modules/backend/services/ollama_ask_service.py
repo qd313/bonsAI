@@ -74,10 +74,7 @@ from backend.services.local_ollama_setup_service import (
     probe_ollama_http_ok,
     recover_loopback_ollama_listening,
 )
-from backend.services.model_policy import (
-    disclosure_for_model,
-    empty_filter_user_message,
-)
+from backend.services.model_policy import disclosure_for_model, empty_filter_user_message
 from backend.services.ask_payload import sanitize_attachments
 from backend.services.chat_memory_step import add_chat_memory_to_prompt
 from backend.services.ollama_ask_extras import (
@@ -123,6 +120,7 @@ async def run_ask_ollama(
     preferred_model: Optional[str] = None,
     chat_turns: Optional[list] = None,
     chat: Optional[dict] = None,
+    question_for_display: str = "",
 ) -> dict[str, Any]:
     """Orchestrate attachment prep, prompt assembly, and model fallback request execution.
 
@@ -130,7 +128,17 @@ async def run_ask_ollama(
     and its id -- read once by the caller (``game_ai_request.py``) via ``Plugin.chat_for_request``.
     ``chat_turns`` alone still works for a caller with no chat id to give (``scripts/eval_kb_answers.py``);
     when both are given, ``chat`` wins.
+
+    ``question_for_display`` (plan 70 helper K): the person's own words, exactly as the sanitizer
+    passed them along, before the caller may have added a reply_followup chip header or a bare
+    follow-up's own reminder text onto ``question`` for the model's benefit. Falls back to
+    ``question`` itself when a caller does not pass it, so nothing breaks for a test or script
+    that predates this. Every progress line and live safety check below that quotes "the
+    question" for a person to read uses this, never ``question`` -- caught on the Deck
+    (docs/test-evidence/plan70-QA-FREE-PLAY-01.json) reading the reminder's own opening words back
+    on the "Model's warming up for…" line from the third question in a chat onward.
     """
+    display_question = question_for_display.strip() or question
     plugin_inst = plugin
     active_request_id = plugin_inst._active_request_id()
 
@@ -153,7 +161,7 @@ async def run_ask_ollama(
             app_name=app_name,
             attachment_count=len(normalized_attachments),
             ask_mode=ask_mode,
-            question=question,
+            question=display_question,
             character_enabled=bool(settings.get("ai_character_enabled")),
             character_preset_id=rp_meta.resolved_preset_id,
         )
@@ -222,10 +230,13 @@ async def run_ask_ollama(
 
     # D112 #7, the spoiler safety net -- the live half (belt and braces alongside the finished-
     # reply cover in game_ai_request.py). The whole policy lookup lives behind this call now.
+    # question=display_question, not question: a reply_followup chip header or a bare follow-up's
+    # own reminder text must never count as the person having named a protected thing themselves
+    # (plan 70 helper K) -- the same reasoning the finished-reply cover already applies.
     cover_live_spoilers = build_live_spoiler_cover(
         consent=strategy_spoiler_consent, app_id=app_id, app_name=app_name,
         strategy_domain=strategy_domain_guidance or ask_mode == "strategy",
-        title_profile=strategy_title_profile, question=question, system_content=system_content,
+        title_profile=strategy_title_profile, question=display_question, system_content=system_content,
     )
 
     # The model choice moves above the memory step here (plan 68 step 3): it only reads
@@ -350,7 +361,7 @@ async def run_ask_ollama(
                     "generating",
                     app_name=app_name,
                     ask_mode=ask_mode,
-                    question=question,
+                    question=display_question,
                     character_enabled=bool(settings.get("ai_character_enabled")),
                     character_preset_id=rp_meta.resolved_preset_id,
                 )
@@ -402,7 +413,7 @@ async def run_ask_ollama(
                     "model_retry" if model_idx > 0 else "connecting_model",
                     app_name=app_name,
                     ask_mode=ask_mode,
-                    question=question,
+                    question=display_question,
                     character_enabled=bool(settings.get("ai_character_enabled")),
                     character_preset_id=rp_meta.resolved_preset_id,
                 )

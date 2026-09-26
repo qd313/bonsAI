@@ -802,6 +802,11 @@ async def run_game_ai_request(
             request_timeout_seconds=request_timeout_seconds,
             attachments=atts,
             ask_mode=ask_mode,
+            # Plan 70 helper K: the person's own words, before either a reply_followup chip
+            # header or finish3's own reminder text was ever spliced in above -- for every
+            # status line and safety check downstream that quotes "the question" rather than
+            # sending it to the model. See question_for_display's own doc in ollama_ask_service.py.
+            question_for_display=question_for_retrieval,
             read_tdp=read_tdp,
             tdp_grounding_requested=tdp_grounding_requested,
             tdp_cap_w=pre_cap,
@@ -1035,7 +1040,14 @@ async def run_game_ai_request(
             raw_question=question,
             sanitizer_action=str(lane.action),
             sanitizer_reason_codes=list(lane.reason_codes),
-            text_after_sanitizer=question_for_model,
+            # The sanitizer's own output, not question_for_model: that field name is "the
+            # question after the sanitizer", read back on Show details, the saved turn header and
+            # desktop_note_service -- never the text a reply_followup chip header or finish 3's
+            # own reminder later added on top for the model's benefit (plan 70 helper K; caught on
+            # the Deck, docs/test-evidence/plan70-QA-FREE-PLAY-01.json, from the third question in
+            # a chat reading "FOLLOW-UP CONTEXT (a system reminder..." where the person's own
+            # words belonged).
+            text_after_sanitizer=question_for_retrieval,
             ollama_result={
                 **ollama_result,
                 **kb_transparency,

@@ -41,15 +41,21 @@ def _settings() -> dict:
 
 
 class _FakePlugin(_BaseFakePlugin):
-    """The neighbour's fake plugin, plus positional-argument capture."""
+    """The neighbour's fake plugin, plus positional-argument capture and a real record of every
+    transparency snapshot game_ai_request.py builds and saves (the neighbour's own version is a
+    no-op there)."""
 
     def __init__(self, settings: dict):
         super().__init__(settings)
         self.ask_ollama_args: list = []
+        self.transparency_snapshots: list = []
 
     async def ask_ollama(self, *args, **kwargs):
         self.ask_ollama_args.append(args)
         return await super().ask_ollama(*args, **kwargs)
+
+    async def _persist_input_transparency(self, payload):
+        self.transparency_snapshots.append(payload)
 
 
 def _ok_result(text: str = "Here is how.") -> dict:
@@ -241,6 +247,44 @@ class SendPrevQaSwitchWiringTests(_SwitchTestCase):
             ),
             ("", ""),
         )
+
+
+class SavedQuestionNeverLeaksTheReminderTests(_SwitchTestCase):
+    """The other half of the QA regression (docs/test-evidence/plan70-QA-FREE-PLAY-01.json): the
+    saved "text_after_sanitizer" field -- Show details and the desktop trace log's source for
+    what the person asked -- must also read the person's own words, never finish 3's reminder
+    text spliced ahead of it for the model. Runs the real two-turn follow-up through the real
+    run_game_ai_request, exactly as the wiring tests above do; only ask_ollama itself is a stub,
+    so everything game_ai_request.py itself does, including building this saved snapshot, runs
+    for real.
+    """
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_the_saved_question_and_the_progress_line_both_stay_clean(self, mock_retrieve):
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result("Break the glowing plates first.")
+
+        _run_followup_pair(
+            mock_retrieve,
+            plugin,
+            "how do i beat the glyphid dreadnought",
+            "what about its second phase",
+        )
+
+        self.assertEqual(len(plugin.transparency_snapshots), 2)
+        for snapshot in plugin.transparency_snapshots:
+            self.assertNotIn("FOLLOW-UP CONTEXT", str(snapshot.get("text_after_sanitizer") or ""))
+        self.assertEqual(
+            plugin.transparency_snapshots[-1].get("text_after_sanitizer"),
+            "what about its second phase",
+        )
+        # The progress-line half: question_for_display is what a live status line would quote,
+        # and it stays clean even though the model itself still receives the reminder ahead of it.
+        self.assertEqual(
+            plugin.ask_ollama_calls[-1].get("question_for_display"),
+            "what about its second phase",
+        )
+        self.assertIn("FOLLOW-UP CONTEXT", plugin.ask_ollama_args[-1][0])
 
 
 if __name__ == "__main__":

@@ -939,3 +939,88 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(out.get("success"))
         saved = self._load_slot(self.tmp, self.slot_id)
         self.assertIsNone(saved.get("summary"))
+
+
+class _QuestionCapturingFakePlugin(_FakePlugin):
+    """Adds a record of the `question` kwarg every `_publish_thinking_phase_key` call actually
+    carried, on top of the shared fake's phase-name-only record."""
+
+    def __init__(self, active_request_id: Any = None) -> None:
+        super().__init__(active_request_id=active_request_id)
+        self.published_questions: list[str] = []
+
+    def _publish_thinking_phase_key(self, _request_id: Any, phase: Any, **kwargs: Any) -> None:
+        super()._publish_thinking_phase_key(_request_id, phase, **kwargs)
+        self.published_questions.append(str(kwargs.get("question") or ""))
+
+
+class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 70 helper K regression: from the third question in a chat, the live "Model's warming
+    up for…" line quoted game_ai_request.py's own reminder text ahead of a bare follow-up
+    (docs/test-evidence/plan70-QA-FREE-PLAY-01.json), because every phase-key publish here read
+    ``question`` -- what actually reaches the model -- rather than the person's own words.
+    ``question_for_display``, when a caller gives one, is what every phase-key publish and the
+    live spoiler cover now read instead; ``question`` itself is untouched, since the model still
+    has to see the reminder.
+    """
+
+    @staticmethod
+    def _patched(fake_post_ollama_chat):
+        return (
+            patch(
+                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen2.5:3b"],
+            ),
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.services.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.services.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        )
+
+    @staticmethod
+    def _fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+        return {
+            "success": True, "status": 200, "model": "qwen2.5:3b",
+            "response": "ok", "assistant_raw": "ok",
+        }
+
+    async def test_connecting_model_quotes_the_display_question_not_the_model_bound_one(self) -> None:
+        plugin = _QuestionCapturingFakePlugin(active_request_id=4)
+        reminder_laden_question = (
+            'FOLLOW-UP CONTEXT (a system reminder, not something the user typed): the previous '
+            'question in this chat was "how do i beat the glyphid dreadnought", and the answer '
+            'given was: "Kite it and target the plates." This new question carries on from that.\n'
+            "what about its second phase"
+        )
+        p1, p2, p3, p4 = self._patched(self._fake_post_ollama_chat)
+        with p1, p2, p3, p4:
+            await run_ask_ollama(
+                plugin,
+                reminder_laden_question,
+                "127.0.0.1:11434",
+                "",
+                "",
+                request_timeout_seconds=30,
+                question_for_display="what about its second phase",
+            )
+
+        self.assertEqual(plugin.published_phases, ["connecting_model"])
+        self.assertEqual(plugin.published_questions, ["what about its second phase"])
+        self.assertNotIn("FOLLOW-UP CONTEXT", plugin.published_questions[0])
+
+    async def test_with_no_question_for_display_it_falls_back_to_question(self) -> None:
+        """A caller that predates this parameter (an older test, a script) still gets exactly
+        today's behaviour -- the fallback exists so nothing else had to change to pick this up."""
+        plugin = _QuestionCapturingFakePlugin(active_request_id=5)
+        p1, p2, p3, p4 = self._patched(self._fake_post_ollama_chat)
+        with p1, p2, p3, p4:
+            await run_ask_ollama(
+                plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30,
+            )
+
+        self.assertEqual(plugin.published_questions, ["hello"])

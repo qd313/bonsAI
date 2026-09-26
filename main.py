@@ -2126,6 +2126,7 @@ class Plugin:
         preferred_model: Optional[str] = None,
         chat_turns: Optional[list] = None,
         chat: Optional[dict] = None,
+        question_for_display: str = "",
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         return await run_ask_ollama(
@@ -2153,6 +2154,7 @@ class Plugin:
             preferred_model=preferred_model,
             chat_turns=chat_turns,
             chat=chat,
+            question_for_display=question_for_display,
         )
 
     def chat_for_request(self, request_id: Any) -> dict:

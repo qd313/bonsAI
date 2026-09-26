@@ -174,6 +174,11 @@ def plan_summary(
     goes through, run here as a probe rather than to build a prompt.
     """
     turns = [t for t in (chat.get("turns") or []) if isinstance(t, dict)]
+    # The question being asked right now is already the chat's newest turn (it is saved when the
+    # Ask is accepted). It is neither summed up nor one of the kept turns -- the answer's own
+    # memory drops it too -- so "the newest two questions and answers" means two finished ones.
+    while turns and str(turns[-1].get("role") or "").strip().lower() == "user":
+        turns.pop()
     previous = chat.get("summary") if isinstance(chat.get("summary"), dict) else None
     not_covered = turns_not_yet_summarized(turns, previous)
 

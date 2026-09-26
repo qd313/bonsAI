@@ -160,6 +160,15 @@ class PlanSummaryTests(unittest.TestCase):
         self.assertTrue(plan.needed)
         self.assertGreaterEqual(len(plan.kept_turns), MIN_KEPT_TURNS)
 
+    def test_the_question_being_asked_is_not_one_of_the_kept_turns(self):
+        # The live question is saved into the chat before the answer starts; the kept tail must
+        # still be two FINISHED questions and answers, not one and a half plus the live question.
+        turns = _chat(60) + [{"id": "live", "role": "user", "text": "and what about that"}]
+        plan = plan_summary({"turns": turns}, memory_allowance_tokens=8, model_name="")
+        self.assertTrue(plan.needed)
+        self.assertEqual([t["id"] for t in plan.kept_turns], ["q58", "a58", "q59", "a59"])
+        self.assertNotIn("live", [t["id"] for t in plan.covered_turns])
+
     def test_the_kept_tail_grows_with_more_room_rather_than_always_being_four(self):
         chat = {"turns": _chat(60)}
         small = plan_summary(chat, memory_allowance_tokens=40, model_name="")

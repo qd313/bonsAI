@@ -2,6 +2,7 @@
 search-words helpers built on top of it).
 """
 
+import os
 import unittest
 
 from backend.services import kb_followup_memory
@@ -250,6 +251,187 @@ class AugmentSearchWordsTests(unittest.TestCase):
             "what about her second phase", remembered_subject=""
         )
         self.assertEqual(out, "what about her second phase")
+
+
+class FollowupSwitchesDefaultOffTests(unittest.TestCase):
+    """Plan 70 helper K: both measurement switches read straight from the environment and must
+    default to off so a plain checkout behaves exactly as it does today."""
+
+    def setUp(self):
+        os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
+        os.environ.pop(kb_followup_memory.SEND_PREV_QA_ENV, None)
+
+    def tearDown(self):
+        os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)
+        os.environ.pop(kb_followup_memory.SEND_PREV_QA_ENV, None)
+
+    def test_drop_runnerup_is_off_when_unset(self):
+        self.assertFalse(kb_followup_memory.drop_runnerup_notes_enabled())
+
+    def test_send_prev_qa_is_off_when_unset(self):
+        self.assertFalse(kb_followup_memory.send_prev_qa_enabled())
+
+    def test_drop_runnerup_turns_on_only_for_the_literal_value_one(self):
+        os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "true"
+        self.assertFalse(kb_followup_memory.drop_runnerup_notes_enabled())
+        os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
+        self.assertTrue(kb_followup_memory.drop_runnerup_notes_enabled())
+
+    def test_send_prev_qa_turns_on_only_for_the_literal_value_one(self):
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "yes"
+        self.assertFalse(kb_followup_memory.send_prev_qa_enabled())
+        os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "1"
+        self.assertTrue(kb_followup_memory.send_prev_qa_enabled())
+
+
+class PreviousTurnMemoryTests(unittest.TestCase):
+    """remember_previous_turn / recall_previous_turn -- finish 3's storage, independent of the
+    environment switch (these two functions are not gated themselves; callers gate them)."""
+
+    def setUp(self):
+        kb_followup_memory.forget()
+
+    def tearDown(self):
+        kb_followup_memory.forget()
+
+    def test_recall_with_nothing_stored_is_blank(self):
+        self.assertEqual(
+            kb_followup_memory.recall_previous_turn(
+                app_id="2380520", app_name="Hades", text_resolved_title=""
+            ),
+            ("", ""),
+        )
+
+    def test_remember_onto_an_existing_subject_record_then_recall(self):
+        kb_followup_memory.remember(
+            app_id="2380520", app_name="Hades", text_resolved_title="", subject="Megara"
+        )
+        kb_followup_memory.remember_previous_turn(
+            app_id="2380520",
+            app_name="Hades",
+            text_resolved_title="",
+            question="how do i beat megara",
+            answer="Dodge her spear throws and close the gap between volleys.",
+        )
+        self.assertEqual(
+            kb_followup_memory.recall_previous_turn(
+                app_id="2380520", app_name="Hades", text_resolved_title=""
+            ),
+            (
+                "how do i beat megara",
+                "Dodge her spear throws and close the gap between volleys.",
+            ),
+        )
+
+    def test_remember_previous_turn_does_nothing_without_an_existing_subject_record(self):
+        # No remember() call first -- there is no record to attach the previous turn to.
+        kb_followup_memory.remember_previous_turn(
+            app_id="2380520",
+            app_name="Hades",
+            text_resolved_title="",
+            question="how do i beat megara",
+            answer="Dodge her spear throws.",
+        )
+        self.assertEqual(
+            kb_followup_memory.recall_previous_turn(
+                app_id="2380520", app_name="Hades", text_resolved_title=""
+            ),
+            ("", ""),
+        )
+
+    def test_remember_previous_turn_does_nothing_after_a_game_change(self):
+        kb_followup_memory.remember(
+            app_id="2380520", app_name="Hades", text_resolved_title="", subject="Megara"
+        )
+        # A different game's remember_previous_turn call must not attach to Hades's record.
+        kb_followup_memory.remember_previous_turn(
+            app_id="548430",
+            app_name="Deep Rock Galactic: Survivor",
+            text_resolved_title="",
+            question="how do i beat the dreadnought",
+            answer="Break the glowing plates.",
+        )
+        self.assertEqual(
+            kb_followup_memory.recall_previous_turn(
+                app_id="2380520", app_name="Hades", text_resolved_title=""
+            ),
+            ("", ""),
+        )
+
+    def test_long_answer_is_trimmed_at_a_word_boundary_with_an_ellipsis(self):
+        kb_followup_memory.remember(
+            app_id="2380520", app_name="Hades", text_resolved_title="", subject="Megara"
+        )
+        long_answer = "word " * 200
+        kb_followup_memory.remember_previous_turn(
+            app_id="2380520",
+            app_name="Hades",
+            text_resolved_title="",
+            question="how do i beat megara",
+            answer=long_answer,
+        )
+        _, stored_answer = kb_followup_memory.recall_previous_turn(
+            app_id="2380520", app_name="Hades", text_resolved_title=""
+        )
+        self.assertLessEqual(len(stored_answer), kb_followup_memory._PREV_ANSWER_TRIM_CHARS + 3)
+        self.assertTrue(stored_answer.endswith("..."))
+        self.assertNotIn("wor...", stored_answer)  # cut on a word boundary, not mid-word
+
+
+class BuildPreviousTurnContextBlockTests(unittest.TestCase):
+    def test_blank_when_either_half_is_blank(self):
+        self.assertEqual(kb_followup_memory.build_previous_turn_context_block("", "an answer"), "")
+        self.assertEqual(kb_followup_memory.build_previous_turn_context_block("a question", ""), "")
+
+    def test_names_both_the_question_and_the_answer(self):
+        block = kb_followup_memory.build_previous_turn_context_block(
+            "how do i beat megara", "Dodge her spear throws."
+        )
+        self.assertIn("how do i beat megara", block)
+        self.assertIn("Dodge her spear throws.", block)
+        self.assertIn("FOLLOW-UP CONTEXT", block)
+
+
+class DropRunnerUpNotesTests(unittest.TestCase):
+    _TWO_CARD_TEXT = (
+        "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\n"
+        "Domain: strategy\n"
+        "\n[Deep Rock Galactic: Survivor / boss: Dreadnought Twins] (trust: high)\n"
+        "Split fire between them.\n"
+        "\n[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: high)\n"
+        "Break the glowing plates, then focus the head.\n"
+        "--- End local knowledge base ---"
+    )
+
+    def test_keeps_only_the_card_naming_the_subject(self):
+        out = kb_followup_memory.drop_runner_up_notes(
+            self._TWO_CARD_TEXT, subject="Glyphid Dreadnought"
+        )
+        self.assertIn("Glyphid Dreadnought", out)
+        self.assertNotIn("Dreadnought Twins", out)
+        self.assertIn("--- End local knowledge base ---", out)
+
+    def test_leaves_everything_when_the_subject_matches_no_card(self):
+        out = kb_followup_memory.drop_runner_up_notes(self._TWO_CARD_TEXT, subject="Megara")
+        self.assertIn("Glyphid Dreadnought", out)
+        self.assertIn("Dreadnought Twins", out)
+
+    def test_blank_subject_is_a_no_op(self):
+        out = kb_followup_memory.drop_runner_up_notes(self._TWO_CARD_TEXT, subject="")
+        self.assertEqual(out, self._TWO_CARD_TEXT)
+
+    def test_blank_text_is_a_no_op(self):
+        self.assertEqual(kb_followup_memory.drop_runner_up_notes("", subject="Megara"), "")
+
+    def test_text_with_no_card_headers_is_unchanged(self):
+        fallback_text = (
+            "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\n"
+            "Domain: strategy\n"
+            "\n[Genre/compat fallback] (trust: low)\nGeneral tips.\n"
+            "--- End local knowledge base ---"
+        )
+        out = kb_followup_memory.drop_runner_up_notes(fallback_text, subject="Megara")
+        self.assertEqual(out, fallback_text)
 
 
 if __name__ == "__main__":

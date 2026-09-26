@@ -541,6 +541,23 @@ async def run_game_ai_request(
                     question_for_retrieval, remembered_subject=remembered_subject
                 )
                 followup_subject_for_prompt = remembered_subject
+                # Plan 70 helper K, finish 3 (off unless send_prev_qa_enabled()): hand the model
+                # the previous turn's own question and a trimmed copy of its answer, on the same
+                # bare-follow-up turn the subject note above is carried on. A measurement switch
+                # only -- see kb_followup_memory.py's module comment for why this is not on by
+                # default and what the maintainer's numbers will decide.
+                if kb_followup_memory.send_prev_qa_enabled():
+                    prev_question, prev_answer = kb_followup_memory.recall_previous_turn(
+                        app_id=app_id,
+                        app_name=app_name,
+                        text_resolved_title=text_resolved_title,
+                        chat_id=chat_id,
+                    )
+                    prev_turn_block = kb_followup_memory.build_previous_turn_context_block(
+                        prev_question, prev_answer
+                    )
+                    if prev_turn_block:
+                        question_for_model = f"{prev_turn_block}\n{question_for_model}"
 
         if should_kb:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
@@ -571,6 +588,14 @@ async def run_game_ai_request(
             kb_result = await _loop_kb.run_in_executor(None, _retrieve_kb)
             if kb_result.attached:
                 kb_text = kb_result.text_block
+                # Plan 70 helper K, finish 2 (off unless drop_runnerup_notes_enabled()): on the
+                # same bare-follow-up turn the subject note is carried on, keep only the
+                # subject's own card and drop any sibling notes so the model has nothing else to
+                # write about instead. A no-op when the subject does not name any attached card.
+                if followup_subject_for_prompt and kb_followup_memory.drop_runnerup_notes_enabled():
+                    kb_text = kb_followup_memory.drop_runner_up_notes(
+                        kb_text, subject=followup_subject_for_prompt
+                    )
 
         # Everything from here to the ask_ollama call is context assembly: stacking the blocks
         # against the budget, genre lookup, spoiler-risk signals, TDP grounding. None of it
@@ -972,6 +997,26 @@ async def run_game_ai_request(
                 protected_names = protected_spoiler_names(question, boss_like_card_names(kb_text))
                 if protected_names:
                     response_text = cover_named_spoilers(response_text, protected_names)
+
+            # Plan 70 helper K, finish 3 (off unless send_prev_qa_enabled()): now that this
+            # turn's own answer is finished -- and covered, just above, so what is remembered is
+            # what the person saw -- remember it (trimmed) alongside whatever subject is
+            # already stored for this chat's game, so the *next* bare follow-up can send it back.
+            # Onto an existing subject record only -- kb_followup_memory.remember_previous_turn
+            # is a no-op when this chat's game has changed since the subject was last set.
+            if (
+                kb_memory_eligible
+                and kb_domain == "strategy"
+                and kb_followup_memory.send_prev_qa_enabled()
+            ):
+                kb_followup_memory.remember_previous_turn(
+                    app_id=app_id,
+                    app_name=app_name,
+                    text_resolved_title=text_resolved_title,
+                    chat_id=chat_id,
+                    question=question_for_retrieval,
+                    answer=response_text,
+                )
 
         err_tail = ""
         if not ollama_result.get("success"):

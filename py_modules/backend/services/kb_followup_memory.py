@@ -24,6 +24,7 @@ reads a saved subject back in, once per chat per process, via `seed()`.
 
 from __future__ import annotations
 
+import os
 import re
 import threading
 from dataclasses import dataclass
@@ -47,10 +48,40 @@ _FOLLOWUP_MAX_WORDS = 8
 _lock = threading.Lock()
 
 
+# Plan 70 helper K: two ways of finishing "a follow-up still names the wrong boss", each measured
+# by scripts/eval_kb_answers.py against the fixture's follow-up pairs before the maintainer picks
+# one to keep. Both read straight from the environment so a measuring run can flip one on without
+# touching any file, and both are OFF unless the variable is exactly "1" -- nothing here changes
+# what remember()/recall()/augment_search_words() above already do unconditionally, and neither
+# switch is on in any commit this lane makes. A third candidate finish, "carry the remembered
+# subject into the model's instructions", is not a new switch here: it already shipped
+# unconditionally in plan 48 (D98, ollama_prompts.FOLLOWUP_SUBJECT_NOTE_TEMPLATE) whenever
+# recall() finds a subject, so today's plain baseline already measures it -- see this lane's
+# report for why building a duplicate switch for it would not measure anything new.
+DROP_RUNNERUP_ENV = "BONSAI_KB_FOLLOWUP_DROP_RUNNERUP"
+SEND_PREV_QA_ENV = "BONSAI_KB_FOLLOWUP_SEND_PREV_QA"
+
+
+def drop_runnerup_notes_enabled() -> bool:
+    """Finish 2: off unless ``BONSAI_KB_FOLLOWUP_DROP_RUNNERUP=1`` is set in the environment."""
+    return os.environ.get(DROP_RUNNERUP_ENV, "").strip() == "1"
+
+
+def send_prev_qa_enabled() -> bool:
+    """Finish 3: off unless ``BONSAI_KB_FOLLOWUP_SEND_PREV_QA=1`` is set in the environment."""
+    return os.environ.get(SEND_PREV_QA_ENV, "").strip() == "1"
+
+
 @dataclass
 class _Memory:
     game_key: str = ""
     subject: str = ""
+    # Finish 3 only (send_prev_qa_enabled()) -- blank on every other turn. Never written to disk
+    # by seed()/snapshot(): a restart loses these two fields but keeps the remembered subject,
+    # which is the existing, already-persisted contract plan 68 built (see snapshot()'s docstring
+    # below) and this lane leaves untouched.
+    prev_question: str = ""
+    prev_answer: str = ""
 
 
 # One record per chat id ("" is the fallback entry for an Ask with no chat -- see the module
@@ -210,3 +241,126 @@ def augment_search_words(question_for_retrieval: str, *, remembered_subject: str
     if not looks_like_followup(question_for_retrieval):
         return question_for_retrieval
     return f"{question_for_retrieval} {subject}"
+
+
+# --- Finish 3: send the previous question and a trimmed answer with the follow-up -------------
+
+_PREV_ANSWER_TRIM_CHARS = 320
+
+
+def _trim_answer(answer: str) -> str:
+    """A short, word-boundary-safe copy of a full reply for the previous-turn context block --
+    never the full reply, which would compete with the newly attached note for a small model's
+    attention instead of just reminding it what was already said."""
+    text = re.sub(r"\s+", " ", (answer or "").strip())
+    if len(text) <= _PREV_ANSWER_TRIM_CHARS:
+        return text
+    cut = text[:_PREV_ANSWER_TRIM_CHARS]
+    last_space = cut.rfind(" ")
+    if last_space > 0:
+        cut = cut[:last_space]
+    return cut.rstrip(",;: ") + "..."
+
+
+def remember_previous_turn(
+    *,
+    app_id: str,
+    app_name: str,
+    text_resolved_title: str,
+    chat_id: str = "",
+    question: str,
+    answer: str,
+) -> None:
+    """Finish 3 only: store this turn's own question and a trimmed copy of its answer, onto the
+    record ``remember()`` already holds for this chat's game -- never starts a new record on its
+    own, and does nothing on a game change (``mem.game_key`` must already match this turn's).
+
+    Callers gate the whole call behind ``send_prev_qa_enabled()``; this function does not check
+    the switch itself so a test can call it directly without setting the environment.
+    """
+    game_key = _normalize_game_key(
+        app_id=app_id, app_name=app_name, text_resolved_title=text_resolved_title
+    )
+    if not game_key:
+        return
+    q = re.sub(r"\s+", " ", (question or "").strip())
+    a = _trim_answer(answer)
+    with _lock:
+        mem = _memories.get(_key(chat_id))
+        if mem is None or mem.game_key != game_key:
+            return
+        mem.prev_question = q
+        mem.prev_answer = a
+
+
+def recall_previous_turn(
+    *, app_id: str, app_name: str, text_resolved_title: str, chat_id: str = ""
+) -> tuple[str, str]:
+    """The previous turn's own question and trimmed answer for this chat's game, as
+    ``(question, answer)`` -- or ``("", "")`` when there is none, the game has changed, or
+    ``send_prev_qa_enabled()`` was off on the turn that would have stored them."""
+    game_key = _normalize_game_key(
+        app_id=app_id, app_name=app_name, text_resolved_title=text_resolved_title
+    )
+    with _lock:
+        mem = _memories.get(_key(chat_id))
+        if mem is None or not game_key or game_key != mem.game_key:
+            return "", ""
+        return mem.prev_question, mem.prev_answer
+
+
+_PREV_TURN_BLOCK_TEMPLATE = (
+    "\nFOLLOW-UP CONTEXT (a system reminder, not something the user typed): the previous "
+    'question in this chat was "{question}", and the answer given was: "{answer}". This new '
+    "question carries on from that.\n"
+)
+
+
+def build_previous_turn_context_block(question: str, answer: str) -> str:
+    """Finish 3's prompt text, or ``""`` when there is nothing to say (either half blank)."""
+    q = (question or "").strip()
+    a = (answer or "").strip()
+    if not q or not a:
+        return ""
+    return _PREV_TURN_BLOCK_TEMPLATE.format(question=q, answer=a)
+
+
+# --- Finish 2: drop the runner-up note when the remembered subject names one -------------------
+
+# Matches knowledge_base_cards._BLOCK_SENTINEL exactly. Duplicated rather than imported for the
+# same reason ollama_prompts.py duplicates the block header -- this module takes no dependency on
+# the card-rendering internals, only on the text shape it produces.
+_KB_BLOCK_SENTINEL = "--- End local knowledge base ---"
+_CARD_HEADER_RE = re.compile(r"\[(?:[^\]/]+/\s*[^:\]]+|Tip)\s*:\s*([^\]]+)\]", re.IGNORECASE)
+_CARD_SPLIT_RE = re.compile(r"(?=\n\[(?:[^\]/]+/\s*[^:\]]+|Tip)\s*:\s*[^\]]+\])")
+
+
+def drop_runner_up_notes(kb_text: str, *, subject: str) -> str:
+    """``kb_text`` with every attached card dropped except the one whose title names ``subject``.
+
+    Unchanged when ``subject`` is blank, ``kb_text`` has no separable card headers, or no attached
+    card's title names the subject at all -- attaching nothing is a worse failure than leaving a
+    sibling note in place, which is exactly the cost the rejected "narrow_notes" shape (plan 48,
+    D98) paid and scored worse for. Only ever called behind ``drop_runnerup_notes_enabled()``.
+    """
+    text = kb_text or ""
+    subj = (subject or "").strip().lower()
+    if not subj or not text:
+        return text
+    sentinel_idx = text.find(_KB_BLOCK_SENTINEL)
+    if sentinel_idx == -1:
+        return text
+    body, tail = text[:sentinel_idx], text[sentinel_idx:]
+    parts = _CARD_SPLIT_RE.split(body)
+    if len(parts) < 2:
+        return text
+    header, cards = parts[0], parts[1:]
+    kept: list[str] = []
+    for card in cards:
+        m = _CARD_HEADER_RE.search(card)
+        name = m.group(1).strip().lower() if m else ""
+        if name and (name == subj or subj in name or name in subj):
+            kept.append(card)
+    if not kept:
+        return text
+    return header + kept[0] + tail

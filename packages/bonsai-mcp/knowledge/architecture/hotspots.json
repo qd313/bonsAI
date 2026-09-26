@@ -41,13 +41,13 @@
       "role": ""
     },
     {
-      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
-      "lines": 1102,
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 1139,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1094,
+      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
+      "lines": 1102,
       "role": ""
     },
     {

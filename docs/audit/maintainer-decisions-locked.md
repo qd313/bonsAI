@@ -1932,3 +1932,14 @@ What these answers do to the roadmap: the knowledge-base section points at plan 
 spoiler safety net, the install offer, the starting-out kind, the per-game Deck tips, the next release and the
 follow-up bug each gain "planned in plan 70"; the screenshot-crash bug's open call is answered; the thumbs-down
 demote is marked drawn and planned only; the controller rig entry gains the two pieces this wave takes.
+
+**Answered during the session, 2026-09-26:**
+
+- **The follow-up pick (13):** send the previous question and a short version of its answer along with a
+  follow-up. Measured on this PC with the Deck's model, 8 games, 3 runs each, 24 second-question answers: right
+  boss 21, wrong 2, asked "which boss?" 1 (today: 4, 4 and 10; dropping every note but the asked-about one: 11,
+  0 and 8). About 0.6 seconds slower per follow-up on this PC. Chosen over the other two and over both together.
+- **Session calls made on the way, open to change:** the Skyrim wiki's share-alike 2.5 licence is let through the
+  release check (2.5 lets a reworded note be shared under the later version the library uses, so it fits D20);
+  spoiler settings for the new games: Brotato little story, Palworld and Skyrim protect progress; ranking general
+  "Starting out" notes lower is left off, because it made the answer test worse (46 to 41 of 57 right note first).

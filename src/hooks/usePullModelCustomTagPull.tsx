@@ -35,8 +35,8 @@ export type UsePullModelCustomTagPullArgs = {
   setCustomPullBusy: Dispatch<SetStateAction<boolean>>;
   setCustomTagInput: Dispatch<SetStateAction<string>>;
   setCustomTagEntryOpen: Dispatch<SetStateAction<boolean>>;
-  /** Runs `fn` on the next animation frame, guarded against a since-unmounted screen. */
-  scheduleFocusFrame: (fn: () => void) => void;
+  /** Runs `fn` right after the redraw the caller's own state change asked for (usePullModelCatalogRefresh). */
+  focusAfterRedraw: (fn: () => void) => void;
 };
 
 export type PullModelCustomTagPull = {
@@ -62,7 +62,7 @@ export function usePullModelCustomTagPull(a: UsePullModelCustomTagPullArgs): Pul
     setCustomPullBusy,
     setCustomTagInput,
     setCustomTagEntryOpen,
-    scheduleFocusFrame,
+    focusAfterRedraw,
   } = a;
 
   const onPullCustomTag = useCallback(async () => {
@@ -83,7 +83,7 @@ export function usePullModelCustomTagPull(a: UsePullModelCustomTagPullArgs): Pul
         });
         setCustomTagInput("");
         setCustomTagEntryOpen(false);
-        scheduleFocusFrame(() => focusCustomTagChip());
+        focusAfterRedraw(() => focusCustomTagChip());
         onPullAccepted();
       } else {
         toaster.toast({

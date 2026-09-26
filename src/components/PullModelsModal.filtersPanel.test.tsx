@@ -120,6 +120,36 @@ describe("Filters panel — getting in", () => {
     });
   });
 
+  /*
+   * The race behind this file's one-run-in-three flake (plan 70): the ring move used to wait for
+   * the next animation frame and assume the panel had been drawn by then. When the frame came
+   * first -- a busy test machine, or a press Steam delivers outside React's own batching -- the
+   * rows did not exist yet, the move found nothing and nobody tried again. Here the frame fires
+   * straight away, before the redraw; the ring must still land on the first row.
+   */
+  it("still lands on the first row when the next frame comes before the panel is drawn", async () => {
+    installSwissArmyModelSoNothingIsSuggested();
+    const { container } = renderModal();
+    await waitFor(() => {
+      expect(container.textContent).toContain("Installed 1 ·");
+    });
+    const early = vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      cb(0);
+      return 1;
+    });
+    try {
+      openFilters();
+    } finally {
+      early.mockRestore();
+    }
+
+    await waitFor(() => {
+      const firstRow = container.querySelector('[aria-label="Open source only (recommended)"]');
+      expect(firstRow).not.toBeNull();
+      expect(document.activeElement).toBe(firstRow);
+    });
+  });
+
   it("moves the ring to the first Suggested chip instead, when the screen has one to offer", async () => {
     // Default render, nothing installed -- every coverage role is a gap, so recommendedEntries is
     // non-empty and § 3e #2's move (Suggested lives inside the panel now) puts it first.

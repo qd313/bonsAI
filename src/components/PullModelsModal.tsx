@@ -240,7 +240,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   // Lifted into usePullModelCatalogRefresh. It must stay at exactly this point in the hook
   // list: React matches hooks by the order they run, not by name.
-  const { refreshInstalledAndMeta, scheduleFocusFrame } = usePullModelCatalogRefresh({
+  const { refreshInstalledAndMeta, focusAfterRedraw } = usePullModelCatalogRefresh({
     refreshCatalog,
     setInstalledTags,
     setSizeSource,
@@ -454,13 +454,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
    */
   function openFiltersPanel(): void {
     setFiltersOpen(true);
-    scheduleFocusFrame(() => openFiltersPanelEntry());
+    focusAfterRedraw(() => openFiltersPanelEntry());
   }
 
   /** Closes the panel and returns the ring to the Filters button — the D-pad's way back out. */
   function closeFiltersPanel(): boolean {
     setFiltersOpen(false);
-    scheduleFocusFrame(() => focusFiltersButton());
+    focusAfterRedraw(() => focusFiltersButton());
     return true;
   }
 
@@ -480,7 +480,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   function closeCustomTagEntry(): void {
     setCustomTagEntryOpen(false);
     setCustomTagInput("");
-    scheduleFocusFrame(() => focusCustomTagChip());
+    focusAfterRedraw(() => focusCustomTagChip());
   }
 
   /*
@@ -573,7 +573,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     setCustomPullBusy,
     setCustomTagInput,
     setCustomTagEntryOpen,
-    scheduleFocusFrame,
+    focusAfterRedraw,
   });
 
   const bindSelectRef =
@@ -1046,7 +1046,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     ev.stopPropagation();
                     ev.preventDefault();
                     setCustomTagEntryOpen(true);
-                    scheduleFocusFrame(() => focusCustomTagClose());
+                    focusAfterRedraw(() => focusCustomTagClose());
                   }}
                   aria-label="Type a model name by hand"
                   {...({
@@ -1054,7 +1054,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
                     onOKButton: okButtonRuns(() => {
                       setCustomTagEntryOpen(true);
-                      scheduleFocusFrame(() => focusCustomTagClose());
+                      focusAfterRedraw(() => focusCustomTagClose());
                     }),
                   } as unknown as Record<string, unknown>)}
                 >

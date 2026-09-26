@@ -396,6 +396,18 @@ All notable changes to this project are documented in this file.
   rate while an answer streamed, the difference between an answer staying above 45 frames a second and
   falling below it. Both now hold one steady look while text is arriving, and the question box's glow still
   breathes normally while the model is thinking. `answerBubble.ts`, `section-6.ts`.
+- **A protected boss's name could flash up in plain text for a few seconds while an answer was still
+  arriving, even though the finished answer covered it correctly:** the model sometimes writes its own
+  spoiler cover glued straight onto the sentence before it, with no line break, which was not being
+  recognised as a real cover — so the name, and raw spoiler-marker text, showed on screen until the
+  finished-answer cover caught up. The marker now gets its own line, its whole body is held back while
+  still being written, and a half-typed marker is never shown raw. `response_verify.py`,
+  `strategy_spoiler_policy.py`. On-Deck check owed.
+- **The model's own "thinking" can no longer name a protected boss in plain words:** thinking is shown as
+  plain text, so the answer's own spoiler cover was never applied to it, and a protected name could show
+  there in full, live and in the saved reasoning shown afterward. The sentence naming a protected thing is
+  now replaced with "[hidden]" instead, and any raw spoiler-marker text is stripped on sight.
+  `ollama_ask_service.py`, `game_ai_request.py`. On-Deck check owed.
 
 ### Added
 - **A knowledge-base question asked a while after the last one no longer pays extra time to search:** the

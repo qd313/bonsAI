@@ -120,18 +120,21 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
       2026-09-25**, row SUMUP-03: walking back up from the card and the first turn row, everything stayed
       visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`. **Extended (Deck) 2026-09-26:** walking
       all the way back up from the last of the 73 turn rows, everything stayed visible too.
-- [ ] A on the button starts the summary and the ring stays on it; a greyed-out button still takes the ring
-      and A on it does nothing. **Mostly PASS (Deck):** A started the summary and the ring stayed on the
+- [x] A on the button starts the summary and the ring stays on it; a greyed-out button still takes the ring
+      and A on it does nothing. **PASS (Deck):** A started the summary and the ring stayed on the
       button until it finished (2026-09-25, row SUMUP-03, `docs/test-evidence/plan68-SUMUP-03.json`); a
       greyed-out button took the ring, visible, three times on 2026-09-26 (`plan68-SUMUP-02-p2.json`,
-      `plan68-SUMUP-07-p3.json`, `plan68-SUMUP-13-p3.json`). **Still owed:** nobody has pressed A on a
-      greyed-out button on the Deck to see that nothing happens.
+      `plan68-SUMUP-07-p3.json`, `plan68-SUMUP-13-p3.json`). **A on a greyed-out button: PASS (Deck)
+      2026-09-26 13:16** — nothing happened: no card, no summary starting, nothing new in the plugin log
+      or the chat file. Evidence `docs/test-evidence/plan68-SUMUP-GREYED-A-p4.json` (+ `.png`).
 - [x] B from anywhere in the tab closes the whole panel. **PASS (Deck) 2026-09-25**, row SUMUP-04a: B closed
       the panel. Evidence `docs/test-evidence/plan68-SUMUP-04a.json`. **Extended (Deck) 2026-09-26:** B also
       closed the panel from the *Sum up this chat* button, from the summary card, and from a turn row, each
       time landing the ring back on Show details. Evidence `checks/plan68-session-tab-B-closes.json`.
-- [ ] With no turn rows at all, Down from the last stop in the tab stays put rather than falling into the dock.
-      **Not yet run on the Deck.** A new chat's first answer is the easy place to try it.
+- [x] With no turn rows at all, Down from the last stop in the tab stays put rather than falling into the dock.
+      **Cannot happen in normal use (2026-09-26):** every answer on the Deck carries context chips (checked
+      across all 8 chats), so a Session tab with no turn rows never comes up. Stays covered by the unit test
+      `SessionContextStrip.test.tsx`. Evidence `docs/test-evidence/plan68-SUMUP-GREYED-A-p4.json`.
 - [x] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
       the button at the top. **PASS (Deck) 2026-09-26:** Up from the dock landed on the last turn row's
       chips, visible. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
@@ -379,7 +382,7 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     launch tool can search, so it could not be started. Someone needs to play it once by hand first, or the
     launch tool needs to reach the full Library grid. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
-- [ ] **SPOILER-COVER-01** Fixed in code 2026-09-26 (plan 70, helper A), Deck check owed. On Hollow Knight, a
+- [ ] **SPOILER-COVER-01** Fixed in code 2026-09-26 (plan 70, helper A), Deck re-check owed. On Hollow Knight, a
   story-protected game, describe a boss without naming it ("the boss past the crystal spike area") — a
   sentence naming it must sit in a spoiler box, both while the reply arrives and once it finishes. Ask the
   same thing but name the boss yourself — the reply stays plain. On Deep Rock Galactic: Survivor, the same
@@ -387,7 +390,19 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
   never uses a note's own name at all (a paraphrase) is not caught. **FAILED (Deck) 2026-09-26 (plan 70,
   flow L1):** finished answers passed in full. But one live answer showed the boss name plain, plus raw
   spoiler-marker text, for about 4.7 seconds while still streaming, before the finished cover formed
-  correctly. Being fixed (helper A). Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`.
+  correctly. Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`. **Fixed 2026-09-26 (helper A,
+  `59bb4dd6`):** a fence marker glued straight onto running prose now gets its own line, its whole body is
+  held back while still being written, and a half-typed opener is never shown raw. **Deck re-check owed:**
+  the same teleporting-boss question again, watching the live answer for a plain name or raw fence text
+  before the cover forms.
+- [ ] **THINKING-SPOILER-01** Fixed in code 2026-09-26 (plan 70, helper A, `4b975316`), Deck re-check owed.
+  **FAILED (Deck) 2026-09-26 (plan 70, flow L1):** across 6 described-boss tries (Hollow Knight and Hades),
+  the live thinking line and the saved reasoning fold showed a protected name in plain words in 4 of 6
+  tries, and raw spoiler-fence marker text in 2 tries. Evidence
+  `docs/test-evidence/plan70-THINKING-SPOILER-01.json`. **Fixed:** the sentence naming a protected thing in
+  the model's own thinking is now blanked to "[hidden]", live and in the saved reasoning fold, and any raw
+  fence marker is stripped on sight. **Deck re-check owed:** the same 6-try described-boss setup, no
+  protected name or raw marker text in the thinking line or its saved fold.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
@@ -412,31 +427,14 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     body-text half.
 - [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the roadmap's Shelved list until a throttle or a slower test copy exists.
 - [ ] **KB-NOCLOSE-TEXT-01** Fixed in code 2026-09-26 (plan 70, helper B, `58f60c0a`), wired into answers (`e4c24bdd`), Deck check owed. Hollow Knight, Strategy mode, knowledge base on. Describe a boss without naming it ("the boss past the crystal spike area") and read Show details — the "no close match" line must not appear, since the reply is built on the Broken Vessel note. Also try a Half-Life 2 walkthrough question built on real chapter notes; same pass condition.
-- [ ] **KB-FOLLOWUP-BOSS-01** Fixed in code 2026-09-26 (plan 70, helper K, `e1bf3324`), Deck check owed. New chat, knowledge base on, Strategy mode, Hades or Hollow Knight. Name a boss, then ask a bare follow-up three times, reworded each time. All three must stay on the boss already named, without asking which one is meant.
 - [ ] **KB-NEWGAMES-01** Built 2026-09-26 (plan 70, helpers F and G), Deck check owed, flow R. Brotato, Palworld and Skyrim in the library. Launch Brotato, ask about the shop or the wave-20 bosses; launch Palworld, ask about catching a Pal or a Tower fight; ask about Skyrim by name (not installed on this Deck). Each game's own notes must attach, and Palworld's Tower-fight and Skyrim's story questions must open behind a spoiler box while Brotato's never do.
 - [ ] **STARTING-OUT-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. A covered game with a starting-out note, nothing running. Open the suggestion chips and confirm a "How do I get started in <game>?" chip appears; separately type "where do I start". Both must reach the game's own starting-out note.
 - [ ] **KB-TIP-PERGAME-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. Fallout 4 or GTA San Andreas: The Definitive Edition running. Ask a troubleshooting question that game's own tip answers (a launch or display option). The game's own tip must attach, credited as that game's tip, not a shared one.
 - [ ] **KB-FORMAT-REFUSE-01** Built 2026-09-26 (plan 70, helper E), Deck check owed, flow R. An older build of the plugin trying to install the new (format 4) library must refuse before downloading, with a plain message asking to update the plugin, rather than downloading and half-working.
 - [ ] **KB-NOMIC-OFFER-01** Built 2026-09-26 (plan 70, helper D), Deck check owed, flow R. Remove the library and the meaning-search model (allowed once, D112), install the library from the plugin's own button, then watch for a confirm box asking "Also download the meaning-search model (about 270 MB)? Better note matching." Download must behave like the existing pull button; Update afterwards must not ask again.
-- [ ] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows **Update AI & models** (quiet auto-probe)
-- [ ] **OLLAMA-FOCUS-02** Run AI on this Deck: D-pad vertical — toggle → Install/Update → Browse models → Install options… → Test connection → KB toggle
-- [ ] **OLLAMA-FOCUS-03** Up from Test connection lands on **Install options…** (or last Install-options submenu row when open)
 - [ ] **REPLY-VERB-01** Reply style: set **Caveman** → Ask → Input handling shows `Reply style: caveman` and reply is terse; **Balanced** → no `REPLY VERBOSITY` block vs baseline; **Detailed** → paragraphs; with **AI characters** on + Caveman, character voice (not caveman grammar); Strategy + Detailed still ends with `bonsai-strategy-branches`. **Tried 2026-09-26 (plan 70), UNCLEAR:** labels correct in all three modes, Balanced added nothing, Strategy + Detailed kept its branch menu, but the maintainer's AI character was on the whole time, which drops the Caveman instruction by design and left Detailed and Balanced almost the same length — needs a re-run with characters off. Evidence `docs/test-evidence/plan70-REPLY-VERB-01.json`.
-- [ ] **OLLAMA-KEEPALIVE-FOCUS-01** **Keep models loaded** slider thumb: white gpfocus ring vertically centered on the dot (no ~1px high offset)
-- [ ] **ROUTING-MERGE-SIZE-01** FAILED (Deck) 2026-09-26 (plan 70, flow L1), being fixed (helper I): the
-  note-search model (the one model outside the curated catalog) showed "?" for its size, and the models
-  list header's own total left it out — right for a moment before live sizes finished loading, then
-  wrong. Evidence `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`.
-- [ ] **SCREENSHOT-SHRINK-01** Fixed 2026-09-26 (plan 70, helper J, `c625a03b`): a big, barely-compressed
-  screenshot used to crash the model's graphics chip; `ffmpeg` now shrinks it first. Attach a big
-  screenshot (the one that crashed it before is in `docs/test-evidence/plan64-SCREENSHOT-CRASH-*`) — the
-  answer must come back normally, the picture actually sent must be small, and the plugin log must show
-  the `ffmpeg` shrink path. **COULD NOT RUN (Deck) 2026-09-26 (plan 70, flow L1):** the controller rig's
-  own screenshot chord (Steam + R1) took no picture, tried twice about a minute apart — 0 new files on
-  disk, nothing visibly changed on screen. The attach, the answer and the `ffmpeg` log line were not
-  tested. Tools finding logged. Evidence `docs/test-evidence/plan70-SCREENSHOT-BIG-L1-5.json`.
-- [ ] **ROUTING-01** Set text/vision try order opens picker listing installed tags without requiring a prior Test connection tap
-- [ ] **ROUTING-02** Reorder + Done persists; reopen modal shows saved order
+- [ ] **OLLAMA-KEEPALIVE-FOCUS-01** **Keep models loaded** slider thumb: white gpfocus ring vertically centered on the dot (no ~1px high offset). **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** measured, not centred — the ring's own box sits 3.5 css px (4.5 screen px) above the dot's middle, where a pass needs under 1 px; the ring's own right side also reaches about 17 px past the slider card's right edge. ★ layout, not fixed this wave. Evidence `docs/test-evidence/plan70-OLLAMA-KEEPALIVE-FOCUS-01.json` (+ `.png`, cropped `.png`).
+- [ ] **ROUTING-MERGE-SIZE-02** An installed model's size comes from the Deck's own Ollama first; the online library is only asked about a model not yet installed. Fixed 2026-09-26 (plan 70, helper I, `86a148a7`), replacing ROUTING-MERGE-SIZE-01. With the note-search model (or any model outside the built-in list) installed, its size must show a real number, not "?", and stay after live sizes load; the header must count it. Deck check owed.
 - [ ] **ROUTING-FOCUS-01** Try-order modal chrome matches Pull Models / Character picker (deferred bug). **The D-pad half is no longer a question** — it failed on 2026-08-28, see PICKER-REORDER-01
 - [ ] **QAM-BODY-RO-01** Switch tabs repeatedly (10+, through the taller Settings/Ollama panels), then D-pad to the **bottom** of a long panel: the pane must still reach its end and not be pinned to a stale height. Steam replaces the scroll node on every switch, so this is specifically about the 2nd switch onward — one switch proves nothing. Fixed 2026-08-08; if it regresses, `--bonsai-tab-body-height` will stop matching the live pane's `clientHeight` after a switch. **Re-run QAM-BAZZITE-01 and D-PAD-SCROLL-01 with this** — same measurement chain
 - [ ] **SOFT-PREDICT-04** Strategy mode, an answer long enough to continue mid-branch (opens a `bonsai-strategy-branches` fence before hitting the length wall): confirm no half-rendered fence or stray JSON appears at any point in the stream, including right at the continue boundary — **BLOCKED 2026-09-18:** the long Hades walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`. **Tried again 2026-09-23, still unclear:** the finished text read clean — no half-rendered fence, no stray JSON, at any point — but the reply stopped on its own at 1,117 tokens against a 2,112-token limit in the log, so it never had to continue and the join point this row actually checks never happened. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04.json`. **Tried a second time 2026-09-23, still unclear, same shape:** a Half-Life 2 walkthrough question asked for a very long answer on purpose; the model still stopped itself at 1,050 tokens, well under the 2,112 limit. Asking for more length does not reach the wall — the row needs another way to bring the limit down rather than the question up. Evidence `docs/test-evidence/plan64-SOFT-PREDICT-04-try2.json`.

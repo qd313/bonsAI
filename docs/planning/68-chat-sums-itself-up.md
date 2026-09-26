@@ -499,6 +499,12 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
   Down in the tab. Both are for the next time the Deck is free. Open follow-ups, each its own roadmap
   entry: the summary card sitting behind the dock, the summary's own wording, the doubled-marker cause, a few small D-pad slips, the
   "N earlier" flood, and a fresher card title.
+- **2026-09-26** — The last two manual checklist rows, checked during plan 70's own Deck time (13:15-13:17,
+  external monitor, build `7a5991d3`). **A on a greyed-out Sum up button does nothing: passes** — the
+  button stayed greyed, its reason line unchanged, no card, no summary starting, nothing new in the plugin
+  log or the chat file. **A Session tab with no turn rows: cannot happen in normal use** — every answer on
+  the Deck carries context chips (checked across all 8 chats), so the case stays covered by its own unit
+  test instead. Evidence `docs/test-evidence/plan68-SUMUP-GREYED-A-p4.json` (+ `.png`).
 
 ---
 

@@ -133,13 +133,11 @@ starts work outside this.
   in flight, instead of staying disabled forever after a model's first answer. Evidence
   `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`. **Deck check owed:** row **PRELOAD-RM-01** in
   [testing.md](testing.md).
-- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **OPEN, FAILED on
-  the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper I).** A 17 GB model said it would free
-  "< 0.1 GB" — the screen only asked sizes for its own bundled catalog; it now learns what is actually
-  installed first, but the one installed model outside the curated catalog (the note-search model) still
-  shows "?" for its size, and the header's own total leaves it out (4.0 GB shown, 4.3 GB real). Row
-  **ROUTING-MERGE-SIZE-01** in [testing.md](testing.md), evidence
-  `docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`.
+- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **VERIFY, fixed
+  2026-09-26 (plan 70, helper I, commit `86a148a7`).** An already-installed model's size now comes from
+  the Deck's own Ollama first; the online library is only asked about a model not yet installed. **Deck
+  re-check owed:** row **ROUTING-MERGE-SIZE-02** in [testing.md](testing.md), replacing
+  **ROUTING-MERGE-SIZE-01**. [Detail](roadmap-details.md#model-size-fix-and-re-check).
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
@@ -225,13 +223,6 @@ starts work outside this.
   D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
   on the device. Needs a reproduction with an empty download queue.
   [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
-- ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **VERIFY, fixed 2026-09-26 (plan 70,
-  helper J).** A big, barely-compressed picture crashed the model's graphics chip, since bonsAI only ever
-  shrank a picture when an image library not present on the Deck was installed. Per the maintainer's D112
-  call, `ffmpeg` (already on the Deck) now does the shrinking, or refuses the picture with a message if it
-  can't. **Could not run on the Deck 2026-09-26** (plan 70, flow L1): the screenshot chord took no picture.
-  **Deck check owed:** row **SCREENSHOT-SHRINK-01** in [testing.md](testing.md).
-  [Detail](roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
@@ -248,12 +239,17 @@ starts work outside this.
   choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
   visible area, with the panel half blank.
 - ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
-  already sitting on a filter** — **OPEN, found on the Deck 2026-09-23 (flow H) and again by the plan 65
-  Deck check 2026-09-24.** Once, Manage AI models… opened with its Filters panel already open and the
-  ring already on "Open source only (recommended)"; separately, the ring has landed one press away from
-  changing a licence filter — both times with nothing pressed to put it there. Evidence
-  `docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot `plan64-PRELOAD-01-try3-filters-open.png`).
-  Planned in plan 70.
+  already sitting on a filter** — **OPEN, now with a reliable trigger, being fixed (helper I).**
+  "Manage AI models…" reproduces it 3 of 3; "Browse models…" never does (0 of 13).
+  [Detail](roadmap-details.md#ai-models-filters-panel-focus-bugs).
+- ★★ `[ollama]` `[focus]` **With the AI models screen's Filters panel open, the D-pad cannot reach Done or
+  the model list below it** — **OPEN, found 2026-09-26, being fixed (helper I).** Row **HUB-EDGE-01**
+  (filters-open half). Walking Down stops at "Close filters" and goes no further.
+  [Detail](roadmap-details.md#ai-models-filters-panel-focus-bugs).
+- ★ `[ollama]` **"Reset to defaults" in the try-order picker saves an explicit list where there used to be
+  none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
+  writes an explicit list instead. Same order shown, a paper difference today. Evidence
+  `docs/test-evidence/plan70-ROUTING-01-02.json`.
 - ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
   found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
   shared checkout, so a copy's own generated files go stale and its full checks fail one step.
@@ -298,11 +294,22 @@ starts work outside this.
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **OPEN, FAILED live on the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper A).** Finished answers
-  are covered correctly; a cover forming mid-stream can still show plain text and raw marker text for a few
-  seconds first. Row **SPOILER-COVER-01** in [testing.md](testing.md), evidence
-  `docs/test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
-  [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
+  **VERIFY, fixed 2026-09-26 (plan 70, helper A, commit `59bb4dd6`).** The live-leak cause: a spoiler cover
+  the model glued straight onto the sentence before it, with no line break, was not recognised as a real
+  cover. **Deck re-check owed:** row **SPOILER-COVER-01** in [testing.md](testing.md).
+  [Detail](roadmap-details.md#spoiler-cover-leak-family).
+- ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **VERIFY, fixed
+  2026-09-26 (plan 70, helper A, commit `4b975316`).** Thinking is drawn as plain text, so a protected name
+  there was never covered by the answer's own spoiler fence. **Deck re-check owed:** row
+  **THINKING-SPOILER-01** in [testing.md](testing.md).
+  [Detail](roadmap-details.md#spoiler-cover-leak-family).
+- ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** — **OPEN,
+  found 2026-09-26, being fixed (helper A).** A third leak in the same family as the two above.
+  [Detail](roadmap-details.md#spoiler-cover-leak-family).
+- ★ `[reply]` **A reply can echo one of its own instruction lines back to the player** — **OPEN, found
+  2026-09-26.** A Hollow Knight answer opened with "Strategy guide mode active. I will keep the coaching
+  spoiler-minimized" — meant to steer the model, spoken to the player instead. Evidence
+  `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
 - ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **OPEN,
   found 2026-09-25 (plan 68).** The chat memory now copes with the doubling (`6843f8e1`), but why it happens
   has not been found. Deck check owed.
@@ -768,20 +775,13 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
-- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **VERIFY, fixed 2026-09-26.**
-  Deck check owed: row **KB-NOTIP-FLOOR-01** in [testing.md](testing.md). [Detail](roadmap-details.md#tip-cut-off-fix).
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
   2026-09-26, not fixed.** `knowledge_base_service.py` line ~946. [Detail](roadmap-details.md#speed-mode-tip-gap).
-- ★★ `[KB]` `[ollama]` **The note-search model is only held in memory for 5 minutes, not the 4 hours the
-  answer model gets** — **VERIFY, fixed 2026-09-26 (`409de9f6`).** Both models now share one hold time.
-  Deck check owed: a question more than 5 minutes after the last one must not pay to reload.
 - ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
-  thing** — **VERIFY, both halves fixed 2026-09-26 (plan 70, helper M, `804bd004` + `f14de761`).** Cause 1:
-  every question got a flat score bump from its Ask mode, so a troubleshooting question with nothing else
-  to weigh still landed on "med" — troubleshooting questions now skip that bump. Cause 2: a "Starting out"
-  note could be picked as the named entity, since its title ends in the game's own name — such notes are
-  now skipped when matching. **Not fixed:** a game's own name can still count as naming a note in general.
-  Deck check owed. Evidence `docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
+  thing** — **VERIFY, both halves fixed 2026-09-26 (plan 70, helper M), partly re-checked on the Deck.**
+  Both fixes work as intended but do not fully close the gap. **Not fixed:** a game's own name can still
+  count as naming a note in general. Deck check owed.
+  [Detail](roadmap-details.md#the-spoiler-risk-band-reads-med-on-every-answer).
 - ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
   `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
   time. A fallback to the plain page would cover it for good.
@@ -816,21 +816,15 @@ ones from this month are D81 to D88.
   rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
   stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
-- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **VERIFY, fixed 2026-09-26
-  (plan 70, helper K, commit `e1bf3324`).** A follow-up now sends the model the earlier question and a
-  short version of its own last answer, on by default. Measured on the PC, 8 games × 3 runs: right boss 21
-  of 24, against 4 of 24 before. Turning it on exposed a real spoiler-safety risk an existing test caught:
-  the reminder was spliced in before the checks that decide whether the person named a boss or allowed
-  spoilers; the splice now happens after those checks. **Deck check owed:** row **KB-FOLLOWUP-BOSS-01** in
-  [testing.md](testing.md). [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
   2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
   so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
   nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
   losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
-  note is still attached. **Found again 2026-09-18 and again 2026-09-26 (plan 70, flow L1):** a Hades boss
-  question attaches the wrong area's note and the reply names the wrong bosses.
+  note is still attached. **Found again 2026-09-18 and 2026-09-26 (plan 70, flow L1):** a Hades boss
+  question attaches the wrong area's note. **Regression found 2026-09-26 (flow L2), being fixed (helper
+  B):** the "no close match" line now goes missing on this bug's own control question.
   [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
@@ -1016,6 +1010,22 @@ review, again to keep this document under its size limit.
 
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **DONE, built 2026-09-25, all Deck
   checks passed 2026-09-26 (plan 68).** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+
+**Closed 2026-09-26 (plan 70, flow L1, missed in the earlier bookkeeping pass):**
+
+- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **DONE, fixed 2026-09-26, passed
+  on the Deck 2026-09-26.** [Detail](roadmap-details.md#tip-cut-off-fix).
+
+**Closed 2026-09-26 (plan 70, flow L2, second Deck pass):**
+
+- ★★ `[KB]` `[ollama]` **The note-search model is only held in memory for 5 minutes, not the 4 hours the
+  answer model gets** — **DONE, fixed 2026-09-26 (`409de9f6`), passed on the Deck 2026-09-26.** Evidence
+  `docs/test-evidence/plan70-L1-8-HELPER-M.json`.
+- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **DONE, fixed 2026-09-26 (plan
+  70, helper K, commit `e1bf3324`), passed on the Deck 2026-09-26, row reworded to "stays on the right
+  boss."** [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
+- ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **DONE, fixed 2026-09-26 (helper J),
+  passed on the Deck 2026-09-26.** [Detail](roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 

@@ -1,0 +1,45 @@
+{
+ "row": "plan 68 manual checklist: A on a greyed-out Sum up button does nothing; a Session tab with no turn rows",
+ "session": "bonsai-03, plan 68, fourth Deck visit (driven by the session itself)",
+ "build": "7a5991d3 as installed by bonsai-50 (not redeployed; contains 23ec6949 and every plan 68 screen change)",
+ "deck_time": "2026-09-26 13:15-13:17 EDT",
+ "screen": "external monitor, Quick Access page 855x766, dock top 600",
+ "setup": "no game running; bonsai-50's one-answer test chat 'what is on this screen'; AI character Ali G heavy (the maintainer's setting)",
+ "pressed": [
+  "walkTo Down x8 -> Show details",
+  "A (open)",
+  "Down -> tabs row",
+  "Right (Session)",
+  "Down -> Sum up this chat (visible)",
+  "A on the greyed button",
+  "B"
+ ],
+ "before_A": {
+  "button": "Sum up this chat, class bonsai-sumup-btn--off, aria-disabled=true, ring on it, 534-567 (visible)",
+  "reason_line": "The whole chat still fits, so there's nothing to sum up yet.",
+  "card": false,
+  "summing_up_line": false,
+  "chat_file": "ee9957d4...json 13:08:46 8641 bytes",
+  "log_last_line": "13:11:33 bonsAI plugin loaded!"
+ },
+ "after_A_13s": {
+  "button": "unchanged: greyed, same label, ring still on it, no spinner",
+  "reason_line": "unchanged",
+  "card": false,
+  "summing_up_line": false,
+  "stop_button": false,
+  "chat_file": "unchanged (13:08:46, 8641 bytes)",
+  "log": "no new line",
+  "ollama_journal_posts_last_minute": 0
+ },
+ "b_from_button": "closed the panel, ring on Show details, visible (runs/plan68-SUMUP-GREYED-A-p4-close.json)",
+ "verdict_greyed_A": "PASS",
+ "no_turn_rows": "NOT REACHABLE in normal use: a Session row exists for every turn that carries context chips, and all 12 answers across the Deck's 8 chats carry them (scanned over SSH). Stays covered by the unit test 'with nothing below, Down from the button is consumed so Steam cannot throw the ring into the dock' (SessionContextStrip.test.tsx).",
+ "observation": "The greyed button's reason line wraps to two lines at 573-604, so the bottom 4 px of its second line ('yet.') sit under the dock (top 600) while the ring is on the button. Readable, cosmetic; same family as the open 'summary card behind the dock' bug.",
+ "steam_background": "Not black: the store page drew behind the panel, gamescope 60 fps (bonsai-50 had asked).",
+ "screenshot": "plan68-SUMUP-GREYED-A-p4.png (ring on the greyed button after A)",
+ "raw_runs": [
+  "runs/plan68-SUMUP-GREYED-A-p4-walk.json",
+  "runs/plan68-SUMUP-GREYED-A-p4-close.json"
+ ]
+}

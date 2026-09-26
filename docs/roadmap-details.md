@@ -530,7 +530,8 @@ top measured 597 pixels down against the dock's own top at 600, only 3 pixels of
 from the note under a summarised answer (SUMUP-02), only the top 81 pixels of the card showed above the
 dock. Either way, a person does not see the card appear on its own — they have to press Down to bring it
 into view. **Still true on the second Deck pass, 2026-09-26:** opened from the note again, only 44 of the
-card's 418 pixels showed above the dock. Deck check owed once a fix lands.
+card's 418 pixels showed above the dock. The greyed Sum up button's two-line reason line dips 4 px under
+the dock too (573-604, dock 600). Deck check owed once a fix lands.
 
 ---
 
@@ -1172,7 +1173,7 @@ worse answers with nothing on screen to say why.
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 
-## A name-withheld boss question on a story-protected game comes back with no spoiler box
+## Spoiler cover leak family
 
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
@@ -1238,6 +1239,36 @@ Hollow Knight answer showed "The Soul Master fight is all about timing his movem
 fence mid-line, before the finished cover formed correctly. Row **SPOILER-COVER-01** in
 [testing.md](testing.md), evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
 **Known gap, still open:** a spoiler that never uses a note's own name (a paraphrase) is not caught.
+
+**Fixed 2026-09-26 (plan 70, helper A, commit `59bb4dd6`).** Cause: the model sometimes writes its own
+spoiler cover with no line break before it ("The```bonsai-spoiler"), which neither the checker nor the
+screen's own parser will ever recognise as a real cover — both require one to start its own line. Three
+fixes, all in the safety net itself: give a fence marker glued to running prose its own line; hold back
+a spoiler fence's whole body while it is still being written, not just the sentence that names
+something; and never show a half-typed opener ("```bon") raw while it forms. Proved by breaking the
+line-start fix on purpose: 4 named tests failed as expected, restored afterward. **Deck re-check owed:**
+the same live-answer setup — the teleporting-boss question again, watching the reply while it is still
+arriving for a plain name or raw fence text before the cover forms.
+
+**The model's own thinking can leak the same way, fixed 2026-09-26 (plan 70, helper A, commit
+`4b975316`).** Measured live on the Deck (THINKING-SPOILER-01): the live thinking line, and the saved
+reasoning shown in the fold afterwards, both named a protected boss in plain words in 4 of 6 tries, plus
+raw fence marker text twice (the model's own thinking quoting its instructions' fence syntax back at
+itself). Thinking is drawn as plain text, never markdown, so a fence would not have hidden anything
+there anyway — this blanks the sentence that names a protected thing instead, replacing it with
+"[hidden]", and strips any raw fence marker on sight. Wired into both the live thinking line and the
+saved reasoning shown in the fold and the "Show details" panel. Proved by breaking the redaction on
+purpose: 3 named tests failed as expected, restored afterward. **Deck re-check owed:** the same 6-try
+described-boss setup — no protected name in plain words in the live thinking line or the saved reasoning
+fold, and no raw fence marker text.
+
+**A third leak found 2026-09-26 (plan 70, flow L2), being fixed (helper A): the suggestion menu itself
+can name a protected boss.** Beside the live-text and thinking leaks above, the branch menu's own
+question line under a Hollow Knight answer read "Are you currently struggling with the Soul Master's
+movement or damage output?" in plain view, fully visible, not inside any spoiler element — even though
+the player's own question never named the boss. Screenshot
+`plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png`. Evidence
+`docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
 
 
 ## Headline first: every answer opens with one line that stands alone
@@ -1420,6 +1451,13 @@ limit (word for word):**
   **Sighting, 2026-09-26 (plan 70, flow L1):** Hades "who is the first boss" and "the boss at the end of
   Tartarus" both attached the same wrong note (Theseus and Asterius) and the reply talked about them,
   twice. Evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json`.
+
+**Regression found 2026-09-26 (plan 70, flow L2), being fixed (helper B).** After the "no close match"
+wiring fix landed (`e4c24bdd`), the Black Mesa horse-taming control question — still a wrong-subject
+question with nothing that matches — no longer shows the "no close match" line at all, on screen or in
+the saved chat file. The model instead says in its own words that it has no information on the subject,
+inside its own spoiler cover around otherwise harmless general mechanics. The line is meant to still
+appear here, since nothing genuinely matches. Evidence `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -1618,6 +1656,16 @@ attached note scores 11/0/8/5; sending the previous question and a short version
 subject into the instructions) was already shipped. The maintainer picked sending the previous question
 and answer (D112, added 2026-09-26); being switched on now.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L2), closed, row reworded to "stays on the right boss."**
+Four tries, each a new chat: name a boss, then a bare follow-up about its second phase, reworded each
+time. All four stayed on the boss already named — nobody was asked which one, nobody named a wrong one.
+Two of the four said the boss's name outright (one of those inside a spoiler cover, correctly, since the
+player had named her first); the other two only said "her"/"she," without naming anyone, which still
+counts as staying right rather than going wrong. Side finding, not a bug: a Hollow Knight follow-up asked
+about a second Hornet fight; the reply said the notes don't mention one, which is true — the game does
+have a second Hornet fight, the notes just don't cover it. Evidence
+`docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+
 ## Check that a spoiler cover actually happened
 
 Long version of the roadmap entry. Moved here 2026-09-25 by the plan 70 bookkeeping pass; the roadmap keeps
@@ -1681,6 +1729,14 @@ old raw-bytes fallback) and confirmed exactly two tests catch it, then restored.
 **Could not run on the Deck 2026-09-26 (plan 70, flow L1).** The rig's own screenshot chord (Steam+R1)
 took no picture, tried twice, so the fix has not yet been checked with a real attachment. Retried in
 flow L2 with a workaround file. Row **SCREENSHOT-SHRINK-01** stays Deck check owed.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L2), closed.** The workaround file (the same 2.6 MB
+picture that crashed the model twice on 2026-09-23) was attached again: the answer came back normally
+in 38.9 seconds, nothing in the Deck's own log about a graphics-chip error, and the request actually
+sent measured 107,526 bytes against 3,667,775 bytes for the same file before the fix — 34 times
+smaller. The row's own wording asked for a log line as well, but the shrink writes nothing when it
+succeeds, so the row was reworded to judge by the size of the request sent instead. Evidence
+`docs/test-evidence/plan70-SCREENSHOT-BIG-L2-1b.json`.
 
 ## Measure how well the AI reads a screenshot
 
@@ -1928,4 +1984,69 @@ attached, none dropped, with a roughly 16,000-character prompt. Evidence
 `docs/test-evidence/plan64-KB-TRANSPARENCY-starved.json`, `docs/test-evidence/plan64-KB-TRANSPARENCY-starved-try2.json`.
 **Sighting, 2026-09-23:** searching the notes by meaning took about 1,070 milliseconds with a game
 running, against 22 to 60 milliseconds measured elsewhere with nothing running.
+
+## The spoiler-risk band reads "med" on every answer
+
+Long version of the roadmap entry. Moved here 2026-09-26 to keep the roadmap under its size limit.
+
+**Cause 1:** every question got a flat score bump from its Ask mode, so a troubleshooting question with
+nothing else to weigh still landed on "med" — troubleshooting questions now skip that bump. **Cause 2:**
+a "Starting out" note could be picked as the named entity, since its title ends in the game's own name —
+such notes are now skipped when matching. Both halves fixed 2026-09-26 (plan 70, helper M, `804bd004` +
+`f14de761`). **Not fixed:** a game's own name can still count as naming a note in general. Evidence
+`docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
+
+**Partly re-checked on the Deck 2026-09-26 (plan 70, flow L2, helper M).** A "my game is crashing"
+troubleshooting question now reads "low", as the fix intends. But "my deck fan gets very loud while
+idle" still reads "med" — the word list this fix skips the bump for does not cover a hardware-wear
+question with no crash-shaped word in it. The named-entity half: a final Hollow Knight boss fight with
+no note of its own no longer names "Starting out in Hollow Knight" (the fix working), but now names
+"False Knight" instead — a different wrong boss, since there is still no note for this fight. Evidence
+`docs/test-evidence/plan70-L1-8-HELPER-M.json`.
+
+## Model size fix and re-check
+
+Long version of the roadmap entry. Moved here 2026-09-26 to keep the roadmap under its size limit.
+
+A 17 GB model said it would free "< 0.1 GB" — the screen only asked sizes for its own bundled catalog.
+**Fixed 2026-09-26 (plan 70, helper I, commit `86a148a7`).** An already-installed model's size now comes
+from the Deck's own Ollama first (`GET /api/tags`, which already reports every installed model's real
+size); the online library is only asked about a model not yet installed, which is still the right
+question for "how big would this be to pull." **Deck re-check owed:** with the note-search model (or
+any model outside the built-in list) installed, its size must show a real number, not "?", and must stay
+after live sizes load; the header must count it. Row **ROUTING-MERGE-SIZE-02**, replacing
+**ROUTING-MERGE-SIZE-01** (the Deck result that found this, evidence
+`docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`).
+
+## AI models filters panel focus bugs
+
+Long version of two roadmap entries. Moved here 2026-09-26 to keep the roadmap under its size limit.
+
+**The ring-on-a-filter bug.** Found on the Deck 2026-09-23 (flow H) and again by the plan 65 Deck check
+2026-09-24: once, Manage AI models… opened with its Filters panel already open and the ring already on
+"Open source only (recommended)"; separately, the ring landed one press away from changing a licence
+filter — both times with nothing pressed to put it there. Evidence
+`docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot `plan64-PRELOAD-01-try3-filters-open.png`).
+Planned in plan 70.
+
+**Measured 2026-09-26 (plan 70, flow L2 + 2c), a reliable trigger found.** Opening through "Manage AI
+models…" reproduces it every time (3 of 3) — the screen opens with the Filters panel already open and
+the ring on "Open source only (recommended)". Opening through "Browse models…" never does (0 of 13),
+whatever way the screen was last closed. Both buttons open the same screen; the difference is which
+button opened it. Being fixed (helper I). Evidence `docs/test-evidence/plan70-RING-ON-FILTER-2c1.json`
+(+ screenshot `plan70-RING-ON-FILTER-manage-open1.png`).
+
+**Note on B, 2026-09-26:** with the Filters panel open, B does two different things depending on where
+the ring is — on the Filters button, B closes the whole screen; inside the panel, B only folds the panel
+and puts the ring back on the Filters button. Worth knowing when reading any walk through this screen,
+not itself a fix to make.
+
+**A second, related bug in the same screen: the D-pad cannot reach Done or the model list with the
+Filters panel open.** Found on the Deck 2026-09-26 (plan 70, flow L2), being fixed (helper I). Row
+**HUB-EDGE-01** (filters-open half). Walking Down through the filter choices stops at "Close filters"
+and goes no further, even though Done is visible on screen the whole time; the third licence choice
+("Any installed model") is never reached either direction. Walking Up out of the open panel folds it
+shut by itself, as a side effect. With the panel closed, the same walk reaches Done and back with
+nothing skipped. Evidence `docs/test-evidence/plan70-HUB-EDGE-01.json` (+ screenshot
+`plan70-HUB-EDGE-01-panel-folded-after-up.png`).
 

@@ -382,3 +382,43 @@ testing-manual.md. Found by the planning-folder review
   one-failure-after-a-deploy quirk, now seen twice in a row. Evidence
   `docs/test-evidence/plan70-OLLAMA-TAB-AFTER-RELOAD-02.json`.
 
+### Plan 70 flow L2 + 2c (2026-09-26)
+
+- [x] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows
+  **Update AI & models**. **PASS (Deck) 2026-09-26:** straight after a deploy and the first plugin open,
+  with Test connection never pressed, the button already read "Update AI & models" and the status line
+  showed "Connected · Ollama v0.34.1 · 2 models" from the quiet auto-probe alone. Evidence
+  `docs/test-evidence/plan70-OLLAMA-FOCUS-01.json` (+ `.png`).
+- [x] **OLLAMA-FOCUS-02** Run AI on this Deck: D-pad vertical walk. **PASS (Deck) 2026-09-26:** walking
+  down then back up from the "Run AI on this Deck" switch visited every stop the row expects, in order,
+  nothing skipped, all visible — plus one newer switch ("Start the AI with the Deck") added since the row
+  was written. Saved walk `checks/plan70-OLLAMA-FOCUS-02.json`. Evidence
+  `docs/test-evidence/plan70-OLLAMA-FOCUS-02.json`.
+- [x] **OLLAMA-FOCUS-03** Up from Test connection lands on **Install options…**. **PASS (Deck) 2026-09-26:**
+  tried twice (the recorded walk and the saved-check replay), both times Up from Test connection moved the
+  ring onto "Install model bundles" (the Install options… button), fully visible. The variant with an
+  Install-options submenu row open was not tried. Evidence `docs/test-evidence/plan70-OLLAMA-FOCUS-03.json`.
+- [x] **ROUTING-01** Set text/vision try order opens picker listing installed tags without requiring a
+  prior Test connection tap. **PASS (Deck) 2026-09-26:** opened the picker two plugin reloads after a
+  deploy, with Test connection never pressed — it listed both installed tags straight away. Evidence
+  `docs/test-evidence/plan70-ROUTING-01-02.json`, screenshot `plan70-ROUTING-01.png`.
+- [x] **ROUTING-02** Reorder + Done persists; reopen modal shows saved order. **PASS (Deck) 2026-09-26:**
+  moved a model down one step, pressed Done, reopened the picker — the new order was still there. Put
+  back afterward. Caveat: putting an order back with Reset to defaults + Done saves an explicit list where
+  there used to be none — see the new bug this found on the roadmap. Evidence
+  `docs/test-evidence/plan70-ROUTING-01-02.json`.
+- [x] **SCREENSHOT-SHRINK-01** A big, barely-compressed screenshot used to crash the model's graphics
+  chip; `ffmpeg` now shrinks it first. **PASS (Deck) 2026-09-26:** the same 2.6 MB picture that crashed the
+  model twice on 2026-09-23 was attached again — the answer came back normally in 38.9 seconds, no
+  graphics-chip error in the Deck's own log, and the request actually sent measured 107,526 bytes against
+  3,667,775 bytes for the same file before the fix. Row reworded: judged by the size of the request sent,
+  since the shrink writes no log line of its own when it succeeds. Evidence
+  `docs/test-evidence/plan70-SCREENSHOT-BIG-L2-1b.json`.
+- [x] **KB-FOLLOWUP-BOSS-01** A follow-up stays on the boss it was already asked about. **PASS (Deck)
+  2026-09-26, reworded to "stays on the right boss":** four fresh chats, name a boss then a bare follow-up
+  about its second phase — all four stayed on the boss already named, never asked which one, never named a
+  wrong one. Two of the four said the name outright (one correctly inside a spoiler cover), the other two
+  said "her"/"she" without naming anyone, which still counts as staying right. Side finding, not a bug: a
+  Hollow Knight follow-up about a second Hornet fight said the notes don't mention one, true of the notes
+  rather than the game. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+

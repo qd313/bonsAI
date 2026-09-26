@@ -71,6 +71,7 @@ export const FRONTEND_RPC_METHODS = [
   "create_chat_slot",
   "delete_chat_slot",
   "rename_chat_slot",
+  "sum_up_chat_slot",
 ] as const;
 
 export type FrontendRpcMethod = (typeof FRONTEND_RPC_METHODS)[number];
@@ -273,6 +274,7 @@ function defaultHandlers(): Record<string, RpcHandler> {
       },
     }),
     delete_chat_slot: () => ({ ok: true }),
+    sum_up_chat_slot: () => ({ accepted: false, status: "nothing_to_do" }),
     rename_chat_slot: () => ({
       ok: true,
       slot: { id: "slot-test-1", label: "Renamed", created_at: 0, updated_at: 0, turns: [] },

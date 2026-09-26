@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2247,
+      "lines": 2250,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -12,12 +12,12 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1735,
+      "lines": 1676,
       "role": ""
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1513,
+      "lines": 1515,
       "role": ""
     },
     {
@@ -96,6 +96,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 817,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 745,
       "role": ""
@@ -128,11 +133,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 704,
-      "role": ""
-    },
-    {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 695,
       "role": ""
     },
     {

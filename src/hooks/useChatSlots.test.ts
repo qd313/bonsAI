@@ -317,4 +317,77 @@ describe("useChatSlots", () => {
       expect(chatSlotsApi.deleteChatSlot).not.toHaveBeenCalled();
     });
   });
+
+  /*
+   * Plan 68: the open chat's own summary rides on its row of the chat list, set by the same load
+   * that sets the transcript -- and blanked the moment another chat is picked, so a card can never
+   * show under a chat it does not belong to.
+   */
+  describe("the open chat's summary on its own row", () => {
+    const SUMMARY = {
+      text: "Playing Half-Life 2.",
+      covers_through_turn_id: "a1",
+      turns_covered: 2,
+      oldest_turns_unread: 0,
+      hidden_notes_left_out: 0,
+      written_at: "2026-09-25T19:00:00Z",
+      seconds: 30,
+      model: "gemma4:e2b-it-qat",
+    };
+    const row = (id: string) => ({ id, label: id, created_at: 0, updated_at: 0, turn_count: 4 });
+
+    function renderWithSlots() {
+      vi.mocked(chatSlotsApi.listChatSlots).mockResolvedValue([row("summed"), row("plain")]);
+      vi.mocked(chatSlotsApi.getChatSlot).mockImplementation(async (id: string) =>
+        id === "summed"
+          ? {
+              ...row("summed"),
+              summary: SUMMARY,
+              can_sum_up: true,
+              turns: [
+                { id: "q1", role: "user", text: "one" },
+                { id: "a1", role: "assistant", text: "one." },
+                { id: "q2", role: "user", text: "two" },
+                { id: "a2", role: "assistant", text: "two." },
+              ],
+            }
+          : { ...row("plain"), turns: [{ id: "q9", role: "user", text: "hi" }, { id: "a9", role: "assistant", text: "hello" }] },
+      );
+      const activeSlotIdRef = { current: null as string | null };
+      return renderHook(() =>
+        useChatSlots({
+          activeSlotIdRef,
+          setAskThreadCollapsed: vi.fn(),
+          setAskThreadDisplayQuestion: vi.fn(),
+          setExpandedTurnKey: vi.fn(),
+        }),
+      );
+    }
+
+    it("the open chat's row carries its summary, whether there is anything to sum up, and what is kept", async () => {
+      const { result } = renderWithSlots();
+      await act(async () => {
+        await result.current.refreshSummaries();
+        await result.current.selectSlot("summed");
+      });
+      const open = result.current.summaries.find((r) => r.id === "summed");
+      expect(open?.sumUp?.summary).toEqual(SUMMARY);
+      expect(open?.sumUp?.canSumUp).toBe(true);
+      expect(open?.sumUp?.questionsAfterSummary).toBe(1);
+      expect(open?.sumUp?.summingUp).toBe(false);
+      expect(result.current.summaries.find((r) => r.id === "plain")?.sumUp).toBeUndefined();
+    });
+
+    it("switching chats never lends the old chat's card to the new one", async () => {
+      const { result } = renderWithSlots();
+      await act(async () => {
+        await result.current.refreshSummaries();
+        await result.current.selectSlot("summed");
+        await result.current.selectSlot("plain");
+      });
+      const open = result.current.summaries.find((r) => r.id === "plain");
+      expect(open?.sumUp?.summary).toBeNull();
+      expect(open?.sumUp?.canSumUp).toBe(false);
+    });
+  });
 });

@@ -79,6 +79,8 @@
     "src/data/uiScaleProfile.test.ts",
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
     "src/features/chat-slots/ChatSlotRow.test.tsx",
+    "src/features/chat-sum-up/chatSumUpModel.test.ts",
+    "src/features/chat-sum-up/useChatSumUpJob.test.ts",
     "src/features/model-routing/useRoutingOrderModal.test.tsx",
     "src/features/plugin-shell/TabIndicatorBar.test.tsx",
     "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",

@@ -102,6 +102,11 @@ export type ChatSlot = {
    * the screen, the same as it never did when it lived in the plugin-wide memory it replaces.
    */
   summary?: ChatMemorySummary | null;
+  /**
+   * The back end's answer to "is there anything to sum up" (plan 68 step 4): false while the whole
+   * chat still fits in what the AI is shown. Absent on a build before this existed.
+   */
+  can_sum_up?: boolean;
   turns: ChatSlotTurn[];
 };
 
@@ -142,6 +147,28 @@ export async function createChatSlot(args: {
 export async function deleteChatSlot(slotId: string): Promise<boolean> {
   const res = await callDeckyWithTimeout<[string], DeleteSlotRpc>("delete_chat_slot", [slotId]);
   return res?.ok === true;
+}
+
+export type SumUpStartResult = {
+  accepted: boolean;
+  /** "pending" once started; "busy" while an answer or another summary holds the one slot; "nothing_to_do" while the chat still fits. */
+  status: "pending" | "busy" | "invalid" | "nothing_to_do";
+  request_id?: number;
+};
+
+/**
+ * Plan 68: the Session tab's *Sum up this chat*. Starts the back end's summary of this chat as a
+ * job of its own, through the same one-at-a-time slot as a question; the caller follows it with
+ * the ordinary background status (`kind: "sum_up"`).
+ */
+export async function sumUpChatSlot(slotId: string): Promise<SumUpStartResult> {
+  const res = await callDeckyWithTimeout<[string], Partial<SumUpStartResult>>("sum_up_chat_slot", [slotId]);
+  const status = res?.status;
+  return {
+    accepted: res?.accepted === true,
+    status: status === "pending" || status === "busy" || status === "nothing_to_do" ? status : "invalid",
+    ...(typeof res?.request_id === "number" ? { request_id: res.request_id } : {}),
+  };
 }
 
 export async function renameChatSlot(slotId: string, label: string): Promise<ChatSlot | null> {

@@ -43,6 +43,8 @@ export function useAskMountRestore(a: UseAskMountRestoreArgs): void {
       .then((status) => {
         const f = restoreFnsRef.current;
         if (!f.isRequestActive(seq)) return;
+        // Plan 68: a Sum up job still running is picked up by useChatSumUpJob, not the Ask.
+        if (status.kind === "sum_up") return;
         f.applyBackgroundStatusToUi(status);
         if (status.status === "pending") {
           f.startBackgroundStatusPolling(seq, status.question ?? "");

@@ -206,25 +206,11 @@ import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
 import { useSpoilerFenceRecheck } from "../hooks/useSpoilerFenceRecheck";
+import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */
 export { focusKbNotesBlock, focusUpPastLiveKbNotesBlock, focusUpPastSessionContextStripKbNotesBlock };
-
-/**
- * Mirrors `__bonsaiTabRestoreAfterModal` in useBonsaiPluginShell.ts -- same problem, one level
- * deeper. Opening the Session tab's Clear confirm box (or any Decky modal) remounts the whole
- * plugin, which resets this component's own `transparencyDetailsOpen` and `detailsTab` state to
- * their defaults (closed, "answer") the same way it would have reset the top-level tab without
- * that other module-level variable. `expandedTurnKey` (which turn) already survives through the
- * session snapshot index.tsx restores; these two do not, because they are local to this
- * component. Plan 64 bug E: cancelling Clear used to reopen with the panel closed and the ring
- * thrown out to the tab bar, because the Clear button the return-focus registry was aiming for
- * was never rendered -- the Session tab it lives on was gone. Set right before the confirm box
- * opens (`wrapOnBeforeNestedDeckyModal` below), read and cleared by the layout effect next to
- * where `transparencyDetailsOpen`/`detailsTab` are declared.
- */
-let __bonsaiDetailsPanelRestoreAfterModal: { open: boolean; tab: "answer" | "session" } | null = null;
 
 export type MainTabChatTranscriptProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -298,16 +284,10 @@ export type MainTabChatTranscriptProps = {
    */
   onAskOllama?: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
   /**
-   * D105, now the Session tab's own Clear confirm box (plan 62 3c folded the standalone strip's
-   * Clear into it): wrapped the same way Settings' two confirm boxes are -- opening any Decky
-   * modal remounts the plugin, and skipping these would let the remount undo whichever turn is
-   * expanded right now. Already part of MainTabProps (as `onBeforeNestedDeckyModal` /
-   * `onCompleteNestedDeckyModalClose`, the names the chat-slot rename modal already uses) and
-   * reaches this component via MainTab's plain `{...props}` spread, the same route `onAskOllama`
-   * documents above; only needs declaring here to type it and hand it on to `buildDetailsPanelElement`.
+   * Plan 68: the open chat's own summary and the Sum up button's job, for the Session tab. Rides
+   * on the open chat's row of the chat list (useChatSlots.ts); MainTab picks it out.
    */
-  onBeforeNestedDeckyModal?: () => void;
-  onCompleteNestedDeckyModalClose?: (close: () => void) => void;
+  chatSumUp?: ChatSumUpState | null;
   /**
    * The slot row's carousel is sitting on the `[+]` create position. Cycling there deliberately
    * does not change the active slot, so the transcript cannot see it any other way; while it is
@@ -401,8 +381,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     gameContextReadEnabled = false,
     onNavigateToPermissions,
     onAskOllama,
-    onBeforeNestedDeckyModal,
-    onCompleteNestedDeckyModalClose,
+    chatSumUp = null,
   } = props;
 
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
@@ -416,20 +395,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const [detailsTab, setDetailsTab] = useState<"answer" | "session">("answer");
   const [troubleshootingPermHintDismissed, setTroubleshootingPermHintDismissed] = useState(false);
-
-  /*
-   * Stashes the panel's own open/closed state and active tab into the module-level ref right
-   * before a nested Decky modal (Clear's confirm box today) throws the whole plugin's React state
-   * away. Without this, cancelling Clear reopened on "This answer" with the panel closed instead
-   * of back on "Session" with Clear itself focused -- the return-focus registry had a real id to
-   * aim for, but nothing left for it to find, because the Session tab's body was never rendered.
-   * The restore side sits below, after the "reset on turn change" effect -- see its own comment
-   * for why the ordering between the two matters.
-   */
-  const wrapOnBeforeNestedDeckyModal = useCallback(() => {
-    __bonsaiDetailsPanelRestoreAfterModal = { open: transparencyDetailsOpen, tab: detailsTab };
-    onBeforeNestedDeckyModal?.();
-  }, [transparencyDetailsOpen, detailsTab, onBeforeNestedDeckyModal]);
 
   /*
    * Read aloud / Stop (plan 42 step 3a). One instance for the whole transcript — the background
@@ -506,30 +471,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     transparencySnapshot?.final_response,
     expandedTurnKey,
   ]);
-
-  /*
-   * Plan 64 bug E, other half: put `transparencyDetailsOpen`/`detailsTab` back the way
-   * `wrapOnBeforeNestedDeckyModal` above left them, on the very next mount after a Decky modal
-   * (Clear, or any nested confirm box) remounted the plugin and reset both to their React
-   * defaults. Mirrors `__bonsaiTabRestoreAfterModal` in useBonsaiPluginShell.ts -- same problem,
-   * one level deeper (`expandedTurnKey`, which turn, already survives through the session
-   * snapshot index.tsx restores; these two are local to this component, so nothing else puts them
-   * back).
-   *
-   * Declared AFTER the "reset on turn change" effect just above on purpose, not before it: that
-   * effect's own dependencies (`expandedTurnKey`, `transparencySnapshot`'s question/response) go
-   * from unset to their real values on this same first mount, so it fires too and would otherwise
-   * win the race, closing the panel this effect just reopened. React runs same-phase effects in
-   * the order they were declared, so being textually second is what makes this one run last and
-   * be the value that sticks.
-   */
-  useEffect(() => {
-    const pending = __bonsaiDetailsPanelRestoreAfterModal;
-    if (pending == null) return;
-    __bonsaiDetailsPanelRestoreAfterModal = null;
-    setTransparencyDetailsOpen(pending.open);
-    setDetailsTab(pending.tab);
-  }, []);
 
   const noActiveGameContext =
     ollamaContext?.app_context !== "active" || !ollamaContext?.app_id?.trim();
@@ -1319,8 +1260,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       sessionHighlightTurnId,
                       setSessionHighlightTurnId,
                       setTransparencyDetailsOpen,
-                      onBeforeDeckyModal: wrapOnBeforeNestedDeckyModal,
-                      onCompleteDeckyModalClose: onCompleteNestedDeckyModalClose,
+                      sumUp: chatSumUp,
+                      answerInFlight: isAsking,
                     })}
                   </div>
                 ) : null}
@@ -1530,8 +1471,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   sessionHighlightTurnId,
                   setSessionHighlightTurnId,
                   setTransparencyDetailsOpen,
-                  onBeforeDeckyModal: wrapOnBeforeNestedDeckyModal,
-                  onCompleteDeckyModalClose: onCompleteNestedDeckyModalClose,
+                  sumUp: chatSumUp,
+                  answerInFlight: isAsking,
                 })}
               </div>
             ) : null}

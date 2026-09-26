@@ -20,7 +20,7 @@
  * Does not: Render a live Decky modal -- the test harness's `showModal` stub discards its
  *           argument (src/test-harness/fakeDeckyUi.tsx), so this file locally overrides
  *           `showModal` to capture the element and calls its `onOK`/`onCancel` props directly,
- *           the same technique `SessionContextStrip.clearButton.test.tsx` uses. Does not exercise
+ *           the same technique `SessionContextStrip.test.tsx` uses. Does not exercise
  *           Steam's own gamepad ring -- jsdom has none, so the return-focus tests only prove
  *           `focus()` was called on the registered owner, the same limit every other
  *           modalReturnFocusRegistry test lives with. `onBeforeDeckyModal` here is a faithful
@@ -58,7 +58,7 @@ vi.mock("@decky/ui", async () => {
     ...stubs,
     // The real `showModal` opens a portal; the global stub discards its argument entirely.
     // Neither lets a test reach the confirm box's own onOK/onCancel -- capture the element
-    // instead, same technique SessionContextStrip.clearButton.test.tsx uses.
+    // instead, same technique SessionContextStrip.test.tsx uses.
     showModal: (content: unknown) => {
       hoisted.modal = content as { props: Record<string, unknown> };
       return { Close: () => {} };

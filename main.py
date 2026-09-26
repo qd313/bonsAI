@@ -1919,17 +1919,20 @@ class Plugin:
         await self._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 
-    async def forget_game_ai_carried_context(self):
-        """Feature: Clear button (Session context strip + Clear cache). Input: none.
+    async def _forget_game_ai_carried_context(self):
+        """Settings' *Clear session*, first step. Input: none.
         Output: {"ok", "forgot"} — forgets what the plugin carries into the next question.
 
-        *Clear* here means only what the model is fed on the *next* Strategy/Expert question, not
-        the visible session — the chat, the Session context strip's own rows, and the stored
-        background answer are all left alone; ``forget_background_game_ai`` owns those. D105,
-        locked 2026-09-15: the Session context strip's own Clear button calls this directly, and
-        *Clear cache* in Settings calls it too (see the one added line at the top of
-        ``forget_background_game_ai`` below), because the maintainer's choice was the lighter of
-        two meanings for Clear — only what is carried forward, not a second way to wipe the chat.
+        Internal since plan 68 (2026-09-25): the Session tab's own Clear button, which used to call
+        this straight from the screen, was replaced by *Sum up this chat*, which keeps a chat's
+        memory instead of throwing it away. The only caller left is ``forget_background_game_ai``
+        below, so this is no longer a method the screen can call (the leading underscore is what
+        says so — see AGENTS.md, "How the two sides talk").
+
+        It forgets only what the model is fed on the *next* Strategy/Expert question, not the
+        visible session — the chat, the Session tab's own rows, and the stored background answer
+        are all left alone; ``forget_background_game_ai`` owns those. D105, locked 2026-09-15: the
+        lighter of two meanings for Clear — only what is carried forward.
 
         Reading ``py_modules/backend/services/game_ai_request.py`` end to end (done before writing
         this) turned up exactly two things a question carries into the next one without being
@@ -1999,7 +2002,7 @@ class Plugin:
 
         Three jobs, in this order:
 
-        1. **Forget what carries forward** — ``forget_game_ai_carried_context()``, called first and
+        1. **Forget what carries forward** — ``_forget_game_ai_carried_context()``, called first and
            deliberately ahead of the state reset just below: that method reads the running game's
            AppID off ``self._background_state``, so calling it after that state is replaced with a
            fresh one would always see no game at all. D105: Clear cache gets the same forget as the
@@ -2016,7 +2019,7 @@ class Plugin:
            write is a no-op by the time it runs here, which is the wanted outcome: a cleared session
            shows nothing at all, not a "Request cancelled." bubble.
         """
-        await self.forget_game_ai_carried_context()
+        await self._forget_game_ai_carried_context()
         async with self._background_lock:
             task = self._background_task
             self._background_task = None

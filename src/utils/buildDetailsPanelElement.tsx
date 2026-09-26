@@ -29,7 +29,6 @@ import {
 } from "./focusNavigation";
 import {
   focusContextChipLadder,
-  focusDeckOwner,
   focusReplyShowDetails,
   focusReplyUtilityRow,
   focusSessionContextStrip,
@@ -40,6 +39,8 @@ import {
   computeSessionContextRows,
   type SessionContextTurn,
 } from "../components/SessionContextStrip";
+import { focusSumUpButton } from "../features/chat-sum-up/SessionSumUpSection";
+import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type {
   AskDiagnosticsSnapshot,
@@ -107,14 +108,16 @@ export function focusChipLadderRow(turnKey: string): boolean {
  *   This answer | Session · N        <- new stop, only on the newest turn ("bonsai-details-tabs-row")
  *      | Down                                          ^ Up
  *   This answer tab: the existing chip ladder, exactly as before ("bonsai-chip-ladder")
- *   Session tab: the turn row list, the active row's own chips, then Clear (SessionContextTabBody)
+ *   Session tab (plan 68): Sum up this chat, the summary card when there is one, then the turn row
+ *   list and the active row's own chips (SessionContextTabBody; its own graph is drawn in
+ *   SessionSumUpSection.tsx). No Clear.
  *
  * - Only the newest turn (`isNewest`) ever renders the tabs row at all — an older, hand-expanded
  *   turn keeps today's shape, a bare ladder with no tabs, exactly as `SessionContextStrip`'s own
  *   file header already promises ("Older answers show the panel as it is today, with no tabs").
  * - Left/Right switch tabs; Up leaves to Show details (via the existing KB-notes-block-then-
  *   show-details chain every ladder already uses); Down enters whichever tab is active — the
- *   ladder for "This answer", the first session row for "Session".
+ *   ladder for "This answer", the Sum up button for "Session" (registered, never a page search).
  * - B, from anywhere inside either tab's content, closes the whole panel and hands the ring back
  *   to the still-mounted Show details / Hide details line — not just the local re-collapse
  *   `ContextChipLadder` does on its own B press, which is why both the tabs row's own
@@ -133,8 +136,10 @@ export function buildDetailsPanelElement(args: {
   sessionHighlightTurnId: string | null;
   setSessionHighlightTurnId: (id: string | null) => void;
   setTransparencyDetailsOpen: (open: boolean) => void;
-  onBeforeDeckyModal?: () => void;
-  onCompleteDeckyModalClose?: (close: () => void) => void;
+  /** Plan 68: the open chat's summary and the Sum up button's job, for the Session tab. */
+  sumUp?: ChatSumUpState | null;
+  /** Plan 68: an answer is being written right now (the Sum up button is greyed out). */
+  answerInFlight?: boolean;
 }): React.ReactElement {
   const {
     turnKey,
@@ -149,8 +154,8 @@ export function buildDetailsPanelElement(args: {
     sessionHighlightTurnId,
     setSessionHighlightTurnId,
     setTransparencyDetailsOpen,
-    onBeforeDeckyModal,
-    onCompleteDeckyModalClose,
+    sumUp = null,
+    answerInFlight = false,
   } = args;
 
   const upPastPanel = () =>
@@ -190,7 +195,7 @@ export function buildDetailsPanelElement(args: {
   const focusFirstTabContent = () =>
     detailsTab === "answer"
       ? focusChipLadderRow(turnKey) || focusContextChipLadder(querySlot())
-      : focusDeckOwner(querySlot()?.querySelector<HTMLElement>(".bonsai-details-session-row") ?? null);
+      : focusSumUpButton();
 
   return (
     <>
@@ -277,10 +282,10 @@ export function buildDetailsPanelElement(args: {
           archivedTurns={archivedTurns}
           highlightTurnId={sessionHighlightTurnId}
           onHighlightClear={() => setSessionHighlightTurnId(null)}
-          onMoveUpFromFirstRow={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
+          onMoveUpFromTop={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
           onRequestClose={closePanel}
-          onBeforeDeckyModal={onBeforeDeckyModal}
-          onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+          sumUp={sumUp}
+          answerInFlight={answerInFlight}
         />
       )}
     </>

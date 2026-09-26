@@ -242,10 +242,12 @@ export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
  * slot row ran on every press, which is the whole bug.
  *
  * Tried in bottom-up order, so Up lands on the nearest thing above the dock rather than the top of
- * the reply: the open details panel's own content first (the chip ladder for "This answer", the
- * session list for "Session"), then the tabs row itself, then the notes block, then the Show
- * details line, then the reply's utility row. Each one reports false when it is not mounted, so a
- * closed panel, a reply with no notes and an empty chat all fall through cleanly.
+ * the reply: the open details panel's own last stop first — the chip ladder (the "This answer" tab's,
+ * or the Session tab's active row's), else, on a Session tab with no rows, the summary card or the
+ * Sum up button (plan 68: the last stop, not the top of the tab) — then the tabs row itself, then
+ * the notes block, then the Show details line, then the reply's utility row. Each one reports false
+ * when it is not mounted, so a closed panel, a reply with no notes and an empty chat all fall
+ * through cleanly.
  */
 export function focusBottomOfNewestReply(): boolean {
   const doc = getUiDocument();
@@ -253,8 +255,9 @@ export function focusBottomOfNewestReply(): boolean {
   const slot = slots.length > 0 ? slots[slots.length - 1] : null;
   if (!slot) return false;
   const bottomUp = [
-    ".bonsai-details-session-body",
     ".bonsai-chip-ladder",
+    ".bonsai-sumup-card",
+    ".bonsai-sumup-btn",
     ".bonsai-details-tabs-row",
     ".bonsai-kb-notes-block",
   ];
@@ -289,10 +292,23 @@ export function focusDownFromLiveAnswerBubble(liveSlot: HTMLElement | null): boo
   return focusReplyShowDetails(liveSlot);
 }
 
-/** Up from thumbs / reply chrome: checklist → branch → answer bubble. */
+/**
+ * Down onto this turn's strategy chrome, when it has any: the first branch button, else the first
+ * checklist toggle. Plan 68's note under the answer uses it to go "on down the reply" the same way
+ * the answer bubble does, without a page search of its own.
+ */
+export function focusStrategyChromeFromAbove(liveSlot: HTMLElement | null): boolean {
+  return focusStrategyBranchButton(liveSlot, "first") || focusStrategyChecklistToggle(liveSlot, "first");
+}
+
+/**
+ * Up from thumbs / reply chrome: checklist → branch → the summed-up note (plan 68, when this answer
+ * has one) → answer bubble.
+ */
 export function focusUpFromReplyActions(liveSlot: HTMLElement | null): boolean {
   if (focusStrategyChecklistToggle(liveSlot, "last")) return true;
   if (focusStrategyBranchButton(liveSlot, "last")) return true;
+  if (focusRegisteredReplyStop("summary-note")) return true;
   return focusLiveAnswerBubble(liveSlot);
 }
 

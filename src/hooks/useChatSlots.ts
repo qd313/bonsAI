@@ -18,7 +18,7 @@
  * Does not: Send a question to the AI, or check on an answer that is
  * still being written — a separate hook owns that.
  */
-import { useCallback, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useCallback, useMemo, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
 
 import type { AskThreadCollapsedTurn, AskThreadExpandedTurnKey } from "../types/bonsaiUi";
@@ -28,10 +28,27 @@ import {
   getChatSlot,
   listChatSlots,
   renameChatSlot,
+  type ChatMemorySummary,
+  type ChatSlot,
   type ChatSlotSummary,
 } from "../utils/chatSlotsApi";
 import { turnsToCollapsedTurns } from "../utils/chatSlotTurns";
+import {
+  questionsIn,
+  turnsAfterSummary,
+  type ChatListRow,
+} from "../features/chat-sum-up/chatSumUpModel";
+import { useChatSumUpJob } from "../features/chat-sum-up/useChatSumUpJob";
 import { saveActiveChatSlotId } from "../features/plugin-shell/pluginStorage";
+
+type OpenChatMemory = {
+  slotId: string | null;
+  summary: ChatMemorySummary | null;
+  canSumUp: boolean;
+  questionsAfterSummary: number;
+};
+
+const NO_CHAT_MEMORY: OpenChatMemory = { slotId: null, summary: null, canSumUp: false, questionsAfterSummary: 0 };
 
 export type UseChatSlotsArgs = {
   activeSlotIdRef: RefObject<string | null>;
@@ -106,6 +123,31 @@ export function useChatSlots({
   const summariesRef = useRef<ChatSlotSummary[]>([]);
   /** Turns on screen for the active slot; -1 until a transcript has been applied. */
   const activeSlotTurnCountRef = useRef(-1);
+  /**
+   * Plan 68: the open chat's own summary and whether there is anything to sum up, set from the
+   * same load that sets its transcript and blanked wherever the transcript is blanked, so a card
+   * can never show under a different chat than the one it belongs to.
+   */
+  const [chatMemory, setChatMemory] = useState<OpenChatMemory>(NO_CHAT_MEMORY);
+  const applySlotMemory = useCallback((slot: ChatSlot) => {
+    const summary = slot.summary ?? null;
+    setChatMemory({
+      slotId: slot.id,
+      summary,
+      canSumUp: slot.can_sum_up === true,
+      questionsAfterSummary: questionsIn(turnsAfterSummary(slot.turns ?? [], summary)),
+    });
+  }, []);
+  /** After the button's own summary lands: only the card and the button change, not the transcript. */
+  const refreshSlotMemory = useCallback(
+    async (slotId: string) => {
+      if (activeSlotIdRef.current !== slotId) return;
+      const slot = await getChatSlot(slotId);
+      if (slot && activeSlotIdRef.current === slotId) applySlotMemory(slot);
+    },
+    [activeSlotIdRef, applySlotMemory],
+  );
+  const sumUpJob = useChatSumUpJob(refreshSlotMemory);
 
   /*
    * The one place the active slot changes, which is why the persistence goes here rather than at
@@ -182,12 +224,14 @@ export function useChatSlots({
       setAskThreadCollapsed([]);
       setAskThreadDisplayQuestion("");
       setExpandedTurnKey("live");
+      setChatMemory(NO_CHAT_MEMORY);
       return;
     }
     const slot = await getChatSlot(sid);
     if (!slot) return;
     applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
-  }, [applySlotTranscript, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
+    applySlotMemory(slot);
+  }, [applySlotMemory, applySlotTranscript, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
 
   const selectSlot = useCallback(
     async (slotId: string | null) => {
@@ -205,6 +249,8 @@ export function useChatSlots({
        * still come from the branches below, once the real transcript (or "no chat") is known.
        */
       resetLiveAskPresentation?.();
+      // Same reason as the live answer above: the chat being left must not lend its card to the next.
+      setChatMemory(NO_CHAT_MEMORY);
       if (!slotId) {
         activeSlotTurnCountRef.current = -1;
         setAskThreadCollapsed([]);
@@ -212,13 +258,17 @@ export function useChatSlots({
         setExpandedTurnKey("live");
       } else {
         const slot = await getChatSlot(slotId);
-        if (slot) applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
+        if (slot) {
+          applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
+          applySlotMemory(slot);
+        }
       }
       if (leavingId && leavingId !== slotId) {
         sweepIfNeverUsed(leavingId, leavingTurnCount);
       }
     },
     [
+      applySlotMemory,
       applySlotTranscript,
       resetLiveAskPresentation,
       setActiveSlot,
@@ -284,8 +334,35 @@ export function useChatSlots({
     [refreshSummaries, setActiveSlot],
   );
 
+  /*
+   * The open chat's summary and the button's job ride on that chat's own row of the list: the list
+   * is already handed all the way to the Main tab, and no new value may be (plan 68 Appendix A).
+   */
+  const { runningSlotId, seconds: sumUpSeconds, start: startSumUpJob, stop: stopSumUpJob } = sumUpJob;
+  const rows = useMemo<ChatListRow[]>(() => {
+    if (!activeSlotId) return summaries;
+    const memory = chatMemory.slotId === activeSlotId ? chatMemory : { ...NO_CHAT_MEMORY, slotId: activeSlotId };
+    return summaries.map((row) =>
+      row.id !== activeSlotId
+        ? row
+        : {
+            ...row,
+            sumUp: {
+              summary: memory.summary,
+              canSumUp: memory.canSumUp,
+              questionsAfterSummary: memory.questionsAfterSummary,
+              summingUp: runningSlotId === activeSlotId,
+              summingUpSeconds: runningSlotId === activeSlotId ? sumUpSeconds : null,
+              otherJobRunning: runningSlotId != null && runningSlotId !== activeSlotId,
+              startSumUp: () => startSumUpJob(activeSlotId),
+              stopSumUp: stopSumUpJob,
+            },
+          },
+    );
+  }, [activeSlotId, chatMemory, runningSlotId, startSumUpJob, stopSumUpJob, sumUpSeconds, summaries]);
+
   return {
-    summaries,
+    summaries: rows,
     activeSlotId,
     setActiveSlot,
     refreshSummaries,

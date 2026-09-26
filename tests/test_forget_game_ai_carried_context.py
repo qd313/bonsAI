@@ -1,7 +1,7 @@
 """The lighter Clear (D105): forgetting only what the plugin carries into the next question.
 
-`forget_game_ai_carried_context` is the one new back-end method Lane A adds beside
-`forget_background_game_ai`. It must drop the two small things `game_ai_request.py` actually
+`_forget_game_ai_carried_context` sits beside `forget_background_game_ai` (an internal step since
+plan 68 removed the Session tab's Clear button, its one caller on the screen). It must drop the two small things `game_ai_request.py` actually
 carries from one Strategy/Expert question to the next -- the remembered follow-up subject
 (`kb_followup_memory`) and the strategy checklist's ticked-box position for the game that was
 last asked about -- without touching the chat, the background answer state, or any other
@@ -70,7 +70,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
             "Roshan",
         )
 
-        result = await self.plugin.forget_game_ai_carried_context()
+        result = await self.plugin._forget_game_ai_carried_context()
 
         self.assertTrue(result.get("ok"))
         self.assertIn("followup_subject", result.get("forgot", []))
@@ -87,7 +87,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         # so that is all this stands in for.
         self.plugin._background_state = {"app_id": "570"}
 
-        result = await self.plugin.forget_game_ai_carried_context()
+        result = await self.plugin._forget_game_ai_carried_context()
 
         self.assertTrue(result.get("ok"))
         self.assertIn("strategy_checklist_position", result.get("forgot", []))
@@ -104,7 +104,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         # No question has been asked yet this process: app_id is blank.
         self.plugin._background_state = {"app_id": ""}
 
-        result = await self.plugin.forget_game_ai_carried_context()
+        result = await self.plugin._forget_game_ai_carried_context()
 
         self.assertTrue(result.get("ok"))
         self.assertIn("strategy_checklist_whole_store", result.get("forgot", []))
@@ -130,7 +130,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         save_slot_subject(self.settings_dir, chat_b, {"game_key": "appid:730", "subject": "Site B"})
         self.plugin._background_state = {"app_id": "570", "chat_slot_id": chat_a}
 
-        result = await self.plugin.forget_game_ai_carried_context()
+        result = await self.plugin._forget_game_ai_carried_context()
 
         self.assertTrue(result.get("ok"))
         self.assertIsNone(kb_followup_memory.snapshot(chat_a))
@@ -154,7 +154,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         # No question has been asked in a saved chat yet this process.
         self.plugin._background_state = {"app_id": "570"}
 
-        result = await self.plugin.forget_game_ai_carried_context()
+        result = await self.plugin._forget_game_ai_carried_context()
 
         self.assertTrue(result.get("ok"))
         self.assertEqual(

@@ -45,7 +45,7 @@ import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabColumnFill } from "../hooks/useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
 import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
-import type { ChatSlotSummary } from "../utils/chatSlotsApi";
+import type { ChatListRow } from "../features/chat-sum-up/chatSumUpModel";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import {
   STREAM_SCRAMBLE_OFF,
@@ -159,7 +159,8 @@ export type MainTabProps = {
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
   micPermissionDenied?: boolean;
   onDismissMicPermissionDeny?: () => void;
-  chatSlotSummaries?: ChatSlotSummary[];
+  /** The chat list; the open chat's row also carries its summary and the Sum up job (plan 68). */
+  chatSlotSummaries?: ChatListRow[];
   activeChatSlotId?: string | null;
   onChatSlotCreate?: () => Promise<unknown>;
   onChatSlotSelect?: (slotId: string | null) => Promise<void>;
@@ -241,6 +242,13 @@ export function MainTab(props: MainTabProps) {
   /* Bottom-pins the preset/Ask dock: the column stretches to the scroll viewport's bottom edge
      (measured — the offset crosses hashed Steam wrappers) and the dock carries margin-top: auto. */
   const columnRef = useRef<HTMLDivElement | null>(null);
+  /*
+   * Plan 68: the open chat's summary state rides on its own row of the chat list. While the Sum up
+   * button's own job runs (no question in flight), the Ask bar shows Stop and Stop ends that job —
+   * never the Ask hook's own Stop, which would mark the last answer as stopped.
+   */
+  const chatSumUp = props.chatSlotSummaries?.find((row) => row.id === props.activeChatSlotId)?.sumUp ?? null;
+  const sumUpOnly = Boolean(chatSumUp?.summingUp) && !props.isAsking;
   useMainTabColumnFill(columnRef);
   /* Focus landing behind the bottom dock gets lifted above it — see the hook's header. */
   useDockClearanceOnFocus(columnRef);
@@ -292,7 +300,7 @@ export function MainTab(props: MainTabProps) {
           </PanelSectionRow>
         ) : null}
         <StreamScrambleContext.Provider value={streamScrambleContextValue}>
-          <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} />
+          <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} chatSumUp={chatSumUp} />
         </StreamScrambleContext.Provider>
         <div className={mainTabDockClassName(props.isStreamingPreview, props.streamDisplayText)}>
         <PanelSectionRow>
@@ -314,6 +322,8 @@ export function MainTab(props: MainTabProps) {
 
         <MainTabUnifiedAskBar
           {...props}
+          isAsking={props.isAsking || sumUpOnly}
+          onCancelAsk={sumUpOnly && chatSumUp ? chatSumUp.stopSumUp : props.onCancelAsk}
           onAskOllama={onAskOllama}
           presetCarouselHostRef={presetCarouselHostRef}
           onFocusHandlersReady={({ focusUnifiedTextField: fn }) => {

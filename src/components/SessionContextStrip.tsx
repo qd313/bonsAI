@@ -1,38 +1,34 @@
 /**
  * Title: The Session tab, inside a turn's own Show details panel
  *
- * Purpose: The list of every turn in this chat that attached anything extra to what was actually
- * sent to the AI — a screenshot, a log excerpt, a memory note — plus the active row's own chips and
- * a Clear button at the end. Until plan 62 3c this was a whole separate, always-visible box of its
- * own above the transcript ("Session context (N turns) ▸"); it now folds into the newest answer's
- * own Show details panel as a second tab, "Session · N", so a settled answer costs one closed
- * control instead of two. Older, already-answered turns keep the plain single-tab Show details
- * panel exactly as before — only the newest carries this tab, so it never repeats down the chat.
+ * Purpose: What the AI carries from this chat, in one tab: at the top, *Sum up this chat* and the
+ * summary the AI remembers in place of the chat's older turns (plan 68); below it, the list of
+ * every turn that attached anything extra to what was actually sent to the AI — a screenshot, a log
+ * excerpt, a memory note — with the active row's own chips. The tab lives in the newest answer's
+ * Show details panel as "Session · N" (plan 62 3c); older answers keep the plain single-tab panel,
+ * so it never repeats down the chat.
  *
  * Used for: MainTabChatTranscript's `buildDetailsPanelElement`, mounted only while the "Session"
  * tab is the one showing, on the newest turn only.
  *
- * Solves: One place to audit what context reached the model, for both the turn still on screen and
- * every earlier turn in the conversation, without scrolling back up and rereading each answer.
+ * Solves: One place to see and manage what the AI knows about this conversation, and to audit what
+ * context reached it, without scrolling back up and rereading each answer.
  *
- * Does not: Build the "what was actually sent" snapshot, or fetch it from the backend. It is handed
- * already-built snapshots for the live turn and every archived turn, and only draws them. Does not
- * decide when it is showing at all — that is `detailsTab === "session"`, owned by the caller.
+ * Does not: Build the "what was actually sent" snapshot, write a summary, or fetch either from the
+ * back end. It is handed built snapshots and the open chat's summary state, and only draws them.
+ * Does not decide when it is showing at all — that is `detailsTab === "session"`, owned by the
+ * caller.
  *
  * Gotchas:
  * - No header, no open/closed state of its own: Show details itself is what opens and closes this
- *   content now, so this body is either fully mounted or not there at all.
- * - Stepping Up off the row list's first row is wired by hand through the chip ladder's own escape
- *   hatch and this body's own row class — see `focusLastSessionTabRow`'s own comment for why an
- *   unscoped query is safe here (at most one of these bodies is ever mounted at a time) and why it
- *   is not `focusLastSessionContextRow` (liveTurnFocusGraph.ts): that one is keyed to a different,
- *   older class name.
+ *   content, so this body is either fully mounted or not there at all.
+ * - Stepping Up off the row list's first row is wired by hand to the summary card or the button
+ *   above it, and Up off the chip ladder to this body's own last row — see `focusLastSessionTabRow`
+ *   for why an unscoped query is safe here (at most one of these bodies is ever mounted at a time).
  * - B closes the WHOLE Show details panel via `onRequestClose`, not just this body — see its own
  *   `onCancelButton` comment for why that has to be `onCancelButton`, not `onButtonDown`.
- * - Clear opens the same kind of confirm box Settings -> Data's two buttons use. Opening any Decky
- *   modal remounts the whole plugin, which is why it goes through `onBeforeDeckyModal` /
- *   `onCompleteDeckyModalClose` the same way those two do — skipping them would let the remount
- *   undo whichever turn is currently expanded.
+ * - Nothing here opens a Decky modal any more (Clear's confirm box went with Clear), so this body
+ *   no longer needs the before/after-modal hooks that keep the expanded turn across a remount.
  *
  * How it works:
  * 1. `computeSessionContextRows()` builds the row list once: every archived turn with at least one
@@ -40,15 +36,15 @@
  *    newest archived row (`liveIsNewestArchived` inside it) — de-duped because after a completed
  *    Ask the live turn and its own freshly-archived copy would otherwise count as two rows for one
  *    real turn.
- * 2. If there are no rows at all, this body renders nothing (mirrors the old standalone strip).
+ * 2. Always draws the Sum up section first, even with no rows: the tab shows whenever the chat has
+ *    a question in it (plan 68 § 2 item 6).
  * 3. Works out which row is active — an outside `highlightTurnId` if it points at a real row,
  *    otherwise whichever row was last tapped — and falls back to the newest row.
- * 4. Draws every row, wires the first row's own Up to `onMoveUpFromFirstRow`, then the active row's
- *    chips via the shared ladder, then a full-width Clear at the very end.
+ * 4. Draws every row, wires the first row's own Up to the section above, then the active row's
+ *    chips via the shared ladder, whose Down stays put because it is the last thing in the tab.
  */
 import { useState } from "react";
-import { Focusable, showModal, ConfirmModal } from "@decky/ui";
-import { toaster } from "@decky/api";
+import { Focusable } from "@decky/ui";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
 import { ContextChipLadder } from "./ContextChipLadder";
@@ -56,12 +52,8 @@ import { chipsFromSnapshot } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent, isDeckDirectionUpEvent } from "../utils/focusNavigation";
 import { focusDeckOwner } from "../utils/liveTurnFocusGraph";
 import { getUiDocument } from "../utils/uiDocument";
-import { callDeckyWithTimeout } from "../utils/deckyCall";
-import {
-  registerModalReturnFocusOwner,
-  rememberModalReturnFocus,
-  type ModalReturnFocusId,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
+import { SessionSumUpSection, focusLastSumUpStop } from "../features/chat-sum-up/SessionSumUpSection";
+import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
 
 export type SessionContextTurn = {
   id: string;
@@ -110,70 +102,13 @@ export function computeSessionContextRows(
   ];
 }
 
-/**
- * D105's Clear confirm box, as a factory rather than a hook: both `SessionContextStrip` (the
- * standalone strip, still rendered below the transcript for now) and `SessionContextTabBody` (the
- * Session tab's own Clear, at the end of its body) open the exact same box and must not fight over
- * one return-focus id — each caller supplies its own `returnFocusId` so restoring focus after the
- * box closes lands back on the button that actually opened it, not whichever of the two mounted
- * last. Forgets only what the plugin carries into the *next* Strategy/Expert question — the last
- * strategy subject, the running game's checklist position. Never the chat, never either control's
- * own rows; those stay exactly as they are, because they are the honest record of what each past
- * turn actually attached. Same confirm-box shape Settings -> Data's two buttons use
- * (SettingsTab.tsx): remembered return-focus id, registered owner ref, and the before/after modal
- * hooks because opening any Decky modal remounts the plugin.
- */
-function buildOpenClearConfirm(
-  returnFocusId: ModalReturnFocusId,
-  onBeforeDeckyModal?: () => void,
-  onCompleteDeckyModalClose?: (close: () => void) => void
-): () => void {
-  return () => {
-    rememberModalReturnFocus(returnFocusId);
-    onBeforeDeckyModal?.();
-    const handle = showModal(
-      <ConfirmModal
-        strTitle="Start the next question fresh?"
-        strDescription="The plugin forgets the subject of your last strategy question and the checklist position for the running game. Your chat and this bar stay as they are."
-        strOKButtonText="Clear"
-        /*
-         * Plan 64 bug E, first half: this box used to open with the ring on the destructive
-         * "Clear" button instead of the safe "Cancel" -- the same shape ChatSlotRow.tsx's own
-         * "Delete chat slot?" confirm already avoids with this same prop. `bDestructiveWarning`
-         * is Steam's own supported way to ask for that (it is also what styles the OK button as
-         * a warning); this box asks for something forgotten, not deleted outright, but the same
-         * "the safe choice is where the ring starts" rule the task named applies here too.
-         */
-        bDestructiveWarning
-        onOK={() => {
-          // Fire-and-forget, same shape as forget_background_game_ai in index.tsx's
-          // resetPluginSession: the toast below is the actual promise made to the person, and
-          // it is true from the screen's own side either way — nothing carried is re-sent to
-          // the model without a fresh question triggering it.
-          void callDeckyWithTimeout<[], { ok?: boolean; forgot?: string[] }>(
-            "forget_game_ai_carried_context",
-            []
-          ).catch(() => {});
-          toaster.toast({
-            title: "Next question starts fresh",
-            body: "Forgot the last strategy subject and the running game's checklist position.",
-            duration: 3800,
-          });
-          onCompleteDeckyModalClose?.(() => handle.Close());
-        }}
-        onCancel={() => onCompleteDeckyModalClose?.(() => handle.Close())}
-      />
-    );
-  };
-}
-
 export type SessionContextTabBodyProps = {
   liveTurn?: SessionContextTurn | null;
   archivedTurns?: AskThreadCollapsedTurn[];
   highlightTurnId?: string | null;
   onHighlightClear?: () => void;
-  /** D-pad Up off the first row -> whatever sits above this body (the "This answer / Session · N" tabs row, in MainTabChatTranscript). */
-  onMoveUpFromFirstRow?: () => boolean;
+  /** D-pad Up off the top of this body (the Sum up button) -> the "This answer / Session · N" tabs row above it. */
+  onMoveUpFromTop?: () => boolean;
   /**
    * B anywhere inside this body. Plan 62 3c: "B anywhere inside closes the panel" — the whole Show
    * details panel, not the local re-collapse `ContextChipLadder` does on its own B press (see the
@@ -182,56 +117,52 @@ export type SessionContextTabBodyProps = {
    * `focusKbNotesBlock`'s callers do when the block they focused is about to unmount.
    */
   onRequestClose?: () => void;
-  onBeforeDeckyModal?: () => void;
-  onCompleteDeckyModalClose?: (close: () => void) => void;
+  /** Plan 68: the open chat's summary and the Sum up button's job, from the back end. */
+  sumUp?: ChatSumUpState | null;
+  /** Plan 68: an answer is being written, so the button is greyed out and says so. */
+  answerInFlight?: boolean;
 };
 
 /**
  * The Session tab's own content, folded into a turn's Show details panel (plan 62 3c) rather than a
- * standalone box of its own: the same row list and per-row chip ladder `SessionContextStrip` draws
- * once open, plus a full-width "Clear" button at the end of the body instead of a header-corner one
- * — there is no header here at all, since Show details itself is what opens and closes this content
- * now.
+ * standalone box of its own. Top to bottom (plan 68, as drawn): *Sum up this chat* with its reason
+ * line and the summary card (SessionSumUpSection.tsx), then the row list and the active row's chip
+ * ladder, exactly as before. Clear and its confirm box are gone: summing up keeps a chat's memory
+ * where Clear could only throw it away, and nothing is deleted, so there is nothing to confirm.
  *
- * In: the same live/archived turn data `SessionContextStrip` takes, an escape for D-pad Up off the
- * first row, and a request-close callback for B.
- * Out: null when there is nothing to show (mirrors `SessionContextStrip`); otherwise the row list,
- * the active row's chips, and Clear.
+ * In: the same live/archived turn data `SessionContextStrip` takes, the open chat's summary state,
+ * whether an answer is being written, an escape for D-pad Up off the top, and a request-close
+ * callback for B.
+ * Out: always the button (plan 68 § 2 item 6: the tab shows whenever the chat has a question),
+ * then the row list and the active row's chips when any turn attached something extra.
  *
  * What can go wrong: only one turn is ever "the newest answer" and therefore ever mounts this body
  * at a time (the caller gates on that), so — like `focusAnyContextChipLadder` in liveTurnFocusGraph.ts
- * — a plain, unscoped query for this body's own row class to find "the last row" is safe. Reusing
- * `SessionContextStrip`'s own `.bonsai-session-context-row` class here instead of a class of its own
- * would NOT be safe during the period both this body and the standalone strip can be on screen at
- * once (before the strip is removed): `focusLastSessionContextRow` (liveTurnFocusGraph.ts, not owned
- * by this lane) queries that class globally, and would not know which of the two mounted instances a
- * caller meant. `bonsai-details-session-row` is a class of this component's own for exactly that
- * reason.
+ * — a plain, unscoped query for this body's own row class to find "the last row" is safe, and so is
+ * one module-level slot for its first row. `bonsai-details-session-row` is a class of this
+ * component's own so `focusLastSessionContextRow` (liveTurnFocusGraph.ts, the old standalone
+ * strip's) can never match it.
  */
 export function SessionContextTabBody({
   liveTurn = null,
   archivedTurns = [],
   highlightTurnId = null,
   onHighlightClear,
-  onMoveUpFromFirstRow,
+  onMoveUpFromTop,
   onRequestClose,
-  onBeforeDeckyModal,
-  onCompleteDeckyModalClose,
+  sumUp = null,
+  answerInFlight = false,
 }: SessionContextTabBodyProps) {
   const [activeId, setActiveId] = useState<string>("live");
 
   const rows = computeSessionContextRows(liveTurn, archivedTurns);
-  if (!rows.length) return null;
 
   const effectiveActive =
     highlightTurnId && rows.some((r) => r.id === highlightTurnId) ? highlightTurnId : activeId;
   const activeRow = rows.find((r) => r.id === effectiveActive) ?? rows[rows.length - 1];
 
-  const openClearConfirm = buildOpenClearConfirm(
-    "session-tab-clear",
-    onBeforeDeckyModal,
-    onCompleteDeckyModalClose
-  );
+  /* Up off the first row goes to the summary card or the button above it, then the tabs row. */
+  const upFromFirstRow = () => focusLastSumUpStop() || (onMoveUpFromTop?.() ?? false);
 
   return (
     <Focusable
@@ -262,10 +193,23 @@ export function SessionContextTabBody({
         },
       } as Record<string, unknown>)}
     >
+      <SessionSumUpSection
+        state={sumUp}
+        answerInFlight={answerInFlight}
+        onMoveUpFromButton={() => onMoveUpFromTop?.() ?? false}
+        onMoveDownPastSection={() => focusDeckOwner(firstSessionRowEl)}
+      />
       {rows.map((row, index) => (
         <Focusable
           key={row.id}
           className="bonsai-details-session-row"
+          ref={
+            index === 0
+              ? (el: HTMLElement | null) => {
+                  firstSessionRowEl = el;
+                }
+              : undefined
+          }
           onActivate={() => {
             setActiveId(row.id);
             onHighlightClear?.();
@@ -278,14 +222,14 @@ export function SessionContextTabBody({
           }}
           {...(index === 0
             ? ({
-                onMoveUp: () => onMoveUpFromFirstRow?.() ?? false,
+                onMoveUp: upFromFirstRow,
                 onButtonDown: (evt: unknown) => {
                   if (isOkDeckButtonEvent(evt)) {
                     setActiveId(row.id);
                     onHighlightClear?.();
                     return true;
                   }
-                  if (isDeckDirectionUpEvent(evt)) return onMoveUpFromFirstRow?.() ?? false;
+                  if (isDeckDirectionUpEvent(evt)) return upFromFirstRow();
                   return false;
                 },
               } as Record<string, unknown>)
@@ -309,7 +253,13 @@ export function SessionContextTabBody({
         <ContextChipLadder
           snapshot={activeRow.snapshot}
           collapsedHint={false}
-          onMoveUpFromLadder={() => focusLastSessionTabRow() || (onMoveUpFromFirstRow?.() ?? false)}
+          onMoveUpFromLadder={() => focusLastSessionTabRow() || upFromFirstRow()}
+          /*
+           * The ladder is the last thing in the tab now that Clear is gone. Down past it stays put:
+           * left to Steam's own guess, Down from the end of this tab once threw the ring into the
+           * dock (plan 68 § 6).
+           */
+          onMoveDownFromLadder={() => true}
           /*
            * B on the ladder itself swallows the press to re-collapse just the ladder locally
            * (ContextChipLadder's own onButtonDown) — without this, that local collapse would run
@@ -321,50 +271,12 @@ export function SessionContextTabBody({
           }}
         />
       ) : null}
-      {/*
-       * Plan 62 3c, decided 2026-09-20: Clear moves off the header (there is no header in this
-       * body) to a full-width quiet button at the very end, same confirm box as before.
-       */}
-      <Focusable
-        className="bonsai-details-session-clear"
-        ref={(el: HTMLElement | null) => {
-          registerModalReturnFocusOwner("session-tab-clear", el);
-        }}
-        onActivate={openClearConfirm}
-        style={{
-          width: "100%",
-          boxSizing: "border-box",
-          textAlign: "center",
-          padding: "8px 0",
-          marginTop: 2,
-          borderRadius: 6,
-          border: "1px solid rgba(255,255,255,0.08)",
-          background: "transparent",
-          color: "#8fa8c4",
-          fontSize: 11,
-          fontWeight: 700,
-          cursor: "pointer",
-        }}
-      >
-        <button
-          type="button"
-          onClick={openClearConfirm}
-          style={{
-            width: "100%",
-            background: "none",
-            border: "none",
-            color: "inherit",
-            font: "inherit",
-            padding: 0,
-            cursor: "pointer",
-          }}
-        >
-          Clear
-        </button>
-      </Focusable>
     </Focusable>
   );
 }
+
+/** This body's first turn row, for Down off the Sum up section — a ref, never a page search. */
+let firstSessionRowEl: HTMLElement | null = null;
 
 /**
  * The last row inside THIS body specifically — see the component doc above for why an unscoped

@@ -21,7 +21,7 @@ const hoisted = vi.hoisted(() => ({
 
 /*
  * A local override of the global `@decky/ui` mock (src/test-harness/setup.ts), same technique
- * SessionContextStrip.clearButton.test.tsx uses: wraps the real stub `Focusable` so its props
+ * SessionContextStrip.test.tsx uses: wraps the real stub `Focusable` so its props
  * (including `onCancelButton`, which the stub itself strips before it ever reaches the DOM) can be
  * read back and invoked directly.
  */

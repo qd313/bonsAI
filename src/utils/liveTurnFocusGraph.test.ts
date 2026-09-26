@@ -433,6 +433,45 @@ describe("liveTurnFocusGraph", () => {
       expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-chip-ladder");
     });
 
+    it("on a Session tab with no rows, lands on the summary card, else the Sum up button (plan 68)", () => {
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-details-tabs-row Panel Focusable"></div>
+          <div class="bonsai-details-session-body Panel Focusable">
+            <div class="bonsai-sumup-btn Panel Focusable"></div>
+            <div class="bonsai-sumup-card Panel Focusable"></div>
+          </div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-sumup-card");
+
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-details-tabs-row Panel Focusable"></div>
+          <div class="bonsai-details-session-body Panel Focusable">
+            <div class="bonsai-sumup-btn Panel Focusable"></div>
+          </div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-sumup-btn");
+    });
+
+    it("on a Session tab with rows, lands on the active row's chips at the bottom, not the button at the top", () => {
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-details-session-body Panel Focusable">
+            <div class="bonsai-sumup-btn Panel Focusable"></div>
+            <div class="bonsai-details-session-row Panel Focusable"></div>
+            <div class="bonsai-chip-ladder Panel Focusable"></div>
+          </div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-chip-ladder");
+    });
+
     it("falls back up the reply when the panel is shut: the notes block, then Show details", () => {
       resetReplyStops();
       mountLiveTurn(`

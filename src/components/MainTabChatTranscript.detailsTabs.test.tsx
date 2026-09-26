@@ -9,7 +9,7 @@
  * Solves: A jsdom test cannot prove Steam's own gamepad ring moves (AGENTS.md, "The Steam Deck
  *         focus graph") -- what it CAN prove, and what this file proves, is that the exact
  *         onMoveUp/onMoveDown/onMoveLeft/onMoveRight/onCancelButton props Steam invokes on device
- *         are wired to the right targets, the same standard SessionContextStrip.clearButton.test.tsx
+ *         are wired to the right targets, the same standard SessionContextStrip.test.tsx
  *         and MainTabChatTranscript.reasoningFold.test.tsx already hold this codebase to.
  * Does not: Prove any of it on the device -- that is owed separately, and named unproven in the
  *           report until it runs.
@@ -296,7 +296,9 @@ describe("the This answer / Session tabs, on the newest answer", () => {
       // class as "This answer"'s (it is the same shared component either way).
       expect(container.querySelector(".bonsai-details-session-body")).not.toBeNull();
       expect(container.querySelector(".bonsai-details-session-row")).not.toBeNull();
-      expect(container.textContent).toContain("Clear");
+      // Plan 68: Sum up this chat at the top of the tab; Clear is gone.
+      expect(container.textContent).toContain("Sum up this chat");
+      expect(container.textContent).not.toContain("Clear");
 
       const onMoveLeft = tabsRowProps()?.onMoveLeft as () => boolean;
       expect(onMoveLeft).toBeTypeOf("function");
@@ -352,19 +354,19 @@ describe("the This answer / Session tabs, on the newest answer", () => {
       expect(document.activeElement).toBe(ladder);
     });
 
-    it("Session: Down focuses the first session row", () => {
+    it("Session: Down focuses Sum up this chat, at the top of the tab (plan 68)", () => {
       const { container } = renderTranscript();
       clickShowDetails(container);
       act(() => {
         (tabsRowProps()?.onMoveRight as () => boolean)();
       });
 
-      const firstRow = container.querySelector(".bonsai-details-session-row") as HTMLElement;
-      expect(firstRow).not.toBeNull();
+      const button = container.querySelector(".bonsai-sumup-btn") as HTMLElement;
+      expect(button).not.toBeNull();
 
       const onMoveDown = tabsRowProps()?.onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
-      expect(document.activeElement).toBe(firstRow);
+      expect(document.activeElement).toBe(button);
     });
   });
 
@@ -424,39 +426,4 @@ describe("the This answer / Session tabs, on the newest answer", () => {
     });
   });
 
-  /*
-   * Plan 64 bug E, second half. Opening the Session tab's Clear confirm box (or any nested Decky
-   * modal) remounts the whole plugin -- documented at the top of this component's own gotchas and
-   * at useBonsaiPluginShell.ts's `__bonsaiTabRestoreAfterModal`. That remount used to leave
-   * `transparencyDetailsOpen` and `detailsTab` at their React defaults on the way back (closed,
-   * "This answer") instead of where the person actually was. On device this meant: the panel was
-   * gone, and the Clear button the return-focus registry was aiming for was never rendered, so
-   * cancelling threw the ring out to the tab bar instead of back onto Clear.
-   */
-  describe("the panel survives a nested Decky modal (plan 64 bug E)", () => {
-    it("reopens on the Session tab, panel open, after a nested modal remounts the plugin", () => {
-      const onBeforeNestedDeckyModal = vi.fn();
-      const { container, unmount, getByText } = renderTranscript({ onBeforeNestedDeckyModal });
-      clickShowDetails(container);
-      act(() => {
-        (tabsRowProps()?.onMoveRight as () => boolean)();
-      });
-      expect(activeTabText(container)).toBe("Session · 1");
-      expect(container.querySelector(".bonsai-details-session-body")).not.toBeNull();
-
-      // Opening Clear's confirm box: calls the caller's onBeforeNestedDeckyModal, same as any
-      // nested Decky modal, right before the remount it causes.
-      fireEvent.click(getByText("Clear"));
-      expect(onBeforeNestedDeckyModal).toHaveBeenCalledTimes(1);
-
-      // The remount itself: torn down and rendered fresh with the same props, exactly what
-      // index.tsx's Content tree does when a Decky modal opens and closes.
-      unmount();
-      const { container: container2 } = renderTranscript({ onBeforeNestedDeckyModal });
-
-      // No click here -- this is what came back on its own after the remount.
-      expect(container2.querySelector(".bonsai-details-session-body")).not.toBeNull();
-      expect(activeTabText(container2)).toBe("Session · 1");
-    });
-  });
 });

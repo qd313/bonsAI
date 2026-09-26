@@ -689,6 +689,128 @@ ${buildSavedChatSlotsRowSection()}${buildSavedChatSlotDotsSection()}
           background: rgba(156, 231, 255, 0.14);
           border-color: rgba(156, 231, 255, 0.4);
         }
+        /*
+         * Plan 68, as drawn (docs/planning/assets/68-chat-sums-itself-up.html). *Sum up this chat*
+         * takes Clear's own quiet full-width look, moved to the top of the Session tab; greyed out
+         * it is still a D-pad stop (measured 2026-09-16), so it keeps the white ring.
+         */
+        .bonsai-scope .bonsai-sumup-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: ${uiScalePx(6)};
+          width: 100%;
+          box-sizing: border-box;
+          padding: ${uiScalePx(8)} 0;
+          border-radius: 6px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: transparent;
+          color: #8fa8c4;
+          font-size: ${uiScalePx(11)};
+          font-weight: 700;
+          white-space: nowrap;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-sumup-btn--off {
+          opacity: 0.45;
+          cursor: default;
+        }
+        .bonsai-scope .bonsai-sumup-btn.gpfocus,
+        .bonsai-scope .bonsai-sumup-btn:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+          box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.12);
+          color: #dce8f4;
+        }
+        .bonsai-scope .bonsai-sumup-reason {
+          font-size: ${uiScalePx(11)};
+          line-height: 1.4;
+          color: #8fa8c4;
+          padding: 0 ${uiScalePx(2)};
+        }
+        /* The summary card: the chip ladder's own panel, with its edge in the session blue. */
+        .bonsai-scope .bonsai-sumup-card {
+          box-sizing: border-box;
+          padding: ${uiScalePx(8)} ${uiScalePx(10)};
+          border-radius: 8px;
+          border: 1px solid rgba(125, 211, 252, 0.3);
+          background: rgba(14, 22, 32, 0.55);
+          font-size: ${uiScalePx(11)};
+          line-height: 1.45;
+          color: #dce8f4;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-sumup-card.gpfocus,
+        .bonsai-scope .bonsai-sumup-card:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+        }
+        .bonsai-scope .bonsai-sumup-card-head {
+          display: flex;
+          justify-content: space-between;
+          gap: ${uiScalePx(8)};
+          font-size: ${uiScalePx(10)};
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          color: #9fb7d5;
+          margin-bottom: ${uiScalePx(6)};
+        }
+        .bonsai-scope .bonsai-sumup-card-lines {
+          margin: 0;
+          padding-left: ${uiScalePx(14)};
+        }
+        .bonsai-scope .bonsai-sumup-card-lines li {
+          margin: 0 0 ${uiScalePx(3)};
+        }
+        .bonsai-scope .bonsai-sumup-card-foot {
+          margin-top: ${uiScalePx(6)};
+          padding-top: ${uiScalePx(6)};
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
+          font-size: ${uiScalePx(10)};
+          line-height: 1.4;
+          color: #8fa8c4;
+        }
+        /*
+         * The note under the answer that came right after summing up: the waiting line's muted
+         * blue, a squeeze icon in the session blue. A stop only on the newest answer.
+         */
+        .bonsai-scope .bonsai-chat-summary-note {
+          display: flex;
+          align-items: flex-start;
+          gap: ${uiScalePx(6)};
+          width: 92%;
+          box-sizing: border-box;
+          padding: 1px ${uiScalePx(2)};
+          border-radius: 4px;
+          font-size: ${uiScalePx(11)};
+          line-height: 1.35;
+          color: #9fb7d5;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-chat-summary-note--older {
+          cursor: default;
+        }
+        .bonsai-scope .bonsai-chat-summary-note-icon {
+          flex: 0 0 auto;
+          margin-top: 1px;
+          color: #9ce7ff;
+          opacity: 0.8;
+        }
+        .bonsai-scope .bonsai-chat-summary-note.gpfocus,
+        .bonsai-scope .bonsai-chat-summary-note:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+          color: #dce8f4;
+        }
+        /* Summing up failed or ran out of time: the slow-answer line's warning yellow. */
+        .bonsai-scope .bonsai-chat-summary-warn {
+          color: #f2cf84;
+          font-size: ${uiScalePx(12)};
+          line-height: 1.35;
+          margin: ${uiScalePx(8)} 0 ${uiScalePx(4)};
+        }
 
         `;
 }

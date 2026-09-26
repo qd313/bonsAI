@@ -439,6 +439,8 @@ export function useBonsaiAskOrchestration(
   // --- Poll bridge: map get_background_game_ai_status → UI state ---
   const applyBackgroundStatusToUi = useCallback(
     (status: BackgroundRequestStatus, fallbackQuestion: string = "") => {
+      /* Plan 68: the Sum up button's own job has no question and no answer to paint (useChatSumUpJob). */
+      if (status.kind === "sum_up") return;
       const appId = status.app_id ?? "";
       const appContext = status.app_context === "active" ? "active" : "none";
 

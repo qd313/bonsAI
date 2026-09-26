@@ -48,6 +48,7 @@ export type ReplyStopId =
   | "show-details"
   | "show-reasoning"
   | "copy"
+  | "summary-note"
   | "read-aloud";
 
 /**
@@ -60,6 +61,9 @@ export type ReplyStopId =
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.
  *
+ * `summary-note` (plan 68) is the "The chat summed itself up before this answer" line directly
+ * under the answer bubble, on the newest answer only, after Copy and before the thumbs.
+ *
  * `show-reasoning` is the one stop that is NOT below the answer: it is the Show reasoning line
  * between the question and the answer, on a turn whose model thought first (plan 57). It sits
  * between `retry` and `copy` because that is where a person meets it walking down — Retry is on
@@ -70,6 +74,7 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
   "show-reasoning",
   "copy",
+  "summary-note",
   "helpful",
   "not-really",
   "read-aloud",

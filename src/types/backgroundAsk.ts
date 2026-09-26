@@ -154,6 +154,18 @@ export type BackgroundRequestStatus = {
    * existed.
    */
   chat_summary?: "written" | "failed" | null;
+  /**
+   * What the one-at-a-time job is (plan 68 step 4): an ordinary question, or the *Sum up this
+   * chat* button's own job, which saves no turn and has no answer to paint. Absent on a build
+   * before this existed, which only ever ran questions.
+   */
+  kind?: "ask" | "sum_up";
+  /**
+   * Whole seconds the "Summing up the chat so far" line has been up, counted by the back end;
+   * present only while that line is the one showing. The Session tab's button reads it for its
+   * own "Summing up · N s", so the count survives the tab being rebuilt.
+   */
+  summing_up_seconds?: number;
 };
 
 export type PresetCarouselInjectPayload = {

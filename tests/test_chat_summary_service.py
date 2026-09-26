@@ -160,6 +160,16 @@ class PlanSummaryTests(unittest.TestCase):
         self.assertTrue(plan.needed)
         self.assertGreaterEqual(len(plan.kept_turns), MIN_KEPT_TURNS)
 
+    def test_a_stopped_answer_alone_does_not_make_a_chat_outgrown(self):
+        # A chat that fits whole apart from a stopped answer (skipped by the memory on purpose) has
+        # not outgrown its room -- it must not sum itself up again just to fold that one exchange in.
+        turns = _chat(2) + [
+            {"id": "qs", "role": "user", "text": "and what about that"},
+            {"id": "as", "role": "assistant", "text": "Request cancelled."},
+        ]
+        plan = plan_summary({"turns": turns}, memory_allowance_tokens=2000, model_name="")
+        self.assertFalse(plan.needed)
+
     def test_the_question_being_asked_is_not_one_of_the_kept_turns(self):
         # The live question is saved into the chat before the answer starts; the kept tail must
         # still be two FINISHED questions and answers, not one and a half plus the live question.

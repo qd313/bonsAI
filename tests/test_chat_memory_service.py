@@ -238,18 +238,28 @@ class StoppedAnswersAreSkippedTests(unittest.TestCase):
     def setUp(self) -> None:
         reset_token_accounting()
 
+    # A chat with one stopped question in it, shared by the tests below.
+    STOPPED_CHAT = [
+        {"role": "user", "text": "how do i beat morpha"},
+        {"role": "assistant", "text": CANCELLED_ANSWER_TEXT},
+        {"role": "user", "text": "and what about the boots"},
+        {"role": "assistant", "text": "Take the Iron Boots off to swim up."},
+    ]
+
     def test_a_stopped_answer_is_skipped_by_the_memory_builder(self):
         """A stopped answer is saved as the placeholder text, not something anybody said. It must
         not come back as if the AI had actually replied."""
-        turns = [
-            {"role": "user", "text": "how do i beat morpha"},
-            {"role": "assistant", "text": CANCELLED_ANSWER_TEXT},
-            {"role": "user", "text": "and what about the boots"},
-            {"role": "assistant", "text": "Take the Iron Boots off to swim up."},
-        ]
-        memory = build_chat_memory(turns, 2000)
+        memory = build_chat_memory(self.STOPPED_CHAT, 2000)
         self.assertNotIn(CANCELLED_ANSWER_TEXT, memory.text)
         self.assertIn("Iron Boots", memory.text)
+
+    def test_a_skipped_stopped_answer_is_not_counted_as_left_behind(self):
+        """Skipping a stopped answer on purpose is not running out of room: nothing is left behind,
+        and the block must not claim earlier turns are missing (plan 68, seen on the Deck
+        2026-09-25: this count made a chat sum itself up again after every stopped question)."""
+        memory = build_chat_memory(self.STOPPED_CHAT, 2000)
+        self.assertEqual(memory.turns_left_out, 0)
+        self.assertNotIn(MEMORY_TRUNCATED_NOTE, memory.text)
 
 
 class SummaryInTheMemoryBlockTests(unittest.TestCase):

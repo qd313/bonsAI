@@ -226,7 +226,12 @@ def build_memory_lines(
             hidden_removed += removed
 
     lines.reverse()
-    left_out = len(rows) - carried
+    # "Left out" means only turns the walk never reached because the room ran out. A turn it reached
+    # and skipped on purpose -- a stopped answer, or an answer that was nothing but a hidden note --
+    # was not left out for lack of room. Counting it here made every stopped question look like a
+    # chat that had outgrown its room, so the chat summed itself up again on the next question just
+    # to fold that one stopped exchange in (seen on the Deck 2026-09-25, plan 68).
+    left_out = len(rows) - scanned
     return lines, carried, left_out, hidden_removed, used, scanned
 
 

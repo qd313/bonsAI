@@ -318,3 +318,40 @@ testing-manual.md. Found by the planning-folder review
     Vegas guard: a gameplay-only reply about stats and early armour, no story detail, and the follow-up menu
     named New Vegas places (`docs/test-evidence/plan55-STRAT-SPOIL-TEXT-01-newvegas.json`).
 
+### Plan 70 flows 1 and 2a (2026-09-26)
+
+- [x] **KB-FOCUS-01** Ollama KB Update/Remove: Left/Right between pair; both Up → KB toggle; both Down →
+  Reply style; equal row height (Update not taller than Remove). **PASS (Deck) 2026-09-26:** both buttons
+  measured 44 px tall with the same top edge; Left/Right swap between them, Up from either reaches the
+  knowledge-base toggle, Down from either reaches Reply style, all 11 stops fully visible. Evidence
+  `docs/test-evidence/plan70-KB-FOCUS-01.json`, saved walk `checks/plan70-KB-FOCUS-01-v2.json`.
+- [x] **CMD-REPLY-TITLE-01** A command reply saves to its chat slot (turn header / chat title). **PASS
+  (Deck) 2026-09-26:** `bonsai:vac-check` sent from a new chat; the turn header and the chat's own title
+  both read "bonsai:vac-check" right away, and still did after closing and reopening the Quick Access
+  Menu. Evidence `docs/test-evidence/plan70-CMD-REPLY-TITLE-01.json`.
+- [x] **STOP-PARTIAL-01** Stop mid-Ask keeps a readable answer. **PASS (Deck) 2026-09-26, both halves:**
+  stopped mid-answer, the streamed text stayed on screen ending mid-sentence, with "Stopped — partial
+  answer kept." under the question and the question box left empty; stopped an instant after Ask, with no
+  readable text yet, "Request cancelled." showed and the question returned to the box. Side notes:
+  stopping unloads the answer model, so the next question starts cold; after the mid-answer stop the ring
+  was left on the Voice input corner button. Evidence `docs/test-evidence/plan70-STOP-PARTIAL-01.json`.
+- [x] **SCR-05** Close and reopen mid-answer (scrambled answer). **PASS (Deck) 2026-09-26, second try:** a
+  first try was refused once by the controller rig itself ("controller bridge is not available") and
+  nothing was tested; on the second try, closing the panel with about three lines on screen and reopening
+  about 8 seconds later showed the same answer still streaming, readable, no frozen scrambled letters, and
+  it finished normally with its branch menu. The reopened screen's text matched the saved chat word for
+  word. Evidence `docs/test-evidence/plan70-SCR-05.json`.
+- [x] **SPOILER-RISK-CHIP-01** Spoiler confidence chip (Show details band estimate). **PASS (Deck)
+  2026-09-26:** Speed, Strategy and Expert asks about Hollow Knight each showed a "Spoiler risk" band
+  under Show details, and the answer text never dropped to less than half its longest length while
+  streaming (no blank). Side finding: every answer this session read "med", including troubleshooting
+  questions with no game at all; and for one question the recorded named entity was a note's own title
+  ("Starting out in Hollow Knight") rather than the boss actually asked about — see the new bug filed on
+  the roadmap. Evidence `docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
+- [x] **CHAT-HEADER-CAPTION-01** Reopened chat header shows the friendly caption. **PASS (Deck)
+  2026-09-26:** after picking a branch ("A. Starting out in Dirtmouth"), the live header read "I'm at:
+  Starting out in Dirtmouth", and it read exactly the same after closing and reopening the Quick Access
+  Menu. Side finding: walking Up from below skipped both branch buttons, which only took the ring walking
+  Down from above — filed under the Down/Up mirror bug. Evidence
+  `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
+

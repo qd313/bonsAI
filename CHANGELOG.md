@@ -398,6 +398,24 @@ All notable changes to this project are documented in this file.
   breathes normally while the model is thinking. `answerBubble.ts`, `section-6.ts`.
 
 ### Added
+- **A knowledge-base question asked a while after the last one no longer pays extra time to search:** the
+  model that searches the notes was falling out of memory after 5 minutes of no questions, even with "Keep
+  models loaded" set much longer, because that setting only ever reached the model that writes the answer.
+  Both models now share the same hold time. `knowledge_base_service.py`. On-Deck check owed.
+- **The "Spoiler risk" line under Show details no longer reads "med" on every single answer:** it was
+  always adding the same amount for the question's mode (Speed/Strategy/Expert) before weighing anything
+  else, so a plain troubleshooting question with no game and no notes attached still landed on "med" for no
+  reason. Troubleshooting questions no longer get that bump; a beginner's "Starting out" note can also no
+  longer be mistaken for the specific thing a question named. `spoiler_risk_service.py`. On-Deck check owed.
+- **A follow-up question now stays on the boss you were already asking about:** a bare follow-up like
+  "what about its second phase" now carries the earlier question and a short version of its own last
+  answer, so it names the right boss 21 of 24 times where it used to manage 4 of 24, and almost never
+  stops to ask which boss was meant. `game_ai_request.py`. On-Deck check owed.
+- **Installing the knowledge base now also offers its meaning-search model:** right after a fresh
+  install finishes with that model still missing, a confirm box asks once, "Also download the
+  meaning-search model (about 270 MB)? Better note matching." Answering Download works the same way the
+  existing pull button already did; Not now does nothing; updating an already-installed library never
+  asks again. `knowledge_base_service.py`. On-Deck check owed.
 - **A new player now gets a "How do I get started" chip and note:** a covered game with a starting-out
   note now offers a *"How do I get started in <game>?"* suggestion chip, and typing "where do I start"
   or "how do I get started" reaches that note the same way asking about a boss reaches a boss note.

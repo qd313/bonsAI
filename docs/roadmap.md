@@ -85,6 +85,8 @@ starts work outside this.
   everything else matches. A 22-line answer section shows only a third of itself on landing because the
   question box covers it — expected for a section taller than the screen, not a new fault. Row
   **REPLY-STOPS-MIRROR-01**. Evidence `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
+  **Sighting 2026-09-26 (plan 70):** a branch menu's two buttons were reachable walking Down from above,
+  but walking Up from below skipped both. Evidence `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -169,6 +171,10 @@ starts work outside this.
   switching chats" half still stands and can still be tried.
 - ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
+- ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from
+  turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
+- ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
+  **OPEN, found 2026-09-26.** `PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's.
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
@@ -205,6 +211,9 @@ starts work outside this.
   **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Deck check owed.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
+- ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **OPEN,
+  found on the Deck 2026-09-26, row STOP-PARTIAL-01.** Deliberate, so a stuck answer truly stops, but worth
+  revisiting: close the connection first, only unload if still generating a few seconds later. Maintainer's call.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -276,7 +285,8 @@ starts work outside this.
   afterward. **Stays open** — one clean build does not close a fault that has come and gone before; the
   maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots). **Sighting
   2026-09-26:** ring stuck in the question box after an answer finished, no evidence file — reported by
-  the Deck helper.
+  the Deck helper. **Seen again 2026-09-26 (plan 70 flows 1+2a), twice more:** the ring sat in the question
+  box on its own after an answer, with nobody pressing anything.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
@@ -392,7 +402,8 @@ replace it with a specific issue when one exists.
   and 31 again afterwards. It goes both ways — the answer itself drops to about a third of its usual speed. Memory is the other
   half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
-  **A worse sighting 2026-09-26.** [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+  **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
+  night. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
@@ -449,8 +460,9 @@ replace it with a specific issue when one exists.
   [plan 19](planning/19-controller-macro-test-rig.md): a recording that is also a live view (S3), the highlight checked from the
   video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which needed the saved-walk replay bug
   fixed first — **now works, proven 2026-09-26** (see the bug entry above). Comes before stand-in Decks. Plan 70 takes
-  two of the four pieces: the replay working again, and a first slice of the nightly run, run by hand.
-  [Program](planning/21-ai-owned-testing-program.md).
+  two of the four pieces: the replay working again, and a first slice of the nightly run. **The nightly run's
+  first slice is built 2026-09-26** (plan 70, helper N); its first real overnight run is still owed, in flow 6.
+  Row **OVERNIGHT-RUN-01** in [testing.md](testing.md). [Program](planning/21-ai-owned-testing-program.md).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -759,11 +771,19 @@ ones from this month are D81 to D88.
   Deck check owed: row **KB-NOTIP-FLOOR-01** in [testing.md](testing.md). [Detail](roadmap-details.md#tip-cut-off-fix).
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
   2026-09-26, not fixed.** `knowledge_base_service.py` line ~946. [Detail](roadmap-details.md#speed-mode-tip-gap).
-- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26 (plan 70, helper
-  F), not fixed this wave.** `scripts/fetch_wiki_live_pages.py`'s page-render call gets refused (HTTP 403)
-  by palworld.wiki.gg, though the lighter revision-lookup call still answers. Worked around by hand this
-  time (the plain page read directly, with the reader's own clean-up code); a fallback to the plain page
-  when the render call is refused would cover it for good.
+- ★★ `[KB]` `[ollama]` **The note-search model is only held in memory for 5 minutes, not the 4 hours the
+  answer model gets** — **VERIFY, fixed 2026-09-26 (`409de9f6`).** Both models now share one hold time.
+  Deck check owed: a question more than 5 minutes after the last one must not pay to reload.
+- ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
+  thing** — **VERIFY, both halves fixed 2026-09-26 (plan 70, helper M, `804bd004` + `f14de761`).** Cause 1:
+  every question got a flat score bump from its Ask mode, so a troubleshooting question with nothing else
+  to weigh still landed on "med" — troubleshooting questions now skip that bump. Cause 2: a "Starting out"
+  note could be picked as the named entity, since its title ends in the game's own name — such notes are
+  now skipped when matching. **Not fixed:** a game's own name can still count as naming a note in general.
+  Deck check owed. Evidence `docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
+- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
+  `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
+  time. A fallback to the plain page would cover it for good.
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **VERIFY, fixed
   2026-09-26 (plan 70, helper B, commit `58f60c0a`).** **Cause found 2026-09-25:** when a question names
   the game but describes a boss without naming it, the check behind this line compared the question's
@@ -796,13 +816,13 @@ ones from this month are D81 to D88.
   rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
   stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
-- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the
-  follow-up fix closed 2026-09-12.** A follow-up now gets the right boss two times in three, where it used
-  to be wrong every time; DOOM Eternal is wrong every time and no amount of search work closes that one.
-  (D98) **Sighting, 2026-09-19, Hades:** the search found the right boss again, but the written reply asked
-  which boss was meant instead of using her name. **Unblocked 2026-09-25** — plan 68's per-chat remembered
-  subject landed (`cfa5537c`). Plan 70 measures three ways to finish it on the PC and brings the maintainer
-  the numbers before building one. [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
+- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **VERIFY, fixed 2026-09-26
+  (plan 70, helper K, commit `e1bf3324`).** A follow-up now sends the model the earlier question and a
+  short version of its own last answer, on by default. Measured on the PC, 8 games × 3 runs: right boss 21
+  of 24, against 4 of 24 before. Turning it on exposed a real spoiler-safety risk an existing test caught:
+  the reminder was spliced in before the checks that decide whether the person named a boss or allowed
+  spoilers; the splice now happens after those checks. **Deck check owed:** row **KB-FOLLOWUP-BOSS-01** in
+  [testing.md](testing.md). [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
   2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
@@ -812,28 +832,12 @@ ones from this month are D81 to D88.
   note is still attached. **Found again 2026-09-18:** a Hades boss question attached the wrong area's note
   and the reply named the wrong bosses. [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
-  own** — **OPEN, found 2026-09-19.** Asking how to cross the electrified water gave the right, specific
-  answer, but the two notes Show details named as used were general early-game notes about starting out and
-  the opening tram ride — neither one is the electrified-water note, which does exist in the library. So a
-  person sees a correct answer with the wrong notes named underneath it, one run, one asking. **Asked again
-  2026-09-22 with different wording on purpose** (a repeat is cached and proves nothing): this time the
-  electrified-water note itself came first. Shows the right note CAN be found, not that the original
-  wording now finds it. Stays open; next step is clearing the cache and asking the exact original words.
-  Evidence `docs/test-evidence/plan61-W3-D-blackmesa.json`, `docs/test-evidence/plan63-BLACKMESA-WATER-NOTES.json`.
-  **Asked again 2026-09-23 with the exact original words, better but not fixed:** the electrified-water note
-  is now attached and the answer is built on it (treat the floor like lava, cut the power, use crates as
-  stepping stones), where on 2026-09-19 only the two generic notes showed. But the two generic notes are
-  still attached too, still listed first, and the block header still names "Starting out in Black Mesa" —
-  the same ranking shape as the Hollow Knight "no close match" bug above, where the right note is found but
-  ranks behind generic ones. Evidence `docs/test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again
-  2026-09-23 with Black Mesa running: no change.** The notes, their order, the scores and the answer all
-  matched the game-not-running run exactly — having the game running did not affect this bug either way.
-  Evidence `docs/test-evidence/plan64-BLACKMESA-WATER-running.json`. **Measured 2026-09-26 (plan 70,
-  helper B): ranking a "Starting out" note lower is not this wave's fix.** A switch to do this, off by
-  default, was built and measured rather than turned on: it helped the search test (95 → 97 of 153
-  held-back rows right) but hurt the answer test (46 → 41 of 57 right note first), so it stays off, not
-  this wave. It would not have cured this bug on its own either way — a second generic note, the opening
-  tram ride, still ranks ahead of the electrified-water note even with the demotion applied.
+  own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
+  notes are named underneath it instead of the real electrified-water note, which does exist in the
+  library and now attaches too, but still ranks behind the generic ones. **Measured 2026-09-26 (plan 70,
+  helper B): ranking a "Starting out" note lower is not this wave's fix** — it helped the search test but
+  hurt the answer test, so it stays off, and would not have cured this bug alone anyway (a second generic
+  note still ranks ahead). [Detail](roadmap-details.md#black-mesas-electrified-water-question).
 
 ### Deck check owed
 
@@ -851,23 +855,10 @@ ones from this month are D81 to D88.
   on-topic half is a real pass, its off-topic half is waiting on the maintainer to retire or reword it
   against an earlier accepted decision. This entry stays open until that half is settled.
   [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
-- ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, ran for the first time and passed,
-  2026-09-22,** once the answer-lines lane added the missing log line — recorded as impossible every
-  earlier time. Row **KB-TRANSPARENCY-01**, full run in [testing.md](testing.md). **All three attached
-  names confirmed on the Deck 2026-09-23**: a Hollow Knight reply's open notes block named the same three
-  notes, in the same order, as the log's own search and attach lines. Evidence
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-names.json`. **The game-running case passed too, 2026-09-23:**
-  with Half-Life 2 running, the open block named Ravenholm, Combine soldiers and Hunter-Chopper, exactly as
-  the log did, and the log named Half-Life 2 itself. Evidence
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-running.json`. **Still owed:** a case where a note is dropped
-  for space. Tried with nothing running, then tried again 2026-09-23 with a game running and a
-  troubleshooting question meant to produce a large Proton log — still could not be reproduced: 3 notes
-  searched, 3 attached, none dropped, with a roughly 16,000-character prompt. The current library and log
-  simply do not produce a drop; stays owed with these numbers on record. Evidence
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-starved.json`,
-  `docs/test-evidence/plan64-KB-TRANSPARENCY-starved-try2.json`. **Sighting, 2026-09-23:** searching the
-  notes by meaning took about 1,070 milliseconds with a game running (Black Mesa, then the first Hades
-  question), against 22 to 60 milliseconds measured elsewhere with nothing running.
+- ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, passed 2026-09-22,** once the
+  answer-lines lane added the missing log line. Row **KB-TRANSPARENCY-01**. **All attached names confirmed
+  on the Deck 2026-09-23**, both with nothing running and with Half-Life 2 running. **Still owed:** a case
+  where a note is dropped for space — not yet reproduced despite trying. [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
   boss up front keeps the answer in plain text. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the
@@ -900,10 +891,11 @@ ones from this month are D81 to D88.
   slice of questions the word search cannot answer at all was 3 rows when last counted, before 36 more blind rows landed.
   Re-count it on the next search run before calling this closed. No code needed — the search test already reports that
   slice; it only needs a run (plan 70). [Detail](roadmap-details.md#eval-fixture-cannot-see-a-recall-failure).
-- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **OPEN, added 2026-09-05.** A person who
-  installs the library but never presses the pull button silently gets word search only, the weaker half by every
-  measurement. A button and a one-time hint exist today; make the pull part of the download flow, with consent, never
-  silent. Promoted out of Phase 7. One to two days. Planned in plan 70.
+- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **VERIFY, built 2026-09-26
+  (plan 70, helper D).** A person who never pressed the pull button silently got word search only, the
+  weaker half. Now, right after a fresh install finishes with that model still missing, a confirm box
+  offers to download it once; Update never asks again. **Deck check owed:** row **KB-NOMIC-OFFER-01** in
+  [testing.md](testing.md), flow R.
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
   one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
   regression fails a check instead of relying on luck. Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
@@ -967,7 +959,8 @@ ones from this month are D81 to D88.
   thumbs-down that stops a wrong card coming back (three days), add-on packs before any large catalog (five days or more),
   a screenshot feeding the search (a short test to find out first). A nearest-neighbour index buys nothing until the corpus
   is thousands of cards. The embedding-model pull is its own entry above. The thumbs-down that stops a wrong note coming
-  back is drawn and planned in plan 70, not built (D112). [knowledge-base.md](knowledge-base.md) § Phase 7.
+  back is drawn 2026-09-26 (plan 70, helper T) — [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43),
+  helper recommends C. Not built (D112 #8); the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7.
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's

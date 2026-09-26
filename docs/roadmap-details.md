@@ -1573,6 +1573,13 @@ limit (word for word):**
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
+**Measured 2026-09-26 (plan 70, helper K), three ways, by hand (24 second-question answers each, 8 games
+× 3 runs):** today's shape scores right 4, wrong 4, asks "which boss?" 10, vague 6; dropping every other
+attached note scores 11/0/8/5; sending the previous question and a short version of its answer scores
+21/2/1/0 (fixes DOOM Eternal, about 0.6 s slower per follow-up on the PC). The first idea (carry the
+subject into the instructions) was already shipped. The maintainer picked sending the previous question
+and answer (D112, added 2026-09-26); being switched on now.
+
 ## Check that a spoiler cover actually happened
 
 Long version of the roadmap entry. Moved here 2026-09-25 by the plan 70 bookkeeping pass; the roadmap keeps
@@ -1755,6 +1762,10 @@ together. Measured at the title screen, not during a mission, so a real level ma
 1.8 GB was still free with the game at its title screen and both models loaded, so under D112's rule
 the memory safety check stays unbuilt — the room did not actually run tight.
 
+**A third sighting, 2026-09-26 (plan 70 flow 2a).** During the SCR-05 check (no game running this
+time), Steam's own performance overlay recorded the Deck's screen freezing for as long as 7.6 seconds
+at some point between two readings.
+
 ## No tip line numbers
 
 **Numbers in 2026-09-26 (plan 70).** Four cut-offs tried on the topic sorter's pull, measured on 35
@@ -1842,4 +1853,37 @@ Every rule sent to the model is re-checked this way on every single question. **
 between:** show a short status line instead of the checklist; send the model only the rules that
 actually fit the question (needs measuring first, since fewer rules could change answers); turn
 thinking off by default in Speed mode.
+
+## Black Mesa's electrified-water question
+
+**Found 2026-09-19.** Asking how to cross the electrified water gave the right, specific answer, but
+the two notes Show details named as used were general early-game notes about starting out and the
+opening tram ride — neither one is the electrified-water note, which does exist in the library. **Asked
+again 2026-09-22 with different wording** (a repeat is cached and proves nothing): this time the
+electrified-water note itself came first, showing the right note CAN be found, not that the original
+wording now finds it. Evidence `docs/test-evidence/plan61-W3-D-blackmesa.json`,
+`docs/test-evidence/plan63-BLACKMESA-WATER-NOTES.json`. **Asked again 2026-09-23 with the exact original
+words, better but not fixed:** the electrified-water note is now attached and the answer is built on it,
+but the two generic notes are still attached too, still listed first, and the block header still names
+"Starting out in Black Mesa" — the same ranking shape as the Hollow Knight "no close match" bug, where
+the right note is found but ranks behind generic ones. Evidence
+`docs/test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again 2026-09-23 with Black Mesa running: no
+change** — having the game running did not affect this bug either way. Evidence
+`docs/test-evidence/plan64-BLACKMESA-WATER-running.json`.
+
+## KB transparency matches what the model got
+
+**Ran for the first time and passed, 2026-09-22,** once the answer-lines lane added the missing log
+line — recorded as impossible every earlier time. **All three attached names confirmed on the Deck
+2026-09-23:** a Hollow Knight reply's open notes block named the same three notes, in the same order,
+as the log's own search and attach lines. Evidence `docs/test-evidence/plan64-KB-TRANSPARENCY-names.json`.
+**The game-running case passed too, 2026-09-23:** with Half-Life 2 running, the open block named
+Ravenholm, Combine soldiers and Hunter-Chopper, exactly as the log did. Evidence
+`docs/test-evidence/plan64-KB-TRANSPARENCY-running.json`. **Still owed:** a case where a note is dropped
+for space. Tried with nothing running, then again 2026-09-23 with a game running and a troubleshooting
+question meant to produce a large Proton log — still could not be reproduced: 3 notes searched, 3
+attached, none dropped, with a roughly 16,000-character prompt. Evidence
+`docs/test-evidence/plan64-KB-TRANSPARENCY-starved.json`, `docs/test-evidence/plan64-KB-TRANSPARENCY-starved-try2.json`.
+**Sighting, 2026-09-23:** searching the notes by meaning took about 1,070 milliseconds with a game
+running, against 22 to 60 milliseconds measured elsewhere with nothing running.
 

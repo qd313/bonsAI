@@ -270,29 +270,6 @@ Terse ships without them.
 
 ---
 
-## A chat carries what it has already covered into the next question
-
-Row **CHAT-MEMORY-01**. Built 2026-09-21: a question now carries what its chat has already covered instead
-of almost none of it, sized by the plugin's own budget rather than by whatever happens to be on disk.
-
-**Tried on the Deck 2026-09-23 with nothing running, FAIL:** asking about Megaera in Hades, then "what
-about her second phase" — the reply knew "her" meant Megaera but gave only generic fight advice, and Show
-details said no search ran at all ("No game is running, so there is nothing to look up"). A third question,
-"what weapon works best against her", lost track of who "her" was entirely and asked which game and
-character were meant. Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
-
-**Tried again 2026-09-23 with Hades running, still FAIL by this row's own rule:** 34 earlier turns were
-carried, but the reply still opened with "I ain't got no idea what you're talkin' about without a name…
-tell me which part" before guessing the right subject (Sandtraps) and giving two lines on it — the same
-deflect-then-recover shape as with nothing running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
-
-**The no-game half has a fix landed 2026-09-25 (plan 68):** with nothing running and the question naming no
-game, a follow-up now searches the chat's own game instead of finding nothing to look up. Rerun on the Deck
-is owed. **The second failure — the reply asking "tell me which part" before recovering — is exactly what
-plan 68's row SUMUP-01 checks**, since it is the case a chat that has outgrown its room is built for.
-
----
-
 ## The chat sums itself up instead of being cleared
 
 Asked for by the maintainer 2026-09-20. Two parts, and the second needs the first: **a chat keeps a short summary of what
@@ -343,9 +320,18 @@ same by hand, in place of Clear, with a card showing what the AI kept; Clear and
 Each chat keeps its own summary and its own remembered subject now, in its own file, rather than the whole
 plugin sharing one subject. Stop during a summary stops everything and saves nothing; a failure or time-out
 answers the way it did before, with one warning line, and the next question tries again. Hidden spoiler
-text is stripped before the AI ever reads the chat, checked by a unit test. Deck rows **SUMUP-01** to
-**SUMUP-10** and a rerun of **CHAT-MEMORY-01** are owed (see [testing.md](testing.md)); the spoiler-chance
-rating is left for a later plan of its own.
+text is stripped before the AI ever reads the chat, checked by a unit test. The spoiler-chance rating is
+left for a later plan of its own.
+
+**Deck pass 2026-09-25:** SUMUP-01, 03, 04a, 05, 06 and 08 pass, and the rerun of **CHAT-MEMORY-01** also
+passes in full (moved to Done). Still owed: SUMUP-02's re-run (the button used to stay live after a
+summary; fixed the same night, `f008470c`), SUMUP-07's wording with a game running, SUMUP-09 and 10 (not
+runnable on the Deck as it stands), the focus-graph walk and the free-play sweep (see
+[testing.md](testing.md)). Two bugs the pass found, both filed separately: the summary card sits behind
+the dock until Down is pressed, and the summary's own wording sometimes reads oddly. Also found: a stopped
+question used to make the chat re-sum itself far too often (fixed, `f008470c`), and a saved answer with a
+hidden block's markers written twice could leak that hidden text into memory (fixed, `6843f8e1`, cause
+still unknown).
 
 **Every call is in, 2026-09-20.** In the maintainer's own order:
 
@@ -518,6 +504,33 @@ What is wanted instead is flexible with guard rails:
 Related: the four-star **Session context and user stash** entry in the roadmap's Features list is the other half of the
 same idea (live session facts plus notes the person can edit); if both are built, they should share one store rather
 than each keeping their own.
+
+---
+
+## The chat summary card appears behind the dock until Down is pressed
+
+Found 2026-09-25 during plan 68's Deck pass, rows SUMUP-02 and SUMUP-03. After the *Sum up this chat* button
+finishes, the card that shows what the AI kept sits just behind the dock at the bottom of the screen: its
+top measured 597 pixels down against the dock's own top at 600, only 3 pixels of daylight. Opened straight
+from the note under a summarised answer (SUMUP-02), only the top 81 pixels of the card showed above the
+dock. Either way, a person does not see the card appear on its own — they have to press Down to bring it
+into view. Deck check owed once a fix lands.
+
+---
+
+## Some saved answers have a hidden block's markers written twice, cause unknown
+
+Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
+written twice and its closing marker written twice. The screen still drew one closed block correctly, but
+the code that strips such a block out before the AI reads the chat stopped at the second opening marker, so
+the hidden text went into the chat's memory as plain words — for every later question in that chat since
+2026-09-21, and into its summary.
+
+The chat memory now copes with doubled markers (`6843f8e1`) and hides more, not less, whenever it is in
+doubt, proved by breaking it on all three doubled shapes (both doubled, opening doubled, closing doubled).
+**Why an answer ends up saved with doubled markers in the first place is not known.** Deck check owed: find
+or make an answer with doubled markers and confirm the next question's memory does not carry the hidden
+text — the log's memory line or the chat file itself shows it either way.
 
 ---
 

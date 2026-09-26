@@ -246,6 +246,13 @@ starts work outside this.
   (commit `556ffcb`, 2026-09-23), but not pushed, and the tools were still on the old code that night.
   Left: re-save the walks on a current build and push the tools project — even then, a replay across
   builds shows differences rather than a pass. Planned in plan 70.
+- ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
+  from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
+  another desk test on real chats.
+- ★★ `[focus]` **Three D-pad slips seen in the plan 68 Deck pass, may predate it** — **OPEN, found
+  2026-09-25.** With older turns open: Up from the chip row skips the newest answer and lands on an older
+  answer's Show details; B on "Hide details" moves the ring to the tab strip and leaves the details open;
+  Up from a chat's first question skips the chat row and lands on the tab strip.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
   Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
@@ -259,6 +266,9 @@ starts work outside this.
   afterward. **Stays open** — one clean build does not close a fault that has come and gone before; the
   maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+- ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
+  2026-09-25 (plan 68).** Deck check owed.
+  [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Asking about a boss without naming it, in Hollow Knight or Hades, got it named
   and its tactics given in plain text with no cover — with nothing running, and with the game running and
@@ -280,6 +290,10 @@ starts work outside this.
   is no hidden block to walk to and reach. Evidence `docs/test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
   The safety net that should fix it is planned in plan 70 (D112: hide the sentences that name it).
   [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
+- ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **OPEN,
+  found 2026-09-25 (plan 68).** The chat memory now copes with the doubling (`6843f8e1`), but why it happens
+  has not been found. Deck check owed.
+  [Detail](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-unknown).
 
 ---
 
@@ -583,17 +597,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
   box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
-- ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
-  A follow-up that names nothing of its own now stays on the chat's own subject instead of asking which game.
-  Row **CHAT-MEMORY-01**. **Failed on the Deck twice, 2026-09-23:** once with nothing running (no search ran
-  at all) and once with a game running (the reply asked "tell me which part" before recovering). **The first
-  failure has a fix landed 2026-09-25 (plan 68); rerun owed. The second is exactly what row SUMUP-01 checks**
-  (see Features, below). [Detail](roadmap-details.md#a-chat-carries-what-it-has-already-covered-into-the-next-question).
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **VERIFY, built 2026-09-25 (plan 68).**
-  A chat that has grown too long to carry whole now gets a short summary of the older part right before the
-  next answer, so a vague follow-up still lands on the same subject; *Sum up this chat* does the same by hand,
-  at the top of the Session tab, in place of Clear. Rows **SUMUP-01** to **SUMUP-10** and **CHAT-MEMORY-01**
-  (rerun) all owed on the Deck. [Plan 68](planning/68-chat-sums-itself-up.md) ·
+  **Deck pass 2026-09-25:** SUMUP-01, 03, 04a, 05, 06 and 08 pass; CHAT-MEMORY-01 now passes in full too
+  (moved to Done, below). Still owed: SUMUP-02's re-run (a same-night fix changed the button), SUMUP-07's
+  no-game wording, SUMUP-09 and 10 (not runnable on the Deck as it stands), the focus-graph walk and the
+  free-play sweep. [Plan 68](planning/68-chat-sums-itself-up.md) ·
   [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
@@ -1014,6 +1022,14 @@ this document under its size limit.
 
 The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
 review, again to keep this document under its size limit.
+
+**Closed 2026-09-25 (plan 68 Deck pass):**
+
+- ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **DONE, built
+  2026-09-21, confirmed on the Deck 2026-09-25 (plan 68).** Row **CHAT-MEMORY-01** now passes in full: with
+  nothing running, a follow-up searches the chat's own game instead of asking which one is meant; with a
+  game running, the chat's own summary (also plan 68) keeps a long conversation on subject. [Full
+  detail](archive/roadmap-completed.md#a-chat-carries-what-it-has-already-covered-into-the-next-question).
 
 **Closed 2026-09-24 (plan 65, trim and split — nothing a person using the plugin would notice):**
 

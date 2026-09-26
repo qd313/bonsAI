@@ -6,6 +6,39 @@
 
 Headings group related work. Star counts match the historical list.
 
+### A chat carries what it has already covered into the next question (closed 2026-09-25)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-25 during the bookkeeping pass after plan 68's Deck
+run — copied line for line from this session's Verify entry and detail, nothing reworded, with the closing
+note added at the end._
+
+Row **CHAT-MEMORY-01**. Built 2026-09-21: a question now carries what its chat has already covered instead
+of almost none of it, sized by the plugin's own budget rather than by whatever happens to be on disk.
+
+**Tried on the Deck 2026-09-23 with nothing running, FAIL:** asking about Megaera in Hades, then "what
+about her second phase" — the reply knew "her" meant Megaera but gave only generic fight advice, and Show
+details said no search ran at all ("No game is running, so there is nothing to look up"). A third question,
+"what weapon works best against her", lost track of who "her" was entirely and asked which game and
+character were meant. Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
+
+**Tried again 2026-09-23 with Hades running, still FAIL by this row's own rule:** 34 earlier turns were
+carried, but the reply still opened with "I ain't got no idea what you're talkin' about without a name…
+tell me which part" before guessing the right subject (Sandtraps) and giving two lines on it — the same
+deflect-then-recover shape as with nothing running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
+
+**The no-game half had a fix land 2026-09-25 (plan 68):** with nothing running and the question naming no
+game, a follow-up now searches the chat's own game instead of finding nothing to look up. **The second
+failure — the reply asking "tell me which part" before recovering — was exactly what plan 68's row
+SUMUP-01 checks**, since it is the case a chat that has outgrown its room is built for.
+
+**Closed 2026-09-25, confirmed on the Deck.** Both halves now pass. With nothing running, the chips show a
+knowledge-base search on the chat's own game, the log records using the chat's own game rather than one
+named in the question, and the answer stays on subject without asking which game is meant. With a game
+running, plan 68's chat summary (built the same night) keeps a long chat on subject, proved by SUMUP-01
+passing on the Half-Life 2 chat. Evidence `docs/test-evidence/plan68-CHAT-MEMORY-01.json` (+ `.png`).
+
+---
+
 ### Every filter on the AI models screen behind one Filters button, and five changes that give the list more room (closed 2026-09-23)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow A part 1 bookkeeping pass —

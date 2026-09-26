@@ -166,13 +166,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 599,
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "lines": 600,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "lines": 597,
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 599,
       "role": ""
     },
     {

@@ -537,11 +537,14 @@ def _neutralizing_pattern(name: str) -> "re.Pattern[str]":
     replacement can keep exactly one article -- without this, "the Soul Master's" became "the
     this boss's" (measured while building this fix): the name's own replacement phrase already
     carries "this", so a leading "the" has to be absorbed into the match, not left in place.
+    A following "boss" is absorbed for the same reason: the replacement already says "boss", so
+    "facing the Soul Master boss?" read "facing the boss boss?" on the Deck (plan 70,
+    NO-CLOSE-MATCH-HK-02 try 2).
     """
     pat = _NEUTRALIZING_NAME_RE_CACHE.get(name)
     if pat is None:
         pat = re.compile(
-            rf"(?<![a-z0-9])(?:(the|an?)\s+)?{re.escape(name.lower())}s?(?![a-z0-9])",
+            rf"(?<![a-z0-9])(?:(the|an?)\s+)?{re.escape(name.lower())}s?(?:\s+boss)?(?![a-z0-9])",
             re.IGNORECASE,
         )
         _NEUTRALIZING_NAME_RE_CACHE[name] = pat

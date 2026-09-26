@@ -206,6 +206,28 @@ class NeutralizeProtectedNamesInBranchMenuTests(unittest.TestCase):
         out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
         self.assertEqual(out["question"], "Are you struggling with this boss directly?")
 
+    def test_a_name_followed_by_boss_does_not_double_the_word(self):
+        # Deck, plan 70 flow L3 (NO-CLOSE-MATCH-HK-02 try 2): the model wrote "facing the Soul
+        # Master boss?" and the stand-in read "facing the boss boss?".
+        branches = {
+            "question": "Are you currently facing the Soul Master boss?",
+            "options": [
+                {"id": "a", "label": "Yes, fighting Soul Master boss now"},
+                {"id": "b", "label": "Still reaching the Soul Master boss fight"},
+            ],
+        }
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertEqual(out["question"], "Are you currently facing the boss?")
+        self.assertEqual(out["options"][0]["label"], "Yes, fighting this boss now")
+        self.assertEqual(out["options"][1]["label"], "Still reaching the boss fight")
+        for text in [out["question"]] + [o["label"] for o in out["options"]]:
+            self.assertNotIn("boss boss", text)
+
+    def test_a_following_word_that_only_starts_with_boss_is_left_alone(self):
+        branches = {"question": "Is the Soul Master bossfight hard?", "options": []}
+        out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])
+        self.assertEqual(out["question"], "Is the boss bossfight hard?")
+
     def test_a_menu_naming_nothing_protected_is_untouched(self):
         branches = {"question": "Where are you stuck?", "options": [{"id": "a", "label": "Early on"}]}
         out = neutralize_protected_names_in_branch_menu(branches, ["Soul Master"])

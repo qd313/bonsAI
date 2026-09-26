@@ -1,0 +1,17 @@
+{
+ "row": "plan68-3D-SESSION-LAYOUT",
+ "what": "Plan 68 step 3d: where the Session tab's rows sit against the dock, and the space under an answer where the note goes, measured before any screen code.",
+ "when": "2026-09-25 19:55-20:00 EDT",
+ "screen": "The Deck was on its external monitor (capture 1920x1080; the Quick Access page reports 855x766 CSS px). The Deck's own screen is shorter; the chat area is 412 tall there, 512 here.",
+ "chat": "'what is a good way to practice parrying in action games' (66 turns, Deep Rock Galactic: Survivor), newest answer, build experimental aae5add6",
+ "pane": {"scroll_pane_top": 88, "scroll_pane_bottom": 765, "dock_top": 600, "dock_height": 165, "note": "the dock covers the pane's bottom 165 px; useDockClearanceOnFocus lifts any focused control out from behind it"},
+ "under_the_answer": {"answer_bubble": [-545, 225], "copy_corner_slot": [201, 221, "margin-bottom 12"], "branch_picker": [243, 379], "helpful_row": [403, 487], "notes_block": [501, 548], "note_goes": "between the Copy corner and the branch picker (about 22 px there today)"},
+ "session_tab_open_ring_on_first_row": {"tabs_row": [448, 476], "body_margin_top": 8, "row_height": 29, "row_gap": 6, "first_rows": [[484, 513], [519, 548], [554, 584], [590, 619]], "rows_fully_above_dock": 3, "row_count": 42, "active_row_ladder_height": 302, "clear_button": {"height": 33, "at": [2279, 2312], "note": "last thing in the body, 42 rows down"}},
+ "walk": ["Show details -A-> Hide details (ring stays)", "Down -> notes block header", "Down -> tabs row 'This answer | Session · 42'", "Right switches tab, ring stays on the tabs row", "Down -> first session row, visible", "B -> panel closes, ring on Show details, scroll restored"],
+ "conclusions": [
+  "A button of Clear's height (33) above the first row sits at about 484-517 with the ring on it: visible, 83 px clear of the dock.",
+  "The summary card (typically 200-280 px for a 50-85 word summary) is taller than the ~83 px left under the button, so its lower part is behind the dock while the ring is on the button. Per plan 68 section 6 the card becomes ONE D-pad stop (A does nothing) so the dock lift scrolls it into view, and so a chat with no turn rows below it can still read it.",
+  "Rows below the card are reached with the existing dock lift; no new scrolling code is needed."
+ ],
+ "evidence_runs": ["runs/plan68-3d-open-details.json", "runs/plan68-3d-session-tab.json"]
+}

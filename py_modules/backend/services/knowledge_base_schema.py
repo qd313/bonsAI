@@ -68,7 +68,7 @@ import struct
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
-CORPUS_SCHEMA_VERSION = 3
+CORPUS_SCHEMA_VERSION = 4
 CORPUS_MANIFEST_FILENAME = "corpus-manifest.json"
 CORPUS_DB_FILENAME = "corpus.db"
 CORPUS_ATTRIBUTIONS_FILENAME = "ATTRIBUTIONS.md"
@@ -161,7 +161,14 @@ CREATE TABLE IF NOT EXISTS compat_patterns (
     platforms TEXT NOT NULL DEFAULT '[]',
     card TEXT NOT NULL,
     source_url TEXT,
-    source_license TEXT
+    source_license TEXT,
+    -- Schema v4 (D29 / Phase 4 track 3). Null means the tip is shared, which is every tip
+    -- that existed before this column -- additive, no re-authoring needed. Not the numeric
+    -- Steam AppID for every row: a title with no Steam AppID (an emulated shortcut, like
+    -- Ocarina of Time) stores its `games.igdb_id` value here instead, since that is the
+    -- corpus's own per-game key for a title Steam never assigned one to. See
+    -- knowledge_base_service.py's per-game compat pull for the read side.
+    app_id TEXT
 );
 
 CREATE VIRTUAL TABLE IF NOT EXISTS compat_patterns_fts USING fts5(
@@ -406,10 +413,27 @@ def _migrate_compat_patterns_v2(conn: Any) -> None:
         )
 
 
+def _migrate_compat_patterns_v4(conn: Any) -> None:
+    """Add the per-game ``app_id`` column (schema v4, D29) when opening an older corpus.db."""
+    row = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='compat_patterns'"
+    ).fetchone()
+    if not row:
+        return
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(compat_patterns)").fetchall()}
+    if "app_id" not in cols:
+        conn.execute("ALTER TABLE compat_patterns ADD COLUMN app_id TEXT")
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_compat_patterns_app_id ON compat_patterns(app_id) "
+        "WHERE app_id IS NOT NULL"
+    )
+
+
 def apply_schema(conn: Any) -> None:
     conn.executescript(CREATE_SCHEMA_SQL)
     conn.executescript(FTS_SYNC_TRIGGERS_SQL)
     _migrate_compat_patterns_v2(conn)
+    _migrate_compat_patterns_v4(conn)
     conn.commit()
 
 

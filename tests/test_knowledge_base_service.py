@@ -2730,6 +2730,32 @@ class CompatPatternsTipContentTests(unittest.TestCase):
                 len(row["card"]), 200, f"pattern {row['pattern_id']} card is too long to be a quick tip"
             )
 
+    def test_per_game_tips_carry_their_app_id_and_the_two_kinds_read_differently(self):
+        """D29: the maintainer's two confirmed quirks (Fallout 4, GTA San Andreas DE), plus
+
+        researched tips for Deep Rock Galactic: Survivor and Ocarina of Time -- each keyed to
+        its own game, and a researched tip must say so in its own words rather than reading
+        like a confirmed one."""
+        by_app_id = {row["app_id"]: row for row in self.patterns if row.get("app_id")}
+        self.assertEqual(set(by_app_id), {"377160", "1547000", "2321470", "emudeck-oot-n64"})
+
+        fallout4 = by_app_id["377160"]
+        self.assertIn('moshortcut://"F4SE"', fallout4["card"])
+        self.assertIn("Confirmed on the maintainer's own Deck", fallout4["card"])
+
+        san_andreas = by_app_id["1547000"]
+        self.assertIn("%command% -dx12", san_andreas["card"])
+
+        researched = [by_app_id["2321470"]] + [
+            row for row in self.patterns if row.get("app_id") == "emudeck-oot-n64"
+        ]
+        self.assertEqual(len(researched), 3)
+        for row in researched:
+            with self.subTest(card=row["card"]):
+                self.assertIn("Researched, unconfirmed", row["card"])
+                self.assertNotIn("Confirmed on the maintainer's own Deck", row["card"])
+                self.assertTrue(row["source_url"], "a researched tip should cite where it came from")
+
     def test_steam_frame_tips_replaced_after_the_frame_study(self):
         """Plan 49 section 6: the four old Frame tips (one of which pointed at a phone app
         that does not exist) are gone, replaced by seven that read as general guidance and

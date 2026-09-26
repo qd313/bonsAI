@@ -1602,5 +1602,60 @@
     "card": "Restart the game after changing display settings; some games only apply them on the next launch.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 160,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Launch option moshortcut://\"F4SE\" (Properties > Launch Options) starts the game through F4SE via Mod Organizer 2. Confirmed on the maintainer's own Deck, 2026-08-21.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "377160"
+  },
+  {
+    "pattern_id": 161,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Launch option %command% -dx12 (Properties > Launch Options) runs on the maintainer's own Deck. What it fixes is unconfirmed -- a launch option they use, not a documented fix for a specific symptom.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "1547000"
+  },
+  {
+    "pattern_id": 162,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text -- no separate UI-scale option. Below ~90% text gets hard to read; raise Render Scale rather than blame the screen.",
+    "source_url": "https://steamcommunity.com/app/2321470/discussions/2/6292161380818836463/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "2321470"
+  },
+  {
+    "pattern_id": 163,
+    "topic": "emudeck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Ship of Harkinian's enhancements menu (framerate, resolution, saves, textures) has no gamepad-only way in -- map a trackpad as a mouse first, or it stays unreachable.",
+    "source_url": "https://steamdeckhq.com/tips-and-guides/how-to-set-up-zelda-ocarina-of-time-pc-port-on-steam-deck/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "emudeck-oot-n64"
+  },
+  {
+    "pattern_id": 164,
+    "topic": "gyro",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: gyro in Ship of Harkinian reads as a joystick axis, not mouse-look. Pick the control scheme matching a joystick-style gyro, or camera gyro won't respond.",
+    "source_url": "https://steamdeckhq.com/tips-and-guides/how-to-set-up-zelda-ocarina-of-time-pc-port-on-steam-deck/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "emudeck-oot-n64"
   }
 ]

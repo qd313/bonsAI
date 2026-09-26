@@ -368,8 +368,8 @@ def _seed_compat_patterns(conn: sqlite3.Connection) -> int:
     if not isinstance(rows, list):
         return 0
     conn.executemany(
-        "INSERT INTO compat_patterns(pattern_id, topic, platforms, card, source_url, source_license) "
-        "VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO compat_patterns(pattern_id, topic, platforms, card, source_url, "
+        "source_license, app_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
             (
                 int(r["pattern_id"]),
@@ -378,6 +378,10 @@ def _seed_compat_patterns(conn: sqlite3.Connection) -> int:
                 str(r["card"]),
                 str(r.get("source_url") or ""),
                 str(r.get("source_license") or ""),
+                # D29: null for every shared tip (all but a handful today). A per-game row's
+                # own key -- the Steam AppID it names in strategy_seed.json's `games` table,
+                # or that title's igdb_id when it has no Steam AppID at all.
+                (str(r["app_id"]).strip() or None) if r.get("app_id") is not None else None,
             )
             for r in rows
         ],

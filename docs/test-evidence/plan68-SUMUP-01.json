@@ -1,0 +1,28 @@
+{
+  "row": "SUMUP-01 (with the first half of SUMUP-08: close during the summary)",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:25:37 to 22:27:25 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Wheatley chat, Half-Life 2 running (footer 'Context: active game Half-Life 2'), Strategy. Right after the SUMUP-05 stop.",
+  "pressed": ["script put 'and what about that one' in the box (VERIFIED)", "DOWN (ring from Voice input to ask)", "A on ask", "Quick Access toggle chord (GUIDE+A) to close the menu", "waited 10 s", "deck_openPlugin (menu reopened, panel already mounted)"],
+  "seen": {
+    "waitingLine": [
+      {"epochMs": 1790389538528, "text": "Summing up the chat so far · 1 s"},
+      {"afterReopen": "Summing up the chat so far · 28 s (still counting after the menu was shut for about 10 s)"},
+      {"epochMs": 1790389581048, "text": "Waking the model up for \"and what about that one\" in Half-Life 2…", "summingLineLasted": "about 43 s"}
+    ],
+    "closeDidNotStopIt": true,
+    "answerDoneEpochMs": 1790389623701,
+    "answerFirstTwoSentences": "Right, listen up, you wanna know what about that one? You mean that Magnum Revolver we were talking about?",
+    "answerOnSubject": "yes: Half-Life 2's Magnum revolver (the chat's newest subject before the question)",
+    "deflection": "no 'tell me which part' opening; it names the revolver itself (it does ask a follow-up question in its menu at the end: 'What kind of situation are you facing in Half-Life 2 right now?')",
+    "answerFullText": "Right, listen up, you wanna know what about that one? You mean that Magnum Revolver we were talking about? It ain't just some pretty piece of scrap, mate. That thing? It's a close-quarters brawler. You use it when you need to pin down a fella, keep 'em from running off, or just generally make sure they don't get too far away from you. It's for when you gotta get right in there and handle the situation up close. Don't mess around with it if you can't handle the recoil, yeah? / — Not in my notes — this answer is from the model's own knowledge.",
+    "note": {"text": "The chat summed itself up before this answer. Press to read what it kept.", "element": "div.bonsai-chat-summary-note (Focusable)", "position": "under the answer bubble, above the branch picker (A/B/C) and 'Was this helpful?'"},
+    "log": "[2026-09-25 22:26:20,742][INFO]: chat_summary: written in 43.9 s — covered 124 turns, 0 unread, ~8678 input tokens, model gemma4:e2b-it-qat",
+    "chatFileSummary": {"seconds": 43.9, "turns_covered": 124, "hidden_notes_left_out": 2, "oldest_turns_unread": 0},
+    "alsoOnScreen": "slow-answer line '85.7s (>60s): prefer GPU for Ollama, not CPU.' under Show details"
+  },
+  "screenshot": "plan68-SUMUP-01-note.png",
+  "verdict": "PASS",
+  "notes": "Summary seconds recorded: 43.9 s. Whole question took about 85 s from Ask to finished answer."
+}

@@ -1,0 +1,18 @@
+{
+  "row": "SUMUP-06",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:29 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Wheatley chat after SUMUP-01 (summary written 22:26:20, hidden_notes_left_out 2).",
+  "pressed": "none (reads only)",
+  "bannedPhrases": ["final challenge", "ultimate goal", "sweeping attacks", "momentarily vulnerable", "finishes a big combo"],
+  "controlCheck": "All five phrases DO occur somewhere in the chat file's saved turns (so the test is meaningful).",
+  "seen": {
+    "cardOnScreen": "What the AI remembers | 62 turns · 1 min ago | Game: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games. | Player asked about Wheatley fight strategy. | Player asked about the function of the pickaxe. | Player asked about beating Megaera and her second phase in Hades. | Player asked about dealing with the Bone Hydra in Hades. | Player asked about crossing electrified water in Black Mesa. | Player asked about beating the Gonarch in Black Mesa. | Player asked about general strategies for clearing areas/floors. | Player asked about starting a new roguelike run with limited resources. | Player asked about general tips for surviving in survival/desert games. | Player asked about controller issues and game crashing/stuttering. | Player asked about weapon upgrade priority and resource gathering in DRG. | Player asked about general boss fight strategies when new to a game. | Player asked about specific walkthroughs for HL2 chapters and Ravenholm. | Player asked about general advice on exploration and resource management. | Plus the newest 12 turns, word for word · 2 hidden notes left out",
+    "chatFileSummaryText": "Game: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games.\nPlayer asked about Wheatley fight strategy.\nPlayer asked about the function of the pickaxe.\nPlayer asked about beating Megaera and her second phase in Hades.\nPlayer asked about dealing with the Bone Hydra in Hades.\nPlayer asked about crossing electrified water in Black Mesa.\nPlayer asked about beating the Gonarch in Black Mesa.\nPlayer asked about general strategies for clearing areas/floors.\nPlayer asked about starting a new roguelike run with limited resources.\nPlayer asked about general tips for surviving in survival/desert games.\nPlayer asked about controller issues and game crashing/stuttering.\nPlayer asked about weapon upgrade priority and resource gathering in DRG.\nPlayer asked about general boss fight strategies when new to a game.\nPlayer asked about specific walkthroughs for HL2 chapters and Ravenholm.\nPlayer asked about general advice on exploration and resource management.",
+    "sumup01AnswerText": "Right, listen up, you wanna know what about that one? You mean that Magnum Revolver we were talking about? It ain't just some pretty piece of scrap, mate. That thing? It's a close-quarters brawler. You use it when you need to pin down a fella, keep 'em from running off, or just generally make sure they don't get too far away from you. It's for when you gotta get right in there and handle the situation up close. Don't mess around with it if you can't handle the recoil, yeah? / — Not in my notes — this answer is from the model's own knowledge.",
+    "hits": {"card": [], "chatFileSummary": [], "sumup01Answer (screen text of the whole newest turn, 5268 chars, and the saved answer)": []}
+  },
+  "verdict": "PASS",
+  "notes": "The summary names the topics that were asked ('beating Megaera and her second phase') but none of the hidden block's words."
+}

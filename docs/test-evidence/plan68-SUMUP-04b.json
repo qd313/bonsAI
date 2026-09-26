@@ -1,0 +1,15 @@
+{
+  "row": "SUMUP-04b",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 about 23:02 to 23:03:20 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Parrying chat (summed up in SUMUP-03). Half-Life 2 still running. Question put in with the script: 'what is a good drill for dodging instead of parrying' (VERIFIED).",
+  "pressed": ["walk DOWN x15 to ask", "A on ask", "UP x6 (question box -> Test chip -> Retry on the new question -> '43 earlier' -> chat row -> Main tab -> header back button)", "DOWN x3 back to '43 earlier'", "A on '43 earlier' (to open the older turns)"],
+  "seen": {
+    "whileStreaming": "Only the new question's turn was drawn, with '43 earlier' above it. The previous answer was folded into '43 earlier'. After A on '43 earlier', 44 turns were drawn and the page held 0 'Show details' lines anywhere (Stop generation showing, so still writing).",
+    "afterFinish": "At epoch 1790391799616 the answer finished; the transcript folded back to 1 turn and 2 'Show details' lines were present."
+  },
+  "verdict": "NOT REACHABLE",
+  "record": "not reachable while streaming - covered by unit test only",
+  "notes": "No Session tab, and so no greyed 'Wait for the answer to finish, then sum up.' line, could be reached while the answer was being written."
+}

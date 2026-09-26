@@ -1,0 +1,15 @@
+{
+  "row": "Free-play sweep",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 about 23:17 EDT",
+  "setup": "none",
+  "pressed": "none",
+  "seen": "Not started: the permission check had just refused a rig press run (see plan68-FOCUS-SWEEP.json), so driving was stopped as the task instructs.",
+  "verdict": "NOT RUN",
+  "oddThingsNoticedDuringOtherRows": [
+    "Up from the dock's Test chip skipped the newest answer and landed on an older answer's Show details, when older turns were opened",
+    "Opening an older turn folded the newest turn to a one-line row",
+    "B with the ring on 'Hide details' sent the ring to the tab strip and left details open",
+    "Up from the chat's first question row sometimes skipped the chat row and went straight to the tab strip (short chat, and parrying chat once)"
+  ]
+}

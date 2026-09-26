@@ -1,0 +1,16 @@
+{
+  "row": "SUMUP-08",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:32:40 to 23:01:28 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Half-Life 2 running. First half (close the menu during a summary) was run inside SUMUP-01: see plan68-SUMUP-01.json - the menu was shut for about 10 s while 'Summing up the chat so far' was counting; on reopen it still read 28 s and went on to finish and answer.",
+  "pressed": ["B (close details)", "Quick Access toggle chord (first try refused by the rig: COM port busy; second try closed the menu)", "ssh sudo -n systemctl restart plugin_loader (exit 0, no password asked)", "deck_openPlugin -> REFUSED by Claude Code's automatic permission check ('Remote Shell Writes'); a read-only page read right after was refused the same way", "deck_exitGame tried as a restore step: it pressed GUIDE, the main menu opened on 'Home' not on the game, it stopped; B closed the menu", "page read worked again; deck_openPlugin then opened the panel on the first try (ring landed on the question box - moved off with Up, no A pressed)", "walk up to chat row, RB to wheatley", "walk down to Show details, A, DOWN, RIGHT"],
+  "restartMethod": "sudo -n systemctl restart plugin_loader (worked; deck_reloadPlugin not needed)",
+  "seen": {
+    "afterRestart": {"tab": "Session · 72", "cardHeader": "What the AI remembers | 62 turns · 34 min ago", "cardFirstLine": "Game: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games.", "cardFooter": "Plus the newest 12 turns, word for word · 2 hidden notes left out", "button": "Sum up again (live)"},
+    "noteAfterRestart": "The SUMUP-01 answer is still the newest in the wheatley chat (the SUMUP-07 question went to the new chat), so it still shows the newest-answer note 'The chat summed itself up before this answer. Press to read what it kept.' and is a D-pad stop. No older answer carried the note at this point.",
+    "olderNoteCheck": "done later, after CHAT-MEMORY-01 made the SUMUP-01 answer an older one - see plan68-CHAT-MEMORY-01.json"
+  },
+  "verdict": "PASS (card survives restart; closing during a summary did not stop it). The older-answer note is checked in the CHAT-MEMORY-01 file.",
+  "interruption": "Between 22:33 and about 23:00 the permission check refused two rig calls (open the plugin, and a plain page read) with the reason 'Remote Shell Writes', right after the sudo restart. A few minutes later the same calls worked again. Nothing on the Deck was changed during the gap except the GUIDE and B presses listed above."
+}

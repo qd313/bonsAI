@@ -1,0 +1,29 @@
+{
+  "row": "SUMUP-05",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:23:54 to 22:24:31 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Half-Life 2 launched with the rig (appid 220 in RunningApps after 139 ms; hl2_linux process up). Plugin reloaded, then opened: the first open failed (debugger connection reset, expected after a reload), the second failed too (the Quick Access menu did not appear over Steam's home screen, which had come to the front over the game), the third opened it. The plugin was opened over Steam's home screen with the game running in the background, not over the game's own menu. Footer read 'Context: active game Half-Life 2'. Wheatley chat (144 turn entries, no summary key) chosen with RB. Mode Strategy.",
+  "pressed": ["RB", "script put 'and what about that' in the box (VERIFIED)", "walk DOWN x12 to ask", "A on ask", "RIGHT", "RIGHT (ring on 'Stop generation')", "A"],
+  "seen": {
+    "waitingLineReads": [
+      {"epochMs": 1790389436840, "text": "Summing up the chat so far · 0 s"},
+      {"epochMs": 1790389442327, "text": "Summing up the chat so far · 6 s"},
+      {"epochMs": 1790389448409, "text": "Summing up the chat so far · 11 s"},
+      {"epochMs": 1790389454059, "text": "Summing up the chat so far · 17 s"}
+    ],
+    "ringAfterAsk": "moved by itself to the question box (not pressed); walked Right twice to the Stop icon",
+    "afterStop": "waiting line gone; the chat shows the question 'and what about that' with the answer 'Request cancelled.' ('71 earlier' became '72 earlier'); question text left in the box",
+    "chatFile": {"turnEntries": "144 -> 146 (the question and a 'Request cancelled.' answer)", "summary": null, "subject": null, "keysAdded": ["subject", "summary"], "summaryHasText": false},
+    "log": [
+      "22:23:54 start_background_game_ai ... game='Half-Life 2' appid=220 question_len=19",
+      "22:23:55 ask_ollama: POST .../api/chat model=gemma4:e2b-it-qat payload_bytes=31361 num_predict=400 think=False",
+      "22:24:16 abort_background_game_ai: stop requested",
+      "22:24:17 ask_ollama: cancelled mid-request",
+      "no chat_summary line at all (neither 'stopped' nor 'written')"
+    ]
+  },
+  "screenshot": "plan68-SUMUP-05-stopped.png",
+  "verdict": "PASS",
+  "notes": "Runbook accepts 'stopped' or no 'written' line; there was no chat_summary line at all. The chat file gained 'summary': null and 'subject': null keys. The stopped question is saved as a turn, as stopped questions normally are."
+}

@@ -1,0 +1,23 @@
+{
+  "row": "SUMUP-04a",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698, later commits are roadmap text only)",
+  "deckTime": "2026-09-25 22:18 EDT",
+  "screen": "external monitor: page window 855x766 CSS px, screen 1500x843 CSS px at devicePixelRatio 1.28 (capture 1920x1080); not the Deck's own panel",
+  "setup": "Chat 'how should i spend my first hour in a new open world game' (2 turns, id d052dacc). Chats backed up to ~/p68-chat-slots-backup-2216. Mode pill: Strategy.",
+  "runbookDeviation": "Runbook says switch chats with D-pad Left/Right on the chat row. Right pressed twice on the row: focus did not move and the chat did not change. Switched with RB (the shoulder button the row itself shows) twice instead.",
+  "pressed": ["RB", "RB", "walk DOWN x7 to Show details", "A", "DOWN", "RIGHT", "DOWN", "A (on greyed button)", "B"],
+  "seen": {
+    "tabsRow": {"label": "This answer | Session · 1", "rect": [52, 561, 290, 28]},
+    "button": {"text": "Sum up this chat", "classes": "bonsai-sumup-btn bonsai-sumup-btn--off", "opacity": 0.45, "ariaDisabled": "true", "rect": [52, 480, 290, 33], "bottom": 513},
+    "dockTop": 600,
+    "reasonLine": "The whole chat still fits, so there's nothing to sum up yet.",
+    "clearInSessionTab": false,
+    "sessionTabText": "Sum up this chat / The whole chat still fits, so there's nothing to sum up yet. / how should i spend my first hour... / chips",
+    "afterA": "button unchanged (still greyed, same text), no card, no toast, Ask label still 'ask'",
+    "afterB": "details closed (tabs row and button gone), ring on Show details rect [52,530,267,15]"
+  },
+  "visibility": "button bottom 513 < dock top 600: visible; rig verdict visible 100%",
+  "screenshot": "screenshots/DeckCapture_20260925_221812_auto.png (ring on the greyed button)",
+  "savedCheck": "checks/plan68-SUMUP-04a.json (replayed 5/5 when saved)",
+  "verdict": "PASS"
+}

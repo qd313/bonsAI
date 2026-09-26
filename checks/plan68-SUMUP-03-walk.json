@@ -1,0 +1,324 @@
+{
+  "formatVersion": 2,
+  "name": "plan68-SUMUP-03-walk",
+  "tool": "deck_runSequence",
+  "savedAt": "2026-09-26T02:21:46.307Z",
+  "buildHash": "sha256:725106a167500912a837e0ef591c6b2a6c12791f4f8c272258a0a7893bcc637b",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "bin/README.md",
+    "defaults/defaults.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/ask_payload.py",
+    "py_modules/backend/services/ask_topic_instructions.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_memory_service.py",
+    "py_modules/backend/services/chat_memory_step.py",
+    "py_modules/backend/services/chat_slot_rpc.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/chat_sum_up_job.py",
+    "py_modules/backend/services/chat_summary_service.py",
+    "py_modules/backend/services/chat_turn_recorder.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_rpc.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_attached_notes.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/knowledge_base_cards.py",
+    "py_modules/backend/services/knowledge_base_chips.py",
+    "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_search.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/media_desktop_rpc.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_extras.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_chat_stream.py",
+    "py_modules/backend/services/ollama_connection_test.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_local_setup_rpc.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_preload_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_window_fit.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/prompt_budget_service.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/rag_corpus_local_install.py",
+    "py_modules/backend/services/rag_corpus_rpc.py",
+    "py_modules/backend/services/rag_corpus_status.py",
+    "py_modules/backend/services/reply_followup_blocks.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/reply_style_blocks.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/spy_confession_service.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_rpc.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_entity_extraction.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/strategy_spoiler_policy.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_audio_capture_service.py",
+    "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_model_download_service.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_rpc.py",
+    "py_modules/backend/services/voice_transcript_decode_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/services/voice_whisper_runtime.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "steps": [
+      {
+        "press": "DOWN",
+        "label": "button",
+        "expect": ".bonsai-sumup-btn"
+      },
+      {
+        "press": "DOWN",
+        "label": "card",
+        "expect": ".bonsai-sumup-card"
+      },
+      {
+        "press": "DOWN",
+        "label": "first turn row"
+      },
+      {
+        "press": "UP",
+        "label": "card",
+        "expect": ".bonsai-sumup-card"
+      },
+      {
+        "press": "UP",
+        "label": "button",
+        "expect": ".bonsai-sumup-btn"
+      },
+      {
+        "press": "UP",
+        "label": "tabs row",
+        "expect": ".bonsai-details-tabs-row"
+      }
+    ],
+    "stopOnFailure": true,
+    "mustReachText": [],
+    "requireVisible": true,
+    "acquireFocus": false
+  },
+  "expected": {
+    "ok": true,
+    "ranSteps": 6,
+    "totalSteps": 6,
+    "passed": 6,
+    "failed": 0,
+    "visited": [
+      "<DIV> \"This answerSession · 42\"",
+      "<DIV> \"Sum up again\"",
+      "<DIV> \"What the AI remembers\"",
+      "<DIV> \"what is a good way to practice parrying in actio\""
+    ],
+    "cycle": {
+      "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(1)",
+      "seenAt": [
+        0,
+        6
+      ],
+      "loop": [
+        "<DIV> \"This answerSession · 42\"",
+        "<DIV> \"Sum up again\"",
+        "<DIV> \"What the AI remembers\"",
+        "<DIV> \"what is a good way to practice parrying in actio\"",
+        "<DIV> \"What the AI remembers\"",
+        "<DIV> \"Sum up again\"",
+        "<DIV> \"This answerSession · 42\""
+      ],
+      "escaped": false,
+      "stepsAfterLoop": 0
+    },
+    "neverReached": [],
+    "stopsFocusedButNotVisible": 0,
+    "notVisibleStops": [],
+    "steps": [
+      {
+        "index": 1,
+        "label": "button",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-sumup-btn",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"This answerSession · 42\"",
+        "to": "<DIV> \"Sum up again\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 2,
+        "label": "card",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-sumup-card",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Sum up again\"",
+        "to": "<DIV> \"What the AI remembers\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 3,
+        "label": "first turn row",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"What the AI remembers\"",
+        "to": "<DIV> \"what is a good way to practice parrying in actio\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 4,
+        "label": "card",
+        "press": [
+          "UP"
+        ],
+        "expect": ".bonsai-sumup-card",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"what is a good way to practice parrying in actio\"",
+        "to": "<DIV> \"What the AI remembers\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 5,
+        "label": "button",
+        "press": [
+          "UP"
+        ],
+        "expect": ".bonsai-sumup-btn",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"What the AI remembers\"",
+        "to": "<DIV> \"Sum up again\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 6,
+        "label": "tabs row",
+        "press": [
+          "UP"
+        ],
+        "expect": ".bonsai-details-tabs-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Sum up again\"",
+        "to": "<DIV> \"This answerSession · 42\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      }
+    ]
+  }
+}

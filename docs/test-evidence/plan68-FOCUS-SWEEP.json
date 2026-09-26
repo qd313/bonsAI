@@ -1,0 +1,14 @@
+{
+  "row": "Focus sweep (plan 68 section 6 D-pad list)",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 about 23:17 EDT",
+  "setup": "Wheatley chat, newest answer ('and which one is better for combine soldiers'), panel just reopened with the transcript folded to '74 earlier'.",
+  "pressed": "a run of eight Down presses was sent to the rig to reach Show details",
+  "seen": "Claude Code's automatic permission check refused the rig call ('Modify Shared Resources') before any press was made.",
+  "verdict": "NOT RUN",
+  "partialEvidenceFromOtherRows": {
+    "tabsRow->button->card->firstRow and back up, all visible": "plan68-SUMUP-03.json (parrying chat)",
+    "B from the button closes the panel, ring on Show details": "plan68-SUMUP-04a.json and seen again in SUMUP-07",
+    "not covered": "last row -> chips -> stays put; B from the card and from a row; Up from the dock into an open Session tab"
+  }
+}

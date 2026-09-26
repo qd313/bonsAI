@@ -1,0 +1,24 @@
+{
+  "row": "SUMUP-07",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:29 to 22:32:30 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Half-Life 2 still running. Parrying chat summed up in SUMUP-03, wheatley chat in SUMUP-01.",
+  "pressed": ["B", "walk to chat row", "RB (parrying)", "Show details A, DOWN x2, RIGHT", "B", "walk up, LB (wheatley)", "Show details A, DOWN, RIGHT", "B", "UP x7 to chat row", "LB (to [+])", "A on [+] (new chat)", "script put 'what about her second phase' (VERIFIED)", "DOWN x3 to ask", "A", "later: Show details A, DOWN, RIGHT, DOWN"],
+  "seen": {
+    "parryingCard": {"header": "What the AI remembers | 37 turns · 9 min ago", "firstLine": "Game: Parrying practice", "footer": "Plus the newest 6 turns, word for word", "button": "Sum up again (greyed, 'The whole chat still fits...')"},
+    "wheatleyCard": {"header": "What the AI remembers | 62 turns · 4 min ago", "firstLine": "Game: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games.", "footer": "Plus the newest 12 turns, word for word · 2 hidden notes left out", "button": "Sum up again (live)"},
+    "newChat": {
+      "createdAs": "'Half-Life 2' (id 3f606745), named after the running game",
+      "chatPushedOut": "the Hades chat (3b7c08f1, 2 turns) - it is in the S1 backup",
+      "answerVisible": "Right, listen up. You wanna know about some \"second phase\"? Mate, you gotta tell me where you are standing right now, 'cause this game ain't just one straight line. We gotta know if you're still stuck in the beginning or if you've managed to get into the real action. I ain't gonna give you the whole script, but I can guide you on the next move.",
+      "answerHiddenBlock": "Since I don't know exactly which character or event you're talking about, we gotta figure out your current situation first.",
+      "branchPicker": "Where are you at in Half-Life 2? A. Early in the game, exploring the city / B. Later in the game, deep into the action",
+      "carriedFromOtherChat": "nothing: no Hades, no Megaera, no Hollow Knight, no parrying",
+      "sessionTab": {"tab": "Session · 1", "button": "Sum up this chat, greyed (--off)", "reason": "The whole chat still fits, so there's nothing to sum up yet.", "card": false, "buttonRect": [52, 480, 290, 33], "dockTop": 600}
+    }
+  },
+  "verdict": "UNCLEAR",
+  "why": "Each chat kept its own card, and the new chat carried nothing over and shows a greyed button with no card - those parts match. But the new chat's visible answer did not ask which game or character; because Half-Life 2 was running it assumed Half-Life 2 and asked where the player is in it. The line 'I don't know exactly which character or event you're talking about' is inside a hidden spoiler block. The owner decides whether that counts.",
+  "sideFinding": "The saved answer's hidden block has doubled fence markers (```bonsai-spoiler twice at the start and twice at the end). On screen it still showed one 'Spoiler — tap to show' block."
+}

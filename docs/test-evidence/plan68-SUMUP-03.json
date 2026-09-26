@@ -1,0 +1,48 @@
+{
+  "row": "SUMUP-03",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:20 EDT",
+  "screen": "external monitor: page window 855x766 CSS px, devicePixelRatio 1.28 (capture 1920x1080)",
+  "setup": "Parrying chat (id 351b2838, 86 turn entries in the file = 43 question/answer pairs; tab reads 'Session · 42'). No game running. No summary key before. Switched to it with LB x2 on the chat row (runbook's Left/Right did not switch chats, see SUMUP-04a).",
+  "pressed": ["walk DOWN x11 to Show details", "A", "DOWN (landed on the answer's knowledge-base note block 'Upgrades and overclocks', not in the runbook route)", "DOWN (tabs row)", "RIGHT", "DOWN", "A", "DOWN", "DOWN", "UP", "UP", "UP"],
+  "seen": {
+    "beforePress": {"button": "Sum up this chat", "classes": "bonsai-sumup-btn (not --off)", "opacity": 1, "reasonLine": null, "card": false, "rect": [52, 521, 290, 33], "dockTop": 600},
+    "timerReads": [
+      {"epochMs": 1790389217712, "button": "Summing up · 1 s", "spinner": true},
+      {"epochMs": 1790389222920, "button": "Summing up · 6 s"},
+      {"epochMs": 1790389228894, "button": "Summing up · 12 s"},
+      {"screenshot": "Summing up · 18 s"}
+    ],
+    "askBarWhileWorking": "The big ASK button stayed drawn with the word ASK but greyed (class Disabled); a small stop square labelled 'Stop generation' (20x20 at 327,687) appeared at the right corner of the question box. The same control is what shows during an ordinary question (seen in SUMUP-05). No new question or waiting line appeared in the chat.",
+    "finished": {"atEpochMs": 1790389241233, "secondsFromPress": 24, "button": "Sum up again", "buttonGreyed": true, "reasonLine": "The whole chat still fits, so there's nothing to sum up yet.", "ringStayedOnButton": true},
+    "card": {
+      "header": "What the AI remembers | 37 turns · just now",
+      "lines": [
+        "Game: Parrying practice",
+        "Game: Hades Chaos boon",
+        "Game: Deep Rock Galactic Survivor weapon upgrades (Driller, Scout, Gunner, Engineer)",
+        "Game: Deep Rock Galactic Survivor Nitra usage (Scout, Gunner, Engineer)",
+        "Game: Deep Rock Galactic Survivor general gameplay tips (Driller, Scout, Gunner, Engineer)",
+        "Player is stuck on: None apparent in this log.",
+        "Player asked for: How to practice parrying, Chaos boon effect, early weapon upgrades for all classes, Nitra spending, and detailed class run guides."
+      ],
+      "lineCount": 7,
+      "footer": "Plus the newest 6 turns, word for word",
+      "rectRightAfterFinish": [52, 597, 290, 290],
+      "noteOnPosition": "Right after it finished the card's top was at y 597 with the dock top at 600, so the card was hidden behind the dock until the ring moved onto it (see plan68-SUMUP-03-finished.png)."
+    },
+    "walk": [
+      {"press": "DOWN", "landed": "card", "cardRect": [52, 223, 290, 290], "cardBottom": 513, "dockTop": 600, "visible": true},
+      {"press": "DOWN", "landed": "first turn row 'what is a good way to practice parrying in actio'", "visible": true},
+      {"press": "UP", "landed": "card", "visible": true},
+      {"press": "UP", "landed": "button 'Sum up again'", "visible": true},
+      {"press": "UP", "landed": "tabs row", "visible": true}
+    ],
+    "chatFile": {"summary": {"covers_through_turn_id": "3b239327-e2a2-4013-a545-204e2576a141", "hidden_notes_left_out": 0, "model": "gemma4:e2b-it-qat", "oldest_turns_unread": 0, "seconds": 18.8, "turns_covered": 74, "written_at": "2026-09-26T02:20:34Z"}, "turnEntriesBefore": 86, "turnEntriesAfter": 86},
+    "log": "[2026-09-25 22:20:34,478][INFO]: chat_summary: written in 18.8 s — covered 74 turns, 0 unread, ~5886 input tokens, model gemma4:e2b-it-qat"
+  },
+  "screenshots": ["plan68-SUMUP-03-working.png (timer at 18 s)", "plan68-SUMUP-03-finished.png (card behind the dock)", "plan68-SUMUP-03-card.png (ring on the card, card fully shown)"],
+  "savedCheck": "checks/plan68-SUMUP-03-walk.json (6/6 when saved)",
+  "verdict": "PASS",
+  "notes": "Owner may want to look at: (1) the card lands behind the dock when the summary finishes, until you press Down; (2) 'Stop' here is the small corner stop icon, the big bar keeps reading ASK greyed; (3) the summary's own wording is odd ('Game: Parrying practice', 'Player is stuck on: None apparent in this log.')."
+}

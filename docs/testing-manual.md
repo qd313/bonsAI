@@ -105,22 +105,32 @@ dock, and backing out with Up three times lands safely on the chat-slot row with
 going down from the Retry icon takes one extra press, since the question's own row is a stop in between —
 see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
-**Sum up this chat, the summary card and the note (plan 68, step 5 — not yet run):**
+**Sum up this chat, the summary card and the note (plan 68, step 5 — Deck pass 2026-09-25, partly run):**
 
 - [ ] Down from the tabs row lands on the *Sum up this chat* button.
-- [ ] Down from the button reaches the summary card, since it is taller than the room below the button and
+- [x] Down from the button reaches the summary card, since it is taller than the room below the button and
       needs its own stop to be scrolled into view; Down again from the card reaches the first turn row.
-- [ ] Up from the button returns to the tabs row; Up from the card returns to the button.
+      **PASS (Deck) 2026-09-25**, row SUMUP-03: walking down to the card and the first turn row, everything
+      was visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`, walk `checks/plan68-SUMUP-03-walk.json`.
+- [x] Up from the button returns to the tabs row; Up from the card returns to the button. **PASS (Deck)
+      2026-09-25**, row SUMUP-03: walking back up from the card and the first turn row, everything stayed
+      visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`.
 - [ ] A on the button starts the summary and the ring stays on it; a greyed-out button still takes the ring
       and A on it does nothing.
-- [ ] B from anywhere in the tab closes the whole panel.
+- [x] B from anywhere in the tab closes the whole panel. **PASS (Deck) 2026-09-25**, row SUMUP-04a: B closed
+      the panel. Evidence `docs/test-evidence/plan68-SUMUP-04a.json`.
 - [ ] With no turn rows at all, Down from the last stop in the tab stays put rather than falling into the dock.
 - [ ] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
       the button at the top.
-- [ ] Down from the answer's last paragraph (or its Copy icon) reaches the note under it; Down again
-      continues down the reply; Up goes back to the answer.
-- [ ] A on the note opens Show details on the Session tab and moves the ring to the button.
-- [ ] The ring is visible above the dock, not just focused, at every one of the stops above.
+- [x] Down from the answer's last paragraph (or its Copy icon) reaches the note under it; Down again
+      continues down the reply; Up goes back to the answer. **PASS (Deck) 2026-09-25**, row SUMUP-02: Down
+      from the answer reached the note first, visible (note bottom 523, dock 600); Up returned to the
+      answer. Evidence `docs/test-evidence/plan68-SUMUP-02.json`.
+- [x] A on the note opens Show details on the Session tab and moves the ring to the button. **PASS (Deck)
+      2026-09-25**, row SUMUP-02: A on the note opened Show details on the Session tab with the ring on the
+      button. Evidence `docs/test-evidence/plan68-SUMUP-02.json`.
+- [ ] The ring is visible above the dock, not just focused, at every one of the stops above. **Not proven**:
+      the summary card itself sat behind the dock in this pass (new bug, filed on the roadmap).
 
 ---
 

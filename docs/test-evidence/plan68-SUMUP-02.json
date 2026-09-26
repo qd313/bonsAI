@@ -1,0 +1,25 @@
+{
+  "row": "SUMUP-02",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 22:27:40 to 22:28:21 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Wheatley chat right after SUMUP-01's answer; Half-Life 2 running.",
+  "pressed": ["walk DOWN x7 from the tab bar", "UP", "DOWN", "DOWN", "UP", "A on the note"],
+  "seen": {
+    "walkDown": "Main tab -> chat row -> '73 earlier' -> question row -> 'Show reasoning · 21 s' -> the note. The answer bubble itself was not a separate named stop on the way down; Down from 'Show reasoning' reached the note.",
+    "note": {"rect": [52, 491, 267, 32], "bottom": 523, "dockTop": 600, "visible": "100%"},
+    "upFromNote": "into the answer (an unnamed answer section, 89% visible, its corner under the Copy icon - the known Copy-icon overlap, words clear)",
+    "downAgain": "note (matched)",
+    "downFromNote": "branch button 'A. Dealing with a heavily armed enemy in a tight corridor' (visible)",
+    "upFromBranch": "note (matched)",
+    "afterAOnNote": {
+      "tab": "Session · 72 (active)",
+      "ring": "on the button, rect [52, 480, 290, 33]",
+      "button": "Sum up again - NOT greyed (class bonsai-sumup-btn without --off), no reason line",
+      "card": {"rect": [52, 519, 290, 567], "dockTop": 600, "shownAboveDock": "top 81 px only: header 'What the AI remembers | 62 turns · 1 min ago', first line and part of the second; the rest is behind the dock", "footer": "Plus the newest 12 turns, word for word · 2 hidden notes left out"}
+    }
+  },
+  "screenshot": "plan68-SUMUP-02-session.png",
+  "verdict": "UNCLEAR",
+  "why": "Everything the runbook asks for happened (note is the first stop under the answer and visible; Up/Down around it right; A opens Session with the ring on the button and the card showing) except the button state: the runbook expected it greyed with 'The whole chat still fits' right after a summary, but it was live ('Sum up again', pressable, no reason line). Also only the card's top 81 px were above the dock. The owner decides whether a live button here is right for this 148-entry chat."
+}

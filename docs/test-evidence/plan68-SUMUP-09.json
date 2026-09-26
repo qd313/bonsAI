@@ -1,0 +1,10 @@
+{
+  "row": "SUMUP-09",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 23:04 EDT",
+  "setup": "none",
+  "pressed": "none",
+  "seen": "The summary's time limit is a constant in the code, not a setting.",
+  "verdict": "NOT RUN",
+  "record": "unit-tested only (cannot be set on the device without editing code)"
+}

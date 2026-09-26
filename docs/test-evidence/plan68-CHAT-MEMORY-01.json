@@ -1,0 +1,29 @@
+{
+  "row": "CHAT-MEMORY-01 (rerun), plus SUMUP-08's older-answer note",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 23:05 to 23:14 EDT",
+  "screen": "external monitor: page window 855x766 CSS px",
+  "setup": "Half-Life 2 exited: the rig's exit tool twice stopped because the Steam menu opened on 'Home' (Steam's home screen was in front of the game). Done by hand with single reads after each press: GUIDE, Up to the 'Half-Life 2' entry, Right, Down x7 to 'Exit game', A, ring read on 'Confirm', A. Afterwards: no hl2_linux process, no Half-Life 2 process, Steam's running list empty. Footer read 'Context: no active game detected'. Wheatley chat chosen with RB x2.",
+  "pressed": ["script put 'and which one is better for combine soldiers' (VERIFIED)", "walk DOWN x11 to ask", "A", "later: UP x3 to Show details, A"],
+  "seen": {
+    "waitingLine": "'Summing up the chat so far · 0 s' first (the chat summed itself up again, 2 new turns, 9.2 s), then the answer",
+    "answer": "Right, listen up, you wanna know how to handle those Combine soldiers? It's simple, mate. They move in squads, so they're gonna try to flank you while the rest of 'em are laying down the cover. You gotta hold one angle tight, yeah? If you can hold that spot, you keep 'em busy. / Now, if you get surrounded, you gotta throw a grenade. That'll break 'em out of cover and you can throw theirs right back at 'em. And listen, when you're dealing with 'em up close, you gotta kill that shotgun one first. Keep your distance from the rest, yeah? Up close, they're gonna club you, and you don't want that. Keep it snappy!",
+    "askedWhichGame": false,
+    "staysOnHalfLife2": true,
+    "comparesWeapons": "not really - it gives tactics against Combine soldiers (grenades, shotgun soldiers first), and does not say which of the weapons discussed is better",
+    "kbCardUnderAnswer": "Combine soldiers · From the Half-Life wiki",
+    "chips": "Chip 1 of 7 | Keyword + meaning | KB: 9 sections | Reply style: balanced | Local knowledge base combineoverwiki.net · CC-BY-SA-4.0 · as of 2026-08-09 | Half-Life 2 — Combine soldiers | Half-Life 2 — Gravity Gun | Half-Life 2 — Hunter-Chopper (helicopter) | text:half life 2",
+    "notNoGameMessage": "the 'No game is running, so there is nothing to look up' line did not appear",
+    "log": ["[2026-09-25 23:07:58,527][INFO]: kb: no game running or named -- using the chat's own game Half-Life 2", "[2026-09-25 23:08:08,353][INFO]: chat_summary: written in 9.2 s — covered 2 turns, 0 unread, ~520 input tokens, model gemma4:e2b-it-qat"],
+    "newestNote": "The new answer carries 'The chat summed itself up before this answer. Press to read what it kept.' (a D-pad stop)"
+  },
+  "olderNoteCheck_SUMUP08": {
+    "how": "A on '74 earlier', walked Down 73 rows to the collapsed 'and what about that one' row, A to open it",
+    "noteText": "The chat summed itself up here.",
+    "element": "div.bonsai-chat-summary-note.bonsai-chat-summary-note--older, not Focusable, no tabindex",
+    "dpadWalk": "question row -> Show reasoning -> answer section -> Read aloud -> Show details: the note was not a stop",
+    "verdict": "PASS"
+  },
+  "screenshot": "plan68-CHAT-MEMORY-01.png (the answer, the note and the knowledge-base card)",
+  "verdict": "PASS"
+}

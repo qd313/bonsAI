@@ -1,0 +1,10 @@
+{
+  "row": "SUMUP-10",
+  "build": "experimental at 2706d4a8 deployed by the session (checkout HEAD f61f3698)",
+  "deckTime": "2026-09-25 23:04 EDT",
+  "setup": "none",
+  "pressed": "none",
+  "seen": {"SUMUP-03 footer": "Plus the newest 6 turns, word for word", "SUMUP-01 footer": "Plus the newest 12 turns, word for word · 2 hidden notes left out", "oldest_turns_unread": "0 in both chat files"},
+  "verdict": "NOT RUN",
+  "record": "not run: no chat long enough"
+}

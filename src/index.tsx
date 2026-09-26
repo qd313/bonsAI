@@ -567,6 +567,7 @@ const Content: React.FC = () => {
     setExpandedTurnKey,
     resetLiveAskPresentation,
     isSlotGenerating,
+    ollamaPcIp: effectiveOllamaPcIp,
   });
   reloadSlotTranscriptRef.current = chatSlots.reloadActiveSlotTranscript;
   ensureActiveSlotForAskRef.current = chatSlots.ensureActiveSlotForAsk;

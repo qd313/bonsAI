@@ -161,8 +161,12 @@ export type SumUpStartResult = {
  * job of its own, through the same one-at-a-time slot as a question; the caller follows it with
  * the ordinary background status (`kind: "sum_up"`).
  */
-export async function sumUpChatSlot(slotId: string): Promise<SumUpStartResult> {
-  const res = await callDeckyWithTimeout<[string], Partial<SumUpStartResult>>("sum_up_chat_slot", [slotId]);
+export async function sumUpChatSlot(slotId: string, pcIp = ""): Promise<SumUpStartResult> {
+  // The same AI server an Ask would use: every question sends this address as PcIp.
+  const res = await callDeckyWithTimeout<[string, string], Partial<SumUpStartResult>>("sum_up_chat_slot", [
+    slotId,
+    pcIp,
+  ]);
   const status = res?.status;
   return {
     accepted: res?.accepted === true,

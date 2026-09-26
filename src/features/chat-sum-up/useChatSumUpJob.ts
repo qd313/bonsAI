@@ -42,7 +42,8 @@ export type ChatSumUpJob = {
   /** The chat a summary is being written for right now, or null. */
   runningSlotId: string | null;
   seconds: number | null;
-  start: (slotId: string) => void;
+  /** `pcIp`: the AI server every Ask uses (blank = the Deck's own). */
+  start: (slotId: string, pcIp?: string) => void;
   stop: () => void;
 };
 
@@ -107,9 +108,9 @@ export function useChatSumUpJob(onSummaryWritten: (slotId: string) => void): Cha
   );
 
   const start = useCallback(
-    (slotId: string) => {
+    (slotId: string, pcIp = "") => {
       if (!slotId || runningSlotId) return;
-      void sumUpChatSlot(slotId)
+      void sumUpChatSlot(slotId, pcIp)
         .then((res) => {
           if (!mountedRef.current) return;
           if (res.accepted) {

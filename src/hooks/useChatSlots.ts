@@ -59,6 +59,8 @@ export type UseChatSlotsArgs = {
   resetLiveAskPresentation?: () => void;
   /** True while the backend is generating into this slot. A slot mid-answer is never swept. */
   isSlotGenerating?: (slotId: string) => boolean;
+  /** Plan 68: the AI server every Ask uses, so Sum up this chat runs on the same one. */
+  ollamaPcIp?: string;
 };
 
 /**
@@ -114,6 +116,7 @@ export function useChatSlots({
   setExpandedTurnKey,
   resetLiveAskPresentation,
   isSlotGenerating,
+  ollamaPcIp = "",
 }: UseChatSlotsArgs) {
   const [summaries, setSummaries] = useState<ChatSlotSummary[]>([]);
   const [activeSlotId, setActiveSlotIdState] = useState<string | null>(
@@ -354,12 +357,12 @@ export function useChatSlots({
               summingUp: runningSlotId === activeSlotId,
               summingUpSeconds: runningSlotId === activeSlotId ? sumUpSeconds : null,
               otherJobRunning: runningSlotId != null && runningSlotId !== activeSlotId,
-              startSumUp: () => startSumUpJob(activeSlotId),
+              startSumUp: () => startSumUpJob(activeSlotId, ollamaPcIp),
               stopSumUp: stopSumUpJob,
             },
           },
     );
-  }, [activeSlotId, chatMemory, runningSlotId, startSumUpJob, stopSumUpJob, sumUpSeconds, summaries]);
+  }, [activeSlotId, chatMemory, ollamaPcIp, runningSlotId, startSumUpJob, stopSumUpJob, sumUpSeconds, summaries]);
 
   return {
     summaries: rows,

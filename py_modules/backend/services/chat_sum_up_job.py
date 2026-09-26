@@ -12,12 +12,9 @@ paint no answer when it finishes. Keeping that shape here, alongside ``chat_slot
 other chat-slot bodies, keeps ``main.py`` to the one-line hand-off every other RPC method
 already gets.
 Does not: Decide whether a chat has outgrown its room or write the summary itself -- both
-are ``chat_summary_service.py``, which this file only calls. Does not know a Steam Deck's
-address for a remote PC running Ollama: unlike an ordinary Ask, the button's own RPC call
-carries no PcIp, because only the screen's own local storage remembers one (see
-``_pick_model_and_window`` below). On a plugin set to talk to a remote PC rather than the
-Deck's own runtime, this job still reaches for the Deck's own loopback address -- a real
-gap, not something this file can fix on its own.
+are ``chat_summary_service.py``, which this file only calls. Does not remember which AI
+server to use: only the screen does (its own saved address, the same one every Ask sends as
+``PcIp``), so the button sends it with the chat id -- blank means the Deck's own server.
 """
 
 from __future__ import annotations
@@ -70,15 +67,13 @@ def chat_can_sum_up(chat: dict) -> bool:
     return plan.needed
 
 
-def _pick_model_and_window(settings: dict) -> tuple[str, int, str]:
+def _pick_model_and_window(settings: dict, pc_ip: str = "") -> tuple[str, int, str]:
     """The model this job would use, and the room it would ask for -- the same routing
     ``run_ask_ollama`` does for an ordinary text-only question (``resolve_ask_model_routing``,
     text only, no images -- routing does not otherwise depend on Speed vs Strategy), against
-    the Deck's own loopback Ollama address (see this module's own doc comment on why: the
-    button's RPC carries no PcIp, and nothing on the back end remembers one from an earlier
-    Ask).
+    the same AI server an Ask would use: ``pc_ip`` is the address the screen sends with every
+    question, blank for the Deck's own server.
     """
-    pc_ip = ""
     ollama_host, _, ollama_base = normalize_ollama_base(pc_ip)
     if is_loopback_ollama_host(ollama_host) and not probe_ollama_http_ok(ollama_base):
         recover_loopback_ollama_listening(logger.info)
@@ -99,7 +94,7 @@ def _pick_model_and_window(settings: dict) -> tuple[str, int, str]:
     return model_name, window_tokens, f"{ollama_base}/api/chat"
 
 
-async def sum_up_chat_slot(plugin: Any, slot_id: str = "") -> dict:
+async def sum_up_chat_slot(plugin: Any, slot_id: str = "", pc_ip: str = "") -> dict:
     """The body behind ``Plugin.sum_up_chat_slot`` -- see this module's own doc comment."""
     sid = str(slot_id or "").strip()
     if not sid:
@@ -118,7 +113,7 @@ async def sum_up_chat_slot(plugin: Any, slot_id: str = "") -> dict:
     # start_background_game_ai loads its own settings before taking _background_lock: a
     # network round-trip while holding it would stall a concurrent Stop.
     settings = await plugin.load_settings()
-    model_name, window_tokens, url = _pick_model_and_window(settings)
+    model_name, window_tokens, url = _pick_model_and_window(settings, str(pc_ip or "").strip())
     allowance = last_memory_allowance_tokens(model_name)
     plan: SummaryPlan = plan_summary(chat, memory_allowance_tokens=allowance, model_name=model_name)
     keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))

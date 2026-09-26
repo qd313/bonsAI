@@ -998,10 +998,11 @@ class Plugin:
         """Rename a chat slot label."""
         return await chat_slot_rpc.rename_chat_slot(self, payload)
 
-    async def sum_up_chat_slot(self, slot_id: str = ""):
+    async def sum_up_chat_slot(self, slot_id: str = "", PcIp: str = ""):
         """The Session tab's *Sum up this chat* button: sums the chat up right away, as its own
-        job through the same one-question-at-a-time slot an Ask uses. See chat_sum_up_job.py."""
-        return await chat_sum_up_job.sum_up_chat_slot(self, slot_id)
+        job through the same one-question-at-a-time slot an Ask uses, on the same AI server an Ask
+        would use (``PcIp``, as ``start_background_game_ai`` takes it). See chat_sum_up_job.py."""
+        return await chat_sum_up_job.sum_up_chat_slot(self, slot_id, PcIp)
 
     # --- Strategy checklist session RPC ---
 

@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2250,
+      "lines": 2251,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1326,
+      "lines": 1327,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -61,13 +61,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 983,
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
+      "lines": 988,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "lines": 988,
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 983,
       "role": ""
     },
     {

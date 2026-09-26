@@ -91,6 +91,23 @@ class ChatSumUpJobTests(ChatSlotJobTestCase):
             p.start()
             self.addCleanup(p.stop)
 
+    async def test_the_job_talks_to_the_same_ai_server_an_ask_would(self) -> None:
+        # The screen sends its saved AI address with the chat id, as every Ask sends PcIp; a
+        # summary for a Deck set up to use a PC's server must not go to the Deck's own.
+        self._patched()
+        seen: list[str] = []
+
+        def _pick(settings, pc_ip=""):
+            seen.append(pc_ip)
+            return _FIXED_MODEL_AND_WINDOW
+
+        with patch("backend.services.chat_sum_up_job._pick_model_and_window", side_effect=_pick):
+            await self.plugin.sum_up_chat_slot("missing-chat", "192.168.1.20")
+            self.assertEqual(seen, [])  # an unknown chat is refused before any server is asked
+            chat_id = _seed_chat(self.tmp, turns=60)
+            await self.plugin.sum_up_chat_slot(chat_id, "192.168.1.20")
+        self.assertEqual(seen, ["192.168.1.20"])
+
     async def test_blank_slot_id_is_invalid(self) -> None:
         self._patched()
         result = await self.plugin.sum_up_chat_slot("")

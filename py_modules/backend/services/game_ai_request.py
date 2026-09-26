@@ -715,7 +715,12 @@ async def run_game_ai_request(
         # resolved as a fact rather than guessed from phrasing. Empty when nothing attached,
         # which just falls the extractor back to its patterns.
         strategy_spoiler_asked_entity = extract_strategy_asked_entity(
-            question_for_model, known_entities=kb_card_names(kb_text)
+            question_for_model,
+            known_entities=kb_card_names(kb_text),
+            # A game whose own name doubles as one of its own entities' names (Hollow Knight is
+            # both the game and its final boss) must not have that name alone read as naming a
+            # note -- see extract_strategy_asked_entity's ``game_name`` doc.
+            game_name=app_name or text_resolved_title,
         )
         # Plan 54 gap 2, streaming: hand the named thing to the live poll before ask_ollama runs,
         # the same guard shape _publish_thinking_phase_key already uses, so the screen can open a

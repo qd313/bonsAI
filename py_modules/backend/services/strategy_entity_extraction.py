@@ -185,7 +185,33 @@ def _clean_asked_entity(raw: str, *, entity_first: bool) -> str:
     return entity
 
 
-def _match_known_entity(question: str, known_entities) -> str:
+def _strip_game_name(haystack: str, game_name: str) -> str:
+    """Remove the resolved game's own name from an already-lowercased haystack.
+
+    A question about a game necessarily names that game, so the bare fact that the game's name
+    appears somewhere in the question is not evidence the player named anything else. This
+    matters specifically because of the *shortened-name* fallback below: a card whose title is
+    built by appending the game's own name to a template -- every "Starting out in <game>" card,
+    by construction -- has a trailing span that is exactly the game's name, so that fallback was
+    reading "the question says the game's name" as "the question named this card's shortened
+    form". Stripping the game's name out of the haystack before either match pass runs removes
+    that false signal at its source, rather than only patching the one card kind that happened
+    to expose it (see ``_is_generic_starting_out_title``, added first and kept -- belt and
+    braces, since a future card kind could end in the game's name too).
+
+    Found on the Deck 2026-09-26 (docs/test-evidence/plan70-L1-8-HELPER-M.json): with the
+    starting_out card excluded, "in hollow knight how should i prepare for the fight against the
+    hollow knight at the end" still matched a *different* wrong card, "False Knight" -- the word
+    "knight" in the game's own name "Hollow Knight" was enough to satisfy that card's own
+    shortened-tail check ("Knight"), with nothing left in the question to tell the two apart.
+    """
+    name = str(game_name or "").strip().lower()
+    if len(name) < 3:
+        return haystack
+    return re.sub(rf"(?<![a-z0-9]){re.escape(name)}(?![a-z0-9])", " ", haystack)
+
+
+def _match_known_entity(question: str, known_entities, *, game_name: str = "") -> str:
     """Longest known name that appears in the question on word boundaries.
 
     Allows one trailing "s" past the card's own name -- "exploders" must match the card
@@ -207,8 +233,12 @@ def _match_known_entity(question: str, known_entities) -> str:
     never a generic head like "boss" that would match half the corpus, and never shorter than four
     characters. The returned value is still the *card's* full title, so the prompt names the thing
     the corpus knows about rather than echoing the user's abbreviation back at them.
+
+    ``game_name`` -- the resolved game's own name, when known -- is stripped from the question
+    before either pass runs; see ``_strip_game_name`` for why.
     """
     haystack = re.sub(r"\s+", " ", (question or "").lower())
+    haystack = _strip_game_name(haystack, game_name)
 
     def _appears(text: str) -> bool:
         return bool(re.search(rf"(?<![a-z0-9]){re.escape(text.lower())}s?(?![a-z0-9])", haystack))
@@ -241,7 +271,7 @@ def _match_known_entity(question: str, known_entities) -> str:
     return best
 
 
-def extract_strategy_asked_entity(question: str, *, known_entities=()) -> str:
+def extract_strategy_asked_entity(question: str, *, known_entities=(), game_name: str = "") -> str:
     """Pull the boss/enemy/entity name the user named, or "" when they named nothing.
 
     ``known_entities`` is an optional gazetteer — normally :func:`kb_card_names` over the
@@ -249,6 +279,13 @@ def extract_strategy_asked_entity(question: str, *, known_entities=()) -> str:
     a guess. Without it the function falls back to phrasing patterns in both registers:
     verb-first ("how do I beat the Tank") and entity-first ("wheatley fight"), the latter
     being how people type on a controller.
+
+    ``game_name`` -- the resolved game's own name, when the caller has one -- is stripped from
+    the question before it is checked against ``known_entities``, so a question that merely
+    names the game (as it must, to say what it is about) is never read as naming a note or
+    card just because that card's title happens to contain, or end in, the game's own name.
+    See ``_strip_game_name``. Left out (the default), the gazetteer match runs exactly as it
+    did before this existed.
 
     Getting this wrong is not symmetric. An empty result over-fences a player who did name the
     thing; a *wrong* result un-fences content they never asked about and drops it verbatim into
@@ -258,7 +295,7 @@ def extract_strategy_asked_entity(question: str, *, known_entities=()) -> str:
     if raw.startswith(STRATEGY_FOLLOWUP_PREFIX):
         raw = raw[len(STRATEGY_FOLLOWUP_PREFIX) :].lstrip()
 
-    known = _match_known_entity(raw, known_entities)
+    known = _match_known_entity(raw, known_entities, game_name=game_name)
     if known:
         return known
 

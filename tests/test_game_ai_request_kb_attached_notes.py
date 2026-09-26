@@ -699,5 +699,69 @@ class KbSearchAppLogTests(unittest.TestCase):
         self.assertEqual(len(result["kb_attached_notes"]), 1)
 
 
+class NamedEntityGameNameStrippingWiringTests(unittest.TestCase):
+    """Plan 70 helper M follow-up (docs/test-evidence/plan70-L1-8-HELPER-M.json): Hollow Knight
+    is both the game's own name and its final boss's name. Asking about the final fight used to
+    name a wrong note instead -- first "Starting out in Hollow Knight" (fixed, then re-measured
+    on the Deck), then "False Knight" once that one card was excluded, because the word "knight"
+    in the game's own name was still enough to satisfy False Knight's own shortened-name check.
+    Proven here at the same layer the Deck measured it: through run_game_ai_request, with the
+    same three notes attached and app_name set the way a running game sets it, not just against
+    the extractor function directly.
+    """
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_the_final_fight_question_names_nothing_not_a_wrong_note(
+        self, mock_should, mock_retrieve
+    ):
+        mock_should.return_value = (True, "strategy")
+        cards = [
+            _card(
+                section_id=175,
+                name="Starting out in Hollow Knight",
+                section_type="starting_out",
+                card="A side-scrolling metroidvania kingdom under Dirtmouth.",
+            ),
+            _card(
+                section_id=185,
+                name="Watcher Knights",
+                section_type="boss",
+                card="Three armoured knights guarding the Watcher's Spire.",
+            ),
+            _card(
+                section_id=181,
+                name="False Knight",
+                section_type="boss",
+                card="An armoured maggot in the Forgotten Crossroads.",
+            ),
+        ]
+        text_block, trust, sources = _format_block(
+            cards, fallback_text=None, domain="strategy", max_bytes=6_144
+        )
+        mock_retrieve.return_value = KnowledgeRetrievalResult(
+            attached=True, text_block=text_block, trust_tier=trust, sources=sources
+        )
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        question = (
+            "in hollow knight how should I prepare for the fight against the hollow knight "
+            "at the end"
+        )
+        result = _run(
+            plugin,
+            question=question,
+            ask_mode="strategy",
+            app_id="367520",
+            app_name="Hollow Knight",
+        )
+
+        named = result.get("strategy_spoiler_asked_entity")
+        self.assertNotEqual(named, "Starting out in Hollow Knight")
+        self.assertNotEqual(named, "False Knight")
+        self.assertEqual(named, "")
+
+
 if __name__ == "__main__":
     unittest.main()

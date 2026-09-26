@@ -287,6 +287,58 @@ class KnownEntityGazetteerTests(unittest.TestCase):
             "Mantis Lords",
         )
 
+    def test_game_name_stripping_stops_the_final_fight_question_naming_a_wrong_boss(self):
+        """Follow-up measured on the Deck 2026-09-26 (docs/test-evidence/plan70-L1-8-HELPER-M.json):
+        excluding "Starting out in Hollow Knight" was not the whole fix. The exact same worked
+        question then recorded "False Knight" instead -- still wrong, since the question is about
+        the final fight, which has no note in the corpus. The word "knight" in the game's own
+        name "Hollow Knight" was enough on its own to satisfy False Knight's shortened-name
+        fallback (its own tail is "Knight"), with nothing left in the question to tell the two
+        apart. Passing the resolved game's name strips it from the question before either match
+        pass runs, so the correct result is nothing named at all.
+        """
+        question = (
+            "in hollow knight how should I prepare for the fight against the hollow knight "
+            "at the end"
+        )
+        names = ["Starting out in Hollow Knight", "Watcher Knights", "False Knight"]
+        # Without the game name, the old (partially fixed) bug reproduces: False Knight wins.
+        self.assertEqual(
+            extract_strategy_asked_entity(question, known_entities=names),
+            "False Knight",
+        )
+        # With it, nothing in the question is left to name either card.
+        self.assertEqual(
+            extract_strategy_asked_entity(question, known_entities=names, game_name="Hollow Knight"),
+            "",
+        )
+
+    def test_game_name_stripping_does_not_hide_a_real_mention_of_a_different_card(self):
+        """The strip must remove only the game's own name, not any text that happens to share a
+        word with it -- a question that actually names False Knight by name must still resolve
+        to False Knight even when the same game's name is passed in."""
+        self.assertEqual(
+            extract_strategy_asked_entity(
+                "how do i beat false knight",
+                known_entities=["False Knight"],
+                game_name="Hollow Knight",
+            ),
+            "False Knight",
+        )
+
+    def test_game_name_stripping_is_anchored_not_a_bare_substring(self):
+        """A game name that is not actually present in the question must strip nothing -- the
+        removal is a whole-word-boundary phrase match, not a loose substring cut that could eat
+        part of an unrelated word."""
+        self.assertEqual(
+            extract_strategy_asked_entity(
+                "how do i beat false knight",
+                known_entities=["False Knight"],
+                game_name="Something Else Entirely",
+            ),
+            "False Knight",
+        )
+
 
 class FixtureWideInvariantTests(unittest.TestCase):
     """Run the whole eval set through it, because that is what exposed the bug."""

@@ -12,7 +12,13 @@ import json
 import re
 import urllib.error
 import urllib.request
-from typing import Any, Optional, Sequence
+from typing import Any, Callable, Optional, Sequence
+
+from backend.services.strategy_spoiler_policy import (
+    boss_like_card_names,
+    protected_spoiler_names,
+    spoiler_cover_required,
+)
 
 _MAX_VERIFY_EXCERPT_CHARS = 1500
 _VERIFY_NUM_PREDICT = 64
@@ -426,6 +432,38 @@ def cover_named_spoilers(
             text = chunk[: len(chunk) - hold_back_len]
         out.append(_cover_sentences_in_text(text, names))
     return "".join(out)
+
+
+def build_live_spoiler_cover(
+    *,
+    consent: bool,
+    strategy_domain: bool,
+    app_id: str = "",
+    app_name: str = "",
+    title_profile: str = "",
+    question: str,
+    system_content: str,
+) -> Callable[[str, bool], str]:
+    """One call, at turn setup, folding the whole D112 #7 policy lookup (was a cover promised
+    this turn, and on which names) plus ``cover_named_spoilers`` itself behind a single function
+    the caller runs every flushed chunk through -- so ``ollama_ask_service.py``'s own `_on_delta`
+    needs only this call plus one line per flush, not the policy lookup inlined there too.
+    """
+    cover_needed = spoiler_cover_required(
+        consent,
+        strategy_domain=strategy_domain,
+        app_id=app_id,
+        app_name=app_name,
+        title_profile=title_profile,
+    )
+    names = protected_spoiler_names(question, boss_like_card_names(system_content)) if cover_needed else []
+
+    def _cover(text: str, done: bool) -> str:
+        if not cover_needed or not text:
+            return text
+        return cover_named_spoilers(text, names, hold_back_incomplete_trailing=not done)
+
+    return _cover
 
 
 def maybe_append_verifier_notice(response_text: str, verify_result: dict[str, Any]) -> str:

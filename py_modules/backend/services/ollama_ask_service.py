@@ -85,14 +85,9 @@ from backend.services.ollama_ask_extras import (
     resolve_ask_model_routing,
 )
 from backend.services.ollama_service import post_ollama_chat
-from backend.services.response_verify import cover_named_spoilers
+from backend.services.response_verify import build_live_spoiler_cover
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
-from backend.services.strategy_spoiler_policy import (
-    boss_like_card_names,
-    protected_spoiler_names,
-    spoiler_cover_required,
-)
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
     no_installed_routing_models_message,
@@ -225,25 +220,12 @@ async def run_ask_ollama(
     if roleplay:
         system_content = apply_roleplay_to_system_content(system_content, roleplay)
 
-    # D112 #7, the spoiler safety net -- the live half. Worked out once, here, on the finished
-    # prompt: `system_content` already carries whatever knowledge-base cards survived the
-    # context budget (folded in above as `early_context_suffix`), and `boss_like_card_names`
-    # reads its "[Game / kind: Name]" headers straight off that same text. Reusing it here,
-    # rather than threading a new parameter down from game_ai_request.py, is what keeps this
-    # file's own list of what it owns unchanged. Applied inside `_on_delta` below (every
-    # streamed flush) and, separately, again on the finished reply in game_ai_request.py --
-    # belt and braces, since neither file can see what the other one covered.
-    spoiler_cover_needed = spoiler_cover_required(
-        strategy_spoiler_consent,
+    # D112 #7, the spoiler safety net -- the live half (belt and braces alongside the finished-
+    # reply cover in game_ai_request.py). The whole policy lookup lives behind this call now.
+    cover_live_spoilers = build_live_spoiler_cover(
+        consent=strategy_spoiler_consent, app_id=app_id, app_name=app_name,
         strategy_domain=strategy_domain_guidance or ask_mode == "strategy",
-        app_id=app_id,
-        app_name=app_name,
-        title_profile=strategy_title_profile,
-    )
-    spoiler_protected_names = (
-        protected_spoiler_names(question, boss_like_card_names(system_content))
-        if spoiler_cover_needed
-        else []
+        title_profile=strategy_title_profile, question=question, system_content=system_content,
     )
 
     # The model choice moves above the memory step here (plan 68 step 3): it only reads
@@ -372,20 +354,9 @@ async def run_ask_ollama(
                     character_enabled=bool(settings.get("ai_character_enabled")),
                     character_preset_id=rp_meta.resolved_preset_id,
                 )
-            # D112 #7, the spoiler safety net -- the live half. `text` is the whole reply so
-            # far, not just this delta (see ``_update_partial_response``'s own overwrite, not
-            # append). Recomputed from scratch on every flush rather than patched incrementally,
-            # since a name can finish forming inside a sentence that was already partly on
-            # screen. `hold_back_incomplete_trailing` only matters while still streaming
-            # (`done` False) -- the finished reply gets the plain, no-holdback cover again in
-            # game_ai_request.py once every other post-processing step has run.
-            display_text = text
-            if spoiler_cover_needed and text:
-                display_text = cover_named_spoilers(
-                    text,
-                    spoiler_protected_names,
-                    hold_back_incomplete_trailing=not done,
-                )
+            # D112 #7, the spoiler safety net -- the live half. `text` is the whole reply so far,
+            # not just this delta, and this call recomputes the cover from scratch every flush.
+            display_text = cover_live_spoilers(text, done)
             # Plan 57: the model's own thinking, kept in the same poll snapshot the screen already
             # reads every second — so the live lines can move before any answer text exists.
             plugin_inst._update_partial_response(

@@ -1,0 +1,52 @@
+{
+  "row": "Flow 3 section A with Deep Rock Galactic: Survivor running: BRANCH-TEMPLATE-02, STREAM-11 (FIX-01..03), SCR-03/09/10 frame rate, CONST-SPOIL-01 (Deep Rock half), DRG-01f (plan 70 flow L5.4)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e...)",
+  "deckTime": "2026-09-26 17:28-17:55 EDT",
+  "screen": "monitor live: Quick Access page 855x766 CSS px",
+  "setup": "Game launched from Recent Games with deck_launchGame (runs/plan70-L5-launch-DRG.json); DRG Survivor.exe running under Proton 11.0 (checked over SSH). Plugin reloaded after the launch; the first two deck_openPlugin calls failed ('no pane appeared'; Steam's home page was on screen with the game as Current Game), the third opened it. Context line: 'Context: active game Deep Rock Galactic: Survivor'. AI character off. Strategy mode. One new chat for this game. Settings copy: scratch settings-before-flow3-L5.json.",
+  "CONST-SPOIL-01_drg": {
+    "question": "what is the big armored bug boss and how do I beat it",
+    "seen": "answer names 'the Glyphid Dreadnought' in plain text; 0 covers at every read (131 changed reads, scratch L5-4-DRG-boss.jsonl); notes block 'Glyphid Dreadnought · From bonsAI's own note'",
+    "side_note": "'Code block incoming…' showed for one read (about 0.5 s, at 56.8 s) as the branch menu arrived at the end of the answer; '-spoiler' and backticks appeared only in the live thinking text (the model quoting its instructions)",
+    "verdict": "PASS"
+  },
+  "DRG-01f": {
+    "how": "A on menu choice 'A. Just starting the campaign' under the first answer",
+    "seen": "turn header 'I'm at: Just starting the campaign'; answer plain text ('For controller-friendly combat against the Glyphid Dreadnought...'), 0 covers",
+    "side_note": "while the model warmed up, the waiting line read: Waking the model up for \"[Strategy follow-up] I'm at: Just starting the campaign\" in Deep Rock Galactic: Survivor… - the internal tag '[Strategy follow-up]' shows to the person",
+    "verdict": "PASS"
+  },
+  "BRANCH-TEMPLATE-02": {
+    "menus_read": [
+      "boss: A. Just starting the campaign / B. Mid-game, fighting major bosses",
+      "hazard plan: A. Mastering basic movement and kiting techniques / B. Optimizing resource gathering and upgrade timing",
+      "weapons: A. Exploring different weapon types and their roles / B. Managing resource management (Nitra) for upgrades",
+      "class: A. The Engineer (Focus on building and support) / B. The Scout (Focus on mobility and early kills)",
+      "biome: A. Hollow Bough (Sticky Webs) / B. Another specific biome (e.g., Caves, etc.)"
+    ],
+    "follow_up_turn": "no menu",
+    "angle_brackets": 0,
+    "literal_a_place_early_later_in": 0,
+    "verdict": "PASS - clean in 5 (an observation, not proof). Note for the owner: the biome menu's option B, 'Another specific biome (e.g., Caves, etc.)', reads like a filler, though it is not the template text."
+  },
+  "STREAM-11": {
+    "how": "answer length read from the page every ~0.5 s by a Deck-side probe (scratch len_probe.py); raw scratch L5-4-DRG-stream-len.jsonl (scramble on) and L5-4-DRG-stream-len-off.jsonl (scramble off)",
+    "run_scramble_on": "'give me a full plan for a first win on the hardest hazard level, stage by stage': first words at 45.96 s, writing until 64.95 s (19 s, 0 -> 1480 characters); every read grew; largest gap between growths while writing 0.66 s; largest single jump 103 characters",
+    "run_scramble_off": "'explain every weapon type in this game in detail and which ones pair well together for a long run': writing 45.67 s -> 79.05 s (34 s, 0 -> 2380 characters); every read grew; largest single jump 103 characters; the only pause over 1.5 s (5.1 s) came after the text finished (final tidy 2380 -> 2361 -> 2358)",
+    "note": "neither answer ran the 60 s the runbook asked for (19 s and 34 s of writing)",
+    "verdict": "PASS on the numbers measured (no gap over 1.5 s while writing, no jump over 115 characters); shorter answers than asked for"
+  },
+  "SCR-03_09_10_frame_rate_with_game": {
+    "how": "requestAnimationFrame callbacks counted in the Quick Access page over 2.5 s windows, first 0.3 s of each dropped (scratch fps_probe.py), running alongside the length probe",
+    "scramble_on_while_writing": [15.2, 16.8, 13.2, 11.2, 10.8, 10.4],
+    "scramble_on_while_thinking": [43.6, 32.8, 41.6, 32.0, 35.2, 26.0, 30.8, 35.2, 33.2, 36.8, 35.6, 36.0, 35.6, 32.0, 35.2],
+    "scramble_off_while_writing": [20.4, 17.6, 17.2, 16.4, 14.8, 15.2, 15.2, 14.8, 14.4, 12.8, 13.6],
+    "scramble_off_while_thinking": [52.0, 37.6, 31.2, 24.8, 28.4, 34.8, 30.8, 23.2, 28.8, 34.4, 34.0, 33.6, 34.0, 32.8, 34.8],
+    "idle_after_answer": "60 fps both runs (longest frame 17 ms)",
+    "longest_single_frame_while_writing_ms": "scramble on 134-219; scramble off 117-200",
+    "comparison": "no game (earlier): scramble off 56-58, on 44-50",
+    "setting": "Scramble animation (Developer tab) was on; turned off for the second run; turned back on (settings file identical to the pre-flow-3 copy afterwards)",
+    "verdict": "UNCLEAR - numbers for the maintainer (SCR-10 floor 45): with the game running the panel drew 10-17 frames a second with scramble on and 13-20 with it off while text arrived"
+  },
+  "screen_note": "open failures: deck_openPlugin failed twice after the reload with the game running, then opened on the third call"
+}

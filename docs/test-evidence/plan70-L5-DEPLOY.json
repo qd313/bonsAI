@@ -1,0 +1,21 @@
+{
+  "row": "L5.0 tidy + deploy (plan 70 flow L5)",
+  "buildCommit": "380ab9ac (working copy: src/pluginVersion.ts stamped by the build)",
+  "deckTime": "2026-09-26 16:49-16:53 EDT",
+  "screen": "monitor live: Steam window 1500x844 CSS px at 1.28 scale (1920x1080); Quick Access page 855x766",
+  "step1_wake": "Left-stick click pressed at 16:49. Afterwards the Quick Access panel was open on bonsAI Main. No game process over SSH (only the kernel's oom_reaper matched).",
+  "step2_character": {
+    "before": "ai_character_enabled false, preset alig_ali_g, accent heavy (the only difference from settings-before-L4.json)",
+    "pressed": "tab bar -> RB, RB to Settings tab; Down to the 'AI voice & personality' switch (aria-checked false); A once",
+    "after": "ai_character_enabled true, alig_ali_g, heavy; screen shows 'Ali G — Other', accent 'Strong'; settings file now identical to settings-before-L4.json; saved as scratch settings-before-L5.json",
+    "side_effect": "My first RB press was taken while the ring was on the chat row, so it switched chats (from the Hades Megaera chat to the Hollow Knight charms chat). Nothing sent."
+  },
+  "step4_deploy": {
+    "fixes_present": ["2d7406a7", "acf69c5f", "cb708b37", "b673bcab", "9a557a9c", "59d3d1c0"],
+    "fingerprint_before": "Deck dist/index.js ce7f1cd0... (e890ce51 build)",
+    "fingerprint_after": "dist/index.js 3c15531e...60a8 on PC and Deck; main.py 568e1ee5... on both; strategy_spoiler_policy.py d245a801... on both",
+    "loader_ready": true,
+    "plugin_log_errors": 0
+  },
+  "verdict": "DONE - character back on, tip deployed and proved"
+}

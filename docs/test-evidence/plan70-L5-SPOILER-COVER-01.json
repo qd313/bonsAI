@@ -1,0 +1,67 @@
+{
+  "row": "SPOILER-COVER-01 live re-check, the notes block, Copy / Read aloud, control (plan 70 flow L5.1)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e..., main.py 568e1ee5...)",
+  "deckTime": "2026-09-26 16:55-17:14 EDT",
+  "screen": "monitor live: Quick Access page 855x766 CSS px, screenshots 1920x1080",
+  "setup": "Nothing running. Strategy mode. Thinking effort medium (on). AI character switched OFF through the Settings tab for this part (was on, Ali G heavy). One new chat per question ([+] on the chat row, A). Questions put in the box with deck_send_ask.py (VERIFIED each time); Down x3 to Ask, A. A watcher on the Deck read the panel every 250 ms (answer text, live thinking line, notes block header via its aria-label and first line, branch menu buttons, cover labels, and counts of 'Soul Master', backticks, '-spoiler', 'Code block incoming', 'boss boss'). Raw reads: scratch L5-1-HK-B.jsonl, L5-1-HK-C.jsonl, L5-1-HK-NAMED.jsonl.",
+  "new_chats_made": 4,
+  "tries": {
+    "A 'hollow knight tips on my deck for the teleporting boss that throws orbs in the soul sanctum'": {
+      "watched": false,
+      "why": "my watcher's page script had a syntax error on this run and read nothing for 240 s; fixed before try B",
+      "saved_answer": "names Soul Master 3 times, each inside a bonsai-spoiler cover",
+      "finished_screen": "3 covers, 0 plain 'Soul Master', 0 notes blocks, menu 'A. Just starting in the City of Tears / B. Deep into the Soul Sanctum area'",
+      "counts_toward_two": false
+    },
+    "B 'in hollow knight how do I beat the spell casting boss at the very top of the soul sanctum'": {
+      "watched": true,
+      "reads_with_change": 124,
+      "span_ms": 48566,
+      "saved_answer_starts": "```bonsai-spoiler / Reviewing the Soul Master fight. / ```",
+      "first_answer_read_ms": 38361,
+      "cover_at_first_answer_read": "yes - label 'Spoiler — tap to show' from the first read that had answer text",
+      "plain_name_reads": 0,
+      "name_in_thinking_reads": 0,
+      "thinking_showed": "'[hidden] The KB mentioned hitting from below while he conjures orbs is the key.'",
+      "backtick_reads": 0,
+      "dash_spoiler_reads": 0,
+      "code_block_incoming_reads": 0,
+      "boss_boss_reads": 0,
+      "notes_block_reads": "0 blocks on screen at any read while the cover was closed",
+      "menu": "A. Early in the kingdom, exploring Dirtmouth / B. Later, in the City of Tears, fighting major bosses",
+      "repeated_sentence_starts": "none in the answer"
+    },
+    "C 'hollow knight how should I fight the mage boss who teleports around the soul sanctum and drops orbs'": {
+      "watched": true,
+      "reads_with_change": 105,
+      "span_ms": 44094,
+      "saved_answer_starts": "```bonsai-spoiler / For the Soul Master, the key is timing your attacks. / ```",
+      "first_answer_read_ms": 36185,
+      "cover_at_first_answer_read": "yes - 'Spoiler — tap to show'",
+      "plain_name_reads": 0,
+      "name_in_thinking_reads": 0,
+      "backtick_and_dash_spoiler_reads": "27 reads had a backtick and 22 had '-spoiler', ALL in the live thinking text before the answer began (21.9 s to 28.4 s): the model's own reasoning quoting 'wrap the specific tactics in a `bonsai-spoiler fence' and 'Start with `<bonsai-status>`'. None in the answer. One more backtick at 42.8 s was a scrambling letter in the suggestion chip's decode animation.",
+      "code_block_incoming_reads": 0,
+      "boss_boss_reads": 0,
+      "notes_block_reads": "0 at any read",
+      "menu": "A. Starting out in Dirtmouth / B. Deep in the City of Tears",
+      "repeated_sentence_starts": "none in the answer"
+    }
+  },
+  "notes_block": {
+    "while_arriving_and_finished_cover_closed": "no block on screen at all (B and C, every read) - so never 'Soul Master', but also no 'Boss note (spoiler)' title to read. Code (b673bcab) says the block hides behind the answer's own cover; the neutral title is for answers that used the note without naming the boss, and none of mine did that.",
+    "after_opening_the_cover_B": "block appeared, closed, aria-label 'Boss note (spoiler) (+1 more) · From the Hollow Knight wiki, show', text 'Boss note (spoiler) / (+1 more) / From the Hollow Knight wiki'. Screenshot plan70-L5-SPOILER-COVER-01-cover-opened.png",
+    "A_on_block": "Down x7 from the cover (answer, menu A, menu B, Helpful, Show details, block; block box y 501 h 47, dock top 711, visible); A opened it: 'Soul Master (+1 more) · From the Hollow Knight wiki' with the Soul Master note text. Screenshot plan70-L5-NOTES-BLOCK-opened.png. A again closed it and the title went back to 'Boss note (spoiler)'.",
+    "after_reopening_from_chat_list": "switched to chat C and back (RB on the chat row): cover closed again, no block, 0 'Soul Master' in the panel; A on the cover -> block 'Boss note (spoiler) (+1 more)'."
+  },
+  "copy": "Reopened chat B, cover closed, Right from the last answer section to 'Copy reply text', A. Clipboard (navigator.clipboard.readText on the page): '[Spoiler hidden — reveal it on screen to copy]' then the plain answer; 0 'Soul Master'.",
+  "read_aloud": "Same answer. A on 'Read aloud' (first press: no playback seen in 75 s and the button read 'Read aloud' afterwards - unclear if it started; second press: button turned 'Stop' within 150 ms, 9 sentences played). Third press with a /proc watcher catching each espeak-ng sentence: 'A spoiler is hidden here.' then the 8 plain sentences; 0 'Soul Master'. Log: scratch L5-1-readaloud-try3.log.",
+  "control 'in hollow knight how do I beat soul master on my deck'": "no covers at any read; answer plain ('Listen up. Soul Master is all about timing and positioning.'); notes block title 'Soul Master · From the Hollow Knight wiki' from 33.0 s; menu 'A. Early game exploration in Dirtmouth / B. Deep exploration in the City of Tears'.",
+  "verdict": {
+    "SPOILER-COVER-01 live": "PASS - two watched answers named the boss; at none of 229 changed reads did 'Soul Master' show outside a cover (answer, thinking, notes header, menu); covers read 'Spoiler — tap to show' from the first answer read; no '-spoiler', backticks or 'Code block incoming' in the answer; no 'boss boss'; no repeated sentence starts. The only backticks/'-spoiler' seen were in the live thinking text (the model's reasoning) - reported, not judged.",
+    "notes block": "PASS for 'never shows Soul Master while closed' (arriving, finished, reopened) and 'A opens it and shows the Soul Master note'; UNCLEAR for 'reads Boss note (spoiler) while arriving' - the block is not on screen at all until the cover is opened, so there was no title to read then.",
+    "Copy": "PASS",
+    "Read aloud": "PASS",
+    "control": "PASS"
+  }
+}

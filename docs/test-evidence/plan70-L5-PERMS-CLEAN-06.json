@@ -1,0 +1,24 @@
+{
+  "row": "PERMS-CLEAN-06 re-check - the troubleshooting hint's Dismiss (plan 70 flow L5.2)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e...), includes 59d3d1c0",
+  "deckTime": "2026-09-26 17:14-17:18 EDT",
+  "screen": "monitor live: Quick Access page 855x766 CSS px",
+  "setup": "Permissions tab through the screen: 'Read game & screenshot context' on -> off (this one switch stores two keys: media_library_access and steam_logs_read, both went false), 'Steam ban lookup' on -> off (steam_web_api false). New chat; 'bonsai:vac-check' sent (reply 'Steam Web API is off for bonsAI.' and the row 'Enable Steam ban lookup in Permissions to use bonsai:vac-check. / Open Permissions'). Then 'my game keeps crashing right after launch with a proton error' put in the box with deck_send_ask.py (VERIFIED), not sent: the hint 'Troubleshooting Ask detected. Enable Read game & screenshot context in Permissions ... / Open Permissions / Dismiss' showed above the ban-lookup row.",
+  "pressed_and_seen": [
+    "start: ring on the question box",
+    "Up -> suggestion chip 'What are the best settings for 60fps?' (visible 100%)",
+    "Up -> the ban-lookup row's 'Open Permissions' (visible 100%)",
+    "Up -> the hint's 'Open Permissions' (visible 100%)",
+    "Right -> the hint's 'Dismiss' (visible 100%)",
+    "Left -> back on the hint's 'Open Permissions' (visible 100%)",
+    "Left -> did not move; still the hint's 'Open Permissions', ring inside the plugin",
+    "Right -> 'Dismiss' (visible 100%)",
+    "A -> the hint is gone (no 'Troubleshooting Ask detected' text, 0 Dismiss buttons, 1 Open Permissions left = the ban-lookup row); the question text stayed in the box"
+  ],
+  "after_dismiss_focus": "nothing held the ring right after the hint went away (no focused element; Steam's footer showed only 'B Back'). The next Down placed it on the ban-lookup row's Open Permissions.",
+  "recording": "runs/plan70-L5-PERMS-CLEAN-06.json (the seven moves, focus and visibility after each)",
+  "screenshot": "plan70-L5-PERMS-CLEAN-06-after-dismiss.png",
+  "cleanup": "box emptied with the screen's Clear (X) button beside Ask; both switches turned back on through the screen; settings read back: all five capabilities true",
+  "saved_check": "not saved with deck_saveCheck: saving re-runs the walk, and the hint no longer shows after Dismiss",
+  "verdict": "PASS - every stop as the runbook predicts, every stop fully visible, A on Dismiss removes the hint. Observation for the owner: after Dismiss the ring is left on nothing."
+}

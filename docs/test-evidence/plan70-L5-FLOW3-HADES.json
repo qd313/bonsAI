@@ -1,0 +1,25 @@
+{
+  "row": "CONST-SPOIL-SPEED-01 with Hades running (plan 70 flow L5.4, flow 3 section B)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e...)",
+  "deckTime": "2026-09-26 17:44-17:52 EDT",
+  "screen": "monitor live: Quick Access page 855x766 CSS px",
+  "setup": "Hades launched from Recent Games (first deck_launchGame refused because the Steam menu did not open where it could read it; second try launched, runs/plan70-L5-launch-Hades-try2.json). Hades.exe running (SSH). Plugin reloaded; deck_openPlugin failed three times (twice 'could not reach Steam's debugger', once 'no pane appeared') and opened on the fourth. Context line 'Context: active game Hades'. New chat. Mode changed Strategy -> Speed through the mode button (attach button, Right, A, 'speed', A). Knowledge base on (not changed). AI character off.",
+  "named": {
+    "question": "how do I beat megaera on my deck",
+    "answer": "To handle Megaera, focus on dash patterns and punishing her recovery windows. Using mirror and trap boons effectively will help you burst her phases.",
+    "covers": 0,
+    "notes_block": "Megaera · From bonsAI's own note",
+    "show_details": "Keyword search, attached (card 'Hades — Megaera'); Spoiler risk: med; Reply style: balanced; 22.3 s",
+    "verdict_named_plain": "PASS"
+  },
+  "unnamed_known_open_bug": {
+    "question": "who is the first boss and how do I beat them",
+    "answer": "The first boss in Hades is Nyx. To beat her, focus on managing her phases ... Since you're already familiar with Megaera, the core strategy remains similar ...",
+    "covers": 0,
+    "plain_Megaera_reads": 17,
+    "show_details": "Knowledge base (skipped), no notes; Spoiler risk: med; 5.9 s",
+    "note": "recorded, not judged (runbook: known open bug). The answer is also wrong about the first boss, and it carried 'Megaera' over from the previous turn in the same chat."
+  },
+  "protect_band": "Show details reads 'Spoiler risk: med' on both answers. I could not tell from the runbook whether 'med' is Hades' protect band.",
+  "verdict": "UNCLEAR - the named boss is answered plainly (as expected); whether 'Spoiler risk: med' is the protect band is for the owner"
+}

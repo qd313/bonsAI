@@ -1,0 +1,38 @@
+{
+  "row": "Flow 5 - reduced motion: CHIP-BUTTON-07, SCR-07, the reduced-motion boxes (plan 70 flow L5.3)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e...)",
+  "deckTime": "2026-09-26 17:18-17:27 EDT",
+  "screen": "monitor live: Quick Access page 855x766 CSS px; Steam window 1500x844 at 1.28",
+  "setup": "Nothing running. AI character off. Chip settings unchanged: one chip, decode style (preset_single_chip true, preset_chip_animation decode). Answer scramble unchanged: on (stream_scramble_enabled true, style settle). Steam Settings -> Accessibility -> Reduce Motion, reached by D-pad (Steam button, Down x6 to Settings, A, Down x10 to Accessibility, Right, Down x2).",
+  "reduce_motion": {
+    "old_value": "off",
+    "turned_on": "A on the switch at 17:19; switch aria-checked true",
+    "matchMedia_plugin_page": "false before, true after, false again at the end",
+    "turned_off_again": "17:27, switch aria-checked false; matchMedia false on both the Steam page and the plugin page"
+  },
+  "CHIP-BUTTON-07": {
+    "how": "ring on the one chip (box 48,600 300x30); Left, then Right, each under a watcher reading the chip every 25 ms (class, computed transition, box-shadow, box). Raw: scratch L5-3-flash-*.jsonl",
+    "baseline_normal_motion": "Right: edge-flash class on for about 265 ms (2313 to 2578 ms), transition 'box-shadow 0.144s', bottom-edge colour ramped over 8 reads from rgba(56,189,248,0.55) to rgb(150,225,255). Left: no flash seen in one try (probably the watcher started after the press; an earlier combined run showed one flash of about 330 ms).",
+    "reduced_motion_right": "first try: no flash seen (press likely before the watcher started); second try: flash class on for about 280 ms (3563 to 3845 ms), transition 'none', full colour rgb(150,225,255) at the first read - no ramp",
+    "reduced_motion_left": "flash class on for about 263 ms (3994 to 4257 ms), transition 'none', full colour at the first read",
+    "size_and_position": "chip box 48,600.4 300x30 at every read in every run; ring stayed on the chip",
+    "tested_styles": "decode only (the current setting); fade and static were not tried"
+  },
+  "SCR-07": {
+    "how": "two questions in my own test chat (the ban-lookup chat) with the answer scramble on; a watcher read the answer text and the chip label every ~100-200 ms. Raw: scratch L5-3-scr07.jsonl, L5-3-scr07-b.jsonl",
+    "answer_1": "'explain in a few paragraphs how proton lets windows games run on the steam deck': grew 5 -> 855 characters between 22.8 s and 28.3 s over 23 reads; 0 reads with scramble letters, 0 scramble elements",
+    "answer_2": "'describe in detail what each level of the steam deck performance overlay shows and when to use it': grew to 1967 characters over 159 reads; 0 reads with scramble letters, 0 scramble elements",
+    "screenshots": ["plan70-L5-SCR-07-mid1.png", "plan70-L5-SCR-07-mid2.png"],
+    "note": "the first answer finished before my screenshot, so both screenshots are from answer 2, taken about 4 s apart while it was arriving"
+  },
+  "reduced_motion_boxes": {
+    "a_decode_chips_swap_instantly": "13 chip label changes seen across both answers and the wait; each went from one whole label to the next (once via an empty label for about 0.7 s), never through scrambled letters or a caret. For contrast, with reduced motion off (baseline run) the same chip went through 40+ reads of scrambled letters and a block caret while decoding.",
+    "b_long_label_cut_with_ellipsis": "not seen: no chip label overflowed its chip in 90 s of watching (200+ reads) with no game running; the labels on offer were all short. No screenshot."
+  },
+  "verdict": {
+    "CHIP-BUTTON-07": "PASS (decode style) - the flash appears and clears with no ramp, about 260-280 ms, nothing moves, the chip keeps its size",
+    "SCR-07": "PASS - words appeared plainly, no scramble",
+    "box a": "PASS",
+    "box b": "COULD NOT RUN - no long chip label showed with no game running"
+  }
+}

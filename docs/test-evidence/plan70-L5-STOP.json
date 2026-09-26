@@ -1,0 +1,22 @@
+{
+  "row": "L5 block stopped early - Steam's own screens stopped answering with Black Mesa running (plan 70 flow L5.4, flow 3 section C)",
+  "buildCommit": "380ab9ac (dist/index.js 3c15531e...)",
+  "deckTime": "2026-09-26 17:51-17:56 EDT",
+  "what_happened": [
+    "17:51 Black Mesa launched from Recent Games (second deck_launchGame try; first refused as with Hades). bms.exe running (-forceuid3d9 -disabledxvk, Proton Experimental).",
+    "about 17:52:00 deck_reloadPlugin (the runbook's reload after a launch); loader ready.",
+    "17:52:03 Steam's web helper (the program that draws Steam's menus and the Quick Access panel) restarted; its log then shows 'ForwardToRenderer: failed sending message ... to invalid browser 131073'.",
+    "From then on the debug list shows only 'SharedJSContext' and one blank page; the Quick Access page and the main Steam page are missing. Two deck_openPlugin calls failed (reads timed out after 10 s; each sent one Down press, which went to the game's menu). A Quick Access chord (hold Steam, tap A) at 17:54 opened nothing. Still the same at 17:55:29.",
+    "Screen: Black Mesa's own main menu (screenshot in screenshots/DeckCapture_20260926_175413_auto.png)."
+  ],
+  "not_done": [
+    "THINKING-SLOW-01 (Black Mesa) - not started; the answer model was NOT unloaded",
+    "Flow 3 section D, Half-Life 2 (PHASE4-CHIPS-01, PRESET-ONE-LINE-04 decode half, CHIP-BUTTON-09, CHIP-ROTATION-01) - not started",
+    "Exiting Black Mesa - not possible without Steam's menu; I did not end it from the command line",
+    "End of block: AI character back ON - not done (needs the plugin's Settings screen)"
+  ],
+  "settings_vs_before_L5": "only ai_character_enabled differs (true before, false now); everything else I changed is back (permissions, scramble, mode, reduced motion)",
+  "keep_awake": "held (DPS-HOLD-AWAKE, expires 2026-09-27 04:49 UTC)",
+  "deck_lock": "untouched",
+  "verdict": "STOPPED - waiting for the session owner"
+}

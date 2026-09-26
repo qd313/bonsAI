@@ -51,13 +51,13 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1037,
+      "path": "py_modules/backend/services/local_ollama_setup_service.py",
+      "lines": 1051,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "lines": 1017,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1037,
       "role": ""
     },
     {

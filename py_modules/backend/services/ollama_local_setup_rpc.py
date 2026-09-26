@@ -23,6 +23,7 @@ cosmetic win. Does not run `ollama pull`/`ollama rm` itself, or talk to the regi
 """
 
 import asyncio
+import time
 from typing import Any
 
 from backend.services.async_background_job import (
@@ -30,6 +31,8 @@ from backend.services.async_background_job import (
     new_asyncio_cancel_event,
 )
 from backend.services.local_ollama_setup_service import (
+    DEFAULT_BASE,
+    list_installed_ollama_tag_sizes,
     new_local_ollama_setup_state,
     run_local_setup,
     run_ollama_rm_async,
@@ -372,18 +375,50 @@ async def delete_ollama_model(self, tag: str = ""):
 
 
 async def fetch_ollama_catalog_metadata(self, tags: Any = None):
-    """Live sizes from registry.ollama.ai with offline fallback metadata."""
+    """A tag already installed gets its real size from this Deck's own Ollama; registry.ollama.ai
+    is only asked about a tag that is not installed yet.
+
+    A tag outside the curated catalog (nomic-embed-text, the meaning-search model plan 70's own
+    knowledge base installs) has no bundled size to fall back on, and the registry does not
+    answer for it either -- so asking there left it with no size at all: "?" in the models list,
+    and undercounted in the header's own total (docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json).
+    Ollama's own ``GET /api/tags`` already reports the real size of everything installed.
+    """
     ok_gate, gate_out = await _require_local_ollama_on_deck(self)
     if not ok_gate:
         return {**(gate_out or {}), "source": "offline", "tags": {}}
 
     raw = tags if isinstance(tags, list) else []
     normalized = normalize_ollama_pull_tags(raw)
-    try:
-        out = await asyncio.wait_for(
-            asyncio.to_thread(fetch_catalog_metadata, normalized),
-            timeout=10.0,
+
+    def _fetch() -> dict[str, Any]:
+        installed_sizes = list_installed_ollama_tag_sizes(DEFAULT_BASE)
+        local_tags: dict[str, Any] = {}
+        remaining: list[str] = []
+        for tag in normalized:
+            size_bytes = installed_sizes.get(tag)
+            if isinstance(size_bytes, int) and size_bytes > 0:
+                local_tags[tag] = {"size_bytes": size_bytes, "exists": True}
+            else:
+                remaining.append(tag)
+
+        if not remaining:
+            return {
+                "source": "live" if local_tags else "offline",
+                "error": "",
+                "tags": local_tags,
+                "fetched_at": int(time.time()) if local_tags else None,
+            }
+
+        registry_out = fetch_catalog_metadata(remaining)
+        merged_tags = {**(registry_out.get("tags") or {}), **local_tags}
+        source = "live" if (local_tags or registry_out.get("source") == "live") else registry_out.get(
+            "source", "offline"
         )
+        return {**registry_out, "tags": merged_tags, "source": source}
+
+    try:
+        out = await asyncio.wait_for(asyncio.to_thread(_fetch), timeout=10.0)
     except Exception:
         out = {"source": "offline", "error": "fetch_failed", "tags": {}, "fetched_at": None}
     return out

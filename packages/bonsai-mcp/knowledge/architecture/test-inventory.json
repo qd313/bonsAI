@@ -228,6 +228,7 @@
     "tests/test_eval_kb_tie_break.py",
     "tests/test_extract_wiki_notes.py",
     "tests/test_feedback_service.py",
+    "tests/test_fetch_ollama_catalog_metadata_local_sizes.py",
     "tests/test_fetch_wiki_dump_pages.py",
     "tests/test_fetch_wiki_live_pages.py",
     "tests/test_forget_game_ai_carried_context.py",

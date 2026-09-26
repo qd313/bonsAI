@@ -452,6 +452,40 @@ def list_installed_ollama_tags(base_http: str, timeout_seconds: float = 5.0) -> 
         return []
 
 
+def list_installed_ollama_tag_sizes(base_http: str, timeout_seconds: float = 5.0) -> dict[str, int]:
+    """Return {tag: size_bytes} from ``GET {base}/api/tags`` (empty on error).
+
+    Ollama's own /api/tags already reports each installed model's real size on disk -- the size
+    the AI models screen's header and its "remove this model" box both need. A model outside the
+    curated catalog (nomic-embed-text, the meaning-search model that plan 70's own knowledge base
+    installs) has no entry in the bundled catalog to fall back on, and registry.ollama.ai does not
+    answer for it either, so asking there left its size unknown ("?", and undercounted in the
+    header total -- docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). This is the same
+    request list_installed_ollama_tags already makes; a sibling function rather than changing
+    that one's return shape, since many callers already depend on it returning a plain list of
+    names.
+    """
+    url = f"{base_http}/api/tags"
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        models = data.get("models") if isinstance(data, dict) else None
+        if not isinstance(models, list):
+            return {}
+        sizes: dict[str, int] = {}
+        for m in models:
+            if not isinstance(m, dict):
+                continue
+            name = str(m.get("name") or "").strip()
+            size = m.get("size")
+            if name and isinstance(size, int) and size > 0:
+                sizes[name] = size
+        return sizes
+    except Exception:
+        return {}
+
+
 from backend.ollama_connectivity import is_loopback_ollama_host as _is_loopback_ollama_host
 
 

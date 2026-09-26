@@ -14,6 +14,7 @@ from backend.services.local_ollama_setup_service import (
     _env_for_host_system_tools,
     _env_for_ollama_cli,
     ensure_ollama_cli_home_ready,
+    list_installed_ollama_tag_sizes,
     list_installed_ollama_tags,
 )
 
@@ -60,6 +61,39 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
             mock_open.return_value.__enter__.return_value.read.return_value = payload
             tags = list_installed_ollama_tags("http://127.0.0.1:11434")
         self.assertEqual(tags, ["qwen2.5:1.5b", "llava:7b"])
+
+    def test_list_installed_ollama_tag_sizes_parses_the_real_shape(self):
+        # docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json: nomic-embed-text (the meaning-
+        # search model, installed outside the curated catalog) showed "?" for its size and the
+        # header undercounted the total, because the only size lookup asked registry.ollama.ai,
+        # which does not answer for this tag. Ollama's own /api/tags already reports a `size` in
+        # bytes for every installed model -- this reads that instead. Real /api/tags response
+        # shape (trimmed to the fields this reads).
+        payload = (
+            b'{"models":['
+            b'{"name":"nomic-embed-text:latest","model":"nomic-embed-text:latest",'
+            b'"size":274302450,"digest":"0a109f422b47","modified_at":"2026-09-20T10:00:00Z"},'
+            b'{"name":"gemma4:e2b-it-qat","model":"gemma4:e2b-it-qat","size":3208128000}'
+            b']}'
+        )
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = payload
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(
+            sizes, {"nomic-embed-text:latest": 274302450, "gemma4:e2b-it-qat": 3208128000}
+        )
+
+    def test_list_installed_ollama_tag_sizes_skips_a_missing_or_zero_size(self):
+        payload = b'{"models":[{"name":"no-size-field"},{"name":"zero-size","size":0}]}'
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = payload
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(sizes, {})
+
+    def test_list_installed_ollama_tag_sizes_empty_on_error(self):
+        with patch("urllib.request.urlopen", side_effect=OSError("no route to host")):
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(sizes, {})
 
     def test_ensure_ollama_cli_home_ready_forces_fresh_serve_when_key_missing(self):
         with tempfile.TemporaryDirectory() as td:

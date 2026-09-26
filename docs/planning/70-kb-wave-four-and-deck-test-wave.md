@@ -450,8 +450,62 @@ only if the reading with a game running says memory is tight.
 
 ## 11. Report
 
-Filled in as the session runs: every new bug found and where it was logged, every fix and the check that
-proves it, every Deck result with its evidence file, and what is still owed and why.
+**Draft, written 2026-09-26 at about 18:30 while waiting for the Deck; the last Deck blocks and the release are
+added when they run.** Every item below is in the roadmap with its evidence; this is the short version.
+
+### What a person will notice, proven on the Deck
+
+- **A boss you only described stays hidden, even while the answer is arriving.** Four rounds to get there: the
+  safety net for finished answers; two fixes for the live answer and the thinking lines; then the real cause, found
+  on the stronger model from the Deck's own 250 ms screen readings. The screen's letter-by-letter reveal assumed text
+  only grows, so when the safety net wrapped a sentence it had already sent, the screen spliced the name back into
+  view. Final check: 229 reads, the name never showed outside a cover, not in the answer, the thinking, the notes
+  block or the suggestion menu; Copy and Read aloud leave it out too.
+- **"What time is it" gets no troubleshooting tip** in any mode.
+- **A big screenshot no longer crashes the Deck's AI:** the picture that crashed it twice on 23 September now sends
+  108 KB instead of 3.7 MB and is answered in 39 seconds.
+- **The note-search model stays loaded as long as the answer model** (it used to drop after 5 minutes).
+- **A follow-up stays on the right boss** (4 of 4 on the Deck; 21 of 24 on the PC against 4 of 24 before — the
+  maintainer's pick). Its waiting line quotes the person's own words (0 of 407 reads showed the internal reminder).
+- **The AI models screen:** "Manage AI models…" no longer opens with the ring on a licence filter; Down reaches Done
+  with the filters open; Remove works right after an answer; the model sizes add up.
+- **D-pad fixes proven:** the ring stays put when an answer finishes (6 of 6); fade and static chips keep the ring;
+  the troubleshooting hint can be dismissed by D-pad; the Ollama tab's walks.
+- **Saved-walk replay works again,** and there's a one-command overnight check (replay every saved walk, report).
+
+### Fixed in code, Deck check still owed
+
+The notes block titling a protected boss "Boss note (spoiler)" (proven while closed, not yet while arriving); the
+screen never opening a cover by word overlap; the "no close match" line reading note text; the new library format
+(starting-out notes, per-game Deck tips, three new games) — checked in the release block; the install offer for the
+meaning-search model — checked after publishing; the thumbs-up ring, Show details scrolling into view, "Save chat
+to Desktop" reachable from the chips, the ring after Dismiss; a branch pick's waiting line; the Filters-panel race.
+
+### Still open, and why
+
+- **The "No tip for this" line can't appear:** four cut-offs measured, none makes it appear without losing right
+  tips; the maintainer decides whether to retire it or plan a word-search cut-off.
+- **The "no close match" line on the Black Mesa horse question:** a borderline score (0.6508 against 0.65), not a
+  regression; left alone rather than retune a measured cut-off for one question.
+- **The stuck panel and the busy dot** didn't reproduce in 3 honest tries each; they stay open.
+- **Frame rate with a game running:** 10 to 20 a second while an answer arrives, scramble on or off — the game
+  competing, for the maintainer to judge against the 45 floor.
+- **Show details still names a protected note** in its credit line (behind a deliberate press) — the maintainer's call.
+
+### Calls made by the session (in D112's addendum, open to change)
+
+The follow-up pick recorded; Skyrim's share-alike 2.5 licence let through the release check; spoiler settings for
+the new games (Brotato little story, Palworld and Skyrim protect progress); ranking "starting out" notes lower left
+off (it made the answer test worse); the Hollow Knight described-boss answer-test row no longer forbids a cover.
+
+### Lessons (also in docs/lessons-learned.md)
+
+- AI-reworded notes pick up small invented details; checking every sentence against its page caught them in most notes.
+- Cut a helper's copy only when the tests pass at that exact commit.
+- A screen that animates streamed text must not assume the text only grows.
+- A timing-sensitive test that fails under load can be pointing at a real race; this one was.
+- The 20-minute scheduled check did not restart the session after either usage stop; the maintainer's message did.
+- Remove repo copies only with the prune script.
 
 ---
 

@@ -266,6 +266,22 @@ describe("Filters panel — getting back out", () => {
       expect(document.activeElement).toBe(container.querySelector(".bonsai-pullmodels-filters-button"));
     });
   });
+
+  it("Down from Close filters hands back to Steam instead of dead-ending, same as the model list's last row", async () => {
+    // Measured on the Deck (docs/test-evidence/plan70-HUB-EDGE-01.json): with the panel open,
+    // walking Down stopped at Close filters and never reached Done, though Done is visible right
+    // below the panel. onMoveDown here used to unconditionally return true, which claims every
+    // further Down press forever -- the model list's own last row (above, "hands Down back to
+    // Steam...") already returns false for exactly this reason.
+    const { container } = renderModal();
+    openFilters();
+    await waitFor(() => {
+      expect(container.querySelector(".bonsai-pullmodels-filterpanel-close")).not.toBeNull();
+    });
+
+    const closeBtn = latestByClassName("bonsai-pullmodels-filterpanel-close");
+    expect((closeBtn!.onMoveDown as () => boolean)()).toBe(false);
+  });
 });
 
 describe("Filters panel — the Licence rows replace the old Policy buttons", () => {

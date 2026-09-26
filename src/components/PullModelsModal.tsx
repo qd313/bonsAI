@@ -1164,7 +1164,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   }}
                   {...({
                     onMoveUp: () => focusFilterPanelRowSkipping(FILTER_PANEL_ROWS.length - 1, -1),
-                    onMoveDown: () => true,
+                    /*
+                     * Close filters is the panel's own last stop, not the whole screen's --
+                     * hand Down back to Steam so it can carry the ring on to the dialog's footer
+                     * (Done), the same way the model list's own last row already does just above.
+                     * This used to unconditionally return true, which claims every further Down
+                     * press forever: measured on the Deck, Down stopped here and never reached
+                     * Done even though it is visible right below the panel
+                     * (docs/test-evidence/plan70-HUB-EDGE-01.json).
+                     */
+                    onMoveDown: () => false,
                     onMoveLeft: () => true,
                     onMoveRight: () => true,
                     onCancelButton: cancelClosesFiltersPanel,

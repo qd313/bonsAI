@@ -73,6 +73,7 @@ Canonical: `src/utils/buildReplyActionsElement.tsx`, `src/utils/replyStopRegistr
 | Cross-column fallback when primary target “misses” | Helpful↓ lands on Show details “successfully” |
 | Gate `onMove*` success on `document.activeElement` | Focus attempted but handler returns `false`; spatial nav overwrites |
 | A route-specific flag pre-opens a sub-panel and moves the ring into it before anything was pressed | Ring lands one press from an unintended change (`OllamaModelsHubModal`'s old `initialFiltersOpen` shortcut for the "policy" route: 3 of 3 tries, plan70-RING-ON-FILTER-2c1.json) |
+| `onMoveDown` on a container's own last stop unconditionally returns `true` | Down dead-ends there forever; Steam never carries the ring on to the next real container even though it is visible (`PullModelsModal`'s Filters-panel "Close filters" button, plan70-HUB-EDGE-01.json) — return `false` instead, same as the model list's own last row just above it in the same file |
 
 ## Ship checklist
 

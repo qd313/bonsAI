@@ -178,7 +178,17 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("port", "open"),
         ("subnet",),
         ("ip address",),
-        ("lan",),
+        # Written "lan " with a trailing space on purpose. _term_matches only checks a
+        # boundary before a term, not after, so a bare "lan" matched inside "land",
+        # "language" and "lane" too -- a Paper Mario question ending "...right before they
+        # land" was routed as a network problem (found by helper H, 2026-09-26). _normalize
+        # always pads its output with a single space on both ends and collapses whitespace
+        # runs, so every real word is followed by a space somewhere in the haystack; putting
+        # that space in the term itself is a boundary check on the term's own end without
+        # touching _term_matches, which other rules still rely on to reach a suffix ("upscal"
+        # must still reach "upscaling"). Matches "lan party" and "play over lan"; does not
+        # match "land", "language" or "lane".
+        ("lan ",),
         ("wifi", "cannot see"),
         ("wifi", "cant see"),
         ("wifi", "cant find"),

@@ -79,6 +79,28 @@ class CompatTopicRouterTests(unittest.TestCase):
             with self.subTest(question=question):
                 self.assertFalse(question_targets_compat_corpus(question))
 
+    def test_lan_does_not_match_inside_a_longer_word(self):
+        """Word-boundary matching went in for the *start* of a term, not the end.
+
+        "lan" still matched inside "land", "language" and "lane" -- a Paper Mario question
+        ending "...right before they land" was routed as a network problem (found 2026-09-26).
+        Fixed by requiring a word boundary on both sides of this one term; the suffix-matching
+        other rules rely on ("upscal" reaching "upscaling") is untouched.
+        """
+        for question in (
+            "they land",
+            "check the language settings",
+            "which lane is that",
+        ):
+            with self.subTest(question=question):
+                self.assertNotIn("network", match_compat_corpus_topics(question))
+        for question in (
+            "set up a lan party",
+            "play over lan",
+        ):
+            with self.subTest(question=question):
+                self.assertIn("network", match_compat_corpus_topics(question))
+
     def test_a_weak_topic_alone_does_not_route(self):
         """"Deck" and "crash" are ordinary words in a game question."""
         self.assertEqual(match_compat_corpus_topics("how do I beat this boss on my deck"), ["deck"])

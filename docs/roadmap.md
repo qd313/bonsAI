@@ -228,13 +228,6 @@ starts work outside this.
   first large, barely-compressed one ever attached — a screenshot taken while the Deck was plugged into an
   external monitor, about six times bigger than anything sent before. [The measured comparison and size
   table](test-evidence/plan64-SCREENSHOT-SHRINK-COMPARISON.md). **Waiting on the maintainer's yes.**
-- ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
-  a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
-  is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
-  and suffers. Making streaming the default stays a separate feature call. Row **STREAM-11**. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
-  **Cause found 2026-09-24:** the model writes evenly (a piece every 50 ms with a game running), but the plugin reads its output
-  4 KB at a time and waits for each 4 KB to fill, so text reaches the panel in lumps of about 115 letters every 1.5 to 2 seconds.
-  [Plan 69](planning/69-streamed-answers-scramble.md) step 1 fixes it and measures the game's frame rate.
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
@@ -341,14 +334,6 @@ replace it with a specific issue when one exists.
   soon" on 2026-08-07 (its P6): today an answer is laid out one way while it arrives and re-laid out when it
   finishes, and two ways of drawing it can drift apart. Written before September's reply changes: check today's
   code first, it may be moot. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md).
-- ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **OPEN, asked for by the maintainer
-  2026-09-23.** A Developer tab toggle: when on, each streamed piece settles into place the way a suggestion chip does in decode
-  mode, its unsettled tail churning through placeholder glyphs that lock into the real letters, smooth and without bursts, like
-  the Ghost in the Shell titles. Off by default. Reuse the decode chip's animation and timings (`MainTabPresetAnimatedChips.tsx`,
-  `MainTabChatTranscript.tsx`). Related to the accepted bug about streamed text arriving in bursts.
-  **Planned 2026-09-24, calls locked (D119):** [plan 69](planning/69-streamed-answers-scramble.md) and its working
-  [mockup](planning/assets/69-streamed-answers-scramble.html). The bursts fix comes first; the switch is *Scramble animation* in a
-  new Animations section; the scramble must not cost the panel any frames.
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
   answer finishes while the menu is closed, the toast says only *Reply ready*. It would read *bonsAI* over the first lines of
   the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.
@@ -566,6 +551,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   separate case is still open** — the ring itself vanishing while it is walked mid-answer, its own bug
   above, since this fix was not built for that shape. Owed: the same walk on the Deck. Evidence
   `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming-try2.json`.
+- ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **VERIFY, fixed
+  2026-09-24 (`341841d3`).** The plugin waited for a full 4 KB before passing on any of the model's words;
+  with a game running that meant lumps of about 115 letters every 1.5–2 seconds. It now passes on whatever
+  has arrived at once. Row **STREAM-11**, rows **FIX-01**/**FIX-02** in [testing.md](testing.md). Owed: a
+  run with a game actually open. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
@@ -613,6 +603,20 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](archive/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+
+- ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **VERIFY, built
+  2026-09-24/25.** A Developer tab switch, *Scramble animation*, off by default, churns a live answer's
+  newest letters through placeholder symbols before they settle, the way a suggestion chip does.
+  [Plan 69](planning/69-streamed-answers-scramble.md), D119. Deck rows **SCR-04**, **SCR-06**, **SCR-08**
+  and **DEV-01** pass. Owed: the look (**SCR-01**), reopening mid-answer (**SCR-05**), reduced motion
+  (**SCR-07**), the game's frame rate (**SCR-03**). Full rows in [testing.md](testing.md).
+- ★★ `[reply]` **The streamed answer's own redraws were costing most of the panel's frame rate** —
+  **VERIFY, fixed 2026-09-25 (`bb8d7e5b`, `aae5add6`).** With no game running the panel drew about 19–24
+  frames a second while an answer streamed; moving its text on a steady beat instead of every frame, and
+  holding its glow still while text arrives, raised that to 56–58 with the scramble off, 44–50 with it on
+  — the maintainer's own floor was 45. Evidence `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+  Owed: the maintainer's own eye on the look, and a run with a game. Rows **SCR-09**, **SCR-10** in
+  [testing.md](testing.md).
 
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01

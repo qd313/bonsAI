@@ -1772,15 +1772,11 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertIsNotNone(result.best_meaning)
     self.assertIsNone(result.best_meaning_without_game_name)
 
-  def test_compat_meaning_floor_blocks_a_below_floor_pool_end_to_end(self):
-    """D87: a keyword/topic pool whose best meaning score never clears the floor attaches
-    nothing at all -- not the weakest tip in the pool, and not the compat fallback either.
-
-    Real keyword pool ("why is my game crashing proton issue" has five real tips on the seed
-    corpus, per test_compat_hybrid_reranks_when_nomic_available); every mocked vector is
-    orthogonal to the query, so the best meaning score in the pool is 0.0, well under
-    COMPAT_MEANING_FLOOR.
-    """
+  def _retrieve_proton_compat_with_meaning_scores(self, compat_vectors):
+    """Ask the seed corpus's troubleshooting tips "why is my game crashing proton issue" (five
+    real tips in its keyword pool, per test_compat_hybrid_reranks_when_nomic_available) in
+    Expert mode, with the meaning search mocked: the question embeds to [1.0, 0.0, ...], so a
+    tip's meaning score is just the first component of the vector given for it here."""
     settings = {
       "use_local_knowledge_base": True,
       "rag_corpus_path": str(SEED_DB.parent),
@@ -1796,9 +1792,9 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
       "backend.services.knowledge_base_service._load_compat_vectors",
-      return_value={1: [0.0, 1.0] + [0.0] * 766, 2: [0.0, 1.0] + [0.0] * 766},
+      return_value=compat_vectors,
     ):
-      result = retrieve_knowledge_context(
+      return retrieve_knowledge_context(
         settings,
         ask_mode="expert",
         question="why is my game crashing proton issue",
@@ -1807,6 +1803,17 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         domain="compat",
         pc_ip="127.0.0.1:11434",
       )
+
+  def test_compat_meaning_floor_blocks_a_below_floor_pool_end_to_end(self):
+    """D87: a keyword/topic pool whose best meaning score never clears the floor attaches
+    nothing at all -- not the weakest tip in the pool, and not the compat fallback either.
+
+    Every mocked vector is orthogonal to the query, so the best meaning score in the pool is
+    0.0, well under COMPAT_MEANING_FLOOR.
+    """
+    result = self._retrieve_proton_compat_with_meaning_scores(
+      {1: [0.0, 1.0] + [0.0] * 766, 2: [0.0, 1.0] + [0.0] * 766},
+    )
     self.assertFalse(result.attached)
     self.assertEqual(result.text_block, "")
     self.assertTrue(result.notes.startswith("routed_nothing_fit"))
@@ -1814,32 +1821,9 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
   def test_compat_meaning_floor_leaves_a_confident_pool_alone(self):
     """The floor reads the pool's best score, so one strong card keeps the whole pool attached
     even when other candidates in it score near zero."""
-    settings = {
-      "use_local_knowledge_base": True,
-      "rag_corpus_path": str(SEED_DB.parent),
-    }
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      return_value=[[1.0, 0.0] + [0.0] * 766],
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_compat_vectors",
-      return_value={1: [1.0, 0.0] + [0.0] * 766, 2: [0.0, 1.0] + [0.0] * 766},
-    ):
-      result = retrieve_knowledge_context(
-        settings,
-        ask_mode="expert",
-        question="why is my game crashing proton issue",
-        app_id="",
-        app_name="",
-        domain="compat",
-        pc_ip="127.0.0.1:11434",
-      )
+    result = self._retrieve_proton_compat_with_meaning_scores(
+      {1: [1.0, 0.0] + [0.0] * 766, 2: [0.0, 1.0] + [0.0] * 766},
+    )
     self.assertTrue(result.attached)
     self.assertEqual(result.retrieval_method, "hybrid")
 
@@ -1852,34 +1836,9 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     attached. Pinned here at that exact value so a future rounding of the floor back down to
     the ceiling it is measured from fails this test rather than shipping quietly.
     """
-    settings = {
-      "use_local_knowledge_base": True,
-      "rag_corpus_path": str(SEED_DB.parent),
-    }
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      return_value=[[1.0, 0.0] + [0.0] * 766],
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_compat_vectors",
-      # Dot product against [1.0, 0.0, ...] is just this vector's first component: 0.5044,
-      # the old junk ceiling this floor used to sit exactly on.
-      return_value={1: [0.5044, 0.0] + [0.0] * 766},
-    ):
-      result = retrieve_knowledge_context(
-        settings,
-        ask_mode="expert",
-        question="why is my game crashing proton issue",
-        app_id="",
-        app_name="",
-        domain="compat",
-        pc_ip="127.0.0.1:11434",
-      )
+    # The meaning score is this vector's first component: 0.5044, the old junk ceiling this
+    # floor used to sit exactly on.
+    result = self._retrieve_proton_compat_with_meaning_scores({1: [0.5044, 0.0] + [0.0] * 766})
     self.assertFalse(result.attached)
     self.assertTrue(result.notes.startswith("routed_nothing_fit"))
 

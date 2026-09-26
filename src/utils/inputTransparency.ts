@@ -41,6 +41,12 @@ export type KbAttachedNote = {
   source_license: string;
   domain: string;
   game_title: string;
+  /**
+   * D112 #7 (plan 70): a boss or enemy note this turn's question never named, on a turn whose
+   * spoilers are covered. The notes block shows a neutral title for it until opened. Absent
+   * (never false) on every other note.
+   */
+  spoiler_protected?: boolean;
 };
 
 /** One credit line: a licensed source, plus the cards from it that reached the model. */

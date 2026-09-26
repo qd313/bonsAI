@@ -42,7 +42,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1175,
+      "lines": 1171,
       "role": ""
     },
     {
@@ -86,13 +86,13 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 853,
+      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+      "lines": 920,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 846,
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
       "role": ""
     },
     {
@@ -101,13 +101,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 745,
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "lines": 746,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 743,
+      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
+      "lines": 745,
       "role": ""
     },
     {

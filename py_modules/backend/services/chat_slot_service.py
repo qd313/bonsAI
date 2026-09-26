@@ -164,6 +164,9 @@ def _normalize_kb_attached_note(raw: Any) -> dict[str, Any] | None:
         "source_license": str(raw.get("source_license") or "")[:MAX_KB_NOTE_SOURCE_LICENSE_LEN],
         "domain": str(raw.get("domain") or "")[:20],
         "game_title": str(raw.get("game_title") or "")[:MAX_KB_NOTE_GAME_TITLE_LEN],
+        # D112 #7 (plan 70): a protected boss note's name stays hidden on reopening a saved chat.
+        # Kept only when truly true, so every other note keeps the shape it was saved in.
+        **({"spoiler_protected": True} if raw.get("spoiler_protected") is True else {}),
     }
 
 

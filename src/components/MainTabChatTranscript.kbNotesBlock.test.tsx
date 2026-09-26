@@ -843,3 +843,77 @@ describe("the block shows only notes the answer used (roadmap: the gold notes bl
     expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
   });
 });
+
+/*
+ * Plan 70 (D112 #7): the answer used the Soul Master note without naming him, so it has no cover
+ * and the block used to print "Soul Master" in its header -- live and saved. A note the back end
+ * marks protected shows a neutral title until the person opens the block on purpose.
+ */
+describe("a protected boss note (the answer has no cover of its own)", () => {
+  const soulMaster = note({
+    name: "Soul Master",
+    kind: "boss",
+    card: "Soul Master teleports between attacks; hit him from below while he conjures orbs.",
+    source_host: "hollowknight.wiki",
+    game_title: "Hollow Knight",
+    spoiler_protected: true,
+  });
+  const answer = "Hit him from below while he conjures orbs.";
+  const turn: AskThreadCollapsedTurn = {
+    id: "t1",
+    question: "in hollow knight how do I beat the spell casting boss at the top of the sanctum",
+    answer,
+    transparency: {
+      route: "ollama",
+      success: true,
+      context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+      overflow_skips: [],
+      kb_attached_notes: [soulMaster],
+    },
+  };
+
+  it("shows a neutral title, never the name, while closed", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    const el = block(container);
+    expect(el).not.toBeNull();
+    expect(el?.textContent).not.toContain("Soul Master");
+    expect(el?.getAttribute("aria-label") ?? "").not.toContain("Soul Master");
+    expect(el?.textContent).toContain("Boss note (spoiler)");
+    expect(el?.textContent).toContain("From the Hollow Knight wiki");
+  });
+
+  it("shows the note, name and all, once the person opens the block", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    fireEvent.click(block(container) as HTMLElement);
+    expect(block(container)?.textContent).toContain("Soul Master");
+  });
+
+  it("never names it on the live turn either", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          strategySpoilerMaskingEnabled: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: turn.question,
+          ollamaResponse: answer,
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [soulMaster] },
+          transparencySnapshot: null,
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).not.toContain("Soul Master");
+  });
+
+  it("names it as usual when the person has spoiler covers switched off", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />
+    );
+    expect(block(container)?.textContent).toContain("Soul Master");
+  });
+});

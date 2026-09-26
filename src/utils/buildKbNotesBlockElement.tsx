@@ -75,10 +75,24 @@ function kbNoteSourcePhrase(note: KbAttachedNote): string {
  * would just repeat that word twice in one line; the topic word at least tells two different
  * tips apart at a glance when more than one is attached.
  */
-function kbNoteDisplayName(note: KbAttachedNote): string {
+function kbNoteDisplayName(note: KbAttachedNote, open = false): string {
+  if (note.spoiler_protected && !open) return kbNoteNeutralTitle(note);
   const raw = note.name.trim();
   if (!raw) return "Note";
   return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+/**
+ * What the header says in place of a protected note's name (D112 #7, plan 70): the kind of
+ * note, never its name. The answer used the note without naming the boss, so it has no spoiler
+ * cover this block could hide behind -- the block's own header was the one place the name still
+ * showed in plain text. Opening the block is the person's own choice to read it, like tapping a
+ * cover, so the open block shows the note as usual.
+ */
+function kbNoteNeutralTitle(note: KbAttachedNote): string {
+  const kind = note.kind.trim().toLowerCase();
+  const word = kind === "enemy" ? "Enemy" : kind === "boss" ? "Boss" : "Story";
+  return `${word} note (spoiler)`;
 }
 
 /**
@@ -86,11 +100,11 @@ function kbNoteDisplayName(note: KbAttachedNote): string {
  * order, matching the drawn header (see buildKbNotesBlockElement). Nothing here is ever cut; the
  * ellipsis on the drawn source phrase is a visual-only affordance.
  */
-function kbNotesHeaderLabel(notes: KbAttachedNote[]): string {
+function kbNotesHeaderLabel(notes: KbAttachedNote[], open: boolean): string {
   const first = notes[0];
   const extra = notes.length - 1;
   const countText = extra > 0 ? ` (+${extra} more)` : "";
-  return `${kbNoteDisplayName(first)}${countText} · ${kbNoteSourcePhrase(first)}`;
+  return `${kbNoteDisplayName(first, open)}${countText} · ${kbNoteSourcePhrase(first)}`;
 }
 
 export function kbAttachedNotesFrom(
@@ -153,7 +167,9 @@ export function kbNotesToShow(
   notes: KbAttachedNote[]
 ): KbAttachedNote[] {
   if (kbNotesBlockedBySpoiler(turn.answer, maskingEnabled)) return [];
-  return kbNotesUsedByAnswer(notes, turn.answer, turn.question);
+  const used = kbNotesUsedByAnswer(notes, turn.answer, turn.question);
+  /* Covers switched off: the person reads spoilers in plain text everywhere, names included. */
+  return maskingEnabled === false ? used.map(({ spoiler_protected: _p, ...rest }) => rest) : used;
 }
 
 /**
@@ -233,7 +249,7 @@ export function buildKbNotesBlockElement(args: {
 }): React.ReactElement | null {
   const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef } = args;
   if (!notes.length) return null;
-  const headerLabel = kbNotesHeaderLabel(notes);
+  const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
   return (
     <Focusable
@@ -298,7 +314,7 @@ export function buildKbNotesBlockElement(args: {
                 whiteSpace: "nowrap",
               }}
             >
-              {kbNoteDisplayName(notes[0])}
+              {kbNoteDisplayName(notes[0], open)}
             </b>
             {extra > 0 ? (
               <span style={{ color: "#a8916a", flex: "0 0 auto" }}>{`(+${extra} more)`}</span>
@@ -332,7 +348,7 @@ export function buildKbNotesBlockElement(args: {
             <div key={`${turnKey}-kb-note-${i}`} style={{ marginBottom: i === notes.length - 1 ? 0 : 10 }}>
               {notes.length > 1 ? (
                 <div style={{ fontWeight: 700, color: "#dcc493", marginBottom: 3 }}>
-                  {kbNoteDisplayName(note)} · {kbNoteSourcePhrase(note)}
+                  {kbNoteDisplayName(note, true)} · {kbNoteSourcePhrase(note)}
                 </div>
               ) : null}
               {note.card.split("\n").map((line, li) => renderKbNoteCardLine(line, li))}

@@ -280,5 +280,68 @@ class SpoilerCoverWiringTests(unittest.TestCase):
             self.assertNotIn("```", opt.get("label", ""))
 
 
+
+class _LivePlugin(_FakePlugin):
+    """Has a live partial-stream snapshot, so what the screen would read mid-answer is seen."""
+
+    def __init__(self, settings: dict):
+        super().__init__(settings)
+        import threading
+
+        self._partial_response_lock = threading.Lock()
+        self._partial_stream_snapshot = {"request_id": 7}
+
+    def _active_request_id(self):
+        return 7
+
+
+class NotesBlockProtectionTests(unittest.TestCase):
+    """Plan 70 (D112 #7): the "From the notes" block's header names the attached note. When the
+    answer uses the Soul Master note without naming him, the answer has no cover to hide behind,
+    so the block itself has to know the note's name is protected -- live and when finished."""
+
+    def _run_with(self, mock_should, mock_retrieve, question, reply, app_name="Hollow Knight", card=None):
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = _attached_result(card or _soul_master_card())
+        plugin = _LivePlugin(_settings())
+        plugin._ollama_result = {"success": True, "response": reply, "model": "test-model"}
+        result = _run(plugin, question, ask_mode="strategy", app_name=app_name)
+        return result, plugin._partial_stream_snapshot.get("kb_attached_notes") or []
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_described_boss_note_is_marked_live_and_finished(self, mock_should, mock_retrieve):
+        result, live = self._run_with(
+            mock_should, mock_retrieve,
+            "in hollow knight how do I beat the spell casting boss at the top of the sanctum",
+            "Hit him from below while he conjures orbs.",
+        )
+        self.assertEqual([n.get("spoiler_protected") for n in live], [True])
+        self.assertEqual([n.get("spoiler_protected") for n in result["kb_attached_notes"]], [True])
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_boss_the_question_named_is_not_marked(self, mock_should, mock_retrieve):
+        result, live = self._run_with(
+            mock_should, mock_retrieve, "How do I beat Soul Master?", "Hit him from below."
+        )
+        self.assertNotIn("spoiler_protected", live[0])
+        self.assertNotIn("spoiler_protected", result["kb_attached_notes"][0])
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_low_narrative_title_is_not_marked(self, mock_should, mock_retrieve):
+        hive = KnowledgeCard(
+            section_id=1, game_id=1, game_title="Deep Rock Galactic: Survivor", section_type="boss",
+            name="The Hive", card="The Hive spawns waves of swarmers.", source_url="",
+            source_license="", source_version=None, crawled_at="2026-09-01",
+            trust_tier="fallback_no_source",
+        )
+        result, _live = self._run_with(
+            mock_should, mock_retrieve, "What is the final boss like?", "Swarmers.",
+            app_name="Deep Rock Galactic: Survivor", card=hive,
+        )
+        self.assertNotIn("spoiler_protected", result["kb_attached_notes"][0])
+
 if __name__ == "__main__":
     unittest.main()

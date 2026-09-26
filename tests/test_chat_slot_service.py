@@ -300,6 +300,42 @@ class ChatSlotServiceTests(unittest.TestCase):
         assert reloaded is not None
         self.assertEqual(reloaded["turns"][-1]["transparency"]["kb_attached_notes"], [note])
 
+    def test_a_spoiler_protected_note_keeps_its_mark_through_a_save(self):
+        """Plan 70 (D112 #7): a boss note the question never named is marked protected, and the
+        "From the notes" block hides its name behind a neutral title. Reopening a saved chat must
+        still know that, or the name shows in plain text the second time round."""
+        slot = create_slot(self.settings_dir, first_question="the spell casting boss")
+        sid = slot["id"]
+        note = {
+            "name": "Soul Master",
+            "kind": "boss",
+            "card": "Teleports between attacks; hit him from below while he conjures orbs.",
+            "trust_tier": "wiki_verified",
+            "source_host": "hollowknight.wiki",
+            "source_license": "CC-BY-SA-3.0",
+            "domain": "strategy",
+            "game_title": "Hollow Knight",
+            "spoiler_protected": True,
+        }
+        snapshot = {
+            "route": "ollama",
+            "success": True,
+            "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": True}],
+            "overflow_skips": [],
+            "kb_attached_notes": [note, {**note, "name": "Soul Tyrant", "spoiler_protected": "yes"}],
+        }
+        saved = append_turn(
+            self.settings_dir, sid, role="assistant", text="Hit him from below.", request_id=1,
+            transparency=snapshot,
+        )
+        assert saved is not None
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        notes = reloaded["turns"][-1]["transparency"]["kb_attached_notes"]
+        self.assertIs(notes[0]["spoiler_protected"], True)
+        # Only a real true counts; anything else is dropped, never guessed.
+        self.assertNotIn("spoiler_protected", notes[1])
+
     def test_kb_attached_notes_absent_from_the_caller_normalizes_to_an_empty_list(self):
         slot = create_slot(self.settings_dir, label="no-notes")
         sid = slot["id"]

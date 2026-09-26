@@ -148,6 +148,21 @@ def _parse_kb_attached_notes(
     return notes
 
 
+def mark_spoiler_protected_notes(notes: list[dict[str, Any]], protected_names: list[str]) -> None:
+    """Mark each attached note whose name is one of this turn's protected names (D112 #7).
+
+    The "From the notes" block's header names the note. When the answer uses a boss note the
+    question only described, and never names the boss itself, the answer has no cover the block
+    could hide behind -- so the block would print "Soul Master" in plain text (plan 70). The mark
+    tells the screen to show a neutral title until the person opens the block. Added only when
+    true, so every unprotected note keeps exactly the shape it always had.
+    """
+    protected = set(protected_names or ())
+    for note in notes:
+        if note.get("name") in protected:
+            note["spoiler_protected"] = True
+
+
 def _kb_search_log_fields(
     kb_result: Any, *, kb_domain: str, app_name: str, kb_survived: bool, starved: bool
 ) -> dict[str, Any]:

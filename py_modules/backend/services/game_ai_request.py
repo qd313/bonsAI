@@ -157,6 +157,7 @@ from backend.services.kb_attached_notes import (
     _kb_search_log_fields,
     _parse_kb_attached_notes,
     _publish_kb_attached_notes_live,
+    mark_spoiler_protected_notes,
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.services.spoiler_risk_service import build_spoiler_risk_signals
@@ -674,15 +675,14 @@ async def run_game_ai_request(
         # reached the model, in their own words, from what retrieval attached and nowhere else.
         # Empty whenever nothing survived the budget (`kb_survived` false), the same gate
         # `kb_transparency` above uses, so the block and the honesty lines never both fire off a
-        # card that got dropped. Published to the live snapshot immediately, before ask_ollama is
-        # even called below, so a caller reading it can open the block before the model's first
-        # word the same way `strategy_spoiler_asked_entity` already does a few lines down.
+        # card that got dropped. Published to the live snapshot further down, once its spoiler
+        # marks are in, still before ask_ollama is called, so a caller reading it can open the
+        # block before the model's first word, as `strategy_spoiler_asked_entity` already does.
         kb_attached_notes: list[dict[str, Any]] = (
             _parse_kb_attached_notes(kb_text, kb_domain=kb_domain, sources=kb_result.sources)
             if kb_result is not None and kb_survived
             else []
         )
-        _publish_kb_attached_notes_live(plugin, active_rid, kb_attached_notes)
 
         read_tdp = is_current_tdp_read_intent(question_for_model)
         wants_grounding = user_wants_power_or_performance_topic(question_for_model)
@@ -769,6 +769,18 @@ async def run_game_ai_request(
         strategy_title_profile = resolve_title_spoiler_profile(
             app_id, app_name or text_resolved_title
         )
+        # D112 #7: this turn's protected names, decided once, here, before the model is called --
+        # the attached notes are marked with them before they are published live, so the "From
+        # the notes" block never names a protected note in plain text (plan 70). Reused below for
+        # the finished answer, its thinking and the branch menu. See
+        # resolve_turn_spoiler_protected_names's own doc for what it decides and why.
+        spoiler_protected_names_for_turn = resolve_turn_spoiler_protected_names(
+            question, kb_text, spoiler_consent_effective=strategy_spoiler_consent_effective,
+            strategy_domain_guidance=strategy_domain_guidance, ask_mode=ask_mode, app_id=app_id,
+            app_name=app_name, title_profile=strategy_title_profile,
+        )
+        mark_spoiler_protected_notes(kb_attached_notes, spoiler_protected_names_for_turn)
+        _publish_kb_attached_notes_live(plugin, active_rid, kb_attached_notes)
 
         spoiler_risk_signals = build_spoiler_risk_signals(
             ask_mode=ask_mode,
@@ -944,11 +956,6 @@ async def run_game_ai_request(
         # this" applies. See TheTwoLinesNeverBothAppearTests in test_kb_not_in_notes_notice.py
         # for the case proven, and D87 (docs/archive/48-kb-wave-three-session.md § 6) for why
         # the tip sheet needed this line at all.
-        # D112 #7, the spoiler safety net: filled in below, once, and reused after the honesty
-        # footers both to cover `response_text` and to cover the model's own saved thinking
-        # (`reasoning_text`) near the end of this function -- the same protected names apply to
-        # both, since both come from the same turn.
-        spoiler_protected_names_for_turn: list[str] = []
         if ollama_result.get("success"):
             show_no_tip_for_this = should_show_no_tip_for_this_notice(
                 kb_attached=bool(kb_transparency.get("kb_attached")),
@@ -987,18 +994,7 @@ async def run_game_ai_request(
             # footer line is covered the same way ordinary prose is on the rare turn one happens
             # to name a protected thing; run before `ollama_route_snapshot` below so the
             # saved/"Show details" copy and the copy the person reads never disagree about what
-            # got covered. See resolve_turn_spoiler_protected_names's own doc (moved out of this
-            # file, plan 70, growth-limit fix) for what it decides and why.
-            spoiler_protected_names_for_turn = resolve_turn_spoiler_protected_names(
-                question,
-                kb_text,
-                spoiler_consent_effective=strategy_spoiler_consent_effective,
-                strategy_domain_guidance=strategy_domain_guidance,
-                ask_mode=ask_mode,
-                app_id=app_id,
-                app_name=app_name,
-                title_profile=strategy_title_profile,
-            )
+            # got covered. The names were decided before the model call (see there).
             if spoiler_protected_names_for_turn:
                 response_text = cover_named_spoilers(
                     response_text, spoiler_protected_names_for_turn

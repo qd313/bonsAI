@@ -7,6 +7,7 @@ import sys
 import threading
 import types
 import unittest
+from contextlib import ExitStack
 from typing import Any
 from unittest.mock import patch
 
@@ -81,6 +82,24 @@ class _FakePlugin:
 
     def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
         return None
+
+
+class _SpoilerFakePlugin(_FakePlugin):
+    """Adds a real-shaped attached-note header to the prompt (so ``kb_card_names`` finds a
+    protected name) and records every ``_update_partial_response`` call, so a test can read
+    back exactly what the live snapshot would have shown at each flush."""
+
+    def __init__(self, active_request_id: Any = None, *, kb_block: str = "") -> None:
+        super().__init__(active_request_id=active_request_id)
+        self._kb_block = kb_block
+        self.partial_updates: list[tuple[Any, ...]] = []
+
+    def _build_system_prompt(self, *args: Any, **kwargs: Any) -> str:
+        base = super()._build_system_prompt(*args, **kwargs)
+        return f"{base}\n{self._kb_block}" if self._kb_block else base
+
+    def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
+        self.partial_updates.append(args)
 
 
 class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
@@ -459,6 +478,147 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             await run_ask_ollama(plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30)
 
         self.assertEqual(plugin.published_phases, ["connecting_model", "model_retry"])
+
+
+class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
+    """D112 #7, the spoiler safety net -- the live half: the partial-stream snapshot the screen
+    reads while an answer arrives must never show a protected name uncovered, including while it
+    is still being typed one word at a time.
+    """
+
+    def _patched(self, fake_post_ollama_chat) -> ExitStack:
+        stack = ExitStack()
+        stack.enter_context(
+            patch(
+                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen2.5:3b"],
+            )
+        )
+        stack.enter_context(
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+        )
+        stack.enter_context(
+            patch(
+                "backend.services.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            )
+        )
+        stack.enter_context(
+            patch(
+                "backend.services.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            )
+        )
+        return stack
+
+    async def test_a_forming_name_is_held_back_then_covered_once_it_completes(self) -> None:
+        """"Soul Ma" (not yet the full name) must never reach the snapshot bare; once the word
+        finishes ("Soul Master"), the sentence naming it is covered, not shown plain."""
+        plugin = _SpoilerFakePlugin(
+            active_request_id=8, kb_block="[Hollow Knight / boss: Soul Master]"
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("The next boss is Soul Ma", False, None)
+                on_delta("The next boss is Soul Master and he", False, None)
+                on_delta(
+                    "The next boss is Soul Master and he fakes death.", True, None
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "The next boss is Soul Master and he fakes death.",
+                "assistant_raw": "The next boss is Soul Master and he fakes death.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "the boss past the crystal spike area",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=8,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts[0], "", "a growing name must be held back, not shown bare")
+        self.assertIn("```bonsai-spoiler", texts[1])
+        self.assertIn("```bonsai-spoiler", texts[2])
+        # Nothing was silently dropped -- the name is still there, just behind the fence.
+        self.assertIn("Soul Master", texts[2])
+
+    async def test_no_protected_names_leaves_the_stream_untouched(self) -> None:
+        plugin = _SpoilerFakePlugin(active_request_id=9, kb_block="")
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("General advice for", False, None)
+                on_delta("General advice for this fight.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "General advice for this fight.",
+                "assistant_raw": "General advice for this fight.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what class should I play",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=9,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts, ["General advice for", "General advice for this fight."])
+
+    async def test_a_low_narrative_title_never_covers_or_holds_back(self) -> None:
+        plugin = _SpoilerFakePlugin(
+            active_request_id=10, kb_block="[Deep Rock Galactic: Survivor / boss: The Hive]"
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("The next boss is The Hi", False, None)
+                on_delta("The next boss is The Hive.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "The next boss is The Hive.",
+                "assistant_raw": "The next boss is The Hive.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what is the final boss like",
+                "127.0.0.1:11434",
+                "2321470",
+                "Deep Rock Galactic: Survivor",
+                request_timeout_seconds=30,
+                token_stream_request_id=10,
+                ask_mode="strategy",
+                strategy_title_profile="low_narrative",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts, ["The next boss is The Hi", "The next boss is The Hive."])
 
 
 if __name__ == "__main__":

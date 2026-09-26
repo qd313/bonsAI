@@ -349,6 +349,9 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
+- ★★★ `[chat]` **Opening "N earlier" floods a long chat with rows** — **OPEN, reported by the maintainer
+  2026-09-25; needs a drawing of the options first.** Every earlier question becomes its own row, 42 in one
+  chat, filling the screen. [Detail](roadmap-details.md#opening-n-earlier-floods-a-long-chat-with-rows).
 - ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's
   built-in screen, no single cause, not built in plan 56.** The panel is only 454 pixels tall on the Deck's
   own screen, not the 696 every earlier number assumed, so even a two-turn chat overflows it and a person

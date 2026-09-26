@@ -1592,3 +1592,31 @@ built or measured.
 
 **Connected:** the big-screenshot crash (plan 70 shrinks them first — this set should use the shrunk size),
 the Phase 7 entry's "a screenshot feeding the search", and the visual-maps idea.
+
+## Opening "N earlier" floods a long chat with rows
+
+Reported by the maintainer 2026-09-25, from a Deck capture taken at 23:03 that night during plan 68's
+Deck pass (the file is in the untracked screenshots folder, DeckCapture_20260925_230318_game.png).
+
+**What a person sees.** A long chat keeps its older turns folded behind one line, "42 earlier". Open it and
+every one of those questions comes back as its own row, one after another: in the parrying chat that is 42
+near-identical one-line rows ("What are good early weapon upgrades for th…" four times running), filling the
+whole chat area and pushing the newest answer far below. Walking past them with the D-pad is one press per
+row. There is nothing between "all folded" and "all open".
+
+**Why it matters now.** Plan 68 lets a chat grow without losing its memory, so chats will get longer, and
+this list grows with them (a chat keeps up to 200 turns).
+
+**Options to draw before anything is built** (the house rule: a drawn comparison at true size, not a list):
+
+- Open the earlier turns a few at a time — the newest five, with "N more" above them.
+- Group them: by game, or by day, each group one line that opens on its own.
+- Now that a chat sums itself up, fold everything the summary already covers behind one "Summed up" line
+  that shows what the AI remembers, and list only the turns after it. (D118 call 15 turned down a summary
+  card at the top of the chat as the way to *tell* a person the chat had summed itself up; this would be a
+  way to *find your way around* a long chat, a different job.)
+- A short filter line at the top of the opened list, to jump to a question by a word in it.
+
+**Connected:** plan 68 (the chat sums itself up); "Give the reclaimed height to the transcript", since the
+chat area is small to begin with on the Deck's own screen.
+

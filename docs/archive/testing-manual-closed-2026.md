@@ -365,12 +365,17 @@ testing-manual.md. Found by the planning-folder review
   covered, finished answer on screen, the cover was reached one D-pad press at a time walking both up
   and down, stayed 100% visible the whole way, and A opened it to the hidden sentence. Evidence
   `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
-- [x] **NOTES-BLOCK-02** (finished-answer half) A story-protected game's cover stays closed with no
-  notes block showing until the cover is opened. **PASS (Deck) 2026-09-26:** before reveal, no notes
-  block existed anywhere on the page; after reveal, a closed "Soul Master — From the Hollow Knight wiki"
-  block appeared below Show details, outside the spoiler's own box. Caveat: in a separate live-answer
-  try the same block was seen for about 4.7 s while the sentence was still uncovered — row
-  SPOILER-COVER-01, still owed, still open below. Evidence `docs/test-evidence/plan70-NOTES-BLOCK-02.json`.
+- [x] **NOTES-BLOCK-02** A story-protected game's cover stays closed with no notes block showing until
+  the cover is opened, live and finished. **PASS (Deck) 2026-09-26, finished-answer half:** before
+  reveal, no notes block existed anywhere on the page; after reveal, a closed "Soul Master — From the
+  Hollow Knight wiki" block appeared below Show details, outside the spoiler's own box. Caveat at the
+  time: in a separate live-answer try the same block was seen for about 4.7 s while the sentence was
+  still uncovered, tied to the live spoiler leak (row SPOILER-COVER-01). Evidence
+  `docs/test-evidence/plan70-NOTES-BLOCK-02.json`. **PASS (Deck) 2026-09-26 (plan 70, flow L5), live
+  half, closed:** with the live spoiler leak now fixed, no notes block appeared at all while the cover
+  was closed — arriving, finished, or after switching chats away and back. A on the closed cover showed
+  the block as "Boss note (spoiler) (+1 more)"; a further A opened the block itself to the real note.
+  Evidence `docs/test-evidence/plan70-L5-SPOILER-COVER-01.json` (+ screenshots).
 - [x] **PRELOAD-RM-01** Remove stops greying out once an answer finishes. **PASS (Deck) 2026-09-26:**
   right after an answer, the model's Remove control read enabled, with no "Switch Ask mode first" text,
   and both models were still shown installed afterward with nothing removed. Evidence
@@ -458,4 +463,19 @@ testing-manual.md. Found by the planning-folder review
 - [x] **VAC-06** The ban lookup's "turned off" message names the switch the way the screen does. **PASS
   (Deck) 2026-09-26:** with the permission off, the reply named "Permissions → Steam ban lookup", the same
   words as the switch's own label. Evidence `docs/test-evidence/plan70-VAC-06.json`.
+
+### Plan 70 flow L5 (2026-09-26)
+
+- [x] **SPOILER-COVER-01** A safety net covers a boss name the question never typed, live and finished.
+  **PASS (Deck) 2026-09-26, closed after four rounds of fixing:** two watched questions named the boss;
+  across 229 reads the name never once showed outside a closed cover, in the answer, the live thinking,
+  the notes block or the suggestion menu; the cover read "Spoiler — tap to show" from its first
+  appearance; Copy and Read aloud both kept the name out; a question naming the boss outright still
+  answered in plain text. Full four-round history on the roadmap. Evidence
+  `docs/test-evidence/plan70-L5-SPOILER-COVER-01.json` (+ screenshots).
+- [x] **PERMS-CLEAN-06** The troubleshooting hint's Dismiss button is reachable by D-pad. **PASS (Deck)
+  2026-09-26:** walking Up from the question box reached the suggestion chip, then the ban-lookup row's
+  "Open Permissions", then the hint's own "Open Permissions", then Right to "Dismiss" and back — every
+  stop fully visible; A on Dismiss removed the hint. New, small: after Dismiss, nothing holds the ring
+  until the next press. Evidence `docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
 

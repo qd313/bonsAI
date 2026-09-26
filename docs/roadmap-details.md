@@ -729,6 +729,19 @@ See also [Ordinary phrases attach game cards](#ordinary-phrases-attach-game-card
   Overlay frames only: the rig reads the QAM's own page and cannot measure the game's frame rate — the maintainer's performance overlay is
   the judge of whether the game itself stutters during a burst. Full numbers in [testing.md](testing.md) **STREAM-11**.
 
+**Fixed 2026-09-24 (`341841d3`).** The plugin waited for a full 4 KB before passing on any of the model's
+words; with a game running that meant lumps of about 115 letters every 1.5 to 2 seconds. It now passes on
+whatever has arrived at once. Rows **STREAM-11**, **FIX-01**/**FIX-02** in [testing.md](testing.md).
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L5.4), with Deep Rock Galactic: Survivor actually running,
+closed.** Two questions measured, answer length read from the page every half second. With the scramble
+animation on: writing for 19 seconds, growing from 0 to 1,480 characters, every read grew, the largest
+gap between growths 0.66 seconds, the largest single jump 103 characters. With it off: writing for 34
+seconds, 0 to 2,380 characters, every read grew, the only pause over 1.5 seconds (5.1 s) came after the
+text had already finished, during the final tidy-up. Neither answer ran the full 60 seconds the runbook
+asked for, but the numbers measured — no gap over 1.5 seconds while writing, no jump over 115 characters
+— are clean. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+
 ## The tab names never appear
 
 - ★★ **The tab names never appear** — **OPEN, filed by the maintainer 2026-08-30:** the strip shows glyphs only, and *Main*, *Ollama*,
@@ -1388,6 +1401,38 @@ restored afterward. **Deck re-check owed:** the same Hollow Knight spell-casting
 NO-CLOSE-MATCH-HK-02, watching the suggestion menu's own question and button text as well as the answer
 itself.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L5.1), closed — the whole family, four rounds.** Two
+watched Hollow Knight questions each named Soul Master, one three times over. Across 229 changed reads
+(spanning the two answers, roughly 45 and 44 seconds of streaming each), the name never once showed
+outside a closed cover — not in the answer, not in the live thinking line, not in the notes block, not in
+the suggestion menu. The cover itself read "Spoiler — tap to show" from the very first read that had any
+answer text at all, not a flicker through an unfinished state first. None of the earlier leak's own
+signatures came back: no raw backticks or "-spoiler" in the answer (a few backtick reads did show, but
+only in the model's own live thinking text, quoting its instructions back at itself — not a leak, the
+same family as the rule-checklist idea), no "Code block incoming…" chip, no doubled "boss boss" wording,
+no garbled repeated sentence. The notes block: while the cover stayed closed, no block appeared on screen
+at all, at any read, in either try — so the name never showed there either, though this also means the
+neutral "Boss note (spoiler)" title was never actually put on screen to read, since nothing was showing
+to have a title. Pressing A on the cover opened it, and the block then read "Boss note (spoiler)" until a
+further A opened the block itself to the real note; closing the cover put the neutral title back.
+Switching to a different chat and back kept the cover closed with no block, as it should. Copy gave
+"[Spoiler hidden — reveal it on screen to copy]" while closed, the plain text once the cover had been
+opened, never the name while it was still hidden. Read aloud said "A spoiler is hidden here," then the
+plain sentences that followed, never the name. **Control, to confirm nothing over-hides:** the same
+question with the boss named outright ("how do I beat soul master") answered in plain text throughout,
+no cover, notes block titled with the real name from the moment it appeared. Evidence
+`docs/test-evidence/plan70-L5-SPOILER-COVER-01.json` (+ screenshots).
+
+**The four-round story, in order:** (1) the safety net itself, built to cover any protected name a
+finished answer used that the question did not type — right on finished answers from the start, but not
+on live, streaming ones. (2) Two live-leak fixes the first time this was checked on the Deck: a fence
+marker glued to running prose was not recognised as a real cover (fixed, but did not hold on a second
+Deck check), and, once that second failure was investigated, the real cause turned out to be the
+screen's own reveal assuming an answer's text only ever grows at the end, when the safety net can rewrite
+text it already sent to wrap a late-arriving name — fixed together with two further risks the same
+investigation found (the notes block naming a boss too early, and a cover that could be opened just by
+echoing the question's own wording). (3) This flow L5 Deck pass, which found none of the old symptoms
+left across two fresh, real questions, in every place a name could have leaked. Closed.
 
 ## Headline first: every answer opens with one line that stands alone
 
@@ -2286,6 +2331,9 @@ times); Down from the Copy icon also skips the same picker, straight to Helpful 
 picker is reached only walking Down from above it. Evidence `docs/test-evidence/plan70-REPLY-DOWN-01.json`,
 `docs/test-evidence/plan70-MICRO-reply-actions.json`.
 
+**Seen again 2026-09-26 (plan 70, flow L5.4), same shape:** Up from Helpful skipped both the answer body
+and the branch menu on the way back up.
+
 **The ring is dropped again when an answer finishes, and the view jumps to its end.** FAILED on the Deck
 2026-09-26 (plan 70, flow 2b.1), being fixed (helper F2). The 2026-09-23 fix no longer holds: in 3 of 4
 tries, nobody held the ring once the answer finished, and within about 3 seconds the view slid to the end
@@ -2418,10 +2466,30 @@ Left and Right itself and moves between its two buttons, holding still at either
 for the Quick Access rail; Down from the hint goes to the ban-lookup row when it shows; Up from the
 ban-lookup row goes to the hint first when it shows; Up from a suggestion chip goes to the lowest
 permission row first, then up through them, then the reply as before. Proved by breaking the fix: 5 of 8
-new tests fail without it. **Noticed, not fixed this wave:** "Save chat to Desktop" is probably still
-skipped by Up from the chips, since nothing registered can take the ring there. **Deck re-check owed:**
-reach Dismiss with Right from "Open Permissions", and confirm Up from the ban-lookup row and the
-suggestion chip both stop on the permission rows before reaching the reply.
+new tests fail without it. **Noticed, then fixed the same day (helper F2, commit `74c28d5a`):** "Save
+chat to Desktop" sat in a plain div row, so the chips' Up (which only ever hands the ring on through
+Steam's own registered-row transfer) could never reach it. The button now lives in its own small,
+registered row; the chips' Up tries it first, then the ban-lookup row, the hint, then the reply, in that
+order; Down from the button goes back to the chips. Deck re-check owed alongside the rest of this fix.
+**Passed on the Deck 2026-09-26 (plan 70, flow L5.2), closed:** walking Up from the question box reached
+the suggestion chip, then the ban-lookup row's "Open Permissions", then the hint's own "Open Permissions",
+then Right to "Dismiss" and back; every stop fully visible. A on Dismiss removed the hint. **New, small:**
+after Dismiss, nothing holds the ring until the next press. Evidence
+`docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
+
+**A screen test that opens the Filters panel failed once under load, passed alone.** Found 2026-09-26,
+`PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's. **Kept failing 2026-09-26,**
+seen 5 more times in full test runs, always passing when run alone — being fixed (helper F2). **Cause
+found and fixed the same day (commit `647dca4c`):** a real race, not a flaky test. Pressing Filters opens
+the panel and moves the ring onto its first row; that move waited for the next animation frame and
+assumed the panel had already been drawn. When the frame arrived first — a busy machine, or a press Steam
+delivers outside React's own batching — the row did not exist yet, the move found nothing, and nothing
+tried again. Never seen on the Deck itself. The four ring moves that follow a state change on this screen
+(opening and closing the Filters panel, opening and closing "Type a name") now run in a layout effect
+right after the redraw their own state change causes, instead of waiting for an unrelated later frame. A
+new test forces the bad order on purpose and fails on the old code; the existing test is unchanged. A
+focus-graph anti-pattern entry records the shape. **Deck re-check owed**, though the fault was never seen
+there in the first place.
 
 **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon.**
 First sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
@@ -2440,6 +2508,13 @@ about "heat management", a mechanic Hades does not have. Separately, asked in Ho
 reading the description as if it were meant to be a literal title, when the very same area is correctly
 answered (naming Soul Master) when asked a different way in the same session. Evidence
 `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`.
+
+**Picking a branch menu choice shows the model's own internal tag instead of plain words.** Found
+2026-09-26 (plan 70, flow L5.4), being fixed (helper K). While the model warmed up after picking "Just
+starting the campaign" under a Deep Rock Galactic: Survivor answer, the waiting line read: Waking the
+model up for "[Strategy follow-up] I'm at: Just starting the campaign" in Deep Rock Galactic: Survivor… —
+the internal "[Strategy follow-up]" tag shows to the person instead of the friendly "I'm at: …" wording
+used elsewhere. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 
 ## Flow 4 findings
 
@@ -2479,4 +2554,21 @@ longer exists. The next press does not recover from where it left off: Down or L
 small "Read aloud" speaker icon at the right of the same row; B lands the ring on the tab bar at the top
 (the panel itself stays open). The plugin's own log shows nothing about this — no error, no feedback line.
 Evidence `docs/test-evidence/plan70-F4-THUMBS-UP.json`.
+
+## Branch menu template leak
+
+**The branch menu still copies its own template, now with the game's name filled in.** Seen on the Deck
+2026-09-25 under a Deep Rock Galactic Survivor answer: the choices read "A. <a place early in Deep Rock
+Galactic Survivor>", a return of the no-game bug closed 2026-09-23, now with the title swapped into the
+placeholder wording. Fixed 2026-09-25: a menu still carrying the brackets or that "a place early/later in"
+wording is now dropped, whatever the title. Row **BRANCH-TEMPLATE-02**. Screenshot
+`screenshots/DeckCapture_20260925_002145_game.png`.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L5.4), closed:** with Deep Rock Galactic: Survivor running,
+five branch menus in a row (boss, hazard plan, weapons, class, biome) read as real choices, no angle
+brackets and no leftover template wording anywhere, including the follow-up turn after picking one. This is
+one clean run, not proof by itself — the unit tests already landed are the proof — but it is the Deck check
+this row was waiting on. Note for the maintainer, not a bug: the biome menu's option B, "Another specific
+biome (e.g., Caves, etc.)", reads like filler, though it is not the old template text. Evidence
+`docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 

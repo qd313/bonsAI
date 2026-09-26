@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **Pressing thumbs up on a reply no longer leaves the D-pad ring with nowhere to go:** once "Mark reply
+  helpful" was replaced by "Saved on this Deck," the control the ring had been on was gone, and neither
+  Down, Left nor B recovered from where it had been. The ring now moves to the speaker icon in the same
+  row. On-Deck check owed.
+- **Show details no longer looks like it did nothing when pressed:** the press itself always worked, but
+  the opened details panel could land partly behind the bottom dock with no scroll to bring it into
+  view, so the only visible change was the divider's own words switching to "Hide details." Opening the
+  details now scrolls them clear of the dock, once per opening. On-Deck check owed.
+- **Walking up from a suggestion chip no longer skips past "Save chat to Desktop":** the button sat in a
+  plain, unregistered row, so the chips' own Up press could never stop on it. It now lives in its own
+  registered row and is the chips' first Up stop. On-Deck check owed.
 - **A boss the question only described, never named, is now hidden if the reply names it anyway:** a
   story-protected game's rules told the model to keep a boss's name hidden, but nothing ever checked
   that it actually did — so a question like "the boss past the crystal spike area" could come back with

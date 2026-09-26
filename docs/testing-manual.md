@@ -330,8 +330,12 @@ suggestions → **decode**.
       churned to a new question and the ring stayed; A pressed mid-churn filled the Ask field with the
       whole finished prompt, no symbols.
 - [ ] After hold, chip clears and samples a new prompt
-- [ ] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret). Not run
-      this pass.
+- [x] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret). **PASS
+      (Deck) 2026-09-26 (plan 70, flow L5):** 13 chip label changes watched across two answers and a
+      wait, each swapping from one whole label to the next with no scrambled letters and no caret at any
+      point (once through a brief empty label instead). For contrast, the same setting with reduced
+      motion off showed 40-plus reads of scrambled letters and a caret while decoding. Evidence
+      `docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`.
 
 **Judged good by the maintainer 2026-09-14**, which is what this row was waiting on. The boxes above that
 are still empty were never walked one by one; the measurement on 2026-08-28 covered the frame rate and the
@@ -429,34 +433,12 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     between the two library reads above), but it is not on the Deck's Recent Games row, the only list the
     launch tool can search, so it could not be started. Someone needs to play it once by hand first, or the
     launch tool needs to reach the full Library grid. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
-  - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
-- [ ] **SPOILER-COVER-01** Cause found and fixed in code 2026-09-26 (plan 70, helper A2), Deck re-check
-  owed. On Hollow Knight, a story-protected game, describe a boss without naming it ("the
-  boss past the crystal spike area") — a sentence naming it must sit in a spoiler box, both while the
-  reply arrives and once it finishes. Ask the same thing but name the boss yourself — the reply stays
-  plain. On Deep Rock Galactic: Survivor, the same kind of question never shows a spoiler box at all.
-  Known gap, not testable by this row: a spoiler that never uses a note's own name at all (a paraphrase)
-  is not caught. **FAILED (Deck) 2026-09-26 (plan 70, flow L1):** finished answers passed in full. But
-  one live answer showed the boss name plain, plus raw spoiler-marker text, for about 4.7 seconds while
-  still streaming, before the finished cover formed correctly. Evidence
-  `docs/test-evidence/plan70-SPOILER-COVER-01.json`. **Fixed 2026-09-26 (helper A, `59bb4dd6`):** a fence
-  marker glued straight onto running prose now gets its own line, its whole body is held back while
-  still being written, and a half-typed opener is never shown raw. **FAILED again (Deck) 2026-09-26 (flow
-  L3), the fix did not hold:** six fresh questions watched live — finished answers stayed correct, but of
-  the two that named a boss, both leaked while streaming: one name readable in plain text for about 6
-  seconds, and in a second answer a raw fence marker readable for about 3.3 seconds plus a garbled repeat
-  of the opening sentence in plain text for about 9 seconds. A spoiler fence placed at the very start or
-  near the end of an answer still streams its own content uncovered until the answer finishes. Escalated
-  to the stronger model (helper A2). Evidence `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`
-  (+ screenshot). **Cause found and fixed (helper A2, four commits):** the leak was the screen's own
-  reveal, not the back end — replaying the saved answers through the real back-end path found no leak
-  there (0 of 5,333 updates). The reveal assumed the text only grows at the end, but the back end's cover
-  rewrites a sentence already sent once a name arrives; the reveal now falls back to the point both
-  updates agree on. Also fixed: a finished cover no longer flickers mid-stream, and the branch menu's
-  stand-in no longer doubles into "the boss boss". Two further risks fixed the same day: the notes block
-  no longer names a protected boss before its cover opens, and the screen's own "already asked about" rule
-  no longer opens a cover just because it shares words with the question. **Deck re-check owed:** the same
-  described-boss questions, watched live and finished, plus the notes block, Copy and Read aloud.
+  - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy
+    follow-up]` turn → plain text — **DRG-01f PASS (Deck) 2026-09-26 (plan 70, flow L5), with Deep Rock
+    Galactic: Survivor running:** picking "A. Just starting the campaign" under a boss-tactics answer, the
+    follow-up turn answered in plain text, no spoiler cover. Side finding, being fixed (helper K): while the
+    model warmed up, the waiting line showed the raw "[Strategy follow-up]" tag instead of the friendly
+    wording. DRG-01e (streaming off) still owed. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
@@ -574,7 +556,13 @@ everything below assumes it passes. Plan:
 
   **Speed-by-eye PASS (Deck) 2026-09-17:** the long chip label scrolls at about 27 pixels a second, a slow
   calm crawl (the target was about 25). Decode and reduced-motion still owed. Evidence
-  `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`.
+  `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`. **Decode half tried 2026-09-26 (plan 70, flow
+  L5) with Half-Life 2, COULD NOT RUN:** Steam's own screens stopped answering right after the plugin
+  reload, before the check could start. **Reduced-motion half, tried 2026-09-26 (plan 70, flow L5) with no
+  game running:** the instant-swap half passed (see PRESET-STREAM-ANIM-01 above, same mechanism); the
+  ellipsis-cut long-label half **could not run** — no chip label overflowed its chip in 90 seconds of
+  watching, because no game was running to offer a long enough one. Evidence
+  `docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`.
 
 ---
 
@@ -596,8 +584,8 @@ Rows 02, 03, 04 and 08 passed on the Deck and moved to
 | **CHIP-BUTTON-01** | Open the main screen with chips showing, default character, then the gold character. Screenshot the dock. | By eye: the chips read as raised buttons, the two are visibly apart, the Tip dot and the tag colour are quieter than before; nothing else in the dock moved | ⏳ **owed — screenshots taken, the maintainer's own eye still needed** (`screenshots/DeckCapture_20260917_150755_auto.png`, `…_150413_auto.png`, `…_150921_auto.png`) |
 | **CHIP-BUTTON-05** | Read the rectangles of the chip, its container and the question box; screenshot | The shadow's bottom is not cut off; the gap from chip to question box is 8px in decode/static/carousel (12 total in fade); by eye the row no longer touches the box | ⏳ **owed — measurement PASS, the maintainer's own eye on the screenshots still needed.** Gap measured 8px (was 0) in decode/static/carousel, 12 total (unchanged) in fade; question box did not move |
 | **CHIP-BUTTON-06** | Turn on the one-chip setting; show the help chip; get an agent suggestion chip | The full-width chip has the same raised look; the help and agent chips keep their colours and carry the hairline and shadow | ⏳ **PARTIAL — one-chip setting PASS on the Deck 2026-09-17** (same raised look, 300×30); the help chip and the agent chip were not on screen during the run, so they are covered only by the stylesheet tests, not seen by eye |
-| **CHIP-BUTTON-07** | Reduced motion on; repeat 03 | The cue appears and clears with no ramp; nothing looks broken | ⏳ **owed — needs the Deck's reduced-motion setting turned on** |
-| **CHIP-BUTTON-09** | A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls | ❌ **FAIL (Deck) 2026-09-18** — with Half-Life 2 running and the knowledge base on, the suggestion chip showed real Half-Life 2 tips from the notes ("How do I beat Strider?", "Tips for Ravenholm in this game?") but with no dot before the label at all; reading the dot's own element on the page confirmed it was never drawn for either chip. Filed as its own bug (roadmap Bugs, `[chips]` `[KB]`) — the check that decides whether a chip's words come from the notes and the check that decides whether to draw the dot are not agreeing with each other. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its two screenshots. ⏳ **Fixed 2026-09-21 (plan 63, commit `895cf0a`), Deck recheck owed.** Two copies of the same badge markup had drifted apart; one piece of code now draws both. **Tried 2026-09-23, COULD NOT RUN:** three pinned test chips are switched on in the Developer tab, and while they are on no note chip is ever mixed in — the chip row stayed on the same pinned "how do i beat the gonarch in black mesa" chip for the whole run, even though the question itself did attach three real Half-Life 2 notes. Owed: someone clears the pinned chips ("Clear frozen test chips" in Developer — the maintainer may want them kept on purpose, so ask first) and re-run. Evidence `docs/test-evidence/plan64-CHIP-BUTTON-09.json`. |
+| **CHIP-BUTTON-07** | Reduced motion on; repeat 03 | The cue appears and clears with no ramp; nothing looks broken | ✅ **PASS (Deck) 2026-09-26 (plan 70, flow L5)** — decode style: with reduced motion on, the edge-flash cue appeared and cleared in about 260–280 ms with no colour ramp (full colour at the very first read) and nothing moved or resized; fade and static styles were not tried. Evidence `docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`. |
+| **CHIP-BUTTON-09** | A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls | ❌ **FAIL (Deck) 2026-09-18** — with Half-Life 2 running and the knowledge base on, the suggestion chip showed real Half-Life 2 tips from the notes ("How do I beat Strider?", "Tips for Ravenholm in this game?") but with no dot before the label at all; reading the dot's own element on the page confirmed it was never drawn for either chip. Filed as its own bug (roadmap Bugs, `[chips]` `[KB]`) — the check that decides whether a chip's words come from the notes and the check that decides whether to draw the dot are not agreeing with each other. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its two screenshots. ⏳ **Fixed 2026-09-21 (plan 63, commit `895cf0a`), Deck recheck owed.** Two copies of the same badge markup had drifted apart; one piece of code now draws both. **Tried 2026-09-23, COULD NOT RUN:** three pinned test chips are switched on in the Developer tab, and while they are on no note chip is ever mixed in — the chip row stayed on the same pinned "how do i beat the gonarch in black mesa" chip for the whole run, even though the question itself did attach three real Half-Life 2 notes. Owed: someone clears the pinned chips ("Clear frozen test chips" in Developer — the maintainer may want them kept on purpose, so ask first) and re-run. Evidence `docs/test-evidence/plan64-CHIP-BUTTON-09.json`. **Tried again 2026-09-26 (plan 70, flow L5), COULD NOT RUN:** Steam's own screens stopped answering right after the plugin reload, before the check could start. |
 
 Rows 01 and 05 are judged by eye from a screenshot and a rectangle read; the rest are read from the
 page by the bridge. **Seen along the way, not part of this plan:** in fade mode the D-pad skipped the

@@ -89,8 +89,13 @@ starts work outside this.
   2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **VERIFY, fixed 2026-09-26 (F2,
-  `59d3d1c0`).** Row **PERMS-CLEAN-06**. [Detail](roadmap-details.md#l3-and-2d-findings)
+- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **OPEN, found
+  2026-09-26 (plan 70, flow L5.2), being fixed (helper F2).** The next Down does recover it, onto the
+  ban-lookup row. [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
+  **OPEN, found 2026-09-26 (plan 70, flow L5.4), being fixed (helper K).** The waiting line reads the raw
+  "[Strategy follow-up] I'm at: …" tag instead of the friendly "I'm at: …" wording.
+  [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
   speaker icon** — **OPEN, seen twice now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
@@ -164,20 +169,15 @@ starts work outside this.
   any fix — the session thinks this is the same family as the tab-bar ghost below. **Retired 2026-09-25
   (plan 68):** the Clear button this reproduction plan presses is gone, replaced by "Sum up this chat," so
   this exact repro can no longer be run. The button was replaced, not fixed.
-- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **OPEN, likely cause found
-  2026-09-26 (plan 70, flow 4.2), being fixed (helper F2).** The press itself never failed in 3 fresh
-  tries, but the opened details can land behind the dock with no scroll to bring them into view — on
-  screen, only the divider's own words change ("Show details" to "Hide details"), which reads as nothing
-  happening. [Detail](roadmap-details.md#flow-4-findings).
-- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, reproduced
-  3 of 3 on the Deck 2026-09-26 (plan 70, flow 4.1), being fixed (helper F2).** Pressing Helpful swaps the
-  two buttons for the words "Saved on this Deck", and the ring vanishes with them; the next press does not
-  pick up from where it was — Down or Left lands on the speaker icon, B lands on the tab bar.
-  [Detail](roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **VERIFY, likely cause found and
+  fixed 2026-09-26 (helper F2, commit `bb36e334`).** Opening the details now scrolls them clear of the
+  dock, once per opening. **Deck re-check owed:** the same setup — a press that used to look like nothing
+  happened. [Detail](roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **VERIFY, fixed
+  2026-09-26 (helper F2, commit `34bd9315`).** The ring now moves to the speaker icon in the same row
+  once the thumbs are replaced. **Deck re-check owed.** [Detail](roadmap-details.md#flow-4-findings).
 - ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from
   turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
-- ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
-  **OPEN, found 2026-09-26.** `PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's.
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
   plan 65 Deck check 2026-09-24.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
@@ -269,15 +269,6 @@ starts work outside this.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
-- ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **VERIFY, cause found and fixed 2026-09-26 (helper A2, four commits).** The live leak was the screen's
-  own reveal, not the back end (0 of 5,333 replayed updates carried the name); two further risks the same
-  investigation turned up are fixed too. Row **SPOILER-COVER-01**. **Deck re-check owed.**
-  [Detail](roadmap-details.md#spoiler-leak-family).
-- ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **VERIFY, fixed
-  2026-09-26 (helper A, `4b975316`).** Thinking is drawn as plain text, so a protected name there was
-  never covered by the answer's own spoiler fence. **Deck re-check owed:** row **THINKING-SPOILER-01**.
-  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** —
   **VERIFY, fixed 2026-09-26 (helper A, `7c93d5e8`).** A third leak in the same family as the two above.
   **Deck re-check owed:** row **NO-CLOSE-MATCH-HK-02** re-check.
@@ -535,11 +526,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   already says this row by row.
 
 ### Bugs that need verification
-- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
-  **VERIFY, fixed 2026-09-25.** Seen on the Deck that night under a Deep Rock Galactic Survivor answer: the
-  choices read "A. <a place early in Deep Rock Galactic Survivor>", a return of the no-game bug closed
-  2026-09-23 with the title swapped in. A menu still carrying the brackets or that wording is now dropped,
-  whatever the title. Row **BRANCH-TEMPLATE-02**. Screenshot `screenshots/DeckCapture_20260925_002145_game.png`.
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
@@ -553,11 +539,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   unconfirmed either way. Not fixed for this half yet. **Retired 2026-09-25 (plan 68):** the Clear button
   itself is gone, replaced by "Sum up this chat," so this box and its "where you land" bug can no longer be
   reproduced as written. The button was replaced, not fixed.
-- ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **VERIFY, fixed
-  2026-09-24 (`341841d3`).** The plugin waited for a full 4 KB before passing on any of the model's words;
-  with a game running that meant lumps of about 115 letters every 1.5–2 seconds. It now passes on whatever
-  has arrived at once. Row **STREAM-11**, rows **FIX-01**/**FIX-02** in [testing.md](testing.md). Owed: a
-  run with a game actually open. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
@@ -1029,6 +1010,35 @@ review, again to keep this document under its size limit.
 - ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
   question** — **DONE, fixed 2026-09-26 (helper K, `5fe0800a`), passed on the Deck 2026-09-26.** Row
   **KB-FOLLOWUP-QUOTE-01**. [Detail](roadmap-details.md#flow-2b-bugs).
+
+**Closed 2026-09-26 (plan 70, flow L5, fifth Deck pass):**
+
+- ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box**
+  — **DONE, closed 2026-09-26, passed on the Deck across all four rounds of its own fix.** Row
+  **SPOILER-COVER-01**: two watched answers named the boss; across 229 reads the name never once showed
+  outside a cover, in the answer, the thinking, the notes block or the suggestion menu; a cover read
+  "Spoiler — tap to show" from its very first appearance; Copy and Read aloud both kept the name out; a
+  question naming the boss outright still answered in plain text, as it should. The whole four-round
+  story — the safety net, two earlier live-leak fixes, and the screen's own reveal finally catching up —
+  is in the detail. [Detail](roadmap-details.md#spoiler-leak-family).
+- ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **DONE, fixed
+  2026-09-26 (helper A, `4b975316`), passed on the Deck 2026-09-26 (name rule, flow L3; missed in an
+  earlier bookkeeping pass).** Row **THINKING-SPOILER-01**. [Detail](roadmap-details.md#spoiler-leak-family).
+- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **DONE, fixed 2026-09-26 (helper
+  F2, `59d3d1c0`), passed on the Deck 2026-09-26.** Row **PERMS-CLEAN-06**.
+  [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
+  **DONE, cause found and fixed 2026-09-26 (helper F2, commit `647dca4c`).** A real race: the ring's move
+  into the newly opened panel was scheduled for the next frame and assumed the panel was already drawn;
+  never seen on the Deck itself. [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **DONE, fixed
+  2026-09-24 (`341841d3`), passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** No
+  pause over a second and a half, and the biggest jump was 103 characters. Row **STREAM-11**.
+  [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
+- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
+  **DONE, fixed 2026-09-25, passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Five
+  branch menus in a row read as real choices, no brackets, no leftover wording. Row **BRANCH-TEMPLATE-02**.
+  [Detail](roadmap-details.md#branch-menu-template-leak).
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 

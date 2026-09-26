@@ -1893,3 +1893,42 @@ running. Evidence: [scramble-stream-timing-2026-09-24.json](../test-evidence/scr
 What these answers do to the roadmap: the scramble entry gets a link to plan 69, and the accepted bug
 "Token streaming reveals text in bursts while a game is running" gets its cause and a pointer to plan 69's
 first step.
+
+### D112 — LOCKED 2026-09-25 (raised 2026-09-25) — Plan 70, knowledge-base wave four with an automated Deck test wave: the twelve calls before go
+
+The number was kept for 58 phase 2's answers on 2026-09-16. That plan went stale before it ran and was
+replaced by [plan 70](../planning/70-kb-wave-four-and-deck-test-wave.md), so its answers take the number here,
+after D119. The maintainer answered all twelve on 2026-09-25, in three rounds, before "go".
+
+1. **Fitting around plan 68, which was building in parallel:** start now and share. Leave its files alone until
+   it lands; take turns on the Deck by lock file and message.
+2. **What the testing part covers:** all four — run every owed Deck check the rig can run with nobody present;
+   chase the bugs where a press did nothing, with recorded walks, then fix what they show; get saved-walk
+   replay working; start the overnight run.
+3. **Which notes:** new games from cleared wikis, and starting-out notes. Not deepening the thinnest games
+   this time.
+4. **Helpers at once:** seven — past the five-at-once rule, on purpose.
+5. **The new games:** Brotato, Palworld and Skyrim.
+6. **The release:** the starting-out notes, the new games and the per-game Deck tips ride one new library
+   format and one release; **the session may publish it** to both download sites once its Deck check passes.
+7. **The spoiler safety net:** when a reply names a boss or story moment in plain text and the rules said to
+   hide it, hide just the sentences that name it. "It" means a name from the attached notes that the person
+   did not type. The plan also covers them while the answer is still arriving.
+8. **The thumbs-down that stops a wrong note coming back:** draw it and plan it this wave; build it next time.
+9. **Small bugs outside the knowledge base:** the AI-models screen bugs (five), and shrinking a big screenshot
+   with ffmpeg, refusing with a message if the shrink fails. Not the dots under the chat name.
+10. **The overnight run's first slice:** replay every saved walk and write a report, run once by hand.
+11. **What the Deck helper may do on the maintainer's Deck:** new chats, with the eight saved chats backed up
+    first and restored exactly; remove the meaning-search model once, to test the new install offer; remove
+    and reinstall the library; turn reduced motion on for three checks, then off.
+12. **How long:** as long as it needs.
+
+Calls the session makes itself unless the maintainer says otherwise: follow-ups are measured three ways
+before anything is built, and the pick is the maintainer's; the "No tip for this" line is retired only after
+the maintainer sees the numbers; a memory safety check for keeping two models loaded is built only if the
+reading with a game running says memory is tight.
+
+What these answers do to the roadmap: the knowledge-base section points at plan 70 instead of 58 phase 2; the
+spoiler safety net, the install offer, the starting-out kind, the per-game Deck tips, the next release and the
+follow-up bug each gain "planned in plan 70"; the screenshot-crash bug's open call is answered; the thumbs-down
+demote is marked drawn and planned only; the controller rig entry gains the two pieces this wave takes.

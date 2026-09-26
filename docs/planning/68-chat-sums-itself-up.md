@@ -387,28 +387,80 @@ stash entry.
 
 Found while reading the code for this plan. None is fixed by it unless a step above says so.
 
-- **Clear's box has been untrue since 2026-09-21** (§ 1). This plan removes Clear, which ends it.
+- **Clear's box has been untrue since 2026-09-21** (§ 1). This plan removes Clear, which ends it. **Done
+  — Clear and its box are gone as of step 5 (`35224450`).**
 - **A clear pressed while an answer is still being written may lose that answer from the chat.** The
   clear resets the waiting state first, and the stop step then skips saving because the state no
   longer says a question is waiting. A reading of the code only; no test covers it and nobody has seen
-  it on the device. Worth its own roadmap bug with a device check.
+  it on the device. Worth its own roadmap bug with a device check. **Filed 2026-09-25 as a roadmap bug
+  (Bugs, ★★, `[chat]`), Deck check still owed.**
 - **Deleting a chat whose file is already missing leaves its row in the list.** A reading of the code
-  only.
+  only. **Filed 2026-09-25 as a roadmap bug (Bugs, ★★, `[chat]`), Deck check still owed.**
 - **Three out-of-date comments**, corrected in step 6: one says a question is saved after its answer
   (it is saved first); the Session tab's file still describes a stand-alone box that no longer exists;
-  the waiting-line builder names a screen file that no longer exists.
+  the waiting-line builder names a screen file that no longer exists. **The first two were already
+  corrected before this pass. The third — the waiting-line builder's own header still named
+  `composeThinkingBlurb.ts`, a client-side file that was deleted a while back when Python became the
+  only writer of that line — is fixed now, its own commit (`47ae1fd8`).**
 - **The "still preparing" branch of the waiting-line builder can never fire**, because nothing passes it
-  the elapsed seconds. Step 4 is the natural place to either use it or remove it.
+  the elapsed seconds. Step 4 is the natural place to either use it or remove it. **Checked 2026-09-25:
+  this is still true. Step 4's commits (`794917c5`, `7ec03479`) added the new "summing up" phase but did
+  not touch this branch — nothing calls the waiting-line builder for the `building_context` phase with a
+  non-zero elapsed time, so the branch still cannot fire. Left as a decision for whoever picks it up:
+  wire it up, or remove it.**
 - **The old stand-alone Session box's D-pad target is still called from five places and always finds
   nothing**, since the box itself was removed on 2026-09-20. Harmless today; step 5 tidies it where it
-  touches the same code.
+  touches the same code. **Checked 2026-09-25: still true.** The five calls are still there
+  (`buildDetailsPanelElement.tsx` twice, `chatTranscriptNavHelpers.ts`, `MainTabChatTranscript.tsx`
+  twice) and the code's own comments already say it is harmless rather than stale. Not tidied up further
+  by this pass.
 - **Three test files name a Clear-button test file that does not exist.** Corrected with the tests in
-  step 5.
+  step 5. **Checked 2026-09-25: confirmed corrected**, no test file still names one that is missing.
 
 ## 12. Progress log
 
 - **2026-09-24** — Discovery with the maintainer; twenty calls recorded as D118; the drawing published
   and redrawn to the picks; this plan written. Waiting for "go".
+- **2026-09-25** — Room made for the work: the back end's front door and the screen's Ask logic each had
+  a block moved out, with no change in behaviour (`4640a353`, `e2b60ac4`).
+- **2026-09-25** — Step 0, the gate: measured on the Deck's own AI server. A summary took 13 to 32 seconds
+  with Half-Life 2 running in a level, 40 seconds worst from a cold start with the chosen wording, and 47
+  seconds worst of any wording tried. No hidden note text leaked, a Spanish chat came back in Spanish, and
+  writing a summary did not slow the next answer's start. The one-minute gate passed; the time limit was
+  set at 120 seconds and the reading cap at 9,000 tokens. Evidence
+  `docs/test-evidence/plan68-GATE-01.json` (`6801875f`).
+- **2026-09-25** — Each chat's own file now keeps its own summary and its own remembered subject, tested
+  against the trap where a new field quietly vanishes the next time a question is saved
+  (`2cfb55ca`, `96b22721`, `28696c5a`).
+- **2026-09-25** — The remembered subject moved from the whole plugin into each chat, so it survives a
+  restart and a new chat starts with none; a follow-up asked with nothing running now searches the chat's
+  own game instead of finding nothing to look up. This fixes the first of CHAT-MEMORY-01's two failures
+  from 2026-09-23; a rerun on the Deck is still owed (`16594281`, `e9135f7e`, `cfa5537c`).
+- **2026-09-25** — The summary itself landed: when a chat has outgrown its room, the AI writes a short
+  summary of the older part, thinking off, about 200 words, in the reply's own language, then carries that
+  summary plus the newest two or more exchanges word for word. Stop during it stops everything and saves
+  nothing; a failure or a time-out answers the way it did before and marks the answer. Stopped answers are
+  no longer carried back to the AI as if they were a real reply, and the room for the very first question
+  after start is now planned against the true 16,384 instead of the server's smaller starting number
+  (`c07505ff`, `b4ecc6b2`, `c7407cff`, `794917c5`, `386aad5e`).
+- **2026-09-25** — The waiting line now reads "Summing up the chat so far · N s" with the seconds counting
+  up; the *Sum up this chat* button's own back-end job was added; and whether a chat is even worth summing
+  up is now sent to the screen (`e7d9801a`, `7ec03479`, `bd83997a`, `197a6fc8`).
+- **2026-09-25** — The Session tab: *Sum up this chat* now sits at the top, greyed out with a plain reason
+  when the chat still fits or an answer is being written, with the "What the AI remembers" card underneath
+  and the turn rows below. Clear and its confirm box are gone; Settings' own Clear session still works,
+  through what is now an internal step (`35224450`).
+- **2026-09-25** — The note under an answer that came right after a summary: a pressable line on the
+  newest answer that opens Show details on the Session tab, plain text on older answers; and a yellow
+  warning line when summing up failed (`b9fb2c04`).
+- **2026-09-25** — *Sum up this chat* now runs on the same AI server a question does, instead of a
+  separate one (`a7a8e329`).
+- **2026-09-25** — Step 3d: measured the Session tab's layout against the dock, on the Deck, before the
+  screen work started. One change from the drawing followed from the measurement: the summary card is its
+  own D-pad stop, because it is taller than the room left under the button (`2706d4a8`).
+- **2026-09-25** — Documents brought up to date for everything above: the roadmap entry moved to Verify
+  naming the new rows, the rows added to the testing documents, a changelog line, one stale comment in the
+  waiting-line file fixed (`47ae1fd8`), and this log. **The Deck pass, step 7, is next.**
 
 ---
 

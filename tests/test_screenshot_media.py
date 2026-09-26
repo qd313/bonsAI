@@ -1,14 +1,22 @@
-"""Unit tests for Steam screenshot path helpers and VDF window parsing."""
+"""Unit tests for Steam screenshot path helpers, VDF window parsing, and attaching a picture
+to a question (including the no-Pillow ffmpeg shrink path -- see FFMPEG_ATTACHMENT_PRESETS)."""
 
+import base64
 import os
+import subprocess
+import tempfile
 import unittest
 from unittest import mock
 
 from backend.services.screenshot_media import (
+    FFMPEG_ATTACHMENT_PRESETS,
+    FFMPEG_PASSTHROUGH_BYTES,
+    encode_image_with_ffmpeg,
     extract_app_id_from_screenshot_path,
     gamescope_atom_screenshot_value,
     lookup_screenshot_vdf_metadata,
     lookup_steam_app_name,
+    prepare_image_attachment,
     resolve_steam_screenshot_output_dir,
     _finalize_steam_capture_file,
     try_gamescope_atom_screenshot,
@@ -179,6 +187,209 @@ class ScreenshotMediaTests(unittest.TestCase):
                                         )
         self.assertTrue(out.get("success"))
         copy_mock.assert_called_once_with("/tmp/gamescope.png", "/tmp/out.png")
+
+
+class EncodeImageWithFfmpegTests(unittest.TestCase):
+    """The ffmpeg shrink path used when Pillow is not installed (the Deck's own case).
+
+    Plan 70 helper J: a big, barely-compressed screenshot with Pillow missing used to go to the
+    AI untouched and crashed the Deck's graphics chip. ffmpeg is already on the Deck, so it is
+    used to shrink the picture instead; a fake ffmpeg (a mocked subprocess.run that reads the
+    real command line and writes to the real output path) stands in for the real one so these
+    tests run anywhere, without needing ffmpeg installed.
+    """
+
+    def _write_big_file(self, tmp_dir: str, name: str = "shot.png") -> str:
+        path = os.path.join(tmp_dir, name)
+        with open(path, "wb") as f:
+            f.write(b"\xff" * (FFMPEG_PASSTHROUGH_BYTES + 1000))
+        return path
+
+    def test_success_shrinks_and_returns_the_smaller_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_big_file(tmp)
+            seen_cmd: list = []
+
+            def fake_ffmpeg_run(cmd, **kwargs):
+                seen_cmd.extend(cmd)
+                # A real ffmpeg writes its result to the output path named last on its command
+                # line -- this fake does the same, so the code's own read-back is exercised.
+                out_path = cmd[-1]
+                with open(out_path, "wb") as out:
+                    out.write(b"small-jpeg-bytes")
+                return mock.Mock(returncode=0, stderr=b"")
+
+            with mock.patch(
+                "backend.services.screenshot_media.shutil.which",
+                return_value="/usr/bin/ffmpeg",
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.subprocess.run",
+                    side_effect=fake_ffmpeg_run,
+                ):
+                    encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+
+            self.assertIsNotNone(encoded)
+            decoded = base64.b64decode(encoded)
+            self.assertEqual(decoded, b"small-jpeg-bytes")
+            self.assertLess(len(decoded), os.path.getsize(src))
+            self.assertEqual(mime_type, "image/jpeg")
+            self.assertEqual(warnings, [])
+
+            # Test the real call shape, not just the outcome.
+            self.assertEqual(seen_cmd[0], "/usr/bin/ffmpeg")
+            self.assertEqual(seen_cmd[seen_cmd.index("-i") + 1], src)
+            vf_value = seen_cmd[seen_cmd.index("-vf") + 1]
+            low_max_dim = FFMPEG_ATTACHMENT_PRESETS["low"][0]
+            self.assertIn(str(low_max_dim), vf_value)
+            self.assertIn("force_original_aspect_ratio=decrease", vf_value)
+
+    def test_ffmpeg_failure_is_refused_not_sent_full_size(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_big_file(tmp)
+
+            def fake_ffmpeg_run(cmd, **kwargs):
+                return mock.Mock(
+                    returncode=1, stderr=b"Invalid data found when processing input"
+                )
+
+            with mock.patch(
+                "backend.services.screenshot_media.shutil.which",
+                return_value="/usr/bin/ffmpeg",
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.subprocess.run",
+                    side_effect=fake_ffmpeg_run,
+                ):
+                    encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+
+            self.assertIsNone(encoded)
+            self.assertIsNone(mime_type)
+            self.assertTrue(warnings)
+            self.assertIn("ffmpeg could not shrink the image", warnings[0])
+
+    def test_ffmpeg_timeout_is_refused_not_sent_full_size(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_big_file(tmp)
+
+            def fake_ffmpeg_run(cmd, **kwargs):
+                raise subprocess.TimeoutExpired(cmd=cmd, timeout=20)
+
+            with mock.patch(
+                "backend.services.screenshot_media.shutil.which",
+                return_value="/usr/bin/ffmpeg",
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.subprocess.run",
+                    side_effect=fake_ffmpeg_run,
+                ):
+                    encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+
+            self.assertIsNone(encoded)
+            self.assertTrue(warnings)
+            self.assertIn("timed out", warnings[0])
+
+    def test_missing_ffmpeg_is_refused_not_sent_full_size(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_big_file(tmp)
+
+            with mock.patch(
+                "backend.services.screenshot_media.shutil.which", return_value=None
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.subprocess.run"
+                ) as run_mock:
+                    encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+
+            run_mock.assert_not_called()
+            self.assertIsNone(encoded)
+            self.assertTrue(warnings)
+            self.assertIn("ffmpeg is not installed", warnings[0])
+
+    def test_small_picture_is_passed_through_without_calling_ffmpeg(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "shot.jpg")
+            payload = b"already-small-picture-bytes"
+            with open(src, "wb") as f:
+                f.write(payload)
+
+            with mock.patch(
+                "backend.services.screenshot_media.subprocess.run"
+            ) as run_mock:
+                encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+
+            run_mock.assert_not_called()
+            self.assertEqual(base64.b64decode(encoded), payload)
+            self.assertEqual(warnings, [])
+
+
+class PrepareImageAttachmentShrinkChoiceTests(unittest.TestCase):
+    """Which shrink method prepare_image_attachment() reaches for, and what a caller sees
+    when none of them can make the picture smaller."""
+
+    def _write_small_file(self, tmp_dir: str) -> str:
+        path = os.path.join(tmp_dir, "shot.png")
+        with open(path, "wb") as f:
+            f.write(b"\x00" * 10)
+        return path
+
+    def test_prefers_pillow_when_it_is_installed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_small_file(tmp)
+            with mock.patch(
+                "backend.services.screenshot_media._pillow_installed", return_value=True
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.encode_image_with_pillow",
+                    return_value=("pillow-bytes", "image/jpeg", []),
+                ) as pillow_mock:
+                    with mock.patch(
+                        "backend.services.screenshot_media.encode_image_with_ffmpeg"
+                    ) as ffmpeg_mock:
+                        result = prepare_image_attachment({"path": src}, "low")
+
+            pillow_mock.assert_called_once()
+            ffmpeg_mock.assert_not_called()
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["image_b64"], "pillow-bytes")
+
+    def test_falls_back_to_ffmpeg_when_pillow_is_not_installed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_small_file(tmp)
+            with mock.patch(
+                "backend.services.screenshot_media._pillow_installed", return_value=False
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.encode_image_with_ffmpeg",
+                    return_value=("ffmpeg-bytes", "image/jpeg", []),
+                ) as ffmpeg_mock:
+                    result = prepare_image_attachment({"path": src}, "low")
+
+            ffmpeg_mock.assert_called_once()
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["image_b64"], "ffmpeg-bytes")
+
+    def test_refuses_with_a_plain_message_when_neither_can_shrink_it(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = self._write_small_file(tmp)
+            with mock.patch(
+                "backend.services.screenshot_media._pillow_installed", return_value=False
+            ):
+                with mock.patch(
+                    "backend.services.screenshot_media.encode_image_with_ffmpeg",
+                    return_value=(
+                        None,
+                        None,
+                        ["ffmpeg is not installed; could not shrink the image."],
+                    ),
+                ):
+                    result = prepare_image_attachment({"path": src}, "low")
+
+            self.assertFalse(result["ok"])
+            self.assertEqual(
+                result["error"],
+                "This picture is too big to send and could not be made smaller.",
+            )
 
 
 if __name__ == "__main__":

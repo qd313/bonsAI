@@ -61,9 +61,16 @@ calling `prepare_image_attachment()` for each file:
  2. `encode_image_with_pillow()` resizes it to fit the attachment quality
     setting (Low, Mid or Max) and re-encodes it as JPEG, shrinking a
     full-resolution screenshot down to something reasonable to send.
- 3. If Pillow itself is not available on the Deck, the original file bytes
-    are sent instead, capped at a smaller size limit, since there is no way
-    to shrink them first.
+ 3. Pillow is not on the Deck. When it is missing (or it cannot read this
+    particular file), `encode_image_with_ffmpeg()` does the same job with
+    `ffmpeg`, which is already on the Deck: it scales the picture down to
+    the same Low/Mid/Max longest-side limit and re-encodes it as a compact
+    JPEG. A picture already under a small size does not even need that --
+    it is sent as it is.
+ 4. If neither can shrink the picture (`ffmpeg` missing, or the shrink
+    itself fails or times out), the picture is refused with a message a
+    person understands, instead of sending the full-size file and risking
+    the crash this file exists to prevent.
 
 Gotchas:
  - Screenshot capture never uses kmsgrab -- the code comment on
@@ -81,18 +88,36 @@ from __future__ import annotations
 import base64
 import glob
 import io
+import logging
 import mimetypes
 import os
 import pwd
 import re
 import shutil
 import subprocess
+import tempfile
 import time
 from typing import Optional
 
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
 MAX_ATTACHMENT_INLINE_BYTES = 15 * 1024 * 1024
+
+# A picture already at or under this size is sent as it is -- shrinking it further is not
+# worth the extra ffmpeg call. Matches the same "is this already small" cutoff already used
+# for finalizing a fresh capture (see _finalize_steam_capture_file).
+FFMPEG_PASSTHROUGH_BYTES = 500_000
+
+# Longest-side pixel limit and ffmpeg JPEG quality (mjpeg's own scale: 2 is best, 31 is worst)
+# for each attachment preset, kept close to what encode_image_with_pillow() targets for the
+# same preset so Low/Mid/Max mean the same thing whether or not Pillow is installed.
+FFMPEG_ATTACHMENT_PRESETS = {
+    "low": (800, 6),
+    "mid": (1080, 4),
+    "max": (16384, 2),
+}
+
+logger = logging.getLogger("bonsai")
 
 
 def resolve_recent_screenshot_paths(app_id: str = "", limit: int = 5) -> list:
@@ -818,8 +843,89 @@ def encode_image_with_pillow(
         return None, None, [f"Pillow could not process image: {exc}"]
 
 
+def encode_image_with_ffmpeg(
+    path: str, attachment_preset: str
+) -> tuple[Optional[str], Optional[str], list]:
+    """Resize and encode an image with ffmpeg -- already on the Deck -- when Pillow cannot.
+
+    Scales to the same Low / Mid / Max longest-side limit encode_image_with_pillow() uses, so
+    the presets mean the same thing whether or not Pillow is installed. A picture already at or
+    under FFMPEG_PASSTHROUGH_BYTES is sent as it is; shrinking it further is not worth the call.
+    """
+    warnings: list = []
+    if attachment_preset not in FFMPEG_ATTACHMENT_PRESETS:
+        attachment_preset = "low"
+
+    try:
+        file_size = os.path.getsize(path)
+    except OSError as exc:
+        return None, None, [f"Could not read the image file: {exc}"]
+
+    if file_size <= FFMPEG_PASSTHROUGH_BYTES:
+        try:
+            with open(path, "rb") as f:
+                raw = f.read()
+        except OSError as exc:
+            return None, None, [f"Could not read the image file: {exc}"]
+        mime_type = mimetypes.guess_type(path)[0] or "image/jpeg"
+        return base64.b64encode(raw).decode("ascii"), mime_type, warnings
+
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        return None, None, ["ffmpeg is not installed; could not shrink the image."]
+
+    max_dim, qscale = FFMPEG_ATTACHMENT_PRESETS[attachment_preset]
+    fd, out_path = tempfile.mkstemp(suffix=".jpg")
+    os.close(fd)
+    _remove_capture_file(out_path)
+    try:
+        result = subprocess.run(
+            [
+                ffmpeg,
+                "-loglevel", "error",
+                "-y",
+                "-i", path,
+                "-frames:v", "1",
+                "-vf",
+                f"scale='min({max_dim},iw)':'min({max_dim},ih)':force_original_aspect_ratio=decrease",
+                "-q:v", str(qscale),
+                out_path,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=20,
+        )
+        if result.returncode != 0 or not os.path.isfile(out_path) or os.path.getsize(out_path) == 0:
+            stderr = result.stderr.decode("utf-8", errors="replace").strip()
+            detail = stderr or f"exit code {result.returncode}"
+            return None, None, [f"ffmpeg could not shrink the image: {detail}"]
+        with open(out_path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
+    except subprocess.TimeoutExpired:
+        return None, None, ["ffmpeg timed out while shrinking the image."]
+    except Exception as exc:  # noqa: BLE001 — a bad image must not crash Ask RPC
+        return None, None, [f"ffmpeg could not shrink the image: {exc}"]
+    finally:
+        _remove_capture_file(out_path)
+
+
+def _pillow_installed() -> bool:
+    try:
+        import PIL  # type: ignore  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
 def prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:
-    """Validate, transform, and encode one image attachment for Ollama multimodal requests."""
+    """Validate, transform, and encode one image attachment for Ollama multimodal requests.
+
+    Pillow is tried first when it is installed. Where it is not (the Deck), or where it cannot
+    read this particular file, ffmpeg shrinks the picture instead. If neither can shrink it --
+    ffmpeg missing, the shrink itself failing or timing out -- the attachment is refused with a
+    plain message rather than sending the full-size file (the crash this file exists to prevent).
+    """
     path = str(attachment.get("path", "") or "").strip()
     if not path:
         return {"ok": False, "error": "Attachment path is empty."}
@@ -832,21 +938,26 @@ def prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:
     if file_size > MAX_ATTACHMENT_FILE_BYTES:
         return {"ok": False, "error": f"Image is too large ({file_size} bytes)."}
 
-    encoded, mime_type, warnings = encode_image_with_pillow(path, attachment_preset)
+    encoded: Optional[str] = None
+    mime_type: Optional[str] = None
+    warnings: list = []
+
+    if _pillow_installed():
+        encoded, mime_type, pillow_warnings = encode_image_with_pillow(path, attachment_preset)
+        warnings.extend(pillow_warnings)
+
     if encoded is None:
-        with open(path, "rb") as f:
-            raw = f.read()
-        if len(raw) > MAX_ATTACHMENT_INLINE_BYTES:
-            return {
-                "ok": False,
-                "error": (
-                    f"Image inline payload is too large ({len(raw)} bytes). "
-                    "Install Pillow or lower the screenshot attachment quality (Settings)."
-                ),
-            }
-        encoded = base64.b64encode(raw).decode("ascii")
-        guessed = mimetypes.guess_type(path)[0] or "image/png"
-        mime_type = guessed
+        encoded, mime_type, ffmpeg_warnings = encode_image_with_ffmpeg(path, attachment_preset)
+        warnings.extend(ffmpeg_warnings)
+
+    if encoded is None:
+        logger.info(
+            "prepare_image_attachment: could not shrink %s: %s", path, "; ".join(warnings)
+        )
+        return {
+            "ok": False,
+            "error": "This picture is too big to send and could not be made smaller.",
+        }
 
     return {
         "ok": True,

@@ -29,6 +29,38 @@ _The rest of plan 64's flow H block below was moved out of [roadmap.md](../roadm
 during the planning-folder review, for the same reason. Words unchanged; only the link paths were
 adjusted for this folder._
 
+_The three blocks below (the chat-summary feature, its CHAT-MEMORY-01 re-check, and the plan 65
+trim-and-split entries) were moved out of [roadmap.md](../roadmap.md) on 2026-09-26, during the twelfth
+bookkeeping pass, again for the same reason. The chat-summary feature's own long write-up moved with it,
+out of [roadmap-details.md](../roadmap-details.md) into [roadmap-completed.md](roadmap-completed.md)
+under the same heading, since it is finished work now rather than open work — its own closing note is
+there._
+
+**Closed 2026-09-26 (plan 68, third Deck pass):**
+
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **DONE, built 2026-09-25, all Deck
+  checks passed 2026-09-26 (plan 68).** [Full
+  detail](roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared).
+
+**Closed 2026-09-25 (plan 68 Deck pass):**
+
+- ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **DONE, built
+  2026-09-21, confirmed on the Deck 2026-09-25 (plan 68).** Row **CHAT-MEMORY-01** now passes in full: with
+  nothing running, a follow-up searches the chat's own game instead of asking which one is meant; with a
+  game running, the chat's own summary (also plan 68) keeps a long conversation on subject. [Full
+  detail](roadmap-completed.md#a-chat-carries-what-it-has-already-covered-into-the-next-question).
+
+**Closed 2026-09-24 (plan 65, trim and split — nothing a person using the plugin would notice):**
+
+- ★★★ `[platform]` **Trim the five documents that are still big** — **DONE, plan 65 2026-09-24:** the
+  four remaining big documents dropped from 975,989 to 417,563 bytes together, 57% less to read before
+  any work is marked done. [Full
+  detail](roadmap-completed.md#trim-the-five-documents-that-are-still-big).
+- ★★★ `[platform]` **The eleven long files, left long on purpose** — **DONE, plan 65 2026-09-24:**
+  fourteen long files split, code lines 18,767 to 11,521 overall (39% moved out); a check now stops any
+  file over 800 lines of code from growing back. [Full
+  detail](roadmap-completed.md#the-eleven-long-files-left-long-on-purpose).
+
 **Closed 2026-09-23 (plan 64, flow H, proven on the Deck):**
 
 - ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **DONE,

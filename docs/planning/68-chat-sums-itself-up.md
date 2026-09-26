@@ -3,7 +3,7 @@
 Written 2026-09-24 by the planning session, straight after a discovery session with the maintainer the
 same day. This is the build plan for the roadmap entry **The chat sums itself up instead of being
 cleared**, four stars, tagged ask. It takes the five calls of 2026-09-20 in that entry's
-[detail](../roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared) and the twenty calls of
+[detail](../archive/roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared) and the twenty calls of
 2026-09-24 recorded as [D118](../audit/maintainer-decisions-locked.md), and turns them into the steps a
 build session runs. **Built 2026-09-25, the maintainer's "go" the same day; most Deck rows passed that
 night. What is still owed is at the end of § 12, the progress log.**

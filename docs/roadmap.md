@@ -430,7 +430,7 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **Session context and user stash** — **OPEN.** Live session facts plus user-editable notes for Ask. No embeddings, no cloud.
 - ★★★★ `[ask]` **A spoiler-chance rating for the chat's own summary** — **OPEN, not started (D118 call 14).** The
   chat now sums itself up on its own (see Verify, plan 68); rating how likely that summary swept up a spoiler is
-  a later plan of its own. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+  a later plan of its own. [Detail](archive/roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids
@@ -962,10 +962,10 @@ this document under its size limit.
 The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
 review, again to keep this document under its size limit.
 
-**Closed 2026-09-26 (plan 68, third Deck pass):**
-
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **DONE, built 2026-09-25, all Deck
-  checks passed 2026-09-26 (plan 68).** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
+pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
+during the twelfth bookkeeping pass, again to keep this document under its size limit. Today's plan 70
+entries below stayed, so the maintainer can still see them this week.
 
 **Closed 2026-09-26 (plan 70, flow L1, missed in the earlier bookkeeping pass):**
 
@@ -1053,22 +1053,3 @@ review, again to keep this document under its size limit.
   slack, which could flip under load). Rewritten to hold both threads open on real events the test
   controls and wait on those instead of guessing a delay — proven by running it 20 times with heavy CPU
   load alongside it: 20 passes, 0 failures. Nothing on screen to check.
-
-**Closed 2026-09-25 (plan 68 Deck pass):**
-
-- ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **DONE, built
-  2026-09-21, confirmed on the Deck 2026-09-25 (plan 68).** Row **CHAT-MEMORY-01** now passes in full: with
-  nothing running, a follow-up searches the chat's own game instead of asking which one is meant; with a
-  game running, the chat's own summary (also plan 68) keeps a long conversation on subject. [Full
-  detail](archive/roadmap-completed.md#a-chat-carries-what-it-has-already-covered-into-the-next-question).
-
-**Closed 2026-09-24 (plan 65, trim and split — nothing a person using the plugin would notice):**
-
-- ★★★ `[platform]` **Trim the five documents that are still big** — **DONE, plan 65 2026-09-24:** the
-  four remaining big documents dropped from 975,989 to 417,563 bytes together, 57% less to read before
-  any work is marked done. [Full
-  detail](archive/roadmap-completed.md#trim-the-five-documents-that-are-still-big).
-- ★★★ `[platform]` **The eleven long files, left long on purpose** — **DONE, plan 65 2026-09-24:**
-  fourteen long files split, code lines 18,767 to 11,521 overall (39% moved out); a check now stops any
-  file over 800 lines of code from growing back. [Full
-  detail](archive/roadmap-completed.md#the-eleven-long-files-left-long-on-purpose).

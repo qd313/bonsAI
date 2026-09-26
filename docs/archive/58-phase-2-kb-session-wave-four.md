@@ -1,12 +1,15 @@
 # 58 phase 2 — The knowledge-base session: wave four, with Deck checks running alongside
 
 Written 2026-09-16, before any code was started, at the maintainer's request. They asked to pick the
-knowledge base back up, in the shape of [plan 56](../archive/56-feature-session-four.md): a plan first, work split
+knowledge base back up, in the shape of [plan 56](56-feature-session-four.md): a plan first, work split
 across helpers running side by side, the Deck driven by the one running the session the whole time, and
 a list of questions only they can answer.
 
-**Status: nothing started. Runs after [58 phase 1](../archive/58-phase-1-notes-shown-and-wiki-extracts.md) has
+**Status: nothing started. Runs after [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md) has
 landed. Waiting on the answers in § 8, then on the word "go".**
+
+**Replaced 2026-09-25 by [plan 70](../planning/70-kb-wave-four-and-deck-test-wave.md)**, which re-read § 1
+against the code and took the § 8 answers as D112. Kept for history.
 
 **Changed by phase 1 (2026-09-17).** This was plan 58 until the maintainer asked for two fixes to land
 first: the note's own words shown under the reply, placed by code, and notes taken from wikis without
@@ -19,7 +22,7 @@ Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../A
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts
 and § 4 on briefing helpers; the roadmap's
 [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag) section; and
-[the status report](37-rag-status-report.md), which is the zoomed-out view behind it.
+[the status report](../planning/37-rag-status-report.md), which is the zoomed-out view behind it.
 
 **The maintainer's own checklist of things only a person can judge lives here:**
 [Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4).

@@ -135,10 +135,9 @@ class OllamaEmbedServiceTests(unittest.TestCase):
             vectors = embed_texts("127.0.0.1:11434", ["hello"])
         self.assertEqual(vectors, [[0.1, 0.2, 0.3]])
 
-    def test_embed_texts_sends_keep_alive_when_given(self):
-        """KB-SPEED-02: the note-search model must be told to stay loaded the same length of
-        time as the answer model, or it evicts after Ollama's 5-minute default and the next
-        question pays a reload."""
+    def _embed_texts_and_capture_request(self, **embed_kwargs):
+        """Call embed_texts with a faked-out urlopen and return the one request body it sent,
+        as the two tests below both need -- only the embed_texts kwargs differ between them."""
         payload = {"embeddings": [[0.1, 0.2, 0.3]]}
         captured_requests = []
 
@@ -157,37 +156,22 @@ class OllamaEmbedServiceTests(unittest.TestCase):
             return FakeResp()
 
         with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
-            embed_texts("127.0.0.1:11434", ["hello"], keep_alive="4h")
+            embed_texts("127.0.0.1:11434", ["hello"], **embed_kwargs)
 
         self.assertEqual(len(captured_requests), 1)
-        sent_body = json.loads(captured_requests[0].data.decode("utf-8"))
+        return json.loads(captured_requests[0].data.decode("utf-8"))
+
+    def test_embed_texts_sends_keep_alive_when_given(self):
+        """KB-SPEED-02: the note-search model must be told to stay loaded the same length of
+        time as the answer model, or it evicts after Ollama's 5-minute default and the next
+        question pays a reload."""
+        sent_body = self._embed_texts_and_capture_request(keep_alive="4h")
         self.assertEqual(sent_body.get("keep_alive"), "4h")
 
     def test_embed_texts_omits_keep_alive_when_not_given(self):
         """Other callers (the archived eviction probe script) never had an opinion on
         keep_alive and must keep getting Ollama's own default -- no field, not an empty one."""
-        payload = {"embeddings": [[0.1, 0.2, 0.3]]}
-        captured_requests = []
-
-        class FakeResp:
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *args):
-                return False
-
-            def read(self):
-                return json.dumps(payload).encode("utf-8")
-
-        def fake_urlopen(req, timeout=None):
-            captured_requests.append(req)
-            return FakeResp()
-
-        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
-            embed_texts("127.0.0.1:11434", ["hello"])
-
-        self.assertEqual(len(captured_requests), 1)
-        sent_body = json.loads(captured_requests[0].data.decode("utf-8"))
+        sent_body = self._embed_texts_and_capture_request()
         self.assertNotIn("keep_alive", sent_body)
 
     def test_embed_texts_raises_on_bad_payload(self):

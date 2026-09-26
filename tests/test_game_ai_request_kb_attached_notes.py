@@ -15,25 +15,13 @@ Two layers, matching how the feature is actually built:
 """
 
 import asyncio
-import sys
 import threading
-import types
 import unittest
 from unittest.mock import patch
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 
-from backend_module_stubs import install_pwd_stub  # noqa: E402
-
+install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
 from backend.services.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
@@ -495,6 +483,18 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
     `retrieve_knowledge_context`, mocked the same way every other test in this file mocks it.
     """
 
+    def _ask_about_the_crystal_spike_boss(self, plugin):
+        """Both tests below ask this same question of the same fake plugin; only the card and
+        the note text feeding `retrieve_knowledge_context` differ between them."""
+        return _run(
+            plugin,
+            question=(
+                "What should I know about the boss past the crystal spike area in Hollow "
+                "Knight, the one that looks just like me?"
+            ),
+            ask_mode="strategy",
+        )
+
     @patch("backend.services.game_ai_request.summarize_kb_coverage")
     @patch("backend.services.game_ai_request.resolve_title_from_question")
     @patch("backend.services.game_ai_request.retrieve_knowledge_context")
@@ -530,14 +530,7 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = _ok_result()
 
-        out = _run(
-            plugin,
-            question=(
-                "What should I know about the boss past the crystal spike area in Hollow "
-                "Knight, the one that looks just like me?"
-            ),
-            ask_mode="strategy",
-        )
+        out = self._ask_about_the_crystal_spike_boss(plugin)
 
         self.assertNotIn("No close match in my notes", out["response"])
 
@@ -569,14 +562,7 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = _ok_result()
 
-        out = _run(
-            plugin,
-            question=(
-                "What should I know about the boss past the crystal spike area in Hollow "
-                "Knight, the one that looks just like me?"
-            ),
-            ask_mode="strategy",
-        )
+        out = self._ask_about_the_crystal_spike_boss(plugin)
 
         self.assertIn("No close match in my notes", out["response"])
 

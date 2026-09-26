@@ -947,50 +947,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertTrue(result.attached)
     self.assertEqual(result.retrieval_method, "keyword")
 
-  def test_hybrid_retrieval_reranks_when_nomic_available(self):
+  def _retrieve_dreadnought_weakpoint(self, settings_extra=None):
+    """Both tests below ask retrieve_knowledge_context the same Glyphid Dreadnought question
+    against the same mocked section vectors; only the settings passed in and what each one
+    asserts afterward differ."""
     settings = {
       "use_local_knowledge_base": True,
       "rag_corpus_path": str(SEED_DB.parent),
     }
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      return_value=[[1.0, 0.0] + [0.0] * 766],
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
-      return_value={
-        3: [1.0, 0.0] + [0.0] * 766,
-        4: [0.0, 1.0] + [0.0] * 766,
-      },
-    ):
-      result = retrieve_knowledge_context(
-        settings,
-        ask_mode="strategy",
-        question="Glyphid Dreadnought weak point",
-        app_id="2321470",
-        app_name="Deep Rock Galactic: Survivor",
-        domain="strategy",
-        pc_ip="127.0.0.1:11434",
-      )
-    self.assertTrue(result.attached)
-    self.assertEqual(result.retrieval_method, "hybrid")
-    self.assertIn("Dreadnought", result.text_block)
-
-  def test_hybrid_retrieval_keeps_the_embed_model_loaded_like_the_answer_model(self):
-    """KB-SPEED-02: the note-search model was evicting after 5 minutes (Ollama's own default)
-    while the answer model stayed loaded for the "Keep models loaded" duration, because
-    embed_texts was never told what that duration was. retrieve_knowledge_context must pass
-    the same setting through so both models share one keep-alive."""
-    settings = {
-      "use_local_knowledge_base": True,
-      "rag_corpus_path": str(SEED_DB.parent),
-      "ollama_keep_alive": "240m",
-    }
+    if settings_extra:
+      settings.update(settings_extra)
     with mock.patch(
       "backend.services.knowledge_base_service.nomic_embed_available",
       return_value=True,
@@ -1007,7 +973,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         4: [0.0, 1.0] + [0.0] * 766,
       },
     ):
-      retrieve_knowledge_context(
+      result = retrieve_knowledge_context(
         settings,
         ask_mode="strategy",
         question="Glyphid Dreadnought weak point",
@@ -1016,6 +982,20 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         domain="strategy",
         pc_ip="127.0.0.1:11434",
       )
+    return result, embed
+
+  def test_hybrid_retrieval_reranks_when_nomic_available(self):
+    result, _embed = self._retrieve_dreadnought_weakpoint()
+    self.assertTrue(result.attached)
+    self.assertEqual(result.retrieval_method, "hybrid")
+    self.assertIn("Dreadnought", result.text_block)
+
+  def test_hybrid_retrieval_keeps_the_embed_model_loaded_like_the_answer_model(self):
+    """KB-SPEED-02: the note-search model was evicting after 5 minutes (Ollama's own default)
+    while the answer model stayed loaded for the "Keep models loaded" duration, because
+    embed_texts was never told what that duration was. retrieve_knowledge_context must pass
+    the same setting through so both models share one keep-alive."""
+    _result, embed = self._retrieve_dreadnought_weakpoint({"ollama_keep_alive": "240m"})
     embed.assert_called_once()
     self.assertEqual(embed.call_args.kwargs.get("keep_alive"), "240m")
 

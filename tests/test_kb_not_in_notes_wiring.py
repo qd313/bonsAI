@@ -4,24 +4,16 @@ isolation. See tests/test_kb_not_in_notes_notice.py for the module's own unit te
 """
 
 import asyncio
-import sys
-import types
 import unittest
 from unittest.mock import patch
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 
-from backend.services.game_ai_request import run_game_ai_request
-from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult
+install_fcntl_and_decky_stubs()
+install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
+
+from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
 _NOT_IN_NOTES_TEXT = "Not in my notes — this answer is from the model's own knowledge."
 _NO_TIP_TEXT = "No tip for this — this answer is from the model's own knowledge."

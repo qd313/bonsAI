@@ -127,10 +127,16 @@ from backend.services.ollama_service import (
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
 from backend.services.response_verify import (
+    cover_named_spoilers,
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
 from backend.services.spy_confession_service import parse_spy_lies_tag
+from backend.services.strategy_spoiler_policy import (
+    boss_like_card_names,
+    protected_spoiler_names,
+    spoiler_cover_required,
+)
 from backend.services.knowledge_base_service import (
     kb_coverage_to_transparency,
     lookup_game_genres,
@@ -945,6 +951,27 @@ async def run_game_ai_request(
             response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
             response_text = append_no_tip_for_this_notice(response_text, show_no_tip_for_this)
             response_text = append_no_close_match_notice(response_text, show_no_close_match)
+
+            # D112 #7, the spoiler safety net: the prompt already told the model to keep a
+            # boss/story spoiler behind a ```bonsai-spoiler``` fence whenever
+            # `spoiler_cover_required` says this turn needed one -- nothing ever checked whether
+            # it actually did, and a question describing a boss without naming it came back
+            # with the boss named in plain text (measured on the Deck, 83 reads never covered).
+            # Run last, after the honesty footers above, so a footer line is covered the same
+            # way ordinary prose is on the rare turn one happens to name a protected thing; run
+            # before `ollama_route_snapshot` below so the saved/"Show details" copy and the
+            # copy the person reads never disagree about what got covered.
+            strategy_domain = strategy_domain_guidance or ask_mode == "strategy"
+            if spoiler_cover_required(
+                strategy_spoiler_consent_effective,
+                strategy_domain=strategy_domain,
+                app_id=app_id,
+                app_name=app_name,
+                title_profile=strategy_title_profile,
+            ):
+                protected_names = protected_spoiler_names(question, boss_like_card_names(kb_text))
+                if protected_names:
+                    response_text = cover_named_spoilers(response_text, protected_names)
 
         err_tail = ""
         if not ollama_result.get("success"):

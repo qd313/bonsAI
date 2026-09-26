@@ -375,6 +375,36 @@ only if the reading with a game running says memory is tight.
   finding: **no troubleshooting tip in the library has a source page**, so the owed check that a tip's source page
   shows in its credit line cannot run; helper E was asked to give its researched tips a real source page where one
   can be cited.
+- **00:37 to 01:06 — plan 68 had the Deck** for its own three checks and cleared the pinned test chips, which
+  unblocks two chip checks (now in flow 3). It restored the chats from its own backup, taken after flow 0, so the
+  "Hades" chat is still out until the end-of-session restore from this session's earlier backup.
+- **00:41 to 01:40 — wave 1 landed, plus three of wave 2.** One at a time onto the branch, the checks after each:
+  - **H** (blind questions): 107 new, every game in the library now has some; 35 wait for labels (helper L).
+  - **C** (tip cut-off): "what time is it" can no longer get a tip; the "lan" rule no longer fires on "land".
+    **The "No tip for this" line still cannot appear:** four cut-offs measured, none made it appear, the strongest
+    lost 6 right tips, because the hard sentences get their tips from the plain word search. The maintainer's call.
+  - **A** (spoiler net): a boss name the question did not type is covered, in the finished answer and while it
+    arrives. Hollow Knight described boss covered 5 of 5, Hades 4 of 5; no false cover on 97.3% of the answer test.
+  - **E** (new library format): the "starting out" kind and chip, per-game Deck tips (the maintainer's two, two
+    researched ones), a too-new library refused with "update the plugin". An older plugin reading the new library
+    degrades to the old behaviour without crashing (read at the last release's commit).
+  - **F, G** (notes): Brotato 12, Palworld 12, Skyrim 15, and starting-out notes for Cyberpunk, Fallout 4, Red Dead
+    2. A line-by-line check against the source pages found invented details in most notes (F 8 fixes, G 14 of 18
+    notes); all fixed before landing. The two note lists collided on landing and were merged by content.
+  - **I** (small bugs): Remove no longer stays greyed after an answer; a big hand-typed model shows its real size;
+    no false connection failure at start-up; the ban report is a plain list; the read-aloud test passed 20 of 20
+    under load.
+  - **J** (screenshots): a big screenshot is shrunk with ffmpeg, or refused with a message.
+  - **B** (notes line): the "no close match" line reads the notes' own text (wiring into the answer in progress).
+    Ranking general notes lower was measured and **stays off**: better on the search test, worse on the answer
+    test (46 to 41 of 57 right note first). B2 is dropped this wave.
+  - **Session calls made:** the Skyrim wiki's older share-alike licence let through the release check (it allows
+    rewording under the newer version the library uses); spoiler settings: Brotato little story, Palworld and
+    Skyrim protect progress; the Hollow Knight described-boss answer-test row no longer forbids a cover.
+  - **Quality check held twice:** copied test setup and two files past 400 lines, from the helpers' work; shared
+    or moved rather than re-recorded (one file done, one with helper A, the tests with the bookkeeper).
+  All Python tests (1,839) and all screen tests (1,778) passed after the landings. Not yet deployed to the Deck:
+  the Deck is running flows 1 and 2a on the setup build; the next deploy comes after that block.
 
 ## 11. Report
 

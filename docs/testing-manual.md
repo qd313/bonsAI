@@ -105,23 +105,36 @@ dock, and backing out with Up three times lands safely on the chat-slot row with
 going down from the Retry icon takes one extra press, since the question's own row is a stop in between —
 see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
-**Sum up this chat, the summary card and the note (plan 68, step 5 — Deck pass 2026-09-25, partly run):**
+**Sum up this chat, the summary card and the note (plan 68, step 5 — Deck passes 2026-09-25 and 2026-09-26):**
 
 - [ ] Down from the tabs row lands on the *Sum up this chat* button.
 - [x] Down from the button reaches the summary card, since it is taller than the room below the button and
       needs its own stop to be scrolled into view; Down again from the card reaches the first turn row.
       **PASS (Deck) 2026-09-25**, row SUMUP-03: walking down to the card and the first turn row, everything
       was visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`, walk `checks/plan68-SUMUP-03-walk.json`.
+      **Extended (Deck) 2026-09-26:** walking on down through all 73 turn rows of a long chat, every row
+      stayed visible above the dock. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
 - [x] Up from the button returns to the tabs row; Up from the card returns to the button. **PASS (Deck)
       2026-09-25**, row SUMUP-03: walking back up from the card and the first turn row, everything stayed
-      visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`.
+      visible. Evidence `docs/test-evidence/plan68-SUMUP-03.json`. **Extended (Deck) 2026-09-26:** walking
+      all the way back up from the last of the 73 turn rows, everything stayed visible too.
 - [ ] A on the button starts the summary and the ring stays on it; a greyed-out button still takes the ring
       and A on it does nothing.
 - [x] B from anywhere in the tab closes the whole panel. **PASS (Deck) 2026-09-25**, row SUMUP-04a: B closed
-      the panel. Evidence `docs/test-evidence/plan68-SUMUP-04a.json`.
+      the panel. Evidence `docs/test-evidence/plan68-SUMUP-04a.json`. **Extended (Deck) 2026-09-26:** B also
+      closed the panel from the *Sum up this chat* button, from the summary card, and from a turn row, each
+      time landing the ring back on Show details. Evidence `checks/plan68-session-tab-B-closes.json`.
 - [ ] With no turn rows at all, Down from the last stop in the tab stays put rather than falling into the dock.
-- [ ] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
-      the button at the top.
+- [x] Up from the dock into a newest answer whose Session tab is open lands on the last stop in the tab, not
+      the button at the top. **PASS (Deck) 2026-09-26:** Up from the dock landed on the last turn row's
+      chips, visible. Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
+- [ ] Down from the Session tab's last turn row reaches that row's own chips, not something outside the tab
+      (**SUMUP-13**). **FAILED (Deck) 2026-09-26:** it jumped over the chips to "Save chat to Desktop"
+      outside the tab, with the chips on screen right there. **Fixed the same night (`23ec6949`); Deck
+      check owed.** Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
+- [x] On a turn row's own chips, Down steps through every chip and then stays on the last one, rather than
+      moving elsewhere. **PASS (Deck) 2026-09-26:** Down stepped through all 7 chips and then stayed put.
+      Evidence `docs/test-evidence/plan68-FOCUS-SWEEP-p2.json`.
 - [x] Down from the answer's last paragraph (or its Copy icon) reaches the note under it; Down again
       continues down the reply; Up goes back to the answer. **PASS (Deck) 2026-09-25**, row SUMUP-02: Down
       from the answer reached the note first, visible (note bottom 523, dock 600); Up returned to the

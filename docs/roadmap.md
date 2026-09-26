@@ -596,10 +596,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
   box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **VERIFY, built 2026-09-25 (plan 68).**
-  **Deck pass 2026-09-25:** SUMUP-01, 03, 04a, 05, 06 and 08 pass; CHAT-MEMORY-01 now passes in full too
-  (moved to Done, below). Still owed: SUMUP-02's re-run (a same-night fix changed the button), SUMUP-07's
-  no-game wording, SUMUP-09 and 10 (not runnable on the Deck as it stands), the focus-graph walk and the
-  free-play sweep. [Plan 68](planning/68-chat-sums-itself-up.md) ·
+  **Second Deck pass 2026-09-26:** SUMUP-02's re-run, SUMUP-11, the free-play sweep and the focus-graph walk
+  all pass, with one focus step fixed (`23ec6949`). Still owed: the Deck check of that fix, SUMUP-07's
+  no-game half, and SUMUP-10 (needs a longer chat). [Plan 68](planning/68-chat-sums-itself-up.md) ·
   [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60

@@ -514,7 +514,8 @@ finishes, the card that shows what the AI kept sits just behind the dock at the 
 top measured 597 pixels down against the dock's own top at 600, only 3 pixels of daylight. Opened straight
 from the note under a summarised answer (SUMUP-02), only the top 81 pixels of the card showed above the
 dock. Either way, a person does not see the card appear on its own — they have to press Down to bring it
-into view. Deck check owed once a fix lands.
+into view. **Still true on the second Deck pass, 2026-09-26:** opened from the note again, only 44 of the
+card's 418 pixels showed above the dock. Deck check owed once a fix lands.
 
 ---
 

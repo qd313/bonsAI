@@ -477,6 +477,16 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
   that hidden text leak into later questions' memory and into summaries; the chat memory now copes with
   doubled markers, though why they get doubled in the first place is not yet known (`6843f8e1`). Neither fix
   has a device re-check yet.
+- **2026-09-26** — The second Deck pass, 00:37–01:05, external monitor, build `637492e7` (both of the first
+  night's fixes present). No refusals this time. SUMUP-02's re-run passes (the button now greys out after a
+  summary), SUMUP-11 passes (a stopped question no longer triggers an extra summary), and the free-play
+  sweep passes. The pinned test chips were cleared with the Developer tab's own button. The focus sweep
+  failed one step — Down from the Session tab's last turn row jumped over its own chips to "Save chat to
+  Desktop" outside the tab — fixed the same night (`23ec6949`). Still owed: the Deck check of that fix,
+  SUMUP-07's no-game half, and SUMUP-10 (needs a chat long enough). Evidence
+  `docs/test-evidence/plan68-SUMUP-02-p2.json`, `plan68-SUMUP-11-p2.json`, `plan68-FREE-PLAY-p2.json`,
+  `plan68-FOCUS-SWEEP-p2.json` (+ `.png`), `plan68-CHIPS-RESET-p2.json` (+ `.png`),
+  `checks/plan68-session-tab-B-closes.json`.
 
 ---
 

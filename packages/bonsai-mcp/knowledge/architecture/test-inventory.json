@@ -201,6 +201,7 @@
     "tests/test_build_rag_reproducible.py",
     "tests/test_capabilities.py",
     "tests/test_character_catalog_parity.py",
+    "tests/test_chat_for_request.py",
     "tests/test_chat_memory_service.py",
     "tests/test_chat_slot_ownership.py",
     "tests/test_chat_slot_service.py",

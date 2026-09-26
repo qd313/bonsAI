@@ -28,6 +28,8 @@ from typing import Any, Optional
 from backend.services.chat_slot_service import (
     append_turn as chat_append_turn,
     ensure_slot as chat_ensure_slot,
+    save_slot_subject as chat_save_slot_subject,
+    save_slot_summary as chat_save_slot_summary,
 )
 
 import decky
@@ -129,6 +131,7 @@ async def record_assistant_turn(
     app_name: str = "",
     asked_entity: str = "",
     reasoning: Optional[dict] = None,
+    chat_summary: str = "",
 ) -> None:
     sid = str(slot_id or "").strip()
     body = str(response_text or "").strip()
@@ -147,8 +150,40 @@ async def record_assistant_turn(
             app_name=app_name,
             asked_entity=asked_entity,
             reasoning=reasoning,
+            chat_summary=chat_summary,
             logger=logger,
         )
 
     async with self._chat_slots_store_lock:
+        await asyncio.to_thread(_run)
+
+
+async def save_chat_summary(plugin, slot_id: str, summary: Optional[dict]) -> None:
+    """Set a chat's own summary of its older turns (plan 68 step 2). A blank slot id does
+    nothing -- there is no chat to attach the summary to, the same guard ``record_user_turn`` and
+    ``record_assistant_turn`` both open with."""
+    sid = str(slot_id or "").strip()
+    if not sid:
+        return
+    settings_dir = plugin._chat_slots_settings_dir()
+
+    def _run() -> None:
+        chat_save_slot_summary(settings_dir, sid, summary, logger=logger)
+
+    async with plugin._chat_slots_store_lock:
+        await asyncio.to_thread(_run)
+
+
+async def save_chat_subject(plugin, slot_id: str, subject: Optional[dict]) -> None:
+    """Set a chat's own remembered follow-up subject (plan 68 step 2). Same blank-slot-id guard
+    as ``save_chat_summary`` above."""
+    sid = str(slot_id or "").strip()
+    if not sid:
+        return
+    settings_dir = plugin._chat_slots_settings_dir()
+
+    def _run() -> None:
+        chat_save_slot_subject(settings_dir, sid, subject, logger=logger)
+
+    async with plugin._chat_slots_store_lock:
         await asyncio.to_thread(_run)

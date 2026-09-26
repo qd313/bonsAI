@@ -1510,6 +1510,11 @@ class Plugin:
                 "reasoning_text": str(result.get("reasoning_text") or ""),
                 "reasoning_seconds": result.get("reasoning_seconds"),
                 "reasoning_tokens": int(result.get("reasoning_tokens") or 0),
+                # Plan 68 step 2: whether this answer summed the chat up first, so the screen can
+                # paint the note or the warning line from the state before it reloads the chat.
+                # None on a stopped request, the same as ``reasoning`` above is dropped for one --
+                # a stopped answer gets no mark.
+                "chat_summary": None if cancelled_rq else result.get("chat_summary"),
             }
             self._clear_partial_stream_snapshot()
         slot_id = self._chat_slot_by_request.pop(request_id, None)
@@ -1531,6 +1536,7 @@ class Plugin:
                 app_name=app_name,
                 asked_entity=result.get("strategy_spoiler_asked_entity") or "",
                 reasoning=None if cancelled_rq else chat_turn_recorder.reasoning_payload_for_chat_slot(result),
+                chat_summary="" if cancelled_rq else str(result.get("chat_summary") or ""),
             )
         await self._maybe_app_log(
             "ask.background",
@@ -2099,29 +2105,49 @@ class Plugin:
             chat_turns=chat_turns,
         )
 
-    def chat_turns_for_request(self, request_id: Any) -> list:
-        """The questions and answers already in the chat this request belongs to.
+    def chat_for_request(self, request_id: Any) -> dict:
+        """The chat this request belongs to: its id, every turn already in it, its own summary
+        and remembered follow-up subject (plan 68 step 2), and which game it was opened under.
 
-        Empty when the Ask did not come from a saved chat, or when the chat cannot be read. A
+        ``{}`` when the Ask did not come from a saved chat, or when the chat cannot be read. A
         chat that cannot be read is a chat with no memory, which is exactly how every Ask behaved
-        before this existed -- never a reason to fail the question.
+        before this existed -- never a reason to fail the question. Starts with an underscore-free
+        plain ``def`` on purpose -- see the module note on which methods the screen can call.
 
-        The question being asked right now IS in here: it is written to the chat when the Ask is
-        accepted, before the answer starts. Whoever builds the memory drops that trailing turn --
-        see plan_and_build_chat_memory, which does exactly that and says why.
+        The question being asked right now IS among the turns: it is written to the chat when the
+        Ask is accepted, before the answer starts. Whoever builds the memory drops that trailing
+        turn -- see plan_and_build_chat_memory, which does exactly that and says why.
         """
         try:
             if not isinstance(request_id, int):
-                return []
+                return {}
             slot_id = str(self._chat_slot_by_request.get(request_id) or "").strip()
             if not slot_id:
-                return []
+                return {}
             slot = chat_load_slot(Plugin._chat_slots_settings_dir(), slot_id, logger=decky.logger)
-            turns = (slot or {}).get("turns")
-            return list(turns) if isinstance(turns, list) else []
+            if not isinstance(slot, dict):
+                return {}
+            turns = slot.get("turns")
+            return {
+                "id": slot.get("id", slot_id),
+                "turns": list(turns) if isinstance(turns, list) else [],
+                "summary": slot.get("summary"),
+                "subject": slot.get("subject"),
+                "origin_app_id": slot.get("origin_app_id", ""),
+                "origin_app_name": slot.get("origin_app_name", ""),
+            }
         except Exception:
-            decky.logger.exception("chat_turns_for_request: could not read the chat's own history")
-            return []
+            decky.logger.exception("chat_for_request: could not read the chat's own history")
+            return {}
+
+    def chat_turns_for_request(self, request_id: Any) -> list:
+        """The questions and answers already in the chat this request belongs to.
+
+        Empty when the Ask did not come from a saved chat, or when the chat cannot be read -- see
+        ``chat_for_request`` above, which this reads through so there is one loader for both.
+        """
+        turns = self.chat_for_request(request_id).get("turns")
+        return turns if isinstance(turns, list) else []
 
     async def _stop_voice_transcription_internal(self) -> None:
         async with self._voice_lock:

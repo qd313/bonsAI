@@ -615,8 +615,18 @@ class LicenceTests(unittest.TestCase):
                                  "https://creativecommons.org/licenses/by-nc-sa/3.0/")
         )
 
+    def test_share_alike_2_5_is_recognised(self):
+        # The Unofficial Elder Scrolls Pages declare BY-SA 2.5 (plan 70, Skyrim).
+        self.assertEqual(
+            m.canonical_licence("Attribution-ShareAlike 2.5 License",
+                                "https://creativecommons.org/licenses/by-sa/2.5/"),
+            "CC-BY-SA-2.5",
+        )
+        self.assertEqual(m.canonical_licence("Attribution-ShareAlike 2.5 License", ""), "CC-BY-SA-2.5")
+
     def test_allow_list_matches_publish_corpus(self):
         allowed = m._load_allowed_licences()
+        self.assertIn("CC-BY-SA-2.5", allowed)
         self.assertIn("CC-BY-SA-3.0", allowed)
         self.assertIn("CC-BY-SA-4.0", allowed)
         self.assertIn("CC-BY-4.0", allowed)

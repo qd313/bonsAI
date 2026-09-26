@@ -378,7 +378,7 @@ VECTOR_RECALL_MARGIN_MIN_POOL = 4
 # "what time is it" now reads 0.50439822695..., which happens to round to the same 0.5044 but
 # is a whisker under the old floor by luck, not by design -- any small, ordinary difference in
 # corpus build or embedding model would have put it back on the wrong side. The floor is moved
-# to 0.5050, six thousandths above the junk ceiling instead of sitting on it, which still keeps
+# to 0.5050, six ten-thousandths above the junk ceiling instead of sitting on it, which still keeps
 # every tuning-row right tip: the weakest one measured on this corpus today is 0.5804 (question
 # V2-C-08, "I can play alone but online kicks me out straight away"), 75 thousandths of margin.
 COMPAT_MEANING_FLOOR = 0.5050

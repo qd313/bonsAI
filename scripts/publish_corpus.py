@@ -61,7 +61,12 @@ from backend.services.knowledge_base_schema import (  # noqa: E402
 # BY-SA 4.0 work. Every card's source_license must be one of these — anything else (GFDL,
 # NonCommercial, an unversioned "CC BY-SA") is excluded from the seed already, but this gate
 # exists so a future card someone forgets to exclude fails the *publish*, not just the review.
-ALLOWED_SOURCE_LICENSES = frozenset({"CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0", "bonsAI-maintainer"})
+# CC-BY-SA-2.5 joined 2026-09-26 (plan 70) for the Skyrim notes from the Unofficial Elder Scrolls
+# Pages: section 4(b) of BY-SA 2.5 lets an adaptation be shared under a later version with the
+# same licence elements, so a reworded 2.5 note can ride a BY-SA 4.0 work exactly as 3.0 does.
+ALLOWED_SOURCE_LICENSES = frozenset(
+    {"CC-BY-4.0", "CC-BY-SA-2.5", "CC-BY-SA-3.0", "CC-BY-SA-4.0", "bonsAI-maintainer"}
+)
 
 
 def _load_build_rag_db():

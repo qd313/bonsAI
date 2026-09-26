@@ -97,7 +97,16 @@ AskThinkingPhase = Literal[
     "connecting_model",
     "model_retry",
     "generating",
+    "summing_up",
 ]
+
+# Plan 68: shown while the chat's own summary of its older turns is being written, just before
+# an answer that needed one. One fixed line, the same for every tone and character on purpose --
+# every other phase's line is woven around the question or dressed up for a character voice, but
+# this is bookkeeping the plugin is doing about the CHAT, not about what was asked, so weaving the
+# question into it would read oddly ("Summing up the chat about is it worth it to buy the season
+# pass so far"). The maintainer picked this exact wording.
+SUMMING_UP_LINE = "Summing up the chat so far"
 
 _PHASE_MAX_LEN = 240
 _APP_NAME_MAX_LEN = 40
@@ -756,6 +765,8 @@ def format_thinking_phase(
     character_preset_id: Optional[str] = None,
 ) -> str:
     """Build a deterministic, context-aware status line for pending Ask phases."""
+    if phase == "summing_up":
+        return SUMMING_UP_LINE[:_PHASE_MAX_LEN]
     woven_q = (question or "").strip()
     if woven_q:
         if phase == "starting":

@@ -6,6 +6,7 @@ import unittest
 from backend.services.bonsai_stream_tags import (
     _STATIC_LINE_FIRST_WINDOW_SECONDS,
     _STATIC_LINE_STEP_WINDOW_SECONDS,
+    SUMMING_UP_LINE,
     _static_window_seconds,
     compose_thinking_blurb,
     deterministic_thinking_phase_fallback,
@@ -219,6 +220,18 @@ class BonsaiStreamTagsTests(unittest.TestCase):
 
     def test_format_thinking_phase_starting(self):
         self.assertEqual(format_thinking_phase("starting"), "Starting…")
+
+    def test_summing_up_is_one_fixed_line_for_every_tone_and_character(self):
+        """Plan 68: unlike every other phase, this one line never changes -- not for a question
+        to weave in, not for tone, not for a character preset. It is bookkeeping about the chat,
+        not about what was asked."""
+        for kwargs in (
+            {},
+            {"question": "what should i do about the boss fight"},
+            {"question": "what should i do", "character_enabled": True, "character_preset_id": "pyro"},
+            {"question": "help", "app_name": "Elden Ring", "request_id": 7},
+        ):
+            self.assertEqual(format_thinking_phase("summing_up", **kwargs), SUMMING_UP_LINE)
 
     def test_format_thinking_phase_with_game(self):
         self.assertEqual(

@@ -1,0 +1,19 @@
+{
+  "row": "QA-FREE-PLAY-01 re-check (plan 70 flow L4.1) - ring stays on the question's Retry / question text when an answer finishes",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0..., same on Deck and PC)",
+  "deckTime": "2026-09-26 15:31-15:39 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28; dock top y 600; transcript pane y 88-765",
+  "setup": "Main tab, Strategy, AI characters OFF, nothing running. One new test chat made with the chat row's [+] (first question 'in hollow knight what charms should I use for a full first playthrough and why'); all six questions asked in that chat, each worded differently (no cache hits: every answer streamed 5-15 s after 20-33 s of thinking).",
+  "method": "question put in with deck_send_ask.py (VERIFIED each time); walked Down to Ask; A; Up x2 to the live turn's Retry icon (for the question-text tries, one Down more onto the question text) while the answer was still thinking; pressed nothing more. A watcher script on the Deck (scratch finish_watch.py) read focus every 150 ms and took reads 1 s and 5 s after the dock lost its 'answer arriving' class.",
+  "tries": [
+    {"ring_on": "Retry", "question": "in hollow knight what charms should I use for a full first playthrough and why", "finish_t": 43.3, "plus1s": {"focus": "Retry same prompt", "y": 163, "visible": true, "scrollTop": 0, "scrollMax": 444}, "plus5s": {"focus": "Retry same prompt", "y": 163, "visible": true, "scrollTop": 0}, "log": "scratch L4-fp-retry1.jsonl", "screenshot": "plan70-L4-QA-FREE-PLAY-01-retry-try1.png"},
+    {"ring_on": "Retry", "question": "in hades how should a new player spend darkness in the mirror of night", "plus1s": {"focus": "Retry same prompt", "y": 199, "visible": true, "scrollTop": 0, "scrollMax": 419}, "plus5s": {"focus": "Retry same prompt", "y": 199, "visible": true, "scrollTop": 0}, "log": "scratch L4-fp-retry2.jsonl"},
+    {"ring_on": "Retry", "question": "in stardew valley how should I plan my first summer on the farm", "plus1s": {"focus": "Retry same prompt", "y": 201, "visible": true, "scrollTop": 0, "scrollMax": 503}, "plus5s": {"focus": "Retry same prompt", "y": 201, "visible": true, "scrollTop": 0}, "log": "scratch L4-fp-retry3.jsonl"},
+    {"ring_on": "question text", "question": "in terraria what should I build first when starting a new world", "plus1s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0, "scrollMax": 556}, "plus5s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0}, "log": "scratch L4-fp-q1.jsonl", "screenshot": "plan70-L4-QA-FREE-PLAY-01-question-try1.png"},
+    {"ring_on": "question text", "question": "in celeste what is the easiest way to collect strawberries in chapter two", "plus1s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0, "scrollMax": 155}, "plus5s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0}, "note": "short answer (only 155 px below the fold to jump to)", "log": "scratch L4-fp-q2.jsonl"},
+    {"ring_on": "question text", "question": "in dead cells explain how to build a strong brutality build step by step for a beginner", "plus1s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0, "scrollMax": 704}, "plus5s": {"focus": "question text", "y": 190, "visible": true, "scrollTop": 0}, "log": "scratch L4-fp-q3.jsonl"}
+  ],
+  "seen_summary": "In all 6 tries the ring never left its control from the moment it was placed until 5 s after the finish (0 focus changes and 0 empty-focus reads after the answer started arriving), and the view stayed at the top (scrollTop 0) while 155-704 px of answer lay below. The question-text box overlaps the Retry icon (a known false alarm): its text lines start at x 112-113, the icon ends at x 102, so the words are clear.",
+  "saved_walk": "checks/plan70-L4-QA-FREE-PLAY-01.json (question text <-> Retry)",
+  "verdict": "PASS (Retry 3 of 3, question text 3 of 3)"
+}

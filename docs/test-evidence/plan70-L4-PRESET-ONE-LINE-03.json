@@ -1,0 +1,23 @@
+{
+  "row": "PRESET-ONE-LINE-03 fade/static re-check (plan 70 flow L4.1) - the chip keeps the ring when it changes question",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0...)",
+  "deckTime": "2026-09-26 15:40-15:43 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28; chip row y 596-630",
+  "setup": "Main tab, the test chat from the QA-FREE-PLAY-01 re-check (6 finished answers), nothing running, characters off. One-chip setting already on (preset_single_chip true, unchanged). Chip style changed on the Developer tab 'Preset suggestions' buttons with A: decode -> fade -> static (then carousel for L4.2, then back to decode at the end of L4.2).",
+  "method": "walked to 'Save chat to Desktop', Down once onto the chip; a watcher (scratch hold_watch.py) read the chip text and the focused element every 250 ms for 22 s, no presses. For fade, then Down to the box and watched 14 s + 30 s.",
+  "fade": {
+    "hold_22s": "ring on the chip at t 0 and through t 22.2 s; chip text 'Which Ollama essentials should I pull for thi...' unchanged the whole time; opacity 1; one read line only (nothing changed)",
+    "screenshot": "plan70-L4-PRESET-ONE-LINE-03-fade-hold.png (chip lit with the bottom bar; its long label crawls inside the chip)",
+    "then_box": "Down to the box: by the first read (about 1 s later) the chip already showed a different question ('What's the efficiency sweet spot for this gam...'); it then stayed on that question for 44 s more with no change",
+    "logs": ["scratch L4-chip-fade-hold.jsonl", "scratch L4-chip-fade-box.jsonl", "scratch L4-chip-fade-box2.jsonl"],
+    "verdict": "PASS for the ring hold (22 s, chip unchanged, ring kept). The 'changes question again once on the box' half: it changed within about 1 s of leaving, then did not change again in 44 s - reported as seen."
+  },
+  "static": {
+    "hold_22s": "ring on the chip the whole 22 s; the words changed under it at t 9.07 s ('Which Ollama essentials...' -> 'What's the efficiency sweet spot...'); the chip kept the gpfocus ring after the change. Screenshot about 25 s later shows the chip on a third question ('How do I balance FPS and battery?') with the ring bar still on it.",
+    "screenshot": "plan70-L4-PRESET-ONE-LINE-03-static-hold.png",
+    "log": "scratch L4-chip-static-hold.jsonl",
+    "verdict": "PASS"
+  },
+  "settings_changed": "preset_chip_animation decode -> fade -> static -> carousel (L4.2) -> decode; preset_chip_fade_animation_enabled false -> true (set by the plugin while fade was chosen) -> false. Read back at the end of L4.2.",
+  "verdict": "PASS (fade and static both keep the ring for the full 20 s)"
+}

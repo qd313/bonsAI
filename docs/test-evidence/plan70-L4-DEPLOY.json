@@ -1,0 +1,19 @@
+{
+  "row": "L4.0 deploy the tip",
+  "buildCommit": "e890ce51231926b8e4d14250987180814d080aee",
+  "deckTime": "2026-09-26 15:28-15:31 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, screen 1500x843, dpr 1.28",
+  "setup": "Before deploy the Deck had the 8c4e0e4f build (index.js b50d93ea..., main.py e75cd9dd...). Nothing running. Settings copy saved as scratch settings-before-L4.json.",
+  "pressed": "plugin_build, deck_deploy, deck_openPlugin (first open failed as expected after a deploy: home screen owned input; second opened bonsAI on Main)",
+  "seen": {
+    "tipCommitsPresent": {"f87a962c ring stays on Retry": true, "42d6eb48 fade and static keep the ring": true, "5fe0800a follow-up reminder no longer leaks into progress lines (helper K waiting-line fix)": true},
+    "fingerprints": {
+      "dist/index.js": {"pc": "ce7f1cd061296ad8709623968b9ab118e47527bb3ccbf6b96225c15fb5f44fed", "deck": "ce7f1cd061296ad8709623968b9ab118e47527bb3ccbf6b96225c15fb5f44fed"},
+      "main.py": {"pc": "568e1ee59747a1718c629414e8cbe8e0d587b0b83bf08bf799dff83338ccbba2", "deck": "568e1ee59747a1718c629414e8cbe8e0d587b0b83bf08bf799dff83338ccbba2"},
+      "py_modules/backend/services/game_ai_request.py": {"pc": "606a6d9ac8fccd8218d849bdb4a4baccf464ea37a2838704bdf2bc76434029fd", "deck": "606a6d9ac8fccd8218d849bdb4a4baccf464ea37a2838704bdf2bc76434029fd"}
+    },
+    "pluginLog": "journal read right after deploy: no entries, no errors",
+    "charactersOff": "Settings tab 'AI voice & personality' toggled with A: ai_character_enabled true -> false (file read back)"
+  },
+  "verdict": "PASS (deployed and fingerprints match)"
+}

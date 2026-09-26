@@ -1,0 +1,16 @@
+{
+  "row": "Flow 4.1 THUMBS-UP - after pressing Helpful, nothing holds the ring",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0...)",
+  "deckTime": "2026-09-26 15:53-15:58 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28",
+  "setup": "Main tab, the Hades TEST chat (made tonight), nothing running, characters off. Each try on a fresh finished answer (3 different answers: 'which boons help the most against all three', 'is the rail a good weapon for the sisters fight', 'what keepsake should I bring to the fury fight'). Three thumbs-up were recorded in that test chat.",
+  "method": "walked to 'Mark reply helpful' (Helpful), pressed A with deck_runSequence (reads focus before and after), then the next press with a focus read right after. Recordings ran alongside.",
+  "tries": [
+    {"try": 1, "after_A": "nothing held the ring (no gpfocus anywhere; page active element BODY). The Helpful/Not really buttons were gone, replaced by the text 'Saved on this Deck' - the button the ring was on no longer exists.", "next_presses": "Down -> ring appears on 'Read aloud' (x 289 y 426, the speaker icon at the right of the same row, visible); Up -> the answer's text section (y 212); Right -> 'Copy reply text' (y 532)", "run_file": "runs/plan70-F4-THUMBS-UP-try1.json", "recordings": ["recordings/DeckRecord_20260926_155335_auto.mkv (the A)", "recordings/DeckRecord_20260926_155427_auto.mkv (the Down)"]},
+    {"try": 2, "after_A": "nothing held the ring (runSequence: 'Mark reply helpful' -> nothing, settled in 930 ms)", "next_presses": "Left -> ring appears on 'Read aloud' (x 289 y 426)", "run_file": "runs/plan70-F4-THUMBS-UP-try2.json", "recordings": ["recordings/DeckRecord_20260926_155604_auto.mkv (the A)", "recordings/DeckRecord_20260926_155629_auto.mkv (the Left)"]},
+    {"try": 3, "after_A": "nothing held the ring (settled in 960 ms)", "next_presses": "B -> ring appears on the tab bar at the top ('Main tab', y 64); the panel stayed open on Main", "run_file": "runs/plan70-F4-THUMBS-UP-try3.json", "recordings": ["recordings/DeckRecord_20260926_155748_auto.mkv (the A)", "recordings/DeckRecord_20260926_155812_auto.mkv (the B)"]}
+  ],
+  "plugin_log": "loader journal 15:53-15:58: only routine call lines; nothing from bonsAI about feedback or errors. bonsAI's own log (2026-09-26 15.29.14.log, 168 lines) has no feedback/error lines.",
+  "seen_summary": "Reproduced 3 of 3. Pressing Helpful swaps the two buttons for the words 'Saved on this Deck', and the ring vanishes with them. The next press does not move from anywhere: Down or Left puts the ring on the speaker icon at the right of that row; B puts it on the tab bar at the top.",
+  "verdict": "REPRODUCED 3 of 3"
+}

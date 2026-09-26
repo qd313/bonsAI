@@ -1,0 +1,16 @@
+{
+  "row": "L4.2 carousel measurement - where the ring lands after Down from 'Save chat to Desktop' in carousel style, one-chip setting",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0...)",
+  "deckTime": "2026-09-26 15:49-15:52 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28; chip viewport x 48 w 300 y 600",
+  "setup": "Main tab, the Hades test chat (4 finished answers), nothing running, characters off. preset_chip_animation decode -> carousel (Developer tab button, A); preset_single_chip already true (unchanged). Put back to decode afterwards (file read back 15:52: decode / fade false / single true).",
+  "how_the_row_appeared": "For each try the ring was left on 'Save chat to Desktop' (reached from the notes block above, never passing the chip), then RB to the Ollama tab and LB back to Main; the Main tab came back with the ring still on 'Save chat to Desktop' and the carousel track at window-start 0. The row's appear time is the LB press; the gap is measured between the bridge timestamps of the LB press and the Down press.",
+  "carousel_moves_on_its_own": "try 2: window-start went 0 -> 1 within 3.8 s of the row appearing; try 3: window-start was 4 at 62 s and still 4 at 71 s (stopped).",
+  "tries": [
+    {"try": 1, "row_on_screen_s": 3.8, "ring_element": "chip button in slot 0 ('When should I use Expert mode instead of Speed?'), x 48 w 300 y 600", "ring_slot_visible_attr": "true", "active_element": "same chip button", "slot_with_focus_class": 0, "window_start": "0", "track_transform_x": 0, "slots": "0: x 48 visible=true; 1: x 354 visible=false; 2: x 660 visible=false", "screenshot": "plan70-L4-CAROUSEL-READING-try1-4s.png"},
+    {"try": 2, "row_on_screen_s": 33.1, "ring_element": "chip button in slot 4 ('Why can't bonsAI reach my PC Ollama host?'), x 48 w 300 y 600", "ring_slot_visible_attr": "true", "active_element": "same chip button", "slot_with_focus_class": 4, "window_start": "4", "track_transform_x": -1224, "slots": "0-3 at x -1176/-870/-564/-258 visible=false; 4 at x 48 visible=true", "screenshot": "plan70-L4-CAROUSEL-READING-try2-33s.png"},
+    {"try": 3, "row_on_screen_s": 74.2, "ring_element": "chip button in slot 4 ('Any known issues running this on Deck?'), x 48 w 300 y 600", "ring_slot_visible_attr": "true", "active_element": "same chip button", "slot_with_focus_class": 4, "window_start": "4", "track_transform_x": -1224, "slots": "0-3 at x -1176/-870/-564/-258 visible=false; 4 at x 48 visible=true", "screenshot": "plan70-L4-CAROUSEL-READING-try3-74s.png"}
+  ],
+  "seen_summary": "In all three tries the ring, the page's active element and the focus-class slot were the same chip, and that chip sat inside the 300 px viewport (x 48). The off-screen ring seen on 2026-09-26 afternoon did not appear. Caveat: here the row was made to appear by a tab switch; the afternoon sighting may have come from a different way of the row appearing (after an answer finishes, or a first open).",
+  "verdict": "MEASURED (reading for the session owner; no pass/fail asked). Ring on screen and consistent in 3 of 3."
+}

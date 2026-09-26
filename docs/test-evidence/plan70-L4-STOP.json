@@ -1,0 +1,9 @@
+{
+  "row": "L4 block stopped early (agent rule: stop at once on signs another hand is on the Deck)",
+  "buildCommit": "e890ce51",
+  "deckTime": "2026-09-26 16:16-16:46 EDT",
+  "what_happened": "My last press was RB at about 16:16:04 (switch to the Hollow Knight chat for BUSY-DOT try 3); my last screen read was 16:16:15 with the bonsAI panel open. My tools then stalled for about 29 minutes (a permission-check service was unavailable) and I pressed nothing. At 16:45 the send-question script reported the bonsAI panel gone, and a screenshot showed the Quick Access panel closed and a full-screen Deep Rock Galactic: Survivor picture (Steam's game page or launch splash). No game process was found over SSH at 16:46. The Deck lock still reads bonsai-50. deck_status: Deck reachable, bridge port open, automation armed, not stopped.",
+  "screenshot": "plan70-L4-STOP-game-screen.png",
+  "left_not_done": ["Flow 5 (reduced motion on, CHIP-BUTTON-07, SCR-07, the reduced-motion boxes, reduced motion off) - not started; reduced motion was never turned on", "End of block: AI characters are still OFF (ai_character_enabled false; was true) - not put back because putting it back needs presses", "Y chat's question box may still hold 'test words only'"],
+  "verdict": "STOPPED - waiting for the session owner"
+}

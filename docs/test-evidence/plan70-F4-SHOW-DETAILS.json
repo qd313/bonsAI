@@ -1,0 +1,20 @@
+{
+  "row": "Flow 4.2 SHOW-DETAILS - Show details did nothing (A half only)",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0...)",
+  "deckTime": "2026-09-26 15:59-16:02 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28; dock top y 600",
+  "setup": "Main tab, two TEST chats made tonight (Hollow Knight charms chat, 6 answers; Hades chat, 6 answers). Nothing running, characters off.",
+  "route_a": {
+    "method": "chat row -> RB/LB to switch to the other test chat -> walk Down to 'Show details' -> A at once (deck_runSequence reads focus before and after); recording alongside",
+    "tries": [
+      {"try": 1, "switch": "Hades -> Hollow Knight chat", "first_A": "opened: the divider changed to 'Hide details' and the ring stayed on it (settled 1446 ms)", "run_file": "runs/plan70-F4-SHOW-DETAILS-a-try1.json", "recording": "recordings/DeckRecord_20260926_155918_auto.mkv"},
+      {"try": 2, "switch": "Hollow Knight -> Hades chat", "first_A": "opened ('Hide details', settled 1362 ms)", "run_file": "runs/plan70-F4-SHOW-DETAILS-a-try2.json", "recording": "recordings/DeckRecord_20260926_160011_auto.mkv"},
+      {"try": 3, "switch": "Hades -> Hollow Knight chat", "first_A": "opened ('Hide details', settled 1439 ms)", "run_file": "runs/plan70-F4-SHOW-DETAILS-a-try3.json", "recording": "recordings/DeckRecord_20260926_160106_auto.mkv"}
+    ],
+    "what_a_person_sees_measured_on_try_3": "After the A, the details panel's tab row ('This answer | Session - 6') sat at y 617, below the dock top (y 600); the point there was covered by the suggestion chip. The view did not scroll (scrollTop stayed 489 of 824). So on screen the only change was the divider's words 'Show details' -> 'Hide details'; the details themselves were out of sight behind the dock. Down from 'Hide details' went to the notes block (y 466) and scrolled the view 90 px, which brought the tab row up to y 527. Screenshot: plan70-F4-SHOW-DETAILS-opened-behind-dock.png. Recording of the Down: recordings/DeckRecord_20260926_160146_auto.mkv; run runs/plan70-F4-SHOW-DETAILS-a-try3-down.json.",
+    "verdict": "The press itself never failed (opened on the first A, 3 of 3). But in try 3 the opened details were hidden behind the dock with no scroll, which would look like 'nothing happened' to a person. Tries 1 and 2 were not measured for position."
+  },
+  "route_b": "SKIPPED as the runbook says: the Session tab (inside Show details) has no confirm box - 'Sum up this chat' starts at once on A (SessionSumUpSection.tsx header). Not pressed.",
+  "tap_half": "not run (needs a finger; maintainer's list)",
+  "verdict": "NOT REPRODUCED as a dead press in 3 tries; POSSIBLE CAUSE FOUND: details open behind the dock, only the label changes (1 of 1 measured)"
+}

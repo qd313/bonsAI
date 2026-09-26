@@ -1,0 +1,15 @@
+{
+  "row": "Flow 4.3 STUCK-PANEL - Down stops half way after the on-screen keyboard",
+  "buildCommit": "e890ce51 (dist/index.js ce7f1cd0...)",
+  "deckTime": "2026-09-26 16:02-16:08 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28",
+  "setup": "Main tab, Hollow Knight TEST chat (6 finished answers), question box EMPTY (value read back ''), nothing running, characters off. A pressed on the empty box on purpose (the runbook's one exception).",
+  "tries": [
+    {"try": 1, "pressed": "A on box, then B, Down, Right, Up, Down in one run (about 1.4 s between presses)", "seen": "the keyboard opened, but the first B did NOT close it: all four D-pad presses went to the keyboard (its highlight ended on the 'b' key; nothing was typed, box stayed empty). The plugin's focus stayed on the box through all six presses. A second B closed the keyboard. Then Down -> Ask, Right -> stayed on Ask, Up -> 'Attach screenshot to Ask', Down -> Ask: all normal.", "run_files": ["runs/plan70-F4-STUCK-PANEL-try1.json", "runs/plan70-F4-STUCK-PANEL-try1-after-close.json"], "recordings": ["recordings/DeckRecord_20260926_160250_auto.mkv", "recordings/DeckRecord_20260926_160401_auto.mkv"], "screenshot": "plan70-F4-STUCK-PANEL-try1-keyboard-still-open.png"},
+    {"try": 2, "pressed": "A on box; screenshot (keyboard open, highlight on 'g'); B; screenshot (keyboard closed, box empty); then Down, Right, Up, Down", "seen": "Down -> Ask (visible), Right -> no move (Ask has nothing to its right with an empty box), Up -> 'Attach screenshot to Ask', Down -> Ask. D-pad alive.", "run_files": ["runs/plan70-F4-STUCK-PANEL-try2-A.json", "runs/plan70-F4-STUCK-PANEL-try2.json"], "recordings": ["recordings/DeckRecord_20260926_160448_auto.mkv", "recordings/DeckRecord_20260926_160513_auto.mkv", "recordings/DeckRecord_20260926_160535_auto.mkv"], "screenshots": ["plan70-F4-STUCK-PANEL-try2-keyboard-open.png", "plan70-F4-STUCK-PANEL-try2-keyboard-closed.png"]},
+    {"try": 3, "pressed": "same as try 2, then a full walk Up to the tab bar and Down to Ask", "seen": "Down -> Ask, Right -> no move, Up -> paperclip, Down -> Ask. Walk Up: 13 presses from Ask to the 'Main tab' bar through the box, chip, notes block, Show details, Read aloud, reasoning fold, Retry, '5 earlier'. Walk Down: 14 presses from the tab bar all the way back to Ask. Down did not stop anywhere.", "run_files": ["runs/plan70-F4-STUCK-PANEL-try3-A.json", "runs/plan70-F4-STUCK-PANEL-try3.json"], "recordings": ["recordings/DeckRecord_20260926_160619_auto.mkv", "recordings/DeckRecord_20260926_160645_auto.mkv", "recordings/DeckRecord_20260926_160708_auto.mkv"]}
+  ],
+  "recovery_needed": "none (no QAM close/reopen, no reload)",
+  "side_note": "In try 1 a single B did not close the keyboard when it came about 1.4 s after the A; while the keyboard stays up, D-pad presses move the keyboard's key highlight and the panel looks dead. A second B closed it. In tries 2 and 3 (B pressed about 20 s after A) one B closed it.",
+  "verdict": "DID NOT REPRODUCE in 3 tries (the D-pad worked every time once the keyboard was closed)"
+}

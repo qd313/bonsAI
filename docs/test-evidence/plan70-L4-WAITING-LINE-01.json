@@ -1,0 +1,20 @@
+{
+  "row": "The waiting line (plan 70 flow L4.1) - no 'FOLLOW-UP CONTEXT' or 'system reminder' in the waiting line on follow-ups (helper K's fix, commit 5fe0800a)",
+  "buildCommit": "e890ce51 (includes 5fe0800a)",
+  "deckTime": "2026-09-26 15:45-15:50 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, dpr 1.28",
+  "setup": "Main tab, Strategy, AI characters OFF, nothing running. ONE new test chat made with [+] for all four questions. Each question worded so it had not been asked tonight (no answer came back from the cache: 20-27 s before the answer started each time).",
+  "pressed": "per question: deck_send_ask.py (VERIFIED), Down to Ask, A. A watcher (scratch waitline_watch.py) read the live turn's waiting/thinking line and the whole panel text every 200 ms from before the press until after the answer finished.",
+  "questions_and_waiting_lines": [
+    {"q": "in hades what is a good way to beat megaera on my deck", "lines": ["Checking offline cards for \"in hades what is a good way to beat megaera on my deck\".", "\"in hades what is a good way to beat megaera on my deck\" is in good hands now..."], "reads": 120, "log": "scratch L4-wait-q1.jsonl"},
+    {"q": "and what changes in her second phase", "lines": ["Pulling local tips about \"and what changes in her second phase\"...", "\"and what changes in her second phase\" is in good hands now..."], "reads": 71, "log": "scratch L4-wait-q2.jsonl"},
+    {"q": "and how about her sisters", "lines": ["Looking up strategy notes on \"and how about her sisters\"...", "Waking the model up for \"and how about her sisters\"..."], "reads": 109, "log": "scratch L4-wait-q3.jsonl"},
+    {"q": "which boons help the most against all three", "lines": ["(a tree emoji on its own for a moment)", "Model's warming up for \"which boons help the most against all three\". Hang in there..."], "reads": 107, "log": "scratch L4-wait-q4.jsonl"}
+  ],
+  "leak_counts": "0 of 407 reads had 'FOLLOW-UP CONTEXT' or 'system reminder' anywhere on the panel (waiting line, thinking lines, answers)",
+  "side_notes": [
+    "After the waiting line, the model's raw 'Thinking Process' notes show in the live thinking area (with [hidden] blocks from the second question on). Not part of this check; noted only.",
+    "Plugin log in the same window: 48 'OSError: No such device' tracebacks, all from another plugin (steam-deck-battery-tracker main.py line 106), none from bonsAI."
+  ],
+  "verdict": "PASS (4 of 4 follow-up waiting lines quote the person's own words; no leak)"
+}

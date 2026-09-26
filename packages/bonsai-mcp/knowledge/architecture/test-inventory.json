@@ -254,6 +254,7 @@
     "tests/test_knowledge_base_schema.py",
     "tests/test_knowledge_base_schema_compat_app_id.py",
     "tests/test_knowledge_base_service.py",
+    "tests/test_live_spoiler_cover_replay.py",
     "tests/test_local_ollama_loopback.py",
     "tests/test_local_ollama_setup_service.py",
     "tests/test_local_ollama_teardown.py",

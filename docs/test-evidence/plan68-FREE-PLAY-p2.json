@@ -1,0 +1,24 @@
+{
+  "row": "Free-play sweep (part 2)",
+  "build": "637492e7 (deployed by bonsai-50)",
+  "deck_time": "2026-09-26 00:56-01:02",
+  "screen": "external monitor 1920x1080 (QAM page 855x766, dock top 599.6)",
+  "setup": "no game; Strategy mode; chats as left by SUMUP-02/11 and the focus sweep",
+  "done": [
+    "switched chats with RB on the chat row: wheatley fight -> Deep Rock Galactic: Survivor -> wheatley fight",
+    "Deep Rock Galactic chat: Show details opened; This answer tab (ring reached the chip ladder, Chip 1 of 7); Up to the tabs row; Right -> Session · 1; Down -> 'Sum up this chat' greyed (opacity 0.45), reason 'The whole chat still fits, so there's nothing to sum up yet.', no card, no Clear; A on it: nothing happened (no timer, no toast, Ask label still 'ask'); B closed the panel",
+    "asked one question in that short chat: 'which weapon should the scout focus on early' (script VERIFIED). Wait lines: 'Searching knowledge base…', 'Model's warming up…' — no Summing up line. Answer arrived in ~21 s.",
+    "wheatley fight: opened '74 earlier' (A on the pill) - ring went to the first turn row 'wheatley fight'",
+    "expanded the older headcrabs answer: its note reads 'The chat summed itself up here.' (class --older), not focusable; walking Down went answer -> Read aloud -> Show details, skipping the note as designed",
+    "the note on the newest answer was pressed earlier (SUMUP-02-p2) and opened the Session tab with the ring on the button"
+  ],
+  "rig_runs": ["runs/plan68-FREE-PLAY-p2-drg-details.json", "runs/plan68-FREE-PLAY-p2-drg-session.json", "runs/plan68-FREE-PLAY-p2-earlier.json", "runs/plan68-FREE-PLAY-p2-older-note.json"],
+  "odd_things": [
+    "Timer: the Summing up line read 1 s, 4 s, 6 s, 10 s at roughly 2.5 s intervals (00:38). One jump of 4 in 2.5 s; plan section 6 accepts an occasional skipped number.",
+    "The ring moved into the question box on its own twice (when the headcrabs answer finished, and as soon as the crossbow answer's words started). Already reported by bonsai-50's helper; never pressed A there.",
+    "Only focused-but-partly-hidden stop seen: an answer's last paragraph under the Copy icon (rig 89%). Measured the text's own line boxes: 0 of the last 3 lines overlap the icon (icon 291.8-311.8 x, lines end at x<=267.4). Known false alarm.",
+    "Chip ladder skipped by Down from the last Session row (see FOCUS-SWEEP-p2)."
+  ],
+  "verdict": "PASS",
+  "verdict_reason": "No invisible ring, no frozen timer, no unreachable card during normal use. The ladder skip is recorded under the focus sweep, not repeated here."
+}

@@ -1,0 +1,23 @@
+{
+  "row": "CHIPS-RESET (clear the pinned test chips with the plugin's own button)",
+  "build": "637492e7 (deployed by bonsai-50)",
+  "deck_time": "2026-09-26 01:01-01:04",
+  "screen": "external monitor 1920x1080 (QAM page 855x766)",
+  "setup": "settings value before: dev_frozen_test_chips = ['what game am i playing', 'how do i beat the gonarch in black mesa', 'black mesa how do i get across the electrified water'] (Developer tab said '3 pinned.'); settings.json 2267 bytes, modified 2026-09-25 19:53:37",
+  "pressed": [
+    "walked Up to the tab bar; Right x5 (ollama, settings, perms, dev), reading the active tab after each",
+    "walkTo Down 36 presses to 'Clear frozen test chips' (exact match, visible 100%, rect y 636-676)",
+    "A once",
+    "walked Up to the tab bar (the first press after A only placed the ring, landing on 'Preset animation: fade', no A pressed there), Left x4 back to main"
+  ],
+  "seen": {
+    "ssh_value_after": "[]",
+    "settings_file_after": "2128 bytes, modified 2026-09-26 01:01:57",
+    "main_tab_chip_row": {
+      "01:03:00-01:03:42": "the chip row still showed amber TEST chips for about 40 s after the clear (read: 'TEST what game am i playing', then 'TEST …black mesa how do i get across the electrified w…'); screenshot plan68-CHIPS-RESET-p2-before-rotation.png",
+      "01:03:54": "ordinary chip 'Diagnose a slow Ollama response', 0 TEST badges; screenshot plan68-CHIPS-RESET-p2.png"
+    }
+  },
+  "verdict": "PASS",
+  "notes": "Settings cleared at once. The Main tab's chip row kept showing the old TEST chips for about 40 s (at least one read over 31 s still had a badge) before it switched to ordinary chips. For the owner to judge whether that lag matters."
+}

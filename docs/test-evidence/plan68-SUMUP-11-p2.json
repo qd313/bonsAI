@@ -1,0 +1,35 @@
+{
+  "row": "SUMUP-11 (no extra summary after a stopped question)",
+  "build": "637492e7 (deployed by bonsai-50; fix markers present)",
+  "deck_time": "2026-09-26 00:41-00:43",
+  "screen": "external monitor 1920x1080 (Big Picture 1500x844 CSS at dpr 1.28)",
+  "setup": "wheatley fight chat, right after SUMUP-02-p2 (summary written 00:39:10); no game; Strategy mode",
+  "pressed": [
+    "deck_send_ask.py --text 'and what about the crossbow' (VERIFIED)",
+    "B from a Session row (closed details), Down x5 to Ask, A",
+    "when the first answer words showed ('Right,'), the ring had moved to the question box on its own; Down once to 'Stop generation', A",
+    "deck_send_ask.py --text 'and the gravity gun' (VERIFIED); Down 1 to Ask, A"
+  ],
+  "seen": {
+    "crossbow": {
+      "screen": "Stopped — partial answer kept. (two paragraphs kept)",
+      "log": [
+        "00:42:04,388 ask_ollama: budget room=16384 rules+cards=2074 memory=1308 ... carried=18 turns, left behind=0, hidden notes removed=0",
+        "00:42:36,746 abort_background_game_ai: stop requested",
+        "00:42:36,785 ask_ollama: read interrupted by cancel"
+      ],
+      "chat_summary_lines": 0
+    },
+    "gravity_gun": {
+      "wait_lines_seen_every_400ms": ["Checking offline cards for \"and the gravity gun\".", "Model's warming up for \"and the gravity gun\". Hang in there…", "Still chewing on it…", "Still on it…"],
+      "summing_up_line_seen": false,
+      "log": ["00:42:56,283 ask_ollama: budget room=16384 rules+cards=2130 memory=1427 ... carried=20 turns, left behind=0, hidden notes removed=0"],
+      "chat_summary_lines": 0,
+      "answer_start": "Alright, listen up, you wanna know about that Gravity Gun? It ain't just some toy, mate. It's your main tool when you're stuck in Ravenholm...",
+      "summary_note_on_this_answer": 0
+    },
+    "chat_summary_lines_in_whole_log_file": 1
+  },
+  "verdict": "PASS",
+  "notes": "The only chat_summary line in the log is the one written for the headcrabs question at 00:39:10."
+}

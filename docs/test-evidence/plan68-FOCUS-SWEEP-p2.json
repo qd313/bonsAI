@@ -1,0 +1,37 @@
+{
+  "row": "Focus sweep, plan 68 section 6 D-pad list (part 2)",
+  "build": "637492e7 (deployed by bonsai-50)",
+  "deck_time": "2026-09-26 00:45-00:55",
+  "screen": "external monitor 1920x1080 (Big Picture 1500x844 CSS at dpr 1.28); QAM page 855x766; dock top 599.6",
+  "setup": "wheatley fight chat, newest answer = 'and the gravity gun' (SUMUP-11). Show details opened, tabs row, Right -> Session · 73. Session tab: button 'Sum up again' (greyed), reason line, card, 73 turn rows, chip ladder (Chip 1 of 7) as the last child.",
+  "rig_runs": [
+    "runs/plan68-FOCUS-SWEEP-p2-down.json",
+    "runs/plan68-FOCUS-SWEEP-p2-down-try2.json",
+    "runs/plan68-FOCUS-SWEEP-p2-up-from-dock.json",
+    "runs/plan68-FOCUS-SWEEP-p2-ladder-end.json",
+    "runs/plan68-FOCUS-SWEEP-p2-up.json",
+    "runs/plan68-FOCUS-SWEEP-p2-B-from-row.json",
+    "runs/plan68-FOCUS-SWEEP-p2-B-from-row-try2.json",
+    "runs/plan68-FOCUS-SWEEP-p2-B-from-button.json",
+    "runs/plan68-FOCUS-SWEEP-p2-B-from-card.json"
+  ],
+  "saved_check": "checks/plan68-session-tab-B-closes.json",
+  "steps": {
+    "tabs_row_down_to_button": "PASS - lands on 'Sum up again', visible 100%",
+    "button_down_to_card": "PASS - lands on 'What the AI remembers', visible 100%",
+    "card_down_to_first_row": "PASS - 'wheatley fight' row, visible",
+    "rows_1_to_73": "PASS - 73 distinct stops (73 distinct focus keys), every one visible 100%",
+    "last_row_down_to_chip_ladder": "FAIL - tried twice. Down from the last row ('and the gravity gun', rect 206.9-236.0) skipped the chip ladder (on screen at 250.0-547.6, above the dock at 599.6) and landed on 'Save chat to Desktop' (561.6-599.6), outside the Session tab. Further Downs went to the TEST chip, the question box, Ask, then stayed on Ask.",
+    "up_from_save_chat": "Up from 'Save chat to Desktop' also skips the ladder and lands on the last row.",
+    "ladder_down_stays_put": "PASS - once on the ladder, Down steps through the chips (Chip 1 of 7 -> 7 of 7) and then stays put on chip 7 (2 extra presses, ring did not move)",
+    "up_all_the_way_back": "PASS - 82 presses: ladder chips 7->1 (focus stays on the ladder), last row, 72 rows, card, button, tabs row. Every stop visible 100%, no cycle.",
+    "B_from_button": "PASS - panel closed, ring on 'Show details' (visible)",
+    "B_from_card": "PASS - panel closed, ring on 'Show details' (visible); saved as a replayable check",
+    "B_from_row": "PASS - panel closed, ring on 'Show details' (also seen at 00:41 on the headcrabs answer)",
+    "up_from_dock_lands_on_last_stop_in_tab": "PASS - Ask -> Voice input -> question box -> TEST chip -> Up lands on the chip ladder (250.0-547.6, dock top 599.6), visible 100%"
+  },
+  "stops_focused_but_not_visible": 0,
+  "screenshot": "plan68-FOCUS-SWEEP-p2.png (after the retry: ring on Save chat to Desktop, ladder visible between the last row and it)",
+  "verdict": "FAIL",
+  "verdict_reason": "One edge is wrong: Down from the last turn row jumps over the chip ladder to 'Save chat to Desktop' (and Up from there jumps back over it). The ladder is reachable only by Up from the dock. Every other step matched, and no stop was focused but hidden."
+}

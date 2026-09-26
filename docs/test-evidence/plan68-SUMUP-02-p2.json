@@ -1,0 +1,42 @@
+{
+  "row": "SUMUP-02 (re-run with tonight's two fixes)",
+  "build": "637492e7 deployed by bonsai-50 (checkout HEAD 252e2cd9 is docs-only on top); both fix markers grep to 1 on the Deck",
+  "deck_time": "2026-09-26 00:38-00:40",
+  "screen": "external monitor 1920x1080 (Big Picture 1500x844 CSS at dpr 1.28); QAM page 855x766",
+  "setup": "chats backed up to ~/p68-chat-slots-backup-p2-0037; wheatley fight chat (d2aa6252, 144 turns in index, no summary key); no game; Strategy mode",
+  "pressed": [
+    "chat row RB x2 -> wheatley fight",
+    "deck_send_ask.py --text 'which one works best against headcrabs' (VERIFIED, full text)",
+    "walk Down to Ask, A",
+    "after the answer: ring sat in the question box on its own (not pressed); Up x6 into the answer's last paragraph",
+    "Down from the answer's last paragraph -> note",
+    "A on the note"
+  ],
+  "seen": {
+    "wait_line_reads": ["Summing up the chat so far · 1 s", "· 4 s", "· 6 s", "· 10 s", "then ordinary waiting line"],
+    "log": [
+      "00:39:10,716 chat_summary: written in 11.4 s — covered 128 turns, 0 unread, ~8968 input tokens, model gemma4:e2b-it-qat",
+      "00:39:10,752 ask_ollama: budget room=16384 ... memory=1318 ... carried=16 turns, left behind=0, hidden notes removed=0"
+    ],
+    "answer_first_words": "Alright, listen up, you wanna know what's the best way to handle those little critters called headcrabs? ... Gravity Gun ...",
+    "note_text": "The chat summed itself up before this answer. Press to read what it kept.",
+    "note_first_stop_below_answer": true,
+    "note_rect": {"top": 525.2, "bottom": 556.9},
+    "dock_top": 599.6,
+    "note_visibility": "visible 100% (rig)",
+    "answer_last_paragraph_stop": "rig says 89% visible, one sample point under the Copy icon: the known Copy-icon false alarm",
+    "after_A": {
+      "details_tab_active": "Session · 72",
+      "focus": "bonsai-sumup-btn bonsai-sumup-btn--off, text 'Sum up again', rect 479.9-513.0 (above dock 599.6)",
+      "button_opacity": "0.45 (greyed)",
+      "reason_line": "The whole chat still fits, so there's nothing to sum up yet. (519.0-549.8)",
+      "card_rect": {"top": 555.8, "bottom": 973.4, "height": 417.6},
+      "card_above_dock_px": 43.8,
+      "card_header": "What the AI remembers | 64 turns · 1 min ago",
+      "card_footer": "Plus the newest 9 turns, word for word · 2 hidden notes left out"
+    },
+    "screenshot": "plan68-SUMUP-02-p2.png"
+  },
+  "verdict": "PASS",
+  "notes": "Button is now greyed with the expected reason (last night it stayed live). Only the card's header row and first line (43.8 px of 417.6) are above the dock; the rest sits below the dock top until scrolled."
+}

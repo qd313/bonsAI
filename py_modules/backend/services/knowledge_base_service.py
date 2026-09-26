@@ -367,7 +367,21 @@ VECTOR_RECALL_MARGIN_MIN_POOL = 4
 # tip. So this floor is a narrow, measured-safe net: it has not cost a real tip on any row
 # measured so far, but it is not a general fix for meaning-search false positives -- a phrase
 # that happens to share enough vocabulary with a tip still gets one.
-COMPAT_MEANING_FLOOR = 0.5044
+#
+# **Bug found 2026-09-25, fixed 2026-09-26 (plan 70, helper C):** the number above was written
+# down rounded to four decimal places, and then set as the floor verbatim -- so the floor sat
+# exactly ON the junk ceiling it was measured from, not above it. The check only turns a score
+# away when it is strictly *less than* the floor (see ``meaning_floor_rejected`` below), so a
+# junk phrase that reproduces that same rounded score, or a fresh one that lands a hair above
+# it, is not "below the cut-off" and still gets a tip. Measured again on the twelve junk
+# phrases of ``scripts/measure_kb_floor_holdout.py`` against the corpus this repo ships:
+# "what time is it" now reads 0.50439822695..., which happens to round to the same 0.5044 but
+# is a whisker under the old floor by luck, not by design -- any small, ordinary difference in
+# corpus build or embedding model would have put it back on the wrong side. The floor is moved
+# to 0.5050, six thousandths above the junk ceiling instead of sitting on it, which still keeps
+# every tuning-row right tip: the weakest one measured on this corpus today is 0.5804 (question
+# V2-C-08, "I can play alone but online kicks me out straight away"), 75 thousandths of margin.
+COMPAT_MEANING_FLOOR = 0.5050
 
 # --- Meaning floor: "none of these fit" (D87, notes half, 2026-09-07) --------------------------
 #

@@ -1843,6 +1843,46 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertTrue(result.attached)
     self.assertEqual(result.retrieval_method, "hybrid")
 
+  def test_compat_meaning_floor_rejects_a_score_at_the_old_junk_ceiling(self):
+    """The floor must sit ABOVE the junk ceiling it was measured from, not on it.
+
+    Found 2026-09-25: COMPAT_MEANING_FLOOR was set to the same rounded number the junk
+    ceiling was measured at (0.5044), and the rejection check is strict less-than, so a pool
+    whose best score lands exactly on that old number was not "below the cut-off" and still
+    attached. Pinned here at that exact value so a future rounding of the floor back down to
+    the ceiling it is measured from fails this test rather than shipping quietly.
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    with mock.patch(
+      "backend.services.knowledge_base_service.nomic_embed_available",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.embed_texts",
+      return_value=[[1.0, 0.0] + [0.0] * 766],
+    ), mock.patch(
+      "backend.services.knowledge_base_service._load_compat_vectors",
+      # Dot product against [1.0, 0.0, ...] is just this vector's first component: 0.5044,
+      # the old junk ceiling this floor used to sit exactly on.
+      return_value={1: [0.5044, 0.0] + [0.0] * 766},
+    ):
+      result = retrieve_knowledge_context(
+        settings,
+        ask_mode="expert",
+        question="why is my game crashing proton issue",
+        app_id="",
+        app_name="",
+        domain="compat",
+        pc_ip="127.0.0.1:11434",
+      )
+    self.assertFalse(result.attached)
+    self.assertTrue(result.notes.startswith("routed_nothing_fit"))
+
   def test_thank_you_very_much_attaches_nothing(self):
     """Precision test carried over from wave two's tip lane -- must keep passing unchanged.
 

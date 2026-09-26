@@ -460,6 +460,22 @@ Found while reading the code for this plan. None is fixed by it unless a step ab
 - **2026-09-25** — Documents brought up to date for everything above: the roadmap entry moved to Verify
   naming the new rows, the rows added to the testing documents, a changelog line, one stale comment in the
   waiting-line file fixed (`47ae1fd8`), and this log. **The Deck pass, step 7, is next.**
+- **2026-09-25** — The Deck pass, step 7, on the external monitor (build `2706d4a8`, 22:16–23:17). Most rows
+  pass: SUMUP-01, 03, 04a, 05, 06 and 08, plus a full rerun of CHAT-MEMORY-01 (now closed). SUMUP-02 partly
+  passes — the note and the card's own D-pad moves work, but the button read "Sum up again" instead of
+  greyed out (cause found and fixed the same night) and the card sat mostly behind the dock. SUMUP-07 passes
+  for what it tests, though its own wording needs a "with nothing running" qualifier. Two new bugs found:
+  the summary card sits behind the dock until Down is pressed, and the summary's own wording reads oddly in
+  places. Three small D-pad slips also seen, may predate this plan. Still owed: SUMUP-02's re-run, SUMUP-07
+  with a game running, SUMUP-09 and 10 (not runnable on the Deck as it stands), the focus-graph walk and the
+  free-play sweep — the last two, and clearing the pinned test chips, were cut short when Claude Code's own
+  permission check began refusing the controller rig's presses partway through the evening.
+- **2026-09-25** — Two bugs the Deck pass found were fixed the same night. A stopped question used to make
+  the chat sum itself up again right away, since the memory counted the stopped exchange as "left behind"
+  when it should not have (`f008470c`). A saved answer whose hidden block had its markers written twice let
+  that hidden text leak into later questions' memory and into summaries; the chat memory now copes with
+  doubled markers, though why they get doubled in the first place is not yet known (`6843f8e1`). Neither fix
+  has a device re-check yet.
 
 ---
 

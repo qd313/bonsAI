@@ -260,6 +260,44 @@ the server reloaded the model the moment the question arrived. Fixed by having t
 the same room Ask will ask for. Fixed in `a224fb6`. Evidence
 `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`, `docs/test-evidence/plan64-PRELOAD-01-try4.json`.
 
+**What costs frames while an answer streams is how often and how much of the panel changes, not which
+animations are running.** Measured on the Deck 2026-09-25: the live thinking box changing 6 to 7 times a
+second cost nothing, holding 59 to 60 frames a second the whole time, while the answer's own text moving
+on every single frame held the panel near 20. Slowing the model down, and giving the chat its own
+rendering layer, both changed nothing either. Before blaming an animation for a slow panel, measure how
+often the thing actually redraws. Evidence `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+
+**Two timers that both touch the screen, even on the same schedule, cost twice the redraws of one.** The
+streamed-answer scramble's own reshuffle timer and the text reveal's own step ran on separate clocks at
+the same rate, so each beat of new text cost two or three redraws instead of one. Moving the scramble to
+update inside the reveal's own render, instead of on a timer of its own, roughly halved the extra cost.
+Fixed in `bb8d7e5b`.
+
+**Compare frame-rate ideas inside one streaming answer, not across separate ones.** A single run's frame
+rate swings by about 5 frames a second on its own, so timing two different answers is not a fair
+comparison. Split one answer into alternating 2.5-second segments, one setting per segment, and compare
+segment to segment; that is how the plan 69 frame-rate numbers were measured. Evidence
+`docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+
+**A performance trace of the Quick Access page is really a trace of all of Steam.** Every one of Steam's
+own windows shares one rendering thread, so a CPU profile taken while the plugin panel is open also
+carries whatever else Steam's interface is doing at that same moment. Read a trace as "what Steam's
+interface did," not as "what the plugin did," and look for the plugin's own functions by name rather than
+trusting the total.
+
+**Letters and placeholder symbols of a different width force a re-wrap that keeps the whole page busy.**
+The streamed-answer scramble's first version swapped real letters for placeholder symbols wider or
+narrower than them, so the last line of a growing answer kept re-wrapping, and each re-wrap woke the
+chat's own size-watching code to re-measure the whole panel — measured on the Deck as never idle across a
+9-second sample, where the same stretch with the scramble off was idle a third of the time. Drawing each
+placeholder symbol over its real letter, which keeps its own width, instead of replacing the letter fixed
+this. Fixed in `e0fa7f6c`.
+
+**Moving the model off the graphics chip to free up frames for the panel does not pay off.** Reading a
+long prompt on the Deck's processor instead of its graphics chip took about 220 seconds instead of 13 —
+so much slower that it is not a real way to buy the panel more frames during an answer, whatever it might
+save it.
+
 ---
 
 ## 4. Briefing helpers

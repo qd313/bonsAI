@@ -136,6 +136,29 @@ both moved cleanly out of the question box; Left simply had nothing next to it. 
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
+**One deliberate try on the Deck 2026-09-23, under a recorder, DID NOT REPRODUCE:** pressed A once on the
+empty question box (its last known trigger), the on-screen keyboard opened, B closed it, and Down, Right,
+Up and Down all moved the ring normally afterward. **Stays open** — one clean build does not close a fault
+that has come and gone before; the maintainer's call. Evidence
+`docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
+
+**Sighting 2026-09-26, no evidence file:** ring stuck in the question box after an answer finished,
+reported by the Deck helper. **Seen again 2026-09-26 (plan 70 flows 1+2a), twice more:** the ring sat in
+the question box on its own after an answer, with nobody pressing anything. **Seen again 2026-09-26 (plan
+70, flows L3 + 2d), a related shape:** right after pressing Ask, the ring moved onto the question box on
+its own while the answer was still streaming in — an A there would have opened the on-screen keyboard
+instead of doing nothing.
+
+**Not reproduced 2026-09-26 (plan 70, flow 4.3), 3 tries.** A on the empty question box on purpose (the
+runbook's one allowed exception), then a run of D-pad presses. In try 1, a B pressed about 1.4 seconds
+after the A did not close the on-screen keyboard — all four D-pad presses that followed moved the
+keyboard's own key highlight instead, nothing typed, and the plugin's own focus stayed on the box through
+all six presses; a second B did close it, and every press afterward moved normally. In tries 2 and 3, with
+B pressed about 20 seconds after the A, one B closed the keyboard and the D-pad was alive throughout,
+including a full 13-press walk up to the tab bar and 14 back down with nothing stopping partway. No
+recovery step (no Quick Access Menu close, no reload) was needed in any of the three. Evidence
+`docs/test-evidence/plan70-F4-STUCK-PANEL.json` (+ screenshots).
+
 ## Ordinary phrases attach game cards
 
   - **Implemented 2026-08-23:** `VECTOR_RECALL_FLOOR` raised `py_modules/backend/services/knowledge_base_service.py:148` from 0.50 to 0.515, against a fresh local repro (real `nomic-embed-text` via a local Ollama, real seed cards for the six phrases and the seven `V2-PARA-*` strategy rows in `kb_eval_v2.json` — script not committed). The two ranges overlap (noise up to 0.5308, a genuine paraphrase hit as low as 0.4302), so no single floor separates them cleanly; 0.515 was chosen to sit just above "one sentence"'s noise score (0.5034) and just below the lowest genuine score this change must not break (Mind Flayer / `V2-PARA-S04`, 0.5169).
@@ -1264,6 +1287,67 @@ placed at the very start of the answer (or a second one near the end) streams it
 until the whole answer finishes, even with the line-start fix in place. Evidence
 `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json` (+ screenshot).
 
+**Cause found and fixed 2026-09-26 (plan 70, helper A2, four commits, 15:37-15:50).** The leak was on the
+screen, not the back end. Proof first: the two answers the Deck saved were rebuilt and replayed through
+the real back-end path — status-tag stripping, the branch-menu hold-back, the live spoiler cover, exactly
+as each streamed update runs them. The back end never sent the name uncovered, in 0 of 5,333 replayed
+updates (the same check fails 1,131 times with its own hold-back switched off, so the check itself works).
+Correction to the earlier write-up: the first cover in both leaks was the back end's own doing, not the
+model's — the model's answer was already correctly wrapped; the screen just showed it wrong.
+
+**The real cause (commit `2d7406a7`):** the screen's letter-by-letter reveal assumed each new snapshot of
+the answer only ever grows at the end. The back end's live cover rewrites text it already sent — it wraps
+a sentence in a spoiler fence once the name arrives, moving the fence's closer as the sentence grows, and
+can take back a word that could still become a name. The reveal kept what it had already shown and
+appended the new snapshot from the old length, so the fence's own opening marker was eaten
+("When fight" + "-spoiler\nWhen fighting the Soul Master..." — character for character what the Deck
+read), the named sentence showed as plain text, and the orphaned closer opened a code-block chip. Fix:
+when the shown text is no longer the start of the new snapshot, the reveal falls back to the point both
+agree on and reveals the rest from there; a word the back end takes back now disappears instead of
+staying on screen. Tests: the two exact snapshot pairs read on the Deck (HK-A, HK-MENU) and a taken-back
+word all fail on the old reveal, checked.
+
+**A second bug the same fix exposed (commit `acf69c5f`):** with the fall-back point landing inside an
+unfinished fence, a cover would flicker from "Spoiler — tap to show" to "Spoiler hidden until complete…"
+on every update, and a half-typed fence marker could flash a "Code block incoming…" chip. Fix: a
+`settleRevealCut()` step decides where the reveal may stop — never inside a fence marker line, never
+inside a spoiler fence the snapshot has already closed. Tests: a case-by-case check of `settleRevealCut()`
+itself, and the real HK-A cover walked update by update, which fails without the change.
+
+**"The boss boss" wording bug, same investigation (commit `cb708b37`):** the branch menu's stand-in for a
+hidden name only swapped the name itself, so "facing the Soul Master boss?" became "facing the boss
+boss?". The stand-in now also swallows a "boss" that follows the name. Tests: the Deck's own question
+line and two option labels (failed before the fix), plus a "bossfight" boundary case that must stay
+untouched.
+
+**Standing regression guard added (commit `af29d6fc`):** the back-end replay used to find the proof above
+is now a permanent test — five answer shapes, five update sizes, every update checked for a protected name
+outside a closed cover, an open cover's body, or half a fence marker. Breaking the back end's hold-back on
+purpose fails it 921 times.
+
+**Two further risks the same investigation found, fixed 2026-09-26 (plan 70, helper A2, round two,
+16:06-16:16):** (1) the "From the notes" block under an answer could print a protected note's title in
+plain text when the answer used the note without ever naming the boss — the block only ever hid behind
+the answer's own cover, and an answer with no cover (because it never named anyone) had nothing to hide
+behind. Fix (commit `b673bcab`): the back end now decides, once per turn before the model is even called,
+which attached notes are protected (a boss or enemy note the question did not name, on a turn whose
+spoilers are covered), and marks them; the block shows "Boss note (spoiler)" for a marked note until
+opened on purpose, live, finished, or in a saved chat, reusing the same names the answer, thinking and
+branch menu already use. (2) the screen's own "you already asked about it, so don't hide it" rule could
+open a cover by matching shared words between the question and the cover's own restatement, even when the
+question never contained the actual name — so a description-only question could still see the name in
+the answer, Copy, and Read aloud. Fix (commit `9a557a9c`): the screen now reads the same per-turn
+protected names the back end marks, and never opens a cover naming one of them through the word-overlap
+rule; the back end's own "asked about" value now counts only when the question actually contains it. Both
+fixes proven by breaking them: marking off fails the marked-note tests, the protected check off fails 4 of
+the un-hide tests. **Deck re-check owed, row SPOILER-COVER-01, A2's own re-check text:** the same
+described-boss questions, watched live and in the finished answer, the notes block, Copy and Read aloud.
+
+**New open question for the maintainer, not fixed this wave:** Show details' own sources credit line
+still lists a protected note's real name, so a boss's name is readable there after a deliberate press on
+Show details, with no warning that it is a spoiler. Filed as an open question, not a bug, since pressing
+Show details is itself already a deliberate choice to see more — see the Features list.
+
 **The model's own thinking can leak the same way, fixed 2026-09-26 (plan 70, helper A, commit
 `4b975316`).** Measured live on the Deck (THINKING-SPOILER-01): the live thinking line, and the saved
 reasoning shown in the fold afterwards, both named a protected boss in plain words in 4 of 6 tries, plus
@@ -1676,6 +1760,16 @@ sightings, and the app log itself wrote nothing new in the seconds around the sw
 seen three times before, so one clean try is not enough to close it; the maintainer's call. Evidence
 `docs/test-evidence/plan64-BUSY-DOT-01.json` (+ screenshots).
 
+**Three more clean tries on the Deck 2026-09-26 (plan 70, flow 4.4), dot half did not appear.** Two test
+chats (X writing, Y switched-to), each try switching to Y about 19 seconds after X's first words. In all 3
+counted tries, X's dot showed busy (a hollow cyan ring) from the moment of the switch until the answer
+finished, and turned green within the same second the plugin's own log said it finished — the dot itself
+behaved correctly every time. **Ask half, unclear, the maintainer's call:** Y's own Ask button read greyed
+(not "ready") the whole time X was writing, even once in a try with words already typed into Y's box —
+and turned ready the moment X finished. The row as written expects Y's Ask to read ready while X writes;
+what was seen is the opposite. Which reading is actually correct behaviour is for the maintainer to
+decide. Evidence `docs/test-evidence/plan70-F4-BUSY-DOT.json` (+ screenshots).
+
 
 ## The open tab strip redrawn: six equal cells, one icon family, only the current tab named
 
@@ -2007,6 +2101,16 @@ between:** show a short status line instead of the checklist; send the model onl
 actually fit the question (needs measuring first, since fewer rules could change answers); turn
 thinking off by default in Speed mode.
 
+**Seen again 2026-09-26 (plan 70, flow L3):** single inline backtick marks around a quoted tag (like
+`` `<bonsai-status>` ``) or a note title showed in the live thinking line in 3 of 6 described-boss tries —
+not a spoiler leak, since nothing protected is named, just more of the model quoting its own instructions
+back at itself. Evidence `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
+
+**Seen again 2026-09-26 (plan 70, flow L4):** from the second question in a chat on, the model's raw
+"Thinking Process" heading (a note the model writes for its own use) shows live in the thinking area,
+with `[hidden]` blocks inside it once a spoiler cover is owed. Not tested as its own check, just noted
+while watching the waiting-line fix. Evidence `docs/test-evidence/plan70-L4-WAITING-LINE-01.json`.
+
 ## Black Mesa's electrified-water question
 
 **Found 2026-09-19.** Asking how to cross the electrified water gave the right, specific answer, but
@@ -2201,6 +2305,13 @@ purpose: two tests that check the ring reaches the archived question's Retry, an
 as expected, restored after. **Deck re-check owed:** the same setup as before — an answer finishing while
 the ring sits on the question's Retry or text — confirming the ring now stays in view.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L4.1), closed.** Six fresh questions, three with the ring
+on Retry and three on the question text. In all six the ring never left its control from the moment it
+was placed until 5 seconds after the answer finished — 0 focus changes, 0 empty-focus reads — and the
+view stayed at the top with 155 to 704 px of answer still below. Saved walk
+`checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence `docs/test-evidence/plan70-L4-QA-FREE-PLAY-01.json`
+(+ screenshots).
+
 **A preset chip loses the ring when its question changes underneath it.** Found on the Deck 2026-09-26
 (plan 70, flow 2b.9), being fixed (helper F2). In the fade and static chip styles, when the single chip
 swaps to a new question while it holds the ring, the ring is lost outright — nothing on the panel is
@@ -2219,12 +2330,27 @@ walking Up from the question box can skip a chip that is mid-fade. **Deck re-che
 **PRESET-ONE-LINE-03** re-check — hold the ring on a fade or static chip through a question swap and
 confirm it stays.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L4.1), closed.** Fade: the ring stayed on the chip for a
+full 22 seconds with its question unchanged; moving on to the box, the chip changed its question within
+about a second and then held that question for 44 more seconds with no further change — reported as seen,
+not a fail. Static: the ring stayed on the chip through the full 22 seconds, including the moment its
+words changed at 9.1 seconds, and was still on it 25 seconds later after a second change. Evidence
+`docs/test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots).
+
 **In carousel style, Down from "Save chat to Desktop" can land on a chip slid mostly off screen.** Found
 on the Deck 2026-09-26 (plan 70, flow 2b.9). The ring landed on a chip showing only about 4% of itself at
 the left edge, with the fully visible chip beside it holding no ring; Right moved the ring onto the
 visible chip. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot). **Not fixed
 this wave — helper F2's guess:** Steam may be ignoring a chip's own change to "focusable" after it first
 appears on screen. Needs one more Deck reading (flow L4.2) before a fix is attempted.
+
+**Re-measured on the Deck 2026-09-26 (plan 70, flow L4.2): not reproduced in 3 tries, kept as a sighting,
+not a bug.** The ring was left on "Save chat to Desktop", then the row was made to reappear by switching
+to another tab and back — in all three tries the ring, the page's own active element and the highlighted
+carousel slot were all the same chip, and that chip sat fully inside the visible strip, whether the
+carousel had moved on its own or not. The afternoon sighting may need a different way of making the row
+appear (right after an answer finishes, or a first open) rather than a tab switch. Evidence
+`docs/test-evidence/plan70-L4-CAROUSEL-READING.json` (+ screenshots).
 
 **The decode chip's typing caret is pale, not the accent green.** FAILED on the Deck 2026-09-26 (plan 70,
 flow 2b.10), not fixed this wave. The caret is there and moves left to right correctly; its colour
@@ -2249,6 +2375,13 @@ of the reminder-laden one. The saved turn header and the "first line quotes your
 checked too and never saw the reminder, so nothing there needed changing. Tests prove the exact reported
 shape reaches the waiting line clean while the model still receives the reminder. **Deck check owed:**
 row **KB-FOLLOWUP-QUOTE-01** — the same third-question setup, watching the waiting line and Show details.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L4.1), closed.** Four follow-up questions in one chat, each
+watched every 200 ms from before the press to after the answer finished — 0 of 407 reads showed "FOLLOW-UP
+CONTEXT" or "system reminder" anywhere on the panel; every waiting line quoted the person's own words.
+Side note: from the second question on, the model's raw "Thinking Process" notes show in the live
+thinking area — not part of this check, folded into the thinking-checklist idea instead. Evidence
+`docs/test-evidence/plan70-L4-WAITING-LINE-01.json`.
 
 **D-pad Left on the chat row leaves the plugin for Steam's side rail.** Found and measured on the Deck
 2026-09-26 (plan 70, flow 2b.12). From the first chat, a middle one, or the [+] button, Left moves the
@@ -2277,9 +2410,25 @@ suggestion chip also skips "Open Permissions"; the same fix should cover both. R
 Evidence `docs/test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot
 `-hint-dismiss-unreachable.png`).
 
-**After a plugin reload, older answers lose their "Was this helpful?" row, leaving just the speaker
-icon.** Sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
-before a reload. Not yet reproduced on purpose. Evidence `docs/test-evidence/plan70-READ-ALOUD-02-06.json`.
+**Fixed 2026-09-26 (helper F2, commit `59d3d1c0`).** The hint row relied on `flow-children="horizontal"`
+alone for Left/Right, which Steam does not honour (the chip row found the same thing on 2026-09-01); Up
+from the ban-lookup row and from the chips went straight to the reply, past the rows in between; the
+hint's own Down still aimed at the session context strip, which plan 62 removed. Now: the hint row claims
+Left and Right itself and moves between its two buttons, holding still at either end instead of leaving
+for the Quick Access rail; Down from the hint goes to the ban-lookup row when it shows; Up from the
+ban-lookup row goes to the hint first when it shows; Up from a suggestion chip goes to the lowest
+permission row first, then up through them, then the reply as before. Proved by breaking the fix: 5 of 8
+new tests fail without it. **Noticed, not fixed this wave:** "Save chat to Desktop" is probably still
+skipped by Up from the chips, since nothing registered can take the ring there. **Deck re-check owed:**
+reach Dismiss with Right from "Open Permissions", and confirm Up from the ban-lookup row and the
+suggestion chip both stop on the permission rows before reaching the reply.
+
+**Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon.**
+First sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
+before a plugin reload. Evidence `docs/test-evidence/plan70-READ-ALOUD-02-06.json`. **Seen again 2026-09-26
+(plan 70, flow 4), this time after switching between two test chats rather than a reload** — an older
+answer's Helpful row and its "Save chat to Desktop" button were both gone, the same shape twice now.
+Filed as an open bug rather than a one-off sighting. Not yet measured closely enough to fix.
 
 **In Show details, the chip ladder only lets Up leave one chip at a time.** Sighted on the Deck
 2026-09-26 (plan 70, flow L3/2d). Not yet reproduced on purpose; worth checking against the chip-ladder
@@ -2291,4 +2440,43 @@ about "heat management", a mechanic Hades does not have. Separately, asked in Ho
 reading the description as if it were meant to be a literal title, when the very same area is correctly
 answered (naming Soul Master) when asked a different way in the same session. Evidence
 `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`.
+
+## Flow 4 findings
+
+Long version of two roadmap entries, re-investigated during plan 70's flow 4 (2026-09-26). Moved here to
+keep the roadmap under its size limit.
+
+**Once, the Show details line did nothing when pressed.** OPEN, found by the maintainer by hand on the
+Deck 2026-09-23 (build `a224fb6`), after the Deck work ended. No details yet on which chat or when; the
+maintainer does not remember whether they pressed A or tapped, or whether it was right after the Clear
+confirm box or after switching chats. **Reproduction plan, to try all four combinations:** press Show
+details with A, and separately by tap; try each once right after cancelling the Clear confirm box, and
+again right after switching chats. Needs a Deck walk with the focus recorder before any fix — the session
+thinks this is the same family as the tab-bar ghost entry. **The "after cancelling Clear" half is retired
+2026-09-25 (plan 68):** that confirm box is gone, replaced by "Sum up this chat." The "after switching
+chats" half still stands and can still be tried.
+
+**Likely cause found 2026-09-26 (plan 70, flow 4.2), being fixed (helper F2).** Walked to Show details and
+pressed A at once, right after switching between two test chats, 3 times: the press itself never failed —
+the divider changed to "Hide details" and the ring stayed on it every time, settled within about 1.4
+seconds. But on the one try measured for screen position, the opened details panel's own tab row ("This
+answer | Session · 6") landed at y 617, below the dock's own top at y 600 — covered by a suggestion chip —
+and the view did not scroll to bring it up (scrollTop unchanged). So on screen, the only visible change was
+the divider's words switching from "Show details" to "Hide details"; the details themselves stayed out of
+sight. Walking Down from "Hide details" reached the notes block and scrolled the view up 90 px, bringing
+the tab row back into view. This is very likely the original sighting: a press that worked but looked like
+it did nothing. Evidence `docs/test-evidence/plan70-F4-SHOW-DETAILS.json` (+ screenshot
+`plan70-F4-SHOW-DETAILS-opened-behind-dock.png`).
+
+**After pressing thumbs up on a reply, nothing holds the D-pad ring.** OPEN, found by the plan 65 Deck
+check 2026-09-24.
+
+**Reproduced 3 of 3 on the Deck 2026-09-26 (plan 70, flow 4.1), being fixed (helper F2).** Three finished
+answers in one test chat, each with a fresh press of "Mark reply helpful": every time, nothing held the
+ring afterward (no `gpfocus` anywhere, the page's own active element back on `BODY`) — the Helpful and Not
+really buttons are gone, replaced by the words "Saved on this Deck", so the control the ring had been on no
+longer exists. The next press does not recover from where it left off: Down or Left lands the ring on the
+small "Read aloud" speaker icon at the right of the same row; B lands the ring on the tab bar at the top
+(the panel itself stays open). The plugin's own log shows nothing about this — no error, no feedback line.
+Evidence `docs/test-evidence/plan70-F4-THUMBS-UP.json`.
 

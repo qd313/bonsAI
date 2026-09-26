@@ -81,27 +81,21 @@ starts work outside this.
   keyboard on the question box — worth trying on this hidden-block case too.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, sighted three
   more times.** Row **REPLY-STOPS-MIRROR-01**. [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **The ring is dropped again when an answer finishes** — **VERIFY, fixed 2026-09-26 (F2,
-  `f87a962c`), not a regression.** Row **QA-FREE-PLAY-01** re-check. [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **VERIFY, fixed
-  2026-09-26 (F2, `42d6eb48`), fade and static only.** Row **PRESET-ONE-LINE-03** re-check.
-  [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, not fixed,
-  needs one more reading.** [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
+  only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[layout]` **The decode chip's typing caret is pale, not the accent green** — **OPEN, FAILED
   2026-09-26.** Row **PRESET-STREAM-ANIM-01**. [Detail](roadmap-details.md#flow-2b-bugs).
-- ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
-  question** — **VERIFY, fixed 2026-09-26 (helper K, commit `5fe0800a`).** Deck check owed: row
-  **KB-FOLLOWUP-QUOTE-01**. [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **D-pad Left on the chat row leaves the plugin for Steam's side rail** — **OPEN, measured
   2026-09-26.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **OPEN, FAILED 2026-09-26, being
-  fixed (F2).** Row **PERMS-CLEAN-06**. [Detail](roadmap-details.md#l3-and-2d-findings)
-- ★ `[reply]` `[focus]` **Three more sightings, 2026-09-26, not reproduced on purpose yet:** the
-  "Was this helpful?" row goes missing after a reload; the chip ladder only lets Up leave one chip at a
-  time; two confidently wrong answers. [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **VERIFY, fixed 2026-09-26 (F2,
+  `59d3d1c0`).** Row **PERMS-CLEAN-06**. [Detail](roadmap-details.md#l3-and-2d-findings)
+- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
+  speaker icon** — **OPEN, seen twice now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
+  only lets Up leave one chip at a time; two confidently wrong answers.
+  [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -172,17 +166,16 @@ starts work outside this.
   any fix — the session thinks this is the same family as the tab-bar ghost below. **Retired 2026-09-25
   (plan 68):** the Clear button this reproduction plan presses is gone, replaced by "Sum up this chat," so
   this exact repro can no longer be run. The button was replaced, not fixed.
-- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **OPEN, found by the maintainer by
-  hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** No details yet on which chat
-  or when; the maintainer does not remember whether they pressed A or tapped, or whether it was right after
-  the Clear confirm box or after switching chats. **Reproduction plan, to try all four combinations:** press
-  Show details with A, and separately by tap; try each once right after cancelling the Clear confirm box,
-  and again right after switching chats. Needs a Deck walk with the focus recorder before any fix — the
-  session thinks this is the same family as the tab-bar ghost below. **The "after cancelling Clear" half
-  is retired 2026-09-25 (plan 68):** that confirm box is gone, replaced by "Sum up this chat." The "after
-  switching chats" half still stands and can still be tried.
-- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, found by the
-  plan 65 Deck check 2026-09-24.**
+- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **OPEN, likely cause found
+  2026-09-26 (plan 70, flow 4.2), being fixed (helper F2).** The press itself never failed in 3 fresh
+  tries, but the opened details can land behind the dock with no scroll to bring them into view — on
+  screen, only the divider's own words change ("Show details" to "Hide details"), which reads as nothing
+  happening. [Detail](roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **OPEN, reproduced
+  3 of 3 on the Deck 2026-09-26 (plan 70, flow 4.1), being fixed (helper F2).** Pressing Helpful swaps the
+  two buttons for the words "Saved on this Deck", and the ring vanishes with them; the next press does not
+  pick up from where it was — Down or Left lands on the speaker icon, B lands on the tab bar.
+  [Detail](roadmap-details.md#flow-4-findings).
 - ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from
   turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
 - ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
@@ -200,8 +193,11 @@ starts work outside this.
   needs a Deck walk with the focus recorder before any fix.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18, seen three times, stays open — the maintainer's call.** Switch away from a chat that is
-  still writing and nothing says so; the code looks right on paper. One clean measured try on the Deck
-  2026-09-23 did not reproduce it, which is not enough to close a bug seen three times before.
+  still writing and nothing says so; the code looks right on paper. Two clean measured sessions since
+  (2026-09-23 and 2026-09-26, 3 more tries) did not reproduce it, which is not enough to close a bug seen
+  three times before. **New, unclear, the maintainer's call:** the other chat's own Ask button read
+  greyed while the first was still writing, not "ready" as the row expects — which reading is actually
+  right is open.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Clear resets the waiting state
@@ -262,37 +258,23 @@ starts work outside this.
   found from the maintainer's own screenshot 2026-09-26.** Lines like "Direct and concise? Yes" show while
   a reply is written — the model checking its own rules out loud, re-sent and re-checked every question.
   Noise to a person, and Deck time for no benefit they see. Screenshot
-  `docs/test-evidence/plan70-THINKING-CHECKLIST.png`. **Same family, seen again 2026-09-26 (flow L3):**
-  single inline backtick marks around a quoted tag or a note title showed in the thinking line in 3 of 6
-  tries (row THINKING-SPOILER-01's own re-check) — not a spoiler leak, since nothing protected is named,
-  just more of the model quoting its own instructions back at itself. Evidence
-  `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
+  `docs/test-evidence/plan70-THINKING-CHECKLIST.png`. **Same family, seen twice more 2026-09-26 (flows L3
+  and L4):** single inline backtick marks quoting a tag or note title in 3 of 6 tries; separately, the raw
+  "Thinking Process" heading the model writes for itself shows live from the second question on.
   [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
-  out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
-  Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
-  2026-09-18:** pressing Ask can leave the highlight stuck on the question box, happening on almost every
-  question sent by night's end; only closing the whole Quick Access Menu and reopening it clears it. **Not
-  seen at all on 2026-09-19** across about ten questions in four games. A separate, related fault (Down
-  doing nothing while an answer arrives) was fixed 2026-09-20 and is now its own row, but this entry's own
-  symptoms were not seen that day, so it stays open. **One deliberate try on the Deck 2026-09-23, under a
-  recorder, DID NOT REPRODUCE:** pressed A once on the empty question box (its last known trigger), the
-  on-screen keyboard opened, B closed it, and Down, Right, Up and Down all moved the ring normally
-  afterward. **Stays open** — one clean build does not close a fault that has come and gone before; the
-  maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots). **Sighting
-  2026-09-26:** ring stuck in the question box after an answer finished, no evidence file — reported by
-  the Deck helper. **Seen again 2026-09-26 (plan 70 flows 1+2a), twice more:** the ring sat in the question
-  box on its own after an answer, with nobody pressing anything. **Seen again 2026-09-26 (plan 70, flows
-  L3 + 2d), a related shape:** right after pressing Ask, the ring moved onto the question box on its own
-  while the answer was still streaming in — an A there would have opened the on-screen keyboard instead
-  of doing nothing.
+  out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Only a full loader
+  restart clears it, not just reopening the panel. Comes and goes: clean, trap-free runs on 2026-09-19,
+  2026-09-23 and again 2026-09-26 (3 tries) have not been enough to close a fault sighted as recently as
+  2026-09-26 (flows 1+2a, L3+2d — a related shape, ring landing on the question box mid-stream).
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **OPEN, FAILED again on the Deck 2026-09-26 (plan 70, flow L3), escalated to the stronger model
-  (helper A2).** The 2026-09-26 fix did not hold on a second try. Row **SPOILER-COVER-01**.
+  **VERIFY, cause found and fixed 2026-09-26 (helper A2, four commits).** The live leak was the screen's
+  own reveal, not the back end (0 of 5,333 replayed updates carried the name); two further risks the same
+  investigation turned up are fixed too. Row **SPOILER-COVER-01**. **Deck re-check owed.**
   [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **VERIFY, fixed
   2026-09-26 (helper A, `4b975316`).** Thinking is drawn as plain text, so a protected name there was
@@ -320,6 +302,11 @@ replace it with a specific issue when one exists.
   needs the maintainer's call.** Not a spoiler leak — the plugin's own prompt deliberately tells the model
   to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like machine text.
   Decide: drop it, soften it, or leave it. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, needs the
+  maintainer's call, found 2026-09-26 (plan 70, helper A2).** Not filed as a bug: pressing Show details is
+  already a deliberate choice to see more, unlike the answer, Copy or Read aloud, which the spoiler cover
+  now protects. Decide whether the credit line should also hide a protected name until asked, or whether
+  a deliberate press is enough. [Detail](roadmap-details.md#spoiler-leak-family).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -1032,6 +1019,18 @@ review, again to keep this document under its size limit.
   **DONE, fixed in `ec6f87ab` on 2026-09-23, passed on the Deck 2026-09-26.** Row **VAC-06**: the reply
   named "Permissions → Steam ban lookup", the same words as the switch's own label. Evidence
   `docs/test-evidence/plan70-VAC-06.json`.
+
+**Closed 2026-09-26 (plan 70, flow L4, fourth Deck pass):**
+
+- ★ `[focus]` **The ring is dropped again when an answer finishes** — **DONE, fixed 2026-09-26 (helper F2,
+  `f87a962c`), passed on the Deck 2026-09-26.** Row **QA-FREE-PLAY-01** re-check.
+  [Detail](roadmap-details.md#flow-2b-bugs).
+- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **DONE, fixed
+  2026-09-26 (helper F2, `42d6eb48`), passed on the Deck 2026-09-26, fade and static.** Row
+  **PRESET-ONE-LINE-03** re-check. [Detail](roadmap-details.md#flow-2b-bugs).
+- ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
+  question** — **DONE, fixed 2026-09-26 (helper K, `5fe0800a`), passed on the Deck 2026-09-26.** Row
+  **KB-FOLLOWUP-QUOTE-01**. [Detail](roadmap-details.md#flow-2b-bugs).
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 

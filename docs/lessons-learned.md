@@ -140,6 +140,17 @@ frontend-only fix landed red that way (`996752c`), fixed the same night once the
 not a real drift. Until the runner is taught to run those six tests on any `src` change too, expect
 a screen-side change to be able to turn a Python test red with no warning from `--quick`.
 
+**A screen that animates streamed text must not assume the text only grows.** A spoiler leak on the
+Deck looked like the back end sending a boss's name in plain text; replaying the real saved answers
+through the real back-end function, flush by flush, found no leak there at all (0 of 5,333 updates).
+The actual cause was the screen's own reveal: it kept whatever it had already shown and simply
+appended each new update from the old length, which is only safe if the text always grows at the
+end. The back end's own safety net does not work that way — it can rewrite a sentence already sent
+to wrap a name in a cover once the name arrives, which the reveal read as new text tacked onto the
+end, eating the cover's own opening marker in the process. Before blaming either side of a stream,
+replay the real stream against the real function on both sides; the true fault can be on the side
+that looks innocent.
+
 **Moving a helper into its own file can make the copy-paste check see a copy that was already there.**
 Splitting a file can pull a block out next to another block that already reads almost the same, and the
 count goes up even though nothing was duplicated on purpose. Share the common part instead of leaving

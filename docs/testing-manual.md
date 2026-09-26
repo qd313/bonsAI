@@ -87,8 +87,12 @@ Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json` (+ screenshots).
 
 **Fixed 2026-09-26 (helper F2, commit `f87a962c`), not a regression** — a case the 2026-09-23 fix never
 covered (a ring on the question row itself, not inside the answer). The ring is now handed to the same
-stop on the header once the live question is replaced by its finished copy. **Deck re-check owed:** the
-same setup, ring on the question's Retry or its text when the answer finishes.
+stop on the header once the live question is replaced by its finished copy. **PASS (Deck) 2026-09-26
+(plan 70, flow L4.1), closed:** six fresh questions, three with the ring on Retry and three on the
+question text — in all six the ring never left its control from the moment it was placed until 5 seconds
+after the answer finished, and the view stayed at the top with 155 to 704 px of answer still below.
+Saved walk `checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence
+`docs/test-evidence/plan70-L4-QA-FREE-PLAY-01.json` (+ screenshots).
 
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
@@ -426,8 +430,8 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     launch tool can search, so it could not be started. Someone needs to play it once by hand first, or the
     launch tool needs to reach the full Library grid. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
-- [ ] **SPOILER-COVER-01** FAILED again (Deck) 2026-09-26 (plan 70, flow L3), escalated to the stronger
-  model (helper A2). On Hollow Knight, a story-protected game, describe a boss without naming it ("the
+- [ ] **SPOILER-COVER-01** Cause found and fixed in code 2026-09-26 (plan 70, helper A2), Deck re-check
+  owed. On Hollow Knight, a story-protected game, describe a boss without naming it ("the
   boss past the crystal spike area") — a sentence naming it must sit in a spoiler box, both while the
   reply arrives and once it finishes. Ask the same thing but name the boss yourself — the reply stays
   plain. On Deep Rock Galactic: Survivor, the same kind of question never shows a spoiler box at all.
@@ -444,7 +448,15 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
   of the opening sentence in plain text for about 9 seconds. A spoiler fence placed at the very start or
   near the end of an answer still streams its own content uncovered until the answer finishes. Escalated
   to the stronger model (helper A2). Evidence `docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`
-  (+ screenshot).
+  (+ screenshot). **Cause found and fixed (helper A2, four commits):** the leak was the screen's own
+  reveal, not the back end — replaying the saved answers through the real back-end path found no leak
+  there (0 of 5,333 updates). The reveal assumed the text only grows at the end, but the back end's cover
+  rewrites a sentence already sent once a name arrives; the reveal now falls back to the point both
+  updates agree on. Also fixed: a finished cover no longer flickers mid-stream, and the branch menu's
+  stand-in no longer doubles into "the boss boss". Two further risks fixed the same day: the notes block
+  no longer names a protected boss before its cover opens, and the screen's own "already asked about" rule
+  no longer opens a cover just because it shares words with the question. **Deck re-check owed:** the same
+  described-boss questions, watched live and finished, plus the notes block, Copy and Read aloud.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
 - [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
   built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
@@ -545,9 +557,11 @@ everything below assumes it passes. Plan:
   **Fade and static fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Both styles now keep one button
   per slot, like decode, and only its words change; a chip holding the ring in fade style also waits to
   fade out until the ring has moved on. Sighting from the same pass: in fade style, walking Up from the
-  question box can skip a chip that is mid-fade. **Deck re-check owed:** hold the ring on a fade or
-  static chip through a question swap and confirm it stays. The carousel off-screen-chip finding below is
-  not fixed this wave.
+  question box can skip a chip that is mid-fade. **PASS (Deck) 2026-09-26 (plan 70, flow L4.1), closed:**
+  fade held the ring for the full 22 seconds with its question unchanged; static held the ring through
+  the full 22 seconds including the moment its words changed at 9.1 seconds, still on it 25 seconds
+  later. Evidence `docs/test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots). **Re-measured,
+  the carousel off-screen ring did not reproduce in 3 tries** — kept as a sighting below, not a bug.
 - [ ] **PRESET-ONE-LINE-04** (the scrolling is calm and cheap) With the knowledge base on and a covered game running (Half-Life 2 has
   the longest label, 59 characters): both labels crawl slowly with a fade at the edges, the **Tip** badge stays pinned at the left
   while the text scrolls, and a chip does not rotate away before its label has scrolled through once. Judge the speed by eye — "slow

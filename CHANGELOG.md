@@ -436,6 +436,26 @@ All notable changes to this project are documented in this file.
   question changed, taking the ring with it into nothing. The chip now keeps its own place and only its
   words change, the same way the decode style already worked; a chip holding the ring also waits to fade
   until the ring has moved on. `MainTabPresetAnimatedChips.tsx`. On-Deck check owed.
+- **The troubleshooting hint's Dismiss button can now be reached with the D-pad, and walking up no longer
+  skips past it:** Right from "Open Permissions" used to do nothing, so Dismiss could never be reached
+  that way, and walking up from the ban-lookup row or a suggestion chip skipped straight past both
+  permission rows to the reply. The hint row now moves between its own two buttons properly, and walking
+  up stops on the permission rows first. `chatTranscriptNavHelpers.ts`. On-Deck check owed.
+- **A boss's name no longer shows in plain text while a spoiler-covered answer is still arriving:** the
+  screen's letter-by-letter reveal assumed an answer's text only ever grows at the end, but the safety net
+  sometimes rewrites text it already sent to wrap a name in a cover once it arrives — which used to eat
+  the cover's own opening marker and show the name, and sometimes a raw code-block marker, in plain sight
+  for several seconds. The reveal now notices when that happens and catches up correctly, so a cover shows
+  as a finished cover from the moment it appears. `useSmoothStreamReveal.ts`. On-Deck check owed.
+- **The "From the notes" block under an answer no longer names a protected boss before its cover opens:**
+  when an answer used a boss's own note without ever naming the boss, the block below it printed the
+  note's title in plain text regardless. It now reads "Boss note (spoiler)" until opened on purpose, the
+  same as the answer's own cover. `MainTabChatTranscript.tsx`. On-Deck check owed.
+- **A spoiler cover can no longer open itself just because it repeats words from the question:** a cover
+  describing a boss in the same words the question used ("the spell casting boss...") used to be judged
+  "already asked about" and shown in plain text, in the answer, Copy and Read aloud alike, even though the
+  person never typed the boss's name. Only a name the question actually contains counts as already known
+  now. `MainTabChatTranscript.tsx`. On-Deck check owed.
 
 ### Added
 - **A knowledge-base question asked a while after the last one no longer pays extra time to search:** the

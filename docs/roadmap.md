@@ -964,7 +964,8 @@ ones from this month are D81 to D88.
   2026-09-25.** Nobody has ever measured it: no test question attaches a picture, and the notes are only ever searched
   by the typed words, never by what is on screen. First a scored set of real Deck screenshots (game named, then area,
   then boss), run on each picture model the Deck offers; then fixes where it fails — the picture's guess fed into the
-  note search, and notes that say what a place or boss looks like. [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
+  note search, notes that say what a place or boss looks like, and a screen guide per game (health bar, weapon
+  slots, boss bar). [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still matters: a
   thumbs-down that stops a wrong card coming back (three days), add-on packs before any large catalog (five days or more),
   a screenshot feeding the search (a short test to find out first). A nearest-neighbour index buys nothing until the corpus

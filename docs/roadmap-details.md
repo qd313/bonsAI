@@ -1526,6 +1526,15 @@ built or measured.
 - **Notes that say what things look like.** A boss note today says how to beat it, not what it looks like.
   A one-line "looks like" field on boss, area and enemy notes (colours, shape, a landmark) gives the
   search something to match the picture's description against. Rides a library release.
+- **A screen guide note per game.** One note describing the game's on-screen display in words: where
+  health, stamina and ammo sit and what they look like, the weapon or item slots, the minimap, and where
+  a boss's name and health bar appear. It is the strongest clue to which game a picture is from, it lets
+  the reply read the player's state (low health, weapon equipped, boss fight on), and it answers "what
+  does this icon mean?", which gets nothing today. Written in words, not stored pictures: the Deck's model
+  describes a picture in words and the notes are searched in words, so it fits what exists, with no
+  image rights question and no bigger download. Needs a new note kind and rides a library release.
+  Screenshots of each game's display go only in the step 1 test set, never shipped, to prove the notes
+  help; if they do not, that is the case for the picture matching below.
 - **Use the running game's name as a strong hint.** When a game is running the game is already known; the
   picture only has to find the place and the boss, a much easier task. Measure both cases separately.
 - **Later, if the above stalls:** match the picture itself against reference pictures per note, with a

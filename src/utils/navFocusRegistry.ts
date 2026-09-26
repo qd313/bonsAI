@@ -73,6 +73,8 @@ export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-car
    *  for, just in a file neither chat fix had touched yet. */
   | "permissions-row-game-context-read" | "permissions-row-filesystem-write"
   | "permissions-row-steam-web-api" | "permissions-row-microphone-access"
+  /** The "Save chat to Desktop" row, right above the suggestion chips (SaveChatToDesktopRow.tsx). */
+  | "save-chat-desktop"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
   | `tab-body:${string}`;
 

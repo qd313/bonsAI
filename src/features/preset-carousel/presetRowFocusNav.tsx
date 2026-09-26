@@ -168,9 +168,11 @@ export function usePresetRowNav(
         // whole reply. Measured on the Deck 2026-09-21, roadmap: "Walking up from the question box
         // skips every reply row".
         //
-        // The two permission rows sit between the reply and the chips when they show, lowest
-        // first; Up skipped both for Show details (plan70-SMOKE-C.json, plan70-PERMS-CLEAN-05-06.json).
+        // Save chat to Desktop and the two permission rows sit between the reply and the chips when
+        // they show, lowest first; Up skipped all three for Show details (plan70-SMOKE-C.json,
+        // plan70-PERMS-CLEAN-05-06.json).
         exitUp: () =>
+          takeNavFocus("save-chat-desktop") ||
           takeNavFocus("chat-perm-hint-deny") ||
           takeNavFocus("chat-perm-hint-troubleshoot") ||
           focusBottomOfNewestReply() ||

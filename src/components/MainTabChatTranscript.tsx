@@ -197,10 +197,7 @@ import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
 } from "../utils/drgGlossaryAsk";
-import {
-  registerModalReturnFocusOwner,
-  rememberModalReturnFocus,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
+import { SaveChatToDesktopRow } from "./SaveChatToDesktopRow";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
@@ -1612,27 +1609,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
  * deciding whether anything else should reach for it belongs to whoever reviews this next.
  */}
 {canSaveDesktopNote && !showEmptySlotPreview && (
-  <PanelSectionRow>
-    <div className="bonsai-save-chat-desktop-row">
-      <Button
-        ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("desktop-note-save", el)}
-        onClick={() => {
-          rememberModalReturnFocus("desktop-note-save");
-          onOpenDesktopNoteSave();
-        }}
-        style={{
-          width: "100%",
-          minHeight: 38,
-          border: "1px solid rgba(150, 187, 223, 0.45)",
-          background: "rgba(64, 93, 124, 0.35)",
-          color: "#dce8f4",
-          opacity: desktopNoteSaveEnabled ? 1 : 0.45,
-        }}
-      >
-        Save chat to Desktop
-      </Button>
-    </div>
-  </PanelSectionRow>
+  <SaveChatToDesktopRow enabled={desktopNoteSaveEnabled} onOpen={onOpenDesktopNoteSave} />
 )}
     </>
   );

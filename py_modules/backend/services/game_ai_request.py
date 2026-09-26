@@ -181,6 +181,36 @@ from backend.tdp_intent import (
 logger = decky.logger
 
 
+_CHAT_OWN_GAME_LOOKBACK_TURNS = 12
+
+
+def _chat_own_game_title(settings: dict, chat: dict) -> str:
+    """The chat's own game, for the case D19 itself cannot resolve: nothing running and the
+    question naming nothing either (plan 68 step 2, the first memory-check failure from plan
+    68's own § 1 -- fixed here per its § 8 question 1 default). A running game and a title the
+    question names both still win over this; the caller only reaches here once both are absent.
+
+    Walks the chat's own turns newest first, at most the newest 12, for the first of: a turn's
+    own ``app_name`` (resolved against the corpus the same way D19 resolves the question itself,
+    or used as written when it does not resolve to anything), or a user turn's own text resolved
+    the same way. The chat's ``origin_app_name`` is the last resort. "" when none of that turns
+    up anything -- today's behaviour, unchanged.
+    """
+    turns = chat.get("turns")
+    if isinstance(turns, list) and turns:
+        for turn in reversed(turns[-_CHAT_OWN_GAME_LOOKBACK_TURNS:]):
+            if not isinstance(turn, dict):
+                continue
+            turn_app_name = str(turn.get("app_name") or "").strip()
+            if turn_app_name:
+                return resolve_title_from_question(settings, turn_app_name) or turn_app_name
+            if str(turn.get("role") or "") == "user":
+                resolved = resolve_title_from_question(settings, str(turn.get("text") or ""))
+                if resolved:
+                    return resolved
+    return str(chat.get("origin_app_name") or "").strip()
+
+
 async def run_game_ai_request(
     plugin: Any,
     question: str,
@@ -421,6 +451,18 @@ async def run_game_ai_request(
         text_resolved_title = ""
         if not str(app_id or "").strip() and not str(app_name or "").strip():
             text_resolved_title = resolve_title_from_question(settings, question_for_retrieval)
+            if not text_resolved_title:
+                # Plan 68 step 2: the first memory-check failure from the plan's own § 1 -- with
+                # no game running and the question naming nothing, the knowledge-base search used
+                # to get no game at all. Falls back to the chat's own game; still loses to a
+                # running game or a title the question names, both handled above already.
+                chat_own_title = _chat_own_game_title(settings, request_chat)
+                if chat_own_title:
+                    text_resolved_title = chat_own_title
+                    logger.info(
+                        "kb: no game running or named -- using the chat's own game %s",
+                        chat_own_title,
+                    )
 
         kb_coverage_transparency = kb_coverage_to_transparency(
             summarize_kb_coverage(

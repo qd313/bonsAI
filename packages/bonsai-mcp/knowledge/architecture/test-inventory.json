@@ -222,6 +222,7 @@
     "tests/test_fetch_wiki_live_pages.py",
     "tests/test_forget_game_ai_carried_context.py",
     "tests/test_game_ai_request.py",
+    "tests/test_game_ai_request_chat_own_game.py",
     "tests/test_game_ai_request_followup_memory.py",
     "tests/test_game_ai_request_kb_attached_notes.py",
     "tests/test_growth_limit.py",

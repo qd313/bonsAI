@@ -4,7 +4,8 @@ Purpose: Saved chats live in their own per-slot files on disk. This file is the 
 calls the screen makes to manage that list from outside an open chat: see the recent
 chats, open one, start a new empty one, delete one, and rename one. Each stays a method
 of the same name on the plugin class in main.py; the method's body is now a one-line
-hand-off to the function here.
+hand-off to the function here. Every call that hands a full chat back to the screen also
+carries plan 68's own `can_sum_up` flag, for the Session tab's *Sum up this chat* button.
 
 Used for: list_chat_slots, get_chat_slot, create_chat_slot, delete_chat_slot,
 rename_chat_slot.
@@ -30,10 +31,22 @@ from backend.services.chat_slot_service import (
     slot_to_rpc_payload,
     update_slot_label as chat_update_slot_label,
 )
+from backend.services.chat_sum_up_job import chat_can_sum_up
 
 import decky
 
 logger = decky.logger
+
+
+def _payload_with_can_sum_up(slot: dict) -> dict:
+    """``slot_to_rpc_payload`` plus plan 68 step 4's own greyed-out flag. Kept out of
+    ``chat_slot_service.py`` itself: that file is imported *by* ``chat_summary_service.py``
+    (for ``MAX_SUMMARY_TEXT_LEN``), so computing ``can_sum_up`` there would import back the
+    other way and create a cycle. This file already sits above both, so it is the one place
+    that can call into the summary service without one."""
+    payload = slot_to_rpc_payload(slot)
+    payload["can_sum_up"] = chat_can_sum_up(slot)
+    return payload
 
 
 async def list_chat_slots(self):
@@ -62,7 +75,7 @@ async def get_chat_slot(self, slot_id: str = ""):
         slot = await asyncio.to_thread(_run)
     if slot is None:
         return {"ok": False, "error": "Slot not found"}
-    return {"ok": True, "slot": slot_to_rpc_payload(slot)}
+    return {"ok": True, "slot": _payload_with_can_sum_up(slot)}
 
 
 async def create_chat_slot(self, payload: Any = None):
@@ -86,7 +99,7 @@ async def create_chat_slot(self, payload: Any = None):
 
     async with self._chat_slots_store_lock:
         slot = await asyncio.to_thread(_run)
-    return {"ok": True, "slot": slot_to_rpc_payload(slot)}
+    return {"ok": True, "slot": _payload_with_can_sum_up(slot)}
 
 
 async def delete_chat_slot(self, slot_id: str = "", payload: Any = None):
@@ -124,4 +137,4 @@ async def rename_chat_slot(self, payload: Any = None):
         saved = await asyncio.to_thread(_run)
     if saved is None:
         return {"ok": False, "error": "Slot not found"}
-    return {"ok": True, "slot": slot_to_rpc_payload(saved)}
+    return {"ok": True, "slot": _payload_with_can_sum_up(saved)}

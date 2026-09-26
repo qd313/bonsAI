@@ -42,7 +42,25 @@ def _seed_chat(settings_dir: str, *, turns: int, label: str = "chat") -> str:
     return sid
 
 
-class ChatSumUpJobTests(unittest.IsolatedAsyncioTestCase):
+def _slow_write_returning(gate: asyncio.Event, outcome: SummaryOutcome):
+    """A ``write_chat_summary`` stand-in that signals ``gate`` the moment it starts, then sits
+    past any test's own patience -- for a test that needs to catch the job mid-flight, either to
+    find it busy from outside or to Stop it, before letting it finish with ``outcome``."""
+
+    async def _write(*_a, **_k):
+        gate.set()
+        await asyncio.sleep(5)
+        return outcome
+
+    return _write
+
+
+class ChatSlotJobTestCase(unittest.IsolatedAsyncioTestCase):
+    """Shared setup for a test that needs a real Plugin talking to a real (temp-dir) chat-slot
+    store -- reused by tests/test_chat_can_sum_up.py's own RPC-level tests rather than copied,
+    since both need exactly this: a fresh settings dir, a Plugin pointed at it, and a clean slate
+    for chat_summary_service's per-model allowance memory."""
+
     async def asyncSetUp(self) -> None:
         reset_last_memory_allowance()
         tmp = tempfile.TemporaryDirectory()
@@ -53,6 +71,8 @@ class ChatSumUpJobTests(unittest.IsolatedAsyncioTestCase):
         self.addCleanup(patcher.stop)
         self.plugin = Plugin()
 
+
+class ChatSumUpJobTests(ChatSlotJobTestCase):
     def _patched(self, *, write_chat_summary=None):
         """Every patch every test in this class needs: a settings load that never touches
         disk, and a fixed model/window so no test needs a real Ollama connection."""
@@ -117,13 +137,8 @@ class ChatSumUpJobTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_an_ask_is_refused_as_busy_while_a_sum_up_is_pending(self) -> None:
         gate = asyncio.Event()
-
-        async def _slow_write(*_a, **_k):
-            gate.set()
-            await asyncio.sleep(5)
-            return SummaryOutcome(status="written", summary={"text": "notes"}, seconds=1.0, error="")
-
-        self._patched(write_chat_summary=_slow_write)
+        outcome = SummaryOutcome(status="written", summary={"text": "notes"}, seconds=1.0, error="")
+        self._patched(write_chat_summary=_slow_write_returning(gate, outcome))
         sid = _seed_chat(self.tmp, turns=60)
 
         ack = await self.plugin.sum_up_chat_slot(sid)
@@ -196,15 +211,10 @@ class ChatSumUpJobTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_stop_mid_job_leaves_no_summary_and_no_turn(self) -> None:
         gate = asyncio.Event()
-
-        async def _slow_write(*_a, **_k):
-            gate.set()
-            await asyncio.sleep(5)
-            return SummaryOutcome(
-                status="written", summary={"text": "should never be saved"}, seconds=1.0, error=""
-            )
-
-        self._patched(write_chat_summary=_slow_write)
+        outcome = SummaryOutcome(
+            status="written", summary={"text": "should never be saved"}, seconds=1.0, error=""
+        )
+        self._patched(write_chat_summary=_slow_write_returning(gate, outcome))
         sid = _seed_chat(self.tmp, turns=60)
         before = load_slot(self.tmp, sid)
         turn_count_before = len(before["turns"])

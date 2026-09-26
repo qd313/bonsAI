@@ -671,12 +671,52 @@ RRF_K = 60
 RRF_W_FTS = 1.0
 RRF_W_VEC = 1.0
 
+# --- Rank a generic "Starting out in <game>" note below a specific one (D-plan 70, helper B,
+# bug 2, 2026-09-25) -- MEASUREMENT ONLY, off by default -----------------------------------------
+#
+# Found on the Deck: Black Mesa "how do i cross the electrified water" attaches and uses the
+# right card (Crossing the electrified waste pools), but two generic notes ("Starting out in
+# Black Mesa", "The opening tram ride and where it leads") are listed ahead of it and the shown
+# block names the generic one first (docs/test-evidence/plan64-BLACKMESA-WATER.json). Nothing in
+# the fusion above ranks a generic note any differently from a specific one today.
+#
+# Mutated directly the same way `RRF_W_FTS` / `RRF_W_VEC` above are, by a throwaway measurement
+# script rather than a real caller -- this switch has no production wiring yet on purpose. The
+# real build is wave two, once helper E's corpus work gives every card its own "kind" (a
+# "starting out" card marked as such, not guessed from its name) -- keying this off the kind
+# instead of the name is that lane's job, not this one's. Until then this stays OFF so the numbers
+# for the wave-one report can be taken without changing anything a player sees.
+DEMOTE_STARTING_OUT_NOTES = False
+
+# Guessed from the name only -- every "Starting out in ..." card the seed corpus has today
+# (data/kb/strategy_seed.json) starts exactly this way, including the ones with a longer subtitle
+# ("Starting out in DOOM Eternal: the combat loop"). Wave two replaces this with the card's own
+# kind once one exists.
+_STARTING_OUT_NAME_PREFIX = "starting out in"
+
+# A question that is itself asking how to begin should still get the generic note first --
+# demoting it there would be exactly backwards. Kept short and literal on purpose, per the brief:
+# widen this list only with a measured phrase, not a guess.
+_START_INTENT_PHRASES = ("where do i start", "how do i get started", "beginner tips", "new to")
+
+
+def _is_starting_out_card(card: KnowledgeCard) -> bool:
+    """True for a generic "Starting out in <game>" note, guessed from its own name."""
+    return (card.name or "").strip().lower().startswith(_STARTING_OUT_NAME_PREFIX)
+
+
+def _question_asks_how_to_start(question: str) -> bool:
+    """True when the question itself is asking how to begin -- see `_START_INTENT_PHRASES`."""
+    q = (question or "").strip().lower()
+    return any(phrase in q for phrase in _START_INTENT_PHRASES)
+
 
 def _fuse_cards_by_rrf(
     cards: list[KnowledgeCard],
     query_vector: list[float],
     vectors_by_id: dict[int, list[float]],
     *,
+    question: str = "",
     top_k: int,
     recall_cards: Optional[list[KnowledgeCard]] = None,
     preferred_ids: Optional[set[int]] = None,
@@ -712,6 +752,12 @@ def _fuse_cards_by_rrf(
 
     Raises ``EmbeddingDimensionMismatch`` via ``_dot_similarity`` when the corpus was baked at
     a different dimension; the caller treats that as "disable hybrid for this request".
+
+    ``question`` only matters while `DEMOTE_STARTING_OUT_NOTES` is on (see the module comment
+    above this function) -- it decides whether THIS question is itself asking how to start, in
+    which case a generic note is not demoted. Every caller today leaves it blank, which reads the
+    same as "not asking how to start" -- harmless while the switch stays off, which it does by
+    default.
     """
     pool = list(cards)
     if recall_cards:
@@ -756,7 +802,16 @@ def _fuse_cards_by_rrf(
             if card.section_id in preferred_ids:
                 scores[index] += RRF_W_TOPIC / (RRF_K + 1)
 
-    order = sorted(range(len(pool)), key=lambda i: (-scores[i], i))
+    # Measurement-only demotion (see DEMOTE_STARTING_OUT_NOTES above): off by default, so this
+    # never changes the sort a real caller sees until something turns the switch on. A demoted
+    # card ranks below every non-demoted one regardless of its fused score -- "below a specific
+    # note", not "docked a few points" -- but keeps its own score order among other demoted
+    # cards, and among non-demoted cards nothing changes at all.
+    if DEMOTE_STARTING_OUT_NOTES and not _question_asks_how_to_start(question):
+        demoted = [1 if _is_starting_out_card(card) else 0 for card in pool]
+        order = sorted(range(len(pool)), key=lambda i: (demoted[i], -scores[i], i))
+    else:
+        order = sorted(range(len(pool)), key=lambda i: (-scores[i], i))
     return [pool[i] for i in order[:top_k]]
 
 

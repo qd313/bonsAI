@@ -33,7 +33,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "_budget_for_mode": "(ask_mode: 'str') -> 'tuple[int, int]'",
         "_dot_similarity": "(a: 'list[float]', b: 'list[float]') -> 'float'",
         "_expand_query": "(question: 'str', app_name: 'str', *, game_resolved: 'bool' = False) -> 'str'",
-        "_fuse_cards_by_rrf": "(cards: 'list[KnowledgeCard]', query_vector: 'list[float]', vectors_by_id: 'dict[int, list[float]]', *, top_k: 'int', recall_cards: 'Optional[list[KnowledgeCard]]' = None, preferred_ids: 'Optional[set[int]]' = None) -> 'list[KnowledgeCard]'",
+        "_fuse_cards_by_rrf": "(cards: 'list[KnowledgeCard]', query_vector: 'list[float]', vectors_by_id: 'dict[int, list[float]]', *, question: 'str' = '', top_k: 'int', recall_cards: 'Optional[list[KnowledgeCard]]' = None, preferred_ids: 'Optional[set[int]]' = None) -> 'list[KnowledgeCard]'",
         "_resolve_game_id": "(conn: 'sqlite3.Connection', *, app_id: 'str', app_name: 'str', shortcut_name: 'str', text_resolved_title: 'str' = '') -> 'tuple[Optional[int], str]'",
         "_search_compat_patterns": "(conn: 'sqlite3.Connection', *, query: 'str', top_k: 'int') -> 'list[KnowledgeCard]'",
         "_search_sections": "(conn: 'sqlite3.Connection', *, game_id: 'Optional[int]', query: 'str', top_k: 'int', min_relevance: 'float' = 1.0) -> 'list[KnowledgeCard]'",

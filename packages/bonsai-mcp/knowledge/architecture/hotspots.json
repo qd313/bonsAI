@@ -31,13 +31,13 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1220,
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1235,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1180,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1220,
       "role": ""
     },
     {

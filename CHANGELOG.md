@@ -289,6 +289,51 @@ All notable changes to this project are documented in this file.
   by asking the pane directly to put the header's own top at the pane's own top, ignoring that reserved
   space. `chatPanelScroll.ts`, `MainTabChatTranscript.tsx`. On-Deck row owed: plan 64 flow H, in
   `docs/roadmap.md`.
+- **Answers now arrive as the model actually writes them, instead of in stop-and-go lumps:** the plugin
+  used to wait for a full 4 KB of the model's output before showing any of it. One streamed piece is only
+  about 135 bytes, so roughly 30 of them queued up behind that wait — with a game running, text used to
+  land in bursts of about 115 letters every 1.5 to 2 seconds, even though the model itself was writing
+  evenly the whole time. It now shows whatever has arrived as soon as it does, at most every 0.12 seconds,
+  so text flows in steadily. The model's live thinking flows the same steady way now, for the same reason,
+  and Stop answers a little sooner too, since it is checked after every smaller read. `ollama_chat_stream.py`.
+  On-Deck row owed: **FIX-01** and **FIX-02** in `docs/testing.md`, with a game running.
+- **The blinking cursor in an empty question box now sits right where typing will start:** it used to sit
+  noticeably up and to the left of the hint text — 5 pixels left and 4 pixels above the first letter,
+  measured on an external monitor — because it was pinned to a fixed spot in the box instead of to the
+  text itself. It now sits in the line of text: before the hint on an empty box, after the last letter once
+  something is typed, so it always moves exactly where the text does. `MainTabUnifiedAskBar.tsx`. On-Deck
+  row owed: **ASK-CARET-01** in `docs/testing.md`.
+- **The "From the notes" credit line now only shows up when the answer actually used the note:** it used
+  to appear under almost every Strategy answer that had a note attached, whether or not the answer said
+  anything from it — on the maintainer's own saved chats, 49 answers had notes attached and the block
+  showed for all of them; now it shows for barely a third. The block appears once the live answer has said
+  something the note said, checking for shared and repeated words and game names it names, not by guessing
+  at meaning. `kbNoteUsedByAnswer.ts`.
+- **The model's live thinking now reads as ordinary wrapping text, not three lines cut short:** while the
+  model thinks, the sentences under your question used to always show only its newest three, each cut off
+  mid-line with "…". They now wrap and keep their own line breaks, in smaller, dimmed, italic type that
+  fits six lines instead of three, with the newest line at the bottom. `MainTabChatTranscript.tsx`.
+- **The branch menu no longer shows its own placeholder wording when the model copies it, game name and
+  all:** a return of an earlier bug, closed 2026-09-23, that caught the model copying the prompt's example
+  word for word but missed it swapping its own title into the placeholder — seen live under a Deep Rock
+  Galactic: Survivor answer as "A. <a place early in Deep Rock Galactic Survivor>". Any bracketed phrase, or
+  wording that opens the same way as the prompt's own example, now drops the menu the same way; real
+  choices that merely start with similar words are kept. `response_verify.py`. On-Deck row
+  **BRANCH-TEMPLATE-02** in `docs/roadmap.md`, unit-proven, device check still owed.
+- **The panel keeps up much better while an answer streams in:** with no game running, it used to draw
+  only about 19 to 24 frames a second while text was arriving; it now draws 56 to 58 with the scramble
+  animation off (what everyone gets by default) and 44 to 50 with it turned on. The fix moves the streaming
+  text, and the scramble when it is on, forward on a steady beat about nine times a second, instead of
+  trying to redraw on every single frame the screen can produce; the maintainer's own bar was 60 frames a
+  second, 45 at the least. `streamBeat.ts`, `useSmoothStreamReveal.ts`, `ScrambledAnswerText.tsx`. Evidence
+  `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`. Owed: the same measurement with a game
+  running, rows **SCR-09**/**SCR-10** in `docs/testing.md`.
+- **The glow around a streaming answer, and the question box's own breathing glow, now hold still while
+  text is arriving:** both used to redraw on every single frame — a pulse on the answer bubble and a
+  breathing effect on the question box — which alone cost about 5 frames a second off the panel's frame
+  rate while an answer streamed, the difference between an answer staying above 45 frames a second and
+  falling below it. Both now hold one steady look while text is arriving, and the question box's glow still
+  breathes normally while the model is thinking. `answerBubble.ts`, `section-6.ts`.
 
 ### Added
 - **Knowledge base release `2026.09.18` published (372 notes across 35 games, 159 Deck tips):** ten more
@@ -374,6 +419,18 @@ All notable changes to this project are documented in this file.
 - **72 blind search questions for twelve new games (no user-visible change):** Black Mesa, Hollow Knight, DOOM Eternal, Doom 64, GTA V, GTA IV, Fallout: New Vegas, Super Mario 64, Mario Kart 64, Paper Mario: The Thousand-Year Door, Pikmin 2 and Super Smash Bros. Melee — six questions per game, written by someone who had not read a single game-note card, the way a real player would actually type them. None of the 341 questions already in the search test touched any of these twelve games before this, so the new notes could not be measured at all. Each question still needs matching to the note that answers it, which is in progress. `tests/fixtures/kb_eval_v2.json`.
 - **24 answer-test rows for the same twelve games (no user-visible change):** two questions per game, written after reading the notes, checking that a reply actually uses the facts on the card rather than just that the right card was found. Every one of the 24 attached the note it was meant to attach, run against the full 266-note library. `tests/fixtures/kb_answer_eval.json`.
 - **The knowledge-base search test gained a weight sweep, per-question detail, and a second right answer (no user-visible change):** it can now try nine different balances between word-matching search and meaning search in one run and print a table of how each did, without ever looking at the questions held back for the final check; every question's result now records the three notes each kind of search actually returned, in order, instead of only a percentage; and a question can list more than one acceptable note when more than one genuinely answers it. `scripts/eval_kb_embed_models.py`, `tests/test_eval_kb_arms.py`.
+- **A Developer tab switch scrambles a streaming answer's newest letters before they settle, the way the
+  suggestion chips do:** off by default. Turn it on and the newest stretch of text churns through
+  placeholder symbols for a moment before locking into the real letters — three ways to settle (after a
+  moment, at the chip's own pace, or a fixed tail of ten letters) and four colours for the still-scrambled
+  letters, all in a new *Animations* section on the Developer tab, where the existing *Preset suggestions*
+  picker now also lives. It costs no extra frames on its own: the settled text draws through the normal
+  path, and the churning tail is written straight to the screen, the same trick the suggestion chips use.
+  Reduced motion turns it off outright; Stop settles every letter at once; closing and reopening the panel
+  mid-answer shows everything so far as plain text. `streamScrambleContext.ts`, `ScrambledAnswerText.tsx`,
+  `DeveloperTab.tsx`. On-Deck row **DEV-01** passed; rows **SCR-01** through **SCR-08** in
+  `docs/testing.md` — the look itself, reopening mid-answer and reduced motion still owed to the
+  maintainer's own check.
 
 ### Changed
 - **A finished answer's Show details panel can now hold two tabs instead of a separate box below the
@@ -457,6 +514,11 @@ All notable changes to this project are documented in this file.
   voice, the AI models screen, Where the AI runs and Settings all still work. One real regression from
   the move was found and fixed the same night — the Desktop activity log had stopped writing any lines —
   and a re-check on the fixed build confirmed it writes again. `docs/archive/65-trim-docs-split-long-files.md`.
+- **Answer text sits a little closer together, buying back room for more of a reply to show at once:**
+  line spacing on answer text went from 1.4 times the text size down to 1.25 — about two extra lines
+  visible on a 20-line answer — and the model's live thinking is now smaller, dimmer, italic type with its
+  own tighter spacing, so more of it fits in the same space. `section-6.ts` (answers); the live-thinking
+  styles (thinking).
 
 ### Removed
 - **Two re-export shims (no user-visible change):** `refactor_helpers.py` and `src/utils/settingsAndResponse.ts` held no logic — only forwarding — and hid which module a consumer actually depended on. Their 9 and 22 importers now name `backend.ollama_routing` / `ollama_urls` / `tdp_intent` and `bonsaiSettingsSchema` / `bonsaiSettingsNormalizers` / `settingsPayload` directly. Deploy scripts and the zip verifier no longer ship or require `refactor_helpers.py`. Tests follow their subjects: `test_refactor_helpers.py` → `test_backend_helpers.py`, `settingsAndResponse.test.ts` → `settingsContracts.test.ts`. `settingsPayload.ts` also gives up its reply-text formatting to a new `appliedTuningText.ts`.

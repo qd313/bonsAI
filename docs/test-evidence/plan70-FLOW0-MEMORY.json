@@ -1,0 +1,54 @@
+{
+  "row": "FLOW0-MEMORY",
+  "plan": "70",
+  "session": "bonsai-50",
+  "build_commit": "637492e7",
+  "deck_time": "2026-09-26 00:27 to 00:35 EDT",
+  "screen": "monitor (Big Picture 1500x844 CSS px at 1.28, screenshots 1920x1080)",
+  "setup": "Deep Rock Galactic: Survivor (2321470, on the SD card) launched from Recent Games with deck_launchGame (7 presses). Waited 75 s: game at its title screen 'PRESS ANY KEY TO CONTINUE' (plan70-FLOW0-MEMORY-game.png). Plugin reloaded, then opened (first open failed as expected, second worked). Panel then showed 'Context: active game Deep Rock Galactic: Survivor'.",
+  "new_chat": {
+    "route": "chat row reached by Down from the tab bar (walkTo skipped it as an unnamed stop; two Ups from 'Retry same prompt' confirmed the ring on .bonsai-chat-slot-row-focus). D-pad Left from the row went out to Steam's side rail (x 0, w 48), not along the row. Per ChatSlotRow.tsx, LB/RB slide the row; LB x2 reached the [+] position (dots: create dot active), A made the chat.",
+    "new_chat_label": "Deep Rock Galactic: Survivor (tagged with the game)",
+    "dropped_chat": "Hades (3b7c08f1-61e2-459d-92bf-3eefbbaf1482, 2 turns, last used 2026-09-18 12:32) -- its file is gone from chat_slots; it is in the backup archive",
+    "chat_count_after": 8
+  },
+  "question": {
+    "text": "what upgrades should I take first as the scout",
+    "send_script": "VERIFIED, field read back the whole question",
+    "ask_press": "deck_walkTo DOWN exact 'ask' (3 presses; button class bonsai-ask-primary--ready, 100% visible), input re-read to hold the question, then A at 00:31:47",
+    "seen": "'Pulling local tips about ...' at 00:31:51; finished by 00:33:41 with 'Show reasoning · 32 s', an in-character answer, an A/B follow-up question, and a library card 'Upgrades and overclocks (+1 more) From bonsAI's own note' (plan70-FLOW0-MEMORY-answer.png). No 'Summing up the chat so far' (new chat)."
+  },
+  "readings_mb": [
+    {"time": "00:27:15", "state": "before game", "total": 14804, "used": 8835, "free": 2285, "available": 5969, "models": "gemma4:e2b-it-qat 2143 MiB (all in GPU memory)"},
+    {"time": "00:28:54", "state": "game at title screen, 75 s after launch", "total": 14804, "used": 12030, "free": 171, "available": 2773, "models": "not read at this instant"},
+    {"time": "00:29:35", "state": "game running, after plugin reload", "total": 14804, "used": 11232, "free": 1692, "available": 3572, "models": "gemma4:e2b-it-qat only"},
+    {"time": "00:31:47", "state": "A pressed on Ask", "total": 14804, "used": 12309, "free": 712, "available": 2495, "models": "not captured (background sampler died when SSH closed)"},
+    {"time": "00:32:29", "state": "answering, both models", "used": 12977, "free": 231, "available": 1827, "models": "gemma4 2143 MiB all GPU; nomic-embed-text 545 MiB, 256 MiB GPU"},
+    {"time": "00:32:36", "state": "answering, both models (lowest reading)", "used": 12983, "free": 224, "available": 1821},
+    {"time": "00:32:41-00:33:32", "state": "answering, both models, 11 samples 5 s apart", "used_range": "12782-12914", "available_range": "1889-2021"},
+    {"time": "00:33:43", "state": "right after the answer finished, both models", "total": 14804, "used": 12836, "free": 314, "available": 1968, "swap_used": 419},
+    {"time": "00:34:47", "state": "after exiting the game, both models still loaded", "total": 14804, "used": 9983, "free": 3270, "available": 4821}
+  ],
+  "api_ps_with_everything": [
+    {"name": "gemma4:e2b-it-qat", "size": 2247066909, "size_vram": 2247066909, "context_length": 16384},
+    {"name": "nomic-embed-text:latest", "size": 571536834, "size_vram": 268435456, "context_length": 2048}
+  ],
+  "proc_meminfo_with_game_and_both_models": {
+    "time": "00:33:43",
+    "MemTotal_kB": 15159840, "MemFree_kB": 317884, "MemAvailable_kB": 2010880, "Buffers_kB": 107324, "Cached_kB": 2199980,
+    "SwapTotal_kB": 8628216, "SwapFree_kB": 8198672
+  },
+  "overlay_readings": "Steam performance overlay at 00:33:46: RAM 12.5 GiB, VRAM 8.8 GiB, GAMESCOPE 4 FPS, frame time 250 ms (was 60 FPS / 16.7 ms at 00:24 with no game; 60 FPS at the title screen at 00:28:59)",
+  "caveats": [
+    "The game sat at its title screen the whole time, not in a mission, so a real run may use more memory.",
+    "After the plugin reload, Steam's home page, not the game, was in front (Steam's menu opened on 'Home' and the home shelf showed 'Current Game').",
+    "The answer model was already loaded before the game started; the search model loaded during the ask."
+  ],
+  "exit": {
+    "deck_exitGame": "failed twice, safely, at its first step: Steam's menu opened on 'Home', not on the game's entry, because Steam's home was in front. Files runs/plan70-FLOW0-MEMORY-exit-drgs.json and -try2.json.",
+    "manual_route_used": "the tool's own checklist by hand, reading before every A: Up to the game's menu entry, Right, walkTo Down 7 to 'Exit game' (exact), A, ring read on 'Confirm' in 'Exit game? Unsaved game data may be lost.', A",
+    "process_check": "pgrep matched only the check command itself; ps grep for 'DRG Survivor|Deep Rock' printed 'gone'; RunningApps empty"
+  },
+  "verdict": "RECORDED: room",
+  "verdict_note": "Lowest available memory with the game running and both models loaded was 1,821 MB (about 1.8 GB), above the 1 GB line, so 'room' -- but under 2 GB, and measured with the game idle at its title screen."
+}

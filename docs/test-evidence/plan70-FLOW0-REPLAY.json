@@ -1,0 +1,30 @@
+{
+  "row": "FLOW0-REPLAY",
+  "plan": "70",
+  "session": "bonsai-50",
+  "build_commit": "637492e7",
+  "deck_time": "2026-09-26 00:26 EDT",
+  "screen": "monitor (QAM page 855x766 CSS px)",
+  "setup": "Plugin open. RB x3 (the first RB only placed the ring; two tab moves Main -> Ollama -> Settings), then deck_walkTo UP to the header back button 'bonsAIv0.5.0' (2 presses), which is where the saved walk's step 1 starts ('from <BUTTON> in bonsAIv0.5.0').",
+  "saved_walk": "checks/plan65-SETTINGS-walk.json (format 2, saved 2026-09-24T08:00:44Z, 31 steps: 15 DOWN to 'Clear cache', 15 UP, last UP to 'Settings tab'; Down/Up only, no A)",
+  "pressed": "deck_replayChecks only=['plan65-SETTINGS-walk']",
+  "tool_result": {
+    "errors": [],
+    "buildHashMatch": false,
+    "savedBuildHash": "sha256:7c2aec67b7c20fd02a88e1128ea3c7558b5af49a3a5ffeed0cd21dc8156f8c26",
+    "currentBuildHash": "sha256:2e542e93f7864eebfb226fbfed198a488ff5f40224f602167174406433dfe9aa",
+    "diffs": [],
+    "summary_quote": "the comparison ran and is reported rather than discarded: every landing matches the saved check. Re-save the check once you trust this build.",
+    "overall": "ok:false, '0/1 check(s) passed' -- because the build differs, not because a landing differed"
+  },
+  "seen": {
+    "ring_before": "header back button 'bonsAIv0.5.0'",
+    "ring_after": "'Settings tab' -- the saved walk's final landing, so the presses were really delivered",
+    "steps_in_walk": 31,
+    "steps_differing": 0,
+    "per_step_list_returned": false
+  },
+  "not_done": "Walk not re-saved (flow 6 does that).",
+  "verdict": "PASS",
+  "verdict_note": "The replay ran to the end with no crash, no 'nothing to replay' and no refusal, and reported zero differing landings. Gap for the owner: the tool's reply gives no step count or per-step list, only the empty difference list and the sentence above; the 31 comes from the saved file and the ring's final position."
+}

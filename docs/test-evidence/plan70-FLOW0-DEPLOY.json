@@ -1,0 +1,33 @@
+{
+  "row": "FLOW0-DEPLOY",
+  "plan": "70",
+  "session": "bonsai-50",
+  "build_commit": "637492e7 (committed 2026-09-25 23:47 -0400; working tree clean)",
+  "deck_time": "2026-09-26 00:23 to 00:24 EDT",
+  "screen": "monitor: QAM page 855x766 CSS px, Big Picture 1500x844 at devicePixelRatio 1.28; screenshot is 1920x1080",
+  "setup": "Steam home, plugin closed, no game running",
+  "pressed": "deck_deploy (remote, built and copied dist, main.py, plugin.json, package.json, assets, py_modules, defaults, bin; loader ready after 282 ms). Then deck_openPlugin: 8 presses (1 QAM chord, 4 rail, 1 into pane, 1 down, 1 A).",
+  "fingerprints": {
+    "pc_dist_index_js": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698 (2579400 bytes, built 00:23:42)",
+    "deck_dist_index_js": "ed8e8c0337bf23877e4ebbe33ab9a25baae14125eb78afd5a5255162b2a96698 (2579400 bytes, 00:23:41)",
+    "pc_main_py": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "deck_main_py": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f",
+    "match": true,
+    "installed_folder": "~/homebrew/plugins/bonsAI"
+  },
+  "plugin_log": {
+    "deck_readPluginLog": "journal returned '-- No entries --' for the tool's filter",
+    "plugin_log_file": "~/homebrew/logs/bonsAI/2026-09-26 00.23.57.log: '[2026-09-26 00:23:58,079][INFO]: bonsAI plugin loaded!' and nothing else",
+    "previous_log_tail": "clean unload at 00:23:49",
+    "error_lines": 0
+  },
+  "open_plugin": {
+    "attempts": 1,
+    "first_attempt_result": "opened, confirmed by .bonsai-scope (the expected first-open failure did not happen this time)",
+    "panel_box_css_px": [48, 64, 300, 701],
+    "tab": "MAIN",
+    "seen": "chat strip centred on 'wheatley fight', '71 earlier', a Half-Life 2 Magnum question and answer, pinned TEST chip 'what game am i playing', empty question box, ASK, 'Context: no active game detected', version v0.5.0"
+  },
+  "screenshot": "plan70-FLOW0-DEPLOY.png",
+  "verdict": "PASS"
+}

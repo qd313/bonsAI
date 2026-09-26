@@ -1,0 +1,41 @@
+{
+  "row": "FLOW0-GAMES",
+  "plan": "70",
+  "session": "bonsai-50",
+  "build_commit": "637492e7",
+  "deck_time": "2026-09-26 00:27 EDT",
+  "screen": "monitor (Big Picture 1500x844 CSS px)",
+  "setup": "Steam home behind the open plugin panel; nothing launched",
+  "pressed": "nothing (page reads of the home shelf and Steam's app list, plus SSH listings)",
+  "recent_games_shelf_in_order": [
+    "1 Half-Life 2 (220)",
+    "2 Palworld (non-Steam shortcut 4049860804; tile has no Steam image, name read from the focused tile's text 'Palworld No playtime yet')",
+    "3 Brotato (1942280)",
+    "4 Deep Rock Galactic: Survivor (2321470)",
+    "5 Left 4 Dead 2 (550)",
+    "6 Persona 3 Reload (2161700, not installed, never played)",
+    "7 Hades (1145360)",
+    "8 Black Mesa (362890)",
+    "9 Hollow Knight (367520)",
+    "10 God of War (1593500)",
+    "11 Sifu (2138710)",
+    "12 Portal 2 (620)",
+    "13 tile with no Steam image (probably the non-Steam 'Ship of Harkinian', last played 2026-09-05; not confirmed)",
+    "14 Fallout 4 (377160)",
+    "15 Baldur's Gate 3 (1086940)",
+    "16 Team Fortress 2 (440, not installed)",
+    "17 Sons Of The Forest (1326470, not installed)",
+    "18 tile with no Steam image (probably the non-Steam 'State of Emergency'; not confirmed)",
+    "19 Cyberpunk 2077 (1091500)",
+    "20 Marvel's Spider-Man Remastered (1817070)"
+  ],
+  "named_games": {
+    "Brotato": "on the shelf (3rd); installed on internal storage, appmanifest_1942280.acf, app id 1942280",
+    "Palworld": "on the shelf (2nd); a non-Steam shortcut (id 4049860804) (its local file path removed from this record by the session), so it has no Steam manifest",
+    "The Elder Scrolls V: Skyrim": "NOT on the shelf. Steam lists 'The Elder Scrolls V: Skyrim Special Edition' (489830) as owned but not installed, last played 2025-05-16. No Skyrim folder in steamapps/common on internal storage or either SD card path, and no Skyrim manifest.",
+    "Deep Rock Galactic: Survivor": "on the shelf (4th); installed on the SD card, appmanifest_2321470.acf"
+  },
+  "other_notes": "Plain 'Deep Rock Galactic' (548430) is also installed on internal storage but is not on the shelf. The SD card shows under two mount paths (/run/media/mmcblk0p1 and /run/media/deck/3506ff22-...).",
+  "verdict": "PASS (recorded)",
+  "verdict_note": "Brotato and Palworld are launchable from the shelf; Skyrim is neither on the shelf nor installed, so any Skyrim row cannot run on the Deck as it stands."
+}

@@ -1,0 +1,86 @@
+{
+  "row": "FLOW0-BACKUP",
+  "plan": "70",
+  "session": "bonsai-50",
+  "build_commit_on_pc": "637492e7",
+  "build_on_deck_at_backup_time": "previous deploy (before this flow's deploy)",
+  "deck_time": "2026-09-26 00:22 EDT",
+  "screen": "monitor: Big Picture window 1500x844 CSS px at devicePixelRatio 1.28 (1920x1080 output), not the Deck's own panel",
+  "setup": "Steam home screen, plugin closed, no game running. Keep-awake lock held (expires 2026-09-26T12:22:01Z).",
+  "pressed": "nothing for this row (all SSH reads plus one tar/cp)",
+  "settings_folder_listing": {
+    "path": "~/homebrew/settings/bonsAI/",
+    "total_size": "85M",
+    "files": {
+      "settings.json": 2267,
+      "strategy_checklist_session.json": 37,
+      "bonsai_feedback.jsonl": 497,
+      "intent_packs.json": 40,
+      "chat_slots/index.json": 2220,
+      "chat_slots (8 chat files)": "443215, 610517, 18711, 13486, 10269, 7470, 7284, 6688 bytes",
+      "chat_threads (older store)": "3 chats + index, dated 2026-07-17",
+      "seed-knowledge-base": "corpus.db 2732032, corpus.db.zlib 1741067, corpus-manifest.json 25950, ATTRIBUTIONS.md 23552",
+      "folders also present": ["read_aloud_tmp", "voice_bin", "voice_models"],
+      "older settings copies": "20 files settings.json.bak-*"
+    }
+  },
+  "backup": {
+    "deck_archive": "/home/deck/bonsai-backup-plan70.tgz",
+    "deck_archive_bytes": 75930740,
+    "deck_settings_copy": "/home/deck/homebrew/settings/bonsAI/settings.json.bak-plan70 (2267 bytes; name was free)",
+    "pc_copy": "C:\\Users\\still\\AppData\\Local\\Temp\\claude\\c--Users-still-Documents-BonsAI\\45d2c589-d1f4-4514-b331-6710722dc3cc\\scratchpad\\deck-backup-plan70.tgz",
+    "pc_copy_bytes": 75930740,
+    "sha256_deck": "58b2ff041884fc5c8484912d4846b98602e92f1165f254fd1b2e1d16c19458e0",
+    "sha256_pc": "58b2ff041884fc5c8484912d4846b98602e92f1165f254fd1b2e1d16c19458e0",
+    "tar_tzf_entries": 62,
+    "tar_tzf_folders": 7,
+    "tar_tzf_files": 55,
+    "not_in_archive": "the installed library on the SD card (/run/media/deck/3506ff22-.../.bonsai/rag) is outside the settings folder, so it is not in this archive"
+  },
+  "settings_values_recorded": {
+    "use_local_knowledge_base": true,
+    "rag_hybrid_retrieval_enabled": true,
+    "rag_corpus_path": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag",
+    "rag_corpus_version": "2026.09.18",
+    "dev_force_session_rag_chips": false,
+    "dev_frozen_test_chips": ["what game am i playing", "how do i beat the gonarch in black mesa", "black mesa how do i get across the electrified water"],
+    "dev_preload_ask_model": false,
+    "model_allow_high_vram_fallbacks": false,
+    "model_policy_non_foss_unlocked": false,
+    "model_policy_tier": "open_weight",
+    "text_model_routing_order": [],
+    "vision_model_routing_order": ["gemma4:e2b-it-qat"],
+    "voice_stt_model": "tiny.en",
+    "preset_chip_animation": "decode",
+    "preset_chip_fade_animation_enabled": false,
+    "preset_single_chip": true,
+    "strategy_spoiler_masking_enabled": true,
+    "strategy_spoiler_auto_reveal_after_consent": false,
+    "capabilities.media_library_access": true,
+    "reduced_motion_key": "no key with 'reduced' or 'motion' in its name exists in the file"
+  },
+  "library": {
+    "runbook_path_~/.bonsai/rag": "does not exist",
+    "installed_path": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag (SD card)",
+    "installed_version": "2026.09.18 (manifest published_at 2026-09-18T05:13:32Z, schema 3, nomic-embed-text 768-dim, 372 sections, 0 missing embeddings)",
+    "installed_db_sha256": "f579159af2d167d617e61a3be56d5a082ab06907075d01e15f639328d62fe51e",
+    "seed_copy_in_settings_folder": "version 2026.09.22, same corpus.db sha256 as the installed one"
+  },
+  "saved_chats": {
+    "count": 8,
+    "in_store_order": [
+      {"label": "what is a good way to practice parrying in action games", "turns": 86, "created": "2026-09-23 19:13", "updated": "2026-09-25 19:53"},
+      {"label": "wheatley fight", "turns": 144, "created": "2026-09-18 10:02", "updated": "2026-09-23 23:38"},
+      {"label": "how should i spend my first hour in a new open world game", "turns": 2, "updated": "2026-09-23 19:15"},
+      {"label": "what is the safest way to approach a group of enemies at once", "turns": 2, "updated": "2026-09-23 18:28"},
+      {"label": "is it better to explore everything or rush the main objective", "turns": 2, "updated": "2026-09-23 18:27"},
+      {"label": "how do i unlock the next area after finishing the tutorial", "turns": 4, "updated": "2026-09-23 18:26"},
+      {"label": "how do i beat the boss at the end of the first area", "turns": 4, "created": "2026-09-18 11:09", "updated": "2026-09-19 13:28"},
+      {"label": "Hades", "turns": 2, "created": "2026-09-18 12:15", "updated": "2026-09-18 12:32", "game": "Hades 1145360"}
+    ],
+    "oldest_by_last_use": "Hades (last used 2026-09-18 12:32, last in the store's list)",
+    "oldest_by_creation": "wheatley fight (created 2026-09-18 10:02)"
+  },
+  "verdict": "PASS",
+  "verdict_note": "Archive made on the Deck, copied to the PC with an identical fingerprint, and reads back (62 entries). Library not included in the archive because it lives on the SD card."
+}

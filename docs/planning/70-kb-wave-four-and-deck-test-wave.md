@@ -347,13 +347,34 @@ only if the reading with a game running says memory is tight.
   be). Checked by reading the file: both rules are right.
 - **2026-09-26, 00:18 — "go".** Block 0: tree clean at `637492e7`, quick checks pass, no new decision
   numbers taken by another session. Plan 68 handed over the Deck and queued a 40-minute turn after flow 0
-  for its own three owed checks and clearing the pinned test chips. Started at about 00:45: the Deck helper
+  for its own three owed checks and clearing the pinned test chips. Started between 00:22 and 00:30: the Deck helper
   on flow 0; the bookkeeper on the 18 disagreements; a lookup helper gathering the check steps for flows 1
   to 5; and the seven wave 1 helpers A, B, C, E, F, G and H, each in its own copy cut from `637492e7`. To
   keep the three note-writing helpers from colliding in the one notes file, each got its own number range
   (Brotato and Palworld games 36 and 37, notes 402 to 449; Skyrim game 38, notes 450 to 499). New
   starting-out notes are written with today's note type and re-typed when the new kind lands. The 20-minute
   restart check is set.
+- **2026-09-26, 00:21 to 00:36 — flow 0 (setup) on the Deck: all passed.** Nothing was refused: the new
+  permission rules work. Backup of the plugin's settings folder (the settings, the eight chats, the checklist
+  state), 76 MB, on the Deck and in the session's scratch folder, fingerprints identical. The library itself
+  lives on the SD card, outside that folder; installed version 2026.09.18. Build `637492e7` deployed, both files'
+  fingerprints match, no errors in the log. **Saved-walk replay works again:** the saved Settings walk replayed all
+  31 presses with nothing different, so the tools project's fix is live. **Recent Games:** Palworld 2nd and
+  Brotato 3rd; Palworld is a shortcut added by hand, not the Steam copy, so the plugin has to recognise it by name.
+  **Skyrim is not installed** (owned, not installed), so its notes get no Deck check unless the maintainer
+  installs it. **Memory with Deep Rock Galactic: Survivor running and both AI models loaded: at least 1.8 GB
+  still available** (lowest 1,821 MB of 14,804), so the memory safety check stays unbuilt, per D112. Caveat: the
+  game sat at its title screen, not in a mission. **Seen during the answer: the game fell to 4 frames a second**
+  (250 ms a frame), from 60 — added to the roadmap's "what bonsAI costs a running game" entry. The test question
+  went into a new chat, which pushed out the oldest one ("Hades", in the backup). Other sightings: D-pad Left on
+  the chat row jumps out to Steam's side rail; the ring sat in the question box after the answer with nobody
+  putting it there; the exit-game tool stopped on Steam's Home screen again (already in the tools findings log).
+  Evidence `docs/test-evidence/plan70-FLOW0-*.json`. The Deck went to plan 68 at 00:37 for its own checks.
+- **00:25 to 00:40 — the check steps for flows 1 to 5 gathered and turned into runbooks.** Nine checks dropped
+  as already closed or not runnable yet, several rewritten because the control they describe has changed. One
+  finding: **no troubleshooting tip in the library has a source page**, so the owed check that a tip's source page
+  shows in its credit line cannot run; helper E was asked to give its researched tips a real source page where one
+  can be cited.
 
 ## 11. Report
 

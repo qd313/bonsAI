@@ -1684,3 +1684,22 @@ ever second-guessed.
 
 **Connected:** plan 68 (the chat sums itself up); the chat rename box.
 
+## Saved Deck-walk replay across builds
+
+**Proven on the Deck 2026-09-26 (plan 70 flow 0).** A saved Settings walk (31 steps) replayed against a
+newer build; the build fingerprint still read as different, but the replay ran to the end with no
+refusal and reported zero differing landings. Evidence `docs/test-evidence/plan70-FLOW0-REPLAY.json`.
+
+## Cost to a running game, second sighting
+
+**2026-09-26 (plan 70 flow 0).** Deep Rock Galactic: Survivor, sitting at its own title screen,
+fell from 60 to 4 frames a second (250 ms for a frame, read off Steam's own overlay) while an answer was
+being written, with both the answering model and the note-search model loaded at once. Memory stayed
+above the line: at least 1,821 MB was still free out of 14,804 with the game and both models loaded
+together. Measured at the title screen, not during a mission, so a real level may cost more. Evidence
+`docs/test-evidence/plan70-FLOW0-MEMORY.json` (+ `-game.png`, `-answer.png`).
+
+**Whether two models loaded causes trouble with a game running: measured 2026-09-26, same evidence.**
+1.8 GB was still free with the game at its title screen and both models loaded, so under D112's rule
+the memory safety check stays unbuilt — the room did not actually run tight.
+

@@ -245,12 +245,11 @@ starts work outside this.
   hooks at the main checkout's path, where setup uses a relative one; a separate cloud session ("Fix
   pre-commit hook analyzing wrong worktree") is working on it.
 - ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
-  after a deploy** — **OPEN, found by the plan 65 Deck check 2026-09-24.** Every saved walk was recorded
-  against an older build, so 0 walks compared that night. The check's own fingerprint of a build includes
-  Python cache files, which change on every run. **The fix is already written** in the Deck tools project
-  (commit `556ffcb`, 2026-09-23), but not pushed, and the tools were still on the old code that night.
-  Left: re-save the walks on a current build and push the tools project — even then, a replay across
-  builds shows differences rather than a pass. Planned in plan 70.
+  after a deploy** — **VERIFY, fixed in the Deck tools project (commit `556ffcb`, 2026-09-23), proven on
+  the Deck 2026-09-26.** Every saved walk was recorded against an older build, so 0 walks compared that
+  night. The check's own fingerprint of a build includes Python cache files, which change on every run.
+  Replaying across builds now works. **Still owed:** re-saving the walks (flow 6).
+  [Detail](roadmap-details.md#saved-deck-walk-replay-across-builds).
 - ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
   from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
   another desk test on real chats.
@@ -269,7 +268,9 @@ starts work outside this.
   recorder, DID NOT REPRODUCE:** pressed A once on the empty question box (its last known trigger), the
   on-screen keyboard opened, B closed it, and Down, Right, Up and Down all moved the ring normally
   afterward. **Stays open** — one clean build does not close a fault that has come and gone before; the
-  maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
+  maintainer's call. Evidence `docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots). **Sighting
+  2026-09-26:** ring stuck in the question box after an answer finished, no evidence file — reported by
+  the Deck helper.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
@@ -399,6 +400,7 @@ replace it with a specific issue when one exists.
   and 31 again afterwards. It goes both ways — the answer itself drops to about a third of its usual speed. Memory is the other
   half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
+  **A worse sighting 2026-09-26.** [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
@@ -453,9 +455,10 @@ replace it with a specific issue when one exists.
 - ★★★★ `[QA]` `[platform]` **Finish the controller test rig** — **PRIORITY 1 (maintainer, 2026-09-24). PARTIAL: built and
   driving every Deck session since 2026-08-26.** Was ★★★★★ with "board ordered, next: S1 to S3", a month stale. Left from
   [plan 19](planning/19-controller-macro-test-rig.md): a recording that is also a live view (S3), the highlight checked from the
-  video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which first needs the saved-walk replay bug above
-  fixed. Comes before stand-in Decks. Plan 70 takes two of the four pieces: getting the saved-walk replay working again, and a
-  first slice of the nightly run — replay and report, run by hand. [Program](planning/21-ai-owned-testing-program.md).
+  video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which needed the saved-walk replay bug
+  fixed first — **now works, proven 2026-09-26** (see the bug entry above). Comes before stand-in Decks. Plan 70 takes
+  two of the four pieces: the replay working again, and a first slice of the nightly run, run by hand.
+  [Program](planning/21-ai-owned-testing-program.md).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -718,10 +721,9 @@ evening ran the same evening, once the Deck was free.
    Ollama process, the auto-start file, and the Ollama tab's own switch — all three now say "keep two
    models loaded," and `ollama ps` showed both the answering model and the note-search model loaded at
    every one of four reads across three questions, with no load or unload logged in between. Still open:
-   the drift from August to September, and whether keeping two models loaded causes trouble with a game
-   running (a repeat of this same reading is planned with a game running). Evidence
-   `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`. Only the game-running reading is left
-   (plan 70).
+   the drift from August to September. **Whether two models cause trouble with a game running: measured
+   2026-09-26**, safety check stays unbuilt. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+   Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
 6. **Then 58 phase 1** — two fixes before wave four. [The plan](archive/58-phase-1-notes-shown-and-wiki-extracts.md)
    shows the note's own words under a reply instead of the model's rewrite of it, and reads a wiki's own
    sentences into notes with no AI rewrite, tried first against Hollow Knight and then on ten more games from

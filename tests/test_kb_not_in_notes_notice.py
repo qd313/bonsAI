@@ -404,6 +404,203 @@ class GameNamedOnlyInTheQuestionMeaningTests(unittest.TestCase):
         )
 
 
+class NoteTextAlsoCountsAsRealSupportTests(unittest.TestCase):
+    """The note's own text, not only its title, can show the question was really answered.
+
+    Found on the Deck 2026-09-23: a Hollow Knight reply built on the Broken Vessel note (attached
+    second, behind a generic "Starting out" note) still said nothing close was found, because the
+    question described the boss ("the boss past the crystal spike area") instead of naming it, and
+    the check only ever read note TITLES -- "Broken Vessel" shares no word with that description.
+    The same shape hit a Half-Life 2 walkthrough reply built on three attached chapter notes.
+
+    Card text below is copied verbatim from data/kb/strategy_seed.json (the real corpus these
+    replies drew from), and ``kb_attached_notes`` (game_ai_request.py, `kb_attached_notes.py`'s
+    `_parse_kb_attached_notes`) is exactly where a real call site would read a "card" field this
+    shape from -- one entry per attached note, its own text alongside its title.
+    """
+
+    _HK_QUESTION = (
+        "What should I know about the boss past the crystal spike area in Hollow Knight, "
+        "the one that looks just like me?"
+    )
+    _HK_TITLES = (
+        "Hollow Knight — Starting out in Hollow Knight",
+        "Hollow Knight — Broken Vessel",
+        "Hollow Knight — Watcher Knights",
+    )
+    # Verbatim card text, data/kb/strategy_seed.json section_id 185 (Starting out) / 186 (Broken
+    # Vessel) / (Watcher Knights is left out of the two here on purpose: the fix only needs one
+    # attached note's text to carry the real match).
+    _HK_TEXTS = (
+        "Everything opens from Dirtmouth, above the well into Hallownest; the map is one open "
+        "world with no fast travel until you find and pay Cornifer's counterpart the cartographer "
+        "and unlock Stag stations one at a time.",
+        "The infected husk shaped like you, far west in the Ancient Basin past a gap that needs "
+        "the Crystal Heart. It dashes with slashes that cover most of the arena, flails its nail "
+        "overhead, leaps to slam down and throw four arcs of infection, shakes out a cascade of "
+        "blobs that covers nearly everything when its health gets low, and spawns weak balloons "
+        "that drift at you. It is one of the few bosses that gets knocked back, so Vengeful "
+        "Spirit can hit it twice; Desolate Dive during the cascade both damages it and keeps you "
+        "safe. A longer nail (Mark of Pride or Longnail) matches its reach, and Defender's Crest "
+        "quietly clears the balloons. Heal when it staggers, head weighed down and shaking.",
+    )
+
+    _HL2_QUESTION = (
+        "give me a detailed walkthrough of the first three chapters of half life 2 with tips "
+        "for each"
+    )
+    _HL2_TITLES = (
+        "Half-Life 2 — Sandtraps",
+        "Half-Life 2 — Ravenholm",
+        "Half-Life 2 — Strider",
+    )
+    # Verbatim card text, data/kb/strategy_seed.json section_id 37 (Sandtraps) / 33 (Ravenholm) /
+    # 34 (Strider) -- the three notes the device run actually attached and used.
+    _HL2_TEXTS = (
+        "The coastal chapter that teaches the sand. Rock to rock on the way out; after the "
+        "Antlion Guard you keep the pheropod and use antlions to break the Combine bunkers "
+        "guarding the road to Nova Prospekt.",
+        "Ammo is scarce on purpose, so fight with the town instead of your guns. Levers drop car "
+        "traps and reset them; waist-high blade traps shred zombies while you duck under; "
+        "propane spray ignites from a single shot. Poison zombies switch traps off, so deal with "
+        "those first. Loose blades are gravity gun ammunition.",
+        "RPG only, and roughly seven rockets on Normal. The rocket stays laser-guided the whole "
+        "flight, so steer it wide and bring it in off-axis rather than straight up the barrel. "
+        "Its warp cannon does splash damage, so keep moving between shots. A crate of rockets "
+        "nearby means the fight is a long one.",
+    )
+
+    def test_hollow_knight_boss_description_no_longer_shows_the_notice(self):
+        # The device measured a raw meaning score of 0.655 -- just *above* the 0.65 ceiling on
+        # its own -- and only showed the notice because the game-name-stripped companion score
+        # (HONESTY-TEXT-GAME-01 part two, tested on its own in
+        # GameNamedOnlyInTheQuestionMeaningTests above) came in lower. This test isolates the
+        # keyword/title-vs-text half of the fix instead, with a meaning score already under the
+        # ceiling either way, so only the keyword-support check decides the outcome below.
+        #
+        # Before this fix: titles alone give no overlap with the question's real words ("boss",
+        # "past", "crystal", "spike", "area", ...), so the notice wrongly showed under a reply
+        # that plainly used the Broken Vessel note.
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=24.76,
+                kb_best_meaning=0.60,
+                question=self._HK_QUESTION,
+                kb_game_name="Hollow Knight",
+                kb_source_titles=self._HK_TITLES,
+            )
+        )
+        # After this fix: the note's own text carries "past" and "crystal", so the same turn no
+        # longer shows the notice.
+        self.assertFalse(
+            _thin(
+                kb_top_card_keyword_score=24.76,
+                kb_best_meaning=0.60,
+                question=self._HK_QUESTION,
+                kb_game_name="Hollow Knight",
+                kb_source_titles=self._HK_TITLES,
+                kb_source_texts=self._HK_TEXTS,
+            )
+        )
+
+    def test_half_life_2_walkthrough_no_longer_shows_the_notice(self):
+        # Before this fix: "chapters" (the question) shares no word with any of the three titles.
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=5.2278805106341215,
+                kb_best_meaning=0.5820469847443327,
+                question=self._HL2_QUESTION,
+                kb_game_name="Half-Life 2",
+                kb_source_titles=self._HL2_TITLES,
+            )
+        )
+        # After this fix: Sandtraps' own text says "the coastal chapter" -- singular, where the
+        # question says "chapters" -- and the plural/singular tolerance in `_content_words` is
+        # what lets that count as the same word.
+        self.assertFalse(
+            _thin(
+                kb_top_card_keyword_score=5.2278805106341215,
+                kb_best_meaning=0.5820469847443327,
+                question=self._HL2_QUESTION,
+                kb_game_name="Half-Life 2",
+                kb_source_titles=self._HL2_TITLES,
+                kb_source_texts=self._HL2_TEXTS,
+            )
+        )
+
+    def test_a_genuine_wrong_subject_case_still_shows_the_notice(self):
+        # The guard against over-reach: a real device reply that SHOULD keep this line
+        # (docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json). "How do I beat the boss at the
+        # end of the first area in Hades?" attached the wrong notes (Temple of Styx, Theseus and
+        # Asterius) and the reply named the wrong boss. Theseus and Asterius' own card happens to
+        # say "...killing Asterius first...", which would have wrongly counted as a match on the
+        # word "first" alone -- exactly why "first"/"last"/"next" were added to the filler words
+        # rather than left as ordinary content.
+        titles = ("Hades — Temple of Styx", "Hades — Theseus and Asterius")
+        texts = (
+            "Buy charms before entry; poison resistance or healing crucial. Route choice "
+            "affects shop access.",
+            "Two at once, which is the actual difficulty. Asterius, the bull, telegraphs a long "
+            "charge — sidestep it and he is briefly stuck. Theseus throws his spear and "
+            "periodically calls down a god's power, which is marked on the ground before it "
+            "lands. Most runs go better killing Asterius first, because Theseus alone is "
+            "predictable.",
+        )
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=6.0,
+                kb_best_meaning=0.5,
+                question="How do I beat the boss at the end of the first area in Hades?",
+                kb_game_name="Hades",
+                kb_source_titles=titles,
+                kb_source_texts=texts,
+            )
+        )
+
+    def test_black_mesa_horse_question_still_shows_the_notice_with_texts_too(self):
+        # The other regression guard: adding note text must not quiet the horse-taming case
+        # `GameNamedOnlyInTheQuestionTests` above already covers with titles alone.
+        titles = (
+            "Black Mesa — Starting out in Black Mesa",
+            "Black Mesa — The opening tram ride and where it leads",
+            "Black Mesa — Houndeye",
+        )
+        texts = (
+            "Black Mesa is Half-Life rebuilt from the ground up on the Source engine, with new "
+            "art, sound and voice work but the original's chapters, weapons and enemies kept on "
+            "purpose rather than added to.",
+            "Black Mesa opens with a long tram ride that needs no input beyond looking around; "
+            "it carries you from the surface entrance through checkpoints and cargo bays into "
+            "the underground facility.",
+            "Three-legged with one big compound eye, and always in a pack of up to four. Alone "
+            "one is timid; together they charge a sonic shockwave that hurts you and smashes "
+            "crates and glass.",
+        )
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=2.4,
+                kb_best_meaning=0.60,
+                question="black mesa how do i tame a horse",
+                kb_game_name="Black Mesa",
+                kb_source_titles=titles,
+                kb_source_texts=texts,
+            )
+        )
+
+    def test_no_texts_passed_behaves_exactly_as_before_the_fix(self):
+        # Backward compatibility: every caller and every test that predates this fix never
+        # passes kb_source_texts, so titles alone keep deciding this exactly as before.
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=24.76,
+                kb_best_meaning=0.60,
+                question=self._HK_QUESTION,
+                kb_game_name="Hollow Knight",
+                kb_source_titles=self._HK_TITLES,
+            )
+        )
+
+
 class NoCloseMatchAppendTests(unittest.TestCase):
     def test_appends_the_exact_line_below_a_rule(self):
         out = append_no_close_match_notice("Try the left door first.", True)

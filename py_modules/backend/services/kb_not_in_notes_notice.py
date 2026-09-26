@@ -234,6 +234,22 @@ _NO_KEYWORD_SUPPORT = 0.0
 # unchanged. The call site in game_ai_request.py only fills them in for the one case this was
 # ever about: the game was resolved from the question text because nothing was running, so the
 # game's own name really did just get typed as part of the question.
+#
+# --- Read the note's own text too, not only its title (bug found on the Deck 2026-09-23) -----
+#
+# Titles alone under-count a real match. A Hollow Knight question that describes a boss instead
+# of naming it -- "the boss past the crystal spike area" -- shares no word with the title "Broken
+# Vessel", so the check above threw the real match away and printed this line under a reply that
+# plainly used that note (docs/test-evidence/plan64-NO-CLOSE-MATCH-HK.json; the same shape hit a
+# Half-Life 2 walkthrough reply built on three attached chapter notes,
+# docs/test-evidence/plan64-BUSY-DOT-01.json). The note's own text usually has the word the
+# title does not: Broken Vessel's card reads "...far west in the Ancient Basin past a gap that
+# needs the Crystal Heart..." -- "past" and "crystal" are right there.
+#
+# ``kb_source_texts`` carries each attached note's own card text, in the same order and the same
+# optional, additive spirit as ``kb_source_titles``: empty by default, so every call site and
+# every test that predates this fix is unaffected, and it only ever narrows a "no real support"
+# verdict back to "trust the score" -- it can never turn a real match into a warning.
 _QUESTION_FILLER_WORDS = frozenset(
     {
         "a", "an", "the", "i", "my", "me", "do", "does", "did", "is", "are", "was", "were",
@@ -241,39 +257,73 @@ _QUESTION_FILLER_WORDS = frozenset(
         "your", "how", "what", "when", "where", "why", "which", "who", "can", "could", "would",
         "should", "with", "about", "from", "into", "get", "got", "out", "up", "down", "will",
         "so", "if", "then", "there", "am", "be", "been", "being",
+        # Ordinal/position words, added with the note-text check below. A real device reply
+        # (docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json, "How do I beat the boss at the
+        # end of the first area in Hades?") shows why: the wrong Hades notes attached (Temple of
+        # Styx, Theseus and Asterius) and the reply named the wrong boss -- a genuine "no close
+        # match" case the line must keep catching. Their card text happens to say "...killing
+        # Asterius first...", which shares nothing about the question except this one structural
+        # word. Counting it as content would have silenced this exact wrong-subject case.
+        "first", "last", "next",
     }
 )
 
 
+def _singular_form(word: str) -> str:
+    """Strip one trailing "s" from a plural, so "chapters" in a question can match a note that
+    only ever says "chapter" -- same one-letter tolerance strategy_entity_extraction.py's
+    `_match_known_entity` already uses for the mirror-image case (a plural in the question,
+    the card's own name singular). Left alone for "ss" endings ("access") and anything three
+    characters or shorter, where stripping the last letter would just invent a different word.
+    """
+    if len(word) > 3 and word.endswith("s") and not word.endswith("ss"):
+        return word[:-1]
+    return word
+
+
 def _content_words(text: str) -> set[str]:
-    """Lowercase word tokens with filler words and single characters dropped."""
-    return {
+    """Lowercase word tokens with filler words and single characters dropped.
+
+    Each word also contributes its singular form (see `_singular_form`) so a plural in the
+    question and a singular in a note's own text -- "chapters" asked, "chapter" written -- still
+    count as the same word once compared.
+    """
+    words = {
         word
         for word in re.findall(r"[a-z0-9']+", (text or "").lower())
         if word not in _QUESTION_FILLER_WORDS and len(word) > 1
     }
+    return words | {_singular_form(word) for word in words}
 
 
 def _keyword_score_reflects_the_question(
-    *, question: str, kb_game_name: str, kb_source_titles: tuple[str, ...]
+    *,
+    question: str,
+    kb_game_name: str,
+    kb_source_titles: tuple[str, ...] = (),
+    kb_source_texts: tuple[str, ...] = (),
 ) -> bool:
     """False only when a nonzero keyword score can be explained by the game's name alone.
 
     True -- trust the score, the behaviour before this fix -- whenever there is nothing to check
-    it against (no titles were passed) or nothing is left of the question once the game's name
-    and the filler words are stripped from it, and whenever what is left DOES turn up in one of
-    the titles. False only when the question has real content and none of it appears anywhere in
-    what actually attached -- the shape of the Black Mesa horse question above.
+    it against (neither titles nor texts were passed) or nothing is left of the question once the
+    game's name and the filler words are stripped from it, and whenever what is left DOES turn up
+    in one of the titles or in one of the notes' own texts (``kb_source_texts`` -- see the module
+    comment above this function for why titles alone under-count). False only when the question
+    has real content and none of it appears anywhere in what actually attached -- the shape of the
+    Black Mesa horse question above.
     """
-    if not kb_source_titles:
+    if not kb_source_titles and not kb_source_texts:
         return True
     real_words = _content_words(question) - _content_words(kb_game_name)
     if not real_words:
         return True
-    title_words: set[str] = set()
+    attached_words: set[str] = set()
     for title in kb_source_titles:
-        title_words |= _content_words(title)
-    return bool(real_words & title_words)
+        attached_words |= _content_words(title)
+    for text in kb_source_texts:
+        attached_words |= _content_words(text)
+    return bool(real_words & attached_words)
 
 
 def should_show_no_close_match_notice(
@@ -287,6 +337,7 @@ def should_show_no_close_match_notice(
     question: str = "",
     kb_game_name: str = "",
     kb_source_titles: tuple[str, ...] = (),
+    kb_source_texts: tuple[str, ...] = (),
     kb_best_meaning_without_game_name: float | None = None,
 ) -> bool:
     """True when a note reached the model but nothing in the notes matched the question closely.
@@ -296,10 +347,17 @@ def should_show_no_close_match_notice(
     ``kb_domain`` (this is the notes path, not the tip sheet, which has its own floor on a
     different scale), ``kb_best_meaning`` and ``kb_top_card_keyword_score``.
 
-    ``question``, ``kb_game_name`` and ``kb_source_titles`` are optional, and only matter when
-    ``kb_top_card_keyword_score`` is nonzero: see `_keyword_score_reflects_the_question` just
-    above for why a nonzero score is not always proof of a real match, and what these three do
-    about it. Leave them blank to trust the score outright, same as before this parameter existed.
+    ``question``, ``kb_game_name``, ``kb_source_titles`` and ``kb_source_texts`` are optional, and
+    only matter when ``kb_top_card_keyword_score`` is nonzero: see
+    `_keyword_score_reflects_the_question` just above for why a nonzero score is not always proof
+    of a real match, and what these four do about it. Leave them blank to trust the score
+    outright, same as before this parameter existed.
+
+    ``kb_source_texts`` (the bug found on the Deck 2026-09-23) is each attached note's own card
+    text, alongside its title in ``kb_source_titles`` -- a question that describes a boss instead
+    of naming it shares nothing with a short title but often shares a word with the note's own
+    description of it. See the module comment above `_keyword_score_reflects_the_question` for
+    the Hollow Knight and Half-Life 2 replies this was found from.
 
     **``kb_best_meaning`` of None means "nothing was measured", not "a weak match".** Speed mode,
     no embed model reachable, and a corpus baked without meaning vectors all arrive here with
@@ -331,7 +389,10 @@ def should_show_no_close_match_notice(
         return False
     has_keyword_support = kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT
     if has_keyword_support and _keyword_score_reflects_the_question(
-        question=question, kb_game_name=kb_game_name, kb_source_titles=kb_source_titles
+        question=question,
+        kb_game_name=kb_game_name,
+        kb_source_titles=kb_source_titles,
+        kb_source_texts=kb_source_texts,
     ):
         return False
     effective_meaning = (

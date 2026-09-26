@@ -26,7 +26,7 @@ import { toaster } from "@decky/api";
 import { PULL_MODEL_CATALOG, bytesToGb } from "../data/pullModelCatalog";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
-import { getCatalogTags, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
+import { getCatalogTags, isCatalogModelTagInList, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
 import { normalizeInstalledSet } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse, ConnectionTestResult } from "../components/PullModelsModal.types";
 
@@ -80,35 +80,42 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
       else setLoadingMeta(true);
       try {
         const overlayRes = await refreshCatalog(forceCatalog);
-        const tags = getCatalogTags(mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined));
+        const catalog = mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined);
+        const catalogTags = getCatalogTags(catalog);
 
-        const tasks: Promise<unknown>[] = [
-          callDeckyWithTimeout<[string, number], ConnectionTestResult>(
-            "test_ollama_connection",
-            [OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, TEST_CONNECTION_TIMEOUT_SECONDS],
-            TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS
-          ).then((res) => {
-            if (res.reachable && Array.isArray(res.models)) {
-              setInstalledTags(normalizeInstalledSet(res.models));
-            }
-          }),
-          callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
-            "fetch_ollama_catalog_metadata",
-            [tags],
-            DECKY_RPC_TIMEOUT_MS
-          ).then((meta) => {
-            const src = meta.source === "live" ? "live" : "offline";
-            setSizeSource(src);
-            const next: Record<string, number> = {};
-            const tagMap = meta.tags ?? {};
-            for (const [tag, info] of Object.entries(tagMap)) {
-              const b = info?.size_bytes;
-              if (typeof b === "number" && b > 0) next[tag] = bytesToGb(b);
-            }
-            setLiveSizeGbByTag(next);
-          }),
-        ];
-        await Promise.all(tasks);
+        // Which tags are actually on this Deck has to come before the size lookup: a model
+        // installed outside the curated catalog (typed by hand, or pulled from an old overlay
+        // entry that has since been removed) still needs a real size, or the confirm-to-remove
+        // box and the header's own total both undercount it as 0 -- "< 0.1 GB" for a 17 GB model,
+        // seen on the Deck (docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json). Sequencing
+        // these two RPCs (instead of Promise.all) is the cost of asking for the right tags.
+        const connRes = await callDeckyWithTimeout<[string, number], ConnectionTestResult>(
+          "test_ollama_connection",
+          [OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, TEST_CONNECTION_TIMEOUT_SECONDS],
+          TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS
+        );
+        let installedList: string[] = [];
+        if (connRes.reachable && Array.isArray(connRes.models)) {
+          installedList = connRes.models;
+          setInstalledTags(normalizeInstalledSet(connRes.models));
+        }
+        const otherInstalled = installedList.filter((t) => !isCatalogModelTagInList(catalog, t));
+        const metaTags = Array.from(new Set([...catalogTags, ...otherInstalled]));
+
+        const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
+          "fetch_ollama_catalog_metadata",
+          [metaTags],
+          DECKY_RPC_TIMEOUT_MS
+        );
+        const src = meta.source === "live" ? "live" : "offline";
+        setSizeSource(src);
+        const next: Record<string, number> = {};
+        const tagMap = meta.tags ?? {};
+        for (const [tag, info] of Object.entries(tagMap)) {
+          const b = info?.size_bytes;
+          if (typeof b === "number" && b > 0) next[tag] = bytesToGb(b);
+        }
+        setLiveSizeGbByTag(next);
       } catch (e) {
         setSizeSource("offline");
         toaster.toast({

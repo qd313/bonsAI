@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 515,
-  "edgeCount": 1382,
+  "fileCount": 516,
+  "edgeCount": 1384,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -995,6 +995,13 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.otherInstalledSize.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -1035,6 +1042,7 @@
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.formSubmit.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
     },
@@ -3836,6 +3844,7 @@
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
         "src/components/VoiceInputSettingsSection.test.tsx",

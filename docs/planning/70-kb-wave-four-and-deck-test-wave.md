@@ -412,6 +412,23 @@ only if the reading with a game running says memory is tight.
     or moved rather than re-recorded (one file done, one with helper A, the tests with the bookkeeper).
   All Python tests (1,839) and all screen tests (1,778) passed after the landings. Not yet deployed to the Deck:
   the Deck is running flows 1 and 2a on the setup build; the next deploy comes after that block.
+- **01:07 to 01:48 — flows 1 and 2a on the Deck: 12 checks, 7 pass, 2 fail, 2 unclear.** Failed: the note-search
+  model is kept loaded only 5 minutes (the answer model 4 hours); one of eight plain problem sentences still gets
+  an off-subject tip. New from the run: every answer read "Spoiler risk: med"; a Hollow Knight question recorded a
+  note title as the thing asked about; Stop unloads the answer model on purpose, so the next question starts
+  cold. Fixed the same night by helper M (the first three).
+- **01:50 to 02:15 — more of wave 2 landed:** L (labels: new questions find the right note first 90% of the time
+  on the held-back set), D (installing the library offers the meaning-search model, with a yes/no box), N (the
+  overnight command), I's follow-up (quality check clean again), K (**the maintainer picked sending the
+  previous question and a short answer with a follow-up: right boss 21 of 24 against 4 of 24**; switching it on
+  exposed and fixed a spoiler risk), M (three small fixes). T's drawing of the thumbs-down published for the
+  maintainer: https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43 (three options; the helper recommends C).
+  The release library 2026.09.26 was built and passes the release check (38 games, 414 notes, 164 tips); its
+  attributions page linked Skyrim's 2.5 licence to 4.0, fixed, so it gets rebuilt before publishing.
+- **02:15 to 09:05 — stopped by the usage limit** (reset 05:40). The 20-minute scheduled check did not restart
+  anything after the reset; the maintainer's "continue" at 09:05 did. Resumed: the Deck helper mid-way through the
+  landed checks (deployed 83a6ae2e at 02:07, the tip cut-off check passed), the bookkeeper mid-way through recording
+  the first Deck results, and helper B's wiring.
 
 ## 11. Report
 

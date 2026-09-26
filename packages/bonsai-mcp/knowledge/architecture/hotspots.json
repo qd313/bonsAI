@@ -22,7 +22,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1328,
+      "lines": 1329,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1029,
+      "lines": 1039,
       "role": ""
     },
     {

@@ -154,6 +154,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   onApplyTier2MultimodalPolicy,
   onMoveDownFromConnectionRow,
   connectionTestBtnRef,
+  settingsLoaded,
 }) => {
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
@@ -357,14 +358,23 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   // Auto-probe on mount, and again when the on-Deck / network mode changes, so the Install/Update
   // label reflects reachability without Test connection. Typing a new host still waits for an
   // explicit Test connection.
+  //
+  // Waits for settingsLoaded first: this tab can mount before the plugin's saved settings come
+  // back, while ollamaLocalOnDeck and ollamaIp still read this render's opening defaults rather
+  // than what is actually saved. Probing then went to the wrong host and logged a failure it
+  // caused itself, even though Ollama was answering normally the whole time
+  // (docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). Once settings do land, this effect
+  // re-runs from the settingsLoaded dependency and probes exactly once, for the real values.
   useEffect(() => {
+    if (!settingsLoaded) return;
     if (autoProbeModeRef.current === ollamaLocalOnDeck) return;
     const target = ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim();
     if (!target) return;
     autoProbeModeRef.current = ollamaLocalOnDeck;
     void onTestConnectionRef.current({ quiet: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the mode alone, on purpose
-  }, [ollamaLocalOnDeck]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed on the mode (and settings
+    // being loaded) alone, on purpose; ollamaIp is read fresh via the ref above.
+  }, [ollamaLocalOnDeck, settingsLoaded]);
 
   const localSetupBusy = localSetupStatus?.phase === "running";
   const ollamaEngineReady = Boolean(connectionStatus?.reachable);

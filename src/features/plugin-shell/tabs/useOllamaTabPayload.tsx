@@ -72,6 +72,7 @@ export function useOllamaTabPayload({
   useLocalKnowledgeBase,
   setUseLocalKnowledgeBase,
   ragCorpusVersion,
+  settingsLoaded,
 }: UseOllamaTabPayloadArgs): React.ReactElement {
   // Dependency list preserved verbatim from index.tsx: the settings setters are stable
   // identities from usePluginSettings and were deliberately left out.
@@ -112,6 +113,7 @@ export function useOllamaTabPayload({
         useLocalKnowledgeBase={useLocalKnowledgeBase}
         setUseLocalKnowledgeBase={setUseLocalKnowledgeBase}
         ragCorpusVersion={ragCorpusVersion}
+        settingsLoaded={settingsLoaded}
       />
     ),
     [
@@ -132,6 +134,7 @@ export function useOllamaTabPayload({
       onApplyTier2MultimodalPolicy,
       useLocalKnowledgeBase,
       ragCorpusVersion,
+      settingsLoaded,
       onBeforeDeckyModal,
       onCompleteDeckyModalClose,
       onOpenOllamaModelsHub,

@@ -1902,8 +1902,13 @@ class Plugin:
         this) turned up exactly two things a question carries into the next one without being
         re-sent by the screen every time:
 
-        1. **The remembered follow-up subject** — ``kb_followup_memory``, module-level and
-           per-process, keyed by game. Forgotten with its own ``forget()``.
+        1. **The remembered follow-up subject** — ``kb_followup_memory``, one record per chat
+           since plan 68 step 2, keyed by game *within* whichever chat asked. Forgotten for the
+           *active* chat only — the one the last question in this process belongs to — with its
+           own ``forget(chat_id=...)``, and the chat's own file is updated to match so a restart
+           does not bring the forgotten subject back. Every other chat's remembered subject is
+           untouched: Clear is about what carries forward from the last question asked, not a way
+           to reach into a chat nobody is looking at.
         2. **The strategy checklist's ticked-box position** for the game a Strategy/Expert
            question was last asked about. Persisted the same way ``clear_strategy_checklist_session``
            already clears it, reusing ``clear_session_entry`` / ``save_session_store`` and this
@@ -1917,11 +1922,17 @@ class Plugin:
         ``forget_background_game_ai`` calls this method first, ahead of its own state reset. When
         nothing has been asked yet this process, the field is blank and the whole checklist store
         is cleared instead — there is at most one game's position to forget either way — and the
-        return value says which happened, so a caller (or a test) can tell.
+        return value says which happened, so a caller (or a test) can tell. The active chat id is
+        read the same way, off ``self._background_state["chat_slot_id"]``: blank when nothing has
+        been asked yet this process, or when the last question was not asked inside a saved chat
+        — either way ``kb_followup_memory.forget("")`` then reaches only the no-chat entry.
         """
         forgot: list[str] = []
 
-        kb_followup_memory.forget()
+        active_chat_id = str(self._background_state.get("chat_slot_id") or "").strip()
+        kb_followup_memory.forget(chat_id=active_chat_id)
+        if active_chat_id:
+            await chat_turn_recorder.save_chat_subject(self, active_chat_id, None)
         forgot.append("followup_subject")
 
         app_id = str(self._background_state.get("app_id") or "").strip()

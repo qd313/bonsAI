@@ -102,6 +102,7 @@ from backend.services.destructive_advice_guard import (
     append_destructive_advice_notice,
     check_destructive_advice,
 )
+from backend.services import chat_turn_recorder
 from backend.services import kb_followup_memory
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_not_in_notes_notice import (
@@ -339,6 +340,17 @@ async def run_game_ai_request(
         )
 
         active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
+        # Plan 68 step 2: the chat this request belongs to, loaded once here -- {} when the Ask
+        # did not come from a saved chat. Used below for this chat's own remembered follow-up
+        # subject, and (task 3) for the chat's-own-game fallback when nothing is running and the
+        # question names nothing. A restart loses every in-memory subject, so the chat's own
+        # saved one is seeded back in here, once, before anything below might read it -- never
+        # overwriting a subject this process already worked out by asking (see seed()'s guard).
+        request_chat = (
+            plugin.chat_for_request(active_rid) if hasattr(plugin, "chat_for_request") else {}
+        )
+        chat_id = str(request_chat.get("id") or "")
+        kb_followup_memory.seed(chat_id, request_chat.get("subject"))
         # The opening blurb is composed by start_background_game_ai and published before this task
         # runs, so there is no second opener here -- a duplicate compose is what made the line
         # rewrite itself from one generic opener to another within the first poll.
@@ -455,14 +467,26 @@ async def run_game_ai_request(
         # also the only turn the built prompt gets told which thing the question is carrying on
         # from -- see ollama_prompts.build_system_prompt's `followup_subject`. Blank everywhere
         # else, including the question the person and the model see, which never changes here.
+        async def _forget_this_chats_subject() -> None:
+            """The library is off, or this question is troubleshooting -- either way this chat
+            keeps no remembered subject going forward. Only saves to the chat's own file when
+            there was actually something to clear (plan 68 step 2)."""
+            had_one = bool(chat_id) and kb_followup_memory.snapshot(chat_id) is not None
+            kb_followup_memory.forget(chat_id=chat_id)
+            if had_one:
+                await chat_turn_recorder.save_chat_subject(plugin, chat_id, None)
+
         followup_subject_for_prompt = ""
         if settings.get("use_local_knowledge_base") is not True:
-            kb_followup_memory.forget()
+            await _forget_this_chats_subject()
         elif kb_domain == "compat":
-            kb_followup_memory.forget()
+            await _forget_this_chats_subject()
         elif kb_memory_eligible and kb_domain == "strategy":
             remembered_subject = kb_followup_memory.recall(
-                app_id=app_id, app_name=app_name, text_resolved_title=text_resolved_title
+                app_id=app_id,
+                app_name=app_name,
+                text_resolved_title=text_resolved_title,
+                chat_id=chat_id,
             )
             if remembered_subject and not extract_strategy_asked_entity(question_for_retrieval):
                 question_for_kb_search = kb_followup_memory.augment_search_words(
@@ -632,7 +656,12 @@ async def run_game_ai_request(
                 app_name=app_name,
                 text_resolved_title=text_resolved_title,
                 subject=followup_subject,
+                chat_id=chat_id,
             )
+            if followup_subject and chat_id:
+                await chat_turn_recorder.save_chat_subject(
+                    plugin, chat_id, kb_followup_memory.snapshot(chat_id)
+                )
         kb_survived = kb_result is not None and kb_result.attached and stacked.knowledge_attached
         strategy_domain_guidance = ask_mode == "strategy" or (
             kb_domain == "strategy" and kb_survived

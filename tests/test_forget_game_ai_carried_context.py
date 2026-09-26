@@ -28,6 +28,11 @@ sys.modules.setdefault(
 )
 
 from backend.services import kb_followup_memory  # noqa: E402
+from backend.services.chat_slot_service import (  # noqa: E402
+    create_slot,
+    load_slot,
+    save_slot_subject,
+)
 from main import Plugin  # noqa: E402
 from test_strategy_checklist_store_lock import _checklist_payload  # noqa: E402
 
@@ -105,6 +110,59 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("strategy_checklist_whole_store", result.get("forgot", []))
         self.assertIsNone(await self.plugin.get_strategy_checklist_session("570"))
         self.assertIsNone(await self.plugin.get_strategy_checklist_session("730"))
+
+    async def test_forgets_only_the_active_chats_remembered_subject(self) -> None:
+        """Plan 68 step 2: the remembered subject is per chat now. Clear must reach only the
+        chat the last question was actually asked in -- read off ``chat_slot_id`` on the
+        background state -- and must update that chat's own saved file so a restart does not
+        bring the forgotten subject back."""
+        chat_a = create_slot(self.settings_dir, first_question="how do I beat Roshan")["id"]
+        chat_b = create_slot(self.settings_dir, first_question="how do I plant the spike")["id"]
+        kb_followup_memory.remember(
+            app_id="570", app_name="", text_resolved_title="", subject="Roshan", chat_id=chat_a
+        )
+        kb_followup_memory.remember(
+            app_id="730", app_name="", text_resolved_title="", subject="Site B", chat_id=chat_b
+        )
+        # What each chat's own file already holds on disk, the same as a real question would
+        # have left behind (the in-memory remember() calls above are only this process's copy).
+        save_slot_subject(self.settings_dir, chat_a, {"game_key": "appid:570", "subject": "Roshan"})
+        save_slot_subject(self.settings_dir, chat_b, {"game_key": "appid:730", "subject": "Site B"})
+        self.plugin._background_state = {"app_id": "570", "chat_slot_id": chat_a}
+
+        result = await self.plugin.forget_game_ai_carried_context()
+
+        self.assertTrue(result.get("ok"))
+        self.assertIsNone(kb_followup_memory.snapshot(chat_a))
+        self.assertIsNone(load_slot(self.settings_dir, chat_a)["subject"])
+        # Chat B was never the active chat -- its remembered subject, in memory and on disk,
+        # is untouched.
+        self.assertEqual(
+            kb_followup_memory.snapshot(chat_b), {"game_key": "appid:730", "subject": "Site B"}
+        )
+        self.assertEqual(
+            load_slot(self.settings_dir, chat_b)["subject"],
+            {"game_key": "appid:730", "subject": "Site B"},
+        )
+
+    async def test_with_no_active_chat_only_the_no_chat_entry_is_forgotten(self) -> None:
+        kb_followup_memory.remember(app_id="570", app_name="", text_resolved_title="", subject="Roshan")
+        chat = create_slot(self.settings_dir, first_question="how do I plant the spike")["id"]
+        kb_followup_memory.remember(
+            app_id="730", app_name="", text_resolved_title="", subject="Site B", chat_id=chat
+        )
+        # No question has been asked in a saved chat yet this process.
+        self.plugin._background_state = {"app_id": "570"}
+
+        result = await self.plugin.forget_game_ai_carried_context()
+
+        self.assertTrue(result.get("ok"))
+        self.assertEqual(
+            kb_followup_memory.recall(app_id="570", app_name="", text_resolved_title=""), ""
+        )
+        self.assertEqual(
+            kb_followup_memory.snapshot(chat), {"game_key": "appid:730", "subject": "Site B"}
+        )
 
     async def test_clear_cache_in_settings_forgets_the_same_carried_context(self) -> None:
         """`forget_background_game_ai` is what Settings -> Clear cache actually calls."""

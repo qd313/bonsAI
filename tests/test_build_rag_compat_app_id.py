@@ -9,7 +9,6 @@ whose per-game tips are indistinguishable from shared ones -- the bug this schem
 exists to fix, quietly not actually fixed.
 """
 
-import importlib.util
 import json
 import sqlite3
 import tempfile
@@ -17,19 +16,9 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+from build_rag_db_loader import load_build_rag_db
 
-
-def _load_build_rag_db():
-    path = REPO_ROOT / "scripts" / "build_rag_db.py"
-    spec = importlib.util.spec_from_file_location("build_rag_db", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-build_rag_db = _load_build_rag_db()
+build_rag_db = load_build_rag_db()
 
 
 class SeedCompatPatternsAppIdTests(unittest.TestCase):

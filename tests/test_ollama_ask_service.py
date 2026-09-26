@@ -21,13 +21,12 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-if "pwd" not in sys.modules:
-    _pwd = types.ModuleType("pwd")
-    _pwd.getpwuid = lambda _uid: types.SimpleNamespace(pw_dir="/tmp")
-    sys.modules["pwd"] = _pwd
+from backend_module_stubs import install_pwd_stub
 
-from backend.services.ai_character_service import build_roleplay_system_suffix_meta
-from backend.services.ollama_ask_service import run_ask_ollama
+install_pwd_stub()
+
+from backend.services.ai_character_service import build_roleplay_system_suffix_meta  # noqa: E402
+from backend.services.ollama_ask_service import run_ask_ollama  # noqa: E402
 
 
 class _FakePlugin:

@@ -1463,41 +1463,18 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertEqual([c.name for c in fused], ["Stronger", "Weaker"])
 
   def test_compat_hybrid_reranks_when_nomic_available(self):
-    settings = {
-      "use_local_knowledge_base": True,
-      "rag_corpus_path": str(SEED_DB.parent),
-    }
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      return_value=[[1.0, 0.0] + [0.0] * 766],
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_compat_vectors",
-      return_value={
+    # Expert mode (top_k=5), not speed (top_k=1), on purpose. Under the cosine-only
+    # reranker a single mocked vector took the top slot outright, because vectorless cards
+    # were exiled behind every scored one — so a top_k=1 assertion was really asserting
+    # that exile. Fusion instead lets the vector-favoured tip climb from keyword rank 6
+    # into the shortlist while the two strongest keyword hits keep their places, which is
+    # the behaviour worth pinning.
+    result = self._retrieve_proton_compat_with_meaning_scores(
+      {
         1: [1.0, 0.0] + [0.0] * 766,
         2: [0.0, 1.0] + [0.0] * 766,
       },
-    ):
-      # Expert mode (top_k=5), not speed (top_k=1), on purpose. Under the cosine-only
-      # reranker a single mocked vector took the top slot outright, because vectorless cards
-      # were exiled behind every scored one — so a top_k=1 assertion was really asserting
-      # that exile. Fusion instead lets the vector-favoured tip climb from keyword rank 6
-      # into the shortlist while the two strongest keyword hits keep their places, which is
-      # the behaviour worth pinning.
-      result = retrieve_knowledge_context(
-        settings,
-        ask_mode="expert",
-        question="why is my game crashing proton issue",
-        app_id="",
-        app_name="",
-        domain="compat",
-        pc_ip="127.0.0.1:11434",
-      )
+    )
     self.assertTrue(result.attached)
     self.assertEqual(result.retrieval_method, "hybrid")
     self.assertIn("Proton", result.text_block)

@@ -14,26 +14,17 @@ called with, the same way tests/test_kb_not_in_notes_wiring.py does for its own 
 
 import asyncio
 import os
-import sys
-import types
 import unittest
 from unittest.mock import patch
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+from backend_module_stubs import install_fcntl_and_decky_stubs
 
-from backend.services import kb_followup_memory
-from backend.services.game_ai_request import run_game_ai_request
-from backend.services.knowledge_base_service import KnowledgeRetrievalResult
-from backend.services.ollama_prompts import kb_card_names
+install_fcntl_and_decky_stubs()
+
+from backend.services import kb_followup_memory  # noqa: E402
+from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
+from backend.services.ollama_prompts import kb_card_names  # noqa: E402
 
 _CORPUS_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "build", "knowledge-base"

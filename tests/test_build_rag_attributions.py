@@ -8,7 +8,6 @@ Does not: Cover NOTICE or zip guards (ATTR-4…5).
 
 from __future__ import annotations
 
-import importlib.util
 import re
 import sqlite3
 import tempfile
@@ -17,21 +16,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from backend.services.transparency_service import source_display_name
+from build_rag_db_loader import load_build_rag_db
 from corpus_build_support import build_corpus_or_skip
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-
-
-def _load_build_rag_db():
-    path = REPO_ROOT / "scripts" / "build_rag_db.py"
-    spec = importlib.util.spec_from_file_location("build_rag_db", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-build_rag_db = _load_build_rag_db()
+build_rag_db = load_build_rag_db()
 
 
 class BuildRagAttributionsTests(unittest.TestCase):

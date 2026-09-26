@@ -14,29 +14,20 @@ feeds the checker is the same shape retrieval really produces, not a hand-typed 
 
 import asyncio
 import re
-import sys
-import types
 import unittest
 from unittest.mock import patch
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 
-if "pwd" not in sys.modules:
-    _pwd = types.ModuleType("pwd")
-    _pwd.getpwuid = lambda _uid: types.SimpleNamespace(pw_dir="/tmp")
-    sys.modules["pwd"] = _pwd
+install_fcntl_and_decky_stubs()
+install_pwd_stub()
 
-from backend.services.game_ai_request import run_game_ai_request
-from backend.services.knowledge_base_service import KnowledgeCard, KnowledgeRetrievalResult, _format_block
+from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.services.knowledge_base_service import (  # noqa: E402
+    KnowledgeCard,
+    KnowledgeRetrievalResult,
+    _format_block,
+)
 
 
 def _soul_master_card() -> KnowledgeCard:
@@ -107,22 +98,30 @@ class SpoilerCoverWiringTests(unittest.TestCase):
     spoiler box" -- measured on the Deck 2026-09-22/23 (Hollow Knight, "the boss past the
     crystal spike area"), 83 reads during streaming, never covered."""
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
-    def test_a_boss_named_in_the_reply_but_not_the_question_is_covered(
-        self, mock_should, mock_retrieve
-    ):
+    def _wire_soul_master_reply(self, mock_should, mock_retrieve, response_text):
+        """Wire a Strategy Ask against Hollow Knight with the Soul Master card attached and
+        the given model reply text already decided, and return the plugin ready for `_run`."""
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = _attached_result(_soul_master_card())
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = {
             "success": True,
-            "response": (
-                "Soul Master fakes its death partway through, then comes back as Soul Tyrant. "
-                "Keep swinging once it falls the first time."
-            ),
+            "response": response_text,
             "model": "test-model",
         }
+        return plugin
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_boss_named_in_the_reply_but_not_the_question_is_covered(
+        self, mock_should, mock_retrieve
+    ):
+        plugin = self._wire_soul_master_reply(
+            mock_should,
+            mock_retrieve,
+            "Soul Master fakes its death partway through, then comes back as Soul Tyrant. "
+            "Keep swinging once it falls the first time.",
+        )
 
         result = _run(
             plugin,
@@ -142,14 +141,9 @@ class SpoilerCoverWiringTests(unittest.TestCase):
     def test_a_boss_the_question_already_named_is_left_in_plain_text(
         self, mock_should, mock_retrieve
     ):
-        mock_should.return_value = (True, "strategy")
-        mock_retrieve.return_value = _attached_result(_soul_master_card())
-        plugin = _FakePlugin(_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Soul Master fakes its death partway through the fight.",
-            "model": "test-model",
-        }
+        plugin = self._wire_soul_master_reply(
+            mock_should, mock_retrieve, "Soul Master fakes its death partway through the fight."
+        )
 
         result = _run(
             plugin,
@@ -201,14 +195,9 @@ class SpoilerCoverWiringTests(unittest.TestCase):
     @patch("backend.services.game_ai_request.retrieve_knowledge_context")
     @patch("backend.services.game_ai_request.should_retrieve_knowledge")
     def test_consent_turns_the_cover_off(self, mock_should, mock_retrieve):
-        mock_should.return_value = (True, "strategy")
-        mock_retrieve.return_value = _attached_result(_soul_master_card())
-        plugin = _FakePlugin(_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Soul Master fakes its death partway through the fight.",
-            "model": "test-model",
-        }
+        plugin = self._wire_soul_master_reply(
+            mock_should, mock_retrieve, "Soul Master fakes its death partway through the fight."
+        )
 
         result = _run(
             plugin,

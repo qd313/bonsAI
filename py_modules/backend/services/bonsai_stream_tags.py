@@ -9,9 +9,9 @@ personality (witty or deadpan) when a character is enabled.
 
 Used for: The pending-Ask screen, on every chunk of a streaming reply.
 main.py's token-streaming path calls `extract_bonsai_status()` on each
-chunk; the frontend calls `format_thinking_phase()` (mirrored client-side by
-composeThinkingBlurb.ts, so the two must always agree) for the phases it
-already knows about before the model has said anything.
+chunk, and calls `format_thinking_phase()` itself for the phases it already
+knows about before the model has said anything. The screen no longer builds
+any of this wording on its own -- Python is the only writer of the line now.
 
 Solves: A blank or unchanging wait reads as the plugin having frozen,
 especially on a Deck where a local model can genuinely take a long time.

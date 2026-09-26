@@ -1,12 +1,15 @@
 import unittest
 
 from backend.services.chat_memory_service import (
+    CANCELLED_ANSWER_TEXT,
     HIDDEN_NOTE_PLACEHOLDER,
     MAX_REMEMBERED_ANSWER_CHARS,
+    MEMORY_SUMMARY_HEADER,
     MEMORY_TRUNCATED_NOTE,
     build_chat_memory,
     plan_and_build_chat_memory,
     strip_fenced_blocks,
+    turns_not_yet_summarized,
 )
 from backend.services.token_accounting_service import (
     estimate_tokens_from_chars,
@@ -189,7 +192,7 @@ class TheLiveQuestionIsNotEchoedBackTests(unittest.TestCase):
             chat_turns=turns,
             ask_mode="speed",
             think_effort="off",
-            base_http="http://127.0.0.1:11434",
+            room_tokens=16384,
         )
         return memory
 
@@ -214,3 +217,79 @@ class TheLiveQuestionIsNotEchoedBackTests(unittest.TestCase):
             {"role": "assistant", "text": "Use the Longshot on the nucleus."},
         ])
         self.assertEqual(memory.turns_carried, 2)
+
+    def test_first_question_plans_against_the_real_room(self):
+        """The two sizing errors (plan 68 section 1): the very first question of a session must
+        plan against the room the answer will really ask for (16,384 on the Deck), not the
+        server's own 4,096 default -- the caller decides the room now, this function no longer
+        guesses it."""
+        plan, _memory = plan_and_build_chat_memory(
+            system_content="rules",
+            question="q",
+            chat_turns=[],
+            ask_mode="speed",
+            think_effort="off",
+            room_tokens=16384,
+        )
+        self.assertEqual(plan.room_tokens, 16384)
+
+
+class StoppedAnswersAreSkippedTests(unittest.TestCase):
+    def setUp(self) -> None:
+        reset_token_accounting()
+
+    def test_a_stopped_answer_is_skipped_by_the_memory_builder(self):
+        """A stopped answer is saved as the placeholder text, not something anybody said. It must
+        not come back as if the AI had actually replied."""
+        turns = [
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text": CANCELLED_ANSWER_TEXT},
+            {"role": "user", "text": "and what about the boots"},
+            {"role": "assistant", "text": "Take the Iron Boots off to swim up."},
+        ]
+        memory = build_chat_memory(turns, 2000)
+        self.assertNotIn(CANCELLED_ANSWER_TEXT, memory.text)
+        self.assertIn("Iron Boots", memory.text)
+
+
+class SummaryInTheMemoryBlockTests(unittest.TestCase):
+    def setUp(self) -> None:
+        reset_token_accounting()
+
+    def _turns(self):
+        return [
+            {"id": "t1", "role": "user", "text": "how do i beat morpha"},
+            {"id": "t2", "role": "assistant", "text": "Use the Longshot on the nucleus."},
+            {"id": "t3", "role": "user", "text": "what about the water temple boots"},
+            {"id": "t4", "role": "assistant", "text": "Take the Iron Boots off to swim up."},
+            {"id": "t5", "role": "user", "text": "and after that"},
+            {"id": "t6", "role": "assistant", "text": "Head to the Shadow Temple next."},
+        ]
+
+    def test_a_summary_lists_only_the_turns_after_its_own_coverage(self):
+        summary = {"text": "Been through Water Temple.", "covers_through_turn_id": "t4"}
+        memory = build_chat_memory(self._turns(), 2000, summary=summary)
+        self.assertIn(MEMORY_SUMMARY_HEADER, memory.text)
+        self.assertIn("Been through Water Temple.", memory.text)
+        self.assertIn("Shadow Temple", memory.text)
+        self.assertNotIn("Longshot", memory.text)
+        self.assertNotIn("Iron Boots", memory.text)
+
+    def test_a_dropped_coverage_id_means_no_turn_is_covered(self):
+        """The 200-turn cap can drop the very turn a summary says it covers through. When that
+        happens every surviving turn is chronologically after it already, so none of them are
+        skipped as "already covered" -- they all go back to being carried word for word."""
+        summary = {"text": "Old ground covered.", "covers_through_turn_id": "gone-from-disk"}
+        memory = build_chat_memory(self._turns(), 4000, summary=summary)
+        self.assertIn("Old ground covered.", memory.text)
+        self.assertIn("Longshot", memory.text)
+        self.assertIn("Iron Boots", memory.text)
+        self.assertIn("Shadow Temple", memory.text)
+
+    def test_turns_not_yet_summarized_matches_the_memory(self):
+        summary = {"text": "x", "covers_through_turn_id": "t2"}
+        rest = turns_not_yet_summarized(self._turns(), summary)
+        self.assertEqual([t["id"] for t in rest], ["t3", "t4", "t5", "t6"])
+
+    def test_turns_not_yet_summarized_with_no_summary_is_everything(self):
+        self.assertEqual(len(turns_not_yet_summarized(self._turns(), None)), 6)

@@ -80,6 +80,7 @@ from backend.services.ollama_ask_extras import (
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
+from backend.services.token_accounting_service import smallest_known_window_tokens
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
     no_installed_routing_models_message,
@@ -213,7 +214,11 @@ async def run_ask_ollama(
         chat_turns=chat_turns,
         ask_mode=ask_mode,
         think_effort=str(settings.get("ask_think_effort") or "off"),
-        base_http=normalize_ollama_base(pc_ip)[2],
+        # Still the pre-plan-68 room guess here -- the model has not been chosen yet at this
+        # point in the function (that happens a few lines below), so there is no real window to
+        # ask for. Step 3 of plan 68 reorders this so the memory is planned against the room the
+        # answer will really ask for; until then this keeps today's behaviour unchanged.
+        room_tokens=smallest_known_window_tokens(normalize_ollama_base(pc_ip)[2]),
         attached_chars=len(proton_log_attachment or ""),
         logger=logger,
     )

@@ -1,0 +1,18 @@
+{
+  "row": "READ-ALOUD-02 (machine half) and READ-ALOUD-06, new speaker-icon shape (flow 2d.7)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:18-15:21 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Voice replies setting 'Off: Answers are read only when you press Read aloud.' (voice_reply_mode 'off' = reading on demand allowed; not changed). Idle before: no speech process, no sound stream. A Deck-side watcher logged speech processes and sound streams every 0.2 s (scratch RA-02.log, RA-06.log). Note: the speech is made by a short espeak-ng run per sentence and played by pw-play; the runbook's name list (piper|tts|espeak|kokoro) does not include pw-play, so for 06 the watcher also matched pw-play/paplay.",
+  "pressed": "02: ban-lookup chat, walk Down to the speaker icon 'Read aloud' (box 289,359 30x32, visible), A; screenshot; A. 06: Hollow Knight 'prepare' chat, question 'which charms help most for that last fight' put in the box first (deck_send_ask.py VERIFIED), walk to 'Read aloud', A; Down x5 to Ask (speaker still 'Stop' at 15:20:17), A.",
+  "seen": {
+    "02_start": "A about 15:18:19; sound stream appeared 15:18:19.43; the icon changed to aria-label 'Stop' with class bonsai-chat-read-aloud-btn--speaking and colour rgb(248,113,113) (red) by 15:18:21; a second stream at 15:18:21.84 (next sentence)",
+    "02_iconLook": "while the ring is on it, the button draws as a white focus box with a dark stop mark (screenshot plan70-READ-ALOUD-02-speaking.png); the red colour is set but not visible under the focus style",
+    "02_stop": "A at about 15:18:30; stream gone at 15:18:30.69; icon back to 'Read aloud' at 15:18:31; nothing left behind in later reads",
+    "02_process": "not seen by the runbook's name list (espeak-ng runs are too short; the player is pw-play)",
+    "06_reading": "pw-play processes 169321 / 169680 / 170024 with a stream each, sentences starting 15:20:02.4, 15:20:09.9, 15:20:17.3",
+    "06_newQuestion": "Ask pressed about 15:20:19.6; stream gone 15:20:19.85, pw-play gone 15:20:20.10; the new answer finished normally at 15:21:23",
+    "helpfulRowNote": "after the plugin reload, the 'Was this helpful? Helpful / Not really' row was no longer shown under the older answers; the speaker icon stood alone at the right of an empty row"
+  },
+  "verdict": "READ-ALOUD-02 PASS (starts on A, stops within about 0.7 s of the second A, icon turns to Stop/red). READ-ALOUD-06 PASS (reading stopped within about 0.5 s of sending the new question)."
+}

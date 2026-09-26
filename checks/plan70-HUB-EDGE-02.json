@@ -1,0 +1,751 @@
+{
+  "formatVersion": 2,
+  "name": "plan70-HUB-EDGE-02",
+  "tool": "deck_sweep",
+  "savedAt": "2026-09-26T19:06:55.773Z",
+  "buildHash": "sha256:7516a194875c2e12496ff97dfada79e593b066d88f783892368b4f2ee7b682a7",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "bin/README.md",
+    "defaults/defaults.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/ask_payload.py",
+    "py_modules/backend/services/ask_topic_instructions.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_memory_service.py",
+    "py_modules/backend/services/chat_memory_step.py",
+    "py_modules/backend/services/chat_slot_rpc.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/chat_sum_up_job.py",
+    "py_modules/backend/services/chat_summary_service.py",
+    "py_modules/backend/services/chat_turn_recorder.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_rpc.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_attached_notes.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/knowledge_base_cards.py",
+    "py_modules/backend/services/knowledge_base_chips.py",
+    "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_search.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/media_desktop_rpc.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_extras.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_chat_stream.py",
+    "py_modules/backend/services/ollama_connection_test.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_local_setup_rpc.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_preload_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_window_fit.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/prompt_budget_service.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/rag_corpus_local_install.py",
+    "py_modules/backend/services/rag_corpus_rpc.py",
+    "py_modules/backend/services/rag_corpus_status.py",
+    "py_modules/backend/services/reply_followup_blocks.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/reply_style_blocks.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/spy_confession_service.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_rpc.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_entity_extraction.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/strategy_spoiler_policy.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_audio_capture_service.py",
+    "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_model_download_service.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_rpc.py",
+    "py_modules/backend/services/voice_transcript_decode_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/services/voice_whisper_runtime.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "direction": "DOWN",
+    "returnTrip": true,
+    "lanes": 0,
+    "laneButton": "RB",
+    "budget": 30,
+    "stallLimit": 2,
+    "acquireFocus": false
+  },
+  "expected": {
+    "pattern": {
+      "direction": "DOWN",
+      "returnTrip": true,
+      "lanes": 0,
+      "laneButton": "RB",
+      "budget": 30,
+      "stallLimit": 2
+    },
+    "ok": true,
+    "stopped": false,
+    "totals": {
+      "stopsRecorded": 25,
+      "stopsVisited": 14,
+      "unlabeledStops": 0,
+      "cycles": 0,
+      "stopsFocusedButNotVisible": 0,
+      "presses": 28,
+      "legs": 2
+    },
+    "notVisible": [],
+    "legs": [
+      {
+        "lane": 0,
+        "direction": "DOWN",
+        "presses": 13,
+        "stops": 11,
+        "endedBy": "stall",
+        "cycle": null
+      },
+      {
+        "lane": 0,
+        "direction": "UP",
+        "presses": 15,
+        "stops": 13,
+        "endedBy": "stall",
+        "cycle": null
+      }
+    ],
+    "stops": [
+      {
+        "index": 0,
+        "lane": 0,
+        "leg": "start",
+        "press": null,
+        "tag": "BUTTON",
+        "label": "Filters, 2 on: Also try open-weight models, Essentials only",
+        "labelSource": "aria-label",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 205,
+          "w": 492,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 1,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Open source only (recommended)",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)",
+        "rect": {
+          "x": 464,
+          "y": 280,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)"
+      },
+      {
+        "index": 2,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Also try open-weight models",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 310,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 3,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Speed",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(4) > button.Focusable:nth-child(2)",
+        "rect": {
+          "x": 464,
+          "y": 395,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(4) > button.Focusable:nth-child(2)"
+      },
+      {
+        "index": 4,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Strategy",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 425,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 5,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Expert",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(6) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 455,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(6) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 6,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Vision",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(7) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 485,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(7) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 7,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Installed only",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(8) > button.Focusable:nth-child(2)",
+        "rect": {
+          "x": 464,
+          "y": 541,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(8) > button.Focusable:nth-child(2)"
+      },
+      {
+        "index": 8,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Essentials only — show Tier 1 and Tier 2 one-model presets",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(9) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 571,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(9) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 9,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Recently added",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(10) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 601,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(10) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 10,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Close filters",
+        "labelSource": "text",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(11)",
+        "rect": {
+          "x": 464,
+          "y": 635,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(11)"
+      },
+      {
+        "index": 11,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Done",
+        "labelSource": "text",
+        "selector": "#ModalDialogOverlay_Modal_2 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 691,
+          "w": 272,
+          "h": 40
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#ModalDialogOverlay_Modal_2 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)"
+      },
+      {
+        "index": 12,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Close filters",
+        "labelSource": "text",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(11)",
+        "rect": {
+          "x": 464,
+          "y": 635,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(11)"
+      },
+      {
+        "index": 13,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Recently added",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(10) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 601,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(10) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 14,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Essentials only — show Tier 1 and Tier 2 one-model presets",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(9) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 571,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(9) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 15,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Installed only",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(8) > button.Focusable:nth-child(2)",
+        "rect": {
+          "x": 464,
+          "y": 541,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(8) > button.Focusable:nth-child(2)"
+      },
+      {
+        "index": 16,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Vision",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(7) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 485,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(7) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 17,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Expert",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(6) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 455,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(6) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 18,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Strategy",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 425,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(5) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 19,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Speed",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(4) > button.Focusable:nth-child(2)",
+        "rect": {
+          "x": 464,
+          "y": 395,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(4) > button.Focusable:nth-child(2)"
+      },
+      {
+        "index": 20,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Also try open-weight models",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 310,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 21,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Open source only (recommended)",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)",
+        "rect": {
+          "x": 464,
+          "y": 280,
+          "w": 569,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)"
+      },
+      {
+        "index": 22,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Filters, 2 on: Also try open-weight models, Essentials only",
+        "labelSource": "aria-label",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 464,
+          "y": 311,
+          "w": 492,
+          "h": 26
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 23,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Refresh model catalog",
+        "labelSource": "aria-label",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 813,
+          "y": 289,
+          "w": 20,
+          "h": 16
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 24,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Advanced ›",
+        "labelSource": "text",
+        "selector": "#ModalDialogOverlay_Modal_2 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 962,
+          "y": 255,
+          "w": 71,
+          "h": 22
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#ModalDialogOverlay_Modal_2 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)"
+      }
+    ]
+  }
+}

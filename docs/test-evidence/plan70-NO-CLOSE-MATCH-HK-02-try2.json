@@ -1,0 +1,20 @@
+{
+  "row": "NO-CLOSE-MATCH-HK-02 menu re-check (flow L3.1 step 3)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 14:59-15:00 EDT (answer saved 15:00:04)",
+  "screen": "monitor live: QAM page 855x766 css px at dpr 1.28",
+  "setup": "Nothing running, Strategy, character off, new chat. Question 'in hollow knight how do I beat the spell casting boss at the top of the sanctum' via deck_send_ask.py (VERIFIED).",
+  "pressed": "new chat, question in, Down x3 to Ask, A; read after finish",
+  "seen": {
+    "menuQuestion": "Are you currently facing the boss boss?",
+    "buttons": [
+      "A. Yes, I am fighting the boss",
+      "B. No, I am preparing for the fight"
+    ],
+    "protectedNameInMenu": 0,
+    "backticksOnButtons": 0,
+    "answerHadName": "yes, twice, both inside covers when finished (2 covers)",
+    "oddWording": "the stand-in reads 'the boss boss' (doubled word) in the menu question"
+  },
+  "verdict": "PASS (no protected name and no backticks in the menu; a stand-in is used). Side note: the stand-in doubled into 'the boss boss'."
+}

@@ -1,0 +1,16 @@
+{
+  "row": "VAC-06 (flow 2d.1) - the new wording when the ban lookup is off",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:11-15:13 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Permissions tab switch 'Steam ban lookup' (settings key capabilities.steam_web_api) was on (true); switched off through the screen for this row; key empty. New chat, nothing running.",
+  "pressed": "Permissions tab, walk to 'Steam ban lookup', A (off); Main, new chat, 'bonsai:vac-check' via deck_send_ask.py (VERIFIED), Ask",
+  "seen": {
+    "replyVerbatim": "Steam Web API is off for bonsAI.\n\nEnable Permissions \u2192 Steam ban lookup, add your Web API key under Developer \u2192 Integrations, then run:\n\nbonsai:vac-check 7656119\u2026\n\nThis command skips the AI and queries Valve GetPlayerBans for account-level ban flags only.",
+    "rowBelowReply": "Enable Steam ban lookup in Permissions to use bonsai:vac-check. [Open Permissions]",
+    "switchLabelOnScreen": "Steam ban lookup",
+    "match": "the reply names 'Permissions \u2192 Steam ban lookup', the same words as the switch's label"
+  },
+  "restored": "switch back on at 15:16 (file reads steam_web_api true)",
+  "verdict": "PASS"
+}

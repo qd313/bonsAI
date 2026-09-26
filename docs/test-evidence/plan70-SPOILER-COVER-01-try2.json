@@ -1,0 +1,48 @@
+{
+  "row": "SPOILER-COVER-01 re-check (flow L3.1 step 1 and 4)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 14:53-15:03 EDT (answers saved 14:54:28, 14:57:00, 14:58:27, 15:00:04, 15:01:33, 15:03:02)",
+  "screen": "monitor live: QAM page 855x766 css px at dpr 1.28 (1920x1080 screenshots)",
+  "setup": "Nothing running. Strategy mode. AI character switched off. Thinking effort medium (on). One new chat per question. A watcher script read the panel every 250 ms from before Ask until 4 s after the answer settled, reading answer text and the live thinking line separately. Raw reads: scratch L3-1-HK-A/B/C.jsonl, L3-1-HK-MENU.jsonl, L3-1-HADES-A/B.jsonl.",
+  "pressed": "chat row, LB to [+], A (new chat); question via deck_send_ask.py (VERIFIED each time); Down x3 to Ask, A",
+  "seen": {
+    "HK-A 'hollow knight tips for the teleporting boss that throws orbs in the sanctum'": {
+      "savedAnswerStartsWith": "```bonsai-spoiler\nWhen fighting the Soul Master, the key is timing your attacks around his movement.\n```\nHe teleports...",
+      "live": "From 26.27 s to about 32.0 s (23 reads, about 6 s) the screen showed in plain text: 'When fight-spoiler' then 'When fighting the Soul Master, the key is timing your attacks around his movement.' From 26.84 s the line 'Code block incoming...' showed below it, while the named sentence stayed readable.",
+      "rawBackticksInAnswer": "none seen; a stray '-spoiler' word (left of the fence opener) was seen for about 6 s",
+      "finished": "1 cover, name inside it, 0 plain hits; menu 'Where are you at in Hollow Knight?' A. Starting out in Dirtmouth / B. Deep in the City of Tears (no name)",
+      "screenshot": "plan70-SPOILER-COVER-01-try2-finished-covered.png"
+    },
+    "HK-B 'in hollow knight what should I know before fighting the mage boss in the soul sanctum'": {
+      "live": "boss never named in answer at any read (the model said it had no specific details)",
+      "finished": "0 covers, 0 name hits, 0 backticks"
+    },
+    "HK-C 'hollow knight which boss waits past the crystal spike area and how do I win that fight'": {
+      "live": "boss never named at any read (model: 'I don't have specific details on a boss named \"boss waits past the crystal spike area\"')",
+      "finished": "0 covers, 0 name hits, 0 backticks"
+    },
+    "HK-MENU 'in hollow knight how do I beat the spell casting boss at the top of the sanctum'": {
+      "savedAnswer": "two bonsai-spoiler fences: one opening the answer ('I'll give you the rundown on how to handle the Soul Master fight at the top of the Soul Sanctum.') and one at the end ('The Soul Master teleports between attacks...')",
+      "live": "From 25.35 s to 34.15 s (35 reads, about 9 s) 'Soul Master' was readable in plain text. First fence: shown as 'I'll give you the runll give you the rundown on how to handle the Soul Master fight at the top of the Soul Sanctum.' (garbled repeat) with 'Code block incoming...' below. Second fence: at 30.84 s raw '```bonsa' then '```bonsai-spoiler' was readable (14 reads, about 3.3 s), then its content ('...Hitting him from below while he conjures orbs...') showed plain until 34.1 s.",
+      "finished": "2 covers, 0 plain name hits, 0 backticks"
+    },
+    "HADES-A 'in hades who is the fury at the end of tartarus and how do I beat her'": {
+      "live": "no Fury name at any read",
+      "finished": "0 covers, 0 hits"
+    },
+    "HADES-B 'hades tips for the first boss fight, the whip sister guarding the exit of tartarus'": {
+      "live": "no Fury name at any read",
+      "finished": "0 covers, 0 hits"
+    },
+    "backtickNoiseNote": "Some backtick hits came from the suggestion chip's letter-scramble animation (random characters under the answer), not from the answer; those are excluded above."
+  },
+  "verdict": "FAIL - finished answers are covered correctly, but in both Hollow Knight answers that named the boss (2 of 4 tries) the name was readable in plain text for 6 s and 9 s while streaming, and raw '```bonsai-spoiler' was visible for about 3 s once. Pattern: a spoiler fence at the very start of the answer (and a second fence near the end) streams its content uncovered until the answer finishes.",
+  "newChats": [
+    "37417b61 (HK-A)",
+    "323fa27b (HK-B)",
+    "ae87070f (HK-C)",
+    "c66402d9 (HK-MENU)",
+    "7c9370a6 (HADES-A)",
+    "896e5c6f (HADES-B)"
+  ]
+}

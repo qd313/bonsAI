@@ -1,0 +1,10 @@
+{
+  "row": "LANG-01 (flow 2d.4) - reply language shows 'Follow system' on load",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:17-15:19 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Settings file reply_language = 'follow_system' (the default; no language chosen). Plugin reloaded with deck_reloadPlugin, reopened with deck_openPlugin (opened on the first try; it came back on the Permissions tab).",
+  "pressed": "Down (off Decky's header), RB, RB to About; read, no press on the dropdown",
+  "seen": {"aboutText": "Steam client language: English / Language: Follow system", "closedDropdownValue": "Follow system"},
+  "verdict": "PASS"
+}

@@ -1,0 +1,19 @@
+{
+  "row": "HUB-EDGE-02 (flow L3.2)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:06-15:07 EDT",
+  "screen": "monitor live; AI models dialog, window 1500x844 css px",
+  "setup": "Opened with Manage AI models... (open 3); Down to the Filters button, A (opens the panel; no filter touched). Panel open, 10 rows, ring on the Filters button.",
+  "pressed": "deck_sweep DOWN until the ring stopped, then UP until it stopped (directions only), saved as check checks/plan70-HUB-EDGE-02.json",
+  "seen": {
+    "downStops": ["Open source only (recommended)", "Also try open-weight models", "Speed", "Strategy", "Expert", "Vision", "Installed only", "Essentials only", "Recently added", "Close filters", "Done"],
+    "downEndedOn": "Done (box 464,691 272x40) - no longer stuck on 'Close filters'",
+    "upStops": ["Close filters", "Recently added", "Essentials only", "Installed only", "Vision", "Expert", "Strategy", "Speed", "Also try open-weight models", "Open source only (recommended)", "Filters button", "Refresh model catalog", "Advanced >"],
+    "stopsNotVisible": 0,
+    "presses": 28,
+    "cycles": 0,
+    "note": "Down from 'Close filters' goes straight to Done; the model rows are not on the path while the panel is open. Walking Up out of the panel folded it shut by itself (Filters aria-expanded false afterwards).",
+    "filtersAfter": "Filters, 2 on: Also try open-weight models, Essentials only (unchanged)"
+  },
+  "verdict": "PASS - Down reaches Done, every stop visible, Up returns to the top."
+}

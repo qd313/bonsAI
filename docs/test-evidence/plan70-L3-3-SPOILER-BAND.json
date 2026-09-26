@@ -1,0 +1,15 @@
+{
+  "row": "L3.3 spoiler band re-check (helper M, commit 7b2bc753)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:09-15:11 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Nothing running, Strategy, character off, new chat. Reworded question: 'the fan on my steam deck gets really loud even when it is just sitting idle, how do I calm it down' (deck_send_ask.py VERIFIED). Answer took about 8 s (not a cache hit).",
+  "pressed": "Ask; walk Up to Show details, A; read",
+  "seen": {
+    "answer": "Lowering the TDP limit in Quick Settings can help reduce fan noise when the Deck is idle...",
+    "tipAttached": "yes: 'Shared troubleshooting - performance', 'Shared troubleshooting - deck'; 'Source: shared troubleshooting tips', trust tier fallback_no_source (compat_tips)",
+    "spoilerRisk": "Spoiler risk: low",
+    "before": "the same kind of question read 'Spoiler risk: med' on 2026-09-26 13:05 (plan70-L1-8-HELPER-M.json)"
+  },
+  "verdict": "PASS"
+}

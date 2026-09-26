@@ -1,0 +1,19 @@
+{
+  "row": "L3.0 deploy the tip",
+  "buildCommit": "8c4e0e4f67066756869156cfd63c9500eeae58da",
+  "deckTime": "2026-09-26 14:51 EDT",
+  "screen": "monitor live: QAM page 855x766 css px, screen 1500x843, dpr 1.28",
+  "setup": "Before deploy the Deck had the 7a5991d3 build (index.js f724d7ca...). Nothing running.",
+  "pressed": "plugin_build, deck_deploy, deck_openPlugin",
+  "seen": {
+    "tipCommitsPresent": {"59bb4dd6": true, "4b975316": true, "7c93d5e8": true, "86a148a7": true, "3ac00226": true, "6355eb9a": true, "679452e5": true, "7b2bc753": true},
+    "fingerprints": {
+      "dist/index.js": {"pc": "b50d93ea532aec56ac7d33dc6a2c055a291e263ae2e8891209acd8d28d7e5f86", "deck": "b50d93ea532aec56ac7d33dc6a2c055a291e263ae2e8891209acd8d28d7e5f86"},
+      "main.py": {"pc": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f", "deck": "e75cd9dd676d1ea23c810addfa14efae0f7ff611d47552a5ba0299b5231d7e7f"},
+      "py_modules/backend/services/game_ai_request.py": {"pc": "0d0d244e3cfbf4b757f5aa16c545271f3401c2c7ef53855f73e31cb1340711f6", "deck": "0d0d244e3cfbf4b757f5aa16c545271f3401c2c7ef53855f73e31cb1340711f6"}
+    },
+    "pluginLog": "new log 2026-09-26 14.51.14.log: one line, 'bonsAI plugin loaded!', no errors",
+    "openPlugin": "opened on the first attempt (the usual first failure did not happen)"
+  },
+  "verdict": "PASS (deployed and fingerprints match)"
+}

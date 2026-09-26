@@ -1,0 +1,20 @@
+{
+  "row": "RPC-TIMEOUT-01, everyday half (flow 2d.5)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 14:53-15:24 EDT (whole block)",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Watched across flows L3 and 2d. Nothing running.",
+  "pressed": "as in the other L3/2d evidence files; plus for this row: new chat, question 'describe what you can see in this screenshot in two sentences', paperclip (Up from Ask), A, 'Attach recent screenshot', A, picked '20260712-001253.jpg' (177 KB) with A, Ask; then 'list every weapon class in deep rock galactic survivor and what each is good for', Ask, Down to 'Stop generation', A",
+  "seen": {
+    "settingsSaves": "7 switch changes through the screen (character off; 4 permission switches off and on again, one of them twice) - every one read back from the settings file within 2 s, none failed",
+    "ask": "13 questions this block, all answered (8-35 s each); none hung",
+    "showDetails": "opened 3 times, opened at once each time",
+    "screenshotAttach": "the attach menu showed 'Close menu & take screenshot' and 'Attach recent screenshot'; the second opened a picker inside the panel; the 177 KB JPG attached ('1' badge, file name and size under the box); the answer arrived in about 25 s and described the Deep Rock Galactic main menu",
+    "stop": "A on 'Stop generation' at about 15:24:21; answer stopped by 15:24:24 with 'Stopped - partial answer kept.' and the partial text kept",
+    "sideNotes": [
+      "after pressing Ask, the ring moved onto the question box while the answer streamed (an A there would open the on-screen keyboard)",
+      "after choosing a picker item, and after the picker opened, nothing held the ring until the next D-pad press"
+    ]
+  },
+  "verdict": "PASS - settings saves, Ask, Stop, Show details and a screenshot attach all completed normally; nothing hung."
+}

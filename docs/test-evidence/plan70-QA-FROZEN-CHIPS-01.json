@@ -1,0 +1,14 @@
+{
+  "row": "QA-FROZEN-CHIPS-01 (flow 2d.6) - the Test badge on pinned chips",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:19-15:20 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Settings before: dev_frozen_test_chips [] (nothing pinned), preset_chip_animation 'decode' (already on), preset_single_chip true.",
+  "pressed": "Developer tab opened and read; no other presses",
+  "seen": {
+    "developerTabFrozenSection": "Frozen test chips (QA): 'None pinned - the carousel is sampling normally. ... Set the list from the host while preparing a run.' Animation row shows fade / carousel / static / decode.",
+    "pinControls": "none - the tab has no control to pin Batch B; a 'Clear frozen test chips' button appears only once something is pinned (DeveloperTab.tsx)",
+    "howItWasDoneBefore": "docs/archive/20-frozen-chip-qa-batches.md 4b: Batch B was pinned by writing dev_frozen_test_chips into settings.json over SSH"
+  },
+  "verdict": "COULD NOT RUN - the runbook's route (pin Batch B through the Developer tab) does not exist on this build. Pinning needs a settings-file edit over SSH, which the runbook did not ask for, so it was not done. Nothing changed."
+}

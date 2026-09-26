@@ -1,0 +1,28 @@
+{
+  "row": "THINKING-SPOILER-01 re-check (flow L3.1 step 2)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 14:53-15:03 EDT",
+  "screen": "monitor live: QAM page 855x766 css px at dpr 1.28",
+  "setup": "Thinking setting (ask_think_effort) was already 'medium' (on); not changed. Same six answers as plan70-SPOILER-COVER-01-try2.json. The watcher read the live thinking line (.bonsai-chat-reasoning-live and .bonsai-chat-thinking-line) every 250 ms. 'Show reasoning' opened by D-pad + A on screen for HK-A and HK-B; for the others the saved reasoning text was read over SSH (for HK-A and HK-B the on-screen block matched the saved text exactly: same backticks, same [hidden] count).",
+  "pressed": "as the cover check; plus walk Up to 'Show reasoning', A (HK-A, HK-B)",
+  "seen": {
+    "protectedNameInLiveThinking": "0 reads in all six answers (Soul Master / Soul Tyrant / Megaera / Alecto / Tisiphone)",
+    "hiddenMarker": "'[hidden]' appeared in the live thinking line in all six answers (e.g. 'The context is Hollow Knight. [hidden]')",
+    "rawBackticksInLiveThinking": {
+      "HK-B": "12.8-19.3 s (about 6 s): 'Must start with `<bonsai-status>`.'",
+      "HK-C": "9.1-15.5 s (about 6 s): '*   `[Hollow Knight / boss:' and '`[Hollow Knight / mechanic:'",
+      "HADES-A": "9.7-15.0 s (about 5 s): 'Must start with `' then '`<bonsai-status>`.'",
+      "HK-A, HK-MENU, HADES-B": "none"
+    },
+    "showReasoningBlock": {
+      "HK-A": "on screen: 2077 chars, 0 names, 0 backticks, 2 [hidden]",
+      "HK-B": "on screen: 2073 chars, 0 names, 4 backticks ('`<bonsai-status>`', '`bonsai-spoiler...`'), 4 [hidden]",
+      "HK-C": "saved: 0 names, 2 backticks ('`[Hollow Knight / mechanic: Starting out in Hollow Knight]`'), 2 [hidden]",
+      "HK-MENU": "saved: 0 names, 0 backticks, 3 [hidden]",
+      "HADES-A": "saved: 0 names, 2 backticks ('`<bonsai-status>`'), 1 [hidden]",
+      "HADES-B": "saved: 0 names, 0 backticks, 1 [hidden]"
+    },
+    "note": "The backticks are single inline-code marks the model uses to quote a tag or a note title, not a spoiler fence; no '```' ever appeared in thinking. The quoted tag '<bonsai-status>' and the note titles are internal wording shown to the player."
+  },
+  "verdict": "FAIL on the backtick rule as written (single backticks visible in the live thinking line in 3 of 6 answers, and in the opened reasoning in 3 of 6); PASS on the name rule (no protected name in plain words anywhere in thinking, live or opened). Owner to judge whether single inline backticks count."
+}

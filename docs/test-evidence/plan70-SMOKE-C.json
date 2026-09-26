@@ -1,0 +1,18 @@
+{
+  "row": "SMOKE-C (flow 2d.2) - the permission gate",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:12-15:16 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Capability turned off through the Permissions tab: 'Steam ban lookup' (capabilities.steam_web_api, old value true). Blocked action: 'bonsai:vac-check' in a new chat (the same send as plan70-VAC-06.json).",
+  "pressed": "Ask; D-pad Down to 'Open Permissions' (row under the reply), A; read focus; B; walk to 'Back to Main', A; read",
+  "seen": {
+    "denyMessage": "shown at once (see plan70-VAC-06.json)",
+    "noModelCall": "Ollama here runs as a user process, so its system log is empty. Used Ollama's own last-use times instead: /api/ps at 15:13:08 gave gemma4 expires 19:11:20 and nomic 19:11:12 (last use 15:11:20 = the fan question, keep-alive 240 min); the command was sent about 15:12:45, so no model was called.",
+    "openPermissionsLandsOn": "the 'Steam ban lookup' switch (aria-checked false, box 290,506 38x22), on the Permissions tab",
+    "secondJump": "the troubleshooting hint's own 'Open Permissions' (plan70-PERMS-CLEAN-05-06.json) landed on 'Read game & screenshot context' (aria-checked false) - also the right switch",
+    "back": "B on the switch put the ring on the tab bar (Permissions tab), not back to Main. The page has a 'Back to Main' button at the top; walking Up to it and pressing A returned to Main with the ring back on 'Open Permissions'. No crash, panel stayed open.",
+    "reachNote": "Walking Up from the suggestion chip skips 'Open Permissions' (goes chip -> Show details); walking Down from the chat row reaches it."
+  },
+  "restored": "Steam ban lookup back on (file reads true)",
+  "verdict": "PASS on deny with no model call, and the ring landing on the right switch (2 of 2 jumps). Back: 'Back to Main' returns cleanly; plain B only moves the ring to the tab bar - owner to judge whether 'press Back' meant B or the 'Back to Main' button."
+}

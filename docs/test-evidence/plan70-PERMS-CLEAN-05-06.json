@@ -1,0 +1,18 @@
+{
+  "row": "PERMS-CLEAN-05 and PERMS-CLEAN-06 (flow 2d.3)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:13-15:16 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Before: all five capabilities true (filesystem_write, media_library_access, microphone_access, steam_logs_read, steam_web_api). The Permissions tab shows four switches; 'Read game & screenshot context' covers two keys (media_library_access and steam_logs_read). All four switched off through the screen; file read back: all five false.",
+  "pressed": "05: RB to About, read. 06: Main, question box filled with 'my game keeps crashing right after launch with a proton error' via deck_send_ask.py (not sent); walk to the hint; Right twice from its 'Open Permissions'.",
+  "seen": {
+    "05_aboutLinks": ["GitHub", "Built on Ollama!", "Bugs & Feature Requests", "Support my Steam Sale habit"],
+    "05_screenshot": "plan70-PERMS-CLEAN-05-about-links.png",
+    "06_hintShown": "yes: 'Troubleshooting Ask detected. Enable Read game & screenshot context in Permissions to auto-attach Proton logs and screenshots (never turned on automatically).' with [Open Permissions] [Dismiss] (row box 48,376 300x86)",
+    "06_reachingDismiss": "Down from the reply's 'Show details' reaches the hint's 'Open Permissions' (48,428 115x34). Right, then Right again: the ring did not move either time. Dismiss sits right beside it (171,428 62x34), visible, not reachable by D-pad. Down from the ban-lookup 'Open Permissions' and Up from the suggestion chip both skip the hint row entirely.",
+    "06_dismissPressed": "no - could not reach it",
+    "06_screenshot": "plan70-PERMS-CLEAN-06-hint-dismiss-unreachable.png"
+  },
+  "restored": "all four switches back on through the screen; file reads all five true",
+  "verdict": "05 PASS. 06 FAIL - the hint shows, but its Dismiss button cannot be reached with the D-pad (Right from 'Open Permissions' does nothing, tried twice), so it could not be dismissed."
+}

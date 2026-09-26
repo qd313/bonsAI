@@ -1,0 +1,27 @@
+{
+  "row": "L3.3 named entity re-check (helper M, commit 679452e5)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:07-15:09 EDT",
+  "screen": "monitor live: QAM page 855x766 css px",
+  "setup": "Nothing running, Strategy, character off, new chat 8f585da0. Question 'in hollow knight how should I prepare for the fight against the hollow knight at the end' via deck_send_ask.py (VERIFIED). Not cached: the answer took about 33 s.",
+  "pressed": "Ask; after finish walk to Show details, A; Down x3 to the chip ladder; Right x4 to chip 5 (the spoiler chip)",
+  "seen": {
+    "notesAttached": [
+      "Starting out in Hollow Knight",
+      "Watcher Knights",
+      "False Knight"
+    ],
+    "spoilerChipBullets": [
+      "Estimated band: high",
+      "Ask mode: strategy",
+      "Title profile: protect_progression",
+      "KB sections: mechanic, boss",
+      "Transparency only - does not change spoiler masking."
+    ],
+    "namedEntityLine": "absent (no 'Named entity' bullet on any chip)",
+    "savedChat": "subject 'Starting out in Hollow Knight'; asked_entity empty on both turns",
+    "answerNamesRadianceOrPureVessel": "no (0 reads)",
+    "liveThinkingBackticks": "yes, 9.8-34.3 s: '`bonsai-spoiler`', '`<bonsai-status>`'"
+  },
+  "verdict": "PASS - Show details names no wrong note and no wrong boss (nothing). Side note: the chat's saved subject is still 'Starting out in Hollow Knight'."
+}

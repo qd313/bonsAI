@@ -1,0 +1,16 @@
+{
+  "row": "RING-ON-FILTER-2c2 (flow L3.2)",
+  "buildCommit": "8c4e0e4f (index.js b50d93ea...)",
+  "deckTime": "2026-09-26 15:05-15:07 EDT",
+  "screen": "monitor live; AI models dialog in the Big Picture page, window 1500x844 css px",
+  "setup": "Ollama tab, no game. Filters at start: 'Filters, 2 on: Also try open-weight models, Essentials only'. Never changed.",
+  "pressed": "Walk to 'Manage AI models...', A; read; B; A; read; B; A; read. Then 'Browse models...' A once for comparison.",
+  "seen": [
+    {"open": 1, "route": "Manage AI models...", "previousClose": "none (first open this block)", "filtersPanelOpen": false, "panelRows": 0, "focus": "Advanced > (box 962,255 71x22)"},
+    {"open": 2, "route": "Manage AI models...", "previousClose": "B", "filtersPanelOpen": false, "panelRows": 0, "focus": "Advanced >, same box"},
+    {"open": 3, "route": "Manage AI models...", "previousClose": "B", "filtersPanelOpen": false, "panelRows": 0, "focus": "Advanced >, same box"},
+    {"open": 4, "route": "Browse models...", "previousClose": "B", "filtersPanelOpen": false, "panelRows": 0, "focus": "Advanced >, same box"}
+  ],
+  "filtersAfter": "Filters, 2 on: Also try open-weight models, Essentials only (unchanged)",
+  "verdict": "PASS - 3 of 3 opens through Manage AI models... have the Filters panel closed and the ring on Advanced >, the same as Browse models... (was 3 of 3 opening with the panel open before the fix)."
+}

@@ -205,6 +205,7 @@
     "tests/test_chat_memory_service.py",
     "tests/test_chat_slot_ownership.py",
     "tests/test_chat_slot_service.py",
+    "tests/test_chat_summary_service.py",
     "tests/test_clear_plugin_data_voice_reset.py",
     "tests/test_clipboard_service.py",
     "tests/test_closed_rows_check.py",

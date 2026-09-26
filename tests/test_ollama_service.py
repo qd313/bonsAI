@@ -5,6 +5,7 @@ import urllib.error
 from unittest.mock import MagicMock, patch
 
 from backend.services import ollama_service
+from fake_ollama_stream import ndjson_response
 from backend.services.ollama_ask_budgets import (
     ASK_VISIBLE_NUM_PREDICT,
     SOFT_CONTINUE_CUE,
@@ -674,25 +675,7 @@ class OllamaServiceTests(unittest.TestCase):
     @staticmethod
     def _ndjson_response(lines: list[str]):
         """Fake urlopen response replaying NDJSON through the same read call the real stream uses."""
-        body = ("\n".join(lines) + "\n").encode("utf-8")
-        idx = {"i": 0}
-
-        class _Rsp:
-            def read1(self, n: int):
-                chunk = body[idx["i"] : idx["i"] + n]
-                idx["i"] += len(chunk)
-                return chunk
-
-            def close(self) -> None:
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *_):
-                pass
-
-        return _Rsp()
+        return ndjson_response(lines)
 
     def _run_chat_collecting_deltas(self, lines: list[str], on_delta=None) -> list[tuple[str, bool]]:
         seen: list[tuple[str, bool]] = []

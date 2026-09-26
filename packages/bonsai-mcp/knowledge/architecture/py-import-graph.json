@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 99,
-  "edgeCount": 232,
+  "fileCount": 101,
+  "edgeCount": 243,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -60,15 +60,15 @@
       "count": 7
     },
     {
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 7
+    },
+    {
       "path": "py_modules/backend/ollama_routing.py",
       "count": 6
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
-      "count": 6
-    },
-    {
-      "path": "py_modules/backend/services/token_accounting_service.py",
       "count": 6
     },
     {
@@ -94,6 +94,10 @@
     {
       "path": "py_modules/backend/tls_ca_fallback.py",
       "count": 5
+    },
+    {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "count": 4
     },
     {
       "path": "py_modules/backend/services/knowledge_base_cards.py",
@@ -144,7 +148,7 @@
       "count": 3
     },
     {
-      "path": "py_modules/backend/services/chat_slot_service.py",
+      "path": "py_modules/backend/services/chat_turn_recorder.py",
       "count": 3
     },
     {
@@ -153,6 +157,10 @@
     },
     {
       "path": "py_modules/backend/services/model_policy.py",
+      "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/ollama_window_fit.py",
       "count": 3
     },
     {
@@ -180,7 +188,7 @@
       "count": 2
     },
     {
-      "path": "py_modules/backend/services/chat_turn_recorder.py",
+      "path": "py_modules/backend/services/chat_memory_service.py",
       "count": 2
     },
     {
@@ -208,15 +216,23 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/ollama_chat_stream.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/ollama_embed_service.py",
       "count": 2
     },
     {
-      "path": "py_modules/backend/services/ollama_window_fit.py",
+      "path": "py_modules/backend/services/ollama_stop_service.py",
       "count": 2
     },
     {
       "path": "py_modules/backend/services/proton_troubleshooting_logs.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/reply_style_blocks.py",
       "count": 2
     },
     {
@@ -260,11 +276,15 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/chat_memory_service.py",
+      "path": "py_modules/backend/services/chat_memory_step.py",
       "count": 1
     },
     {
       "path": "py_modules/backend/services/chat_slot_rpc.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/chat_summary_service.py",
       "count": 1
     },
     {
@@ -324,10 +344,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/ollama_chat_stream.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/ollama_connection_test.py",
       "count": 1
     },
@@ -349,10 +365,6 @@
     },
     {
       "path": "py_modules/backend/services/ollama_preload_service.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/ollama_stop_service.py",
       "count": 1
     },
     {
@@ -381,10 +393,6 @@
     },
     {
       "path": "py_modules/backend/services/reply_followup_blocks.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/reply_style_blocks.py",
       "count": 1
     },
     {
@@ -647,6 +655,17 @@
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_step.py",
+        "py_modules/backend/services/chat_summary_service.py"
+      ]
+    },
+    "py_modules/backend/services/chat_memory_step.py": {
+      "imports": [
+        "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/chat_summary_service.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
         "py_modules/backend/services/ollama_ask_service.py"
       ]
     },
@@ -665,7 +684,23 @@
       "importedBy": [
         "main.py",
         "py_modules/backend/services/chat_slot_rpc.py",
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/chat_turn_recorder.py"
+      ]
+    },
+    "py_modules/backend/services/chat_summary_service.py": {
+      "imports": [
+        "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/chat_slot_service.py",
+        "py_modules/backend/services/chat_turn_recorder.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
+        "py_modules/backend/services/ollama_stop_service.py",
+        "py_modules/backend/services/ollama_window_fit.py",
+        "py_modules/backend/services/reply_style_blocks.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/chat_memory_step.py"
       ]
     },
     "py_modules/backend/services/chat_turn_recorder.py": {
@@ -674,6 +709,7 @@
       ],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/game_ai_request.py"
       ]
     },
@@ -937,15 +973,14 @@
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ai_character_service.py",
         "py_modules/backend/services/ask_payload.py",
-        "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/chat_memory_step.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/model_policy.py",
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/reply_language_service.py",
         "py_modules/backend/services/screenshot_media.py",
-        "py_modules/backend/services/settings_service.py",
-        "py_modules/backend/services/token_accounting_service.py"
+        "py_modules/backend/services/settings_service.py"
       ],
       "importedBy": [
         "main.py"
@@ -971,6 +1006,7 @@
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -1086,6 +1122,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -1094,6 +1131,7 @@
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_service.py"
       ]
@@ -1195,6 +1233,7 @@
         "py_modules/backend/services/reply_language_service.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/ollama_prompts.py"
       ]
     },
@@ -1326,7 +1365,8 @@
       "imports": [],
       "importedBy": [
         "py_modules/backend/services/chat_memory_service.py",
-        "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/chat_memory_step.py",
+        "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/ollama_service.py",

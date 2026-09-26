@@ -1074,7 +1074,6 @@ const Content: React.FC = () => {
     useLocalKnowledgeBase,
     setUseLocalKnowledgeBase,
     ragCorpusVersion,
-    settingsLoaded,
   });
 
   const permissionsTab = usePermissionsTabPayload({

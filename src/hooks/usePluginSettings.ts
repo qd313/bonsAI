@@ -107,6 +107,7 @@ import { type BonsaiSettings, type BonsaiSettingsSnapshotInput } from "../data/b
 import { normalizeSettings } from "../data/bonsaiSettingsNormalizers";
 import { diffBonsaiSettingsPayload, toBonsaiSettingsPayload } from "../utils/settingsPayload";
 import { saveTabResumeMode } from "../features/plugin-shell/pluginStorage";
+import { markSettingsLoaded } from "../features/plugin-shell/settingsLoadedSignal";
 
 /**
  * THE one field list left in this file: every key of `BonsaiSettingsSnapshotInput` (the
@@ -389,6 +390,7 @@ export function usePluginSettings() {
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
+        markSettingsLoaded();
       });
     return () => {
       cancelled = true;

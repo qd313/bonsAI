@@ -60,7 +60,6 @@ function buildProps(overrides: Partial<OllamaTabProps> = {}): OllamaTabProps {
     setReplyVerbosity: () => {},
     askThinkEffort: "off",
     setAskThinkEffort: () => {},
-    settingsLoaded: true,
     ...overrides,
   };
 }

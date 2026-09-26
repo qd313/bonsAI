@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 517,
-  "edgeCount": 1387,
+  "fileCount": 519,
+  "edgeCount": 1391,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -877,6 +877,7 @@
     "src/components/OllamaWhereAiRunsSection.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
         "src/test-harness/fakeDeckyRpc.ts"
       ],
       "importedBy": []
@@ -890,6 +891,7 @@
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
+        "src/hooks/useSettingsLoadedFlag.ts",
         "src/utils/deckyCall.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
         "src/utils/settingsPanelScroll.ts"
@@ -2044,6 +2046,14 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/settingsLoadedSignal.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.test.tsx",
+        "src/hooks/usePluginSettings.ts",
+        "src/hooks/useSettingsLoadedFlag.ts"
+      ]
+    },
     "src/features/plugin-shell/tabBarNav.test.ts": {
       "imports": [
         "src/features/plugin-shell/tabBarNav.ts"
@@ -3036,6 +3046,7 @@
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/plugin-shell/pluginStorage.ts",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts",
         "src/utils/settingsPayload.ts"
@@ -3281,6 +3292,14 @@
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
+      ]
+    },
+    "src/hooks/useSettingsLoadedFlag.ts": {
+      "imports": [
+        "src/features/plugin-shell/settingsLoadedSignal.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
       ]
     },
     "src/hooks/useSmoothStreamReveal.test.ts": {

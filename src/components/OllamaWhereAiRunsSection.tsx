@@ -104,6 +104,7 @@ import {
 import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
 import { useLocalOllamaSetupFlow } from "../hooks/useLocalOllamaSetupFlow";
+import { useSettingsLoadedFlag } from "../hooks/useSettingsLoadedFlag";
 import type {
   MdnsOllamaHost,
   LocalOllamaSetupStatus,
@@ -154,8 +155,10 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   onApplyTier2MultimodalPolicy,
   onMoveDownFromConnectionRow,
   connectionTestBtnRef,
-  settingsLoaded,
 }) => {
+  // Not a prop -- see settingsLoadedSignal.ts for why the automatic connection check below
+  // needs this without index.tsx threading a value down through the tab's own payload hook.
+  const settingsLoaded = useSettingsLoadedFlag();
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
     () => peekOllamaTabLocalPending()?.connectionStatus ?? null
@@ -299,12 +302,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
       localInstallMenuOpen,
     }));
     return () => unregisterOllamaTabLocalGetter();
-  }, [
-    connectionStatus,
-    mdnsHosts,
-    mdnsDiscoveryMessage,
-    localInstallMenuOpen,
-  ]);
+  }, [connectionStatus, mdnsHosts, mdnsDiscoveryMessage, localInstallMenuOpen]);
 
   useEffect(() => {
     callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)

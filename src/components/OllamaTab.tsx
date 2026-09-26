@@ -95,9 +95,6 @@ export type OllamaTabProps = {
   setReplyVerbosity: (v: ReplyVerbosityId) => void;
   askThinkEffort: AskThinkEffortId;
   setAskThinkEffort: (v: AskThinkEffortId) => void;
-
-  /** True once the plugin's saved settings have finished loading. See OllamaWhereAiRunsSection. */
-  settingsLoaded: boolean;
 };
 
 /**
@@ -167,7 +164,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   setReplyVerbosity,
   askThinkEffort,
   setAskThinkEffort,
-  settingsLoaded,
 }) => {
   const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
   const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
@@ -294,7 +290,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
         onMoveDownFromConnectionRow={focusKbToggle}
         connectionTestBtnRef={connectionTestBtnRef}
-        settingsLoaded={settingsLoaded}
       />
 
       <KnowledgeBaseSection

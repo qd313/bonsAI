@@ -13,14 +13,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { OllamaWhereAiRunsSection } from "./OllamaWhereAiRunsSection";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
+import {
+  markSettingsLoaded,
+  resetSettingsLoadedSignalForTests,
+} from "../features/plugin-shell/settingsLoadedSignal";
 
 function sectionElement(
-  overrides: {
-    ollamaLocalAutostart?: boolean;
-    ollamaIp?: string;
-    ollamaLocalOnDeck?: boolean;
-    settingsLoaded?: boolean;
-  } = {},
+  overrides: { ollamaLocalAutostart?: boolean; ollamaIp?: string; ollamaLocalOnDeck?: boolean } = {},
 ) {
   return (
     <OllamaWhereAiRunsSection
@@ -36,7 +35,6 @@ function sectionElement(
       onBeforeDeckyModal={() => {}}
       onCompleteDeckyModalClose={(close) => close()}
       onOpenOllamaModelsHub={() => {}}
-      settingsLoaded={overrides.settingsLoaded ?? true}
     />
   );
 }
@@ -53,6 +51,8 @@ function checkedOf(el: Element | null): unknown {
 describe("OllamaWhereAiRunsSection startup-entry toggle", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+    resetSettingsLoadedSignalForTests();
+    markSettingsLoaded();
   });
 
   it("renders off by default with its plain-language explanation", () => {
@@ -104,19 +104,22 @@ describe("OllamaWhereAiRunsSection startup-entry toggle", () => {
  * the network address placeholder, failed, and logged "test_ollama_connection failed
  * (non-loopback)" -- even though Ollama was answering normally on this Deck the whole time
  * (plugin log 2026-09-23 22:43:06, "Name or service not known"; flow H, plan 64,
- * docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). The fix: wait for settingsLoaded
- * before ever probing, so the one automatic check always uses the real, final values.
+ * docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). The fix: wait for settingsLoadedSignal.ts's
+ * flag before ever probing, so the one automatic check always uses the real, final values.
  */
 describe("OllamaWhereAiRunsSection automatic connection check", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+    // Unlike the other describe block above, each test here manages this signal itself --
+    // that is the exact thing under test.
+    resetSettingsLoadedSignalForTests();
   });
 
   it("does not probe at all before settings have loaded", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.12.0", models: [] }));
     const probes = () => getRpcCallLog().filter((c) => c.method === "test_ollama_connection");
 
-    render(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false, settingsLoaded: false }));
+    render(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false }));
     // Give any wrongly-eager effect a tick to have fired.
     await new Promise((r) => setTimeout(r, 20));
     expect(probes()).toHaveLength(0);
@@ -132,14 +135,13 @@ describe("OllamaWhereAiRunsSection automatic connection check", () => {
     const probes = () => getRpcCallLog().filter((c) => c.method === "test_ollama_connection");
     // Mount as the tab would right after a reload: settings not back yet, so the on-Deck
     // switch still reads its default (off) and the IP field still holds the old LAN address.
-    const { rerender } = render(
-      sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false, settingsLoaded: false }),
-    );
+    const { rerender } = render(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false }));
     await new Promise((r) => setTimeout(r, 20));
     expect(probes()).toHaveLength(0);
 
     // Settings land: this Deck actually runs Ollama itself.
-    rerender(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: true, settingsLoaded: true }));
+    markSettingsLoaded();
+    rerender(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: true }));
 
     await screen.findByText("Update AI & models");
     expect(probes().map((c) => c.args[0])).toEqual(["127.0.0.1:11434"]);
@@ -158,10 +160,9 @@ describe("OllamaWhereAiRunsSection automatic connection check", () => {
     // Settings are already loaded here -- this covers the general "an older probe must not
     // clobber a newer one" race (e.g. flipping the on-Deck switch twice quickly), independent
     // of the settings-load timing above.
-    const { rerender } = render(
-      sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false, settingsLoaded: true }),
-    );
-    rerender(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: true, settingsLoaded: true }));
+    markSettingsLoaded();
+    const { rerender } = render(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: false }));
+    rerender(sectionElement({ ollamaIp: "192.168.1.", ollamaLocalOnDeck: true }));
     await screen.findByText("Update AI & models");
 
     releaseSlow({ reachable: false, error: "Name or service not known" });

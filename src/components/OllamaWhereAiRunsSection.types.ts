@@ -74,15 +74,6 @@ export type OllamaWhereAiRunsSectionProps = {
   onMoveDownFromConnectionRow?: () => void;
   /** Focus graph: ref for Test connection button (KB toggle onMoveUp target). */
   connectionTestBtnRef?: React.RefObject<HTMLButtonElement | null>;
-  /**
-   * True once the plugin's saved settings have finished loading (or failed and fell back to
-   * defaults -- either way, the values below are final for this mount). The automatic
-   * connection check waits for this: probing before it arrives means `ollamaLocalOnDeck` and
-   * `ollamaIp` are still whatever this render's opening defaults are, not what the person
-   * actually has saved, so the one automatic probe went to the wrong host and logged a failure
-   * it caused itself (docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json).
-   */
-  settingsLoaded: boolean;
 };
 
 export type ConnectionStatus = DeveloperConnectionStatus;

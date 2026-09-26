@@ -16,6 +16,8 @@ import {
   focusSessionContextStrip,
 } from "./liveTurnFocusGraph";
 import { isDeckDirectionLeftEvent } from "./focusNavigation";
+import { elementHasGamepadFocus } from "./uiDocument";
+import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
 
 /**
  * Hand the ring to whichever permission-hint row is mounted below the transcript — the
@@ -88,4 +90,47 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
  */
 export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | undefined {
   return turnIndex === 0 ? () => takeNavFocus("chat-slot-row") : undefined;
+}
+
+/**
+ * The troubleshooting hint row's own moves: [Open Permissions] [Dismiss] side by side.
+ *
+ * Plan 70, PERMS-CLEAN-06 (docs/test-evidence/plan70-PERMS-CLEAN-05-06.json): Right from Open
+ * Permissions did nothing, twice, so Dismiss was visible but out of reach. The row's
+ * `flow-children="horizontal"` hint alone does not make Steam walk a row sideways, the same finding
+ * as the chip row (presetRowNav.ts, 2026-09-01), so Left and Right are claimed here and move between
+ * the two buttons with a plain focus() -- two siblings in this one container. Both ends hold still:
+ * Steam's own "past the edge" is the Quick Access rail.
+ *
+ * Down goes to the ban-lookup row when it sits below; otherwise Steam carries on down. The old Down
+ * aimed at the session context strip, which plan 62 removed. Up is unchanged.
+ */
+export function troubleshootHintRowNavHandlers(buttons: {
+  current: (HTMLElement | null)[];
+}): Record<string, unknown> {
+  const step = (from: number, to: number): boolean => {
+    const [src, dst] = [buttons.current[from], buttons.current[to]];
+    if (src && dst?.isConnected && elementHasGamepadFocus(src)) {
+      try {
+        dst.focus();
+      } catch {
+        /* holds still; the press stays claimed either way */
+      }
+    }
+    return true;
+  };
+  return {
+    onMoveRight: () => step(0, 1),
+    onMoveLeft: () => step(1, 0),
+    onMoveUp: focusUpPastLiveKbNotesBlock,
+    onMoveDown: () => takeNavFocus("chat-perm-hint-deny"),
+  };
+}
+
+/**
+ * Up from the ban-lookup row: the troubleshooting hint sits right above it when both show, and
+ * walking Up used to skip it (plan70-PERMS-CLEAN-05-06.json).
+ */
+export function vacDenyRowMoveUp(): boolean {
+  return takeNavFocus("chat-perm-hint-troubleshoot") || focusUpPastLiveKbNotesBlock();
 }

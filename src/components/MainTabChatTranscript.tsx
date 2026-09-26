@@ -143,6 +143,8 @@ import {
   focusDownFromReplyUtilityRowOrPermHint,
   earlierPillLeftNavHandlers,
   firstArchivedHeaderMoveUp,
+  troubleshootHintRowNavHandlers,
+  vacDenyRowMoveUp,
 } from "../utils/chatTranscriptNavHelpers";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
@@ -723,7 +725,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* Nav targets for the two permission-hint rows below the transcript — lifted into its own
      hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
-  const { troubleshootHintNavRef, vacDenyRowNavRef } = usePermHintNavTargets();
+  const { troubleshootHintNavRef, vacDenyRowNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs } =
+    usePermHintNavTargets();
 
   const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
   /*
@@ -1569,8 +1572,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       flow-children="horizontal"
       {...({
         navRef: troubleshootHintNavRef,
-        onMoveUp: focusUpPastLiveKbNotesBlock,
-        onMoveDown: () => focusSessionContextStrip(),
+        ...troubleshootHintRowNavHandlers(troubleshootHintButtonEls),
       } as Record<string, unknown>)}
     >
       <div
@@ -1593,6 +1595,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
           {onNavigateToPermissions ? (
             <Button
               focusable
+              ref={troubleshootHintButtonRefs[0]}
               onClick={() => onNavigateToPermissions("steam_logs_read")}
               style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
             >
@@ -1601,6 +1604,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
           ) : null}
           <Button
             focusable
+            ref={troubleshootHintButtonRefs[1]}
             onClick={() => setTroubleshootingPermHintDismissed(true)}
             style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
           >
@@ -1625,7 +1629,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       flow-children="horizontal"
       {...({
         navRef: vacDenyRowNavRef,
-        onMoveUp: focusUpPastLiveKbNotesBlock,
+        onMoveUp: vacDenyRowMoveUp,
         onMoveDown: () => focusSessionContextStrip(),
       } as Record<string, unknown>)}
     >

@@ -19,6 +19,10 @@ import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../util
 export interface PermHintNavTargets {
   troubleshootHintNavRef: MutableRefObject<NavRefHolder["current"]>;
   vacDenyRowNavRef: MutableRefObject<NavRefHolder["current"]>;
+  /** The troubleshooting hint's two buttons, [Open Permissions, Dismiss], for its Left/Right. */
+  troubleshootHintButtonEls: MutableRefObject<(HTMLElement | null)[]>;
+  /** Stable ref callbacks filling `troubleshootHintButtonEls`, one per button. */
+  troubleshootHintButtonRefs: ((el: HTMLElement | null) => void)[];
 }
 
 /**
@@ -36,5 +40,12 @@ export function usePermHintNavTargets(): PermHintNavTargets {
     return () => unregisterNavFocus("chat-perm-hint-deny", vacDenyRowNavRef);
   }, []);
 
-  return { troubleshootHintNavRef, vacDenyRowNavRef };
+  const troubleshootHintButtonEls = useRef<(HTMLElement | null)[]>([null, null]);
+  const troubleshootHintButtonRefs = useRef(
+    [0, 1].map((i) => (el: HTMLElement | null) => {
+      troubleshootHintButtonEls.current[i] = el;
+    }),
+  ).current;
+
+  return { troubleshootHintNavRef, vacDenyRowNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs };
 }

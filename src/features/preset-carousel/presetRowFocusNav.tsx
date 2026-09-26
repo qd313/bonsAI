@@ -167,7 +167,14 @@ export function usePresetRowNav(
         // reported false and every Up press fell through to the chat slot row, stepping over the
         // whole reply. Measured on the Deck 2026-09-21, roadmap: "Walking up from the question box
         // skips every reply row".
-        exitUp: () => focusBottomOfNewestReply() || takeNavFocus("chat-slot-row"),
+        //
+        // The two permission rows sit between the reply and the chips when they show, lowest
+        // first; Up skipped both for Show details (plan70-SMOKE-C.json, plan70-PERMS-CLEAN-05-06.json).
+        exitUp: () =>
+          takeNavFocus("chat-perm-hint-deny") ||
+          takeNavFocus("chat-perm-hint-troubleshoot") ||
+          focusBottomOfNewestReply() ||
+          takeNavFocus("chat-slot-row"),
         advanceAtEnd,
         onBlockedEdge: () => flagBlockedEdge(index),
       }) as unknown as Record<string, unknown>,

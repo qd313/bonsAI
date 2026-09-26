@@ -300,11 +300,6 @@ replace it with a specific issue when one exists.
   the maintainer's call 2026-09-26: soften it.** Not a spoiler leak — the plugin's own prompt deliberately
   tells the model to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like
   machine text. Plan 72 must-fix. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
-- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, the
-  maintainer's call 2026-09-26: hide it like the notes block.** The protected note's tag reads "Boss note
-  (spoiler)" until the answer's cover or the notes block is opened, then the real name; no new button.
-  Drawing: [Show Details Credit Line](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). Plan 72 must-fix.
-  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -667,7 +662,10 @@ its publish check passing. **Published 2026-09-23:** both Hugging Face and the G
 2026.09.18, read back after publishing to confirm it. **Blind test-question coverage finished 2026-09-26,**
 107 more added. [Detail](roadmap-details.md#blind-questions-done). **Three new games landed 2026-09-26** (plan
 70, helpers F and G): Brotato, Palworld and Skyrim, plus starting-out notes for Cyberpunk, Fallout 4 and Red
-Dead 2. The library is now **38 games, 414 notes**. [Detail](roadmap-details.md#three-new-games-and-their-notes).
+Dead 2. [Detail](roadmap-details.md#three-new-games-and-their-notes). **The next release, 2026.09.26, is
+built: 38 games, 414 notes, 164 Deck tips.** It passes the release check on the PC and is installed on the
+Deck for its Deck check; **not published yet** — publishing waits on that check passing. The published
+release stays **2026.09.18** (372 notes, 35 games, 159 tips) until then.
 
 **Finding the right note.** On the held-back questions nobody tuned against (177 rows), the search puts the
 right note in the top three **85.3 times in a hundred**. Every one of the 21 notes written in wave two is found
@@ -761,93 +759,73 @@ ones from this month are D81 to D88.
 
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
   2026-09-26, not fixed.** `knowledge_base_service.py` line ~946. [Detail](roadmap-details.md#speed-mode-tip-gap).
+- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
+  `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
+  time. A fallback to the plain page would cover it for good.
+- ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
+  own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
+  notes are named underneath it instead of the real one, which does exist and now attaches too, but still
+  ranks behind them. **Measured 2026-09-26:** ranking general notes lower is not the fix — it stays off.
+  [Detail](roadmap-details.md#black-mesas-electrified-water-question).
+- ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
+  so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
+  nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
+  losing correct answers elsewhere. **Sighted again 2026-09-26 (plan 70, flow L1):** a Hades boss question
+  still attaches the wrong area's note, twice. [Detail](roadmap-details.md#wrong-subject-notes).
+- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **VERIFY, fixed
+  2026-09-26 (plan 70, helper B, commit `58f60c0a`).** The check now also reads each attached note's own
+  words, not just its title, so it stops appearing under an answer that clearly used a note. Wired into
+  real answers (`e4c24bdd`). **Deck check owed:** row **KB-NOCLOSE-TEXT-01** in [testing.md](testing.md).
+  [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
+  2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
+- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, the
+  maintainer's call 2026-09-26: hide it like the notes block.** The protected note's tag reads "Boss note
+  (spoiler)" until the answer's cover or the notes block is opened, then the real name; no new button.
+  Drawing: [Show Details Credit Line](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). Plan 72 must-fix.
+  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
   thing** — **VERIFY, both gaps closed 2026-09-26 (helper M, `679452e5`, `7b2bc753`).** A game's own name
   is now cut from the question before matching; a routed-to-tips turn now reads as troubleshooting even
   off the word list. Deck re-check owed. [Detail](roadmap-details.md#spoiler-risk-band-fixes).
-- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
-  `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
-  time. A fallback to the plain page would cover it for good.
-- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper B, commit `58f60c0a`).** **Cause found 2026-09-25:** when a question names
-  the game but describes a boss without naming it, the check behind this line compared the question's
-  leftover words against the attached notes' titles only — "the boss past the crystal spike area" shares
-  no word with "Broken Vessel", so the real match was thrown away and the line appeared anyway. The check
-  now also reads each attached note's own text, where the matching word usually lives, plus a small
-  tolerance for plurals. **Now wired into real answers (commit `e4c24bdd`).** **Deck check owed:** row
-  **KB-NOCLOSE-TEXT-01** in [testing.md](testing.md).
-  [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held
+  back 2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** With nothing running, all 24 fresh
+  plainly-worded problem sentences now reach the search, but six measured examples still attach a tip about
+  something else. **Cause:** the meaning search only runs when the plain word search finds nothing, which is
+  almost never. The real fix is rewriting the tips, its own entry below. [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
-- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held
-  back 2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** With nothing running, all 24 fresh
-  plainly-worded problem sentences now reach the search, against 8 before — but what comes back is often
-  wrong, six measured examples attaching a tip about something else entirely. **The cause:** the meaning
-  search only runs when the plain word search finds nothing, which is almost never, so a poor match wins
-  first. The real fix is rewriting the tips, filed as its own entry below. [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
 - ★★★ `[KB]` **Searching the notes by meaning costs about a second, every time, on the Deck** — **ACCEPTED
   2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same
   band as first measured — the maintainer said that is fine next to an answer that then takes tens of
   seconds to write. **The cause is now measured:** the two models pushing each other out of memory, which
   reads as cheap to fix; the acceptance stands until the maintainer says otherwise. (D84) [Detail](roadmap-details.md#searching-the-notes-by-meaning-costs-about-a-second-every-time-on-the-deck).
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
-  2026-09-06.** The weight sweep ran: leaning the search toward meaning gets the right note first about four to six
-  points more often, but it also buries a brand-new note whose meaning index has not been built yet, which the current
-  weights deliberately protect against. **Not lifted until every note is guaranteed to have its index before it can be
-  searched.** Two other objections — a strong exact word match losing to a weaker meaning match, and a locked routing
-  rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
-  stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
-
-- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
-  2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
-- ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
-  so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
-  nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
-  losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
-  note is still attached. **Found again 2026-09-18 and 2026-09-26 (plan 70, flow L1):** a Hades boss
-  question attaches the wrong area's note. **Wrong-subject half, borderline, known fragile (checked
-  2026-09-26):** the Black Mesa control's own "no close match" line came out missing once, not a
-  regression — its score landed at 0.6508 against a 0.65 cut-off. No code change.
-  [Detail](roadmap-details.md#wrong-subject-notes).
-- ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
-  own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
-  notes are named underneath it instead of the real electrified-water note, which does exist in the
-  library and now attaches too, but still ranks behind the generic ones. **Measured 2026-09-26 (plan 70,
-  helper B): ranking a "Starting out" note lower is not this wave's fix** — it helped the search test but
-  hurt the answer test, so it stays off, and would not have cured this bug alone anyway (a second generic
-  note still ranks ahead). [Detail](roadmap-details.md#black-mesas-electrified-water-question).
+  2026-09-06.** Leaning the search toward meaning finds the right note first more often, but it buries a brand-new
+  note whose meaning index is not built yet. **Not lifted until every note is guaranteed to have its index before
+  it can be searched.** Two smaller objections are unanswered if this is ever revisited. Weights stay even for
+  now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
 ### Deck check owed
 
+- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
+  retire.** Four of the five now have real answers: the corpus-format check is retired (D116 #7, its own
+  unit tests cover it); the follow-up check passed in full on the Deck 2026-09-23. The relevance floor's
+  on-topic half passed; its off-topic half still waits on the maintainer to retire or reword it against an
+  earlier accepted decision. [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
 - ★ `[KB]` **A shared troubleshooting tip that has a source page never gets it shown** — **VERIFY, fixed
   in code 2026-09-23 (commit `4ce37bcf`, moved in `c6f0c94d`); the roadmap had not caught up.** Owed: one
   Deck check that a shared tip with a source page shows that page in its credit line. Planned in plan 70.
-- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
-  retire.** Covers the corpus format gate, the relevance floor, follow-ups, transparency, and the
-  Developer kill-switch. **Update 2026-09-22:** four of the five now have real answers — the transparency
-  check joined them that night, once the log finally named the attached notes (see the row below). Only
-  the corpus-format check still cannot run, since that means replacing the library it tests. **Per D116
-  #7, the corpus-format check is retired, covered by its own unit tests.** The other four are not all
-  clean passes yet — **the follow-up check passed in full on the Deck 2026-09-23** (Megaera's note came
-  first for both the parent question and its follow-up); the relevance floor is still half passed — its
-  on-topic half is a real pass, its off-topic half is waiting on the maintainer to retire or reword it
-  against an earlier accepted decision. This entry stays open until that half is settled.
-  [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
+- ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
+  landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
+  boss up front keeps the answer in plain text. **DRG-01b passed on the Deck 2026-09-23:** the boss tactics
+  came back in plain text with no cover, as expected. **Still owed:** STRAT-SPOIL-NAME-01, blocked since its
+  game cannot be launched. [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
 - ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, passed 2026-09-22,** once the
   answer-lines lane added the missing log line. Row **KB-TRANSPARENCY-01**. **All attached names confirmed
   on the Deck 2026-09-23**, both with nothing running and with Half-Life 2 running. **Still owed:** a case
   where a note is dropped for space — not yet reproduced despite trying. [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
-- ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
-  landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
-  boss up front keeps the answer in plain text. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the
-  Deck**; two Hades rows failed on the name-withheld-boss bug above. **Still owed as of 2026-09-19:**
-  STRAT-SPOIL-NAME-01 and DRG-01b, both blocked because their games keep falling off the Recent Games list.
-  **DRG-01b passed on the Deck 2026-09-23:** with Deep Rock Galactic: Survivor running, the knowledge base
-  off, masking on and no consent phrase, the boss tactics came back in plain text — no cover, no notes
-  block, no knowledge-base search in the log, and no question-box trap on the way to Ask. STRAT-SPOIL-NAME-01
-  is still blocked. Evidence `docs/test-evidence/plan64-DRG-01b.json`.
-  [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
   and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
   — the only stop still missing is the chip ladder inside the open block, its own bug above. Why the tip and
@@ -855,26 +833,17 @@ ones from this month are D81 to D88.
   no gap at all. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
 ### Next
 
-- ★★★ `[KB]` `[reply]` **Check that a spoiler cover actually happened, instead of trusting the model to add
-  one** — **VERIFY, same safety net as the ★★★ bug "a name-withheld boss question comes back with no
-  spoiler box" above, fixed the same way, Deck re-check owed.** Same result, full detail there.
-  [Detail](roadmap-details.md#check-that-a-spoiler-cover-actually-happened).
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
   run includes — planned as wave three ([48](archive/48-kb-wave-three-session.md)). Planned in plan 70.
-- ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
-  agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
-  the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
-  answers. No row uses the second-answer option yet. One to two days. (D51, D68)
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, one measurement owed.** The
   slice of questions the word search cannot answer at all was 3 rows when last counted, before 36 more blind rows landed.
   Re-count it on the next search run before calling this closed. No code needed — the search test already reports that
   slice; it only needs a run (plan 70). [Detail](roadmap-details.md#eval-fixture-cannot-see-a-recall-failure).
-- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **VERIFY, built 2026-09-26
-  (plan 70, helper D).** A person who never pressed the pull button silently got word search only, the
-  weaker half. Now, right after a fresh install finishes with that model still missing, a confirm box
-  offers to download it once; Update never asks again. **Deck check owed:** row **KB-NOMIC-OFFER-01** in
-  [testing.md](testing.md), flow R.
+- ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
+  agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
+  the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
+  answers. No row uses the second-answer option yet. One to two days. (D51, D68)
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
   one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
   regression fails a check instead of relying on luck. Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
@@ -882,12 +851,27 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
-- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
-  "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
-  ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
-  screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
-  that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
-  none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
+- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **VERIFY, built 2026-09-26
+  (plan 70, helper D).** A person who never pressed the pull button silently got word search only, the
+  weaker half. Now, right after a fresh install finishes with that model still missing, a confirm box
+  offers to download it once; Update never asks again. **Deck check owed:** row **KB-NOMIC-OFFER-01** in
+  [testing.md](testing.md), flow R.
+- ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the 139 prose cards as labelled short
+  lines, the shape the 16 structured cards use. Facts kept is already 92%, so the ceiling is low; do it only if the answer
+  test shows the labelled shape scores better. Two to three days of content plus a rebuild.
+- ★★★ `[KB]` **Deeper answer checks** — **OPEN, added 2026-09-05.** The answer test checks facts, contradictions, fences and
+  the menu, and cannot see whether a reply was helpful or whether the model admitted not knowing. Add a small set of
+  questions no card can answer, scored for an honest "I don't know", and a read by a person of ten replies a month.
+- ★★★ `[KB]` **KB visual maps** — **OPEN.** Two shapes you named 2026-08-29: a dungeon map, and a boss outline with weak
+  points marked. Nothing draws anything in a reply today. A dungeon map has to be authored, which sits behind the source
+  policy and a corpus rebuild. Research first. [Detail](roadmap-details.md#kb-visual-maps).
+- `[KB]` **Idea for wave four: dungeon maps** — raised by the maintainer 2026-09-07, no stars and no plan yet. Picks up
+  the dungeon-map half of the visual-maps idea above when the time comes.
+- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built 2026-09-26
+  (plan 70, helper E).** Format bumped 3 → 4 for the per-game tip column; every installed library goes stale
+  until it downloads the new one. A too-new library now refuses before downloading with a plain message; an
+  older plugin degrades gracefully instead of crashing. **Deck check owed:** row **KB-FORMAT-REFUSE-01** in
+  [testing.md](testing.md), flow R. [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a
@@ -896,36 +880,11 @@ ones from this month are D81 to D88.
   player now gets a *"How do I get started in <game>?"* chip, and "where do I start" reaches that game's own
   note. All 28 starting-out notes now carry the new kind. **Deck check owed:** row **STARTING-OUT-01** in
   [testing.md](testing.md), flow R. [Detail](roadmap-details.md#the-corpus-has-no-starting-out-card).
-- ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the 139 prose cards as labelled short
-  lines, the shape the 16 structured cards use. Facts kept is already 92%, so the ceiling is low; do it only if the answer
-  test shows the labelled shape scores better. Two to three days of content plus a rebuild.
-- ★★★ `[KB]` **Deeper answer checks** — **OPEN, added 2026-09-05.** The answer test checks facts, contradictions, fences and
-  the menu, and cannot see whether a reply was helpful or whether the model admitted not knowing. Add a small set of
-  questions no card can answer, scored for an honest "I don't know", and a read by a person of ten replies a month.
-- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built 2026-09-26 (plan
-  70, helper E).** Format bumped 3 → 4 for the per-game tip column; every installed library goes stale until it
-  downloads the new one. A library too new for this plugin now refuses before downloading, with a plain
-  message; an older plugin degrades gracefully instead of crashing. **Deck check owed:** row
-  **KB-FORMAT-REFUSE-01** in [testing.md](testing.md), flow R.
-  [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
-- ★★★ `[KB]` **KB visual maps** — **OPEN.** Two shapes you named 2026-08-29: a dungeon map, and a boss outline with weak
-  points marked. Nothing draws anything in a reply today. A dungeon map has to be authored, which sits behind the source
-  policy and a corpus rebuild. Research first. [Detail](roadmap-details.md#kb-visual-maps).
-- `[KB]` **Idea for wave four: dungeon maps** — raised by the maintainer 2026-09-07, no stars and no plan yet. Picks up
-  the dungeon-map half of the visual-maps idea above when the time comes.
-- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, per-game Deck tips built 2026-09-26 (plan 70, helper
-  E).** The chip guarantee and 16 structured cards shipped 2026-08-19; the split was accepted 2026-08-21 and prose
-  replies were accepted 2026-09-05 (D67). A troubleshooting tip can now belong to one game and joins the search
-  pool ahead of an equally-good shared tip; five tips ship this way, two of them labelled "Researched,
-  unconfirmed" since nobody has checked them on real hardware yet. Left: the chip clipping check,
-  which waits on the preset-row work. **Deck check owed:** row **KB-TIP-PERGAME-01** in [testing.md](testing.md),
-  flow R. [Detail](roadmap-details.md#rag-phase-4-extended-retrieval),
-  [new tips](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
-- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. **Counted
-  2026-09-25:** only four of the original titles still have no enemy or item cards — Baldur's Gate 3, GTA San Andreas,
-  The Sims 4 and Portal 2 — not eleven of thirteen as this entry used to say. Next: 40–60 entity cards in tranches with
-  a quality read from you after the first; then chip ranking by meaning. Card authors cannot write blind test questions,
-  so content and eval rows go in separate sessions. [Plan](planning/28-phase5-corpus-depth.md).
+- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.**
+  Measured 2026-09-07: nine of ten ordinary problem sentences ("my game keeps crashing", "my game won't
+  launch") reach nothing at all, since the word "crash" alone is deliberately too weak to route a question.
+  **Related work landed 2026-09-26:** the tip cut-off and a false-positive word match are now fixed, and the
+  "no tip for this" line has real numbers, but is still waiting on the maintainer. (D81, D85) [Detail](roadmap-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips).
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get cards; today they get nothing specific. New card kinds and a spoiler table update, Left 4
   Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md).
@@ -934,12 +893,21 @@ ones from this month are D81 to D88.
   First a scored set of real Deck screenshots (game, area, boss), run on each picture model the Deck offers; then fixes
   where it fails — the picture's guess fed into the search, notes that say what a place or boss looks like, and a screen
   guide per game (health bar, weapon slots, boss bar). [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
-- ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still matters: a
-  thumbs-down that stops a wrong card coming back (three days), add-on packs before any large catalog (five days or more),
-  a screenshot feeding the search (a short test to find out first). A nearest-neighbour index buys nothing until the corpus
-  is thousands of cards. The embedding-model pull is its own entry above. The thumbs-down that stops a wrong note coming
-  back is drawn 2026-09-26 (plan 70, helper T) — [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43),
-  helper recommends C. Not built (D112 #8); the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7.
+- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, track 3 (per-game Deck tips) built 2026-09-26
+  (plan 70, helper E).** Tracks 1 and 2 shipped 2026-08-19 to 2026-09-05 (D67). A troubleshooting tip can now
+  belong to one game and joins the search pool ahead of an equally-good shared tip. Left: the chip clipping
+  check, which waits on the preset-row work. **Deck check owed:** row **KB-TIP-PERGAME-01** in
+  [testing.md](testing.md), flow R. [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. **Counted
+  2026-09-25:** only four of the original titles still have no enemy or item cards — Baldur's Gate 3, GTA San Andreas,
+  The Sims 4 and Portal 2 — not eleven of thirteen as this entry used to say. Next: 40–60 entity cards in tranches with
+  a quality read from you after the first; then chip ranking by meaning. Card authors cannot write blind test questions,
+  so content and eval rows go in separate sessions. [Plan](planning/28-phase5-corpus-depth.md).
+- ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still
+  matters: a thumbs-down that stops a wrong card coming back (three days), add-on packs before any large
+  catalog (five days or more), a screenshot feeding the search. **The thumbs-down drawn 2026-09-26** (plan
+  70, helper T): [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43); not
+  built yet, the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7.
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's

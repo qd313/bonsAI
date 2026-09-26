@@ -768,6 +768,11 @@ kind is free text.
     visible ones. **Maintainer call owed:** either accept the split or hold tracks 1–2 from the release
     notes until track 3 lands. [knowledge-base.md](knowledge-base.md) § Phase 4.
 
+**Track 3 built 2026-09-26 (plan 70, helper E):** the schema v4 bump landed with a per-game tip
+column; a game's own tip now joins the search pool ahead of an equally-good shared tip. Five tips
+ship this way, two labelled "Researched, unconfirmed". Deck check owed: row **KB-TIP-PERGAME-01**,
+flow R. See [Library format bump and per-game Deck tips](#library-format-bump-and-per-game-deck-tips).
+
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
 - ★★★★ **RAG Deck query — retrieval infra (Phase 7)**
@@ -783,6 +788,25 @@ kind is free text.
   - **Goal:** Large offline catalog after Phase 6 publish (~top 1000 Steam, ~100 Deck, emulated slice).
   - **Status:** Locked intent only. [knowledge-base.md](knowledge-base.md) § Phase 8.
   - **Depends on:** Phase 6 (shipped 2026-08-16) + likely Phase 7 infra.
+
+**The thumbs-down piece drawn 2026-09-26 (plan 70, helper T):** three options at the Deck's true
+size — [drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43) — the helper recommends
+option C. Not built (D112 #8); the maintainer picks.
+
+
+## A troubleshooting question mostly never reaches the tips
+
+- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
+  "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
+  ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
+  screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
+  that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
+  none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](archive/48-kb-wave-three-session.md)).
+
+**Related work landed 2026-09-26 (plan 70, helper C):** the tip cut-off and a false-positive word
+match are now fixed (see [Tip cut-off fix](#tip-cut-off-fix), [Lan word-boundary fix](#lan-word-boundary-fix)),
+and the "no tip for this" line has real numbers (see [No tip line numbers](#no-tip-line-numbers)), but
+still cannot be made to appear — that is still waiting on the maintainer.
 
 
 ## Permissions / safety items, as filed
@@ -1446,6 +1470,14 @@ the line, and a note sharing no word still shows it. Deck check owed: row **KB-N
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
+**Update 2026-09-22: four of the five now have real answers.** The transparency check joined them
+that night, once the log finally named the attached notes. Only the corpus-format check still cannot
+run, since that would mean replacing the library it tests. **Per D116 #7, the corpus-format check is
+retired, covered by its own unit tests.** **The follow-up check passed in full on the Deck 2026-09-23:**
+Megaera's note came first for both the parent question and its follow-up. The relevance floor stays
+half passed — its on-topic half is a real pass, its off-topic half still waits on the maintainer to
+retire or reword it against an earlier accepted decision.
+
 
 ## Hidden spoiler box stays shut on games with no Steam ID and on name-first questions
 
@@ -1476,6 +1508,12 @@ the line, and a note sharing no word still shows it. Deck check owed: row **KB-N
   `docs/test-evidence/plan61-DRG-01b-retry.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
+
+**DRG-01b passed on the Deck 2026-09-23:** with Deep Rock Galactic: Survivor running, the knowledge
+base off, masking on and no consent phrase, the boss tactics came back in plain text — no cover, no
+notes block, no knowledge-base search in the log, and no question-box trap on the way to Ask.
+Evidence `docs/test-evidence/plan64-DRG-01b.json`. STRAT-SPOIL-NAME-01 is still blocked, since Doom 64
+cannot be launched.
 
 
 ## RAG Phase 8: catalog corpus
@@ -1920,6 +1958,11 @@ the right note is found but ranks behind generic ones. Evidence
 `docs/test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again 2026-09-23 with Black Mesa running: no
 change** — having the game running did not affect this bug either way. Evidence
 `docs/test-evidence/plan64-BLACKMESA-WATER-running.json`.
+
+**Measured 2026-09-26 (plan 70, helper B): ranking a "Starting out" note lower is not this wave's
+fix.** It helped the search test but hurt the answer test (46 to 41 of 57 right note first), so it
+stays off; it would not have cured this bug alone either, since a second generic note still ranks
+ahead.
 
 ## KB transparency matches what the model got
 

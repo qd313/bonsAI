@@ -434,6 +434,19 @@
         "action-adventure",
         "open-world"
       ]
+    },
+    {
+      "game_id": 36,
+      "app_id": "1942280",
+      "igdb_id": null,
+      "canonical_title": "Brotato",
+      "edition": null,
+      "platform": "Steam",
+      "genres": [
+        "roguelike",
+        "bullet-heaven",
+        "action"
+      ]
     }
   ],
   "aliases": [
@@ -820,6 +833,10 @@
     {
       "alias": "gta iii definitive edition",
       "game_id": 35
+    },
+    {
+      "alias": "brotato",
+      "game_id": 36
     }
   ],
   "sections": [
@@ -4815,6 +4832,138 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": null,
       "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 402,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "Starting out in Brotato",
+      "card": "Brotato drops you on an island as a potato with a starting weapon and asks you to survive twenty short waves back to back, spending the green materials enemies drop between waves in a shop that refreshes every time. There is no story to follow: the loop is survive, shop, repeat, and dying just means picking a different one of the many playable characters and starting over. Characters change how a run should be played more than any single item does, since each one carries its own starting gear, bonuses and penalties, so it is worth reading a character's card before diving into a wave.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Characters",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 403,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "The shop and rerolling in Brotato",
+      "card": "Between waves, Brotato opens a shop offering up to four items or weapons bought with materials, and it is the only place weapons can be bought at all. What appears leans toward a character's own item tags and improves in rarity as waves pass, though the better tiers only start showing up from around wave two, four and eight onward. Any item can be locked to keep it in the shop at its current price, and the rest can be rerolled for a fee that climbs with the wave number and with every reroll already spent that shop, though buying all four items on offer earns a free reroll.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Shop",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 404,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "Materials, gold and experience in Brotato",
+      "card": "The green blobs enemies drop in Brotato are called materials, and picking one up hands over both the gold spent in the shop and the experience used to level up at the same time, even though the game mostly just calls all of it materials. Anything left uncollected when a wave ends is not lost: it gets bagged automatically, and the bag's value is paid out a little at a time as new materials drop on later waves. Only fifty material blobs can exist on the ground at once, so once that cap is hit, new drops add their value onto an existing blob instead of spawning a new one.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Materials",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 405,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "Danger levels and difficulty in Brotato",
+      "card": "Danger level is Brotato's difficulty slider, running from Danger 0 up to Danger 5, and each step keeps every increase from the levels below it rather than replacing them. Raising it introduces tougher enemy types earlier, and from Danger 2 onward it also starts adding Elite and Horde waves into the run. Some unlockable characters are only reachable by clearing a run at a specific danger level, so pushing the slider up is also part of how the character roster grows rather than only a harder challenge run.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Danger_Levels",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 406,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "Elite and Horde waves in Brotato",
+      "card": "From Danger 2 upward, a run includes one or more Elite or Horde waves layered on top of the normal wave. Horde waves simply throw extra enemies at you, worth less material each but more in total. Elite waves add one tough, unique enemy that will not repeat within the same run; killing it drops a guaranteed Legendary item and heals a chunk of health on pickup. Danger 4 and 5 runs see three of these harder waves instead of one, spread around the low-to-mid teens, with the last one always guaranteed to be an Elite wave rather than left to chance.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Elite_and_Horde_Waves",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 407,
+      "game_id": 36,
+      "section_type": "mechanic",
+      "name": "Characters and item tags in Brotato",
+      "card": "Brotato ships with a large roster of characters, only a handful unlocked from the start and the rest earned by hitting in-run milestones. Every character has its own stat spread and starting weapon, and quite a few carry real restrictions, such as being unable to equip melee weapons or losing most ranged damage in exchange for something else entirely. Most characters also favor a set of item tags, which just weights the random shop toward items that suit how that character is meant to be played, rather than forcing any specific build.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Characters",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 408,
+      "game_id": 36,
+      "section_type": "boss",
+      "name": "The wave 20 bosses in Brotato",
+      "card": "Wave 20 is the last wave of a standard run, and one of two bosses shows up to end it: a melee-focused charger that surrounds itself with circling projectiles before switching to an all-directions burst partway through its health bar, or a ranged caster that keeps summoning fields of projectiles around you and gets faster and wider in its attacks as its health drops. On Danger 5 both bosses appear together at once rather than one or the other, and their health is boosted well beyond a normal Danger 5 enemy to match.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 409,
+      "game_id": 36,
+      "section_type": "enemy",
+      "name": "Elite enemies at Danger 2 and up in Brotato",
+      "card": "The unique enemy in an Elite wave is drawn from a pool of tough specialists, each with its own attack pattern that escalates once its health drops below a set percentage or a timer runs out, whichever happens first. One example charges the player every couple of seconds while firing projectiles out to its sides, then shifts to a faster charge with extra shots once it is below sixty percent health. All of them carry far more health than a normal enemy of the same wave, so they are best focused down rather than left to survive alongside a full wave of regular spawns.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 410,
+      "game_id": 36,
+      "section_type": "enemy",
+      "name": "Support enemies that buff and heal in Brotato",
+      "card": "Not every threat in Brotato attacks directly. A Buffer runs away from the player rather than closing in, and while alive it boosts every other enemy's health, damage and speed substantially, with buffed enemies outlined in red so they stand out on screen. A Healer does the opposite job, wandering among the crowd and restoring a growing amount of health to nearby enemies each hit. Neither is very tough on its own, so killing them quickly removes a much bigger problem than their health bar suggests, especially once a wave gets crowded.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 411,
+      "game_id": 36,
+      "section_type": "enemy",
+      "name": "Early regular enemies in Brotato",
+      "card": "The first waves of Brotato are built from a handful of weak, common enemy types rather than anything dangerous alone. Trees just sit still and can be ignored or farmed for a little extra material. Baby Aliens and Chasers beeline straight at the player and deal damage on touch, with Chasers arriving in small groups. Spitters instead keep their distance and fire projectiles, retreating if the player gets too close. None of these hit hard individually, but they gain a flat amount of extra health and damage every wave they remain in play, so a Tree from wave one is not the same threat by wave ten.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 412,
+      "game_id": 36,
+      "section_type": "item",
+      "name": "Item rarity and tags in Brotato",
+      "card": "Every item and weapon in Brotato's shop carries a rarity tier from common up to legendary, and higher tiers only start appearing in shops and loot crates after certain wave thresholds are passed, with average rarity also climbing as a run goes on. Items are also grouped by the stat or playstyle they support, such as melee damage or max health, and a character's own preferred tags make the shop more likely to offer items that match how that character is built to fight, without ever guaranteeing them.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Items",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 413,
+      "game_id": 36,
+      "section_type": "item",
+      "name": "Legendary loot crates from Elites in Brotato",
+      "card": "Beating the unique enemy in an Elite wave always drops a Legendary-tier loot crate, which is guaranteed to contain a Legendary item rather than leaving it to chance like a normal crate, and picking it up also restores a set chunk of health on the spot. There is an item that specifically raises damage dealt to these tough enemies, which is worth prioritizing on a run heading into a Danger level where Elite waves show up, since it shortens the fight and the health risk that comes with it.",
+      "source_url": "https://brotato.wiki.spellsandguns.com/Elite_and_Horde_Waves",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
     }
   ],
   "genre_patterns": [

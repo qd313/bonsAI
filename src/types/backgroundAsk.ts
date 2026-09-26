@@ -147,6 +147,13 @@ export type BackgroundRequestStatus = {
    * field existed.
    */
   kb_attached_notes?: KbAttachedNote[];
+  /**
+   * Whether the answer that just finished summed the chat up first (plan 68 step 2), so the
+   * screen can paint the note or the warning line before it reloads the chat. `null` on a
+   * stopped request and on any answer that did not need to sum up; absent on a build before this
+   * existed.
+   */
+  chat_summary?: "written" | "failed" | null;
 };
 
 export type PresetCarouselInjectPayload = {

@@ -227,4 +227,32 @@ describe("turnsToCollapsedTurns", () => {
     ]);
     expect(collapsed[0]?.reasoning).toBeUndefined();
   });
+
+  // Plan 68 step 2: the field-list trap on the screen side. This function rebuilds a new object
+  // field by field, the same way chat_slot_service.py's sanitize_slot does on the backend -- a
+  // field read off the raw turn but never copied here would reach the transcript as if it had
+  // never been saved at all.
+  it("carries the assistant turn's chat_summary onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "and what about that" },
+      { id: "a1", role: "assistant", text: "answer", chat_summary: "written" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBe("written");
+  });
+
+  it("carries a failed chat_summary onto the collapsed turn too", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "and what about that" },
+      { id: "a1", role: "assistant", text: "answer", chat_summary: "failed" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBe("failed");
+  });
+
+  it("leaves chat_summary unset for a turn that never summed the chat up", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBeUndefined();
+  });
 });

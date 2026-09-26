@@ -49,6 +49,31 @@ export type ChatSlotTurn = {
    */
   display_text?: string;
   created_at?: number;
+  /**
+   * Whether this answer summed the chat up first (plan 68 step 2), so the screen can draw the
+   * note or the warning line straight off the saved turn. Only ever set on an assistant turn, to
+   * one of these two exact words -- absent otherwise, never "" and never a stored null, the same
+   * "absent, not empty" rule the backend's `chat_slot_service.py` follows for `reasoning`.
+   */
+  chat_summary?: "written" | "failed";
+};
+
+/**
+ * A chat's own summary of its older turns (plan 68 step 2), written just before the chat would
+ * otherwise outgrow its room. Coverage is by turn id, not a count: `covers_through_turn_id` names
+ * the newest turn the summary accounts for, and if that id is no longer among the chat's turns
+ * (the 200-turn cap dropped it), no remaining turn is covered. `turns_covered` and
+ * `hidden_notes_left_out` are cumulative across rewrites, not just the most recent one.
+ */
+export type ChatMemorySummary = {
+  text: string;
+  covers_through_turn_id: string;
+  turns_covered: number;
+  oldest_turns_unread: number;
+  hidden_notes_left_out: number;
+  written_at: string;
+  seconds: number;
+  model: string;
 };
 
 export type ChatSlotSummary = {
@@ -70,6 +95,13 @@ export type ChatSlot = {
   origin_app_id?: string;
   /** Display name of the game the slot was opened under. Absent on slots saved before it was kept. */
   origin_app_name?: string;
+  /**
+   * This chat's own summary of its older turns (plan 68 step 2). `null` on a chat with no summary
+   * yet, or one saved before this existed -- never rendered on its own; the Session tab reads it.
+   * This chat's remembered follow-up subject rides the same slot on the backend but never reaches
+   * the screen, the same as it never did when it lived in the plugin-wide memory it replaces.
+   */
+  summary?: ChatMemorySummary | null;
   turns: ChatSlotTurn[];
 };
 

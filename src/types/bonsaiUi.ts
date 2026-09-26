@@ -135,6 +135,13 @@ export type AskThreadCollapsedTurn = {
    * it draws exactly as it always did.
    */
   reasoning?: TurnReasoning;
+  /**
+   * Whether this answer summed the chat up first (plan 68 step 2), read straight off the saved
+   * assistant turn's own `chat_summary`. Absent on every turn saved before this existed and on
+   * every turn where summing up did not happen -- "missing" is the ordinary case, the same as
+   * `reasoning` above.
+   */
+  chatSummary?: "written" | "failed";
 };
 
 /** Accordion key for the Ask transcript: archived turn id, live turn, or all collapsed. */

@@ -112,6 +112,10 @@ export function turnsToCollapsedTurns(
         // turn saved before thinking existed, or one answered with thinking off — the reopened
         // turn then draws exactly as it did before, with no fold row.
         reasoning: normalizeTurnReasoning((turn as SavedTurnWithReasoning).reasoning),
+        // Plan 68 step 2: whether this answer summed the chat up first, straight off the saved
+        // assistant turn. Only ever set there (see chatSlotsApi.ts), so the question turn is never
+        // consulted -- unlike appId/appName there is no slot-level fallback to fall back to.
+        chatSummary: turn.chat_summary,
       });
       pendingQ = null;
     }

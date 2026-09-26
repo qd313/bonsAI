@@ -246,6 +246,47 @@ class KnownEntityGazetteerTests(unittest.TestCase):
             "Tank",
         )
 
+    def test_a_starting_out_card_is_never_the_named_entity(self):
+        """SPOILER-RISK-CHIP-01 / plan 70: "in hollow knight how should i prepare for the fight
+        against the hollow knight at the end" recorded "Named entity: Starting out in Hollow
+        Knight" -- a generic onboarding note, not the boss being asked about. Hollow Knight is
+        both the game's own name and its final boss's name, and the onboarding card's whole
+        title is built by appending the game's name -- "Starting out in Hollow Knight" -- so the
+        shortened-name fallback read the question naming the game as the question naming that
+        card. The seed corpus has no card for the boss itself, so the correct result here is ""
+        (over-fencing, the safe direction), never the note title.
+        """
+        question = (
+            "in hollow knight how should i prepare for the fight against the hollow knight "
+            "at the end"
+        )
+        self.assertEqual(
+            extract_strategy_asked_entity(
+                question, known_entities=["Starting out in Hollow Knight"]
+            ),
+            "",
+        )
+        # Same guard on the shortened-tail fallback with a phrasing that never reaches the
+        # verb-first/entity-first patterns, so only the gazetteer path is exercised.
+        self.assertEqual(
+            extract_strategy_asked_entity(
+                "let's talk about hollow knight",
+                known_entities=["Starting out in Hollow Knight"],
+            ),
+            "",
+        )
+
+    def test_a_starting_out_card_never_wins_even_alongside_a_real_card(self):
+        """The exclusion must not depend on there being nothing else to match -- a real card in
+        the same pool must still be found once the generic onboarding card is skipped."""
+        names = ["Starting out in Hollow Knight", "Mantis Lords"]
+        self.assertEqual(
+            extract_strategy_asked_entity(
+                "let's talk about mantis lords and hollow knight", known_entities=names
+            ),
+            "Mantis Lords",
+        )
+
 
 class FixtureWideInvariantTests(unittest.TestCase):
     """Run the whole eval set through it, because that is what exposed the bug."""

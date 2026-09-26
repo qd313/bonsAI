@@ -119,6 +119,22 @@ _ENTITY_GENERIC_HEADS = frozenset(
 
 _KB_CARD_NAME_RE = re.compile(r"\[(?:[^\]/]+/\s*[^:\]]+|Tip)\s*:\s*([^\]]+)\]", re.IGNORECASE)
 
+# Guessed from the name only, the same way knowledge_base_service._is_starting_out_card guesses
+# it -- every "Starting out in <game>" card is named exactly this way (data/kb/strategy_seed.json,
+# and enforced at build time by scripts/build_rag_db.py's mistyped_starting_out_rows check).
+# Excluded from the gazetteer match entirely: naming a game names the game, not one of its notes,
+# and this generic card's whole title is built by appending the game's own name -- the one title
+# in the corpus guaranteed to end in exactly that. That is what let a game whose name is also its
+# final boss's name ("Hollow Knight") match this card instead of the boss: the question naturally
+# says "Hollow Knight" (it has to, to name the game at all), and the shortened-name fallback below
+# was reading that as "the player typed the card's trailing words" rather than "the player named
+# the game". Found 2026-09-25, docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json.
+_STARTING_OUT_NAME_PREFIX = "starting out in"
+
+
+def _is_generic_starting_out_title(name: str) -> bool:
+    return (name or "").strip().lower().startswith(_STARTING_OUT_NAME_PREFIX)
+
 
 def kb_card_names(kb_text: str) -> list[str]:
     """Card titles from an assembled KB block, e.g. ``[Left 4 Dead 2 / boss: Tank]`` -> ``Tank``.
@@ -200,7 +216,7 @@ def _match_known_entity(question: str, known_entities) -> str:
     best = ""
     for candidate in known_entities or ():
         name = str(candidate or "").strip()
-        if len(name) < 3 or len(name) <= len(best):
+        if len(name) < 3 or len(name) <= len(best) or _is_generic_starting_out_title(name):
             continue
         if _appears(name):
             best = name
@@ -209,6 +225,8 @@ def _match_known_entity(question: str, known_entities) -> str:
 
     for candidate in known_entities or ():
         name = str(candidate or "").strip()
+        if _is_generic_starting_out_title(name):
+            continue
         words = name.split()
         if len(words) < 2 or len(name) <= len(best):
             continue

@@ -447,6 +447,19 @@
         "bullet-heaven",
         "action"
       ]
+    },
+    {
+      "game_id": 37,
+      "app_id": "1623730",
+      "igdb_id": null,
+      "canonical_title": "Palworld",
+      "edition": null,
+      "platform": "Steam",
+      "genres": [
+        "survival",
+        "creature-collector",
+        "open-world"
+      ]
     }
   ],
   "aliases": [
@@ -837,6 +850,14 @@
     {
       "alias": "brotato",
       "game_id": 36
+    },
+    {
+      "alias": "palworld",
+      "game_id": 37
+    },
+    {
+      "alias": "pal world",
+      "game_id": 37
     }
   ],
   "sections": [
@@ -4961,6 +4982,138 @@
       "name": "Legendary loot crates from Elites in Brotato",
       "card": "Beating the unique enemy in an Elite wave always drops a Legendary-tier loot crate, which is guaranteed to contain a Legendary item rather than leaving it to chance like a normal crate, and picking it up also restores a set chunk of health on the spot. There is an item that specifically raises damage dealt to these tough enemies, which is worth prioritizing on a run heading into a Danger level where Elite waves show up, since it shortens the fight and the health risk that comes with it.",
       "source_url": "https://brotato.wiki.spellsandguns.com/Elite_and_Horde_Waves",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 414,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Starting out in Palworld",
+      "card": "Palworld opens with the player washed up on the Palpagos Islands, able to catch, tame and fight alongside creatures called Pals rather than facing everything alone. An early priority is throwing a basic Pal Sphere at a weakened wild Pal to add it to the party, since low-level Pals compatible with the starter sphere are what most early progress depends on. From there, a first base built around a Palbox lets caught Pals work automatically at assigned jobs, turning raw materials into gear while the player explores, fights hostile human factions, and works toward tougher creatures and better gear further out on the islands.",
+      "source_url": "https://palworld.wiki.gg/wiki/Base",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 415,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Catching Pals in Palworld",
+      "card": "Wild Pals are captured by throwing a Pal Sphere at them, and it plays out as a hit-or-miss attempt rather than a certainty: the odds depend on the sphere's own capture power, how much health the target Pal has left, and situational bonuses such as landing the throw from behind. Weakening a Pal first, usually by fighting it down to low health without knocking it out, makes almost any sphere far more likely to succeed. Basic Pal Spheres only work reliably on lower-level Pals, so tougher targets call for a higher-tier sphere with a bigger base capture power rather than repeated throws of the starting one.",
+      "source_url": "https://palworld.wiki.gg/wiki/Pal_Sphere",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 416,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Building and running a base in Palworld",
+      "card": "A base in Palworld is anchored by a Palbox, whose placement sets both the base's location and the area where structures can be built and Pals put to work. Losing the Palbox destroys everything the base is built around, so protecting it matters as much as growing it. Upgrading a base raises how many Pals can be assigned to work there, unlocks more production options, and eventually allows a second or third base elsewhere. A base built up this way also becomes a fast-travel point in its own right, and it can become a target during certain late-game events, so its defenses are worth investing in alongside its production.",
+      "source_url": "https://palworld.wiki.gg/wiki/Base",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 417,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Keeping Pals working at a base in Palworld",
+      "card": "Every job at a base, from crafting to cooking to construction, carries its own workload value, so pairing tasks with Pals whose Work Suitability fits the job gets things done faster than assigning whichever Pal is nearby. Each working Pal also has a Sanity stat that drains steadily while it works; once it runs low the Pal heads for a resting structure like a hot spring to recover, and if it stays low for too long it can start refusing tasks or fall ill outright. Illness on its own slows a Pal's work and risks it stopping altogether, though a Clinic built at the base can treat and help prevent it.",
+      "source_url": "https://palworld.wiki.gg/wiki/Base",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 418,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Breeding Pals in Palworld",
+      "card": "Breeding lets two Pals of opposite genders produce a Pal Egg at a Breeding Farm, a structure unlocked at level nineteen that also requires clearing a specific story boss fight before it can actually be built, even once the level and materials are met. Once a male and female Pal are placed inside and a cake is left in the farm's chest for them, they begin breeding on their own, filling a progress bar toward an egg, and keep going as long as cake remains and the farm has room. Which species hatches is decided by each parent's hidden Breeding Rank: the game averages the two ranks and picks the closest eligible species, so a bred Pal is never weaker or stronger than either parent was.",
+      "source_url": "https://palworld.wiki.gg/wiki/Breeding",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 419,
+      "game_id": 37,
+      "section_type": "mechanic",
+      "name": "Technology points and the tech tree in Palworld",
+      "card": "Unlocking new blueprints in Palworld runs through two separate point pools, ordinary Technology Points and Ancient Technology Points, spent on a shared tech tree. Technology Points mostly come from leveling up and from switching on new Fast Travel points, while Ancient Technology Points come from defeating an Alpha Pal for the first time or beating a Tower's boss, alongside occasional manuals found as loot or bought from merchants. Some entries on the tree also carry a hard requirement, such as a specific Tower boss already defeated or a piece of research finished, and the tree marks any blueprint whose requirement is unmet with a clear warning rather than letting it be picked blindly.",
+      "source_url": "https://palworld.wiki.gg/wiki/Technology",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 420,
+      "game_id": 37,
+      "section_type": "boss",
+      "name": "The five kinds of boss fights in Palworld",
+      "card": "Palworld separates its toughest fights into five distinct kinds rather than one boss ladder. Alpha Pals are oversized, stronger versions of ordinary Pals that patrol fixed spots on the map or wait at the end of dungeons. Predator Pals are similar overpowered variants but appear only in their own scripted encounters and cannot be captured. Bounty Targets are named human enemies, sometimes accompanied by their own Pals, fought for a turn-in reward. Faction Leaders command hostile factions and are fought one on one inside a dedicated Tower. Raid Bosses are the toughest tier: a powerful Pal summoned at the player's own base that demands real preparation and base defenses to survive.",
+      "source_url": "https://palworld.wiki.gg/wiki/Bosses",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 421,
+      "game_id": 37,
+      "section_type": "boss",
+      "name": "Towers and Faction Leaders in Palworld",
+      "card": "A Tower fight in Palworld is a timed one-on-one encounter: entering starts a five-minute clock, and running out of time before the boss falls gets the player killed and ejected, though any dropped gear can still be recovered at the entrance afterward. Up to four players can enter a Tower together, and each Tower's arena has its own hazards to watch for, such as ground that can be electrified on command or craters that fill with damaging liquid. A Tower can be re-entered and challenged again at any time after a win, and once enough of these boss fights have been cleared, previously beaten ones can be challenged again in a harder Hard Mode version with tougher stats and its own unique loot.",
+      "source_url": "https://palworld.wiki.gg/wiki/Tower",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 422,
+      "game_id": 37,
+      "section_type": "enemy",
+      "name": "Alpha Pals as roaming world bosses in Palworld",
+      "card": "Alpha Pals are simply larger, tougher versions of regular Pals scattered across the map, either standing in a fixed overworld spot or waiting at the end of a Dungeon. The ones out in the open respawn every in-game day once defeated, while a smaller number live inside special sealed areas that take about an hour to reset, though sleeping can fast-forward that wait. Not every Pal species has an overworld Alpha version; a handful only ever show up as a random Alpha encounter guarding the end of a Dungeon instead. Either way, an Alpha is recognizable at a glance by its larger size and a marker shown next to its name once it has been caught.",
+      "source_url": "https://palworld.wiki.gg/wiki/Alpha_Pals",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 423,
+      "game_id": 37,
+      "section_type": "enemy",
+      "name": "What makes an Alpha Pal tougher in Palworld",
+      "card": "Beyond raw size, an Alpha Pal differs from its ordinary counterpart in several concrete ways: it hands out roughly ten times the experience when defeated, it takes noticeably reduced damage from every source so fights against it run longer, and it is generally harder to actually capture than the regular version of the same Pal. In exchange for the extra fight, an Alpha always drops Ancient Civilization Parts on top of its usual loot, sells for more to a Pal Merchant, and defeating or catching a given overworld Alpha for the first time also grants Ancient Technology Points and an item that gives ongoing bonuses to the player's own Pals.",
+      "source_url": "https://palworld.wiki.gg/wiki/Alpha_Pals",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 424,
+      "game_id": 37,
+      "section_type": "item",
+      "name": "The Pal Sphere in Palworld",
+      "card": "The Pal Sphere is the basic, earliest tool for catching wild Pals in Palworld, thrown at a target to attempt a capture rather than guaranteeing one. It becomes available very early, needing only a low character level and a single technology point to unlock at a workbench, and it can also be bought from traveling merchants or occasionally picked up from defeated human enemies. Its capture power is comparatively low, which is enough for weaker early Pals but increasingly unreliable against anything higher level, and that is exactly the gap the game's later, higher-tier spheres exist to close as the player and their targets both get stronger.",
+      "source_url": "https://palworld.wiki.gg/wiki/Pal_Sphere",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-26"
+    },
+    {
+      "section_id": 425,
+      "game_id": 37,
+      "section_type": "item",
+      "name": "Weapons and ammo in Palworld",
+      "card": "Player weapons in Palworld are split into melee gear, ranged firearms and bows, and explosives, all crafted at workbenches that scale up from a basic Primitive Workbench to dedicated weapon assembly lines as the tech tree advances. Pals cannot use these weapons themselves; they fight instead with their own separate Pal Gear. Every ranged weapon is locked to one specific ammo type, so keeping the right ammo stocked matters as much as the weapon itself, and new weapons arrive either through the tech tree or from Schematics that unlock stronger versions with better damage, durability or magazine size, ranging from a common tier up to a rare legendary one.",
+      "source_url": "https://palworld.wiki.gg/wiki/Weapons",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-26"

@@ -55,7 +55,7 @@ _HIGH_SPOILER_SECTION_TYPES = frozenset(
         "secret",
     }
 )
-_LOW_SPOILER_SECTION_TYPES = frozenset({"tip", "compat", "control", "mechanic"})
+_LOW_SPOILER_SECTION_TYPES = frozenset({"tip", "compat", "control", "mechanic", "starting_out"})
 
 
 def spoiler_risk_chip_label(band: SpoilerRiskBand) -> str:

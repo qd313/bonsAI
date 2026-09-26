@@ -198,6 +198,10 @@ _TYPE_WORDS: dict[str, tuple[str, ...]] = {
     "quest": ("quest", "quests", "mission", "missions", "sidequest"),
     "encounter": ("encounter", "encounters", "fight", "fights"),
     "mechanic": ("mechanic", "mechanics", "system", "systems"),
+    # "where do I start" / "how do I get started" / "new to this, where do I begin" (D65) --
+    # the same "generic word, not the note's own name" rescue as every other kind above, so a
+    # game's own `starting_out` note is pulled in even when the question never says its name.
+    "starting_out": ("start", "started", "starting", "begin", "beginner", "beginning", "newbie"),
 }
 
 

@@ -555,6 +555,26 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       _curtail_section_to_chip("mechanic", "Epona"), "What should I know about Epona?"
     )
 
+  def test_starting_out_card_names_the_game_not_the_note(self):
+    """D65: the chip says "How do I get started in <game>?" -- the game's own title, not
+
+    the note's own name, which can be a shortened form ("Starting out in Melee" for "Super
+    Smash Bros. Melee", per the real seed data)."""
+    self.assertEqual(
+      _curtail_section_to_chip(
+        "starting_out", "Starting out in Melee", game_title="Super Smash Bros. Melee"
+      ),
+      "How do I get started in Super Smash Bros. Melee?",
+    )
+
+  def test_starting_out_card_falls_back_to_its_own_name_with_no_game_title(self):
+    """A defensive fallback for a caller that has not looked the game title up -- every real
+    row is named "Starting out in <game>", so stripping that prefix still reads right."""
+    self.assertEqual(
+      _curtail_section_to_chip("starting_out", "Starting out in Black Mesa"),
+      "How do I get started in Black Mesa?",
+    )
+
 
   def test_suggest_chip_candidates_caps_generic_compat_chips(self):
     """Generic compat chips are bounded so they cannot crowd out entity-named ones."""

@@ -385,6 +385,25 @@ def _seed_compat_patterns(conn: sqlite3.Connection) -> int:
     return len(rows)
 
 
+STARTING_OUT_KIND = "starting_out"
+_STARTING_OUT_NAME_PREFIX = "Starting out in"
+
+
+def mistyped_starting_out_rows(sections: list[dict]) -> list[str]:
+    """Names of rows called "Starting out in ..." that are not typed ``starting_out`` (D65).
+
+    Helpers writing a new game's notes may still file these as `mechanic` (the kind
+    `starting_out` replaces) while this lands elsewhere -- this check catches any left that
+    way before the corpus builds, so a re-typing pass is never skipped by accident.
+    """
+    return sorted(
+        str(s.get("name") or f"section {s.get('section_id')}")
+        for s in sections
+        if str(s.get("name") or "").startswith(_STARTING_OUT_NAME_PREFIX)
+        and str(s.get("section_type") or "") != STARTING_OUT_KIND
+    )
+
+
 def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
     path = KB_DATA_DIR / "strategy_seed.json"
     if not path.is_file():
@@ -429,6 +448,13 @@ def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
         raise SystemExit(
             "strategy_seed.json: these rows cite a source_url but no crawled_at, so their "
             "capture date cannot be attributed: " + ", ".join(undated)
+        )
+    mistyped = mistyped_starting_out_rows(sections)
+    if mistyped:
+        raise SystemExit(
+            "strategy_seed.json: these rows are named \"Starting out in ...\" but are not "
+            f"typed {STARTING_OUT_KIND!r} -- re-type their section_type before this build: "
+            + ", ".join(mistyped)
         )
     conn.executemany(
         "INSERT INTO sections(section_id, game_id, section_type, name, card, source_url, "

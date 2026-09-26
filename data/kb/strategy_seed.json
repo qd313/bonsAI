@@ -2501,7 +2501,7 @@
     {
       "section_id": 164,
       "game_id": 14,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Black Mesa",
       "card": "Black Mesa is Half-Life rebuilt from the ground up on the Source engine, with new art, sound and voice work but the original's chapters, weapons and enemies kept on purpose rather than added to. The one exception is Xen: those chapters are mostly new work and far longer than the 1998 originals, so budget more time for the alien world than veterans remember. Expect the same shape of game throughout: no cutscenes, scripted scenes you walk through, a crowbar for crates and vents, and fights that go better from a doorway than from the middle of a room. There are 25 achievements, Workshop support and a separate deathmatch mode; the campaign itself is single-player only.",
       "source_url": "https://combineoverwiki.net/wiki/Black_Mesa_(video_game)",
@@ -2622,7 +2622,7 @@
     {
       "section_id": 175,
       "game_id": 15,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Hollow Knight",
       "card": "A side-scrolling metroidvania: a huge connected kingdom under the town of Dirtmouth that opens piece by piece as you find abilities. There is no map of an area until you find Cornifer, the humming cartographer, and buy his copy, and it only fills in as you rest at benches once you own a quill from his wife in Dirtmouth. Benches are everything: they save, restore your masks, and are the only place charms can be swapped. Your nail is short, so learn early to bounce off enemies and spikes with a downward slash. Hitting enemies fills the soul meter; hold Focus to spend it healing one mask at a time, or tap it for spells. Dying is not the end: your Shade waits where you fell, holding your Geo.",
       "source_url": "https://hollowknight.wiki/w/Hollow_Knight",
@@ -2765,7 +2765,7 @@
     {
       "section_id": 188,
       "game_id": 16,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in DOOM Eternal: the combat loop",
       "card": "Eternal is a resource game wearing a shooter's clothes. Ammo is scarce and the pools are small, so the loop is: shoot a weak enemy until it flashes, glory kill it for health; chainsaw a fodder demon for a shower of ammo (three fuel units, one always refilling on its own every twenty seconds, and fodder costs one, so it is never off the table); flame belch a group and kill them burning for armour, on a twenty-five second cooldown. Heavy demons cost all three fuel units and the super heavies cannot be sawed at all. Never stand still: dash twice, jump twice, and swap weapons mid-fight rather than reloading. If you run dry on everything, the game hands you the chainsaw for one fodder kill and the loop starts again.",
       "source_url": "https://doomwiki.org/wiki/Chainsaw_(Doom_Eternal)",
@@ -2908,7 +2908,7 @@
     {
       "section_id": 201,
       "game_id": 17,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Doom 64",
       "card": "Not a port: a separate sequel to Doom II with thirty-two new levels, redrawn larger sprites, coloured lighting and a slower, darker mood. The whole Doom II arsenal is here plus one new gun, the Unmaker, and most of the classic monsters, but no arch-viles, revenants, spider mastermind or chaingunners; the new faces are the fast, half-invisible nightmare imp and the Mother Demon at the end. Four secret levels hide the game's real reward, and the 2020 re-release adds a further episode, The Lost Levels, after the ending. Play it like classic Doom: find keys, hit switches, and treat every quiet room as a trap.",
       "source_url": "https://doomwiki.org/wiki/Doom_64",
@@ -2963,7 +2963,7 @@
     {
       "section_id": 206,
       "game_id": 18,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in GTA V",
       "card": "Three protagonists share one map, and in free roam you can switch between them any time from the character wheel; the number under each face is how many missions that person has waiting, and you cannot switch while you have a wanted level. Each has a special ability on the small yellow meter under the radar: Michael slows time in gunfights, Franklin slows time while driving, Trevor takes half damage and deals double while raging. Skills grow by doing: run to build stamina, land shots to build shooting, punch and play sports for strength. A cheap trick worth knowing early: switch away and straight back, and your character returns with full health and a repaired, cleaned car.",
       "source_url": "https://gta.fandom.com/wiki/Character_Wheel",
@@ -3062,7 +3062,7 @@
     {
       "section_id": 215,
       "game_id": 19,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in GTA IV",
       "card": "Liberty City opens up one island at a time as the story goes, starting in Broker. Save by walking to the bed in a safehouse and choosing to sleep; that also clears any wanted level. There are no garages: the yellow Residents Parking bays on the street outside each safehouse hold two vehicles, and anything damaged there repairs itself when you leave the area or reload. Gunfire hurts far more than in older games, so the cover button is not optional: it snaps you to the nearest solid object, and from there you strafe, pop out to aim, or blind-fire round the edge. The phone runs the game: friends call, jobs arrive as texts and emails, and the internet cafés are where the side work starts.",
       "source_url": "https://gta.fandom.com/wiki/Safehouses_in_GTA_IV",
@@ -3150,7 +3150,7 @@
     {
       "section_id": 223,
       "game_id": 20,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Fallout: New Vegas",
       "card": "Doc Mitchell patches you up in Goodsprings, sets your stats with his tester, and hands over a Pip-Boy and a gun or two based on the skills you tagged. The town is the tutorial: Sunny Smiles teaches shooting and campfire cooking, and the little quests around it show every kind of skill check in the game, all of them fixed thresholds rather than dice rolls, so a Speech of 25 either works or it does not. The road north out of town is closed by deathclaws at the quarry past Sloan; the game means you to go south through Primm, Nipton and Novac and round the long way. Doc Mitchell's containers are safe storage, and once the town is cleared nothing hostile respawns inside it. You choose three tag skills for fifteen points each, get ten skill points plus half your Intelligence per level, a perk every two levels, and a cap of thirty, or fifty with the four add-ons.",
       "source_url": "https://fallout.fandom.com/wiki/Goodsprings",
@@ -3271,7 +3271,7 @@
     {
       "section_id": 234,
       "game_id": 21,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Super Mario 64",
       "card": "The paintings in the castle are the courses: walk up and the surface ripples, jump in and you are there. Each course holds several missions, one star each, and stars open the castle's doors. Health is the eight-wedge power meter, refilled by coins, spinning hearts, or surfacing in water. The moves are the game: run and jump three times for the triple jump, run then crouch and jump for the long jump, jump into a wall and jump again for the wall kick, crouch and jump for the backflip, turn around sharply and jump for the side flip, and press crouch in the air to ground-pound. Caps last sixty seconds and only appear in courses once you have hit their switches. A hundred coins in any course is an extra star, and the rabbit in the basement gives one when caught at fifteen stars and again at fifty.",
       "source_url": "https://www.mariowiki.com/Super_Mario_64",
@@ -3337,7 +3337,7 @@
     {
       "section_id": 240,
       "game_id": 22,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Kart 64",
       "card": "Hold the gas as the lights change from red to blue for a rocket start; too early and you spin your tyres and leave slower than everyone. Hop and hold to drift, then wiggle the stick side to side while sliding: the smoke goes white, yellow, then orange, and letting go on orange gives a mini-turbo. Gas and brake together spins the kart on the spot. If you drive straight into a banana, a well-timed tap of the brake saves the spin and shows a musical note. Item boxes hand out stronger items the further back you are. Grand Prix is four cups of four races at 50, 100 and 150cc, scoring nine, six, three and one point for the top four; the Extra class runs the courses mirrored. Battle mode gives each player three balloons, and time-trial ghosts only save if you never pause, crash, reverse or fall.",
       "source_url": "https://www.mariowiki.com/Mario_Kart_64",
@@ -3381,7 +3381,7 @@
     {
       "section_id": 244,
       "game_id": 23,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Paper Mario: The Thousand-Year Door",
       "card": "Battles are turn-based on a theatre stage: Mario and one partner each act every turn, and you can swap who goes first, which also puts that one in front. Hit an enemy in the field to open with a free first strike; they can do the same to you. Every attack has an action command, a button press at the right moment for extra damage, and every enemy attack can be guarded with A as it lands for one less damage, or superguarded with B in a tiny window for no damage and a point back. Levelling up every hundred star points gives a choice: five HP, five FP or three badge points. The boots and hammer upgrades are story finds you cannot skip, and the black chests hand out paper tricks like the plane and the sideways squeeze.",
       "source_url": "https://www.mariowiki.com/Paper_Mario:_The_Thousand-Year_Door",
@@ -3447,7 +3447,7 @@
     {
       "section_id": 250,
       "game_id": 24,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Pikmin 2",
       "card": "There is no day limit this time: the goal is ten thousand Pokos of treasure to clear the company's debt, and treasures and enemy bodies both pay. Two captains share the work, and the button that used to pause now swaps between them, so one can carry while the other fights. The day still ends at sunset, and any Pikmin not with a captain or back at the Onion is eaten when the night creatures wake, so watch the sun and call everyone in early. The colours: red for fire and the hardest hitters, yellow thrown highest and safe from electricity, blue the only ones for water, purple heavy and strong, white fast, poison-proof and able to see treasure buried underground. Bulbmin, found only in certain caves, shrug off every hazard but cannot leave with you.",
       "source_url": "https://www.pikminwiki.com/Pikmin_2",
@@ -3557,7 +3557,7 @@
     {
       "section_id": 260,
       "game_id": 25,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Melee",
       "card": "Twenty-five fighters, fourteen there from the start and eleven to unlock, on twenty-nine stages. You do not drain a health bar: damage climbs as a percentage, and the higher it goes the further a hit sends you, so a stock is lost by being launched past the edge of the screen, not by running out of health. Everything is faster than the first game: less freeze on hits, higher gravity, faster falls, and momentum carried out of a dash into a jump. Smash attacks charge for up to a second for forty percent more power. Shield with the shoulder buttons, and press them only part way for a bigger, longer-lasting but weaker shield. Sudden Death after a tie restarts at three hundred percent, where nearly anything is a knockout.",
       "source_url": "https://www.ssbwiki.com/Super_Smash_Bros._Melee",
@@ -3950,7 +3950,7 @@
     {
       "section_id": 314,
       "game_id": 26,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Party",
       "card": "Turns rotate: each player rolls a 1-10 Dice Block and moves that many spaces, landing on Blue spaces for 3 coins or Red for -3. Passing the Star Space lets you buy a Star for 20 coins if you have enough, and its location shifts to a new random spot each time someone buys one. After everyone moves, a roulette matches players up for that turn's minigame: land all on the same color and everyone plays a 4-player game together, split 2-2 for a team game, or 1 alone against 3 for the odd one out. A new player's biggest surprise is that minigames can take coins from the losers, not just award them to the winner. Games run 20, 35, or 50 turns, and at the end three Bonus Stars go out for the most coins won in minigames, the most coins held, and the most Happening Spaces landed on -- so a last-place player can still close the gap.",
       "source_url": "https://www.mariowiki.com/Mario_Party",
@@ -4060,7 +4060,7 @@
     {
       "section_id": 324,
       "game_id": 27,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Party 2",
       "card": "Mario Party 2 keeps the same turn structure as the original -- roll, move, land on a colored space, then play a minigame -- but adds real items for the first time: buy one from an Item Shop, win one from an Item Space's minigame, or hold a Dueling Glove to challenge another player directly for coins. Only one item can be held at a time, unlike later games, so a new player has to decide whether to use an item right away or hold it and risk losing the chance. Bowser Spaces now run a full roulette of bad outcomes rather than a single effect, and a Bank Space lets you deposit coins for another player to potentially collect if they land on it before you pass again. Every board dresses its cast in a costume matching its theme, purely cosmetic but a good sign of which board's rules apply.",
       "source_url": "https://www.mariowiki.com/Mario_Party_2",
@@ -4159,7 +4159,7 @@
     {
       "section_id": 333,
       "game_id": 28,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Party 3",
       "card": "Mario Party 3 keeps the roll-and-move loop from the earlier games but layers on real choices: you can now hold up to three items at once instead of just one, and computer players can be given a handicap to even out a mismatched group. Coins still come from Blue Spaces and go from Red ones, and Happening (\"?\") Spaces trigger board-specific events. The biggest change for a new player is Duel Mode, played on its own set of boards where two characters fight using partner characters instead of collecting Stars, and Story Mode, a single-player campaign that alternates between normal board games and duels on the way to a set of seven Star Stamps. Party Mode, the game's regular multiplayer format, plays like the earlier two games with these new options layered in.",
       "source_url": "https://www.mariowiki.com/Mario_Party_3",
@@ -4225,7 +4225,7 @@
     {
       "section_id": 339,
       "game_id": 29,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Party 6",
       "card": "Mario Party 6 keeps the same roll-and-move turns as earlier games but replaces carried items with Orbs, bought from Orb Huts, picked up on Orb Spaces, or won from \"?\" Spaces; a new player's biggest adjustment is that Orbs, not items, are now the thing worth saving coins for. A day-and-night cycle runs the whole game, switching every three turns and changing which characters host events: Donkey Kong Spaces during the day become Bowser Spaces at night, each running its own set of minigames and rewards. Landing on the same space as another player, or on a Duel Space, triggers a Duel Mini-Game with a bet of coins, a Star, or both riding on the result -- a bigger risk than the coin-only duels of earlier games.",
       "source_url": "https://www.mariowiki.com/Mario_Party_6",
@@ -4313,7 +4313,7 @@
     {
       "section_id": 347,
       "game_id": 30,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Mario Party 7",
       "card": "Mario Party 7 plays like the previous GameCube entries -- roll a Dice Block, move up to ten spaces, land on a Blue or Red space for a coin swing, then play whichever minigame the mix of spaces calls for -- but adds a Bowser Time gauge that fills a little every turn and triggers a board-specific bit of trouble from Bowser once it's full, roughly every five turns. Orbs return from Mario Party 6 with mostly the same roles, bought at Orb Shops or won from Green Spaces. The game supports up to eight players through a Tag Battle or 4-Team Battle mode, where teamed players move together on a single pair of Dice Blocks rather than taking separate turns, with the team's \"leader\" alternating each round to decide when to use Orbs or make event choices.",
       "source_url": "https://www.mariowiki.com/Mario_Party_7",
@@ -4401,7 +4401,7 @@
     {
       "section_id": 364,
       "game_id": 31,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Donkey Kong 64",
       "card": "In Donkey Kong 64 you begin as Donkey Kong alone, exploring open levels in the style of Super Mario 64. The main goal in every level is collecting Golden Bananas; the other four Kongs (Diddy, Lanky, Tiny, Chunky) are locked up and join your roster one at a time as you free them. DK Isles is the hub between levels: a level's lobby sits behind a padlock that a Boss Key opens, and once inside, a gate called B. Locker still blocks entry unless you are carrying enough Golden Bananas for that level, with later levels asking for more. Each level also hides its own boss, reached only after feeding a trough called Troff 'n' Scoff enough bananas to raise a platform to the door.",
       "source_url": "https://www.mariowiki.com/Donkey_Kong_64",
@@ -4500,7 +4500,7 @@
     {
       "section_id": 373,
       "game_id": 32,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Yoshi's Story",
       "card": "Before each level in Yoshi's Story you pick one of six Baby Yoshis to play, and every level's goal is the same: eat exactly 30 fruits scattered around it to finish. Movement covers a jump that becomes a floaty flutter-jump if you hold the button, a tongue swallow that turns whatever you lick into an egg, and throwing that egg by aiming and releasing. A ground pound reveals items buried in the floor, and sniffing near a suspicious spot makes Yoshi wave or show a mark if something is hidden there. If your Yoshi is hit too many times it is carried off by Baby Bowser's Toadies, but a White Shy Guy carried to the level's end brings a lost Yoshi back.",
       "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
@@ -4577,7 +4577,7 @@
     {
       "section_id": 380,
       "game_id": 33,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Diddy Kong Racing",
       "card": "Diddy Kong Racing gives you ten racers, eight available from the start, and three kinds of vehicle: a car for land, a hovercraft for water or land, and a plane for air, each with its own strengths and weaknesses that can also change depending on who is driving. In Adventure Mode you explore Timber's Island as a hub, finding Golden Balloons that open access to five worlds and the fight with Wizpig. Each of the first four worlds has four tracks, a trophy race and a boss you race rather than fight; the fifth is Wizpig's own world. You can change vehicles at any time by talking to Taj, found in the middle of the island hub.",
       "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -4665,7 +4665,7 @@
     {
       "section_id": 388,
       "game_id": 34,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Super Smash Bros.",
       "card": "Super Smash Bros. gives you twelve fighters to choose from, eight available right away: Mario, Yoshi, Donkey Kong, Link, Samus, Kirby, Fox and Pikachu, with Luigi, Jigglypuff, Captain Falcon and Ness unlocked through play. A match is not about draining a health bar; instead every hit adds to a damage percentage, and the more damage a fighter is carrying, the further a solid hit sends them flying. Knocking someone far enough off the stage past its edges counts the same as a win in most modes. Versus Mode can be played as a Stock match, where each fighter has a set number of lives, or a Time match, scored on how many knockouts you land within a limit.",
       "source_url": "https://www.ssbwiki.com/Super_Smash_Bros.",
@@ -4742,7 +4742,7 @@
     {
       "section_id": 395,
       "game_id": 35,
-      "section_type": "mechanic",
+      "section_type": "starting_out",
       "name": "Starting out in Grand Theft Auto III - The Definitive Edition",
       "card": "Grand Theft Auto III: The Definitive Edition drops you into Liberty City with no map marker telling you what to do next: money and better weapons mostly come from taking on jobs from characters scattered around the city or answering ringing payphones, rather than from a single storefront. The city itself opens up in stages rather than all at once, with new islands unlocking as you make progress, so early errands tend to stay close to wherever you started. Petty crime like reckless driving or a stray gunshot draws police attention quickly, so it is worth learning how the wanted system works before testing how far you can push it.",
       "source_url": "https://gta.fandom.com/wiki/Grand_Theft_Auto_III",

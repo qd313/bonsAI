@@ -43,7 +43,10 @@ _CHIP_TEXT_MAX_LEN = 80
 # order kinds are *drawn* in, one at a time — see _list_game_sections_for_chips — not a
 # priority that lets an earlier kind take every slot. Kinds absent from this tuple still
 # appear, after the ones listed.
-_CHIP_SECTION_TYPE_ORDER = ("boss", "dungeon", "encounter", "area", "quest", "enemy", "item")
+#
+# "starting_out" goes first (D65): a new player should see the "How do I get started" chip
+# before anything else the corpus offers, when a game has one.
+_CHIP_SECTION_TYPE_ORDER = ("starting_out", "boss", "dungeon", "encounter", "area", "quest", "enemy", "item")
 
 # Insertion order is the display order for compat chips — see _compat_chip_candidates.
 # Note "deck" is textually identical to a static carousel seed (src/data/presets.ts), so it is
@@ -164,11 +167,28 @@ def _truncate_chip_text(text: str, max_len: int = _CHIP_TEXT_MAX_LEN) -> str:
     return (cut or t[: max_len - 1]).rstrip("?., ") + "?"
 
 
-def _curtail_section_to_chip(section_type: str, name: str) -> str:
+def _starting_out_game_name(name: str, game_title: str) -> str:
+    """The game name a "starting out" chip should say — the game's own title when known,
+
+    else whatever follows "Starting out in " in the note's own name (every real row is named
+    that way; see strategy_seed.json), else the raw name as a last resort."""
+    gt = (game_title or "").strip()
+    if gt:
+        return gt
+    n = (name or "").strip()
+    prefix = "starting out in "
+    if n.lower().startswith(prefix):
+        return n[len(prefix):].strip() or n
+    return n
+
+
+def _curtail_section_to_chip(section_type: str, name: str, *, game_title: str = "") -> str:
     st = (section_type or "").strip().lower()
     n = (name or "").strip()
     if not n:
         return ""
+    if st == "starting_out":
+        return _truncate_chip_text(f"How do I get started in {_starting_out_game_name(n, game_title)}?")
     if st == "boss":
         return _truncate_chip_text(f"How do I beat {n}?")
     if st == "dungeon":
@@ -291,8 +311,14 @@ def suggest_chip_candidates(
         seen: set[str] = set()
 
         if game_id is not None:
+            # Read once per call, not once per row -- the "starting out" chip names the game
+            # itself rather than the note's own name (see _starting_out_game_name).
+            game_row = conn.execute(
+                "SELECT canonical_title FROM games WHERE game_id = ?", (game_id,)
+            ).fetchone()
+            game_title = str(game_row["canonical_title"] or "") if game_row else ""
             for section_type, name in _list_game_sections_for_chips(conn, game_id):
-                text = _curtail_section_to_chip(section_type, name)
+                text = _curtail_section_to_chip(section_type, name, game_title=game_title)
                 if not text or text in seen:
                     continue
                 seen.add(text)

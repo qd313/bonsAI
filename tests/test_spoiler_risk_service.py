@@ -85,6 +85,30 @@ class SpoilerRiskServiceTests(unittest.TestCase):
         self.assertEqual(heuristic_band, "high")
         self.assertEqual(blended, "med")
 
+    def test_starting_out_notes_score_lower_than_a_boss_note(self):
+        """D65: a "starting out" card is onboarding, not a spoiler -- it belongs in the same
+
+        low-risk bucket as `mechanic`/`tip`/`compat`, not left out of both sets where it would
+        score the same as a card whose kind nobody has classified at all."""
+        base = dict(
+            ask_mode="strategy",
+            app_id="1547000",
+            question="How do I get started?",
+            game_genres="Action",
+            asked_entity="",
+        )
+        boss_signals = build_spoiler_risk_signals(
+            kb_text="\n[Grand Theft Auto V / boss: Big Smoke]\nWeak point.", **base
+        )
+        starting_out_signals = build_spoiler_risk_signals(
+            kb_text="\n[Grand Theft Auto V / starting_out: Starting out in GTA V]\nGet a car.",
+            **base,
+        )
+        self.assertLess(
+            compute_heuristic_spoiler_risk_score(starting_out_signals),
+            compute_heuristic_spoiler_risk_score(boss_signals),
+        )
+
     def test_extract_kb_section_types(self):
         kb = "\n[Zelda / boss: Ganon]\nTips\n\n[Zelda / area: Temple]\nGo east."
         self.assertEqual(extract_kb_section_types_from_text(kb), ["boss", "area"])

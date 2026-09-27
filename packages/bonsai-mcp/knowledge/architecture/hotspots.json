@@ -81,13 +81,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 934,
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 944,
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 926,
+      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+      "lines": 934,
       "role": ""
     },
     {

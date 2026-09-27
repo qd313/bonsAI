@@ -157,14 +157,30 @@ const KB_DOWNLOAD_RESUME_WINDOW_MS = 10 * 60 * 1000;
  */
 let kbInstallNomicOfferPending = false;
 
+/*
+ * The meaning-search model's pull outlives this section for the same reason a download does: the
+ * offer's Download closes a Decky modal, which remounts the section. The new copy read "missing"
+ * once on mount and never looked again, so the hint stayed on the open tab for over a minute after
+ * the model landed (docs/test-evidence/plan70-R5.json). Module scope lets a remounted copy keep
+ * polling; cleared when a poll sees the model, or after the window so a failed pull cannot poll
+ * forever.
+ */
+let kbNomicPullStartedAtMs: number | null = null;
+const KB_NOMIC_PULL_RESUME_WINDOW_MS = 15 * 60 * 1000;
+
 function kbDownloadLikelyInFlight(): boolean {
   return kbDownloadStartedAtMs != null && Date.now() - kbDownloadStartedAtMs < KB_DOWNLOAD_RESUME_WINDOW_MS;
+}
+
+function kbNomicPullLikelyInFlight(): boolean {
+  return kbNomicPullStartedAtMs != null && Date.now() - kbNomicPullStartedAtMs < KB_NOMIC_PULL_RESUME_WINDOW_MS;
 }
 
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
   kbDownloadStartedAtMs = null;
   kbInstallNomicOfferPending = false;
+  kbNomicPullStartedAtMs = null;
 }
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
@@ -265,9 +281,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
   const [cancelBusy, setCancelBusy] = useState(false);
-  const [nomicPullBusy, setNomicPullBusy] = useState(false);
-  /** Set once a pull is accepted; polls status until the model shows up, then stops. */
-  const [nomicPullStarted, setNomicPullStarted] = useState(false);
+  const [nomicPullBusy, setNomicPullBusy] = useState(kbNomicPullLikelyInFlight);
+  /** Set once a pull is accepted (by this copy or one before a remount); polls status until the model shows up. */
+  const [nomicPullStarted, setNomicPullStarted] = useState(kbNomicPullLikelyInFlight);
   const primaryBtnRefLocal = useRef<HTMLButtonElement | null>(null);
   const removeBtnRef = useRef<HTMLButtonElement | null>(null);
   const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -425,7 +441,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     if (!nomicPullStarted) return;
     const id = window.setInterval(() => {
       void refreshStatus().then((st) => {
-        if (st?.embed_model_available === true) {
+        if (st?.embed_model_available === true || !kbNomicPullLikelyInFlight()) {
+          kbNomicPullStartedAtMs = null;
           setNomicPullStarted(false);
           setNomicPullBusy(false);
         }
@@ -490,6 +507,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           // moment after pressing it, which reads as "nothing happened". The poll below
           // clears it for real: once the model lands, embed_model_available flips true
           // and the whole hint unmounts.
+          kbNomicPullStartedAtMs = Date.now();
           setNomicPullStarted(true);
           toaster.toast({
             title: "Pulling nomic-embed-text",

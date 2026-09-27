@@ -8,7 +8,7 @@
  */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { KnowledgeBaseSection } from "./KnowledgeBaseSection";
+import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
 import { getRpcCallLog, ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 function renderInstalled(overrides: Record<string, unknown> = {}) {
@@ -39,6 +39,7 @@ const pullCalls = () => getRpcCallLog().filter((c) => c.method === "pull_ollama_
 describe("KnowledgeBaseSection nomic-embed-text pull", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+    resetKbDownloadInFlightForTests();
   });
 
   it("shows a Pull button when hybrid vectors exist but the embed model is unavailable", async () => {
@@ -102,6 +103,39 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
       () => {
         expect(screen.queryByText("Pulling… (Ollama → Where AI runs)")).toBeNull();
         expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+      },
+      { timeout: 10000 },
+    );
+  }, 15000);
+
+  it("clears the hint when the model lands even if the section was remounted mid-pull", async () => {
+    // Measured on the Deck (docs/test-evidence/plan70-R5.json): the offer's Download closes a
+    // Decky modal, which remounts this section. The new copy had no idea a pull was running,
+    // read "missing" once on mount and never looked again, so "Pull nomic-embed-text" stayed
+    // on the open tab for over a minute after nomic-embed-text:latest had landed.
+    const first = renderInstalled();
+    fireEvent.click(await screen.findByText("Pull nomic-embed-text"));
+    await screen.findByText("Pulling… (Ollama → Where AI runs)");
+    first.unmount();
+
+    // The remounted copy's first status read still sees the model missing...
+    renderInstalled();
+    expect(await screen.findByText("Pulling… (Ollama → Where AI runs)")).toBeTruthy();
+
+    // ...then the pull finishes and the back end reports the model on the Ask host.
+    setRpcHandler("get_rag_corpus_status", () =>
+      ragCorpusStatusFixture({
+        installed: true,
+        corpus_version: "2026.09.26",
+        embeddings_populated: true,
+        embed_model_available: true,
+      }),
+    );
+    await waitFor(
+      () => {
+        expect(screen.queryByText("Pulling… (Ollama → Where AI runs)")).toBeNull();
+        expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+        expect(screen.queryByText(/Keyword \+ meaning search\./)).toBeNull();
       },
       { timeout: 10000 },
     );

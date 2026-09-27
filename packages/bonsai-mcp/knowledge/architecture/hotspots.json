@@ -21,6 +21,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1420,
+      "role": ""
+    },
+    {
       "path": "src/index.tsx",
       "lines": 1328,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -28,11 +33,6 @@
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1327,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1238,
       "role": ""
     },
     {

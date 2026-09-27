@@ -42,7 +42,11 @@ from backend.services.knowledge_base_service import (
     _get_connection,
     _load_section_vectors,
     _search_compat_patterns,
+    _game_tip_query_terms,
+    _reroute_to_game_tip_if_it_fits,
+    _resolve_game_id,
     COMPAT_TOPIC_RECALL_K,
+    GAME_TIP_REROUTE_FLOOR,
     STRATEGY_MEANING_FLOOR,
     _vector_recall_sections,
     VECTOR_RECALL_FLOOR,
@@ -166,6 +170,151 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     )
     self.assertFalse(ok)
     self.assertEqual(domain, "")
+
+  def test_per_game_tip_reroutes_a_speed_mode_question_the_topic_router_misses(self):
+    """Plan 70 helper E2. Measured on the Deck 2026-09-26
+    (docs/test-evidence/plan70-R-R4-try2.json): "the text on screen looks blurry" never
+    reaches Deep Rock Galactic: Survivor's own Render Scale tip, because Speed mode is not a
+    declared-game Ask and neither the phrase gate nor the topic router recognise the word
+    "blurry" alone -- so `should_retrieve_knowledge` hands this turn domain="strategy",
+    exactly as it does here. The tip must still attach."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="speed",
+      question="the text in this game looks blurry on my deck, how do i fix it",
+      app_id="2321470",
+      app_name="Deep Rock Galactic: Survivor",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Render Scale", result.text_block)
+
+  def test_per_game_tip_reroutes_even_when_strategy_mode_locked_the_domain(self):
+    """Same Deck bug, Strategy mode. `should_retrieve_knowledge` locks a declared-game Ask to
+    domain="strategy" before it ever reads the question -- so a real troubleshooting question
+    asked in Strategy mode reaches retrieval exactly as this test calls it, and the tip must
+    still win out over that lock."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="the text on screen looks blurry on my deck",
+      app_id="2321470",
+      app_name="Deep Rock Galactic: Survivor",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Render Scale", result.text_block)
+
+  def test_per_game_tip_reroutes_a_launch_option_question_with_no_topic_match(self):
+    """Same Deck evidence, Fallout 4: "what launch options should I use" matches no compat
+    topic rule at all, so before this fix the maintainer's F4SE launch option never reached an
+    answer and an unrelated strategy note (Stimpaks and chems) was attached instead."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="speed",
+      question="how do i get mods working, what launch options should i use",
+      app_id="377160",
+      app_name="Fallout 4",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn('F4SE', result.text_block)
+
+  def test_strategy_question_about_the_game_does_not_get_a_deck_tip(self):
+    """The brief's own guard rail: a real strategy question about the same game that ships a
+    per-game tip must stay clean. Deep Rock Galactic: Survivor's boss card attaches as usual;
+    its unrelated Render Scale tip does not ride along."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="how do i beat the dreadnought",
+      app_id="2321470",
+      app_name="Deep Rock Galactic: Survivor",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Dreadnought", result.text_block)
+    self.assertNotIn("Render Scale", result.text_block)
+
+  def test_game_tip_reroute_ignores_orphan_apostrophe_fragments(self):
+    """A bare "s" or "t" left over from splitting "there's" / "can't" on the apostrophe used
+    to match almost any short tip by accident -- 9 of 18 false positives found while measuring
+    GAME_TIP_REROUTE_FLOOR were nothing but this. "how do i beat the dreadnought" carries no
+    apostrophe; this pins the fragment itself stays out of the query."""
+    self.assertNotIn("s", _game_tip_query_terms("there's a boss that keeps beating me"))
+    self.assertNotIn("t", _game_tip_query_terms("i can't get past this part"))
+
+  def test_game_tip_reroute_ignores_generic_tip_boilerplate_verbs(self):
+    """"fix", "get", "run" and "start" sit in nearly every tip's own template sentence
+    ("starts the game", "runs on...", "fixes...") and inflated a strategy question's score on
+    nothing but that one shared word -- see GAME_TIP_REROUTE_FLOOR's own measurement."""
+    terms = _game_tip_query_terms("how do i fix this, get it running, and start over")
+    for boilerplate_word in ("fix", "get", "running", "start"):
+      self.assertNotIn(boilerplate_word, terms)
+
+  def test_game_tip_reroute_stays_below_floor_for_every_measured_strategy_row(self):
+    """The numbers behind GAME_TIP_REROUTE_FLOOR: every tune/holdout strategy-domain question
+    in kb_eval_v2.json for a game that ships a per-game tip must score under the floor, or it
+    would wrongly get a Deck tip attached to an ordinary strategy answer."""
+    fixture_path = REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json"
+    rows = json.loads(fixture_path.read_text(encoding="utf-8"))["queries"]
+    game_names = {
+      "2321470": "Deep Rock Galactic: Survivor",
+      "377160": "Fallout 4",
+      "1547000": "Grand Theft Auto: San Andreas",
+    }
+    conn = _get_connection(str(SEED_DB))
+    checked = 0
+    false_positives = []
+    for row in rows:
+      if row.get("domain") != "strategy":
+        continue
+      app_id = str(row.get("app_id") or "")
+      shortcut = str(row.get("shortcut") or "").strip().lower()
+      app_name = ""
+      text_resolved = ""
+      if app_id in game_names:
+        app_name = game_names[app_id]
+      elif not app_id and shortcut == "ocarina of time":
+        text_resolved = "The Legend of Zelda: Ocarina of Time"
+      else:
+        continue
+      game_id, _ = _resolve_game_id(
+        conn, app_id=app_id, app_name=app_name, shortcut_name=row.get("shortcut", ""),
+        text_resolved_title=text_resolved,
+      )
+      if game_id is None:
+        continue
+      checked += 1
+      expanded = _expand_query(row["query"], app_name or text_resolved, game_resolved=True)
+      reroute, _ = _reroute_to_game_tip_if_it_fits(conn, game_id=game_id, expanded_question=expanded)
+      if reroute:
+        false_positives.append((row["id"], row["query"]))
+    self.assertGreater(checked, 0, "no fixture rows for the four per-game-tip games were found")
+    self.assertEqual(
+      false_positives, [],
+      f"a strategy question wrongly reroutes to a Deck tip (floor={GAME_TIP_REROUTE_FLOOR}): {false_positives}",
+    )
 
   def test_soh_alias_resolves_to_oot_cards(self):
     settings = {

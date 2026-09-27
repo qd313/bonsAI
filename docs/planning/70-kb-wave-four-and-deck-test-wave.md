@@ -447,6 +447,24 @@ only if the reading with a game running says memory is tight.
   reads this turn's own knowledge-base routing as a troubleshooting signal, not only the fixed word list,
   so a hardware-wear question with none of those words still reads "low" (`7b2bc753`). Both close the
   gaps the first Deck pass found; Deck re-check owed on both.
+- **14:00 to 20:00 — the afternoon Deck blocks (L2 to L6) and the second usage stop** (reset 14:00; resumed by
+  message). Results are in the roadmap and `docs/test-evidence/plan70-*.json`; the headline is the spoiler fix passing
+  on the Deck (229 reads). At 17:52 a plugin reload with Black Mesa running made Decky restart Steam's interface and
+  the screens never came back; the maintainer restarted Steam by hand. Rule since: never reload with a game running.
+- **20:04 — the overnight command's first real run** finished end to end in 76 s, but all 30 saved walks read
+  "different": the panel is closed after a deploy and each walk needs its own start screen. Next step recorded.
+- **20:30 to 21:00 — the release library on the Deck (flow R):** new games, notes and the starting-out chip pass;
+  **the per-game Deck tips never reached an answer.** Not published; the maintainer: "Fix the tips first, then publish".
+  Two new ring bugs over a running game; F2 fixed the hidden "Save chat to Desktop" one (`12ee3dfb`) and wrote the
+  measurements the chip-then-Ask trap needs.
+- **21:40 — E2's tip fix landed** (`e1bc0c16`): a running game's own tip is checked against every question by keyword
+  before anything else sorts it. Landing it broke three follow-up tests on an older library: the check read a column a
+  library from before 26 September doesn't have, the plugin never adds it to an installed library, and the failure
+  emptied every answer's notes. **Fixed by the session** (`c1ca8b7d`, test proven by breaking it). That covers anyone
+  still on the library now on the download sites.
+- **21:55 — the last Deck block started** (tips re-check, the hidden ring, the chip-trap reading; then publish, the
+  fresh download, restoring the chats). Helper O started on E2's other find: contractions leave a stray letter in
+  every keyword search.
 
 ## 11. Report
 

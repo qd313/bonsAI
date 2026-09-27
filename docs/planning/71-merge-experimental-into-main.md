@@ -164,14 +164,14 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
     to download Ollama (about … GB)." Recommended: shown the first time for each site, as the
     maintainer suggested; after that, only the size shows, on the button itself. The real address and
     size are read from the code for each button, never typed from memory.
-  - **An Internet permission** in the permissions list, beside the Steam and microphone ones. Off on a
+  - **A download permission** in the permissions list, beside the Steam and microphone ones. Off on a
     fresh install. While it is off, nothing reaches the internet — including the recommended-models
     list, which today refreshes itself from GitHub without asking. The first download notice doubles
     as the question "turn on internet downloads?", so a new player is not sent hunting for a switch.
     The kids lock forces it off, like the planned web-search permission.
-  - **Not the same as the planned web-search permission.** That one (live answers from the web) stays
-    after 0.6.0. Recommended: this new switch is named for what it does today — downloads — so the
-    later one can sit beside it without confusion.
+  - **Downloads only — the maintainer's call 2026-09-26.** This switch covers downloads and nothing
+    else, and is named for that. The planned web-search permission (live answers from the web) stays a
+    separate switch and a separate roadmap entry, after 0.6.0.
 - **Stop adding new screenshots and recordings to the repo** (question 3): the Deck tools write pictures and
   videos to a folder the repo ignores; written reports keep going in. Done before the session starts, so
   its own evidence follows the new rule.

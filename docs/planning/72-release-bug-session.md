@@ -160,7 +160,7 @@ as it is then.
 
 | Lane | What it fixes | Needs the Deck first? | Can start |
 |---|---|---|---|
-| **1 · Downloads and the Internet switch** | The notice before every download; the new Internet permission, off by default; the recommended-models refresh gated behind it; a downloaded model joining the list that picks who answers | No — built from the code; checked on the Deck after | **Now**, if plan 70 has none of the download files in flight |
+| **1 · Downloads and the download permission** | The notice before every download; the new download permission (downloads only, the maintainer's call 2026-09-26; live web search is not part of it), off by default; the recommended-models refresh gated behind it; a downloaded model joining the list that picks who answers | No — built from the code; checked on the Deck after | **Now**, if plan 70 has none of the download files in flight |
 | **2 · Chat and Stop, behind the scenes** | Stop keeps the model loaded; clearing a chat mid-answer no longer loses it; deleting a chat whose file is gone removes its row | No | **Now**, same check with plan 70 |
 | **3 · The answer's words** | The thinking line's rule checklist, stray marks and raw heading; the softer Strategy opening; the credit line hiding a protected name | No | **After plan 70 lands** — these files are where plan 70's spoiler work lives |
 | **4 · The chat area's look** | Question bubble (option D); the "Not helpful" reason chips; the summary card behind the dock; the thin strip under the game line | **Yes** — flow P measurements in the brief | After the first Deck block |

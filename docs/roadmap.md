@@ -403,11 +403,12 @@ replace it with a specific issue when one exists.
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
   **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
   night. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
-- ★★★ `[perms]` **Say where a download goes before it starts, and an Internet permission to gate it** —
+- ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** —
   **OPEN, from the maintainer 2026-09-26, wanted before 0.6.0.** Install/update Ollama, model downloads,
   voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
   https://… to download …"), at least the first time per site. A new permission, off by default, gates
-  every download and the automatic model-list refresh. Plan 72, lane 1.
+  every download and the automatic model-list refresh. Downloads only (the maintainer, 2026-09-26); live
+  web search stays the separate Web permission entry, after 0.6.0. Plan 72, lane 1.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up

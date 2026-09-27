@@ -50,6 +50,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
+from backend.services.knowledge_base_cards import _COMPAT_GAME_TITLE
 from backend.services.spoiler_risk_service import (
     compute_spoiler_risk_band,
     parse_bonsai_spoiler_risk_tag,
@@ -435,6 +436,28 @@ def _captured_date(value: Any) -> str:
 _NO_SOURCE_LABEL = "No source page"
 
 
+def _kb_tip_source_line(kb_sources: Any) -> str:
+    """The knowledge-base card's "Source:" line on a tips turn.
+
+    Each source title is "<game> — <tip>"; a shared tip's game is ``_COMPAT_GAME_TITLE``, a game's
+    own tip's is that game (``_label_own_game_tips``). Seen on the Deck (plan 72): this line said
+    "shared troubleshooting tips" over Deep Rock Galactic: Survivor's own tip.
+    """
+    games: list[str] = []
+    shared = False
+    for item in kb_sources or []:
+        title = str(item.get("title") or "") if isinstance(item, dict) else ""
+        game = title.rsplit(" — ", 1)[0].strip() if " — " in title else ""
+        if not game or game == _COMPAT_GAME_TITLE:
+            shared = True
+        elif game not in games:
+            games.append(game)
+    if not games:
+        return "Source: shared troubleshooting tips"
+    line = f"Source: Deck tips for {' and '.join(games)}"
+    return f"{line}, and shared troubleshooting tips" if shared else line
+
+
 def build_attribution_entries(sources: Any) -> list[dict[str, Any]]:
     """Group per-card sources into one credit line per (source, licence).
 
@@ -570,7 +593,7 @@ def build_context_chips_manifest(
             kb_domain = str(snapshot.get("kb_domain") or "").strip().lower()
             kb_notes = str(snapshot.get("kb_notes") or "").strip().lower()
             if kb_domain == "compat" or kb_notes == "compat_tips":
-                kb_bullets.append("Source: shared troubleshooting tips")
+                kb_bullets.append(_kb_tip_source_line(kb_sources))
             tier = str(snapshot.get("kb_trust_tier") or "").strip()
             if tier:
                 kb_bullets.append(f"Trust tier: {tier}")

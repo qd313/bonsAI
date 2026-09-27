@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 263,
+  "edgeCount": 264,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -83,6 +83,10 @@
       "count": 5
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_cards.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/services/ollama_service.py",
       "count": 5
     },
@@ -108,10 +112,6 @@
     },
     {
       "path": "py_modules/backend/services/chat_turn_recorder.py",
-      "count": 4
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_cards.py",
       "count": 4
     },
     {
@@ -860,7 +860,8 @@
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/knowledge_base_search.py",
-        "py_modules/backend/services/knowledge_base_service.py"
+        "py_modules/backend/services/knowledge_base_service.py",
+        "py_modules/backend/services/transparency_service.py"
       ]
     },
     "py_modules/backend/services/knowledge_base_chips.py": {
@@ -1425,6 +1426,7 @@
     },
     "py_modules/backend/services/transparency_service.py": {
       "imports": [
+        "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/spoiler_risk_service.py"
       ],
       "importedBy": [

@@ -24,6 +24,10 @@ from backend.services.knowledge_base_service import (  # noqa: E402
     close_connection,
     retrieve_knowledge_context,
 )
+from backend.services.transparency_service import (  # noqa: E402
+    build_context_chips_manifest,
+    build_knowledge_base_transparency,
+)
 # The module, not its test class: a class imported by name here would run all of its tests twice.
 import test_knowledge_base_service as kb_service_tests  # noqa: E402
 
@@ -95,6 +99,65 @@ class OwnGameTipLabelTests(unittest.TestCase):
             result.text_block, kb_domain="compat", sources=result.sources
         )
         self.assertEqual([n["game_title"] for n in notes], [""])
+
+    def _source_bullets(self, result, *, kb_domain):
+        """The "Source:" lines Show details' knowledge-base card draws for a real retrieval."""
+        snapshot = build_knowledge_base_transparency(
+            attached=result.attached,
+            trust_tier=result.trust_tier,
+            sources=result.sources,
+            notes=result.notes,
+            timing_ms={},
+            retrieval_method=result.retrieval_method,
+            kb_domain=kb_domain,
+        )
+        manifest = build_context_chips_manifest(snapshot=snapshot)
+        kb_chip = next(c for c in manifest["context_chips"] if c["id"] == "kb")
+        return [b for b in kb_chip["body"]["bullets"] if b.startswith("Source:")]
+
+    def test_show_details_names_the_games_own_tips_as_that_games(self):
+        """Seen on the Deck after the credit fix (plan 72, plan72-F-TIP.json): the same card still
+        said "Source: shared troubleshooting tips" over Deep Rock Galactic: Survivor's own tip.
+        The turn reached the tip by the per-game reroute, so its domain is still "strategy"."""
+        result = self._drg_blurry_text()
+        self.assertEqual(result.notes, "compat_tips")
+        self.assertEqual(
+            self._source_bullets(result, kb_domain="strategy"),
+            ["Source: Deck tips for Deep Rock Galactic: Survivor"],
+        )
+
+    def test_show_details_keeps_shared_tips_shared(self):
+        result = retrieve_knowledge_context(
+            _settings(),
+            ask_mode="speed",
+            question="my game keeps crashing right after launch on my deck",
+            app_id="377160",
+            app_name="Fallout 4",
+            domain="compat",
+            pc_ip="",
+        )
+        self.assertEqual(
+            self._source_bullets(result, kb_domain="compat"), ["Source: shared troubleshooting tips"]
+        )
+
+    def test_show_details_names_both_when_a_turn_attaches_both(self):
+        own = {"title": "Fallout 4 — proton", "url": "", "license": "", "captured": ""}
+        shared = {"title": f"{_COMPAT_GAME_TITLE} — display", "url": "", "license": "", "captured": ""}
+        result = type(
+            "R",
+            (),
+            {
+                "attached": True,
+                "trust_tier": "fallback_no_source",
+                "sources": [own, shared],
+                "notes": "compat_tips",
+                "retrieval_method": "keyword",
+            },
+        )()
+        self.assertEqual(
+            self._source_bullets(result, kb_domain="compat"),
+            ["Source: Deck tips for Fallout 4, and shared troubleshooting tips"],
+        )
 
     def test_a_library_from_before_per_game_tips_keeps_the_shared_label(self):
         """No ``app_id`` column at all: nothing to look up, and nothing must raise."""

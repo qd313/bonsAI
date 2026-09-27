@@ -129,6 +129,7 @@ import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
   kbNotesToShow,
+  kbCreditsView,
   focusKbNotesBlock,
   focusUpPastLiveKbNotesBlock,
   focusUpPastSessionContextStripKbNotesBlock,
@@ -164,7 +165,7 @@ import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
 import { useLiveTurnHeaderRingRestore } from "../hooks/useLiveTurnHeaderRingRestore";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
 import { type SessionContextTurn } from "./SessionContextStrip";
-import { creditsHiddenForSpoiler, transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
+import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
 import type {
   AppliedResult,
   AskThreadCollapsedTurn,
@@ -553,12 +554,25 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
      view the moment it opens — lifted into its own hook, called from exactly the spot this block
      occupied (tests/test_ask_hook_order.py). */
   const { isKbNotesOpen, toggleKbNotesOpen, kbNotesHeaderElRefs } = useKbNotesFold();
-  /* Show details keeps a turn's credit line hidden while it would name a spoiler the notes block
-     still hides — until that same turn's block is opened (maintainer's call, 2026-09-27). */
-  const creditsHiddenFor = (
-    turnKey: string,
-    snap: Parameters<typeof creditsHiddenForSpoiler>[0]
-  ) => creditsHiddenForSpoiler(snap, strategySpoilerMaskingEnabled, isKbNotesOpen(turnKey));
+  /* Show details never names a spoiler the notes block hides: see kbCreditsView for the rule.
+     Asked per turn key, with that turn's own question and answer. */
+  const creditsViewFor = (turnKey: string, snap: Parameters<typeof kbAttachedNotesFrom>[0]) => {
+    const archived = askThreadCollapsed.find((t) => t.id === turnKey);
+    const turnText =
+      archived ??
+      (turnKey === "live"
+        ? {
+            question: liveQuestion || lastExchange?.question || "",
+            answer: isAsking ? liveResponseBody : lastExchange?.answer ?? "",
+          }
+        : {});
+    return kbCreditsView(
+      turnText,
+      strategySpoilerMaskingEnabled,
+      kbAttachedNotesFrom(snap),
+      isKbNotesOpen(turnKey)
+    );
+  };
 
   /* Re-render whenever a spoiler fence opens or closes anywhere, so kbNotesBlockedBySpoiler's
      read of anySpoilerFenceOpen() below is never stale — lifted into its own hook, called from
@@ -1249,7 +1263,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       setTransparencyDetailsOpen,
                       sumUp: chatSumUp,
                       answerInFlight: isAsking,
-                      creditsHiddenFor,
+                      creditsViewFor,
                     })}
                   </div>
                 ) : null}
@@ -1441,7 +1455,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   setTransparencyDetailsOpen,
                   sumUp: chatSumUp,
                   answerInFlight: isAsking,
-                  creditsHiddenFor,
+                  creditsViewFor,
                 })}
               </div>
             ) : null}

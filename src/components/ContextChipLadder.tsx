@@ -47,6 +47,9 @@ import {
   chipDevJson,
   chipsFromSnapshot,
   CONTEXT_CHIP_SHOW_ALL_MAX,
+  CREDITS_SHOWN,
+  creditCardLabel,
+  type CreditsView,
   SPOILER_HIDDEN_CREDITS_TEXT,
   windowRange,
 } from "../utils/contextChipsFromSnapshot";
@@ -105,11 +108,12 @@ export type ContextChipLadderProps = {
    */
   rootRef?: (el: HTMLElement | null) => void;
   /**
-   * Keep the credit block's sources and note names hidden, showing one plain line instead — true
-   * while this turn hid a spoiler and its notes block has not been opened yet (see
-   * creditsHiddenForSpoiler in contextChipsFromSnapshot.ts). Text only: adds no D-pad stop.
+   * How the credit block treats a spoiler-protected note: the whole line swapped for one plain
+   * sentence, or a protected name swapped for its neutral title (CreditsView,
+   * contextChipsFromSnapshot.ts). Absent: credits show as they always did. Text only: adds no
+   * D-pad stop.
    */
-  creditsHidden?: boolean;
+  creditsView?: CreditsView;
 };
 
 /**
@@ -150,7 +154,7 @@ export function ContextChipLadder({
   onMoveDownFromLadder,
   devDiagnostics = null,
   rootRef,
-  creditsHidden = false,
+  creditsView = CREDITS_SHOWN,
 }: ContextChipLadderProps) {
   const chips = chipsFromSnapshot(snapshot);
   const [expanded, setExpanded] = useState(!collapsedHint);
@@ -344,7 +348,7 @@ export function ContextChipLadder({
       <ChipExpandedBody
         chip={active}
         devDiagnostics={active.id === "developer" ? devDiagnostics : null}
-        creditsHidden={creditsHidden}
+        creditsView={creditsView}
       />
     </Focusable>
   );
@@ -379,12 +383,13 @@ export function ContextChipLadder({
 function ChipExpandedBody({
   chip,
   devDiagnostics,
-  creditsHidden = false,
+  creditsView = CREDITS_SHOWN,
 }: {
   chip: ContextChip;
   devDiagnostics?: AskDiagnosticsSnapshot | null;
-  creditsHidden?: boolean;
+  creditsView?: CreditsView;
 }) {
+  const creditsHidden = creditsView.hidden;
   const bullets = chipBodyBullets(chip);
   const paths = chipBodyPaths(chip);
   const attribution = chipAttribution(chip);
@@ -428,9 +433,11 @@ function ChipExpandedBody({
               ) : null}
               {entry.cards.length > 0 ? (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 3 }}>
-                  {entry.cards.map((card) => (
+                  {entry.cards.map((rawCard, cardIndex) => {
+                    const card = creditCardLabel(rawCard, creditsView);
+                    return (
                     <span
-                      key={card}
+                      key={`${cardIndex}|${card}`}
                       title={card}
                       style={{
                         display: "inline-block",
@@ -447,7 +454,8 @@ function ChipExpandedBody({
                     >
                       {card}
                     </span>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : null}
             </div>

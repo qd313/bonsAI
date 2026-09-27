@@ -90,22 +90,33 @@ export function chipHasAttribution(chip: ContextChip): boolean {
 export const SPOILER_HIDDEN_CREDITS_TEXT = "Sources hidden — open the notes to see them";
 
 /**
- * True when Show details must keep this turn's credit line hidden: the turn has a note the back
- * end marked spoiler-protected (a boss or enemy the question never named), spoiler covers are on,
- * and the person has not opened that turn's "From the notes" block. The credit line lists every
- * note by name ("Soul Master · No source page"), so without this it gave away the very name the
- * rest of the screen hides (maintainer's call, 2026-09-27). Opening the block is the person's own
- * choice to read the note, so from then on the credits show exactly as they always did; answers
- * with nothing protected are never affected. `maskingEnabled` undefined counts as on, the same
- * default the notes block itself uses (buildKbNotesBlockElement.tsx, kbNotesToShow).
+ * How Show details draws one turn's credit line when that turn has a spoiler-protected note (a boss
+ * or enemy the question never named). Worked out per turn by kbCreditsView
+ * (buildKbNotesBlockElement.tsx), which owns the notes block this follows:
+ * - `hidden`: the protected note is in the turn's "From the notes" block and the block is still
+ *   closed -- the whole credit line gives way to SPOILER_HIDDEN_CREDITS_TEXT until the person opens
+ *   the block (maintainer's call, 2026-09-27).
+ * - `renames`: protected notes the answer never used, so no block will ever show them -- their name
+ *   in the credit line becomes the block's own neutral title ("Boss note (spoiler)"), so nothing
+ *   leaks and nothing points at a block that is not there. Keyed by note name.
  */
-export function creditsHiddenForSpoiler(
-  snapshot: Pick<TransparencySnapshot, "kb_attached_notes"> | null | undefined,
-  maskingEnabled: boolean | undefined,
-  notesOpen: boolean,
-): boolean {
-  if (maskingEnabled === false || notesOpen) return false;
-  return (snapshot?.kb_attached_notes ?? []).some((n) => n.spoiler_protected === true);
+export type CreditsView = { hidden: boolean; renames: Record<string, string> };
+
+/** Every turn with nothing protected, and every turn with spoiler covers off. */
+export const CREDITS_SHOWN: CreditsView = { hidden: false, renames: {} };
+
+/**
+ * One credited card's label under a CreditsView. A card is titled "<game> — <note name>"
+ * (kb_attached_notes.py builds the same key) or, for a note with no game, just the name; either
+ * way only the name part is swapped.
+ */
+export function creditCardLabel(card: string, view: CreditsView): string {
+  for (const [name, neutral] of Object.entries(view.renames)) {
+    if (card === name) return neutral;
+    const tail = ` — ${name}`;
+    if (card.endsWith(tail)) return `${card.slice(0, -tail.length)} — ${neutral}`;
+  }
+  return card;
 }
 
 /** Warm parchment, distinct from every tier colour. Reads as a citation, not a warning. */

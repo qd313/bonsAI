@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 531,
-  "edgeCount": 1440,
+  "edgeCount": 1442,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4533,6 +4533,7 @@
         "src/types/bonsaiUi.ts",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/chatPanelScroll.ts",
+        "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
@@ -4548,6 +4549,7 @@
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/features/unified-input/constants.ts",
+        "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
@@ -4780,6 +4782,8 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/utils/buildDetailsPanelElement.tsx",
+        "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/contextChipsFromSnapshot.test.ts"
       ]
     },

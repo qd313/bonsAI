@@ -16,10 +16,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
 
 /* Which notes an answer used has its own tests (kbNoteUsedByAnswer.test.ts); here every attached
-   note counts as used so the block's presence depends only on what this file is about. */
+   note counts as used so the block's presence depends only on what this file is about -- except
+   in the describe that turns the real rule back on for a note the answer never used. */
+const usedRule = vi.hoisted(() => ({ countEveryNote: true }));
 vi.mock("../utils/kbNoteUsedByAnswer", async (importOriginal) => {
   const real = await importOriginal<typeof import("../utils/kbNoteUsedByAnswer")>();
-  return { ...real, kbNotesUsedByAnswer: (notes: unknown[]) => notes };
+  return {
+    ...real,
+    kbNotesUsedByAnswer: (...args: Parameters<typeof real.kbNotesUsedByAnswer>) =>
+      usedRule.countEveryNote ? args[0] : real.kbNotesUsedByAnswer(...args),
+  };
 });
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
@@ -47,7 +53,8 @@ function soulMaster(overrides: Partial<KbAttachedNote> = {}): KbAttachedNote {
 }
 
 /* The knowledge chip exactly as the back end builds it for this turn: one credit group with no
-   source page, naming the note (transparency_service.build_attribution_entries). */
+   source page, naming the note by its source title, "<game> — <name>"
+   (kb_attached_notes.py, transparency_service.build_attribution_entries). */
 const KB_CHIP: ContextChip = {
   id: "kb",
   rank: 1,
@@ -58,7 +65,7 @@ const KB_CHIP: ContextChip = {
     title: "Local knowledge base",
     paths: [],
     bullets: [],
-    attribution: [{ source: "No source page", license: "", url: "", cards: ["Soul Master"] }],
+    attribution: [{ source: "No source page", license: "", url: "", cards: ["Hollow Knight — Soul Master"] }],
   },
 };
 
@@ -122,6 +129,7 @@ function openNotesBlock(container: HTMLElement) {
 
 beforeEach(() => {
   resetSpoilerFenceOpenCountForTests();
+  usedRule.countEveryNote = true;
 });
 
 describe("an answer that hid a spoiler", () => {
@@ -195,5 +203,33 @@ describe("an answer that hid nothing", () => {
     expect(text).toContain("No source page");
     expect(text).toContain("Soul Master");
     expect(text).not.toContain(HIDDEN_TEXT);
+  });
+});
+
+describe("an answer that attached a protected note but never used it (no notes block)", () => {
+  // The real used-note rule: this answer shares nothing with the note, so no block appears.
+  const unused = turnWith([soulMaster()], "Rest at a bench first.");
+
+  it("shows the credit line with the note's neutral title, never its name, and no pointer to a block", () => {
+    usedRule.countEveryNote = false;
+    const { container } = render(<MainTabChatTranscript {...props(unused, true)} />);
+    expect(container.querySelector(".bonsai-kb-notes-block")).toBeNull();
+    openShowDetails(container);
+    const text = ladderText(container);
+    expect(text).toContain("No source page");
+    expect(text).toContain("Hollow Knight — Boss note (spoiler)");
+    expect(text).not.toContain("Soul Master");
+    expect(text).not.toContain(HIDDEN_TEXT);
+    const card = Array.from(container.querySelectorAll("span[title]")).find((el) =>
+      (el.getAttribute("title") ?? "").startsWith("Hollow Knight")
+    );
+    expect(card?.getAttribute("title")).toBe("Hollow Knight — Boss note (spoiler)");
+  });
+
+  it("names it when the person has spoiler covers switched off", () => {
+    usedRule.countEveryNote = false;
+    const { container } = render(<MainTabChatTranscript {...props(unused, false)} />);
+    openShowDetails(container);
+    expect(ladderText(container)).toContain("Hollow Knight — Soul Master");
   });
 });

@@ -26,6 +26,7 @@ import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } f
 import { anySpoilerFenceOpen } from "../components/MainTabBonsaiAiMarkdownChunk";
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../features/unified-input/constants";
+import { CREDITS_SHOWN, type CreditsView } from "./contextChipsFromSnapshot";
 
 /**
  * Everyday name for a host the library has already cleared a note from — the header's job is to
@@ -170,6 +171,33 @@ export function kbNotesToShow(
   const used = kbNotesUsedByAnswer(notes, turn.answer, turn.question);
   /* Covers switched off: the person reads spoilers in plain text everywhere, names included. */
   return maskingEnabled === false ? used.map(({ spoiler_protected: _p, ...rest }) => rest) : used;
+}
+
+/**
+ * How Show details' credit line treats this turn's spoiler-protected notes (CreditsView). The
+ * credit line names every attached note, so without this it gave away the name the block hides.
+ * - A protected note the block shows (the answer used it): the whole credit line stays hidden
+ *   until the person opens the block, then shows as usual (maintainer's call, 2026-09-27).
+ * - A protected note the answer never used: no block will ever show it, so "open the notes" would
+ *   point at nothing -- its name in the credit line is swapped for the block's own neutral title
+ *   instead, for good. Judged on the answer alone, not on the spoiler cover: a closed cover only
+ *   delays the block (kbNotesBlockedBySpoiler), it does not remove it.
+ * Covers switched off, or nothing protected: credits show exactly as always.
+ */
+export function kbCreditsView(
+  turn: { question?: string | null; answer?: string | null },
+  maskingEnabled: boolean | undefined,
+  notes: KbAttachedNote[],
+  blockOpen: boolean
+): CreditsView {
+  if (maskingEnabled === false) return CREDITS_SHOWN;
+  const protectedNotes = notes.filter((n) => n.spoiler_protected === true);
+  if (!protectedNotes.length) return CREDITS_SHOWN;
+  const inBlock = new Set(kbNotesUsedByAnswer(notes, turn.answer, turn.question).map((n) => n.name));
+  const hidden = !blockOpen && protectedNotes.some((n) => inBlock.has(n.name));
+  const renames: Record<string, string> = {};
+  for (const n of protectedNotes) if (!inBlock.has(n.name)) renames[n.name] = kbNoteNeutralTitle(n);
+  return { hidden, renames };
 }
 
 /**

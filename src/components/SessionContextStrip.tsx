@@ -48,7 +48,7 @@ import { Focusable } from "@decky/ui";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
 import { ContextChipLadder } from "./ContextChipLadder";
-import { chipsFromSnapshot } from "../utils/contextChipsFromSnapshot";
+import { chipsFromSnapshot, type CreditsView } from "../utils/contextChipsFromSnapshot";
 import {
   isOkDeckButtonEvent,
   isDeckDirectionDownEvent,
@@ -126,12 +126,12 @@ export type SessionContextTabBodyProps = {
   sumUp?: ChatSumUpState | null;
   /** Plan 68: an answer is being written, so the button is greyed out and says so. */
   answerInFlight?: boolean;
-  /** Whether a row's credit line stays hidden for a spoiler, asked by that row's own turn id
+  /** How a row's credit line treats a spoiler, asked by that row's own turn id
    *  (buildDetailsPanelElement.tsx passes the same function its own ladder uses). */
-  creditsHiddenFor?: (
+  creditsViewFor?: (
     turnKey: string,
     snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined
-  ) => boolean;
+  ) => CreditsView;
 };
 
 /**
@@ -163,7 +163,7 @@ export function SessionContextTabBody({
   onRequestClose,
   sumUp = null,
   answerInFlight = false,
-  creditsHiddenFor,
+  creditsViewFor,
 }: SessionContextTabBodyProps) {
   const [activeId, setActiveId] = useState<string>("live");
 
@@ -280,7 +280,7 @@ export function SessionContextTabBody({
         <ContextChipLadder
           snapshot={activeRow.snapshot}
           collapsedHint={false}
-          creditsHidden={creditsHiddenFor?.(activeRow.id, activeRow.snapshot) ?? false}
+          creditsView={creditsViewFor?.(activeRow.id, activeRow.snapshot)}
           rootRef={(el) => {
             sessionLadderEl = el;
           }}

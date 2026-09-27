@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 533,
-  "edgeCount": 1448,
+  "fileCount": 536,
+  "edgeCount": 1451,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -253,6 +253,12 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTab.gameLighter.test.ts": {
+      "imports": [
+        "src/components/MainTab.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.streamScramble.test.tsx": {
       "imports": [
         "src/components/MainTab.tsx",
@@ -284,6 +290,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.dockClass.test.ts",
+        "src/components/MainTab.gameLighter.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
@@ -3681,6 +3688,7 @@
     },
     "src/styles/bonsaiScopeStylesheet.ts": {
       "imports": [
+        "src/styles/sections/gameRunningLighter.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-1.ts",
@@ -3698,6 +3706,7 @@
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
+        "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"
       ]
     },
@@ -3737,6 +3746,18 @@
       "imports": [],
       "importedBy": [
         "src/styles/sections/gamepadAndPullModels.ts"
+      ]
+    },
+    "src/styles/sections/gameRunningLighter.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
+    "src/styles/sections/gameRunningLighter.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
     "src/styles/sections/gamepadAndPullModels.test.ts": {

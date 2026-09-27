@@ -239,6 +239,16 @@ export function mainTabDockClassName(isStreamingPreview: boolean | undefined, st
   return answerArriving ? "bonsai-main-tab-dock bonsai-main-tab-dock--answer-arriving" : "bonsai-main-tab-dock";
 }
 
+/**
+ * The column's class: marked while a game runs and a question is in flight, which holds the
+ * panel's small animations still (gameRunningLighter.ts) -- with a game running the panel drew
+ * 10 to 20 frames a second while an answer arrived (plan 70). Unmarked otherwise.
+ */
+export function mainTabColumnClassName(gameRunning: boolean, isAsking: boolean): string {
+  const steady = isAsking && lighterWhileGameRuns(gameRunning).steady;
+  return steady ? "bonsai-main-tab-column bonsai-main-tab-column--game-steady" : "bonsai-main-tab-column";
+}
+
 /** The Main tab itself — assembles the chat-slot row, transcript and dock. See the file header above for the full flow. */
 export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = useRef<HTMLDivElement | null>(null);
@@ -290,7 +300,7 @@ export function MainTab(props: MainTabProps) {
   return (
     <>
       <PanelSection>
-        <div ref={columnRef} className="bonsai-main-tab-column">
+        <div ref={columnRef} className={mainTabColumnClassName(gameRunning, props.isAsking)}>
         {props.onChatSlotCreate && props.onChatSlotSelect && props.onChatSlotRename && props.onChatSlotDelete ? (
           <PanelSectionRow>
             <ChatSlotRow

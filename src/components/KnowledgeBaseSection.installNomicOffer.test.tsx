@@ -184,7 +184,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
 
     // pullNomicEmbed's own catch handler is reused as-is; its button reverts to idle,
     // which only happens on the failure path (the accepted path leaves it "Pulling…").
-    await screen.findByText("Pull nomic-embed-text");
+    await screen.findByText("Pull nomic-embed-text · about 270 MB");
   });
 
   it("does not ask again after an Update, only after a fresh install", async () => {

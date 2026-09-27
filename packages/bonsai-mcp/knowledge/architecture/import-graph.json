@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 549,
-  "edgeCount": 1489,
+  "fileCount": 556,
+  "edgeCount": 1517,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -212,6 +212,13 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
       ]
     },
+    "src/components/KnowledgeBaseSection.downloadNotice.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -236,11 +243,14 @@
     },
     "src/components/KnowledgeBaseSection.tsx": {
       "imports": [
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/settingsPanelScroll.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
@@ -1326,6 +1336,13 @@
         "src/features/stream-scramble/ScrambledAnswerText.tsx"
       ]
     },
+    "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx": {
+      "imports": [
+        "src/components/VoiceInputSettingsSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/VoiceInputSettingsSection.test.tsx": {
       "imports": [
         "src/components/VoiceInputSettingsSection.tsx",
@@ -1337,11 +1354,14 @@
       "imports": [
         "src/components/PermissionDenyAction.tsx",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/utils/deckyCall.ts",
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
+        "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx",
         "src/components/VoiceInputSettingsSection.test.tsx"
       ]
     },
@@ -1509,6 +1529,8 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/characterUiAccent.ts",
+        "src/features/downloads/downloadNotice.test.tsx",
+        "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -1740,6 +1762,7 @@
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelDownloadNotice.test.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
@@ -2055,6 +2078,43 @@
       "importedBy": [
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/hooks/useChatSlots.ts"
+      ]
+    },
+    "src/features/downloads/downloadNotice.test.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/features/downloads/downloadNotice.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/VoiceInputSettingsSection.tsx",
+        "src/features/downloads/downloadNotice.test.tsx",
+        "src/features/downloads/downloadSites.ts",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
+        "src/hooks/usePullModelCustomTagPull.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/index.tsx"
+      ]
+    },
+    "src/features/downloads/downloadSites.ts": {
+      "imports": [
+        "src/features/downloads/downloadNotice.tsx"
+      ],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/VoiceInputSettingsSection.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
+        "src/hooks/usePullModelCustomTagPull.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx"
       ]
     },
     "src/features/model-routing/useRoutingOrderModal.test.tsx": {
@@ -3109,17 +3169,28 @@
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
+    "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx": {
+      "imports": [
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useLocalOllamaSetupFlow.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/deckEssentialsTags.ts",
         "src/data/modelPolicy.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelCatalogRefresh.ts"
       ],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx"
       ]
     },
     "src/hooks/useMainTabAskBarFocus.test.ts": {
@@ -3252,11 +3323,14 @@
     },
     "src/hooks/usePullModelCustomTagPull.tsx": {
       "imports": [
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelDownloadNotice.test.tsx"
       ]
     },
     "src/hooks/usePullModelDeleteConfirm.tsx": {
@@ -3267,6 +3341,14 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx"
       ]
+    },
+    "src/hooks/usePullModelDownloadNotice.test.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts",
+        "src/hooks/usePullModelCustomTagPull.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx"
+      ],
+      "importedBy": []
     },
     "src/hooks/usePullModelEmbeddedFooterState.ts": {
       "imports": [
@@ -3302,11 +3384,14 @@
         "src/components/PullModelsModal.types.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelDownloadNotice.test.tsx"
       ]
     },
     "src/hooks/usePullModelTableData.ts": {
@@ -3671,6 +3756,7 @@
         "src/data/presets.ts",
         "src/data/pullModelCatalog.ts",
         "src/data/uiScaleProfile.ts",
+        "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/PluginErrorBoundary.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
@@ -4049,6 +4135,7 @@
         "src/types/backgroundAsk.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
@@ -4063,12 +4150,14 @@
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
+        "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx",
         "src/components/VoiceInputSettingsSection.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/voice/useVoiceAskInput.test.ts",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
+        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReplyFeedbackChips.test.ts",
@@ -4127,9 +4216,11 @@
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
+        "src/features/downloads/downloadNotice.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/test-harness/setup.ts",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
@@ -4585,6 +4676,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
@@ -4967,6 +5059,7 @@
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
+        "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",

@@ -44,24 +44,24 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
 
   it("shows a Pull button when hybrid vectors exist but the embed model is unavailable", async () => {
     renderInstalled();
-    expect(await screen.findByText("Pull nomic-embed-text")).toBeTruthy();
+    expect(await screen.findByText("Pull nomic-embed-text · about 270 MB")).toBeTruthy();
   });
 
   it("does not show the button once the embed model is available", async () => {
     renderInstalled({ embed_model_available: true });
     await screen.findByText("Installed");
-    expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+    expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
   });
 
   it("does not show the button when the corpus has no baked vectors at all", async () => {
     renderInstalled({ embeddings_populated: false, embed_model_available: false });
     await screen.findByText("Installed");
-    expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+    expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
   });
 
   it("calls pull_ollama_models with the nomic-embed-text tag when pressed", async () => {
     renderInstalled();
-    const button = await screen.findByText("Pull nomic-embed-text");
+    const button = await screen.findByText("Pull nomic-embed-text · about 270 MB");
 
     fireEvent.click(button);
 
@@ -75,17 +75,17 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
     // service. Snapping back to the idle label here is what made pressing the button look
     // like it did nothing at all.
     renderInstalled();
-    const button = await screen.findByText("Pull nomic-embed-text");
+    const button = await screen.findByText("Pull nomic-embed-text · about 270 MB");
 
     fireEvent.click(button);
 
     expect(await screen.findByText("Pulling… (Ollama → Where AI runs)")).toBeTruthy();
-    expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+    expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
   });
 
   it("stops showing the hint once the model actually arrives", async () => {
     renderInstalled();
-    const button = await screen.findByText("Pull nomic-embed-text");
+    const button = await screen.findByText("Pull nomic-embed-text · about 270 MB");
     fireEvent.click(button);
     await screen.findByText("Pulling… (Ollama → Where AI runs)");
 
@@ -102,7 +102,7 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
     await waitFor(
       () => {
         expect(screen.queryByText("Pulling… (Ollama → Where AI runs)")).toBeNull();
-        expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+        expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
       },
       { timeout: 10000 },
     );
@@ -114,7 +114,7 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
     // read "missing" once on mount and never looked again, so "Pull nomic-embed-text" stayed
     // on the open tab for over a minute after nomic-embed-text:latest had landed.
     const first = renderInstalled();
-    fireEvent.click(await screen.findByText("Pull nomic-embed-text"));
+    fireEvent.click(await screen.findByText("Pull nomic-embed-text · about 270 MB"));
     await screen.findByText("Pulling… (Ollama → Where AI runs)");
     first.unmount();
 
@@ -134,7 +134,7 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
     await waitFor(
       () => {
         expect(screen.queryByText("Pulling… (Ollama → Where AI runs)")).toBeNull();
-        expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+        expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
         expect(screen.queryByText(/Keyword \+ meaning search\./)).toBeNull();
       },
       { timeout: 10000 },
@@ -168,7 +168,7 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
     // The gap is still explained -- naming the host that needs the model.
     expect(await screen.findByText(/192\.168\.1\.50:11434/)).toBeTruthy();
     // ...but the button that would target the wrong machine is gone.
-    expect(screen.queryByText("Pull nomic-embed-text")).toBeNull();
+    expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
     expect(pullCalls()).toHaveLength(0);
   });
 

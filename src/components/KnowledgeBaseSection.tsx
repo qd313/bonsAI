@@ -71,6 +71,8 @@ import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, ToggleF
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
+import { confirmDownload } from "../features/downloads/downloadNotice";
+import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
 
 type RagStorageOption = {
@@ -480,6 +482,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   }, [nomicPullStarted, refreshStatus]);
 
   const startDownload = async (installPath: string, storage: string) => {
+    if (!(await confirmDownload(KNOWLEDGE_LIBRARY_NOTICES))) return;
     kbDownloadStartedAtMs = Date.now();
     setDownloadBusy(true);
     try {
@@ -521,6 +524,12 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    */
   const pullNomicEmbed = () => {
     if (nomicPullBusy) return;
+    void confirmDownload([MEANING_SEARCH_MODEL_NOTICE]).then((go) => {
+      if (go) startNomicPull();
+    });
+  };
+
+  const startNomicPull = () => {
     setNomicPullBusy(true);
     void callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
       "pull_ollama_models",
@@ -577,7 +586,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     onBeforeDeckyModal();
     const handle = showModal(
       <ConfirmModal
-        strTitle="Also download the meaning-search model (about 270 MB)?"
+        strTitle={`Also download the meaning-search model (${MEANING_SEARCH_MODEL_NOTICE.size})?`}
         strDescription={
           <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
             Better note matching for your questions.
@@ -649,6 +658,13 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    */
   const runUpdate = () => {
     if (updateNote?.kind === "checking") return;
+    // Checking for a newer library already reaches the library's sites.
+    void confirmDownload(KNOWLEDGE_LIBRARY_NOTICES).then((go) => {
+      if (go) startUpdate();
+    });
+  };
+
+  const startUpdate = () => {
     setUpdateNote({ kind: "checking", text: "Checking for a newer version…" });
     void callDeckyWithTimeout<[], RagUpdateResult>("update_rag_corpus", [], RAG_UPDATE_RPC_TIMEOUT_MS)
       .then((out) => {
@@ -834,7 +850,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                       ? "Pulling… (Ollama → Where AI runs)"
                       : nomicPullBusy
                         ? "Starting…"
-                        : "Pull nomic-embed-text"}
+                        : `Pull nomic-embed-text · ${MEANING_SEARCH_MODEL_NOTICE.size}`}
                   </Button>
                 </Focusable>
               </div>

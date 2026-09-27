@@ -24,6 +24,8 @@ import { useCallback, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { isPlausibleOllamaPullTag } from "../utils/mergePullModelCatalog";
+import { confirmDownload } from "../features/downloads/downloadNotice";
+import { modelPullNotice } from "../features/downloads/downloadSites";
 
 export type UsePullModelCustomTagPullArgs = {
   customTagInput: string;
@@ -68,6 +70,8 @@ export function usePullModelCustomTagPull(a: UsePullModelCustomTagPullArgs): Pul
   const onPullCustomTag = useCallback(async () => {
     const tag = customTagInput.trim();
     if (!tag || !isPlausibleOllamaPullTag(tag) || customPullBusy || pullBusy) return;
+    // A typed name has no size in the bundled catalog.
+    if (!(await confirmDownload([modelPullNotice([tag], null)]))) return;
     setCustomPullBusy(true);
     try {
       const res = await callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(

@@ -27,6 +27,8 @@ import { VOICE_STT_MODEL_OPTIONS, type VoiceSttModelId } from "../data/bonsaiSet
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import { confirmDownload } from "../features/downloads/downloadNotice";
+import { voiceEngineNotices } from "../features/downloads/downloadSites";
 
 type VoiceEngineStatus = {
   model_id?: string;
@@ -144,6 +146,15 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       });
       return;
     }
+    // Names only what is still missing; Reinstall (nothing missing) names both.
+    const missing = {
+      engineReady: Boolean(engineStatus?.binary_ready),
+      modelReady: Boolean(engineStatus?.model_ready),
+      model: voiceSttModel,
+    };
+    const notices = voiceEngineNotices(missing);
+    const toFetch = notices.length ? notices : voiceEngineNotices({ ...missing, engineReady: false, modelReady: false });
+    if (!(await confirmDownload(toFetch))) return;
     setInstallBusy(true);
     try {
       const out = await callDeckyWithTimeout<[string], { accepted?: boolean; reason?: string }>(

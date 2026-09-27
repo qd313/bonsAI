@@ -46,7 +46,33 @@ import {
   LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
   LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
+  LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
+  LOCAL_SETUP_TIER2_DOWNLOAD_SIZE,
 } from "../components/OllamaWhereAiRunsSection.constants";
+import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
+import {
+  OLLAMA_PROGRAM_NOTICE,
+  OLLAMA_REGISTRY_SITE,
+  OLLAMA_SITE,
+  modelPullNotice,
+} from "../features/downloads/downloadSites";
+
+/** Where each setup profile connects: Ollama itself from ollama.com, the models from the registry. */
+function localSetupDownloadNotices(profile: string): DownloadNotice[] {
+  if (profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED) {
+    return [
+      { site: OLLAMA_SITE, what: "the latest Ollama", size: null },
+      { site: OLLAMA_REGISTRY_SITE, what: "fresh copies of every model already installed", size: null },
+    ];
+  }
+  const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
+  return [
+    OLLAMA_PROGRAM_NOTICE,
+    isTier1
+      ? modelPullNotice([TIER1_ESSENTIALS_TAG], LOCAL_SETUP_TIER1_DOWNLOAD_SIZE)
+      : modelPullNotice([TIER2_MULTIMODAL_TAG], LOCAL_SETUP_TIER2_DOWNLOAD_SIZE),
+  ];
+}
 
 /**
  * The three confirm dialogs, the Cancel RPC, the status-line wording, the setup poll, and the
@@ -219,11 +245,14 @@ export function useLocalOllamaSetupFlow({
                   });
                 });
             };
-            if (isTier2 && onApplyTier2MultimodalPolicy) {
-              void Promise.resolve(onApplyTier2MultimodalPolicy()).then(startSetup);
-            } else {
-              startSetup();
-            }
+            void confirmDownload(localSetupDownloadNotices(profile)).then((go) => {
+              if (!go) return;
+              if (isTier2 && onApplyTier2MultimodalPolicy) {
+                void Promise.resolve(onApplyTier2MultimodalPolicy()).then(startSetup);
+              } else {
+                startSetup();
+              }
+            });
           }}
           onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
         />

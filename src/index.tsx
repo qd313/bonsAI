@@ -156,6 +156,7 @@ import { useSteamSettingsSearch } from "./hooks/useSteamSettingsSearch";
 import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
 import { usePermissionJump } from "./hooks/usePermissionJump";
 import { effectiveCapabilities, useKidsLock } from "./hooks/useKidsLock";
+import { useDownloadPermissionBridge } from "./features/downloads/downloadNotice";
 import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
 import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToolActions";
 import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/plugin-shell/useUnifiedInputBehaviors";
@@ -399,6 +400,15 @@ const Content: React.FC = () => {
     () => effectiveCapabilities(capabilities, kidsLockActive),
     [capabilities, kidsLockActive]
   );
+  // The notice before every download reads the permission, and turns it on, through this.
+  useDownloadPermissionBridge({
+    enabled: gatedCapabilities.internet_downloads,
+    kidsLockActive,
+    capabilities,
+    setCapabilities,
+    onBeforeDeckyModal: captureSessionBeforeModal,
+    onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+  });
 
   const { effectiveLang, steamClientLanguageLabel, t: uiT } = useReplyLanguage(replyLanguage);
 

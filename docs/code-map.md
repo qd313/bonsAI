@@ -233,6 +233,11 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **chatSumUpModel.ts** (src/features/chat-sum-up/chatSumUpModel.ts) — *What the Session tab says about a chat's summary*: The pure half of plan 68's screen: given a chat's saved summary, its turns, and whether the back end says there is anything to sum up, work out every word the Session tab shows — the button's label, the line saying why it is greyed out, the summary card's header, its lines and…
 - **useChatSumUpJob.ts** (src/features/chat-sum-up/useChatSumUpJob.ts) — *The Sum up this chat button's job*: Starts the back end's summary of the open chat when the Session tab's button is pressed, follows it with the same status the Ask uses, and says when it is done, so the button can show "Summing up · 12 s" and the card can appear under it (plan 68 step 5).
 
+## src/features/downloads
+
+- **downloadNotice.tsx** (src/features/downloads/downloadNotice.tsx) — *The notice before every download, and the question that turns downloads on*: Before bonsAI downloads anything -- Ollama, an AI model, the voice engine, the knowledge library -- the player is told in plain words where it will connect and roughly how big it is: bonsAI will connect to https://ollama.com to download Ollama (size not known ahead of time)."…
+- **downloadSites.ts** (src/features/downloads/downloadSites.ts) — *Where each download connects, as the download notice names it*: The address and, where the code knows it, the size for every download button, so the notice before a download says exactly where bonsAI connects. […]
+
 ## src/features/model-routing
 
 - **useRoutingOrderModal.ts** (src/features/model-routing/useRoutingOrderModal.ts) — *"Which model to try first" popup*: Opens the popup where a person orders their installed AI models from most to least preferred — one order for plain questions, another for questions that include a picture. […]

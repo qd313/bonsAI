@@ -23,11 +23,24 @@
 import { useCallback, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { ConfirmModal, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import type { PullModelEntry } from "../data/pullModelCatalog";
+import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
 import { disclosureSummaryForSourceClass, type ModelPolicyTierId } from "../data/modelPolicy";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { findUnavailableRegistryTags } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse } from "../components/PullModelsModal.types";
+import { confirmDownload } from "../features/downloads/downloadNotice";
+import { modelPullNotice } from "../features/downloads/downloadSites";
+
+/** "about N GB" from the bundled catalog, or null when any of the models has no size there. */
+function catalogSizeText(tags: readonly string[], catalog: readonly PullModelEntry[]): string | null {
+  let total = 0;
+  for (const tag of tags) {
+    const gb = catalog.find((e) => e.tag === tag)?.sizeGb;
+    if (typeof gb !== "number" || !(gb > 0)) return null;
+    total += gb;
+  }
+  return `about ${formatSizeGb(total)}`;
+}
 
 export type UsePullModelSubmitSelectedArgs = {
   selectedTags: Set<string>;
@@ -65,6 +78,9 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
     if (selectedTags.size === 0) return;
 
     const runPull = async () => {
+      // Before the registry check below, which already reaches registry.ollama.ai.
+      const queued = [...selectedTags];
+      if (!(await confirmDownload([modelPullNotice(queued, catalogSizeText(queued, mergedCatalog))]))) return;
       setPullBusy(true);
       try {
         const tags = [...selectedTags];

@@ -27,10 +27,11 @@ const LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED = "update_installed";
 /** Shown in setup modals; align with `refactor_helpers.setup_recommended_pull_tags` sizes. */
 const OLLAMA_MODELS_DISK_HINT =
   "Default model folder on this account: /home/deck/.ollama/models (override with the OLLAMA_MODELS environment variable if you moved the store).";
-const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB =
-  "Rough download: about 3–4 GiB (one FOSS multimodal model — chat, screenshots, Strategy).";
-const LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB =
-  "Rough download: about 4–5 GiB (one Gemma 4 edge multimodal model).";
+/** The rough model sizes alone, also named by the download notice (features/downloads). */
+const LOCAL_SETUP_TIER1_DOWNLOAD_SIZE = "about 3–4 GiB";
+const LOCAL_SETUP_TIER2_DOWNLOAD_SIZE = "about 4–5 GiB";
+const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB = `Rough download: ${LOCAL_SETUP_TIER1_DOWNLOAD_SIZE} (one FOSS multimodal model — chat, screenshots, Strategy).`;
+const LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB = `Rough download: ${LOCAL_SETUP_TIER2_DOWNLOAD_SIZE} (one Gemma 4 edge multimodal model).`;
 
 const LOCAL_SETUP_NETWORK_AND_POWER_HINT = (
   <>
@@ -54,5 +55,7 @@ export {
   OLLAMA_MODELS_DISK_HINT,
   LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
   LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB,
+  LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
+  LOCAL_SETUP_TIER2_DOWNLOAD_SIZE,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
 };

@@ -32,6 +32,7 @@ describe("effectiveCapabilities", () => {
       steam_logs_read: true,
       steam_web_api: true,
       microphone_access: true,
+      internet_downloads: true,
     };
     expect(effectiveCapabilities(stored, false)).toEqual(stored);
     expect(effectiveCapabilities(stored, true)).toEqual({
@@ -40,6 +41,7 @@ describe("effectiveCapabilities", () => {
       steam_logs_read: false,
       steam_web_api: false,
       microphone_access: false,
+      internet_downloads: false,
     });
   });
 });

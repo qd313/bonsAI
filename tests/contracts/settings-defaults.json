@@ -8,6 +8,7 @@
   "ask_think_effort": "off",
   "capabilities": {
     "filesystem_write": false,
+    "internet_downloads": false,
     "media_library_access": false,
     "microphone_access": false,
     "steam_logs_read": false,

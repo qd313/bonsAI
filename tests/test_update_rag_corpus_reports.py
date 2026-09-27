@@ -24,7 +24,12 @@ from backend.services import rag_corpus_rpc  # noqa: E402
 
 class _FakePlugin:
     def __init__(self, local_version: str = "2026.09.26", accepted: bool = True, reason: str = "") -> None:
-        self._settings = {"rag_corpus_version": local_version, "rag_corpus_path": "/home/deck/.bonsai/rag"}
+        self._settings = {
+            "rag_corpus_version": local_version,
+            "rag_corpus_path": "/home/deck/.bonsai/rag",
+            # Checking for a newer library is a download (test_internet_downloads_permission.py).
+            "capabilities": {"internet_downloads": True},
+        }
         self._accepted = accepted
         self._reason = reason
         self.download_calls: list[dict] = []

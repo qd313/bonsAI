@@ -37,6 +37,7 @@ const DENIED_CAPABILITIES: BonsaiCapabilities = {
   steam_logs_read: false,
   steam_web_api: false,
   microphone_access: false,
+  internet_downloads: false,
 };
 
 /** Stored caps when unlocked; all-deny when Kids lock is active (does not mutate storage). */

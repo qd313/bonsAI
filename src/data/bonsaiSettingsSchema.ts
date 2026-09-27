@@ -91,6 +91,8 @@ export type BonsaiCapabilities = {
   steam_web_api: boolean;
   /** Local microphone capture for speech-to-text in the Ask bar. */
   microphone_access: boolean;
+  /** Downloads from the internet (Ollama, models, voice engine, knowledge library, model list). */
+  internet_downloads: boolean;
 };
 
 export type VoiceSttModelId = "tiny.en" | "base.en";
@@ -326,6 +328,7 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   steam_logs_read: false,
   steam_web_api: false,
   microphone_access: false,
+  internet_downloads: false,
 };
 
 export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "tiny.en";

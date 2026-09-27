@@ -25,6 +25,7 @@ import os
 from typing import Any
 
 from backend.services.async_background_job import new_asyncio_cancel_event
+from backend.services.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.knowledge_base_schema import (
     default_corpus_dir_internal,
     resolve_corpus_db_path,
@@ -58,6 +59,8 @@ async def get_rag_corpus_status(self, data: Any = None):
 
 async def start_rag_corpus_download(self, data: Any = None):
     """Download and install the knowledge base corpus (user-initiated; Model A consent)."""
+    if not capability_enabled(await self.load_settings(), "internet_downloads"):
+        return downloads_off_refusal()
     install_dir = default_corpus_dir_internal()
     storage = "internal"
     if isinstance(data, dict):
@@ -157,6 +160,10 @@ async def update_rag_corpus(self):
             f" ({detail})" if detail else "",
         )
 
+    if not capability_enabled(settings, "internet_downloads"):
+        # Checking for a newer library already reaches huggingface.co / github.com.
+        log_update("download_not_started", "", "downloads_off")
+        return {**downloads_off_refusal(), "outcome": "download_not_started"}
     try:
         manifest = await asyncio.to_thread(fetch_remote_manifest)
     except Exception as exc:

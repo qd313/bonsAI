@@ -216,7 +216,8 @@
         "media_library_access": false,
         "steam_logs_read": false,
         "steam_web_api": false,
-        "microphone_access": false
+        "microphone_access": false,
+        "internet_downloads": false
       }
     }
   },

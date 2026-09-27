@@ -3,8 +3,8 @@
  *
  * Purpose: The Permissions tab — the screen where you turn on the things the
  * AI is allowed to touch: saving files to your desktop, looking up your
- * Steam ban status, using the microphone, and reading game screenshots and
- * Proton logs to help with troubleshooting. Every one of these starts off
+ * Steam ban status, using the microphone, downloading from the internet, and
+ * reading game screenshots and Proton logs to help with troubleshooting. Every one of these starts off
  * for a new install. Turning a toggle on here is what lets the Python side
  * of the plugin do that thing at all when Ask needs it; leaving it off
  * blocks the request outright, not just hides a button. The screen also
@@ -78,12 +78,20 @@ const ROWS: {
     description:
       "Record from this device's microphone for local speech-to-text in the Ask bar. Audio stays on-device and is never saved.",
   },
+  {
+    key: "internet_downloads",
+    focusId: "internet_downloads",
+    title: "Internet downloads",
+    description:
+      "Lets bonsAI download Ollama, AI models, voice models and the knowledge library, and refresh the recommended-models list. Off, nothing downloads.",
+  },
 ];
 
 const KIDS_LOCK_BANNER =
   "Parental controls active. Steam reports that parental controls are locked " +
   "on this account, so bonsAI keeps every high-impact permission off — no file " +
-  "writes, no screenshots or game logs, no microphone, no Steam ban lookups. Ask " +
+  "writes, no screenshots or game logs, no microphone, no Steam ban lookups, no " +
+  "downloads. Ask " +
   "still works with your local AI. These switches turn back on by themselves when " +
   "Steam's parental controls are unlocked. bonsAI does not filter what the AI says.";
 

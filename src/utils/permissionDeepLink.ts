@@ -36,7 +36,8 @@ export type PermissionFocusTargetId =
   | "game_context_read"
   | "filesystem_write"
   | "steam_web_api"
-  | "microphone_access";
+  | "microphone_access"
+  | "internet_downloads";
 
 const CAPABILITY_TO_FOCUS: Record<BonsaiCapabilityKey, PermissionFocusTargetId> = {
   media_library_access: "game_context_read",
@@ -44,6 +45,7 @@ const CAPABILITY_TO_FOCUS: Record<BonsaiCapabilityKey, PermissionFocusTargetId> 
   filesystem_write: "filesystem_write",
   steam_web_api: "steam_web_api",
   microphone_access: "microphone_access",
+  internet_downloads: "internet_downloads",
 };
 
 /** Standard user-facing deny copy per capability (override per site when context needs it). */
@@ -54,6 +56,7 @@ export const PERMISSION_DENY_MESSAGES: Record<BonsaiCapabilityKey, string> = {
     "Enable Read game & screenshot context in Permissions to auto-attach Proton logs and screenshots.",
   steam_web_api: "Enable Steam ban lookup in Permissions to use bonsai:vac-check.",
   microphone_access: "Enable Voice input (microphone) in Permissions to use speech-to-text.",
+  internet_downloads: "Enable Internet downloads in Permissions to download.",
 };
 
 /** Toggle labels as shown in PermissionsTab — used for Back banner and docs. */
@@ -62,6 +65,7 @@ export const PERMISSION_TOGGLE_LABELS: Record<PermissionFocusTargetId, string> =
   filesystem_write: "Save files to Desktop",
   steam_web_api: "Steam ban lookup",
   microphone_access: "Voice input (microphone)",
+  internet_downloads: "Internet downloads",
 };
 const TAB_LABELS: Record<string, string> = {
   main: "Main",

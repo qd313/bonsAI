@@ -11,6 +11,7 @@ const ALL_ON: BonsaiCapabilities = {
   steam_logs_read: true,
   steam_web_api: true,
   microphone_access: true,
+  internet_downloads: true,
 };
 
 function Harness({ kidsLockActive }: { kidsLockActive: boolean }) {
@@ -35,7 +36,7 @@ describe("PermissionsTab kids lock", () => {
     expect(document.querySelector('[data-bonsai-kids-lock-banner="1"]')).toBeTruthy();
 
     const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
-    expect(toggles.length).toBe(4);
+    expect(toggles.length).toBe(5);
     for (const toggle of toggles) {
       expect(toggle.hasAttribute("disabled")).toBe(true);
       expect(toggle.hasAttribute("checked")).toBe(false);
@@ -65,7 +66,7 @@ describe("PermissionsTab kids lock", () => {
 
     expect(screen.queryByText(/Parental controls active/i)).toBeNull();
     const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
-    expect(toggles.length).toBe(4);
+    expect(toggles.length).toBe(5);
     for (const toggle of toggles) {
       expect(toggle.hasAttribute("disabled")).toBe(false);
     }

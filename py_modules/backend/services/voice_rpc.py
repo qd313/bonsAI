@@ -31,7 +31,7 @@ from backend.services.async_background_job import (
     make_state_updating_on_stage,
     new_threading_cancel_event,
 )
-from backend.services.capabilities import capability_enabled
+from backend.services.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.transparency_service import build_voice_transcribe_snapshot
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
@@ -75,6 +75,9 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
         return gate_out or {"accepted": False, "reason": "permission_denied"}
 
     settings = await self.load_settings()
+    if not capability_enabled(settings, "internet_downloads"):
+        # The engine image (ghcr.io) and the model (huggingface.co) are both downloads.
+        return downloads_off_refusal()
     mid = sanitize_voice_stt_model(model_id or settings.get("voice_stt_model"))
     async with self._voice_install_lock:
         existing = self._voice_install_task

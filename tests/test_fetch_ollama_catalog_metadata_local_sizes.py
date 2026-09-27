@@ -50,6 +50,14 @@ class FetchOllamaCatalogMetadataLocalSizesTests(PluginSettingsFileMixin, unittes
         )
         gate.start()
         self.addCleanup(gate.stop)
+        # Asking the registry is a download; these tests are about which tags it is asked for.
+        downloads = patch.object(
+            main.ollama_local_setup_rpc,
+            "_internet_downloads_allowed",
+            AsyncMock(return_value=True),
+        )
+        downloads.start()
+        self.addCleanup(downloads.stop)
 
     async def test_an_installed_tag_gets_its_size_from_local_api_tags_not_the_registry(self) -> None:
         # The real /api/tags shape reported on the Deck (docs/test-evidence/

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 548,
-  "edgeCount": 1484,
+  "fileCount": 549,
+  "edgeCount": 1489,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -997,6 +997,16 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx"
       ]
     },
+    "src/components/PermissionsTab.internetDownloads.test.tsx": {
+      "imports": [
+        "src/components/PermissionsTab.tsx",
+        "src/data/bonsaiSettingsNormalizers.ts",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/hooks/useKidsLock.ts",
+        "src/utils/permissionDeepLink.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx": {
       "imports": [
         "src/components/PermissionsTab.tsx",
@@ -1020,6 +1030,7 @@
         "src/utils/permissionJumpRegistry.ts"
       ],
       "importedBy": [
+        "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx"
@@ -1463,6 +1474,7 @@
         "src/data/uiScaleProfile.ts"
       ],
       "importedBy": [
+        "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/data/bonsaiSettingsContract.test.ts",
         "src/data/bonsaiSettingsHostileContract.test.ts",
@@ -1488,6 +1500,7 @@
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
         "src/components/PermissionsTab.tsx",
@@ -3082,6 +3095,7 @@
         "src/utils/steamParental.ts"
       ],
       "importedBy": [
+        "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/hooks/useKidsLock.test.ts",
         "src/index.tsx"
       ]
@@ -5423,6 +5437,7 @@
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/MainTabUnifiedAskBar.types.ts",
         "src/components/PermissionDenyAction.tsx",
+        "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/VoiceInputSettingsSection.tsx",

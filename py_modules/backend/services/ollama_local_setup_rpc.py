@@ -53,6 +53,7 @@ from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
+from backend.services.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
 
@@ -89,6 +90,13 @@ async def start_local_ollama_setup(self, data: Any = None):
             fields={"profile": prof, "accepted": False, "reason": "invalid_profile"},
         )
         return out
+    if not capability_enabled(settings, "internet_downloads"):
+        await self._maybe_app_log(
+            "local_setup.start",
+            "setup rejected",
+            fields={"profile": prof, "accepted": False, "reason": "downloads_off"},
+        )
+        return downloads_off_refusal()
 
     async with self._local_ollama_setup_lock:
         existing = self._local_ollama_setup_task
@@ -163,6 +171,11 @@ async def _require_local_ollama_on_deck(self) -> tuple[bool, dict[str, Any] | No
     return True, None
 
 
+async def _internet_downloads_allowed(self) -> bool:
+    """The Internet downloads permission (capabilities.py); off also while the kids lock is on."""
+    return capability_enabled(await self.load_settings(), "internet_downloads")
+
+
 async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any]:
     """Start downloading AI models onto the Deck itself.
 
@@ -190,6 +203,9 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
     ok_gate, gate_out = await _require_local_ollama_on_deck(self)
     if not ok_gate:
         return gate_out or {"accepted": False, "reason": "local_off"}
+    # Before the registry name check below, which already reaches registry.ollama.ai.
+    if not await _internet_downloads_allowed(self):
+        return downloads_off_refusal()
 
     tags = normalize_ollama_pull_tags(pull_tags)
     if not tags:
@@ -401,6 +417,9 @@ async def fetch_ollama_catalog_metadata(self, tags: Any = None):
 
     raw = tags if isinstance(tags, list) else []
     normalized = normalize_ollama_pull_tags(raw)
+    # While Internet downloads is off the Deck's own Ollama still answers for installed tags;
+    # registry.ollama.ai is not asked about the rest.
+    may_ask_registry = await _internet_downloads_allowed(self)
 
     def _fetch() -> dict[str, Any]:
         installed_sizes = list_installed_ollama_tag_sizes(DEFAULT_BASE)
@@ -413,7 +432,7 @@ async def fetch_ollama_catalog_metadata(self, tags: Any = None):
             else:
                 remaining.append(tag)
 
-        if not remaining:
+        if not remaining or not may_ask_registry:
             return {
                 "source": "live" if local_tags else "offline",
                 "error": "",
@@ -443,6 +462,10 @@ async def fetch_pull_model_catalog(self, opts: Any = None):
         force = bool(opts.get("force"))
     elif isinstance(opts, bool):
         force = opts
+    if ok_gate and not await _internet_downloads_allowed(self):
+        # The recommended-models list is a download from GitHub: while Internet downloads is off,
+        # the saved copy (any age) or the bundled list answers instead.
+        return await asyncio.to_thread(fetch_pull_model_catalog_service, force, allow_network=False)
     if not ok_gate:
         return {
             **(gate_out or {}),

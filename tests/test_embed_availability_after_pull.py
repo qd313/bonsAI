@@ -75,7 +75,7 @@ class CustomPullRunnerTests(unittest.IsolatedAsyncioTestCase):
                     "backend.services.ollama_catalog_service.partition_pull_tags_by_registry",
                     return_value=(["nomic-embed-text"], []),
                 ), \
-                mock.patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup):
+                mock.patch.object(setup_rpc, "_internet_downloads_allowed", mock.AsyncMock(return_value=True)),                 mock.patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup):
             out = await setup_rpc.pull_ollama_models(plugin, ["nomic-embed-text"])
             self.assertTrue(out["accepted"])
             await plugin._local_ollama_setup_task

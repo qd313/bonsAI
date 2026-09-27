@@ -210,10 +210,24 @@ def _response_from_overlay(
     }
 
 
-def fetch_pull_model_catalog(force: bool = False) -> dict[str, Any]:
-    """Return overlay delta for frontend merge with bundled catalog."""
+def fetch_pull_model_catalog(force: bool = False, *, allow_network: bool = True) -> dict[str, Any]:
+    """Return overlay delta for frontend merge with bundled catalog.
+
+    ``allow_network=False`` (Internet downloads off) never fetches: the saved copy of any age
+    answers, else the bundled list, with error "downloads_off".
+    """
     now = int(time.time())
     cached = _read_cache()
+    if not allow_network:
+        if cached and isinstance(cached.get("overlay"), dict):
+            fetched_at = cached.get("fetched_at")
+            return _response_from_overlay(
+                cached["overlay"],
+                source="cached",
+                error="downloads_off",
+                fetched_at=fetched_at if isinstance(fetched_at, int) else None,
+            )
+        return _response_from_overlay(_empty_overlay(), source="bundled", error="downloads_off")
     if not force and cached:
         fetched_at = cached.get("fetched_at")
         overlay = cached.get("overlay")

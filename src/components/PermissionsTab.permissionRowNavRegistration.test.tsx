@@ -29,6 +29,7 @@ const ALL_ON: BonsaiCapabilities = {
   steam_logs_read: true,
   steam_web_api: true,
   microphone_access: true,
+  internet_downloads: true,
 };
 
 function Harness() {

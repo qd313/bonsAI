@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 261,
+  "edgeCount": 263,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -63,6 +63,10 @@
       "count": 8
     },
     {
+      "path": "py_modules/backend/services/capabilities.py",
+      "count": 7
+    },
+    {
       "path": "py_modules/backend/ollama_routing.py",
       "count": 6
     },
@@ -72,10 +76,6 @@
     },
     {
       "path": "py_modules/backend/services/ai_character_service.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/capabilities.py",
       "count": 5
     },
     {
@@ -651,6 +651,8 @@
         "main.py",
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/media_desktop_rpc.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
+        "py_modules/backend/services/rag_corpus_rpc.py",
         "py_modules/backend/services/settings_service.py",
         "py_modules/backend/services/voice_rpc.py"
       ]
@@ -1085,6 +1087,7 @@
       "imports": [
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/services/async_background_job.py",
+        "py_modules/backend/services/capabilities.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_catalog_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
@@ -1227,6 +1230,7 @@
     "py_modules/backend/services/rag_corpus_rpc.py": {
       "imports": [
         "py_modules/backend/services/async_background_job.py",
+        "py_modules/backend/services/capabilities.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",

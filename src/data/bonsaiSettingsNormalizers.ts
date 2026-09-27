@@ -409,6 +409,7 @@ function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     steam_logs_read: raw.steam_logs_read === true,
     steam_web_api: raw.steam_web_api === true,
     microphone_access: raw.microphone_access === true,
+    internet_downloads: raw.internet_downloads === true,
   };
 }
 

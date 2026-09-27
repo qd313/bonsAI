@@ -61,6 +61,8 @@ function permissionRowNavFocusId(id: PermissionFocusTargetId): NavFocusId {
       return "permissions-row-steam-web-api";
     case "microphone_access":
       return "permissions-row-microphone-access";
+    case "internet_downloads":
+      return "permissions-row-internet-downloads";
   }
 }
 

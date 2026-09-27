@@ -1,16 +1,17 @@
-"""Title: The five permissions the user grants, and the one question "am I allowed to"
+"""Title: The six permissions the user grants, and the one question "am I allowed to"
 
-Purpose: The plugin can do five things that a person would want to be asked about
+Purpose: The plugin can do six things that a person would want to be asked about
 first: write files to the Desktop, look through the Steam screenshot and video
 library, read Steam's own logs, talk to Steam's servers over the internet with the
-user's key, and switch the microphone on. Each one is a switch in the Permission
-Center, off until it is turned on. This file holds the list of the five, decides
-what a saved settings file means when it says something odd, and answers the single
-question every piece of code asks before doing one of those five things: am I
+user's key, switch the microphone on, and download from the internet (Ollama, AI
+models, the voice engine, the knowledge library). Each one is a switch in the
+Permission Center, off until it is turned on. This file holds the list of the six,
+decides what a saved settings file means when it says something odd, and answers the
+single question every piece of code asks before doing one of those six things: am I
 allowed to.
 
-Used for: the Permission Center screen, which shows and sets the five switches; the
-check at the top of every piece of code that does one of those five things; and
+Used for: the Permission Center screen, which shows and sets the six switches; the
+check at the top of every piece of code that does one of those six things; and
 settings files written before the switches existed, which need a sensible answer
 rather than an empty one.
 
@@ -28,7 +29,7 @@ How the answer is decided, in order -- the first "no" wins:
                  |
                  no
                  v
-    is this one of the five names?     -- no  --> NO
+    is this one of the six names?      -- no  --> NO
                  |
                 yes
                  v
@@ -55,12 +56,14 @@ Gotchas:
     accept it. So a permissions block that has never been through the tidy-up and
     holds a 1 reads as off, and the same block after tidying reads as on. Nothing
     writes a 1 today -- this is only worth knowing before adding a second way in.
-  - **Old settings files get three of the five, not all five.** A settings file from
+  - **Old settings files get three of the six, not all six.** A settings file from
     before the switches existed is treated as having granted what the plugin was
     already doing at the time: writing files, reading the screenshot library, and
-    reading Steam's logs. Two are deliberately left off even so -- talking to
+    reading Steam's logs. Three are deliberately left off even so -- talking to
     Steam's servers, because that spends the user's own key on traffic they never
-    agreed to, and the microphone, because it is a microphone.
+    agreed to; the microphone, because it is a microphone; and internet downloads,
+    because the first download notice asks for it in place (the maintainer, 2026-09-26:
+    off on a fresh install, and nothing reaches the internet while it is off).
 """
 
 from typing import Any
@@ -72,7 +75,16 @@ CAPABILITY_KEYS = (
     "steam_logs_read",
     "steam_web_api",
     "microphone_access",
+    # Downloads from the internet: Ollama itself, AI models, the voice engine and its models,
+    # the knowledge library, and the recommended-models list and size lookups. Downloads only;
+    # a later live web search is a separate switch.
+    "internet_downloads",
 )
+
+# The one refusal every download entry point returns while internet_downloads is off. The
+# screen matches on error == "downloads_off" to offer the permission in place.
+DOWNLOADS_OFF_ERROR = "downloads_off"
+DOWNLOADS_OFF_REASON = "Internet downloads are off. Turn them on in Permissions to download."
 
 # Session Kids master lock (Steam parental). Not persisted — frontend pushes via RPC.
 # Checked first in capability_enabled so every key (including future Web) denies while active.
@@ -110,7 +122,19 @@ def legacy_grandfather_capabilities() -> dict[str, bool]:
     out["steam_web_api"] = False
     # Microphone capture is opt-in even for legacy installs.
     out["microphone_access"] = False
+    # Internet downloads are asked for in place by the first download notice.
+    out["internet_downloads"] = False
     return out
+
+
+def downloads_off_refusal() -> dict[str, Any]:
+    """The refusal a download entry point returns while internet_downloads is off."""
+    return {
+        "accepted": False,
+        "ok": False,
+        "error": DOWNLOADS_OFF_ERROR,
+        "reason": DOWNLOADS_OFF_REASON,
+    }
 
 
 def capability_enabled(settings: dict, key: str) -> bool:

@@ -155,6 +155,13 @@ export function SessionSumUpSection(props: {
             revealOnceWhenMounted(el, uiGamepadFocusElement);
           }}
           aria-label="What the AI remembers"
+          /*
+           * Holding the ring, come fully clear of the dock (or keep the top on screen when taller
+           * than the room). The reveal on mount was held back by the ring above it, and Down from
+           * Sum up again put the ring on the card a third behind the question box (plan 72,
+           * plan72-Z-FREEPLAY.json finding 2). Scrolls only.
+           */
+          onFocus={() => summaryCardEl && revealBelowKeepingAsItSettles(summaryCardEl, () => summaryCardEl)}
           {...(directionHandlers(() => summaryCardEl, focusSumUpButton, downFromCard) as Record<string, unknown>)}
         >
           <div className="bonsai-sumup-card-head">

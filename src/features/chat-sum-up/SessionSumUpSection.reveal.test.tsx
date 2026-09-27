@@ -226,3 +226,59 @@ describe("the greyed Sum up button's reason line", () => {
     expect(top(button)).toBeGreaterThanOrEqual(PANE_TOP);
   });
 });
+
+describe("the summary card taking the ring", () => {
+  /*
+   * Plan 72 free play (plan72-Z-FREEPLAY.json finding 2): Down from "Sum up again" put the ring on
+   * the card while a third of it sat behind the question box. The one-time reveal on mount had been
+   * held back by the ring above it; once the card holds the ring itself, nothing above needs keeping.
+   */
+  it("scrolls fully above the dock", () => {
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const { container } = render(section(sumUpState({ summary: SUMMARY })), { container: host });
+    const button = container.querySelector(".bonsai-sumup-btn")!;
+    const card = container.querySelector(".bonsai-sumup-card")!;
+    /* The ring on the button near the top of the pane holds the mount reveal back. */
+    place(button, pane, 96, 128);
+    place(card, pane, 330, 720);
+    ringOn(button);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(bottom(card)).toBeGreaterThan(DOCK_TOP);
+
+    ringOn(card);
+    fireEvent.focus(card);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(bottom(card)).toBeLessThanOrEqual(DOCK_TOP);
+    expect(top(card)).toBeGreaterThanOrEqual(PANE_TOP);
+    expect(card.classList.contains("gpfocus")).toBe(true);
+  });
+
+  it("a card taller than the room keeps its top on screen", () => {
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const { container } = render(section(sumUpState({ summary: SUMMARY })), { container: host });
+    const button = container.querySelector(".bonsai-sumup-btn")!;
+    const card = container.querySelector(".bonsai-sumup-card")!;
+    place(button, pane, 96, 128);
+    place(card, pane, 330, 1100);
+    ringOn(button);
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    ringOn(card);
+    fireEvent.focus(card);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(top(card)).toBeGreaterThanOrEqual(PANE_TOP);
+    expect(top(card)).toBeLessThan(PANE_TOP + 20);
+  });
+});

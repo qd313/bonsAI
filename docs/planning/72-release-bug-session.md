@@ -556,3 +556,8 @@ land.
   listed for after the release (behind the scenes, not reshaping in this session): the Ask code's after-answer
   step may hold other stale copies the same way — it broke the Strategy checklist once before; worth a read-only
   sweep. Deck row owed: knowledge base on, reload, three answers, the chip never offered.
+- **17:25 — a landing check caught a helper's green report.** Lane 11 reported all six checks green, but at
+  landing its commit failed the Ask hook-order check (three hooks added inside the suggested-chips hook, record
+  not updated). The session updated the record with the reason (`a710d8ff`); every check green at `a710d8ff`.
+  `c7a09f81` alone fails that one check — `a710d8ff` completes it. Why landings rerun every check, not trust
+  the lane's word.

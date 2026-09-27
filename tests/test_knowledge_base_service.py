@@ -892,6 +892,23 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       '"best" OR "thing" OR "here"',
     )
 
+  def test_fts_query_contraction_leaves_no_stray_short_word(self):
+    """A contraction must not leave a bare "s" / "t" / etc. behind as its own search word.
+
+    ``\\w+`` alone splits "there's" into "there" + a lone "s", and "can't" into "can" + a
+    lone "t" -- single-letter terms that then match almost any card by coincidence (found on
+    the release corpus: 9 of 18 false per-game-tip candidates were nothing but this, see
+    ``GAME_TIP_REROUTE_FLOOR``'s comment). Every stopword here ("there", "a", "that", "me",
+    "i", "can") is dropped as filler either way -- the only thing this test pins is that no
+    stray ending survives them. Proven by breaking the fix: reverting
+    ``_CONTRACTION_ENDING_RE`` to a no-op regex makes this fail with a bare '"s"' in the
+    result.
+    """
+    result = _fts_match_query("there's a boss that keeps beating me, i can't win")
+    self.assertEqual(result, '"boss" OR "keeps" OR "beating" OR "win"')
+    self.assertNotIn('"s"', result)
+    self.assertNotIn('"t"', result)
+
   def test_expand_query_drops_app_name_once_the_game_is_resolved(self):
     # Already scoped by game_id, so the title is pure BM25 noise that favours cards
     # repeating it.
@@ -2249,6 +2266,30 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         self.assertTrue(result.attached)
         self.assertIn(expected_card, result.text_block)
         self.assertTrue(result.notes.startswith("text:"))
+
+  def test_a_real_question_with_a_contraction_still_finds_its_note(self):
+    """The point of the contraction-ending fix, proven end to end: a natural question with
+    two contractions in it must still attach the right card -- the fix must not cost a real
+    match while it removes the stray short word. Proven by breaking the fix: reverting
+    ``_CONTRACTION_ENDING_RE`` to a no-op still passes this one (the boss name alone is
+    enough to match, and a section-type rescue backs it up), which is why the other new
+    test pins the stray-word mechanism directly rather than relying on this test alone.
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="what's the trick to beating volvagia in oot, it's a lava boss right",
+      app_id="",
+      app_name="The Legend of Zelda: Ocarina of Time",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Volvagia", result.text_block)
 
   def test_a_running_game_always_beats_a_title_named_in_the_question(self):
     """The failure this must never cause: answering about a game the user is not playing."""

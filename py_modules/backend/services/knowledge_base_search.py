@@ -131,6 +131,19 @@ _FTS_STOPWORDS = frozenset(
 # two-sentence question; the tail of a long question is now searched rather than dropped.
 _FTS_MAX_TOKENS = 24
 
+# A contraction's ending, not the whole apostrophe. "\w+" alone splits "there's" into "there"
+# and a bare "s" -- a single-letter term that then matches almost any card by coincidence, since
+# there is no bigger candidate pool around it to dilute the coincidence (found on the release
+# corpus, tests/fixtures/kb_eval_v2.json: 9 of 18 false per-game-tip candidates were nothing but
+# this). Deleting the *whole* apostrophe instead was tried and reverted: "what's" is a function
+# word ("what") today, thrown away by `_FTS_STOPWORDS` -- but "whats" is not on that list, so
+# deleting the apostrophe turns a discarded word into a new real search term, and one held-back
+# question ("what's the best strategy on the stage that's...") lost its right answer to a wrong
+# one that shares no real word with it, only the newly-created "whats"/"thats". Deleting just the
+# ending avoids that: "what's" -> "what", still filler, still dropped; only the stray "s"/"t"/
+# "d"/"m"/"ll"/"re"/"ve" disappears, and nothing new is created for the stopword list to miss.
+_CONTRACTION_ENDING_RE = re.compile(r"['’](?:s|t|d|m|ll|re|ve)\b", re.IGNORECASE)
+
 
 def _fts_match_query(query: str) -> str:
     """Build the FTS5 OR expression, keeping only discriminative terms.
@@ -143,6 +156,7 @@ def _fts_match_query(query: str) -> str:
     q = (query or "").strip()
     if not q:
         return ""
+    q = _CONTRACTION_ENDING_RE.sub("", q)
     tokens = [t for t in re.findall(r"\w+", q) if t.lower() not in _FTS_STOPWORDS]
     tokens = tokens[:_FTS_MAX_TOKENS]
     if not tokens:

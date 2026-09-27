@@ -98,7 +98,7 @@ import {
   registerReplyStop,
   setReplyStopUnavailable,
 } from "./replyStopRegistry";
-import { elementHasGamepadFocus } from "./uiDocument";
+import { elementHasGamepadFocus, uiGamepadFocusElement } from "./uiDocument";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
 import {
   isDeckDirectionDownEvent,
@@ -115,7 +115,7 @@ import {
   findNextDrgGlossaryTermChipInView,
   focusDrgGlossaryTermChip,
 } from "./drgGlossaryTermRegistry";
-import { findScrollablePanel } from "./chatPanelScroll";
+import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
@@ -169,6 +169,25 @@ export type BuildReplyActionsElementArgs = {
 type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null };
 const thumbsRowNavByKey = new Map<string, SteamNavHolder>();
 
+/** Chip rows already seen once; a later render of the same row never scrolls again. */
+const chipRowsSeen = new WeakSet<HTMLElement>();
+
+/**
+ * When the chips first appear because someone just pressed Not really (the ring is still in this
+ * reply's own block), scroll the whole "What went wrong?" block out from behind the dock, keeping
+ * the ring's control on screen. Measured on the Deck 2026-09-27
+ * (plan72-A5b-BEFORE-SAVEROW-CHIPS.json): the page did not move and four of five chips sat behind
+ * the dock. `el` is the last chip row, so revealing it brings the label and the rows above with
+ * it. Scrolls only. A chat opening on a reply already rated down, ring elsewhere, is left alone.
+ */
+function revealChipsWhenTheyAppear(el: HTMLElement | null): void {
+  if (!el || chipRowsSeen.has(el)) return;
+  chipRowsSeen.add(el);
+  const ring = uiGamepadFocusElement();
+  if (!ring || !el.closest(".bonsai-chat-reply-actions")?.contains(ring)) return;
+  revealBelowKeepingAsItSettles(el, uiGamepadFocusElement);
+}
+
 function renderChipRow(
   chipIds: ReplyMicroActionId[],
   args: {
@@ -176,14 +195,15 @@ function renderChipRow(
     onChip?: (chipId: ReplyMicroActionId) => void;
     rowClassName: string;
     onMoveUpFirst?: () => boolean;
+    rowRef?: (el: HTMLElement | null) => void;
   }
 ): React.ReactElement | null {
-  const { chipsDisabled, onChip, rowClassName, onMoveUpFirst } = args;
+  const { chipsDisabled, onChip, rowClassName, onMoveUpFirst, rowRef } = args;
   if (!onChip) return null;
   const defs = chipIds.map((id) => replyMicroActionById(id)).filter(Boolean);
   if (!defs.length) return null;
   return (
-    <Focusable className={rowClassName} flow-children="horizontal">
+    <Focusable className={rowClassName} flow-children="horizontal" ref={rowRef}>
       {defs.map((def) => (
         <BonsaiChatSecondaryButton
           key={def!.id}
@@ -610,6 +630,7 @@ export function buildReplyActionsElement(
             chipsDisabled: chipsInactive,
             onChip,
             rowClassName: "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips",
+            rowRef: revealChipsWhenTheyAppear,
           })
         : null}
       {chipError ? (

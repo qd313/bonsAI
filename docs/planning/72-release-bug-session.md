@@ -477,3 +477,18 @@ land.
   turns when this session has no answer; the note still saves the newest question and answer). Dots order:
   "newest first, I think" — [a drawing of three ways](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY)
   (A move at once, today; B fixed order; C newest first but re-sorted only on the next open) sent to confirm.
+- **15:20 — block 2 part 2 (flow F2) finished** on `0065fccb`; settings, chats and the feedback log restored
+  (two test chats the restore could not remove moved to `~/qa-backups/plan72-test-chats/`, not deleted).
+  **Passed:** Stop keeps the model loaded (listed 2 s after Stop; the next answer's first words 5.5 s after Ask,
+  no model-load line) and hands the ring to the question box (the fix; STOP-KEEPS-MODEL-01 and STOP-PARTIAL-01
+  can close); Strategy openings have no "mode active" / "spoiler-minimized" (Hollow Knight's still says in
+  its own words that it keeps spoilers out — the maintainer's look); the first-run wording is in the build.
+  **Partly:** the tip label — the credit and the notes card name the game, but a "Source: shared
+  troubleshooting tips" line remains (lane 6's job H); the thinking line — every targeted rule holds, but a
+  cut heading tail "ess:", a lone ".", and setup lines like "Voice: Ali G" still show (lane 3's job C; thinking
+  is off by default). **Failed:** the download notice is missing on "Update AI & models" (the old box, no site
+  or size, no permission question; nothing downloaded) — lane 1's job D, must-fix; the summary card on a
+  144-entry chat is 475 px tall against 471 px of room below its button, so its last 10 px sit behind the
+  dock (was 44 of 418 px showing) — the maintainer's call. **Could not run:** Clear session mid-answer (the
+  answer finished in 33 s before the 20-press walk to Clear arrived; the fix is unit-tested). Sightings: the
+  ring goes to the tab bar after the update box closes; Steam's home once named Fallout 4 with no game running.

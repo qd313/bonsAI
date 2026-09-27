@@ -1133,6 +1133,15 @@ still lists a protected note's real name, so a boss's name is readable there aft
 Show details, with no warning that it is a spoiler. Filed as an open question, not a bug, since pressing
 Show details is itself already a deliberate choice to see more — see the Features list.
 
+**Seen again 2026-09-26 (plan 70, flow L6):** on the same Hollow Knight described-boss answer, covered
+correctly on screen, Show details' own sources list read "Hollow Knight — Soul Master" in plain text
+underneath. Same open question, not a new one; the maintainer's call above already covers it.
+
+**Re-confirmed again 2026-09-26 (plan 70, flow L6):** the same Hollow Knight described-boss question,
+watched every 250 ms across 184 reads over about 45 seconds while the cover was still arriving: no notes
+block appeared at any point, though the saved turn does list the attached note once it finishes; the
+protected name never showed anywhere on screen. Evidence `docs/test-evidence/plan70-L6-NOTES-ARRIVING.json`.
+
 **The model's own thinking can leak the same way, fixed 2026-09-26 (plan 70, helper A, commit
 `4b975316`).** Measured live on the Deck (THINKING-SPOILER-01): the live thinking line, and the saved
 reasoning shown in the fold afterwards, both named a protected boss in plain words in 4 of 6 tries, plus
@@ -1827,6 +1836,16 @@ ever second-guessed.
 newer build; the build fingerprint still read as different, but the replay ran to the end with no
 refusal and reported zero differing landings. Evidence `docs/test-evidence/plan70-FLOW0-REPLAY.json`.
 
+**All 30 saved walks re-run and re-saved where they still applied, 2026-09-26 (plan 70, flow L6), closed.**
+20 of 30 landed exactly where saved (small id or pixel-shift differences only) and were re-saved fresh on
+tonight's build. 7 were not re-saved because the screen itself changed since they were made, on purpose or
+by content, and need the maintainer's own call on what the walk should now expect: a Session-tab walk now
+stops on "Sum up this chat" (the plan 68 button); a tall-answer walk needs an answer as tall as the one it
+was saved on; a reply-buttons walk now spends its presses on a branch menu instead of reaching Show
+details and Ask; a chip walk's first step now lands on "Save chat to Desktop" (tonight's own fix); a
+session-tab walk expects 7 rows where tonight's chat has 6. The remaining 2 need a chat that has already
+been summed up, which nothing on the Deck tonight was. Evidence `docs/test-evidence/plan70-FLOW6-RESAVE.json`.
+
 ## Cost to a running game, second sighting
 
 **2026-09-26 (plan 70 flow 0).** Deep Rock Galactic: Survivor, sitting at its own title screen,
@@ -2262,6 +2281,11 @@ chat to Desktop" sat in a plain div row, so the chips' Up (which only ever hands
 Steam's own registered-row transfer) could never reach it. The button now lives in its own small,
 registered row; the chips' Up tries it first, then the ban-lookup row, the hint, then the reply, in that
 order; Down from the button goes back to the chips. Deck re-check owed alongside the rest of this fix.
+**Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** walking Up from the question box reached a
+suggestion chip, then "Save chat to Desktop" fully visible above the dock, then "Show details" of the
+newest answer; Down walked back the same way. A on "Save chat to Desktop" opened its save dialog with the
+ring on the name box; B closed it and returned the ring to the button. Evidence
+`docs/test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
 **Passed on the Deck 2026-09-26 (plan 70, flow L5.2), closed:** walking Up from the question box reached
 the suggestion chip, then the ban-lookup row's "Open Permissions", then the hint's own "Open Permissions",
 then Right to "Dismiss" and back; every stop fully visible. A on Dismiss removed the hint. **New, small:**
@@ -2272,6 +2296,13 @@ after Dismiss, nothing holds the ring until the next press. Evidence
 was on included, and nothing handed the ring on — the same shape as the Helpful fix above. The ring now
 moves to the row below (the ban-lookup row, else "Save chat to Desktop", else the chips). Deck re-check
 owed.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** two walks, both with permissions and the
+ban-lookup row on screen. With the ban-lookup row present, A on Dismiss left the ring on that row's own
+"Open Permissions". With only the hint on screen (a fresh chat, no ban-lookup row), A on Dismiss left the
+ring on "Save chat to Desktop". Both fully visible. **New, small, seen along the way:** a dismissed hint
+stays hidden only until Quick Access is closed and reopened — it then comes back, and the ban-lookup row
+can reappear in a different chat too. Evidence `docs/test-evidence/plan70-L6-AFTER-DISMISS.json`.
 
 **A screen test that opens the Filters panel failed once under load, passed alone.** Found 2026-09-26,
 `PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's. **Kept failing 2026-09-26,**
@@ -2287,12 +2318,22 @@ new test forces the bad order on purpose and fails on the old code; the existing
 focus-graph anti-pattern entry records the shape. **Deck re-check owed**, though the fault was never seen
 there in the first place.
 
+**Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** opening the Filters panel put the ring on
+its first row 6 of 6 times, closing it with Up or with B both returned the ring to the Filters button 3 of
+3 times each, and opening/closing "Type a name" worked 5 of 5 times — every stop visible. Evidence
+`docs/test-evidence/plan70-L6-FILTERS-PANEL.json`.
+
 **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon.**
 First sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
 before a plugin reload. Evidence `docs/test-evidence/plan70-READ-ALOUD-02-06.json`. **Seen again 2026-09-26
 (plan 70, flow 4), this time after switching between two test chats rather than a reload** — an older
 answer's Helpful row and its "Save chat to Desktop" button were both gone, the same shape twice now.
 Filed as an open bug rather than a one-off sighting. Not yet measured closely enough to fix.
+
+**Seen a third time 2026-09-26 (plan 70, flow L6):** "Save chat to Desktop" only draws when this
+session has a last answer, so after switching chats it was gone (0 buttons) until a fresh question was
+asked in that chat. Same shape again, still not measured closely enough to fix. Evidence
+`docs/test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
 
 **In Show details, the chip ladder only lets Up leave one chip at a time.** Sighted on the Deck
 2026-09-26 (plan 70, flow L3/2d). Not yet reproduced on purpose; worth checking against the chip-ladder
@@ -2344,6 +2385,12 @@ the tab row back into view. This is very likely the original sighting: a press t
 it did nothing. Evidence `docs/test-evidence/plan70-F4-SHOW-DETAILS.json` (+ screenshot
 `plan70-F4-SHOW-DETAILS-opened-behind-dock.png`).
 
+**Fixed 2026-09-26 (helper F2, commit `bb36e334`).** Opening the details now scrolls them clear of the
+dock, once per opening, instead of leaving them out of sight behind it. **Passed on the Deck 2026-09-26
+(plan 70, flow L6), closed:** three fresh tries, including one right after switching between two chats,
+each time the tab row and "Hide details" landed fully above the dock with no jump when walking Right onto
+the tab row. Evidence `docs/test-evidence/plan70-L6-SHOW-DETAILS.json`.
+
 **After pressing thumbs up on a reply, nothing holds the D-pad ring.** OPEN, found by the plan 65 Deck
 check 2026-09-24.
 
@@ -2355,6 +2402,13 @@ longer exists. The next press does not recover from where it left off: Down or L
 small "Read aloud" speaker icon at the right of the same row; B lands the ring on the tab bar at the top
 (the panel itself stays open). The plugin's own log shows nothing about this — no error, no feedback line.
 Evidence `docs/test-evidence/plan70-F4-THUMBS-UP.json`.
+
+**Fixed 2026-09-26 (helper F2, commit `34bd9315`).** The ring now moves to the "Read aloud" speaker icon
+in the same row once the thumbs are replaced, using Steam's own transfer rather than being left behind.
+**Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** three fresh finished answers, each time the
+ring landed on the speaker icon after Helpful; pressing "Not really" instead correctly kept the ring on
+its own greyed button and Down reached the "What went wrong?" chips underneath. Evidence
+`docs/test-evidence/plan70-L6-THUMBS-UP.json`.
 
 ## Branch menu template leak
 
@@ -2372,4 +2426,70 @@ one clean run, not proof by itself — the unit tests already landed are the pro
 this row was waiting on. Note for the maintainer, not a bug: the biome menu's option B, "Another specific
 biome (e.g., Caves, etc.)", reads like filler, though it is not the old template text. Evidence
 `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+
+## Flow L6 findings
+
+Long version of five roadmap entries and two Half-Life 2 test results, found during plan 70's flow L6
+Deck pass (2026-09-26, build `532b76f8`). Moved here to keep the roadmap under its size limit.
+
+**In Show details' Session tab, Down from the last chip of the chip ladder does not move the ring.**
+Sighted while re-checking the Show-details scroll fix: three presses of Down on "Chip 7 of 7" left the
+ring exactly where it was. Up still works normally, stepping the ladder back from 7 to 1 before leaving
+it. Not yet reproduced on purpose or measured further. Evidence
+`docs/test-evidence/plan70-L6-SHOW-DETAILS.json`.
+
+**With details open, Down from "N earlier" jumps straight to the notes block.** Sighted during free play.
+Expanding an older turn and walking Down from its "N earlier" row skips over the newest turn's own Retry,
+question, answer and "Hide details" entirely, landing straight on the notes block underneath. Not yet
+reproduced on purpose or measured further.
+
+**B on the notes block sends the ring to the tab bar and leaves Show details open.** Sighted during free
+play: pressing B while the ring was on the notes block moved it to the tab bar at the top of the panel,
+rather than closing the details the way B closes other things on this screen. Not yet reproduced on
+purpose or measured further.
+
+**A typed command shows up later as a suggestion chip.** Sighted during the Half-Life 2 chip watch: the
+text `bonsai:vac-check`, typed as a command earlier in the same session, later rotated through as one of
+the suggestion chips, indistinguishable from an ordinary question. Evidence
+`docs/test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
+
+**The Context line briefly read "no active game" right after reopening the panel over Half-Life 2.**
+Sighted once during the chip watch, while closing and reopening Quick Access with the game still running;
+the line then read the game's name correctly again. Not reproduced on purpose.
+
+**PHASE4-CHIPS-01 and CHIP-ROTATION-01, with Half-Life 2 running: FAIL.** Watched about 420 seconds
+across three panel-open sessions plus a 150-second wait, 15 different chip labels in all. Only one of
+them was a Half-Life 2 chip, "How do I beat Strider?" with its Tip mark, and it only showed for about 17
+of those 420 seconds — right after each time the panel opened, then rotated away and did not come back.
+So the corpus guarantee ("at least one of the running game's own chips always shows") did not hold, and
+the chips never rotated to a second Half-Life 2 suggestion. Labels themselves fit their chip correctly, no
+overflow. The maintainer's one-chip setting was on for this run, which leaves only one slot for the
+guarantee to use — may explain both results; not re-tried with more chips on screen. Evidence
+`docs/test-evidence/plan70-L6-PHASE4-CHIPS-01.json`, `docs/test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
+
+**KB-FOLLOWUP-QUOTE-02, re-checked: UNCLEAR.** The waiting line and the turn header both read the
+friendly "I'm at: …" wording, and Show details' own "This answer" tab does too — all as fixed. But Show
+details' separate "Session" tab still lists the raw "[Strategy follow-up] I'm at: …" line for the same
+turn, alongside a second, clean copy of it. The model's own live reasoning also showed the raw
+"[Strategy follow-up]" text for about five seconds, while quoting its own instructions back to itself
+("Must *not* repeat the branch fence if the user starts with `[Strategy follow-up]`") — not as a leak of
+the person's own words, but the same tag, readable. Whether the Session tab and the reasoning quote count
+as "Show details on that turn" for this row is the maintainer's call. Evidence
+`docs/test-evidence/plan70-L6-BRANCH-WAIT.json` (+ two screenshots).
+
+**PRESET-ONE-LINE-04, decode half, with Half-Life 2 running: PASS.** Four eight-second windows of frame
+timing while a chip both churned its decode animation and scrolled a long label: 60.0, 59.8, 59.8 and 60.0
+frames a second, worst single gap 50 ms, no gap over that. Evidence
+`docs/test-evidence/plan70-L6-PRESET-ONE-LINE-04.json`.
+
+**CHIP-BUTTON-09, with Half-Life 2 running: PASS for the dot itself.** The Tip chip's small square dot
+showed on every one of 9 reads it was on screen, 7×7 px, the character's own colour, before the label,
+with no "Tip" word drawn — matching the design. Its "stays put while a long label scrolls" half could not
+be seen: the only Tip label offered ("How do I beat Strider?") was short and never scrolled. Evidence
+`docs/test-evidence/plan70-L6-CHIP-BUTTON-09.json` (+ screenshot).
+
+**Reduced-motion box (b), re-tried with Half-Life 2 running: still UNCLEAR.** With reduced motion on,
+about 210 seconds of watching (188 reads) found no crawling label and no scrambled letters — the pass
+half holds — but every label seen fit its chip exactly, so the "cut off with an ellipsis" half still has
+nothing to prove it on. Evidence `docs/test-evidence/plan70-L6-REDUCED-MOTION-B.json`.
 

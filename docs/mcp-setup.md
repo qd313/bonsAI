@@ -43,6 +43,8 @@ below are the index; the draft is the detail.
 
 | Date | Finding | Documented in bonsAI | Upstream (issue/PR) | Status |
 |------|---------|----------------------|---------------------|--------|
+| 2026-09-26 | **The game launcher failed once because it read an empty ring on Steam's Home screen, then worked on the second try.** Seen during plan 70 flow L6, launching Half-Life 2. | this file | *pending* | Open, needs filing |
+| 2026-09-26 | **The exit-game tool refused once because the menu had opened on Settings rather than the expected spot.** Seen during plan 70 flow L6; the driver exited the game by hand instead. | this file | *pending* | Open, needs filing |
 | 2026-09-26 | **Right after a plugin reload with Black Mesa running, Decky's own loader restarted `steamwebhelper` and Steam's screens (Quick Access, the Steam menu) never came back on their own.** Seen during plan 70 flow L5.4, 17:52. No memory pressure at the time (about 70% free). The maintainer restarted Steam by hand. Not a bonsAI bug — a Decky Loader behaviour; the rig's reload right after a game launch may be what triggers it. | this file | *pending* | Open, needs filing |
 | 2026-09-26 | **The exit-game and launch tools each refused on their first try, working on a retry, once each.** Seen during plan 70 flow L5.4, alongside the `steamwebhelper` restart above. | this file | *pending* | Open, needs filing |
 | 2026-09-26 | **The first LB press on the chat row was ignored once, then worked normally.** Seen during plan 70 flow L5.4. One-off, not reproduced on purpose. | this file | *pending* | Open, needs filing |

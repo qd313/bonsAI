@@ -90,10 +90,27 @@ starts work outside this.
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
-  speaker icon** — **OPEN, seen twice now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
+  speaker icon** — **OPEN, seen three times now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
   only lets Up leave one chip at a time; two confidently wrong answers.
   [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[focus]` **In Show details' Session tab, Down from the last chip of the chip ladder does not move the
+  ring** — **OPEN, found 2026-09-26 (plan 70, flow L6).** Up still steps back through the chips normally,
+  then leaves. [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
+  found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
+  Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[focus]` **B on the notes block sends the ring to the tab bar and leaves Show details open** —
+  **OPEN, found 2026-09-26 (plan 70, flow L6).** [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[chips]` **A typed command shows up later as a suggestion chip** — **OPEN, found 2026-09-26 (plan 70,
+  flow L6).** Typing `bonsai:vac-check` earlier in the session, the same text later rotated through the
+  suggestion chips like an ordinary question. [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[chat]` **A dismissed troubleshooting hint comes back once Quick Access is closed and reopened, and
+  the ban-lookup row can follow it into a different chat** — **OPEN, found 2026-09-26 (plan 70, flow
+  L6).** [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[ui]` **One more one-off sighting from flow L6, not reproduced on purpose:** the Context line briefly
+  read "no active game" right after reopening the panel over Half-Life 2.
+  [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -162,13 +179,6 @@ starts work outside this.
   any fix — the session thinks this is the same family as the tab-bar ghost below. **Retired 2026-09-25
   (plan 68):** the Clear button this reproduction plan presses is gone, replaced by "Sum up this chat," so
   this exact repro can no longer be run. The button was replaced, not fixed.
-- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **VERIFY, likely cause found and
-  fixed 2026-09-26 (helper F2, commit `bb36e334`).** Opening the details now scrolls them clear of the
-  dock, once per opening. **Deck re-check owed:** the same setup — a press that used to look like nothing
-  happened. [Detail](roadmap-details.md#flow-4-findings).
-- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **VERIFY, fixed
-  2026-09-26 (helper F2, commit `34bd9315`).** The ring now moves to the speaker icon in the same row
-  once the thumbs are replaced. **Deck re-check owed.** [Detail](roadmap-details.md#flow-4-findings).
 - ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from
   turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
 - ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
@@ -248,12 +258,6 @@ starts work outside this.
   Workaround: commit with `git -c core.hooksPath=.githooks commit`. **Cause:** the shared setting points
   hooks at the main checkout's path, where setup uses a relative one; a separate cloud session ("Fix
   pre-commit hook analyzing wrong worktree") is working on it.
-- ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
-  after a deploy** — **VERIFY, fixed in the Deck tools project (commit `556ffcb`, 2026-09-23), proven on
-  the Deck 2026-09-26.** Every saved walk was recorded against an older build, so 0 walks compared that
-  night. The check's own fingerprint of a build includes Python cache files, which change on every run.
-  Replaying across builds now works. **Still owed:** re-saving the walks (flow 6).
-  [Detail](roadmap-details.md#saved-deck-walk-replay-across-builds).
 - ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
   from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
   another desk test on real chats.
@@ -539,15 +543,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   already says this row by row.
 
 ### Bugs that need verification
-- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **VERIFY, fixed
-  2026-09-26 (helper F2, commit `6116f33c`).** The ring now moves to the row below (the ban-lookup row,
-  else "Save chat to Desktop", else the chips) the same way the Helpful fix already works. **Deck re-check
-  owed:** press A on Dismiss and confirm the next press lands on that row, not nowhere.
-  [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
-  **VERIFY, fixed 2026-09-26 (helper K, commit `2e13421d`).** The waiting line and Show details now show the
-  friendly "I'm at: …" wording; the model still gets the full internal text behind the scenes. Row
-  **KB-FOLLOWUP-QUOTE-02**. [Detail](roadmap-details.md#l3-and-2d-findings).
+  **VERIFY, fixed 2026-09-26 (helper K, `2e13421d`), mostly passed on the Deck 2026-09-26.** The waiting
+  line, the turn header and Show details' own "This answer" tab all show the friendly wording now. **Still
+  owed:** Show details' separate "Session" tab still lists the raw tag for the same turn. Row
+  **KB-FOLLOWUP-QUOTE-02**. [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
   out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
   destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
@@ -561,11 +561,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   unconfirmed either way. Not fixed for this half yet. **Retired 2026-09-25 (plan 68):** the Clear button
   itself is gone, replaced by "Sum up this chat," so this box and its "where you land" bug can no longer be
   reproduced as written. The button was replaced, not fixed.
-- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
-  **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
-  is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
-  set the chip animation to the scrambling one and confirm the dot shows.
-  [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
   the ring on the chip. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer**, from
@@ -1048,3 +1043,24 @@ entries below stayed, so the maintainer can still see them this week.
   slack, which could flip under load). Rewritten to hold both threads open on real events the test
   controls and wait on those instead of guessing a delay — proven by running it 20 times with heavy CPU
   load alongside it: 20 passes, 0 failures. Nothing on screen to check.
+
+**Closed 2026-09-26 (plan 70, flow L6, sixth and last Deck pass):**
+
+- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **DONE, fixed
+  2026-09-26 (helper F2, `34bd9315`), passed on the Deck 2026-09-26, 3 of 3.** The ring moves to the
+  speaker icon in the same row each time. [Detail](roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **DONE, cause found and fixed
+  2026-09-26 (helper F2, `bb36e334`), passed on the Deck 2026-09-26, 3 of 3 including after switching
+  chats.** Opening the details now scrolls them clear of the dock every time.
+  [Detail](roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **DONE, fixed
+  2026-09-26 (helper F2, `6116f33c`), passed on the Deck 2026-09-26.** The ring lands on the row below
+  every time. [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
+  after a deploy** — **DONE, fixed in the Deck tools project (`556ffcb`), proven on the Deck 2026-09-26,
+  and its own saved walks re-saved on the current build (20 of 30; 7 need the maintainer's own call, 2
+  need a summed-up chat first).** [Detail](roadmap-details.md#saved-deck-walk-replay-across-builds).
+- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **DONE, fixed
+  in `895cf0a`, passed on the Deck 2026-09-26 with Half-Life 2 running.** Row **CHIP-BUTTON-09**: the dot
+  showed on every Tip chip seen. **Still owed:** whether the dot stays put while a long label scrolls — no
+  label long enough was offered. [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).

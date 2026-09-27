@@ -169,6 +169,15 @@ says that.
 assignment from a script (`module.NAME = ...`) both still point at the old location and miss code that
 has moved. Search for all three before trusting that every caller was found.
 
+**A timing-sensitive test that fails under load can be pointing at a real bug, not just a flaky test.**
+A screen test that opens a panel and moves the ring onto its first row failed about one run in three
+whenever the machine was busy, and passed every time run alone — the same shape as another test already
+known to be flaky under load. It was not: the ring's move waited for the next animation frame and assumed
+the panel had already been drawn, which only holds when nothing else is competing for the machine. A
+probe built to force the bad order on purpose failed every time on the old code. Before writing off a
+load-only failure as noise, try to force the bad ordering on purpose; if it fails every time, the cause is
+real.
+
 ---
 
 ## 3. Checking work on the Steam Deck
@@ -446,6 +455,12 @@ before trusting the next run.
 
 **Working folder carries over between shell calls.** Changing folder in one call leaves the next
 call somewhere unexpected. Start every command from the repo path spelled out in full.
+
+**A scheduled check restarting a stopped session is not something to count on.** A 20-minute scheduled
+prompt had once been seen bringing a session back after it hit its usage limit. On the night of
+2026-09-26 it did not: the session hit its usage limit twice, and both times it sat there until the
+maintainer's own message woke it back up, not the schedule. Send a message to resume unattended work
+rather than assuming the schedule will do it.
 
 ---
 

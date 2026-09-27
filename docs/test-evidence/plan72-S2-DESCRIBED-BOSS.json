@@ -1,0 +1,33 @@
+{
+  "row": "plan72-S2-DESCRIBED-BOSS",
+  "build": {"commit": "8e438f74", "indexJsMd5": "eff40145113a42eb63fe661570442f46"},
+  "deckTime": "2026-09-27 15:50:28 to 15:52:10 EDT",
+  "screen": {"innerWidth": 855, "innerHeight": 766, "devicePixelRatio": 1.28, "note": "external monitor"},
+  "setup": "same as S-1: speed mode, thinking off, spoiler covers ON, chat 'wheatley fight', no game",
+  "question": "Hades the three sisters in the second area are wrecking me, help",
+  "pressed": "send script (VERIFIED). Walking Down to Ask got stuck on the details chip row at the end of the Session tab (see Z-FREEPLAY finding 1); B closed the details and the ring landed on Show details; then DOWN x4 to Ask; sampler installed (box still held the question); A once. Then UP to Show details, A; DOWN to the tab row, RIGHT (Session tab); UP x3 + RIGHT to Copy reply text, A; DOWN, RIGHT x2 to Read aloud, A",
+  "sampler": {
+    "every": "250 ms",
+    "names": "Megaera, Alecto, Tisiphone, Furies, Fury Sisters",
+    "samples": 81,
+    "spanSeconds": 20.5,
+    "stopControlShown": "0.25 s to 13.5 s",
+    "nameHits": 0,
+    "textContainingBonsaiSpoiler": 0,
+    "textContainingUndefined": 0,
+    "waitingLineDistinct": ["Waking the model up for \"Hades the three sisters in the second area are wrecking…\"…", "Helping you with the second area of Hades"],
+    "note": "the details panel was closed while the answer arrived, so the Session tab's list was not on screen during sampling"
+  },
+  "seen": {
+    "answerText": "522 characters (backend raw 595). Calls them 'those three sisters'; no name. The wording is almost the same as the Hollow Knight answer ('See how they swing those big arms?').",
+    "showDetailsThisAnswer": "chips Keyword search, KB: 15 sections, Reply style: balanced, Spoiler risk: med, Routed gemma4:e2b-it-qat, Developer details; Local knowledge base 'No source page / Hades — Boss note (spoiler)', trust tier fallback_no_source; no name",
+    "showDetailsSession": "PROTECTED NAME SHOWN IN PLAIN TEXT, twice: (1) the AI's chat summary 'What the AI remembers' reads 'Player asked about beating Megaera and her second phase in Hades.'; (2) the list of the chat's questions includes a row 'How do I beat Megaera?' (class bonsai-details-session-row). Both come from the player's own older questions in this chat, not from today's answer. No cover around either.",
+    "copy": "clipboard read through the page: 522 characters, the answer text, 0 name hits (the answer's two paragraphs came out as one paragraph in the copy)",
+    "readAloud": "three wav files appeared at 15:52; spoken text not in the plugin log, so SKIPPED",
+    "spoilerCovers": "none appeared in this answer, so none could be opened",
+    "S3": "no 'undefined' reveal and no 'bonsai-spoiler' text anywhere"
+  },
+  "screenshots": ["screenshots/plan72/S2-details-thisanswer.png", "screenshots/plan72/S2-details-session.png"],
+  "verdict": "UNCLEAR",
+  "verdictNote": "Today's answer, its live text, the This-answer tab, the chips and the copied text are clean (0 hits in 81 samples). But the Session tab shows 'Megaera' in plain text in two places, from the player's own earlier questions and the AI's summary of them. The runbook says no protected name in any read; whether the player's own words count is the owner's call."
+}

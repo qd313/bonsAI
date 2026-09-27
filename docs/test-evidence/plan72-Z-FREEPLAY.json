@@ -1,0 +1,126 @@
+{
+  "row": "plan72-Z-FREEPLAY",
+  "build": {"commit": "8e438f74", "indexJsMd5": "eff40145113a42eb63fe661570442f46"},
+  "deckTime": "2026-09-27 15:48 to 16:10 EDT (plus the S-flow walks from 15:44)",
+  "screen": {"innerWidth": 855, "innerHeight": 766, "devicePixelRatio": 1.28, "note": "external monitor the whole block"},
+  "setup": "speed mode, thinking off (block settings), spoiler covers on, chat 'wheatley fight', no game. Only D-pad, A, B, LB, RB. Never A on the question box, the x, a download or a save.",
+  "route": [
+    "Main: Ask on two S questions, Show details open/close on the Hollow Knight answer and the Hades answer (A and B), details tab row Right to Session",
+    "Main: walked Down through the Session list to the end (70 presses), got stuck on the chip row (finding 1), B out, Down to Ask",
+    "Main: Up to the chat row; RB, RB, LB, LB; RB and back; Left to the save icon, Left, Right, Right to the x, Right, Left back to the name; LB back to 'wheatley fight'",
+    "Main: A on '73 earlier' (opens the list of older questions); sweep Down the whole chat to Ask (81 stops) and back Up to the top (85 stops)",
+    "Main: A on Show details, A on Hide details; Down to the chip, A (filled 'Any known issues running this on Deck?'), Down x2 to Ask, A; Down to Stop, A (Request cancelled)",
+    "Main: chip 'What TDP should I use for menus and idle?' A, Ask A, answer; Helpful A",
+    "Main: chip A (got 'Recommended TDP for this game?', see finding 4), Ask A, answer; Not really A, picked no reason",
+    "Tabs: tab bar Right to Ollama (sweep down and up), Settings (sweep), Permissions (sweep), Developer (look only, screenshot, no press inside), About (sweep), Right back to Main",
+    "Closed with B from the tab bar, reopened (ring landed in the question box); B, B, reopened again (ring unowned, first Down to Retry)",
+    "Saved check plan72-Z-main-down-to-ask (Retry to Ask, 11 stops)"
+  ],
+  "findings": [
+    {
+      "id": 1,
+      "what": "Down stops half way: with Show details open on the Session tab, Down through the Session list ends on the details chip row; Down steps chip 1 to chip 6, then does nothing. Ask cannot be reached by Down.",
+      "pressed": "DOWN x70 (walk), then DOWN x1 (chip 5), DOWN x6 and RIGHT x1: ring stayed on 'Chip 6 of 6'",
+      "ringBefore": "Session list rows, then .bonsai-chip-ladder",
+      "ringAfter": ".bonsai-chip-ladder 'Chip 6 of 6' (Developer details open under it)",
+      "numbers": {"ladderRect": [52, 283.7, 290, 368.7], "ladderBottom": 652.4, "dockTop": 585.6, "underDock": 66.8, "visiblePercent": 67, "coveredBy": "the question box input"},
+      "recovery": "B closed the details; ring on Show details; Down x4 reached Ask",
+      "screenshot": "screenshots/plan72/Z-01-ladder-down-dead.png"
+    },
+    {
+      "id": 2,
+      "what": "Ring on a partly hidden card: 'What the AI remembers' (Session tab) took the ring while 67% visible, the rest behind the question box",
+      "pressed": "DOWN from 'Sum up again'",
+      "numbers": {"visiblePercent": 67, "coveredBy": "question box input"}
+    },
+    {
+      "id": 3,
+      "what": "Two messages disagree: the Session tab says 'The whole chat still fits, so there's nothing to sum up yet.' while the answer carries 'The chat summed itself up before this answer.' and the memory card reads '61 turns · just now'. The plugin log shows 'chat_summary: written in 13.9 s — covered 122 turns'.",
+      "pressed": "A on Show details, RIGHT on the tab row",
+      "screenshot": "screenshots/plan72/S1-details-session.png"
+    },
+    {
+      "id": 4,
+      "what": "A suggestion chip changes under the ring. Read the chip as 'Why is my Deck running hot?'; about 2 s later A put 'Recommended TDP for this game?' into the box (the chip was mid-change, scrambled letters on it). Also, right after A on a chip, the chip changes to a new question.",
+      "pressed": "DOWN to the chip, read label, A",
+      "ringBefore": "chip 'Why is my Deck running hot?'",
+      "ringAfter": "chip 'Recommended TDP for this game?' (box filled with that)"
+    },
+    {
+      "id": 5,
+      "what": "Straight Down skips Helpful / Not really on the newest answer: from the last answer section Down lands on Read aloud at the right end; in the whole-chat sweep Up from Show details also went to Read aloud. After Not helpful, Down from Read aloud visits only the left reason chips (Bad info, Spoiled it) and skips 'Wrong game or topic', 'Too long', 'Too short'.",
+      "pressed": "DOWN / UP walks",
+      "evidence": "runs/plan72-Z-longchat-sweep.json stops 76-78 and 85-87; checks/plan72-Z-main-down-to-ask.json"
+    },
+    {
+      "id": 6,
+      "what": "Up skips the question row (Retry to 'N earlier'); Down lands on it. The question row is behind the Retry icon (known false alarm for visibility).",
+      "pressed": "UP from Retry"
+    },
+    {
+      "id": 7,
+      "what": "The open tab strip covers the top of the page while the ring is on the tab bar. Main: the chat row (name, save icon, x, dots) is hidden. Developer: the heading 'KNOWLEDGE BASE (DEV QA)' and the first line hidden. About: the heading and first lines hidden. The page says the tab bar box is 20 tall (y 64 to 84) and the Developer heading is at y 88 to 110, but the screenshot shows the icon strip from about y 133 to 213 on screen (about 64 to 126 page px) over it.",
+      "pressed": "UP to the tab bar, RIGHT between tabs",
+      "screenshots": ["screenshots/plan72/Z-main-tab-strip-over-chatrow.png", "screenshots/plan72/Z-dev-tab-strip-over-heading.png", "screenshots/plan72/Z-about-tab-strip-over-top.png"],
+      "note": "may be by design (strip opens while focused); owner to decide"
+    },
+    {
+      "id": 8,
+      "what": "Reopen lands in different places: reopen 1 put the ring straight into the question box (where A opens the keyboard); reopen 2 left the ring unowned and the first Down went to Retry on the newest question (y 187), skipping the chat row.",
+      "pressed": "B from the tab bar (closes), open; B (ring to tab bar), B (closes), open, DOWN"
+    },
+    {
+      "id": 9,
+      "what": "After Stop: 'Request cancelled.' shows, the question goes back into the box, the ring sits in the question box, and the Read aloud button sits alone with a blank gap and no thumbs",
+      "pressed": "A on Ask, DOWN to 'Stop generation', A",
+      "screenshot": "screenshots/plan72/Z-after-stop.png"
+    },
+    {
+      "id": 10,
+      "what": "After Helpful the thumbs are replaced by 'Saved on this Deck' and Read aloud sits alone on its own row with a gap under it; the ring moved to Read aloud (visible)",
+      "pressed": "A on Helpful",
+      "screenshot": "screenshots/plan72/Z-after-helpful.png"
+    },
+    {
+      "id": 11,
+      "what": "After Not really, the 'What went wrong?' block's box ends 14 px under the top of the dock (chips themselves visible)",
+      "pressed": "A on Not really",
+      "numbers": {"blockBottom": 614.6, "dockTop": 600.6},
+      "screenshot": "screenshots/plan72/Z-not-helpful-chips.png"
+    },
+    {
+      "id": 12,
+      "what": "Answer quality: the Hades answer reused the Hollow Knight answer's wording ('See how they swing those big arms?'); two differently worded TDP questions got nearly the same answer and neither gives a number; the log parsed a TDP suggestion {'tdp_watts': 10, 'gpu_clock_mhz': 1200} out of the Hollow Knight boss answer",
+      "pressed": "Ask on the S-1, S-2 and chip questions"
+    },
+    {
+      "id": 13,
+      "what": "Copy joined the Hades answer's two paragraphs into one (clipboard has a space where the screen shows a paragraph break); the Hollow Knight copy kept its breaks",
+      "pressed": "A on Copy reply text"
+    },
+    {
+      "id": 14,
+      "what": "Small layout differences: Settings 'Clear cache...' starts at x 48 while the other buttons start at x 64; About 'Support my Steam Sale habit' control box is 180 x 192",
+      "evidence": "runs/plan72-Z-settings-sweep.json, runs/plan72-Z-about-sweep.json"
+    },
+    {
+      "id": 15,
+      "what": "Opening the plugin failed twice after the reload at the start (first expected; second: the Quick Access button over the home screen showed no pane); third try worked",
+      "pressed": "deck_openPlugin x3"
+    }
+  ],
+  "notAProblem": [
+    "The performance overlay showed 0 to 4 FPS and multi-second frame times on several screenshots; the screen was idle, so nothing was redrawn. Not counted.",
+    "Every tab sweep (Ollama 18 stops, Settings 17, Permissions 7, About 7) had every stop visible.",
+    "The whole-chat walk Down reached Ask (81 stops) and Up reached the top (85); the only partly hidden stops were the two known false alarms (question row behind Retry, last section behind Copy).",
+    "The question box never went dead: Down from it reached Ask each time.",
+    "Chat row: Left reaches the save icon, Right reaches the x; nothing pressed on them."
+  ],
+  "threeThatComeAndGo": {
+    "downStopsHalfWayAskUnreachable": "SEEN once (finding 1), inside Show details on the Session tab",
+    "questionBoxGoesDead": "not seen",
+    "downSkipsAnAnswerOrTheChatRow": "partly: Down skips Helpful/Not really (finding 5); reopen 2 first Down skipped the chat row (finding 8)"
+  },
+  "sweepsSaved": ["runs/plan72-Z-longchat-sweep.json", "runs/plan72-Z-ollama-sweep.json", "runs/plan72-Z-settings-sweep.json", "runs/plan72-Z-perms-sweep.json", "runs/plan72-Z-about-sweep.json", "checks/plan72-Z-main-down-to-ask.json"],
+  "verdict": "FINDINGS RECORDED (free play has no pass line)"
+}

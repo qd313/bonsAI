@@ -1,0 +1,50 @@
+{
+  "row": "plan72-S1-DESCRIBED-BOSS",
+  "build": {"commit": "8e438f74", "indexJsMd5": "eff40145113a42eb63fe661570442f46", "confirmed": "md5sum on the Deck 15:42 EDT"},
+  "deckTime": "2026-09-27 15:44:17 to 15:47:30 EDT",
+  "screen": {"innerWidth": 855, "innerHeight": 766, "screen": "1500x843", "devicePixelRatio": 1.28, "note": "external monitor (same as blocks 1-3)"},
+  "setup": {
+    "ask_mode": "speed (was strategy)",
+    "ask_think_effort": "off (was medium)",
+    "strategy_spoiler_masking_enabled": "true (spoiler covers ON; left unchanged)",
+    "how": "settings edit over SSH, plugin reload at once; open failed twice (first expected; second: QAM chord over the home screen showed no pane), third open worked",
+    "chat": "'wheatley fight' (the chat that was open)",
+    "game": "none",
+    "backup": "~/qa-backups/settings-plan72-block4 (9 chat_slots files, same as original); feedback log 5 lines"
+  },
+  "question": "In Hollow Knight the big mantis guys in the tall arena keep beating me, any tips",
+  "pressed": "send script (VERIFIED, whole text read back); walkTo DOWN 11 presses to Ask; sampler installed; A once. Then walkTo UP to Show details, A; DOWN to the details tab row, RIGHT (switches to the Session tab); later DOWN/RIGHT to Copy reply text, A; UP to Mark reply helpful, RIGHT x2 to Read aloud, A",
+  "sampler": {
+    "every": "250 ms",
+    "watched": "text of the newest answer slot, the live thinking line (.bonsai-chat-reasoning-live), the waiting line (.bonsai-chat-thinking-line), and the whole panel's text",
+    "names": "Mantis Lords / Mantis Lord (case-insensitive)",
+    "samples": 147,
+    "spanSeconds": 36.9,
+    "stopControlShown": "0.25 s to 32.5 s",
+    "nameHits": 0,
+    "textContainingBonsaiSpoiler": 0,
+    "textContainingUndefined": 0,
+    "liveThinkingLineSamples": "none (thinking off)",
+    "waitingLineDistinct": [
+      "Worth answering properly: gathering context on \"In Hollow Knight the big mantis guys in the tall arena…\"…",
+      "Summing up the chat so far · 1 s ... 13 s (11 distinct counters)",
+      "\"In Hollow Knight the big mantis guys in the tall arena…\" is in good hands now…",
+      "Tips for dealing with the big mantis in Hollow Knight's tall arena"
+    ]
+  },
+  "seen": {
+    "answerText": "974 visible characters (backend raw 1072). Four paragraphs in a chatty voice ('Right, listen up, mate!'), calls them 'those big mantis guys'; no boss name.",
+    "showDetailsThisAnswer": "card 'Starting out in Hollow Knight / From the Hollow Knight wiki'; chips Keyword search, KB: 14 sections, Reply style: balanced, Spoiler risk: med, Routed gemma4:e2b-it-qat, Developer details; Local knowledge base hollowknight.wiki CC-BY-SA-3.0; no protected name",
+    "showDetailsSession": "'What the AI remembers, 61 turns · just now' list and the chat's question list; no Mantis name. (It does show 'Megaera' from the player's own older questions; see S-2.)",
+    "suggestionChipUnderAnswer": "one chip at a time, rotating: 'I'm stuck — what should I try next?', 'How do I start a new named chat?', 'Game won't launch, what should I check?', 'How do I fix Steam Input for this game?', 'How well does this game run on Deck?' - no protected name",
+    "wholePanelTextAfter": "6111 characters, 0 name hits, no 'undefined', no 'bonsai-spoiler'",
+    "copy": "A on Copy reply text; clipboard read through the page (navigator.clipboard.readText worked): 920 characters, exactly the answer's four paragraphs, 0 name hits",
+    "readAloud": "A on Read aloud; three wav files appeared in read_aloud_tmp at 15:47; the plugin log does not record the spoken text, so that part is SKIPPED (not logged)",
+    "spoilerCovers": "none appeared in this answer (0 cover elements in every sample), so none could be opened",
+    "S3": "no 'undefined' reveal and no 'bonsai-spoiler' text anywhere"
+  },
+  "screenshots": ["screenshots/plan72/S1-details-thisanswer.png", "screenshots/plan72/S1-details-session.png"],
+  "raw": "scratch deck/b5",
+  "verdict": "PASS",
+  "verdictNote": "No protected name in any of 147 samples, the answer, both details tabs, the chips, or the copied text. Read-aloud text could not be checked (not logged). No cover appeared, so the cover path was not exercised."
+}

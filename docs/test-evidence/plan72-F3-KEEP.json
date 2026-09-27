@@ -1,0 +1,494 @@
+{
+ "row": "plan72-F3-KEEP",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:33:40 to 15:34:50 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": "right after F3-CHIPS: thumbs given (Not really), 'What went wrong?' with 5 chips showing under the overlay answer; chat 'wheatley fight'",
+ "pressed": "walkTo UP 11 presses from 'Mark reply not helpful' to the chat row; LEFT once (save icon lit: class bonsai-chat-slot-save--active-stop, icon x 99.5 w 22.0); A once; read the window; B once; read",
+ "seen": {
+  "saveWindow": "Steam window 'Save to Desktop note' (appends to a file in Desktop/bonsAI_logs/, never replaces), text field 'Note name (saved as name.md)' prefilled 'bonsai-debug', buttons Save and Cancel; the ring on the name field; the QAM hidden behind it",
+  "afterB": "window closed, the QAM came back with bonsAI open on the same chat; ring on the chat row (save icon no longer lit)",
+  "thumbsAfter": "both thumbs still carry class 'Disabled' (the same as right after the rating)",
+  "reasonChipsAfter": "'What went wrong?' still shown with Bad info, Wrong game or topic, Spoiled it, Too long, Too short",
+  "nothingSaved": "Desktop/bonsAI_logs still 166 files, no bonsai-debug.md (only the automatic chat log file changed, at 15:31:28, before the save window)"
+ },
+ "savedCheck": "checks/F3-KEEP-row-left-right.json (Left then Right on the chat row; note the rig only sees the row element, so this saved check cannot tell the save-icon stop from the name)",
+ "verdict": "PASS",
+ "verdictReason": "After opening and closing the save window, the thumbs were still greyed (Disabled) and the five 'What went wrong?' chips were still there under that answer; nothing was saved. (Block 2 saw these chips vanish after the same window.)",
+ "reads": {
+  "rowAfterLeft": {
+   "deckTime": "2026-09-27 15:34:11 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "row": {
+     "x": 47.998,
+     "y": 87.952,
+     "w": 300,
+     "h": 48.547,
+     "right": 347.998,
+     "bottom": 136.499
+    },
+    "rowText": "LBwheatley fight\u00d7what is a good way to practice parrying in action games+RB",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "ring": {
+     "tag": "DIV",
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "LBwheatley fight\u00d7what is a good way to practice parrying in ",
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 48.547,
+      "right": 347.998,
+      "bottom": 136.499
+     }
+    },
+    "els": [
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-row-inner",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 47.998,
+       "y": 87.952,
+       "w": 300,
+       "h": 48.547,
+       "right": 347.998,
+       "bottom": 136.499
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "LB",
+      "rect": {
+       "x": 55.994,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 91.553,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-center",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 32.996,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-game",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 10.999,
+       "right": 296.448,
+       "bottom": 106.726
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-row bonsai-chat-slot-title-row--has-save",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 196.899,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 121.545,
+       "bottom": 127.734
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "svg",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 103.552,
+       "y": 109.741,
+       "w": 13.989,
+       "h": 13.989,
+       "right": 117.542,
+       "bottom": 123.73
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 105.884,
+       "y": 112.073,
+       "w": 9.326,
+       "h": 9.326,
+       "right": 115.21,
+       "bottom": 121.399
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 108.215,
+       "y": 112.073,
+       "w": 4.08,
+       "h": 2.914,
+       "right": 112.296,
+       "bottom": 114.987
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 107.632,
+       "y": 117.902,
+       "w": 5.829,
+       "h": 3.497,
+       "right": 113.461,
+       "bottom": 121.399
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 156.494,
+       "y": 109.534,
+       "w": 82.996,
+       "h": 14.392,
+       "right": 239.49,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title-inner",
+      "aria": null,
+      "text": "wheatley fight",
+      "rect": {
+       "x": 156.494,
+       "y": 109.534,
+       "w": 82.996,
+       "h": 14.392,
+       "right": 239.49,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-delete",
+      "aria": null,
+      "text": "\u00d7",
+      "rect": {
+       "x": 274.451,
+       "y": 105.737,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-dots",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 124.731,
+       "w": 196.899,
+       "h": 3.992,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156.055,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 160.046,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.04,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 170.032,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176.025,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 180.017,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186.011,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 190.002,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.996,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 199.988,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 205.981,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 209.973,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 215.967,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 219.958,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 225.952,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 229.944,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 235.938,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 239.929,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "RB",
+      "rect": {
+       "x": 304.443,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 340.002,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     }
+    ]
+   }
+  },
+  "afterB": {
+   "deckTime": "2026-09-27 15:34:36 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "open": true,
+    "ring": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswi",
+     "aria": null,
+     "text": "LBwheatley fight\u00d7what is a good way to practice pa"
+    },
+    "saveActive": false,
+    "title": "wheatley fight",
+    "lastQ": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+    "thumbs": [
+     {
+      "aria": "Mark reply helpful",
+      "cls": "bonsai-chat-secondary-btn Disabled cXzBZxhPBl7fZs9LODEnc Focusable",
+      "opacity": "1",
+      "color": "rgb(200, 218, 240)"
+     },
+     {
+      "aria": "Mark reply not helpful",
+      "cls": "bonsai-chat-secondary-btn Disabled cXzBZxhPBl7fZs9LODEnc Focusable",
+      "opacity": "1",
+      "color": "rgb(200, 218, 240)"
+     }
+    ],
+    "labels": [
+     "Was this helpful?",
+     "What went wrong?"
+    ],
+    "buttonsInReplyActions": [
+     "Helpful",
+     "Not really",
+     "Bad info",
+     "Wrong game or topic",
+     "Spoiled it",
+     "Too long",
+     "Too short"
+    ]
+   }
+  }
+ }
+}

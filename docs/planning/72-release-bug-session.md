@@ -507,3 +507,15 @@ land.
   entry, the stale STOP-PARTIAL-01 sentence fixed, one plan 72 block in the changelog, and the session's
   evidence (65 files) committed. Spot-checked by the session: the dots row says monitor only with the Deck's
   own screen owed; Apply UI scale says closed by hiding, as the maintainer ruled.
+- **15:55 — block 3 (flow F3) finished** on `8e438f74`, monitor. **Passed:** F3-DL (the update button opens
+  the notice; "Not now" downloads nothing), F3-CHIPS (rows 6.006 apart, chips 5.99), F3-KEEP (rating and chips
+  survive the save window), F3-HOLD (77 samples unchanged during the answer; resumed 0.5 s after), F3-OLDSAVE
+  (the icon on a 4-day-old chat). **Nearly:** F3-BUBBLE — even lines 164.6 / 170.7 / 189.0 (was 193.6 / 225.0
+  / 105.8), no overlap, but the widest line starts 4.41 px from Retry against 3–4 (the maintainer's eye).
+  **Unclear:** F3-TIP — a different note section matched, so the fixed line was not on screen (unit-tested).
+  **Failed:** F3-THINK — the targeted shapes are gone, but other instruction echoes still show ("Review
+  against Constraints", "End with a mandatory branching JSON fence", a lone "1."); pattern-by-pattern filtering
+  will not end — proposed to the maintainer: show only the model's step titles as progress. Sightings: a
+  Strategy answer about the Deck overlay ended with Hollow Knight choice buttons carried over from the chat's
+  previous question; twice Up from the "N earlier" pill skipped the chat row; Down stalled once on an answer's
+  last section. Settings, chats and the feedback log restored.

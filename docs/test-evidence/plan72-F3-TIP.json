@@ -1,0 +1,83 @@
+{
+ "row": "plan72-F3-TIP",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:24:30 to 15:26:10 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "speed (was strategy; settings edit + reload)",
+  "ask_think_effort": "medium (unchanged; the runbook names only Speed mode)",
+  "chat": "'wheatley fight' (the chat the panel was on, 124 turns)",
+  "game": "none (Context: no active game detected)",
+  "use_local_knowledge_base": true
+ },
+ "question": "deep rock galactic survivor the words on screen look blurry on my deck, what should i change",
+ "pressed": "send script (VERIFIED, full text); walkTo DOWN 13 presses from the Main tab bar to Ask; A once; waited for the answer; walkTo UP 2 presses to 'Show details'; A once",
+ "seen": {
+  "answerSeconds": "64.5 (plugin log). The chat summed itself up first (28.0 s, 124 turns), then the answer took 36 s with thinking on (Show reasoning \u00b7 19 s)",
+  "answerMentionsRenderScale": false,
+  "answerGist": "generic advice: in-game Text Scale / UI Scaling / Font Size, then Steam Deck graphics settings, GPU clock",
+  "detailsPanel": [
+   "This answer | Session \u00b7 72",
+   "Chip 1 of 7: Keyword search, KB: 13 sections, Reply style: balanced",
+   "card 'Local knowledge base' with an orange 'No source page' block and a chip 'Deep Rock Galactic: Surviv...' (full text 'Deep Rock Galactic: Survivor \u2014 Praetorian')",
+   "bullets: 'Retrieval: Keyword search', 'Trust tier: fallback_no_source', 'text:deep rock galactic survivor'",
+   "latency line: '64.5s (>60s): prefer GPU for Ollama, not CPU.'"
+  ],
+  "sourceLine": "no line starting 'Source:' anywhere in the panel; neither 'Deck tips for Deep Rock Galactic: Survivor' nor 'shared troubleshooting tips' appears",
+  "logAttached": "ask_ollama: rules+cards=1623 (attached 478 chars)"
+ },
+ "screenshot": "screenshots/plan72/F3-TIP-details.png",
+ "verdict": "UNCLEAR",
+ "verdictReason": "The expected Source line never appeared. This time the knowledge base matched a different page (the game's Praetorian section, marked 'No source page', trust tier fallback_no_source) instead of the game's Deck display tips that block 2 got with a near-identical question, so the line the fix changed was not on screen to judge. The old wrong wording 'shared troubleshooting tips' was also not shown. The credit chip does name the game. Thinking was on at medium (the settings value on arrival), unlike block 2's run with thinking off; that may or may not change what is looked up.",
+ "reads": {
+  "details": {
+   "deckTime": "2026-09-27 15:25:56 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "Hide details",
+    "hits": [
+     {
+      "cls": "",
+      "text": "\n/* ==========================================================================\n        /* Keep plugin subtree shrinkable inside QAM flex layout (avoids horizontal spill). */\n        /*\n          Do no"
+     },
+     {
+      "cls": "bonsai-chat-turn-row-title",
+      "text": "deep rock galactic survivor the words on screen look blurry on my deck, what should i change"
+     },
+     {
+      "cls": "",
+      "text": "Local knowledge base"
+     },
+     {
+      "cls": "",
+      "text": "No source page"
+     },
+     {
+      "cls": "",
+      "text": "Deep Rock Galactic: Survivor \u2014 Praetorian"
+     },
+     {
+      "cls": "",
+      "text": "Trust tier: fallback_no_source"
+     },
+     {
+      "cls": "",
+      "text": "text:deep rock galactic survivor"
+     },
+     {
+      "cls": "_2ADpTpv53dcY1uFpMWO1KT",
+      "text": "Enable local knowledge base for better game tips"
+     }
+    ],
+    "lastText": "deep rock galactic survivor the words on screen look blurry on my deck, what should i change\nShow reasoning \u00b7 19 s\n\nRight, listen up. If the words look like they\u2019ve gone through a blender, it means the game\u2019s graphics settings are probably cranked up too high, or somethin' ain't right with how the deck's handling the display. You gotta check the in-game settings first, yeah?\n\nFirst thing, look for any stuff called \"Text Scale,\" \"UI Scaling,\" or \"Font Size.\" If those are set way too high, the text gets stretched out and looks like a mess. Try dialin' that back down a notch.\n\nThen, go into your Steam Deck system settings\u2014the big menu where you change the look of the whole thing. Look for the graphics settings. You might need to try lowering the overall rendering quality or maybe switch the scaling mode. Sometimes switching from \"Full Screen\" to a specific aspect ratio setting can fix those weird blurriness issues.\n\nIf you\u2019re still seeing dodgy text, you might need to tweak the GPU clock a bit to make sure it\u2019s running smooth. But for now, just start with the in-game scaling. Keep it simple, yeah?\n\nThe chat summed itself up before this answer. Press to read what it kept.\nWas this helpful?\nHelpful\nNot really\nHide details \u2191\nThis answer\nSession \u00b7 72\nChip 1 of 7\nKeyword search\nKB: 13 sections\nReply style: balanced\nLocal knowledge base\nNo source page\nDeep Rock Galactic: Survivor \u2014 Praetorian\nRetrieval: Keyword search\nTrust tier: fallback_no_source\ntext:deep rock galactic survivor"
+   }
+  }
+ }
+}

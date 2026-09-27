@@ -1,0 +1,1488 @@
+{
+ "row": "plan72-F3-THINK",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:28:10 to 15:29:00 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "strategy (was speed from F3-TIP; the original value is strategy)",
+  "ask_think_effort": "low (original medium)",
+  "how": "settings edit, plugin reload at once, reopened (first open failed as expected, second worked)",
+  "chat": "'wheatley fight'",
+  "game": "none"
+ },
+ "question": "In Hollow Knight the mantis boss fight keeps going wrong for me, how do I read its moves",
+ "pressed": "send script (VERIFIED); walkTo DOWN 12 presses to Ask; sampler installed; A once",
+ "sampler": "every 250 ms: text of .bonsai-chat-reasoning-live and of .bonsai-chat-thinking-line (the waiting phrase, class bonsai-chat-status-line bonsai-chat-thinking-line); 223 samples over 55 s; Stop control present from 0.5 s to 47.0 s",
+ "seen": {
+  "waitingPhrase": {
+   "0.5s to 1.5s": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026",
+   "1.75s to 11.0s": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026",
+   "after": "gone once the first thought arrived at 11.3 s (never shown together with the live line)"
+  },
+  "liveLine": "from 11.3 s to 35.0 s; 96 samples, 66 distinct texts",
+  "startsWithSmallLetter": 0,
+  "onlyPunctuationOrDigit": [
+   "'1' at 11.3 s",
+   "'1.' at 11.5 s"
+  ],
+  "startsWithPunctuation": {
+   "count": 14,
+   "kinds": [
+    "'[hidden]' (5 distinct samples, e.g. '[hidden]\n3.  Determine Strategy Mode: ...')",
+    "'\u2022' bullet (9 distinct samples, e.g. '\u2022 Use bonsai-spoiler for unavoidable spoilery details.', '\u2022 End with a mandatory branching JSON fence.')"
+   ]
+  },
+  "containsModeColon": {
+   "count": 13,
+   "example": "3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE."
+  },
+  "containsVoiceColon": {
+   "count": 0,
+   "note": "12 samples contain '6.  Draft the Response (Ali G Voice):' \u2014 'Voice)' then colon, not 'Voice:'"
+  },
+  "containsConstraint": {
+   "count": 1,
+   "at": "29.0 s",
+   "text": "7.  Review against Constraints"
+  },
+  "containsMust": 0,
+  "setupLines": [
+   "\u2022 Keep coaching free of spoilers initially.",
+   "\u2022 Use bonsai-spoiler for unavoidable spoilery details.",
+   "\u2022 Lead with tactics, skip orientation.",
+   "\u2022 End with a mandatory branching JSON fence.",
+   "\u2022 Start with the status line.",
+   "\u2022 Provide the required branching options."
+  ],
+  "analysisAndGameLinesShow": true,
+  "analysisExample": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.",
+  "gameExample": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]",
+  "knowledgeBaseQuoted": "the live line also showed the knowledge-base card quoted word for word ('Key info: \"The three sisters on the thrones in the Mantis Village ...\"') for about 8 s"
+ },
+ "distinctLines": [
+  "1",
+  "1.",
+  "1.  Analyze the Request: The user is stuck on",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. The context",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. The context provided includes specific",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode:",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n4",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n4.",
+  "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+  "Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+  "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+  "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n    \u2022 *Hollow Knight /",
+  "3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]",
+  "3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info",
+  "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on",
+  "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not",
+  "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One",
+  "Apply Strategy Mode Rules:\n    \u2022 Keep coaching free of spoilers initially.\n    \u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash",
+  "\u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly",
+  "\u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you,",
+  "\u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall",
+  "\u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising",
+  "\u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her",
+  "End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang",
+  "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When",
+  "[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes",
+  "[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go",
+  "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    *",
+  "When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate",
+  "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking",
+  "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy",
+  "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics",
+  "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the",
+  "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.\n7",
+  "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.\n7.  Review against Constraints",
+  "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+  "\u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+  "\u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+  "\u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+  "\u2022 Provide the required branching options."
+ ],
+ "settingsRestored": "ask_think_effort put back to medium right after (ask_mode left at strategy = its original value)",
+ "verdict": "FAIL",
+ "verdictReason": "Several expected points fail: 13 samples contain 'Mode:' ('Determine Strategy Mode:'), 1 contains 'Constraint', two early samples are only '1' and '1.', and 14 samples start with a bullet or '[hidden]' rather than a word. The setup-style lines ('End with a mandatory branching JSON fence', 'Use bonsai-spoiler ...') still show. What passes: no sample starts with a small letter, none contains 'Must' or 'Voice:', the analysis and game lines show, and the waiting phrase was on screen for the first 11 s.",
+ "reads": {
+  "samples": {
+   "deckTime": "2026-09-27 15:29:06 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 55817,
+    "samples": [
+     {
+      "t": 251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 501,
+      "stop": true,
+      "live": null,
+      "wait": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026"
+     },
+     {
+      "t": 751,
+      "stop": true,
+      "live": null,
+      "wait": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026"
+     },
+     {
+      "t": 1001,
+      "stop": true,
+      "live": null,
+      "wait": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026"
+     },
+     {
+      "t": 1252,
+      "stop": true,
+      "live": null,
+      "wait": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026"
+     },
+     {
+      "t": 1501,
+      "stop": true,
+      "live": null,
+      "wait": "Pulling local tips about \"In Hollow Knight the mantis boss fight keeps going wron\u2026\"\u2026"
+     },
+     {
+      "t": 1751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 2001,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 2252,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 2501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 2751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 3002,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 3251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 3501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 3753,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 4003,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 4251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 4503,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 4751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 5004,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 5251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 5501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 5751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 6001,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 6251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 6501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 6751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 7001,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 7252,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 7502,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 7751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 8001,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 8251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 8501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 8751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 9003,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 9253,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 9501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 9751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 10002,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 10251,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 10501,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 10751,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 11001,
+      "stop": true,
+      "live": null,
+      "wait": "\"In Hollow Knight the mantis boss fight keeps going wron\u2026\" is in good hands now\u2026"
+     },
+     {
+      "t": 11336,
+      "stop": true,
+      "live": "1",
+      "wait": null
+     },
+     {
+      "t": 11501,
+      "stop": true,
+      "live": "1.",
+      "wait": null
+     },
+     {
+      "t": 11751,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on",
+      "wait": null
+     },
+     {
+      "t": 12001,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight",
+      "wait": null
+     },
+     {
+      "t": 12251,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the",
+      "wait": null
+     },
+     {
+      "t": 12519,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/",
+      "wait": null
+     },
+     {
+      "t": 12751,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The",
+      "wait": null
+     },
+     {
+      "t": 13001,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. The context",
+      "wait": null
+     },
+     {
+      "t": 13252,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. The context provided includes specific",
+      "wait": null
+     },
+     {
+      "t": 13501,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]",
+      "wait": null
+     },
+     {
+      "t": 13752,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode:",
+      "wait": null
+     },
+     {
+      "t": 14002,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode",
+      "wait": null
+     },
+     {
+      "t": 14254,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n4",
+      "wait": null
+     },
+     {
+      "t": 14505,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n4.",
+      "wait": null
+     },
+     {
+      "t": 14751,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 15001,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 15253,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 15502,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 15762,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 16003,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 16252,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 16501,
+      "stop": true,
+      "live": "1.  Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 16752,
+      "stop": true,
+      "live": "Analyze the Request: The user is stuck on the Hollow Knight Mantis boss fight and needs help reading the moves.\n2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 17018,
+      "stop": true,
+      "live": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 17252,
+      "stop": true,
+      "live": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 17505,
+      "stop": true,
+      "live": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 17752,
+      "stop": true,
+      "live": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.",
+      "wait": null
+     },
+     {
+      "t": 18001,
+      "stop": true,
+      "live": "2.  Identify Game/Context: The game is Hollow Knight. [hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n    \u2022 *Hollow Knight /",
+      "wait": null
+     },
+     {
+      "t": 18251,
+      "stop": true,
+      "live": "3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]",
+      "wait": null
+     },
+     {
+      "t": 18501,
+      "stop": true,
+      "live": "3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info",
+      "wait": null
+     },
+     {
+      "t": 18751,
+      "stop": true,
+      "live": "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on",
+      "wait": null
+     },
+     {
+      "t": 19013,
+      "stop": true,
+      "live": "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not",
+      "wait": null
+     },
+     {
+      "t": 19262,
+      "stop": true,
+      "live": "[hidden]\n3.  Determine Strategy Mode: The active mode is STRATEGY GUIDE MODE.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you",
+      "wait": null
+     },
+     {
+      "t": 19501,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with",
+      "wait": null
+     },
+     {
+      "t": 19751,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One",
+      "wait": null
+     },
+     {
+      "t": 20002,
+      "stop": true,
+      "live": "Apply Strategy Mode Rules:\n    \u2022 Keep coaching free of spoilers initially.\n    \u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash",
+      "wait": null
+     },
+     {
+      "t": 20255,
+      "stop": true,
+      "live": "\u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly",
+      "wait": null
+     },
+     {
+      "t": 20501,
+      "stop": true,
+      "live": "\u2022 Use bonsai-spoiler for unavoidable spoilery details.\n    \u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you,",
+      "wait": null
+     },
+     {
+      "t": 20751,
+      "stop": true,
+      "live": "\u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall",
+      "wait": null
+     },
+     {
+      "t": 21005,
+      "stop": true,
+      "live": "\u2022 Lead with tactics, skip orientation.\n    \u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising",
+      "wait": null
+     },
+     {
+      "t": 21251,
+      "stop": true,
+      "live": "\u2022 End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her",
+      "wait": null
+     },
+     {
+      "t": 21501,
+      "stop": true,
+      "live": "End with a mandatory branching JSON fence.\n5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one",
+      "wait": null
+     },
+     {
+      "t": 21751,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits",
+      "wait": null
+     },
+     {
+      "t": 22007,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she",
+      "wait": null
+     },
+     {
+      "t": 22252,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang",
+      "wait": null
+     },
+     {
+      "t": 22501,
+      "stop": true,
+      "live": "5.  Consult Local Knowledge Base:\n[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When",
+      "wait": null
+     },
+     {
+      "t": 22752,
+      "stop": true,
+      "live": "[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes",
+      "wait": null
+     },
+     {
+      "t": 23002,
+      "stop": true,
+      "live": "[hidden]\n    \u2022 Key info: \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both",
+      "wait": null
+     },
+     {
+      "t": 23251,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when",
+      "wait": null
+     },
+     {
+      "t": 23515,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs",
+      "wait": null
+     },
+     {
+      "t": 23754,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades",
+      "wait": null
+     },
+     {
+      "t": 24002,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two",
+      "wait": null
+     },
+     {
+      "t": 24252,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go",
+      "wait": null
+     },
+     {
+      "t": 24502,
+      "stop": true,
+      "live": "One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick",
+      "wait": null
+     },
+     {
+      "t": 24754,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the",
+      "wait": null
+     },
+     {
+      "t": 25001,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands",
+      "wait": null
+     },
+     {
+      "t": 25251,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of",
+      "wait": null
+     },
+     {
+      "t": 25501,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in",
+      "wait": null
+     },
+     {
+      "t": 25751,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.",
+      "wait": null
+     },
+     {
+      "t": 26001,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice",
+      "wait": null
+     },
+     {
+      "t": 26252,
+      "stop": true,
+      "live": "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice",
+      "wait": null
+     },
+     {
+      "t": 26503,
+      "stop": true,
+      "live": "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line",
+      "wait": null
+     },
+     {
+      "t": 26764,
+      "stop": true,
+      "live": "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the",
+      "wait": null
+     },
+     {
+      "t": 27003,
+      "stop": true,
+      "live": "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/",
+      "wait": null
+     },
+     {
+      "t": 27251,
+      "stop": true,
+      "live": "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    *",
+      "wait": null
+     },
+     {
+      "t": 27503,
+      "stop": true,
+      "live": "When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate",
+      "wait": null
+     },
+     {
+      "t": 27752,
+      "stop": true,
+      "live": "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking",
+      "wait": null
+     },
+     {
+      "t": 28005,
+      "stop": true,
+      "live": "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy",
+      "wait": null
+     },
+     {
+      "t": 28252,
+      "stop": true,
+      "live": "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics",
+      "wait": null
+     },
+     {
+      "t": 28502,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the",
+      "wait": null
+     },
+     {
+      "t": 28752,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.\n7",
+      "wait": null
+     },
+     {
+      "t": 29001,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.\n7.  Review against Constraints",
+      "wait": null
+     },
+     {
+      "t": 29252,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 29504,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 29758,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 30008,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 30253,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 30502,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 30753,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 31003,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 31255,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 31503,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 31752,
+      "stop": true,
+      "live": "6.  Draft the Response (Ali G Voice):\n    \u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 32003,
+      "stop": true,
+      "live": "\u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 32253,
+      "stop": true,
+      "live": "\u2022 Start with the status line.\n    \u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 32502,
+      "stop": true,
+      "live": "\u2022 Address the request by explaining the rhythm/pattern of the fight.\n    \u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 32753,
+      "stop": true,
+      "live": "\u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 33002,
+      "stop": true,
+      "live": "\u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 33253,
+      "stop": true,
+      "live": "\u2022 Incorporate the necessary spoiler block since the user is asking how to read the moves (which implies strategy/mechanics).\n    \u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 33505,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 33753,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 34001,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 34252,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 34502,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 34752,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 35002,
+      "stop": true,
+      "live": "\u2022 Provide the required branching options.",
+      "wait": null
+     },
+     {
+      "t": 35251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 35501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 35751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 36014,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 36251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 36501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 36776,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 37014,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 37254,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 37501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 37751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 38003,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 38279,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 38501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 38751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 39001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 39259,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 39501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 39759,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 40013,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 40270,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 40501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 40751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 41001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 41251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 41508,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 41768,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 42010,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 42251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 42501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 42751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 43001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 43251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 43501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 43751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 44012,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 44253,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 44501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 44751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 45001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 45251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 45501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 45751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 46001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 46251,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 46501,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 46751,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 47001,
+      "stop": true,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 47251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 47501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 47751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 48005,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 48256,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 48501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 48755,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 49001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 49251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 49501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 49751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 50001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 50251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 50501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 50751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 51001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 51251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 51501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 51751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 52001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 52251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 52501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 52753,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 53001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 53251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 53501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 53751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 54001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 54251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 54501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 54751,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 55001,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 55251,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 55501,
+      "stop": false,
+      "live": null,
+      "wait": null
+     },
+     {
+      "t": 55752,
+      "stop": false,
+      "live": null,
+      "wait": null
+     }
+    ]
+   }
+  }
+ }
+}

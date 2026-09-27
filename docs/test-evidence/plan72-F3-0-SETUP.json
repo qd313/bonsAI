@@ -1,0 +1,44 @@
+{
+ "row": "plan72-F3-0-SETUP",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:21:29 EDT",
+ "setup": {
+  "rig": "lsusb lists 303a:1001 (ESP32S3_DEV); deck_status bridgePortOpen true on COM7, automation armed",
+  "keepAwake": "systemd-inhibit lists a block lock 'DPS-HOLD-AWAKE: bonsai-72 F2' (sleep 28800), taken earlier; the task says it holds to 2026-09-28 02:33Z (about 7 h from now), so not renewed",
+  "buildMd5OnDeck": "eff40145113a42eb63fe661570442f46 (matches the task)",
+  "backup": "cp -r ~/homebrew/settings/bonsAI ~/qa-backups/settings-plan72-block3; chat_slots 9 files in both (8 chats + index.json)",
+  "feedbackLines": 5,
+  "bonsAI_logsFileCount": 166,
+  "screen": "external monitor: innerWidth 855, innerHeight 766, dpr 1.28, screen 1500x843 (not the Deck's own screen), so F3-DOTS is not run",
+  "internetDownloads": "no internet-downloads key in settings.json (default off); capabilities has no download entry",
+  "settingsNoted": {
+   "ask_mode": "strategy",
+   "ask_think_effort": "medium",
+   "preset_chip_animation": "decode",
+   "preset_single_chip": true,
+   "ui_scale_auto_enabled": true,
+   "ui_scale_manual_profile": "handheld",
+   "show_developer_tab": true
+  },
+  "plugin": "QAM was shut; deck_openPlugin opened bonsAI on the first try (Main tab, chat 'wheatley fight', 9 dots)",
+  "game": "none running (no reaper/SteamLaunch process)"
+ },
+ "verdict": "SETUP DONE",
+ "reads": {
+  "state": {
+   "deckTime": "2026-09-27 15:21:54 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "tab": "Main tab",
+    "ring": null,
+    "title": "wheatley fight",
+    "firstTurn": "how useful is the magnum revolver in half life 2",
+    "dots": 9
+   }
+  }
+ }
+}

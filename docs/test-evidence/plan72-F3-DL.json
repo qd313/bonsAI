@@ -1,0 +1,37 @@
+{
+ "row": "plan72-F3-DL",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:22:30 to 15:23:30 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": "Internet downloads off (Permissions switch aria-checked=false; no settings key). No game.",
+ "pressed": "from the Main tab bar RIGHT once (Ollama tab); DOWN once (toggle 'Run AI on this Deck', rect y 127.9), DOWN once (toggle 'Start the AI with the Deck', y 207.5), DOWN once (button 'Update AI & models', aria 'Update AI engine and installed models', rect 64,373.1,268x36); A once; read focus (ring on the BUTTON 'Not now'); screenshot; A once",
+ "seen": {
+  "boxTitle": "Turn on internet downloads?",
+  "sitesNamed": [
+   "https://ollama.com (size not known ahead of time)",
+   "https://registry.ollama.ai (size not known ahead of time)"
+  ],
+  "buttonsInOrder": [
+   "Not now",
+   "Turn on and download",
+   "Cancel"
+  ],
+  "ringBeforeA": "'Not now' (DialogButton Primary, text 'Not now' with one trailing space in textContent)",
+  "note": "the box is drawn by Steam's main screen over the library; the Quick Access menu is hidden behind it while it shows",
+  "afterA": "box gone (no DialogContent in the main Steam page); the QAM came back on bonsAI's Ollama tab",
+  "ringAfterBoxClosed": "the Ollama tab bar (aria 'Ollama tab'), not the 'Update AI & models' button",
+  "journalPullCountLast2Min": 0,
+  "downloadProcesses": "none (no ollama pull / installer / curl process)",
+  "switchAfter": "Permissions tab: 'Internet downloads' switch aria-checked=false"
+ },
+ "screenshot": "screenshots/plan72/F3-DL-box.png",
+ "verdict": "PASS",
+ "verdictReason": "Every expected item seen: the title, both sites with 'size not known ahead of time', the three buttons in that order, the ring on 'Not now'; after A the box closed, 0 pull lines, the switch stayed off. The ring went to the tab bar after the box closed (recorded as asked)."
+}

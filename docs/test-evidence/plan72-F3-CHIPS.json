@@ -1,0 +1,203 @@
+{
+ "row": "plan72-F3-CHIPS",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:32:40 to 15:33:35 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": "same chat and answer as F3-BUBBLE (overlay question, answered in Strategy mode)",
+ "pressed": "walkTo DOWN from Retry (18 presses; the thumbs row is passed on 'Mark reply helpful', ended on Ask); walkTo UP 5 to 'Mark reply helpful'; RIGHT once (ring on 'Mark reply not helpful', text 'Not really'); A once; read; screenshot",
+ "seen": {
+  "rowLabel": "What went wrong? (label box y 508.26 to 523.11)",
+  "rows": [
+   [
+    "Bad info",
+    "Wrong game or topic"
+   ],
+   [
+    "Spoiled it",
+    "Too long",
+    "Too short"
+   ]
+  ],
+  "chipHeight": 27.991,
+  "gapBetweenChipRowsVertical": 6.006,
+  "gapsBetweenChipsInRow": [
+   [
+    5.993
+   ],
+   [
+    5.994,
+    5.994
+   ]
+  ],
+  "cssRowGapColumnGapOfParent": "8px / 8px (the measured chip gaps are 6)",
+  "lastChipRowBottom": 593.091,
+  "dockTop": 600.574,
+  "blockClearanceAboveDock": 7.483,
+  "ringAfterA": "stayed on 'Mark reply not helpful'",
+  "thumbsState": "both thumbs now carry the class 'Disabled' (opacity 1); by eye in the screenshot they look much the same as before",
+  "note": "'Show details' (y 605.08) now sits behind the dock top; it is not part of the 'What went wrong?' block",
+  "answerOddity": "this Steam Deck overlay answer ends with a choice block 'Where are you at in Hollow Knight?' (A. Leaving the Forgotten Crossroads / B. Exploring the City of Tears), carried over from the Hollow Knight question asked just before in the same chat"
+ },
+ "screenshot": "screenshots/plan72/F3-CHIPS-afterA.png",
+ "verdict": "PASS",
+ "verdictReason": "The two chip rows are 6.006 px apart (expected 6 \u00b10.2), chips within a row 5.993 to 5.994 apart (expected 6), and the whole 'What went wrong?' block ends 7.48 px above the dock.",
+ "reads": {
+  "chips": {
+   "deckTime": "2026-09-27 15:33:16 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "head": "Was this helpful?",
+    "box": {
+     "x": 51.99,
+     "y": 445.435,
+     "w": 266.809,
+     "h": 176.477,
+     "right": 318.799,
+     "bottom": 621.912
+    },
+    "rows": [
+     [
+      "Helpful",
+      "Not really",
+      ""
+     ],
+     [
+      "Bad info",
+      "Wrong game or topic"
+     ],
+     [
+      "Spoiled it",
+      "Too long",
+      "Too short"
+     ]
+    ],
+    "chips": [
+     {
+      "text": "Helpful",
+      "x": 51.99,
+      "y": 468.274,
+      "w": 88.989,
+      "h": 31.995,
+      "right": 140.979,
+      "bottom": 500.269
+     },
+     {
+      "text": "Not really",
+      "x": 148.975,
+      "y": 468.274,
+      "w": 103.918,
+      "h": 31.995,
+      "right": 252.893,
+      "bottom": 500.269
+     },
+     {
+      "text": "",
+      "x": 288.806,
+      "y": 468.274,
+      "w": 29.993,
+      "h": 31.995,
+      "right": 318.799,
+      "bottom": 500.269
+     },
+     {
+      "text": "Bad info",
+      "x": 51.99,
+      "y": 531.104,
+      "w": 65.088,
+      "h": 27.991,
+      "right": 117.078,
+      "bottom": 559.094
+     },
+     {
+      "text": "Wrong game or topic",
+      "x": 123.071,
+      "y": 531.104,
+      "w": 138.416,
+      "h": 27.991,
+      "right": 261.487,
+      "bottom": 559.094
+     },
+     {
+      "text": "Spoiled it",
+      "x": 51.99,
+      "y": 565.1,
+      "w": 71.326,
+      "h": 27.991,
+      "right": 123.315,
+      "bottom": 593.091
+     },
+     {
+      "text": "Too long",
+      "x": 129.309,
+      "y": 565.1,
+      "w": 66.797,
+      "h": 27.991,
+      "right": 196.106,
+      "bottom": 593.091
+     },
+     {
+      "text": "Too short",
+      "x": 202.1,
+      "y": 565.1,
+      "w": 72.131,
+      "h": 27.991,
+      "right": 274.231,
+      "bottom": 593.091
+     }
+    ],
+    "verticalGapsBetweenRows": [
+     30.835,
+     6.006
+    ],
+    "horizontalGapsPerRow": [
+     [
+      7.996,
+      35.913
+     ],
+     [
+      5.993
+     ],
+     [
+      5.994,
+      5.994
+     ]
+    ],
+    "rowGapCss": "8px",
+    "columnGapCss": "8px",
+    "dock": {
+     "x": 47.998,
+     "y": 600.574,
+     "w": 300,
+     "h": 164.368,
+     "right": 347.998,
+     "bottom": 764.941
+    },
+    "blockBottomMinusDockTop": 21.338,
+    "ring": "Mark reply not helpful",
+    "thumbs": [
+     {
+      "aria": "Mark reply helpful",
+      "disabled": null,
+      "cls": "bonsai-chat-secondary-btn Disabled cXzBZxhPBl7fZs9LODEnc Focusable",
+      "opacity": "1"
+     },
+     {
+      "aria": "Mark reply not helpful",
+      "disabled": null,
+      "cls": "bonsai-chat-secondary-btn Disabled cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "opacity": "1"
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,2327 @@
+{
+ "row": "plan72-F3-HOLD",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:35:10 to 15:36:30 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": {
+  "chipStyle": "preset_chip_animation 'decode', preset_single_chip true, preset_chip_fade_animation_enabled false",
+  "ask_mode": "strategy",
+  "ask_think_effort": "medium",
+  "chat": "'wheatley fight'",
+  "lastAnswerBefore": "about 15:31:00 (so this started about 4 min after it; the chip was still rotating when the walk passed it)"
+ },
+ "question": "Name five ways to keep the Steam Deck cool during long sessions",
+ "pressed": "send script (VERIFIED); walkTo DOWN 19 presses to Ask (the ring passed the chip 'Why is my game crashing?' on the way); sampler installed; A once",
+ "sampler": "every 500 ms: text and rect of each .bonsai-preset-glass chip, and whether the Stop control is shown; 152 samples",
+ "seen": {
+  "answerRunning": "Stop control from 0.5 s to 41.5 s after the sampler started (A pressed at about 0.3 s)",
+  "from3sToAnswerEnd": "78 samples from 3.5 s to 41.5 s: one chip, text 'Why is my game crashing?', rect x 48 y 601.35 w 300 h 29.99, identical in every sample",
+  "afterAnswer": [
+   "42.0 s: text briefly a single space (one sample)",
+   "43.0 to 44.0 s: decode animation, settles on 'Why is my Deck running hot?'",
+   "52.0 to 53.5 s: changes to 'How can I optimize for battery life?'",
+   "64.5 to 66.5 s: changes to 'What's the efficiency sweet spot for this game?'"
+  ],
+  "firstChangeAfterAnswer": "0.5 s after the answer finished (expected within 20 s)",
+  "chipRectAfter": "unchanged x 48 y 601.35 w 300 h 29.99"
+ },
+ "verdict": "PASS",
+ "verdictReason": "The chip did not change at all while the answer was arriving (label and box identical in all 78 samples from 3 s after Ask to the end), and it changed 0.5 s after the answer finished, then kept rotating about every 10 s.",
+ "reads": {
+  "samples": {
+   "deckTime": "2026-09-27 15:36:56 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 76385,
+    "samples": [
+     {
+      "t": 502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 1002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 1503,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 2002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 2502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 3002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 3501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 4001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 4501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 5003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 5502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 6003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 6503,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 7001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 7502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 8003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 8503,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 9003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 9502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 10068,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 10501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 11001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 11502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 12001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 12501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 13001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 13501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 14001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 14501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 15003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 15501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 16001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 16501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 17001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 17501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 18002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 18503,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 19002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 19501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 20005,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 20501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 21002,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 21502,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 22017,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 22501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 23001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 23501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 24022,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 24504,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 25003,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 25501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 26001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 26501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 27001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 27501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 28001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 28501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 29001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 29507,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 30000,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 30525,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 31000,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 31500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 32001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 32501,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 33001,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 33515,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 34000,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 34500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 35013,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 35500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 36011,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 36500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 37024,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 37500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 38026,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 38500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 39000,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 39500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 40010,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 40500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 41000,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 41500,
+      "stop": true,
+      "chips": [
+       {
+        "text": "Why is my game crashing?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 42005,
+      "stop": false,
+      "chips": [
+       {
+        "text": " ",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 42500,
+      "stop": false,
+      "chips": [
+       {
+        "text": " ",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 43000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my ?\uff9aPw<m\uff96F24\uff89w6\uff69j\uff89\uff8d",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 43500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running\u258bE2\uff70:",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 44000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 44500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 45000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 45500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 46000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 46500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 47000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 47500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 48000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 48500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 49000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 49500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 50000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 50500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 51000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 51500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "Why is my Deck running hot?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 52005,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How \uff9cN)\uff8f>K\uff8f*\uff72=zk\uff7amt\uff73F@x\uff6b\uff848qgdC\uff92\uff7a\uff9d\uff6a-4",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 52500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimi\u258bE@%{\uff82\uff9b\uff705\uff8b4\uff80e\uff82My:hR*",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 53005,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for batteXEp]\uff86\uff93\uff85_",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 53500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 54000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 54500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 55000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 55500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 56000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 56500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 57000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 57500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 58000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 58500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 59000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 59500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 60000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 60500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 61000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 61500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 62000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 62500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 63000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 63500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 64000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "How can I optimize for battery life?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 64500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's t\u258b\uff95n\uff94/.s\uff6b\uff6c\uff7df&T\uff74c;\uff7f\uff96\uff84M\uff719we\uff85\uff83E\uff7bL&<\uff70\uff7f\uff8ch\uff8b\uff83X\uff9d",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 65006,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficienc\u258b\uff98bJ\uff91\uff929y\uff73gu\uff77`y]o\uff6ec.\uff94B7\uff9cWn\uff97o",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 65500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spotM\\G\uff9d\uff8bte\uff9a\uff828\uff74\uff6bv|]",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 66006,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this ga\u258b!#",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 66500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 67000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 67501,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 68000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 68500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 69000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 69500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 70000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 70500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 71000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 71500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 72000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 72500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 73000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 73500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 74000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 74500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 75000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 75500,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     },
+     {
+      "t": 76000,
+      "stop": false,
+      "chips": [
+       {
+        "text": "What's the efficiency sweet spot for this game?",
+        "r": [
+         48,
+         601.35,
+         300,
+         29.99
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ }
+}

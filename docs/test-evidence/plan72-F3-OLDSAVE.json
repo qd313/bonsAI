@@ -1,0 +1,520 @@
+{
+ "row": "plan72-F3-OLDSAVE",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:36:40 to 15:38:15 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": "no 'Hades' chat is among the eight saved chats now; used 'how should i spend my first hour in a new open world game' (2 turns, last updated 1790205334 = about 3.8 days ago, not asked in today)",
+ "pressed": "walkTo UP 11 to the chat row on 'wheatley fight'; RB (chat 'what is a good way to practice parrying in action games', updated today in an earlier block, skipped); RB (target chat, dot 3); read row; LEFT; read; screenshot; A; read the window; B; read",
+ "seen": {
+  "iconAtRest": "with the ring on the name, a disk icon span (bonsai-chat-slot-save, opacity 0.85) at the row's left end, x 99.548 w 21.997, beside the scrolling name",
+  "afterLeft": "icon lit (class --active-stop, opacity 1), box x 99.548 y 105.737 w 21.997 h 21.997, fully inside the column (48 to 348)",
+  "saveWindow": "'Save to Desktop note', note name field prefilled 'bonsai-debug', buttons Save and Cancel; ring on the name field. Not confirmed.",
+  "afterB": "window closed, the QAM came back with bonsAI open on the same chat; ring on the chat row (icon no longer lit)",
+  "nothingSaved": "Desktop/bonsAI_logs still 166 files; no bonsai-debug.md",
+  "newEmptyChat": "skipped as the runbook says"
+ },
+ "screenshot": "screenshots/plan72/F3-OLDSAVE-icon-ring.png",
+ "verdict": "PASS",
+ "verdictReason": "On a chat with only older answers the disk icon shows and takes the ring on Left; A opens the save window; B closes it with the ring back on the chat row. (Block 2 found no icon on such a chat.)",
+ "reads": {
+  "row": {
+   "deckTime": "2026-09-27 15:37:50 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "row": {
+     "x": 47.998,
+     "y": 87.952,
+     "w": 300,
+     "h": 48.547,
+     "right": 347.998,
+     "bottom": 136.499
+    },
+    "rowText": "LBwhat is a good way to practice parrying in action gameshow should i spend my first hour in a new open world gamehow should i spend my first hour in a new open world game\u00d7what is the safest way to approach a group of enemies at once+RB",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "ring": {
+     "tag": "DIV",
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "LBwhat is a good way to practice parrying in action gameshow",
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 48.547,
+      "right": 347.998,
+      "bottom": 136.499
+     }
+    },
+    "els": [
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-row-inner",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 47.998,
+       "y": 87.952,
+       "w": 300,
+       "h": 48.547,
+       "right": 347.998,
+       "bottom": 136.499
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "LB",
+      "rect": {
+       "x": 55.994,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 91.553,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-center",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 32.996,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-game",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 10.999,
+       "right": 296.448,
+       "bottom": 106.726
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-row bonsai-chat-slot-title-row--has-save",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 196.899,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-save",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 121.545,
+       "bottom": 127.734
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "svg",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 103.552,
+       "y": 109.741,
+       "w": 13.989,
+       "h": 13.989,
+       "right": 117.542,
+       "bottom": 123.73
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 105.884,
+       "y": 112.073,
+       "w": 9.326,
+       "h": 9.326,
+       "right": 115.21,
+       "bottom": 121.399
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 108.215,
+       "y": 112.073,
+       "w": 4.08,
+       "h": 2.914,
+       "right": 112.296,
+       "bottom": 114.987
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 107.632,
+       "y": 117.902,
+       "w": 5.829,
+       "h": 3.497,
+       "right": 113.461,
+       "bottom": 121.399
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflo",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 125.366,
+       "y": 109.534,
+       "w": 145.264,
+       "h": 14.392,
+       "right": 270.63,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-marquee",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 125.366,
+       "y": 109.534,
+       "w": 145.264,
+       "h": 14.392,
+       "right": 270.63,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "_26RbFDzzMplRhf211ujl5A _2yQMJ1umABgAeEwgFWYJVV _1XpsrsAvs4yCY2nYVsEvLw _1k-XZZlF-3tfscfYN",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 125.366,
+       "y": 109.534,
+       "w": 145.264,
+       "h": 14.392,
+       "right": 270.63,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "_2ADpTpv53dcY1uFpMWO1KT",
+      "aria": null,
+      "text": "how should i spend my first hour in a new open wor",
+      "rect": {
+       "x": -120.525,
+       "y": 109.534,
+       "w": 363.867,
+       "h": 14.392,
+       "right": 243.342,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "_2ADpTpv53dcY1uFpMWO1KT",
+      "aria": null,
+      "text": "how should i spend my first hour in a new open wor",
+      "rect": {
+       "x": 243.342,
+       "y": 109.534,
+       "w": 363.867,
+       "h": 14.392,
+       "right": 607.209,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-delete",
+      "aria": null,
+      "text": "\u00d7",
+      "rect": {
+       "x": 274.451,
+       "y": 105.737,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-dots",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 124.731,
+       "w": 196.899,
+       "h": 3.992,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156.055,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 160.046,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.04,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 170.032,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176.025,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 180.017,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186.011,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 190.002,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.996,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 199.988,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 205.981,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 209.973,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 215.967,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 219.958,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 225.952,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 229.944,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 235.938,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 239.929,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "RB",
+      "rect": {
+       "x": 304.443,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 340.002,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     }
+    ]
+   }
+  },
+  "afterB": {
+   "deckTime": "2026-09-27 15:38:15 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "open": true,
+    "ring": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswi",
+     "aria": null,
+     "text": "LBwhat is a good way to practice parrying in actio"
+    },
+    "saveActive": false,
+    "title": "how should i spend my first hour in a new open world gamehow should i spend my first hour in a new open world game",
+    "lastQ": "how should i spend my first hour in a new open world game",
+    "thumbs": [],
+    "labels": [],
+    "buttonsInReplyActions": []
+   }
+  }
+ }
+}

@@ -1,0 +1,239 @@
+{
+ "row": "plan72-F3-BUBBLE",
+ "buildCommit": "8e438f74f9106049d1c61d403ea4053ee85ac99b",
+ "deckBundleMd5": "eff40145113a42eb63fe661570442f46",
+ "deckTime": "2026-09-27 15:30:00 to 15:32:15 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "strategy",
+  "ask_think_effort": "medium (both back to their original values)",
+  "chat": "'wheatley fight'"
+ },
+ "question": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+ "pressed": "send script (VERIFIED); walkTo DOWN 12 to Ask; A once; answer done after about 55 s; first read (bubble scrolled above the view, y -516); walkTo UP 18 (went past the question to the header back button: the question's own text has no name, so the walk did not stop on it); walkTo DOWN 4 to 'Retry same prompt'; second read with the bubble on screen; screenshot",
+ "seen": {
+  "lines": 3,
+  "lineWidths": [
+   164.563,
+   170.691,
+   189.038
+  ],
+  "helperExpected": [
+   167,
+   166,
+   192
+  ],
+  "widestLine": 189.038,
+  "widestUnder225": true,
+  "bubble": {
+   "x": 111.011,
+   "y": 182.861,
+   "w": 230.994,
+   "h": 56.433
+  },
+  "bubbleStyle": {
+   "padding": "6px 10px",
+   "maxWidth": "min(92%, 280px)",
+   "textAlign": "right",
+   "textWrap": "balance",
+   "titleMarginLeft": "19.4458px"
+  },
+  "retryArrow": {
+   "x": 117.786,
+   "y": 215.527,
+   "w": 19.995,
+   "h": 19.995,
+   "right": 137.781
+  },
+  "widestLineLeft": 142.188,
+  "widestStartMinusArrowRight": 4.407,
+  "anyLineOverlapsArrow": false,
+  "bubbleWidthMinusWidestPlus19PlusPadding": 2.956,
+  "byEye": "in the screenshot the arrow's white focus ring sits right against the 'd' of 'differ' on the third line"
+ },
+ "screenshot": "screenshots/plan72/F3-BUBBLE-open.png",
+ "verdict": "FAIL",
+ "verdictReason": "Three of four points pass: 3 lines, widest 189.0 (well under 225), no line overlaps the arrow. The fourth misses narrowly: the widest line starts 4.41 px right of the arrow, expected 3 to 4 px.",
+ "reads": {
+  "bubbleScrolledAway": {
+   "deckTime": "2026-09-27 15:31:34 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+    "header": {
+     "x": 111.011,
+     "y": -516.357,
+     "w": 230.994,
+     "h": 56.433,
+     "right": 342.004,
+     "bottom": -459.924
+    },
+    "headerStyle": {
+     "padding": "6px 10px",
+     "width": "230.994px",
+     "maxWidth": "min(92%, 280px)",
+     "textAlign": "right",
+     "borderWidth": "0.78125px",
+     "boxSizing": "border-box"
+    },
+    "titleRect": {
+     "x": 141.235,
+     "y": -509.583,
+     "w": 189.99,
+     "h": 42.883,
+     "right": 331.226,
+     "bottom": -466.699
+    },
+    "titleStyle": {
+     "textWrap": "balance",
+     "textWrapStyle": "",
+     "paddingLeft": "0px",
+     "marginLeft": "19.4458px"
+    },
+    "lines": [
+     {
+      "y": -509.583,
+      "left": 166.663,
+      "right": 331.226,
+      "width": 164.563
+     },
+     {
+      "y": -495.288,
+      "left": 160.535,
+      "right": 331.226,
+      "width": 170.691
+     },
+     {
+      "y": -480.994,
+      "left": 142.188,
+      "right": 331.226,
+      "width": 189.038
+     }
+    ],
+    "lineWidths": [
+     164.563,
+     170.691,
+     189.038
+    ],
+    "retry": {
+     "x": 117.786,
+     "y": -483.691,
+     "w": 19.995,
+     "h": 19.995,
+     "right": 137.781,
+     "bottom": -463.696
+    },
+    "widest": {
+     "y": -480.994,
+     "left": 142.188,
+     "right": 331.226,
+     "width": 189.038
+    },
+    "checks": {
+     "bubbleWidth": 230.994,
+     "widestPlus19PlusPadding": 228.038,
+     "diff": 2.956,
+     "widestStartMinusRetryRight": 4.407,
+     "anyLineOverlapsRetry": false,
+     "minLeftMinusRetryRight": 4.407
+    }
+   }
+  },
+  "bubbleOnScreen": {
+   "deckTime": "2026-09-27 15:32:13 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+    "header": {
+     "x": 111.011,
+     "y": 182.861,
+     "w": 230.994,
+     "h": 56.433,
+     "right": 342.004,
+     "bottom": 239.294
+    },
+    "headerStyle": {
+     "padding": "6px 10px",
+     "width": "230.994px",
+     "maxWidth": "min(92%, 280px)",
+     "textAlign": "right",
+     "borderWidth": "0.78125px",
+     "boxSizing": "border-box"
+    },
+    "titleRect": {
+     "x": 141.235,
+     "y": 189.636,
+     "w": 189.99,
+     "h": 42.883,
+     "right": 331.226,
+     "bottom": 232.52
+    },
+    "titleStyle": {
+     "textWrap": "balance",
+     "textWrapStyle": "",
+     "paddingLeft": "0px",
+     "marginLeft": "19.4458px"
+    },
+    "lines": [
+     {
+      "y": 189.636,
+      "left": 166.663,
+      "right": 331.226,
+      "width": 164.563
+     },
+     {
+      "y": 203.931,
+      "left": 160.535,
+      "right": 331.226,
+      "width": 170.691
+     },
+     {
+      "y": 218.225,
+      "left": 142.188,
+      "right": 331.226,
+      "width": 189.038
+     }
+    ],
+    "lineWidths": [
+     164.563,
+     170.691,
+     189.038
+    ],
+    "retry": {
+     "x": 117.786,
+     "y": 215.527,
+     "w": 19.995,
+     "h": 19.995,
+     "right": 137.781,
+     "bottom": 235.522
+    },
+    "widest": {
+     "y": 218.225,
+     "left": 142.188,
+     "right": 331.226,
+     "width": 189.038
+    },
+    "checks": {
+     "bubbleWidth": 230.994,
+     "widestPlus19PlusPadding": 228.038,
+     "diff": 2.956,
+     "widestStartMinusRetryRight": 4.407,
+     "anyLineOverlapsRetry": false,
+     "minLeftMinusRetryRight": 4.407
+    }
+   }
+  }
+ }
+}

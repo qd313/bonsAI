@@ -1,0 +1,138 @@
+{
+ "row": "plan72-F6-STEPS",
+ "buildCommit": "279e415e880dd0308c00593a6173e3a7c7f9d669",
+ "deckBundleMd5": "4c48ca4fcb199439ef3463568c489056",
+ "check": "F6-STEPS: the live thinking line shows the model's step titles only",
+ "deckTime": "2026-09-27 17:41:50 to 17:44:42 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5; screenshots 1280x800",
+ "setup": {
+  "chat": "how should i spend my first hour in a new open world game (1 earlier turn)",
+  "ask_mode": "strategy (already; unchanged)",
+  "ask_think_effort": "medium -> low for the check, put back to medium and reloaded at 17:45",
+  "internetDownloads": "off (untouched)",
+  "sampler": "every 250 ms on .bonsai-chat-reasoning-live, installed just before Ask"
+ },
+ "pressed": [
+  "question typed by scripts/deck_send_ask.py (VERIFIED, whole text)",
+  "DOWN (placed ring on chip)",
+  "DOWN (question box)",
+  "RIGHT (mode button)",
+  "RIGHT (voice)",
+  "DOWN (Ask)",
+  "A on Ask",
+  "after the answer: UP x8 one at a time, reading focus, to 'Show reasoning - 25 s'",
+  "A on it"
+ ],
+ "question": "In Hollow Knight the mantis fight in the village keeps beating me, how do I learn when to dodge",
+ "seen": {
+  "samplesTotal": 387,
+  "samplesWithThinkingLine": 99,
+  "thinkingLineShownFromMs": 10010,
+  "thinkingLineGoneAtMs": 34751,
+  "answerFinishedAtMs": 41750,
+  "maxLinesInAnySample": 5,
+  "longestLineChars": 30,
+  "everyLineEndsWithTickOrEllipsis": true,
+  "forbiddenFound": "none of [hidden], quote marks, Key info, Mode, Voice, Constraint, Must, Hollow, Knight, Mantis, Lords, village in any sample",
+  "fainterFinishedSteps": "finished lines at opacity 0.55, current line at 1.0, in every multi-line sample",
+  "lastSampleBeforeAnswer": [
+   "Analyze the Request \u2713",
+   "Determine Game Context \u2713",
+   "Identify Key Strategy Points \u2713",
+   "Draft the Response \u2713",
+   "Construct the Branch\u2026"
+  ],
+  "distinctSamples": [
+   {
+    "tMs": 10010,
+    "answering": true,
+    "lines": [
+     "Analyze the Request\u2026"
+    ],
+    "lineOpacity": [
+     1
+    ]
+   },
+   {
+    "tMs": 10765,
+    "answering": true,
+    "lines": [
+     "Analyze the Request \u2713",
+     "Determine Game Context\u2026"
+    ],
+    "lineOpacity": [
+     0.55,
+     1
+    ]
+   },
+   {
+    "tMs": 20250,
+    "answering": true,
+    "lines": [
+     "Analyze the Request \u2713",
+     "Determine Game Context \u2713",
+     "Identify Key Strategy Points\u2026"
+    ],
+    "lineOpacity": [
+     0.55,
+     0.55,
+     1
+    ]
+   },
+   {
+    "tMs": 28015,
+    "answering": true,
+    "lines": [
+     "Analyze the Request \u2713",
+     "Determine Game Context \u2713",
+     "Identify Key Strategy Points \u2713",
+     "Draft the Response\u2026"
+    ],
+    "lineOpacity": [
+     0.55,
+     0.55,
+     0.55,
+     1
+    ]
+   },
+   {
+    "tMs": 29250,
+    "answering": true,
+    "lines": [
+     "Analyze the Request \u2713",
+     "Determine Game Context \u2713",
+     "Identify Key Strategy Points \u2713",
+     "Draft the Response \u2713",
+     "Construct the Branch\u2026"
+    ],
+    "lineOpacity": [
+     0.55,
+     0.55,
+     0.55,
+     0.55,
+     1
+    ]
+   },
+   {
+    "tMs": 34751,
+    "answering": true,
+    "lines": null,
+    "lineOpacity": null
+   }
+  ],
+  "showReasoning": {
+   "label": "Hide reasoning \u00b7 25 s",
+   "reasoningTextChars": 2498,
+   "head": "1.  Analyze the Request: The user is struggling with the Mantis fight in Hollow Knight and specifically asks how to learn when to dodge.\n2.  Determine Game Context: The game is Hollow Knight. [hidden]\n3.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you ",
+   "tail": "ching. I'll focus on the concept of rhythm.\n\n8.  Final Review: Check against all constraints (Status line first, Ali G voice, strategy guide mode, branch fence at the end, character voice maintained)."
+  }
+ },
+ "screenshots": [
+  "screenshots/plan72/F6-STEPS-reasoning-open.png"
+ ],
+ "verdict": "PASS",
+ "notes": [
+  "The last sample before the answer ends with a fifth step 'Construct the Branch...' after 'Draft the Response' (ticked); the runbook's example ended at 'Draft the Response...'. Same shape: short step titles only.",
+  "Walking Up from 'Helpful' landed on branch option A, not the nearer option B (one press each, read after each)."
+ ]
+}

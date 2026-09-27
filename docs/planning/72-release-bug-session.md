@@ -582,3 +582,12 @@ land.
   out of view — expected there). **F5-KBCHIP passed:** after a reload, three answers, 90 reads — the "Enable local
   knowledge base" chip never offered. Landed since 17:34: `c603925d` (the ring moves to the new summary card so all
   of it shows), `279e415e` (lane 3: the live thinking line shows step titles only, the maintainer's option B).
+- **18:10 — block 7 (flow F6) finished** on `279e415e`, the Deck's own screen; everything restored. **Passed:**
+  F6-STEPS (387 samples: only step titles, at most five lines, finished ones faded; no notes, rules, names or
+  covers; Show reasoning still full), F6-ROTATE (5–6 chip changes every minute for five minutes; held 95 s under
+  the ring; resumed 7 s after). **Failed:** F6-SUMUP — when Sum up finished the ring stayed on the button, twice
+  (the programmatic plain focus does not carry Steam's ring outside a press) → lane 12's job E2 (Steam's transfer).
+  On this short screen the card (349 px) is taller than the room above the dock, so only its top can show — by the
+  earlier rule. Sightings: the Sum up reason line and the card disagree about whether the chat fits (known, "if
+  there is room"); Up from Helpful landed on choice A, skipping B; the summary card quotes "Megaera" from the
+  player's own question (the player's words — not a leak).

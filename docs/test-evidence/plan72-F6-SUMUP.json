@@ -1,0 +1,449 @@
+{
+ "row": "plan72-F6-SUMUP",
+ "buildCommit": "279e415e880dd0308c00593a6173e3a7c7f9d669",
+ "deckBundleMd5": "4c48ca4fcb199439ef3463568c489056",
+ "check": "F6-SUMUP: the ring moves onto the new summary card when Sum up finishes",
+ "deckTime": "try 1 17:47:58-17:49:30 EDT; try 2 17:51:21-17:52:21 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5; screenshots 1280x800",
+ "setup": {
+  "chat": "wheatley fight (dot 3 after re-sort; 71 earlier + newest 'how useful is the magnum revolver in half life 2'; Session tab reads 'Session - 71')",
+  "ask_mode": "strategy",
+  "noSummaryBefore": "button read 'Sum up this chat' both times",
+  "betweenTries": "the wheatley chat file was copied back from ~/qa-backups/settings-plan72-block7 (md5 8ae4e1a2... matched) and the plugin reloaded, so try 2 started with no summary"
+ },
+ "pressed": [
+  "chat row: RB, RB (titles read after each) to 'wheatley fight'",
+  "DOWN one at a time x12 to 'Show details' on the newest answer (earlier pill, Retry, question, answer body x4, second part x2, Read aloud, Show details)",
+  "A (Hide details)",
+  "DOWN (Gravity Gun note)",
+  "DOWN (tabs row)",
+  "RIGHT (Session - 71 became active; ring stayed on the tabs row)",
+  "DOWN ('Sum up this chat')",
+  "A, then no presses until finished",
+  "after try 1 only, to test the second half: DOWN once, UP once; and one A on the greyed 'Sum up again' (did nothing)",
+  "try 2: same route (runSequence, focus read after every press), A, no presses"
+ ],
+ "seen": {
+  "try1": {
+   "summingFor": "about 31 s",
+   "ringWhenFinished": "'Sum up again' button (greyed, class --off), rect y 96.5-129.1",
+   "card": "'What the AI remembers', y 171.92 to 520.58 (h 348.67)",
+   "dockTop": 290.17,
+   "questionBoxTop": 322.8,
+   "reasonLine": "'The whole chat still fits, so there's nothing to sum up yet.'",
+   "sampler": "ring never left the button from A until 45.9 s after A",
+   "afterOneDown": "ring on the card, card top 88.6 (on screen), bottom 437.3",
+   "afterOneUp": "ring back on 'Sum up again'"
+  },
+  "try2": {
+   "summingFor": "about 7 s",
+   "ringWhenFinished": "'Sum up again' button (greyed)",
+   "card": "y 171.92 to 535.58 (h 363.67)",
+   "dockTop": 290.17,
+   "sampler": "button read 'Sum up this chat' again for ~0.2 s, then 'Sum up again' with the card; ring stayed on the button through 56.7 s"
+  },
+  "cardVsRoom": "the card (349-364 px) is taller than the room between the button and the dock (about 202 px), so its top should be on screen: it is (171.9), but the ring is not on it"
+ },
+ "screenshots": [
+  "screenshots/plan72/F6-SUMUP-finished.png",
+  "screenshots/plan72/F6-SUMUP-finished-try2.png"
+ ],
+ "verdict": "FAIL",
+ "verdictReason": "Both times, when the summary finished the ring stayed on the greyed 'Sum up again' button instead of moving onto the card. A person has to press Down once to reach the card. The card itself showed with its top on screen, and one Up from the card returned to 'Sum up again' as expected.",
+ "notes": [
+  "The reason line under the button says the whole chat still fits, while the card's own footer (try 1) says it covers only the newest 65 turns because the chat is too long. The two lines disagree.",
+  "Try 2's summary card text names 'Megaera' (a Hades boss) in plain text: 'Player asked about Megaera in Hades and her second phase.'"
+ ],
+ "reads": {
+  "try1Final": {
+   "deckTime": "2026-09-27 17:48:55 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": "Sum up again",
+     "cls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfoc"
+    },
+    "card": {
+     "x": 52,
+     "y": 171.92,
+     "w": 290,
+     "h": 348.67,
+     "bottom": 520.58
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame topics include Half-Life 2 tips, Hollow Knight boss guides (Broken Vessel, Bone Hydra), Black Mesa navigation (electrified water, Gonarch), Deep Rock Galactic strategies, survival game tips (desert, zombie, winter), and general game mechanics (pickaxe, Gravity Gun).\nPlayer asked for walkthroughs of specific areas and boss fights.\nPlayer asked for advice on resource management and starting new runs.\nPlayer asked about controller issues, game crashing, and storage management.\nPlayer asked about specific boss mechanics and weapon effectiveness.\nPlayer asked for general exploration and survival advice.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 96.46,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 129.13
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfocus gpfocuswithin",
+    "reason": {
+     "x": 52,
+     "y": 135.13,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 165.92
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 912
+   }
+  },
+  "try1Sampler": {
+   "deckTime": "2026-09-27 17:48:44 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 45876,
+    "samples": [
+     {
+      "t": 251,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5]]"
+     },
+     {
+      "t": 1501,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 0 s\",null,\"Summing up \u00b7 0 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 2767,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 1 s\",null,\"Summing up \u00b7 1 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 4001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 2 s\",null,\"Summing up \u00b7 2 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 5258,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 3 s\",null,\"Summing up \u00b7 3 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 6522,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 4 s\",null,\"Summing up \u00b7 4 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 7517,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 6 s\",null,\"Summing up \u00b7 6 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 8752,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 7 s\",null,\"Summing up \u00b7 7 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 10001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 8 s\",null,\"Summing up \u00b7 8 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 11253,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 9 s\",null,\"Summing up \u00b7 9 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 12502,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 10 s\",null,\"Summing up \u00b7 10 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 13549,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 12 s\",null,\"Summing up \u00b7 12 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 14756,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 13 s\",null,\"Summing up \u00b7 13 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 16001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 14 s\",null,\"Summing up \u00b7 14 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 17252,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 15 s\",null,\"Summing up \u00b7 15 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 18501,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 16 s\",null,\"Summing up \u00b7 16 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 19753,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 18 s\",null,\"Summing up \u00b7 18 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 20795,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 19 s\",null,\"Summing up \u00b7 19 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 22001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 20 s\",null,\"Summing up \u00b7 20 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 23252,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 21 s\",null,\"Summing up \u00b7 21 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 24501,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 22 s\",null,\"Summing up \u00b7 22 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 25751,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 24 s\",null,\"Summing up \u00b7 24 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 26783,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 25 s\",null,\"Summing up \u00b7 25 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 28001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 26 s\",null,\"Summing up \u00b7 26 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 29253,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 27 s\",null,\"Summing up \u00b7 27 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 30501,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 28 s\",null,\"Summing up \u00b7 28 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 31752,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 30 s\",null,\"Summing up \u00b7 30 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 33001,
+      "k": "[\"bonsai-sumup-btn bonsai-sumup-btn--off\",\"Sum up again\",[171.9,520.6],\"Sum up again\",[96.5,129.1]]"
+     }
+    ]
+   }
+  },
+  "try1Down": {
+   "deckTime": "2026-09-27 17:49:14 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "t": 1790545754085,
+    "focusCls": "bonsai-sumup-card",
+    "aria": "What the AI remembers",
+    "text": "What the AI remembers65 turns \u00b7 just nowGame topics include Half-Life ",
+    "focusRect": {
+     "x": 52,
+     "y": 88.6,
+     "w": 290,
+     "h": 348.7,
+     "bottom": 437.3
+    },
+    "inLadder": false,
+    "ladderRect": null,
+    "ladderIndex": null,
+    "sessionRowRect": null,
+    "cardRect": null,
+    "cardCls": null,
+    "questionBoxTop": 322.8,
+    "questionBoxRect": {
+     "x": 48,
+     "y": 322.8,
+     "w": 300,
+     "h": 74.3,
+     "bottom": 397.2
+    },
+    "dockTop": 290.2,
+    "paneRect": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 995.3,
+    "innerWidth": 854,
+    "innerHeight": 454,
+    "ladders": [
+     {
+      "rect": {
+       "x": 52,
+       "y": 2912.6,
+       "w": 290,
+       "h": 326,
+       "bottom": 3238.6
+      },
+      "chips": 6,
+      "active": "Keyword + meaning"
+     }
+    ],
+    "sessionRows": 71,
+    "sumup": [
+     "Sum up again"
+    ]
+   }
+  },
+  "try1Up": {
+   "deckTime": "2026-09-27 17:49:20 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "t": 1790545760490,
+    "focusCls": "bonsai-sumup-btn bonsai-sumup-btn--off",
+    "aria": "Sum up again",
+    "text": "Sum up again",
+    "focusRect": {
+     "x": 52,
+     "y": 203.8,
+     "w": 290,
+     "h": 32.7,
+     "bottom": 236.5
+    },
+    "inLadder": false,
+    "ladderRect": null,
+    "ladderIndex": null,
+    "sessionRowRect": null,
+    "cardRect": null,
+    "cardCls": null,
+    "questionBoxTop": 322.8,
+    "questionBoxRect": {
+     "x": 48,
+     "y": 322.8,
+     "w": 300,
+     "h": 74.3,
+     "bottom": 397.2
+    },
+    "dockTop": 290.2,
+    "paneRect": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 804.7,
+    "innerWidth": 854,
+    "innerHeight": 454,
+    "ladders": [
+     {
+      "rect": {
+       "x": 52,
+       "y": 3103.3,
+       "w": 290,
+       "h": 326,
+       "bottom": 3429.3
+      },
+      "chips": 6,
+      "active": "Keyword + meaning"
+     }
+    ],
+    "sessionRows": 71,
+    "sumup": [
+     "Sum up again"
+    ]
+   }
+  },
+  "try2Final": {
+   "deckTime": "2026-09-27 17:52:18 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": "Sum up again",
+     "cls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfoc"
+    },
+    "card": {
+     "x": 52,
+     "y": 171.92,
+     "w": 290,
+     "h": 363.67,
+     "bottom": 535.58
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame: Half-Life 2\nPlayer is stuck on Ravenholm with limited ammo.\nPlayer asked for tips on clearing areas safely.\nPlayer asked about the Broken Vessel boss in Hollow Knight.\nPlayer asked about Megaera in Hades and her second phase.\nPlayer asked about the pickaxe function.\nPlayer asked about the Gravity Gun function.\nPlayer asked about dealing with Antlions.\nPlayer asked about crossing electrified water in Black Mesa.\nPlayer asked about general survival tips (desert/winter).\nPlayer asked about game settings/crashing issues.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 96.46,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 129.13
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfocus gpfocuswithin",
+    "reason": {
+     "x": 52,
+     "y": 135.13,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 165.92
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 912
+   }
+  },
+  "try2Sampler": {
+   "deckTime": "2026-09-27 17:52:18 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 56720,
+    "samples": [
+     {
+      "t": 261,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5]]"
+     },
+     {
+      "t": 1624,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 0 s\",null,\"Summing up \u00b7 0 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 2756,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 1 s\",null,\"Summing up \u00b7 1 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 4004,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 2 s\",null,\"Summing up \u00b7 2 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 5250,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 3 s\",null,\"Summing up \u00b7 3 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 6517,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 4 s\",null,\"Summing up \u00b7 4 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 7750,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 6 s\",null,\"Summing up \u00b7 6 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 8790,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5]]"
+     },
+     {
+      "t": 9000,
+      "k": "[\"bonsai-sumup-btn bonsai-sumup-btn--off\",\"Sum up again\",[171.9,535.6],\"Sum up again\",[96.5,129.1]]"
+     }
+    ]
+   }
+  }
+ }
+}

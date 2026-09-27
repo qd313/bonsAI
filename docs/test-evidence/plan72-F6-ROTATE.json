@@ -1,0 +1,1870 @@
+{
+ "row": "plan72-F6-ROTATE",
+ "buildCommit": "279e415e880dd0308c00593a6173e3a7c7f9d669",
+ "deckBundleMd5": "4c48ca4fcb199439ef3463568c489056",
+ "check": "F6-ROTATE: the suggestion chips keep rotating for as long as the panel is open",
+ "deckTime": "2026-09-27 17:53:46 to 18:02:03 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5",
+ "setup": {
+  "chat": "wheatley fight",
+  "chipStyle": "preset_chip_animation 'decode' (letters scramble into place), preset_single_chip true (one chip shown), fade off - unchanged",
+  "ring": "on the chat row (bonsai-chat-slot-row-focus) for the 5-minute phase",
+  "samplers": "in-page sampler every 200 ms logging every change of chip text or ring; plus a read every 10 s from the PC as the runbook asks"
+ },
+ "pressed": [
+  "L3 at 17:53:48 and then about every 25 s (11 times) to keep the screen awake; the ring did not move on any L3",
+  "after 5 min: DOWN x14 one at a time (with A on 'Hide details' to fold the details open from F6-SUMUP) to the chip, ring on chip 17:59:24",
+  "held on the chip 95 s with two L3 presses",
+  "UP x13 back to the chat row, ring on row at about 18:01:22"
+ ],
+ "seen": {
+  "rowPhaseChangesPerMinute": [
+   5,
+   6,
+   5,
+   5,
+   5
+  ],
+  "rowPhaseGapBetweenChangesSec": {
+   "min": 8.4,
+   "max": 17.2
+  },
+  "tenSecondReads": "32 reads in the 5 minutes, ring on the row in every one; the text differed from the read before in 26 of them (some reads caught the scramble mid-way)",
+  "ringOnChip": "95.3 s on 'Why can't bonsAI reach my PC Ollama host?' - 0 changes (10 reads, all the same text)",
+  "afterLeavingChip": "the chip changed 1.7 s after the ring left it (while walking up through the chat)",
+  "backOnRow": "ring reached the row at sampler 456.4 s; first change after that at 463.6 s (7.2 s later), then 474.4 s and 485.8 s"
+ },
+ "verdict": "PASS",
+ "notes": [
+  "The label 'Which Ollama essentials should I pull for this Deck?' reads twice in a row in the chip's text (both times it came up). Probably a second copy for scrolling a long label; not checked on screen."
+ ],
+ "tenSecondReadsRaw": [
+  {
+   "t": "17:53:51",
+   "chips": [
+    "What are the best FSR settings?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:01",
+   "chips": [
+    "I'm stuck \u2014 what should I try next?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:11",
+   "chips": [
+    "How do I set up voice input on the Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:16",
+   "chips": [
+    "How do I set up voice input on the Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:26",
+   "chips": [
+    "How can I reduce input lag?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:36",
+   "chips": [
+    "How do I balance FPS and battery?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:40",
+   "chips": [
+    "How do I fix stutter=Mp~"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:54:50",
+   "chips": [
+    "Where do your game tips come from?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:01",
+   "chips": [
+    "How well does this game run on\u258b]4n,\""
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:06",
+   "chips": [
+    "How well does this game run on Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:16",
+   "chips": [
+    "What's ahead (without spoilers)?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:26",
+   "chips": [
+    "Check Steam players for bans"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:31",
+   "chips": [
+    "Check Steam players for bans"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:41",
+   "chips": [
+    "How do I fix stuttering?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:51",
+   "chips": [
+    "How can I optimize for battery life?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:55:55",
+   "chips": [
+    "How well does thi\uff8d\uff68\uff7b\uff7d`UuOM\uff8c,m\uff68VzQ`(\uff7d"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:05",
+   "chips": [
+    "How well does this game run on Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:15",
+   "chips": [
+    "Check Steam players for bans"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:19",
+   "chips": [
+    "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:29",
+   "chips": [
+    "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:40",
+   "chips": [
+    "What settings should I use?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:44",
+   "chips": [
+    "How do I fix \u258b\uff86L\uff71\uff88\uff79\\\uff680\uff98L\uff973\uff6b\uff9b?\uff74\uff9d\uff79]\uff71UQ\uff75\uff89\""
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:56:54",
+   "chips": [
+    "How do I fix Steam Input for this game?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:04",
+   "chips": [
+    "Any known issues running this on Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:10",
+   "chips": [
+    "Any known issues running this on Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:20",
+   "chips": [
+    "Recommended c0-\\R\uff69.\uff8flDa\uff6cq\uff79\uff6d\uff95\uff7dm"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:30",
+   "chips": [
+    "How d\uff9a\uff7c\uff7cnKM\uff8d{C\uff7d\uff6d\uff8d;|[\uff73\\t\uff85"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:34",
+   "chips": [
+    "How do I fix stuttering?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:44",
+   "chips": [
+    "How do I set up voice input on the Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:54",
+   "chips": [
+    "I'm stuck \u2014 what should I try next?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:57:59",
+   "chips": [
+    "I'm stuck \u2014 what should I try next?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:58:09",
+   "chips": [
+    "How can I reduce input lag?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:58:19",
+   "chips": [
+    "Why is my Deck running hot?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:58:29",
+   "chips": [
+    "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:58:33",
+   "chips": [
+    "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:58:44",
+   "chips": [
+    "Which Ollama model fits my Deck setup?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "17:59:33",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "17:59:44",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "17:59:54",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "17:59:59",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:09",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:19",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:24",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:34",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:44",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:00:54",
+   "chips": [
+    "Why can't bonsAI reach my PC Ollama host?"
+   ],
+   "ring": "bonsai-preset-glass bonsai-preset-glass--decode"
+  },
+  {
+   "t": "18:01:25",
+   "chips": [
+    "Why is my Deck running hot?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "18:01:35",
+   "chips": [
+    "What are the best FSR settings?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "18:01:45",
+   "chips": [
+    "How do I balance FPS and battery?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  },
+  {
+   "t": "18:01:55",
+   "chips": [
+    "What are the best settings for 60fps?"
+   ],
+   "ring": "bonsai-chat-slot-row-focus"
+  }
+ ],
+ "reads": {
+  "sampler": {
+   "deckTime": "2026-09-27 18:02:03 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "wall0": "17:53:46",
+    "now": 496737,
+    "changes": [
+     {
+      "t": 201,
+      "chips": "What are the best FSR settings?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 7008,
+      "chips": "I\u258bg1\uff96x\uff9a\uff68\uff75o\uff93\uff83B0N\uff95S4Y\uff69\"Y\uff77m\uff88vK\uff78a\uff7d>aRNP",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 7200,
+      "chips": "I'm s\uff6b\uff6fy\uff75I\uff89Mx\uff69\uff82gFi\uff85\uff75\uff88\uff9d\uff8bND:t8W\uff8d\uff73`\uff8aFh",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 7400,
+      "chips": "I'm stuck \uff79#\\x~ic\uff98$\uff6a\uff83\uff69\uff70f\uff85g[Ao\uff8e\uff74h\uff9a;%",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 7600,
+      "chips": "I'm stuck \u2014 wha\u258b\uff6b0#\uff7dk4C}HL\uff9c,=-E2\uff84WT",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 7807,
+      "chips": "I'm stuck \u2014 what sho\u258b<\uff88\uff7e#=o1\uff9aw\uff6a\uff82qtj",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 8006,
+      "chips": "I'm stuck \u2014 what should IE<zg\uff82J,\uff76\uff7eU",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 8200,
+      "chips": "I'm stuck \u2014 what should I tryNo\uff7e\uff71h\uff7e",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 8400,
+      "chips": "I'm stuck \u2014 what should I try next\uff85",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 8600,
+      "chips": "I'm stuck \u2014 what should I try next?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 19009,
+      "chips": "H\uff91\"\uff91K\uff7e\uff88\uff6d\uff76q\uff76Za\uff6b4\uff7b\\D64[\uff90\uff89(\uff9519=([\uff88S\uff79yw\uff76u}\uff7c,",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 19200,
+      "chips": "How d!Z\uff6e\uff7a\uff6aB\uff88\uff87P\uff70\uff98\uff70`\uff7c]\uff91\uff8a\uff905nx2\uff96\uff86\uff99<Ev\uff9a_\uff73vX1#",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 19400,
+      "chips": "How do I s\uff96\uff82\uff77xvN/<\uff98eT3A\uff82dc\uff82g(\uff82\uff90\uff710\uff88#rP\uff94M\uff94",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 19600,
+      "chips": "How do I set up\u258b\uff74\uff75%s{\uff7c\uff7eS\uff6a\uff96\uff72I/Q\uff88@fiLX3\uff90=g",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 19806,
+      "chips": "How do I set up voic\u258b-\uff84sDt2t`1\uff7c\uff85dn\uff9a7gz\uff6dI",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 20003,
+      "chips": "How do I set up voice inp\uff92fHZk.5\uff70.Of/X\uff97)",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 20200,
+      "chips": "How do I set up voice input o:e\uff87O\uff88[IHa&\uff6d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 20400,
+      "chips": "How do I set up voice input on the\u258bf\uff7e'\uff6a\uff85",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 20603,
+      "chips": "How do I set up voice input on the Deck\u258b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 20801,
+      "chips": "How do I set up voice input on the Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 32800,
+      "chips": "How\uff8e{\uff98|z\uff7aBGQ!\uff7b@\uff99Ybk%\uff8b/\uff9b\uff93kxL",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 33005,
+      "chips": "How can U2A`\uff8b\uff7892>YBL\uff77va\uff75\uff8c?[",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 33206,
+      "chips": "How can I red\u258bM.B\uff7b\uff7d:\uff7553x\uff7c*\uff7a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 33400,
+      "chips": "How can I reduce \u258b*K\uff94?k\uff82H}Y",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 33602,
+      "chips": "How can I reduce input\u258b\uff7bp\uff6cS",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 33800,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 42000,
+      "chips": "H*h\uff99bmm\uff6f\uff8cN~=7E<\uff9d\uff88'\uff714)3\uff72\uff6cVz(!{~\uff92t\uff8c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 42200,
+      "chips": "How do;5wk=lSw\uff9b0*ya\uff6f\uff88\uff87|c\uff71\uff974>-'l\uff7d^",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 42400,
+      "chips": "How do I ba\u258bETw[\uff71H\uff73o\uff6e\uff8f~r\uff7cgEav\uff84sC\uff97",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 42603,
+      "chips": "How do I balance\u258b\uff6fQ2\uff69>-z\uff82\uff8c/hNy\uff7crM",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 42805,
+      "chips": "How do I balance FPS NC/,\uff7a\uff7a\uff8d\uff70\uff82-/c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 43000,
+      "chips": "How do I balance FPS and 2\uff85V\uff8a:|\uff96\uff9a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 43205,
+      "chips": "How do I balance FPS and batte\u258b\uff93p",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 43400,
+      "chips": "How do I balance FPS and battery?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 53400,
+      "chips": "How\u258b\uff9a\uff762\uff9d:/|\uff8b@.\uff6a:\\]iH\uff8cN`~",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 53600,
+      "chips": "How do I\u258bA\uff67\uff9b=\uff9c3|H\uff79\uff95G\uff74\uff78\uff85{",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 53800,
+      "chips": "How do I fix e\uff9aD\uff82gY1\uff94\uff92Rx",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 54007,
+      "chips": "How do I fix stutt\uff94e/\uff6cuZ",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 54204,
+      "chips": "How do I fix stuttering\u258b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 54400,
+      "chips": "How do I fix stuttering?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 62405,
+      "chips": "Whe\u258bK\uff8a$)&\uff9d\uff67v\\+(\uff69\uff75_\uff77\uff92`488Tu)u\uff9c\uff6b\uff97\uff92TR",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 62600,
+      "chips": "Where d\u258bDYN\uff96e\uff97t\uff683\uff7czj57I|0\uff97>\uff69Vvx,\uff7fJ",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 62800,
+      "chips": "Where do you\u258b\uff77PNd\uff8a\uff79h\uff74ekCf\uff8dIY~\uff7aa\uff8c1&",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 63000,
+      "chips": "Where do your gam\uff94\uff8d\uff90SsFGH5V\uff76\uff74\uff880\uff96Z8",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 63206,
+      "chips": "Where do your game tip}\uff73b\uff85\"R\uff8c\uff7bys5g",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 63400,
+      "chips": "Where do your game tips co\u258bAJV\uff9ao\uff92+",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 63600,
+      "chips": "Where do your game tips come fr\u258b\uff79*",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 63800,
+      "chips": "Where do your game tips come from?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 74000,
+      "chips": "H~\uff90\uff68CU8|\uff89;K^@\uff7d\uff81+_r&\uff8e|\\P52xIe9\uff7cS|\uff6bH\uff82(",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 74200,
+      "chips": "How weB)aj\uff90\uff78|?\uff99A\uff917O@d\uff74(x\uff7a\uff8e\uff8b\uff75\uff7eg1KF\uff80*\uff92",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 74400,
+      "chips": "How well do\u258b=n\uff7b*A'\uff89j(1\uff89\uff68HF\uff99=\uff86:,\uff6e\uff82\uff6cP0",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 74609,
+      "chips": "How well does th\u258b%s\uff75\uff7f\uff75_\uff8d6Vi\uff9a1\uff66\uff6fv\\z_t",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 74800,
+      "chips": "How well does this ga\uff7b\uff8a\uff84V\uff7eSa>\uff66h\uff85\uff87V,M",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 75000,
+      "chips": "How well does this game r[\uff73A\uff6ex\uff66\uff7c\uff7b\uff89\uff69@",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 75200,
+      "chips": "How well does this game run on\u258b]4n,\"",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 75405,
+      "chips": "How well does this game run on Deck\u258b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 75600,
+      "chips": "How well does this game run on Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 86400,
+      "chips": "Wha\u258b!a+\uff98Aj\uff68^\uff80Q\uff7ff\uff71\\M\uff8b2\uff88I}W2lL>\uff6e_.",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 86604,
+      "chips": "What's a#U$m\uff6b0\uff7d4;\uff72m'\uff87\uff77&\uff68\uff93\uff9d]\uff9cK)\uff84.",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 86800,
+      "chips": "What's ahead ;%\uff99\uff8cZ}pB\uff84`h\uff88\uff8f`9f2\uff7f\uff7d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 87000,
+      "chips": "What's ahead (wit\u258b#QB-\uff89Y{y\uff98t|FQx",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 87200,
+      "chips": "What's ahead (without \u258b\uff6bK\uff69nu\uff75!2~",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 87405,
+      "chips": "What's ahead (without spoil\u258b\uff92\uff8co\uff8b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 87600,
+      "chips": "What's ahead (without spoilers)?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 97405,
+      "chips": "Chec\u258bh!Jj3K\"U\uff71\uff9d\uff73\uff95\uff8c\uff78/\uff99m'\uff89\uff70\uff7aY\\",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 97602,
+      "chips": "Check Sted.\uff75Cs\uff6c.\uff66-a\uff9brP-@V?\uff6c\uff71",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 97801,
+      "chips": "Check Steam pl\uff69*\uff9a\uff906\uff68qB\uff83\uff96bDPd",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 98000,
+      "chips": "Check Steam player\u258b6]i9\uff90\uff8d$M\uff75",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 98201,
+      "chips": "Check Steam players for\u258b\uff7b_\uff76h",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 98400,
+      "chips": "Check Steam players for bans",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 107006,
+      "chips": "How \uff6ep\uff78gJk=}Z841\uff908q\uff66\uff8daW{",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 107204,
+      "chips": "How do I \u258b\uff88\uff71\uff74>\uff77u'0A\uff8f\uff86\uff98hG",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 107400,
+      "chips": "How do I fix \u258bVN[r4Oz'.\uff68",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 107601,
+      "chips": "How do I fix stutte\uff6b6p^\uff74",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 107800,
+      "chips": "How do I fix stuttering\uff87",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 108000,
+      "chips": "How do I fix stuttering?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 116000,
+      "chips": "How/7-[Z0\uff9b\uff7fH)\uff805\uff6clcI\uff9b!1t\uff92P\uff9c~\uff7d#\uff77\uff87WdIX[",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 116204,
+      "chips": "How can \u258bh\uff97\uff89\uff73\uff7b:\uff92\uff8bz\uff98\uff9b38;/\uff73s\uff7bc\uff96@\"\uff6bY:\uff91A",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 116404,
+      "chips": "How can I opt\u258b\uff85k<Rv\uff72\uff7aI\uff66I=\uff81G[t\uff95\uff75|\uff7dS1H",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 116600,
+      "chips": "How can I optimize\u258b/\uff7c0P\uff7bb\uff896\uff85z1Q\uff8a\uff81\uff9b.\uff9c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 116800,
+      "chips": "How can I optimize for 5H[\uff7e\uff70G,\uff91l{.\uff81)",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 117004,
+      "chips": "How can I optimize for battKP\uff72\uff9cH:8\uff77\uff82",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 117204,
+      "chips": "How can I optimize for battery l\u258b=4w",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 117400,
+      "chips": "How can I optimize for battery life?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 128225,
+      "chips": "\u258bGG]\uff99\uff9cRZkU\uff873{H\uff76}\uff95R-\uff87\uff73w|XZ;\uff81\uff7f,tl\uff9aG\uff67\uff753",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 128400,
+      "chips": "How w\u258bzS\uff8e\uff9a\uff7e\uff86\uff6b\uff7f-a/es-j/f\uff91\\\uff97\uff86}\uff7bU\uff94E^\uff78/^",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 128600,
+      "chips": "How well d9\uff86\uff68H%6B\uff84v@2\uff90=\uff7c\uff69\uff95,Q\uff93\uff69\uff6fu\uff8dn\uff6a\uff7c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 128800,
+      "chips": "How well does t#t\uff74v\uff72=\uff8d\uff7a\uff8a\uff888\uff76\uff76-d}\uff69\uff78~\uff84Y",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 129000,
+      "chips": "How well does this \uff87NV:\"\uff77nM3yu{-'6\uff82d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 129203,
+      "chips": "How well does this game \u258bg5q\uff84L\uff7f\uff82\uff99g\uff6dM",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 129400,
+      "chips": "How well does this game run o\u258b\uff99#j\uff8e\uff9d\\",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 129600,
+      "chips": "How well does this game run on Dec\uff97)",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 129800,
+      "chips": "How well does this game run on Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 140600,
+      "chips": "Ch#2I7Opb*\uff9d\uff87\uff69H\uff99\uff90\uff89\uff8a\"e\uff66P]^s7\uff79\uff88",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 140800,
+      "chips": "Check SPR\uff82^K\uff98Qg\uff81\uff70\uff92\uff9bTqS1Jl\uff80-G",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 141000,
+      "chips": "Check Steam\u258b\uff7f2Y;\uff7e\uff7e/zUz{\uff7f\uff8a)\uff92\uff80",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 141203,
+      "chips": "Check Steam play\u258b\uff6c\uff9cyI;P[\uff9bZZ?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 141404,
+      "chips": "Check Steam players fFJjN8\uff85Q",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 141600,
+      "chips": "Check Steam players for ba_)",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 141800,
+      "chips": "Check Steam players for bans",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 150200,
+      "chips": "Wh\u258b\uff8c#\uff85S\uff83\uff7b\uff9cqJ\uff73\uff96\uff6d\uff96f9\uff7dBJvV\uff80\uff738\uff78\uff6ar{K\uff6a\uff89\uff791lk\uff7eI_\uff71K\uff6ejP+\uff6dn\uff8b\"\uff7bo",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 150400,
+      "chips": "Which O\u258bf\uff95K\uff69]r3N\uff8dLcx]\uff66\uff9b\uff75\uff913\uff7cQ8\"\uff83Xtc(\\\uff95\uff89\uff78\uff99\uff97\uff7fV\uff71\uff80\uff766Zg\uff7f\uff9a\uff95",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 150600,
+      "chips": "Which Ollam,_\uff69L\uff90oZ\uff77Bl?\uff90\uff84\uff77\uff81C-w\uff93@v(\uff70F[\uff8e\uff8bU&]\uff66\uff99\uff83\uff76V\uff97Q'3Jf",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 150800,
+      "chips": "Which Ollama ess-SW\uff8c=\uff96\uff69v\uff6ae\uff71[)Z_1\uff6b\uff88R\uff81)?\uff8e,nD(-CG\uff74j\uff72\"\uff8d|",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 151000,
+      "chips": "Which Ollama essentia\u258b\uff7aKsn\uff73:4v\uff6aR\uff92zh\uff70\uff7c)v=@\uff70\uff8b\"+M..\uff8eH\uff6eb",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 151200,
+      "chips": "Which Ollama essentials sh\u258bn2\uff93ZH\uff72KS$\uff88Pd\uff7a\uff6dj\uff7do\uff76\uff6a/\uff7fp|\uff8aw",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 151400,
+      "chips": "Which Ollama essentials shouldI/api\uff8e0>+o7\uff98!d\uff72\uff85&.O\uff8bIW",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 151601,
+      "chips": "Which Ollama essentials should I puo\uff7e\uff93\uff6c\uff99\uff78J[\uff85}c=\uff83qq\uff68$",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 151802,
+      "chips": "Which Ollama essentials should I pull fo,J\uff7a\uff92K,nA0r[\uff8c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 152000,
+      "chips": "Which Ollama essentials should I pull for thi\u258b=E/\uff732{",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 152200,
+      "chips": "Which Ollama essentials should I pull for this De\u258b8V",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 152400,
+      "chips": "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 168000,
+      "chips": "WFz\uff89\uff863wN\uff96$\uff81\uff6c#vS|f*6v\uff92\uff7e$\uff84]=,",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 168200,
+      "chips": "What s1A\uff7a\uff90/\uff73#'o\uff8e\uff6e\uff7a0\uff7b\uff73\uff8clK%S7",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 168402,
+      "chips": "What settin\u258b!VC*9\uff94t2H\uff6d\uff91\uff99\uff8e\uff95%",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 168600,
+      "chips": "What settings sh\u258b(b\uff8f\uff8a\uff89Y\uff6ePgc",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 168800,
+      "chips": "What settings should \uff96|\uff84u\uff83\uff8d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 169000,
+      "chips": "What settings should I us\uff9dI",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 169200,
+      "chips": "What settings should I use?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 177241,
+      "chips": "M7\uff7bNCX\uff8eZL\uff6d\uff90w\uff7b\uff95\uff78_\uff66}A\uff71\uff74[l/Qb\uff77|\uff74\uff78[m\uff8eh\uff85`\uff98L&",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 177400,
+      "chips": "How d\u258b\uff6d\uff86\uff72\uff732~\uff6eL;\uff96p\uff7b;\"+w[rH(\uff72*\uff9aqSm>#tP)*K",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 177600,
+      "chips": "How do I \u258b\uff8f=/fQP)\uff8du\uff83R[_[&N\uff83Yhv\uff9c\uff6f\\!:}R\uff6es",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 177800,
+      "chips": "How do I fix S\uff86L\uff71\uff88\uff79\\\uff680\uff98L\uff973\uff6b\uff9b?\uff74\uff9d\uff79]\uff71UQ\uff75\uff89\"",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 178000,
+      "chips": "How do I fix Steam Lg\uff848n\uff66E\uff74\uff8f[\uff89\";f:\uff66\uff8c@a\uff6a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 178200,
+      "chips": "How do I fix Steam Inputx\uff77\uff92ob\uff88\uff7e.\uff66H\uff71Q)f'",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 178400,
+      "chips": "How do I fix Steam Input for\u258b:\uff7d.yOxth\uff97a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 178601,
+      "chips": "How do I fix Steam Input for this\u258b%\uff6d\uff6789",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 178801,
+      "chips": "How do I fix Steam Input for this gameE",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 179000,
+      "chips": "How do I fix Steam Input for this game?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 190606,
+      "chips": "#\uff79/\uff85\uff88\uff70'lY\uff77[d7|\uff7b\uff8bi\uff76Y\uff8f3\uff7akCGUDd\uff78\uff96w{&$\uff8f:6\uff7f",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 190800,
+      "chips": "Any k+\uff8e\uff68\"\uff69\uff7a\uff91/\uff9a[\uff67g3\uff8eT\uff6ee\uff8b\"*m\uff88\uff99:f_\uff8e\uff73!\uff7cFF)",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 191000,
+      "chips": "Any known |+%Lq!+R\uff9bP\uff8c\uff96e}\uff95\uff93:)b\uff9bk\uff7e\uff98S(jB\uff6e",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 191200,
+      "chips": "Any known issue\u258b[<msL\uff85nKuo[2*mG\uff84XBl]%c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 191400,
+      "chips": "Any known issues run\u258bg\uff94L!^6K\"(ZD\uff92lY02\uff99",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 191600,
+      "chips": "Any known issues runningWVW\uff6a\uff94E\uff9b7)\uff6aK!\uff92=",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 191800,
+      "chips": "Any known issues running this*#.&\uff76yd\uff74}",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 192000,
+      "chips": "Any known issues running this on D\u258b`\uff70\uff9a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 192200,
+      "chips": "Any known issues running this on Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 203600,
+      "chips": "\uff66]J:\uff89OVLLl%/TGB\uff72X,]w;~k\uff849c\uff80",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 203800,
+      "chips": "Why i\u258b\uff7dks\uff79\uff81\uff76`\uff7f>0\uff95@74\uff690Z\uff76\uff7f\uff76\uff76",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 204000,
+      "chips": "Why is my \u258b(P\uff80DCpp\uff79s\uff7c\uff8dk*/\"<",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 204200,
+      "chips": "Why is my Deck :U]A\uff8e}\uff72)\uff8b\uff7acm",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 204400,
+      "chips": "Why is my Deck runn\uff98\uff9ahbKg\uff6cz",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 204600,
+      "chips": "Why is my Deck running hLn\uff85",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 204800,
+      "chips": "Why is my Deck running hot?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 213000,
+      "chips": "Rec\u258b\uff68\uff81Qi\uff7cUf\uff6dG*]_!\uff70O<\uff74\uff73\uff7c\uff66\uff82\uff7a\uff7csyx",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 213200,
+      "chips": "Recommen\u258bx\uff70\uff6fr\uff71\uff8b\uff73.\uff93f\"4P\uff6c_|\uff7dV\uff9a\uff71\uff91",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 213400,
+      "chips": "Recommended c0-\\R\uff69.\uff8flDa\uff6cq\uff79\uff6d\uff95\uff7dm",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 213600,
+      "chips": "Recommended contro\uff89|UQ~^@\uff88\uff88p$b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 213800,
+      "chips": "Recommended controller \u258b#\uff94\uff73\uff95\uff6b\uff6b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 214000,
+      "chips": "Recommended controller layo\u258b\uff79\uff9d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 214200,
+      "chips": "Recommended controller layout?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 223200,
+      "chips": "H\u258b\uff70W\uff7bM\"\uff90_NGfr\uff725-\uff87p'2%:\uff77&",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 223400,
+      "chips": "How do\uff82\uff9aw5\uff94P}\uff72Z\uff92OkcQz\uff8f\uff68Q",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 223600,
+      "chips": "How do I fit#\uff9cLp\uff96q\uff94\uff8f\uff9a?\uff89\uff8e",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 223800,
+      "chips": "How do I fix stu\u258bW39Jw\uff90\uff75",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 224000,
+      "chips": "How do I fix stutteri\u258b\uff80D",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 224200,
+      "chips": "How do I fix stuttering?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 232204,
+      "chips": "\u258b\uff7e\uff74\uff7e??sc2TS|\uff76\uff6c\uff8eJ2\uff6c/AHLpCZW@q\uff76#Wn\uff82\uff69-\uff6b6s-s",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 232400,
+      "chips": "How d\u258bn\uff93\uff88\uff963/l.\uff7a\uff88>#i5pq\uff6f:sQL'B\uff8eG\uff73$\uff72\uff73\uff75\uff82\uff848\uff83",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 232600,
+      "chips": "How do I s)\uff6d\uff70M\uff7fj{\uff99\uff98,X\uff93P1e:\uff75>)o\uff7fo$\uff81@XT1\uff97D",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 232800,
+      "chips": "How do I set up0\uff92MhN{J\uff7e2a\uff9bd\uff85\uff97o/)j:$j\uff92oo;",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 233000,
+      "chips": "How do I set up voic\u258bQ\uff9cz\uff97Ba\uff84|q.\uff8f\uff91\\\uff7bT!\uff7d\uff78V",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 233200,
+      "chips": "How do I set up voice in\u258b\uff75\uff8b\uff69B%R\uff8f\uff92\uff89C\uff99\uff91Q%a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 233400,
+      "chips": "How do I set up voice input ogX^mJP)#\uff79ik",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 233600,
+      "chips": "How do I set up voice input on thee.\uff8d~nH",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 233800,
+      "chips": "How do I set up voice input on the Deck:",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 234000,
+      "chips": "How do I set up voice input on the Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 246000,
+      "chips": "I'm\u258bD@\uff90\uff8bRp1g)X+T*k\uff8d{\uff94t~?xETt\uff873:3V^\uff78",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 246200,
+      "chips": "I'm stucw?)R\uff6a\uff6c\uff71\uff980\uff9c}\"\uff89I\uff94\uff83(nm\uff779:\uff9bYA\uff89\uff6f",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 246400,
+      "chips": "I'm stuck \u2014 w\uff6bz\uff8c\uff72ul\uff78\uff7eNP~\uff71Q\uff8dHI\uff69Oy%\uff86\uff72",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 246600,
+      "chips": "I'm stuck \u2014 what \uff79T`J+x<-EX\uff6dU\uff9a=23\uff93\uff6b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 246800,
+      "chips": "I'm stuck \u2014 what shoul\u258b97El]\uff85$C\uff8fe0(",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 247000,
+      "chips": "I'm stuck \u2014 what should I t\u258bOOhr\uff9bc\uff73",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 247200,
+      "chips": "I'm stuck \u2014 what should I try ne;\uff9d'",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 247400,
+      "chips": "I'm stuck \u2014 what should I try next?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 258000,
+      "chips": "How\u258bB3\uff7d;\uff6bT\uff89v[1ws|l\uff71?c<\uff76r\uff89\uff8c\uff7c",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 258200,
+      "chips": "How can Z\uff6ec\uff6d\uff8e[S(+P\uff96!}\uff88#i\uff99\uff83b",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 258400,
+      "chips": "How can I redv\uff970h\uff97\uff9cwVp\uff67\uff95&Z;",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 258600,
+      "chips": "How can I reduce \u258b\uff6ax\uff97\uff75\uff69TEV\uff79",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 258800,
+      "chips": "How can I reduce input\u258bq\uff82m\uff78",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 259008,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 267200,
+      "chips": "Wt(\uff78u_]\uff70$Z\uff9a\uff8bO8\uff84\uff67\uff7f\\jTG\uff74uc\uff9d\uff85\uff87",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 267400,
+      "chips": "Why is\uff96\uff98P%L{[O04\uff8esz\uff70\uff7dyarHD\uff7a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 267600,
+      "chips": "Why is my DY)\uff69\uff73[\uff6eo8\uff69\uff92P\uff70l4I`",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 267800,
+      "chips": "Why is my Deck r\u258b\uff69A\uff66M\\\uff7cRC\uff9b\uff9d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 268000,
+      "chips": "Why is my Deck runnin\u258b&->W~",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 268200,
+      "chips": "Why is my Deck running hoc\uff75",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 268400,
+      "chips": "Why is my Deck running hot?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 276436,
+      "chips": "\uff90\uff81\uff99|A.\uff80b+\uff8f\uff69MoJ\uff87\uff74\uff93\uff86\uff66cxd:uC\uff92\uff99\"<\uff8f\uff78Y/@!\uff77\"\uff75u_vm\uff66\uff96Ke+\\\uff86\uff99lx",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 276600,
+      "chips": "Which\uff7d\uff92f/KN\uff68t\uff8e9|\uff75\uff8dz3\uff72Yj@o$\uff95-u\uff70/j5\uff6b\uff67i<B\uff66}E\uff8bi\uff92H\uff83\uff6ce\uff6fQ@\uff90",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 276800,
+      "chips": "Which Oll\u258bD\uff73U\uff84,x\uff7b\uff9aVWj?Ng\uff85|%\uff88\uff90\uff85dSrW\uff6e@%f\uff95dQ\uff8c?\uff9b\uff97|a\uff8a&\uff83hI",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 277000,
+      "chips": "Which Ollama e\u258bO\uff81s4\uff9aG7g\uff86\uff89G)GX\uff66\uff70C\uff6f,=c)9,u\uff77?^pcd\uff82)\uff73Pf\uff94",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 277200,
+      "chips": "Which Ollama essent\uff83\uff77Yrc\uff72\uff81g\uff90\uff824X\uff96?\uff6f*\uff71\uff9a$\uff73}5N\uff94{\uff8dKJp\uff74x)\uff97",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 277400,
+      "chips": "Which Ollama essentials 5vY.+\\e\uff89H\uff6el\uff94\uff7f\uff97\uff80}B5edIxVsW\uff93\\9",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 277600,
+      "chips": "Which Ollama essentials shou!X\uff90Qw\uff85-Y\uff7e\uff7d'\uff87K\uff94bE\uff92&2\uff9a.GE\uff68",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 277800,
+      "chips": "Which Ollama essentials should I \u258b\uff94\uff76R\uff95\uff90PQ\uff90~\uff7b=42\uff98\uff78\uff85A0",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 278000,
+      "chips": "Which Ollama essentials should I pull \u258b2.}|y\uff84N42\uff93\uff7bI\uff99",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 278200,
+      "chips": "Which Ollama essentials should I pull for tq\uff85<>-\uff85]:\uff82",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 278400,
+      "chips": "Which Ollama essentials should I pull for this DJ]\uff6cW",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 278600,
+      "chips": "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 294256,
+      "chips": "\u258b\uff97ry|j\uff8f\uff69\uff67\uff9ax=Vp'#\uff9baOf\uff6dx\uff9d[\uff74\uff92p#\uff8b,\uff71J\uff68\uff6d?\uff78M|",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 294400,
+      "chips": "Whic\u258b\uff8d\uff94\uff8e\uff8biA\uff81\uff68;Ta1^\uff7d8M\uff96\uff79]\"\uff88X\uff6f\uff83\uff6bK\uff7cX\uff6bc\"\uff74l",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 294600,
+      "chips": "Which Oll\uff8dhXa\uff85l\\M9Jk4\uff80\uff74\uff7b>6G\uff90Xb}}\uff900%B)\uff70",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 294800,
+      "chips": "Which Ollama m+$R\uff7d%5\uff827K\uff78qRfRw\uff7dX\uff94Jq}7=z",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 295000,
+      "chips": "Which Ollama model \u258b!\uff88P\uff99W\uff94@\uff72\uff67Z\uff67\uff77Z\uff72[14\uff8a",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 295200,
+      "chips": "Which Ollama model fits\u258bZ\uff997i\uff6dw\uff72+Cr\uff94tD?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 295400,
+      "chips": "Which Ollama model fits my D\u258b\uff901\uff87L2d\uff91H\uff88",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 295600,
+      "chips": "Which Ollama model fits my Deck sX\uff8do\uff67C",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 295814,
+      "chips": "Which Ollama model fits my Deck setup?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 304652,
+      "chips": "Which Ollama model fits my Deck setup?",
+      "ring": "bonsai-chat-earlier-pill-row"
+     },
+     {
+      "t": 306200,
+      "chips": "Which Ollama model fits my Deck setup?",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 307400,
+      "chips": "Chec\uff7e_\uff66kg=\uff9a\uff95\uff96dT-b\uff7c&UN,Gp3\uff68\uff74\uff6e",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 307600,
+      "chips": "Check SteTa<u\uff70LkPr\uff9ag,s\uff79V|/r.",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 307800,
+      "chips": "Check Steam p\u258b\uff9cm[\uff82GIYx\uff9a\uff67\uff7b\uff6e\uff9a\uff86",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 308002,
+      "chips": "Check Steam player\u258bv\uff70-\uff75\uff7b3`\uff84f",
+      "ring": "bonsai-chat-turn-row-body"
+     },
+     {
+      "t": 308200,
+      "chips": "Check Steam players for\u258b/\uff7f\uff6fo",
+      "ring": "bonsai-chat-turn-row-body"
+     },
+     {
+      "t": 308407,
+      "chips": "Check Steam players for bans",
+      "ring": "bonsai-chat-turn-row-body"
+     },
+     {
+      "t": 309600,
+      "chips": "Check Steam players for bans",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 317000,
+      "chips": "Game\u258bVYN?\uff84&u\uff6bo9Qi\\4%,\uff76\uff8bu|\uff6f2n'\uff89K\uff6b@l\uff76+N\uff8a:",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 317200,
+      "chips": "Game won'\u258b\uff74\uff96\uff84]1z\uff72)\uff77\uff70\uff90x\uff76r\\\uff8ey~\uff77+`x\uff7cVW+\"aO",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 317421,
+      "chips": "Game won't lau*Cf\uff85=\uff78\uff91\uff88}\uff7b\uff94_`\uff90+\uff6aY\uff93\uff95uO\uff84\uff937\uff75",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 317600,
+      "chips": "Game won't launch,4\uff668`-\uff85^\uff7dSR;#2\uff90\uff73T\uff8c3S\uff69\uff7e",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 317800,
+      "chips": "Game won't launch, what\u258bA[:\uff69\uff9dsg\uff9a]\uff9duR]l6",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 318000,
+      "chips": "Game won't launch, what shou\u258b\uff88\uff8b,'%k\uff856zB",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 318200,
+      "chips": "Game won't launch, what should I\u258b\uff7f$\uff66W(\uff89",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 318400,
+      "chips": "Game won't launch, what should I checp\uff81",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 318600,
+      "chips": "Game won't launch, what should I check?",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 321400,
+      "chips": "Game won't launch, what should I check?",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 327404,
+      "chips": "Game won't launch, what should I check?",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 330200,
+      "chips": "\uff72!t|)\uff7dAG\uff7f\uff6f}\uff97\uff70SBhZ-/j\uff984|n\uff8bB\uff7c\uff7c\uff8bAMK\uff72\uff70o\uff83\uff8c\uff92fkT",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 330400,
+      "chips": "Why cO\uff76b\uff7cy\uff70l\uff9ct_j>0FS\uff73\uff8dC\uff7b>\uff7b\uff70/\uff85qX4\uff6bJ\uff7b\uff6dsZ\uff80&\uff6e",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 330600,
+      "chips": "Why can't\u258bf\uff80[\uff83Zqx:!\uff98G%zS@\uff7eaSo?j\uff7eTK\uff7bL\uff91#\uff8e\uff9bd",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 330800,
+      "chips": "Why can't bons\u258bR<X\uff68\uff99\uff99Y\uff9cs:'\uff9d\uff66oc\uff7c\uff7eL>\\p73e8P",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 331000,
+      "chips": "Why can't bonsAI re\u258b\uff95.p\uff8fn\uff7a\uff9c\uff6c\uff7dt\uff75a\uff99x3\uff76\uff85\uff9duVU",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 331200,
+      "chips": "Why can't bonsAI reach m?[LW\uff98M\uff84\uff70'%9\uff7bh\uff81\uff9c&\\",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 331400,
+      "chips": "Why can't bonsAI reach my PC\uff85\uff8bpl\uff74\uff8b,6\uff7bCsN&",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 331600,
+      "chips": "Why can't bonsAI reach my PC Olla\u258buET;8n{",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 331800,
+      "chips": "Why can't bonsAI reach my PC Ollama ho\u258bJ?",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 332000,
+      "chips": "Why can't bonsAI reach my PC Ollama host?",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 334400,
+      "chips": "Why can't bonsAI reach my PC Ollama host?",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 338200,
+      "chips": "Why can't bonsAI reach my PC Ollama host?",
+      "ring": "chip"
+     },
+     {
+      "t": 433467,
+      "chips": " ",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 433602,
+      "chips": "How \uff85pvS\uff8a\uff86\uff6e,j\uff66\uff80\uff74HOE\uff94u\uff9c+\uff6cdr!",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 433801,
+      "chips": "How can I\u258b{\uff7aY\uff96\uff718\uff95U'~wJA5\uff7c4U",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 434000,
+      "chips": "How can I redu\u258b\uff72g,/\uff83\uff6b\uff96\uff88W\uff80u\uff87",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 434201,
+      "chips": "How can I reduce inH\uff66\uff67C;B\uff8fS",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 434400,
+      "chips": "How can I reduce input xv\uff6eM",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 434600,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-kb-notes-block"
+     },
+     {
+      "t": 435201,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-chat-details-divider"
+     },
+     {
+      "t": 436800,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 438400,
+      "chips": "How can I reduce input lag?",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 442800,
+      "chips": "Wha\u258bX\uff7fM.oDadoq\uff93Br\uff76\uff6a\uff6e\uff99]\uff69T\uff8f\uff8c{X\uff84\"",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 443000,
+      "chips": "What do\u258b9.\uff7b\uff97-[F\uff96\uff74\uff99`^|Hf\uff85\uff8a\uff9aH\uff8b@)",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 443200,
+      "chips": "What does Ki#\uff7d\uff6a\uff84z\uff72\uff6b\uff71PF\uff83po\uff6c\uff68\uff95o$",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 443400,
+      "chips": "What does Kids maS1-Z,l\uff93\uff71m\\)kb",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 443600,
+      "chips": "What does Kids master \uff8cBJo\uff84\uff80_A",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 443800,
+      "chips": "What does Kids master lock\u258b<u*",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 444000,
+      "chips": "What does Kids master lock do?",
+      "ring": "bonsai-ai-response-chunk"
+     },
+     {
+      "t": 450201,
+      "chips": "What does Kids master lock do?",
+      "ring": "bonsai-chat-turn-row-body"
+     },
+     {
+      "t": 451801,
+      "chips": "What does Kids master lock do?",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 453000,
+      "chips": "W\u258b4@H\"\uff7eBQI\uff7c\uff8eKs2\uff9bz\uff8d,~u[nn\uff68kq",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 453200,
+      "chips": "Why i\u258b`\uff93bn\uff96YN|Yu\uff9c$\uff8bJ\uff83G\uff8a=Uc\uff8b",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 453400,
+      "chips": "Why is my M6N]H\uff6esBb\uff6dC'fm\uff6ab\uff91",
+      "ring": "bonsai-chat-secondary-btn"
+     },
+     {
+      "t": 453601,
+      "chips": "Why is my Deck J\uff70ew[\uff98s:j6QS",
+      "ring": "bonsai-chat-earlier-pill-row"
+     },
+     {
+      "t": 453800,
+      "chips": "Why is my Deck runni\u258b\uff98x1a\uff70z",
+      "ring": "bonsai-chat-earlier-pill-row"
+     },
+     {
+      "t": 454000,
+      "chips": "Why is my Deck running h\u258bN\uff7e",
+      "ring": "bonsai-chat-earlier-pill-row"
+     },
+     {
+      "t": 454200,
+      "chips": "Why is my Deck running hot?",
+      "ring": "bonsai-chat-earlier-pill-row"
+     },
+     {
+      "t": 456401,
+      "chips": "Why is my Deck running hot?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 462400,
+      "chips": "WhatN\uff99%>{\uff75V3l\uff98\uff95\uff98=W\uff84\"YceguA\uff8d\uff88?\uff72\uff6e",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 462600,
+      "chips": "What are \uff8ax\uff8fF\uff7a\uff97((kh\uff96A4C\uff79i!\uff9ce8E;",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 462800,
+      "chips": "What are the U\uff8d\uff9d\uff80(Gb\uff95cHV\uff7ab|gET\uff81",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 463000,
+      "chips": "What are the best \u258b~\uff98E\uff6c/(+A}\uff68\uff73\uff71",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 463200,
+      "chips": "What are the best FSR s\u258b~\uff978\uff9bnQt",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 463400,
+      "chips": "What are the best FSR settin\uff67\uff80=",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 463600,
+      "chips": "What are the best FSR settings?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 473000,
+      "chips": "How\u258b\uff8ei0Xr\uff92;\uff7d\uff86swX\uff78sN.\uff94-6zR\uff98\uff692\uff8c\uff9a\uff78\uff9b\uff8f",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 473200,
+      "chips": "How do I\u258b\uff9cTUf\uff84\uff93\uff6d`P\uff98M\uff87\uff70<\uff76\uff6cOa\uff8a-$\uff86\uff6a0",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 473401,
+      "chips": "How do I balaJ>\uff772\uff6eL^%s\uff91\uff84zUI{\uff71\uff67i\uff96\uff96",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 473600,
+      "chips": "How do I balance >\uff9d\uff93C\uff682?0)\uff78\uff98@U3\uff88-",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 473800,
+      "chips": "How do I balance FPS a\u258bJY~]\uff7a@Nb\uff88K",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 474000,
+      "chips": "How do I balance FPS and ba\u258b\uff7c\uff9d3Y:",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 474200,
+      "chips": "How do I balance FPS and battery\uff9d",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 474400,
+      "chips": "How do I balance FPS and battery?",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 484210,
+      "chips": "\u258bp\uff93U;m\uff71~/j<\uff8aS\uff8d\uff70\uff6d\uff7cX\uff70;9\uff68R@]m\uff8e\uff7d&\uff977\uff75\uff6b\uff6c]b\\",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 484400,
+      "chips": "What 1zBF1>\uff76;\uff75\uff8d\uff77\uff6e\uff83G\uff82\uff85\uff78%@I\uff6df\uff96\uff70*'\uff71\\\uff7d/\uff87*",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 484600,
+      "chips": "What are t\uff7a\\\uff97\uff9a=\uff9b\uff98{\uff6d`1b;=aSKuN\uff96w&\uff9a\uff95\uff6a+p",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 484800,
+      "chips": "What are the be\u258b\"\uff71n[m\uff77gNVP\uff66\uff8c\uff66|\uff95Mf\uff7d\uff66R\uff92",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 485000,
+      "chips": "What are the best s\u258b\uff7b|um&s&~T7\uff83h`qy^;",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 485200,
+      "chips": "What are the best settin>\uff8bwZ\uff72\uff6e\uff94\uff8dQ\uff7cH`W",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 485400,
+      "chips": "What are the best settings fo\uff72lS\uff8bsr8\uff76",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 485600,
+      "chips": "What are the best settings for 60f\u258b[M",
+      "ring": "bonsai-chat-slot-row-focus"
+     },
+     {
+      "t": 485800,
+      "chips": "What are the best settings for 60fps?",
+      "ring": "bonsai-chat-slot-row-focus"
+     }
+    ]
+   }
+  }
+ }
+}

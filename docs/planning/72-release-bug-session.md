@@ -561,3 +561,11 @@ land.
   not updated). The session updated the record with the reason (`a710d8ff`); every check green at `a710d8ff`.
   `c7a09f81` alone fails that one check — `a710d8ff` completes it. Why landings rerun every check, not trust
   the lane's word.
+- **17:40 — the maintainer's calls:** dots order **A** (move at once, as today — no change; the roadmap entry
+  closes as by design); **keep the chips rotating** (no one-minute rest — lane 11's job E); question bubble "is
+  five, leave it"; the ban key box stays on the Developer tab for now; thinking line — asked for examples of both
+  ([drawing](https://claude.ai/artifact/8FWXhWNJi3NLBrS85Q4sk2), from the Deck's real thinking: A trimmed notes,
+  B step titles only; A also repeats game notes word for word, including a reward the answer would cover). The
+  summary-card question was unclear to the maintainer — re-asked in plain words. The maintainer switched the Deck
+  to its own screen; the build with the knowledge-base chip fix was deployed (md5 `d818949c…`) and block 6 (the
+  dots on the Deck's own screen, and the knowledge-base chip) started, agent `a898434f3d0451148`.

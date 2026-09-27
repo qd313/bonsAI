@@ -536,3 +536,11 @@ land.
   top while the ring is on it. **Known issue (answer quality):** the Hades answer reused the Hollow Knight
   answer's wording; two power questions got near-identical answers with no number; the log pulled a power
   suggestion out of a boss answer.
+- **16:40 — free-play fixes landed:** `499f3a55` (lane 11) — while the ring is anywhere on the chip row, every chip
+  style holds still, so A takes the words shown (only one style had checked, and not the one on the Deck);
+  `af05d456`, `4c0605c2`, `7eadad3f`, `84049cfa` (lane 12) — Down/Right past the Session tab's last chip, or past
+  Sum up / the card in an empty Session tab, leaves to the chips (else a hint row, else the question box) through
+  Steam's transfer; the ladder and the summary card scroll clear of the question box when they hold the ring.
+  Listed, not changed: the "This answer" tab's ladder hands its last Down to Steam's own navigation; the rare
+  "Open Controller settings" button is skipped by the new route; if the ring sits on the chips past the one-minute
+  rest, they stay still after it leaves until the panel reopens (tied to the maintainer's call on the rest).

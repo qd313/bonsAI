@@ -354,7 +354,7 @@ closing note added at the end of each._
 - ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
   2026-09-20.** After pressing Ask, Down did nothing at all until the answer finished, even though the Stop
   button was live and reachable by Right the whole time. Down now goes to Stop instead. Row
-  **ASKBAR-DOWN-TO-STOP-01**. A twin bug, also closed below, said the same route was hard to find by D-pad.
+  **ASKBAR-DOWN-TO-STOP-01**. A twin bug, also closed below, said the same route was hard to find by D-pad. [Twin's detail](roadmap-details-closed.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
 
   **Closed 2026-09-23, confirmed on the Deck.** While a reply was arriving, Down from the emptied question
   box landed on Stop; Right, Right also did. After the reply finished, the same presses went back to Ask and
@@ -1919,3 +1919,30 @@ at a time, stayed fully visible, and A opened it. Evidence
 `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`. The table in
 [testing.md](../testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already
 says this row by row.
+
+### Some long-notes blocks and testing rows don't match what was found (closed 2026-09-26)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-26 — copied line for line from its Bugs entry,
+nothing reworded, with the closing note added at the end._
+
+- ★★ `[docs]` **Some long-notes blocks and testing rows don't match what was found** — **OPEN, found by
+  plan 65 2026-09-24, a maintainer read, not a helper's.** 23 long-notes blocks could not be matched to
+  a finished roadmap entry (list in plan 65 §12). In the testing rows: KB-ROUTER-01 and STREAM-FOLLOW-01
+  read Open but say they moved to Done, HUB-EDGE-01 reads Verified for a screen that no longer exists,
+  and five more rows carry "owed" in their own status.
+
+**Closed 2026-09-26, docs only, so no Deck check.** By then 26 headings on the long-notes page had no
+link from anywhere. Fifteen belong to entries still open, and each now has a link from its roadmap
+entry. The other eleven, in ten blocks, belong to entries that have finished; they moved word for word to
+[roadmap-details-closed.md](roadmap-details-closed.md), each linked from its finished entry. None was
+left without a home. The roadmap's tag list now has `[docs]`.
+
+The test rows, checked against their own notes and evidence, with nothing re-run on the Deck: KB-ROUTER-01
+already read Done, and HUB-EDGE-01 had already been re-measured on today's AI models screen, so both
+were left alone. STREAM-FOLLOW-01 read Verified; it now reads Partial, since its touch half is still
+owed to the maintainer. PERMS-CLEAN-06 read as owed but had passed on the Deck 2026-09-26. Row 09 of
+the chip-button checks had its dot pass on the Deck 2026-09-26; its long-label half is still owed.
+MODELS-FILTERS-01 pointed at a half that had already passed as MODELS-LIST-CAP-01. PULL-FIRST-TICK-01
+now says its other half is a separate roadmap bug. DESTRUCT-ADVICE-01's streaming-off half can no longer
+be run, since replies always stream now. CONST-SPOIL-CONSENT-01 read "owed, passed weakly"; it now
+reads Open, as it is still owed.

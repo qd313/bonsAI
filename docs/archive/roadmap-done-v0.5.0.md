@@ -92,7 +92,7 @@ roadmap keeps one pointer line to them._
 
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box**
   — **DONE, closed 2026-09-26, passed on the Deck across all four rounds of its own fix.** Row
-  **SPOILER-COVER-01**. The whole four-round story is in the detail. [Detail](../roadmap-details.md#spoiler-leak-family).
+  **SPOILER-COVER-01**. The whole four-round story is in the detail. [Detail](../roadmap-details.md#spoiler-leak-family) · [Cover check](roadmap-details-closed.md#check-that-a-spoiler-cover-actually-happened).
 - ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **DONE, fixed
   2026-09-26 (helper A, `4b975316`), passed on the Deck 2026-09-26 (name rule, flow L3; missed in an
   earlier bookkeeping pass).** Row **THINKING-SPOILER-01**. [Detail](../roadmap-details.md#spoiler-leak-family).

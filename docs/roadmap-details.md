@@ -209,18 +209,6 @@ at all (its own entry now). Evidence `docs/test-evidence/plan70-CHIP-TRAP-readin
 
     **Method — and the correction it forced.** The card names are **not readable from the device UI**: *Show details* reports retrieval mode, `Trust tier`, and a corpus section count, but never names what was retrieved, and a `fallback_no_source` tier looks identical whether the payload was the genre fallback or a real game card. An earlier note on this row read that chip as "no cards attached" for *"one sentence"* — **that was wrong**, and the conclusion was only accidentally right. `kb_attached: true` was in the same snapshot the whole time, and `fallback_no_source` is a **trust tier** ([knowledge_base_schema.py:48](../py_modules/backend/services/knowledge_base_schema.py#L48)), not an attachment count. The authoritative source is the Desktop ask trace — `~/Desktop/bonsAI_logs/bonsai-ask-trace-<date>.md`, written when `desktop_ask_verbose_logging` is on ([main.py:2135](../main.py#L2135)) — which dumps the verbatim `--- Local knowledge base ---` block with one `[title / kind: Card] (trust: tier)` header per attached card. **Read the trace, not the panel**, for any card-attachment QA.
 
-## An Ask that completes instantly loses its branch picker and checklist
-
-  - **Not what the device measures**, and that is why it is one star rather than two: `gemma4:e2b-it-qat` takes 6-32s on this hardware, so the start call answers `pending` and the polled path — the fixed one — is what real Asks take. This bites a fast or cached completion.
-  - **The same literal already carries `shortcut_setup`, `thinking_unsupported` and `model` through with a comment explaining why**, so the fix is to add the two strategy fields beside them. Confirm first that the RPC actually returns them on this path before adding the fields, and keep the test on the polled path as well — these are two different routes to the same panel.
-
-## Live Ask user bubble shows a bare ellipsis after reopen
-
-  - **On-Deck 2026-08-23 — half the fix works, and the failure moved.** Batch A chip #1 (*"one sentence"*, Deep Rock Galactic: Survivor), QAM closed and reopened mid-think. **The caption came back correctly and stayed correct for the whole thinking phase** — that is the `pending`-branch backfill ([useBonsaiAskOrchestration.ts:502-505](../src/hooks/useBonsaiAskOrchestration.ts#L502-L505)) doing exactly its job, and it is the first time this has been seen working on hardware. **It then reverted to `…` at the moment thinking finished.** So the bug is no longer "nothing ever refills the caption"; it is "something clears it again on the terminal transition".
-  - **Lead, not yet proven — the one unguarded write.** All three in-flight writes to `askThreadDisplayQuestion` are blank-only (`(prev) => prev || value`) — pending at :504, completed at :605 — **except `restoreSessionSnapshot`, which assigns unconditionally** ([useBonsaiAskOrchestration.ts:1312](../src/hooks/useBonsaiAskOrchestration.ts#L1312)). A snapshot captured before the Ask was submitted holds `askThreadDisplayQuestion: ""`, and the survival snapshot is only written before a nested-modal open ([useBonsaiPluginShell.ts:115](../src/hooks/useBonsaiPluginShell.ts)), never on a plain QAM close — so the stored value is routinely stale. If the mount-restore effect lands after the pending poll, its bare assignment overwrites the good caption with the stale blank one, and the header falls back to the `|| "…"` literal at [MainTabChatTranscript.tsx:480](../src/components/MainTabChatTranscript.tsx#L480). The ordering is **not established** — do not fix on this alone. **Cheapest next step:** make :1312 blank-only like its two siblings and re-run the same chip; if the caption survives, that was it. Note the comment already at :599-603 anticipates the restore path but guards the *poll* writes rather than the *restore* write.
-  - **Second asymmetry worth folding into the same fix:** the collapsed turn header at :480 reads `buildCollapsedTurnTitle(liveQuestion) || "…"` with no fallback, while the question bubble 46 lines below at :526 reads `liveQuestion || lastExchange?.question || ""`. Whatever clears `liveQuestion`, the header is the only one of the two with nothing to fall back on — which is why the symptom is a header showing `…` rather than a blank turn.
-  - **Duplicate-question follow-on: not observed this run.** Batch A #1 produced a single turn. One clean run is not a close — the symptom was always intermittent — but it is one data point against it sharing a root cause with the caption bug, since the caption bug *did* reproduce in the same session.
-
 ---
 
 ## Terse mode (Speed answers in three lines)
@@ -511,21 +499,6 @@ text had already finished, during the final tidy-up. Neither answer ran the full
 asked for, but the numbers measured — no gap over 1.5 seconds while writing, no jump over 115 characters
 — are clean. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 
-## The tab names never appear
-
-- ★★ **The tab names never appear** — **OPEN, filed by the maintainer 2026-08-30:** the strip shows glyphs only, and *Main*, *Ollama*,
-  *Settings* and the rest are nowhere, though the mock-ups draw them. **Read the decision before writing any CSS:** this is not an
-  oversight, it is [R5](archive/major-redesign.md) — *filled active glyph only, no micro labels, no width change, no height cost* — which the
-  backlog entry **Tab-strip micro labels + wide active cell** records as deliberately not built. So the fix is to **reopen R5** in
-  [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md) first, and it needs settling alongside the collapsing tab
-  bar below, which wants the active tab readable at a glance and is the natural place for a name to live. **Planned 2026-09-01:**
-  settled inside [archive/30-collapsing-tab-bar.md](archive/30-collapsing-tab-bar.md) — the thin bar names the active tab at rest
-  and the open strip names all six. R5 is reopened as **D44**. **Fixed 2026-09-02:** the bar shows the active tab's name at rest
-  (11px caps in the character accent) and the open strip labels all six tabs (8px caps, PERMS and DEV as the short forms while
-  Developer is mounted). D44 locked. Rows **TAB-BAR-01…06** pass on the Deck; the by-eye legibility check (**TAB-BAR-07**) is the
-  maintainer's.
-
-
 ## Small and cosmetic, as filed
 
 - ★ **The active chip in Show details is hard to spot** — no focus ring, and the "Chip 1 of 6" counter is easy to miss. Filed by the maintainer.
@@ -538,71 +511,6 @@ asked for, but the numbers measured — no gap over 1.5 seconds while writing, n
   screen that lays tiles out in a grid. Needs each grid to leave a margin outside its own edge for the ring to fit.
 - ★★ **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a blanket rule was
   tried and reverted in favour of Steam's native outline.
-
-## Vertical space for the chat bubbles (the lane, as it read)
-
-### Vertical space for the chat bubbles
-
-**Overarching goal, set by the maintainer 2026-08-30:** buy back as much vertical room for the chat bubbles as possible — every bit of
-height in the 300px column is worth something. Today most of it goes to chrome: a tab icon bar, a preset block, a button row under each
-answer, and a Session context bar. These four each hand some of it back, which is why this lane is listed **first** rather than in the
-alphabetical order the rest of the Backlog uses.
-
-- ★★ **Show details becomes a divider, not a chip**
-  - **Goal:** At the end of a reply, **Show details** stops being a button and becomes a full-width
-    divider with the label in the middle — `---------- Show details ↓ ----------`. It reads as the end of
-    the answer rather than as another control competing with it, and the row it currently shares stops
-    needing to exist.
-  - **Prior art in the same file:** the collapsed-history row (`.bonsai-chat-earlier-pill-row` + `-rule`)
-    is already a label centred on a hairline. Copy that shape rather than inventing one.
-
-
-## A setting for one or two preset chips
-
-- ★★★ **A setting for one or two preset chips** — filed by the maintainer 2026-09-02.
-  - **Goal:** A Settings option chooses whether the preset row shows one chip or two side by side. Two stays the default (D43); one gives
-    the label the whole column, so most suggestions read at rest without scrolling.
-  - **The cost is plumbing, not the row:** the row already reads one constant for "how many across" (`PRESET_VISIBLE_SLOTS`, which the
-    carousel window, the seed queue and the corpus Tip guarantee all follow), so the render side is making that a live value. The setting
-    itself is the ~18-file, ~30-edit-point walk in CLAUDE.md, plus a QA row per chip mode. The 2026-08-31 one-chip build (`fc1b245`) is the
-    reference for how one across should behave.
-
-## Copy sits in the answer corner, not in a button row
-
-- ★★★ **Copy sits in the answer's corner, not in a button row**
-  - **Goal:** **Copy** becomes a small semi-transparent icon in the corner of the answer bubble — the same weight as the microphone in the
-    Ask field — drawn as the standard two-overlapping-rounded-squares copy glyph, styled to the SteamOS motif. The button row under the
-    reply loses an entry and the transcript gains its height.
-  - **The hard part is focus, not paint.** Answer bubbles are not D-pad stops today, so a control inside one needs a way in and back out
-    ([AGENTS.md § The Steam Deck focus graph](../AGENTS.md#the-steam-deck-focus-graph)). Copy must not quietly become touch-only.
-
-## Thinking tips replace the status blurb (Thinking effort Phase 2)
-
-**Retired 2026-09-05 (D70 #6).** Real thinking replaces the composed phrases wherever thinking is on, under
-**Reasoning display** ([40-reasoning-display.md](archive/40-reasoning-display.md)); the phrases stay as they are with thinking Off.
-The roadmap entry is removed; this note is what remains of it.
-
-- ★★ **Thinking effort control** — **Phase 1 shipped 2026-08-15; Phase 2 Backlog**
-  - **Phase 1 (shipped):** Ollama tab → **Thinking** row, Off / Brief / Balanced / Deep, defaulting **Off**. Sends `think: true` for all three on levels — named levels are gpt-oss-only and qwen3 / deepseek-r1 reject a string (**D21**, superseding doc 16) — with effort carried by the reserved budget (256 / 512 / 1024) added to `num_predict`. A model that cannot think gets one silent retry with thinking off, is remembered for the session, and the user is told once. On-Deck **THINK-EFFORT-04**, **THINK-EFFORT-05** Open.
-  - **Phase 2 (Backlog):** Replace the cosmetic `<bonsai-status>` blurb outright with hand-curated bonsAI tips — feature tips ("Ask-mode Speed trims replies for a quick answer") for generic asks, KB-strategy tips ("A run spent only kiting is a run that ends underpowered") for game-specific asks, selected contextually by current game/mode. Not a fallback for otherwise-empty moments — the generic filler copy goes away entirely. Data file shaped like `data/kb/strategy_seed.json`.
-  - **Not in scope:** Reply verbosity → token budgets; caveman / lowering `num_predict`; native gpt-oss levels (needs per-model capability detection — see D21).
-  - **Related:** **Reasoning display** (below) — once raw `thinking` streams live, it takes over the slot Phase 2 tips otherwise fill.
-
-## Make token streaming the default and drop the setting
-
-- ★★ **Make token streaming the default and drop the setting** (maintainer direction 2026-08-23)
-  - **Goal:** `bonsai_token_streaming_enabled` goes away and streaming is simply how replies
-    arrive. Stated by the maintainer 2026-08-23 as the intended end state, not a proposal.
-  - **Gate:** the outstanding streaming bugs are fixed and the reveal performs well on the Deck.
-    The live blocker is *Token streaming reveal is chunky under game load* in [Bugs](#bugs),
-    measured 2026-08-22 with a game running; the earlier idle-Deck measurement that called it
-    smooth does not cover this case.
-  - **What it shrinks:** every QA row currently written as "with streaming on and with it off"
-    loses half its work — **DESTRUCT-ADVICE-01** most directly, whose accepted limitation only
-    exists on the streaming path. Do not spend on hardening the non-streaming path meanwhile.
-  - **Two-language removal, so budget for the plumbing:** dropping a boolean is not the reverse of
-    adding one. Python is authoritative (**D13**), both settings contracts need the key gone, and
-    a Deck whose `settings.json` still carries it must not read as "the setting reset itself".
 
 ## User-adjustable spoiler fencing (absorbed into the tiered setting)
 
@@ -1609,21 +1517,6 @@ cannot be launched.
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 
-## Reaching the Stop generation button by D-pad while a reply is streaming is hard to find
-
-- ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
-  **OPEN, found 2026-09-16.** With a reply still being written, Down from the question box stalls (Ask is
-  disabled) and Down from the live streaming answer never reaches Stop generation either; the only route found
-  is the question box, then Right onto the Ask-mode button, then Right again onto Stop generation. Two long
-  replies finished on their own before the ring reached the button by other routes. Not a trap, since Stop can
-  still be reached — just not where a person would first look. Evidence
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`. **Confirmed on the Deck 2026-09-17:** Down
-  from the question box while a reply is streaming still goes nowhere; Stop generation is reached only by
-  Right, then Right again. Evidence `docs/test-evidence/plan57-QA-GREYED-STEP-OVER-02.json`.
-
-*Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
-
-
 ## A chat that is still writing does not look busy from another chat
 
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
@@ -1706,22 +1599,6 @@ counts as staying right rather than going wrong. Side finding, not a bug: a Holl
 about a second Hornet fight; the reply said the notes don't mention one, which is true — the game does
 have a second Hornet fight, the notes just don't cover it. Evidence
 `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
-
-## Check that a spoiler cover actually happened
-
-Long version of the roadmap entry. Moved here 2026-09-25 by the plan 70 bookkeeping pass; the roadmap keeps
-the short summary and the decision.
-
-Today the plugin tells the model to hide spoilers and then trusts it. Nothing reads the reply back to see
-whether it did. That is why the same name-withheld boss question comes back covered some times and bare
-others: the follow-up menu's rule is repeated and stressed all through the instructions and that one
-holds, while the spoiler rule is said once. A device log from 2026-09-18 rules out the obvious explanation
-— the instructions fitted the model's window with room to spare, and the model's own thinking mentions
-wrapping the answer, yet the answer came back bare.
-
-Build the same kind of safety net the follow-up menu already has: when a reply names a protected thing in
-plain text and the turn's rules required a cover, hold it back or wrap it after the fact. Found while
-fixing the menu bug; full reasoning and the five causes ruled out are in that lane's landing commit.
 
 ## Attaching a screenshot crashed the model once
 

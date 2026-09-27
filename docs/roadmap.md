@@ -48,10 +48,10 @@ lists plus one section for the knowledge base, each sorted from one star to six.
    passes:** move it again, same-commit, into [Done](#done-for-v050) as one line, with the full entry going to the matching
    archive file. Never leave a finished item sitting in Bugs or Features, and never mark one with a strike-through.
 5. **Stars** are effort and risk on the GTA scale: `★` easiest … `★★★★★` very high; `★★★★★★` extreme scope.
-6. **Tags:** `[ask]` Ask bar and input · `[chat]` chat slots · `[chips]` preset chips · `[focus]` D-pad and focus ring ·
-   `[KB]` knowledge base · `[layout]` Main tab layout and vertical space · `[ollama]` models and routing · `[perms]` permissions ·
-   `[platform]` build, deploy, tooling, upstream · `[QA]` testing · `[reply]` the answer itself · `[tabs]` the tab bar ·
-   `[ui]` everything else on screen · `[voice]` voice.
+6. **Tags:** `[ask]` Ask bar and input · `[chat]` chat slots · `[chips]` preset chips · `[docs]` the documents themselves ·
+   `[focus]` D-pad and focus ring · `[KB]` knowledge base · `[layout]` Main tab layout and vertical space ·
+   `[ollama]` models and routing · `[perms]` permissions · `[platform]` build, deploy, tooling, upstream · `[QA]` testing ·
+   `[reply]` the answer itself · `[tabs]` the tab bar · `[ui]` everything else on screen · `[voice]` voice.
 7. **Parked work lives in [Shelved](#shelved)**, not in Bugs or Features: one line saying what unshelves it, with the
    full entry in [archive/roadmap-shelved.md](archive/roadmap-shelved.md). Move the whole block back when it restarts.
 
@@ -228,7 +228,7 @@ starts work outside this.
 - ★★ `[chat]` **Deleting a chat whose file is already missing leaves its row in the list** —
   **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Deck check owed.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
-  blanket rule was tried and reverted in favour of Steam's native outline.
+  blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
 - ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **OPEN,
   found on the Deck 2026-09-26, row STOP-PARTIAL-01. The maintainer's call 2026-09-26: Stop must not unload
   the model.** Close the connection instead; the next question should start warm. Plan 72 must-fix.
@@ -243,11 +243,6 @@ starts work outside this.
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
   never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
   the moment a second listener is added, a wake word for example.
-- ★★ `[docs]` **Some long-notes blocks and testing rows don't match what was found** — **OPEN, found by
-  plan 65 2026-09-24, a maintainer read, not a helper's.** 23 long-notes blocks could not be matched to
-  a finished roadmap entry (list in plan 65 §12). In the testing rows: KB-ROUTER-01 and STREAM-FOLLOW-01
-  read Open but say they moved to Done, HUB-EDGE-01 reads Verified for a screen that no longer exists,
-  and five more rows carry "owed" in their own status.
 - ★★ `[focus]` **Up under an answer skips whole rows of controls** — **OPEN, found by the plan 65 Deck
   check 2026-09-24.** With details open, Up from "Save chat to Desktop" jumps past the chip ladder and
   the tabs row straight to the notes block, 3 of 3 tries. With details closed, Up from there skips the
@@ -337,6 +332,7 @@ replace it with a specific issue when one exists.
   offered its suggestion and chooses to rename or keep. [Detail](roadmap-details.md#summing-up-offers-a-fresher-title).
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
+  [Detail](roadmap-details.md#first-run-ghost-new-chat-label).
 - ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
   (plan 55, D104), carried over 2026-09-24 when that plan was archived.** About fifty settings, and the screen
   side names every one of them by hand in seven places in one file. Miss one when adding a setting and it looks
@@ -393,6 +389,7 @@ replace it with a specific issue when one exists.
   real screen, showing the swap in motion.
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
+  [Detail](roadmap-details.md#ask--reply-items-with-short-entries-as-filed).
 - ★★★ `[ollama]` **Per-mode latency timeouts** — **OPEN, weighed and deliberately not built 2026-09-05.** Separate warning and
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
@@ -427,6 +424,7 @@ replace it with a specific issue when one exists.
 - ★★★ `[ui]` **Adjustable text size in Settings** — **OPEN.** `uiScalePx()` already runs through the stylesheet; the work is exposing it,
   deciding what must not scale (icons, the 300px column), and paying the settings plumbing. [Detail](roadmap-details.md#adjustable-text-size-in-settings).
 - ★★★ `[ui]` **Search density** — **OPEN.** Tighter, more scannable results with highlighted match tokens.
+  [Detail](roadmap-details.md#focus--deck-ui-items-with-short-entries-as-filed).
 - ★★★ `[voice]` **Full-quality reading from a LAN PC** — **OPEN, deliberately not built 2026-09-08 (D74); reopened only if the
   local port fails its Deck test.** For a person whose Ollama already runs on a PC in the house, that PC could also run OmniVoice as
   a speech server and read every answer in the full character voice, five to forty times faster than real time on its graphics card.
@@ -456,9 +454,9 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids
-  lock forces it off. [Discovery](planning/web-permission-discovery.md).
+  lock forces it off. [Discovery](planning/web-permission-discovery.md) · [Detail](roadmap-details.md#permissions--safety-items-as-filed).
 - ★★★★ `[platform]` **Llama.cpp provider spike** — **OPEN, research only.** Go or no-go against Deck-local Ollama. Prior:
-  [llama-cpp-provider.md](archive/spikes/llama-cpp-provider.md).
+  [llama-cpp-provider.md](archive/spikes/llama-cpp-provider.md) · [Detail](roadmap-details.md#platform--upstream-items-as-filed).
 - ★★★★ `[platform]` **Steam Input layout parse** — **OPEN.** Parse controller VDF configs for control context. Not in scope: writing
   configs.
 - ★★★★ `[QA]` `[platform]` **Finish the controller test rig** — **PRIORITY 1 (maintainer, 2026-09-24). PARTIAL: built and
@@ -468,7 +466,7 @@ replace it with a specific issue when one exists.
   fixed first — **now works** (see the bug entry above). Comes before stand-in Decks. Plan 70 built two of
   the four pieces: the replay, and a first slice of the nightly run. **Its first real run happened
   2026-09-26: the command itself works, the walks don't check anything yet.** Row **OVERNIGHT-RUN-01** in
-  [testing.md](testing.md). [Detail](roadmap-details.md#overnight-runs-first-real-run). [Program](planning/21-ai-owned-testing-program.md).
+  [testing.md](testing.md). [Detail](roadmap-details.md#overnight-runs-first-real-run). [Program](planning/21-ai-owned-testing-program.md) · [History](roadmap-details.md#controller-macro-test-rig-and-live-view).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -484,9 +482,10 @@ replace it with a specific issue when one exists.
   speed and completion; offer as try order with confirmation. Its own gate said: if timings do not hold still, descope to a
   one-shot readout. That readout is now its own three-star entry, [plan 43](planning/43-model-speed-readout.md), and its record
   of timings answers the gate over time. Whether this line retires is D75. **First input, 2026-09-05:** the desk survey of this
-  quarter's models in [41-deck-model-survey.md](planning/41-deck-model-survey.md); the calls are D72.
+  quarter's models in [41-deck-model-survey.md](planning/41-deck-model-survey.md); the calls are D72. [Detail](roadmap-details.md#deck-health-snapshot-local-reply-tts-on-deck-model-benchmark).
 - ★★★★★ `[perms]` **VAC Phase 2: opponent IDs** — **OPEN, research.** Surface live opponent identities for ban checks when metadata allows.
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
+  [Detail](roadmap-details.md#the-five-star-and-six-star-platform-items-as-filed).
 - ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; first step is a ★★
   test to find out.** bonsAI's panel floating over any VR game, drawn by a small PC program, not a Decky
   plugin. **Locked rule (D97):** it goes only through SteamVR's own panel door and never touches the game
@@ -615,7 +614,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   04, 05 and 06 pass; 03 waits on the maintainer's own look; 07 failed and is filed as its own bug above.
   **The free-play sweep's streaming half closed 2026-09-23** (fourth try of the recorded walk); that same
   pass found a new, unrelated bug instead — two tall answer sections only 33% visible on landing — tracked
-  on its own. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named).
+  on its own. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named) · [Tab icon](roadmap-details.md#replace-the-bonsai-tab-icon).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
@@ -785,12 +784,12 @@ ones from this month are D81 to D88.
   almost never. The real fix is rewriting the tips, its own entry below. [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
-  irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
+  irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards) · [Earlier wording](roadmap-details.md#unrelated-questions-still-get-game-cards-stapled-on-2026-09-02-wording).
 - ★★★ `[KB]` **Searching the notes by meaning costs about a second, every time, on the Deck** — **ACCEPTED
   2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same
   band as first measured — the maintainer said that is fine next to an answer that then takes tens of
   seconds to write. **The cause is now measured:** the two models pushing each other out of memory, which
-  reads as cheap to fix; the acceptance stands until the maintainer says otherwise. (D84) [Detail](roadmap-details.md#searching-the-notes-by-meaning-costs-about-a-second-every-time-on-the-deck).
+  reads as cheap to fix; the acceptance stands until the maintainer says otherwise. (D84) [Detail](roadmap-details.md#searching-the-notes-by-meaning-costs-about-a-second-every-time-on-the-deck) · [Cause](roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads).
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** Leaning the search toward meaning finds the right note first more often, but it buries a brand-new
   note whose meaning index is not built yet. **Not lifted until every note is guaranteed to have its index before
@@ -863,7 +862,7 @@ ones from this month are D81 to D88.
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a
-  focus entry, and Deck QA. About three days. (D50) [Detail](roadmap-details.md#spoiler-coverage-should-be-a-setting-with-tiers).
+  focus entry, and Deck QA. About three days. (D50) [Detail](roadmap-details.md#spoiler-coverage-should-be-a-setting-with-tiers) · [Fencing](roadmap-details.md#user-adjustable-spoiler-fencing-absorbed-into-the-tiered-setting).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.**
   Measured 2026-09-07: nine of ten ordinary problem sentences ("my game keeps crashing", "my game won't
   launch") reach nothing at all, since the word "crash" alone is deliberately too weak to route a question.
@@ -871,7 +870,8 @@ ones from this month are D81 to D88.
   "no tip for this" line has real numbers, but is still waiting on the maintainer. (D81, D85) [Detail](roadmap-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips).
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get cards; today they get nothing specific. New card kinds and a spoiler table update, Left 4
-  Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md).
+  Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md)
+  [Detail](roadmap-details.md#kb-online--versus-strategy-content-and-rag-phase-5).
 - ★★★★ `[KB]` `[QA]` **Measure how well the AI reads a screenshot: which game, which area, which boss** — **OPEN, added
   2026-09-25.** Never measured: no test question attaches a picture, and the notes are searched by the typed words only.
   First a scored set of real Deck screenshots (game, area, boss), run on each picture model the Deck offers; then fixes
@@ -890,7 +890,7 @@ ones from this month are D81 to D88.
   matters: a thumbs-down that stops a wrong card coming back (three days), add-on packs before any large
   catalog (five days or more), a screenshot feeding the search. **The thumbs-down drawn 2026-09-26** (plan
   70, helper T): [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43); not
-  built yet, the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7.
+  built yet, the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7. [Detail](roadmap-details.md#rag-phase-7-community-tip-contribution-rag-phase-8).
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's
@@ -943,6 +943,11 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-26 (docs clean-up):**
+
+- ★★ `[docs]` **Some long-notes blocks and testing rows didn't match what was found** — **DONE
+  2026-09-26, docs only.** [Full detail](archive/roadmap-bugs-fixed.md#some-long-notes-blocks-and-testing-rows-dont-match-what-was-found-closed-2026-09-26).
 
 **Plan 70 (2026-09-26): 34 items closed** — the knowledge-base wave four and the Deck test wave,
 flows L1 to L7 and the helpers' landings. Each one, word for word, with its evidence: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the long notes in

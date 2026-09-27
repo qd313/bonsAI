@@ -519,3 +519,20 @@ land.
   Strategy answer about the Deck overlay ended with Hollow Knight choice buttons carried over from the chat's
   previous question; twice Up from the "N earlier" pill skipped the chat row; Down stalled once on an answer's
   last section. Settings, chats and the feedback log restored.
+- **16:30 — block 4 (flows S and Z) finished** on `8e438f74`, monitor; everything restored. **Flow S passed:**
+  no protected name anywhere for the Hollow Knight and Hades described bosses (147 and 81 samples, both Show
+  details tabs, chips, Copy); the Hades chat's Session tab shows "Megaera" only because the player typed it in an
+  older question — the session's call: the player's own words are not a leak. No one-line cover misbehaved.
+  **Flow Z (22 minutes of free play):** the long chat walks cleanly to Ask and back; the question box never went
+  dead. Sorted against the line: **must fix** — Down dies at the last chip of Show details' Session-tab ladder,
+  with the chip 67 px under the question box (B frees it; plays like a trap; the known ★ entry, raised) → lane 12
+  (agent `a92b2fc7332f25401`), with the summary card taking the ring a third hidden; a chip changed under the ring
+  between reading it and pressing A (the known ★ "rotating chip takes a press", raised) → lane 11's job C.
+  **If there is room:** the Session tab says "nothing to sum up yet" while the answer says the chat summed
+  itself up; a straight Down lands on Read aloud, not Helpful; Up skipped the question row once; the ring's
+  landing on reopen varies; after Stop or Helpful, Read aloud sits alone above a gap; the "What went wrong?"
+  block ended 14 px under the dock once; Copy joined two paragraphs; "Clear cache…" sits 16 px left of the other
+  Settings buttons; About's support button has a 192 px tall hit area. **By design:** the tab strip covers the
+  top while the ring is on it. **Known issue (answer quality):** the Hades answer reused the Hollow Knight
+  answer's wording; two power questions got near-identical answers with no number; the log pulled a power
+  suggestion out of a boss answer.

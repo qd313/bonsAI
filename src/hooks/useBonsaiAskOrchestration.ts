@@ -143,6 +143,7 @@ import {
 } from "../utils/askOrchestrationRestore";
 import { type ReplyMicroActionId } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
+import { gameIsRunning, streamBeatMsFor } from "../utils/lighterWhileGameRuns";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
@@ -395,6 +396,8 @@ export function useBonsaiAskOrchestration(
     targetText: ollamaResponse,
     enabled: streamRevealActive,
     done: !isAsking && !isStreamSettling,
+    // Slower steps while a game runs: the panel fell to 10-20 frames a second (plan 70).
+    beatMs: streamBeatMsFor(gameIsRunning(ollamaContext)),
   });
 
   const desktopAutoSavePrefsRef = useRef({

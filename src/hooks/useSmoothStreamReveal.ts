@@ -16,6 +16,12 @@ type UseSmoothStreamRevealArgs = {
   targetText: string;
   enabled: boolean;
   done: boolean;
+  /**
+   * Milliseconds between the text's steps. Omitted: the answer's usual beat. The Ask hook hands a
+   * slower one while a game runs (lighterWhileGameRuns.ts): with Deep Rock Galactic: Survivor
+   * running the panel drew 10 to 20 frames a second while an answer arrived (plan 70).
+   */
+  beatMs?: number;
 };
 
 /** Slowest reveal, so a couple of trailing characters still animate rather than snapping. */
@@ -40,7 +46,7 @@ const IDLE_COAST_BEATS = 2;
 /** After a non-spoiler fence closes, reveal backlog at this multiple (C2; may change). */
 const FENCE_BURST_RATE_MULTIPLIER = 3;
 /** How long that burst lasts: the 0.75 s the 45 frames it was counted in used to take. */
-const FENCE_BURST_BEATS = Math.round(750 / STREAM_BEAT_MS);
+const FENCE_BURST_MS = 750;
 
 function proseRevealRate(backlog: number): number {
   return Math.max(PROSE_RATE_MIN, backlog / TARGET_DRAIN_SECONDS);
@@ -62,6 +68,7 @@ export function useSmoothStreamReveal({
   targetText,
   enabled,
   done,
+  beatMs = STREAM_BEAT_MS,
 }: UseSmoothStreamRevealArgs): string {
   const [displayText, setDisplayText] = useState("");
   const displayRef = useRef("");
@@ -71,6 +78,9 @@ export function useSmoothStreamReveal({
   const lastTsRef = useRef<number | null>(null);
   const burstTicksRef = useRef(0);
   const idleTicksRef = useRef(0);
+  /* Read at each step, so a game starting or ending mid-answer changes the pace at the next step. */
+  const beatMsRef = useRef(beatMs);
+  beatMsRef.current = beatMs;
 
   const ensureTicking = () => {
     if (!enabled || done) return;
@@ -98,7 +108,7 @@ export function useSmoothStreamReveal({
           timerRef.current = null;
           return;
         }
-        timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
+        timerRef.current = window.setTimeout(tick, beatMsRef.current);
         return;
       }
       idleTicksRef.current = 0;
@@ -111,15 +121,15 @@ export function useSmoothStreamReveal({
       displayRef.current = merged;
       setDisplayText(merged);
       if (bursting) burstTicksRef.current -= 1;
-      timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
+      timerRef.current = window.setTimeout(tick, beatMsRef.current);
     };
-    timerRef.current = window.setTimeout(tick, STREAM_BEAT_MS);
+    timerRef.current = window.setTimeout(tick, beatMsRef.current);
   };
 
   useEffect(() => {
     const prev = prevTargetRef.current;
     if (didNonSpoilerFenceJustClose(prev, targetText)) {
-      burstTicksRef.current = FENCE_BURST_BEATS;
+      burstTicksRef.current = Math.round(FENCE_BURST_MS / beatMsRef.current);
     }
     prevTargetRef.current = targetText;
     targetRef.current = targetText;

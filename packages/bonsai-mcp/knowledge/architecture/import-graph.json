@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 531,
-  "edgeCount": 1442,
+  "fileCount": 533,
+  "edgeCount": 1447,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2839,6 +2839,7 @@
         "src/utils/desktopChatAutosave.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/keepIfUnchanged.ts",
+        "src/utils/lighterWhileGameRuns.ts",
         "src/utils/localOnlyAskCommands.ts",
         "src/utils/presetCarouselInject.ts",
         "src/utils/reasoningDisplay.ts",
@@ -4146,6 +4147,7 @@
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/chatSlotTurns.ts",
+        "src/utils/lighterWhileGameRuns.ts",
         "src/utils/reasoningDisplay.ts",
         "src/utils/strategyChecklist.ts",
         "src/utils/strategyChecklistPersistence.ts",
@@ -5102,6 +5104,23 @@
         "src/utils/keepIfUnchanged.test.ts"
       ]
     },
+    "src/utils/lighterWhileGameRuns.test.ts": {
+      "imports": [
+        "src/utils/lighterWhileGameRuns.ts",
+        "src/utils/streamBeat.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/lighterWhileGameRuns.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts",
+        "src/utils/streamBeat.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/utils/lighterWhileGameRuns.test.ts"
+      ]
+    },
     "src/utils/liveTurnFocusGraph.test.ts": {
       "imports": [
         "src/utils/liveTurnFocusGraph.ts",
@@ -5625,7 +5644,9 @@
       "importedBy": [
         "src/features/stream-scramble/streamScrambleMath.ts",
         "src/hooks/useSmoothStreamReveal.test.ts",
-        "src/hooks/useSmoothStreamReveal.ts"
+        "src/hooks/useSmoothStreamReveal.ts",
+        "src/utils/lighterWhileGameRuns.test.ts",
+        "src/utils/lighterWhileGameRuns.ts"
       ]
     },
     "src/utils/streamMarkdownPrepare.test.ts": {

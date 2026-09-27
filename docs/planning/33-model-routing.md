@@ -178,6 +178,19 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 |---|---|---|---|---|
 | | | | | |
 
+### 4b. The Opus-low lane trial (proposed 2026-09-26, the maintainer's idea)
+
+Can Opus 5.5 at low effort replace Sonnet 5 high for cause-known lanes? Nothing measured it yet. Tried
+first in the release bug session ([plan 72](72-release-bug-session.md) § 3): two lanes on Opus low, one on
+Sonnet high, same kind of work, no Deck needed to build. One row per lane. **Verdict:** Opus low replaces
+Sonnet high for cause-known lanes if it needs no more landing redos and passes the Deck first time as
+often, at no more than about a third higher cost per turn; otherwise Sonnet high stays. Screen work
+(`[focus]`, `[layout]`, `[ui]`) is not part of the trial.
+
+| Date | Session and lane | Model and effort | Cost per turn | Landing redos | Passed the Deck first time? |
+|---|---|---|---|---|---|
+| | | | | | |
+
 ## 5. Where Haiku fits
 
 Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for under a dollar. There is

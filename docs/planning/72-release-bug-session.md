@@ -144,7 +144,7 @@ player meets in the first ten minutes gets its pass in this session; the rest st
 |---|---|---|
 | **The session** | Opus 5.5, extra-high | Re-sorts the list. Writes every brief and Deck runbook. Sorts new bugs against the line. Does the D-pad fixes itself, with a Deck measurement in hand. Keeps five lanes busy. Lands every fix, one at a time. Reports to the maintainer. |
 | **Deck driver**, one at a time | Opus 5.5, medium | Runs one flow from a runbook. Measures, records, reports in plain words. Never fixes, never edits docs. |
-| **Fix lanes**, up to five at once | Sonnet 5, high | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
+| **Fix lanes**, up to five at once | Sonnet 5, high — except lanes 1 and 2, Opus 5.5 low, as a trial (below) | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
 | **Prep helper** | Sonnet 5, high | Writes the next Deck flow's step-by-step runbook while the current one runs, so the Deck never waits for paperwork. |
 | **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. Never commits while a landing runs. |
 
@@ -169,6 +169,58 @@ as it is then.
 When a lane finishes, the session reads its changes, lands them one at a time with every check, and
 starts the next job in the freed slot, so five stay busy. The D-pad family stays with the session itself,
 since those need a measurement read by the one who fixes them.
+
+### Models and effort (the maintainer asked, 2026-09-26)
+
+- **The one running the session: Opus 5.5 at extra-high.** The routing plan's record: extra-high did the
+  refactor, the plans and every landing; max bought nothing over it; and on 09-04 a Fable orchestrator
+  cost more than all six lanes put together while doing work Opus extra-high does.
+- **Lanes: a side-by-side trial of Opus low against Sonnet high** (the maintainer's idea, 2026-09-26).
+  There is no measurement of Opus low anywhere yet, so this session makes one instead of switching blind:
+  - **Lanes 1 and 2 run on Opus low; lane 3 runs on Sonnet high.** All three are cause-known code with
+    no Deck needed, so they compare fairly. Lanes 4 and 5 stay on Sonnet high with the measurement in
+    the brief, as the house rule for screen work says; a low-effort model is the wrong test for pixel
+    work.
+  - **Setup in flow 0:** the lane helpers' model and effort are fixed in their own definition files, and
+    a launch can change the model but not the effort. So flow 0 adds one Opus-low copy of the bug-fix
+    lane helper beside the existing one, identical except for those two lines.
+  - **What gets written down**, one row per lane in the routing plan's trial table (plan 33 § 4b): cost
+    per turn, how many redos the landing needed, whether its fixes passed on the Deck the first time.
+  - **Verdict rule:** Opus low replaces Sonnet high for cause-known lanes if it needs no more redos and
+    passes the Deck as often, at no more than about a third higher cost. Otherwise Sonnet high stays.
+
+### Option: code-only lanes in the cloud (the maintainer asked, 2026-09-26)
+
+A cloud session runs on Anthropic's computers, not the maintainer's PC. It cannot reach the home
+network, so it can never touch the Deck, the controller rig, the Deck tools or the PC's Ollama. Code-only
+lanes can run there; everything Deck-bound stays home.
+
+| Stays on the PC | Can go to the cloud |
+|---|---|
+| The session itself: sorting, briefs, landing each lane, deploying each batch | Lanes 1, 2 and 3 — no Deck at any point |
+| Every Deck flow: measurements, re-checks, free play | Lanes 4 and 5, but only after flow P's measurements are written into their briefs |
+| The D-pad fixes (they need the measurement read by the one who fixes them) | |
+| Bookkeeping, since it follows each landing | |
+
+**What it takes:**
+
+1. **The maintainer pushes experimental first.** A cloud lane starts from GitHub, not the PC, and
+   sessions are not allowed to push. Push again before each new cloud lane, so it starts from the tip.
+2. **Each cloud lane pushes its work as its own branch.** The repo is public, so half-finished fixes
+   are visible until landed. Branch names say plainly they are release-bug lanes; each branch is deleted
+   once it lands.
+3. **The session on the PC fetches each branch and lands it** exactly like a local lane: read the
+   changes, one landing at a time, every check after each.
+4. **Cloud sessions cannot message back yet.** The session checks the lane's branch on a schedule instead
+   of waiting to be told. The brief tells the lane to finish with a report file on its branch.
+5. **Same briefs as local lanes**, minus the local-only parts (the linked packages folder, the Windows
+   hook path). The automatic tests already pass on a clean Linux machine, which is what the cloud uses.
+
+**What it buys and what it does not:** local lanes already run side by side, so the cloud adds no speed.
+It takes load off the PC, and a cloud lane can be started from a phone. To only *follow and steer* the
+session from a phone, Remote Control on the PC session is enough, and keeps the Deck in reach.
+**Recommended:** run on the PC with Remote Control; send lanes 1 to 3 to the cloud only if the PC is
+struggling or the maintainer is away from it.
 
 ---
 

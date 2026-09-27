@@ -366,8 +366,82 @@ land.
 - **12:00 — the Deck woke** (on the monitor; its own screen off; build matches the checkout). Block 1 part 1
   (flows D and P) started with the deck-driver, agent `a13ca274642063dcc`. The maintainer confirmed the
   must-fix list and set the last call: **Friday 2 October**.
-- **12:25 — lane 2 finished and landed** (`b7339ea4`, `1069c8f1`), every check green after each: Settings'
+- **12:08 — lane 2 finished and landed** (`b7339ea4`, `1069c8f1`), every check green after each: Settings'
   Clear session mid-answer now keeps what a Stop would have kept in that chat (it could still happen: the
   clear reset the waiting state before stopping the answer, so neither save ran); deleting a chat whose file
   is gone removes its row. No Stop comment still said it unloads; one testing row (STOP-PARTIAL-01) does —
   for the bookkeeper. Lane 2's slot is free.
+- **12:17 — lane 3 landed** (`d44b6e78` thinking line, `9dd6db16` Strategy opening). One landing check failed
+  on the start-up test's 20-second limit while five copies ran tests at once; it passed alone in 10 s, and
+  the landing script now retries that test once. Lane 6 started in lane 2's slot (agent `a15aaa90d77e73bfc`,
+  copy `p72-lane6-room`, Opus medium): a game's own tip labelled "Shared troubleshooting", a typed command
+  turning up as a suggestion chip, and the cause of doubled hidden-block markers. A read-only helper
+  (agent `a1a57e718acb89c9d`) drafted the working / half-built / broken list plan 71 needs.
+- **12:20 — first readings from flow D (monitor, handheld):** in every state measured — plain, row lit,
+  writing, unread, the new-chat position — every round dot, the active one included, is painted on the
+  same five rows of screen pixels with the same shape; only its brightness differs.
+- **12:22 — lane 4 landed** (reason chips E, the summary card). Lane 4 got the question bubble (option D) by
+  message: Steam's browser supports balanced lines, so only the shrink-to-longest-line needs measuring in
+  code. Lane 5 got the chip gap (8.0 px above the box against 2.8 px below it) and the mic ring (clipped
+  2.8 px past the panel's edge, and at the bottom).
+- **12:30 — block 1 part 1 (flows D, P) finished**, monitor only, both UI sizes; settings and chats restored
+  byte for byte. Measured: dots (every state), chip gaps (same at both sizes), question bubble, scroll speeds
+  (chat name about 40 px/s out with a 300 px/s rewind on a 6 s loop; chip 27.4 px/s after 1.75 s, a ticker),
+  mic ring, bottom strip (not caught). The reason chips and the save row's "before" picture could only be
+  taken under an answer asked on the chat still in view (folded into part 2). The screenshot script asks
+  for a password; the rig's own capture was used.
+- **12:30 — the dots, worked out from the painted pixels.** Every round dot is on the same rows in every state
+  at both sizes. What makes the active dot look a hair low: with the D-pad on the row, the chat name's glow is
+  clipped to the name's box, and that box overlapped the dots by 0.2 px, so a faint lighter band sat on
+  (couch) or right against (handheld) the dots' top row. The dim dots' top rows brighten and their visual
+  centre rises about 0.1 screen px; the bright active dot barely moves. Also the "+" (a text glyph) sat one
+  screen pixel low with the row lit at handheld. Fixed by the session (`e3e849bd`): the name's line lifts
+  1 px by paint only, and the "+" is two bars in its own dot box. Re-measure both screens in flow F.
+- **12:30 — new sightings sorted:** the dots re-sort newest-first when an answer lands (by design — the
+  maintainer's call pending); at couch size the dock ran 2.5 px past the page bottom (closed by the UI size
+  hide below); chips stopping rotation after a minute is most likely the dimmed screen; the hollow circle in
+  the title is the "writing" spark, as designed.
+- **12:35 — the maintainer's calls on the half-built list:** hide the six "[beta]" chips and any other chip
+  for a skipped feature ("Open Steam Input config", the quick-launch chip, Find LAN's two); drop the
+  quick-launch shortcut chip and its setup commands (hidden unless the Developer tab is on); **keep** the
+  Steam ban lookup, its chip reworded in plain words; hide the UI scale section (**hiding counts as the fix**
+  for "after Apply UI scale, nothing holds the ring"); hide Find LAN. Lane 8 (agent `a24196b3bf9627722`) and
+  lane 7 (agent `a0ec531205a9fcd13`, Opus low: the three untrue first-run messages) started. Lane 5 calls:
+  one shared 2 px chip gap (a stylesheet at 401 lines, recorded, not squeezed); mic ring: icons 5 px in
+  from both sides and the icon row 5 px taller so all three rings show whole. Still open with the
+  maintainer: whether the ban lookup's key box moves onto the Permissions tab.
+- **12:44 — landed:** lane 4's question bubble (`59574cfe`), lane 7's three first-run messages (`5ebac341`),
+  lane 6's tip label (`67216a4d`: a game's own Deck tip is credited under that game).
+- **13:00 to 13:30 — landed:** lane 6's streaming fix (`8753cb7f`); lane 5's four (`bdd19507` name scroll like a
+  chip, 20% slower; `dfd133c9` save icon B and the pencil "New chat", the Save row gone, Left claimed on the
+  whole row; `0dde6860` chip gap = box-to-Ask gap; `810cb160` corner icons' rings whole, dock still shorter);
+  lane 1's three (`409cd3aa` downloaded model joins the try order; `e4715d5a` "Internet downloads"
+  permission, off by default and on old settings files, the kids lock forces it off — one hand-merged clash
+  with lane 5 in the D-pad name list; `ed022b89` a notice before every download); lane 6's four (`7ea4f378`
+  typed commands never rotate as chips; `74e8fc7b` a one-line hidden block is covered and opens onto its
+  text — before, it opened onto "undefined" or showed openly; `7b8b5139` the ban chip reads "Check Steam
+  players for bans"; `d2e5e98e` Copy and Read aloud no longer give a one-line hidden block away); the
+  session's dots fix (`e3e849bd`).
+- **13:15 — block 1 part 2 (flow A) finished**, monitor, old build; settings and chats restored. **The stuck
+  panel** did not happen, 0 of 3 with the keyboard trigger and none over Fallout 4; **the RB-opened
+  chat over a game** walked cleanly; **Down while an answer arrives** never lost the ring. These stay on
+  "must fix" as comes-and-goes, watched in every later block. **After Stop** the ring was ON the mic (Stop
+  and Voice input are one corner button; 3 of 3). **Left on the chat row** left bonsAI from the name and the
+  new-chat spot (fixed by lane 5's row). **The Up family:** Up from Show details skipped the reason chips, Up
+  from Read aloud skipped the choice buttons, Up from the answer skipped the question row. **New:** after
+  Not helpful the reason chips appeared behind the dock. **Apply UI scale** lost the ring completely (closed
+  by the hide). **The thin strip** under the game line did not show with answer text behind the dock — not
+  reproduced; watched in free play. Sightings: opening the plugin after a reload took 3 to 4 tries (rig); a
+  stopped answer wandered off topic once; Up from Ask alternates between the mic and the paperclip.
+- **13:48 — landed:** the session's Stop fix (`66d60b40`: Stop hands the ring to the question box, like a
+  send; the ask bar's size limit raised by that one line, with its reason); lane 8's five (`169edb07`
+  unfinished chips hidden — hand-merged with lane 6's command filter, both kept; `12227980` UI scale section
+  only with the Developer tab on, a player always loads Handheld; `4dc2fbdc` Find LAN only with the
+  Developer tab on; `8b27e38e` the shortcut-setup commands answer one plain line without it; `642634dc`
+  contracts note); lane 4's `8a832ccb` (the "What went wrong?" block scrolls above the dock by itself).
+  Lane 9 (agent `adeec41da0273ec2e`) finished the Up family in three commits; landing next, with one
+  hand merge against lane 4's reveal in the chip rows.
+- **13:50 — a slip, recorded:** a reset used while testing which lane 9 commits clash also discarded this
+  log's unsaved entries since `20837fbf`; they were rewritten from the session's own notes the same minute.
+  No landed code was touched. Lesson: never reset the shared checkout with uncommitted work in it; commit the
+  plan log right after each entry.

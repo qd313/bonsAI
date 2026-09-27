@@ -65,7 +65,7 @@ section 2 with the date, and go into their group. Nothing jumps the queue becaus
 | Stop unloads the model, so the next question starts slow | Plainly broken feel: every question after a Stop is slow | The maintainer's call 2026-09-26: Stop must not unload the model. Close the connection instead. Check on the Deck that a stopped answer really stops, and that the next question starts warm. |
 | A model downloaded from the first-run picker never joins the list that picks who answers | Possibly the first ten minutes | Check first whether a new player's first answer actually suffers. If not, it drops to "if there is room". |
 | Clearing a session while an answer is being written may lose that answer | Loses a chat | Found by reading the code. Check it can still happen now the Session tab changed; if it can, fix. |
-| The spoiler family: a withheld boss name leaking in the answer, the thinking line, and the suggestion menu | Spoiler shown | Already fixed. Must pass its Deck re-check before release. |
+| The spoiler family: a withheld boss name leaking in the answer, the thinking line, and the suggestion menu | Spoiler shown | **Done:** passed on the Deck 2026-09-26 in plan 70 (229 reads, the name never showed outside a cover). Nothing left for this session. |
 | The troubleshooting hint's Dismiss can't be reached by D-pad | Traps the player | Already fixed. Deck check only. |
 
 ### Must fix — the maintainer's own polish list (2026-09-26)
@@ -142,23 +142,49 @@ player meets in the first ten minutes gets its pass in this session; the rest st
 
 | Who | Model | Does |
 |---|---|---|
-| **The session** | Opus 5.5, extra-high | Re-sorts the list. Writes every brief and Deck runbook. Sorts new bugs against the line. Does the D-pad and layout fixes itself, with a Deck measurement in hand. Lands every fix. Reports to the maintainer. |
+| **The session** | Opus 5.5, extra-high | Re-sorts the list. Writes every brief and Deck runbook. Sorts new bugs against the line. Does the D-pad fixes itself, with a Deck measurement in hand. Keeps five lanes busy. Lands every fix, one at a time. Reports to the maintainer. |
 | **Deck driver**, one at a time | Opus 5.5, medium | Runs one flow from a runbook. Measures, records, reports in plain words. Never fixes, never edits docs. |
-| **Fix helpers**, up to three | Sonnet 5, high | Fix bugs whose cause is already known, each in its own copy of the repo. |
-| **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. |
-
-**Also built during this session, as one lane:** the download notices and the Internet permission from
-plan 71 (Stage B there). It touches the permissions screen and adds pop-ups, so it gets its own Deck rows:
-each notice's words, the D-pad path through each pop-up, and that nothing downloads with the permission
-off.
+| **Fix lanes**, up to five at once | Sonnet 5, high | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
+| **Prep helper** | Sonnet 5, high | Writes the next Deck flow's step-by-step runbook while the current one runs, so the Deck never waits for paperwork. |
+| **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. Never commits while a landing runs. |
 
 The D-pad and layout bugs are most of "must fix". By the house rules they are never handed to a helper
-without a Deck measurement first, so the session measures first and fixes those itself or with the
-measurement in the brief.
+without a Deck measurement first. So the session measures first, then fixes the D-pad ones itself and
+hands the layout ones to a lane with the measurement in the brief.
+
+### The lanes (added 2026-09-26 for speed)
+
+Five lanes, split so **no two lanes touch the same files**. Each brief carries the exact file list, the
+tip it was cut from, and the base check. The session confirms the file lists in flow 0, against the code
+as it is then.
+
+| Lane | What it fixes | Needs the Deck first? | Can start |
+|---|---|---|---|
+| **1 · Downloads and the Internet switch** | The notice before every download; the new Internet permission, off by default; the recommended-models refresh gated behind it; a downloaded model joining the list that picks who answers | No — built from the code; checked on the Deck after | **Now**, if plan 70 has none of the download files in flight |
+| **2 · Chat and Stop, behind the scenes** | Stop keeps the model loaded; clearing a chat mid-answer no longer loses it; deleting a chat whose file is gone removes its row | No | **Now**, same check with plan 70 |
+| **3 · The answer's words** | The thinking line's rule checklist, stray marks and raw heading; the softer Strategy opening; the credit line hiding a protected name | No | **After plan 70 lands** — these files are where plan 70's spoiler work lives |
+| **4 · The chat area's look** | Question bubble (option D); the "Not helpful" reason chips; the summary card behind the dock; the thin strip under the game line | **Yes** — flow P measurements in the brief | After the first Deck block |
+| **5 · The top and bottom rows' look** | Chat dots lined up; the chat name scroll matching the chips; the preset chip's gap; the mic ring cut off; then Save chat as an icon and the new "+" (once the maintainer picks from the drawing) | **Yes** — flows D and P | After the first Deck block |
+
+When a lane finishes, the session reads its changes, lands them one at a time with every check, and
+starts the next job in the freed slot, so five stay busy. The D-pad family stays with the session itself,
+since those need a measurement read by the one who fixes them.
 
 ---
 
 ## 4. The flows, in outline
+
+**The Deck's order, so it never sits idle.** Measurements first, because every layout lane waits on them.
+Then the checks that don't depend on any fix in flight, while the lanes build. Then re-checks as batches
+land.
+
+| Deck block | Next to it, off the Deck |
+|---|---|
+| **Flow 0** — no Deck | Lanes 1 and 2 already building (they may have started before plan 70 finished) |
+| **1st block: flows A, D and P** — every measurement in one sitting | Lanes 1 and 2 keep building; lane 3 starts once plan 70 has landed; the prep helper writes the next runbook |
+| **2nd block: flows S and G** — spoiler and first-ten-minutes passes, the "try once" bugs. None of these waits on a fix. | Lanes 4 and 5 start with the measurements; the session works on the D-pad family; finished lanes land one at a time |
+| **Then flow F, once per batch of landings** — one deploy per batch, never mid-flow | The next jobs fill freed lane slots; the bookkeeper writes up the last flow |
+| **Last: flow Z**, free play over the whole panel | Anything found goes through the line; "must fix" goes straight to a free lane |
 
 - **Flow 0 — re-sort (no Deck).** Re-read the roadmap after plan 70; move what plan 70 fixed; close retired
   entries; write steps for any row that has none; confirm the "must fix" list with the maintainer.
@@ -176,7 +202,7 @@ measurement in the brief.
 - **Flow P — the polish list, measured.** One pass of screenshots and gap measurements for the
   maintainer's polish list before any change, and again after. Same rule as the dots: measure what is
   painted, not just the boxes.
-- **Fixing, in parallel.** The session takes the D-pad and layout fixes; helpers take the known-cause ones
+- **Fixing, in parallel** — see the lanes in section 3. The session takes the D-pad fixes; lanes take the rest
   (the thinking line, Clear during an answer, the try-order join, the small layout items once measured).
 - **Flow F — re-checks after each batch**, with every saved walk replayed so a new fix cannot quietly break
   an old one.
@@ -205,5 +231,9 @@ measurement in the brief.
    a true-size drawing for the save icon and the new "+".
 2. Is the "must fix" list right? Anything missing that you have hit yourself?
 3. The last-call date — not decided yet (2026-09-26).
-4. One long session like plan 64, or two shorter ones (D-pad and layout first, everything else second)?
-   Recommended: two. The D-pad family needs Deck measurements before fixing, which makes a natural break.
+4. One long session or two shorter ones? **Updated 2026-09-26 for the time crunch:** one continuous
+   session, run as the waves in section 4, with the Deck busy the whole time and lanes 1 and 2 started
+   early. The first Deck block's measurements still come first, but nothing else waits for a second
+   session.
+5. Starting lanes 1 and 2 before plan 70 finishes: fine by you? They need no Deck and touch no knowledge
+   base files, but they do add landings to the same branch plan 70 is landing on.

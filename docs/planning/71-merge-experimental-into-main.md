@@ -26,6 +26,52 @@ Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), "Which m
 
 ---
 
+## 0. Doing it fast: what runs side by side (added 2026-09-26, the maintainer: "we're under a time crunch")
+
+The stages in section 3 are **not** a queue. Most of them can start today, while plan 70 finishes. Only
+one thing truly has to wait its turn: **the Deck, because only one helper can drive it at a time.** So
+the plan is built around keeping the Deck busy every hour, and keeping everything that doesn't need the
+Deck moving next to it.
+
+**The one line that has to go in order (the critical path):**
+plan 70 finishes → the bug session's Deck measurements → fixes land in batches, each re-checked on the
+Deck → freeze → fresh install from the release zip, then filming → release day.
+Anything that shortens this line is worth doing first. Anything not on it runs next to it.
+
+**Tracks that start now, before plan 70 finishes, with no Deck:**
+
+| Track | What | Who | Waits for |
+|---|---|---|---|
+| Docs | README draft, release-notes draft, bug-report form, how-to-help page, the what-reaches-the-internet list | Bookkeeper (Sonnet) drafts, Opus reviews | Nothing. Screenshots and clips drop in at the end. |
+| Reviews | Security review and licence check on today's code | The two read-only review helpers, at the same time | Nothing. At the freeze, a short second pass over only what changed since. |
+| Research | Decky store rules on AI-written code; the list of every setting's starting value | One read-only helper each | Nothing. |
+| Drawings | Save icon and new "+"; the reason chips with and without shorter labels | Opus, true-size drawings like the bubble one | Nothing. The maintainer picks while the bug session runs. |
+| Clean-up | Merged branches, finished repo copies, stray files, the evidence-folder rule | Bookkeeper | Nothing — but never a repo copy plan 70 is still using. Ask its session first. |
+| Early fix lanes | The bug-session lanes that touch no file plan 70 is working in (plan 72 section 3) | Sonnet lanes, each in its own copy of the repo | A quick check with plan 70's session which files it still has in flight. |
+
+**Tracks that start when plan 70 frees the Deck:** the bug session proper (plan 72), with up to five
+fix lanes at once plus the Deck driver.
+
+**Tracks at the end, and even these overlap:** once the freeze lands, the fresh install and the filming
+share the Deck one after the other, while the video scripts, the release notes' "Known issues" and the
+README's final pictures are written from what was just recorded.
+
+**Rules that keep side-by-side work from costing time** (from [lessons-learned.md](../lessons-learned.md)
+§ 1 and § 4, all learned the hard way):
+
+- Each helper works in its own copy of the repo, cut from the newest tip, and checks its base is current
+  before starting. Copies have been made hundreds of commits out of date before.
+- Each helper owns a list of files. If its fix needs a file outside the list, it stops and says so.
+  Two helpers never own the same file at once.
+- Landings go one at a time, with every check after each. After every landing, re-check the
+  copy-paste check, because side-by-side helpers each pass it alone and then fail together.
+- The bookkeeper never commits while a landing is running. It reports its file list instead.
+- In a repo copy, commit with the repo's own hooks path, or the hook stages files from the shared copy.
+- A usage-limit stop kills every helper at once. Their copies keep their work, and each resumes with
+  one short message. A scheduled check every 20 minutes restarts an unattended session after the limit.
+
+---
+
 ## 1. What is true right now (checked 2026-09-26 against git and the code, nothing pressed on the Deck)
 
 - **Main has not moved since 8 July** (the 0.4.9 release). Experimental is 1,681 commits ahead and main has
@@ -90,7 +136,9 @@ Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), "Which m
 
 ## 3. The work, in stages
 
-### Stage A — clean-up, first pass (now, alongside the running sessions)
+*Each stage says when it can start. See section 0 for how they run side by side.*
+
+### Stage A — clean-up, first pass (starts now, alongside the running sessions)
 
 Only clean-up that cannot change how the plugin behaves goes here, so it cannot add bugs:
 
@@ -134,7 +182,7 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
   fixes. No new features, no reshaping of code.
 - Push experimental so the pushed copy matches the local one, and confirm the tests go green.
 
-### Stage D — README and release notes (high priority; can start now, finished before the merge)
+### Stage D — README and release notes (high priority; drafts start now, next to everything else; pictures and final wording after the freeze)
 
 - **README:** written for someone meeting bonsAI for the first time. What it is and why, what it does,
   what you need, how to install, the knowledge library, how to get help.
@@ -182,7 +230,7 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 - **One line for past 0.4.9 users:** what to expect if they install over the old version.
 - Check every link the plugin itself opens points to something that exists on main after the merge.
 
-### Stage E — two read-only reviews, then a fresh install
+### Stage E — two read-only reviews (start now), then a fresh install (after the freeze)
 
 - **A security review** of everything changed since 0.4.9 — a lot of new network and download code came
   with the knowledge library and voice.

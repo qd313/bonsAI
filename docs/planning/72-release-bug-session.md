@@ -451,3 +451,18 @@ land.
   lines of routing): recorded 28 with the reason, not squeezed; the focus check tightened 24 -> 22
   (`0065fccb`). Deployed `0065fccb` (md5 `167064d0…` both sides). Block 2 part 1 (flow F1) started with a
   new driver, agent `ab54c0138d5d2c91b`; part 2 (F2) follows.
+- **14:33 — block 2 part 1 (flow F1) finished** on `0065fccb`, monitor, handheld. **Passed:** the dots (the
+  session's pixel read: every dot, the active one and the "+" crossbar on the same five screen rows in every
+  state; the name's glow now ends two rows above them with a clear row between — was touching); the chat name
+  scrolls like a chip (21.69 against 21.67 px/s, both slower than 27.4); chip gap 2.002 against box-to-Ask
+  1.990; no Save row anywhere; the Up walk visits every row in order (saved as a replayable walk); Find LAN
+  gone; the reason chips' block scrolls above the dock by itself; Left on the row stays in bonsAI; the save
+  icon works (Left onto it, A opens the save window, B returns the ring). **Failed:** the question bubble —
+  balanced lines have no effect on the Deck (lines unchanged) though the rest of option D holds; lane 4 now
+  balances by measuring (and makes the two chip rows 6 px apart, not 8). **For the maintainer:** the save icon
+  shows only on a chat with an answer from this session (the old button's rule), so older saved chats have no
+  icon. **Sightings:** once, Down from the chat row after returning from Settings skipped the whole answer;
+  the reason chips vanished after the save window closed and reopened the panel (the known "older answers
+  lose their helpful row" family); chips stopped changing after about 30 s even with the screen kept awake.
+  The test rating was added to the Deck's feedback log; restored to its pre-session 5 lines. Block 2 part 2
+  (flow F2) started, agent `a605287a135e5b704`.

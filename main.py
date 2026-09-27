@@ -1875,7 +1875,7 @@ class Plugin:
         if isinstance(evt, threading.Event):
             evt.set()
             logger.info(
-                "abort_background_game_ai: stop requested — closing HTTP read; scheduling Ollama stop/unload"
+                "abort_background_game_ai: stop requested — closing HTTP read; watching the AI worker (model stays loaded)"
             )
 
         wre = getattr(self, "_active_ollama_chat_http_response", None)
@@ -1886,10 +1886,15 @@ class Plugin:
                 wre = getattr(self, "_active_ollama_chat_http_response", None)
         close_ollama_chat_response(wre, logger)
 
+        # Closing the connection is the stop; the model stays loaded (2026-09-26). The watch only
+        # unloads a local worker still busy long after Stop, and must not mistake a newer
+        # question's work for it: every model call starts with a fresh ready-event.
+        stopped_evt = getattr(self, "_chat_resp_ready_evt", None)
         spawn_ollama_stop_thread(
             str(getattr(self, "_active_ollama_chat_pc_ip", None) or "").strip(),
             getattr(self, "_active_ollama_chat_model", None),
             logger,
+            newer_request_started=lambda: getattr(self, "_chat_resp_ready_evt", None) is not stopped_evt,
         )
         with self._partial_response_lock:
             snap = self._partial_stream_snapshot

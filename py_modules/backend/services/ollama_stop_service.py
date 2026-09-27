@@ -1,19 +1,24 @@
 """Title: Actually stopping the AI when Stop is pressed
 
 Purpose: When someone presses Stop mid-answer, this is the chain that makes the AI really
-stop, not just the UI. It closes the live network connection so the streaming read wakes up,
-then asks Ollama over the network to unload the model, and on the Deck's own local Ollama,
-follows up with the AI program's own stop command and, as a last resort, ends any AI worker
-process still running by hand.
+stop, not just the UI -- while leaving the model loaded, so the next question starts warm (the
+maintainer's call, 2026-09-26). Closing the live network connection is the stop: Ollama cancels a
+request once its client goes away. Nothing is unloaded on a normal Stop.
 
 Used for: `spawn_ollama_stop_thread()` is what the Stop-button RPC calls; it runs
 `best_effort_abort_ollama_inference()` on a background thread so Stop returns to the screen
-right away instead of waiting for the unload to finish. `close_ollama_chat_response()` is
-called separately, from the thread that is actually blocked reading the stream, to unblock it.
+right away. `close_ollama_chat_response()` is called separately, from the Stop RPC and from the
+thread that is actually blocked reading the stream, to unblock it and end the connection.
 
-Solves: A network "unload" can report success while work already running on the processor
-keeps going. Trying the network call, then the local stop command, then a direct process end,
-in that order, is what actually stops a stuck local model -- one step alone is not reliable.
+Solves: Until 2026-09-26 every Stop also unloaded the model (network unload, then `ollama stop`,
+then ending the AI worker processes), because a network unload could report success while work
+already running kept going. That cost a cold load on the next question, every time. The unload
+chain is now a safety net only: on the Deck's own Ollama, the worker's processor use is watched
+after Stop, and the chain fires only if the worker stays busy for the whole watch
+(`RUNNER_BUSY_WATCH_SECONDS`) with no newer question started. A worker that goes quiet once --
+the normal case, within a second or two of the connection closing -- ends the watch and the
+model stays loaded. A remote Ollama is never unloaded: it cannot be watched from here, and a
+network unload was never the thing that stopped its work.
 
 Does not: Decide *when* Stop should fire -- that is `abort_background_game_ai` in main.py.
 This is only the "how".
@@ -25,9 +30,10 @@ import signal
 import subprocess
 import sys
 import threading
+import time
 import urllib.error
 import urllib.request
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from backend.ollama_connectivity import (
     guess_ollama_cli_paths,
@@ -70,11 +76,16 @@ def spawn_ollama_stop_thread(
     pc_ip_field: str,
     model_name: Optional[str],
     logger: Any,
+    *,
+    newer_request_started: Optional[Callable[[], bool]] = None,
 ) -> threading.Thread:
-    """Ask Ollama to stop and unload, off the event loop and without waiting for it.
+    """Run the after-Stop watch off the event loop and without waiting for it.
 
-    Deliberately fire-and-forget: Stop must return to the UI immediately, and the unload can take
-    seconds. Returns the thread so callers (and tests) can join it; production ignores it.
+    Deliberately fire-and-forget: Stop must return to the UI immediately, and the watch lasts a
+    few seconds normally, up to about ``RUNNER_BUSY_WATCH_SECONDS`` for a worker that will not
+    quiet down. ``newer_request_started`` tells the watch when the player has asked again, so it
+    never mistakes the new question's work for the stopped one's. Returns the thread so callers
+    (and tests) can join it; production ignores it.
     """
 
     def _stop_bg() -> None:
@@ -83,9 +94,10 @@ def spawn_ollama_stop_thread(
                 pc_ip_field=pc_ip_field,
                 model_name=model_name if isinstance(model_name, str) else None,
                 logger=logger,
+                newer_request_started=newer_request_started,
             )
         except Exception:
-            logger.exception("kill/unload helper failed")
+            logger.exception("after-Stop watch failed")
 
     thread = threading.Thread(target=_stop_bg, name="bonsai-ollama-stop", daemon=True)
     thread.start()
@@ -233,21 +245,17 @@ def try_ollama_cli_stop_model(model_name: str, logger: Any, *, timeout_seconds: 
     return False
 
 
-def try_sigterm_linux_ollama_runner_procs(logger: Any, _model_name: str = "") -> int:
-    """
-    Linux-only last resort after unload + ``ollama stop``: terminate same-UID processes whose cmdline matches
-    an Ollama *runner*. Some builds leave inference workers pegging CPU briefly or longer after CLI stop succeeds.
-    """
-    if sys.platform != "linux":
-        return 0
+def _linux_ollama_runner_pids(logger: Any = None, *, limit: int = 24) -> list[int]:
+    """Same-UID processes whose command line names an Ollama *runner* (the AI worker)."""
     my_uid = os.getuid()
     my_pid = os.getpid()
-    killed: list[int] = []
+    found: list[int] = []
     try:
         entries = sorted(os.listdir("/proc"), key=lambda x: int(x) if x.isdigit() else 10**18)
     except OSError as exc:
-        logger.debug("sigterm_linux_ollama_runners: list /proc err=%s", exc)
-        return 0
+        if logger is not None:
+            logger.debug("ollama runner scan: list /proc err=%s", exc)
+        return found
     for name in entries:
         if not name.isdigit():
             continue
@@ -278,13 +286,27 @@ def try_sigterm_linux_ollama_runner_procs(logger: Any, _model_name: str = "") ->
         cmd_l = raw.replace(b"\x00", b" ").decode("utf-8", "replace").lower()
         if "ollama" not in cmd_l or "runner" not in cmd_l:
             continue
+        found.append(pid)
+        if len(found) >= limit:
+            break
+    return found
+
+
+def try_sigterm_linux_ollama_runner_procs(logger: Any, _model_name: str = "") -> int:
+    """
+    Linux-only last resort after unload + ``ollama stop``: terminate same-UID processes whose cmdline matches
+    an Ollama *runner*. Some builds leave inference workers pegging CPU briefly or longer after CLI stop succeeds.
+    Only the safety net in ``best_effort_abort_ollama_inference`` calls this, never a normal Stop.
+    """
+    if sys.platform != "linux":
+        return 0
+    killed: list[int] = []
+    for pid in _linux_ollama_runner_pids(logger):
         try:
             os.kill(pid, signal.SIGTERM)
             killed.append(pid)
         except OSError as exc:
             logger.debug("sigterm_linux_ollama_runners: kill pid=%s err=%s", pid, exc)
-        if len(killed) >= 24:
-            break
     if killed:
         logger.info(
             "try_sigterm_linux_ollama_runner_procs: sent SIGTERM to %d ollama runner proc(s)",
@@ -293,36 +315,154 @@ def try_sigterm_linux_ollama_runner_procs(logger: Any, _model_name: str = "") ->
     return len(killed)
 
 
+# The after-Stop watch. A cancelled answer lets go of the processor within a second or two of the
+# connection closing; the settle wait covers that. A Stop pressed while the model is still reading
+# a long prompt (or still loading) keeps the worker busy until its first word, when the reader sees
+# the Stop and closes -- tens of seconds on the Deck at worst -- so the watch runs long enough that
+# such a worker goes quiet on its own before the net would ever fire.
+STOP_SETTLE_SECONDS = 3.0
+RUNNER_SAMPLE_SECONDS = 2.0
+RUNNER_BUSY_WATCH_SECONDS = 90.0
+# Cores' worth of processor time the AI workers must be using, together, to count as busy. An idle
+# loaded model sits near zero; a generating one keeps at least one core fully occupied.
+RUNNER_BUSY_CORES = 0.5
+
+
+def _cpu_ticks_from_stat_text(text: str) -> Optional[int]:
+    """User plus system processor ticks from one ``/proc/<pid>/stat`` line.
+
+    The process name sits in brackets and may itself hold spaces or brackets, so the fields are
+    read from after the *last* closing bracket: there, index 11 is utime and 12 is stime.
+    """
+    try:
+        fields = text.rsplit(")", 1)[1].split()
+        return int(fields[11]) + int(fields[12])
+    except (IndexError, ValueError):
+        return None
+
+
+def _proc_cpu_ticks(pid: int) -> Optional[int]:
+    try:
+        with open(os.path.join("/proc", str(pid), "stat"), encoding="utf-8", errors="replace") as fh:
+            return _cpu_ticks_from_stat_text(fh.read())
+    except OSError:
+        return None
+
+
+def _clock_ticks_per_second() -> int:
+    try:
+        return int(os.sysconf("SC_CLK_TCK")) or 100
+    except (AttributeError, ValueError, OSError):
+        return 100
+
+
+def sample_linux_ollama_runner_cpu_cores(
+    window_seconds: float,
+    *,
+    platform: Optional[str] = None,
+    sleep: Callable[[float], None] = time.sleep,
+    logger: Any = None,
+) -> Optional[float]:
+    """How many cores the Ollama AI workers used, together, over one window.
+
+    ``None`` means it cannot be measured here (not Linux). No workers at all reads as 0.0: there
+    is nothing left running to stop. A worker that exits during the window is left out.
+    """
+    if (platform or sys.platform) != "linux":
+        return None
+    pids = _linux_ollama_runner_pids(logger)
+    if not pids:
+        return 0.0
+    before = {pid: _proc_cpu_ticks(pid) for pid in pids}
+    sleep(window_seconds)
+    used = 0
+    for pid, start in before.items():
+        end = _proc_cpu_ticks(pid)
+        if start is not None and end is not None and end >= start:
+            used += end - start
+    return used / float(_clock_ticks_per_second()) / max(window_seconds, 1e-6)
+
+
+def _unload_stuck_local_model(base: str, model_name: str, logger: Any) -> None:
+    """The pre-2026-09-26 Stop chain, now the safety net only: network unload, then ``ollama
+    stop`` (an HTTP unload can return 200 while processor work keeps running), then ending any
+    worker process still left."""
+    request_ollama_stop_model_via_api(base, model_name, logger)
+    try_ollama_cli_stop_model(model_name, logger)
+    try_sigterm_linux_ollama_runner_procs(logger, model_name)
+
+
 def best_effort_abort_ollama_inference(
     *,
     pc_ip_field: str,
     model_name: Optional[str],
     logger: Any,
-) -> None:
+    newer_request_started: Optional[Callable[[], bool]] = None,
+    sample_runner_cpu_cores: Optional[Callable[[float], Optional[float]]] = None,
+    sleep: Callable[[float], None] = time.sleep,
+) -> str:
     """
-    After the user presses Stop (HTTP read abort + threading Event), aggressively wind down inference:
+    After the user presses Stop (connection closed + threading Event set), make sure the answer's
+    work really ended -- without unloading the model.
 
-    - POST ``/api/generate`` unload on whichever host backs ``pc_ip_field`` (LAN or localhost).
-    - On **localhost Ollama**, also run ``ollama stop <tag>`` **after** the API attempt: HTTP unload can
-      return 200 while CPU-offloaded inference keeps running; CLI ``stop`` is documented to abort in-flight work.
+    Step by step:
 
-    Prefer this over naive PID kills: Ollama owns runner processes; unloading + ``ollama stop`` is the supported pair.
+    - Remote Ollama (a PC): nothing more. Closing the connection is what cancels its work, and its
+      processor cannot be watched from here. Returns ``"left_loaded_remote"``.
+    - Local Ollama (the Deck): wait ``STOP_SETTLE_SECONDS``, then sample the AI workers' processor
+      use every ``RUNNER_SAMPLE_SECONDS``. The first quiet sample ends the watch with the model
+      still loaded (``"left_loaded"``, the normal outcome). A newer question at any point ends it
+      too (``"newer_request"``): the busy worker is now doing that question's work.
+    - Safety net: only if every sample for ``RUNNER_BUSY_WATCH_SECONDS`` found the workers busy,
+      and no newer question started, run the old unload chain (``"unloaded_stuck_runner"``). That
+      is the case the unload was first added for -- work that kept running after Stop.
+    - If the workers cannot be measured (not Linux), keep the model (``"cannot_measure"``).
     """
     base = _ollama_http_base_from_pc_ip_field(pc_ip_field)
     mn = str(model_name or "").strip() if model_name is not None else ""
     if not mn:
-        logger.info("best_effort_abort_ollama_inference: no active model snapshot — skipping server stop.")
-        return
-    request_ollama_stop_model_via_api(base, mn, logger)
-    # On-loopback: always run `ollama stop` after unload API (HTTP unload alone can leave CPU offload running).
-    if _is_loopback_ollama_base(base):
+        logger.info("best_effort_abort_ollama_inference: no active model snapshot — nothing to watch.")
+        return "no_model"
+    if not _is_loopback_ollama_base(base):
         logger.info(
-            "best_effort_abort_ollama_inference: localhost Ollama — running ollama stop after unload API (%s)",
+            "best_effort_abort_ollama_inference: remote Ollama host — connection closed, model left loaded (%s)",
             mn,
         )
-        try_ollama_cli_stop_model(mn, logger)
-        try_sigterm_linux_ollama_runner_procs(logger, mn)
-    else:
-        logger.info(
-            "best_effort_abort_ollama_inference: remote Ollama host — unload API only (no local ollama CLI).",
-        )
+        return "left_loaded_remote"
+
+    newer = newer_request_started or (lambda: False)
+    sampler = sample_runner_cpu_cores or (
+        lambda window: sample_linux_ollama_runner_cpu_cores(window, sleep=sleep, logger=logger)
+    )
+    newer_msg = "best_effort_abort_ollama_inference: a newer question started — watch ended, model left loaded"
+    sleep(STOP_SETTLE_SECONDS)
+    samples = max(1, int(RUNNER_BUSY_WATCH_SECONDS // RUNNER_SAMPLE_SECONDS))
+    last_cores = 0.0
+    for _ in range(samples):
+        if newer():
+            logger.info(newer_msg)
+            return "newer_request"
+        cores = sampler(RUNNER_SAMPLE_SECONDS)
+        if cores is None:
+            logger.info("best_effort_abort_ollama_inference: cannot watch the AI worker here — model left loaded (%s)", mn)
+            return "cannot_measure"
+        if cores < RUNNER_BUSY_CORES:
+            logger.info(
+                "best_effort_abort_ollama_inference: AI worker quiet after Stop (%.2f cores) — model left loaded (%s)",
+                cores,
+                mn,
+            )
+            return "left_loaded"
+        last_cores = cores
+    if newer():
+        logger.info(newer_msg)
+        return "newer_request"
+    logger.warning(
+        "best_effort_abort_ollama_inference: AI worker still busy %.0f s after Stop (%.2f cores) — "
+        "unloading %s as a last resort",
+        RUNNER_BUSY_WATCH_SECONDS,
+        last_cores,
+        mn,
+    )
+    _unload_stuck_local_model(base, mn, logger)
+    return "unloaded_stuck_runner"

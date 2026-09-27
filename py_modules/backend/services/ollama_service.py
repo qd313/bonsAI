@@ -49,20 +49,22 @@ How it works:
        v
     the reply a person actually sees
 
-Stopping an in-progress answer follows its own chain, each step only tried because the one
-before it is not reliable enough on its own:
+Stopping an in-progress answer keeps the model loaded, so the next question starts warm (the
+maintainer's call, 2026-09-26):
 
     Stop pressed
        |
        v
-    ask Ollama over the network to unload the model  (request_ollama_stop_model_via_api)
+    close the live connection -- Ollama cancels the request once its client goes away
        |
-       v   (local AI only — a network "unload" can report success while
-       |    work already running on the processor keeps going)
-    run the AI program's own stop command directly    (try_ollama_cli_stop_model)
+       v   (the Deck's own Ollama only; a remote one is left alone)
+    watch the AI workers' processor use for a short while
        |
-       v   (still local; last resort, when the above still leaves something running)
-    end any leftover AI worker process by hand         (try_sigterm_linux_ollama_runner_procs)
+       +-- they go quiet (the normal case)  ->  done; the model stays loaded
+       |
+       +-- still busy for the whole watch, and no newer question started
+              -> the old unload chain, as a safety net: network unload, then the AI
+                 program's own stop command, then ending the leftover worker processes
 
 1. `post_ollama_chat()` is the entry point. It works out the reply-length and thinking budget for
    the question's mode, then drives the loop above: one streamed call per attempt
@@ -87,9 +89,9 @@ before it is not reliable enough on its own:
    `format_ai_response()` (from ollama_prompts) does the final cleanup pass before the reply goes
    back to the caller.
 5. Stopping a question in progress is handled separately, by `best_effort_abort_ollama_inference()`,
-   which runs the three-step chain drawn above. Only the network step runs against a remote
-   Ollama host; the other two only make sense against the AI running on the Deck itself. The
-   whole stop chain now lives in ollama_stop_service.py and is re-exported here.
+   which runs the watch drawn above. A remote Ollama host is never unloaded; the safety-net
+   unload only ever runs against the AI on the Deck itself, and only when its workers stay busy
+   for the whole watch. The whole stop chain lives in ollama_stop_service.py and is re-exported here.
 6. Two smaller, unrelated jobs are re-exported here but actually live in their own files now:
    `probe_ollama_health()` (Connection-panel reachability) is in ollama_health_probe.py, and
    `preload_ask_model_sync()` (warming one small model at startup) is in

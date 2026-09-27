@@ -1,8 +1,8 @@
 """Unit tests for the Stop-button transport helpers (backend.services.ollama_service).
 
 `abort_background_game_ai` decides *when* to abort — that is plugin-level and stays in main.py.
-These two helpers are *how*: close the live HTTP handle from another thread, and ask Ollama to
-unload without blocking the UI. Both were inline in the RPC with no test.
+These two helpers are *how*: close the live HTTP handle from another thread, and run the after-Stop
+watch without blocking the UI. Both were inline in the RPC with no test.
 """
 
 import threading
@@ -71,19 +71,28 @@ class TestSpawnOllamaStopThread(unittest.TestCase):
     def test_calls_the_abort_helper_with_the_host_and_model(self):
         seen = {}
 
-        def fake_abort(*, pc_ip_field, model_name, logger):
+        def fake_abort(*, pc_ip_field, model_name, logger, newer_request_started=None):
             seen["pc_ip_field"] = pc_ip_field
             seen["model_name"] = model_name
+            seen["newer_request_started"] = newer_request_started
+
+        def newer():
+            return False
 
         log = RecordingLogger()
         with mock.patch.object(ollama_stop_service, "best_effort_abort_ollama_inference", fake_abort):
-            spawn_ollama_stop_thread("192.168.1.50", "qwen2.5:7b", log).join(timeout=5)
-        self.assertEqual(seen, {"pc_ip_field": "192.168.1.50", "model_name": "qwen2.5:7b"})
+            spawn_ollama_stop_thread(
+                "192.168.1.50", "qwen2.5:7b", log, newer_request_started=newer
+            ).join(timeout=5)
+        self.assertEqual(
+            seen,
+            {"pc_ip_field": "192.168.1.50", "model_name": "qwen2.5:7b", "newer_request_started": newer},
+        )
 
     def test_non_string_model_becomes_none(self):
         seen = {}
 
-        def fake_abort(*, pc_ip_field, model_name, logger):
+        def fake_abort(*, pc_ip_field, model_name, logger, newer_request_started=None):
             seen["model_name"] = model_name
 
         log = RecordingLogger()

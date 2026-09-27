@@ -284,6 +284,7 @@
     "tests/test_ollama_prompts_stream_instruction.py",
     "tests/test_ollama_pull_registry.py",
     "tests/test_ollama_service.py",
+    "tests/test_ollama_stop_keeps_model_loaded.py",
     "tests/test_plugin_data_reset.py",
     "tests/test_plugin_zip_corpus_guard.py",
     "tests/test_preload_ask_model_boot.py",

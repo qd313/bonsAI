@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 556,
-  "edgeCount": 1517,
+  "edgeCount": 1519,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1706,13 +1706,15 @@
     },
     "src/data/presets.test.ts": {
       "imports": [
-        "src/data/presets.ts"
+        "src/data/presets.ts",
+        "src/utils/localOnlyAskCommands.ts"
       ],
       "importedBy": []
     },
     "src/data/presets.ts": {
       "imports": [
-        "src/data/askMode.ts"
+        "src/data/askMode.ts",
+        "src/utils/localOnlyAskCommands.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -5391,6 +5393,8 @@
         "src/data/inputSanitizerCommands.ts"
       ],
       "importedBy": [
+        "src/data/presets.test.ts",
+        "src/data/presets.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/localOnlyAskCommands.test.ts"
       ]

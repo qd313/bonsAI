@@ -12,6 +12,7 @@ import {
   getFrozenTestChips,
   frozenTestChipsActive,
 } from "./presets";
+import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 
 /** Regression tests for preset sampling and category detection heuristics. */
 describe("presets", () => {
@@ -160,5 +161,21 @@ describe("frozen test chips (QA)", () => {
     setFrozenTestChips([]);
     expect(frozenTestChipsActive()).toBe(false);
     expect(getRandomPresets(3).some((p) => p.testChip)).toBe(false);
+  });
+});
+
+describe("suggestion chip pool", () => {
+  it("never offers a typed command as a suggestion chip (plan 70, flow L6)", () => {
+    // "bonsai:vac-check" sat in the chip list and rotated through the chips like a question.
+    const isCommand = (text: string) => questionBypassesOllamaPcIpRequirement(text);
+    for (const options of [undefined, { useLocalKnowledgeBase: true }]) {
+      expect(getRandomPresets(500, options).some((p) => isCommand(p.text))).toBe(false);
+      for (const category of ["troubleshooting", "ollama", "general"]) {
+        expect(getContextualPresets(category, 500, options).some((p) => isCommand(p.text))).toBe(false);
+      }
+      for (let i = 0; i < 300; i++) {
+        expect(isCommand(getRandomPresetExcluding(new Set(), options).text)).toBe(false);
+      }
+    }
   });
 });

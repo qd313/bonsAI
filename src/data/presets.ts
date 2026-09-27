@@ -48,6 +48,7 @@
  *     chips in the same row, which defeats the point of pinning for a
  *     repeatable test.
  */
+import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import type { AskModeId } from "./askMode";
 
 export type PresetPrompt = {
@@ -161,9 +162,15 @@ export type PresetSamplerOptions = {
   useLocalKnowledgeBase?: boolean;
 };
 
+/**
+ * A typed command ("bonsai:vac-check") is never offered as a suggestion chip: plan 70 saw it rotate
+ * through the chips like a question. It stays in PRESET_PROMPTS so `detectPromptCategory` still
+ * files the typed command under troubleshooting for the follow-up chips.
+ */
 function samplerPool(options?: PresetSamplerOptions): PresetPrompt[] {
-  if (!options?.useLocalKnowledgeBase) return PRESET_PROMPTS;
-  return PRESET_PROMPTS.filter((p) => p.text !== LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT);
+  const suggestable = PRESET_PROMPTS.filter((p) => !questionBypassesOllamaPcIpRequirement(p.text));
+  if (!options?.useLocalKnowledgeBase) return suggestable;
+  return suggestable.filter((p) => p.text !== LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT);
 }
 
 const PRESET_PROMPTS: PresetPrompt[] = [

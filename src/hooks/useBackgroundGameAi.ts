@@ -34,11 +34,19 @@ export const BACKGROUND_STREAM_POLL_MS = 150;
 /**
  * Background ask lifecycle: invalidates stale polls when the user submits again or unmounts,
  * and fans out ``get_background_game_ai_status`` until a terminal state.
+ *
+ * `streamPollMs`, when given, is the pace while text streams, asked at every check: the Ask hook
+ * slows it while a game runs (lighterWhileGameRuns.ts), because every check that brings text is a
+ * redraw of the whole plugin, and with a game running the panel drew about 11 frames a second
+ * while an answer arrived (plan 70).
  */
 export function useBackgroundGameAi(
   applyBackgroundStatusToUi: (status: BackgroundRequestStatus, fallbackQuestion?: string) => void,
   onPollError: (error: unknown) => void,
+  streamPollMs?: () => number,
 ) {
+  const streamPollMsRef = useRef(streamPollMs);
+  streamPollMsRef.current = streamPollMs;
   const askRequestSeqRef = useRef(0);
   const isMountedRef = useRef(true);
   const backgroundPollTimerRef = useRef<number | null>(null);
@@ -95,7 +103,9 @@ export function useBackgroundGameAi(
              * nothing while a game was running.
              */
             const delayMs =
-              status.streaming === true ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
+              status.streaming === true
+                ? (streamPollMsRef.current?.() ?? BACKGROUND_STREAM_POLL_MS)
+                : BACKGROUND_STATUS_POLL_MS;
             backgroundPollTimerRef.current = window.setTimeout(() => {
               void pollOnce();
             }, delayMs);

@@ -1,19 +1,24 @@
 /**
- * While a game runs, the panel draws its answers with less work (lighterWhileGameRuns.ts): the
- * game and the model already share the Deck's chip. These pin who counts as "a game is running",
- * the pace the answer's text moves at, and the Deck's switch for comparing with and without.
+ * While a game runs, the panel does less for each step of an arriving answer
+ * (lighterWhileGameRuns.ts): the game and the model already hold the Deck's processor. These pin
+ * who counts as "a game is running", the pace of the status checks, whether the text is smoothed,
+ * and the Deck's switch for comparing with and without.
  */
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
-  GAME_RUNNING_BEAT_MS,
+  GAME_RUNNING_POLL_MS,
   gameIsRunning,
   lighterWhileGameRuns,
-  streamBeatMsFor,
+  smoothRevealFor,
+  streamPollMsFor,
 } from "./lighterWhileGameRuns";
-import { STREAM_BEAT_MS } from "./streamBeat";
 
 type SwitchWindow = Window & { __bonsaiGameLoad?: unknown };
+
+function setSwitch(value: unknown): void {
+  (window as SwitchWindow).__bonsaiGameLoad = value;
+}
 
 afterEach(() => {
   delete (window as SwitchWindow).__bonsaiGameLoad;
@@ -31,42 +36,60 @@ describe("gameIsRunning", () => {
 
 describe("lighterWhileGameRuns", () => {
   it("turns every part on while a game runs, and none with nothing running", () => {
-    expect(lighterWhileGameRuns(true)).toEqual({ beat: true, scramble: true, steady: true, blur: true });
-    expect(lighterWhileGameRuns(false)).toEqual({ beat: false, scramble: false, steady: false, blur: false });
+    expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: true, steady: true });
+    expect(lighterWhileGameRuns(false)).toEqual({ pace: false, scramble: false, steady: false });
   });
 
   it("the Deck's switch can turn it all off with a game running", () => {
-    (window as SwitchWindow).__bonsaiGameLoad = { off: true };
-    expect(lighterWhileGameRuns(true)).toEqual({ beat: false, scramble: false, steady: false, blur: false });
+    setSwitch({ off: true });
+    expect(lighterWhileGameRuns(true)).toEqual({ pace: false, scramble: false, steady: false });
   });
 
   it("the Deck's switch can force it on with nothing running", () => {
-    (window as SwitchWindow).__bonsaiGameLoad = { force: true };
-    expect(lighterWhileGameRuns(false)).toEqual({ beat: true, scramble: true, steady: true, blur: true });
+    setSwitch({ force: true });
+    expect(lighterWhileGameRuns(false)).toEqual({ pace: true, scramble: true, steady: true });
   });
 
   it("the Deck's switch can leave out one part at a time", () => {
-    (window as SwitchWindow).__bonsaiGameLoad = { scramble: false, blur: false };
-    expect(lighterWhileGameRuns(true)).toEqual({ beat: true, scramble: false, steady: true, blur: false });
+    setSwitch({ scramble: false, steady: false });
+    expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: false, steady: false });
   });
 
   it("ignores a switch of the wrong shape", () => {
-    (window as SwitchWindow).__bonsaiGameLoad = "off";
-    expect(lighterWhileGameRuns(true).beat).toBe(true);
-    (window as SwitchWindow).__bonsaiGameLoad = { off: "yes", beat: 0 };
-    expect(lighterWhileGameRuns(true).beat).toBe(true);
+    setSwitch("off");
+    expect(lighterWhileGameRuns(true).pace).toBe(true);
+    setSwitch({ off: "yes", pace: 0 });
+    expect(lighterWhileGameRuns(true).pace).toBe(true);
   });
 });
 
-describe("streamBeatMsFor", () => {
-  it("moves the answer's text on half as often while a game runs", () => {
-    expect(streamBeatMsFor(false)).toBe(STREAM_BEAT_MS);
-    expect(streamBeatMsFor(true)).toBe(GAME_RUNNING_BEAT_MS);
-    expect(GAME_RUNNING_BEAT_MS).toBeGreaterThan(STREAM_BEAT_MS);
+describe("streamPollMsFor", () => {
+  it("checks less often while a game runs, and at the usual pace otherwise", () => {
+    expect(streamPollMsFor(false, 150)).toBe(150);
+    expect(streamPollMsFor(true, 150)).toBe(GAME_RUNNING_POLL_MS);
+    expect(GAME_RUNNING_POLL_MS).toBeGreaterThan(150);
   });
 
-  it("keeps the usual beat when the Deck's switch leaves the beat out", () => {
-    (window as SwitchWindow).__bonsaiGameLoad = { beat: false };
-    expect(streamBeatMsFor(true)).toBe(STREAM_BEAT_MS);
+  it("takes the Deck's pace, kept inside 50 to 2000 ms, only while the lighter pace is on", () => {
+    setSwitch({ pollMs: 400 });
+    expect(streamPollMsFor(true, 150)).toBe(400);
+    expect(streamPollMsFor(false, 150)).toBe(150);
+    setSwitch({ pollMs: 5 });
+    expect(streamPollMsFor(true, 150)).toBe(50);
+    setSwitch({ pollMs: 99999 });
+    expect(streamPollMsFor(true, 150)).toBe(2000);
+    setSwitch({ pollMs: "fast" });
+    expect(streamPollMsFor(true, 150)).toBe(GAME_RUNNING_POLL_MS);
+    setSwitch({ pace: false, pollMs: 400 });
+    expect(streamPollMsFor(true, 150)).toBe(150);
+  });
+});
+
+describe("smoothRevealFor", () => {
+  it("smooths the text between checks only when the lighter pace is off", () => {
+    expect(smoothRevealFor(false)).toBe(true);
+    expect(smoothRevealFor(true)).toBe(false);
+    setSwitch({ pace: false });
+    expect(smoothRevealFor(true)).toBe(true);
   });
 });

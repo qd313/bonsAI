@@ -153,4 +153,57 @@ describe("useBackgroundGameAi", () => {
     result.current.invalidateRequests();
     vi.useRealTimers();
   });
+
+  /*
+   * Plan 70: with a game running the panel drew about 11 frames a second while an answer arrived,
+   * and each status check that brings text is a redraw of the whole plugin. The Ask hook hands a
+   * slower pace then (lighterWhileGameRuns.ts), read at every check.
+   */
+  it("checks at the streaming pace it is handed, read afresh at every check", async () => {
+    vi.useFakeTimers();
+    let polls = 0;
+    setRpcHandler("get_background_game_ai_status", () => {
+      polls += 1;
+      return {
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "q",
+        request_id: 4,
+        streaming: true,
+        partial_response: "partial",
+      } as BackgroundRequestStatus;
+    });
+    let paceMs = 500;
+    const { result } = renderHook(() =>
+      useBackgroundGameAi(
+        () => {},
+        () => {},
+        () => paceMs
+      )
+    );
+
+    act(() => {
+      const seq = result.current.startNextRequest();
+      result.current.startBackgroundStatusPolling(seq, "q");
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    const first = polls;
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1500);
+    });
+    // Three checks in 1500 ms at 500 ms apart, not the ten a 150 ms pace would make.
+    expect(polls - first).toBe(3);
+
+    paceMs = 150;
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1500);
+    });
+    // The check already waiting keeps its 500 ms; every one after it follows the new pace.
+    expect(polls - first - 3).toBeGreaterThanOrEqual(7);
+
+    result.current.invalidateRequests();
+    vi.useRealTimers();
+  });
 });

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 536,
-  "edgeCount": 1451,
+  "edgeCount": 1449,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5128,15 +5128,13 @@
     },
     "src/utils/lighterWhileGameRuns.test.ts": {
       "imports": [
-        "src/utils/lighterWhileGameRuns.ts",
-        "src/utils/streamBeat.ts"
+        "src/utils/lighterWhileGameRuns.ts"
       ],
       "importedBy": []
     },
     "src/utils/lighterWhileGameRuns.ts": {
       "imports": [
-        "src/types/bonsaiUi.ts",
-        "src/utils/streamBeat.ts"
+        "src/types/bonsaiUi.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -5667,9 +5665,7 @@
       "importedBy": [
         "src/features/stream-scramble/streamScrambleMath.ts",
         "src/hooks/useSmoothStreamReveal.test.ts",
-        "src/hooks/useSmoothStreamReveal.ts",
-        "src/utils/lighterWhileGameRuns.test.ts",
-        "src/utils/lighterWhileGameRuns.ts"
+        "src/hooks/useSmoothStreamReveal.ts"
       ]
     },
     "src/utils/streamMarkdownPrepare.test.ts": {

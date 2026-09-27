@@ -1,53 +1,60 @@
 /**
  * Title: Lighter drawing while a game runs
- * Purpose: One place that decides how much less the panel draws while an answer arrives with a
+ * Purpose: One place that decides how much less the panel does while an answer arrives with a
  * game running, and the switch the Deck uses to compare with and without it.
- * Used for: the Ask hook (the pace the answer's text moves at), the Main tab (the scramble, and a
- * class on its column that holds the small animations still and drops the blur).
- * Solves: The panel's frame rate while an answer arrives with a game running. With nothing
- * running it draws about 57 frames a second (plan 69); with Deep Rock Galactic: Survivor running
- * it drew 10 to 20 (plan 70, 2026-09-26). The game, the model and the panel share one chip, and
- * every frame the panel changes in is a frame the Deck has to redraw -- so while a game runs the
- * panel changes in fewer frames. Nothing changes with nothing running.
+ * Used for: the Ask hook (how often it asks for new text, and whether the text is smoothed between
+ * those asks), the Main tab (the scramble, and a class on its column that holds the small
+ * animations still).
+ * Solves: The panel's frame rate while an answer arrives with a game running. Measured on the
+ * Deck, 2026-09-27, Deep Rock Galactic: Survivor running: about 11 frames a second while the
+ * answer's text arrived and about 35 while the model only thought, against 60 and 59 with nothing
+ * running; the processor sat at 96-98% the whole answer, and the scramble made no difference. The
+ * gap between thinking and answering is the panel's own work for each step of new text: each is a
+ * redraw of the whole plugin in React, a new layout of the growing answer, and the scroll follow
+ * and size watchers measuring it. Today there are about 16 such steps a second (a status check
+ * every 150 ms, plus 9 smoothing steps). While a game runs this cuts them to 4: a status check
+ * every 250 ms, and each one's text shown as it lands, with no smoothing steps in between.
+ * Nothing changes with nothing running.
  * Does not: Find out which game runs -- it is handed the same context the "Context:" line under
  * the question box reads (Steam's running app, kept in step by useOllamaGameContextSync and the
  * Ask's own status polls).
  *
  * The Deck's switch, for measuring: in the Quick Access page's console,
- *   window.__bonsaiGameLoad = { off: true }     -- never lighter, even with a game running
- *   window.__bonsaiGameLoad = { force: true }   -- lighter even with nothing running
- *   window.__bonsaiGameLoad = { scramble: false } -- leave one part out (beat, scramble, steady, blur)
- *   delete window.__bonsaiGameLoad              -- back to normal
- * It is read on every render, so set it before asking; an answer already arriving picks it up
- * at its next step.
+ *   window.__bonsaiGameLoad = { off: true }       -- never lighter, even with a game running
+ *   window.__bonsaiGameLoad = { force: true }     -- lighter even with nothing running
+ *   window.__bonsaiGameLoad = { scramble: false } -- leave one part out (pace, scramble, steady)
+ *   window.__bonsaiGameLoad = { pollMs: 400 }     -- try another status-check pace (50-2000 ms)
+ *   delete window.__bonsaiGameLoad                -- back to normal
+ * It is read on every render and every status check, so an answer already arriving picks it up.
  */
 import type { OllamaContextUi } from "../types/bonsaiUi";
-import { STREAM_BEAT_MS } from "./streamBeat";
 
 /** The whole feature's off switch: false keeps the panel drawing the same with or without a game. */
 const LIGHTER_WHILE_A_GAME_RUNS = true;
 
 /**
- * Milliseconds between the answer's visible steps while a game runs: about 4.5 a second, half the
- * usual pace. Measured with nothing running (plan 69), this pace alone took the panel from about
- * 55 frames a second to about 60 -- the one change that is known to help, and it helps more when
- * each redraw costs more.
+ * Milliseconds between status checks while an answer arrives with a game running: 4 a second
+ * instead of about 7, and each check's text is shown as it lands, so the answer moves in about
+ * 4 steps a second of a few words each. Plan 69 measured, with nothing running, that the panel's
+ * frame rate rises as the steps get fewer: 9 a second gave 53-57 frames, 4.5 gave 59.5.
  */
-export const GAME_RUNNING_BEAT_MS = 220;
+export const GAME_RUNNING_POLL_MS = 250;
+
+/** The range the Deck's `pollMs` may set. */
+const POLL_MS_MIN = 50;
+const POLL_MS_MAX = 2000;
 
 /** Which parts of the lighter drawing are on. */
 export type LighterParts = {
-  /** The answer's text moves on GAME_RUNNING_BEAT_MS instead of STREAM_BEAT_MS. */
-  beat: boolean;
+  /** Status checks every GAME_RUNNING_POLL_MS, each one's text shown as it lands (no smoothing). */
+  pace: boolean;
   /** The scramble animation is skipped: the text arrives plain. */
   scramble: boolean;
-  /** Blinking cursors, the thinking spinner and the question box's breathing hold still. */
+  /** Blinking cursors, the spinners and the question box's breathing hold still. */
   steady: boolean;
-  /** Panels drop their frosted-glass blur. */
-  blur: boolean;
 };
 
-const PART_NAMES = ["beat", "scramble", "steady", "blur"] as const;
+const PART_NAMES = ["pace", "scramble", "steady"] as const;
 
 /** Whether the context names a running game, the way the "Context:" footnote decides it. */
 export function gameIsRunning(ctx: OllamaContextUi | null | undefined): boolean {
@@ -67,7 +74,7 @@ function readDeckSwitch(): Record<string, unknown> | null {
 export function lighterWhileGameRuns(gameRunning: boolean): LighterParts {
   const sw = readDeckSwitch();
   const on = sw?.off === true ? false : sw?.force === true ? true : LIGHTER_WHILE_A_GAME_RUNS && gameRunning;
-  const parts = { beat: on, scramble: on, steady: on, blur: on };
+  const parts = { pace: on, scramble: on, steady: on };
   if (on && sw) {
     for (const name of PART_NAMES) {
       if (sw[name] === false) parts[name] = false;
@@ -76,7 +83,17 @@ export function lighterWhileGameRuns(gameRunning: boolean): LighterParts {
   return parts;
 }
 
-/** Milliseconds between the streaming answer's visible steps. */
-export function streamBeatMsFor(gameRunning: boolean): number {
-  return lighterWhileGameRuns(gameRunning).beat ? GAME_RUNNING_BEAT_MS : STREAM_BEAT_MS;
+/** Milliseconds between status checks while text streams: `usualMs`, or the lighter pace. */
+export function streamPollMsFor(gameRunning: boolean, usualMs: number): number {
+  if (!lighterWhileGameRuns(gameRunning).pace) return usualMs;
+  const asked = readDeckSwitch()?.pollMs;
+  if (typeof asked === "number" && Number.isFinite(asked)) {
+    return Math.min(POLL_MS_MAX, Math.max(POLL_MS_MIN, Math.round(asked)));
+  }
+  return GAME_RUNNING_POLL_MS;
+}
+
+/** Whether the answer's text is smoothed between status checks (useSmoothStreamReveal). */
+export function smoothRevealFor(gameRunning: boolean): boolean {
+  return !lighterWhileGameRuns(gameRunning).pace;
 }

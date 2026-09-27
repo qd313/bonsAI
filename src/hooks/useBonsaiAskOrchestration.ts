@@ -107,7 +107,7 @@ import {
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { stripSoftContinueCue } from "../utils/stripSoftContinueCue";
 import { uiActiveElement } from "../utils/uiDocument";
-import { useBackgroundGameAi } from "./useBackgroundGameAi";
+import { BACKGROUND_STREAM_POLL_MS, useBackgroundGameAi } from "./useBackgroundGameAi";
 import type {
   AppendDesktopChatEventPayload,
   AppendDesktopNoteResult,
@@ -143,7 +143,7 @@ import {
 } from "../utils/askOrchestrationRestore";
 import { type ReplyMicroActionId } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
-import { gameIsRunning, streamBeatMsFor } from "../utils/lighterWhileGameRuns";
+import { gameIsRunning, smoothRevealFor, streamPollMsFor } from "../utils/lighterWhileGameRuns";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
@@ -394,10 +394,9 @@ export function useBonsaiAskOrchestration(
 
   const streamDisplayText = useSmoothStreamReveal({
     targetText: ollamaResponse,
-    enabled: streamRevealActive,
+    // While a game runs each status check's text shows as it lands, unsmoothed (plan 70).
+    enabled: streamRevealActive && smoothRevealFor(gameIsRunning(ollamaContext)),
     done: !isAsking && !isStreamSettling,
-    // Slower steps while a game runs: the panel fell to 10-20 frames a second (plan 70).
-    beatMs: streamBeatMsFor(gameIsRunning(ollamaContext)),
   });
 
   const desktopAutoSavePrefsRef = useRef({
@@ -845,7 +844,9 @@ export function useBonsaiAskOrchestration(
     invalidateRequests,
     startBackgroundStatusPolling,
     isRequestActive,
-  } = useBackgroundGameAi(applyBackgroundStatusToUi, onBackgroundPollError);
+  } = useBackgroundGameAi(applyBackgroundStatusToUi, onBackgroundPollError, () =>
+    streamPollMsFor(gameIsRunning(ollamaContext), BACKGROUND_STREAM_POLL_MS),
+  );
 
   // --- Mount restore: resume pending Ask after plugin remount ---
   // Lifted into useAskMountRestore. It must stay at exactly this point in the list: React

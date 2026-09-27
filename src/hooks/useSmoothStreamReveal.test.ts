@@ -61,37 +61,6 @@ describe("useSmoothStreamReveal", () => {
     expect(frames).not.toHaveBeenCalled();
   });
 
-  /*
-   * Plan 70: with a game running the panel drew 10 to 20 frames a second while an answer arrived,
-   * so the Ask hook hands the reveal a slower beat then (lighterWhileGameRuns.ts).
-   */
-  it("moves the text on the slower beat it is handed, never between those beats", () => {
-    const slow = STREAM_BEAT_MS * 2;
-    const { result, rerender } = renderHook(
-      ({ target }) => useSmoothStreamReveal({ targetText: target, enabled: true, done: false, beatMs: slow }),
-      { initialProps: { target: "x".repeat(200) } }
-    );
-    act(() => {
-      vi.advanceTimersByTime(slow - 1);
-    });
-    expect(result.current).toBe("");
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    const first = result.current.length;
-    expect(first).toBeGreaterThan(0);
-    // More text lands between steps (a poll): it waits for the next slow step, not a usual beat.
-    rerender({ target: "x".repeat(400) });
-    act(() => {
-      vi.advanceTimersByTime(slow - 1);
-    });
-    expect(result.current.length).toBe(first);
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    expect(result.current.length).toBeGreaterThan(first);
-  });
-
   it("does not shrink display when target grows", () => {
     const { result, rerender } = renderHook(
       ({ target, enabled, done }) => useSmoothStreamReveal({ targetText: target, enabled, done }),

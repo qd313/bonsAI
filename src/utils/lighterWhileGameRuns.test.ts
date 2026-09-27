@@ -56,8 +56,9 @@ describe("gameIsRunning", () => {
 });
 
 describe("lighterWhileGameRuns", () => {
-  it("turns every part on while a game runs, and none with nothing running", () => {
-    expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: true, steady: true });
+  it("turns the pace and the still animations on while a game runs, and none with nothing running", () => {
+    // The scramble skip is off by the maintainer's call (2026-09-27): the decode effect stays.
+    expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: false, steady: true });
     expect(lighterWhileGameRuns(false)).toEqual({ pace: false, scramble: false, steady: false });
   });
 
@@ -68,12 +69,18 @@ describe("lighterWhileGameRuns", () => {
 
   it("the Deck's switch can force it on with nothing running", () => {
     setSwitch({ force: true });
-    expect(lighterWhileGameRuns(false)).toEqual({ pace: true, scramble: true, steady: true });
+    expect(lighterWhileGameRuns(false)).toEqual({ pace: true, scramble: false, steady: true });
   });
 
   it("the Deck's switch can leave out one part at a time", () => {
-    setSwitch({ scramble: false, steady: false });
+    setSwitch({ steady: false });
     expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: false, steady: false });
+  });
+
+  it("the Deck's switch can skip the scramble too, to measure what keeping it costs", () => {
+    setSwitch({ scramble: true });
+    expect(lighterWhileGameRuns(true)).toEqual({ pace: true, scramble: true, steady: true });
+    expect(lighterWhileGameRuns(false).scramble).toBe(false);
   });
 
   it("ignores a switch of the wrong shape", () => {

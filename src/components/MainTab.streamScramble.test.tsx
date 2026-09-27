@@ -31,16 +31,17 @@ describe("resolveStreamScrambleSettings", () => {
    * Plan 70: with a game running the panel drew 10 to 20 frames a second while an answer arrived;
    * plan 69 measured the scramble alone at about 10 frames a second with nothing running.
    */
-  it("is the off constant while a game runs, even with the switch on", () => {
+  it("keeps the decode effect while a game runs (the maintainer's call, 2026-09-27)", () => {
     const given = { enabled: true, style: "settle", color: "same", settleMs: 400 } as const;
-    expect(resolveStreamScrambleSettings(given, true)).toBe(STREAM_SCRAMBLE_OFF);
+    expect(resolveStreamScrambleSettings(given, true)).toBe(given);
     expect(resolveStreamScrambleSettings(given, false)).toBe(given);
   });
 
-  it("keeps the scramble with a game running when the Deck's switch leaves that part out", () => {
-    (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad = { scramble: false };
+  it("skips the scramble with a game running when the Deck's switch asks, to measure its cost", () => {
+    (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad = { scramble: true };
     const given = { enabled: true, style: "settle", color: "same", settleMs: 400 } as const;
-    expect(resolveStreamScrambleSettings(given, true)).toBe(given);
+    expect(resolveStreamScrambleSettings(given, true)).toBe(STREAM_SCRAMBLE_OFF);
+    expect(resolveStreamScrambleSettings(given, false)).toBe(given);
   });
 });
 

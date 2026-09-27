@@ -23,7 +23,8 @@
  * panel draws) or Steam's hidden main page, SharedJSContext (where the plugin's code runs),
  *   window.__bonsaiGameLoad = { off: true }       -- never lighter, even with a game running
  *   window.__bonsaiGameLoad = { force: true }     -- lighter even with nothing running
- *   window.__bonsaiGameLoad = { scramble: false } -- leave one part out (pace, scramble, steady)
+ *   window.__bonsaiGameLoad = { steady: false }   -- leave one part out (pace, scramble, steady)
+ *   window.__bonsaiGameLoad = { scramble: true }  -- skip the scramble too (kept by default)
  *   window.__bonsaiGameLoad = { pollMs: 400 }     -- try another status-check pace (50-2000 ms)
  *   window.__bonsaiGameLoad = { pieces: false }   -- draw the live answer whole, not piece by
  *                                                    piece (StreamMarkdownPieces; any game state)
@@ -35,6 +36,13 @@ import { getUiDocument } from "./uiDocument";
 
 /** The whole feature's off switch: false keeps the panel drawing the same with or without a game. */
 const LIGHTER_WHILE_A_GAME_RUNS = true;
+
+/**
+ * Whether the scramble is skipped while a game runs. Off by the maintainer's call (2026-09-27):
+ * keep the decode effect even with a game running. The Deck's switch `{ scramble: true }` still
+ * skips it, to measure what it costs.
+ */
+const SKIP_SCRAMBLE_WHILE_A_GAME_RUNS = false;
 
 /**
  * Milliseconds between status checks while an answer arrives with a game running: 4 a second
@@ -82,14 +90,17 @@ export function readDeckSwitch(): Record<string, unknown> | null {
   }
 }
 
-/** Which parts are on, given whether a game runs. Only a real `true`/`false` in the switch counts. */
+/**
+ * Which parts are on, given whether a game runs. Only a real `true`/`false` in the switch counts:
+ * `false` leaves a part out, `true` puts one in (the scramble skip is out by default).
+ */
 export function lighterWhileGameRuns(gameRunning: boolean): LighterParts {
   const sw = readDeckSwitch();
   const on = sw?.off === true ? false : sw?.force === true ? true : LIGHTER_WHILE_A_GAME_RUNS && gameRunning;
-  const parts = { pace: on, scramble: on, steady: on };
+  const parts: LighterParts = { pace: on, scramble: on && SKIP_SCRAMBLE_WHILE_A_GAME_RUNS, steady: on };
   if (on && sw) {
     for (const name of PART_NAMES) {
-      if (sw[name] === false) parts[name] = false;
+      if (typeof sw[name] === "boolean") parts[name] = sw[name] as boolean;
     }
   }
   return parts;

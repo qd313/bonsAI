@@ -264,4 +264,16 @@ describe("the 'What went wrong?' reason chips are tighter than the other reply b
     expect(match![1]!).toMatch(/min-height:\s*32px !important/);
     expect(match![1]!).toMatch(/padding:\s*6px 12px !important/);
   });
+
+  it("puts 6 between the two rows of reason chips too, not the block's 8", () => {
+    // Deck re-check 2026-09-27 (plan72-F-CHIPS.json): 6 between chips, but 7.996 between the two
+    // rows, which is the reply block's own gap. The second row pulls up by the difference.
+    const block = css.match(/\.bonsai-scope \.bonsai-chat-reply-actions\s*\{([^}]*)\}/);
+    expect(block![1]!).toContain("gap: 8px !important");
+    const match = css.match(
+      /\.bonsai-scope \.bonsai-chat-reply-actions-row--chips \+ \.bonsai-chat-reply-actions-row--chips\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    expect(match![1]!).toContain(`margin-top: calc(${scaled(6)} - 8px) !important`);
+  });
 });

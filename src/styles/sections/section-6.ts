@@ -335,6 +335,11 @@ ${buildAnswerBubbleSection()}
           min-height: ${uiScalePx(28)} !important;
           padding: ${uiScalePx(4)} ${uiScalePx(8)} !important;
         }
+        /* The two rows sit 6 apart as well: the reply block's own gap is 8, so the second row
+           pulls up by the difference (Deck re-check, plan 72: 7.996 between the rows). */
+        .bonsai-scope .bonsai-chat-reply-actions-row--chips + .bonsai-chat-reply-actions-row--chips {
+          margin-top: calc(${uiScalePx(6)} - 8px) !important;
+        }
         .bonsai-scope .bonsai-chat-reply-actions-row--utility {
           flex-wrap: nowrap !important;
         }

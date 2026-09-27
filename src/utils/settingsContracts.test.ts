@@ -41,11 +41,29 @@ describe("settings contracts", () => {
     expect(defaults.ui_scale_auto_enabled).toBe(true);
     expect(defaults.ui_scale_manual_profile).toBe("handheld");
     const manual = normalizeSettings({
+      show_developer_tab: true,
       ui_scale_auto_enabled: false,
       ui_scale_manual_profile: "couch",
     });
     expect(manual.ui_scale_auto_enabled).toBe(false);
     expect(manual.ui_scale_manual_profile).toBe("couch");
+  });
+
+  /**
+   * 0.6.0 (plan 72): the UI scale section shows only with the Developer tab on, so a player without
+   * it must get the default size even when an older settings file saved Couch or auto off.
+   */
+  it("normalizeSettings: without the Developer tab, a saved manual UI scale loads as the default", () => {
+    const loaded = normalizeSettings({
+      show_developer_tab: false,
+      ui_scale_auto_enabled: false,
+      ui_scale_manual_profile: "couch",
+    });
+    expect(loaded.ui_scale_auto_enabled).toBe(true);
+    expect(loaded.ui_scale_manual_profile).toBe("handheld");
+    // The legacy name for the Developer tab switch counts the same.
+    const legacy = normalizeSettings({ show_debug_tab: true, ui_scale_manual_profile: "couch" } as never);
+    expect(legacy.ui_scale_manual_profile).toBe("couch");
   });
 
   /**

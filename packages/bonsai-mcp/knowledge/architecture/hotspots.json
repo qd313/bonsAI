@@ -126,13 +126,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 713,
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 718,
       "role": ""
     },
     {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 707,
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 713,
       "role": ""
     },
     {
@@ -181,24 +181,24 @@
       "role": ""
     },
     {
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 591,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/response_verify.py",
       "lines": 590,
       "role": ""
     },
     {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 585,
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 578,
       "role": ""
     },
     {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 569,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 560,
-      "role": ""
     }
   ]
 }

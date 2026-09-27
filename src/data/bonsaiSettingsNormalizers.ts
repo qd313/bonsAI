@@ -556,8 +556,14 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     raw.preset_chip_fade_animation_enabled,
   );
 
+  const showDeveloperTab = normalizeShowDeveloperTab(raw.show_developer_tab, rawRecord?.show_debug_tab);
+
   return {
     ...simple,
+    // 0.6.0 (plan 72): the UI scale section is Developer-tab only, so without it the size is the
+    // default whatever an older settings file saved. TS-only, like SHOW_IMMERSIVE_UI_SCALE: the
+    // back end never reads these two.
+    ...(showDeveloperTab ? {} : { ui_scale_auto_enabled: true, ui_scale_manual_profile: "handheld" as const }),
     // Clamped as a pair — the warning must land below the timeout.
     latency_warning_seconds: latencyTimeout.latency_warning_seconds,
     request_timeout_seconds: latencyTimeout.request_timeout_seconds,
@@ -567,7 +573,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     // Read a legacy key as well as their own.
     screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     ask_mode: normalizeAskMode(raw.ask_mode),
-    show_developer_tab: normalizeShowDeveloperTab(raw.show_developer_tab, rawRecord?.show_debug_tab),
+    show_developer_tab: showDeveloperTab,
     preset_chip_animation: presetChipAnimation,
     // Deprecated, and derived from the live field rather than read independently — Python
     // matches this since D13, because reading it on its own can contradict the animation.

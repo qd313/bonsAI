@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 561,
-  "edgeCount": 1535,
+  "fileCount": 562,
+  "edgeCount": 1536,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1244,6 +1244,7 @@
       "importedBy": [
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
+        "src/components/SettingsTabUiScaleHidden.test.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx"
       ]
     },
@@ -1278,6 +1279,12 @@
       ]
     },
     "src/components/SettingsTabPresetSingleChip.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTabUiScaleHidden.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx"
       ],

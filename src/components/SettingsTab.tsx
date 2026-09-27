@@ -194,6 +194,15 @@ export type SettingsTabProps = {
 };
 
 /**
+ * Up from the screenshot-quality row goes to the UI scale Apply button above it. With that section
+ * hidden (Developer tab off) this row is the top of the tab, so it keeps no Up handler and Steam's
+ * own Up to the tab header takes over, as it did from the UI scale toggle.
+ */
+export function screenshotQualityRowNav(focusUiScaleApply: (() => boolean) | null): Record<string, unknown> {
+  return focusUiScaleApply ? { onMoveUp: () => focusUiScaleApply() } : {};
+}
+
+/**
  * The whole tab. See "How it works" above for the layout and flow.
  *
  * In: every setting this tab shows plus a setter for each one, the AI
@@ -299,14 +308,18 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack"
       data-bonsai-tab-panel="settings"
     >
-      <SettingsTabUiScaleSection
-        uiScaleAutoEnabled={uiScaleAutoEnabled}
-        uiScaleManualProfile={uiScaleManualProfile}
-        appliedProfileId={appliedUiScaleProfileId}
-        onApply={onApplyUiScale}
-        applyButtonRef={uiScaleApplyButtonRef}
-        onMoveDownFromApply={focusScreenshotQualityRow}
-      />
+      {/* 0.6.0 (plan 72): Developer tab only, so no player lands on it. The size itself is held at
+          the default on load while the Developer tab is off (normalizeSettings). */}
+      {showDeveloperTab ? (
+        <SettingsTabUiScaleSection
+          uiScaleAutoEnabled={uiScaleAutoEnabled}
+          uiScaleManualProfile={uiScaleManualProfile}
+          appliedProfileId={appliedUiScaleProfileId}
+          onApply={onApplyUiScale}
+          applyButtonRef={uiScaleApplyButtonRef}
+          onMoveDownFromApply={focusScreenshotQualityRow}
+        />
+      ) : null}
       <PanelSection title="Screenshot quality">
         <PanelSectionRow>
           <div
@@ -332,9 +345,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             <Focusable
               flow-children="horizontal"
               style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-              {...({
-                onMoveUp: () => focusUiScaleApplyButton(),
-              } as unknown as Record<string, unknown>)}
+              {...screenshotQualityRowNav(showDeveloperTab ? focusUiScaleApplyButton : null)}
             >
               {SCREENSHOT_ATTACHMENT_PRESET_OPTIONS.map((option) => {
                 const active = option === screenshotAttachmentPreset;

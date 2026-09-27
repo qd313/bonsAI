@@ -852,11 +852,17 @@ def _compat_tips_for_app_keys(
     if not app_keys:
         return []
     placeholders = ",".join("?" for _ in app_keys)
-    rows = conn.execute(
-        "SELECT pattern_id, topic, platforms, card, source_url, source_license "
-        f"FROM compat_patterns WHERE app_id IN ({placeholders}) ORDER BY pattern_id",
-        app_keys,
-    ).fetchall()
+    try:
+        rows = conn.execute(
+            "SELECT pattern_id, topic, platforms, card, source_url, source_license "
+            f"FROM compat_patterns WHERE app_id IN ({placeholders}) ORDER BY pattern_id",
+            app_keys,
+        ).fetchall()
+    except sqlite3.OperationalError:
+        # A library built before schema v4 has no per-game ``app_id`` column. Since plan 70's
+        # reroute calls this on every question, raising here emptied the whole answer's notes
+        # on such a library, strategy questions included -- no tips is the right answer.
+        return []
     out: list[KnowledgeCard] = []
     for row in rows:
         if int(row["pattern_id"]) in exclude_ids:

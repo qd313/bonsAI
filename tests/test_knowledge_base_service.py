@@ -256,6 +256,41 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertIn("Dreadnought", result.text_block)
     self.assertNotIn("Render Scale", result.text_block)
 
+  def test_a_library_from_before_per_game_tips_still_attaches_strategy_notes(self):
+    """A library built before schema v4 has no ``compat_patterns.app_id`` column, and the
+    plugin never adds it to an installed one. The per-game tip reroute runs on every question,
+    so the missing column used to empty the whole answer's notes -- strategy included. Found
+    landing plan 70's E2 fix: three follow-up tests on the 2026-09-18 library lost every note."""
+    import shutil
+    import sqlite3
+    import tempfile
+
+    old_dir = Path(tempfile.mkdtemp())
+    try:
+      for item in SEED_DB.parent.iterdir():
+        if item.is_file():
+          shutil.copy2(item, old_dir / item.name)
+      conn = sqlite3.connect(old_dir / SEED_DB.name)
+      conn.execute("DROP INDEX IF EXISTS idx_compat_patterns_app_id")
+      conn.execute("ALTER TABLE compat_patterns DROP COLUMN app_id")
+      conn.commit()
+      conn.close()
+
+      result = retrieve_knowledge_context(
+        {"use_local_knowledge_base": True, "rag_corpus_path": str(old_dir)},
+        ask_mode="strategy",
+        question="how do i beat the dreadnought",
+        app_id="2321470",
+        app_name="Deep Rock Galactic: Survivor",
+        domain="strategy",
+        pc_ip="",
+      )
+      self.assertTrue(result.attached)
+      self.assertIn("Dreadnought", result.text_block)
+    finally:
+      close_connection(str(old_dir / SEED_DB.name))
+      shutil.rmtree(old_dir, ignore_errors=True)
+
   def test_game_tip_reroute_ignores_orphan_apostrophe_fragments(self):
     """A bare "s" or "t" left over from splitting "there's" / "can't" on the apostrophe used
     to match almost any short tip by accident -- 9 of 18 false positives found while measuring

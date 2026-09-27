@@ -166,3 +166,36 @@ export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, pa
   pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), before + delta));
   return pane.scrollTop !== before;
 }
+
+/**
+ * revealBelowKeeping, re-run as things settle: a frame after the call, then on the same
+ * 150/300/900 ms schedule useDockClearanceOnFocus's lift uses (SETTLE_PASS_DELAYS_MS there, the
+ * one timing this device has been measured to hold). `keep` is asked afresh on every pass, so a
+ * ring that moves in the meantime is the one kept on screen. Scrolls only; never moves the ring.
+ * Each pass measures first and scrolls only if `el` is still behind the dock.
+ */
+export function revealBelowKeepingAsItSettles(
+  el: HTMLElement,
+  keep: () => HTMLElement | null,
+  delaysMs: readonly number[] = [150, 300, 900]
+): void {
+  const pass = () => {
+    if (el.isConnected) revealBelowKeeping(el, keep());
+  };
+  requestAnimationFrame(pass);
+  delaysMs.forEach((delayMs) => window.setTimeout(pass, delayMs));
+}
+
+const revealedOnMount = new WeakSet<HTMLElement>();
+
+/**
+ * For a `ref` callback: bring something that has just appeared out from behind the dock, once per
+ * element, keeping whatever holds the ring on screen. The chat summary card appeared behind the
+ * dock after Sum up finished (top 597, dock 600) and when opened from the note under an answer
+ * (44 of 418 px showing), measured on the Deck 2026-09-25 and 2026-09-26.
+ */
+export function revealOnceWhenMounted(el: HTMLElement | null, keep: () => HTMLElement | null): void {
+  if (!el || revealedOnMount.has(el)) return;
+  revealedOnMount.add(el);
+  revealBelowKeepingAsItSettles(el, keep);
+}

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 543,
-  "edgeCount": 1466,
+  "fileCount": 544,
+  "edgeCount": 1471,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1945,16 +1945,27 @@
         "src/features/chat-slots/ChatSlotRow.tsx"
       ]
     },
+    "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx": {
+      "imports": [
+        "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-sum-up/SessionSumUpSection.tsx": {
       "imports": [
         "src/components/icons.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/utils/buildDetailsPanelElement.tsx"
       ]
@@ -1988,6 +1999,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/chatSumUpModel.test.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
@@ -4066,6 +4078,7 @@
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
@@ -4725,6 +4738,7 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
@@ -5828,6 +5842,7 @@
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",

@@ -36,7 +36,8 @@ import { Focusable } from "@decky/ui";
 
 import { ThinkingSpinnerIcon } from "../../components/icons";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../utils/focusNavigation";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
+import { elementHasGamepadFocus, uiGamepadFocusElement } from "../../utils/uiDocument";
+import { revealBelowKeepingAsItSettles, revealOnceWhenMounted } from "../../utils/chatPanelScroll";
 import { focusRowElement } from "../../utils/focusPerTurnRow";
 import {
   summaryCardFooter,
@@ -53,6 +54,7 @@ import {
  */
 let sumUpButtonEl: HTMLElement | null = null;
 let summaryCardEl: HTMLElement | null = null;
+let sumUpReasonEl: HTMLElement | null = null;
 
 /** The Sum up button of the Session tab on screen: where Down from the tabs row lands. */
 export function focusSumUpButton(): boolean {
@@ -126,17 +128,31 @@ export function SessionSumUpSection(props: {
         aria-disabled={view.disabled}
         onOKButton={press}
         onClick={press}
+        /* The dock lift clears the button only; keep its reason line clear too (plan 72). */
+        onFocus={() => sumUpReasonEl && revealBelowKeepingAsItSettles(sumUpReasonEl, () => sumUpButtonEl)}
         {...(directionHandlers(() => sumUpButtonEl, onMoveUpFromButton, downFromButton) as Record<string, unknown>)}
       >
         {view.busy ? <ThinkingSpinnerIcon size={14} className="bonsai-thinking-spinner" /> : null}
         <span>{view.label}</span>
       </Focusable>
-      {view.reason ? <div className="bonsai-sumup-reason">{view.reason}</div> : null}
+      {view.reason ? (
+        <div
+          className="bonsai-sumup-reason"
+          ref={(el) => {
+            sumUpReasonEl = el;
+            revealOnceWhenMounted(el, uiGamepadFocusElement);
+          }}
+        >
+          {view.reason}
+        </div>
+      ) : null}
       {summary && !view.busy ? (
         <Focusable
           className="bonsai-sumup-card"
           ref={(el: HTMLElement | null) => {
             summaryCardEl = el;
+            /* Appears behind the dock otherwise, after Sum up or from the note (plan 72). */
+            revealOnceWhenMounted(el, uiGamepadFocusElement);
           }}
           aria-label="What the AI remembers"
           {...(directionHandlers(() => summaryCardEl, focusSumUpButton, downFromCard) as Record<string, unknown>)}

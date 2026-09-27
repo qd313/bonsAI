@@ -94,7 +94,7 @@ describe("MainTabPresetRow: the chips hold still while the ring is on them", () 
         vi.advanceTimersByTime(6_000);
       });
 
-      // Several hold times (at least 8 s each) and carousel steps (5.8 s), inside the one minute.
+      // Several hold times (at least 8 s each) and carousel steps (5.8 s).
       expect(distinctFramesOver(row.container, 30_000), `${mode}: the row moved under the ring`).toBe(1);
 
       // A lands on the words the chip is showing.

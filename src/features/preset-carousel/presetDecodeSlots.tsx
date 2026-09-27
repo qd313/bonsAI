@@ -39,7 +39,6 @@ import {
 import {
   type MainTabPresetAnimatedChipsProps,
   normalizeThreeSeeds,
-  PRESET_CAROUSEL_ACTIVE_MS,
   prefersReducedMotion,
   slotStaggerMs,
 } from "./presetChipShared";
@@ -199,9 +198,8 @@ export function MainTabPresetDecodeSlots(
     setSlots(first);
     setResolved(Array.from({ length: slotCount }, () => false));
 
-    const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     let cancelled = false;
-    const mayStartNextCycle = (): boolean => !cancelled && performance.now() < sessionEnd;
+    const mayStartNextCycle = (): boolean => !cancelled;
 
     const visibleTexts = () => new Set(slotsRef.current.map((s) => s.text));
     const pickNext = (current: PresetPrompt): PresetPrompt => {

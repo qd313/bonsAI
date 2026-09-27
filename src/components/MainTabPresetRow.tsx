@@ -99,12 +99,12 @@ export function MainTabPresetRow({
     isAsking && hadInjectChipRef.current && !presetCarouselInject?.text?.trim();
 
   /*
-   * Every chip mode's 60-second walk (PRESET_CAROUSEL_ACTIVE_MS) stops scheduling new cycles that
-   * long after it starts, and normally restarts because a completed Ask reseeds `suggestedPrompts`
-   * with new text -- `seedsKeyFrom` changes, so the mode's own effect restarts. A pinned QA batch
-   * breaks that: it always resolves to its first three entries verbatim (data/presets.ts's
-   * `applyTempFrozenCarousel`), so the text never changes and the effect never restarts -- ten
-   * chips pinned and chips 6-10 never came into view (D58 #3, KB-ANSWER-02). This token is
+   * Every chip mode's walk restarts from the new chips because a completed Ask reseeds
+   * `suggestedPrompts` with new text -- `seedsKeyFrom` changes, so the mode's own effect restarts.
+   * A pinned QA batch breaks that: it always resolves to its first three entries verbatim
+   * (data/presets.ts's `applyTempFrozenCarousel`), so the text never changes and the effect never
+   * restarts. That mattered most while the walk stopped after one minute (chips 6-10 of ten never
+   * came into view, D58 #3, KB-ANSWER-02; the minute was dropped in plan 72). This token is
    * independent of the seed text, so it restarts the walk even when the reseed produced exactly
    * the same three chips. Bumped on the Ask *completing* (isAsking true -> false), which is when
    * useBonsaiAskOrchestration actually reseeds -- not on Ask start.
@@ -131,8 +131,8 @@ export function MainTabPresetRow({
         /*
          * The help chip owns the row until it is dismissed; the suggestion chips mount only after
          * that. Two things follow: the Ask bar's Up press lands here first (useMainTabAskBarFocus
-         * looks for this chip before the carousel), and the chips' 60-second rotation window is
-         * not spent while the help chip is up.
+         * looks for this chip before the carousel), and the chips' rotation timers do not run
+         * while the help chip is up.
          */
         <Button
           className="bonsai-preset-glass bonsai-preset-help-chip"

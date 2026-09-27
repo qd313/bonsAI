@@ -16,7 +16,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   composeDecodeText,
   MainTabPresetAnimatedChips,
-  PRESET_CAROUSEL_ACTIVE_MS,
   PRESET_DECODE_CARET_CHAR,
   usePresetRowNav,
 } from "./MainTabPresetAnimatedChips";
@@ -454,10 +453,10 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
 /*
  * D58 #3: a pinned QA batch always reseeds to its first three entries verbatim
  * (`applyTempFrozenCarousel` in data/presets.ts), so `seedsKeyFrom` cannot tell an Ask happened
- * from that alone -- the row's 60-second walk (`PRESET_CAROUSEL_ACTIVE_MS`) stopped restarting on
- * an Ask, and chips past what the auto-advance had already reached before the user started
- * browsing could never be reached. `askRestartToken` (bumped by MainTabPresetRow when an Ask
- * completes) is the independent-of-text signal that restarts it.
+ * from that alone. While the walk stopped after one minute that meant it never restarted on an
+ * Ask (the minute was dropped in plan 72; the walk now runs for as long as the row is mounted).
+ * `askRestartToken` (bumped by MainTabPresetRow when an Ask completes) is still the
+ * independent-of-text signal that restarts the walk from the reseeded chips.
  */
 describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts the walk)", () => {
   afterEach(() => {
@@ -482,19 +481,25 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
     );
     expect(firstSlotText(container)).toBe("q1");
 
-    // Comfortably past PRESET_CAROUSEL_ACTIVE_MS: rotation has moved on and then stopped
-    // scheduling further cycles.
+    // Several minutes in, the walk is still going (plan 72: no more one-minute rest).
     act(() => {
-      vi.advanceTimersByTime(PRESET_CAROUSEL_ACTIVE_MS + 10_000);
+      vi.advanceTimersByTime(4 * 60_000);
     });
-    const stalledAt = firstSlotText(container);
-    expect(stalledAt).not.toBe("q1");
-
-    // More time passing with no restart: the walk stays stopped where it left off.
-    act(() => {
-      vi.advanceTimersByTime(20_000);
-    });
-    expect(firstSlotText(container)).toBe(stalledAt);
+    const seen = new Set<string | null | undefined>();
+    for (let t = 0; t < 60_000; t += 250) {
+      act(() => {
+        vi.advanceTimersByTime(250);
+      });
+      seen.add(firstSlotText(container));
+    }
+    expect(seen.size).toBeGreaterThan(1);
+    // Stop on a moment when the slot is not showing "q1", so its return below proves the restart.
+    for (let t = 0; t < 60_000 && firstSlotText(container) === "q1"; t += 250) {
+      act(() => {
+        vi.advanceTimersByTime(250);
+      });
+    }
+    expect(firstSlotText(container)).not.toBe("q1");
 
     // Same seeds -- a pinned batch always reseeds to the same three -- but the Ask completed, so
     // MainTabPresetRow bumps the token. The whole effect restarts, the same as a fresh mount:
@@ -511,7 +516,7 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
     expect(firstSlotText(container)).toBe("q1");
   });
 
-  it("carousel mode: a bumped token restarts the 60s auto-advance without touching existing history", () => {
+  it("carousel mode: a bumped token restarts the auto-advance without touching existing history", () => {
     // More entries than the carousel's window keeps, so the auto-tick has real batch entries left
     // to walk through rather than degenerating to repeats once the whole batch is on screen.
     const batch = Array.from({ length: CAROUSEL_HISTORY_MAX + 3 }, (_, i) => `q${i + 1}`);
@@ -530,15 +535,16 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
       />,
     );
 
+    // Several minutes in, the carousel is still stepping (plan 72: no more one-minute rest).
     act(() => {
-      vi.advanceTimersByTime(PRESET_CAROUSEL_ACTIVE_MS + 5_000);
+      vi.advanceTimersByTime(4 * 60_000);
     });
+    const before = newestText(container);
+    act(() => {
+      vi.advanceTimersByTime(CAROUSEL_STEP_MS + 500);
+    });
+    expect(newestText(container)).not.toBe(before);
     const stalledAt = newestText(container);
-
-    act(() => {
-      vi.advanceTimersByTime(20_000);
-    });
-    expect(newestText(container)).toBe(stalledAt);
 
     // Bumping the token alone must not move anything: unlike static/decode, the carousel has a
     // persistent, browsable history worth keeping across an Ask, so a restart only extends the

@@ -4,21 +4,20 @@
  * plan 70's helper S). While `isAsking` is true the panel is busy and a chip that changes under
  * the ring can take a press meant for another, so no mode may start a new chip change; one
  * already under way finishes. They start again once the answer finishes or is stopped (the
- * `isAsking` true -> false edge, which also restarts the one-minute walk -- D58 #3).
+ * `isAsking` true -> false edge, which also restarts the walk from the reseeded chips -- D58 #3).
  *
  * Driven through the real MainTabPresetRow and the real chips, with fake timers, so the wiring
  * from `isAsking` down to each mode's own timer is what is tested, not a stub.
  *
- * Also pins the designed stop (`PRESET_CAROUSEL_ACTIVE_MS`): every mode rotates for one minute
- * after the row mounts or an Ask completes, then rests. That is by design since 2026-04-15, not
- * a fault -- see the report for plan 72 lane 11.
+ * Also pins that every mode keeps rotating for as long as the row is mounted. Until plan 72 each
+ * mode rested one minute after mounting (`PRESET_CAROUSEL_ACTIVE_MS`, by design since
+ * 2026-04-15); the maintainer dropped the rest, and this test used to pin it.
  */
 import React from "react";
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetRow } from "./MainTabPresetRow";
 import { setFrozenTestChips, type PresetPrompt } from "../data/presets";
-import { PRESET_CAROUSEL_ACTIVE_MS } from "../features/preset-carousel/presetChipShared";
 import { resetFakeDeckyRpc } from "../test-harness/fakeDeckyRpc";
 
 type Mode = "fade" | "static" | "carousel" | "decode";
@@ -90,7 +89,7 @@ describe("MainTabPresetRow: the chips hold still while an answer is written", ()
         vi.advanceTimersByTime(6_000);
       });
 
-      // Still well inside the one-minute walk, so a stop here is the hold, not the designed rest.
+      // The row would otherwise have changed several times in this window.
       expect(distinctFramesOver(container, 40_000), `${mode}: the row moved while answering`).toBe(1);
 
       // The answer finishes (or is stopped): the chips start again.
@@ -100,13 +99,11 @@ describe("MainTabPresetRow: the chips hold still while an answer is written", ()
   }
 
   for (const mode of MODES) {
-    it(`${mode}: left idle, the row rotates for its one minute and then rests (by design)`, () => {
+    it(`${mode}: left idle, the row keeps rotating minute after minute`, () => {
       const { container } = render(row(mode, false));
-      expect(distinctFramesOver(container, 30_000), `${mode}: no rotation in the first half minute`).toBeGreaterThan(1);
-      act(() => {
-        vi.advanceTimersByTime(PRESET_CAROUSEL_ACTIVE_MS);
-      });
-      expect(distinctFramesOver(container, 180_000), `${mode}: still rotating after the minute`).toBe(1);
+      for (let minute = 1; minute <= 6; minute++) {
+        expect(distinctFramesOver(container, 60_000), `${mode}: no change in minute ${minute}`).toBeGreaterThan(1);
+      }
     });
   }
 });

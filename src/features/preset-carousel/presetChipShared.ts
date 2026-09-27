@@ -32,8 +32,6 @@ import type { AskModeId } from "../../data/askMode";
 export const PRESET_CAROUSEL_FADE_IN_MS = 1000;
 /** Fade-out duration (ms); must match the slot wrapper transition when opacity decreases. */
 export const PRESET_CAROUSEL_FADE_OUT_MS = 2000;
-/** Carousel schedules new preset cycles for this long after mount/re-seed; in-flight fades still complete, then no more swaps until remount. */
-export const PRESET_CAROUSEL_ACTIVE_MS = 60_000;
 /** Stagger each slot's first appearance so the chips never move in lockstep. */
 const PRESET_SLOT_STAGGER_MS: readonly number[] = [750, 1300, 1700];
 export function slotStaggerMs(slotIndex: number): number {
@@ -75,8 +73,8 @@ export type MainTabPresetAnimatedChipsProps = {
   /** When true, KB-advice static seeds are excluded from timer-driven re-samples. */
   useLocalKnowledgeBase?: boolean;
   /**
-   * Bumped by MainTabPresetRow every time an Ask completes, so every mode's 60-second walk
-   * restarts even when the reseed produced the exact same three seeds. A pinned QA batch always
+   * Bumped by MainTabPresetRow every time an Ask completes, so every mode's walk restarts from
+   * the reseeded chips even when the reseed produced the exact same three seeds. A pinned QA batch always
    * returns its first three entries verbatim (`applyTempFrozenCarousel` in data/presets.ts), so
    * `seedsKeyFrom` cannot tell an Ask happened from this alone (D58 #3).
    */

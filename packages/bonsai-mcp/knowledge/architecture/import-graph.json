@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 574,
-  "edgeCount": 1584,
+  "edgeCount": 1583,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -713,7 +713,6 @@
       "imports": [
         "src/components/MainTabPresetRow.tsx",
         "src/data/presets.ts",
-        "src/features/preset-carousel/presetChipShared.ts",
         "src/test-harness/fakeDeckyRpc.ts"
       ],
       "importedBy": []
@@ -2690,7 +2689,6 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
-        "src/components/MainTabPresetRow.holdStill.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx"

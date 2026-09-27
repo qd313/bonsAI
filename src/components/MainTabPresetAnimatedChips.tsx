@@ -39,10 +39,11 @@
  *    blinking caret at the boundary. Its reveal loop runs on a single shared
  *    animation frame rather than React state, so a churning chip does not
  *    force a re-render on every frame.
- * 5. Whatever mode is running, all of them stop scheduling new cycles a
- *    fixed time after mounting or after the prompts are reseeded — an
- *    animation already in progress still finishes, then the row simply
- *    rests until it remounts.
+ * 5. Every mode keeps changing chips for as long as the row is mounted (the
+ *    maintainer's call, plan 72; until then they rested one minute after
+ *    mounting). They hold while an answer is written or Steam's ring is on the
+ *    row (usePresetRowNav's rowHeld). Closing the Quick Access panel or leaving
+ *    the Main tab unmounts the row, and the effect cleanups stop every timer.
  * 6. MainTabPresetAnimatedChipsInner is the actual component: it reads which
  *    mode is active and runs the matching logic above, wrapped in
  *    React.memo with a hand-written comparator instead of the default one —
@@ -102,7 +103,6 @@ import { composeDecodeText, PRESET_DECODE_CARET_CHAR } from "../features/preset-
 import {
   type MainTabPresetAnimatedChipsProps,
   normalizeThreeSeeds,
-  PRESET_CAROUSEL_ACTIVE_MS,
   PRESET_CAROUSEL_FADE_IN_MS,
   PRESET_CAROUSEL_FADE_OUT_MS,
   prefersReducedMotion,
@@ -117,7 +117,7 @@ import {
 // moved to presetChipShared.ts specifically so presetDecodeSlots.tsx (which needs the type) does
 // not have to import it back from this file, which imports presetDecodeSlots.tsx itself.
 export { usePresetRowNav };
-export { composeDecodeText, PRESET_CAROUSEL_ACTIVE_MS, PRESET_DECODE_CARET_CHAR };
+export { composeDecodeText, PRESET_DECODE_CARET_CHAR };
 export type { MainTabPresetAnimatedChipsProps };
 
 /**
@@ -193,7 +193,7 @@ function MainTabPresetSidewaysCarousel(
   const advanceAtEnd = useCallback((): boolean => {
     // Right at the last chip normally just claims the move (presetRowNav) so Steam's own idea of
     // "past it" -- the Quick Access rail -- never fires. A pinned QA batch longer than the row is
-    // the one case with a real "next" waiting: the 60s auto-advance timer alone cannot be relied
+    // the one case with a real "next" waiting: the auto-advance timer alone cannot be relied
     // on to pull it in, because auto-advance stands down entirely while a chip has focus, and
     // walking a pinned batch by hand is exactly that (D58 #3). The normal carousel has no such
     // fixed list to pull from ahead of the timer, so this stays scoped to a frozen batch.
@@ -245,12 +245,11 @@ function MainTabPresetSidewaysCarousel(
     // panel is busy and a chip sliding under the ring can take a press meant for another. History
     // is state, not this effect's, so standing the ticker down here moves nothing on screen.
     if (props.holdStill) return;
-    const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     let cancelled = false;
     let timeoutId = 0;
 
     const tick = () => {
-      if (cancelled || performance.now() >= sessionEnd) return;
+      if (cancelled) return;
       if (performance.now() < autoPausedUntilRef.current) {
         timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
         return;
@@ -283,10 +282,10 @@ function MainTabPresetSidewaysCarousel(
       cancelled = true;
       window.clearTimeout(timeoutId);
     };
-    // askRestartToken restarts the 60s window on every completed Ask (D58 #3), independently of
+    // askRestartToken restarts the ticker on every completed Ask (D58 #3), independently of
     // seedsKey: a pinned QA batch always reseeds to the same three chips, so seedsKey alone never
-    // signals that an Ask happened. Restarting only this effect (not the whole carousel) extends
-    // the deadline without touching history or focus, unlike fade/static/decode's full restart --
+    // signals that an Ask happened. Restarting only this effect (not the whole carousel) restarts
+    // the step timer without touching history or focus, unlike fade/static/decode's full restart --
     // the carousel has a persistent, browsable history worth keeping across an Ask; the other
     // modes have no such state to preserve. visibleSlots restarts it too, so a mid-session flip of
     // the one-chip setting reads the new window size on the next tick instead of the one captured
@@ -367,9 +366,8 @@ const PRESET_RING_HOLD_RECHECK_MS = 500;
 /**
  * PRESET_VISIBLE_SLOTS preset suggestion chips with independent fade in/out cycles — or, in static
  * mode, plain swaps. Hold time after each appearance scales with prompt length and is never shorter
- * than one full scroll of the label; fade durations are fixed. After `PRESET_CAROUSEL_ACTIVE_MS` no
- * new cycles start; any fade already in progress runs to completion, then the row rests until
- * remount.
+ * than one full scroll of the label; fade durations are fixed. No new cycle starts while rowHeld();
+ * otherwise the row keeps changing for as long as it is mounted.
  */
 function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps) {
   const {
@@ -437,12 +435,11 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     slotsRef.current = first;
     setSlots(first);
 
-    const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     const timeouts: number[] = [];
     let cancelled = false;
 
     /** Only gate starting a *new* cycle after a full fade-out; never abort mid fade/hold. */
-    const mayStartNextCycle = (): boolean => !cancelled && performance.now() < sessionEnd;
+    const mayStartNextCycle = (): boolean => !cancelled;
 
     const pushTimeout = (fn: () => void, ms: number) => {
       const id = window.setTimeout(() => {

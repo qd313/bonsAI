@@ -53,6 +53,7 @@ import {
   type StreamScrambleContextValue,
   type StreamScrambleSettings,
 } from "../features/stream-scramble/streamScrambleContext";
+import { gameIsRunning, lighterWhileGameRuns } from "../utils/lighterWhileGameRuns";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -212,15 +213,19 @@ export type MainTabProps = {
 
 /**
  * In: the one `streamScramble` prop `MainTab` received — undefined for a caller that never heard
- * of the setting (an older test fixture, one built before this shipped).
+ * of the setting (an older test fixture, one built before this shipped) — and whether a game runs.
  * Out: the `StreamScrambleSettings` object the context provides: the given value as-is when
  * there is one, or the shared `STREAM_SCRAMBLE_OFF` constant (switch off, schema defaults)
- * otherwise.
+ * otherwise, and always while a game runs (lighterWhileGameRuns.ts): with a game running the
+ * panel drew 10 to 20 frames a second while an answer arrived (plan 70), and the scramble alone
+ * cost about 10 with nothing running (plan 69).
  * Can go wrong: nothing — a missing prop is exactly the same as the switch being off.
  */
 export function resolveStreamScrambleSettings(
   streamScramble: StreamScrambleSettings | undefined,
+  gameRunning = false,
 ): StreamScrambleSettings {
+  if (lighterWhileGameRuns(gameRunning).scramble) return STREAM_SCRAMBLE_OFF;
   return streamScramble ?? STREAM_SCRAMBLE_OFF;
 }
 
@@ -272,10 +277,14 @@ export function MainTab(props: MainTabProps) {
     [slotRowAtCreate, onChatSlotCreate, submitAsk],
   );
 
+  const gameRunning = gameIsRunning(props.ollamaContext);
+  /* A dependency below so the Deck's A/B switch, read on every render, takes effect mid-answer. */
+  const scrambleSkipped = lighterWhileGameRuns(gameRunning).scramble;
   /* Plus whether the answer on screen was stopped: its scrambled letters then turn real at once. */
   const streamScrambleContextValue: StreamScrambleContextValue = useMemo(
-    () => ({ ...resolveStreamScrambleSettings(props.streamScramble), stopped: props.askStopped === true }),
-    [props.streamScramble, props.askStopped],
+    () => ({ ...resolveStreamScrambleSettings(props.streamScramble, gameRunning), stopped: props.askStopped === true }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- scrambleSkipped: see above
+    [props.streamScramble, props.askStopped, gameRunning, scrambleSkipped],
   );
 
   return (

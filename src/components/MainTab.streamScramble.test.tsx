@@ -7,7 +7,7 @@
  * the value it provides. Rendering the whole Main tab just to prove this would pull in the
  * transcript, the Ask bar and the screenshot browser for no reason.
  */
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { resolveStreamScrambleSettings } from "./MainTab";
 import { STREAM_SCRAMBLE_OFF } from "../features/stream-scramble/streamScrambleContext";
@@ -26,4 +26,24 @@ describe("resolveStreamScrambleSettings", () => {
     const given = { enabled: false, style: "settle", color: "green", settleMs: 400 } as const;
     expect(resolveStreamScrambleSettings(given)).toBe(given);
   });
+
+  /*
+   * Plan 70: with a game running the panel drew 10 to 20 frames a second while an answer arrived;
+   * plan 69 measured the scramble alone at about 10 frames a second with nothing running.
+   */
+  it("is the off constant while a game runs, even with the switch on", () => {
+    const given = { enabled: true, style: "settle", color: "same", settleMs: 400 } as const;
+    expect(resolveStreamScrambleSettings(given, true)).toBe(STREAM_SCRAMBLE_OFF);
+    expect(resolveStreamScrambleSettings(given, false)).toBe(given);
+  });
+
+  it("keeps the scramble with a game running when the Deck's switch leaves that part out", () => {
+    (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad = { scramble: false };
+    const given = { enabled: true, style: "settle", color: "same", settleMs: 400 } as const;
+    expect(resolveStreamScrambleSettings(given, true)).toBe(given);
+  });
+});
+
+afterEach(() => {
+  delete (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad;
 });

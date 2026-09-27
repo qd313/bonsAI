@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 533,
-  "edgeCount": 1447,
+  "edgeCount": 1448,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -279,6 +279,7 @@
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/lighterWhileGameRuns.ts",
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
@@ -5117,6 +5118,7 @@
         "src/utils/streamBeat.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/lighterWhileGameRuns.test.ts"
       ]

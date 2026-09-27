@@ -42,9 +42,8 @@ agent, or another tool calls the matching MCP prompt:
 The helpers in AGENTS.md, 'Which model does which work' (`bookkeeper`, the `*-lane` agents,
 `deck-driver`) are files there too; front matter sets model and effort.
 
-## Commands specific to this session
+## Commands and long sessions
 
-Everything else — `npm test`, `npm run build`, deploy scripts, and so on — is in
-[AGENTS.md § Commands](AGENTS.md#commands) and is not repeated here. There is no
-`.claude/commands/` directory in this repo today: no Claude-only slash commands beyond the
-built-in ones.
+Commands are in [AGENTS.md § Commands](AGENTS.md#commands); there are no Claude-only slash
+commands. The desktop app keeps this PC awake during a session; the VS Code extension does not, so
+there, start `python scripts/keep_awake.py --hours 8` in the background at the start of a long one.

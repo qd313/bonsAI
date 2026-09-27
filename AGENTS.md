@@ -226,6 +226,12 @@ folder and plugin name.
 
 `scripts/build.ps1` is the Windows equivalent of `dev`.
 
+### Long sessions: keep this PC awake
+
+The maintainer's PC sleeps after a few idle hours, which freezes a session (a Deck check stopped
+for four hours on 2026-09-27). Only the Claude Code desktop app prevents that; from anywhere else,
+start `python scripts/keep_awake.py --hours 8` in the background at the start of a long session.
+
 ## Testing on the Deck
 
 **When the maintainer has to run questions on the device, offer to pin them as fixed test chips

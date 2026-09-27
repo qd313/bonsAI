@@ -13,7 +13,7 @@ import { renderHook, act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { call, toaster } from "@decky/api";
 
-import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
+import { resetRememberedReplyFeedbackForTests, useReplyFeedbackChips } from "./useReplyFeedbackChips";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import type { LastExchangeSnapshot, ReplyFollowUpPending } from "../types/backgroundAsk";
 import {
@@ -70,6 +70,8 @@ const toastTitles = () =>
 describe("useReplyFeedbackChips", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+    // Ratings are remembered per reply outside the hook; every test starts with none.
+    resetRememberedReplyFeedbackForTests();
     vi.mocked(call).mockImplementation((method: string, ...args: unknown[]) =>
       dispatchFakeRpc(method, args) as ReturnType<typeof call>
     );

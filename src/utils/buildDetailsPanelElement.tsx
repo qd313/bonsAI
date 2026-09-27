@@ -159,6 +159,15 @@ export function buildDetailsPanelElement(args: {
   sumUp?: ChatSumUpState | null;
   /** Plan 68: an answer is being written right now (the Sum up button is greyed out). */
   answerInFlight?: boolean;
+  /**
+   * Whether a turn's credit line must stay hidden because it would name a spoiler the rest of the
+   * screen hides (creditsHiddenForSpoiler, contextChipsFromSnapshot.ts) — asked per turn key, so
+   * the Session tab's rows answer for their own turn. Absent: credits always show.
+   */
+  creditsHiddenFor?: (
+    turnKey: string,
+    snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined
+  ) => boolean;
 }): React.ReactElement {
   const {
     turnKey,
@@ -175,7 +184,9 @@ export function buildDetailsPanelElement(args: {
     setTransparencyDetailsOpen,
     sumUp = null,
     answerInFlight = false,
+    creditsHiddenFor,
   } = args;
+  const creditsHidden = creditsHiddenFor?.(turnKey, snapshot) ?? false;
 
   const upPastPanel = () =>
     focusKbNotesBlock(turnKey) ||
@@ -203,6 +214,7 @@ export function buildDetailsPanelElement(args: {
         onMoveUpFromLadder={upPastPanel}
         onMoveDownFromLadder={() => focusSessionContextStrip()}
         devDiagnostics={devDiagnostics}
+        creditsHidden={creditsHidden}
       />
     );
   }
@@ -297,6 +309,7 @@ export function buildDetailsPanelElement(args: {
            */
           onMoveDownFromLadder={() => focusSessionContextStrip()}
           devDiagnostics={devDiagnostics}
+          creditsHidden={creditsHidden}
           onExpandChange={(expanded) => {
             if (!expanded) closePanel();
           }}
@@ -311,6 +324,7 @@ export function buildDetailsPanelElement(args: {
           onRequestClose={closePanel}
           sumUp={sumUp}
           answerInFlight={answerInFlight}
+          creditsHiddenFor={creditsHiddenFor}
         />
       )}
     </>

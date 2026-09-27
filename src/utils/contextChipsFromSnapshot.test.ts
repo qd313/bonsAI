@@ -12,6 +12,7 @@ import {
   ATTRIBUTION_ACCENT,
   chipAttribution,
   chipHasAttribution,
+  creditsHiddenForSpoiler,
   tierBackground,
   tierBorderColor,
 } from "./contextChipsFromSnapshot";
@@ -92,5 +93,25 @@ describe("chip attribution", () => {
       expect(tierBorderColor(tier)).not.toBe(ATTRIBUTION_ACCENT);
       expect(tierBackground(tier)).not.toBe(ATTRIBUTION_ACCENT);
     }
+  });
+});
+
+describe("creditsHiddenForSpoiler", () => {
+  const protectedNote = {
+    name: "Soul Master", kind: "boss", card: "c", trust_tier: "t", source_host: "",
+    source_license: "", domain: "strategy", game_title: "Hollow Knight", spoiler_protected: true,
+  };
+  const plainNote = { ...protectedNote, spoiler_protected: undefined };
+
+  it("hides while a protected note's block is closed and covers are on (or not stated)", () => {
+    expect(creditsHiddenForSpoiler({ kb_attached_notes: [plainNote, protectedNote] }, true, false)).toBe(true);
+    expect(creditsHiddenForSpoiler({ kb_attached_notes: [protectedNote] }, undefined, false)).toBe(true);
+  });
+
+  it("shows once the block is open, with covers off, or with nothing protected", () => {
+    expect(creditsHiddenForSpoiler({ kb_attached_notes: [protectedNote] }, true, true)).toBe(false);
+    expect(creditsHiddenForSpoiler({ kb_attached_notes: [protectedNote] }, false, false)).toBe(false);
+    expect(creditsHiddenForSpoiler({ kb_attached_notes: [plainNote] }, true, false)).toBe(false);
+    expect(creditsHiddenForSpoiler(null, true, false)).toBe(false);
   });
 });

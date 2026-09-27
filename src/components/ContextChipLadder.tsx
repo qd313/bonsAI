@@ -47,6 +47,7 @@ import {
   chipDevJson,
   chipsFromSnapshot,
   CONTEXT_CHIP_SHOW_ALL_MAX,
+  SPOILER_HIDDEN_CREDITS_TEXT,
   windowRange,
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
@@ -103,6 +104,12 @@ export type ContextChipLadderProps = {
    * and threw the ring out of the panel onto a preset chip in the dock.
    */
   rootRef?: (el: HTMLElement | null) => void;
+  /**
+   * Keep the credit block's sources and note names hidden, showing one plain line instead — true
+   * while this turn hid a spoiler and its notes block has not been opened yet (see
+   * creditsHiddenForSpoiler in contextChipsFromSnapshot.ts). Text only: adds no D-pad stop.
+   */
+  creditsHidden?: boolean;
 };
 
 /**
@@ -143,6 +150,7 @@ export function ContextChipLadder({
   onMoveDownFromLadder,
   devDiagnostics = null,
   rootRef,
+  creditsHidden = false,
 }: ContextChipLadderProps) {
   const chips = chipsFromSnapshot(snapshot);
   const [expanded, setExpanded] = useState(!collapsedHint);
@@ -336,6 +344,7 @@ export function ContextChipLadder({
       <ChipExpandedBody
         chip={active}
         devDiagnostics={active.id === "developer" ? devDiagnostics : null}
+        creditsHidden={creditsHidden}
       />
     </Focusable>
   );
@@ -370,9 +379,11 @@ export function ContextChipLadder({
 function ChipExpandedBody({
   chip,
   devDiagnostics,
+  creditsHidden = false,
 }: {
   chip: ContextChip;
   devDiagnostics?: AskDiagnosticsSnapshot | null;
+  creditsHidden?: boolean;
 }) {
   const bullets = chipBodyBullets(chip);
   const paths = chipBodyPaths(chip);
@@ -403,7 +414,10 @@ function ChipExpandedBody({
             background: ATTRIBUTION_ACCENT_SOFT,
           }}
         >
-          {attribution.map((entry) => (
+          {creditsHidden ? (
+            <div style={{ fontStyle: "italic", color: "#c9b892" }}>{SPOILER_HIDDEN_CREDITS_TEXT}</div>
+          ) : null}
+          {creditsHidden ? null : attribution.map((entry) => (
             <div key={`${entry.source}|${entry.license}`} style={{ marginBottom: 2 }}>
               <span style={{ fontWeight: 700, color: ATTRIBUTION_ACCENT }}>{entry.source}</span>
               {entry.license ? (

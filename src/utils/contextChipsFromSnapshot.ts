@@ -86,6 +86,28 @@ export function chipHasAttribution(chip: ContextChip): boolean {
   return chipAttribution(chip).length > 0;
 }
 
+/** What the credit block says in place of the sources while they would give a spoiler away. */
+export const SPOILER_HIDDEN_CREDITS_TEXT = "Sources hidden — open the notes to see them";
+
+/**
+ * True when Show details must keep this turn's credit line hidden: the turn has a note the back
+ * end marked spoiler-protected (a boss or enemy the question never named), spoiler covers are on,
+ * and the person has not opened that turn's "From the notes" block. The credit line lists every
+ * note by name ("Soul Master · No source page"), so without this it gave away the very name the
+ * rest of the screen hides (maintainer's call, 2026-09-27). Opening the block is the person's own
+ * choice to read the note, so from then on the credits show exactly as they always did; answers
+ * with nothing protected are never affected. `maskingEnabled` undefined counts as on, the same
+ * default the notes block itself uses (buildKbNotesBlockElement.tsx, kbNotesToShow).
+ */
+export function creditsHiddenForSpoiler(
+  snapshot: Pick<TransparencySnapshot, "kb_attached_notes"> | null | undefined,
+  maskingEnabled: boolean | undefined,
+  notesOpen: boolean,
+): boolean {
+  if (maskingEnabled === false || notesOpen) return false;
+  return (snapshot?.kb_attached_notes ?? []).some((n) => n.spoiler_protected === true);
+}
+
 /** Warm parchment, distinct from every tier colour. Reads as a citation, not a warning. */
 export const ATTRIBUTION_ACCENT = "rgba(214, 174, 116, 0.95)";
 export const ATTRIBUTION_ACCENT_SOFT = "rgba(214, 174, 116, 0.14)";

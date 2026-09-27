@@ -126,6 +126,12 @@ export type SessionContextTabBodyProps = {
   sumUp?: ChatSumUpState | null;
   /** Plan 68: an answer is being written, so the button is greyed out and says so. */
   answerInFlight?: boolean;
+  /** Whether a row's credit line stays hidden for a spoiler, asked by that row's own turn id
+   *  (buildDetailsPanelElement.tsx passes the same function its own ladder uses). */
+  creditsHiddenFor?: (
+    turnKey: string,
+    snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined
+  ) => boolean;
 };
 
 /**
@@ -157,6 +163,7 @@ export function SessionContextTabBody({
   onRequestClose,
   sumUp = null,
   answerInFlight = false,
+  creditsHiddenFor,
 }: SessionContextTabBodyProps) {
   const [activeId, setActiveId] = useState<string>("live");
 
@@ -273,6 +280,7 @@ export function SessionContextTabBody({
         <ContextChipLadder
           snapshot={activeRow.snapshot}
           collapsedHint={false}
+          creditsHidden={creditsHiddenFor?.(activeRow.id, activeRow.snapshot) ?? false}
           rootRef={(el) => {
             sessionLadderEl = el;
           }}

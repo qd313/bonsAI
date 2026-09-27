@@ -164,7 +164,7 @@ import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
 import { useLiveTurnHeaderRingRestore } from "../hooks/useLiveTurnHeaderRingRestore";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
 import { type SessionContextTurn } from "./SessionContextStrip";
-import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
+import { creditsHiddenForSpoiler, transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
 import type {
   AppliedResult,
   AskThreadCollapsedTurn,
@@ -553,6 +553,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
      view the moment it opens — lifted into its own hook, called from exactly the spot this block
      occupied (tests/test_ask_hook_order.py). */
   const { isKbNotesOpen, toggleKbNotesOpen, kbNotesHeaderElRefs } = useKbNotesFold();
+  /* Show details keeps a turn's credit line hidden while it would name a spoiler the notes block
+     still hides — until that same turn's block is opened (maintainer's call, 2026-09-27). */
+  const creditsHiddenFor = (
+    turnKey: string,
+    snap: Parameters<typeof creditsHiddenForSpoiler>[0]
+  ) => creditsHiddenForSpoiler(snap, strategySpoilerMaskingEnabled, isKbNotesOpen(turnKey));
 
   /* Re-render whenever a spoiler fence opens or closes anywhere, so kbNotesBlockedBySpoiler's
      read of anySpoilerFenceOpen() below is never stale — lifted into its own hook, called from
@@ -1243,6 +1249,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       setTransparencyDetailsOpen,
                       sumUp: chatSumUp,
                       answerInFlight: isAsking,
+                      creditsHiddenFor,
                     })}
                   </div>
                 ) : null}
@@ -1434,6 +1441,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   setTransparencyDetailsOpen,
                   sumUp: chatSumUp,
                   answerInFlight: isAsking,
+                  creditsHiddenFor,
                 })}
               </div>
             ) : null}

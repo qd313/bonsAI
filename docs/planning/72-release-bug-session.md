@@ -445,3 +445,9 @@ land.
   log's unsaved entries since `20837fbf`; they were rewritten from the session's own notes the same minute.
   No landed code was touched. Lesson: never reset the shared checkout with uncommitted work in it; commit the
   plan log right after each entry.
+- **13:59 — everything so far is on the Deck.** Lane 9's three landed (`8294e75b` question row, `29c0b075`
+  choice buttons, `9feef4e1` reason chips — the last hand-merged with lane 4's reveal in the chip rows; 50
+  tests across both pass). The combined tree put one more file over 400 lines (the answers' D-pad map, +21
+  lines of routing): recorded 28 with the reason, not squeezed; the focus check tightened 24 -> 22
+  (`0065fccb`). Deployed `0065fccb` (md5 `167064d0…` both sides). Block 2 part 1 (flow F1) started with a
+  new driver, agent `ab54c0138d5d2c91b`; part 2 (F2) follows.

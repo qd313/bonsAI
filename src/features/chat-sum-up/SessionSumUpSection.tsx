@@ -88,15 +88,24 @@ function handRingToNewCard(): () => void {
   let done = false;
   const attempt = () => {
     if (done) return;
-    if (!summaryCardEl?.isConnected || !elementHasGamepadFocus(sumUpButtonEl)) {
+    /* Landed: judged by Steam's ring itself. TakeFocus can answer before it has moved anything
+       (plan72-F7-SUMUP.json: the second build trusted that answer, stopped, and the ring stayed). */
+    if (summaryCardEl && elementHasGamepadFocus(summaryCardEl)) {
       done = true;
       return;
     }
-    if (takeNavFocus("session-summary-card")) done = true;
+    /* The player moved the ring somewhere else during the wait: leave it there. */
+    if (!elementHasGamepadFocus(sumUpButtonEl)) {
+      done = true;
+      return;
+    }
+    /* The card may not be on the page yet; a later try finds it. */
+    if (!summaryCardEl?.isConnected) return;
+    takeNavFocus("session-summary-card");
   };
   attempt();
   const frame = requestAnimationFrame(attempt);
-  const timers = [150, 300, 900].map((delayMs) => window.setTimeout(attempt, delayMs));
+  const timers = [150, 300, 600, 900, 1500].map((delayMs) => window.setTimeout(attempt, delayMs));
   return () => {
     done = true;
     cancelAnimationFrame(frame);
@@ -171,10 +180,20 @@ export function SessionSumUpSection(props: {
      arriving from the back end must not cancel the retries. */
   const hasSummary = summary != null;
   const wasBusy = useRef(view.busy);
+  /* When the job ended, if it has not handed over yet: the job's end and its summary can reach
+     this section in two separate updates (plan72-F7-SUMUP.json), so the hand-off waits for the
+     card rather than deciding at the job's end. Kept for a few seconds only, so a summary that
+     turns up later for another reason never pulls the ring. */
+  const jobEndedAt = useRef<number | null>(null);
   useEffect(() => {
-    const finished = wasBusy.current && !view.busy;
+    if (wasBusy.current && !view.busy) jobEndedAt.current = Date.now();
+    if (view.busy) jobEndedAt.current = null;
     wasBusy.current = view.busy;
-    if (finished && hasSummary) return handRingToNewCard();
+    const endedAt = jobEndedAt.current;
+    if (endedAt !== null && hasSummary && !view.busy && Date.now() - endedAt < 5000) {
+      jobEndedAt.current = null;
+      return handRingToNewCard();
+    }
     return undefined;
   }, [view.busy, hasSummary]);
   const downFromButton = () => (summary ? focusSummaryCard() : false) || downFromCard();

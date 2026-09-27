@@ -176,6 +176,72 @@ describe("the summary card when Sum up finishes", () => {
     expect(nav.take.mock.calls.length).toBe(calls);
   });
 
+  it("still hands the ring over when the summary arrives a render after the job ends (two updates, as on the Deck)", () => {
+    /*
+     * plan72-F6-SUMUP.json and plan72-F7-SUMUP.json: on the Deck the ring stayed on the button, twice
+     * per build. The job's end and its summary can reach this section in two separate updates; the
+     * hand-off must wait for the card instead of giving up when the job ends with no summary yet.
+     */
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const { container, rerender } = render(section(sumUpState({ summingUp: true, summingUpSeconds: 3 })), {
+      container: host,
+    });
+    const button = container.querySelector(".bonsai-sumup-btn")!;
+    place(button, pane, 96, 130);
+    ringOn(button);
+    nav.take.mockImplementation((id: string) => {
+      if (id !== "session-summary-card") return false;
+      ringOn(container.querySelector(".bonsai-sumup-card")!);
+      return true;
+    });
+
+    /* Update 1: the job has ended, the summary is not here yet. */
+    rerender(section(sumUpState({ summingUp: false })));
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    /* Update 2: the summary arrives, and with it the card. */
+    rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
+    const card = container.querySelector(".bonsai-sumup-card")!;
+    place(card, pane, 136, 611);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(nav.take).toHaveBeenCalledWith("session-summary-card");
+    expect(card.classList.contains("gpfocus")).toBe(true);
+  });
+
+  it("keeps trying until Steam's ring is really on the card, not until the transfer says yes", () => {
+    /* On the Deck a node's TakeFocus can report success before it has moved anything. */
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const { container, rerender } = render(section(sumUpState({ summingUp: true, summingUpSeconds: 3 })), {
+      container: host,
+    });
+    const button = container.querySelector(".bonsai-sumup-btn")!;
+    place(button, pane, 96, 130);
+    ringOn(button);
+    let calls = 0;
+    nav.take.mockImplementation((id: string) => {
+      if (id !== "session-summary-card") return false;
+      calls += 1;
+      /* The first two "succeed" without moving the ring; the third really moves it. */
+      if (calls >= 3) ringOn(container.querySelector(".bonsai-sumup-card")!);
+      return true;
+    });
+    rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
+    const card = container.querySelector(".bonsai-sumup-card")!;
+    place(card, pane, 136, 611);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(calls).toBeGreaterThanOrEqual(3);
+    expect(card.classList.contains("gpfocus")).toBe(true);
+  });
+
   it("leaves the ring alone when Steam's ring went elsewhere during the wait, even with the button's browser focus", () => {
     const pane = deckPane();
     const host = document.createElement("div");

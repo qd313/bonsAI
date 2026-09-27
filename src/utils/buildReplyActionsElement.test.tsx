@@ -124,9 +124,9 @@ describe("buildReplyActionsElement refine chip row", () => {
     expect(el).not.toBeNull();
     render(el!);
 
-    expect(screen.getByLabelText("Bad information")).toBeTruthy();
-    expect(screen.getByLabelText("Misidentified game/problem")).toBeTruthy();
-    expect(screen.getByLabelText("Unfenced spoiler")).toBeTruthy();
+    expect(screen.getByLabelText("Bad info")).toBeTruthy();
+    expect(screen.getByLabelText("Wrong game or topic")).toBeTruthy();
+    expect(screen.getByLabelText("Spoiled it")).toBeTruthy();
   });
 
   it("reports unfenced_spoiler through onChip when that chip is pressed", () => {
@@ -140,9 +140,68 @@ describe("buildReplyActionsElement refine chip row", () => {
     });
     render(el!);
 
-    fireEvent.click(screen.getByLabelText("Unfenced spoiler"));
+    fireEvent.click(screen.getByLabelText("Spoiled it"));
 
     expect(onChip).toHaveBeenCalledWith("unfenced_spoiler");
+  });
+
+  /*
+   * Plan 72, option E (the maintainer's pick, 2026-09-27): two rows, short words. Only the words
+   * changed — each chip still hands back the same id, which is what picks the re-ask sentence and
+   * what gets recorded (replyMicroActions.test.ts pins those).
+   */
+  it("lays the five reasons out as two rows: Bad info and Wrong game or topic, then the other three", () => {
+    const el = buildReplyActionsElement({
+      replyKey: "r1",
+      rating: "down",
+      onRate: () => {},
+      showFeedback: true,
+      onChip: () => {},
+    });
+    const { container } = render(el!);
+    const rows = Array.from(container.querySelectorAll(".bonsai-chat-reply-actions-row--chips"));
+    expect(rows.map((row) => Array.from(row.querySelectorAll("button")).map((b) => b.textContent))).toEqual([
+      ["Bad info", "Wrong game or topic"],
+      ["Spoiled it", "Too long", "Too short"],
+    ]);
+  });
+
+  it("sends the same id from every chip as before the words changed", () => {
+    const onChip = vi.fn();
+    const el = buildReplyActionsElement({
+      replyKey: "r1",
+      rating: "down",
+      onRate: () => {},
+      showFeedback: true,
+      onChip,
+    });
+    render(el!);
+    for (const label of ["Bad info", "Wrong game or topic", "Spoiled it", "Too long", "Too short"]) {
+      fireEvent.click(screen.getByLabelText(label));
+    }
+    expect(onChip.mock.calls.map((call) => call[0])).toEqual([
+      "bad_information",
+      "misidentified_game",
+      "unfenced_spoiler",
+      "too_long",
+      "too_short",
+    ]);
+  });
+
+  it("keeps Up from the first chip of the top row wired to the caller's hand-off", () => {
+    const onMoveUpFromChips = vi.fn(() => true);
+    const el = buildReplyActionsElement({
+      replyKey: "r1",
+      rating: "down",
+      onRate: () => {},
+      showFeedback: true,
+      onChip: () => {},
+      onMoveUpFromChips,
+    });
+    const first = elementsWithAriaLabel(el).find((node) => node.props["aria-label"] === "Bad info");
+    const deckNav = (first!.props as { deckNav?: { onMoveUp?: () => boolean } }).deckNav;
+    expect(deckNav?.onMoveUp?.()).toBe(true);
+    expect(onMoveUpFromChips).toHaveBeenCalledTimes(1);
   });
 
   it("does not render refine chips before the reply is rated down", () => {
@@ -156,7 +215,7 @@ describe("buildReplyActionsElement refine chip row", () => {
     });
     render(el!);
 
-    expect(screen.queryByLabelText("Unfenced spoiler")).toBeNull();
+    expect(screen.queryByLabelText("Spoiled it")).toBeNull();
   });
 });
 

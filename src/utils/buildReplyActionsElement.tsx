@@ -11,8 +11,8 @@
  *     ┌─ reply actions ─────────────────────┐
  *     │   Helpful   Not really   (speaker)  │  <- thumbs + Read aloud
  *     │   (only once Not really is picked)  │
- *     │   [chip] [chip] [chip]              │  <- what went wrong
- *     │   [chip] [chip]                     │  <- too long / too short
+ *     │   [chip] [chip]                     │  <- bad info / wrong game
+ *     │   [chip] [chip] [chip]              │  <- spoiled / too long / short
  *     │   (chip error text, if a chip failed)│
  *     │  ──────── Show details ↓ ───        │
  *     └───────────────────────────────────────┘
@@ -117,12 +117,9 @@ import {
 } from "./drgGlossaryTermRegistry";
 import { findScrollablePanel } from "./chatPanelScroll";
 
-const CHIP_ROW_REFINE: ReplyMicroActionId[] = [
-  "bad_information",
-  "misidentified_game",
-  "unfenced_spoiler",
-];
-const CHIP_ROW_LENGTH: ReplyMicroActionId[] = ["too_long", "too_short"];
+/* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
+const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
+const CHIP_ROW_LENGTH: ReplyMicroActionId[] = ["unfenced_spoiler", "too_long", "too_short"];
 
 export type BuildReplyActionsElementArgs = {
   replyKey: string;

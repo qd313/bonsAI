@@ -324,9 +324,16 @@ ${buildAnswerBubbleSection()}
           gap: 8px !important;
           width: 100% !important;
         }
+        /* The "What went wrong?" reason chips run tighter than the other reply buttons, so the five
+           fit two rows in the 300-wide column (option E, the maintainer's pick, plan 72). */
         .bonsai-scope .bonsai-chat-reply-actions-row--chips {
           flex-wrap: wrap;
-          gap: 8px;
+          gap: ${uiScalePx(6)} !important;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn,
+        .bonsai-scope .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn.DialogButton {
+          min-height: ${uiScalePx(28)} !important;
+          padding: ${uiScalePx(4)} ${uiScalePx(8)} !important;
         }
         .bonsai-scope .bonsai-chat-reply-actions-row--utility {
           flex-wrap: nowrap !important;

@@ -97,7 +97,12 @@
     },
     {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 817,
+      "lines": 824,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 784,
       "role": ""
     },
     {
@@ -121,11 +126,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 725,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 713,
       "role": ""
@@ -137,7 +137,7 @@
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 674,
+      "lines": 671,
       "role": ""
     },
     {

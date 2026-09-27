@@ -2,9 +2,10 @@
  * Title: The quick fix-it chips under a reply
  *
  * Purpose: Under a finished answer, a row of small chips lets the user ask
- * for a quick correction with one tap instead of typing it out: Bad
- * information, Too long, Too short, Misidentified game/problem, and
- * Unfenced spoiler. This file names the five chips, and, for each one, the
+ * for a quick correction with one tap instead of typing it out: Bad info,
+ * Wrong game or topic, Spoiled it, Too long and Too short. The chip words
+ * were shortened in plan 72 (option E); the log label below keeps the old
+ * longer wording. This file names the five chips, and, for each one, the
  * label shown on the chip and the sentence quietly added in front of the
  * original question when it is re-asked.
  *
@@ -38,21 +39,21 @@ export type ReplyMicroActionDef = {
 const REPLY_MICRO_ACTIONS: ReplyMicroActionDef[] = [
   {
     id: "bad_information",
-    label: "Bad information",
+    label: "Bad info",
     prefix:
       "The last answer may be wrong. Correct factual errors, drop unverified claims, and state what you're unsure about. Original question: ",
     transparencyLabel: "Follow-up: Bad information",
   },
   {
     id: "misidentified_game",
-    label: "Misidentified game/problem",
+    label: "Wrong game or topic",
     prefix:
       "You may have the wrong game or issue. Re-check the running game/AppID and context, then re-answer. Original question: ",
     transparencyLabel: "Follow-up: Misidentified game/problem",
   },
   {
     id: "unfenced_spoiler",
-    label: "Unfenced spoiler",
+    label: "Spoiled it",
     prefix:
       "The last answer revealed spoiler content in plain text that should have been hidden. Rewrite it with the same information, but put anything spoilery — twists, endings, secret unlocks, or other things the player shouldn't know yet — inside ```bonsai-spoiler``` fences this time. Original question: ",
     transparencyLabel: "Follow-up: Unfenced spoiler",

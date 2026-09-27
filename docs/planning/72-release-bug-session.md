@@ -492,3 +492,13 @@ land.
   dock (was 44 of 418 px showing) — the maintainer's call. **Could not run:** Clear session mid-answer (the
   answer finished in 33 s before the 20-press walk to Clear arrived; the fix is unit-tested). Sightings: the
   ring goes to the tab bar after the update box closes; Steam's home once named Fallout 4 with no game running.
+- **15:20 — follow-ups landed:** `4b32343b` the save icon on every chat with an answer (older chats save their
+  newest question and answer); `2aeb331c` Show details' Source line names a game's own tips; `17253191` +
+  `f4613e2d` a rating and its reason chips survive a panel close and reopen (a chat switch still loses them —
+  lane 10's written plan, "if there is room"); `eb4f4d16` "Update AI & models", Install Ollama and Tier 1/2 open
+  the download notice itself, ring on "Not now" (with the switch off nothing could have downloaded: a second
+  box asked, and the back end refuses); `a7b43276` the thinking line never opens mid-word, never shows only
+  punctuation, and drops Mode/Voice/Constraint setup lines; `8e438f74` the chips hold still while an answer is
+  written. **By design, the maintainer's call:** the chips rotate for one minute after the panel opens, then
+  rest (since April). Left as "if there is room": two older boxes still open with the ring on their action
+  ("Enable Tier 2 before pulling?", the library's download location). Block 3 (flow F3) next, on `8e438f74`.

@@ -826,7 +826,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   border: "none",
                   background: "transparent",
                   flexShrink: 0,
-                  transform: "translateX(2px)",
                 }}
               >
                 <span className="bonsai-unified-input-icon">
@@ -858,7 +857,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   background: "transparent",
                   color: "#f87171",
                   flexShrink: 0,
-                  transform: "translateX(2px)",
                 }}
               >
                 <span className="bonsai-unified-input-icon">
@@ -890,7 +888,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   background: "transparent",
                   color: "#dbe6f3",
                   flexShrink: 0,
-                  transform: "translateX(2px)",
                 }}
               >
                 <span className="bonsai-unified-input-icon">

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 547,
-  "edgeCount": 1478,
+  "fileCount": 548,
+  "edgeCount": 1484,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -703,6 +703,17 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/features/unified-input/constants.ts",
+        "src/styles/sections/gamepadAndPullModels.ts",
+        "src/styles/sections/section-8.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -775,6 +786,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
@@ -2719,6 +2731,7 @@
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabAttachMenuPopover.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
@@ -3835,6 +3848,7 @@
         "src/styles/sections/chatSlotModal.ts"
       ],
       "importedBy": [
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"
@@ -3968,6 +3982,7 @@
         "src/features/unified-input/constants.ts"
       ],
       "importedBy": [
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
@@ -4078,6 +4093,7 @@
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
@@ -5334,6 +5350,7 @@
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
+        "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",

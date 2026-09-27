@@ -27,7 +27,7 @@ import {
   ASK_LABEL_COLOR,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
-  UNIFIED_INPUT_ICON_STRIP_PAD_X_PX,
+  UNIFIED_INPUT_CORNER_RING_ROOM_PX,
 } from "../../features/unified-input/constants";
 
 /**
@@ -204,10 +204,12 @@ export function buildSection8Section(): string {
           align-self: stretch !important;
         }
 
-        /* Bottom icon strip: hug left/right corners (independent of ai-character text indent). */
+        /* Bottom icon strip: hug left/right corners (independent of ai-character text indent), with
+           room on both sides and underneath for the focus ring the question box would clip. */
         .bonsai-scope .bonsai-unified-input-bottom-actions {
-          padding-left: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
-          padding-right: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
+          padding-left: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
+          padding-right: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
+          padding-bottom: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
           box-sizing: border-box !important;
         }
 

@@ -7,8 +7,21 @@
  */
 /** Max height (px) of the whole glass card (text body + bottom icon strip). */
 const UNIFIED_INPUT_HEIGHT_MAX_PX = 200;
-/** Reserved height (px) for attach + mic strip inside the glass host (below the text body). */
-export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
+/**
+ * Room (px) between the corner icons (paperclip, mode chip, mic) and the question box's inner
+ * edge, on the left, the right and underneath: the white focus ring reaches this far past a button
+ * (outline 2 + offset 2, soft glow 5; gamepadAndPullModels.ts), and the box clips anything outside
+ * itself. Plan 72 (plan72-P-MIC-RING-handheld.json): the mic sat 0 px from the right edge and every
+ * icon 0 px from the bottom, so the ring showed only its top and left sides. Not scaled: the ring
+ * it makes room for is not scaled either.
+ */
+export const UNIFIED_INPUT_CORNER_RING_ROOM_PX = 5;
+/**
+ * Reserved height (px) for attach + mic strip inside the glass host (below the text body). Was 24;
+ * plan 72 added the ring room underneath the icons, so the box grew by that much and the typed
+ * text stays exactly as far above the icons as before.
+ */
+export const UNIFIED_INPUT_ICON_STRIP_PX = 24 + UNIFIED_INPUT_CORNER_RING_ROOM_PX;
 /**
  * The one gap between the dock's stacked rows: the suggestion chips to the question box, and the
  * question box to the Ask bar. Both read this, so the two gaps always match (plan 72, the
@@ -18,8 +31,6 @@ export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
 export const DOCK_ROW_GAP_PX = 2;
 /** Room kept under a suggestion chip, inside the row that clips it, for its soft drop shadow (0 2px 3px). */
 export const PRESET_CHIP_SHADOW_ROOM_PX = 5;
-/** Horizontal inset (px) for bottom icon strip — matches avatar top-left (2px), not text body indent. */
-export const UNIFIED_INPUT_ICON_STRIP_PAD_X_PX = 2;
 /** Minimum text-body height (px) when empty — one line taller than the prior floor (~+1 overlay line at 13px / line-height 1.2). */
 export const UNIFIED_TEXT_BODY_MIN_PX = 42;
 /** Unified search typography — must match `TextField` and the measure/overlay nodes or the caret misaligns from the painted text. */

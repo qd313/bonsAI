@@ -327,7 +327,7 @@ replace it with a specific issue when one exists.
 - ★★ `[chat]` **Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon** — **OPEN,
   from the maintainer 2026-09-26.** "Save chat to Desktop" moves from its own row under the answer to a
   save icon in the chat tab; the "+" (new chat) gets a clearer, more obvious icon. Draw the options at
-  true size first, which also settles exactly where the icon sits. Plan 72, for 0.6.0.
+  true size first, which also settles exactly where the icon sits. Plan 72, lane 5, for 0.6.0.
 - ★★ `[chat]` **Summing up offers a fresher title** — **OPEN, asked for by the maintainer 2026-09-25.** Each
   *Sum up this chat* also hands the AI the chat's current title; when the AI judges it stale, the person is
   offered its suggestion and chooses to rename or keep. [Detail](roadmap-details.md#summing-up-offers-a-fresher-title).
@@ -404,7 +404,7 @@ replace it with a specific issue when one exists.
   **OPEN, from the maintainer 2026-09-26, wanted before 0.6.0.** Install/update Ollama, model downloads,
   voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
   https://… to download …"), at least the first time per site. A new permission, off by default, gates
-  every download and the automatic model-list refresh. Plan 71 § 3, Stage B.
+  every download and the automatic model-list refresh. Plan 72, lane 1.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up

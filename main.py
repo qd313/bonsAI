@@ -1186,10 +1186,6 @@ class Plugin:
         """Pull one or more Ollama tags on this Deck (background, reuses setup service)."""
         return await ollama_local_setup_rpc.pull_ollama_models(self, tags)
 
-    async def merge_pulled_tags_into_routing_orders(self, tags: Any = None):
-        """Append newly pulled tags to the user's saved text/vision try orders."""
-        return await ollama_local_setup_rpc.merge_pulled_tags_into_routing_orders(self, tags)
-
     async def delete_ollama_model(self, tag: str = ""):
         """Remove one installed Ollama model via ``ollama rm`` (argv form)."""
         return await ollama_local_setup_rpc.delete_ollama_model(self, tag)

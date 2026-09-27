@@ -4,6 +4,8 @@ import unittest
 
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
+from backend.services.ollama_local_setup_rpc import merge_pulled_tags_into_routing_orders
+
 
 class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self) -> None:
@@ -12,7 +14,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
     async def test_appends_pulled_tag_to_saved_text_order(self) -> None:
         self._write_settings({"text_model_routing_order": ["gemma4:e2b", "tinyllama"]})
 
-        out = await self.plugin.merge_pulled_tags_into_routing_orders(["mistral:7b"])
+        out = await merge_pulled_tags_into_routing_orders(self.plugin, ["mistral:7b"])
 
         self.assertTrue(out["ok"])
         self.assertEqual(out["merged"], ["mistral:7b"])
@@ -29,7 +31,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             }
         )
 
-        await self.plugin.merge_pulled_tags_into_routing_orders(["qwen2.5vl:3b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["qwen2.5vl:3b"])
 
         saved = self._read_settings()
         self.assertEqual(saved["text_model_routing_order"], ["tinyllama", "qwen2.5vl:3b"])
@@ -43,7 +45,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             }
         )
 
-        await self.plugin.merge_pulled_tags_into_routing_orders(["mistral:7b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["mistral:7b"])
 
         saved = self._read_settings()
         self.assertIn("mistral:7b", saved["text_model_routing_order"])
@@ -53,7 +55,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
         """A derived order already contains anything just pulled; a one-tag write would replace it."""
         self._write_settings({"ask_mode": "speed"})
 
-        out = await self.plugin.merge_pulled_tags_into_routing_orders(["mistral:7b"])
+        out = await merge_pulled_tags_into_routing_orders(self.plugin, ["mistral:7b"])
 
         self.assertTrue(out["ok"])
         self.assertEqual(out["merged"], [])
@@ -68,7 +70,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             }
         )
 
-        await self.plugin.merge_pulled_tags_into_routing_orders(["qwen2.5:32b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["qwen2.5:32b"])
 
         self.assertEqual(
             self._read_settings()["text_model_routing_order"],
@@ -83,7 +85,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             }
         )
 
-        await self.plugin.merge_pulled_tags_into_routing_orders(["qwen2.5:32b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["qwen2.5:32b"])
 
         self.assertEqual(
             self._read_settings()["text_model_routing_order"],
@@ -93,8 +95,8 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
     async def test_merging_same_tag_twice_does_not_duplicate(self) -> None:
         self._write_settings({"text_model_routing_order": ["tinyllama"]})
 
-        await self.plugin.merge_pulled_tags_into_routing_orders(["mistral:7b"])
-        await self.plugin.merge_pulled_tags_into_routing_orders(["mistral:7b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["mistral:7b"])
+        await merge_pulled_tags_into_routing_orders(self.plugin, ["mistral:7b"])
 
         self.assertEqual(
             self._read_settings()["text_model_routing_order"],
@@ -105,7 +107,7 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
         self._write_settings({"text_model_routing_order": ["tinyllama"]})
 
         for payload in ([], None, ["  "], "mistral:7b"):
-            out = await self.plugin.merge_pulled_tags_into_routing_orders(payload)
+            out = await merge_pulled_tags_into_routing_orders(self.plugin, payload)
             self.assertFalse(out["ok"])
             self.assertEqual(out["error"], "no_tags")
 

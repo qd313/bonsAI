@@ -8,8 +8,9 @@ stays a method of the same name on the plugin class in main.py; the method's bod
 now a one-line hand-off to the function here.
 
 Used for: start_local_ollama_setup, get_local_ollama_setup_status,
-cancel_local_ollama_setup, pull_ollama_models, merge_pulled_tags_into_routing_orders,
-delete_ollama_model, fetch_ollama_catalog_metadata, fetch_pull_model_catalog.
+cancel_local_ollama_setup, pull_ollama_models, delete_ollama_model,
+fetch_ollama_catalog_metadata, fetch_pull_model_catalog. merge_pulled_tags_into_routing_orders is
+no longer an RPC: the custom-pull runner calls it when a download finishes.
 
 Solves: Keeps the Deck-side install/pull/delete machinery -- the one-at-a-time lock, the
 background task, the try-order bookkeeping -- out of main.py.
@@ -250,6 +251,10 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
                     on_stage=on_stage,
                     on_verbose_line=on_verbose_line,
                 )
+                # Join the saved try order here, not from the screen: the screen only saw the
+                # finish while the Settings panel stayed open, so a closed menu skipped it.
+                if (self._local_ollama_setup_state or {}).get("phase") == "done":
+                    await merge_pulled_tags_into_routing_orders(self, tags)
             finally:
                 # A pull of the meaning-search model must be seen at once, not after the
                 # 30 s "is it installed" memory runs out (plan70-R5.json).

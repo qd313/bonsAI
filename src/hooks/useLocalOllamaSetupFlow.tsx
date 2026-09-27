@@ -272,23 +272,8 @@ export function useLocalOllamaSetupFlow({
           DECKY_RPC_TIMEOUT_MS
         ).catch(() => {});
       }
-      const pulled = localSetupStatus.pull_tags?.filter(Boolean) ?? [];
-      if (localSetupStatus.profile === "custom" && pulled.length > 0) {
-        // Appends the pulled tags to the saved try orders. A no-op when the user
-        // has no saved order, because the derived one already includes anything
-        // just installed. Logged rather than swallowed so failures stay visible
-        // on-device.
-        void callDeckyWithTimeout<[string[]], { ok?: boolean }>(
-          "merge_pulled_tags_into_routing_orders",
-          [pulled],
-          DECKY_RPC_TIMEOUT_MS
-        ).catch((e) => {
-          console.error(
-            "[bonsAI] merge_pulled_tags_into_routing_orders failed; pulled tags not merged into model routing order:",
-            formatDeckyRpcError(e)
-          );
-        });
-      }
+      // A custom pull joins the saved try order in the back end, where the download ends
+      // (ollama_local_setup_rpc); this screen only saw the finish while it stayed open.
       toaster.toast({
         title: "Local Ollama setup complete",
         body: wasUpdateInstalled ? "Running connection test and refreshing model catalog." : "Running connection test.",

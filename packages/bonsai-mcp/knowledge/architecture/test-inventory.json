@@ -32,6 +32,7 @@
     "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
     "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
     "src/components/MainTabChatTranscript.replyBlock.test.tsx",
+    "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
     "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
     "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
     "src/components/MainTabChatTranscript.strategyPanels.test.tsx",

@@ -41,7 +41,8 @@
  * 3. Works out which row is active — an outside `highlightTurnId` if it points at a real row,
  *    otherwise whichever row was last tapped — and falls back to the newest row.
  * 4. Draws every row, wires the first row's own Up to the section above, then the active row's
- *    chips via the shared ladder, whose Down stays put because it is the last thing in the tab.
+ *    chips via the shared ladder, whose Down off the last chip leaves the panel through
+ *    `onMoveDownPastTab` (what sits below Show details in the chat, else the dock).
  */
 import { useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -122,6 +123,12 @@ export type SessionContextTabBodyProps = {
    * `focusKbNotesBlock`'s callers do when the block they focused is about to unmount.
    */
   onRequestClose?: () => void;
+  /**
+   * D-pad Down off the last chip of the ladder, the last stop in this tab: on to whatever sits below
+   * Show details, through Steam's own transfer. False lets Steam's own navigation carry the press.
+   * Absent: the press is consumed, as it was before plan 72.
+   */
+  onMoveDownPastTab?: () => boolean;
   /** Plan 68: the open chat's summary and the Sum up button's job, from the back end. */
   sumUp?: ChatSumUpState | null;
   /** Plan 68: an answer is being written, so the button is greyed out and says so. */
@@ -161,6 +168,7 @@ export function SessionContextTabBody({
   onHighlightClear,
   onMoveUpFromTop,
   onRequestClose,
+  onMoveDownPastTab,
   sumUp = null,
   answerInFlight = false,
   creditsViewFor,
@@ -286,11 +294,13 @@ export function SessionContextTabBody({
           }}
           onMoveUpFromLadder={() => focusLastSessionTabRow() || upFromFirstRow()}
           /*
-           * The ladder is the last thing in the tab now that Clear is gone. Down past it stays put:
-           * left to Steam's own guess, Down from the end of this tab once threw the ring into the
-           * dock (plan 68 § 6).
+           * The ladder is the last thing in the tab now that Clear is gone. Down past it used to
+           * stay put (plan 68 § 6: Steam's own guess once threw the ring into the dock), and that
+           * was a trap: on the Deck, seven Downs and a Right left the ring on "Chip 6 of 6" with
+           * the question box unreachable except by B (plan 70 flow L6; plan 72 free play,
+           * plan72-Z-FREEPLAY.json finding 1). It now leaves the panel by name.
            */
-          onMoveDownFromLadder={() => true}
+          onMoveDownFromLadder={() => onMoveDownPastTab?.() ?? true}
           /*
            * B on the ladder itself swallows the press to re-collapse just the ladder locally
            * (ContextChipLadder's own onButtonDown) — without this, that local collapse would run

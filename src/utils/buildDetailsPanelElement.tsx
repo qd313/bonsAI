@@ -23,6 +23,8 @@ import { revealBelowKeeping } from "./chatPanelScroll";
 import { uiGamepadFocusElement } from "./uiDocument";
 import { focusPerTurnRow } from "./focusPerTurnRow";
 import { focusKbNotesBlock } from "./buildKbNotesBlockElement";
+import { focusChatPermissionHintRow } from "./chatTranscriptNavHelpers";
+import { takeNavFocus } from "./navFocusRegistry";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
@@ -131,6 +133,9 @@ function revealWhenOpened(panel: HTMLElement | null): void {
  *   Session tab (plan 68): Sum up this chat, the summary card when there is one, then the turn row
  *   list and the active row's own chips (SessionContextTabBody; its own graph is drawn in
  *   SessionSumUpSection.tsx). No Clear.
+ *      | Down off the Session tab's last chip (plan 72)
+ *   a permission hint row below the chat, else the suggestion chips, else the question box --
+ *   Steam's own transfer each time (`downPastPanel`), since all three sit outside this turn.
  *
  * - Only the newest turn (`isNewest`) ever renders the tabs row at all — an older, hand-expanded
  *   turn keeps today's shape, a bare ladder with no tabs, exactly as `SessionContextStrip`'s own
@@ -193,6 +198,13 @@ export function buildDetailsPanelElement(args: {
     focusKbNotesBlock(turnKey) ||
     focusReplyShowDetails(querySlot()) ||
     focusReplyUtilityRow(querySlot());
+  /*
+   * Down off the bottom of the panel, to what sits below Show details in the chat: a permission
+   * hint row when one shows, else the suggestion chips, else the question box. Each is a registered
+   * nav node outside this turn's own container, so only Steam's transfer carries the ring there.
+   */
+  const downPastPanel = () =>
+    focusChatPermissionHintRow() || takeNavFocus("preset-carousel") || takeNavFocus("unified-input");
 
   if (!isNewest) {
     /*
@@ -323,6 +335,7 @@ export function buildDetailsPanelElement(args: {
           onHighlightClear={() => setSessionHighlightTurnId(null)}
           onMoveUpFromTop={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
           onRequestClose={closePanel}
+          onMoveDownPastTab={downPastPanel}
           sumUp={sumUp}
           answerInFlight={answerInFlight}
           creditsViewFor={creditsViewFor}

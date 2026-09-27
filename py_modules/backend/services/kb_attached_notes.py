@@ -127,6 +127,14 @@ def _parse_kb_attached_notes(
             # published note itself is unchanged.
             game_title = ""
             title_key = f"{_COMPAT_GAME_TITLE} — {name}"
+            if title_key not in by_title:
+                # A game's own tip is credited under that game's title instead
+                # (`_label_own_game_tips`); a block holds tips only, so the name alone finds it.
+                # The game goes on the note so the screen can say it is that game's own tip.
+                own = [t for t in by_title if t.endswith(f" — {name}")]
+                if own:
+                    title_key = own[0]
+                    game_title = own[0][: -len(f" — {name}")]
         else:
             name = m.group("name")
             kind = m.group("kind")

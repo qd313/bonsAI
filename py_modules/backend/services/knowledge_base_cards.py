@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import sqlite3
 import threading
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Optional
 
 from backend.services.knowledge_base_schema import (
@@ -166,6 +166,40 @@ def _compat_row_to_card(row: sqlite3.Row) -> KnowledgeCard:
         trust_tier=_trust_tier_for_compat_row(row),
         bm25_score=_row_relevance(row),
     )
+
+
+def _label_own_game_tips(
+    conn: sqlite3.Connection, cards: list[KnowledgeCard]
+) -> list[KnowledgeCard]:
+    """Give each of a game's own tips that game's title in place of ``_COMPAT_GAME_TITLE``.
+
+    ``_compat_row_to_card`` labels every tip shared, because the tip searches that feed it do
+    not read ``compat_patterns.app_id``. Relabelled once here, just before ``_format_block``,
+    rather than in each of those searches. Found on the Deck by plan 70: Show details credited
+    Deep Rock Galactic: Survivor's Render Scale tip as "Shared troubleshooting — display".
+    ``app_id`` holds a Steam AppID or, for a title Steam never numbered, its ``igdb_id``.
+    Cards come back unchanged on a library built before that column existed.
+    """
+    tip_ids = [c.section_id for c in cards if c.game_title == _COMPAT_GAME_TITLE]
+    if not tip_ids:
+        return cards
+    placeholders = ",".join("?" for _ in tip_ids)
+    try:
+        rows = conn.execute(
+            "SELECT p.pattern_id, g.canonical_title FROM compat_patterns p "
+            "JOIN games g ON p.app_id IN (g.app_id, g.igdb_id) "
+            f"WHERE p.app_id IS NOT NULL AND p.pattern_id IN ({placeholders})",
+            tip_ids,
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return cards
+    titles = {int(r["pattern_id"]): str(r["canonical_title"] or "") for r in rows}
+    return [
+        replace(c, game_title=titles[c.section_id])
+        if c.game_title == _COMPAT_GAME_TITLE and titles.get(c.section_id)
+        else c
+        for c in cards
+    ]
 
 
 def _section_row_to_card(row: sqlite3.Row, *, bm25_score: float = 0.0) -> KnowledgeCard:

@@ -141,6 +141,7 @@ from backend.services.knowledge_base_cards import (
     _compat_row_to_card,
     _format_block,
     _get_connection,
+    _label_own_game_tips,
     _section_row_to_card,
     _trust_tier_for_row,
     close_connection,
@@ -1376,6 +1377,8 @@ def retrieve_knowledge_context(
                 cards = [forced_card] + [c for c in cards if c.section_id != forced_tip_id]
                 cards = cards[:top_k]
 
+        if domain == "compat":
+            cards = _label_own_game_tips(conn, cards)
         text_block, trust, sources = _format_block(
             cards,
             fallback_text=fallback_text,

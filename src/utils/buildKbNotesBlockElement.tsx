@@ -59,7 +59,9 @@ const KB_NOTE_WIKI_HOST_NAMES: Record<string, string> = {
  * true structurally, not just by shortening this one phrase).
  */
 function kbNoteSourcePhrase(note: KbAttachedNote): string {
-  if (note.domain === "compat") return "From the shared Deck tips";
+  // A tip carries a game title only when it is that one game's own tip (the back end's
+  // `_label_own_game_tips`); plan 70 found those labelled shared.
+  if (note.domain === "compat") return note.game_title ? "From this game's Deck tips" : "From the shared Deck tips";
   if (!note.source_host) return "From bonsAI's own note";
   const known = KB_NOTE_WIKI_HOST_NAMES[note.source_host];
   return known ? `From ${known}` : `From ${note.source_host}`;

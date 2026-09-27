@@ -208,9 +208,21 @@ describe("the header's three source wordings", () => {
   });
 
   it("names a shared tip separately from a strategy note, even with no source_host", () => {
-    const { container } = withNote({ source_host: "", domain: "compat", name: "proton" });
+    const { container } = withNote({ source_host: "", domain: "compat", name: "proton", game_title: "" });
     expect(block(container)?.textContent).toContain("From the shared Deck tips");
     expect(block(container)?.textContent).not.toContain("no source");
+  });
+
+  it("says a game's own tip is that game's, not a shared one (plan 70's Render Scale tip)", () => {
+    // The back end sets `game_title` on a tip only when the tip belongs to one game.
+    const { container } = withNote({
+      source_host: "steamcommunity.com",
+      domain: "compat",
+      name: "display",
+      game_title: "Deep Rock Galactic: Survivor",
+    });
+    expect(block(container)?.textContent).toContain("From this game's Deck tips");
+    expect(block(container)?.textContent).not.toContain("shared");
   });
 });
 

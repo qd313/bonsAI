@@ -169,6 +169,14 @@ says that.
 assignment from a script (`module.NAME = ...`) both still point at the old location and miss code that
 has moved. Search for all three before trusting that every caller was found.
 
+**The plugin never upgrades an installed library on its own — only the build script adds a new column.**
+A per-game tip check read a column that a knowledge-base library built before 2026-09-26 does not have,
+because only the script that builds a fresh library adds a new column; the plugin itself never rewrites
+one already installed. Run on every single question, the check failed outright on that older library and
+emptied every answer's notes, not just the tips. Any code that reads a column added in a newer library
+format has to survive that column being absent, and a test built against a copy of the library with the
+column dropped is what actually proves it, not a test against the newest library alone.
+
 **A timing-sensitive test that fails under load can be pointing at a real bug, not just a flaky test.**
 A screen test that opens a panel and moves the ring onto its first row failed about one run in three
 whenever the machine was busy, and passed every time run alone — the same shape as another test already

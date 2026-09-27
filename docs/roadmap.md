@@ -154,26 +154,19 @@ starts work outside this.
   press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
   not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
 - ★ `[ollama]` **Remove greys out once a model has answered a question, until the plugin reloads** —
-  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Remove now only greys out while a request is actually
-  in flight, instead of staying disabled forever after a model's first answer. Evidence
-  `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`. **Deck check owed:** row **PRELOAD-RM-01** in
-  [testing.md](testing.md).
+  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **PRELOAD-RM-01** in
+  [testing.md](testing.md). [Detail](roadmap-details.md#remove-greys-out-once-a-model-has-answered-a-question-until-the-plugin-reloads).
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
   not survive a reload. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
 - ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** —
-  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** The Ollama tab's first connection check ran before
-  settings finished loading, using the still-default, often-wrong host. It now waits for settings first.
-  Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`. **Deck check owed:** row
-  **OLLAMA-TAB-AFTER-RELOAD-02** in [testing.md](testing.md).
+  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **OLLAMA-TAB-AFTER-RELOAD-02** in
+  [testing.md](testing.md). [Detail](roadmap-details.md#the-plugin-log-writes-one-false-non-loopback-connection-failure-right-at-start-up).
 - ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper I).** The ban report was built as a markdown table the Deck's renderer
-  cannot draw, so it showed as one line of pipe characters; each account's facts are now one plain bullet
-  line instead. Evidence `docs/test-evidence/plan64-VAC-03-06.json`. **Could not run on the Deck 2026-09-26
-  (plan 70, flow L1):** no Steam Web API key is saved, and the runbook forbids setting one by hand. **Deck
-  check owed, on the maintainer's own list (their key needed):** row **VAC-03-07** in
-  [testing-manual.md](testing-manual.md).
+  2026-09-26 (plan 70, helper I).** Deck check owed on the maintainer's own list — needs their own Steam
+  Web API key. Row **VAC-03-07** in [testing-manual.md](testing-manual.md).
+  [Detail](roadmap-details.md#the-steam-ban-lookups-report-shows-as-raw-text-not-a-table).
 - ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
   maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
   does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
@@ -270,12 +263,8 @@ starts work outside this.
   answer's Show details; B on "Hide details" moves the ring to the tab strip and leaves the details open;
   Up from a chat's first question skips the chat row and lands on the tab strip.
 - ★★ `[reply]` **The live thinking line shows the model's own rule checklist while it works** — **OPEN,
-  found from the maintainer's own screenshot 2026-09-26.** Lines like "Direct and concise? Yes" show while
-  a reply is written — the model checking its own rules out loud, re-sent and re-checked every question.
-  Noise to a person, and Deck time for no benefit they see. Screenshot
-  `docs/test-evidence/plan70-THINKING-CHECKLIST.png`. **Same family, seen twice more 2026-09-26 (flows L3
-  and L4):** single inline backtick marks quoting a tag or note title in 3 of 6 tries; separately, the raw
-  "Thinking Process" heading the model writes for itself shows live from the second question on.
+  found from the maintainer's own screenshot 2026-09-26.** Noise to a person, and Deck time for no benefit
+  they see. Seen twice more the same night, same family.
   [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Usually only a full
@@ -530,21 +519,6 @@ replace it with a specific issue when one exists.
 Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row named in each entry; full evidence in
 [testing.md](testing.md) / [testing-manual.md](testing-manual.md). Once a Deck run confirms one, move it in the same commit: a line into
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
-
-### Checks whose evidence never existed
-- ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **VERIFY, found 2026-09-13 during the
-  clean-up.** Twelve checks name a saved Deck recording as their proof. None of those recordings exists, and the project's whole
-  history shows none ever did — they were never written, not lost. So twelve results were written down as passing on the
-  strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
-  we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
-  each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
-  **All twelve now have real evidence behind them.** The knowledge-base update button check, the 12
-  September follow-up-memory re-run, model eviction on the Deck, and the wave-three Deck evening all
-  closed earlier. **The last one, the spoiler-reveal reachability check, passed on the Deck 2026-09-26**
-  (plan 70, flow L1): with a covered answer on screen, the cover took the ring one D-pad press at a time,
-  stayed fully visible, and A opened it. Evidence `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
-  The table in [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved)
-  already says this row by row.
 
 ### Bugs that need verification
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
@@ -851,10 +825,8 @@ ones from this month are D81 to D88.
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
 - ★★ `[KB]` **Pull the embedding model as part of installing the library** — **VERIFY, built 2026-09-26
-  (plan 70, helper D).** A person who never pressed the pull button silently got word search only, the
-  weaker half. Now, right after a fresh install finishes with that model still missing, a confirm box
-  offers to download it once; Update never asks again. **Deck check owed:** row **KB-NOMIC-OFFER-01** in
-  [testing.md](testing.md), flow R.
+  (plan 70, helper D).** Deck check owed: row **KB-NOMIC-OFFER-01** in [testing.md](testing.md).
+  [Detail](roadmap-details.md#pull-the-embedding-model-as-part-of-installing-the-library).
 - ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the 139 prose cards as labelled short
   lines, the shape the 16 structured cards use. Facts kept is already 92%, so the ceiling is low; do it only if the answer
   test shows the labelled shape scores better. Two to three days of content plus a rebuild.
@@ -867,9 +839,10 @@ ones from this month are D81 to D88.
 - `[KB]` **Idea for wave four: dungeon maps** — raised by the maintainer 2026-09-07, no stars and no plan yet. Picks up
   the dungeon-map half of the visual-maps idea above when the time comes.
 - ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built,
-  Deck check split 2026-09-26 (flow R): install, notes and starting-out chips passed; per-game tips never
-  reached an answer, being fixed.** **Not published — the maintainer chose to fix the tips first.** Row
-  **KB-FORMAT-REFUSE-01** in [testing.md](testing.md). [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+  Deck check split 2026-09-26 (flow R): install, notes and starting-out chips passed; per-game tips
+  failed, fixed the same night (helper E2, `e1bc0c16`), Deck re-check owed.** **Still not published — the
+  maintainer chose to fix the tips before publishing.** Row **KB-FORMAT-REFUSE-01** in
+  [testing.md](testing.md). [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a
@@ -891,10 +864,15 @@ ones from this month are D81 to D88.
   First a scored set of real Deck screenshots (game, area, boss), run on each picture model the Deck offers; then fixes
   where it fails — the picture's guess fed into the search, notes that say what a place or boss looks like, and a screen
   guide per game (health bar, weapon slots, boss bar). [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
-- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, track 3 (per-game Deck tips) built, FAILED
-  (Deck) 2026-09-26 (flow R): the tip is in the library and ranks ahead of a shared one, but the questions
-  tried never routed to troubleshooting, so it was never reached.** Tracks 1 and 2 shipped 2026-08-19 to
-  2026-09-05 (D67). Being fixed (helper E2). Row **KB-TIP-PERGAME-01** in [testing.md](testing.md). [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, track 3 (per-game Deck tips) FAILED (Deck)
+  2026-09-26 (flow R), fixed the same night (helper E2, `e1bc0c16`), Deck re-check owed.** A question
+  naming a game with its own tip now finds that tip first, in Speed or a locked Strategy mode. Tracks 1
+  and 2 shipped 2026-08-19 to 2026-09-05 (D67). Row **KB-TIP-PERGAME-01** in [testing.md](testing.md). [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★ `[KB]` **Keyword search can match a card by a stray leftover letter** — **OPEN, found 2026-09-26
+  (plan 70, helper E2), being fixed (helper O).** Splitting words like "there's" or "can't" for keyword
+  search leaves a bare single letter behind, which can then match a card by coincidence. Runs on every
+  keyword search except the new per-game tip check, which was written to avoid it.
+  [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. **Counted
   2026-09-25:** only four of the original titles still have no enemy or item cards — Baldur's Gate 3, GTA San Andreas,
   The Sims 4 and Portal 2 — not eleven of thirteen as this entry used to say. Next: 40–60 entity cards in tranches with
@@ -963,6 +941,9 @@ entries below stayed, so the maintainer can still see them this week.
 
 - ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **DONE, fixed 2026-09-26, passed
   on the Deck 2026-09-26.** [Detail](roadmap-details.md#tip-cut-off-fix).
+- ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **DONE, closed 2026-09-26.** The
+  last of the twelve, the spoiler-reveal reachability check, passed on the Deck 2026-09-26 (plan 70, flow
+  L1). [Full detail](archive/roadmap-bugs-fixed.md#twelve-checks-read-as-proven-with-nothing-behind-them-closed-2026-09-26).
 
 **Closed 2026-09-26 (plan 70, flow L2, second Deck pass):**
 
@@ -1007,12 +988,7 @@ entries below stayed, so the maintainer can still see them this week.
 
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box**
   — **DONE, closed 2026-09-26, passed on the Deck across all four rounds of its own fix.** Row
-  **SPOILER-COVER-01**: two watched answers named the boss; across 229 reads the name never once showed
-  outside a cover, in the answer, the thinking, the notes block or the suggestion menu; a cover read
-  "Spoiler — tap to show" from its very first appearance; Copy and Read aloud both kept the name out; a
-  question naming the boss outright still answered in plain text, as it should. The whole four-round
-  story — the safety net, two earlier live-leak fixes, and the screen's own reveal finally catching up —
-  is in the detail. [Detail](roadmap-details.md#spoiler-leak-family).
+  **SPOILER-COVER-01**. The whole four-round story is in the detail. [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **DONE, fixed
   2026-09-26 (helper A, `4b975316`), passed on the Deck 2026-09-26 (name rule, flow L3; missed in an
   earlier bookkeeping pass).** Row **THINKING-SPOILER-01**. [Detail](roadmap-details.md#spoiler-leak-family).
@@ -1020,17 +996,14 @@ entries below stayed, so the maintainer can still see them this week.
   F2, `59d3d1c0`), passed on the Deck 2026-09-26.** Row **PERMS-CLEAN-06**.
   [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
-  **DONE, cause found and fixed 2026-09-26 (helper F2, commit `647dca4c`).** A real race: the ring's move
-  into the newly opened panel was scheduled for the next frame and assumed the panel was already drawn;
-  never seen on the Deck itself. [Detail](roadmap-details.md#l3-and-2d-findings).
+  **DONE, cause found and fixed 2026-09-26 (helper F2, commit `647dca4c`).** A real race, never seen on
+  the Deck itself. [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **DONE, fixed
-  2026-09-24 (`341841d3`), passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** No
-  pause over a second and a half, and the biggest jump was 103 characters. Row **STREAM-11**.
-  [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
+  2026-09-24 (`341841d3`), passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Row
+  **STREAM-11**. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
 - ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
-  **DONE, fixed 2026-09-25, passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Five
-  branch menus in a row read as real choices, no brackets, no leftover wording. Row **BRANCH-TEMPLATE-02**.
-  [Detail](roadmap-details.md#branch-menu-template-leak).
+  **DONE, fixed 2026-09-25, passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Row
+  **BRANCH-TEMPLATE-02**. [Detail](roadmap-details.md#branch-menu-template-leak).
 
 **Closed 2026-09-26 (plan 70, helper C's landing):**
 
@@ -1040,29 +1013,29 @@ entries below stayed, so the maintainer can still see them this week.
 **Closed 2026-09-26 (plan 70, helper I's landing):**
 
 - ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **DONE, fixed
-  2026-09-26.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was never broken, only the
-  test's own way of proving the read-ahead overlap (comparing two threads' timestamps against a fixed
-  slack, which could flip under load). Rewritten to hold both threads open on real events the test
-  controls and wait on those instead of guessing a delay — proven by running it 20 times with heavy CPU
-  load alongside it: 20 passes, 0 failures. Nothing on screen to check.
+  2026-09-26.** Its own way of proving the timing was flaky under load, not read-aloud itself; rewritten
+  to wait on real events instead of a guessed delay. Nothing on screen to check.
+  [Detail](roadmap-details.md#a-read-aloud-timing-test-fails-now-and-then-when-the-pc-is-busy).
 
 **Closed 2026-09-26 (plan 70, flow L6, sixth and last Deck pass):**
 
 - ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **DONE, fixed
-  2026-09-26 (helper F2, `34bd9315`), passed on the Deck 2026-09-26, 3 of 3.** The ring moves to the
-  speaker icon in the same row each time. [Detail](roadmap-details.md#flow-4-findings).
+  2026-09-26 (helper F2, `34bd9315`), passed on the Deck 2026-09-26, 3 of 3.**
+  [Detail](roadmap-details.md#flow-4-findings).
 - ★ `[focus]` **Once, the Show details line did nothing when pressed** — **DONE, cause found and fixed
-  2026-09-26 (helper F2, `bb36e334`), passed on the Deck 2026-09-26, 3 of 3 including after switching
-  chats.** Opening the details now scrolls them clear of the dock every time.
+  2026-09-26 (helper F2, `bb36e334`), passed on the Deck 2026-09-26, 3 of 3.**
   [Detail](roadmap-details.md#flow-4-findings).
 - ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **DONE, fixed
-  2026-09-26 (helper F2, `6116f33c`), passed on the Deck 2026-09-26.** The ring lands on the row below
-  every time. [Detail](roadmap-details.md#l3-and-2d-findings).
+  2026-09-26 (helper F2, `6116f33c`), passed on the Deck 2026-09-26.** [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
-  after a deploy** — **DONE, fixed in the Deck tools project (`556ffcb`), proven on the Deck 2026-09-26,
-  and its own saved walks re-saved on the current build (20 of 30; 7 need the maintainer's own call, 2
-  need a summed-up chat first).** [Detail](roadmap-details.md#saved-deck-walk-replay-across-builds).
+  after a deploy** — **DONE, fixed in the Deck tools project (`556ffcb`), proven on the Deck 2026-09-26.**
+  Its own saved walks re-saved on the current build, most of them. [Detail](roadmap-details.md#saved-deck-walk-replay-across-builds).
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **DONE, fixed
-  in `895cf0a`, passed on the Deck 2026-09-26 with Half-Life 2 running.** Row **CHIP-BUTTON-09**: the dot
-  showed on every Tip chip seen. **Still owed:** whether the dot stays put while a long label scrolls — no
-  label long enough was offered. [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
+  in `895cf0a`, passed on the Deck 2026-09-26 with Half-Life 2 running.** Row **CHIP-BUTTON-09**.
+  [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
+
+**Closed 2026-09-26 (plan 70, E2's tip-fix landing):**
+
+- ★★ `[KB]` **A library saved before the per-game tip column existed loses every note, not just tips** —
+  **DONE, found and fixed the same night (`c1ca8b7d`).** No Deck row needed — the Deck itself already has
+  the newer library. [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).

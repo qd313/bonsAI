@@ -1898,3 +1898,24 @@ measurements and the QA rows survive. The roadmap keeps a one-line entry in **Do
   morning shows it white but hairline-thin. **Fixed at the desk 2026-09-05, your look owed again:** the tiles now get the same white
   ring as every other control, and the column already has room for it. Row **CHAR-PICKER-RING-01**.
   - **Maintainer, second look 2026-09-05: pass.** The focused tile takes the plugin's own white ring with its soft outer glow, in the room the column already reserved. Picture `screenshots/DeckCapture_20260905_041028_game.png`.
+
+### Twelve checks read as proven with nothing behind them (closed 2026-09-26)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-26 during a bookkeeping pass — copied line for
+line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **VERIFY, found 2026-09-13 during the
+  clean-up.** Twelve checks name a saved Deck recording as their proof. None of those recordings exists, and the project's whole
+  history shows none ever did — they were never written, not lost. So twelve results were written down as passing on the
+  strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
+  we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
+  each row in [testing.md](../testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
+
+**Closed 2026-09-26.** All twelve now have real evidence behind them. The knowledge-base update button
+check, the 12 September follow-up-memory re-run, model eviction on the Deck, and the wave-three Deck
+evening all closed earlier. The last one, the spoiler-reveal reachability check, passed on the Deck
+2026-09-26 (plan 70, flow L1): with a covered answer on screen, the cover took the ring one D-pad press
+at a time, stayed fully visible, and A opened it. Evidence
+`docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`. The table in
+[testing.md](../testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already
+says this row by row.

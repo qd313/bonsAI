@@ -794,6 +794,20 @@ pull only runs for questions that do. Being fixed (helper E2) before the library
 maintainer's call. The shared tip's source-page credit line still cannot be checked until a tip actually
 shows. Evidence `docs/test-evidence/plan70-R-R4.json`, `plan70-R-R4-try2.json` (+ two screenshots).
 
+**Fixed 2026-09-26 (helper E2, commit `e1bc0c16`).** A game's own Deck tip now reaches the answer
+whenever a game carrying its own tip is running and the question matches that tip by keyword — no
+longer only when the question was already sorted as troubleshooting. Measured against 114 real
+strategy-mode questions for the four games that carry a tip: 0 wrong pick-ups, 0 notes lost, and the
+matching floor (4.0) sits comfortably below the weakest real question (4.91) and above the worst
+strategy row that should NOT match (3.34). Works in Speed mode and when Strategy mode had locked the
+question to strategy notes instead. **Deck re-check owed, row R.4 re-check (E2's own text):** with Deep
+Rock Galactic: Survivor running, ask "the text on screen looks blurry on my deck" in Strategy, then the
+same question reworded in Speed — the Render Scale tip should appear first, with its source page, both
+times; with Fallout 4 running, ask about mods and launch options in Speed — the F4SE tip should appear;
+then, still on Deep Rock Galactic: Survivor, ask a real strategy question such as "how do I beat the
+dreadnought" — the Render Scale tip must NOT appear, and the boss note should. **This Deck re-check has
+not yet run — do not mark the tips as passed, or the library as published, until it has.**
+
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
 - ★★★★ **RAG Deck query — retrieval infra (Phase 7)**
@@ -2002,6 +2016,26 @@ ahead of publishing.** Not published: the maintainer chose to fix the per-game t
   problem like this one hard to diagnose from the log alone. Evidence
   `docs/test-evidence/plan70-R-R3-try2.json` (the hidden ring and chip-trap screenshots).
 
+**Found while landing E2's tip fix, fixed the same night by the session (`c1ca8b7d`).** A library built
+before 2026-09-26 (schema format 3 — the one still on the download sites while the new one waits to
+publish) has no per-game column at all; only the build script adds that column, the plugin itself never
+adds it to an already-installed library. E2's own tip check ran on every single question regardless, so
+against a format-3 library it failed outright and emptied that answer's notes completely — strategy
+questions included, not just troubleshooting ones. Caught by three follow-up tests run against the
+2026-09-18 library. Fixed by having the shared tip lookup return no tips, rather than fail, when the
+column is missing; this also quietly covers the older troubleshooting path, which had the same weakness
+whenever a troubleshooting question named a game. New test
+`test_a_library_from_before_per_game_tips_still_attaches_strategy_notes` fails without the fix. No Deck
+row needed — the Deck itself already carries the newer library, so this could only have bitten someone
+on the still-published, older download.
+
+**New bug, found by E2, not fixed: contractions split into a stray letter in keyword search.**
+`_fts_match_query` (`py_modules/backend/services/knowledge_base_search.py`) splits words like "there's"
+or "can't" so that a bare single letter ("s", "t") is left over and can match a card purely by
+coincidence. This runs for every keyword search — notes and the whole tip sheet — except inside the new
+per-game tip check, which E2 wrote to avoid it. Needs a measurement across the full question set before
+it is touched, since fixing it may move many scores at once, for better or worse. Being fixed (helper O).
+
 ## The live thinking line shows the model's own rule checklist
 
 **Found 2026-09-26, from the maintainer's own screenshot** (`docs/test-evidence/plan70-THINKING-CHECKLIST.png`).
@@ -2576,4 +2610,41 @@ says does not count as a real difference on its own.
 starting screen — each walk file already says which screen that is — before replaying it. Once that is
 in place, a real overnight run can put this row on the schedule. Evidence
 `docs/test-evidence/overnight-2026-09-26-200443.md` (+ `.json`).
+
+## A read-aloud timing test fails now and then when the PC is busy
+
+**Fixed 2026-09-26.** Failed 1 run in 11 under load, 0 in 12 idle; read-aloud itself was never broken,
+only the test's own way of proving the read-ahead overlap (comparing two threads' timestamps against a
+fixed slack, which could flip under load). Rewritten to hold both threads open on real events the test
+controls and wait on those instead of guessing a delay — proven by running it 20 times with heavy CPU
+load alongside it: 20 passes, 0 failures.
+
+## Pull the embedding model as part of installing the library
+
+**Built 2026-09-26 (plan 70, helper D).** A person who never pressed the pull button silently got word
+search only, the weaker half. Now, right after a fresh install finishes with that model still missing, a
+confirm box offers to download it once; Update never asks again.
+
+## Remove greys out once a model has answered a question, until the plugin reloads
+
+**Fixed 2026-09-26 (plan 70, helper I).** Remove now only greys out while a request is actually in
+flight, instead of staying disabled forever after a model's first answer. Evidence
+`docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`.
+
+## The plugin log writes one false "non-loopback" connection failure right at start-up
+
+**Fixed 2026-09-26 (plan 70, helper I).** The Ollama tab's first connection check ran before settings
+finished loading, using the still-default, often-wrong host. It now waits for settings to finish loading
+first. Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
+
+## The Steam ban lookup's report shows as raw text, not a table
+
+**Fixed 2026-09-26 (plan 70, helper I).** The ban report was built as a markdown table, which the Deck's
+own renderer cannot draw, so it showed up as one run-on line of pipe and dash characters. Each account's
+facts are now written as a plain bullet line instead. Evidence `docs/test-evidence/plan64-VAC-03-06.json`.
+
+**Could not run on the Deck 2026-09-26 (plan 70, flow L1):** no Steam Web API key is saved on the Deck,
+and the runbook forbids setting one by hand — the one try got the plain "no key saved" message, not a
+report to read. Needs the maintainer's own key; on their own checklist. Evidence
+`docs/test-evidence/plan70-VAC-03-07.json`.
 

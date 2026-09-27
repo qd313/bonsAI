@@ -35,7 +35,14 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "_expand_query": "(question: 'str', app_name: 'str', *, game_resolved: 'bool' = False) -> 'str'",
         "_fuse_cards_by_rrf": "(cards: 'list[KnowledgeCard]', query_vector: 'list[float]', vectors_by_id: 'dict[int, list[float]]', *, question: 'str' = '', top_k: 'int', recall_cards: 'Optional[list[KnowledgeCard]]' = None, preferred_ids: 'Optional[set[int]]' = None) -> 'list[KnowledgeCard]'",
         "_resolve_game_id": "(conn: 'sqlite3.Connection', *, app_id: 'str', app_name: 'str', shortcut_name: 'str', text_resolved_title: 'str' = '') -> 'tuple[Optional[int], str]'",
-        "_search_compat_patterns": "(conn: 'sqlite3.Connection', *, query: 'str', top_k: 'int') -> 'list[KnowledgeCard]'",
+        # Plan 70 helper P (2026-09-26): added ``own_app_keys`` so a general tip search can
+        # tell a shared tip from another game's own -- see knowledge_base_search.py's
+        # _compat_app_id_filter_clause. A deliberate behaviour change for every caller, not
+        # only an addition: the default (an empty tuple, no game in context) now excludes a
+        # per-game tip it used to return unfiltered. Measured safe on
+        # tests/fixtures/kb_eval_v2.json's compat rows (none carry an app_id) -- see the plan
+        # 70 helper P report for the before/after numbers.
+        "_search_compat_patterns": "(conn: 'sqlite3.Connection', *, query: 'str', top_k: 'int', own_app_keys: 'tuple[str, ...]' = ()) -> 'list[KnowledgeCard]'",
         "_search_sections": "(conn: 'sqlite3.Connection', *, game_id: 'Optional[int]', query: 'str', top_k: 'int', min_relevance: 'float' = 1.0) -> 'list[KnowledgeCard]'",
         "_vector_recall_sections": "(conn: 'sqlite3.Connection', *, game_id: 'int', query_vector: 'list[float]', top_k: 'int', min_similarity: 'float', exclude_ids: 'set[int]') -> 'tuple[list[KnowledgeCard], dict[int, list[float]]]'",
         "close_connection": "(db_path: 'str') -> 'None'",

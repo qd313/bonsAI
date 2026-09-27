@@ -164,15 +164,61 @@ def _fts_match_query(query: str) -> str:
     return " OR ".join(f'"{tok}"' for tok in tokens)
 
 
+def _compat_app_id_column_exists(conn: sqlite3.Connection) -> bool:
+    """Whether this corpus.db's ``compat_patterns`` table has the per-game ``app_id`` column
+    (schema v4, D29). An installed corpus is never migrated after the fact (see
+    knowledge_base_schema.py's ``_migrate_compat_patterns_v4`` docstring, and the test
+    ``test_a_library_from_before_per_game_tips_still_attaches_strategy_notes``), so a library
+    built before this column existed can still reach here today. Checked once per query rather
+    than letting ``AND p.app_id ...`` raise ``sqlite3.OperationalError`` from inside the WHERE
+    clause -- that used to empty every note on such a library (see plan 70's E2 fix note on
+    ``_compat_tips_for_app_keys``, the read side this mirrors).
+    """
+    try:
+        cols = {row[1] for row in conn.execute("PRAGMA table_info(compat_patterns)").fetchall()}
+    except sqlite3.Error:
+        return False
+    return "app_id" in cols
+
+
+def _compat_app_id_filter_clause(
+    conn: sqlite3.Connection, *, own_app_keys: tuple[str, ...]
+) -> tuple[str, list[str]]:
+    """The ``AND ...`` clause and its bound params that keep a general tip search from handing
+    back a per-game tip that belongs to a *different* game (bug found on the release library,
+    2026-09-26: a Fallout 4 question also attached Deep Rock Galactic: Survivor's own Render
+    Scale tip -- see GAME_TIP_REROUTE_FLOOR's measurement comment in knowledge_base_service.py
+    for the fuller account).
+
+    A shared tip (``app_id`` NULL) always passes; a per-game tip passes only when its key is
+    one of ``own_app_keys`` -- the resolved game's own Steam AppID or ``igdb_id`` (see
+    ``_compat_app_keys_for_game``). With no game resolved (``own_app_keys`` empty), only shared
+    tips pass: a general search with no game in context has no "own game" to prefer, and D29's
+    per-game tips were never meant to behave like shared ones.
+
+    Empty string and no params on a library with no ``app_id`` column at all -- see
+    ``_compat_app_id_column_exists`` for why that has to be checked rather than let the query
+    raise.
+    """
+    if not _compat_app_id_column_exists(conn):
+        return "", []
+    if own_app_keys:
+        placeholders = ",".join("?" for _ in own_app_keys)
+        return f" AND (p.app_id IS NULL OR p.app_id IN ({placeholders}))", list(own_app_keys)
+    return " AND p.app_id IS NULL", []
+
+
 def _search_compat_patterns(
     conn: sqlite3.Connection,
     *,
     query: str,
     top_k: int,
+    own_app_keys: tuple[str, ...] = (),
 ) -> list[KnowledgeCard]:
     fts_q = _fts_match_query(query)
     if not fts_q:
         return []
+    app_filter, app_params = _compat_app_id_filter_clause(conn, own_app_keys=own_app_keys)
     # ORDER BY the *same* weighted expression that is selected. "ORDER BY rank" is the
     # unweighted bm25, so ordering by it would leave the column weights affecting the floor
     # only and silently do nothing to ranking.
@@ -181,11 +227,12 @@ def _search_compat_patterns(
         f"-{_COMPAT_BM25} AS relevance "
         "FROM compat_patterns_fts f "
         "JOIN compat_patterns p ON p.pattern_id = f.rowid "
-        "WHERE compat_patterns_fts MATCH ? "
+        "WHERE compat_patterns_fts MATCH ?"
+        f"{app_filter} "
         f"ORDER BY {_COMPAT_BM25} LIMIT ?"
     )
     try:
-        rows = conn.execute(sql, (fts_q, top_k)).fetchall()
+        rows = conn.execute(sql, (fts_q, *app_params, top_k)).fetchall()
     except sqlite3.Error:
         return []
     return [
@@ -296,6 +343,7 @@ def _compat_tips_for_topics(
     topics: list[str],
     exclude_ids: set[int],
     top_k: int,
+    own_app_keys: tuple[str, ...] = (),
 ) -> list[KnowledgeCard]:
     """Tips on the topics the router matched, whether or not they share a word with the Ask.
 
@@ -303,15 +351,19 @@ def _compat_tips_for_topics(
     no vocabulary with the tips that answer them, so a keyword-gated topic search returns the
     same nothing the unfiltered one did. Ordered by pattern_id for determinism only -- the
     useful ordering comes from fusion, where these compete on cosine like everything else.
+
+    ``own_app_keys`` keeps a topic match from handing back another game's own tip -- see
+    ``_compat_app_id_filter_clause``, the same filter ``_search_compat_patterns`` applies.
     """
     if not topics:
         return []
     placeholders = ",".join("?" for _ in topics)
+    app_filter, app_params = _compat_app_id_filter_clause(conn, own_app_keys=own_app_keys)
     rows = conn.execute(
         "SELECT p.pattern_id, p.topic, p.platforms, p.card, p.source_url, p.source_license "
-        f"FROM compat_patterns p WHERE p.topic IN ({placeholders}) "
+        f"FROM compat_patterns p WHERE p.topic IN ({placeholders}){app_filter} "
         "ORDER BY p.pattern_id",
-        topics,
+        [*topics, *app_params],
     ).fetchall()
     out: list[KnowledgeCard] = []
     for row in rows:
@@ -381,8 +433,10 @@ def _genre_fallback(conn: sqlite3.Connection, game_id: Optional[int]) -> Optiona
     return None
 
 
-def _compat_fallback(conn: sqlite3.Connection, question: str) -> Optional[str]:
-    tips = _search_compat_patterns(conn, query=question, top_k=1)
+def _compat_fallback(
+    conn: sqlite3.Connection, question: str, *, own_app_keys: tuple[str, ...] = ()
+) -> Optional[str]:
+    tips = _search_compat_patterns(conn, query=question, top_k=1, own_app_keys=own_app_keys)
     if tips:
         return tips[0].card
     return None

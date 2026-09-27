@@ -127,6 +127,31 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
   def tearDown(self):
     close_connection(str(SEED_DB))
 
+  @contextmanager
+  def _old_library_without_app_id_column(self):
+    """A copy of the seed corpus with ``compat_patterns.app_id`` dropped -- the shape of a
+    library built before schema v4, which the plugin never migrates after the fact. Shared by
+    every test proving a fix stays safe on one, so the copy-and-drop steps live in one place
+    rather than being retyped per test."""
+    import shutil
+    import sqlite3
+    import tempfile
+
+    old_dir = Path(tempfile.mkdtemp())
+    try:
+      for item in SEED_DB.parent.iterdir():
+        if item.is_file():
+          shutil.copy2(item, old_dir / item.name)
+      conn = sqlite3.connect(old_dir / SEED_DB.name)
+      conn.execute("DROP INDEX IF EXISTS idx_compat_patterns_app_id")
+      conn.execute("ALTER TABLE compat_patterns DROP COLUMN app_id")
+      conn.commit()
+      conn.close()
+      yield old_dir
+    finally:
+      close_connection(str(old_dir / SEED_DB.name))
+      shutil.rmtree(old_dir, ignore_errors=True)
+
   def test_should_retrieve_strategy_when_enabled(self):
     ok, domain = should_retrieve_knowledge(
       use_local_knowledge_base=True,
@@ -256,26 +281,111 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertIn("Dreadnought", result.text_block)
     self.assertNotIn("Render Scale", result.text_block)
 
+  def test_a_different_games_own_tip_no_longer_attaches_to_this_game(self):
+    """Plan 70 helper P. Measured on the release library, 2026-09-26: a Strategy question
+    resolved to Fallout 4 also attached Deep Rock Galactic: Survivor's own Render Scale tip
+    (pattern 162, app_id 2321470) alongside Fallout 4's own F4SE tip, because the general tip
+    searches never looked at `compat_patterns.app_id` -- every per-game tip behaved like a
+    shared one for every game. Proven by breaking: reverting the fix on this same question
+    brings "Render Scale" back."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="my menu and HUD text is hard to read what launch options should i use",
+      app_id="377160",
+      app_name="Fallout 4",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("F4SE", result.text_block)
+    self.assertNotIn("Render Scale", result.text_block)
+
+  def test_general_tip_searches_keep_a_games_own_tip_only_for_that_game(self):
+    """Unit-level proof for both general tip searches' ``own_app_keys`` filter -- the keyword
+    pass (`_search_compat_patterns`) and the topic-recall pass (`_compat_tips_for_topics`), the
+    same guard on the same shape of leak (a topic match alone, no shared keyword needed, used to
+    be enough for the topic-recall pass to hand back another game's tip). Deep Rock Galactic:
+    Survivor's Render Scale tip (pattern 162) must appear only when DRG Survivor's own key is
+    passed, never for a different game's key or for no game at all -- a general search with no
+    game in context has no "own game" to prefer."""
+    conn = _get_connection(str(SEED_DB))
+    question = "my menu and HUD text is hard to read what launch options should i use"
+
+    def _drg_tip_shows_up_for(search_fn, **extra_kwargs) -> dict:
+      return {
+        keys: 162 in {
+          c.section_id for c in search_fn(own_app_keys=keys, **extra_kwargs)
+        }
+        for keys in ((), ("377160",), ("2321470",))
+      }
+
+    by_keyword = _drg_tip_shows_up_for(
+      lambda **kw: _search_compat_patterns(conn, query=question, top_k=6, **kw)
+    )
+    by_topic = _drg_tip_shows_up_for(
+      lambda **kw: _compat_tips_for_topics(
+        conn, topics=["display"], exclude_ids=set(), top_k=50, **kw
+      )
+    )
+    for label, result in (("keyword search", by_keyword), ("topic recall", by_topic)):
+      self.assertEqual(
+        result,
+        {(): False, ("377160",): False, ("2321470",): True},
+        f"{label} let the wrong game's tip through (or hid the right one): {result}",
+      )
+
+  def test_a_shared_tip_still_attaches_for_any_game(self):
+    """The fix must not turn into a filter on shared tips too: a tip with no `app_id` (a plain
+    Deck-wide tip) has to keep attaching no matter which game is running, or none at all."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    question = "my game keeps crashing right after launch on my deck"
+    for app_id, app_name in (("377160", "Fallout 4"), ("2321470", "Deep Rock Galactic: Survivor"), ("", "")):
+      result = retrieve_knowledge_context(
+        settings,
+        ask_mode="speed",
+        question=question,
+        app_id=app_id,
+        app_name=app_name,
+        domain="compat",
+        pc_ip="",
+      )
+      self.assertTrue(result.attached, f"shared tip did not attach for app_id={app_id!r}")
+      self.assertIn("free storage", result.text_block.lower())
+
+  def test_a_library_from_before_per_game_tips_still_attaches_a_shared_tip(self):
+    """Same missing-``app_id``-column shape as the sibling test just below, but through the
+    general compat search functions this fix touches (`_search_compat_patterns` /
+    `_compat_tips_for_topics`) rather than the per-game reroute path -- proves the new filter
+    checks the column once and skips itself rather than raising `sqlite3.OperationalError`
+    from inside the WHERE clause, which would otherwise empty a troubleshooting answer's tips
+    on any library built before schema v4."""
+    with self._old_library_without_app_id_column() as old_dir:
+      result = retrieve_knowledge_context(
+        {"use_local_knowledge_base": True, "rag_corpus_path": str(old_dir)},
+        ask_mode="speed",
+        question="my game keeps crashing right after launch on my deck",
+        app_id="377160",
+        app_name="Fallout 4",
+        domain="compat",
+        pc_ip="",
+      )
+      self.assertTrue(result.attached)
+      self.assertIn("free storage", result.text_block.lower())
+
   def test_a_library_from_before_per_game_tips_still_attaches_strategy_notes(self):
     """A library built before schema v4 has no ``compat_patterns.app_id`` column, and the
     plugin never adds it to an installed one. The per-game tip reroute runs on every question,
     so the missing column used to empty the whole answer's notes -- strategy included. Found
     landing plan 70's E2 fix: three follow-up tests on the 2026-09-18 library lost every note."""
-    import shutil
-    import sqlite3
-    import tempfile
-
-    old_dir = Path(tempfile.mkdtemp())
-    try:
-      for item in SEED_DB.parent.iterdir():
-        if item.is_file():
-          shutil.copy2(item, old_dir / item.name)
-      conn = sqlite3.connect(old_dir / SEED_DB.name)
-      conn.execute("DROP INDEX IF EXISTS idx_compat_patterns_app_id")
-      conn.execute("ALTER TABLE compat_patterns DROP COLUMN app_id")
-      conn.commit()
-      conn.close()
-
+    with self._old_library_without_app_id_column() as old_dir:
       result = retrieve_knowledge_context(
         {"use_local_knowledge_base": True, "rag_corpus_path": str(old_dir)},
         ask_mode="strategy",
@@ -287,9 +397,6 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       )
       self.assertTrue(result.attached)
       self.assertIn("Dreadnought", result.text_block)
-    finally:
-      close_connection(str(old_dir / SEED_DB.name))
-      shutil.rmtree(old_dir, ignore_errors=True)
 
   def test_game_tip_reroute_ignores_orphan_apostrophe_fragments(self):
     """A bare "s" or "t" left over from splitting "there's" / "can't" on the apostrophe used

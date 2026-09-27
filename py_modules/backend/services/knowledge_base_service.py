@@ -1122,7 +1122,13 @@ def retrieve_knowledge_context(
             )
             t_fts = time.perf_counter()
             fts_k = HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k
-            cards = _search_compat_patterns(conn, query=expanded, top_k=fts_k)
+            # Plan 70, helper P (2026-09-26): a general tip search only ever returns a shared
+            # tip (app_id NULL) or the resolved game's own -- see
+            # _compat_app_id_filter_clause's docstring for the wrong-game tip this closes.
+            own_app_keys = tuple(_compat_app_keys_for_game(conn, game_id)) if game_id is not None else ()
+            cards = _search_compat_patterns(
+                conn, query=expanded, top_k=fts_k, own_app_keys=own_app_keys
+            )
             # D16 already worked out what this question is about; D22 says use it. The topic
             # opens a recall path (measured: on-topic tips were absent from the keyword
             # candidates, not merely ranked below them) and marks its tips as preferred.
@@ -1135,6 +1141,7 @@ def retrieve_knowledge_context(
                 topics=compat_topics,
                 exclude_ids={c.section_id for c in cards},
                 top_k=COMPAT_TOPIC_RECALL_K,
+                own_app_keys=own_app_keys,
             )
             preferred_ids |= {
                 c.section_id
@@ -1148,7 +1155,7 @@ def retrieve_knowledge_context(
             if game_id is not None:
                 game_tips = _compat_tips_for_app_keys(
                     conn,
-                    app_keys=_compat_app_keys_for_game(conn, game_id),
+                    app_keys=own_app_keys,
                     exclude_ids={c.section_id for c in cards + topic_cards},
                     top_k=COMPAT_TOPIC_RECALL_K,
                 )
@@ -1351,7 +1358,7 @@ def retrieve_knowledge_context(
         # found" -- so the fallback card is skipped too, on both branches below.
         if not cards and not routed_nothing_fit:
             if domain == "compat":
-                fallback_text = _compat_fallback(conn, question)
+                fallback_text = _compat_fallback(conn, question, own_app_keys=own_app_keys)
             elif not implicit_strategy_route:
                 fallback_text = _genre_fallback(conn, game_id)
 

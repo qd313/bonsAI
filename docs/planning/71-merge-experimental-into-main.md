@@ -318,7 +318,7 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 real-time video with the maintainer's voice-over, short pieces, vertical shorts, better screenshots),
 6 (keep "qwert" for now), 7 (yes, a fix goes out as 0.6.1 when needed), 8 (yes), 9 (yes, and lead with
 the free-and-open, self-hosted, privacy-first spirit). Later the same day: 1 (yes — hide anything
-half-built) and 4 (announce on Reddit). 5 (the Decky store) was settled by reading its rules — see below. **Still open:** the last-call date.
+half-built) and 4 (announce on Reddit). 5 (the Decky store) was settled by reading its rules — see below. **Last call: Friday 2 October 2026** (the maintainer, 2026-09-27: "pencils down"); the must-fix list was confirmed the same day.
 
 **On the Decky store (5) — settled 2026-09-26: bonsAI cannot go in the store.** Read that day from the
 store's own pages:

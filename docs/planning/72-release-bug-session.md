@@ -4,9 +4,9 @@ Written 2026-09-26 as part of [plan 71](71-merge-experimental-into-main.md), the
 maintainer asked for "a list, a plan for a massive bug fix session, and new bugs get checked against the
 line". This is that plan. It starts once plan 70 has landed.
 
-**Status: draft. The sort in section 2 is a first pass from the roadmap as it read on 2026-09-26 in the
-afternoon. Plan 70 was fixing some of these the same day, so the session re-sorts on its first morning
-(flow 0) before any work starts.**
+**Status: running since 2026-09-27, 11:38 (the maintainer's "go"). Section 2 was re-sorted the same
+morning (flow 0) against the roadmap after plan 70 closed; what changed is marked "re-sort 09-27". The
+running record is section 7.**
 
 **This plan may sit for a while before it runs.** Whoever picks it up first checks it against the roadmap
 and the code, and updates anything stale before starting — the bugs, who has already fixed what, and the
@@ -48,25 +48,27 @@ section 2 with the date, and go into their group. Nothing jumps the queue becaus
 
 | Bug | Why it crosses the line | Notes |
 |---|---|---|
-| Down stops half way and the Ask button is out of reach; only a loader restart clears it | Traps the player | Comes and goes. Known trigger: opening and closing Steam's on-screen keyboard on the question box. The one-star "Down does not leave a hidden spoiler block" is probably the same fault. |
+| Down stops half way and the Ask button is out of reach; only a loader restart clears it | Traps the player | Comes and goes. Known trigger: opening and closing Steam's on-screen keyboard on the question box. The one-star "Down does not leave a hidden spoiler block" is probably the same fault. **Re-sort 09-27: joined by "Over Fallout 4, the question box goes dead with no chip pressed" (★★★, plan 70)** — the ring stays in the box while the page's own focus moves on; reopening doesn't clear it while the game runs. |
+| **Added 09-27:** a chat opened with RB while a game runs is drawn as history, and Down dies on its question line | Traps the player until the panel is reopened | Plan 70, flow L7. Probably the same family as the row above. |
+| **Added 09-27:** walking Down while an answer is still arriving loses the ring | Traps: nothing has focus | Plan 70, flow L10. Fine on a finished answer. |
 | The chat summary card sits behind the dock until Down is pressed | Plainly broken, in any long chat | |
 | After Stop mid-answer, the ring lands on Voice input — one press from turning the microphone on | Surprise microphone | |
 | Left on the chat row leaves the plugin for Steam's side rail | Traps the player out of the plugin | |
-| Up under an answer skips whole rows of controls; plus three more slips with older turns open | Traps: parts of the panel become unreachable | Likely one family. Measure first. |
+| Up under an answer skips whole rows of controls; plus three more slips with older turns open | Traps: parts of the panel become unreachable | Likely one family. Measure first. **Re-sort 09-27: plus two from plan 70** — Up from "Save chat to Desktop" jumps to the top of the turn, skipping the answer; reaching a spoiler cover by Up lands the ring beside it and A does nothing. The first changes shape once Save chat becomes an icon. |
 | After "Apply UI scale", nothing holds the ring | First ten minutes (settings) | |
-| After thumbs up, nothing holds the ring | Controller lost after a common press | Plan 70 is fixing it; re-check only if it lands. |
-| Show details opens behind the dock, so it looks like nothing happened | Plainly broken | Plan 70 is fixing it; re-check only if it lands. |
+| ~~After thumbs up, nothing holds the ring~~ | | **Done by plan 70** (Helpful keeps the ring on the row). Free play re-checks it. |
+| ~~Show details opens behind the dock~~ | | **Done by plan 70** (it scrolls into view above the dock). Free play re-checks it. |
 | The live thinking line shows the model's own rule checklist, stray backticks, and a raw "Thinking Process" heading | Plainly broken, on every answer | |
 | The voice button's ring is cut off at the panel's right edge | Plainly broken | Small. |
 | A thin strip of the answer shows through under the game line at the bottom | Plainly broken | Small. Measure first. |
 | The dots under the chat name don't line up — the active dot looks a hair above or below the rest | Plainly broken; the maintainer wants it exact, not "close enough" | Keep the dots (the maintainer's call 2026-09-26). How to measure is in section 4, flow D. |
 | A Strategy answer can open by quoting one of bonsAI's own instructions back | Plainly broken — reads like machine text | The maintainer's call 2026-09-26: soften it. A known-cause fix in the question wording. |
-| Show details' credit line prints a protected boss's name in plain view | Spoiler shown | The maintainer's call 2026-09-26: hide it like the notes block. The tag reads "Boss note (spoiler)" until the player opens the answer's spoiler or the notes block, then shows the real name. No new button, so the D-pad path is unchanged. [The drawing](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). |
+| Show details' credit line prints a protected boss's name in plain view | Spoiler shown | **Done by plan 70** (`6d31bc1d`, `8bba1f00`) and checked on the Deck that night, with the maintainer's 09-27 wording ("Sources hidden — open the notes to see them"). Nothing left for this session. |
 | Stop unloads the model, so the next question starts slow | Plainly broken feel: every question after a Stop is slow | **Landed 2026-09-26 (`59123c1b`), before this session**, from the model trial. Deck check only: row STOP-KEEPS-MODEL-01. |
 | A model downloaded from the first-run picker never joins the list that picks who answers | Possibly the first ten minutes | Check first whether a new player's first answer actually suffers. If not, it drops to "if there is room". |
 | Clearing a session while an answer is being written may lose that answer | Loses a chat | Found by reading the code. Check it can still happen now the Session tab changed; if it can, fix. |
 | The spoiler family: a withheld boss name leaking in the answer, the thinking line, and the suggestion menu | Spoiler shown | **Done:** passed on the Deck 2026-09-26 in plan 70 (229 reads, the name never showed outside a cover). Nothing left for this session. |
-| The troubleshooting hint's Dismiss can't be reached by D-pad | Traps the player | Already fixed. Deck check only. |
+| The troubleshooting hint's Dismiss can't be reached by D-pad | Traps the player | **Done:** passed on the Deck in plan 70. |
 
 ### Must fix — the maintainer's own polish list (2026-09-26)
 
@@ -77,9 +79,9 @@ screen), and every one is a layout change, so each is measured on the Deck befor
 |---|---|
 | The preset chip sits too far above the question box | The chip-to-box gap equals the box-to-Ask-button gap, measured on the Deck at every UI size. |
 | The question bubble: empty space on the left, ragged line edges, text too far from the Retry arrow | **Option D from [the drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF), the maintainer's pick 2026-09-26:** right-aligned text split into lines of about equal length, the bubble shrunk to its longest line, text 3 pixels from the Retry arrow. Two things to check on the Deck first: whether Steam's browser can even out the lines by itself (if not, the plugin measures and does it), and a screenshot with Steam's own font, which can break lines a word differently from the drawing. |
-| The "Not helpful" reason chips sit almost one to a row | The five chips under "What went wrong?" share rows instead of taking one each. Measure first what makes each chip so wide (its padding, a minimum width, the 8-pixel gaps), then tighten. **Option, added at the maintainer's yes 2026-09-26: shorter labels.** "Misidentified game/problem" is by far the longest. "Wrong game" is shortest, but the chip also covers a misread problem, not just a wrong game, so "Wrong game or topic" keeps that. "Unfenced spoiler" could become "Showed a spoiler", which is plainer. Only the words on the chip change; what the chip asks the AI to do stays the same. Draw spacing-only and spacing-plus-shorter-labels side by side at true size; the maintainer picks. Before-and-after screenshots on the maintainer's checks page. |
-| The chat name's scroll doesn't match the chip scroll | Same speed and same pauses as a long chip label, then both slowed slightly. The chip scroll today: 25 pixels a second, 1.5 seconds before it starts, 1.5 seconds at the end. Where the chat name's scroll lives in the code is not yet found — a first job in flow 0. |
-| Save chat to Desktop becomes a save icon in the chat tab; the "+" gets a clearer icon | A true-size drawing of the options first (it also settles exactly where the icon sits), then built. The D-pad path changes, so the free-play walk covers it. |
+| The "Not helpful" reason chips sit almost one to a row | The five chips under "What went wrong?" share rows instead of taking one each. Measure first what makes each chip so wide (its padding, a minimum width, the 8-pixel gaps), then tighten. **Option, added at the maintainer's yes 2026-09-26: shorter labels.** "Misidentified game/problem" is by far the longest. "Wrong game" is shortest, but the chip also covers a misread problem, not just a wrong game, so "Wrong game or topic" keeps that. "Unfenced spoiler" could become "Showed a spoiler", which is plainer. Only the words on the chip change; what the chip asks the AI to do stays the same. Draw spacing-only and spacing-plus-shorter-labels side by side at true size; the maintainer picks. Before-and-after screenshots on the maintainer's checks page. **Picked 2026-09-27: option E from [the drawing](https://claude.ai/artifact/WhECSTogth2QeMNiXekg2s)** — two rows: "Bad info · Wrong game or topic" over "Spoiled it · Too long · Too short". |
+| The chat name's scroll doesn't match the chip scroll | Same speed and same pauses as a long chip label, then both slowed slightly. The chip scroll today: 25 pixels a second, 1.5 seconds before it starts, 1.5 seconds at the end. **Found in flow 0 (09-27):** the chat name does not use Steam's scrolling label at all — it is its own six-second back-and-forth in the chat row's stylesheet, so its speed changes with the name's length. Flow P measures both. |
+| Save chat to Desktop becomes a save icon in the chat tab; the "+" gets a clearer icon | **Picked 2026-09-27 from [the drawing](https://claude.ai/artifact/HKZZbRU9wN7Fuw2gUpcJfY): save option B** — a floppy-disk save icon at the row's left end, the mirror of the × at the right; Left from the name lands on it, which also gives Left somewhere to go instead of Steam's side menu. **New chat option 4** — a pencil with the words "New chat"; beside your newest chat, just the pencil. The D-pad path changes, so the free-play walk covers it. |
 
 ### Must try once, then sort
 
@@ -101,8 +103,17 @@ reproduces, it goes to **Must fix**. If not, **Known issue**.
 - The chat summary reads oddly in places.
 - Deleting a chat whose file is already missing leaves its row in the list.
 - Saved answers sometimes have a hidden block's markers written twice. The leak is fixed; the cause is not.
-- Knowledge base: the "no tip" line never appears; four questions still get notes about the wrong subject;
-  a follow-up names the wrong boss one run in three (plan 70 is on this one).
+- Knowledge base: four questions still get notes about the wrong subject. (Re-sort 09-27: the "no tip"
+  line was retired by the maintainer, `db4b3b4a`; the follow-up naming the wrong boss was fixed by plan 70,
+  4 of 4 on the Deck.)
+- **Added 09-27, found by plan 70:** a game's own tip is labelled "Shared troubleshooting" in Show details;
+  the "Enable local knowledge base" chip showed once while the knowledge base was on; with thinking off the
+  waiting spinner can spin through the whole answer; the suggestion chips keep rotating while an answer is
+  written; a rotating chip can take a press meant for another; a dismissed troubleshooting hint comes back
+  after reopening; three smaller Show details ring slips (the Session tab's last chip, "N earlier" jumping
+  to the notes, B on the notes block); nothing holds the ring when the Pull button disappears (the next
+  press recovers); the meaning-search hint needs the Ollama tab reopened; a typed command reappears as a
+  suggestion chip; a Strategy answer's follow-up choices are sometimes not understood.
 
 ### Known issue (as things stand)
 
@@ -110,6 +121,10 @@ reproduces, it goes to **Must fix**. If not, **Known issue**.
 - Focus ring styling differs a little between bonsAI's controls and Steam's own.
 - In carousel style, Down once landed on a chip that was mostly off screen (never reproduced).
 - Unrelated questions can get game notes attached (already accepted).
+- **Added 09-27:** the frame rate while an answer arrives with a game running — 30 to 36 a second, dipping
+  into the 20s late in long answers (plan 70 raised it from about 12); with nothing running the decode
+  effect slows very long answers to about 37 a second. The Context line can read the wrong thing for a
+  moment after reopening.
 
 ### Behind the scenes (to plan 71's clean-up)
 
@@ -145,8 +160,8 @@ player meets in the first ten minutes gets its pass in this session; the rest st
 | **The session** | Opus 5.5, extra-high | Re-sorts the list. Writes every brief and Deck runbook. Sorts new bugs against the line. Does the D-pad fixes itself, with a Deck measurement in hand. Keeps five lanes busy. Lands every fix, one at a time. Reports to the maintainer. |
 | **Deck driver**, one at a time | Opus 5.5, medium | Runs one flow from a runbook. Measures, records, reports in plain words. Never fixes, never edits docs. |
 | **Fix lanes**, up to five at once | Opus 5.5 medium (trial result, below) | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
-| **Prep helper** | Sonnet 5, high | Writes the next Deck flow's step-by-step runbook while the current one runs, so the Deck never waits for paperwork. |
-| **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. Never commits while a landing runs. |
+| **Prep helper** | Opus 5.5, medium (re-sort 09-27: helpers moved to Opus on 2026-09-26) | Writes the next Deck flow's step-by-step runbook while the current one runs, so the Deck never waits for paperwork. |
+| **Bookkeeper** | Opus 5.5, low (the `bookkeeper` helper) | Roadmap, testing rows and changelog after every flow; keeps section 2 current. Never commits while a landing runs. |
 
 The D-pad and layout bugs are most of "must fix". By the house rules they are never handed to a helper
 without a Deck measurement first. So the session measures first, then fixes the D-pad ones itself and
@@ -209,10 +224,9 @@ since those need a measurement read by the one who fixes them.
   Bookkeeping in this session: the `bookkeeper` helper (Opus low). Every test status it changes names its
   evidence file, and the session spot-checks those before they land.
 
-- **Lane 2's Stop fix is already written:** the winning version sits on its own branch from the trial. Before
-  landing, fix the stale Stop diagram in the other Ollama service file (the losing Sonnet version's rewrite
-  can be carried over), and optionally add the other version's request-number check so a new question is seen
-  from the moment it is asked. Then it needs only its Deck check.
+- **Lane 2's Stop fix landed 2026-09-26 (`59123c1b`).** Lane 2 only checks no comment still says a normal
+  Stop unloads the model. Then it needs only its Deck check (STOP-KEEPS-MODEL-01).
+- **Lane 3's credit line was done by plan 70**, so lane 3 is the thinking line and the Strategy wording.
 
 ### Option: code-only lanes in the cloud (the maintainer asked, 2026-09-26)
 
@@ -297,17 +311,20 @@ land.
 - **A fix that fails on the Deck twice** moves up one model tier with the measurement in hand, as the house
   rule says. If it fails again, it comes to the maintainer.
 - **No reshaping of code** in this session, only fixes. Reshaping is what turns up bugs late.
-- **The last call** is a date the maintainer sets. After it, only "must fix" work lands.
+- **The last call is Friday 2 October 2026** (the maintainer's "pencils down", set 2026-09-27). After it, only
+  "must fix" work lands. The maintainer reviews the final list of bugs after this session.
 - **The session's final output** is the "Known issues" list for the release notes, in plain words.
 
 ---
 
 ## 6. Questions for the maintainer
 
-1. The calls in section 2 — all answered 2026-09-26. The question bubble is option D (2026-09-26). Still owed:
-   a true-size drawing for the save icon and the new "+".
-2. Is the "must fix" list right? Anything missing that you have hit yourself?
-3. The last-call date — not decided yet (2026-09-26).
+1. The calls in section 2 — all answered 2026-09-26. The question bubble is option D (2026-09-26). The save
+   icon, the new "+" and the reason chips were drawn and picked 2026-09-27 (save B, pencil with "New chat",
+   chips E).
+2. Is the "must fix" list right? Anything missing that you have hit yourself? — **Confirmed 2026-09-27.**
+3. The last-call date — **Friday 2 October 2026**, set 2026-09-27 ("pencils down"). The must-fix list in
+   section 2 was confirmed the same day ("looks good").
 4. One long session or two shorter ones? **Updated 2026-09-26 for the time crunch:** one continuous
    session, run as the waves in section 4, with the Deck busy the whole time and lanes 1 and 2 started
    early. The first Deck block's measurements still come first, but nothing else waits for a second
@@ -315,3 +332,42 @@ land.
 5. Starting lanes 1 and 2 before plan 70 finishes — **yes, the maintainer, 2026-09-26.** Before cutting
    either lane, check with plan 70's session that none of the lane's files are in its flight, and land
    between plan 70's landings, never during one.
+
+---
+
+## 7. Progress log
+
+**2026-09-27**
+
+- **11:38 — "go".** Plan 70 had closed at about 07:00 (`71225356`); its Deck lock was gone by 06:52. The
+  session took the Deck lock. The maintainer's picks came with the go: save option B, the pencil with "New
+  chat", reason chips option E.
+- **11:40 — flow 0, the re-sort.** Section 2 updated against the roadmap: four items plan 70 finished are
+  marked done (thumbs-up ring, Show details behind the dock, the credit line, the troubleshooting hint's
+  Dismiss); four ring bugs plan 70 found join "must fix" (Fallout 4's dead question box, the RB-opened chat
+  over a game, Down while an answer arrives, and two Up slips folded into the Up family); plan 70's smaller
+  finds go to "if there is room" or "known issue". The chat name's scroll was found (its own six-second
+  back-and-forth, not Steam's scrolling label). Stale text fixed: helper models, lane 2's Stop fix, lane 3's
+  credit line.
+- **11:44 — lanes 1, 2 and 3 started**, each in its own copy cut from `71225356`, all Opus medium
+  (`bugfix-lane`). Lane 1 (downloads and the download permission) agent `a85b36afbb6dc517e`, copy
+  `p72-lane1-downloads`; lane 2 (clearing mid-answer, deleting a missing chat, the Stop comments) agent
+  `a6821586b0155153c`, copy `p72-lane2-chat`; lane 3 (the thinking line, the Strategy wording) agent
+  `aeb60f94abc1851c6`, copy `p72-lane3-words`. Lane 1 owns the shared files (`main.py`, the RPC type list,
+  the plugin's entry file); the other two keep any change there to a few lines and name it.
+- **11:46 — the Deck is asleep** (no answer over the network). Block 1's runbook for flows D and P is
+  written and waits for it.
+- **11:52 — lanes 4 and 5 started early** on the parts that need no new Deck measurement, both Opus medium.
+  Lane 4 (reason chips option E; the summary card behind the dock, already measured by plan 68) agent
+  `a02f954d3fc964ee1`, copy `p72-lane4-chatlook`; lane 5 (the chat name's scroll matching the chips then 20%
+  slower; save icon B and the pencil "New chat", removing the "Save chat to Desktop" row) agent
+  `afe87837b4480a04b`, copy `p72-lane5-rowlook`. Their measured jobs (question bubble, bottom strip, chip gap,
+  mic ring) follow by message after flow P. Block 1's second runbook (flow A) is written too.
+- **12:00 — the Deck woke** (on the monitor; its own screen off; build matches the checkout). Block 1 part 1
+  (flows D and P) started with the deck-driver, agent `a13ca274642063dcc`. The maintainer confirmed the
+  must-fix list and set the last call: **Friday 2 October**.
+- **12:25 — lane 2 finished and landed** (`b7339ea4`, `1069c8f1`), every check green after each: Settings'
+  Clear session mid-answer now keeps what a Stop would have kept in that chat (it could still happen: the
+  clear reset the waiting state before stopping the answer, so neither save ran); deleting a chat whose file
+  is gone removes its row. No Stop comment still said it unloads; one testing row (STOP-PARTIAL-01) does —
+  for the bookkeeper. Lane 2's slot is free.

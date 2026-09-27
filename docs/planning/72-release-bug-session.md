@@ -466,3 +466,9 @@ land.
   lose their helpful row" family); chips stopped changing after about 30 s even with the screen kept awake.
   The test rating was added to the Deck's feedback log; restored to its pre-session 5 lines. Block 2 part 2
   (flow F2) started, agent `a605287a135e5b704`.
+- **14:55 — lane 4's two landed** (`d66f6f40` the two reason-chip rows 6 px apart; `86c7361a` the question's
+  lines evened out by measuring — about 167 / 166 / 192 for the Deck's question, was 194 / 225 / 106 — with a
+  fallback to the fit that already passed). Fresh usage window at 14:50. Lane 10 started (agent
+  `a7ac4ddbb3247fb72`): the Helpful row and reason chips vanish on a panel reopen or chat switch (more visible
+  now the save icon's window reopens the panel). Lane 11 started (agent `a65bf9866ef9d9d87`): the chips stop
+  rotating after about 30 s idle, and keep rotating while an answer is written.

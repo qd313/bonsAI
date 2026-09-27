@@ -90,6 +90,7 @@ import {
 } from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
 import { prepareStreamMarkdown } from "./streamMarkdownPrepare";
+import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import {
@@ -363,7 +364,7 @@ export function buildAnswerBubbleElement(
     spoilerConsentEffective,
     protectedNames,
   };
-  let displayBody = stripAssistantDisplayTags(body);
+  let displayBody = expandOneLineSpoilerFences(stripAssistantDisplayTags(body));
   if (spoilerUnwrapEligible) {
     displayBody = unwrapAskedEntitySpoilerFences(displayBody, spoilerUnwrapOpts);
   }

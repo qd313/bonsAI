@@ -187,9 +187,11 @@ import {
   focusReplyUtilityRow,
   focusSessionContextStrip,
   queryLiveTurnSlot,
+  registerStrategyBranchPickerNav,
+  ringIsOnFirstStrategyBranch,
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
-import { focusAnswerChunkAtIndex, focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
+import { focusAnswerChunkAtIndex, focusFirstAnswerChunk, focusLastAnswerChunk } from "../utils/answerBubbleNavigation";
 import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
@@ -869,11 +871,26 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const renderStrategyBranchPicker = (placementKey: string) => {
     if (!strategyBranchesReady || !strategyGuideBranches || !onStrategyBranchPick) return null;
+    /* Steam's nav node for the buttons, so Up from Read aloud can hand the ring in (plan 72 A-4). */
+    const pickerNav: { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null } = { current: null };
+    registerStrategyBranchPickerNav(pickerNav);
+    /*
+     * Up from the FIRST button leaves the choices: onto the summed-up note when the answer has one,
+     * else the answer's last section, the same two stops Down came from. The handler sits on this
+     * Focusable because a Decky button does not forward move props (the deckNav below never runs on
+     * the Deck). Up from any other button is Steam's own step to the button above.
+     */
+    const upOutOfChoices = () => {
+      if (!ringIsOnFirstStrategyBranch(queryTurnSlot(placementKey) ?? queryLiveTurnSlot())) return false;
+      if (focusRegisteredReplyStop("summary-note")) return true;
+      return focusLastAnswerChunk(placementKey);
+    };
     return (
       <Focusable
         key={`strategy-branches-${placementKey}`}
         className="bonsai-glass-panel bonsai-strategy-branch-picker"
         flow-children="vertical"
+        {...({ navRef: pickerNav, onMoveUp: upOutOfChoices } as Record<string, unknown>)}
         style={{
           width: "100%",
           display: "flex",

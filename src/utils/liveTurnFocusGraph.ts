@@ -7,7 +7,7 @@
  */
 
 import { focusRegisteredReplyStop, type ReplyStopId } from "./replyStopRegistry";
-import { elementHasFocus, getUiDocument } from "./uiDocument";
+import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "./uiDocument";
 import { focusRowElement } from "./focusPerTurnRow";
 import { takeNavFocus } from "./navFocusRegistry";
 
@@ -302,12 +302,43 @@ export function focusStrategyChromeFromAbove(liveSlot: HTMLElement | null): bool
 }
 
 /**
+ * Steam's nav node for the choice buttons ("A. ...", "B. ..."), which only the newest answer draws,
+ * so one holder is enough. MainTabChatTranscript hands a fresh holder in on every render.
+ */
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
+let strategyBranchPickerNav: SteamNavHolder | null = null;
+
+export function registerStrategyBranchPickerNav(holder: SteamNavHolder | null): void {
+  strategyBranchPickerNav = holder;
+}
+
+/**
+ * Up onto the LAST choice button, from the row below (plan 72 A-4). The buttons are their own
+ * container, so Steam's transfer goes first and the plain focus after it only moves between the
+ * buttons inside it; the focus check decides the result.
+ */
+function focusLastStrategyBranchFromBelow(slot: HTMLElement | null): boolean {
+  if (!branchButtons(slot).length) return false;
+  try {
+    strategyBranchPickerNav?.current?.TakeFocus?.(true);
+  } catch {
+    /* the focus + check below decides */
+  }
+  return focusStrategyBranchButton(slot, "last");
+}
+
+/** True while the ring is on the FIRST choice button: an Up there leaves the choices. */
+export function ringIsOnFirstStrategyBranch(slot: HTMLElement | null): boolean {
+  return elementHasGamepadFocus(branchButtons(slot)[0] ?? null);
+}
+
+/**
  * Up from thumbs / reply chrome: checklist → branch → the summed-up note (plan 68, when this answer
  * has one) → answer bubble.
  */
 export function focusUpFromReplyActions(liveSlot: HTMLElement | null): boolean {
   if (focusStrategyChecklistToggle(liveSlot, "last")) return true;
-  if (focusStrategyBranchButton(liveSlot, "last")) return true;
+  if (focusLastStrategyBranchFromBelow(liveSlot)) return true;
   if (focusRegisteredReplyStop("summary-note")) return true;
   return focusLiveAnswerBubble(liveSlot);
 }

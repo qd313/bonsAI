@@ -91,6 +91,7 @@ import {
   focusReplyShowDetails,
   focusUpFromReplyActions,
   queryLiveTurnSlot,
+  queryTurnSlot,
 } from "./liveTurnFocusGraph";
 import {
   focusRegisteredReplyStop,
@@ -313,6 +314,13 @@ export function buildReplyActionsElement(
 
   const liveSlot = () => queryLiveTurnSlot();
   /*
+   * This reply's own turn, for the Up hand-offs. A finished answer is an ARCHIVED turn (its slot
+   * reload moves it off "live"), so `liveSlot()` found nothing there and every Up check for the
+   * choice buttons above this row reported "none" -- Up from Read aloud jumped into the answer
+   * past them (plan 72 A-4, plan72-A4-UP-FAMILY-d.json). Same lookup the answer's own Down uses.
+   */
+  const turnSlot = () => queryTurnSlot(replyKey) ?? queryLiveTurnSlot();
+  /*
    * True when a strategy branch picker or checklist is mounted between the answer bubble and this
    * row (MainTabChatTranscript draws them there, not this file). Checked before calling
    * `focusUpFromReplyActions`: that function's own last resort focuses the whole bubble rather than
@@ -347,7 +355,7 @@ export function buildReplyActionsElement(
    */
   const moveUpFromReply = () => {
     if (onMoveUpFromReply?.()) return true;
-    const slot = liveSlot();
+    const slot = turnSlot();
     if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
     /* Plan 68: the summed-up note sits between the answer and this row. */
     if (focusRegisteredReplyStop("summary-note")) return true;
@@ -505,8 +513,8 @@ export function buildReplyActionsElement(
    * on the bare bubble, and only a second Up walked into its last `.bonsai-answer-stop`.
    */
   const upFromRetry = () => {
-    const slot = liveSlot();
-    if (showChipRows && focusLastReplyChip(slot)) return true;
+    const slot = turnSlot();
+    if (showChipRows && focusLastReplyChip(liveSlot())) return true;
     if (focusReplyHelpful(slot)) return true;
     /* No live Helpful to land on (greyed and skipped — replyStopRegistry — or no thumbs row at
        all), but the speaker is still there: Up from Show details lands on the row either way, now

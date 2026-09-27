@@ -177,6 +177,10 @@ function byLabel(container: HTMLElement, label: string): HTMLElement {
   return el;
 }
 
+function answerStops(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(".bonsai-answer-stop"));
+}
+
 function focusOn(el: HTMLElement): void {
   act(() => el.focus());
   expect(document.activeElement).toBe(el);
@@ -203,5 +207,34 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     focusOn(body!);
     expect(press("onMoveDown")).toBe(true);
     expect(document.activeElement).toBe(fold);
+  });
+
+  it("Read aloud goes Up onto the last choice button, not into the answer", () => {
+    const { container } = renderTurn();
+    focusOn(byLabel(container, "Read aloud"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement?.textContent).toBe(`B. ${BRANCHES.options[1]!.label}`);
+  });
+
+  it("Up from the last choice is Steam's own step to the first; the first goes Up into the answer's last section", () => {
+    const { container } = renderTurn();
+    const buttons = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-branch-btn"));
+    expect(buttons).toHaveLength(2);
+    focusOn(buttons[1]!);
+    expect(press("onMoveUp")).toBe(false);
+
+    focusOn(buttons[0]!);
+    expect(press("onMoveUp")).toBe(true);
+    const stops = answerStops(container);
+    expect(stops.length).toBeGreaterThan(0);
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
+  });
+
+  it("with no choices, Read aloud still goes Up into the answer's last section", () => {
+    const { container } = renderTurn({ strategyGuideBranches: null });
+    focusOn(byLabel(container, "Read aloud"));
+    expect(press("onMoveUp")).toBe(true);
+    const stops = answerStops(container);
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
   });
 });

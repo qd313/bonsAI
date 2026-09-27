@@ -2040,6 +2040,7 @@ class Plugin:
             task = self._background_task
             self._background_task = None
             was_running = task is not None and not task.done()
+            stopped_answer = chat_turn_recorder.take_answer_a_clear_will_stop(self)
             self._background_state = self._new_background_state()
             self._background_request_seq += 1
         self._last_input_transparency = None
@@ -2051,6 +2052,7 @@ class Plugin:
         if was_running:
             await self.abort_background_game_ai()
         await cancel_and_await(task)
+        await chat_turn_recorder.save_answer_a_clear_stopped(self, stopped_answer)
         # A cleared session must go silent: a reading of the old answer must not keep playing.
         await asyncio.to_thread(self._read_aloud_service.stop)
 

@@ -158,6 +158,32 @@ async def record_assistant_turn(
         await asyncio.to_thread(_run)
 
 
+def take_answer_a_clear_will_stop(plugin) -> Optional[dict]:
+    """Settings' Clear session, pressed while an answer is still arriving: what that answer's
+    chat should keep, as a Stop would have left it -- the text written so far, else "Request
+    cancelled." Call it under ``_background_lock`` *before* the clear resets the waiting state:
+    once that state is idle, neither Stop's own save nor the answer task's save runs, and the chat
+    on disk ends on a question with no answer. ``None`` when nothing is waiting in a chat."""
+    state = plugin._background_state
+    rid = state.get("request_id")
+    if state.get("status") != "pending" or not isinstance(rid, int):
+        return None
+    slot_id = plugin._chat_slot_by_request.pop(rid, None)
+    if slot_id is None:
+        return None
+    return {
+        "slot_id": slot_id,
+        "response_text": plugin._cancelled_response_text(rid, "Request cancelled."),
+        "app_id": str(state.get("app_id") or ""),
+    }
+
+
+async def save_answer_a_clear_stopped(plugin, stopped: Optional[dict]) -> None:
+    """Write what ``take_answer_a_clear_will_stop`` kept into its chat, once the answer is stopped."""
+    if stopped:
+        await record_assistant_turn(plugin, **stopped)
+
+
 async def save_chat_summary(plugin, slot_id: str, summary: Optional[dict]) -> None:
     """Set a chat's own summary of its older turns (plan 68 step 2). A blank slot id does
     nothing -- there is no chat to attach the summary to, the same guard ``record_user_turn`` and

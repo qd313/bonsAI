@@ -134,5 +134,77 @@ class ForgetBackgroundAskTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(status.get("streaming"))
 
 
+class ClearWhileAnsweringKeepsTheChatWholeTests(unittest.IsolatedAsyncioTestCase):
+    """Settings' Clear session pressed while an answer is still arriving.
+
+    The question is saved into its chat the moment it is asked. Clear used to reset the waiting
+    state first, so both steps that save the stopped answer (Stop's own, and the answer task's)
+    then found nothing waiting and saved nothing: the chat on disk ended on a question with no
+    answer. Clear stops the answer; the chat must keep what a Stop would have kept.
+    """
+
+    async def asyncSetUp(self) -> None:
+        import tempfile
+
+        from backend.services.chat_slot_service import create_slot
+
+        self.tmp = tempfile.mkdtemp()
+        self.settings_patcher = patch.object(Plugin, "_chat_slots_settings_dir", return_value=self.tmp)
+        self.settings_patcher.start()
+        self.plugin = Plugin()
+        self.slot_id = create_slot(self.tmp, label="clear-mid-answer")["id"]
+
+    async def asyncTearDown(self) -> None:
+        import shutil
+
+        self.settings_patcher.stop()
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    async def _ask_then_clear_mid_answer(self, partial_text: str) -> int:
+        streaming = asyncio.Event()
+
+        async def slow_execute(_self, *_args, token_stream_request_id=None, **_kwargs):
+            if partial_text:
+                _self._update_partial_response(token_stream_request_id, partial_text, False)
+            streaming.set()
+            await asyncio.sleep(30)
+            return {"success": True, "response": "never reached"}
+
+        with patch.object(Plugin, "_execute_game_ai_request", autospec=True, side_effect=slow_execute), \
+                patch.object(Plugin, "load_settings", return_value={}), \
+                patch.object(Plugin, "_compose_opening_thinking_blurb", return_value=("Thinking…", None)):
+            ack = await self.plugin.start_background_game_ai(
+                {"question": "how do I parry?", "PcIp": "127.0.0.1:11434", "chat_slot_id": self.slot_id}
+            )
+            self.assertTrue(ack.get("accepted"))
+            await asyncio.wait_for(streaming.wait(), timeout=2.0)
+            result = await self.plugin.forget_background_game_ai()
+        self.assertTrue(result.get("stopped"))
+        return int(ack["request_id"])
+
+    def _turns(self) -> list:
+        from backend.services.chat_slot_service import load_slot
+
+        loaded = load_slot(self.tmp, self.slot_id)
+        assert loaded is not None
+        return [(t.get("role"), t.get("text")) for t in loaded["turns"]]
+
+    async def test_the_text_already_written_is_saved_after_the_question(self) -> None:
+        request_id = await self._ask_then_clear_mid_answer("Hold L1 and tap")
+        self.assertEqual(
+            self._turns(), [("user", "how do I parry?"), ("assistant", "Hold L1 and tap")]
+        )
+        self.assertNotIn(request_id, self.plugin._chat_slot_by_request)
+        # The screen side is unchanged: a cleared session still shows nothing at all.
+        status = await self.plugin.get_background_game_ai_status()
+        self.assertEqual(status.get("status"), "idle")
+
+    async def test_with_nothing_readable_yet_the_chat_says_the_request_was_cancelled(self) -> None:
+        await self._ask_then_clear_mid_answer("")
+        self.assertEqual(
+            self._turns(), [("user", "how do I parry?"), ("assistant", "Request cancelled.")]
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,251 @@
+{
+ "row": "plan72-F8-SUMUP",
+ "buildCommit": "5dbb9bffb5ecabcdcc9bda42dcc091162224f796",
+ "deckBundleMd5": "9016e9751fec46435669bfa87bf15ae3",
+ "check": "F8-SUMUP: when Sum up finishes, Steam's ring moves onto the new summary card (third try, on the fix in 5dbb9bff)",
+ "deckTime": "2026-09-27 18:29:17-18:30:56 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5; screenshot 1280x800",
+ "setup": {
+  "build": "tip 5dbb9bff, dist/index.js md5 9016e9751fec46435669bfa87bf15ae3 on the Deck and in the checkout (checked 18:28)",
+  "backup": "~/qa-backups/settings-plan72-block8b taken 18:28 (whole settings folder, 9 chat-slot files)",
+  "chat": "wheatley fight (already the open chat; Session tab reads 'Session - 71'); chat file d2aa6252... md5 8ae4e1a2... = same as the no-summary copy in the block8 backup",
+  "noSummaryBefore": "button read 'Sum up this chat'",
+  "ask_mode": "strategy (unchanged)"
+ },
+ "pressed": [
+  "plugin was closed; deck_openPlugin opened it on the first try",
+  "DOWN placed the ring on the newest answer's Retry, then DOWN x9 in one rig sequence with focus read after every press (question, answer body, second part, Read aloud, Show details) - same route as F7",
+  "A on Show details (ring on 'Hide details')",
+  "DOWN (Gravity Gun note), DOWN (tabs row), RIGHT (Session tab; ring stays on the tabs row), DOWN ('Sum up this chat', matched)",
+  "250 ms focus sampler installed at 18:29:51 (Deck time), then A, then no presses for about 32 s",
+  "then, for the second half: DOWN once, UP once"
+ ],
+ "seen": {
+  "timings": "sampler clock from 18:29:51: 'Summing up - 0 s' first seen at 1.50 s; last 'Summing up - 7 s' at 8.75 s; spinner gone AND card present in the same sample at 10.00 s (no in-between sample); ring on the card: never",
+  "summingFor": "about 8.5 s (1.50 s to 10.00 s)",
+  "ringWhenFinished": "'Sum up again' (greyed button) at every sample from 10.00 s to the last read at 31.84 s (21.8 s after the card appeared); the rig's own focus read at 18:30:32 agrees (gpfocus on 'Sum up again', y 96, h 33, fully visible)",
+  "ringOnCardAtAnyTime": "no - the sampler's 'ring inside card' flag was false in every sample",
+  "card": "'What the AI remembers', y 171.92 to 584.38 (h 412.46): top on screen, above the dock top 290.17",
+  "button": "'Sum up again' y 96.46-129.13 (the pane scrolled from 796.7 to 912 when the card appeared)",
+  "cardVsRoom": "the card (412 px) is taller than the room below the button, so only its top needs to show: it does (171.9)",
+  "afterOneDown": "ring on the card ('What the AI remembers'), card y 88.58-501.04",
+  "afterOneUp": "ring back on 'Sum up again' (y 203.8)"
+ },
+ "screenshots": [
+  "screenshots/plan72/F8-SUMUP-finished.png"
+ ],
+ "verdict": "FAIL",
+ "verdictReason": "Third try, same result: the card appeared with its top on screen, but Steam's ring stayed on the greyed 'Sum up again' button for the whole 21.8 s watched and never moved to the card. A person has to press Down once to reach it. One Up from the card does return to 'Sum up again', as expected.",
+ "notes": [
+  "The reason line under the button still reads 'The whole chat still fits, so there's nothing to sum up yet.' while the card's footer says it covers only the newest 65 turns because the chat is too long (same as blocks 7 and 8).",
+  "Unlike F7, no sample caught a moment with the spinner gone but no card yet: this time both changed inside one 250 ms step.",
+  "No walk saved with deck_saveCheck: the check failed."
+ ],
+ "reads": {
+  "before": {
+   "deckTime": "2026-09-27 18:29:50 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": "Sum up this chat",
+     "cls": "bonsai-sumup-btn Panel Focusable gpfocus gpfocuswithin"
+    },
+    "card": null,
+    "cardText": null,
+    "btn": {
+     "x": 52,
+     "y": 211.79,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 244.46
+    },
+    "btnText": "Sum up this chat",
+    "btnCls": "bonsai-sumup-btn Panel Focusable gpfocus gpfocuswithin",
+    "reason": null,
+    "reasonText": null,
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 796.6666870117188
+   }
+  },
+  "sampler": {
+   "deckTime": "2026-09-27 18:30:22 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 31840,
+    "samples": [
+     {
+      "t": 251,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5],false]"
+     },
+     {
+      "t": 1500,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 0 s\",null,\"Summing up \u00b7 0 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 2757,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 1 s\",null,\"Summing up \u00b7 1 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 3804,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 2 s\",null,\"Summing up \u00b7 2 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 5001,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 3 s\",null,\"Summing up \u00b7 3 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 6250,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 4 s\",null,\"Summing up \u00b7 4 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 7500,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 6 s\",null,\"Summing up \u00b7 6 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 8751,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 7 s\",null,\"Summing up \u00b7 7 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 10000,
+      "k": "[\"bonsai-sumup-btn bonsai-sumup-btn--off\",\"Sum up again\",[171.9,584.4],\"Sum up again\",[96.5,129.1],false]"
+     }
+    ]
+   }
+  },
+  "finished": {
+   "deckTime": "2026-09-27 18:30:24 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": "Sum up again",
+     "cls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfoc"
+    },
+    "card": {
+     "x": 52,
+     "y": 171.92,
+     "w": 290,
+     "h": 412.46,
+     "bottom": 584.38
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame topics include Half-Life 2, Hades, Hollow Knight, Black Mesa, Deep Rock Galactic, and various survival/RPG games.\nPlayer asked about pickaxe function (smashing/climbing), boss tactics (Wheatley, Megaera, Bone Hydra, Broken Vessel, Gonarch), and specific game mechanics (Gravity Gun, electrified water).\nPlayer asked about general strategy (clearing floors, starting with limited resources, exploring maps, managing food/water).\nPlayer asked about technical issues (controller problems, game crashing after updates, storage management).\nPlayer asked for walkthroughs of specific areas/chapters in Half-Life 2 and general survival tips.\nNo specific current sticking point was explicitly stated, but the conversation covers many game guides.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 96.46,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 129.13
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable gpfocus gpfocuswithin",
+    "reason": {
+     "x": 52,
+     "y": 135.13,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 165.92
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 912
+   }
+  },
+  "afterOneDown": {
+   "deckTime": "2026-09-27 18:30:49 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": "What the AI remembers",
+     "cls": "bonsai-sumup-card Panel Focusable gpfocus gpfocuswithin"
+    },
+    "card": {
+     "x": 52,
+     "y": 88.58,
+     "w": 290,
+     "h": 412.46,
+     "bottom": 501.04
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame topics include Half-Life 2, Hades, Hollow Knight, Black Mesa, Deep Rock Galactic, and various survival/RPG games.\nPlayer asked about pickaxe function (smashing/climbing), boss tactics (Wheatley, Megaera, Bone Hydra, Broken Vessel, Gonarch), and specific game mechanics (Gravity Gun, electrified water).\nPlayer asked about general strategy (clearing floors, starting with limited resources, exploring maps, managing food/water).\nPlayer asked about technical issues (controller problems, game crashing after updates, storage management).\nPlayer asked for walkthroughs of specific areas/chapters in Half-Life 2 and general survival tips.\nNo specific current sticking point was explicitly stated, but the conversation covers many game guides.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 13.13,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 45.79
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable",
+    "reason": {
+     "x": 52,
+     "y": 51.79,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 82.58
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 995.3333129882812
+   }
+  },
+  "afterOneUp": {
+   "deckTime": "2026-09-27 18:30:56 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "cls": "bonsai-sumup-btn bonsai-sumup-btn--off",
+    "aria": "Sum up again",
+    "text": "Sum up again",
+    "y": 203.8,
+    "h": 32.7,
+    "title": "wheatley fight",
+    "t": "18:30:56"
+   }
+  }
+ }
+}

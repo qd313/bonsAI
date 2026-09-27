@@ -1,0 +1,147 @@
+{
+ "row": "plan72-F7-SUMUP-AWAY",
+ "buildCommit": "01127c7930568cb81962b9a27a6d8524a8a795bc",
+ "deckBundleMd5": "58f17022de594d2e85d25e11061d09f5",
+ "check": "F7-SUMUP-AWAY: if the person moves the ring away while it is summing, the ring stays where they put it when it finishes",
+ "deckTime": "2026-09-27 18:17:19-18:18:30 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5; screenshot 1280x800",
+ "setup": {
+  "build": "tip 01127c79, dist/index.js md5 58f17022de594d2e85d25e11061d09f5",
+  "restore": "wheatley chat file copied back from ~/qa-backups/settings-plan72-block8 (md5 8ae4e1a2... matched, i.e. no summary), plugin reloaded; opening failed once (expected after a reload), second open worked",
+  "noSummaryBefore": "button read 'Sum up this chat'"
+ },
+ "pressed": [
+  "DOWN (placed ring on Retry), DOWN x9 to 'Show details' (focus read after each; last one matched)",
+  "A (Hide details), DOWN (Gravity Gun note), DOWN (tabs row), RIGHT (Session tab), DOWN ('Sum up this chat') - each matched",
+  "250 ms focus sampler installed, A, then UP about 0.5 s later while it read 'Summing up - 0 s'",
+  "then no presses"
+ ],
+ "seen": {
+  "ringDuringSumming": "tabs row ('This answer / Session - 71') from 2.25 s on",
+  "summingFor": "about 7 s; card appeared at 9.0 s",
+  "ringWhenFinished": "tabs row, unchanged through the last sampler read at 21.5 s (12.5 s after the card appeared); the page's focus read at 18:18:30 agrees (tabs row y 96.5, h 28, on screen)",
+  "card": "y 207.92-553.58, button 'Sum up again' y 132.46-165.13"
+ },
+ "screenshots": [
+  "screenshots/plan72/F7-SUMUP-AWAY-finished.png"
+ ],
+ "verdict": "PASS",
+ "verdictReason": "The person moved the ring up to the tabs row while it was summing, and when the summary appeared the ring stayed on the tabs row.",
+ "notes": [
+  "This passes partly because the plugin never moves the ring onto the card at all (see F7-SUMUP). It shows the finish does not pull the ring away from where the person put it; it cannot show the move-onto-card logic respects a moved ring, because that move never happens.",
+  "No walk saved with deck_saveCheck: replaying it would press A on Sum up and write a summary into the chat again."
+ ],
+ "reads": {
+  "sampler": {
+   "deckTime": "2026-09-27 18:18:22 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 21509,
+    "samples": [
+     {
+      "t": 251,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5]]"
+     },
+     {
+      "t": 1756,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 0 s\",null,\"Summing up \u00b7 0 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 2250,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 0 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 3002,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 1 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 4250,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 2 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 5502,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 3 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 6515,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 4 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 7751,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 6 s\",[211.8,244.5]]"
+     },
+     {
+      "t": 9000,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",[207.9,553.6],\"Sum up again\",[132.5,165.1]]"
+     }
+    ]
+   }
+  },
+  "finished": {
+   "deckTime": "2026-09-27 18:18:23 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": null,
+     "cls": "bonsai-details-tabs-row Panel Focusable gpfocus gpfocuswithi"
+    },
+    "card": {
+     "x": 52,
+     "y": 207.92,
+     "w": 290,
+     "h": 345.67,
+     "bottom": 553.58
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame: Half-Life 2, Hades, Black Mesa, Hollow Knight, Deep Rock Galactic, Survival Games, RPGs.\nPlayer is stuck on various boss mechanics (Wheatley, Megaera, Broken Vessel, Bone Hydra) and environmental puzzles (electrified water, electrified water).\nPlayer asked for tips on various game elements: pickaxe function, best boss strategies, clearing areas, resource management, and technical issues (controller, crashing, storage).\nPlayer asked for walkthroughs of Half-Life 2 chapters and survival tips for various scenarios.\nPlayer asked for weapon upgrade priority and resource gathering strategy in Deep Rock Galactic.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 132.46,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 165.13
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable",
+    "reason": {
+     "x": 52,
+     "y": 171.13,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 201.92
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 876
+   }
+  },
+  "focusAfter": {
+   "deckTime": "2026-09-27 18:18:30 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "cls": "bonsai-details-tabs-row",
+    "aria": null,
+    "text": "This answerSession \u00b7 71",
+    "y": 96.5,
+    "h": 28,
+    "title": "wheatley fight",
+    "t": "18:18:30"
+   }
+  }
+ }
+}

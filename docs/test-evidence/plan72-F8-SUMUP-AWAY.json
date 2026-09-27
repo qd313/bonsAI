@@ -1,0 +1,151 @@
+{
+ "row": "plan72-F8-SUMUP-AWAY",
+ "buildCommit": "5dbb9bffb5ecabcdcc9bda42dcc091162224f796",
+ "deckBundleMd5": "9016e9751fec46435669bfa87bf15ae3",
+ "check": "F8-SUMUP-AWAY: if the person moves the ring away while it is summing, the ring stays where they put it when it finishes",
+ "deckTime": "2026-09-27 18:31:04-18:33:07 EDT",
+ "screen": "Deck's own screen (built-in panel): page 854x454 at dpr 1.5; screenshot 1280x800",
+ "setup": {
+  "build": "tip 5dbb9bff, dist/index.js md5 9016e9751fec46435669bfa87bf15ae3",
+  "restore": "wheatley chat file copied back from ~/qa-backups/settings-plan72-block8b (md5 went 1a0f68dc... -> 8ae4e1a2..., i.e. no summary; still 8ae4e1a2... after the reload), plugin reloaded; opening failed once (expected after a reload), second open worked",
+  "noSummaryBefore": "button read 'Sum up this chat'"
+ },
+ "pressed": [
+  "DOWN (placed ring on Retry), DOWN x9 to 'Show details' (focus read after each; last one matched)",
+  "A (Hide details), DOWN (Gravity Gun note), DOWN (tabs row, matched), RIGHT (Session tab), DOWN ('Sum up this chat', matched)",
+  "250 ms focus sampler installed at 18:32:29 (Deck time), A, then UP about 0.5 s later while it read 'Summing up - 0 s' (rig read: ring on the tabs row, matched)",
+  "then no presses"
+ ],
+ "seen": {
+  "timings": "sampler clock from 18:32:29: 'Summing up - 0 s' at 2.83 s; ring on the tabs row from 4.00 s; last 'Summing up - 8 s' at 11.25 s; spinner gone and card present in the same sample at 12.50 s; last read at 34.50 s",
+  "summingFor": "about 9.7 s (2.83 s to 12.50 s)",
+  "ringWhenFinished": "tabs row ('This answer / Session - 71'), unchanged in every sample from 4.00 s to 34.50 s (22.0 s after the card appeared); the page's focus read at 18:33:05 agrees (tabs row y 96.5, h 28, on screen); the ring-inside-card flag was false throughout",
+  "card": "y 207.92-645.32 (h 437.41), button 'Sum up again' y 132.46-165.13"
+ },
+ "screenshots": [
+  "screenshots/plan72/F8-SUMUP-AWAY-finished.png"
+ ],
+ "verdict": "PASS",
+ "verdictReason": "The person moved the ring up to the tabs row while it was summing, and when the summary appeared the ring stayed on the tabs row.",
+ "notes": [
+  "As in F7, this passes partly because the plugin never moves the ring onto the card at all (see F8-SUMUP). It shows the finish does not pull the ring away from where the person put it; it cannot show that the move-onto-card logic respects a moved ring, because that move never happens.",
+  "No walk saved with deck_saveCheck: replaying it would press A on Sum up and write a summary into the chat again."
+ ],
+ "reads": {
+  "sampler": {
+   "deckTime": "2026-09-27 18:33:03 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 34500,
+    "samples": [
+     {
+      "t": 251,
+      "k": "[\"bonsai-sumup-btn\",\"Sum up this chat\",null,\"Sum up this chat\",[211.8,244.5],false]"
+     },
+     {
+      "t": 2825,
+      "k": "[\"bonsai-sumup-btn\",\"Summing up \u00b7 0 s\",null,\"Summing up \u00b7 0 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 4000,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 1 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 5250,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 2 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 6505,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 3 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 7750,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 4 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 8787,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 6 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 10000,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 7 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 11250,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",null,\"Summing up \u00b7 8 s\",[211.8,244.5],false]"
+     },
+     {
+      "t": 12501,
+      "k": "[\"bonsai-details-tabs-row\",\"This answerSession \u00b7 71\",[207.9,645.3],\"Sum up again\",[132.5,165.1],false]"
+     }
+    ]
+   }
+  },
+  "finished": {
+   "deckTime": "2026-09-27 18:33:04 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "dpr": 1.5,
+    "ring": {
+     "aria": null,
+     "cls": "bonsai-details-tabs-row Panel Focusable gpfocus gpfocuswithi"
+    },
+    "card": {
+     "x": 52,
+     "y": 207.92,
+     "w": 290,
+     "h": 437.41,
+     "bottom": 645.32
+    },
+    "cardText": "What the AI remembers\n65 turns \u00b7 just now\nGame: Half-Life 2, Hollow Knight, Hades, Black Mesa, Deep Rock Galactic, Survival Games, RPGs.\nPlayer asked about pickaxe function.\nPlayer asked about game end and how to beat various bosses (Wheatley, Megaera, Bone Hydra, Gonarch, Broken Vessel).\nPlayer asked about environmental hazards (electrified water in Black Mesa).\nPlayer asked about game mechanics (Gravity Gun in Half-Life 2).\nPlayer asked about game progression/strategy (clearing floors, starting with limited resources, first boss strategy).\nPlayer asked about technical issues (controller/game crashing, storage/SD card issues, frame rate instability).\nPlayer asked for walkthroughs/tips for specific areas (first chapters of HL2, Ravenholm tips, desert survival tips).\nPlayer asked for general advice on resource management and exploration.\nToo long to read in one go: this covers the newest 65 turns. The oldest 1 are not in it.",
+    "btn": {
+     "x": 52,
+     "y": 132.46,
+     "w": 290,
+     "h": 32.67,
+     "bottom": 165.13
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn bonsai-sumup-btn--off Panel Focusable",
+    "reason": {
+     "x": 52,
+     "y": 171.13,
+     "w": 290,
+     "h": 30.79,
+     "bottom": 201.92
+    },
+    "reasonText": "The whole chat still fits, so there's nothing to sum up yet.",
+    "dock": {
+     "x": 48,
+     "y": 290.17,
+     "w": 300,
+     "h": 163.83,
+     "bottom": 454
+    },
+    "pane": {
+     "x": 48,
+     "y": 88,
+     "w": 300,
+     "h": 366,
+     "bottom": 454
+    },
+    "paneScrollTop": 876
+   }
+  },
+  "focusAfter": {
+   "deckTime": "2026-09-27 18:33:05 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "cls": "bonsai-details-tabs-row",
+    "aria": null,
+    "text": "This answerSession \u00b7 71",
+    "y": 96.5,
+    "h": 28,
+    "title": "wheatley fight",
+    "t": "18:33:05"
+   }
+  }
+ }
+}

@@ -591,3 +591,10 @@ land.
   earlier rule. Sightings: the Sum up reason line and the card disagree about whether the chat fits (known, "if
   there is room"); Up from Helpful landed on choice A, skipping B; the summary card quotes "Megaera" from the
   player's own question (the player's words — not a leak).
+- **18:40 — the summary card hand-off failed a third time.** Lane 12's second build (`01127c79`, Steam's transfer)
+  and the session's own (`5dbb9bff`: wait for the card whatever order the updates arrive in; judge by Steam's ring,
+  not the transfer's answer) both left the ring on the greyed "Sum up again" on the Deck's own screen
+  (plan72-F7-SUMUP.json, plan72-F8-SUMUP.json; the "ring moved away" variants passed). What a player gets: the card
+  appears with its top on screen and one Down reaches it. By the session rule (fails on the device twice → up a
+  tier; fails again → the maintainer), it goes to the maintainer: accept as is for 0.6.0 (recommended) or another
+  Deck round to learn how Steam wants the ring handed over from that button.

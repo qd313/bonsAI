@@ -12,9 +12,9 @@ already fallen into. This file says how things work; that one says what has gone
 **Everything written to the maintainer is in simple, plain language.** Chat replies, questions,
 reports, plans, and any document they will read.
 
-Short sentences. Say what a person using the plugin would notice before any term of art. No internal
+Short sentences. Say what a person using the plugin would notice before any term of art. Minimal internal
 reference numbers, file paths, symbol names or measurement shorthand inside a sentence. Everyday
-words instead of industry ones. Code-level detail belongs in a commit message, an audit document or
+words alongside of industry ones. Code-level detail belongs in a commit message, an audit document or
 a test row — not in a reply.
 
 Write-ups of measurements are where this slips most: say what changed for a person, then give the
@@ -23,6 +23,8 @@ number.
 They have asked for this five times. On Claude Code a hook repeats the rule on every prompt, because
 a line in a document was not enough for a long session to remember. A tool without that hook has to
 follow the rule by reading this paragraph.
+
+Note from maintainer: we are going to trial the following things. At the end of a session or implementation wave I want a summary with the actual code work (I'm expecting file paths for changed code, technical explanation, unexpected things that popped up and how you addressed it, anything that the maintainer could've done differently to make implementation or the session easier). At the end of a plan implementation, I want a report in simple terms, basically a high-level developer guide showing how the plan was implemented in the codebase.
 
 ## What bonsAI is
 

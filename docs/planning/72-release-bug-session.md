@@ -235,5 +235,6 @@ land.
    session, run as the waves in section 4, with the Deck busy the whole time and lanes 1 and 2 started
    early. The first Deck block's measurements still come first, but nothing else waits for a second
    session.
-5. Starting lanes 1 and 2 before plan 70 finishes: fine by you? They need no Deck and touch no knowledge
-   base files, but they do add landings to the same branch plan 70 is landing on.
+5. Starting lanes 1 and 2 before plan 70 finishes — **yes, the maintainer, 2026-09-26.** Before cutting
+   either lane, check with plan 70's session that none of the lane's files are in its flight, and land
+   between plan 70's landings, never during one.

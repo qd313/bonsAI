@@ -574,3 +574,11 @@ land.
   reasoning" unchanged); **fix the summary card's last line** (lane 12's job E: when Sum up finishes with the ring
   still on its button, the ring moves to the new card, which then fits fully above the dock). Landed `db701304`
   (lane 11): the chips keep rotating while the panel is open, holding still during an answer and under the ring.
+- **17:40 — block 6 finished on the Deck's OWN screen** (854×454 page at dpr 1.5; dot boxes exactly 4×4 on whole
+  pixels there). **The dots pass on both screens:** the session's pixel read of the row-lit capture — every plain
+  dot's centre and the active one within 0.01 screen px (249.990–249.999), the "+" 0.07 px higher, the name's glow
+  band ending with a clear row above; the new-chat spot and the writing ring on the same rows (the driver's own
+  0.1–0.26 px estimate was coarser). Ring-on-a-chip could not show the dots on this short screen (the row scrolls
+  out of view — expected there). **F5-KBCHIP passed:** after a reload, three answers, 90 reads — the "Enable local
+  knowledge base" chip never offered. Landed since 17:34: `c603925d` (the ring moves to the new summary card so all
+  of it shows), `279e415e` (lane 3: the live thinking line shows step titles only, the maintainer's option B).

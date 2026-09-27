@@ -1,0 +1,93 @@
+{
+ "row": "plan72-F5-KBCHIP",
+ "buildCommit": "67d3489c35534654c6d61d46702d59a2cd31cd8c",
+ "deckBundleMd5": "d818949c464573041d59fe573f02e3ef",
+ "deckTime": "2026-09-27 17:25:40 (reload) to 17:35:35 EDT",
+ "setup": {
+  "screen": "DECK'S OWN SCREEN (eDP-1), page 854x454, dpr 1.5",
+  "knowledgeBase": "use_local_knowledge_base true (read at 17:18 and again at 17:35; not changed); dev_force_session_rag_chips false",
+  "askMode": "Strategy",
+  "game": "none running (context line: 'no active game detected')",
+  "chat": "'how should i spend my first hour in a new open world game' (the chat on screen after the reload)",
+  "build": "d818949c464573041d59fe573f02e3ef (includes the fix commit c7a09f81)"
+ },
+ "pressed": "deck_reloadPlugin at ~17:25:40; deck_openPlugin failed once (expected after a reload; QAM did not open), second try opened the panel. For each question: send-question script (VERIFIED, whole text read back), walk to Ask (walkTo / one DOWN from the box), A once. Chips read every 5 s, 30 reads per question, starting ~4 s after Ask",
+ "questions": [
+  {
+   "q": "deep rock galactic survivor how do I pick good upgrades early",
+   "ask": "17:26:58",
+   "answerDone": "17:27:29 (Ollama /api/chat 30.4 s; two /api/embed calls, so the notes were searched)",
+   "readsAfterDone": "25 reads, 17:27:29-17:29:33 (124 s)",
+   "chipsSeen": [
+    "What are the best settings for 60fps?",
+    "I'm stuck - what should I try next?",
+    "Any known issues running this on Deck?",
+    "Check Steam players for bans",
+    "Game won't launch, what should I check?"
+   ]
+  },
+  {
+   "q": "what should I know before my first long run in deep rock galactic survivor",
+   "ask": "17:30:08",
+   "answerDone": "17:30:52 (43.5 s; two /api/embed calls; the answer card showed 'Upgrades and overclocks - From bonsAI's own note')",
+   "readsAfterDone": "22 reads, 17:30:54-17:32:43 (109 s)",
+   "chipsSeen": [
+    "What are the best settings for 60fps?",
+    "Any known issues running this on Deck?",
+    "What TDP should I use for menus and idle?",
+    "How do I use strategy mode?",
+    "What's the efficiency sweet spot for this game?"
+   ]
+  },
+  {
+   "q": "deep rock galactic survivor which weapons are best for beginners",
+   "ask": "17:33:01",
+   "answerDone": "17:33:34 (33.4 s; two /api/embed calls)",
+   "readsAfterDone": "24 reads, 17:33:36-17:35:35 (119 s)",
+   "chipsSeen": [
+    "What's the efficiency sweet spot for this game?",
+    "Which Ollama model fits my Deck setup?",
+    "What are the best FSR settings?",
+    "How can I optimize for battery life?",
+    "Any known issues running this on Deck?",
+    "How do I get past this part?",
+    "How can I reduce input lag?"
+   ]
+  }
+ ],
+ "seen": {
+  "enableKbChip": "0 of 90 reads contained 'knowledge' in any chip text",
+  "tipDot": "0 of 90 reads showed a chip with the Tip dot (.bonsai-preset-chip-tip-badge)",
+  "chipCount": "exactly 1 chip on screen in every read",
+  "chipTiming": "the chip label first changed 5-6 s after each answer finished, then rotated every 5-20 s for about a minute, then held still",
+  "note": "a few reads caught a chip mid-way through its letter-scramble animation (e.g. 'Any known issues running c...'); each such label read cleanly 5 s later and none was the knowledge-base chip"
+ },
+ "verdict": "PASS - with the knowledge base on and the plugin freshly reloaded, three differently worded Deep Rock Galactic: Survivor questions never brought up the 'Enable local knowledge base' chip. No chip with the Tip dot appeared either.",
+ "rawSamples": [
+  "scratch deck/b7/raw-KB-q1.jsonl",
+  "scratch deck/b7/raw-KB-q2.jsonl",
+  "scratch deck/b7/raw-KB-q3.jsonl"
+ ],
+ "reads": {
+  "pre": {
+   "deckTime": "2026-09-27 17:26:42 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "t": "17:26:42",
+    "chips": [
+     {
+      "t": "Check Steam players for bans",
+      "tip": false,
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode"
+     }
+    ],
+    "askCls": "bonsai-askbar-target bonsai-ask-primary",
+    "askText": "ask",
+    "title": "how should i spend my first hour in a new open world game",
+    "turns": 1,
+    "lastQ": "how should i spend my first hour in a new open world game",
+    "lastA": "Listen up, mate. You wanna know how to spend your first hour in a new open world? Forget the fancy stuff. You gotta get your feet wet. Don't just run around aim"
+   }
+  }
+ }
+}

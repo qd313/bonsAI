@@ -1,0 +1,908 @@
+{
+ "row": "plan72-F5-DOTS-writing-deckscreen",
+ "buildCommit": "67d3489c35534654c6d61d46702d59a2cd31cd8c",
+ "deckBundleMd5": "d818949c464573041d59fe573f02e3ef",
+ "deckTime": "2026-09-27 17:23:58 EDT (Ask) to 17:25:15 (answer done)",
+ "setup": {
+  "screen": "DECK'S OWN SCREEN (eDP-1). Page 854x454, dpr 1.5; page origin at physical (759,60)",
+  "uiSize": "handheld (scale 1)",
+  "writingChat": "wheatley fight (dot index 2 when asked)",
+  "build": "d818949c464573041d59fe573f02e3ef"
+ },
+ "pressed": "send-question script (VERIFIED, whole text: 'Explain in detail what each number in the Steam Deck performance overlay means'); deck_walkTo DOWN 2 presses chip -> Ask; A once on Ask (answer started: 'Summing up the chat so far' showed); deck_walkTo UP 12 presses (overshot to the back button, the row has no name to match), DOWN x2 to the chat row; RB once; three captures; deck_walkTo DOWN 9 presses to the chip; one capture",
+ "seen": {
+  "timing": "RB landed about 18 s after Ask (bridge clock 1416023800 -> 1416041992 ms), not within 5 s: the walk up is 12+ presses on this screen. The answer was still writing: Ollama finished at 17:25:15 (46.8 s request).",
+  "rowLitFrames": "chat after RB: 'how should i spend my first hour in a new open world game' (dot 3 active, bright rgb(156,231,255)); writing chat = dot 2, class --pending: background transparent, box-shadow 'rgba(56,189,248,0.9) 0 0 0 1px inset, rgba(56,189,248,0.55) 0 0 5px', animation none - drawn as a hollow blue ring. All boxes 4x4 at y 124.667, x 156..236 step 10",
+  "paintedPixels": "all three frames (17:24:34, :42, :44): every dot, the ring-shaped writing dot and the lit dot included, paints physical rows 247..252. Centroids: plain 249.19..249.30, writing ring 249.37..249.41, lit 249.44..249.45. The three frames match to within 0.1 px, so no visible pulse. The header also shows a small hollow circle between the save icon and the title while the other chat writes.",
+  "chipFrame": "17:25:11, ring on the chip 'Which Ollama model fits my Deck setup?': the chat's scroll area was at scrollTop 256 and the chat row was off the top of the panel (row y -168), so no dots are visible in this picture. The Ask area shows the stop square, so the answer was still writing at capture.",
+  "afterFinish": "read at 17:25:15, just after the answer finished: the dots had re-sorted newest first - the writing chat moved to dot 1 and is now --unread, bg rgb(74,222,128) with a green 5px glow; the viewed chat moved to dot 3 (active, pale rgba(200,214,230,0.5) since the ring is off the row)"
+ },
+ "screenshots": [
+  "screenshots/plan72/F5-DOTS-writing-deckscreen-f1.png",
+  "screenshots/plan72/F5-DOTS-writing-deckscreen-f2.png",
+  "screenshots/plan72/F5-DOTS-writing-deckscreen-f3.png",
+  "screenshots/plan72/F5-DOTS-writing-deckscreen-chip.png (row off screen)"
+ ],
+ "verdict": "MEASURED for the ring-on-row frames (writing dot sits on the same rows as the others, under 0.25 px apart). The ring-on-chip frame shows no dots on this screen (same as the plain state). RB came at 18 s, not 5 s.",
+ "reads": {
+  "rowLit": {
+   "deckTime": "2026-09-27 17:24:39 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "sw": 853,
+    "sh": 533,
+    "dpr": 1.5,
+    "uiScale": "1",
+    "focus": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "text": "LBwheatley fighthow should i spend my first hour in a new open world gamehow sho",
+     "aria": null,
+     "rect": {
+      "x": 48,
+      "y": 88,
+      "w": 300,
+      "h": 48.333
+     }
+    },
+    "title": "how should i spend my first hour in a new open world gamehow should i spend my first hour in a new open world game",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing",
+    "rects": {
+     "dots": {
+      "x": 99.333,
+      "y": 124.667,
+      "w": 197.333,
+      "h": 4
+     },
+     "title": {
+      "x": 132.51,
+      "y": 109.469,
+      "w": 145.646,
+      "h": 14.396
+     },
+     "row": {
+      "x": 48,
+      "y": 88,
+      "w": 300,
+      "h": 48.333
+     },
+     "scope": {
+      "x": 48,
+      "y": 64,
+      "w": 300,
+      "h": 390
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--pending",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "rgba(56, 189, 248, 0.9) 0px 0px 0px 1px inset, rgba(56, 189, 248, 0.55) 0px 0px 5px 0px",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgb(156, 231, 255)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 196,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 206,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 216,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 226,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 236,
+       "y": 124.667,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  },
+  "chip": {
+   "deckTime": "2026-09-27 17:25:15 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "sw": 853,
+    "sh": 533,
+    "dpr": 1.5,
+    "uiScale": "1",
+    "focus": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "text": " ",
+     "aria": null,
+     "rect": {
+      "x": 48,
+      "y": 290.583,
+      "w": 300,
+      "h": 30
+     }
+    },
+    "title": "how should i spend my first hour in a new open world game",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop",
+    "rects": {
+     "dots": {
+      "x": 56,
+      "y": -133.333,
+      "w": 284,
+      "h": 4
+     },
+     "title": {
+      "x": 108.594,
+      "y": -148.531,
+      "w": 178.813,
+      "h": 14.396
+     },
+     "row": {
+      "x": 48,
+      "y": -168,
+      "w": 300,
+      "h": 44.333
+     },
+     "scope": {
+      "x": 48,
+      "y": 64,
+      "w": 300,
+      "h": 390
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--unread",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgb(74, 222, 128)",
+      "boxShadow": "rgba(74, 222, 128, 0.65) 0px 0px 5px 0px",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(200, 214, 230, 0.5)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 196,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 206,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 216,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 226,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 236,
+       "y": -133.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  },
+  "paintF1": [
+   {
+    "i": 0,
+    "cls": "--create",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.24,
+    "centroidX": 995.43,
+    "peakRGBsum": 400,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 1,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.3,
+    "centroidX": 1010.51,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 2,
+    "cls": "--pending",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.41,
+    "centroidX": 1025.47,
+    "peakRGBsum": 453,
+    "bgRGBsum": 77
+   },
+   {
+    "i": 3,
+    "cls": "--active",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.45,
+    "centroidX": 1040.5,
+    "peakRGBsum": 642,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 4,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.3,
+    "centroidX": 1055.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 5,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.3,
+    "centroidX": 1070.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 6,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.29,
+    "centroidX": 1085.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 7,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.28,
+    "centroidX": 1100.49,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 8,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.3,
+    "centroidX": 1115.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   }
+  ],
+  "paintF2": [
+   {
+    "i": 0,
+    "cls": "--create",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.15,
+    "centroidX": 995.43,
+    "peakRGBsum": 400,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 1,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.24,
+    "centroidX": 1010.51,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 2,
+    "cls": "--pending",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.4,
+    "centroidX": 1025.47,
+    "peakRGBsum": 453,
+    "bgRGBsum": 77
+   },
+   {
+    "i": 3,
+    "cls": "--active",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.44,
+    "centroidX": 1040.5,
+    "peakRGBsum": 642,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 4,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.22,
+    "centroidX": 1055.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 5,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.22,
+    "centroidX": 1070.49,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 6,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.22,
+    "centroidX": 1085.51,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 7,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.18,
+    "centroidX": 1100.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 8,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.21,
+    "centroidX": 1115.49,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   }
+  ],
+  "paintF3": [
+   {
+    "i": 0,
+    "cls": "--create",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.16,
+    "centroidX": 995.44,
+    "peakRGBsum": 400,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 1,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.19,
+    "centroidX": 1010.51,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 2,
+    "cls": "--pending",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.37,
+    "centroidX": 1025.46,
+    "peakRGBsum": 453,
+    "bgRGBsum": 77
+   },
+   {
+    "i": 3,
+    "cls": "--active",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.44,
+    "centroidX": 1040.5,
+    "peakRGBsum": 642,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 4,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.23,
+    "centroidX": 1055.51,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 5,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.2,
+    "centroidX": 1070.49,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 6,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.19,
+    "centroidX": 1085.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 7,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.18,
+    "centroidX": 1100.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   },
+   {
+    "i": 8,
+    "cls": "",
+    "boxPhysY": 247.0,
+    "paintedRows": [
+     247,
+     252
+    ],
+    "centroidY": 249.16,
+    "centroidX": 1115.5,
+    "peakRGBsum": 209,
+    "bgRGBsum": 74
+   }
+  ]
+ }
+}

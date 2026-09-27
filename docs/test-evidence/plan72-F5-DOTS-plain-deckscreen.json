@@ -1,0 +1,291 @@
+{
+ "row": "plan72-F5-DOTS-plain-deckscreen",
+ "buildCommit": "67d3489c35534654c6d61d46702d59a2cd31cd8c",
+ "deckBundleMd5": "d818949c464573041d59fe573f02e3ef",
+ "deckTime": "2026-09-27 17:20:25 EDT (read), screenshot 17:20:21; retried 17:23:30",
+ "setup": {
+  "screen": "DECK'S OWN SCREEN (eDP-1 on, DP-1 off). Page 854x454, screen 853x533, dpr 1.5. Screenshot 1280x800; the page's (0,0) sits at physical (759,60) in the screenshot",
+  "uiSize": "handheld (ui_scale_auto_enabled true, manual profile handheld, --bonsai-ui-scale 1)",
+  "chat": "wheatley fight, dot index 2 active (index 0 is the '+', 8 saved chats at 1..8)",
+  "build": "d818949c464573041d59fe573f02e3ef"
+ },
+ "pressed": "after opening the panel: DOWN (placed ring on the Retry arrow), then deck_walkTo DOWN (14 presses, ran past the chip to Ask), UP x3 one at a time to the preset chip 'Which Ollama model fits my Deck setup?'. Retry of the runbook's route at 17:23: from the chat row, deck_walkTo DOWN, 11 presses, to the same chip",
+ "seen": {
+  "ring": "preset chip button .bonsai-preset-glass, rect 48,290.833 300x30, fully visible",
+  "chatRowVisible": false,
+  "why": "on this screen the chat's scroll area is only 366 CSS px tall (scrollHeight 1034). Walking down to the chip scrolls it to scrollTop 668, which carries the chat row off the top: .bonsai-chat-slot-row at y -580, dots at y -545.333. Both tries gave the same result. The screenshot shows no chat row and no dots, only the tab strip (LB, six dashes, MAIN, RB) above the answer.",
+  "dotBoxes": "9 elements, all 4x4 at y -545.333 (off screen): '+' x 156 (transparent, radius 0), dots x 166..236 step exactly 10.000; active dot (i2) bg rgba(200,214,230,0.5), others rgba(143,168,196,0.3); no box-shadow, transform none, opacity 1, margin 0, vertical-align baseline on all",
+  "containerRects": {
+   "dots": "56,-545.333 284x4",
+   "title": "156.5,-560.531 83x14.396",
+   "row": "48,-580 300x44.333",
+   "scope": "48,64 300x390"
+  },
+  "compareMonitor": "on the monitor (block 1) boxes were 3.992 wide at fractional x; here every box is exactly 4.000 at whole-number x"
+ },
+ "screenshot": "screenshots/plan72/F5-DOTS-plain-deckscreen.png (1280x800, ring on the chip, chat row not on screen)",
+ "verdict": "UNCLEAR - the ring-on-a-chip state could be set up and its boxes read, but on the Deck's own screen the chat row is scrolled out of sight in that state, so there are no painted dots to measure. The runbook's route was tried twice with the same result.",
+ "reads": {
+  "dots": {
+   "deckTime": "2026-09-27 17:20:25 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 854,
+    "ih": 454,
+    "sw": 853,
+    "sh": 533,
+    "dpr": 1.5,
+    "uiScale": "1",
+    "focus": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "text": "Which Ollama model fits my Deck setup?",
+     "aria": null,
+     "rect": {
+      "x": 48,
+      "y": 290.833,
+      "w": 300,
+      "h": 30
+     }
+    },
+    "title": "wheatley fight",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop",
+    "rects": {
+     "dots": {
+      "x": 56,
+      "y": -545.333,
+      "w": 284,
+      "h": 4
+     },
+     "title": {
+      "x": 156.5,
+      "y": -560.531,
+      "w": 83,
+      "h": 14.396
+     },
+     "row": {
+      "x": 48,
+      "y": -580,
+      "w": 300,
+      "h": 44.333
+     },
+     "scope": {
+      "x": 48,
+      "y": 64,
+      "w": 300,
+      "h": 390
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(200, 214, 230, 0.5)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 196,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 206,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 216,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 226,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 236,
+       "y": -545.333,
+       "w": 4,
+       "h": 4
+      },
+      "width": "4px",
+      "height": "4px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  }
+ }
+}

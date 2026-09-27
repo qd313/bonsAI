@@ -1,0 +1,64 @@
+{
+ "row": "plan72-F5-SCREEN",
+ "buildCommit": "67d3489c35534654c6d61d46702d59a2cd31cd8c",
+ "deckBundleMd5": "d818949c464573041d59fe573f02e3ef",
+ "deckTime": "2026-09-27 17:19:25 EDT",
+ "setup": {
+  "build": "deployed 17:31 per the session (the Deck clock reads 17:18-17:19 at this point); dist/index.js md5 d818949c464573041d59fe573f02e3ef on the PC and the Deck",
+  "rig": "303a:1001 on the Deck's USB bus; bridge COM7",
+  "keepAwake": "systemd-inhibit block lock 'DPS-HOLD-AWAKE: bonsai-72 F2', sleep 28800 started 14:33:18 EDT, so it runs to 22:33 EDT (02:33Z)",
+  "backup": "~/qa-backups/settings-plan72-block6 made at 17:18; diff -r against the live folder: identical; chat_slots 9 files (8 chats + index.json); bonsai_feedback.jsonl 5 lines; ~/Desktop/bonsAI_logs 166 entries",
+  "game": "none running (no reaper / steamapps process)"
+ },
+ "pressed": "nothing but deck_openPlugin (QAM opened, Decky tab, bonsAI row, A); the panel was closed beforehand",
+ "seen": {
+  "drm": {
+   "card0-eDP-1": "enabled, connected",
+   "card0-DP-1": "disabled, disconnected",
+   "card0-Writeback-1": "disabled"
+  },
+  "page": {
+   "innerWidth": 854,
+   "innerHeight": 454,
+   "screen.width": 853,
+   "screen.height": 533,
+   "devicePixelRatio": 1.5,
+   "textWrapBalance": true,
+   "textWrapPretty": true,
+   "--bonsai-ui-scale": "1",
+   ".bonsai-scope": "x 48 y 64 w 300 h 390 (bottom 454)",
+   "chat": "wheatley fight"
+  },
+  "monitorForComparison": "855x766 at dpr 1.28 (earlier blocks)",
+  "note": "with the panel closed the QAM page read innerWidth 1 / innerHeight 1, screen 853x533, dpr 1.5. 853x533 at 1.5 = 1280x800, the Deck's own panel. innerHeight 454 is 79 px less than screen.height 533."
+ },
+ "verdict": "PASS - the Deck's own screen (eDP-1) is live and the page numbers (854x454, dpr 1.5) differ from the monitor's 855x766 at 1.28",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 17:19:25 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 854,
+    "innerHeight": 454,
+    "screenWidth": 853,
+    "screenHeight": 533,
+    "devicePixelRatio": 1.5,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Valve Steam Client Safari/537.36",
+    "textWrapBalance": true,
+    "textWrapPretty": true,
+    "uiScaleVar": "1",
+    "scopeRect": {
+     "x": 48,
+     "y": 64,
+     "width": 300,
+     "height": 390,
+     "top": 64,
+     "right": 348,
+     "bottom": 454,
+     "left": 48
+    },
+    "chatTitle": "wheatley fight"
+   }
+  }
+ }
+}

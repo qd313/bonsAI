@@ -11,6 +11,7 @@ import {
   setFrozenTestChips,
   getFrozenTestChips,
   frozenTestChipsActive,
+  SHOW_BETA_PRESET_CHIPS,
 } from "./presets";
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 
@@ -189,5 +190,51 @@ describe("suggestion chip pool", () => {
     // Pressing a chip puts its text in the Ask box; this is the check that sends it to the lookup
     // rather than the AI (the back end's parse_vac_check_command answers to the same sentence).
     expect(questionBypassesOllamaPcIpRequirement(chip!.text)).toBe(true);
+  });
+});
+
+// Plan 72 lane 8 (0.6.0): chips for features that are unbuilt, shelved or cannot do what they
+// say must never reach a player. They stay in the file for later; SHOW_BETA_PRESET_CHIPS brings
+// them back.
+describe("unfinished chips stay hidden", () => {
+  const HIDDEN = [
+    "How do I enable token streaming?",
+    "What should I expect while answers stream in?",
+    "Can you set a quiet fan profile?",
+    "What does my Proton log say about the last crash?",
+    "Are there issues with my Steam Input layout?",
+    "Suggest mods or tweaks for this game",
+    "Open Steam Input config",
+    "How do I bind a BonsAI quick-launch chord?",
+    "How do I find Ollama on my LAN?",
+    "How do I use Find LAN on the Ollama tab?",
+  ];
+  afterEach(() => setFrozenTestChips([]));
+
+  it("the flag that brings them back is off", () => {
+    expect(SHOW_BETA_PRESET_CHIPS).toBe(false);
+  });
+
+  it("no sampler can pick one, with or without the knowledge base on", () => {
+    for (const useLocalKnowledgeBase of [false, true]) {
+      const opts = { useLocalKnowledgeBase };
+      // Asking for more than the pool returns the whole pool.
+      const whole = getRandomPresets(10_000, opts).map((p) => p.text);
+      expect(whole.length).toBeGreaterThan(20);
+      for (const cat of ["performance", "controls", "troubleshooting", "ollama", "general", "thermal", "nope"]) {
+        whole.push(...getContextualPresets(cat, 10_000, opts).map((p) => p.text));
+      }
+      // Excluding every visible chip makes the rotation fall back to the full pool it draws from.
+      const visible = new Set(getRandomPresets(10_000, opts).map((p) => p.text));
+      for (let i = 0; i < 200; i++) {
+        whole.push(getRandomPresetExcluding(visible, opts).text);
+        whole.push(getRandomPresetExcluding(new Set(), opts).text);
+      }
+      for (const text of HIDDEN) expect(whole).not.toContain(text);
+    }
+  });
+
+  it("still knows their category, so a typed question matching one routes the same", () => {
+    expect(detectPromptCategory("Open Steam Input config")).toBe("controls");
   });
 });

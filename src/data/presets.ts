@@ -163,16 +163,26 @@ export type PresetSamplerOptions = {
 };
 
 /**
- * A raw typed command ("bonsai:...") is never offered as a suggestion chip: plan 70 saw
+  * Chips marked `beta` are left out of every sampler while this is false (0.6.0, plan 72): they ask
+  * about unbuilt or shelved features (fan profiles, mods, Steam Input layout reading, Proton logs,
+  * the old streaming switch, the quick-launch chord, Find LAN), or read like a button that opens a
+  * Steam screen when they only send words. Set it to true to bring them all back with their
+  * "[beta]" badge; the entries themselves stay below.
+  */
+export const SHOW_BETA_PRESET_CHIPS = false;
+
+/**
+ * A raw typed command ("bonsai:...") is never offered as a suggestion chip either: plan 70 saw
  * "bonsai:vac-check" rotate through the chips like a question. A command in plain words ("Check
  * Steam players for bans", the ban lookup) is a chip like any other.
  */
 function samplerPool(options?: PresetSamplerOptions): PresetPrompt[] {
-  const suggestable = PRESET_PROMPTS.filter(
-    (p) => !(questionBypassesOllamaPcIpRequirement(p.text) && /^\/?\s*bonsai:/i.test(p.text))
+  return PRESET_PROMPTS.filter(
+    (p) =>
+      (SHOW_BETA_PRESET_CHIPS || !p.beta) &&
+      !(questionBypassesOllamaPcIpRequirement(p.text) && /^\/?\s*bonsai:/i.test(p.text)) &&
+      !(options?.useLocalKnowledgeBase && p.text === LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT),
   );
-  if (!options?.useLocalKnowledgeBase) return suggestable;
-  return suggestable.filter((p) => p.text !== LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT);
 }
 
 const PRESET_PROMPTS: PresetPrompt[] = [
@@ -187,17 +197,17 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Why is my Deck running hot?", category: "thermal" },
   { text: "Recommended controller layout?", category: "controls" },
   { text: "How can I reduce input lag?", category: "controls" },
-  { text: "Open Steam Input config", category: "controls" },
+  { text: "Open Steam Input config", category: "controls", beta: true },
   { text: "How do I fix Steam Input for this game?", category: "controls" },
-  { text: "How do I bind a BonsAI quick-launch chord?", category: "controls" },
+  { text: "How do I bind a BonsAI quick-launch chord?", category: "controls", beta: true },
   { text: "Why is my game crashing?", category: "troubleshooting" },
   { text: "How do I fix stuttering?", category: "troubleshooting" },
   { text: "Help me troubleshoot a Proton issue", category: "troubleshooting" },
   { text: "Game won't launch, what should I check?", category: "troubleshooting" },
   { text: "Check Steam players for bans", category: "troubleshooting" },
   { text: "Diagnose a slow Ollama response", category: "ollama" },
-  { text: "How do I find Ollama on my LAN?", category: "ollama" },
-  { text: "How do I use Find LAN on the Ollama tab?", category: "ollama" },
+  { text: "How do I find Ollama on my LAN?", category: "ollama", beta: true },
+  { text: "How do I use Find LAN on the Ollama tab?", category: "ollama", beta: true },
   { text: "Why can't bonsAI reach my PC Ollama host?", category: "ollama" },
   { text: "What should I do if Ask times out?", category: "ollama" },
   { text: "What settings should I use?", category: "general" },
@@ -314,7 +324,7 @@ function frozenPresets(): PresetPrompt[] {
   if (!TEMP_PRESET_CAROUSEL_FROZEN) return [];
   const resolved: PresetPrompt[] = [];
   for (const text of TEMP_CAROUSEL_FROZEN_TEXTS) {
-    const p = PRESET_PROMPTS.find((x) => x.text === text);
+    const p = samplerPool().find((x) => x.text === text);
     if (p) {
       resolved.push(p);
     }

@@ -131,6 +131,14 @@ export function buildQuestionBubbleSection(): string {
           width: ${uiScalePx(19)} !important;
           height: 1.3em !important;
         }
+        /* Once questionBubbleFit.ts has fitted the bubble, the title box itself starts clear of
+           the icon on every line, so the float would only take the same room twice. */
+        .bonsai-scope
+          .bonsai-chat-turn-row-header--with-retry.bonsai-chat-turn-row-header--expanded[data-bonsai-fitted]
+          .bonsai-chat-turn-row-title::after {
+          content: none !important;
+          float: none !important;
+        }
         /* Icon only, same weight as the microphone in the Ask field. */
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner,
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.DialogButton {
@@ -191,8 +199,11 @@ export function buildQuestionBubbleSection(): string {
           text-overflow: clip !important;
           max-height: 6.5em !important;
           /* Option D (plan 72): lines of about equal length. After white-space, which can reset it.
-             The bubble's shrink to the longest line is measured in questionBubbleFit.ts. */
+             Steam's browser ignored it on the Deck (the Retry float, most likely), so
+             questionBubbleFit.ts evens the lines itself; this stays for a Steam that honours it. */
           text-wrap: balance !important;
+          /* When that measurement narrows the title, it sits at the bubble's right edge. */
+          margin-left: auto !important;
         }
         /*
          * The last-line fade only belongs on a question that is actually cut short by the

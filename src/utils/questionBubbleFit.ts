@@ -5,9 +5,9 @@
  * stylesheet already evens out the open question's lines (text-wrap: balance), but a browser
  * does not shrink a box to its longest line after wrapping: measured on the Deck
  * (plan72-P-QBUBBLE-handheld.json), a three-line question kept its bubble at full width with
- * 20.3 px of empty space left of the widest line. This reads the text's real line boxes and sets
- * the bubble to the widest line, plus its padding and border, plus the room the text keeps clear
- * of the Retry arrow.
+ * 20.3 px of empty space left of the widest line. This reads the text's real line boxes, evens
+ * the lines out itself (balance did nothing on the Deck), and sets the bubble to the widest line,
+ * plus its padding and border, plus the room the text keeps clear of the Retry arrow.
  *
  * Used for: buildTurnHeaderElement.tsx, from the question bubble's ref.
  *
@@ -46,24 +46,77 @@ function lineWidths(title: HTMLElement): number[] {
   return lines.map((l) => l.right - l.left);
 }
 
+/** Set on a bubble while it is fitted: the stylesheet then drops the Retry float (see fit). */
+const FITTED_ATTR = "data-bonsai-fitted";
+
 /**
- * Measure once and set the width. The inline width is cleared first so the text wraps at the
- * bubble's natural (capped) width; `!important` because the stylesheet's own
- * `width: fit-content` carries it. The room kept for Retry is the float the stylesheet puts on
- * the title's last line (its `::after`, 0 when there is no Retry): adding it to every line keeps
- * the widest line clear of the arrow by the same 3 px as the last one.
+ * Even out the lines by hand. The stylesheet asks for text-wrap: balance, but the Deck re-check
+ * (plan72-F-BUBBLE.json, build 0065fccb) found it has no effect there: the lines stayed 193.6 /
+ * 225.0 / 105.8. Most likely Chromium skips balancing when a float sits in the paragraph, and the
+ * Retry spacer is one. So: a binary search on the title's max-width for the narrowest width that
+ * keeps the same number of lines and no more height. About six layouts, once per fit, never per
+ * frame.
+ * In: the title, its natural lines and height, and the widest the title may be.
+ * Out: that narrowest width, left set on the title; or null when even the widest does not keep
+ * the lines, with the title's max-width cleared again.
+ */
+function balanceTitle(title: HTMLElement, natural: number[], height: number, widest: number): number | null {
+  const keeps = (width: number): boolean => {
+    title.style.setProperty("max-width", `${width}px`, "important");
+    return lineWidths(title).length === natural.length && title.scrollHeight <= height;
+  };
+  let fits = Math.floor(widest);
+  if (!keeps(fits)) {
+    title.style.removeProperty("max-width");
+    return null;
+  }
+  const total = natural.reduce((sum, w) => sum + w, 0);
+  let fails = Math.floor(total / natural.length) - 1;
+  while (fits - fails > 1) {
+    const mid = Math.floor((fits + fails) / 2);
+    if (keeps(mid)) fits = mid;
+    else fails = mid;
+  }
+  title.style.setProperty("max-width", `${fits}px`, "important");
+  return fits;
+}
+
+/**
+ * Measure and set the width. Inline widths are cleared first so the text wraps at the bubble's
+ * natural (capped) width; `!important` because the stylesheet's own `width: fit-content` carries
+ * it. The room kept for Retry is the float the stylesheet puts on the title's last line (its
+ * `::after`, 0 when there is no Retry).
+ *
+ * Fitted, the bubble is the balanced text width + that room + its own padding and border, and the
+ * title box sits at the right (its `margin-left: auto`), so the room is on the left of EVERY line
+ * and the widest one starts 3 px from the arrow. The float is then switched off (FITTED_ATTR): left
+ * on, it would take the room a second time from the last line, and it stops the lines narrowing
+ * (the last line plus 19 would set the width, leaving 22 px beside the arrow). When the balanced
+ * text will not fit beside that room, the float stays and the bubble gets the plain fit instead:
+ * the widest natural line + padding + room, as passed on the Deck (plan72-F-BUBBLE.json).
  */
 function fit(header: HTMLElement): void {
   const title = header.querySelector<HTMLElement>(".bonsai-chat-turn-row-title");
   header.style.removeProperty("width");
+  header.removeAttribute(FITTED_ATTR);
   if (!title) return;
+  title.style.removeProperty("max-width");
   const widths = lineWidths(title);
   if (widths.length < 2) return;
-  const longest = Math.max(...widths);
-  const padding = header.getBoundingClientRect().width - title.getBoundingClientRect().width;
+  const titleWidth = title.getBoundingClientRect().width;
+  const padding = header.getBoundingClientRect().width - titleWidth;
   const retryRoom = parseFloat(window.getComputedStyle(title, "::after").width) || 0;
-  header.style.setProperty("width", `${Math.ceil(longest + padding + retryRoom)}px`, "important");
+  const height = title.scrollHeight;
+  header.setAttribute(FITTED_ATTR, "");
+  const textWidth = balanceTitle(title, widths, height, titleWidth - retryRoom);
+  if (textWidth === null) {
+    header.removeAttribute(FITTED_ATTR);
+    header.style.setProperty("width", `${Math.ceil(Math.max(...widths) + padding + retryRoom)}px`, "important");
+    return;
+  }
+  header.style.setProperty("width", `${Math.ceil(textWidth + padding + retryRoom)}px`, "important");
 }
+
 
 /**
  * For the question bubble's ref, on every render. In: the bubble (or null on unmount), whether
@@ -78,6 +131,8 @@ export function fitOpenQuestionBubble(header: HTMLElement | null, expanded: bool
       state.observer?.disconnect();
       fits.delete(header);
       header.style.removeProperty("width");
+      header.removeAttribute(FITTED_ATTR);
+      header.querySelector<HTMLElement>(".bonsai-chat-turn-row-title")?.style.removeProperty("max-width");
     }
     return;
   }

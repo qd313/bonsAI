@@ -472,3 +472,8 @@ land.
   `a7ac4ddbb3247fb72`): the Helpful row and reason chips vanish on a panel reopen or chat switch (more visible
   now the save icon's window reopens the panel). Lane 11 started (agent `a65bf9866ef9d9d87`): the chips stop
   rotating after about 30 s idle, and keep rotating while an answer is written.
+- **15:10 — the maintainer's calls:** the save icon shows on every chat with at least one answer, older saved
+  chats included, never on an empty one (lane 5's job E: the icon and the save window read the chat's loaded
+  turns when this session has no answer; the note still saves the newest question and answer). Dots order:
+  "newest first, I think" — [a drawing of three ways](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY)
+  (A move at once, today; B fixed order; C newest first but re-sorted only on the next open) sent to confirm.

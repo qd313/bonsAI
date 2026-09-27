@@ -102,6 +102,21 @@ type RagCorpusStatus = {
   };
 };
 
+type RagUpdateResult = {
+  ok?: boolean;
+  updated?: boolean;
+  outcome?: string;
+  version?: string;
+  error?: string;
+  reason?: string;
+};
+
+/**
+ * What the last Update press found, shown in the row's own status text. "downloading" is
+ * only drawn while the download runs; the Installed line carries the new version after.
+ */
+type UpdateNote = { kind: "checking" | "current" | "downloading" | "error"; text: string };
+
 type Props = {
   useLocalKnowledgeBase: boolean;
   setUseLocalKnowledgeBase: (v: boolean) => void;
@@ -281,6 +296,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
   const [cancelBusy, setCancelBusy] = useState(false);
+  const [updateNote, setUpdateNote] = useState<UpdateNote | null>(null);
   const [nomicPullBusy, setNomicPullBusy] = useState(kbNomicPullLikelyInFlight);
   /** Set once a pull is accepted (by this copy or one before a remount); polls status until the model shows up. */
   const [nomicPullStarted, setNomicPullStarted] = useState(kbNomicPullLikelyInFlight);
@@ -426,9 +442,14 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     return () => window.clearInterval(id);
   }, [downloadBusy, refreshStatus, ollamaIp]);
 
-  /** The download ending is what clears Cancel's own pending state, however it ended. */
+  /**
+   * The download ending is what clears Cancel's own pending state, however it ended, and
+   * an Update's "downloading" note with it (a later fresh download must not reuse it).
+   */
   useEffect(() => {
-    if (!downloadBusy) setCancelBusy(false);
+    if (downloadBusy) return;
+    setCancelBusy(false);
+    setUpdateNote((n) => (n?.kind === "downloading" ? null : n));
   }, [downloadBusy]);
 
   /**
@@ -612,34 +633,45 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     );
   };
 
+  /**
+   * Update says what it did in the row's status text: "Checking…" while the manifest is
+   * fetched, then up to date (with the version), a newer version downloading (the progress
+   * line below takes over), or a plain error. On the Deck two presses showed nothing at all
+   * (plan70-R5.json). A press while a check is already running is ignored rather than
+   * disabling the button, so focus never lands on a dead control.
+   */
   const runUpdate = () => {
-    void callDeckyWithTimeout<[], { ok?: boolean; updated?: boolean; version?: string; error?: string }>(
-      "update_rag_corpus",
-      [],
-      DECKY_RPC_TIMEOUT_MS,
-    )
+    if (updateNote?.kind === "checking") return;
+    setUpdateNote({ kind: "checking", text: "Checking for a newer version…" });
+    void callDeckyWithTimeout<[], RagUpdateResult>("update_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
       .then((out) => {
         if (!out?.ok) {
-          toaster.toast({ title: "Update failed", body: out?.error ?? "Unknown error", duration: 8000 });
+          const err = out?.error ?? out?.reason ?? "Unknown error";
+          const text =
+            out?.outcome === "check_failed" ? `Could not check for updates: ${err}` : `Update failed: ${err}`;
+          setUpdateNote({ kind: "error", text });
+          toaster.toast({ title: "Update failed", body: err, duration: 8000 });
           return;
         }
         if (out.updated === false) {
-          toaster.toast({
-            title: "Already up to date",
-            body: out.version ? `Version ${out.version} is the latest.` : "No update available.",
-            duration: 4000,
+          setUpdateNote({
+            kind: "current",
+            text: out.version ? `Already up to date (version ${out.version}).` : "Already up to date.",
           });
           return;
         }
-        toaster.toast({
-          title: "Update found",
-          body: out.version ? `Downloading version ${out.version}…` : "Downloading the latest corpus…",
-          duration: 4000,
+        setUpdateNote({
+          kind: "downloading",
+          text: out.version ? `Newer version ${out.version} found — downloading…` : "Newer version found — downloading…",
         });
         kbDownloadStartedAtMs = Date.now();
         setDownloadBusy(true);
       })
-      .catch((e) => toaster.toast({ title: "Update failed", body: formatDeckyRpcError(e), duration: 8000 }));
+      .catch((e) => {
+        const err = formatDeckyRpcError(e);
+        setUpdateNote({ kind: "error", text: `Update failed: ${err}` });
+        toaster.toast({ title: "Update failed", body: err, duration: 8000 });
+      });
   };
 
   const confirmRemove = () => {
@@ -660,6 +692,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
             .then(() => {
               setUseLocalKnowledgeBase(false);
+              setUpdateNote(null);
               void refreshStatus();
               toaster.toast({ title: "Knowledge base removed", body: "Corpus deleted from disk.", duration: 3000 });
             })
@@ -790,6 +823,13 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
               </div>
               ) : null}
             </div>
+          ) : null}
+          {updateNote && (updateNote.kind !== "downloading" || downloadBusy) ? (
+            <span
+              style={{ display: "block", marginTop: 6, color: updateNote.kind === "error" ? "#ff9b9b" : "#9fb7d5" }}
+            >
+              {updateNote.text}
+            </span>
           ) : null}
           {progress ? <span style={{ display: "block", marginTop: 6 }}>{progress}</span> : null}
           {wasCancelled && !downloadBusy ? (

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 536,
-  "edgeCount": 1449,
+  "fileCount": 537,
+  "edgeCount": 1451,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -244,8 +244,16 @@
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
+        "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/OllamaTab.tsx"
       ]
+    },
+    "src/components/KnowledgeBaseSection.update.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
     },
     "src/components/MainTab.dockClass.test.ts": {
       "imports": [
@@ -3958,6 +3966,7 @@
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
+        "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",

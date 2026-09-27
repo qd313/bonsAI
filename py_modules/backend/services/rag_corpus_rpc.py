@@ -137,20 +137,46 @@ async def cancel_rag_corpus_download(self):
 
 
 async def update_rag_corpus(self):
-    """Check remote manifest and re-download when version differs."""
+    """Check remote manifest and re-download when version differs.
+
+    Every call ends in one of four ``outcome`` values the screen shows in the row's
+    status line -- up_to_date, download_started, download_not_started, check_failed --
+    and writes exactly one plugin-log line saying which. On the Deck an Update that
+    found nothing new used to leave no trace at all (plan70-R5.json).
+    """
     settings = await self.load_settings()
+    local_ver = str(settings.get("rag_corpus_version") or "")
+
+    def log_update(outcome: str, newest: str, detail: str = "") -> None:
+        log = logger.warning if outcome in ("check_failed", "download_not_started") else logger.info
+        log(
+            "update_rag_corpus: checked; installed=%s newest=%s outcome=%s%s",
+            local_ver or "none",
+            newest or "unknown",
+            outcome,
+            f" ({detail})" if detail else "",
+        )
+
     try:
         manifest = await asyncio.to_thread(fetch_remote_manifest)
     except Exception as exc:
-        return {"ok": False, "error": str(exc)}
+        log_update("check_failed", "", str(exc))
+        return {"ok": False, "outcome": "check_failed", "error": str(exc)}
     remote_ver = str(manifest.get("version") or "")
-    local_ver = str(settings.get("rag_corpus_version") or "")
     if remote_ver and remote_ver == local_ver and resolve_corpus_db_path(settings):
-        return {"ok": True, "updated": False, "version": local_ver}
+        log_update("up_to_date", remote_ver)
+        return {"ok": True, "updated": False, "outcome": "up_to_date", "version": local_ver}
     out = await self.start_rag_corpus_download(
         {"install_path": settings.get("rag_corpus_path") or default_corpus_dir_internal()}
     )
-    return {"ok": bool(out.get("accepted")), "updated": True, "version": remote_ver, **out}
+    accepted = bool(out.get("accepted"))
+    reason = str(out.get("reason") or "")
+    outcome = "download_started" if accepted else "download_not_started"
+    log_update(outcome, remote_ver, reason)
+    result = {"ok": accepted, "updated": True, "outcome": outcome, "version": remote_ver, **out}
+    if not accepted:
+        result["error"] = reason or "The download did not start."
+    return result
 
 
 async def remove_rag_corpus(self):

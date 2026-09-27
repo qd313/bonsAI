@@ -71,6 +71,11 @@
       "role": ""
     },
     {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 984,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 983,
       "role": ""
@@ -78,11 +83,6 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 946,
-      "role": ""
-    },
-    {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 944,
       "role": ""
     },
     {

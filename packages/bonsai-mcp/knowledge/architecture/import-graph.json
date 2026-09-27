@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 547,
-  "edgeCount": 1477,
+  "edgeCount": 1478,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2730,6 +2730,7 @@
         "src/index.tsx",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
+        "src/styles/sections/section-4.test.ts",
         "src/styles/sections/section-4.ts",
         "src/styles/sections/section-5.test.ts",
         "src/styles/sections/section-5.ts",
@@ -3897,6 +3898,7 @@
     "src/styles/sections/section-4.test.ts": {
       "imports": [
         "src/features/preset-carousel/presetRowLayout.ts",
+        "src/features/unified-input/constants.ts",
         "src/styles/sections/section-4.ts",
         "src/styles/sections/section-6.ts"
       ],

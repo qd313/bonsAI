@@ -20,6 +20,14 @@
  * for the typing field itself, or the icon row underneath it — see
  * section-8.ts.
  *
+ * How it works: one function returns the CSS text, roughly top to bottom
+ * of the dock: the edge-to-edge resets for the chip row, the question box
+ * and the Ask bar; the spacing under the chip row (one row gap shared with
+ * the gap under the question box, plan 72); each chip's own size and
+ * label; the carousel's sliding track; the chip's focus bar and its
+ * out-of-chips flash; the settings-results card; and last the Ask bar's
+ * own width rules.
+ *
  * What changed on 2026-09-17 (plan 60), and why, since three rules below
  * only make sense together:
  *
@@ -64,7 +72,7 @@
  *    in this file: one of their arms is the same length, and in a tie the
  *    later rule wins.
  */
-import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../features/unified-input/constants";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_CHIP_GAP_PX,
@@ -120,7 +128,7 @@ export function buildSection4Section(): string {
         }
 
         .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
-          margin-bottom: 2px !important;
+          margin-bottom: ${uiScalePx(DOCK_ROW_GAP_PX)} !important;
         }
 
         /*
@@ -153,9 +161,9 @@ export function buildSection4Section(): string {
           padding-right: 0 !important;
         }
 
-        /* padding-bottom: 5px for the chip's soft shadow to land in, 3 more so the chip is not
-           touching the question box. Measured 2026-09-17: there was no room at all. See the file
-           header, point 1. */
+        /* padding-bottom: 5px for the chip's soft shadow to land in (2026-09-17: there was no room
+           at all; file header, point 1). The negative margin leaves the dock's one row gap between
+           chip and question box, the same as under the box (plan 72); the box covers the rest. */
         .bonsai-scope .bonsai-preset-row-host {
           min-width: 0 !important;
           overflow: hidden !important;
@@ -163,13 +171,14 @@ export function buildSection4Section(): string {
           gap: 8px !important;
           margin-top: 0 !important;
           padding-top: 0 !important;
-          padding-bottom: 8px !important;
+          padding-bottom: ${PRESET_CHIP_SHADOW_ROOM_PX}px !important;
+          margin-bottom: calc(${uiScalePx(DOCK_ROW_GAP_PX)} - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
         }
 
-        /* 12 - the 8 above = 4, so fade mode's total under the row is unchanged. */
+        /* Fade mode had 12px under its chips; since plan 72 it has the same row gap as every mode. */
         .bonsai-scope .bonsai-preset-row-host--fade-anim {
           gap: 3px !important;
-          margin-bottom: 4px !important;
+          margin-bottom: calc(${uiScalePx(DOCK_ROW_GAP_PX)} - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
           margin-top: 0 !important;
         }
 

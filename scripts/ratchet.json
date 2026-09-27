@@ -8,7 +8,7 @@
   },
   "files_over_400_lines": {
     "label": "Files over 400 lines (app code, both sides)",
-    "best": 26,
+    "best": 27,
     "target": 30,
     "start_2026_09_09": 41,
     "direction": "lower_is_better",

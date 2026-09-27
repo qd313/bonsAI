@@ -19,6 +19,7 @@ import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
+import { DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../features/unified-input/constants";
 
 describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   const css = buildSection4Section();
@@ -178,17 +179,51 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
   // cut off and the chips touched the question box. These pin the numbers that fixed it, because
   // nothing in jsdom can measure a shadow (design-language.md rule 6).
 
-  it("gives the row 8px under the chips: 5 for the shadow, 3 clear of the box below", () => {
-    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host\s*\{([^}]*)\}/);
+  /*
+   * Plan 72 (docs/test-evidence/plan72-P-CHIP-GAP-handheld.json, and -couch): the chip sat 8px above
+   * the question box while the box sat 2px above the Ask bar. The maintainer wants the two gaps
+   * equal, with the chip moving down to the box. The chip keeps its 5px of shadow room, and the
+   * row hands back what the gap does not use, so the question box overlaps the tail of the shadow.
+   */
+  function declared(selector: RegExp, prop: string): string {
+    const match = css.match(selector);
     expect(match).toBeTruthy();
-    expect(match![1]!).toMatch(/padding-bottom:\s*8px\s*!important/);
+    const decl = match![1]!.match(new RegExp(`${prop}:\\s*([^;!]+?)\\s*!important`));
+    expect(decl).toBeTruthy();
+    return decl![1]!;
+  }
+  /** Evaluates a declared length at one UI size: plain px, uiScalePx's calc(), and sums of both. */
+  function px(value: string, uiScale: number): number {
+    const expr = value
+      .replace(/var\(--bonsai-ui-scale,\s*1\)/g, String(uiScale))
+      .replace(/calc\(/g, "(")
+      .replace(/px/g, "");
+    expect(expr).toMatch(/^[\d\s.+\-*()]+$/);
+    return Number(new Function(`return (${expr});`)());
+  }
+  const ROW = /\.bonsai-scope \.bonsai-preset-row-host\s*\{([^}]*)\}/;
+  const FADE_ROW = /\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/;
+  const BOX = /\.bonsai-scope \.bonsai-unified-input-host\.bonsai-full-bleed-row\s*\{([^}]*)\}/;
+
+  it("puts the chip as far above the question box as the box sits above the Ask bar, at every UI size", () => {
+    for (const uiScale of [1, 1.18, 1.5]) {
+      const boxToAsk = px(declared(BOX, "margin-bottom"), uiScale);
+      const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(ROW, "margin-bottom"), uiScale);
+      expect(chipToBox).toBeCloseTo(boxToAsk, 6);
+      expect(boxToAsk).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
+    }
   });
 
-  it("drops fade mode's own gap from 12 to 4, so fade mode still totals 12", () => {
-    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/);
-    expect(match).toBeTruthy();
-    expect(match![1]!).toMatch(/margin-bottom:\s*4px\s*!important/);
-    expect(match![1]!).not.toMatch(/margin-bottom:\s*12px/);
+  it("does the same in fade mode, the default, which has its own rule", () => {
+    for (const uiScale of [1, 1.18]) {
+      const boxToAsk = px(declared(BOX, "margin-bottom"), uiScale);
+      const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(FADE_ROW, "margin-bottom"), uiScale);
+      expect(chipToBox).toBeCloseTo(boxToAsk, 6);
+    }
+  });
+
+  it("still keeps 5px under the chips inside the row, so the row does not cut the chip's shadow", () => {
+    expect(px(declared(ROW, "padding-bottom"), 1)).toBe(PRESET_CHIP_SHADOW_ROOM_PX);
   });
 
   it("lets the shadow out of the carousel's own clipping box without changing its height", () => {

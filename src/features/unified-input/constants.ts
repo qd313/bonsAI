@@ -9,6 +9,15 @@
 const UNIFIED_INPUT_HEIGHT_MAX_PX = 200;
 /** Reserved height (px) for attach + mic strip inside the glass host (below the text body). */
 export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
+/**
+ * The one gap between the dock's stacked rows: the suggestion chips to the question box, and the
+ * question box to the Ask bar. Both read this, so the two gaps always match (plan 72, the
+ * maintainer's polish list: the chip sat 8px above the box while the box sat 2px above Ask).
+ * Scaled with the UI size where it is used.
+ */
+export const DOCK_ROW_GAP_PX = 2;
+/** Room kept under a suggestion chip, inside the row that clips it, for its soft drop shadow (0 2px 3px). */
+export const PRESET_CHIP_SHADOW_ROOM_PX = 5;
 /** Horizontal inset (px) for bottom icon strip — matches avatar top-left (2px), not text body indent. */
 export const UNIFIED_INPUT_ICON_STRIP_PAD_X_PX = 2;
 /** Minimum text-body height (px) when empty — one line taller than the prior floor (~+1 overlay line at 13px / line-height 1.2). */

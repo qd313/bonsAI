@@ -569,3 +569,8 @@ land.
   summary-card question was unclear to the maintainer — re-asked in plain words. The maintainer switched the Deck
   to its own screen; the build with the knowledge-base chip fix was deployed (md5 `d818949c…`) and block 6 (the
   dots on the Deck's own screen, and the knowledge-base chip) started, agent `a898434f3d0451148`.
+- **17:55 — the maintainer's calls:** thinking line **option B, step titles only** (lane 3's job D: the live line
+  shows the model's step titles as progress, finished ones ticked; nothing from the notes, no rules; "Show
+  reasoning" unchanged); **fix the summary card's last line** (lane 12's job E: when Sum up finishes with the ring
+  still on its button, the ring moves to the new card, which then fits fully above the dock). Landed `db701304`
+  (lane 11): the chips keep rotating while the panel is open, holding still during an answer and under the ring.

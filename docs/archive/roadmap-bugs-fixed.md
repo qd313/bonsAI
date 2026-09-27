@@ -2058,3 +2058,85 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 **Closed 2026-09-27 (plan 72, `7ea4f378`, `7b8b5139`).** Typed commands no longer come back as chips. The
   maintainer kept the ban lookup; its chip now reads "Check Steam players for bans". Evidence
   `docs/test-evidence/plan72-F-HIDDEN.json` (no "bonsai:" chip seen) and unit tests.
+
+- ★★ `[reply]` **The live thinking line shows the model's own rule checklist while it works** — **VERIFY, fixed 2026-09-27 (plan 72, `d44b6e78`, `a7b43276`).** Noise to a person, and Deck time for no benefit
+  they see. Seen twice more the same night, same family.
+  [Detail](roadmap-details-closed.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
+  The first Deck look held the targeted rules, `docs/test-evidence/plan72-F-THINK.json`; the leftovers were fixed after. Deck check owed: row **F3-THINK**.
+
+**Closed 2026-09-27 (plan 72, `d44b6e78`, `a7b43276`, `279e415e`).** The live line now shows only the model's own step
+  titles (the maintainer's option B); no rule checklist and nothing else in 387 reads. Evidence
+  `docs/test-evidence/plan72-F6-STEPS.json`.
+
+- ★ `[tabs]` **The dots under the chat name line up, on the Deck's own screen** — **VERIFY, fixed 2026-09-27 (plan 72,
+  `e3e849bd`).** Passed on the external monitor (`docs/test-evidence/plan72-F-DOTS-plain.json`); the Deck's own screen still owed.
+
+**Closed 2026-09-27 (plan 72, `e3e849bd`).** On the Deck's own screen too, every dot sits within 0.01 pixels of
+  the others and the "+" within 0.07. Evidence `docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json` (and the plain,
+  plus and writing files beside it).
+
+- ★ `[KB]` **A game's own Deck tip is labelled "shared" in Show details and the notes block** — **VERIFY, fixed 2026-09-27 (plan 72, `67216a4d`, `2aeb331c`).** It should say it is that game's own tip. [Detail](../roadmap-details.md#flow-l7-findings).
+  The credit and the notes card were right on the Deck, `docs/test-evidence/plan72-F-TIP.json`; the Source line was fixed after. Deck check owed: row **F3-TIP**.
+
+**Closed 2026-09-27 (plan 72, `67216a4d`, `2aeb331c`).** The Source line now says it is the game's own tip too.
+  Evidence `docs/test-evidence/plan72-F4-TIP.json`.
+
+- ★ `[chips]` **The suggestion chips keep rotating and animating while a question is being answered** —
+  **VERIFY, fixed 2026-09-27 (plan 72, `8e438f74`).** [Detail](../roadmap-details.md#flow-l10-findings).
+  The chips now hold still while an answer is written. Deck check owed: row **F3-HOLD**. The chips resting after
+  a minute idle is by design (since April); the maintainer's call is pending.
+
+**Closed 2026-09-27 (plan 72, `8e438f74`, `db701304`).** The chips hold still while an answer is written. The
+  maintainer's call on the one-minute rest: keep rotating; they now change 5 to 6 times a minute for five minutes.
+  Evidence `docs/test-evidence/plan72-F3-HOLD.json`, `docs/test-evidence/plan72-F6-ROTATE.json`.
+
+- ★ `[chips]` **The "Enable local knowledge base" chip showed while the knowledge base was on** — **OPEN,
+  seen once 2026-09-26 (plan 70, flow L7).** [Detail](../roadmap-details.md#flow-l7-findings).
+
+**Closed 2026-09-27 (plan 72, `c7a09f81`, `a710d8ff`).** Never offered in 90 reads with the knowledge base on.
+  Evidence `docs/test-evidence/plan72-F5-KBCHIP.json`.
+
+- ★ `[chips]` `[KB]` **Two more small gaps, found 2026-09-26 (plan 70, flow R):** a rotating suggestion
+  chip can take a press meant for a different chip, since it keeps rotating on its own timer; the
+  plugin's own log says nothing about which notes or tips a question chose, which makes a routing
+  problem hard to diagnose from the log alone. [Detail](../roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+
+**Closed 2026-09-27 (plan 72, `499f3a55`), the chip half only.** A chip now holds still while the ring is on it,
+  so a press lands on the chip you meant; free play's "a chip changed under the ring" is the same fix. Evidence
+  `docs/test-evidence/plan72-F4-RINGHOLD.json`. The log half stays open on the roadmap.
+
+- ★ `[focus]` **In Show details' Session tab, Down from the last chip of the chip ladder does not move the
+  ring** — **OPEN, found 2026-09-26 (plan 70, flow L6).** Up still steps back through the chips normally,
+  then leaves. [Detail](../roadmap-details.md#flow-l6-findings).
+
+**Closed 2026-09-27 (plan 72, `af05d456`, `4c0605c2`).** Down leaves the ladder every time, 81 of 81. Replayable
+  walk `checks/F4-LADDER-EXIT.json`. Evidence `docs/test-evidence/plan72-F4-LADDER.json`. The empty-tab exit (`84049cfa`)
+  is unit-tested only, **still owed** on the Deck (row **F4-EMPTY**): no such chat to try it on, `docs/test-evidence/plan72-F4-EMPTY.json`.
+
+- ★ `[focus]` `[layout]` **Show details' chip ladder hides under the question box** — **OPEN, found on the
+  Deck 2026-09-23.** Walking Down through the ladder, the ringed chip read 33% to 67% visible at several
+  steps, covered by the question box or by the chip row itself; a person can only reach the row of chips by
+  stepping through all six or seven of them rather than landing straight on one that is fully in view. The
+  maintainer's proposed cure is the new Features entry **"While reading an answer, the Show details line
+  takes the suggestion chip's place above the question box"**, above. Evidence
+  `docs/test-evidence/plan64-DETAILS-LADDER-01-try2.json`.
+
+**Closed 2026-09-27 (plan 72, `af05d456`, `4c0605c2`).** Closed with the Session-tab entry above: the same walk
+  keeps each lit chip in view. Evidence `docs/test-evidence/plan72-F4-LADDER.json`.
+
+- ★ `[layout]` **The question bubble has too much empty space on the left, and uneven line edges** —
+  **VERIFY, built 2026-09-27 (plan 72, `59574cfe`, `86c7361a`).** Right-aligned text leaves every line's left edge ragged, and a
+  wrapped question stretches the bubble to its widest. **The maintainer picked option D 2026-09-26:** keep
+  right-aligned text, split it into lines of about equal length, shrink the bubble to its longest line, 3px
+  from Retry. [Drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF). Plan 72 must-fix.
+  The first Deck look failed the line balance, `docs/test-evidence/plan72-F-BUBBLE.json`; the fix now balances by measuring. Deck check owed: row **F3-BUBBLE**.
+
+**Closed 2026-09-27 (plan 72, `59574cfe`, `86c7361a`), accepted.** The lines now balance (164.6, 170.7 and 189.0
+  pixels) and the bubble hugs its longest line. It sits 4.41 pixels from Retry, not 3; the maintainer: "it is five,
+  leave it". Evidence `docs/test-evidence/plan72-F3-BUBBLE.json`.
+
+- ★ `[tabs]` **The dots under the chat name re-sort newest first when an answer lands** — **OPEN, by design; the maintainer is
+  choosing between three drawn options, 2026-09-27 (plan 72).** [Drawing](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY).
+
+**Closed 2026-09-27, by design.** The maintainer chose option A: keep the order, and move the dots at once.
+  [Drawing](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY). Not a bug.

@@ -89,22 +89,18 @@ starts work outside this.
   [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
   speaker icon** — **PARTIAL, seen three times now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
-  **2026-09-27 (plan 72, `17253191`, `f4613e2d`):** the row now survives closing and reopening the panel (Deck check owed, row **F3-KEEP**). A chat switch still loses it; the next step is in plan 72 § 7, the 15:20 entry.
+  **2026-09-27 (plan 72, `17253191`, `f4613e2d`):** the row now survives closing and reopening the panel, passed on the Deck (row **F3-KEEP**, `docs/test-evidence/plan72-F3-KEEP.json`). A chat switch still loses it; the next step is in plan 72 § 7, the 15:20 entry.
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
   only lets Up leave one chip at a time (and once Down stuck on it, flow L7); two confidently wrong answers.
   [Detail](roadmap-details.md#l3-and-2d-findings).
-- ★ `[focus]` **In Show details' Session tab, Down from the last chip of the chip ladder does not move the
-  ring** — **OPEN, found 2026-09-26 (plan 70, flow L6).** Up still steps back through the chips normally,
-  then leaves. [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[focus]` **B on the notes block sends the ring to the tab bar and leaves Show details open** —
   **OPEN, found 2026-09-26 (plan 70, flow L6).** [Detail](roadmap-details.md#flow-l6-findings).
-- ★ `[chips]` `[KB]` **Two more small gaps, found 2026-09-26 (plan 70, flow R):** a rotating suggestion
-  chip can take a press meant for a different chip, since it keeps rotating on its own timer; the
-  plugin's own log says nothing about which notes or tips a question chose, which makes a routing
-  problem hard to diagnose from the log alone. [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+- ★ `[KB]` **The plugin's own log says nothing about which notes or tips a question chose** — **OPEN, found
+  2026-09-26 (plan 70, flow R).** That makes a routing problem hard to diagnose from the log alone. (Its twin, a
+  rotating chip taking a press meant for another, closed 2026-09-27.) [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★ `[chat]` **A dismissed troubleshooting hint comes back once Quick Access is closed and reopened, and
   the ban-lookup row can follow it into a different chat** — **OPEN, found 2026-09-26 (plan 70, flow
   L6).** [Detail](roadmap-details.md#l3-and-2d-findings).
@@ -120,8 +116,6 @@ starts work outside this.
   2026-09-27 (plan 70, flow L10).** After removing the model with the tab open. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **OPEN, sighting 2026-09-27
   (plan 70, flow L10).** The next press recovers. [Detail](roadmap-details.md#flow-l10-findings).
-- ★ `[chips]` **The "Enable local knowledge base" chip showed while the knowledge base was on** — **OPEN,
-  seen once 2026-09-26 (plan 70, flow L7).** [Detail](roadmap-details.md#flow-l7-findings).
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows**
   — **OPEN, sightings 2026-09-26 (plan 70, flow L7):** the log warned twice, on troubleshooting turns.
   [Detail](roadmap-details.md#flow-l7-findings).
@@ -129,13 +123,6 @@ starts work outside this.
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
   which chip is lit. Evidence `docs/test-evidence/plan64-DETAILS-LADDER-01.json` (+ `.png`).
-- ★ `[focus]` `[layout]` **Show details' chip ladder hides under the question box** — **OPEN, found on the
-  Deck 2026-09-23.** Walking Down through the ladder, the ringed chip read 33% to 67% visible at several
-  steps, covered by the question box or by the chip row itself; a person can only reach the row of chips by
-  stepping through all six or seven of them rather than landing straight on one that is fully in view. The
-  maintainer's proposed cure is the new Features entry **"While reading an answer, the Show details line
-  takes the suggestion chip's place above the question box"**, above. Evidence
-  `docs/test-evidence/plan64-DETAILS-LADDER-01-try2.json`.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -176,8 +163,26 @@ starts work outside this.
 - ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
 - ★ `[focus]` **Up from Ask lands on the mic one time and on the paperclip another** — **OPEN, found 2026-09-27 (plan 72).**
-- ★ `[tabs]` **The dots under the chat name re-sort newest first when an answer lands** — **OPEN, by design; the maintainer is
-  choosing between three drawn options, 2026-09-27 (plan 72).** [Drawing](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY).
+- ★ `[chat]` **The Session tab says "nothing to sum up yet" while the answer and the card say the chat summed itself up**
+  — **OPEN, found 2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F6-SUMUP.json`.
+- ★ `[focus]` **A straight Down lands on Read aloud, not Helpful; Up from Helpful lands on choice A, skipping B** —
+  **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[layout]` **After Stop or Helpful, Read aloud sits alone above a blank gap** — **OPEN, found 2026-09-27 (plan 72,
+  free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[layout]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
+  (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[reply]` **Copy joined two paragraphs into one** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence
+  `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[ui]` **Settings' "Clear cache…" sits 16 pixels left of the other buttons, and About's support button is 192 pixels
+  tall to press** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
+  **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
+- ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
+  The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
+  the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
+  after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
+  The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -200,6 +205,7 @@ starts work outside this.
   question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
   [Detail](roadmap-details.md#flow-l7-findings).
   **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-ii.json`.
+  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18, seen three times, stays open — the maintainer's call.** Switch away from a chat that is
   still writing and nothing says so; the code looks right on paper. Two clean measured sessions since
@@ -245,15 +251,19 @@ starts work outside this.
   time from a chip filling the question box. Still sighted 2026-09-26; a careful reading the same night
   did not reproduce the chip route (0 of 6). [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
   **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
+  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
 - ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **OPEN, found
   2026-09-26 (plan 70, flow L7), same family as the entry above.** Down and Right leave the ring in the box;
   only Up works, and closing and reopening the panel does not clear it while the game runs.
   [Detail](roadmap-details.md#flow-l7-findings).
   **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-i.json`.
+  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
   **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
+  **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
+  `docs/test-evidence/plan72-F6-SUMUP.json`. A fix is being built.
 - ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** —
   **VERIFY, fixed 2026-09-26 (helper A, `7c93d5e8`).** A third leak in the same family as the two above.
   **Deck re-check owed:** row **NO-CLOSE-MATCH-HK-02** re-check.
@@ -496,24 +506,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
-- ★ `[chips]` **The suggestion chips keep rotating and animating while a question is being answered** —
-  **VERIFY, fixed 2026-09-27 (plan 72, `8e438f74`).** [Detail](roadmap-details.md#flow-l10-findings).
-  The chips now hold still while an answer is written. Deck check owed: row **F3-HOLD**. The chips resting after
-  a minute idle is by design (since April); the maintainer's call is pending.
-- ★ `[layout]` **The question bubble has too much empty space on the left, and uneven line edges** —
-  **VERIFY, built 2026-09-27 (plan 72, `59574cfe`, `86c7361a`).** Right-aligned text leaves every line's left edge ragged, and a
-  wrapped question stretches the bubble to its widest. **The maintainer picked option D 2026-09-26:** keep
-  right-aligned text, split it into lines of about equal length, shrink the bubble to its longest line, 3px
-  from Retry. [Drawing](https://claude.ai/artifact/6TGmioi2KdtWM8yKC4cYkF). Plan 72 must-fix.
-  The first Deck look failed the line balance, `docs/test-evidence/plan72-F-BUBBLE.json`; the fix now balances by measuring. Deck check owed: row **F3-BUBBLE**.
 - ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** —
   **VERIFY, fixed 2026-09-27 (plan 72, `409cd3aa`).** Ticking the first tickable model in a fresh download picker now correctly
   only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
   though, it did not join the saved order used to pick which model answers a question. That half is now
   fixed in the back end.
   Deck check owed: row **PULL-TRY-ORDER-01** (save a try order, download from the picker, close the menu; the model is last).
-- ★ `[tabs]` **The dots under the chat name line up, on the Deck's own screen** — **VERIFY, fixed 2026-09-27 (plan 72,
-  `e3e849bd`).** Passed on the external monitor (`docs/test-evidence/plan72-F-DOTS-plain.json`); the Deck's own screen still owed.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -522,10 +520,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★ `[chat]` **Deleting a chat whose file is already missing leaves its row in the list** —
   **VERIFY, fixed 2026-09-27 (plan 72, `b7339ea4`).**
   Deck check owed: row **CHAT-DELETE-MISSING-01** (remove a chat file over SSH, then delete it in the list).
-- ★★ `[reply]` **The live thinking line shows the model's own rule checklist while it works** — **VERIFY, fixed 2026-09-27 (plan 72, `d44b6e78`, `a7b43276`).** Noise to a person, and Deck time for no benefit
-  they see. Seen twice more the same night, same family.
-  [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
-  The first Deck look held the targeted rules, `docs/test-evidence/plan72-F-THINK.json`; the leftovers were fixed after. Deck check owed: row **F3-THINK**.
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
   **VERIFY, fixed 2026-09-26 (helper K, `2e13421d`), mostly passed on the Deck 2026-09-26.** The waiting
   line, the turn header and Show details' own "This answer" tab all show the friendly wording now. **Still
@@ -574,6 +568,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   commands, Find LAN and its chips, and the UI scale section** — **VERIFY, landed 2026-09-27 (plan 72, `169edb07`, `12227980`,
   `4dc2fbdc`, `8b27e38e`), the maintainer's calls in plan 71 § 6 item 1.** Find LAN is gone, `docs/test-evidence/plan72-F-HIDDEN.json`; UI scale
   still shows there only because that Deck has the Developer tab on. Deck check owed: each item with the Developer tab off.
+  **2026-09-27:** the Steam ban lookup's key box stays on the Developer tab for now, the maintainer's call.
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
   (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
   instead of the old outline. Rows 02 to 06 and 08 passed by measurement; row 09 failed and is filed as its
@@ -594,13 +589,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Owed: the maintainer's own eye on the look, and a run with a game. Rows **SCR-09**, **SCR-10** in
   [testing.md](testing.md).
 
-- ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** —
-  **VERIFY, built 2026-09-27 (plan 72, `e4715d5a`, `ed022b89`, `eb4f4d16`).** Install/update Ollama, model downloads,
-  voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
-  https://… to download …"), at least the first time per site. A new permission, off by default, gates
-  every download and the automatic model-list refresh. Downloads only (the maintainer, 2026-09-26); live
-  web search stays the separate Web permission entry, after 0.6.0. Plan 72, lane 1.
-  The new "Internet downloads" switch is there and off by default, `docs/test-evidence/plan72-F-DL.json`; the update button lacked the notice, since fixed. Deck check owed: row **F3-DL**.
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
   re-confirmed on the Deck 2026-09-17:** no lock banner, all four Permissions switches on and reachable.
@@ -797,8 +785,6 @@ ones from this month are D81 to D88.
 
 ### Deck check owed
 
-- ★ `[KB]` **A game's own Deck tip is labelled "shared" in Show details and the notes block** — **VERIFY, fixed 2026-09-27 (plan 72, `67216a4d`, `2aeb331c`).** It should say it is that game's own tip. [Detail](roadmap-details.md#flow-l7-findings).
-  The credit and the notes card were right on the Deck, `docs/test-evidence/plan72-F-TIP.json`; the Source line was fixed after. Deck check owed: row **F3-TIP**.
 - ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
   retire.** Four of the five now have real answers: the corpus-format check is retired (D116 #7, its own
   unit tests cover it); the follow-up check passed in full on the Deck 2026-09-23. The relevance floor's
@@ -937,7 +923,7 @@ The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
 
-**Plan 72 (2026-09-27): 16 items closed** — the release bug session's first Deck blocks. One line each, with its
+**Plan 72 (2026-09-27): 27 items closed** — the release bug session's Deck blocks, in two docs passes. One line each, with its
 evidence, in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full entries in
 [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md) and [archive/roadmap-completed.md](archive/roadmap-completed.md).
 

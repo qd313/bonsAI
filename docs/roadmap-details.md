@@ -1949,24 +1949,6 @@ Keyword + meaning". Row **KB-NOMIC-OFFER-01** passes. **Still owed:** row **KB-F
 library too new for this plugin exists yet to test the refusal with. Evidence `docs/test-evidence/plan70-R5.json`
 (+ 2 screenshots).
 
-## The live thinking line shows the model's own rule checklist
-
-**Found 2026-09-26, from the maintainer's own screenshot** (`docs/test-evidence/plan70-THINKING-CHECKLIST.png`).
-Every rule sent to the model is re-checked this way on every single question. **Options, not yet chosen
-between:** show a short status line instead of the checklist; send the model only the rules that
-actually fit the question (needs measuring first, since fewer rules could change answers); turn
-thinking off by default in Speed mode.
-
-**Seen again 2026-09-26 (plan 70, flow L3):** single inline backtick marks around a quoted tag (like
-`` `<bonsai-status>` ``) or a note title showed in the live thinking line in 3 of 6 described-boss tries —
-not a spoiler leak, since nothing protected is named, just more of the model quoting its own instructions
-back at itself. Evidence `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
-
-**Seen again 2026-09-26 (plan 70, flow L4):** from the second question in a chat on, the model's raw
-"Thinking Process" heading (a note the model writes for its own use) shows live in the thinking area,
-with `[hidden]` blocks inside it once a spoiler cover is owed. Not tested as its own check, just noted
-while watching the waiting-line fix. Evidence `docs/test-evidence/plan70-L4-WAITING-LINE-01.json`.
-
 ## Black Mesa's electrified-water question
 
 **Found 2026-09-19.** Asking how to cross the electrified water gave the right, specific answer, but

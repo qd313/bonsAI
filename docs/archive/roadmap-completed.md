@@ -16,6 +16,20 @@ Headings group related work. Star counts match the historical list.
 **Closed 2026-09-27 (plan 72, `dfd133c9`, `4b32343b`).** Save is now an icon in the chat tab, the old row under
   the answer is gone, and the "+" has a clearer icon. The older-chat icon is re-checked in the next Deck block.
   Evidence `docs/test-evidence/plan72-F-ROW.json`, `docs/test-evidence/plan72-F-NOSAVEROW.json`.
+  **2026-09-27:** the save icon on older chats passed too (`4b32343b`), `docs/test-evidence/plan72-F3-OLDSAVE.json`.
+
+### Say where a download goes before it starts, and a download permission to gate it (closed 2026-09-27)
+
+- ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** —
+  **VERIFY, built 2026-09-27 (plan 72, `e4715d5a`, `ed022b89`, `eb4f4d16`).** Install/update Ollama, model downloads,
+  voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
+  https://… to download …"), at least the first time per site. A new permission, off by default, gates
+  every download and the automatic model-list refresh. Downloads only (the maintainer, 2026-09-26); live
+  web search stays the separate Web permission entry, after 0.6.0. Plan 72, lane 1.
+  The new "Internet downloads" switch is there and off by default, `docs/test-evidence/plan72-F-DL.json`; the update button lacked the notice, since fixed. Deck check owed: row **F3-DL**.
+
+**Closed 2026-09-27 (plan 72, `e4715d5a`, `ed022b89`, `eb4f4d16`).** Every Ollama setup button, the update button
+  included, now shows the notice first. Evidence `docs/test-evidence/plan72-F3-DL.json`.
 
 ### The chat sums itself up instead of being cleared (closed 2026-09-26)
 

@@ -67,7 +67,7 @@ roadmap keeps one pointer line to them._
 - ★ `[tabs]` `[layout]` **The dots under the chat name don't line up: the active dot looks a hair above or below
   the rest** — **DONE 2026-09-27 (plan 72, `e3e849bd`), passed on the Deck.** Every dot and the "+" sit on the
   same five screen rows, and the name's glow ends a clear row above. **Checked on the external monitor only; the
-  Deck's own screen is still owed** (see Verify). Evidence `docs/test-evidence/plan72-F-DOTS-plain.json`,
+  Deck's own screen is still owed** (see Verify; passed later the same day, below). Evidence `docs/test-evidence/plan72-F-DOTS-plain.json`,
   `docs/test-evidence/plan72-F-DOTS-rowlit.json`, `docs/test-evidence/plan72-F-DOTS-plus.json`.
 - ★ `[ui]` **The chat name's scroll doesn't match the chip scroll** — **DONE 2026-09-27 (plan 72, `bdd19507`),
   passed on the Deck.** The name and the chips now scroll at the same speed: 21.69 against 21.67 pixels a
@@ -86,6 +86,7 @@ roadmap keeps one pointer line to them._
   (plan 72, `dfd133c9`, `4b32343b`), passed on the Deck.** Save is now an icon in the chat tab, the old row
   under the answer is gone, and the "+" has a clearer icon. The older-chat icon is re-checked in the next Deck
   block. Evidence `docs/test-evidence/plan72-F-ROW.json`, `docs/test-evidence/plan72-F-NOSAVEROW.json`.
+  **2026-09-27:** the older-chat save icon passed too, `docs/test-evidence/plan72-F3-OLDSAVE.json`.
 - ★ `[reply]` **A reply can quote one of its own steering instructions back to the player** — **DONE 2026-09-27
   (plan 72, `9dd6db16`), passed on the Deck.** Strategy answers no longer open with the plugin's own instruction
   wording. Evidence `docs/test-evidence/plan72-F-STRAT.json`.
@@ -103,6 +104,42 @@ roadmap keeps one pointer line to them._
 - ★ `[ui]` **The "What went wrong?" chips appeared behind the dock after Not helpful** — **DONE 2026-09-27 (plan
   72, `8a832ccb`), passed on the Deck.** The block now scrolls 74 pixels into view by itself; its bottom row
   sits 7.86 above the dock. Evidence `docs/test-evidence/plan72-F-CHIPS.json`.
+
+**Closed 2026-09-27 (plan 72, second docs pass):**
+
+- ★★ `[reply]` **The live thinking line shows the model's own rule checklist while it works** — **DONE 2026-09-27
+  (plan 72, `d44b6e78`, `a7b43276`, `279e415e`), passed on the Deck.** The line now shows only the model's step
+  titles, the maintainer's option B. Row **F3-THINK**. Evidence `docs/test-evidence/plan72-F6-STEPS.json`.
+- ★ `[tabs]` **The dots under the chat name line up, on the Deck's own screen** — **DONE 2026-09-27 (plan 72,
+  `e3e849bd`), passed on the Deck.** Within 0.01 pixels, the "+" within 0.07. This closes the half the monitor
+  entry above left owed. Row **PLAN72-F-DOTS**. Evidence `docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`.
+- ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** — **DONE
+  2026-09-27 (plan 72, `e4715d5a`, `ed022b89`, `eb4f4d16`), passed on the Deck.** The notice shows on every Ollama
+  setup button, the update button included. Row **F3-DL**. Evidence `docs/test-evidence/plan72-F3-DL.json`.
+- ★ `[KB]` **A game's own Deck tip is labelled "shared" in Show details and the notes block** — **DONE 2026-09-27
+  (plan 72, `67216a4d`, `2aeb331c`), passed on the Deck.** The credit, the notes card and the Source line all say
+  it is the game's own. Row **F3-TIP**. Evidence `docs/test-evidence/plan72-F4-TIP.json`.
+- ★ `[chips]` **The suggestion chips keep rotating and animating while a question is being answered** — **DONE
+  2026-09-27 (plan 72, `8e438f74`, `db701304`), passed on the Deck.** They hold still during an answer, and, by the
+  maintainer's call, no longer stop after a minute. Rows **F3-HOLD**, **F6-ROTATE**. Evidence
+  `docs/test-evidence/plan72-F3-HOLD.json`, `docs/test-evidence/plan72-F6-ROTATE.json`.
+- ★ `[chips]` **The "Enable local knowledge base" chip showed while the knowledge base was on** — **DONE 2026-09-27
+  (plan 72, `c7a09f81`, `a710d8ff`), passed on the Deck.** Never offered in 90 reads. Row **F5-KBCHIP**. Evidence
+  `docs/test-evidence/plan72-F5-KBCHIP.json`.
+- ★ `[chips]` **A rotating suggestion chip can take a press meant for a different chip** — **DONE 2026-09-27 (plan 72,
+  `499f3a55`), passed on the Deck.** The chip under the ring holds still. Row **F4-RINGHOLD**. Evidence
+  `docs/test-evidence/plan72-F4-RINGHOLD.json`. The log half of the same entry stays open.
+- ★ `[focus]` **In Show details' Session tab, Down from the last chip does not move the ring** — **DONE 2026-09-27
+  (plan 72, `af05d456`, `4c0605c2`), passed on the Deck.** 81 of 81. Row **F4-LADDER**. Evidence
+  `docs/test-evidence/plan72-F4-LADDER.json`. The empty-tab exit is still owed (row **F4-EMPTY**).
+- ★ `[focus]` `[layout]` **Show details' chip ladder hides under the question box** — **DONE 2026-09-27 (plan 72,
+  `af05d456`, `4c0605c2`), passed on the Deck.** Row **F4-LADDER**. Evidence `docs/test-evidence/plan72-F4-LADDER.json`.
+- ★ `[layout]` **The question bubble has too much empty space on the left, and uneven line edges** — **DONE
+  2026-09-27 (plan 72, `59574cfe`, `86c7361a`), passed on the Deck and accepted.** The gap to Retry is 4.41
+  pixels, not 3; the maintainer accepted it. Row **F3-BUBBLE**. Evidence `docs/test-evidence/plan72-F3-BUBBLE.json`.
+- ★ `[tabs]` **The dots under the chat name re-sort newest first when an answer lands** — **CLOSED 2026-09-27
+  (plan 72), by design.** The maintainer chose option A: keep it, move at once.
+  [Drawing](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY).
 
 **Closed 2026-09-27 (plan 70, flows L8 to L10, and the maintainer's calls):**
 

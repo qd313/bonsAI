@@ -10,32 +10,34 @@ All notable changes to this project are documented in this file.
 - **After Stop, the ring lands on the question box**, not one press from turning the microphone on. Passed on the Deck.
 - **Left on the chat row stays in bonsAI** instead of jumping to Steam's side rail. Passed on the Deck.
 - **Up and Down under an answer now visit every row in order**, both ways, instead of skipping whole rows. Passed on the Deck.
+- **Down always leaves Show details' chip ladder**, and the lit chip stays in view. Passed on the Deck.
 - **The "What went wrong?" chips scroll into view by themselves** instead of hiding behind the dock. Passed on the Deck.
 - **The chat summary card scrolls into view by itself.** A very tall card can still leave a sliver behind the dock.
 
 **Look**
-- **Save chat is now an icon in the chat tab**, and the "+" for a new chat has a clearer icon. Passed on the Deck.
-- **The dots under the chat name line up exactly.** Passed on the external monitor; the Deck's own screen is still owed.
+- **Save chat is now an icon in the chat tab**, on older chats too, and the "+" for a new chat has a clearer icon. Passed on the Deck.
+- **The dots under the chat name line up exactly.** Passed on the Deck, on its own screen and on a monitor.
 - **A long chat name scrolls at the same speed as a long chip label.** Passed on the Deck.
 - **The preset chip sits as close to the question box as the Ask button does.** Passed on the Deck.
 - **The mic button's ring is no longer cut off at the panel's edge.** Passed on the Deck.
 - **The "Not helpful" reasons fit on two rows**, with shorter words. Passed on the Deck.
-- **Your question's bubble splits into lines of about equal length** and hugs its longest line. On-Deck check owed.
-- **The suggestion chips hold still while an answer is being written.** On-Deck check owed.
+- **Your question's bubble splits into lines of about equal length** and hugs its longest line. Passed on the Deck.
+- **The suggestion chips hold still while an answer is being written, and while the ring is on one**, so a press lands on the chip you meant. They also keep rotating past the first minute now. Passed on the Deck.
+- **The "Enable local knowledge base" chip is never offered while the knowledge base is on.** Passed on the Deck.
 - **The first-run notices read more plainly.** Passed on the Deck.
 
 **Answers**
 - **Pressing Stop keeps the AI model loaded**, so the next question starts warm. Passed on the Deck.
 - **Strategy answers no longer open with the plugin's own instruction wording.** Passed on the Deck.
-- **The live thinking line no longer shows the model's rule checklist.** On-Deck check owed.
-- **A game's own tip is credited as that game's own**, not as shared troubleshooting. On-Deck check owed.
+- **The live thinking line shows only the model's own step titles**, not its rule checklist. Passed on the Deck.
+- **A game's own tip is credited as that game's own**, not as shared troubleshooting. Passed on the Deck.
 - **A one-line hidden block is no longer doubled, shown openly or given away by Copy and Read aloud.**
 - **A typed command no longer comes back later as a suggestion chip.**
-- **The "Was this helpful?" row survives closing and reopening the panel.** Switching chats can still lose it.
+- **The "Was this helpful?" row survives closing and reopening the panel.** Passed on the Deck. Switching chats can still lose it.
 - **Clearing a chat while an answer is being written keeps that answer**, and deleting a chat whose file is already gone removes its row.
 
 **Downloads and permissions**
-- **A new "Internet downloads" permission, off by default**, and a notice saying where each download comes from before it starts. On-Deck check owed.
+- **A new "Internet downloads" permission, off by default**, and a notice saying where each download comes from before it starts, on every Ollama setup button. Passed on the Deck.
 - **A model downloaded from the first-tick picker joins your saved try order.** On-Deck check owed.
 
 **Hidden for 0.6.0**

@@ -119,14 +119,16 @@ export function buildQuestionBubbleSection(): string {
          * A float rather than padding for the open case on purpose: padding reserved 26px beside
          * every line of a four-line question, and the maintainer flagged the empty strip from a
          * screenshot on 2026-09-06. Widths: the icon starts at 6 and is 20 wide, so it ends at 26;
-         * the header's 10px side padding plus this 22 puts the first word at 32, a 6px gap.
+         * the header's 10px side padding plus this 19 puts the first word at 29, a 3px gap (option
+         * D, plan 72; was 22 and 6px). questionBubbleFit.ts reads this float's width, and adds it
+         * to every line when it shrinks the bubble, so the widest line keeps the same 3px.
          */
         .bonsai-scope
           .bonsai-chat-turn-row-header--with-retry.bonsai-chat-turn-row-header--expanded
           .bonsai-chat-turn-row-title::after {
           content: "" !important;
           float: left !important;
-          width: ${uiScalePx(22)} !important;
+          width: ${uiScalePx(19)} !important;
           height: 1.3em !important;
         }
         /* Icon only, same weight as the microphone in the Ask field. */
@@ -188,6 +190,9 @@ export function buildQuestionBubbleSection(): string {
           overflow-wrap: anywhere !important;
           text-overflow: clip !important;
           max-height: 6.5em !important;
+          /* Option D (plan 72): lines of about equal length. After white-space, which can reset it.
+             The bubble's shrink to the longest line is measured in questionBubbleFit.ts. */
+          text-wrap: balance !important;
         }
         /*
          * The last-line fade only belongs on a question that is actually cut short by the

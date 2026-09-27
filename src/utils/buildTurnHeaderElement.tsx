@@ -19,6 +19,7 @@ import {
 } from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
 import { focusReplyShowReasoning } from "./liveTurnFocusGraph";
+import { fitOpenQuestionBubble } from "./questionBubbleFit";
 
 export type BuildTurnHeaderElementArgs = {
   turnId: string;
@@ -107,6 +108,16 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     .filter(Boolean)
     .join(" ");
 
+  /*
+   * Option D (plan 72): the open bubble shrinks to its longest line. Measured again only when the
+   * text, Retry or the open state changes (the key), or the column's width does.
+   */
+  const fitKey = `${onRetry ? "retry" : "plain"}|${title}`;
+  const outerRef = (el: HTMLElement | null) => {
+    headerRef?.(el);
+    fitOpenQuestionBubble(el, expanded, fitKey);
+  };
+
   /* Same per-render holder pattern the reply row uses — this is a plain function, no hooks. */
   const bodyEl: { current: HTMLElement | null } = { current: null };
 
@@ -173,7 +184,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       <Focusable
         key={`turn-header-${turnId}`}
         className={headerClass}
-        ref={headerRef}
+        ref={outerRef}
         onActivate={onActivate}
         aria-expanded={expanded}
         data-bonsai-turn-id={turnId}
@@ -213,7 +224,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       key={`turn-header-${turnId}`}
       className={`${headerClass} bonsai-chat-turn-row-header--with-retry`}
       flow-children="horizontal"
-      ref={headerRef}
+      ref={outerRef}
       data-bonsai-turn-id={turnId}
       {...headerNavHandlers}
     >

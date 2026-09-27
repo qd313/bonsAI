@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 544,
-  "edgeCount": 1471,
+  "fileCount": 546,
+  "edgeCount": 1475,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3830,7 +3830,8 @@
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
-        "src/styles/sections/section-6.ts"
+        "src/styles/sections/section-6.ts",
+        "src/utils/questionBubbleFit.test.tsx"
       ]
     },
     "src/styles/sections/savedChatSlotDots.ts": {
@@ -4085,6 +4086,7 @@
         "src/test-harness/setup.ts",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
+        "src/utils/questionBubbleFit.test.tsx",
         "src/utils/revealOpenedDetails.test.tsx"
       ]
     },
@@ -4722,11 +4724,13 @@
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/questionBubbleFit.ts",
         "src/utils/replyStopRegistry.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
-        "src/utils/buildTurnHeaderElement.test.tsx"
+        "src/utils/buildTurnHeaderElement.test.tsx",
+        "src/utils/questionBubbleFit.test.tsx"
       ]
     },
     "src/utils/chatPanelScroll.test.ts": {
@@ -5476,6 +5480,20 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/utils/pullModelRecommendations.test.ts"
+      ]
+    },
+    "src/utils/questionBubbleFit.test.tsx": {
+      "imports": [
+        "src/styles/sections/questionBubble.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/buildTurnHeaderElement.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/utils/questionBubbleFit.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/utils/buildTurnHeaderElement.tsx"
       ]
     },
     "src/utils/reasoningDisplay.test.ts": {

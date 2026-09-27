@@ -31,7 +31,7 @@
  * `onMoveDownPastSection` says: the first turn row when there is one, else (plan 72) the way out of
  * the whole panel that the chip ladder's last Down uses; the caller decides when to consume it.
  */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
 import { ThinkingSpinnerIcon } from "../../components/icons";
@@ -115,6 +115,22 @@ export function SessionSumUpSection(props: {
     state.startSumUp();
   };
   const downFromCard = () => onMoveDownPastSection();
+
+  /*
+   * Job E (plan 72, the maintainer's call): when Sum up finishes while the ring still sits on the
+   * button, the ring moves onto the new card, so the card's own reveal can bring all of it clear.
+   * Measured before (plan72-F-SUMUP.json): with the ring kept on the button, a 475 px card had only
+   * the 471 px between the button and the dock, and its last line hid behind the question box.
+   * Only on that finish: a card already there when the tab opens (from the note under an answer)
+   * is left alone, and so is a ring the player moved elsewhere during the wait. Button and card are
+   * siblings in one container, so this is the same plain move Down from the button makes.
+   */
+  const wasBusy = useRef(view.busy);
+  useEffect(() => {
+    const finished = wasBusy.current && !view.busy;
+    wasBusy.current = view.busy;
+    if (finished && summary && elementHasGamepadFocus(sumUpButtonEl)) focusSummaryCard();
+  }, [view.busy, summary]);
   const downFromButton = () => (summary ? focusSummaryCard() : false) || downFromCard();
 
   return (

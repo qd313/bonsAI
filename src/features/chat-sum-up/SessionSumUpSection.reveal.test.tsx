@@ -108,7 +108,13 @@ afterEach(() => {
 });
 
 describe("the summary card when Sum up finishes", () => {
-  it("scrolls itself out from behind the dock, keeping the button and the ring where they are", () => {
+  /*
+   * Plan 72, the maintainer's call (job E). Measured before it (plan72-F-SUMUP.json, a 144-entry
+   * chat): with the ring left on the button, the 475 px card got only the 471 px between the button
+   * and the dock, so its last 10 px sat behind the dock. The room from the pane's top to the dock
+   * holds the card alone, so the ring now moves onto the new card and the card comes fully clear.
+   */
+  it("hands the ring to the new card, which then comes fully clear of the dock (the measured 136-611)", () => {
     const pane = deckPane();
     const host = document.createElement("div");
     pane.appendChild(host);
@@ -117,28 +123,64 @@ describe("the summary card when Sum up finishes", () => {
       container: host,
     });
     const button = container.querySelector(".bonsai-sumup-btn")!;
-    place(button, pane, 540, 572);
+    place(button, pane, 96, 130);
     ringOn(button);
     act(() => {
       vi.runAllTimers();
     });
     expect(pane.scrollTop).toBe(START_SCROLL);
 
-    /* The job finishes: the card mounts just under the dock's top edge (597, as measured). */
+    /* The job finishes with the ring still on the button. */
     rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
     const card = container.querySelector(".bonsai-sumup-card")!;
     expect(card).toBeTruthy();
-    place(card, pane, 597, 1015);
-    const focusedBefore = document.activeElement;
+    place(card, pane, 136, 611);
+    expect(document.activeElement).toBe(card);
+
+    /* Steam moves its ring with the focus; the card's own reveal then runs. */
+    ringOn(card);
+    fireEvent.focus(card);
     act(() => {
       vi.runAllTimers();
     });
-
     expect(bottom(card)).toBeLessThanOrEqual(DOCK_TOP);
-    expect(top(button)).toBeGreaterThanOrEqual(PANE_TOP);
-    /* Scrolling only: the ring and the browser's focus are untouched. */
-    expect(button.classList.contains("gpfocus")).toBe(true);
-    expect(document.activeElement).toBe(focusedBefore);
+    expect(top(card)).toBeGreaterThanOrEqual(PANE_TOP);
+  });
+
+  it("leaves the ring alone when the player moved it elsewhere during the wait", () => {
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const elsewhere = document.createElement("button");
+    pane.appendChild(elsewhere);
+    const { container, rerender } = render(section(sumUpState({ summingUp: true, summingUpSeconds: 3 })), {
+      container: host,
+    });
+    place(container.querySelector(".bonsai-sumup-btn")!, pane, 96, 130);
+    elsewhere.focus();
+    ringOn(elsewhere);
+
+    rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
+    expect(document.activeElement).toBe(elsewhere);
+    expect(elsewhere.classList.contains("gpfocus")).toBe(true);
+  });
+
+  it("does not take the ring when the card was already there (opened from the note under an answer)", () => {
+    const pane = deckPane();
+    const host = document.createElement("div");
+    pane.appendChild(host);
+    const button = document.createElement("button");
+    pane.appendChild(button);
+    button.focus();
+    ringOn(button);
+    const { container, rerender } = render(section(sumUpState({ summary: SUMMARY })), { container: host });
+    expect(document.activeElement).not.toBe(container.querySelector(".bonsai-sumup-card"));
+    const sumUp = container.querySelector(".bonsai-sumup-btn") as HTMLElement;
+    sumUp.setAttribute("tabindex", "-1");
+    sumUp.focus();
+    ringOn(sumUp);
+    rerender(section(sumUpState({ summary: SUMMARY, questionsAfterSummary: 1 })));
+    expect(document.activeElement).toBe(sumUp);
   });
 
   it("scrolls only once for the same card, so a later render does not pull the view back", () => {

@@ -253,6 +253,21 @@ describe("SessionContextTabBody -- D-pad through the top of the tab", () => {
   });
 });
 
+describe("SessionContextTabBody -- the new card after Sum up finishes (plan 72 job E)", () => {
+  it("takes the ring from the button, and Up from it goes back to the button", () => {
+    const { container, rerender } = render(
+      <SessionContextTabBody sumUp={sumUpState({ summingUp: true, summingUpSeconds: 4 })} />
+    );
+    const button = container.querySelector(".bonsai-sumup-btn") as HTMLElement;
+    button.setAttribute("tabindex", "-1");
+    button.focus();
+    rerender(<SessionContextTabBody sumUp={sumUpState({ summary: SUMMARY })} />);
+    expect(document.activeElement).toBe(container.querySelector(".bonsai-sumup-card"));
+    expect((latestPropsFor("bonsai-sumup-card")?.onMoveUp as () => boolean)()).toBe(true);
+    expect(document.activeElement).toBe(button);
+  });
+});
+
 describe("SessionContextTabBody -- B closes the whole panel, not just this body", () => {
   it("onCancelButton calls onRequestClose and consumes the press", () => {
     const onRequestClose = vi.fn();

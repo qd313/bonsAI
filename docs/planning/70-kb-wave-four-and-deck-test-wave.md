@@ -5,7 +5,9 @@ knowledge-base build and an automated test wave on the Deck, split across as man
 It replaces [58 phase 2](../archive/58-phase-2-kb-session-wave-four.md), which was written on 16 September and
 had gone stale — most of its first section was no longer true.
 
-**Status: ran 2026-09-26 from 00:18 ("go") to about 00:30 on the 27th. Answers locked as D112. Two steps owed, both waiting on the maintainer: publish the library, then the fresh-download check — see § 11.**
+**Status: finished 2026-09-27 at about 07:00 ("go" was 00:18 on the 26th). Answers locked as D112, with the
+maintainer's later calls in its addendum. The library 2026.09.26 is published and checked on the Deck. Report in § 11,
+developer guide in § 12, session summary in § 13.**
 
 **What this session does, in one paragraph.** Seven helpers build at once, each in its own copy of the repo.
 They make answers hide spoilers they were told to hide, make the notes under an answer honest about which
@@ -475,27 +477,39 @@ only if the reading with a game running says memory is tight.
   The bookkeeper brought the roadmap back under its size limit (`107f83d2`; another chat's commit had pushed it
   over). **The publish was refused by Claude Code's permission check** and waits on the maintainer. The chats were
   restored (15 files match), characters back on, keep-awake and both locks released.
+- **2026-09-27, 00:03 — the maintainer published the library**; the session verified both sites byte for byte.
+- **00:10 — the maintainer's calls:** retire "No tip for this" (helper Q, `db4b3b4a`); thumbs-down design C (recorded,
+  not built); Show details' credit line hidden until the notes block opens when a spoiler was hidden (helper R,
+  `6d31bc1d`, `8bba1f00`, passed on the Deck); at least 30 frames a second with a game running (helper S); the Steam
+  key saved on the Deck from the private settings file (the ban-lookup check then passed).
+- **00:15 to 01:05 — flow L8** measured the frame rate before any change: ~12 while an answer arrives with a game
+  running, CPU 96–98%. Helper S's first round (`75c32ace` to `49622e21`: 4 updates a second, no scramble, still
+  animations while a game runs) lifted it to ~30.
+- **01:05 to 04:50 — the PC slept** and the Deck check froze; `scripts/keep_awake.py` and a line in both guides followed
+  (`5bf7a146`).
+- **05:00 to 06:45 — flows L9 and L10:** the fresh-download check passed; helper U fixed the model hint and made Update
+  say what it did (`6885d5d7`, `03c8e25d`, `2644d5df`, `7c924310`, all passed); helper S's second round (`7ead9b06`,
+  `453635d9`: redraw only the newest paragraph) showed no clear gain on the Deck; the maintainer chose to keep the
+  decode effect with a game running (`4c7edeb6`, costs 5–9 frames). Long answers with a game: 36 (decode off) and
+  30–33 (decode on) middle values, dipping into the 20s late on — open in the roadmap. Chats restored each time.
 
 ## 11. Report
 
-**Final, written 2026-09-27 at about 00:30.** Every item is in the roadmap with its evidence; this is the short
-version. Two steps are left, both waiting on the maintainer (below), so this plan stays out of the archive until
-they are done.
+**Final, written 2026-09-27 at about 00:30 and closed at about 07:00.** Every item is in the roadmap with its
+evidence; this is the short version. The maintainer's five calls after midnight (retire "No tip for this", the
+thumbs-down design C, the credit line, 30 frames a second with a game, the Steam key; then keeping the decode
+effect) were built and checked on the Deck the same night — see § 10's last entries and § 12.
 
-### Owed — the only open ends of this plan
+### Owed — both done
 
-1. **Publish the library (the maintainer runs it).** Release 2026.09.26 is built in `build/kb-release`, passes the
-   publish check, and is byte-for-byte the library installed on the Deck (sha256 `82392d5e…`). The session's
-   publish was refused by Claude Code's permission check — pushing to public sites needs the maintainer — so it was
-   not retried. From the repo folder:
-   `python scripts/publish_corpus.py --build-dir build/kb-release --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`.
-   No released plugin can download a library (0.4.9 and `main` have no knowledge base), so this reaches
-   experimental builds only.
-2. **The fresh-download check on the Deck, after publishing** (flow R § R.5): back up the chats first, remove the
-   meaning-search model once, remove the library with the plugin's own button, Download from the published sites,
-   the offer to download the meaning-search model appears, Update does not ask again, one question shows the meaning
-   search working; restore the chats.
-3. Then move this plan to the archive.
+1. **Published** by the maintainer (about 00:03, 2026-09-27) after Claude Code's permission check refused the
+   session's push. The session checked both sites: the same version, the library file and the credits page match
+   the build byte for byte.
+2. **The fresh-download check passed on the Deck** (flow L9): the library came down from the published site, the
+   offer to download the meaning-search model appeared, and the next question used it.
+
+What continues outside this plan is in the roadmap: the frame rate on long answers with a game running and with
+the decode effect on; the new ring bugs found on the last night.
 
 ### What a person will notice, proven on the Deck
 
@@ -586,6 +600,189 @@ overnight while the publish waited — that check brings its own backup and rest
   tip's keyword match needed and cost a Deck round.
 - Publishing to public sites is refused from a session by Claude Code's permission check; plan it as the
   maintainer's step.
+
+---
+
+## 12. How plan 70 was built — a developer guide
+
+Plain terms, for someone picking this code up later. Each part says what it does for a person, then where it
+lives. File paths are relative to the repo root.
+
+### The library itself: notes, tips, and its format
+
+- **What's in it.** Strategy notes per game live in `data/kb/strategy_seed.json`; this wave added Brotato,
+  Palworld and Skyrim, plus "Starting out in…" notes for Cyberpunk 2077, Fallout 4 and Red Dead Redemption 2.
+  Deck troubleshooting tips live in `data/kb/compat_patterns.json`; a tip can now belong to one game (its `app_id`),
+  e.g. Fallout 4's F4SE launch option or Deep Rock Galactic: Survivor's Render Scale tip. Tips without a game are
+  shared by every game.
+- **Building it.** `scripts/build_rag_db.py` turns those two files into one database (`corpus.db`) with a keyword
+  index and a meaning index. The format is now **4**: a new note kind, `starting_out`, and the tip's game column.
+  The table layout and the step that adds new columns are in
+  `py_modules/backend/services/knowledge_base_schema.py`. **Only the build adds columns** — the plugin never
+  upgrades a library already installed on a Deck, so any code reading a newer column must cope with its absence
+  (see the guard in `_compat_tips_for_app_keys` in `knowledge_base_service.py`).
+- **Checking and publishing it.** `scripts/publish_corpus.py` checks licences (Skyrim's wiki is share-alike 2.5,
+  now allowed) and that the files match their own manifest, then pushes to Hugging Face and GitHub. The push is
+  the maintainer's step: Claude Code's permission check refuses it from a session.
+- **Downloading it on the Deck.** `py_modules/backend/services/rag_corpus_download_service.py` fetches the
+  manifest, refuses a format newer than this plugin reads, and installs. After an install the plugin offers the
+  meaning-search model (`src/components/KnowledgeBaseSection.tsx`). "Update knowledge base" now says what it did,
+  waits long enough for a slow network, and logs one line (`py_modules/backend/services/rag_corpus_rpc.py`).
+
+### How a question finds its notes and tips
+
+The request path is `py_modules/backend/services/game_ai_request.py`. In order:
+
+1. **Which game?** The running game, else a game named in the question, else the chat's own game.
+2. **What kind of question?** `should_retrieve_knowledge` sorts it into strategy or troubleshooting ("compat").
+   Strategy mode locks a question about the running game to strategy before reading it.
+3. **The search** — `retrieve_knowledge_context` in `py_modules/backend/services/knowledge_base_service.py`, with
+   keyword search in `knowledge_base_search.py` and the meaning search via `ollama_embed_service.py`.
+   - **New this wave: the game's own tip gets a chance on every question.** `_reroute_to_game_tip_if_it_fits`
+     checks the running game's own tips by keyword against a measured cut-off (4.0: no strategy question in the
+     test set scores above 3.4; the weakest real Deck question scores 4.9). A hit sends the turn to the tips, with
+     that tip first — even in Speed, even when Strategy mode had locked it.
+   - **Tips stay with their own game.** The general tip searches keep shared tips and only the resolved game's own
+     tips, never another game's.
+   - **Contractions** ("there's", "can't") drop their ending before the words are searched, so no stray "s" or "t".
+4. **After the search the request re-labels the turn** if the tips answered it, so everything after — the honesty
+   lines, the follow-up memory, the notes list — treats it as a troubleshooting turn.
+5. **Honesty lines** under an answer are decided in `kb_not_in_notes_notice.py`: "Not in my notes" and "No close
+   match in my notes". "No tip for this" was retired (it could never appear).
+6. **Follow-ups** remember what the chat is about (`kb_followup_memory.py`) and, by default, send the previous
+   question and a trimmed answer with a bare follow-up — the maintainer's pick (right boss 21 of 24, was 4 of 24).
+7. **The meaning-search model** stays loaded as long as the answer model, and is seen as soon as its download
+   finishes.
+
+### The spoiler safety net
+
+Goal: a boss the person only described never shows by name unless they tap to reveal it.
+
+- **Deciding what to protect** — `py_modules/backend/services/strategy_spoiler_policy.py` works out, once per turn,
+  whether a cover is owed and which names are protected (boss notes the person didn't name). Per-game settings are
+  in `spoiler_title_profiles.py` (back end) and `src/data/spoilerTitleProfiles.ts` (screen).
+- **Covering the finished answer** — `response_verify.py` wraps any sentence naming a protected thing in a spoiler
+  fence the model forgot, and repairs fences glued to a word.
+- **Covering the live answer and the thinking lines** — `ollama_ask_service.py` applies the same cover to the text
+  while it streams, and hides protected names in the thinking lines.
+- **The notes block** under an answer titles a protected note "Boss note (spoiler)" (`kb_attached_notes.py`,
+  `src/utils/buildKbNotesBlockElement.tsx`).
+- **The screen side** — the real cause of the last leak was here: `src/hooks/useSmoothStreamReveal.ts` assumed the
+  text only grows, so when the back end wrapped an already-sent sentence the reveal spliced the name back in; it now
+  resyncs when earlier text changes. The screen never opens a cover by word overlap
+  (`src/utils/unwrapAskedEntitySpoilerFences.ts`); Copy and Read aloud leave covered text out.
+- **Show details** hides its credit line until the notes block is opened when the answer hid a spoiler, or shows the
+  protected note under its neutral title when there's no block to open (`src/utils/contextChipsFromSnapshot.ts`,
+  `src/components/ContextChipLadder.tsx`, `src/components/SessionContextStrip.tsx`,
+  `src/utils/buildDetailsPanelElement.tsx`).
+
+### Keeping the panel smooth while a game runs
+
+The maintainer's target: at least 30 frames a second in the panel while an answer arrives with a game running.
+
+- **Knowing a game runs** — `src/utils/lighterWhileGameRuns.ts` reads the same state as the Context line, and holds
+  a measuring switch (`window.__bonsaiGameLoad`) for A/B tests on the Deck.
+- **Fewer updates** — while a game runs, the answer updates 4 times a second in word groups instead of ~16 redraws
+  (`src/hooks/useBackgroundGameAi.ts`, `src/hooks/useBonsaiAskOrchestration.ts`); the scramble is skipped
+  (`src/components/MainTab.tsx`); small animations hold still (`src/styles/sections/gameRunningLighter.ts`).
+- **Cheaper updates at any length** — an arriving answer is split into finished pieces and the growing last piece;
+  only the last piece is re-read and redrawn (`src/utils/streamMarkdownPieces.ts`,
+  `src/components/StreamMarkdownPieces.tsx`, wired in `src/features/stream-scramble/ScrambledAnswerText.tsx`).
+- **Measured** — on the Deck with Deep Rock Galactic: Survivor running, while an answer arrives: about 12 frames a second
+  before; 36 after with the decode effect skipped; 30–33 with the decode kept (the maintainer's choice, now the
+  default; it costs 5–9 frames). Long answers still dip into the 20s late on, and redrawing only the newest
+  paragraph helped on the PC but showed no clear gain on the Deck, where the game and the AI take most of the
+  processor. The game itself now holds 23–31 frames a second during an answer (was 14–17). With nothing running
+  the decode-off panel is unchanged (~58); with the decode on, a long answer falls to ~37 — open. Evidence:
+  `docs/test-evidence/plan70-FPS-baseline.json`, `plan70-FPS-after.json`, `plan70-FPS-pieces.json`.
+
+### D-pad ring fixes on the Main tab
+
+Each is its own small change, most in the chat transcript's navigation:
+
+- The ring stays on the question's Retry when an answer finishes (`src/hooks/useLiveTurnHeaderRingRestore.ts`).
+- Fade and static chips keep the ring when the chip changes (`src/features/preset-carousel/presetRowFocusNav.tsx`,
+  `src/components/MainTabPresetAnimatedChips.tsx`).
+- Helpful keeps the ring on the row (`src/utils/buildReplyActionsElement.tsx`); Show details scrolls into view above
+  the dock (`src/utils/chatPanelScroll.ts`); the troubleshooting hint's Dismiss is reachable and hands the ring on
+  (`src/utils/handRingOnWhenGone.ts`, `src/hooks/usePermHintNavTargets.ts`).
+- "Save chat to Desktop" is reachable from the chips, but only when it's fully visible
+  (`src/components/SaveChatToDesktopRow.tsx`, `src/utils/saveChatRowNav.ts`).
+- The Session tab's last row reaches the chips (`src/components/SessionContextStrip.tsx`).
+
+### The AI models screen and the Ollama tab
+
+- The Filters panel always takes the ring when it opens, Down reaches Done, and "Manage AI models…" opens like
+  Browse (`src/components/PullModelsModal.tsx`, `src/components/OllamaModelsHubModal.tsx`).
+- Remove stops greying out once an answer finishes (`src/utils/activeOllamaRoutingTag.ts`); installed models' sizes
+  come from the Deck (`py_modules/backend/services/local_ollama_setup_service.py`,
+  `src/hooks/usePullModelCatalogRefresh.ts`).
+- No false connection failure at startup (`src/features/plugin-shell/settingsLoadedSignal.ts`,
+  `src/hooks/useSettingsLoadedFlag.ts`).
+
+### Smaller fixes
+
+- A big screenshot is shrunk with ffmpeg when the imaging library is missing, instead of crashing the Deck's AI
+  (`py_modules/backend/services/screenshot_media.py`).
+- The Steam ban report reads as a list (`py_modules/backend/services/steam_vac_service.py`).
+- Internal follow-up text never shows in waiting lines or Show details (`main.py`, `game_ai_request.py`).
+
+### Tools added for testing
+
+- `scripts/deck_overnight_run.mjs` (with `scripts/lib/`): replays every saved Deck walk and writes a report.
+- `scripts/eval_kb_answers.py`: switches to measure the follow-up fixes.
+- `scripts/keep_awake.py`: keeps this PC awake during long sessions.
+
+## 13. Session technical summary (the maintainer's trial format)
+
+**Code changed:** 97 code commits from plan 70 across the files named in § 12, plus tests for each; the busiest files
+were `py_modules/backend/services/game_ai_request.py` (14 commits), `knowledge_base_service.py` (9),
+`src/components/MainTabChatTranscript.tsx` (7) and `strategy_spoiler_policy.py` (5). Library data changed in
+`data/kb/strategy_seed.json` and `data/kb/compat_patterns.json`.
+
+**What came up that wasn't planned, and how it was handled**
+
+1. **The live spoiler leak took four rounds.** The back end's covers were right; the screen's letter-by-letter
+   reveal assumed text only grows and spliced the name back in. Found from the Deck's own 250 ms screen readings;
+   fixed in `useSmoothStreamReveal.ts`.
+2. **The new per-game tips never reached an answer.** The code only looked at a game's tips after deciding a
+   question was troubleshooting, and real questions ("the text looks blurry") weren't sorted that way. Fixed with a
+   per-game keyword check and a measured cut-off.
+3. **That fix nearly emptied every answer on older libraries.** The plugin never upgrades an installed library;
+   the new check read a column older libraries lack. Caught by three tests on an old library; guarded and tested.
+4. **One game's tip could attach to another game's question**, and a turn switched to tips still carried its
+   "strategy" label into the honesty lines and the follow-up memory (which remembered "display" as the subject).
+   Both fixed and proven on the Deck.
+5. **A contraction fix made one question worse on its first try** ("what's" became the search word "whats");
+   a narrower version helped one and hurt none.
+6. **Publishing was refused** by Claude Code's permission check; the maintainer ran it; the session verified both
+   sites byte for byte.
+7. **A plugin reload with a game running froze Steam's screens** (17:52); the maintainer restarted Steam. Rule since:
+   never reload while a game runs — and the helpers' own notes that said otherwise were corrected in each runbook.
+8. **The PC slept** mid-check overnight; a four-hour "hang" was the PC, not the tool. Now `scripts/keep_awake.py`.
+9. **Frame rate with a game** was CPU-bound: ~16 full redraws a second, each growing with the answer. Fewer
+   updates first (12 → 30), then piece-by-piece drawing for long answers — which helped on the PC but not clearly
+   on the Deck; the last gap needs a Deck processor profile. The maintainer then chose to keep the decode effect
+   with a game running (costs 5–9 frames). The measuring switch was first set in
+   the wrong page (the plugin runs in Steam's hidden main page); fixed so it works from either.
+10. **Two usage-limit stops**; the 20-minute scheduled check didn't restart the session either time — the
+    maintainer's message did.
+11. **Size limits tripped by other chats' commits** (the roadmap, then the project guide); fixed by moving detail
+    into linked pages, never by raising a limit.
+12. **Removing a repo copy the plain way damaged shared packages**; since then copies are removed only with the
+    prune script — which can't tell cherry-picked copies are done, so 23 plan 70 copies await the word.
+
+**What would have made this easier on the maintainer's side**
+
+- **Run long sessions in the Claude Code desktop app** — it keeps the PC awake (now noted in the guides).
+- **Decide the publish step at plan time** — either run it yourself when told, or add a narrow allow rule for the
+  publish command before "go"; the session lost an hour waiting on it.
+- **Say where a secret lives when a check needs it** — the ban-lookup check waited a day for the Steam key that was
+  already in the private settings file.
+- **Answer open calls early** — the "No tip for this" question had been blocked since mid-September; the four
+  calls answered tonight each unblocked work immediately.
+- **Tell the session before switching the Deck's screen or Steam mode** — you did this tonight (offline mode), and
+  it saved a round.
 
 ---
 

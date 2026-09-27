@@ -5,7 +5,7 @@ knowledge-base build and an automated test wave on the Deck, split across as man
 It replaces [58 phase 2](../archive/58-phase-2-kb-session-wave-four.md), which was written on 16 September and
 had gone stale — most of its first section was no longer true.
 
-**Status: running since 2026-09-26 00:18, when the maintainer said "go". Answers locked as D112.**
+**Status: ran 2026-09-26 from 00:18 ("go") to about 00:30 on the 27th. Answers locked as D112. Two steps owed, both waiting on the maintainer: publish the library, then the fresh-download check — see § 11.**
 
 **What this session does, in one paragraph.** Seven helpers build at once, each in its own copy of the repo.
 They make answers hide spoilers they were told to hide, make the notes under an answer honest about which
@@ -465,20 +465,56 @@ only if the reading with a game running says memory is tight.
 - **21:55 — the last Deck block started** (tips re-check, the hidden ring, the chip-trap reading; then publish, the
   fresh download, restoring the chats). Helper O started on E2's other find: contractions leave a stray letter in
   every keyword search.
+- **22:00 to 00:30 — the last Deck block and four more fixes.** The tips re-check passed for Deep Rock Galactic:
+  Survivor (running: Strategy, Speed, and a clean boss question); Fallout 4 couldn't be tried running (its question
+  box went dead — a new ring bug) and passed with the game named instead. The hidden ring passed over a game; the
+  chip-then-Ask trap didn't reproduce (0 of 6, the reading recorded). Checking Fallout 4 on the PC showed one game's
+  tip landing on another game's question; helper P fixed that and the "No close match" line under a tip answer
+  (`aeed48be`, `fb805301`), and the session fixed the follow-up memory storing a tip's header as the chat's subject
+  (`9063bbfb`) — all three proven on the Deck. Helper O's contraction fix landed on its second try (`55719a6e`).
+  The bookkeeper brought the roadmap back under its size limit (`107f83d2`; another chat's commit had pushed it
+  over). **The publish was refused by Claude Code's permission check** and waits on the maintainer. The chats were
+  restored (15 files match), characters back on, keep-awake and both locks released.
 
 ## 11. Report
 
-**Draft, written 2026-09-26 at about 18:30 while waiting for the Deck; the last Deck blocks and the release are
-added when they run.** Every item below is in the roadmap with its evidence; this is the short version.
+**Final, written 2026-09-27 at about 00:30.** Every item is in the roadmap with its evidence; this is the short
+version. Two steps are left, both waiting on the maintainer (below), so this plan stays out of the archive until
+they are done.
+
+### Owed — the only open ends of this plan
+
+1. **Publish the library (the maintainer runs it).** Release 2026.09.26 is built in `build/kb-release`, passes the
+   publish check, and is byte-for-byte the library installed on the Deck (sha256 `82392d5e…`). The session's
+   publish was refused by Claude Code's permission check — pushing to public sites needs the maintainer — so it was
+   not retried. From the repo folder:
+   `python scripts/publish_corpus.py --build-dir build/kb-release --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`.
+   No released plugin can download a library (0.4.9 and `main` have no knowledge base), so this reaches
+   experimental builds only.
+2. **The fresh-download check on the Deck, after publishing** (flow R § R.5): back up the chats first, remove the
+   meaning-search model once, remove the library with the plugin's own button, Download from the published sites,
+   the offer to download the meaning-search model appears, Update does not ask again, one question shows the meaning
+   search working; restore the chats.
+3. Then move this plan to the archive.
 
 ### What a person will notice, proven on the Deck
 
+- **A game's own Deck tip reaches the answer.** Deep Rock Galactic: Survivor's Render Scale tip and Fallout 4's F4SE
+  launch option come first in Show details, in Strategy and Speed, with the game running or named in the question;
+  a boss question about the same game stays clean. Found broken in the release check (the tips never reached an
+  answer), fixed by E2, re-checked the same night.
+- **One game's tip never lands on another game's question; a tip answer no longer ends with "No close match in my
+  notes"; and a tip answer no longer sets what the chat is "about"** for the next follow-up. All three found during
+  the re-check and proven on the Deck before midnight.
 - **A boss you only described stays hidden, even while the answer is arriving.** Four rounds to get there: the
   safety net for finished answers; two fixes for the live answer and the thinking lines; then the real cause, found
-  on the stronger model from the Deck's own 250 ms screen readings. The screen's letter-by-letter reveal assumed text
-  only grows, so when the safety net wrapped a sentence it had already sent, the screen spliced the name back into
-  view. Final check: 229 reads, the name never showed outside a cover, not in the answer, the thinking, the notes
-  block or the suggestion menu; Copy and Read aloud leave it out too.
+  from the Deck's own 250 ms screen readings. The screen's letter-by-letter reveal assumed text only grows, so when
+  the safety net wrapped a sentence it had already sent, the screen spliced the name back into view. Final check:
+  229 reads, the name never showed outside a cover, not in the answer, the thinking, the notes block or the
+  suggestion menu; Copy and Read aloud leave it out too.
+- **Up from a chip no longer parks the ring on a hidden "Save chat to Desktop"** over a running game (three tries
+  over a game, one without).
+- **The new library on the Deck:** Brotato, Palworld and Skyrim notes, and "Starting out in…" notes and chips.
 - **"What time is it" gets no troubleshooting tip** in any mode.
 - **A big screenshot no longer crashes the Deck's AI:** the picture that crashed it twice on 23 September now sends
   108 KB instead of 3.7 MB and is answered in 39 seconds.
@@ -490,17 +526,33 @@ added when they run.** Every item below is in the roadmap with its evidence; thi
 - **D-pad fixes proven:** the ring stays put when an answer finishes (6 of 6); fade and static chips keep the ring;
   the troubleshooting hint can be dismissed by D-pad; the Ollama tab's walks.
 - **Saved-walk replay works again,** and there's a one-command overnight check (replay every saved walk, report).
+  Its first run finished in 76 s but every walk read "different": the panel is closed after a deploy and each walk
+  needs its own start screen — the next step for it.
+- **The maintainer's eight chats are back** (all 15 files match the backup; settings byte-identical, characters on).
 
-### Fixed in code, Deck check still owed
+### Fixed in code, proven on the PC only
 
-The notes block titling a protected boss "Boss note (spoiler)" (proven while closed, not yet while arriving); the
-screen never opening a cover by word overlap; the "no close match" line reading note text; the new library format
-(starting-out notes, per-game Deck tips, three new games) — checked in the release block; the install offer for the
-meaning-search model — checked after publishing; the thumbs-up ring, Show details scrolling into view, "Save chat
-to Desktop" reachable from the chips, the ring after Dismiss; a branch pick's waiting line; the Filters-panel race.
+- **An older library keeps its notes** (`c1ca8b7d`). The plugin never upgrades an installed library, and tonight's
+  tip check read a column older libraries lack — without this, every answer on a library from before 26 September
+  (including the one on the download sites today) would have lost all its notes.
+- **Contractions no longer leave a stray letter in the search** ("there's" → "there"; `55719a6e`). Held-back set:
+  one question better, none worse. A first try that deleted apostrophes entirely made one question worse and was
+  dropped.
+
+What is still owed on the Deck from earlier landings is in the roadmap's Verify list.
 
 ### Still open, and why
 
+- **The question box goes dead over Fallout 4** with no chip pressed: the ring stays in the box while the page's own
+  focus moves on; reopening the panel doesn't clear it while the game runs. Same family as the ★★★ chip-then-Ask
+  trap, which did **not** reproduce in 6 measured tries with nothing running (the reading is recorded for the fix).
+- **A chat opened with RB while a game runs:** Down stops on its question line until the panel is reopened.
+- **A game's own tip is found by shared words only:** "the words look blurry" misses the Render Scale tip that "the
+  text looks blurry" finds. A meaning-search rescue was measured and left for a later lane (it would add a second
+  search call to every Strategy question for such a game).
+- **A game's own tip is labelled "Shared troubleshooting"** in Show details; the fix has to carry the tip's game
+  through several card builders.
+- **"Enable local knowledge base" chip** appeared once while the knowledge base was on.
 - **The "No tip for this" line can't appear:** four cut-offs measured, none makes it appear without losing right
   tips; the maintainer decides whether to retire it or plan a word-search cut-off.
 - **The "no close match" line on the Black Mesa horse question:** a borderline score (0.6508 against 0.65), not a
@@ -515,6 +567,8 @@ to Desktop" reachable from the chips, the ring after Dismiss; a branch pick's wa
 The follow-up pick recorded; Skyrim's share-alike 2.5 licence let through the release check; spoiler settings for
 the new games (Brotato little story, Palworld and Skyrim protect progress); ranking "starting out" notes lower left
 off (it made the answer test worse); the Hollow Knight described-boss answer-test row no longer forbids a cover.
+Late in the night: the chats were restored before the fresh-download check rather than leave the Deck on test chats
+overnight while the publish waited — that check brings its own backup and restore.
 
 ### Lessons (also in docs/lessons-learned.md)
 
@@ -524,6 +578,14 @@ off (it made the answer test worse); the Hollow Knight described-boss answer-tes
 - A timing-sensitive test that fails under load can be pointing at a real race; this one was.
 - The 20-minute scheduled check did not restart the session after either usage stop; the maintainer's message did.
 - Remove repo copies only with the prune script.
+- The plugin never upgrades an installed library: any read of a column from a newer library format must survive its
+  absence, or an older library loses every note. A test on a copy with the column dropped guards it.
+- When a later step changes what kind of question a turn is, every reader after it must see the change — three places
+  read the stale label here (the notice, the follow-up memory, the notes list).
+- Reword a Deck question by adding words, not swapping them: swapping "text" for "words" dropped the one word the
+  tip's keyword match needed and cost a Deck round.
+- Publishing to public sites is refused from a session by Claude Code's permission check; plan it as the
+  maintainer's step.
 
 ---
 

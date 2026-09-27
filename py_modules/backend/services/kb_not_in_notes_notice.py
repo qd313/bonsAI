@@ -1,8 +1,9 @@
 """Title: Knowledge-base attribution notices
 
 Purpose: Output-side notes telling the user a reply came from the model's own training
-knowledge rather than the local knowledge base -- one pair for the notes (Strategy/Expert
-only), one pair for the tip sheet (any Ask mode).
+knowledge rather than the local knowledge base -- both about the notes (Strategy/Expert only).
+A third line for the tip sheet ("No tip for this") was retired by the maintainer on 2026-09-27:
+four cut-offs were measured and none made it appear without losing right tips.
 Used for: Post-generation step in run_game_ai_request (game_ai_request.py), run once the KB
 attach/coverage/domain signals for the turn are known -- alongside the destructive-advice safety
 notice this copies the shape of.
@@ -15,8 +16,8 @@ something actually reach the model this turn), `kb_coverage_status` (does the co
 strategy notes for this game at all), `kb_domain` (was this turn routed to the notes or the tip
 sheet), `kb_unavailable_reason` and `kb_notes` (why nothing attached) -- and appends one fixed
 line per case. See destructive_advice_guard.py for the sibling check/append pair this mirrors.
-The call site decides which of the two lines below wins when both would otherwise fire; see the
-comment at that call site in game_ai_request.py.
+`tip_sheet_turn_came_back_empty` below is not a line of its own: the call site uses it to keep
+"Not in my notes" off a turn whose search looked in the tip sheet, never in the notes.
 """
 
 from __future__ import annotations
@@ -74,28 +75,21 @@ def append_not_in_notes_notice(response_text: str, should_show: bool) -> str:
     return (response_text or "").rstrip() + _NOTICE
 
 
-# --- "No tip for this" (D86 lane F, 2026-09-07) ---------------------------------------------
+# --- Was this a tip-sheet turn that came back empty? ------------------------------------------
 #
-# Same shape as the notice above, for the other half of the corpus: a turn routed to the tip
-# sheet (`kb_domain == "compat"`, `should_retrieve_knowledge`'s troubleshooting branch) where
-# nothing attached. Wording decided in the wave-three plan; do not reword without the same
-# process the sibling line above used.
-_NO_TIP_FOR_THIS_LINE = "No tip for this — this answer is from the model's own knowledge."
-
-_NO_TIP_NOTICE = f"\n\n—\n*{_NO_TIP_FOR_THIS_LINE}*"
+# This used to decide a third line, "No tip for this", retired by the maintainer on 2026-09-27
+# (four cut-offs measured in plan 70, none made it appear without losing right tips). The check
+# itself stays for one job: "Not in my notes" must not appear on a turn whose search went to the
+# tip sheet, because the notes were never searched that turn. The inputs and the answer are the
+# same as before the line was retired, so "Not in my notes" behaves exactly as it did.
 
 # `should_retrieve_knowledge` (knowledge_base_service.py) returns this domain only for a
-# troubleshooting-shaped question -- a game running (or named) is not required, unlike the
-# notes' `_COVERED_STATUS` check above. It is never "compat" while the local knowledge base
-# setting is off, so checking the domain alone already keeps this line off in that case; the
-# `kb_unavailable_reason` check below covers the other "never" case the brief names, a missing
-# corpus.
+# troubleshooting-shaped question. It is never "compat" while the local knowledge base setting
+# is off.
 _COMPAT_DOMAIN = "compat"
 
 # `run_game_ai_request` (game_ai_request.py) writes this exact string into `kb_notes` when a
-# compat card was found and scored, but the context budget cut it before it reached the model --
-# a real tip existed for this turn, it just did not fit. That is a different fact from "no tip
-# fit", so it must not trigger this line.
+# compat card was found and scored, but the context budget cut it before it reached the model.
 _BUDGET_DROPPED_NOTE = "dropped_by_context_budget"
 
 # `retrieve_knowledge_context` (knowledge_base_service.py) writes this exact string into its
@@ -109,32 +103,15 @@ _BUDGET_DROPPED_NOTE = "dropped_by_context_budget"
 # for this exact staleness (see its own `kb_domain == "compat" or kb_notes == "compat_tips"`).
 _COMPAT_TIPS_RESOLUTION = "compat_tips"
 
-# The floor lane C is building (D87, knowledge_base_service.py) stamps `kb_notes` with this
-# exact prefix when it decided nothing in the routed candidate pool was a real match. It is not
-# tested for separately below: once that lane lands, a compat turn where it fired is *also* a
-# compat turn with nothing attached and no budget-dropped tip, so the broader checks below
-# already return True for it. Kept as a named constant so the two are visibly meant to line up,
-# and so a later, stricter reading of this line (requiring the floor's own verdict rather than
-# the broader "nothing attached" signal) has something to key off without re-deriving it.
-_FLOOR_REJECTED_NOTE_PREFIX = "routed_nothing_fit"
 
-
-def should_show_no_tip_for_this_notice(
+def tip_sheet_turn_came_back_empty(
     *, kb_attached: bool, kb_domain: str, kb_unavailable_reason: str = "", kb_notes: str = ""
 ) -> bool:
     """True when this turn was routed to the tip sheet and nothing from it reached the model.
 
-    ``kb_domain`` is `build_knowledge_base_transparency`'s `kb_domain` field. ``kb_attached`` is
-    the same field's `kb_attached`. ``kb_unavailable_reason`` and ``kb_notes`` are that same
-    dict's fields, read only to rule out a missing corpus and a budget-dropped tip -- see the
-    module comments above for what each rules out. All four are already computed once per turn
-    in run_game_ai_request; this just reads them.
-
-    This already fires correctly once lane C's floor lands and starts writing
-    "routed_nothing_fit (...)" into ``kb_notes`` for a floor-rejected turn -- that case is a
-    compat turn with nothing attached and no budget-dropped tip, which the checks below already
-    catch. Until it lands, the same checks catch the plainer "no_hit (...)" case instead, which
-    reads the same to a person: nothing from the tip sheet reached them.
+    All four are fields of `build_knowledge_base_transparency`'s result, already computed once
+    per turn in run_game_ai_request. A missing corpus (``kb_unavailable_reason``) and a tip the
+    context budget trimmed (``kb_notes``) both return False, as they always have.
     """
     if kb_attached:
         return False
@@ -147,21 +124,10 @@ def should_show_no_tip_for_this_notice(
     return True
 
 
-def append_no_tip_for_this_notice(response_text: str, should_show: bool) -> str:
-    """Append the fixed "no tip for this" line when `should_show`; unchanged otherwise.
-
-    Same stacking rule as `append_not_in_notes_notice`: appends after whatever is already in
-    `response_text`, in whichever order the caller adds the footers.
-    """
-    if not should_show:
-        return response_text
-    return (response_text or "").rstrip() + _NO_TIP_NOTICE
-
-
 # --- "No close match in my notes" (D88, 2026-09-07) -----------------------------------------
 #
-# The third line, and the only one of the three that fires on a turn where a note DID reach the
-# model. The other two say "nothing came from the notes"; this one says "something did, and it
+# The second line, and the only one that fires on a turn where a note DID reach the model.
+# "Not in my notes" says "nothing came from the notes"; this one says "something did, and it
 # was a stretch".
 #
 # **Why it exists.** The "not in my notes" line above shows only when nothing attached, and

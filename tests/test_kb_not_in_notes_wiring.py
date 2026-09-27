@@ -17,7 +17,8 @@ from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
 _NOT_IN_NOTES_TEXT = "Not in my notes — this answer is from the model's own knowledge."
-_NO_TIP_TEXT = "No tip for this — this answer is from the model's own knowledge."
+# Retired by the maintainer on 2026-09-27; kept here only so the tests can prove it never shows.
+_RETIRED_NO_TIP_TEXT = "No tip for this"
 _NO_CLOSE_MATCH_TEXT = (
     "No close match in my notes, this answer leans on the model's own knowledge."
 )
@@ -178,14 +179,10 @@ class NotInNotesWiringTests(unittest.TestCase):
         self.assertNotIn(_NOT_IN_NOTES_TEXT, result.get("response", ""))
 
 
-class NoTipForThisWiringTests(unittest.TestCase):
-    """Tests that run_game_ai_request appends the "no tip for this" line to the reply the user
-    (and transparency) sees. See tests/test_kb_not_in_notes_notice.py for the module's own unit
-    tests of the decision function this wires up.
-    """
+class NoTipLineIsRetiredWiringTests(unittest.TestCase):
+    """The "No tip for this" line was retired by the maintainer on 2026-09-27: a troubleshooting
+    turn where no tip reached the model now gets the reply alone, in any Ask mode."""
 
-    # Routed to the tip sheet, nothing attached -- the case the line exists for. Speed mode on
-    # purpose: unlike the sibling line, this one has no Ask-mode gate.
     @patch(
         "backend.services.game_ai_request.should_retrieve_knowledge",
         return_value=(True, "compat"),
@@ -194,111 +191,25 @@ class NoTipForThisWiringTests(unittest.TestCase):
         "backend.services.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, notes="no_hit (keyword)"),
     )
-    def test_routed_to_tips_with_nothing_attached_appends_the_line(self, _retrieve, _should_kb):
+    def test_routed_to_tips_with_nothing_attached_adds_no_line(self, _retrieve, _should_kb):
         plugin = _FakePlugin(_base_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Try restarting Steam and checking your network connection.",
-            "model": "test-model",
-        }
+        reply = "Try restarting Steam and checking your network connection."
+        plugin._ollama_result = {"success": True, "response": reply, "model": "test-model"}
 
         result = _run(plugin, ask_mode="speed", question="my controller stopped working")
 
-        self.assertIn(_NO_TIP_TEXT, result.get("response", ""))
+        self.assertEqual(result.get("response", ""), reply)
         self.assertEqual(len(plugin.persisted_snapshots), 1)
-        self.assertIn(_NO_TIP_TEXT, plugin.persisted_snapshots[0].get("final_response", ""))
-
-    # Same routing, but a tip actually attached -- no line.
-    @patch(
-        "backend.services.game_ai_request.should_retrieve_knowledge",
-        return_value=(True, "compat"),
-    )
-    @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
-        return_value=KnowledgeRetrievalResult(
-            attached=True,
-            text_block="Tip: re-pair the controller from Bluetooth settings.",
-            trust_tier="wiki",
-            sources=[{"title": "Tip"}],
-        ),
-    )
-    def test_a_tip_that_attached_shows_no_line(self, _retrieve, _should_kb):
-        plugin = _FakePlugin(_base_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Re-pair the controller from Bluetooth settings.",
-            "model": "test-model",
-        }
-
-        result = _run(plugin, ask_mode="speed", question="my controller stopped working")
-
-        self.assertNotIn(_NO_TIP_TEXT, result.get("response", ""))
-
-    # Routed to the notes instead of the tips -- this turn's search never looked at the tip
-    # sheet, so the line must not appear even with nothing attached.
-    @patch(
-        "backend.services.game_ai_request.should_retrieve_knowledge",
-        return_value=(True, "strategy"),
-    )
-    @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
-        return_value=KnowledgeRetrievalResult(attached=False, unavailable_reason="no_match"),
-    )
-    def test_routed_to_notes_shows_no_line(self, _retrieve, _should_kb):
-        plugin = _FakePlugin(_base_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Focus down the adds first, then burst the boss.",
-            "model": "test-model",
-        }
-
-        result = _run(plugin, ask_mode="strategy")
-
-        self.assertNotIn(_NO_TIP_TEXT, result.get("response", ""))
-
-    # Missing corpus: retrieve_knowledge_context's real early return for this, "corpus_missing".
-    @patch(
-        "backend.services.game_ai_request.should_retrieve_knowledge",
-        return_value=(True, "compat"),
-    )
-    @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
-        return_value=KnowledgeRetrievalResult(attached=False, unavailable_reason="corpus_missing"),
-    )
-    def test_missing_corpus_shows_no_line(self, _retrieve, _should_kb):
-        plugin = _FakePlugin(_base_settings())
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Some reply text.",
-            "model": "test-model",
-        }
-
-        result = _run(plugin, ask_mode="speed", question="my controller stopped working")
-
-        self.assertNotIn(_NO_TIP_TEXT, result.get("response", ""))
-
-    # Library off: should_retrieve_knowledge's real behaviour (no patch needed) skips retrieval
-    # outright, so kb_domain never becomes "compat" and the line cannot fire.
-    def test_library_off_shows_no_line(self):
-        settings = _base_settings()
-        settings["use_local_knowledge_base"] = False
-        plugin = _FakePlugin(settings)
-        plugin._ollama_result = {
-            "success": True,
-            "response": "Some reply text.",
-            "model": "test-model",
-        }
-
-        result = _run(plugin, ask_mode="speed", question="my controller stopped working")
-
-        self.assertNotIn(_NO_TIP_TEXT, result.get("response", ""))
+        self.assertNotIn(
+            _RETIRED_NO_TIP_TEXT, plugin.persisted_snapshots[0].get("final_response", "")
+        )
 
 
-class TheTwoNoticesNeverBothAppearWiringTests(unittest.TestCase):
-    """The one collision the module-level tests can only prove is possible in isolation: an
-    Expert or Strategy ask about a game the notes cover, where *this* question was routed to
-    the tip sheet instead and nothing there matched either. Both decision functions would read
-    True; run_game_ai_request must show only the tip-sheet line.
+class TipSheetTurnShowsNoNotInNotesWiringTests(unittest.TestCase):
+    """An Expert or Strategy ask about a game the notes cover, where *this* question was routed
+    to the tip sheet instead and nothing there matched either. "Not in my notes" would be true
+    but misleading -- the notes were never searched -- so run_game_ai_request keeps it off, as it
+    did before the tip-sheet line was retired.
     """
 
     @patch(
@@ -313,7 +224,7 @@ class TheTwoNoticesNeverBothAppearWiringTests(unittest.TestCase):
         "backend.services.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, notes="no_hit (keyword)"),
     )
-    def test_no_tip_for_this_wins_over_not_in_my_notes(self, _retrieve, _should_kb, _coverage):
+    def test_a_tip_sheet_turn_shows_no_footer_at_all(self, _retrieve, _should_kb, _coverage):
         plugin = _FakePlugin(_base_settings())
         plugin._ollama_result = {
             "success": True,
@@ -324,8 +235,8 @@ class TheTwoNoticesNeverBothAppearWiringTests(unittest.TestCase):
         result = _run(plugin, ask_mode="expert", question="the game keeps crashing to desktop")
 
         response = result.get("response", "")
-        self.assertIn(_NO_TIP_TEXT, response)
         self.assertNotIn(_NOT_IN_NOTES_TEXT, response)
+        self.assertNotIn(_RETIRED_NO_TIP_TEXT, response)
 
 
 def _attached(*, best_meaning, keyword_score, notes: str = "") -> KnowledgeRetrievalResult:
@@ -362,9 +273,9 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         result = _run(plugin, ask_mode="strategy")
 
         self.assertIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
-        # The other two lines are about a turn where nothing attached; neither belongs here.
+        # "Not in my notes" is about a turn where nothing attached; it does not belong here.
         self.assertNotIn(_NOT_IN_NOTES_TEXT, result.get("response", ""))
-        self.assertNotIn(_NO_TIP_TEXT, result.get("response", ""))
+        self.assertNotIn(_RETIRED_NO_TIP_TEXT, result.get("response", ""))
         # Reaches the snapshot Show details reads, same as the model text does.
         self.assertEqual(len(plugin.persisted_snapshots), 1)
         self.assertIn(

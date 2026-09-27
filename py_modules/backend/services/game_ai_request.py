@@ -71,9 +71,9 @@ How it works:
    power-setting suggestion in it is pulled out and the raw text describing it is removed from
    what the person reads (the suggestion is never applied automatically — Ask only ever
    suggests); the finished reply is run through the safety check for dangerous advice; and up to
-   one of three short footers may be appended noting that the knowledge base had nothing for this
-   question (the three are mutually exclusive by construction — see D88 in the comments where
-   they are appended for exactly why).
+   one of two short footers may be appended noting that the notes had nothing, or nothing close,
+   for this question (the two are mutually exclusive by construction — see D88 in the comments
+   where they are appended for exactly why).
 7. A Show details record is built for this turn and saved, and the final answer is handed back.
 
 Gotchas:
@@ -107,11 +107,10 @@ from backend.services import kb_followup_memory
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_not_in_notes_notice import (
     append_no_close_match_notice,
-    append_no_tip_for_this_notice,
     append_not_in_notes_notice,
     should_show_no_close_match_notice_for_turn,
-    should_show_no_tip_for_this_notice,
     should_show_not_in_notes_notice,
+    tip_sheet_turn_came_back_empty,
 )
 from backend.services.ollama_prompts import (
     build_reply_followup_context_block,
@@ -966,21 +965,18 @@ async def run_game_ai_request(
                 verify_result.get("warnings") or [],
             )
 
-        # Attribution notes: two footers, each saying which half of the knowledge base this
-        # reply did *not* get help from. Appended after the safety notice above so a reply that
-        # trips more than one shows the safety warning first.
+        # Attribution notes: footers saying the reply did not get help from the notes.
+        # Appended after the safety notice above so a reply that trips more than one shows the
+        # safety warning first. (A tip-sheet line, "No tip for this", was retired by the
+        # maintainer on 2026-09-27.)
         #
-        # They can never both appear on one reply, and "no tip for this" wins the tie. A turn
-        # this specific can happen: an Expert or Strategy ask about a game whose notes are
-        # covered (so "not in my notes" would qualify), where this particular question read as
-        # troubleshooting and got routed to the tip sheet instead (kb_domain == "compat"), and
-        # nothing there matched either. "Not in my notes" would be true but misleading -- the
-        # search never looked in the notes this turn -- so it is suppressed whenever "no tip for
-        # this" applies. See TheTwoLinesNeverBothAppearTests in test_kb_not_in_notes_notice.py
-        # for the case proven, and D87 (docs/archive/48-kb-wave-three-session.md § 6) for why
-        # the tip sheet needed this line at all.
+        # "Not in my notes" stays off a turn this specific: an Expert or Strategy ask about a
+        # game whose notes are covered, where this particular question read as troubleshooting
+        # and got routed to the tip sheet instead (kb_domain == "compat"), and nothing there
+        # matched either. The line would be true but misleading -- the search never looked in
+        # the notes this turn.
         if ollama_result.get("success"):
-            show_no_tip_for_this = should_show_no_tip_for_this_notice(
+            tip_sheet_came_back_empty = tip_sheet_turn_came_back_empty(
                 kb_attached=bool(kb_transparency.get("kb_attached")),
                 kb_domain=str(kb_transparency.get("kb_domain") or ""),
                 kb_unavailable_reason=str(kb_transparency.get("kb_unavailable_reason") or ""),
@@ -990,11 +986,11 @@ async def run_game_ai_request(
                 ask_mode=ask_mode,
                 kb_attached=bool(kb_transparency.get("kb_attached")),
                 kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
-            ) and not show_no_tip_for_this
-            # The third line (D88). It fires on the case the other two cannot reach: a note
-            # DID come back, and it was a stretch. No tie-break against them is needed or
-            # written -- they require nothing to have attached and this requires something to
-            # have, so the three are mutually exclusive by construction.
+            ) and not tip_sheet_came_back_empty
+            # The second line (D88). It fires on the case the first cannot reach: a note DID
+            # come back, and it was a stretch. No tie-break is needed or written -- "Not in my
+            # notes" requires nothing to have attached and this requires something to have, so
+            # the two are mutually exclusive by construction.
             #
             # Plan 70 helper B, bug 1: `kb_attached_notes` (built above by
             # `_parse_kb_attached_notes`) carries each note's own card text alongside its title,
@@ -1010,7 +1006,6 @@ async def run_game_ai_request(
                 kb_attached_notes=kb_attached_notes,
             )
             response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
-            response_text = append_no_tip_for_this_notice(response_text, show_no_tip_for_this)
             response_text = append_no_close_match_notice(response_text, show_no_close_match)
 
             # D112 #7, the spoiler safety net. Run last, after the honesty footers above, so a

@@ -1386,7 +1386,7 @@ def retrieve_knowledge_context(
         if not text_block.strip():
             # D87's distinct signal: "routed_nothing_fit" means a topic (or keyword hit) reached
             # retrieval and the meaning floor turned it away, not that nothing was routed at all
-            # -- so a later reader (Show details, the "no tip for this" line) can tell the two
+            # -- so a later reader (Show details) can tell the two
             # apart instead of reading one "no_hit" for both.
             no_hit_label = "routed_nothing_fit" if routed_nothing_fit else "no_hit"
             return KnowledgeRetrievalResult(

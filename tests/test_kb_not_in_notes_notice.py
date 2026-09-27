@@ -1,19 +1,18 @@
-"""Tests for the output-side "not in my notes" and "no tip for this" attribution notices."""
+"""Tests for the output-side "not in my notes" and "no close match" attribution notices."""
 
 import unittest
 
 from backend.services.kb_not_in_notes_notice import (
     _NOT_IN_NOTES_LINE,
     _NO_CLOSE_MATCH_LINE,
-    _NO_TIP_FOR_THIS_LINE,
     _THIN_MATCH_MEANING_CEILING,
     append_no_close_match_notice,
-    append_no_tip_for_this_notice,
     append_not_in_notes_notice,
     should_show_no_close_match_notice,
-    should_show_no_tip_for_this_notice,
     should_show_not_in_notes_notice,
+    tip_sheet_turn_came_back_empty,
 )
+import backend.services.kb_not_in_notes_notice as notice_module
 
 
 class NotInNotesDecisionTests(unittest.TestCase):
@@ -105,134 +104,71 @@ class NotInNotesAppendTests(unittest.TestCase):
         )
 
 
-class NoTipForThisDecisionTests(unittest.TestCase):
-    """should_show_no_tip_for_this_notice: routed-to-tips, nothing attached, any Ask mode."""
+class NoTipLineIsRetiredTests(unittest.TestCase):
+    """The "No tip for this" line was retired by the maintainer on 2026-09-27. Nothing in the
+    module may still build it."""
 
-    def test_routed_to_tips_with_nothing_attached_shows_the_line(self):
-        self.assertTrue(
-            should_show_no_tip_for_this_notice(kb_attached=False, kb_domain="compat")
-        )
+    def test_the_module_no_longer_offers_the_line(self):
+        for name in (
+            "_NO_TIP_FOR_THIS_LINE",
+            "_NO_TIP_NOTICE",
+            "should_show_no_tip_for_this_notice",
+            "append_no_tip_for_this_notice",
+        ):
+            self.assertFalse(hasattr(notice_module, name), name)
 
-    def test_routed_to_tips_with_a_tip_attached_does_not_show_the_line(self):
+
+class TipSheetTurnCameBackEmptyTests(unittest.TestCase):
+    """tip_sheet_turn_came_back_empty: the check that keeps "Not in my notes" off a turn whose
+    search went to the tip sheet. Same inputs and answers the retired line's check had."""
+
+    def test_routed_to_tips_with_nothing_attached_is_true(self):
+        self.assertTrue(tip_sheet_turn_came_back_empty(kb_attached=False, kb_domain="compat"))
+
+    def test_routed_to_tips_with_a_tip_attached_is_false(self):
+        self.assertFalse(tip_sheet_turn_came_back_empty(kb_attached=True, kb_domain="compat"))
+
+    def test_routed_to_notes_instead_is_false(self):
+        self.assertFalse(tip_sheet_turn_came_back_empty(kb_attached=False, kb_domain="strategy"))
+
+    def test_not_routed_at_all_is_false(self):
+        self.assertFalse(tip_sheet_turn_came_back_empty(kb_attached=False, kb_domain=""))
+
+    def test_missing_corpus_is_false(self):
         self.assertFalse(
-            should_show_no_tip_for_this_notice(kb_attached=True, kb_domain="compat")
-        )
-
-    def test_speed_mode_still_shows_the_line(self):
-        # Unlike the sibling notice, this one has no Ask-mode gate -- the brief is explicit
-        # that a tip search runs in any mode, so the line can too. There is no ask_mode
-        # parameter to pass: the function's signature is the proof.
-        self.assertTrue(
-            should_show_no_tip_for_this_notice(kb_attached=False, kb_domain="compat")
-        )
-
-    def test_routed_to_notes_instead_does_not_show_the_line(self):
-        # domain == "strategy" means this turn's search looked in the notes, not the tips.
-        self.assertFalse(
-            should_show_no_tip_for_this_notice(kb_attached=False, kb_domain="strategy")
-        )
-
-    def test_not_routed_at_all_does_not_show_the_line(self):
-        # The library-off case: should_retrieve_knowledge never returns "compat" while the
-        # setting is off, so kb_domain stays "" and this line never fires from that alone.
-        self.assertFalse(
-            should_show_no_tip_for_this_notice(kb_attached=False, kb_domain="")
-        )
-
-    def test_missing_corpus_does_not_show_the_line(self):
-        self.assertFalse(
-            should_show_no_tip_for_this_notice(
-                kb_attached=False,
-                kb_domain="compat",
-                kb_unavailable_reason="corpus_missing",
+            tip_sheet_turn_came_back_empty(
+                kb_attached=False, kb_domain="compat", kb_unavailable_reason="corpus_missing"
             )
         )
 
-    def test_a_tip_trimmed_for_space_does_not_show_the_line(self):
-        # A real tip was found and scored -- the context budget cut it, which is a different
-        # fact from "no tip fit". kb_attached is already False in this case (the tip never
-        # reached the model), so kb_notes is the only signal that tells the two apart.
+    def test_a_tip_trimmed_for_space_is_false(self):
         self.assertFalse(
-            should_show_no_tip_for_this_notice(
-                kb_attached=False,
-                kb_domain="compat",
-                kb_notes="dropped_by_context_budget",
+            tip_sheet_turn_came_back_empty(
+                kb_attached=False, kb_domain="compat", kb_notes="dropped_by_context_budget"
             )
         )
 
-    def test_floors_own_signal_shows_the_line_once_it_lands(self):
-        # Forward-compatibility case: once lane C's floor ships, an unattached compat turn's
-        # kb_notes reads "routed_nothing_fit (...)" instead of the plainer "no_hit (...)". Both
-        # must show the line.
-        self.assertTrue(
-            should_show_no_tip_for_this_notice(
-                kb_attached=False,
-                kb_domain="compat",
-                kb_notes="routed_nothing_fit (some_reason)",
+    def test_nothing_fit_and_no_hit_are_both_true(self):
+        for notes in ("routed_nothing_fit (some_reason)", "no_hit (some_reason)"):
+            self.assertTrue(
+                tip_sheet_turn_came_back_empty(
+                    kb_attached=False, kb_domain="compat", kb_notes=notes
+                ),
+                notes,
             )
-        )
-        self.assertTrue(
-            should_show_no_tip_for_this_notice(
-                kb_attached=False,
-                kb_domain="compat",
-                kb_notes="no_hit (some_reason)",
-            )
-        )
 
 
-class NoTipForThisAppendTests(unittest.TestCase):
-    """append_no_tip_for_this_notice: wording and composition with the safety notice."""
+class NotInNotesNeedsTheCallSitesTipSheetGuardTests(unittest.TestCase):
+    """should_show_not_in_notes_notice reads True on a tip-sheet turn about a covered game, so
+    game_ai_request.py's guard is what keeps the line off it -- see the wiring test."""
 
-    def test_exact_wording(self):
-        out = append_no_tip_for_this_notice("Try restarting Steam.", True)
-        self.assertIn(_NO_TIP_FOR_THIS_LINE, out)
-        self.assertIn(
-            "No tip for this — this answer is from the model's own knowledge.", out
-        )
-
-    def test_not_shown_leaves_reply_untouched(self):
-        original = "Try restarting Steam."
-        self.assertEqual(append_no_tip_for_this_notice(original, False), original)
-
-    def test_stacks_after_an_existing_safety_notice_in_a_sensible_order(self):
-        reply_with_safety_notice = (
-            "Try deleting the existing prefix folder and letting Steam rebuild it."
-            "\n\n—\n**bonsAI safety check:** this reply describes deleting save data, a "
-            "Wine/Proton prefix, or compatdata, without a clear backup step. That is permanent "
-            "unless the game uses Steam Cloud for saves -- back up the folder before deleting "
-            "anything."
-        )
-
-        out = append_no_tip_for_this_notice(reply_with_safety_notice, True)
-
-        self.assertIn("bonsAI safety check", out)
-        self.assertIn(_NO_TIP_FOR_THIS_LINE, out)
-        self.assertLess(
-            out.index("bonsAI safety check"),
-            out.index(_NO_TIP_FOR_THIS_LINE),
-            "the attribution note should land after the safety notice, not before it",
-        )
-
-
-class TheTwoLinesNeverBothAppearTests(unittest.TestCase):
-    """Both decision functions can return True for the same inputs (only kb_domain differs
-    between the two on the same turn) -- proving the module's own functions are mutually
-    exclusive is not possible without the call site's extra guard, so this proves the two
-    functions do not enforce it *themselves*, which is why game_ai_request.py must and does."""
-
-    def test_both_functions_would_fire_together_without_the_call_sites_guard(self):
-        # An Expert ask about a game whose notes are covered, but this particular turn got
-        # routed to the tip sheet (kb_domain == "compat") and nothing attached: both decision
-        # functions read True in isolation. game_ai_request.py is what stops both lines landing
-        # on the same reply -- see its test in test_kb_not_in_notes_wiring.py.
+    def test_both_read_true_for_the_same_turn_without_the_call_sites_guard(self):
         show_not_in_notes = should_show_not_in_notes_notice(
             ask_mode="expert", kb_attached=False, kb_coverage_status="sections"
         )
-        show_no_tip = should_show_no_tip_for_this_notice(
-            kb_attached=False, kb_domain="compat"
-        )
+        tip_sheet_empty = tip_sheet_turn_came_back_empty(kb_attached=False, kb_domain="compat")
         self.assertTrue(show_not_in_notes)
-        self.assertTrue(show_no_tip)
+        self.assertTrue(tip_sheet_empty)
 
 
 def _thin(**overrides):
@@ -655,25 +591,20 @@ class NoCloseMatchAppendTests(unittest.TestCase):
             "No close match in my notes, this answer leans on the model's own knowledge.",
         )
         self.assertNotIn("—", _NO_CLOSE_MATCH_LINE)
-        # The siblings keep their dashes; this is a deliberate difference, not a style drift.
+        # The sibling keeps its dash; this is a deliberate difference, not a style drift.
         self.assertIn("—", _NOT_IN_NOTES_LINE)
-        self.assertIn("—", _NO_TIP_FOR_THIS_LINE)
 
-    def test_the_three_lines_are_different_sentences(self):
-        # Each says a different thing: nothing came from the notes, nothing came from the tips,
-        # and something came from the notes but it was a stretch. Sharing wording would make the
-        # three indistinguishable to the person reading them.
-        self.assertEqual(
-            len({_NOT_IN_NOTES_LINE, _NO_TIP_FOR_THIS_LINE, _NO_CLOSE_MATCH_LINE}), 3
-        )
+    def test_the_two_lines_are_different_sentences(self):
+        # Each says a different thing: nothing came from the notes, and something came from the
+        # notes but it was a stretch. Sharing wording would make the two indistinguishable to
+        # the person reading them.
+        self.assertNotEqual(_NOT_IN_NOTES_LINE, _NO_CLOSE_MATCH_LINE)
 
 
-class TheThirdLineCannotCollideWithTheOtherTwoTests(unittest.TestCase):
-    """The other two need nothing to have attached; this one needs something to have.
+class NoCloseMatchCannotCollideWithNotInNotesTests(unittest.TestCase):
+    """"Not in my notes" needs nothing to have attached; this one needs something to have.
 
-    That is what makes the three mutually exclusive, and it holds in the functions themselves
-    rather than only at the call site -- unlike the first two, which need game_ai_request.py's
-    guard (see TheTwoLinesNeverBothAppearTests above).
+    That makes the two mutually exclusive in the functions themselves, not only at the call site.
     """
 
     def test_no_input_makes_this_line_and_not_in_notes_both_true(self):
@@ -683,14 +614,6 @@ class TheThirdLineCannotCollideWithTheOtherTwoTests(unittest.TestCase):
             )
             no_close_match = _thin(kb_attached=attached)
             self.assertFalse(not_in_notes and no_close_match)
-
-    def test_no_input_makes_this_line_and_no_tip_both_true(self):
-        for attached in (True, False):
-            no_tip = should_show_no_tip_for_this_notice(
-                kb_attached=attached, kb_domain="compat"
-            )
-            no_close_match = _thin(kb_attached=attached, kb_domain="compat")
-            self.assertFalse(no_tip and no_close_match)
 
 
 if __name__ == "__main__":

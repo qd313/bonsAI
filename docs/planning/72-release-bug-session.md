@@ -502,3 +502,8 @@ land.
   written. **By design, the maintainer's call:** the chips rotate for one minute after the panel opens, then
   rest (since April). Left as "if there is room": two older boxes still open with the ring on their action
   ("Enable Tier 2 before pulling?", the library's download location). Block 3 (flow F3) next, on `8e438f74`.
+- **15:35 — docs sweep landed** (`1ec11d0d`, the bookkeeper, Opus low): 16 entries to Done with their evidence
+  files, 8 to Verify with owed rows (F3-*, PULL-TRY-ORDER-01, CHAT-DELETE-MISSING-01), the "hidden for 0.6.0"
+  entry, the stale STOP-PARTIAL-01 sentence fixed, one plan 72 block in the changelog, and the session's
+  evidence (65 files) committed. Spot-checked by the session: the dots row says monitor only with the Deck's
+  own screen owed; Apply UI scale says closed by hiding, as the maintainer ruled.

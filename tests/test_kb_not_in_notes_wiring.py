@@ -12,6 +12,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
+from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
@@ -457,6 +458,39 @@ class RerouteToTheTipSheetWiringTests(unittest.TestCase):
         result = _run(plugin, ask_mode="strategy")
 
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
+
+    def test_a_rerouted_tip_turn_leaves_no_follow_up_subject(self):
+        # The real block a rerouted Strategy turn gets (release library, 2026-09-26): its tip
+        # headers parse as card names, so a turn still labelled "strategy" remembered "display"
+        # as what the chat was about, and the next bare follow-up searched for it.
+        tip_block = (
+            "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\n"
+            "Domain: compat\n\n"
+            "[Tip: display] (trust: wiki_no_patch)\n"
+            "Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text.\n"
+        )
+        retrieval = KnowledgeRetrievalResult(
+            attached=True, text_block=tip_block, trust_tier="wiki_no_patch", notes="compat_tips"
+        )
+        plugin = _FakePlugin(_base_settings())
+        plugin._ollama_result = {"success": True, "response": "Raise Render Scale.", "model": "m"}
+        kb_followup_memory.forget()
+        try:
+            with patch(
+                "backend.services.game_ai_request.summarize_kb_coverage",
+                return_value=KbCoverageSummary(status="sections", section_count=4),
+            ), patch(
+                "backend.services.game_ai_request.retrieve_knowledge_context",
+                return_value=retrieval,
+            ):
+                _run(plugin, ask_mode="strategy", question="the text looks blurry on my deck")
+
+            remembered = kb_followup_memory.recall(
+                app_id="570", app_name="Dota 2", text_resolved_title=""
+            )
+            self.assertEqual(remembered, "")
+        finally:
+            kb_followup_memory.forget()
 
 
 def _black_mesa_retrieval(sources: list) -> KnowledgeRetrievalResult:

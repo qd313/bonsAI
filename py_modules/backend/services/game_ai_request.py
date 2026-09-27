@@ -615,6 +615,11 @@ async def run_game_ai_request(
 
             _loop_kb = asyncio.get_running_loop()
             kb_result = await _loop_kb.run_in_executor(None, _retrieve_kb)
+            # The per-game tip check (plan 70) can send a turn locked to "strategy" to the tip
+            # sheet; from here on it is a troubleshooting turn -- no follow-up subject, tips parsed
+            # as tips, the "no close match" line judged as tips.
+            if kb_result.notes == "compat_tips":
+                kb_domain = "compat"
             if kb_result.attached:
                 kb_text = kb_result.text_block
                 # Plan 70 helper K, finish 2 (off unless drop_runnerup_notes_enabled()): on the

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 575,
-  "edgeCount": 1584,
+  "edgeCount": 1586,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2087,6 +2087,7 @@
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
@@ -2098,6 +2099,7 @@
         "src/utils/chatPanelScroll.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
@@ -5663,6 +5665,8 @@
         "src/components/PermissionsTab.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",

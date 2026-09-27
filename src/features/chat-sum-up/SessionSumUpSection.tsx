@@ -40,6 +40,12 @@ import { elementHasGamepadFocus, uiGamepadFocusElement } from "../../utils/uiDoc
 import { revealBelowKeepingAsItSettles, revealOnceWhenMounted } from "../../utils/chatPanelScroll";
 import { focusRowElement } from "../../utils/focusPerTurnRow";
 import {
+  registerNavFocus,
+  takeNavFocus,
+  unregisterNavFocus,
+  type NavRefHolder,
+} from "../../utils/navFocusRegistry";
+import {
   summaryCardFooter,
   summaryCardLines,
   summaryCardMeta,
@@ -69,6 +75,33 @@ function focusSummaryCard(): boolean {
 /** The lowest stop of this section: the card when it shows, else the button. */
 export function focusLastSumUpStop(): boolean {
   return focusSummaryCard() || focusSumUpButton();
+}
+
+/**
+ * Job E's hand-off: Steam's ring from the Sum up button to the card that just appeared, through the
+ * card's registered nav node. Tries now, then a frame later and on the 150/300/900 ms settle
+ * schedule (the node is filled once Steam registers the new card), and gives up for good the
+ * moment Steam's ring is no longer on the button -- the player moved it, or the move landed.
+ * Returns a cancel, for the effect's cleanup.
+ */
+function handRingToNewCard(): () => void {
+  let done = false;
+  const attempt = () => {
+    if (done) return;
+    if (!summaryCardEl?.isConnected || !elementHasGamepadFocus(sumUpButtonEl)) {
+      done = true;
+      return;
+    }
+    if (takeNavFocus("session-summary-card")) done = true;
+  };
+  attempt();
+  const frame = requestAnimationFrame(attempt);
+  const timers = [150, 300, 900].map((delayMs) => window.setTimeout(attempt, delayMs));
+  return () => {
+    done = true;
+    cancelAnimationFrame(frame);
+    timers.forEach((t) => window.clearTimeout(t));
+  };
 }
 
 function directionHandlers(
@@ -117,20 +150,33 @@ export function SessionSumUpSection(props: {
   const downFromCard = () => onMoveDownPastSection();
 
   /*
-   * Job E (plan 72, the maintainer's call): when Sum up finishes while the ring still sits on the
-   * button, the ring moves onto the new card, so the card's own reveal can bring all of it clear.
+   * Job E (plan 72, the maintainer's call): when Sum up finishes while Steam's ring still sits on
+   * the button, the ring moves onto the new card, so the card's own reveal can bring it clear.
    * Measured before (plan72-F-SUMUP.json): with the ring kept on the button, a 475 px card had only
    * the 471 px between the button and the dock, and its last line hid behind the question box.
    * Only on that finish: a card already there when the tab opens (from the note under an answer)
-   * is left alone, and so is a ring the player moved elsewhere during the wait. Button and card are
-   * siblings in one container, so this is the same plain move Down from the button makes.
+   * is left alone, and so is a ring the player moved elsewhere during the wait.
+   *
+   * Through Steam's own transfer (the card's nav node), not a plain focus(): the first build did
+   * focus() and on the Deck the ring stayed on the button twice, 46 s each (plan72-F6-SUMUP.json).
+   * A focus() made outside a Steam move event moves only the browser's focus. Steam fills the new
+   * card's node a moment after it mounts, so the transfer is retried on the settle schedule.
    */
+  const cardNavRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("session-summary-card", cardNavRef);
+    return () => unregisterNavFocus("session-summary-card", cardNavRef);
+  }, []);
+  /* Keyed on whether there is a summary, not on the object: a fresh copy of the same summary
+     arriving from the back end must not cancel the retries. */
+  const hasSummary = summary != null;
   const wasBusy = useRef(view.busy);
   useEffect(() => {
     const finished = wasBusy.current && !view.busy;
     wasBusy.current = view.busy;
-    if (finished && summary && elementHasGamepadFocus(sumUpButtonEl)) focusSummaryCard();
-  }, [view.busy, summary]);
+    if (finished && hasSummary) return handRingToNewCard();
+    return undefined;
+  }, [view.busy, hasSummary]);
   const downFromButton = () => (summary ? focusSummaryCard() : false) || downFromCard();
 
   return (
@@ -171,6 +217,7 @@ export function SessionSumUpSection(props: {
             revealOnceWhenMounted(el, uiGamepadFocusElement);
           }}
           aria-label="What the AI remembers"
+          {...({ navRef: cardNavRef } as Record<string, unknown>)}
           /*
            * Holding the ring, come fully clear of the dock (or keep the top on screen when taller
            * than the room). The reveal on mount was held back by the ring above it, and Down from

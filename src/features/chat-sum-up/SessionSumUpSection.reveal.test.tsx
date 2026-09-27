@@ -20,6 +20,17 @@ import { resetUiDocument } from "../../utils/uiDocument";
 
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
 
+/*
+ * Steam's transfer, stood in for: jsdom has no nav nodes, so `takeNavFocus` is replaced by a spy
+ * each test scripts (what Steam would do when the card's node takes the ring). Every other export
+ * of the registry is the real one.
+ */
+const nav = vi.hoisted(() => ({ take: vi.fn((_id: string) => false) }));
+vi.mock("../../utils/navFocusRegistry", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../utils/navFocusRegistry")>()),
+  takeNavFocus: (id: string) => nav.take(id),
+}));
+
 const DOCK_TOP = 600;
 const PANE_TOP = 88;
 const START_SCROLL = 489;
@@ -98,6 +109,8 @@ function section(state: ChatSumUpState): React.ReactElement {
 }
 
 beforeEach(() => {
+  nav.take.mockReset();
+  nav.take.mockImplementation(() => false);
   vi.useFakeTimers();
   resetUiDocument();
 });
@@ -114,7 +127,7 @@ describe("the summary card when Sum up finishes", () => {
    * and the dock, so its last 10 px sat behind the dock. The room from the pane's top to the dock
    * holds the card alone, so the ring now moves onto the new card and the card comes fully clear.
    */
-  it("hands the ring to the new card, which then comes fully clear of the dock (the measured 136-611)", () => {
+  it("hands Steam's ring to the new card through the card's nav node, then the card comes clear (136-611)", () => {
     const pane = deckPane();
     const host = document.createElement("div");
     pane.appendChild(host);
@@ -130,38 +143,61 @@ describe("the summary card when Sum up finishes", () => {
     });
     expect(pane.scrollTop).toBe(START_SCROLL);
 
+    /* Steam fills the new card's node a moment after it mounts: the first try finds nothing. */
+    let nodeReady = false;
+    nav.take.mockImplementation((id: string) => {
+      if (id !== "session-summary-card" || !nodeReady) return false;
+      const card = container.querySelector(".bonsai-sumup-card")!;
+      ringOn(card);
+      fireEvent.focus(card);
+      return true;
+    });
+
     /* The job finishes with the ring still on the button. */
     rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
     const card = container.querySelector(".bonsai-sumup-card")!;
     expect(card).toBeTruthy();
     place(card, pane, 136, 611);
-    expect(document.activeElement).toBe(card);
+    expect(nav.take).toHaveBeenCalledWith("session-summary-card");
+    expect(button.classList.contains("gpfocus")).toBe(true);
 
-    /* Steam moves its ring with the focus; the card's own reveal then runs. */
-    ringOn(card);
-    fireEvent.focus(card);
+    nodeReady = true;
     act(() => {
       vi.runAllTimers();
     });
+    expect(card.classList.contains("gpfocus")).toBe(true);
     expect(bottom(card)).toBeLessThanOrEqual(DOCK_TOP);
     expect(top(card)).toBeGreaterThanOrEqual(PANE_TOP);
+    /* Once the ring has moved, the remaining tries stop. */
+    const calls = nav.take.mock.calls.length;
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(nav.take.mock.calls.length).toBe(calls);
   });
 
-  it("leaves the ring alone when the player moved it elsewhere during the wait", () => {
+  it("leaves the ring alone when Steam's ring went elsewhere during the wait, even with the button's browser focus", () => {
     const pane = deckPane();
     const host = document.createElement("div");
     pane.appendChild(host);
     const elsewhere = document.createElement("button");
     pane.appendChild(elsewhere);
+    nav.take.mockImplementation(() => true);
     const { container, rerender } = render(section(sumUpState({ summingUp: true, summingUpSeconds: 3 })), {
       container: host,
     });
-    place(container.querySelector(".bonsai-sumup-btn")!, pane, 96, 130);
-    elsewhere.focus();
+    const button = container.querySelector(".bonsai-sumup-btn") as HTMLElement;
+    place(button, pane, 96, 130);
+    /* The browser's focus says "button"; Steam's ring says "elsewhere". The ring wins. */
+    button.setAttribute("tabindex", "-1");
+    button.focus();
     ringOn(elsewhere);
 
     rerender(section(sumUpState({ summary: SUMMARY, canSumUp: true })));
-    expect(document.activeElement).toBe(elsewhere);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(nav.take).not.toHaveBeenCalledWith("session-summary-card");
     expect(elsewhere.classList.contains("gpfocus")).toBe(true);
   });
 
@@ -169,18 +205,14 @@ describe("the summary card when Sum up finishes", () => {
     const pane = deckPane();
     const host = document.createElement("div");
     pane.appendChild(host);
-    const button = document.createElement("button");
-    pane.appendChild(button);
-    button.focus();
-    ringOn(button);
+    nav.take.mockImplementation(() => true);
     const { container, rerender } = render(section(sumUpState({ summary: SUMMARY })), { container: host });
-    expect(document.activeElement).not.toBe(container.querySelector(".bonsai-sumup-card"));
-    const sumUp = container.querySelector(".bonsai-sumup-btn") as HTMLElement;
-    sumUp.setAttribute("tabindex", "-1");
-    sumUp.focus();
-    ringOn(sumUp);
+    ringOn(container.querySelector(".bonsai-sumup-btn")!);
     rerender(section(sumUpState({ summary: SUMMARY, questionsAfterSummary: 1 })));
-    expect(document.activeElement).toBe(sumUp);
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(nav.take).not.toHaveBeenCalledWith("session-summary-card");
   });
 
   it("scrolls only once for the same card, so a later render does not pull the view back", () => {

@@ -318,12 +318,24 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 real-time video with the maintainer's voice-over, short pieces, vertical shorts, better screenshots),
 6 (keep "qwert" for now), 7 (yes, a fix goes out as 0.6.1 when needed), 8 (yes), 9 (yes, and lead with
 the free-and-open, self-hosted, privacy-first spirit). Later the same day: 1 (yes — hide anything
-half-built) and 4 (announce on Reddit). **Still open:** 5 (the Decky store — see below) and the
-last-call date.
+half-built) and 4 (announce on Reddit). 5 (the Decky store) was settled by reading its rules — see below. **Still open:** the last-call date.
 
-**On the Decky store (5):** the maintainer is not sure the store would take a plugin written largely
-with AI help. Before deciding, someone reads the store's own submission rules and recent review threads
-for anything on AI-written code, and reports back in plain words. No application is made until then.
+**On the Decky store (5) — settled 2026-09-26: bonsAI cannot go in the store.** Read that day from the
+store's own pages:
+
+- The submission guide (wiki.deckbrew.xyz, "Submitting Plugins", section "AI, LLMs and so on") says:
+  "No. We do not accept any plugin that uses any LLM based code … Any LLM focused plugins will be
+  rejected outright and there will be no appeals." bonsAI is built around a language model, so it is
+  ruled out whoever wrote the code.
+- The store's form for a new plugin also asks the author to confirm that "Generative AI was NOT used to
+  write a majority of the code I am submitting", and warns that a form not followed exactly "may result
+  in your PR being denied for suspected AI usage".
+
+**So:** bonsAI keeps shipping as a zip from its GitHub releases page. That makes the README's install
+steps matter more — a new player has to install a zip by hand, so those steps are written and tested on
+a fresh Deck as part of the fresh-install check. The Reddit posts should not promise a store listing.
+The Reddit rule check (item 4) must also look for similar AI rules in each community, since some Deck
+communities share the store's view.
 
 1. **What is in 0.6.0? — agreed 2026-09-26: hide anything half-built.** Everything landed and working by
    the freeze ships; plan 70's work ships if it lands and passes on the Deck by then. Anything half-built
@@ -345,9 +357,8 @@ for anything on AI-written code, and reports back in plain words. No application
    about AI-written code, then report back in plain words. The session drafts one post per community,
    each leading with what that community cares about; the maintainer posts them. Posting waits until
    the release page, README and video are live, so every link works on the first click.
-5. **The Decky plugin store.** bonsAI is not in it; players download a zip from the GitHub page. A re-launch
-   is the natural moment to decide whether to apply. Recommended: decide now, apply after 0.6.0 has been
-   out a week without a serious bug.
+5. **The Decky plugin store — settled 2026-09-26: not possible.** The store refuses any plugin built on a
+   language model, with no appeal (details above). bonsAI stays a zip from its GitHub releases page.
 6. **The name on it.** The plugin's author field says "qwert", while the GitHub page is qd313. Pick the one
    players should see.
 7. **If 0.6.0 turns out broken.** Recommended: a fix goes on main directly as 0.6.1, then is copied back

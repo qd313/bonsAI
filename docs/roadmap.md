@@ -169,8 +169,8 @@ starts work outside this.
   **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **OLLAMA-TAB-AFTER-RELOAD-02** in
   [testing.md](testing.md). [Detail](roadmap-details.md#the-plugin-log-writes-one-false-non-loopback-connection-failure-right-at-start-up).
 - ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper I).** Deck check owed on the maintainer's own list — needs their own Steam
-  Web API key. Row **VAC-03-07** in [testing-manual.md](testing-manual.md).
+  2026-09-26 (plan 70, helper I).** The maintainer's own Steam Web API key is now saved on the Deck
+  (2026-09-27, never committed); the Deck check is running. Row **VAC-03-07** in [testing-manual.md](testing-manual.md).
   [Detail](roadmap-details.md#the-steam-ban-lookups-report-shows-as-raw-text-not-a-table).
 - ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
   maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
@@ -397,7 +397,9 @@ replace it with a specific issue when one exists.
   half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
   **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
-  night. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+  night. **Target set by the maintainer 2026-09-27:** at least 30 frames a second in the panel while an answer
+  arrives with a game running (today 10–20); being worked (helper S), a Deck baseline being measured (D112).
+  [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
 - ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** —
   **OPEN, from the maintainer 2026-09-26, wanted before 0.6.0.** Install/update Ollama, model downloads,
   voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
@@ -768,10 +770,11 @@ ones from this month are D81 to D88.
   words, not just its title, so it stops appearing under an answer that clearly used a note. Wired into
   real answers (`e4c24bdd`). **Deck check owed:** row **KB-NOCLOSE-TEXT-01** in [testing.md](testing.md).
   [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
-- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, numbers in
-  2026-09-26.** Waiting on the maintainer (D112). [Detail](roadmap-details.md#no-tip-line-numbers).
-- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, the
-  maintainer's call 2026-09-26: hide it like the notes block.** The protected note's tag reads "Boss note
+- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, being retired
+  (helper Q), the maintainer's call 2026-09-27 (D112).** "Not in my notes" and "No close match" stay. [Detail](roadmap-details.md#no-tip-line-numbers).
+- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, being fixed
+  (helper R); the maintainer's call 2026-09-27 (D112): hidden until the notes block is opened, only when the
+  answer hid a spoiler.** The protected note's tag reads "Boss note
   (spoiler)" until the answer's cover or the notes block is opened, then the real name; no new button.
   Drawing: [Show Details Credit Line](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). Plan 72 must-fix.
   [Detail](roadmap-details.md#spoiler-leak-family).
@@ -891,8 +894,9 @@ ones from this month are D81 to D88.
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **OPEN.** Mostly nothing at 161 cards. What still
   matters: a thumbs-down that stops a wrong card coming back (three days), add-on packs before any large
   catalog (five days or more), a screenshot feeding the search. **The thumbs-down drawn 2026-09-26** (plan
-  70, helper T): [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43); not
-  built yet, the maintainer picks. [knowledge-base.md](knowledge-base.md) § Phase 7. [Detail](roadmap-details.md#rag-phase-7-community-tip-contribution-rag-phase-8).
+  70, helper T): [three options, drawn true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43).
+  **Design C chosen by the maintainer 2026-09-27 (D112):** "Not really" opens the reason chips, and a
+  "which note?" row only when two or three notes were used. Not built; ready for a feature session. [knowledge-base.md](knowledge-base.md) § Phase 7. [Detail](roadmap-details.md#rag-phase-7-community-tip-contribution-rag-phase-8).
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's

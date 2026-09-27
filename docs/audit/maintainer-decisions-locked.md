@@ -1943,3 +1943,19 @@ demote is marked drawn and planned only; the controller rig entry gains the two 
   release check (2.5 lets a reworded note be shared under the later version the library uses, so it fits D20);
   spoiler settings for the new games: Brotato little story, Palworld and Skyrim protect progress; ranking general
   "Starting out" notes lower is left off, because it made the answer test worse (46 to 41 of 57 right note first).
+
+**Answered by the maintainer 2026-09-27, just after midnight, on the questions plan 70 left open:**
+
+- **The "No tip for this" line (14):** retire it. Chosen over retiring "Not in my notes" instead; "Not in my
+  notes" and "No close match" both stay. Being removed by helper Q.
+- **The thumbs-down on a wrong note (15):** design C. "Not really" opens the reason chips (Wrong tip, Outdated,
+  Wrong edition); only when the answer used two or three notes, one more row asks which note, with "Both of
+  them" offered. Drawing: [three options, true size](https://claude.ai/artifact/K2MXtVYoEYV6cNxsAzUh43). Chosen,
+  not built; ready for a feature session.
+- **Show details' credit line (16):** stays hidden until the notes block is opened, but only when the answer hid
+  a spoiler. Chosen over hiding it always. Being built by helper R.
+- **Frame rate with a game running (17):** at least 30 frames a second in the panel while an answer arrives
+  (today 10 to 20). Being worked by helper S; a Deck baseline is being measured.
+- **The ban-lookup check (18):** the maintainer's own Steam Web API key is now saved in the plugin's settings on
+  the Deck, taken from their private settings file that git ignores; it was never committed. The VAC-03-07
+  check is no longer blocked and is running on the Deck.

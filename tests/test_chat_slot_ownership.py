@@ -280,7 +280,8 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         slot = create_slot(self.tmp)
         sid = slot["id"]
 
-        with patch.object(Plugin, "load_settings", return_value={}):
+        # The full steps are Developer-tab only since 0.6.0 (test_shortcut_setup_developer_gate.py).
+        with patch.object(Plugin, "load_settings", return_value={"show_developer_tab": True}):
             ack = await self.plugin.start_background_game_ai(
                 {
                     "question": "bonsai:shortcut-setup-deck",

@@ -805,8 +805,12 @@ class Plugin:
         variant = classify_shortcut_setup_command(question)
         if variant is None:
             return None
-        response = response_message_for_shortcut(variant)
         app_context = "active" if app_id else "none"
+        # 0.6.0 (plan 72): the quick-launch chord is shelved; Developer tab only. No shortcut_setup, no button.
+        if not (await self.load_settings()).get("show_developer_tab"):
+            return {"success": True, "response": "That command isn't available in this version.", "app_id": app_id,
+                    "app_context": app_context, "applied": None, "elapsed_seconds": 0.0}
+        response = response_message_for_shortcut(variant)
         return {
             "success": True,
             "response": response,

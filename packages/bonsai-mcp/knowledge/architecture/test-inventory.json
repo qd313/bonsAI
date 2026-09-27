@@ -347,6 +347,7 @@
     "tests/test_settings_save_lock.py",
     "tests/test_settings_service.py",
     "tests/test_shortcut_setup_commands.py",
+    "tests/test_shortcut_setup_developer_gate.py",
     "tests/test_source_attribution.py",
     "tests/test_spoiler_risk_service.py",
     "tests/test_spoiler_title_profiles.py",

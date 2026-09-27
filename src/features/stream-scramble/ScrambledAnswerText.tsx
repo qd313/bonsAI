@@ -391,8 +391,9 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   );
 
   if (on && streaming && markdownSettled != null) {
+    /* Piece by piece: the slot mark ends the text, so only the last piece is parsed per beat. */
     return (
-      <MainTabBonsaiAiMarkdownChunk
+      <StreamMarkdownPieces
         {...markdownProps}
         source={settledMarkdownWithSlot(raw, markdownSettled)}
         scrambleSlotRef={slotRefCallback}

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 541,
-  "edgeCount": 1461,
+  "edgeCount": 1464,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1306,7 +1306,10 @@
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/StreamMarkdownPieces.tsx",
-        "src/features/stream-scramble/ScrambledAnswerText.tsx"
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
+        "src/features/stream-scramble/liveScrambleMemo.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -2630,6 +2633,7 @@
         "src/features/stream-scramble/streamScrambleMath.ts"
       ],
       "importedBy": [
+        "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/liveScrambleMemo.test.ts",
@@ -2651,6 +2655,7 @@
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/streamScrambleContext.test.ts",
@@ -4058,6 +4063,7 @@
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SaveChatToDesktopRow.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
+        "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",

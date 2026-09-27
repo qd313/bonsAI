@@ -5,11 +5,15 @@
  * update parsed and drew the whole answer again.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 
 import { StreamMarkdownPieces } from "./StreamMarkdownPieces";
 import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
 import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
+import { StreamScrambleContext } from "../features/stream-scramble/streamScrambleContext";
+import { resetLiveScrambleMemoForTests } from "../features/stream-scramble/liveScrambleMemo";
+
+vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
 const parsed: string[] = [];
 vi.mock("react-markdown", async (importOriginal) => {
@@ -79,5 +83,35 @@ describe("the live tail of a streaming answer, scramble off", () => {
   it("a finished section is still drawn whole", () => {
     render(<ScrambledAnswerText plain={ANSWER} raw={ANSWER} streaming={false} />);
     expect(parsed).toEqual([ANSWER]);
+  });
+});
+
+describe("the live tail of a streaming answer, scramble on", () => {
+  const ON = { enabled: true, style: "settle", color: "green", settleMs: 400 } as const;
+  const view = (text: string) => (
+    <StreamScrambleContext.Provider value={ON}>
+      <ScrambledAnswerText plain={text} raw={text} streaming />
+    </StreamScrambleContext.Provider>
+  );
+
+  it("parses only the piece holding the settle point, and the churn span still lands at the end", () => {
+    vi.useFakeTimers();
+    resetLiveScrambleMemoForTests();
+    try {
+      const first = ANSWER.slice(0, ANSWER.length - 20);
+      const { container, rerender } = render(view(first));
+      for (let i = 0; i < 40; i += 1) act(() => { vi.advanceTimersByTime(25); });
+      parsed.length = 0;
+      rerender(view(ANSWER));
+      for (let i = 0; i < 40; i += 1) act(() => { vi.advanceTimersByTime(25); });
+      expect(parsed.length).toBeGreaterThan(0);
+      for (const source of parsed) expect(source.length).toBeLessThan(120);
+      // The slot is inside the last block drawn, after everything settled before it.
+      const slot = container.querySelector(".bonsai-stream-scramble");
+      expect(slot).not.toBeNull();
+      expect(container.textContent).toContain("escape tool");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

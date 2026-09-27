@@ -47,8 +47,8 @@ function localRuntimeBetaNoticeDescription(): string {
     "use at your own risk. This path is beta: screenshots and attachments use vision-capable models where available; Expert and heavier models can add delay.\n\n" +
     "Speed (Fast) is the default for quick answers. Use Strategy when you need branching choices. Expert is heavier and slower.\n\n" +
     `Default Tier-1 pull: ${TIER1_ESSENTIALS_TAG} (one FOSS model for chat and screenshots). ` +
-    "Under Connection, use Install Tier 1 essentials or optional Tier 2 one-model multimodal.\n\n" +
-    "You can turn off Ollama on Deck in Settings if you prefer a LAN host."
+    "On the Ollama tab, under Where AI runs, use Install Tier 1 essentials or optional Tier 2 one-model multimodal.\n\n" +
+    "You can turn off Run AI on this Deck on the Ollama tab if you prefer a LAN host."
   );
 }
 
@@ -56,9 +56,8 @@ function localRuntimeBetaNoticeDescription(): string {
 const BONSAI_BETA_NOTICE_DESCRIPTION =
   "Welcome to bonsAI!\n\n" +
   "This plugin is currently in beta. Some features may not work as expected, " +
-  "and AI-generated recommendations \u2014 especially TDP and performance changes \u2014 " +
-  "should be verified before relying on them.\n\n" +
-  "bonsAI modifies system hardware settings based on AI suggestions. " +
+  "and answers come from an AI, so they can be wrong. " +
+  "Check anything important before relying on it.\n\n" +
   "Use at your own risk.\n\n" +
   "If you have another PC on your LAN that can host Ollama, that path is typically much faster than inference on-device.\n\n" +
   "Running heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior " +

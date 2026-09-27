@@ -78,6 +78,7 @@
     "src/data/bonsaiSettingsHostileContract.test.ts",
     "src/data/characterCatalog.test.ts",
     "src/data/characterUiAccent.test.ts",
+    "src/data/firstRunNoticeWording.test.ts",
     "src/data/presets.test.ts",
     "src/data/pullModelCatalog.test.ts",
     "src/data/replyLanguage.test.ts",

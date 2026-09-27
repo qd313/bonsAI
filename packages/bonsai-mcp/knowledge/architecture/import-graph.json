@@ -1,6 +1,6 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 546,
+  "fileCount": 547,
   "edgeCount": 1475,
   "cycles": [],
   "orphans": [],
@@ -1614,6 +1614,10 @@
         "src/utils/drgGlossaryTermMatch.test.ts",
         "src/utils/drgGlossaryTermMatch.ts"
       ]
+    },
+    "src/data/firstRunNoticeWording.test.ts": {
+      "imports": [],
+      "importedBy": []
     },
     "src/data/inputSanitizerCommands.ts": {
       "imports": [],

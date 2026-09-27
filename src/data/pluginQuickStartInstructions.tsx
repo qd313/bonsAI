@@ -78,10 +78,6 @@ export function PluginQuickStartInstructionsBody() {
         <strong>Screenshots:</strong> attach a Steam shot for vision asks; use <strong>Permissions</strong> if attach is
         blocked. Pick attachment quality under Settings.
       </li>
-      <li style={itemStyle}>
-        <strong>TDP / power</strong> tips are suggestion-first; optional <strong>Adjust power limits</strong> in Permissions is
-        advanced and may become read-only later. Always verify in QAM → Performance (GPU clock lines stay recommendations only).
-      </li>
       <li style={{ marginBottom: 0 }}>
         Other tabs: <strong>Ollama</strong> (connection, models, timing), <strong>Settings</strong> (voice, character),{" "}
         <strong>Permissions</strong> (gates), <strong>About</strong> (links).

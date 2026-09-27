@@ -161,7 +161,7 @@ import { archivedTurnTransparency } from "../utils/archivedTurnTransparency";
 import { buildAnswerBubbleElement } from "../utils/buildAnswerBubbleElement";
 import { buildAnswerCopyText } from "../utils/answerCopyText";
 import { buildThinkingBlurbTextElement } from "../utils/buildThinkingBlurbTextElement";
-import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
+import { buildTurnHeaderElement, focusOpenQuestionText } from "../utils/buildTurnHeaderElement";
 import { useLiveTurnHeaderRingRestore } from "../hooks/useLiveTurnHeaderRingRestore";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
 import { type SessionContextTurn } from "./SessionContextStrip";
@@ -594,11 +594,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           seconds: reasoning.seconds,
           onToggle: () => setReasoningOpenFor((prev) => (prev === turnKey ? null : turnKey)),
           /*
-           * Up: Retry on the question above, and the question's own row when this turn has no
-           * Retry. Both are siblings inside this turn's own container, so a plain focus is the
-           * right move here (AGENTS.md, "The Steam Deck focus graph").
+           * Up: the question's own text first -- the stop Down visits between Retry and this line
+           * (plan 72 A-4: Up went straight to Retry, skipping it, plan72-A4-UP-FAMILY-a.json) --
+           * then Retry, then the question's row when this turn has neither. All inside this turn's
+           * own column, so a plain focus is the right move here (AGENTS.md, "The Steam Deck focus
+           * graph"); the text's own Up then goes on to Retry.
            */
           onMoveUp: () => {
+            if (focusOpenQuestionText(turnKey)) return true;
             if (focusRegisteredReplyStop("retry")) return true;
             return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
           },

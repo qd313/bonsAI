@@ -20,6 +20,7 @@ import {
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
 import { focusReplyShowReasoning } from "./liveTurnFocusGraph";
 import { fitOpenQuestionBubble } from "./questionBubbleFit";
+import { elementHasFocus } from "./uiDocument";
 
 export type BuildTurnHeaderElementArgs = {
   turnId: string;
@@ -79,6 +80,31 @@ export type BuildTurnHeaderElementArgs = {
   headerNavRef?: { current: unknown };
   bodyRef?: (el: HTMLElement | null) => void;
 };
+
+/**
+ * The open question's own text stop, by turn, for the Show reasoning line's Up (plan 72 A-4).
+ *
+ * Only a question with Retry has a separate text stop, and only the newest open turn has Retry, so
+ * at most one entry is ever live. Removal checks identity, the same rule navFocusRegistry keeps, so
+ * an old header's late unmount cannot wipe the new one's entry.
+ */
+const questionTextByTurn = new Map<string, HTMLElement>();
+
+/**
+ * Put the ring on this turn's question text. Plain `focus()`: the Show reasoning line and the
+ * question are both in the turn's own column, the same hop the line already makes onto Retry,
+ * which the Deck measured landing (docs/test-evidence/plan72-A4-UP-FAMILY-a.json).
+ */
+export function focusOpenQuestionText(turnId: string): boolean {
+  const el = questionTextByTurn.get(turnId);
+  if (!el?.isConnected) return false;
+  try {
+    el.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(el);
+}
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
 export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.ReactElement {
@@ -249,7 +275,10 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       <Focusable
         className="bonsai-chat-turn-row-body"
         ref={(el: HTMLElement | null) => {
+          const prev = bodyEl.current;
           bodyEl.current = el;
+          if (el) questionTextByTurn.set(turnId, el);
+          else if (prev && questionTextByTurn.get(turnId) === prev) questionTextByTurn.delete(turnId);
           bodyRef?.(el);
         }}
         onActivate={onActivate}
@@ -257,6 +286,14 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         aria-expanded={expanded}
         data-bonsai-turn-id={turnId}
         {...({
+          /*
+           * Up from the question text reaches Retry before leaving the question, the reverse of
+           * Down, which the Deck measured going Retry -> text -> Show reasoning. Without this, Up
+           * left the row straight from the text and Retry was only reachable from below by Left
+           * (plan 72 A-4, plan72-A4-UP-FAMILY-a.json). Retry and the text are siblings in this
+           * row, so a plain focus is the right move; a greyed Retry declines and Up leaves as before.
+           */
+          onMoveUp: () => leftIntoRetry(),
           onMoveLeft: () => leftIntoRetry(),
           onButtonDown: (button: unknown) =>
             isDeckDirectionLeftEvent(button) ? leftIntoRetry() : false,

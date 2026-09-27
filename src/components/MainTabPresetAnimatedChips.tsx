@@ -257,7 +257,7 @@ function MainTabPresetSidewaysCarousel(
       }
       /* Never auto-advance while the user is browsing the carousel: focusIndex follows DOM
          focus, so moving it under the user would desync the white Steam ring from the blue chip. */
-      if (elementHasFocus(viewportRef.current)) {
+      if (elementHasFocus(viewportRef.current) || nav.rowHeld()) {
         timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
         return;
       }
@@ -416,8 +416,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   const seedsKey = seedsKeyFrom(seeds);
   const reducedMotion = prefersReducedMotion();
   const slotCount = effectivePresetVisibleSlots(presetSingleChip);
-  const nav = usePresetRowNav(slotCount, onCarouselExitDown);
-  const { chipHasRing } = nav;
+  const { rowHeld, ...nav } = usePresetRowNav(slotCount, onCarouselExitDown, { holdStill: props.holdStill });
 
   const [slots, setSlots] = useState<PresetPrompt[]>(() =>
     normalizeThreeSeeds(seeds, samplerOptions).slice(0, slotCount),
@@ -429,13 +428,6 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   );
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
-  /*
-   * An answer is being written (holdStill): a change already under way finishes, no new one
-   * starts. A ref, not an effect dependency, because this effect's restart resets and re-fades
-   * the whole row. When the answer ends, the completed Ask's askRestartToken restarts it anyway.
-   */
-  const holdStillRef = useRef(props.holdStill);
-  holdStillRef.current = props.holdStill;
 
   useEffect(() => {
     const initial = normalizeThreeSeeds(seeds, samplerOptions);
@@ -478,14 +470,15 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
 
     if (staticMode) {
       setSlotFade(Array.from({ length: slotCount }, () => ({ opacity: 1, transitionMs: 0 })));
-      const loopStatic = (slotIndex: number, prompt: PresetPrompt) => {
+      const loopStatic = (slotIndex: number, prompt: PresetPrompt, wait = presetHoldMs(prompt.text)) => {
         pushTimeout(() => {
-          // Held: this slot stops; askRestartToken's restart picks every slot up again.
-          if (!mayStartNextCycle() || holdStillRef.current) return;
+          if (!mayStartNextCycle()) return;
+          // Held (rowHeld): keep this question and look again shortly.
+          if (rowHeld()) return loopStatic(slotIndex, prompt, PRESET_RING_HOLD_RECHECK_MS);
           const next = pickNext(prompt);
           showInSlot(slotIndex, next);
           loopStatic(slotIndex, next);
-        }, presetHoldMs(prompt.text));
+        }, wait);
       };
       first.forEach((prompt, i) => loopStatic(i, prompt));
       return () => {
@@ -510,11 +503,11 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
             /*
              * A chip holding the ring does not fade out: a fading chip stops being a focus stop,
              * so Steam dropped the ring with nothing to take it (plan70-PRESET-ONE-LINE-03.json,
-             * 7.6 s after the ring landed). It waits, and fades once the ring has moved on.
-             * It waits the same way while an answer is being written (holdStill).
+             * 7.6 s after the ring landed). It waits, and fades once the ring has left the row
+             * and no answer is being written (rowHeld).
              */
             const fadeOut = () => {
-              if (chipHasRing(slotIndex) || holdStillRef.current) {
+              if (rowHeld()) {
                 pushTimeout(fadeOut, PRESET_RING_HOLD_RECHECK_MS);
                 return;
               }
@@ -541,7 +534,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     // askRestartToken restarts this whole effect on every completed Ask (D58 #3) even when
     // seedsKey is unchanged, which is exactly what happens under a pinned QA batch: it always
     // resolves to the same three chips, so seedsKey alone never signals that an Ask happened.
-  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken, chipHasRing]);
+  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken, rowHeld]);
 
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">

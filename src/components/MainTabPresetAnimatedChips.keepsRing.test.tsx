@@ -44,7 +44,10 @@ describe("a suggestion chip holding the ring keeps it when the chip changes ques
     document.body.innerHTML = "";
   });
 
-  it("static: the chip changes question under the ring and the ring stays on it", () => {
+  // Until plan 72 the static chip changed question under the ring and only the ring was kept. A
+  // chip that changes under the ring takes a press meant for the words just read
+  // (plan72-Z-FREEPLAY.json finding 4), so now it keeps its question while the ring is on it.
+  it("static: the chip keeps its question and the ring while the ring is on it", () => {
     const row = renderOneChip("static");
     const button = row.chip();
     const first = row.chipText();
@@ -54,7 +57,7 @@ describe("a suggestion chip holding the ring keeps it when the chip changes ques
       vi.advanceTimersByTime(20_000);
     });
 
-    expect(row.chipText()).not.toBe(first);
+    expect(row.chipText()).toBe(first);
     expect(button.isConnected).toBe(true);
     expect(row.chip()).toBe(button);
     expect(document.activeElement).toBe(button);

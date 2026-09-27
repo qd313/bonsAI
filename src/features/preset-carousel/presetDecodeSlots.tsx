@@ -44,7 +44,7 @@ import {
   slotStaggerMs,
 } from "./presetChipShared";
 
-/** How often a reduced-motion chip held by `holdStill` checks whether it may change yet. */
+/** How often a reduced-motion chip held by `rowHeld` checks whether it may change yet. */
 const PRESET_DECODE_HOLD_RECHECK_MS = 500;
 
 /**
@@ -169,7 +169,7 @@ export function MainTabPresetDecodeSlots(
   const seedsKey = seedsKeyFrom(seeds);
   const reducedMotion = prefersReducedMotion();
   const slotCount = effectivePresetVisibleSlots(presetSingleChip);
-  const nav = usePresetRowNav(slotCount, onCarouselExitDown);
+  const nav = usePresetRowNav(slotCount, onCarouselExitDown, { holdStill });
 
   const [slots, setSlots] = useState<PresetPrompt[]>(() =>
     normalizeThreeSeeds(seeds, samplerOptions).slice(0, slotCount),
@@ -178,9 +178,6 @@ export function MainTabPresetDecodeSlots(
   const [resolved, setResolved] = useState<boolean[]>(() => Array.from({ length: slotCount }, () => false));
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
-  /** An answer is being written: a reveal under way finishes, no new one begins. */
-  const holdStillRef = useRef(holdStill);
-  holdStillRef.current = holdStill;
 
   const labelRefs = useRef<(HTMLSpanElement | null)[]>(Array.from({ length: slotCount }, () => null));
   /** Stable per-slot ref callbacks — an inline arrow per render would churn ref identity and
@@ -241,7 +238,7 @@ export function MainTabPresetDecodeSlots(
           markResolved(slotIndex, true);
           const next = () => {
             if (!mayStartNextCycle()) return;
-            if (holdStillRef.current) {
+            if (nav.rowHeld()) {
               pushTimeout(next, PRESET_DECODE_HOLD_RECHECK_MS);
               return;
             }
@@ -282,7 +279,8 @@ export function MainTabPresetDecodeSlots(
       if (!anim) return;
 
       if (anim.resolved) {
-        if (now >= anim.holdEndAt && mayStartNextCycle() && !holdStillRef.current) {
+        // rowHeld: an answer is being written or the ring is on the row; a reveal under way finishes.
+        if (now >= anim.holdEndAt && mayStartNextCycle() && !nav.rowHeld()) {
           begin(slotIndex, pickNext(anim.prompt), now);
         }
         return;

@@ -99,6 +99,8 @@ export function usePresetRowNav(
     requestFocus?: (index: number) => boolean;
     /** Right at the last chip; see buildChipNavHandlers and carouselState.nextFrozenHistoryEntry. */
     advanceAtEnd?: () => boolean;
+    /** An answer is being written; `rowHeld` reports it (MainTabPresetAnimatedChipsProps.holdStill). */
+    holdStill?: boolean;
   },
 ) {
   const buttonRefs = useRef<(HTMLElement | null)[]>(Array.from({ length: maxCount }, () => null));
@@ -112,6 +114,8 @@ export function usePresetRowNav(
   const isFocusable = options?.isFocusable;
   const requestFocus = options?.requestFocus;
   const advanceAtEnd = options?.advanceAtEnd;
+  const holdStillRef = useRef(options?.holdStill);
+  holdStillRef.current = options?.holdStill;
   const focusChip = useCallback(
     (i: number): boolean => {
       if (isFocusable && !isFocusable(i)) return requestFocus ? requestFocus(i) : false;
@@ -183,7 +187,18 @@ export function usePresetRowNav(
   );
   /** True for the one chip that should carry the edge-cue class right now. */
   const isBlockedEdge = useCallback((index: number) => blockedEdgeChip?.index === index, [blockedEdgeChip]);
-  /** Steam's ring sits on this chip right now (fade mode holds a chip's fade-out while it does). */
-  const chipHasRing = useCallback((index: number) => elementHasGamepadFocus(buttonRefs.current[index]), []);
-  return { setButtonRef, handlersFor, focusChip, isBlockedEdge, chipHasRing };
+  /*
+   * The row may not start a new chip change right now: an answer is being written, or Steam's ring
+   * sits on one of its chips. A chip that changed under the ring took the press meant for the words
+   * the person had just read (plan72-Z-FREEPLAY.json finding 4, decode style), and a fading chip
+   * stops being a focus stop, so Steam dropped the ring (plan70-PRESET-ONE-LINE-03.json). The whole
+   * row holds, not only the ringed chip, and every style asks this at each cycle boundary -- never
+   * as an effect dependency, because restarting a style's effect resets and re-animates the row.
+   * Steam's ring, not DOM focus: on device the two disagree (elementHasGamepadFocus).
+   */
+  const rowHeld = useCallback(
+    () => Boolean(holdStillRef.current) || buttonRefs.current.some((el) => elementHasGamepadFocus(el)),
+    [],
+  );
+  return { setButtonRef, handlersFor, focusChip, isBlockedEdge, rowHeld };
 }

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 570,
-  "edgeCount": 1567,
+  "fileCount": 571,
+  "edgeCount": 1570,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -696,6 +696,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabPresetRow.ringHold.test.tsx": {
+      "imports": [
+        "src/components/MainTabPresetRow.tsx",
+        "src/data/presets.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetRow.test.tsx": {
       "imports": [
         "src/components/MainTabPresetRow.tsx",
@@ -718,6 +726,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
         "src/components/MainTabPresetRow.holdStill.test.tsx",
+        "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx"
       ]
     },
@@ -1772,6 +1781,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
         "src/components/MainTabPresetRow.holdStill.test.tsx",
+        "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/data/presets.test.ts",
@@ -4243,6 +4253,7 @@
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
         "src/components/MainTabPresetRow.holdStill.test.tsx",
+        "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",

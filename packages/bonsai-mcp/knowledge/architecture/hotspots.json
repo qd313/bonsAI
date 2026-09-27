@@ -166,13 +166,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 610,
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "lines": 607,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "lines": 607,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 603,
       "role": ""
     },
     {

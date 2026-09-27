@@ -29,6 +29,12 @@ your commit. It has happened. Stage the paths you actually changed, by name. If 
 already done it, do not reset the branch — undo the commit while keeping every file
 (`git reset --soft HEAD~1`), unstage what was not yours, and commit again with only your paths.
 
+**Never hard-reset the shared folder to back out of a test.** To see whether a lane's commit
+clashes, a session ran `git cherry-pick --no-commit` and then `git reset --hard HEAD` as its way
+out. The reset also threw away that session's own uncommitted plan log, an hour of entries (plan
+72, 2026-09-27). Back out with `git cherry-pick --abort` alone, try the pick in a repo copy instead,
+and commit a running log right after each entry rather than letting it build up.
+
 **Do not switch branches in the shared folder while others are working.** A branch switch picks up
 whatever they have uncommitted and carries it onto your branch. When you need a branch, make a
 separate copy of the repo instead — `python scripts/worktree.py create <name>` — and work there.

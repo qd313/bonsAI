@@ -1,6 +1,6 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 78,
+  "total": 76,
   "counts": {
     "src/components/CharacterPickerModal.tsx": {
       "page-search": 2
@@ -65,7 +65,7 @@
       "tabindex-removal": 1
     },
     "src/utils/liveTurnFocusGraph.ts": {
-      "page-search": 24,
+      "page-search": 22,
       "tabindex-removal": 1
     },
     "src/utils/replyStopRegistry.ts": {

@@ -158,6 +158,18 @@ export function buildSavedChatSlotsRowSection(): string {
             this row's own right edge instead of the row-inner's.
           */
           position: relative;
+          /*
+            Lifted 1px as a whole (name, x, save icon and ghosts together, so the name stays centred
+            on the two icons; top on a relative box moves the paint, not the layout, so the dots
+            below stay where the tab strip covers them). Plan 72, measured on the Deck 2026-09-27
+            (plan72-D-DOTS-rowlit-*.json): the name's box ended 0.2px INTO the dots, and with the
+            ring on the row its glow (text-shadow, clipped to that box) paints a faint band there.
+            The band lit the dim dots' top row - on it at couch size, right against it at handheld -
+            raising their visual centre about 0.1 screen px while the bright active dot barely
+            moved, which is the "active dot a hair off" the maintainer saw. 1px leaves at least one
+            clear screen row between the band and the dots.
+          */
+          top: ${uiScalePx(-1)};
         }
         /*
           Sized for READING THE NAME, not for hierarchy. The 300px column leaves the focused row

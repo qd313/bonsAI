@@ -80,32 +80,37 @@ export function buildSavedChatSlotDotsSection(): string {
           slots, which left that position with no indicator at all.
         */
         .bonsai-scope .bonsai-chat-slot-dot--create {
-          /* Same box as every other marker, so the strip's rhythm is uniform; the glyph is centred
-             inside it and sized to fit rather than the box being sized to the glyph. */
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+          /*
+            Same box as every other marker, so the strip's rhythm is uniform. The + is painted as two
+            bars in this box's OWN background, not as a text glyph (plan 72, measured on the Deck
+            2026-09-27, plan72-D-DOTS-*.json): a glyph is laid out on its own text line and snaps to
+            the pixel grid separately from the dots' boxes, so with the row lit at handheld its bar
+            sat one screen pixel below the dots' centre line (level when the row was not lit). A
+            background is painted inside the same snapped box as a round dot's, so the bars cross
+            exactly where a dot's centre is, at every UI size and on either screen. The "+" text
+            stays in the element for tests and readers; font-size 0 keeps it from painting.
+          */
+          --bonsai-slot-plus:
+            linear-gradient(currentColor, currentColor) center / 100% ${uiScalePx(1)} no-repeat,
+            linear-gradient(currentColor, currentColor) center / ${uiScalePx(1)} 100% no-repeat;
+          display: inline-block;
           box-sizing: border-box;
           width: ${uiScalePx(4)};
           height: ${uiScalePx(4)};
           width: round(${uiScalePx(4)}, 1px);
           height: round(${uiScalePx(4)}, 1px);
           border-radius: 0;
-          background: transparent;
+          background: var(--bonsai-slot-plus);
           color: rgba(143, 168, 196, 0.5);
-          /* The glyph may overrun its 4px box, symmetrically, because the BOX is what the strip's
-             spacing is measured from - sizing the box to the glyph is what put the + off the line
-             in the first place. */
-          font-size: ${uiScalePx(8)};
-          font-weight: 700;
-          line-height: 1;
+          font-size: 0;
+          line-height: 0;
         }
         .bonsai-scope .bonsai-chat-slot-dot--create.bonsai-chat-slot-dot--active {
-          background: transparent;
+          background: var(--bonsai-slot-plus);
           color: #9ce7ff;
         }
         .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-dot--create.bonsai-chat-slot-dot--active {
-          background: transparent;
+          background: var(--bonsai-slot-plus);
           color: #9ce7ff;
         }
         .bonsai-scope .bonsai-chat-slot-dot--pending {

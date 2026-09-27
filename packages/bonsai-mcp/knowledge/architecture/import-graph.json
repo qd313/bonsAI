@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 558,
-  "edgeCount": 1525,
+  "fileCount": 559,
+  "edgeCount": 1529,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4454,12 +4454,14 @@
     },
     "src/utils/answerCopyText.ts": {
       "imports": [
+        "src/utils/expandOneLineSpoilerFences.ts",
         "src/utils/stripAssistantDisplayTags.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
-        "src/utils/answerCopyText.test.ts"
+        "src/utils/answerCopyText.test.ts",
+        "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts"
       ]
     },
     "src/utils/answerReadableText.test.ts": {
@@ -4470,13 +4472,15 @@
     },
     "src/utils/answerReadableText.ts": {
       "imports": [
+        "src/utils/expandOneLineSpoilerFences.ts",
         "src/utils/stripAssistantDisplayTags.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useReadAloud.ts",
-        "src/utils/answerReadableText.test.ts"
+        "src/utils/answerReadableText.test.ts",
+        "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts"
       ]
     },
     "src/utils/answerStopRegistry.test.ts": {
@@ -5162,6 +5166,8 @@
     "src/utils/expandOneLineSpoilerFences.ts": {
       "imports": [],
       "importedBy": [
+        "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/oneLineSpoilerBlock.test.tsx"
       ]
@@ -5528,6 +5534,13 @@
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/expandOneLineSpoilerFences.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts": {
+      "imports": [
+        "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts"
       ],
       "importedBy": []
     },

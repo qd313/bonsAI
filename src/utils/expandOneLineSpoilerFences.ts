@@ -8,7 +8,8 @@
  * opening marker and the closing marker their own lines, so the text is the block's content.
  *
  * Used for: buildAnswerBubbleElement.tsx, on the answer text before anything else reads it, for
- * both a streaming and a finished answer.
+ * both a streaming and a finished answer; and answerCopyText.ts / answerReadableText.ts, so Copy
+ * and Read aloud hide such a block exactly as the screen does.
  *
  * Does not: touch a block already written the usual way (the opening marker alone on its line),
  * or any other kind of fenced block.

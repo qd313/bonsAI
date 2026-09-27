@@ -190,6 +190,7 @@
     "src/utils/navFocusRegistry.remount.test.ts",
     "src/utils/navFocusRegistry.test.ts",
     "src/utils/oneLineSpoilerBlock.test.tsx",
+    "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts",
     "src/utils/permHintRowNav.test.ts",
     "src/utils/permissionDeepLink.test.ts",
     "src/utils/permissionJumpRegistry.test.ts",

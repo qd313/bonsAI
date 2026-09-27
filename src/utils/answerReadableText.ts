@@ -10,6 +10,7 @@
  * Does not: Split the result into sentences — the background reader (Python) does that. Does not
  *   touch the Strategy branch-menu control; that is stripped along with the other internal tags.
  */
+import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
 
@@ -111,7 +112,7 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
     protectedNames = null,
   } = args;
 
-  let text = stripAssistantDisplayTags(body || "");
+  let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
   if (!text.trim()) return "";
 
   const opts: UnwrapSpoilerOpts = {

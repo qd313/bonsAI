@@ -7,6 +7,7 @@
  * Does not: Render markdown to plain prose — copies the same source text
  *   MainTabBonsaiAiMarkdownChunk renders, minus internal tags and hidden spoiler bodies.
  */
+import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
 
@@ -49,7 +50,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     protectedNames = null,
   } = args;
 
-  let text = stripAssistantDisplayTags(body || "");
+  let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
 
   const opts: UnwrapSpoilerOpts = {
     question: askQuestion,

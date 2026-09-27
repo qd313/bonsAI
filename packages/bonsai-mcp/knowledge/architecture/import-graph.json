@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 537,
-  "edgeCount": 1453,
+  "fileCount": 541,
+  "edgeCount": 1461,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -352,6 +352,8 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
+        "src/components/StreamMarkdownPieces.test.tsx",
+        "src/components/StreamMarkdownPieces.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/hooks/useSpoilerFenceRecheck.ts",
         "src/utils/buildKbNotesBlockElement.tsx"
@@ -1298,6 +1300,25 @@
       "imports": [],
       "importedBy": [
         "src/utils/buildAnswerBubbleElement.tsx"
+      ]
+    },
+    "src/components/StreamMarkdownPieces.test.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/StreamMarkdownPieces.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/StreamMarkdownPieces.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/utils/lighterWhileGameRuns.ts",
+        "src/utils/streamMarkdownPieces.ts"
+      ],
+      "importedBy": [
+        "src/components/StreamMarkdownPieces.test.tsx",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx"
       ]
     },
     "src/components/VoiceInputSettingsSection.test.tsx": {
@@ -2585,12 +2606,14 @@
     "src/features/stream-scramble/ScrambledAnswerText.tsx": {
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/StreamMarkdownPieces.tsx",
         "src/features/preset-carousel/presetChipShared.ts",
         "src/features/stream-scramble/liveScrambleMemo.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
         "src/features/stream-scramble/streamScrambleMath.ts"
       ],
       "importedBy": [
+        "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx"
       ]
@@ -5149,6 +5172,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/StreamMarkdownPieces.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/lighterWhileGameRuns.test.ts"
       ]
@@ -5677,6 +5701,19 @@
         "src/features/stream-scramble/streamScrambleMath.ts",
         "src/hooks/useSmoothStreamReveal.test.ts",
         "src/hooks/useSmoothStreamReveal.ts"
+      ]
+    },
+    "src/utils/streamMarkdownPieces.test.ts": {
+      "imports": [
+        "src/utils/streamMarkdownPieces.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/streamMarkdownPieces.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/StreamMarkdownPieces.tsx",
+        "src/utils/streamMarkdownPieces.test.ts"
       ]
     },
     "src/utils/streamMarkdownPrepare.test.ts": {

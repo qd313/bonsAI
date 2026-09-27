@@ -25,6 +25,8 @@
  *   window.__bonsaiGameLoad = { force: true }     -- lighter even with nothing running
  *   window.__bonsaiGameLoad = { scramble: false } -- leave one part out (pace, scramble, steady)
  *   window.__bonsaiGameLoad = { pollMs: 400 }     -- try another status-check pace (50-2000 ms)
+ *   window.__bonsaiGameLoad = { pieces: false }   -- draw the live answer whole, not piece by
+ *                                                    piece (StreamMarkdownPieces; any game state)
  *   delete window.__bonsaiGameLoad                -- back to normal
  * It is read on every render and every status check, so an answer already arriving picks it up.
  */
@@ -70,7 +72,7 @@ type SwitchWindow = Window & { __bonsaiGameLoad?: unknown };
  * because on the Deck the first is Steam's hidden main page and a person measuring naturally sets
  * it in the second (plan 70: set there, it changed nothing).
  */
-function readDeckSwitch(): Record<string, unknown> | null {
+export function readDeckSwitch(): Record<string, unknown> | null {
   try {
     const own = (window as SwitchWindow).__bonsaiGameLoad;
     const raw = own ?? (getUiDocument().defaultView as SwitchWindow | null)?.__bonsaiGameLoad;

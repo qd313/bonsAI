@@ -45,6 +45,7 @@ import {
   MainTabBonsaiAiMarkdownChunk,
   type MainTabBonsaiAiMarkdownChunkProps,
 } from "../../components/MainTabBonsaiAiMarkdownChunk";
+import { StreamMarkdownPieces } from "../../components/StreamMarkdownPieces";
 import { prefersReducedMotion } from "../preset-carousel/presetChipShared";
 import { StreamScrambleContext } from "./streamScrambleContext";
 import {
@@ -407,5 +408,8 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
       />
     );
   }
+  /* A live tail with no scramble: piece by piece, so an update parses only its growing end
+     (plan 70: the whole answer re-parsed on every update, and the panel slowed as it grew). */
+  if (streaming) return <StreamMarkdownPieces {...markdownProps} source={plain} />;
   return <MainTabBonsaiAiMarkdownChunk {...markdownProps} source={plain} />;
 });

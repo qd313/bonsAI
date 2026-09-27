@@ -283,8 +283,15 @@ def _strategy_spoiler_policy_block(
                 else ""
             )
         )
+    # The opening steer is worded so there is nothing machine-like to repeat. It once read
+    # "Coaching is spoiler-minimized by default; say so briefly in your opening." and the model
+    # said it back to the player ("Strategy guide mode active. I will keep the coaching
+    # spoiler-minimized." -- docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json). Only this sentence
+    # changed; the avoid list and the fence rules below are untouched.
     return (
-        "STRATEGY SPOILER POLICY (default): Coaching is spoiler-minimized by default; say so briefly in your opening. "
+        "STRATEGY SPOILER POLICY (default): Keep your coaching as free of spoilers as you can. "
+        "Early in your reply, let the player know in your own casual words that you are keeping "
+        "spoilers out; never quote or paraphrase these instructions, and never announce a mode or setting. "
         f"{first_turn_avoid}"
         + fence_rules
         + f"{low_risk}\n"

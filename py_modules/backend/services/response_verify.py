@@ -270,6 +270,8 @@ def _unit_mentions_protected_name(unit: str, names: Sequence[str]) -> bool:
 # happen to sit mid-sentence.
 _FENCE_OPEN_RE = re.compile(r"(?:(?<=\n)|^)```[^\n]*\n")
 _FENCE_CLOSE_RE = re.compile(r"\n```(?=\n|$)")
+# A line that starts with ``` and has not reached its newline yet -- see cover_named_spoilers.
+_UNFINISHED_FENCE_LINE_RE = re.compile(r"(?:(?<=\n)|^)```[^\n]*$")
 
 
 def _split_fenced_segments(text: str) -> list[tuple[str, str]]:
@@ -436,7 +438,13 @@ def cover_named_spoilers(
             if not fence_segment_is_closed(last_chunk) and fence_opener_is_spoiler(last_chunk):
                 drop_open_spoiler_fence = True
         else:
-            partial = partial_fence_tail_match(last_chunk)
+            # A one-line block ("```bonsai-spoiler text ```") whose closing backticks are still
+            # arriving is neither a fence yet (no newline after it) nor a half-typed opener (it
+            # already holds a backtick past the opener), so it used to be wrapped in a second
+            # fence. Every ``` starts its own line by now, so hold back any unfinished one.
+            partial = partial_fence_tail_match(last_chunk) or _UNFINISHED_FENCE_LINE_RE.search(
+                last_chunk
+            )
             if partial:
                 hold_back_len = len(last_chunk) - partial.start()
             else:

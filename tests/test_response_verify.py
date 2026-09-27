@@ -312,6 +312,50 @@ class MidlineFenceLeakTests(unittest.TestCase):
         self.assertIn("Outro line.", out)
 
 
+class OneLineHiddenBlockWhileStreamingTests(unittest.TestCase):
+    """The model sometimes writes a hidden block on one line ("```bonsai-spoiler text ```"), the
+    inline shape its own instructions show. While the closing backticks were arriving, that line
+    was not yet a fence (no newline after it) and not a half-typed opener either (it already held
+    a backtick past the opener), so the live pass wrapped it in a second fence: two opening
+    markers on screen, and in the saved chat if Stop landed in that moment. Found by feeding the
+    real function one letter at a time (plan 72 lane 6)."""
+
+    FENCE = "`" * 3
+    NAMES = ["Soul Master"]
+
+    def _shapes(self) -> dict[str, tuple[str, str]]:
+        """Each one-line shape the model writes, and what the finished-reply pass makes of it."""
+        f = self.FENCE
+        return {
+            "glued to a bullet": (
+                f"- tip: {f}bonsai-spoiler The Soul Master teleports. {f}\nGood luck.",
+                f"- tip: \n{f}bonsai-spoiler The Soul Master teleports. \n{f}\nGood luck.",
+            ),
+            "on its own line": (
+                f"Intro.\n{f}bonsai-spoiler The Soul Master teleports.{f}\nGood luck.",
+                f"Intro.\n{f}bonsai-spoiler The Soul Master teleports.\n{f}\nGood luck.",
+            ),
+        }
+
+    def _stream(self, raw: str) -> list[str]:
+        return [
+            cover_named_spoilers(raw[:i], self.NAMES, hold_back_incomplete_trailing=True)
+            for i in range(1, len(raw) + 1)
+        ]
+
+    def test_no_partial_ever_holds_two_opening_markers(self):
+        opener = f"{self.FENCE}bonsai-spoiler"
+        for name, (raw, _finished) in self._shapes().items():
+            with self.subTest(name):
+                for i, partial in enumerate(self._stream(raw), start=1):
+                    self.assertLessEqual(partial.count(opener), 1, f"after {i} letters: {partial!r}")
+
+    def test_the_finished_text_is_unchanged(self):
+        for name, (raw, finished) in self._shapes().items():
+            with self.subTest(name):
+                self.assertEqual(cover_named_spoilers(raw, self.NAMES), finished)
+
+
 class CoverThinkingTextTests(unittest.TestCase):
     """D112 #7 leak fix: THINKING-SPOILER-01, measured live on the Deck 2026-09-26. The live
     thinking line and the saved reasoning shown in the fold afterwards both named a protected

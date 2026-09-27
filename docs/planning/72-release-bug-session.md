@@ -598,3 +598,7 @@ land.
   appears with its top on screen and one Down reaches it. By the session rule (fails on the device twice → up a
   tier; fails again → the maintainer), it goes to the maintainer: accept as is for 0.6.0 (recommended) or another
   Deck round to learn how Steam wants the ring handed over from that button.
+- **18:45 — the session's final output:** [the bug list page](https://claude.ai/artifact/AwHrNSvzftpkKPPrhL3Hf5) —
+  fixed and proven, still open (the summary card hand-off for the maintainer; the three comes-and-goes traps,
+  unseen in eight blocks), fixed in code only, "if there is room", the known issues for the release notes in plain
+  words, and what waits on the maintainer (hand checks, the characters' ownership check).

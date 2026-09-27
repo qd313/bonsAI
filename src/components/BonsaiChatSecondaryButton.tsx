@@ -39,11 +39,13 @@ type BonsaiChatSecondaryButtonProps = {
   deckNav?: Record<string, () => boolean | void>;
   /** Registers this button in the reply 2x2 focus registry for column D-pad hops. */
   replyStop?: ReplyStopId;
+  /** Hands the caller the button's own element, for a row that moves the ring between its buttons. */
+  elRef?: (el: HTMLElement | null) => void;
 };
 
 /** Decky `Button` focus stop — native `<button>` inside `Focusable` is not D-pad navigable. */
 export function BonsaiChatSecondaryButton(props: BonsaiChatSecondaryButtonProps) {
-  const { children, onClick, disabled, className, style, deckNav, replyStop, ...rest } = props;
+  const { children, onClick, disabled, className, style, deckNav, replyStop, elRef, ...rest } = props;
   const extra = className ? ` ${className}` : "";
   return (
     <Button
@@ -53,9 +55,10 @@ export function BonsaiChatSecondaryButton(props: BonsaiChatSecondaryButtonProps)
       onClick={onClick}
       style={style}
       ref={
-        replyStop
+        replyStop || elRef
           ? (el: HTMLElement | null) => {
-              registerReplyStop(replyStop, el);
+              if (replyStop) registerReplyStop(replyStop, el);
+              elRef?.(el);
             }
           : undefined
       }

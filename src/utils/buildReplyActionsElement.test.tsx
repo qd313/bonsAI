@@ -188,7 +188,7 @@ describe("buildReplyActionsElement refine chip row", () => {
     ]);
   });
 
-  it("keeps Up from the first chip of the top row wired to the caller's hand-off", () => {
+  it("keeps Up from the top chip row wired to the caller's hand-off", () => {
     const onMoveUpFromChips = vi.fn(() => true);
     const el = buildReplyActionsElement({
       replyKey: "r1",
@@ -198,9 +198,10 @@ describe("buildReplyActionsElement refine chip row", () => {
       onChip: () => {},
       onMoveUpFromChips,
     });
-    const first = elementsWithAriaLabel(el).find((node) => node.props["aria-label"] === "Bad info");
-    const deckNav = (first!.props as { deckNav?: { onMoveUp?: () => boolean } }).deckNav;
-    expect(deckNav?.onMoveUp?.()).toBe(true);
+    /* On the row, not the chip: a Decky button does not forward move props on the Deck. */
+    const topRow = findByClassName(el, "bonsai-chat-reply-actions-row--chips");
+    const onMoveUp = (topRow!.props as { onMoveUp?: () => boolean }).onMoveUp;
+    expect(onMoveUp?.()).toBe(true);
     expect(onMoveUpFromChips).toHaveBeenCalledTimes(1);
   });
 

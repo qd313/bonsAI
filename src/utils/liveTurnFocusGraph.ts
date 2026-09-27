@@ -268,16 +268,6 @@ export function focusBottomOfNewestReply(): boolean {
   return focusReplyUtilityRow(slot);
 }
 
-export function focusLastReplyChip(liveSlot: HTMLElement | null): boolean {
-  const reply = liveSlot?.querySelector(".bonsai-chat-reply-actions");
-  if (!reply) return false;
-  const chips = reply.querySelectorAll<HTMLElement>(
-    ".bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn"
-  );
-  const last = chips[chips.length - 1];
-  return focusDeckOwner(last);
-}
-
 /**
  * After answer bubble scroll is exhausted: branch → checklist → thumbs → Retry/Copy → the Read
  * aloud line → Show details. The last two are the fallback for an answer with no thumbs and no

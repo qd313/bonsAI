@@ -85,7 +85,6 @@ import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import { replyMicroActionById } from "../data/replyMicroActions";
 import {
   focusDownFromReplyUtilityRow,
-  focusLastReplyChip,
   focusReplyHelpful,
   focusReplyReadAloud,
   focusReplyShowDetails,
@@ -99,7 +98,7 @@ import {
   registerReplyStop,
   setReplyStopUnavailable,
 } from "./replyStopRegistry";
-import { elementHasGamepadFocus, uiGamepadFocusElement } from "./uiDocument";
+import { elementHasFocus, elementHasGamepadFocus, uiGamepadFocusElement } from "./uiDocument";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
 import {
   isDeckDirectionDownEvent,
@@ -154,7 +153,7 @@ export type BuildReplyActionsElementArgs = {
   onMoveUpFromReply?: () => boolean;
   /** D-pad Up from utility row (Retry / Show details) when no chip rows are visible. */
   onMoveUpFromUtility?: () => boolean;
-  /** D-pad Up from the first refinement chip → thumbs row. */
+  /** D-pad Up from the top row of reason chips, tried before the thumbs row. */
   onMoveUpFromChips?: () => boolean;
   /** D-pad Down from thumbs → utility row (Retry). */
   onMoveDownFromThumbs?: () => boolean;
@@ -189,33 +188,75 @@ function revealChipsWhenTheyAppear(el: HTMLElement | null): void {
   revealBelowKeepingAsItSettles(el, uiGamepadFocusElement);
 }
 
+/**
+ * One row of reason chips, as the Up hand-offs need it: Steam's nav node for the row and the chip
+ * buttons in order. A fresh one per render, like `thumbsRowEl` below.
+ */
+type ChipRowParts = { nav: SteamNavHolder; chips: (HTMLElement | null)[] };
+
+function newChipRowParts(): ChipRowParts {
+  return { nav: { current: null }, chips: [] };
+}
+
+/**
+ * Put the ring on chip `index` of a reason-chip row, clamped to the row's last chip. The row is its
+ * own container, so Steam's transfer into it goes first and the plain focus after only moves
+ * between chips inside it (AGENTS.md, "The Steam Deck focus graph"); the focus check decides.
+ */
+function focusChipInRow(row: ChipRowParts, index: number): boolean {
+  const chips = row.chips.filter((c): c is HTMLElement => Boolean(c?.isConnected));
+  if (!chips.length) return false;
+  try {
+    row.nav.current?.TakeFocus?.(true);
+  } catch {
+    /* the focus + check below decides */
+  }
+  const target = chips[Math.min(Math.max(index, 0), chips.length - 1)]!;
+  try {
+    target.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(target);
+}
+
+/** Which chip in the row holds the ring, or -1. Reads Steam's ring, not `activeElement`. */
+function ringChipIndex(row: ChipRowParts): number {
+  return row.chips.findIndex((c) => elementHasGamepadFocus(c));
+}
+
 function renderChipRow(
   chipIds: ReplyMicroActionId[],
   args: {
     chipsDisabled: boolean;
     onChip?: (chipId: ReplyMicroActionId) => void;
     rowClassName: string;
-    onMoveUpFirst?: () => boolean;
+    parts: ChipRowParts;
+    /* On the row, not a chip: a Decky button does not forward move props on the Deck. */
+    onMoveUp: () => boolean;
     rowRef?: (el: HTMLElement | null) => void;
   }
 ): React.ReactElement | null {
-  const { chipsDisabled, onChip, rowClassName, onMoveUpFirst, rowRef } = args;
+  const { chipsDisabled, onChip, rowClassName, parts, onMoveUp, rowRef } = args;
   if (!onChip) return null;
   const defs = chipIds.map((id) => replyMicroActionById(id)).filter(Boolean);
   if (!defs.length) return null;
   return (
-    <Focusable className={rowClassName} flow-children="horizontal" ref={rowRef}>
-      {defs.map((def) => (
+    <Focusable
+      className={rowClassName}
+      flow-children="horizontal"
+      ref={rowRef}
+      {...({ navRef: parts.nav, onMoveUp } as Record<string, unknown>)}
+    >
+      {defs.map((def, i) => (
         <BonsaiChatSecondaryButton
           key={def!.id}
           disabled={chipsDisabled}
           onClick={() => onChip(def!.id)}
           aria-label={def!.label}
-          deckNav={
-            onMoveUpFirst && def!.id === chipIds[0]
-              ? { onMoveUp: () => onMoveUpFirst() ?? false }
-              : undefined
-          }
+          elRef={(el: HTMLElement | null) => {
+            parts.chips[i] = el;
+          }}
         >
           {def!.label}
         </BonsaiChatSecondaryButton>
@@ -514,7 +555,8 @@ export function buildReplyActionsElement(
    */
   const upFromRetry = () => {
     const slot = turnSlot();
-    if (showChipRows && focusLastReplyChip(liveSlot())) return true;
+    /* The reason chips sit directly above this line: the bottom row, its first chip (plan 72 A-4). */
+    if (showChipRows && (focusChipInRow(lengthRow, 0) || focusChipInRow(refineRow, 0))) return true;
     if (focusReplyHelpful(slot)) return true;
     /* No live Helpful to land on (greyed and skipped — replyStopRegistry — or no thumbs row at
        all), but the speaker is still there: Up from Show details lands on the row either way, now
@@ -531,6 +573,33 @@ export function buildReplyActionsElement(
   /* Up from Show details: straight to the thumbs/Read-aloud row above it (the separate Read aloud
      line this used to check for first is gone — see upFromRetry). */
   const upFromDivider = () => upFromRetry();
+
+  /*
+   * The two "What went wrong?" rows (plan 72 A-4). Measured on the Deck
+   * (plan72-A4-UP-FAMILY-d.json): Up from Show details went straight to Read aloud, so no reason
+   * chip could be reached going Up -- the chip lookup asked for the live turn, which a finished
+   * answer is not. Each row now owns its Up: the bottom row goes to the chip in the same place in
+   * the top row (the third chip, with no chip above it, to the top row's last); the top row goes to
+   * the thumbs row -- Helpful when it is live, else the speaker -- and past that, the same way the
+   * thumbs row itself goes Up. Down is Steam's own, as before.
+   */
+  const refineRow = newChipRowParts();
+  const lengthRow = newChipRowParts();
+  const upFromRefineRow = () => {
+    if (onMoveUpFromChips?.()) return true;
+    if (focusReplyHelpful(turnSlot())) return true;
+    if (showReadAloudRow) {
+      try {
+        thumbsRowNav.current?.TakeFocus?.(true);
+      } catch {
+        /* the focus + check below decides */
+      }
+      if (focusRegisteredReplyStop("read-aloud")) return true;
+    }
+    return moveUpFromReply();
+  };
+  const upFromLengthRow = () =>
+    focusChipInRow(refineRow, ringChipIndex(lengthRow)) || upFromRefineRow();
 
   if (!showFeedback && !showDetailsDivider && !showChipRows && !showReadAloudRow && rating === null) {
     return null;
@@ -630,7 +699,8 @@ export function buildReplyActionsElement(
             chipsDisabled: chipsInactive,
             onChip,
             rowClassName: "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips",
-            onMoveUpFirst: onMoveUpFromChips,
+            parts: refineRow,
+            onMoveUp: upFromRefineRow,
           })
         : null}
       {showChipRows
@@ -638,6 +708,8 @@ export function buildReplyActionsElement(
             chipsDisabled: chipsInactive,
             onChip,
             rowClassName: "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips",
+            parts: lengthRow,
+            onMoveUp: upFromLengthRow,
             rowRef: revealChipsWhenTheyAppear,
           })
         : null}

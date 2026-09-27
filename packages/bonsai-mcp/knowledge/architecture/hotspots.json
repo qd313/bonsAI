@@ -102,7 +102,12 @@
     },
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 784,
+      "lines": 785,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 772,
       "role": ""
     },
     {
@@ -133,11 +138,6 @@
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 713,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 700,
       "role": ""
     },
     {

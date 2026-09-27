@@ -177,6 +177,14 @@ function byLabel(container: HTMLElement, label: string): HTMLElement {
   return el;
 }
 
+function byText(container: HTMLElement, text: string): HTMLElement {
+  const el = Array.from(container.querySelectorAll<HTMLElement>("button")).find(
+    (b) => b.textContent?.trim() === text,
+  );
+  if (!el) throw new Error(`no button reading ${text}`);
+  return el;
+}
+
 function answerStops(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(".bonsai-answer-stop"));
 }
@@ -236,5 +244,79 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(press("onMoveUp")).toBe(true);
     const stops = answerStops(container);
     expect(document.activeElement).toBe(stops[stops.length - 1]);
+  });
+
+  it("Show details goes Up onto the bottom row of reason chips, first chip", () => {
+    const { container } = renderTurn();
+    focusOn(byLabel(container, "Show details"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byText(container, "Spoiled it"));
+  });
+
+  it("the bottom chip row goes Up onto the top row, the chip in the same place", () => {
+    const { container } = renderTurn();
+    focusOn(byText(container, "Spoiled it"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byText(container, "Bad info"));
+
+    focusOn(byText(container, "Too long"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byText(container, "Wrong game or topic"));
+
+    /* Three chips below, two above: the third lands on the nearer of the two. */
+    focusOn(byText(container, "Too short"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byText(container, "Wrong game or topic"));
+  });
+
+  it("the top chip row goes Up onto Read aloud (the thumbs are greyed once rated)", () => {
+    const { container } = renderTurn();
+    focusOn(byText(container, "Wrong game or topic"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+
+    focusOn(byText(container, "Bad info"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+  });
+
+  it("with no reason chips, Show details still goes Up onto Read aloud", () => {
+    const { container } = renderTurn({ liveReplyFeedbackRating: "up" });
+    focusOn(byLabel(container, "Show details"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+  });
+
+  /*
+   * The whole Up leg in one go, from Show details into the answer: every stop the Down leg
+   * visits, in reverse. Steam's own step between the two choices is done by hand, as Steam does it.
+   */
+  it("walks Up from Show details through every row into the answer", () => {
+    const { container } = renderTurn();
+    const seen: string[] = [];
+    const name = () => {
+      const el = document.activeElement as HTMLElement;
+      if (el.classList.contains("bonsai-answer-stop")) return "answer's last section";
+      if (el.classList.contains("bonsai-strategy-branch-btn")) return el.textContent!.slice(0, 2);
+      return el.getAttribute("aria-label") ?? "";
+    };
+    focusOn(byLabel(container, "Show details"));
+    for (let i = 0; i < 12; i++) {
+      if (!press("onMoveUp")) {
+        const buttons = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-branch-btn"));
+        if (document.activeElement !== buttons[1]) break;
+        focusOn(buttons[0]!);
+      }
+      seen.push(name());
+      if (document.activeElement?.classList.contains("bonsai-answer-stop")) break;
+    }
+    expect(seen).toEqual([
+      "Spoiled it",
+      "Bad info",
+      "Read aloud",
+      "B.",
+      "A.",
+      "answer's last section",
+    ]);
   });
 });

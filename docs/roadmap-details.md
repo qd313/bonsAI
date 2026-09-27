@@ -159,6 +159,15 @@ including a full 13-press walk up to the tab bar and 14 back down with nothing s
 recovery step (no Quick Access Menu close, no reload) was needed in any of the three. Evidence
 `docs/test-evidence/plan70-F4-STUCK-PANEL.json` (+ screenshots).
 
+**Reproduced again 2026-09-26 (plan 70, flow R), the chip-fills-the-box shape from the 2026-09-15
+recipe.** With a fresh Brotato chat, walking a chip's own words into the question box then trying to
+reach Ask: the box took the ring and Down (3 presses) and Right (1 press) both did nothing, so Ask could
+not be reached. Closing and reopening Quick Access cleared it and emptied the box. Being fixed (helper
+F2). A related shape seen the same session: walking Up from the question box with a game running landed
+the ring on "Save chat to Desktop" while it read 0% visible, fully covered by the dock, and Up did
+nothing further — also cleared only by closing and reopening the panel. Evidence
+`docs/test-evidence/plan70-R-R3-try2.json` (+ two screenshots).
+
 ## Ordinary phrases attach game cards
 
   - **Implemented 2026-08-23:** `VECTOR_RECALL_FLOOR` raised `py_modules/backend/services/knowledge_base_service.py:148` from 0.50 to 0.515, against a fresh local repro (real `nomic-embed-text` via a local Ollama, real seed cards for the six phrases and the seven `V2-PARA-*` strategy rows in `kb_eval_v2.json` — script not committed). The two ranges overlap (noise up to 0.5308, a genuine paraphrase hit as low as 0.4302), so no single floor separates them cleanly; 0.515 was chosen to sit just above "one sentence"'s noise score (0.5034) and just below the lowest genuine score this change must not break (Mind Flayer / `V2-PARA-S04`, 0.5169).
@@ -772,6 +781,18 @@ kind is free text.
 column; a game's own tip now joins the search pool ahead of an equally-good shared tip. Five tips
 ship this way, two labelled "Researched, unconfirmed". Deck check owed: row **KB-TIP-PERGAME-01**,
 flow R. See [Library format bump and per-game Deck tips](#library-format-bump-and-per-game-deck-tips).
+
+**FAILED (Deck) 2026-09-26 (plan 70, flow R):** neither game tried reached its own tip. With Deep Rock
+Galactic: Survivor running, "the text on screen looks blurry on my deck" got generic display-scaling
+advice with no local match at all ("No close match in my notes"); reworded as a troubleshooting-shaped
+question in Speed mode it read "Knowledge base (skipped)" and logged a flat "no_hit" for the game — the
+game's own Render Scale tip (already sitting in the library) was never reached either way. With Fallout
+4 running, "how do I get mods working, what launch options should I use" also missed the maintainer's own
+F4SE tip, attaching an unrelated Stimpaks note instead and inventing generic launch options. The cause in
+both cases: the question never gets sorted as troubleshooting in the first place, and the per-game tip
+pull only runs for questions that do. Being fixed (helper E2) before the library is published — the
+maintainer's call. The shared tip's source-page credit line still cannot be checked until a tip actually
+shows. Evidence `docs/test-evidence/plan70-R-R4.json`, `plan70-R-R4-try2.json` (+ two screenshots).
 
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
@@ -1943,6 +1964,44 @@ from their own Deck, plus two more for Deep Rock Galactic: Survivor and Ocarina 
 Once a game is resolved, its own tips now join the search pool ahead of an equally-good shared tip
 (`bbad8e00`), reusing the same preferred-tip weight a routed topic already gets.
 
+**Deck check, plan 70 flow R, 2026-09-26 (build `7379a043`), library `2026.09.26` installed locally
+ahead of publishing.** Not published: the maintainer chose to fix the per-game tips first.
+
+- **R.1, installing the library — PASS.** One press on the Developer tab's own install button, no game
+  running: the Ollama tab read the new version at once, no errors in the plugin log. Side note, by
+  design or not: the install landed on the internal drive rather than the SD card the old library lived
+  on, and rewrote the location setting; the old copy stays on the card, unused. Evidence
+  `docs/test-evidence/plan70-R-R1.json` (+ screenshot).
+- **R.2, the new games and their notes, nothing running — PASS, 5 of 5.** A fresh question for each of
+  Brotato, Palworld, Skyrim, Fallout 4 and Red Dead Redemption 2 attached the right note every time,
+  each one credited to its real source page. Two small model slips, not note errors: Skyrim's answer
+  reversed the order of an instruction the note states correctly, and a Red Dead answer said Dead Eye
+  "refills ammo or tonics" when the note says it only refills from tonics. Evidence
+  `docs/test-evidence/plan70-R-R2.json`.
+- **R.3, the starting-out chip with a game running — PASS, second try.** The first try was blocked by
+  Steam itself (a "logged in on another computer" dialog over Left 4 Dead 2, not the plugin's doing) and
+  a rig limitation reading a non-Steam shortcut's tile; re-run once the Deck was set offline. With
+  Brotato running, its own "How do I get started in Brotato?" chip showed within a second and the answer
+  attached "Starting out in Brotato"; with the maintainer's own Palworld shortcut running, its chip
+  showed within three seconds too, so the name match works for both a Steam game and a shortcut. The
+  runbook's own route (press the chip, then Ask) hit the already-known chip-then-Ask trap, so the
+  question was sent with the chip's exact words instead; the owner may prefer to call that half
+  unclear rather than passed for that reason. Evidence `docs/test-evidence/plan70-R-R3.json`,
+  `plan70-R-R3-try2.json` (+ three screenshots).
+- **R.4, per-game Deck tips — FAIL.** See [RAG Phase 4](#rag-phase-4-extended-retrieval): neither Deep
+  Rock Galactic: Survivor's Render Scale tip nor Fallout 4's F4SE launch-option tip ever reached an
+  answer, because the questions never sorted as troubleshooting in the first place. GTA San Andreas: The
+  Definitive Edition was not on the Deck's Recent Games shelf, so its own tip was not tried at all.
+- **New bugs found along the way, being fixed:** a hidden stuck selection — walking up from the question
+  box can land the D-pad ring on "Save chat to Desktop" while it is fully covered by the dock, dead to
+  every press, seen three times (helper F2 fixing); the already-known chip-then-Ask trap reproduced
+  again; the Context line briefly names the previous game for about a second after switching games, and
+  briefly reads "no active game" for under a second right after reopening the panel; a rotating
+  suggestion chip can take a press meant for a different chip than the one actually read; and the
+  plugin's own log records nothing about which notes or tips a question chose, which makes a routing
+  problem like this one hard to diagnose from the log alone. Evidence
+  `docs/test-evidence/plan70-R-R3-try2.json` (the hidden ring and chip-trap screenshots).
+
 ## The live thinking line shows the model's own rule checklist
 
 **Found 2026-09-26, from the maintainer's own screenshot** (`docs/test-evidence/plan70-THINKING-CHECKLIST.png`).
@@ -2457,6 +2516,12 @@ the suggestion chips, indistinguishable from an ordinary question. Evidence
 Sighted once during the chip watch, while closing and reopening Quick Access with the game still running;
 the line then read the game's name correctly again. Not reproduced on purpose.
 
+**Seen twice more 2026-09-26 (plan 70, flow R):** reopening the panel over Brotato read "no active game
+detected" for under a second before correcting to "active game Brotato"; separately, launching Deep Rock
+Galactic: Survivor right after Brotato read "active game Brotato" (the previous game) for about a second
+before correcting itself. Still not reproduced on purpose. Evidence
+`docs/test-evidence/plan70-R-R3-try2.json`, `plan70-R-R4-try2.json`.
+
 **PHASE4-CHIPS-01 and CHIP-ROTATION-01, with Half-Life 2 running: FAIL.** Watched about 420 seconds
 across three panel-open sessions plus a 150-second wait, 15 different chip labels in all. Only one of
 them was a Half-Life 2 chip, "How do I beat Strider?" with its Tip mark, and it only showed for about 17
@@ -2492,4 +2557,23 @@ be seen: the only Tip label offered ("How do I beat Strider?") was short and nev
 about 210 seconds of watching (188 reads) found no crawling label and no scrambled letters — the pass
 half holds — but every label seen fit its chip exactly, so the "cut off with an ellipsis" half still has
 nothing to prove it on. Evidence `docs/test-evidence/plan70-L6-REDUCED-MOTION-B.json`.
+
+## Overnight run's first real run
+
+**Run 2026-09-26, 20:03-20:04 EDT, 76 seconds, unattended.** `node scripts/deck_overnight_run.mjs` held
+the Deck awake, deployed the newest build, replayed all 30 saved walks one at a time, ran this PC's own
+`python scripts/verify.py --quick` (passed), and wrote its plain-words report. Nothing needed a human
+mid-run — the command itself worked end to end.
+
+**But the walks proved nothing this time.** All 30 came back showing differences. The cause is not the
+walks or the build: deploying leaves the plugin's own panel closed, and the command neither reopens it
+nor puts each walk back on the specific screen it is meant to start from, so every walk was compared
+against the wrong starting point rather than a real regression. Some walks also compared against an
+older build on top of that (their own saved build hash differs from tonight's), which the report already
+says does not count as a real difference on its own.
+
+**Next step, not yet built:** open the plugin after deploying, and start each saved walk from its own
+starting screen — each walk file already says which screen that is — before replaying it. Once that is
+in place, a real overnight run can put this row on the schedule. Evidence
+`docs/test-evidence/overnight-2026-09-26-200443.md` (+ `.json`).
 

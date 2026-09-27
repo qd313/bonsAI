@@ -105,12 +105,16 @@ starts work outside this.
 - ★ `[chips]` **A typed command shows up later as a suggestion chip** — **OPEN, found 2026-09-26 (plan 70,
   flow L6).** Typing `bonsai:vac-check` earlier in the session, the same text later rotated through the
   suggestion chips like an ordinary question. [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[chips]` `[KB]` **Two more small gaps, found 2026-09-26 (plan 70, flow R):** a rotating suggestion
+  chip can take a press meant for a different chip, since it keeps rotating on its own timer; the
+  plugin's own log says nothing about which notes or tips a question chose, which makes a routing
+  problem hard to diagnose from the log alone. [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★ `[chat]` **A dismissed troubleshooting hint comes back once Quick Access is closed and reopened, and
   the ban-lookup row can follow it into a different chat** — **OPEN, found 2026-09-26 (plan 70, flow
   L6).** [Detail](roadmap-details.md#l3-and-2d-findings).
-- ★ `[ui]` **One more one-off sighting from flow L6, not reproduced on purpose:** the Context line briefly
-  read "no active game" right after reopening the panel over Half-Life 2.
-  [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
+  games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
+  on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
@@ -274,11 +278,10 @@ starts work outside this.
   "Thinking Process" heading the model writes for itself shows live from the second question on.
   [Detail](roadmap-details.md#the-live-thinking-line-shows-the-models-own-rule-checklist).
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
-  out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Only a full loader
-  restart clears it, not just reopening the panel. Comes and goes: clean, trap-free runs on 2026-09-19,
-  2026-09-23 and again 2026-09-26 (3 tries) have not been enough to close a fault sighted as recently as
-  2026-09-26 (flows 1+2a, L3+2d — a related shape, ring landing on the question box mid-stream).
-  [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Usually only a full
+  loader restart clears it; closing and reopening Quick Access cleared one flow-R occurrence too, this
+  time from a chip filling the question box. Being fixed (helper F2), still sighted as recently as
+  2026-09-26. [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **OPEN, found
   2026-09-25 (plan 68).** Deck check owed.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
@@ -460,10 +463,10 @@ replace it with a specific issue when one exists.
   driving every Deck session since 2026-08-26.** Was ★★★★★ with "board ordered, next: S1 to S3", a month stale. Left from
   [plan 19](planning/19-controller-macro-test-rig.md): a recording that is also a live view (S3), the highlight checked from the
   video (S4), handheld runs over Bluetooth, and the nightly unattended run (P4), which needed the saved-walk replay bug
-  fixed first — **now works, proven 2026-09-26** (see the bug entry above). Comes before stand-in Decks. Plan 70 takes
-  two of the four pieces: the replay working again, and a first slice of the nightly run. **The nightly run's
-  first slice is built 2026-09-26** (plan 70, helper N); its first real overnight run is still owed, in flow 6.
-  Row **OVERNIGHT-RUN-01** in [testing.md](testing.md). [Program](planning/21-ai-owned-testing-program.md).
+  fixed first — **now works** (see the bug entry above). Comes before stand-in Decks. Plan 70 built two of
+  the four pieces: the replay, and a first slice of the nightly run. **Its first real run happened
+  2026-09-26: the command itself works, the walks don't check anything yet.** Row **OVERNIGHT-RUN-01** in
+  [testing.md](testing.md). [Detail](roadmap-details.md#overnight-runs-first-real-run). [Program](planning/21-ai-owned-testing-program.md).
 - ★★★★ `[reply]` **A note pinned in space** — **OPEN, filed 2026-09-08; needs the SteamVR panel first.** In a headset, park the
   answer on a wall or table beside you. It stays there while you play, so a checklist becomes a sticky note you glance at between
   fights. Worth testing on a PC with SteamVR now: the built-in pretend headset can show a panel fixed in the room, and a real
@@ -862,11 +865,10 @@ ones from this month are D81 to D88.
   policy and a corpus rebuild. Research first. [Detail](roadmap-details.md#kb-visual-maps).
 - `[KB]` **Idea for wave four: dungeon maps** — raised by the maintainer 2026-09-07, no stars and no plan yet. Picks up
   the dungeon-map half of the visual-maps idea above when the time comes.
-- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built 2026-09-26
-  (plan 70, helper E).** Format bumped 3 → 4 for the per-game tip column; every installed library goes stale
-  until it downloads the new one. A too-new library now refuses before downloading with a plain message; an
-  older plugin degrades gracefully instead of crashing. **Deck check owed:** row **KB-FORMAT-REFUSE-01** in
-  [testing.md](testing.md), flow R. [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built,
+  Deck check split 2026-09-26 (flow R): install, notes and starting-out chips passed; per-game tips never
+  reached an answer, being fixed.** **Not published — the maintainer chose to fix the tips first.** Row
+  **KB-FORMAT-REFUSE-01** in [testing.md](testing.md). [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a
@@ -888,11 +890,10 @@ ones from this month are D81 to D88.
   First a scored set of real Deck screenshots (game, area, boss), run on each picture model the Deck offers; then fixes
   where it fails — the picture's guess fed into the search, notes that say what a place or boss looks like, and a screen
   guide per game (health bar, weapon slots, boss bar). [Detail](roadmap-details.md#measure-how-well-the-ai-reads-a-screenshot).
-- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, track 3 (per-game Deck tips) built 2026-09-26
-  (plan 70, helper E).** Tracks 1 and 2 shipped 2026-08-19 to 2026-09-05 (D67). A troubleshooting tip can now
-  belong to one game and joins the search pool ahead of an equally-good shared tip. Left: the chip clipping
-  check, which waits on the preset-row work. **Deck check owed:** row **KB-TIP-PERGAME-01** in
-  [testing.md](testing.md), flow R. [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL, track 3 (per-game Deck tips) built, FAILED
+  (Deck) 2026-09-26 (flow R): the tip is in the library and ranks ahead of a shared one, but the questions
+  tried never routed to troubleshooting, so it was never reached.** Tracks 1 and 2 shipped 2026-08-19 to
+  2026-09-05 (D67). Being fixed (helper E2). Row **KB-TIP-PERGAME-01** in [testing.md](testing.md). [Detail](roadmap-details.md#rag-phase-4-extended-retrieval).
 - ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** 133 → 161 cards since 2026-08-29. **Counted
   2026-09-25:** only four of the original titles still have no enemy or item cards — Baldur's Gate 3, GTA San Andreas,
   The Sims 4 and Portal 2 — not eleven of thirteen as this entry used to say. Next: 40–60 entity cards in tranches with

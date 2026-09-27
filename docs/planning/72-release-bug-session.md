@@ -144,7 +144,7 @@ player meets in the first ten minutes gets its pass in this session; the rest st
 |---|---|---|
 | **The session** | Opus 5.5, extra-high | Re-sorts the list. Writes every brief and Deck runbook. Sorts new bugs against the line. Does the D-pad fixes itself, with a Deck measurement in hand. Keeps five lanes busy. Lands every fix, one at a time. Reports to the maintainer. |
 | **Deck driver**, one at a time | Opus 5.5, medium | Runs one flow from a runbook. Measures, records, reports in plain words. Never fixes, never edits docs. |
-| **Fix lanes**, up to five at once | Mostly Sonnet 5 high; some Opus 5.5 low or medium, as a measured trial (below) | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
+| **Fix lanes**, up to five at once | Opus 5.5 medium (trial result, below) | Fix bugs whose cause is known, each in its own copy of the repo, each owning its own files (table below). |
 | **Prep helper** | Sonnet 5, high | Writes the next Deck flow's step-by-step runbook while the current one runs, so the Deck never waits for paperwork. |
 | **Bookkeeper** | Sonnet 5, high | Roadmap, testing rows and changelog after every flow; keeps section 2 current. Never commits while a landing runs. |
 
@@ -175,57 +175,26 @@ since those need a measurement read by the one who fixes them.
 - **The one running the session: Opus 5.5 at extra-high.** The routing plan's record: extra-high did the
   refactor, the plans and every landing; max bought nothing over it; and on 09-04 a Fable orchestrator
   cost more than all six lanes put together while doing work Opus extra-high does.
-- **Lanes: a measured trial of Sonnet high, Opus low and Opus medium** (the maintainer's idea,
-  2026-09-26). Nothing has measured Opus low or Opus medium as a lane here, so this session measures
-  them instead of switching blind.
+- **Lanes: Opus 5.5 medium by default — settled by a trial run on 2026-09-26, before this session.** The
+  maintainer asked for Sonnet high, Opus low and Opus medium to be compared on a real fix first, so this
+  session does not have to. Same task (Stop keeps the model loaded), same brief, same starting point, each in
+  its own copy, reviewed blind. Full table in plan 33 § 4b:
 
-**Which lanes get which model, before the trial says otherwise:**
+  | | Sonnet 5 high | Opus 5.5 low | Opus 5.5 medium |
+  |---|---|---|---|
+  | Blind review score | 18 of 25 | 15 of 25 — its fix still unloads on a Stop while the model is "thinking" | **21 of 25, the pick** |
+  | Cost at list price | $2.13 | **$0.77** | $1.89 |
+  | Minutes / turns | 14.9 / 67 | **7.6 / 16** | 16.4 / 34 |
 
-| Lane | Model | Why |
-|---|---|---|
-| 1 · Downloads and the download permission | **Opus medium** | The one lane with real design choices: a new permission threaded through the settings, five download paths plus the automatic refresh, new pop-ups with their own D-pad path. Settings plumbing is where the routing plan says a Sonnet lane needs an Opus review anyway. |
-| 2 · Chat and Stop, behind the scenes | Sonnet high **and** Opus low, the same task each (see "paired runs") | Small, cause-known fixes: the fairest place to compare the two. |
-| 3 · The answer's words | Sonnet high, with one task run three ways (see below) | Mostly wording and filtering, but the credit-line fix touches the spoiler work plan 70 took four rounds to get right. |
-| 4 · The chat area's look | Sonnet high with the measurement in the brief — **except the question bubble, Opus medium** | Option D needs the plugin to measure the lines and shrink the bubble itself if Steam's browser can't, inside the transcript, where most D-pad bugs live. |
-| 5 · The top and bottom rows' look | Sonnet high — **except the dots, done by the session itself at extra-high** | The routing plan: pixel work is Opus extra-high with a measurement, or a person. Nothing has named the dots' cause yet, so no lane gets it. |
+  So lanes run on **Opus 5.5 medium** (the `bugfix-lane-opus-medium` helper). Screen lanes keep the house rule:
+  the measurement goes in the brief, and pixel work stays with the session at extra-high. Every lane adds a
+  row to plan 33's table, so the one-task verdict firms up as the session goes. No paired runs are needed
+  here any more.
 
-**Paired runs, for a fair quality comparison.** A lane's cost and redo count only mean something next to
-the same task done another way. So a few tasks are done twice (or three times), each in its own copy of
-the repo, from the same brief and the same starting point. The session reviews the results **without
-knowing which model wrote which** (the bookkeeper labels the copies A, B and C), picks the best one to
-land, and throws the others away.
-
-| Task | Runs | Why this one |
-|---|---|---|
-| Stop keeps the model loaded | Sonnet high vs Opus low | Small and cause-known |
-| Clearing a chat mid-answer; deleting a chat whose file is gone | Sonnet high vs Opus low | Two small fixes in the chat-saving code, where a slip loses a chat |
-| The credit line hides a protected name | Sonnet high vs Opus low vs Opus medium | Moderate, needs judgment, easy to check (a test either shows the name or doesn't) |
-
-The duplicate runs cost extra — roughly one lane's worth for each pair — which is the price of a clean
-answer. After this session, lanes go back to one run each, on whichever model won.
-
-**What gets measured, for every run** (one row each in the routing plan's trial table, plan 33 § 4b):
-
-- **Quality:** did every check pass on its first hand-back; how many problems the blind review found
-  (a real bug, a broken house rule, a file outside its list); how many rounds before it could land; does
-  each new test fail when the fix is removed (the house rule: prove a check by breaking it); did it pass
-  on the Deck the first time; and did anything it touched break later in the session.
-- **Efficiency:** tokens in, tokens out, cache reads, turns, tool calls, minutes from start to hand-back,
-  and a dollar figure at list prices — the same way plan 33 priced everything else, so the numbers line
-  up with the old ones. The subscription's real limit is the usage window, and these drive it.
-- **How it is measured:** flow 0 adds a small script that reads a helper's own log after it finishes
-  and prints those efficiency numbers. The routing plan's earlier numbers were worked out by hand, so
-  this also makes future comparisons cheap. The quality numbers come from the blind review and the Deck.
-
-**Verdict, written into plan 33 at the end of the session, in plain words:** which model gives the best
-fix per unit of usage for small known-cause fixes, and whether Opus medium earns its place on the
-judgment-heavy lanes. The rule: a cheaper model wins if its quality numbers are no worse; a dearer one
-has to show fewer review problems or fewer redos to be worth it. A single session is a small sample, so
-the verdict says so, and the table keeps collecting rows in later sessions.
-
-- **Setup in flow 0:** a lane helper's model and effort are fixed in its own definition file, and a
-  launch can change the model but not the effort. So flow 0 adds an Opus-low copy and an Opus-medium copy
-  of the bug-fix lane helper, identical to the existing one except for those two lines.
+- **Lane 2's Stop fix is already written:** the winning version sits on its own branch from the trial. Before
+  landing, fix the stale Stop diagram in the other Ollama service file (the losing Sonnet version's rewrite
+  can be carried over), and optionally add the other version's request-number check so a new question is seen
+  from the moment it is asked. Then it needs only its Deck check.
 
 ### Option: code-only lanes in the cloud (the maintainer asked, 2026-09-26)
 

@@ -191,7 +191,26 @@ work (`[focus]`, `[layout]`, `[ui]`) stays out of the paired runs.
 
 | Date | Task | Label | Model and effort | Checks green first time? | Review problems | Rounds to land | New tests fail without the fix? | Deck first time? | Tokens in / out / cache read | Turns | Tool calls | Minutes | $ at list |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| | | | | | | | | | | | | | |
+| 2026-09-26 | Stop keeps the model loaded (★★) | C | Sonnet 5 high | Yes (full Python suite 1,974 green); quick check red only on the roadmap size limit, already red at the base | Blind score 18/25. Should fix: no check at all on the old "work keeps running" worry, and a docstring claim that is false for a Stop before the first word; a background thread whose only job is one log line; three functions kept that nothing calls. Its tests only intercept the named steps. Plus: the only one that fixed the second file's stale diagram | Not landed | Yes — 2 of 12 fail on behaviour | Not run | 134 / 37,193 / 6,923,533 (147,377 cache write) | 67 | 66 | 14.9 (PC to itself) | $2.13 |
+| 2026-09-26 | same | A | Opus 5.5 low | Yes (1,978 green); same roadmap-size note, which it disclosed | Blind score 15/25. **Should fix, and fails the goal:** one 2-second reading 4 s after Stop, so a Stop while the model still "thinks" usually unloads anyway — the commonest Stop. Also: no owner check on the processes it measures; stale diagram left in the second file; the new-question check in the main file untested | Not landed | Its own check: 3 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 32 / 16,125 / 928,769 (52,450 cache write) | 16 | 16 | 7.6 (shared the PC) | $0.77 |
+| 2026-09-26 | same | B | Opus 5.5 medium | Yes (1,989 green); same roadmap-size note, disclosed; skipped the build step, said so | **Blind score 21/25, the reviewer's pick.** Should fix: the same stale diagram in the second file. Minor: a new question is only seen once its model call begins; a long unrelated job busy for 90 s straight would still be stopped; a test that only checks a number. Strengths: watches the worker over time, clear outcome on every path including "can't measure", keeps the owner check, fake clock with no real sleeps, tests the real Stop wiring | Not landed yet | Its own check: 9 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 68 / 43,353 / 2,775,055 (93,658 cache write) | 34 | 40 | 16.4 (shared the PC) | $1.89 |
+
+Priced at list: Opus 5.5 $4 in, $20 out; Sonnet 5 $2 in, $10 out; cache reads a tenth of the input price, cache
+writes 1.25 times it. The blind review itself (Opus 5.5 at the session's high effort) cost $0.82 and 2.6 minutes.
+
+**First verdict (2026-09-26, one task, three runs — a small sample, so provisional):**
+
+- **Opus medium gave the best fix and still cost less than Sonnet high** ($1.89 against $2.13). Sonnet's cost
+  is mostly re-reading its own growing context: 67 short turns re-read 6.9 million cached tokens. Opus medium
+  took half the turns. By the rule above, a model that is no dearer and scores better wins outright.
+- **Opus low was the cheapest by far** ($0.77, half the time, a quarter of the turns). But its fix fails the
+  task's own goal in the commonest case. Cheap only counts when the fix holds, so it does not replace Sonnet
+  high for fixes that need judgment. It stays a candidate for purely mechanical work, untested so far.
+- **Provisional routing change:** cause-known lanes default to **Opus 5.5 medium** instead of Sonnet 5 high,
+  until more rows say otherwise. Add a row every time a lane runs; revisit after five more.
+- Caveats: one task, one run per model; the Sonnet run had the PC to itself while the two Opus runs shared
+  it, so their minutes are, if anything, a little high; my own "take the fix out" check could not tell the
+  two Opus runs' tests apart, because their tests call new code that does not exist without the fix.
 
 ## 5. Where Haiku fits
 

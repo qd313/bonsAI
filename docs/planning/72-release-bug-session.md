@@ -186,10 +186,28 @@ since those need a measurement read by the one who fixes them.
   | Cost at list price | $2.13 | **$0.77** | $1.89 |
   | Minutes / turns | 14.9 / 67 | **7.6 / 16** | 16.4 / 34 |
 
-  So lanes run on **Opus 5.5 medium** (the `bugfix-lane-opus-medium` helper). Screen lanes keep the house rule:
+  So lanes run on **Opus 5.5 medium** (the `bugfix-lane` helper, which now runs Opus medium), and on
+  **Opus 5.5 low** (`bugfix-lane-opus-low`) for the mechanical fixes listed below. Screen lanes keep the house rule:
   the measurement goes in the brief, and pixel work stays with the session at extra-high. Every lane adds a
   row to plan 33's table, so the one-task verdict firms up as the session goes. No paired runs are needed
   here any more.
+
+- **Low or medium for each item** (decided by whether the fix needs a judgment, not by stars):
+
+  | Opus low (known cause, one obvious way) | Opus medium (a real decision in it) | The session itself, extra-high |
+  |---|---|---|
+  | Shorter "Not helpful" chip labels, and their spacing once measured | The download notices and download permission | The chat dots (pixel-exact, needs a measurement) |
+  | The preset chip's gap, once measured | The question bubble, option D | The D-pad bugs: Down stopping half way, Left leaving the plugin, Up skipping rows, "Apply UI scale", the ring beside the mic after Stop |
+  | The chat name's scroll speed | The thinking-line clean-up (must not hide real content) | |
+  | The mic button's ring cut off, once measured | Hiding the boss name in the credit line (spoilers) | |
+  | Softer wording for the Strategy opening | Clearing a chat mid-answer (saved chats) | |
+  | Deleting a chat whose file is already gone | A downloaded model joining the answer list (settings) | |
+  | The Stop fix's one doc correction | The summary card behind the dock; the thin strip under the game line | |
+  | | Save chat as an icon and the new "+" (they change the D-pad path) | |
+  | | Hiding half-built features for 0.6.0 | |
+
+  Bookkeeping in this session: the `bookkeeper` helper (Opus low). Every test status it changes names its
+  evidence file, and the session spot-checks those before they land.
 
 - **Lane 2's Stop fix is already written:** the winning version sits on its own branch from the trial. Before
   landing, fix the stale Stop diagram in the other Ollama service file (the losing Sonnet version's rewrite

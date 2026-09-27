@@ -309,28 +309,34 @@ The short form. The evidence and the cost table are in
 
 The model tier is the expensive lever, not the effort setting. Opus from high to max costs about a
 quarter more per turn; Opus to Fable is two and a half to three times more. Eight of ten times the
-usage limit stopped a session, it was a Fable session at max. Cheaper models did the one- to
-three-star work fine when the cause was already known. Focus and layout fixes failed at every tier
-until someone measured on the device — the measurement fixed them, not a stronger model.
+usage limit stopped a session, it was a Fable session at max. Focus and layout fixes failed at every
+tier until someone measured on the device — the measurement fixed them, not a stronger model.
+
+**Helpers run on Opus 5.5, not Sonnet, since 2026-09-26:** two blind trials ranked Opus medium first,
+and Sonnet high cost the most (many short turns, each re-reading everything). Plan 33 § 4b.
 
 | Work | Plan | Implement | Land and review |
 |---|---|---|---|
-| Five and six stars | Fable 5.1 max: decisions and briefs, not a long document | Sonnet 5 high | Opus extra-high |
-| Three and four stars | Opus extra-high | Sonnet 5 high when the cause is known; Opus itself when it is not | Opus extra-high |
-| One and two stars | none, or Opus in the same session | Sonnet 5 high | Opus only if it touches focus or settings plumbing |
+| Five and six stars | Fable 5.1 max: decisions and briefs, not a long document | Opus medium helpers | Opus extra-high |
+| Three and four stars | Opus extra-high | Opus medium helpers when the cause is known; Opus extra-high itself when it is not | Opus extra-high |
+| One and two stars | none, or Opus in the same session | Opus medium helper; **Opus low** when the fix is mechanical (see below) | Opus only if it touches focus or settings plumbing |
 | Focus, layout, screen work | Opus extra-high, **after** a device measurement | Opus with the measurement in hand | Opus; the device row is the gate |
 | Pixel polish | a measurement or a person — the tools cannot see pixels | Opus extra-high | human eyes |
-| Knowledge base and back end | Opus extra-high | Sonnet 5 high | Opus; the answer-quality harness, not the device |
-| Documents and bookkeeping | | Sonnet 5 high or Opus medium | |
+| Knowledge base and back end | Opus extra-high | Opus medium helpers | Opus; the answer-quality harness, not the device |
+| Documents and bookkeeping | | The `bookkeeper` helper, Opus low; every status it changes names its evidence | |
 | Read-only lookups with a checkable answer | | Haiku 4.5 or Sonnet 5 low; whoever asked confirms with a search | |
-| Deck testing | Opus writes the rows and the expected results | Sonnet may run rows already written; never Haiku | Opus reads the failures |
+| Deck testing | Opus writes the rows and the expected results | The `deck-driver` helper (Opus medium) runs rows already written; never Haiku | Opus reads the failures |
 
 Rules that go with it:
 
 - **Move up a tier only after the tier below failed on the device twice, with a measurement in
   hand.** Going up because a fix feels hard is what the record says does not help.
-- **Opus effort:** extra-high for anything that writes code or a plan, medium for explanations and
-  tooling fixes. Max bought nothing measurable over extra-high.
+- **Opus effort:** extra-high for whoever plans and lands, and for anything that writes a plan.
+  Medium for helpers, explanations and tooling fixes. Max bought nothing measurable over extra-high.
+- **Low or medium: judge by the decision, not the stars.** Low when the cause is known and there is
+  one obvious way (wording, a number, moving or linking text); medium when there is a real choice
+  (timing, spoilers, saved chats, settings), even on a one-star bug. When unsure, medium. Long jobs:
+  low if every step is the same checkable kind. Each helper run adds a row to plan 33 § 4b.
 - **Helper lanes:** at most five for feature or bug work, at most three for a refactor, because
   refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a

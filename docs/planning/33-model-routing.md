@@ -1,6 +1,7 @@
 # Plan 33: which model and effort to use for what
 
-**Status: POLICY since 2026-09-05 (D59, all five calls locked; Haiku is on a measured trial, § 4a).** The short form lives in
+**Status: POLICY since 2026-09-05 (D59, all five calls locked; Haiku is on a measured trial, § 4a). Helpers moved from
+Sonnet 5 high to Opus 5.5 medium/low on 2026-09-26, the maintainer's call after two blind trials (§ 4b).** The short form lives in
 [AGENTS.md, 'Which model does which work'](../../AGENTS.md); this file is the evidence and the long form. A prompt-time hook hands every
 implementation kickoff the short table and asks for a gentle heads-up when the session is outside it; it never blocks.
 
@@ -59,16 +60,16 @@ means: write the code and tests. "Land" means: review each diff, cherry-pick, ke
 
 | Work | Plan | Implement | Land and review | Deck |
 |---|---|---|---|---|
-| ★★★★★ and ★★★★★★ feature | Fable 5.1 max, decisions and briefs only, not a 9,000-word document | Sonnet 5 high lanes | Opus xhigh | Opus xhigh or the orchestrator |
-| ★★★ and ★★★★ feature or bug | Opus xhigh | Sonnet 5 high lanes when the cause is known; Opus xhigh itself when it is not | Opus xhigh | same |
-| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Sonnet 5 high | Opus xhigh if it touches focus or settings plumbing, else none | same |
+| ★★★★★ and ★★★★★★ feature | Fable 5.1 max, decisions and briefs only, not a 9,000-word document | Opus 5.5 medium lanes | Opus xhigh | Opus xhigh or the orchestrator |
+| ★★★ and ★★★★ feature or bug | Opus xhigh | Opus 5.5 medium lanes when the cause is known; Opus xhigh itself when it is not | Opus xhigh | same |
+| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Opus 5.5 medium; Opus 5.5 low when the fix is mechanical | Opus xhigh if it touches focus or settings plumbing, else none | same |
 | Focus and layout (`[focus]`, `[layout]`, `[ui]`) | Opus xhigh, **after** a device measurement | Opus xhigh with the measurement in hand; Sonnet only for a fix whose cause the measurement already named | Opus xhigh | required; no fix is done until the row passes |
 | Pixel polish (dots, rings, fonts) | do not use Fable; the tools cannot see pixels | Opus xhigh with a measurement, else a human | | human eyes |
-| Backend and retrieval (`[KB]`, `[ollama]`) | Opus xhigh | Sonnet 5 high | Opus xhigh | the eval harness, not the Deck |
-| Refactor | Opus xhigh (§ 3) | Sonnet 5 high lanes for moves; Opus xhigh for behavior-touching steps | Opus xhigh | after each landing batch |
-| Docs, roadmap bookkeeping, plain explanations | | the `bookkeeper` helper (Sonnet 5 high) or Opus medium | | |
+| Backend and retrieval (`[KB]`, `[ollama]`) | Opus xhigh | Opus 5.5 medium | Opus xhigh | the eval harness, not the Deck |
+| Refactor | Opus xhigh (§ 3) | Opus 5.5 low lanes for moves; Opus xhigh for behavior-touching steps | Opus xhigh | after each landing batch |
+| Docs, roadmap bookkeeping, plain explanations | | the `bookkeeper` helper (Opus 5.5 low); every status it changes names its evidence | | |
 | Read-only lookups with a checkable answer | | Haiku 4.5 on trial (§ 4a) or Sonnet 5 low | the caller greps to confirm | |
-| Deck QA driving | Opus xhigh writes the rows and expect strings | Sonnet 5 high may run rows already written | Opus xhigh reads the failures | |
+| Deck QA driving | Opus xhigh writes the rows and expect strings | the `deck-driver` helper (Opus 5.5 medium) runs rows already written | Opus xhigh reads the failures | |
 
 Escalation rule: go up one tier only after the tier below has failed **on the device** twice with a
 measurement in hand. Going up because a fix "feels hard" is what the history says does not help.
@@ -146,8 +147,9 @@ Yes, for cause-known work, and every failure so far was operational rather than 
 What to keep doing:
 
 - Lane briefs that carry the ancestry check, the file ownership, one fix per commit, and the four gates.
-- Five lanes at most. Sonnet 5 high is the right lane model; nothing in the record says a stronger lane
-  would have passed the device where Sonnet failed.
+- Five lanes at most. *Superseded 2026-09-26:* this used to say Sonnet 5 high is the right lane model. Two
+  blind trials (§ 4b) ranked Opus 5.5 medium above it on quality and below it on cost, so lanes run on Opus
+  5.5 medium now, low for mechanical fixes. What still holds: no model passes a focus fix without a measurement.
 - The orchestrator reviews every diff against the focus law and drives the Deck serially.
 
 What to change:
@@ -211,6 +213,32 @@ writes 1.25 times it. The blind review itself (Opus 5.5 at the session's high ef
 - Caveats: one task, one run per model; the Sonnet run had the PC to itself while the two Opus runs shared
   it, so their minutes are, if anything, a little high; my own "take the fix out" check could not tell the
   two Opus runs' tests apart, because their tests call new code that does not exist without the fix.
+
+**Second trial, bookkeeping (2026-09-26).** The roadmap's own `[docs]` bug: 26 blocks on the details page that
+nothing linked to, plus test rows whose status contradicted their notes. Same brief, same starting commit
+(`107f83d2`), each helper in its own copy, reviewed blind. A script counted the unlinked blocks before and after.
+
+| Date | Task | Label | Model and effort | Unlinked blocks after (of 26) | Blind score | Review problems | Tokens in / out / cache read | Turns | Tool calls | Minutes | $ at list |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-09-26 | Docs sweep | C | Sonnet 5 high (the `bookkeeper` helper as it was) | 3 — and all 3 did have a home | 14/25 | **Lost facts:** dropped headings and a sentence, reworded a note, 3 broken links in moved text; 8 open blocks linked only from an old archived plan, where nobody looks | 554 / 167,537 / 74,138,632 (381,532 cache write) | 277 | 283 | 35.0 | $17.46 |
+| 2026-09-26 | same | B | Opus 5.5 low | 0 | 20/25 | Nothing lost. **Must fix:** left one test row saying "owed" though the evidence says it passed, while its closing note claimed every "owed" row was really owed; wrote that a check "passed by probe only" with nothing to support it | 126 / 37,479 / 6,855,146 (133,919 cache write) | 63 | 62 | 9.1 | $2.79 |
+| 2026-09-26 | same | A | Opus 5.5 medium | 0 | **22/25, the pick** | Nothing lost. Should fix: one row's closing sentence still contradicts its new status; left one row "Done" whose notes list two owed checks | 192 / 68,001 / 17,406,367 (268,600 cache write) | 96 | 98 | 14.1 | $6.19 |
+
+**Bookkeeping verdict:** Opus medium was best and Opus low close behind at 45% of its cost. Low's worst slip was
+a claim the evidence does not support. **The maintainer's call (2026-09-26): the `bookkeeper` helper runs on Opus
+5.5 low**, for the cost and speed. The guard for that slip: every test status the bookkeeper changes must name
+the evidence file it rests on, and the session that briefed it spot-checks those changes before they land. Record
+each bookkeeper run here; if a made-up result gets past the spot-check, move it back to medium. Sonnet 5 high was last on quality and six times the cost of Opus
+low: 277 short turns re-read 74 million cached tokens.
+
+**Long jobs.** This sweep is the long, token-heavy kind of job. Dropping from medium to low saved 55% and five
+minutes, and lost two points, both on judgment calls. Rule: low when every step is the same checkable kind;
+medium when steps carry decisions. Untested so far and worth a row: a low run followed by one medium review pass.
+
+**Routing adopted 2026-09-26 (the maintainer's call, after both trials):** helpers on Opus 5.5 medium by default,
+Opus 5.5 low for mechanical fixes and moves, decided by whether the fix needs a judgment rather than by stars.
+The bookkeeper runs on Opus low (the maintainer's call, see above). AGENTS.md, the reminder hook, the roadmap
+note and the helper settings files were updated the same day.
 
 ## 5. Where Haiku fits
 

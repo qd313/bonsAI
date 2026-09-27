@@ -36,17 +36,20 @@ KICKOFF = re.compile(
 
 TABLE = (
     "Routing table (AGENTS.md, 'Which model does which work'; evidence in docs/planning/33-model-routing.md): "
-    "5-6 stars: Fable 5.1 max plans (decisions and lane briefs only), Sonnet 5 high lanes implement, Opus xhigh lands. "
-    "3-4 stars: Opus xhigh plans and lands, Sonnet 5 high lanes implement when the cause is known. "
-    "1-2 stars: Sonnet 5 high straight through, Opus xhigh reviews only if it touches focus or settings plumbing. "
+    "Helpers run on Opus 5.5 since 2026-09-26 (two blind trials in plan 33 section 4b ranked Opus medium first, Sonnet high last or middle, and Sonnet cost the most). "
+    "5-6 stars: Fable 5.1 max plans (decisions and lane briefs only), Opus medium helpers implement, Opus xhigh lands. "
+    "3-4 stars: Opus xhigh plans and lands, Opus medium helpers implement when the cause is known. "
+    "1-2 stars: an Opus medium helper, or Opus low when the fix is mechanical (known cause, one obvious way: wording, numbers, moving or linking text); Opus xhigh reviews only if it touches focus or settings plumbing. "
+    "Low or medium is decided by whether the fix needs a judgment, not by stars; when unsure, medium. "
     "Focus, layout, ui tags: Opus xhigh after a device measurement; never a lane without the measurement. "
     "Pixel polish: a measurement or a human, not a model tier. "
-    "Refactor: Opus xhigh plans; Sonnet lanes do mechanical moves (max three lanes); Opus xhigh does behavior-touching steps. "
+    "Refactor: Opus xhigh plans; Opus low helpers do mechanical moves (max three lanes); Opus xhigh does behavior-touching steps. "
     "Bug or feature lane session: Opus xhigh orchestrates (Fable only when the same session plans 5-6 star scope); lanes never edit roadmap, testing or changelog rows. "
-    "Docs, roadmap bookkeeping, explanations: Sonnet 5 high or Opus medium. "
+    "Docs and roadmap bookkeeping: the bookkeeper helper on Opus low (the maintainer's call 2026-09-26); every test status it changes must name its evidence file, and the session spot-checks those. Explanations: Opus medium. "
+    "Long jobs: Opus low when every step is the same checkable kind; medium when each step needs a decision. "
     "Read-only lookups with a checkable answer: Haiku 4.5 on trial (log every use in plan 33 section 4a, grep-confirm, note if Sonnet had to step in) or Sonnet low. "
-    "Deck QA: Opus xhigh writes rows and reads failures; Sonnet high may run rows already written; never Haiku. "
-    "Max effort: Opus uses xhigh instead; Fable max only for 5-6 star decision lists or a bug that failed on the device twice. Ultracode only for read-only fan-out with Sonnet or Haiku workers. "
+    "Deck QA: Opus xhigh writes rows and reads failures; the deck-driver helper (Opus medium) runs rows already written; never Haiku. "
+    "Max effort: Opus uses xhigh instead; Fable max only for 5-6 star decision lists or a bug that failed on the device twice. Ultracode only for read-only fan-out with Opus low, Sonnet or Haiku workers. "
     "Escalate one tier only after the tier below failed on the device twice with a measurement in hand."
 )
 

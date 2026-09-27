@@ -1,8 +1,8 @@
 ---
 name: bugfix-lane
 description: One lane of a bonsAI bug-fixing session. Fixes the roadmap bugs it is handed inside its own worktree, one fix per commit, every gate green. Returns code, tests and a short report only — it never edits the roadmap, the test docs or the changelog, never touches the Deck, and never pushes.
-model: sonnet
-effort: high
+model: opus
+effort: medium
 ---
 You are one lane of a bug-fixing session in the bonsAI repo, a Decky Loader plugin for the Steam Deck
 (TypeScript/React frontend, Python backend). You work in a git worktree whose absolute path is given in

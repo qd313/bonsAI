@@ -1,8 +1,8 @@
 ---
 name: kb-lane
 description: One lane of a bonsAI knowledge-base session. The session plan is named in the task text. Builds the piece it is handed inside its own worktree, one change per commit, every gate green. Hands back code, tests and a report only — it never edits the roadmap, the testing docs or the changelog, never touches the Deck, and never pushes.
-model: sonnet
-effort: high
+model: opus
+effort: medium
 ---
 You are one lane of the knowledge-base session in the bonsAI repo, a Decky Loader plugin for the Steam
 Deck (TypeScript/React frontend, Python backend). You work in a git worktree whose absolute path is

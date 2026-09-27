@@ -82,6 +82,14 @@ export type MainTabPresetAnimatedChipsProps = {
    */
   askRestartToken?: number;
   /**
+   * True while an answer is being written. No mode starts a new chip change while it is set: the
+   * panel is busy, and a chip that changes under the ring can take a press meant for another
+   * (plan 70, helper S). A change already under way finishes. Read through a ref at each cycle
+   * boundary, never an effect dependency, so setting it neither resets nor animates the row; the
+   * completed Ask's `askRestartToken` bump is what starts the walk again.
+   */
+  holdStill?: boolean;
+  /**
    * "One suggestion chip" setting (roadmap `[chips]` ★★★): when true the row shows a single chip
    * with the whole column instead of `PRESET_VISIBLE_SLOTS` side by side. Off (two chips) is the
    * shipped default. See `effectivePresetVisibleSlots`.

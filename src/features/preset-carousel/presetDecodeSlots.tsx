@@ -44,6 +44,9 @@ import {
   slotStaggerMs,
 } from "./presetChipShared";
 
+/** How often a reduced-motion chip held by `holdStill` checks whether it may change yet. */
+const PRESET_DECODE_HOLD_RECHECK_MS = 500;
+
 /**
  * The label's text is owned by the reveal effect below while the prompt is still churning, written
  * straight to the churn span's `textContent` via `setLabelRef` — never through React state. The JSX
@@ -159,6 +162,7 @@ export function MainTabPresetDecodeSlots(
     onCarouselExitDown,
     useLocalKnowledgeBase = false,
     askRestartToken,
+    holdStill = false,
     presetSingleChip = false,
   } = props;
   const samplerOptions = { useLocalKnowledgeBase };
@@ -174,6 +178,9 @@ export function MainTabPresetDecodeSlots(
   const [resolved, setResolved] = useState<boolean[]>(() => Array.from({ length: slotCount }, () => false));
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
+  /** An answer is being written: a reveal under way finishes, no new one begins. */
+  const holdStillRef = useRef(holdStill);
+  holdStillRef.current = holdStill;
 
   const labelRefs = useRef<(HTMLSpanElement | null)[]>(Array.from({ length: slotCount }, () => null));
   /** Stable per-slot ref callbacks — an inline arrow per render would churn ref identity and
@@ -232,10 +239,15 @@ export function MainTabPresetDecodeSlots(
         pushTimeout(() => {
           showInSlot(slotIndex, prompt);
           markResolved(slotIndex, true);
-          pushTimeout(() => {
+          const next = () => {
             if (!mayStartNextCycle()) return;
+            if (holdStillRef.current) {
+              pushTimeout(next, PRESET_DECODE_HOLD_RECHECK_MS);
+              return;
+            }
             runReduced(slotIndex, pickNext(prompt), 0);
-          }, presetHoldMs(prompt.text));
+          };
+          pushTimeout(next, presetHoldMs(prompt.text));
         }, firstDelay);
       };
       first.forEach((prompt, i) => runReduced(i, prompt, slotStaggerMs(i)));
@@ -270,7 +282,7 @@ export function MainTabPresetDecodeSlots(
       if (!anim) return;
 
       if (anim.resolved) {
-        if (now >= anim.holdEndAt && mayStartNextCycle()) {
+        if (now >= anim.holdEndAt && mayStartNextCycle() && !holdStillRef.current) {
           begin(slotIndex, pickNext(anim.prompt), now);
         }
         return;

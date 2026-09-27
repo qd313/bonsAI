@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 569,
-  "edgeCount": 1563,
+  "fileCount": 570,
+  "edgeCount": 1567,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -687,6 +687,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabPresetRow.holdStill.test.tsx": {
+      "imports": [
+        "src/components/MainTabPresetRow.tsx",
+        "src/data/presets.ts",
+        "src/features/preset-carousel/presetChipShared.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetRow.test.tsx": {
       "imports": [
         "src/components/MainTabPresetRow.tsx",
@@ -708,6 +717,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
+        "src/components/MainTabPresetRow.holdStill.test.tsx",
         "src/components/MainTabPresetRow.test.tsx"
       ]
     },
@@ -1761,6 +1771,7 @@
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
+        "src/components/MainTabPresetRow.holdStill.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/data/presets.test.ts",
@@ -2646,6 +2657,7 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/MainTabPresetRow.holdStill.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx"
@@ -4230,6 +4242,7 @@
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
+        "src/components/MainTabPresetRow.holdStill.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",

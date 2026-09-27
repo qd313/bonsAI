@@ -277,6 +277,7 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
       "onCarouselExitDown",
       "useLocalKnowledgeBase",
       "askRestartToken",
+      "holdStill",
       "presetSingleChip",
     ];
 

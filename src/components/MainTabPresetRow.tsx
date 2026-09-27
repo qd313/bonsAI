@@ -163,6 +163,7 @@ export function MainTabPresetRow({
           onCarouselExitDown={focusUnifiedTextField}
           useLocalKnowledgeBase={useLocalKnowledgeBase}
           askRestartToken={askRestartToken}
+          holdStill={isAsking}
           presetSingleChip={presetSingleChip}
         />
       )}

@@ -117,7 +117,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 745,
+      "lines": 746,
       "role": ""
     },
     {
@@ -166,6 +166,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 610,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "lines": 607,
       "role": ""
@@ -173,11 +178,6 @@
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 599,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 595,
       "role": ""
     },
     {

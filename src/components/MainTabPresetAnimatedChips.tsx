@@ -241,6 +241,10 @@ function MainTabPresetSidewaysCarousel(
   }, [seedsKey]);
 
   useEffect(() => {
+    // No auto-advance at all while an answer is being written (holdStill, plan 70 helper S): the
+    // panel is busy and a chip sliding under the ring can take a press meant for another. History
+    // is state, not this effect's, so standing the ticker down here moves nothing on screen.
+    if (props.holdStill) return;
     const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     let cancelled = false;
     let timeoutId = 0;
@@ -268,8 +272,7 @@ function MainTabPresetSidewaysCarousel(
           visibleTexts: visibleWindowTexts(prev.history, prev.focusIndex, visibleSlots),
           staticFallback: () => getRandomPresetExcluding(texts, samplerOptions),
         });
-        const advanced = advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
-        return advanced;
+        return advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
       });
 
       timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
@@ -288,7 +291,7 @@ function MainTabPresetSidewaysCarousel(
     // modes have no such state to preserve. visibleSlots restarts it too, so a mid-session flip of
     // the one-chip setting reads the new window size on the next tick instead of the one captured
     // when auto-advance last started.
-  }, [seedsKey, useLocalKnowledgeBase, askRestartToken, visibleSlots]);
+  }, [seedsKey, useLocalKnowledgeBase, askRestartToken, visibleSlots, props.holdStill]);
 
   /**
    * Focus model: the Steam DOM focus (white ring) is the single source of truth. Every chip is
@@ -390,6 +393,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
         onCarouselExitDown={onCarouselExitDown}
         useLocalKnowledgeBase={useLocalKnowledgeBase}
         askRestartToken={askRestartToken}
+        holdStill={props.holdStill}
         presetSingleChip={presetSingleChip}
       />
     );
@@ -403,6 +407,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
         onCarouselExitDown={onCarouselExitDown}
         useLocalKnowledgeBase={useLocalKnowledgeBase}
         askRestartToken={askRestartToken}
+        holdStill={props.holdStill}
         presetSingleChip={presetSingleChip}
       />
     );
@@ -424,6 +429,13 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   );
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
+  /*
+   * An answer is being written (holdStill): a change already under way finishes, no new one
+   * starts. A ref, not an effect dependency, because this effect's restart resets and re-fades
+   * the whole row. When the answer ends, the completed Ask's askRestartToken restarts it anyway.
+   */
+  const holdStillRef = useRef(props.holdStill);
+  holdStillRef.current = props.holdStill;
 
   useEffect(() => {
     const initial = normalizeThreeSeeds(seeds, samplerOptions);
@@ -468,7 +480,8 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
       setSlotFade(Array.from({ length: slotCount }, () => ({ opacity: 1, transitionMs: 0 })));
       const loopStatic = (slotIndex: number, prompt: PresetPrompt) => {
         pushTimeout(() => {
-          if (!mayStartNextCycle()) return;
+          // Held: this slot stops; askRestartToken's restart picks every slot up again.
+          if (!mayStartNextCycle() || holdStillRef.current) return;
           const next = pickNext(prompt);
           showInSlot(slotIndex, next);
           loopStatic(slotIndex, next);
@@ -498,9 +511,10 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
              * A chip holding the ring does not fade out: a fading chip stops being a focus stop,
              * so Steam dropped the ring with nothing to take it (plan70-PRESET-ONE-LINE-03.json,
              * 7.6 s after the ring landed). It waits, and fades once the ring has moved on.
+             * It waits the same way while an answer is being written (holdStill).
              */
             const fadeOut = () => {
-              if (chipHasRing(slotIndex)) {
+              if (chipHasRing(slotIndex) || holdStillRef.current) {
                 pushTimeout(fadeOut, PRESET_RING_HOLD_RECHECK_MS);
                 return;
               }
@@ -587,6 +601,7 @@ function presetChipsPropsEqual(
     prev.onCarouselExitDown === next.onCarouselExitDown &&
     prev.useLocalKnowledgeBase === next.useLocalKnowledgeBase &&
     prev.askRestartToken === next.askRestartToken &&
+    prev.holdStill === next.holdStill &&
     prev.presetSingleChip === next.presetSingleChip
   );
 }

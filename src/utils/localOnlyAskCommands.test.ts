@@ -17,6 +17,12 @@ describe("questionBypassesOllamaPcIpRequirement", () => {
     expect(questionBypassesOllamaPcIpRequirement("bonsai:vac-check 76561198000000000")).toBe(true);
   });
 
+  it("treats the ban lookup chip's plain sentence as the same command", () => {
+    expect(questionBypassesOllamaPcIpRequirement("Check Steam players for bans")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("check steam players for bans 76561198000000000")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("Check Steam players for bansheeX")).toBe(false);
+  });
+
   it("requires PC IP for normal asks", () => {
     expect(questionBypassesOllamaPcIpRequirement("What TDP should I use?")).toBe(false);
   });

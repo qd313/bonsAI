@@ -13,7 +13,12 @@ from backend.services.steam_vac_service import (
     split_vac_query_body,
 )
 from backend.services import steam_vac_service as svs
-from backend.services.vac_check_commands import COMMAND_VAC_CHECK, parse_vac_check_command, response_for_vac_check
+from backend.services.vac_check_commands import (
+    COMMAND_VAC_CHECK,
+    VAC_CHECK_PLAIN_PHRASE,
+    parse_vac_check_command,
+    response_for_vac_check,
+)
 
 
 class _FakeResponse:
@@ -138,6 +143,17 @@ class VacCheckCommandsTests(unittest.TestCase):
     def test_response_no_key(self):
         md = response_for_vac_check("76561198000000000", api_key="", capability_ok=True)
         self.assertIn("No Steam Web API key", md)
+
+    def test_the_suggestion_chips_plain_sentence_runs_the_same_lookup(self):
+        """The chip reads in plain words (maintainer, plan 72) and pressing it puts that sentence
+        in the Ask box; it must reach the same lookup as the typed command, IDs and all."""
+        self.assertEqual(parse_vac_check_command(VAC_CHECK_PLAIN_PHRASE), "")
+        self.assertEqual(parse_vac_check_command("check steam players for bans"), "")
+        self.assertEqual(
+            parse_vac_check_command(f"{VAC_CHECK_PLAIN_PHRASE} 76561198000000000"), "76561198000000000"
+        )
+        self.assertIsNone(parse_vac_check_command("Check Steam players for bansheeX"))
+        self.assertNotIn("bonsai:", VAC_CHECK_PLAIN_PHRASE)
 
     def test_constant_prefix(self):
         self.assertTrue(COMMAND_VAC_CHECK.startswith("bonsai:"))

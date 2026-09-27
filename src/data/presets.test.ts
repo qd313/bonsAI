@@ -167,7 +167,9 @@ describe("frozen test chips (QA)", () => {
 describe("suggestion chip pool", () => {
   it("never offers a typed command as a suggestion chip (plan 70, flow L6)", () => {
     // "bonsai:vac-check" sat in the chip list and rotated through the chips like a question.
-    const isCommand = (text: string) => questionBypassesOllamaPcIpRequirement(text);
+    // A raw typed command; the ban lookup's plain-words chip is allowed (see the test below).
+    const isCommand = (text: string) =>
+      questionBypassesOllamaPcIpRequirement(text) && /^\/?\s*bonsai:/i.test(text);
     for (const options of [undefined, { useLocalKnowledgeBase: true }]) {
       expect(getRandomPresets(500, options).some((p) => isCommand(p.text))).toBe(false);
       for (const category of ["troubleshooting", "ollama", "general"]) {
@@ -177,5 +179,15 @@ describe("suggestion chip pool", () => {
         expect(isCommand(getRandomPresetExcluding(new Set(), options).text)).toBe(false);
       }
     }
+  });
+
+  it("offers the ban lookup in plain words, and pressing it runs the lookup (maintainer, plan 72)", () => {
+    const pool = getRandomPresets(500);
+    expect(pool.some((p) => p.text.toLowerCase().includes("bonsai:"))).toBe(false);
+    const chip = pool.find((p) => p.text === "Check Steam players for bans");
+    expect(chip).toBeTruthy();
+    // Pressing a chip puts its text in the Ask box; this is the check that sends it to the lookup
+    // rather than the AI (the back end's parse_vac_check_command answers to the same sentence).
+    expect(questionBypassesOllamaPcIpRequirement(chip!.text)).toBe(true);
   });
 });

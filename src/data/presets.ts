@@ -163,12 +163,14 @@ export type PresetSamplerOptions = {
 };
 
 /**
- * A typed command ("bonsai:vac-check") is never offered as a suggestion chip: plan 70 saw it rotate
- * through the chips like a question. It stays in PRESET_PROMPTS so `detectPromptCategory` still
- * files the typed command under troubleshooting for the follow-up chips.
+ * A raw typed command ("bonsai:...") is never offered as a suggestion chip: plan 70 saw
+ * "bonsai:vac-check" rotate through the chips like a question. A command in plain words ("Check
+ * Steam players for bans", the ban lookup) is a chip like any other.
  */
 function samplerPool(options?: PresetSamplerOptions): PresetPrompt[] {
-  const suggestable = PRESET_PROMPTS.filter((p) => !questionBypassesOllamaPcIpRequirement(p.text));
+  const suggestable = PRESET_PROMPTS.filter(
+    (p) => !(questionBypassesOllamaPcIpRequirement(p.text) && /^\/?\s*bonsai:/i.test(p.text))
+  );
   if (!options?.useLocalKnowledgeBase) return suggestable;
   return suggestable.filter((p) => p.text !== LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT);
 }
@@ -192,7 +194,7 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "How do I fix stuttering?", category: "troubleshooting" },
   { text: "Help me troubleshoot a Proton issue", category: "troubleshooting" },
   { text: "Game won't launch, what should I check?", category: "troubleshooting" },
-  { text: "bonsai:vac-check", category: "troubleshooting" },
+  { text: "Check Steam players for bans", category: "troubleshooting" },
   { text: "Diagnose a slow Ollama response", category: "ollama" },
   { text: "How do I find Ollama on my LAN?", category: "ollama" },
   { text: "How do I use Find LAN on the Ollama tab?", category: "ollama" },

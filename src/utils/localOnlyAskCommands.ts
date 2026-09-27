@@ -37,6 +37,8 @@ function isSanitizerKeywordCommand(question: string): boolean {
 const SHORTCUT_DECK = "bonsai:shortcut-setup-deck";
 const SHORTCUT_STADIA = "bonsai:shortcut-setup-stadia";
 const VAC_PREFIX = "bonsai:vac-check";
+/** The ban lookup chip's plain wording; mirrors ``VAC_CHECK_PLAIN_PHRASE`` in vac_check_commands.py. */
+const VAC_PLAIN_PHRASE = "Check Steam players for bans";
 
 function isShortcutSetupCommand(question: string): boolean {
   const key = normalizeAskWithOptionalLeadingSlash(question);
@@ -50,10 +52,10 @@ function isVacCheckCommand(question: string): boolean {
     raw = raw.slice(1).trimStart();
   }
   const low = raw.toLowerCase();
-  const prefix = VAC_PREFIX.toLowerCase();
-  if (low === prefix) return true;
-  if (low.startsWith(`${prefix} `) || low.startsWith(`${prefix}\t`)) return true;
-  return false;
+  return [VAC_PREFIX, VAC_PLAIN_PHRASE].some((command) => {
+    const prefix = command.toLowerCase();
+    return low === prefix || low.startsWith(`${prefix} `) || low.startsWith(`${prefix}\t`);
+  });
 }
 
 /**

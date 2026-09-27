@@ -30,6 +30,9 @@ from backend.services.steam_vac_service import (
 )
 
 COMMAND_VAC_CHECK = "bonsai:vac-check"
+# The suggestion chip's plain wording (maintainer, plan 72): pressing the chip puts this in the Ask
+# box, so it runs the same lookup. Mirrored in src/utils/localOnlyAskCommands.ts.
+VAC_CHECK_PLAIN_PHRASE = "Check Steam players for bans"
 
 
 def parse_vac_check_command(text: str) -> Optional[str]:
@@ -39,15 +42,13 @@ def parse_vac_check_command(text: str) -> Optional[str]:
     """
     raw = strip_optional_leading_slash(text)
     low = raw.casefold()
-    prefix = COMMAND_VAC_CHECK.casefold()
-    if low == prefix:
-        return ""
-    if not (low.startswith(prefix + " ") or low.startswith(prefix + "\t")):
-        return None
-    idx = raw.casefold().find(prefix)
-    if idx < 0:
-        return None
-    return raw[idx + len(COMMAND_VAC_CHECK) :].strip()
+    for command in (COMMAND_VAC_CHECK, VAC_CHECK_PLAIN_PHRASE):
+        prefix = command.casefold()
+        if low == prefix:
+            return ""
+        if low.startswith(prefix + " ") or low.startswith(prefix + "\t"):
+            return raw[len(command) :].strip()
+    return None
 
 
 def response_for_vac_check(

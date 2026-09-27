@@ -327,7 +327,7 @@ class TheTwoNoticesNeverBothAppearWiringTests(unittest.TestCase):
         self.assertNotIn(_NOT_IN_NOTES_TEXT, response)
 
 
-def _attached(*, best_meaning, keyword_score) -> KnowledgeRetrievalResult:
+def _attached(*, best_meaning, keyword_score, notes: str = "") -> KnowledgeRetrievalResult:
     return KnowledgeRetrievalResult(
         attached=True,
         text_block="Boss note: focus the adds first.",
@@ -335,6 +335,7 @@ def _attached(*, best_meaning, keyword_score) -> KnowledgeRetrievalResult:
         sources=[{"title": "Wiki"}],
         best_meaning=best_meaning,
         top_card_keyword_score=keyword_score,
+        notes=notes,
     )
 
 
@@ -425,6 +426,37 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         }
 
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, _run(plugin, ask_mode="strategy").get("response", ""))
+
+
+class RerouteToTheTipSheetWiringTests(unittest.TestCase):
+    """Plan 70 helper P, end to end. A Strategy Ask about a running game locks
+    `should_retrieve_knowledge`'s domain to "strategy" before the question is even read (see
+    knowledge_base_service.py), and that value is never revisited even when
+    `_reroute_to_game_tip_if_it_fits` later sends the turn to the tip sheet instead -- so a
+    turn the tip sheet actually answered still carries `kb_domain == "strategy"` all the way to
+    this notice. Measured on the Deck 2026-09-26 (docs/test-evidence/plan70-R4-try3.json): Deep
+    Rock Galactic: Survivor's own Render Scale tip attached and the reply used it, and the reply
+    still ended with "No close match in my notes" underneath it."""
+
+    @patch(
+        "backend.services.game_ai_request.summarize_kb_coverage",
+        return_value=KbCoverageSummary(status="sections", section_count=4),
+    )
+    @patch(
+        "backend.services.game_ai_request.retrieve_knowledge_context",
+        return_value=_attached(best_meaning=0.60, keyword_score=0.0, notes="compat_tips"),
+    )
+    def test_a_rerouted_tip_does_not_get_told_no_close_match(self, _retrieve, _coverage):
+        plugin = _FakePlugin(_base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Raise the Render Scale slider -- below about 90% the text gets hard to read.",
+            "model": "test-model",
+        }
+
+        result = _run(plugin, ask_mode="strategy")
+
+        self.assertNotIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
 
 
 def _black_mesa_retrieval(sources: list) -> KnowledgeRetrievalResult:

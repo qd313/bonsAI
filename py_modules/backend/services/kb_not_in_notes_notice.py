@@ -98,6 +98,17 @@ _COMPAT_DOMAIN = "compat"
 # fit", so it must not trigger this line.
 _BUDGET_DROPPED_NOTE = "dropped_by_context_budget"
 
+# `retrieve_knowledge_context` (knowledge_base_service.py) writes this exact string into its
+# result's ``notes`` -- and so into ``kb_transparency["kb_notes"]`` -- whenever the tip sheet is
+# what actually answered the turn, including a turn `_reroute_to_game_tip_if_it_fits` sent there
+# (plan 70, helper E2) even though `should_retrieve_knowledge` had already locked the turn's
+# `kb_domain` to "strategy" before the question was even read. `kb_domain` is computed once,
+# before retrieval runs, and is never updated after a reroute -- so a rerouted turn's `kb_domain`
+# still reads "strategy" everywhere downstream. Checking `kb_notes` alongside `kb_domain` is the
+# same fix `transparency_service.py`'s "Source: shared troubleshooting tips" line already uses
+# for this exact staleness (see its own `kb_domain == "compat" or kb_notes == "compat_tips"`).
+_COMPAT_TIPS_RESOLUTION = "compat_tips"
+
 # The floor lane C is building (D87, knowledge_base_service.py) stamps `kb_notes` with this
 # exact prefix when it decided nothing in the routed candidate pool was a real match. It is not
 # tested for separately below: once that lane lands, a compat turn where it fired is *also* a
@@ -339,6 +350,7 @@ def should_show_no_close_match_notice(
     kb_source_titles: tuple[str, ...] = (),
     kb_source_texts: tuple[str, ...] = (),
     kb_best_meaning_without_game_name: float | None = None,
+    kb_notes: str = "",
 ) -> bool:
     """True when a note reached the model but nothing in the notes matched the question closely.
 
@@ -346,6 +358,18 @@ def should_show_no_close_match_notice(
     and whether the notes cover this game -- plus three from the retrieval result:
     ``kb_domain`` (this is the notes path, not the tip sheet, which has its own floor on a
     different scale), ``kb_best_meaning`` and ``kb_top_card_keyword_score``.
+
+    ``kb_notes`` (plan 70, helper P) backs up the ``kb_domain`` check for a turn
+    `_reroute_to_game_tip_if_it_fits` (knowledge_base_service.py) sent to the tip sheet even
+    though `should_retrieve_knowledge` had already locked `kb_domain` to "strategy" before the
+    reroute ran -- `kb_domain` is never updated afterward, so it still reads "strategy" for a
+    turn the tip sheet actually answered. Measured on the Deck 2026-09-26
+    (docs/test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
+    tip attached and the answer used it, and this line still printed "No close match in my
+    notes" underneath it, judging a tip-sheet turn by the notes' own floor. See
+    `_COMPAT_TIPS_RESOLUTION`'s module comment for why `kb_notes` is the reliable signal here --
+    the same fix `transparency_service.py` already applies to its own domain-keyed label.
+    Blank by default, so a caller that predates this keeps its old behaviour unchanged.
 
     ``question``, ``kb_game_name``, ``kb_source_titles`` and ``kb_source_texts`` are optional, and
     only matter when ``kb_top_card_keyword_score`` is nonzero: see
@@ -386,6 +410,8 @@ def should_show_no_close_match_notice(
     if kb_coverage_status != _COVERED_STATUS:
         return False
     if (kb_domain or "").strip().lower() == _COMPAT_DOMAIN:
+        return False
+    if (kb_notes or "").strip() == _COMPAT_TIPS_RESOLUTION:
         return False
     has_keyword_support = kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT
     if has_keyword_support and _keyword_score_reflects_the_question(
@@ -433,6 +459,10 @@ def should_show_no_close_match_notice_for_turn(
 
     Moved out of game_ai_request.py (plan 70, growth-limit fix) so that file keeps one call for
     this instead of building these four arguments inline.
+
+    Always passes `kb_transparency`'s own `kb_notes` through -- see
+    `should_show_no_close_match_notice`'s own docstring for why a rerouted tip-sheet turn needs
+    it alongside `kb_domain`.
     """
     close_match_question = ""
     close_match_game_name = ""
@@ -464,6 +494,7 @@ def should_show_no_close_match_notice_for_turn(
         kb_best_meaning_without_game_name=kb_transparency.get(
             "kb_best_meaning_without_game_name"
         ),
+        kb_notes=str(kb_transparency.get("kb_notes") or ""),
     )
 
 

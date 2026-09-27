@@ -293,6 +293,35 @@ class NoCloseMatchDecisionTests(unittest.TestCase):
         self.assertFalse(_thin(kb_coverage_status="kb_off"))
 
 
+class RerouteToTheTipSheetLeavesKbDomainStaleTests(unittest.TestCase):
+    """Plan 70 helper P. `should_retrieve_knowledge` (knowledge_base_service.py) locks
+    `kb_domain` to "strategy" before the question is even read, for a Strategy/Expert Ask about
+    a running game -- and it is never updated afterward. So a turn `_reroute_to_game_tip_if_it_
+    fits` sends to the tip sheet still carries `kb_domain == "strategy"` everywhere downstream,
+    which is exactly `_thin()`'s own base shape: strategy mode, strategy domain, no keyword
+    support (the forced tip card is fetched fresh rather than kept in the ranked list), a
+    meaning score under the ceiling. Measured on the Deck 2026-09-26
+    (docs/test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
+    tip attached and the answer used it, and this line still printed underneath it."""
+
+    def test_a_rerouted_tip_turn_does_not_show_the_notice(self):
+        # Same inputs as test_thin_match_with_no_keyword_support_shows_the_notice, which is
+        # correct there -- a genuine notes-domain thin match, no reroute in play. The only
+        # difference here is kb_notes, which is how the caller learns a reroute happened.
+        self.assertFalse(_thin(kb_notes="compat_tips"))
+
+    def test_kb_domain_alone_still_catches_a_turn_that_reports_it_correctly(self):
+        # The kb_notes check is additive, not a replacement -- a caller that already reports
+        # kb_domain="compat" correctly (no reroute involved) is unaffected.
+        self.assertFalse(_thin(kb_domain="compat", kb_notes=""))
+
+    def test_an_unrelated_kb_notes_value_does_not_suppress_the_notice(self):
+        # Only the exact resolution string the tip-sheet branch writes counts -- an ordinary
+        # notes-domain resolution string (e.g. how a game was resolved) must not be read as
+        # "this was really a tip-sheet turn".
+        self.assertTrue(_thin(kb_notes="running_app"))
+
+
 class GameNamedOnlyInTheQuestionTests(unittest.TestCase):
     """HONESTY-TEXT-GAME-01 (plan 56 lane J): the real shape of the device failure on
     2026-09-15 -- three Black Mesa cards attached to "black mesa how do i tame a horse", none of

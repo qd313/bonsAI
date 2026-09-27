@@ -1,0 +1,27 @@
+{
+  "row": "plan70 flow L7, L7.1d: Deep Rock Galactic: Survivor named ('text' wording), nothing running",
+  "build_commit": "PC tip 9063bbfb, deployed at 23:29 (see plan70-R4-try5.json for the fingerprints)",
+  "deck_time": "2026-09-26 23:37 to 23:39 EDT",
+  "screen": "external monitor (capture 1920x1080; Quick Access page 855x766)",
+  "setup": "Nothing running (checked over SSH). AI characters OFF. Strategy mode. Same test chat as L7.1b/L7.1c (now 6 turns; earlier ones fold into '5 earlier'). No new chat.",
+  "question": "in deep rock galactic survivor the text on the screen looks blurry",
+  "answer_time_s": 37.8,
+  "cached": false,
+  "answer_first_two_sentences": "If the text looks blurry, it usually means the display scaling or resolution settings on your Steam Deck don't match what the game is expecting. Here are the steps to try:",
+  "answer_mentions_render_scale": "yes - bullet 'Render Scale: If you are looking at the menu or HUD text specifically, the local knowledge suggests the Render Scale slider might be the culprit. If it's too high, it can cause text to blur. Try raising the Render Scale instead of lowering the resolution if the issue is just text clarity.' (note: the bullet contradicts itself - 'too high' then 'try raising')",
+  "answer_ending": "a two-option branch menu 'Where are you at in Deep Rock Galactic Survivor?' (A. just starting / B. deep in the mines)",
+  "ends_with_no_close_match": false,
+  "show_details_in_order": [
+    "Notes block header: 'Display (+1 more) · From the shared Deck tips'",
+    "1st inside: 'Display · From the shared Deck tips' - 'Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text -- no separate UI-scale option. Below ~90% text gets hard to read; raise Render Scale rather than blame the screen.'",
+    "2nd inside: 'Display · From the shared Deck tips' - 'Lower the in-game resolution if the picture looks blurry on the built-in screen.'",
+    "Chip ladder: Keyword + meaning, KB: 13 sections, Reply style: balanced",
+    "Local knowledge base credit lines: 'steamcommunity.com · bonsAI-maintainer' - 'Shared troubleshooting — display'; then 'No source page' - 'Shared troubleshooting — display'",
+    "Retrieval: Keyword + meaning; Source: shared troubleshooting tips; Trust tier: fallback_no_source; compat_tips; Embed 17.24 ms; Re-rank 20.19 ms"
+  ],
+  "block_header_note": "the game's own tip is listed under 'From the shared Deck tips' (not labelled as the game's own tip)",
+  "chip_afterwards": "'When should I use Expert mode instead of Speed?' right after the answer, later 'What's the efficiency sweet spot for this game?'. 'Enable local knowledge base for better game tips' did NOT appear.",
+  "plugin_log": "request logged with game='' (nothing running), completed in 37.8 s; no ERROR/WARNING lines for this answer",
+  "screenshot": "plan70-R4-try6-drgs-text-details.png",
+  "verdict": "PASS - the Render Scale tip attached first (credited to steamcommunity.com) and the answer does not end with 'No close match in my notes'"
+}

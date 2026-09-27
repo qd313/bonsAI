@@ -36,11 +36,150 @@ out of [roadmap-details.md](../roadmap-details.md) into [roadmap-completed.md](r
 under the same heading, since it is finished work now rather than open work — its own closing note is
 there._
 
+_Plan 70's own Done entries below (flows L1 to L7 and the helpers' landings, 2026-09-26) were moved
+out of [roadmap.md](../roadmap.md) on 2026-09-27 during plan 70's final bookkeeping pass, copied line for
+line apart from link paths adjusted for this folder, to keep that document under its size limit. The
+roadmap keeps one pointer line to them._
+
+**Closed 2026-09-26 (plan 70, flow L1, missed in the earlier bookkeeping pass):**
+
+- ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **DONE, fixed 2026-09-26, passed
+  on the Deck 2026-09-26.** [Detail](../roadmap-details.md#tip-cut-off-fix).
+- ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **DONE, closed 2026-09-26.** The
+  last of the twelve, the spoiler-reveal reachability check, passed on the Deck 2026-09-26 (plan 70, flow
+  L1). [Full detail](roadmap-bugs-fixed.md#twelve-checks-read-as-proven-with-nothing-behind-them-closed-2026-09-26).
+
+**Closed 2026-09-26 (plan 70, flow L2, second Deck pass):**
+
+- ★★ `[KB]` `[ollama]` **The note-search model is only held in memory for 5 minutes, not the 4 hours the
+  answer model gets** — **DONE, fixed 2026-09-26 (`409de9f6`), passed on the Deck 2026-09-26.** Evidence
+  `docs/test-evidence/plan70-L1-8-HELPER-M.json`.
+- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **DONE, fixed 2026-09-26 (plan
+  70, helper K, commit `e1bf3324`), passed on the Deck 2026-09-26, row reworded to "stays on the right
+  boss."** [Detail](../roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
+- ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **DONE, fixed 2026-09-26 (helper J),
+  passed on the Deck 2026-09-26.** [Detail](../roadmap-details.md#attaching-a-screenshot-crashed-the-model-once).
+
+**Closed 2026-09-26 (plan 70, flow L3, third Deck pass):**
+
+- ★★ `[ollama]` `[focus]` **The AI models screen, and "Manage AI models" itself, can open with the ring
+  already sitting on a filter** — **DONE, fixed 2026-09-26 (helper I, `3ac00226`), passed on the Deck
+  2026-09-26.** Row **RING-ON-FILTER-2c2**. [Detail](../roadmap-details.md#filters-panel-focus-bugs).
+- ★★ `[ollama]` `[focus]` **With the AI models screen's Filters panel open, the D-pad cannot reach Done or
+  the model list below it** — **DONE, fixed 2026-09-26 (helper I, `6355eb9a`), passed on the Deck
+  2026-09-26.** Row **HUB-EDGE-02**. [Detail](../roadmap-details.md#filters-panel-focus-bugs).
+- ★ `[ollama]` **The remove box and the models list undercount a big model's size** — **DONE, fixed
+  2026-09-26 (helper I, `86a148a7`), passed on the Deck 2026-09-26.** Row **ROUTING-MERGE-SIZE-02**.
+  [Detail](../roadmap-details.md#model-size-fix-and-re-check).
+- ★ `[perms]` **The ban lookup's "turned off" message names the switch the way the screen does** —
+  **DONE, fixed in `ec6f87ab` on 2026-09-23, passed on the Deck 2026-09-26.** Row **VAC-06**: the reply
+  named "Permissions → Steam ban lookup", the same words as the switch's own label. Evidence
+  `docs/test-evidence/plan70-VAC-06.json`.
+
+**Closed 2026-09-26 (plan 70, flow L4, fourth Deck pass):**
+
+- ★ `[focus]` **The ring is dropped again when an answer finishes** — **DONE, fixed 2026-09-26 (helper F2,
+  `f87a962c`), passed on the Deck 2026-09-26.** Row **QA-FREE-PLAY-01** re-check.
+  [Detail](../roadmap-details.md#flow-2b-bugs).
+- ★ `[chips]` **A preset chip loses the ring when its question changes underneath it** — **DONE, fixed
+  2026-09-26 (helper F2, `42d6eb48`), passed on the Deck 2026-09-26, fade and static.** Row
+  **PRESET-ONE-LINE-03** re-check. [Detail](../roadmap-details.md#flow-2b-bugs).
+- ★★ `[reply]` **From the third question on, the waiting line quotes the follow-up reminder, not the
+  question** — **DONE, fixed 2026-09-26 (helper K, `5fe0800a`), passed on the Deck 2026-09-26.** Row
+  **KB-FOLLOWUP-QUOTE-01**. [Detail](../roadmap-details.md#flow-2b-bugs).
+
+**Closed 2026-09-26 (plan 70, flow L5, fifth Deck pass):**
+
+- ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box**
+  — **DONE, closed 2026-09-26, passed on the Deck across all four rounds of its own fix.** Row
+  **SPOILER-COVER-01**. The whole four-round story is in the detail. [Detail](../roadmap-details.md#spoiler-leak-family).
+- ★★ `[reply]` **The model's own thinking can name a protected boss in plain words** — **DONE, fixed
+  2026-09-26 (helper A, `4b975316`), passed on the Deck 2026-09-26 (name rule, flow L3; missed in an
+  earlier bookkeeping pass).** Row **THINKING-SPOILER-01**. [Detail](../roadmap-details.md#spoiler-leak-family).
+- ★ `[focus]` **Troubleshooting hint's Dismiss unreachable by D-pad** — **DONE, fixed 2026-09-26 (helper
+  F2, `59d3d1c0`), passed on the Deck 2026-09-26.** Row **PERMS-CLEAN-06**.
+  [Detail](../roadmap-details.md#l3-and-2d-findings).
+- ★ `[platform]` **A screen test that opens the Filters panel failed once under load, passed alone** —
+  **DONE, cause found and fixed 2026-09-26 (helper F2, commit `647dca4c`).** A real race, never seen on
+  the Deck itself. [Detail](../roadmap-details.md#l3-and-2d-findings).
+- ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **DONE, fixed
+  2026-09-24 (`341841d3`), passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Row
+  **STREAM-11**. [Detail](../roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
+- ★ `[reply]` **The branch menu still copies its own template, now with the game's name filled in** —
+  **DONE, fixed 2026-09-25, passed on the Deck 2026-09-26 with Deep Rock Galactic: Survivor running.** Row
+  **BRANCH-TEMPLATE-02**. [Detail](../roadmap-details.md#branch-menu-template-leak).
+
+**Closed 2026-09-26 (plan 70, helper C's landing):**
+
+- ★ `[KB]` **A network troubleshooting tip could fire on ordinary words starting with "lan"** — **DONE,
+  fixed 2026-09-26.** [Detail](../roadmap-details.md#lan-word-boundary-fix).
+
+**Closed 2026-09-26 (plan 70, helper I's landing):**
+
+- ★ `[platform]` **A read-aloud timing test fails now and then when the PC is busy** — **DONE, fixed
+  2026-09-26.** Its own way of proving the timing was flaky under load, not read-aloud itself; rewritten
+  to wait on real events instead of a guessed delay. Nothing on screen to check.
+  [Detail](../roadmap-details.md#a-read-aloud-timing-test-fails-now-and-then-when-the-pc-is-busy).
+
+**Closed 2026-09-26 (plan 70, flow L6, sixth and last Deck pass):**
+
+- ★ `[focus]` **After pressing thumbs up on a reply, nothing holds the D-pad ring** — **DONE, fixed
+  2026-09-26 (helper F2, `34bd9315`), passed on the Deck 2026-09-26, 3 of 3.**
+  [Detail](../roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **Once, the Show details line did nothing when pressed** — **DONE, cause found and fixed
+  2026-09-26 (helper F2, `bb36e334`), passed on the Deck 2026-09-26, 3 of 3.**
+  [Detail](../roadmap-details.md#flow-4-findings).
+- ★ `[focus]` **After Dismiss on the troubleshooting hint, nothing holds the D-pad ring** — **DONE, fixed
+  2026-09-26 (helper F2, `6116f33c`), passed on the Deck 2026-09-26.** [Detail](../roadmap-details.md#l3-and-2d-findings).
+- ★★ `[platform]` **The saved Deck-walk replay can never compare across builds, so it checks nothing
+  after a deploy** — **DONE, fixed in the Deck tools project (`556ffcb`), proven on the Deck 2026-09-26.**
+  Its own saved walks re-saved on the current build, most of them. [Detail](../roadmap-details.md#saved-deck-walk-replay-across-builds).
+- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **DONE, fixed
+  in `895cf0a`, passed on the Deck 2026-09-26 with Half-Life 2 running.** Row **CHIP-BUTTON-09**.
+  [Detail](../roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
+
+**Closed 2026-09-26 (plan 70, E2's tip-fix landing):**
+
+- ★★ `[KB]` **A library saved before the per-game tip column existed loses every note, not just tips** —
+  **DONE, found and fixed the same night (`c1ca8b7d`).** No Deck row needed — the Deck itself already has
+  the newer library. [Detail](../roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+
+**Closed 2026-09-26 (plan 70, flow R and flow L7, the release library's Deck checks):**
+
+- ★★★ `[KB]` **"Starting out" cards get their own kind** — **DONE, built 2026-09-26 (plan 70, helper E),
+  passed on the Deck 2026-09-26 (flow R).** With Brotato running its "How do I get started" chip showed and
+  the answer attached "Starting out in Brotato"; a Palworld shortcut's chip showed too. Row
+  **STARTING-OUT-01**. Evidence `docs/test-evidence/plan70-R-R3-try2.json`.
+  [Detail](../roadmap-details.md#the-corpus-has-no-starting-out-card).
+- ★★★★ `[KB]` **A running game's own Deck tip never reached an answer** — **DONE, fixed 2026-09-26 (helper
+  E2, `e1bc0c16`), passed on the Deck 2026-09-26:** Deep Rock Galactic: Survivor running (Strategy, Speed,
+  and a boss question that correctly did not get the tip) and named; Fallout 4 named (Speed and Strategy).
+  Row **KB-TIP-PERGAME-01**. Evidence `docs/test-evidence/plan70-R4-try3.json`, `plan70-R4-try4.json`,
+  `plan70-R4-try6.json`. [Detail](../roadmap-details.md#rag-phase-4-extended-retrieval).
+- ★★ `[KB]` **One game's own tip attached to another game's question** — **DONE, fixed 2026-09-26 (helper
+  P, `aeed48be`), passed on the Deck 2026-09-26.** Evidence `docs/test-evidence/plan70-R4-try5.json`.
+  [Detail](../roadmap-details.md#flow-l7-findings).
+- ★ `[KB]` **"No close match in my notes" showed even when the game's own tip answered** — **DONE, fixed
+  2026-09-26 (helper P, `fb805301`), passed on the Deck 2026-09-26.** Evidence
+  `docs/test-evidence/plan70-R4-try6.json`. [Detail](../roadmap-details.md#flow-l7-findings).
+- ★ `[KB]` **A question answered by a game's own tip set what the chat is "about" to the tip's topic** —
+  **DONE, fixed 2026-09-26 (`9063bbfb`), held on the Deck 2026-09-26:** the bare follow-up afterwards never
+  searched for "display". Evidence `docs/test-evidence/plan70-R4-try5.json`. [Detail](../roadmap-details.md#flow-l7-findings).
+- ★ `[KB]` **A tip with a source page shows it in its credit line** — **DONE, fixed 2026-09-23 (`4ce37bcf`),
+  passed on the Deck 2026-09-26 on Deep Rock Galactic: Survivor's tip ("steamcommunity.com").** Reworded from
+  "a shared tip": no shared tip carries a source page today. Evidence `docs/test-evidence/plan70-R4-try3.json`.
+  [Detail](../roadmap-details.md#flow-l7-findings).
+- ★ `[focus]` **Up from a chip parked the ring on a hidden "Save chat to Desktop"** — **DONE, fixed
+  2026-09-26 (helper F2, `12ee3dfb`), passed on the Deck 2026-09-26:** three tries over a game, one without.
+  Evidence `docs/test-evidence/plan70-HIDDEN-RING-recheck.json`. [Detail](../roadmap-details.md#flow-l7-findings).
+- ★ `[KB]` **Keyword search could match a card by a stray leftover letter** — **DONE, fixed 2026-09-26
+  (helper O, `55719a6e`), measured on the PC; no Deck row needed.** [Detail](../roadmap-details.md#flow-l7-findings).
+
 **Closed 2026-09-26 (plan 68, third Deck pass):**
 
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **DONE, built 2026-09-25, all Deck
   checks passed 2026-09-26 (plan 68).** [Full
-  detail](roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared).
+  detail](roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared-closed-2026-09-26).
 
 **Closed 2026-09-25 (plan 68 Deck pass):**
 

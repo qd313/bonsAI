@@ -479,3 +479,18 @@ testing-manual.md. Found by the planning-folder review
   stop fully visible; A on Dismiss removed the hint. New, small: after Dismiss, nothing holds the ring
   until the next press. Evidence `docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
 
+### Plan 70 flows R and L7 (2026-09-26)
+
+- [x] **STARTING-OUT-01** A covered game gets a "How do I get started in <game>?" chip, and "where do I
+  start" reaches that game's own starting-out note. **PASS (Deck) 2026-09-26 (flow R):** typed questions for
+  Fallout 4 and Red Dead Redemption 2 each attached that game's starting-out note
+  (`docs/test-evidence/plan70-R-R2.json`); with Brotato running its chip showed within a second and the
+  answer attached "Starting out in Brotato", and a Palworld shortcut's chip showed too
+  (`docs/test-evidence/plan70-R-R3-try2.json`). The Brotato question was sent with the chip's exact words by
+  script, because pressing the chip then walking to Ask hit the known chip-then-Ask trap.
+- [x] **KB-TIP-PERGAME-01** A running game's own Deck tip attaches, first. **FAILED (Deck) 2026-09-26 (flow
+  R)**, fixed the same night (`e1bc0c16`). **PASS (Deck) 2026-09-26 (flow L7):** Deep Rock Galactic:
+  Survivor running, the Render Scale tip first in Strategy and alone in Speed, and not on a boss question
+  (`docs/test-evidence/plan70-R4-try3.json`); Fallout 4 named (the box was dead over the running game), the
+  F4SE tip first in Speed and Strategy (`docs/test-evidence/plan70-R4-try4.json`); Deep Rock Galactic:
+  Survivor named, the Render Scale tip first (`docs/test-evidence/plan70-R4-try6.json`).

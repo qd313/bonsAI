@@ -1,0 +1,23 @@
+{
+  "row": "plan70 flow L7, L7.0 tidy and deploy",
+  "build_commit": "PC tip c1ca8b7d (branch experimental)",
+  "deck_time": "2026-09-26 21:52 to 21:57 EDT",
+  "screen": "external monitor (Steam main window 1500x845 CSS at 1.28 scale = 1920x1080; Quick Access page window 855x766)",
+  "setup": "Deck lock held by bonsai-50; keep-awake taken for 480 min (expires 2026-09-27 09:52 UTC); no game process running over SSH at 21:52",
+  "commits_in_build": {
+    "e1bc0c16 (a game's own tip reaches the answer)": "in",
+    "c1ca8b7d (an older library keeps its notes)": "in",
+    "12ee3dfb (Up from a chip no longer parks the ring on a hidden Save chat)": "in (ancestor of HEAD)"
+  },
+  "deploy": "plugin_build ok; deck_deploy ok, loader ready after 291 ms",
+  "fingerprints": {
+    "dist/index.js sha256 prefix": "PC 942a432a28ab9f56 = Deck 942a432a28ab9f56",
+    "main.py sha256 prefix": "PC f098c0b665ed3f61 = Deck f098c0b665ed3f61"
+  },
+  "plugin_log_after_deploy": "one line: 'bonsAI plugin loaded!' - no errors",
+  "open_plugin": "first open after deploy failed as expected (no pane after chord); second open worked",
+  "library": "Ollama tab knowledge-base row reads 'Installed — version 2026.09.26'; install manifest: version 2026.09.26, schema_version 4, published_at 2026-09-26T13:51:38Z, embeddings populated (414 sections)",
+  "settings_before": "ai_character_enabled true, preset alig_ali_g, accent heavy; ask_mode strategy; ask_think_effort medium (Thinking on)",
+  "setting_changed": "ai_character_enabled true -> false through the Settings tab's 'AI voice & personality' toggle (A on it); file confirmed false",
+  "verdict": "DONE - all three commits in, fingerprints match, library 2026.09.26"
+}

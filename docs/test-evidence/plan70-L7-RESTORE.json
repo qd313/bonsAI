@@ -1,0 +1,58 @@
+{
+  "row": "plan70 flow L7, L7.5 restore the maintainer's eight chats, then the End section (L7.4 skipped on the session's instruction: library not published)",
+  "build_commit": "PC tip 9063bbfb as deployed at 23:29",
+  "deck_time": "2026-09-26 23:39 to 23:43 EDT",
+  "screen": "external monitor (Quick Access page 855x766)",
+  "setup": "Nothing running (checked over SSH before step 1 and at the end).",
+  "step1_test_chats_copied_aside": "~/bonsai-plan70-test-chats now holds chat_slots and chat_threads (tonight's test chats)",
+  "step2_backup_contents": "the backup holds all four: bonsAI/chat_slots/ (index.json + 8 chat files), bonsAI/chat_threads/ (index.json + 3 thread files), bonsAI/bonsai_feedback.jsonl, bonsAI/strategy_checklist_session.json",
+  "step3_restore": "ran the runbook's command exactly (removed chat_slots and chat_threads, extracted only the four items from the backup; settings.json not touched); exit code 0",
+  "step4_reload": "deck_reloadPlugin straight after, nothing running; loader ready in 286 ms",
+  "step5_sha256_first16_backup_vs_restored": {
+    "bonsAI/bonsai_feedback.jsonl": "8027070f972bbade = 8027070f972bbade MATCH",
+    "bonsAI/chat_slots/351b2838-3a5e-4863-9a9b-72b5438f3cb3.json": "e7312c4cbcf3cdff MATCH",
+    "bonsAI/chat_slots/3b7c08f1-61e2-459d-92bf-3eefbbaf1482.json": "351e18484f53201c MATCH",
+    "bonsAI/chat_slots/4baaccbc-6a59-419c-b2d1-5504c7ab037d.json": "c939e32939990f50 MATCH",
+    "bonsAI/chat_slots/66df6be3-d76e-4750-a0c1-9e2db2fc45ce.json": "9b5457267c117370 MATCH",
+    "bonsAI/chat_slots/92a45014-ea93-496a-80da-15896b199b46.json": "e2e43a647e28c899 MATCH",
+    "bonsAI/chat_slots/a8fb9f67-e21f-4993-9d6e-fb177d53c43f.json": "97bbdea48bf30a11 MATCH",
+    "bonsAI/chat_slots/d052dacc-d35e-4a28-b89b-8ae811884178.json": "cedfe73a806a3451 MATCH",
+    "bonsAI/chat_slots/d2aa6252-0814-4f46-92fe-dd158d073fe2.json": "891d486ca3ecbcee MATCH",
+    "bonsAI/chat_slots/index.json": "e03c93e17447739c MATCH",
+    "bonsAI/chat_threads/0f3b7142-160c-477c-8898-0b1f7880e68d.json": "829b49766282e1ec MATCH",
+    "bonsAI/chat_threads/67c84639-a773-42c8-8a66-9fd47a6108af.json": "d84ffb0e97f3aaca MATCH",
+    "bonsAI/chat_threads/fa671a39-fda4-46b9-8940-2493d95269b9.json": "879dfab301f61b90 MATCH",
+    "bonsAI/chat_threads/index.json": "4e6706742ea00add MATCH",
+    "bonsAI/strategy_checklist_session.json": "936702b9ba7e082c MATCH"
+  },
+  "extra_files_on_disk": "none (no file in chat_slots/chat_threads that is not in the backup)",
+  "recheck_after_browsing": "all 15 files still match after reading the chat list on screen (23:41:37)",
+  "chat_list_on_screen": {
+    "how_read": "chat row, RB one press at a time from [+], reading the active title after each press; 9 dots = [+] plus 8 chats",
+    "titles_in_order": [
+      "what is a good way to practice parrying in action games",
+      "wheatley fight",
+      "how should i spend my first hour in a new open world game",
+      "what is the safest way to approach a group of enemies at once",
+      "is it better to explore everything or rush the main objective",
+      "how do i unlock the next area after finishing the tutorial",
+      "how do i beat the boss at the end of the first area",
+      "Hades"
+    ],
+    "matches_restored_index": "yes - same eight titles in the same order as chat_slots/index.json (turn counts 86, 144, 2, 2, 2, 4, 4, 2)",
+    "note": "right after the reload the panel showed the empty [+] slot (the chat it had been on was a test chat that no longer exists); browsing left the 'Hades' chat as the open one"
+  },
+  "end_section": {
+    "ai_characters": "turned back ON through the Settings tab's 'AI voice & personality' toggle; screen shows 'Ali G — Other', accent 'Strong'",
+    "settings_diff": "settings.json is byte-for-byte IDENTICAL to settings-before-L7.json (ai_character_enabled true, alig_ali_g, heavy; ask_mode strategy; every other key unchanged)",
+    "pinned_test_chips": "none - dev_frozen_test_chips is [] and no pinned batch showed, so nothing to clear",
+    "reduced_motion": "off - the page's prefers-reduced-motion reads false, no reduced-motion setting in the plugin's settings, and chip decode animations ran all night",
+    "game": "none running",
+    "plugin": "open on Main, Show details closed, Context 'no active game detected'",
+    "offline_mode": "left alone",
+    "keep_awake": "held (one dps-hold-awake inhibitor listed; expires 2026-09-27 09:52 UTC)",
+    "lock": "untouched, still 'bonsai-50 ... 2026-09-27T00:30'",
+    "plugin_log": "current log has no error or traceback lines"
+  },
+  "verdict": "PASS - all 15 restored files match the backup, the eight chats show on screen by title, settings are back exactly as before the block"
+}

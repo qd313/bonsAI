@@ -5,6 +5,23 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **A question about the game you are playing now finds that game's own Deck tip:** asking "the text on
+  the screen looks blurry" with Deep Rock Galactic: Survivor running, or about mod launch options for
+  Fallout 4, used to get generic advice while the game's own tip sat unused in the library. The game's own
+  tip now comes first. `knowledge_base_service.py`. Passed on the Deck.
+- **One game's tip no longer turns up under another game's question:** a Fallout 4 question about blurry
+  text could get Deep Rock Galactic: Survivor's Render Scale tip. Only the game you are asking about, and
+  shared tips, are offered now. `knowledge_base_search.py`. Passed on the Deck.
+- **"No close match in my notes" no longer appears under an answer that used the game's own tip.**
+  `kb_not_in_notes_notice.py`. Passed on the Deck.
+- **A tip-answered question no longer changes what the chat is "about":** after an answer from a Deck tip,
+  a short follow-up like "what about the second one" used to search for the tip's topic ("display")
+  instead of the game. `game_ai_request.py`. Passed on the Deck.
+- **An older knowledge-base library keeps its notes:** with a library downloaded before 26 September, the
+  new per-game tip check failed and every answer lost its notes, strategy questions included. It now just
+  finds no per-game tips. `knowledge_base_search.py`.
+- **A word like "there's" or "can't" no longer helps the wrong note attach:** keyword search split it
+  into a stray single letter that could match a note by chance. `knowledge_base_search.py`.
 - **Pressing thumbs up on a reply no longer leaves the D-pad ring with nowhere to go:** once "Mark reply
   helpful" was replaced by "Saved on this Deck," the control the ring had been on was gone, and neither
   Down, Left nor B recovered from where it had been. The ring now moves to the speaker icon in the same
@@ -490,12 +507,12 @@ All notable changes to this project are documented in this file.
 - **A new player now gets a "How do I get started" chip and note:** a covered game with a starting-out
   note now offers a *"How do I get started in <game>?"* suggestion chip, and typing "where do I start"
   or "how do I get started" reaches that note the same way asking about a boss reaches a boss note.
-  `knowledge_base_chips.py`, `knowledge_base_search.py`. On-Deck check owed.
+  `knowledge_base_chips.py`, `knowledge_base_search.py`. Passed on the Deck.
 - **A troubleshooting question about a running game can now get that game's own tip, not just shared
   advice:** a Deck tip can now belong to one game instead of only ever being generic. Five tips ship this
   way: the maintainer's own Fallout 4 launch-option and GTA San Andreas: The Definitive Edition display
   option, plus two researched (not yet confirmed on real hardware) tips for Deep Rock Galactic: Survivor
-  and Ocarina of Time. `knowledge_base_service.py`, `build_rag_db.py`. On-Deck check owed.
+  and Ocarina of Time. `knowledge_base_service.py`, `build_rag_db.py`. Passed on the Deck.
 - **Installing a knowledge-base library too new for this build of the plugin now refuses with a plain
   message instead of half-working:** nothing used to check the library's own format number before
   installing it. It now compares that number first and asks the person to update the plugin if it is

@@ -1,0 +1,77 @@
+{
+  "row": "plan70 flow L7, L7.1 = R.4 again: a game's own tip reaches the answer (the release waits on this)",
+  "build_commit": "PC tip c1ca8b7d (includes e1bc0c16, c1ca8b7d, 12ee3dfb); Deck dist/index.js sha256 942a432a28ab9f56..., main.py f098c0b665ed3f61..., both match the PC",
+  "library": "2026.09.26, format 4, at the internal ~/.bonsai/rag",
+  "deck_time": "2026-09-26 21:55 to 22:13 EDT",
+  "screen": "external monitor (capture 1920x1080; Quick Access page 855x845 with a game running, 855x766 without)",
+  "setup": "Steam offline mode (left as set); AI characters OFF (turned off in L7.0); Thinking on (setting 'medium'); no plugin reload while any game ran - the panel was closed and reopened instead",
+  "drg_survivor": {
+    "launch": "deck_launchGame appid 2321470; process seen over SSH (DRG Survivor.exe)",
+    "context_line": "'Context: active game Deep Rock Galactic: Survivor' on the first read after opening the panel",
+    "ask_1_strategy": {
+      "mode": "Strategy",
+      "new_chat": true,
+      "question": "the text on the screen looks blurry on my deck (the runbook's words plus 'the', because the exact sentence was asked in Strategy earlier today)",
+      "answer_time_s": 50,
+      "cached": false,
+      "answer_first_two_sentences": "The text blurriness is usually related to the display scaling settings. Check your in-game graphics settings or Steam Deck system settings for the Render Scale.",
+      "answer_rest": "'If the text is hard to read, try raising the Render Scale setting; this often makes the text sharper...' then the line '— No close match in my notes, this answer leans on the model's own knowledge.' and a two-option branch menu",
+      "mentions_render_scale": true,
+      "show_details_tips_in_order": [
+        "1. Notes block 'Display · From steamcommunity.com'; opened, it reads: 'Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text -- no separate UI-scale option. Below ~90% text gets hard to read; raise Render Scale rather than blame the screen.'",
+        "Local knowledge base list: (a) 'steamcommunity.com · bonsAI-maintainer' - 'Shared troubleshooting — display' (this is the game's own tip #162); (b) 'No source page' - 'Shared troubleshooting — deck'"
+      ],
+      "show_details_other_lines": ["Chip 1 of 7", "Keyword + meaning", "KB: 13 sections", "Reply style: balanced", "Retrieval: Keyword + meaning", "Source: shared troubleshooting tips", "Trust tier: fallback_no_source", "compat_tips", "Embed: 42.31 ms", "Re-rank: 10.24 ms"],
+      "credit_line": "site name 'steamcommunity.com' (plain text, not a link) followed by '· bonsAI-maintainer'",
+      "screenshot": "plan70-R4-try3-drgs-strategy-details.png",
+      "result": "PASS - the game's own Render Scale tip is first, marked 'Researched, unconfirmed', credited to steamcommunity.com, and the answer names Render Scale. Oddity: the answer still ends with the 'No close match in my notes' line although the tip was used."
+    },
+    "ask_2_speed": {
+      "mode": "Speed (changed through the mode button)",
+      "new_chat": true,
+      "question": "the text in this game looks really blurry on my deck, how do i fix it",
+      "answer_time_s": 10.7,
+      "cached": false,
+      "answer_first_two_sentences": "The text blurriness in the game is likely related to the Render Scale setting. The local knowledge base suggests that the Render Scale slider also affects menu and HUD text, and that text becomes hard to read below about 90%.",
+      "show_details_tips_in_order": ["1. 'Display · From steamcommunity.com' - same tip text as above (opened and read)", "Local knowledge base list: only 'steamcommunity.com · bonsAI-maintainer' - 'Shared troubleshooting — display'"],
+      "show_details_other_lines": ["Chip 1 of 6", "Keyword search", "KB: 13 sections", "Reply style: balanced", "Spoiler risk: low", "Routed gemma4:e2b-it-qat", "Retrieval: Keyword search", "Source: shared troubleshooting tips", "Trust tier: wiki_no_patch", "compat_tips"],
+      "screenshot": "plan70-R4-try3-drgs-speed-details.png",
+      "result": "PASS - one tip attached and it is the game's own Render Scale tip"
+    },
+    "ask_3_control_strategy": {
+      "mode": "Strategy",
+      "new_chat": true,
+      "question": "how do I beat the dreadnought boss (reworded from 'how do I beat the dreadnought')",
+      "answer_time_s": 50,
+      "cached": false,
+      "answer_first_two_sentences": "The main strategy against the Glyphid Dreadnought is to kite between waves and focus on its weak-point armor plates as they become exposed. Save your powerful abilities, like the overclock or nuke, for specific windows when you need to break through its armor.",
+      "show_details_tips_in_order": ["Notes block 'Glyphid Dreadnought · From bonsAI's own note'", "Local knowledge base, 'No source page': 'Deep Rock Galactic: Survivor — Glyphid Dreadnought', '— Dreadnought Twins', '— Mactera'"],
+      "show_details_other_lines": ["Keyword + meaning", "KB: 13 sections", "Trust tier: fallback_no_source", "app_id:2321470", "Embed: 41.88 ms", "Re-rank: 9.35 ms"],
+      "render_scale_tip_attached": false,
+      "result": "PASS - Dreadnought note attached, Render Scale tip not attached"
+    },
+    "exit": "deck_exitGame; left the running list after 258 ms; no DRG process over SSH at 22:06:49"
+  },
+  "fallout_4": {
+    "launch": "deck_launchGame appid 377160; Fallout4 processes seen over SSH",
+    "context_line": "'Context: active game Fallout 4'",
+    "blocker": "Could not reach the Ask button or the mode button. Every time the panel was opened over Fallout 4 (4 opens, the last after waiting about 2 minutes for the game to load), the ring sat in the question box and Down from the box did nothing (5 separate Down presses checked, each read: ring still on the box, while the page's own focus was on the Ask button). Right moved the page's own focus to the mode button but not the ring. Up worked (to the chip). The same walk with nothing running reached Ask at once. I did not press A anywhere near the box.",
+    "screenshot": "plan70-R4-try3-fo4-box-down-dead.png",
+    "result": "COULD NOT RUN - the question could not be sent"
+  },
+  "shared_tip_source_page": {
+    "mode": "Speed, nothing running",
+    "new_chat": "the empty chat made in L7.2 (never asked into)",
+    "question": "my game keeps crashing right after launch with a proton error on my deck",
+    "answer_time_s": 5.3,
+    "cached": false,
+    "answer_first_two_sentences": "Check your free storage space. A nearly full drive can cause crashes during launch or saving.",
+    "show_details_tips_in_order": ["Notes block 'Crash · From the shared Deck tips', opened: 'Check free storage space -- a nearly full drive can crash a game at launch or while saving.'", "Local knowledge base: 'No source page' - 'Shared troubleshooting — crash'"],
+    "show_details_other_lines": ["Keyword search", "KB: 13 sections", "Spoiler risk: low", "Source: shared troubleshooting tips", "Trust tier: fallback_no_source", "compat_tips"],
+    "library_check": "read-only query of the installed library: 164 tips, only 3 carry a source page and all 3 are game-specific (#162 DRG Survivor display, #163 and #164 an EmuDeck Ocarina of Time entry). No shared tip has a source page, so this check cannot pass with this library.",
+    "result": "FAIL - a shared tip attached but its credit line reads 'No source page'"
+  },
+  "plugin_log": "current log (51 lines at 22:13) has no error, traceback or exception lines; no knowledge-base error after any answer",
+  "new_chats_made": ["DRG Survivor Strategy blurry-text chat", "DRG Survivor Speed blurry-text chat", "DRG Survivor Dreadnought chat", "one empty chat (L7.2) later used for the shared-tip question"],
+  "verdict": "PASS for the game's own tip (both modes) and the control; Fallout 4 COULD NOT RUN (focus trap over the game); shared-tip source page FAIL (no shared tip in the library has a source page)"
+}

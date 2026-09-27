@@ -1,0 +1,47 @@
+{
+  "row": "plan70 flow L7, L7.1b: Fallout 4's own launch-option tip with the game named, nothing running",
+  "build_commit": "PC tip c1ca8b7d; Deck dist/index.js sha256 942a432a28ab9f56... matches the PC",
+  "library": "2026.09.26, format 4, internal ~/.bonsai/rag",
+  "deck_time": "2026-09-26 22:51 to 22:57 EDT",
+  "screen": "external monitor (capture 1920x1080; Quick Access page 855x766)",
+  "setup": "No game running (checked over SSH at 22:51:42 and again at the end). AI characters OFF. Context line: 'no active game detected'. Both questions asked in the empty 'New chat' left from L7.3 (no new chat made); it became a two-turn chat. The screensaver had come on; one left-stick click woke it.",
+  "ask_1_speed": {
+    "mode": "Speed (set through the mode button)",
+    "question": "in fallout 4 how do i get mods working, what launch options should i use",
+    "answer_time_s": 19.9,
+    "cached": false,
+    "answer_first_two_sentences": "To get mods working, you generally need a mod manager like Mod Organizer 2 (MO2) and you need to launch the game through the Fallout 4 Script Extender (F4SE). The specific launch option you should use is: moshortcut://\"F4SE\" (Add this to the Launch Options in the game's properties).",
+    "invented_launch_options": "none - the only launch option given is moshortcut://\"F4SE\"",
+    "no_close_match_line": false,
+    "show_details_in_order": [
+      "Notes block 'Proton · From bonsAI's own note'; opened: 'Launch option moshortcut://\"F4SE\" (Properties > Launch Options) starts the game through F4SE via Mod Organizer 2. Confirmed on the maintainer's own Deck, 2026-08-21.'",
+      "Local knowledge base: 'No source page' - 'Shared troubleshooting — proton'",
+      "Chip ladder: Keyword search, KB: 15 sections, Reply style: balanced",
+      "Retrieval: Keyword search; Source: shared troubleshooting tips; Trust tier: fallback_no_source; compat_tips"
+    ],
+    "credit_line": "'From bonsAI's own note' on the block; 'No source page' in the credit list (this tip has no source page in the library)",
+    "screenshot": "plan70-R4-try4-fo4-speed-details.png",
+    "result": "PASS"
+  },
+  "ask_2_strategy": {
+    "mode": "Strategy (set through the mode button)",
+    "question": "for fallout 4, which launch options do i need so mods load",
+    "answer_time_s": 31.2,
+    "cached": false,
+    "answer_first_two_sentences": "To get mods loading in Fallout 4, the main thing you need is the Fallout 4 Script Extender, or F4SE. This is a tool that lets mods interact with the game engine.",
+    "answer_launch_option": "'The specific launch option you need to use is: moshortcut://\"F4SE\".' - no other launch options; ends with a two-option branch menu (texture/mesh mods or a complex overhaul)",
+    "no_close_match_line": false,
+    "show_details_in_order": [
+      "Notes block 'Proton · From bonsAI's own note' - same F4SE tip text as above (opened and read)",
+      "Local knowledge base, 'No source page': 'Shared troubleshooting — proton', 'Shared troubleshooting — windows_steam'",
+      "Chip ladder: Keyword + meaning, KB: 15 sections, Reply style: balanced",
+      "Retrieval: Keyword + meaning; Source: shared troubleshooting tips; Trust tier: fallback_no_source; compat_tips; Embed: 19.75 ms; Re-rank: 26.3 ms"
+    ],
+    "drg_render_scale_tip_attached": false,
+    "screenshot": "plan70-R4-try4-fo4-strategy-details.png",
+    "result": "PASS"
+  },
+  "side_note": "Before the second question, walking Down from the opened notes block stopped on the Show details chip row (Down dead twice); closing and reopening the panel cleared it. This looks like the known chip-ladder focus issue.",
+  "plugin_log": "no error, traceback or exception lines; both requests logged with game='' (nothing running)",
+  "verdict": "PASS - the Fallout 4 F4SE tip attached first in both modes and both answers gave exactly moshortcut://\"F4SE\"; no Render Scale tip; no 'No close match' line"
+}

@@ -1,0 +1,51 @@
+{
+  "row": "plan70 flow L7, L7.1c: deploy and re-check three tip fixes (nothing running)",
+  "build_commit": "PC tip 9063bbfb (includes 9063bbfb, fb805301, aeed48be - all three ancestors of HEAD)",
+  "deploy": "plugin_build ok; deck_deploy ok (loader ready 292 ms). dist/index.js and main.py fingerprints unchanged from the earlier build (942a432a28ab9f56 / f098c0b665ed3f61, PC = Deck) because the fixes only touch backend files; the four changed files match PC = Deck: game_ai_request.py 6a68f42e637b, kb_not_in_notes_notice.py d021817cd924, knowledge_base_search.py 61499e1e5379, knowledge_base_service.py c2f0f7373257. New plugin log '2026-09-26 23.29.06.log' starts clean ('bonsAI plugin loaded!'). The plugin opened on the first try after this deploy. Working copy note: git status showed src/pluginVersion.ts modified before and after the build; I did not edit it.",
+  "library": "2026.09.26, format 4, internal ~/.bonsai/rag",
+  "deck_time": "2026-09-26 23:29 to 23:36 EDT",
+  "screen": "external monitor (capture 1920x1080; Quick Access page 855x766)",
+  "setup": "Nothing running (checked over SSH before and after). AI characters OFF. Strategy mode throughout. All three questions asked in the same test chat used for L7.1b (no new chat). The earlier turns in that chat fold into 'N earlier'; the log shows 'carried=4 turns' of chat memory on the first question.",
+  "step2_drg_named": {
+    "question": "in deep rock galactic survivor the words on screen look blurry on my deck",
+    "answer_time_s": 36.3,
+    "cached": false,
+    "answer_first_two_sentences": "If the words look blurry, it usually means the display scaling or resolution settings on your Steam Deck don't match what the game is expecting. Try these steps:",
+    "answer_rest": "bullets: Steam Deck display scaling, in-game 'Text Scaling / Font Size / Resolution', updates. Does NOT name Render Scale.",
+    "ends_with_no_close_match": true,
+    "no_close_match_text": "— No close match in my notes, this answer leans on the model's own knowledge.",
+    "show_details_in_order": ["no tip/notes block above the details at all", "Keyword + meaning, KB: 13 sections, Reply style: balanced", "Local knowledge base, 'No source page': 'Deep Rock Galactic: Survivor — Mactera', '— Praetorian', '— Glyphid Dreadnought'", "Retrieval: Keyword + meaning; Trust tier: fallback_no_source; text:deep rock galactic survivor; Embed 21.87 ms; Re-rank 24.84 ms"],
+    "render_scale_tip_attached": false,
+    "log_warning": "strategy branch fence present but did NOT parse (the answer shows no branch menu)",
+    "screenshot": "plan70-R4-try5-drgs-named-details.png",
+    "result": "FAIL - the Render Scale tip did not attach (only three DRG boss/enemy notes) and the answer ends with 'No close match in my notes'"
+  },
+  "step3_fo4_blurry_and_launch": {
+    "question": "fallout 4 text looks blurry, and what launch options do i need",
+    "answer_time_s": 32.0,
+    "cached": false,
+    "answer_first_two_sentences": "Dealing with blurry text usually means the display settings aren't matching what the game is expecting. Try checking your Steam Deck's system settings for display scaling or resolution options.",
+    "answer_launch_option": "'The specific launch option you need to add to the game's properties is: moshortcut://\"F4SE\".' - no other launch options",
+    "ends_with_no_close_match": false,
+    "show_details_in_order": ["Notes block 'Proton (+1 more) · From the shared Deck tips'; opened: (1) 'Proton · From the shared Deck tips' - 'Launch option moshortcut://\"F4SE\" (Properties > Launch Options) starts the game through F4SE via Mod Organizer 2. Confirmed on the maintainer's own Deck, 2026-08-21.' (2) 'Display · From the shared Deck tips' - 'Lower the in-game resolution if the picture looks blurry on the built-in screen.'", "Keyword + meaning, KB: 15 sections, Reply style: balanced", "Local knowledge base, 'No source page': 'Shared troubleshooting — proton', '— display', '— windows_steam'", "Retrieval: Keyword + meaning; Source: shared troubleshooting tips; Trust tier: fallback_no_source; compat_tips; Embed 29.76 ms; Re-rank 54.55 ms"],
+    "credit_note": "the block header now says 'From the shared Deck tips' for the F4SE tip (in L7.1b it said 'From bonsAI's own note')",
+    "drg_render_scale_tip_attached": false,
+    "log_warning": "strategy branch fence present but did NOT parse",
+    "screenshot": "plan70-R4-try5-fo4-blurry-launch-details.png",
+    "result": "PASS - the F4SE tip attached first; the DRG Render Scale tip did not (a generic shared 'lower the in-game resolution' display tip attached second)"
+  },
+  "step4_followup": {
+    "question": "what about the second one",
+    "answer_time_s": 31.7,
+    "waiting_lines_seen_in_order": ["Checking offline cards for \"what about the second one\".", "Model's warming up for \"what about the second one\". Hang in there…", "then the live thinking text: 'Thinking Process: 1. **Analyze the Request:** The user input is \"what about the second one\". This is extremely vague. 2. **Analyze Context:** I have no prior context about wh…'"],
+    "answer_first_two_sentences": "I need more context to give you a useful answer. Are you referring to the second launch option we discussed for Fallout 4 mods, or perhaps something else entirely?",
+    "answer_menu": "A. Fallout 4 modding and F4SE setup / B. Deep Rock Galactic Survivor text blurriness / C. Something else entirely (please specify)",
+    "show_details_in_order": ["no tip/notes block", "Keyword + meaning, KB: 15 sections, Reply style: balanced", "Local knowledge base: 'No source page' - 'Fallout 4 — Legendary enemies'; 'fallout.fandom.com · CC-BY-SA-3.0 · as of 2025-06-01' - 'Fallout 4 — SPECIAL points', 'Fallout 4 — Stimpaks and chems'", "Retrieval: Keyword + meaning; Trust tier: fallback_no_source; text:fallout 4; Embed 33.67 ms; Re-rank 35.56 ms"],
+    "mentions_display": false,
+    "chip_after": "the chip row then offered 'Enable local knowledge base for better game tips' although the knowledge base is on",
+    "screenshot": "plan70-R4-try5-followup-details.png",
+    "result": "RECORDED - neither the waiting lines nor Show details mention 'display'; the search was pinned to 'fallout 4'"
+  },
+  "plugin_log": "no ERROR or traceback lines; two WARNING lines (strategy branch fence did not parse) on steps 2 and 3",
+  "verdict": "FAIL on step 2 (DRG named, nothing running: no Render Scale tip and 'No close match' still appears); PASS on step 3; step 4 recorded, no 'display'"
+}

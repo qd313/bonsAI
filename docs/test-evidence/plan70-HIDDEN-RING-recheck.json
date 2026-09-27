@@ -1,0 +1,28 @@
+{
+  "row": "plan70 flow L7, L7.2 the hidden ring over a running game (F2's row) plus the measurement",
+  "build_commit": "PC tip c1ca8b7d, includes 12ee3dfb; Deck dist/index.js sha256 942a432a28ab9f56... matches the PC",
+  "deck_time": "2026-09-26 22:02 to 22:08 EDT",
+  "screen": "external monitor. Quick Access page window 855x845 CSS with the game running (tab bar at y 104), 855x766 with nothing running (tab bar at y 64) - the panel sits 40 px lower over a game",
+  "setup": "Deep Rock Galactic: Survivor running for tries 1-3 and the answered-chat readings; AI characters off; Strategy mode; no plugin reload while the game ran (panel closed and reopened with the Quick Access chord instead)",
+  "route_note": "In a NEW empty chat there is no 'Save chat to Desktop' row at all (it appears only once a chat has an answer), so the runbook's new-chat tries can never land on it. I ran the three new-chat tries as written and also ran the same walk on the answered Dreadnought chat (made in L7.1), which is where the row exists.",
+  "new_chat_tries_with_game": [
+    {"try": 1, "pressed": "question box, Up, Up", "landings": ["chip 'Tip' (visible 100%)", "chat row [+]/Deep Rock Galactic: Survivor (visible 100%)"], "save_chat_row": "not present", "pane": "scrollTop 0, max 0", "result": "visible control"},
+    {"try": 2, "pressed": "panel closed and reopened; tab bar, Down x3 to the box, Up, Up", "landings": ["chip 'bonsai:vac-check' (visible)", "chat row (visible)"], "save_chat_row": "not present", "result": "visible control"},
+    {"try": 3, "pressed": "panel closed and reopened (ring came up on the box); Up, Up", "landings": ["chip 'What is Caveman reply style?' (visible)", "chat row (visible)"], "save_chat_row": "not present", "result": "visible control; saved as check plan70-HIDDEN-RING-recheck-game-newchat"}
+  ],
+  "answered_chat_readings_with_game": [
+    {"reading": "A", "pressed": "Ask button, Up (attach icon), Up (box), Up (chip), Up", "landed": "Save chat to Desktop", "save_row_box": "y 602.2 to 640.2", "dock_top": 639.6, "save_row_behind_dock_px": 0.6, "save_text_line": "not read this time", "pane": "_TabContentsScroll, scrollTop 153.1, max 154 (scrollHeight 831 - clientHeight 677) - already scrolled as far as it goes", "next_up": "Glyphid Dreadnought notes block (visible)"},
+    {"reading": "B", "pressed": "panel closed and reopened; box, Up (chip), Up", "landed": "Save chat to Desktop", "save_row_box": "y 602.2 to 640.2", "dock_top": 639.6, "save_text_line_box": "y 612.6 to 629.0 (10.6 px clear of the dock)", "pane": "scrollTop 153.1 of max 154", "next_up": "Retry same prompt at the top of the turn (visible, pane scrolled to 0)"},
+    {"reading": "C", "pressed": "panel closed and reopened; tab bar, Down x15 to the box, then Up, Up, Up (saved as check plan70-HIDDEN-RING-recheck-game-answered-chat)", "landings": ["chip 'Tip' visible 100%", "Save chat to Desktop visible 100%", "Glyphid Dreadnought notes block visible 100%"]}
+  ],
+  "no_game_reading": {"pressed": "after the game exited: box, Up (chip 'Any known issues running this on Deck?'), Up (Save chat), Up", "save_row_box": "y 562.2 to 600.2", "dock_top": 599.6, "save_text_line_box": "y 572.6 to 589.0", "pane": "scrollTop 153.1 of max 154, pane box y 88 to 765", "next_up": "Glyphid Dreadnought notes block (visible)", "saved_check": "plan70-HIDDEN-RING-recheck-nogame-answered-chat"},
+  "measurement_answer": "Over the game and without it the numbers are the same shape: the chat pane is 677 tall and runs under the dock (dock is 165 tall, its top 163 px above the pane's bottom). The pane was already at its furthest scroll (153.1 of 154) each time, and the Save chat row is the last thing in it, so its bottom sits exactly at the dock's top (0.6 px under). The only difference over a game is the whole panel is 40 px lower (Steam's top bar), which moves every box equally. At no reading tonight was the row hidden; earlier sightings of it being 33% visible were probably with the pane not scrolled to the end.",
+  "other_sighting": "While the Speed answer in L7.1 was on screen with Show details open, a screenshot shows 'Save chat to Desktop' partly under the chip row (ring elsewhere, pane not at the end) - plan70-R4-try3-drgs-speed-details.png.",
+  "possible_new_bug": {
+    "what_pressed": "with the game running: chat row, RB (switched from the empty new chat to the Dreadnought chat), then Down",
+    "what_happened": "the Dreadnought chat was drawn as history (no 'Was this helpful', no Save chat row, no chip); Down from the chat row reached the question row 'how do I beat the dreadnought boss' and then Down did nothing (5 presses in the walk, 1 more checked by hand). The ring stayed on the question row while the page's own focus had moved to 'Show reasoning'. Closing and reopening the panel cleared it and redrew the chat in full.",
+    "expected": "Down moves on to Show reasoning and the answer",
+    "screenshot": "plan70-HIDDEN-RING-recheck-stuck-question-row.png"
+  },
+  "verdict": "PASS - every landing after Up from the chip was a fully visible control (the chat row in a new chat; 'Save chat to Desktop' wholly above the dock in the answered chat, and Up moved on from it), with the game running and without"
+}

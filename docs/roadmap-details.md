@@ -168,6 +168,18 @@ the ring on "Save chat to Desktop" while it read 0% visible, fully covered by th
 nothing further — also cleared only by closing and reopening the panel. Evidence
 `docs/test-evidence/plan70-R-R3-try2.json` (+ two screenshots).
 
+**F2 looked at the code and found no clear cause (2026-09-26); the hidden "Save chat" shape was a
+separate fault, fixed in `12ee3dfb`.** F2 listed the Deck readings that would settle the chip route
+instead, and they were taken the same night.
+
+**The reading, 2026-09-26 (plan 70, flow L7): not reproduced, 0 of 6.** With nothing running, three
+chips that switch the Ask mode and three that do not, each pressed once with A: every time the ring
+stayed on the chip and the page's own focus agreed, no on-screen keyboard opened, and afterwards Down
+went to the question box and Right to the mode button. No press reached the box itself on A — Steam
+delivers every press as a button event, never as a key or direction event. So the chip route alone does
+not trap with nothing running. The same symptom did appear that night over Fallout 4 with no chip pressed
+at all (its own entry now). Evidence `docs/test-evidence/plan70-CHIP-TRAP-reading.json` (+ screenshots).
+
 ## Ordinary phrases attach game cards
 
   - **Implemented 2026-08-23:** `VECTOR_RECALL_FLOOR` raised `py_modules/backend/services/knowledge_base_service.py:148` from 0.50 to 0.515, against a fresh local repro (real `nomic-embed-text` via a local Ollama, real seed cards for the six phrases and the seven `V2-PARA-*` strategy rows in `kb_eval_v2.json` — script not committed). The two ranges overlap (noise up to 0.5308, a genuine paraphrase hit as low as 0.4302), so no single floor separates them cleanly; 0.515 was chosen to sit just above "one sentence"'s noise score (0.5034) and just below the lowest genuine score this change must not break (Mind Flayer / `V2-PARA-S04`, 0.5169).
@@ -805,8 +817,13 @@ Rock Galactic: Survivor running, ask "the text on screen looks blurry on my deck
 same question reworded in Speed — the Render Scale tip should appear first, with its source page, both
 times; with Fallout 4 running, ask about mods and launch options in Speed — the F4SE tip should appear;
 then, still on Deep Rock Galactic: Survivor, ask a real strategy question such as "how do I beat the
-dreadnought" — the Render Scale tip must NOT appear, and the boss note should. **This Deck re-check has
-not yet run — do not mark the tips as passed, or the library as published, until it has.**
+dreadnought" — the Render Scale tip must NOT appear, and the boss note should.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L7), closed:** every step of that re-check passed —
+Fallout 4 with the game named rather than running, since the question box was dead over the running
+game. The library itself is still not published (the maintainer runs the push). Full readings in
+[Flow L7 findings](#flow-l7-findings). Evidence `docs/test-evidence/plan70-R4-try3.json`,
+`plan70-R4-try4.json`, `plan70-R4-try6.json`.
 
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
@@ -2034,7 +2051,8 @@ on the still-published, older download.
 or "can't" so that a bare single letter ("s", "t") is left over and can match a card purely by
 coincidence. This runs for every keyword search — notes and the whole tip sheet — except inside the new
 per-game tip check, which E2 wrote to avoid it. Needs a measurement across the full question set before
-it is touched, since fixing it may move many scores at once, for better or worse. Being fixed (helper O).
+it is touched, since fixing it may move many scores at once, for better or worse. **Fixed the same night
+(helper O, `55719a6e`), measured first** — see [Flow L7 findings](#flow-l7-findings).
 
 ## The live thinking line shows the model's own rule checklist
 
@@ -2431,6 +2449,9 @@ asked in that chat. Same shape again, still not measured closely enough to fix. 
 **In Show details, the chip ladder only lets Up leave one chip at a time.** Sighted on the Deck
 2026-09-26 (plan 70, flow L3/2d). Not yet reproduced on purpose; worth checking against the chip-ladder
 bugs already on the roadmap (the ones about the chip row and its counter sitting above the visible area).
+**Sighting 2026-09-26 (plan 70, flow L7):** walking Down from an opened notes block, the ring stopped on
+this row of small labels and two more Down presses did nothing; closing and reopening the panel cleared
+it. Evidence `docs/test-evidence/plan70-R4-try4.json`.
 
 **Two confidently wrong answers, 2026-09-26.** Not yet reproduced on purpose. A Hades question answered
 about "heat management", a mechanic Hades does not have. Separately, asked in Hollow Knight which boss
@@ -2648,3 +2669,105 @@ and the runbook forbids setting one by hand — the one try got the plain "no ke
 report to read. Needs the maintainer's own key; on their own checklist. Evidence
 `docs/test-evidence/plan70-VAC-03-07.json`.
 
+## Flow L7 findings
+
+Long version of the fixes closed and the problems found in plan 70's last Deck block, flow L7
+(2026-09-26, 21:52 to 23:43), and the helpers' landings just before it. Moved here to keep the roadmap
+under its size limit.
+
+**A running game's own Deck tip now reaches the answer (helper E2, `e1bc0c16`) — passed on the Deck.**
+With Deep Rock Galactic: Survivor running, "the text on the screen looks blurry on my deck" in Strategy
+put the game's own Render Scale tip first, credited "steamcommunity.com", and the answer named Render
+Scale; the same question reworded in Speed attached that one tip only; the control question "how do I
+beat the dreadnought boss" attached the Dreadnought note and not the tip. Evidence
+`docs/test-evidence/plan70-R4-try3.json` (+ two screenshots). Over Fallout 4 the question could not be
+sent (the dead question box below), so it was asked with the game named and nothing running: in Speed
+and in Strategy the F4SE tip came first and the answer gave exactly that one launch option. Evidence
+`docs/test-evidence/plan70-R4-try4.json` (+ two screenshots). Deep Rock Galactic: Survivor named, nothing
+running, "text" wording: the Render Scale tip first again. Evidence `docs/test-evidence/plan70-R4-try6.json`.
+
+**One game's own tip no longer attaches to another game's question (helper P, `aeed48be`) — passed on
+the Deck.** The general tip searches now keep shared tips and only the resolved game's own. Measured on
+the PC over the 76 troubleshooting test questions: the right tip first 26 → 26, in the top three 35 → 36,
+questions with another game's tip in the running 5 → 0. On the Deck, "fallout 4 text looks blurry, and
+what launch options do i need" got the F4SE tip and a shared display tip, and Deep Rock Galactic:
+Survivor's Render Scale tip did not attach. Evidence `docs/test-evidence/plan70-R4-try5.json` (+ screenshot).
+
+**"No close match in my notes" no longer shows when the game's own tip answered (helper P, `fb805301`) —
+passed on the Deck.** Before the fix, the Strategy blurry-text answer ended with that line though the
+tip was used (`plan70-R4-try3.json`). After it, the same kind of answer ended without it and the plugin
+log showed no error. Evidence `docs/test-evidence/plan70-R4-try6.json` (+ screenshot).
+
+**A tip-answered question no longer sets what the chat is "about" (`9063bbfb`) — held on the Deck.** A
+Strategy turn rerouted to the tips used to store the tip's topic ("display") as the chat's follow-up
+subject, so the next bare follow-up searched for "display". The test was proven by breaking it. On the
+Deck, the bare follow-up "what about the second one" after the Fallout 4 turn showed "display" nowhere,
+and the answer asked which thing was meant. Evidence `docs/test-evidence/plan70-R4-try5.json`.
+
+**A tip with a source page shows it in its credit line — reworded, then passed.** The old check asked for
+a *shared* tip with a source page. It could never pass with this library: of 164 tips only 3 carry a
+source page, and all 3 belong to one game (Deep Rock Galactic: Survivor's Render Scale tip and two
+Ocarina of Time tips); the shared tips are the maintainer's own words and carry none. The credit line
+itself works: Deep Rock Galactic: Survivor's tip read "steamcommunity.com · bonsAI-maintainer". So the
+check now reads "a tip with a source page shows it in its credit line", and passes on that tip. Evidence
+`docs/test-evidence/plan70-R4-try3.json`.
+
+**Up from a chip no longer parks the ring on a hidden "Save chat to Desktop" (helper F2, `12ee3dfb`) —
+passed on the Deck.** Three tries over Deep Rock Galactic: Survivor on an answered chat and one with
+nothing running: each time Up from the chip landed on "Save chat to Desktop" with its words about 10 px
+clear of the dock, and Up again moved on. The measurement F2 asked for: the chat pane is 677 px tall and
+runs under the 165 px dock; it was already scrolled to its end every time (153.1 of 154), and "Save
+chat" is its last row, so the row's bottom sits at the dock's top edge. Over a game the whole panel sits
+40 px lower, every box together. A brand-new chat has no "Save chat" row, so Up lands on the chat row.
+Three walks saved (`checks/plan70-HIDDEN-RING-recheck-*`). Evidence
+`docs/test-evidence/plan70-HIDDEN-RING-recheck.json`.
+
+**Contractions no longer leave a stray letter in keyword search (helper O, `55719a6e`) — measured on the
+PC.** Only the ending after an apostrophe is dropped before splitting ("there's" becomes "there", "can't"
+becomes "can"), so no single-letter search word is left and nothing new becomes a search word. On the
+test questions against a clean library, keyword search alone: tuning questions unchanged (164 of 199
+found, 129 first); held-back questions found unchanged (194 of 236), first 143 → 144; wrong answers
+unchanged at 42. A first try that deleted every apostrophe was rejected: it turned "what's" into "whats"
+and lost one held-back question. No Deck row needed.
+
+**New, open: over Fallout 4 the question box goes dead with no chip pressed.** Every time the panel was
+opened over Fallout 4 (4 opens over about 5 minutes), the ring sat in the question box: Down (5 presses
+checked) and Right left it there while the page's own focus moved to the Ask or mode button; only Up
+worked. Closing and reopening the panel did not clear it while the game ran; with nothing running the
+same walk reached Ask at once, and over Deep Rock Galactic: Survivor it worked too. The same shape as the
+chip-then-Ask trap, without any chip. Evidence `docs/test-evidence/plan70-R4-try3.json`,
+`plan70-R4-try3-fo4-box-down-dead.png`.
+
+**New, open: a chat opened with RB while a game runs is drawn as history, and Down dies on its question
+line.** With Deep Rock Galactic: Survivor running, RB from an empty new chat to the answered Dreadnought
+chat drew it without its Helpful row, "Save chat" row or chip; Down reached the question line and then
+did nothing for six presses while the page's own focus moved to "Show reasoning". Closing and reopening
+the panel drew the chat in full and cleared it. Evidence `docs/test-evidence/plan70-HIDDEN-RING-recheck.json`,
+`plan70-HIDDEN-RING-recheck-stuck-question-row.png`.
+
+**New, open: a game's own tip is labelled "shared".** Show details credits Deep Rock Galactic: Survivor's
+Render Scale tip and Fallout 4's F4SE tip as "Shared troubleshooting — <topic>", and since `9063bbfb` the
+notes block over a game's own tip reads "From the shared Deck tips". Both should say it is that game's own
+tip. The label comes from one fixed wording applied to every tip where tips are turned into cards
+(`knowledge_base_cards.py`, `_compat_row_to_card`); fixing it means carrying the tip's game through several
+card builders, and tests pin the exact wording of the sources list. Evidence
+`docs/test-evidence/plan70-R4-try5.json`, `plan70-R4-try6.json`.
+
+**New, open: a game's own tip is found only by its own words.** "The words on screen look blurry" in Deep
+Rock Galactic: Survivor attached no tip — its keyword score was 2.0 against the 4.0 cut-off — while "the
+text ... looks blurry" scores 6.9 and finds it. A question that avoids the tip's own words misses it; a
+rescue by meaning search was measured and left for a later lane. Evidence `docs/test-evidence/plan70-R4-try5.json`.
+
+**New sightings, open:** after a bare follow-up the suggestion chip read "Enable local knowledge base for
+better game tips" though the knowledge base was on (once); the plugin log warned twice that a Strategy
+answer's follow-up choices were not understood, so no choice menu showed (both on troubleshooting turns).
+Evidence `docs/test-evidence/plan70-R4-try5.json`. And an answer that used the Render Scale tip said text
+blurs when Render Scale is "too high", then said to raise it — the tip says plainly to raise it; the small
+model garbled a clear tip (logged under "Deeper answer checks"). Evidence `docs/test-evidence/plan70-R4-try6.json`.
+
+**Not run, owed:** R.5, a fresh download of the library from the published sites plus the
+meaning-search model's offer. The library passes its release check and the Deck's copy matches the
+release build byte for byte, but Claude Code's permission check refused the push to the public sites,
+so it is not published. The maintainer runs
+`python scripts/publish_corpus.py --build-dir build/kb-release --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`;
+R.5 follows. No released plugin can download a library yet (0.4.9 and main have no knowledge base).

@@ -95,8 +95,10 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     await waitFor(() => {
       expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
     });
-    expect(hoisted.modal?.props.strOKButtonText).toBe("Download");
-    expect(hoisted.modal?.props.strCancelButtonText).toBe("Not now");
+    // The offer is the download notice (plan72-F-DL): Steam opens a ConfirmModal with the ring on
+    // OK, so OK is the choice that downloads nothing and Download is the middle button.
+    expect(hoisted.modal?.props.strOKButtonText).toBe("Not now");
+    expect(hoisted.modal?.props.strMiddleButtonText).toBe("Download");
   });
 
   it("does not ask when the model is already present", async () => {
@@ -137,10 +139,10 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     });
 
     await act(async () => {
-      (hoisted.modal!.props.onOK as () => void)();
+      (hoisted.modal!.props.onMiddleButton as () => void)();
     });
 
-    expect(pullCalls()).toHaveLength(1);
+    await waitFor(() => expect(pullCalls()).toHaveLength(1));
     expect(pullCalls()[0].args).toEqual([["nomic-embed-text"]]);
   });
 
@@ -179,12 +181,32 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     });
 
     await act(async () => {
+      (hoisted.modal!.props.onMiddleButton as () => void)();
+    });
+
+    // The pull's own catch handler is reused as-is; its button reverts to idle,
+    // which only happens on the failure path (the accepted path leaves it "Pulling…").
+    await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "pull_ollama_models")).toBe(true));
+    await screen.findByText("Pull nomic-embed-text · about 270 MB");
+  });
+
+  it("Not now, where the ring opens, downloads nothing", async () => {
+    renderNotInstalled(true);
+    await finishFreshInstall({
+      installed: true,
+      corpus_version: "2026.09.18",
+      embeddings_populated: true,
+      embed_model_available: false,
+    });
+    await waitFor(() => {
+      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+    });
+
+    await act(async () => {
       (hoisted.modal!.props.onOK as () => void)();
     });
 
-    // pullNomicEmbed's own catch handler is reused as-is; its button reverts to idle,
-    // which only happens on the failure path (the accepted path leaves it "Pulling…").
-    await screen.findByText("Pull nomic-embed-text · about 270 MB");
+    expect(pullCalls()).toHaveLength(0);
   });
 
   it("does not ask again after an Update, only after a fresh install", async () => {

@@ -583,25 +583,17 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     if (!ollamaLocalOnDeck) return;
     if (status.embeddings_populated !== true) return;
     if (status.embed_model_available !== false) return;
-    onBeforeDeckyModal();
-    const handle = showModal(
-      <ConfirmModal
-        strTitle={`Also download the meaning-search model (${MEANING_SEARCH_MODEL_NOTICE.size})?`}
-        strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-            Better note matching for your questions.
-          </div>
-        }
-        strOKButtonText="Download"
-        strCancelButtonText="Not now"
-        onOK={() => {
-          onCompleteDeckyModalClose(() => handle.Close());
-          pullNomicEmbed();
-        }}
-        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
-      />,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- pullNomicEmbed is a fresh
+    // The offer is the download notice itself (plan72-F-DL): the site, the size, the permission
+    // question while downloads are off, and the ring on "Not now" rather than on Download.
+    void confirmDownload([MEANING_SEARCH_MODEL_NOTICE], {
+      always: true,
+      title: `Also download the meaning-search model (${MEANING_SEARCH_MODEL_NOTICE.size})?`,
+      body: "Better note matching for your questions.",
+      actionLabel: "Download",
+    }).then((go) => {
+      if (go) startNomicPull();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- startNomicPull is a fresh
     // closure every render; including it would fire this effect on every render instead
     // of only when downloadBusy/status change, which is what actually decides the ask.
   }, [downloadBusy, status, ollamaLocalOnDeck, onBeforeDeckyModal, onCompleteDeckyModalClose]);

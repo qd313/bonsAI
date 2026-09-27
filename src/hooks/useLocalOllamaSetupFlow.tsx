@@ -32,7 +32,6 @@
  */
 import { useCallback, useEffect, type MutableRefObject, type RefObject } from "react";
 import { toaster } from "@decky/api";
-import { showModal, ConfirmModal } from "@decky/ui";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
 import { TIER1_ESSENTIALS_TAG, TIER2_MULTIMODAL_TAG } from "../data/deckEssentialsTags";
@@ -75,7 +74,7 @@ function localSetupDownloadNotices(profile: string): DownloadNotice[] {
 }
 
 /**
- * The three confirm dialogs, the Cancel RPC, the status-line wording, the setup poll, and the
+ * The three confirm dialogs (each is the download notice itself), the Cancel RPC, the status-line wording, the setup poll, and the
  * auto-test-after-done effect. Every hook below must keep its position — React matches hooks by
  * the order they run in.
  */
@@ -87,8 +86,6 @@ export function useLocalOllamaSetupFlow({
   setupAutoTestRanRef,
   lastCompletedSetupProfileRef,
   onApplyTier2MultimodalPolicy,
-  onBeforeDeckyModal,
-  onCompleteDeckyModalClose,
   onTestConnectionRef,
 }: {
   ollamaLocalOnDeck: boolean;
@@ -98,7 +95,9 @@ export function useLocalOllamaSetupFlow({
   setupAutoTestRanRef: MutableRefObject<boolean>;
   lastCompletedSetupProfileRef: MutableRefObject<string>;
   onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
+  /** No longer used here: the setup box is the download notice, which takes the shell's own box hooks. */
   onBeforeDeckyModal: () => void;
+  /** No longer used here, as above. */
   onCompleteDeckyModalClose: (close: () => void) => void;
   onTestConnectionRef: RefObject<(opts?: { quiet?: boolean }) => Promise<void>>;
 }) {
@@ -139,126 +138,117 @@ export function useLocalOllamaSetupFlow({
       const isTier2 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL;
       const isUpdateInstalled = profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
       const tier2LicenseNote = disclosureSummaryForSourceClass("open_weight");
-      onBeforeDeckyModal();
-      const handle = showModal(
-        <ConfirmModal
-          strTitle={
-            isTier1
-              ? "Install Tier 1 essentials?"
-              : isUpdateInstalled
-                ? "Update Ollama and models?"
-                : "Install Tier 2 one-model multimodal?"
+      const title = isTier1
+        ? "Install Tier 1 essentials?"
+        : isUpdateInstalled
+          ? "Update Ollama and models?"
+          : "Install Tier 2 one-model multimodal?";
+      const actionLabel = isTier1
+        ? "Install Tier 1 essentials"
+        : isUpdateInstalled
+          ? "Start update"
+          : "Install Tier 2 multimodal";
+      const body = (
+        <div
+          className="bonsai-prose"
+          style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}
+        >
+          {isTier1 ? (
+            <>
+              <div style={{ marginBottom: 8 }}>
+                Pulls <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span> — one FOSS model for
+                chat, screenshots, OCR, and Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
+              </div>
+              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+              <div style={{ marginTop: 8 }}>
+                Install uses the official script; if it fails in this environment, finish in Desktop Konsole and
+                retry here for pulls only.
+              </div>
+            </>
+          ) : isUpdateInstalled ? (
+            <>
+              <div style={{ marginBottom: 8 }}>
+                Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
+                newer weights are fetched when upstream changed.
+              </div>
+              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+              <div style={{ marginTop: 8 }}>
+                If nothing is installed yet, the update finishes after the binary refresh — use Tier 1 essentials or
+                Tier 2 multimodal to pull a model first.
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ marginBottom: 8 }}>
+                Pulls <span style={{ color: "#9ce7ff" }}>{TIER2_MULTIMODAL_TAG}</span> (falls back to gemma4:e2b if
+                needed). {LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB}
+              </div>
+              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
+                bonsAI will switch Model policy to <strong>Tier 2 (open-weight)</strong> so this model is eligible
+                for Ask. {tier2LicenseNote}
+              </div>
+              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+            </>
+          )}
+        </div>
+      );
+      const startSetup = () => {
+        void callDeckyWithTimeout<
+          [{ profile: string }],
+          {
+            accepted?: boolean;
+            reason?: string;
           }
-          strDescription={
-            <div
-              className="bonsai-prose"
-              style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}
-            >
-              {isTier1 ? (
-                <>
-                  <div style={{ marginBottom: 8 }}>
-                    Pulls <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span> — one FOSS model for
-                    chat, screenshots, OCR, and Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
-                  </div>
-                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-                  <div style={{ marginTop: 8 }}>
-                    Install uses the official script; if it fails in this environment, finish in Desktop Konsole and
-                    retry here for pulls only.
-                  </div>
-                </>
-              ) : isUpdateInstalled ? (
-                <>
-                  <div style={{ marginBottom: 8 }}>
-                    Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
-                    newer weights are fetched when upstream changed.
-                  </div>
-                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-                  <div style={{ marginTop: 8 }}>
-                    If nothing is installed yet, the update finishes after the binary refresh — use Tier 1 essentials or
-                    Tier 2 multimodal to pull a model first.
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div style={{ marginBottom: 8 }}>
-                    Pulls <span style={{ color: "#9ce7ff" }}>{TIER2_MULTIMODAL_TAG}</span> (falls back to gemma4:e2b if
-                    needed). {LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB}
-                  </div>
-                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                    bonsAI will switch Model policy to <strong>Tier 2 (open-weight)</strong> so this model is eligible
-                    for Ask. {tier2LicenseNote}
-                  </div>
-                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-                </>
-              )}
-            </div>
-          }
-          strOKButtonText={
-            isTier1
-              ? "Install Tier 1 essentials"
-              : isUpdateInstalled
-                ? "Start update"
-                : "Install Tier 2 multimodal"
-          }
-          onOK={() => {
-            setupAutoTestRanRef.current = false;
-            lastCompletedSetupProfileRef.current = profile;
-            onCompleteDeckyModalClose(() => handle.Close());
-            const startSetup = () => {
-              void callDeckyWithTimeout<
-                [{ profile: string }],
-                {
-                  accepted?: boolean;
-                  reason?: string;
-                }
-              >("start_local_ollama_setup", [{ profile }], 15000)
-                .then((out) => {
-                  if (!out?.accepted) {
-                    toaster.toast({
-                      title: "Setup not started",
-                      body: out?.reason ?? "Unknown error.",
-                      duration: 6000,
-                    });
-                    return;
-                  }
-                  toaster.toast({
-                    title: "Local Ollama setup started",
-                    body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
-                    duration: 6000,
-                  });
-                  void callDeckyWithTimeout<[], LocalOllamaSetupStatus>(
-                    "get_local_ollama_setup_status",
-                    [],
-                    DECKY_RPC_TIMEOUT_MS
-                  )
-                    .then(setLocalSetupStatus)
-                    .catch(() => {});
-                })
-                .catch((e: unknown) => {
-                  toaster.toast({
-                    title: "Setup RPC failed",
-                    body: formatDeckyRpcError(e),
-                    duration: 6000,
-                  });
-                });
-            };
-            void confirmDownload(localSetupDownloadNotices(profile)).then((go) => {
-              if (!go) return;
-              if (isTier2 && onApplyTier2MultimodalPolicy) {
-                void Promise.resolve(onApplyTier2MultimodalPolicy()).then(startSetup);
-              } else {
-                startSetup();
-              }
+        >("start_local_ollama_setup", [{ profile }], 15000)
+          .then((out) => {
+            if (!out?.accepted) {
+              toaster.toast({
+                title: "Setup not started",
+                body: out?.reason ?? "Unknown error.",
+                duration: 6000,
+              });
+              return;
+            }
+            toaster.toast({
+              title: "Local Ollama setup started",
+              body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
+              duration: 6000,
             });
-          }}
-          onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
-        />
+            void callDeckyWithTimeout<[], LocalOllamaSetupStatus>(
+              "get_local_ollama_setup_status",
+              [],
+              DECKY_RPC_TIMEOUT_MS
+            )
+              .then(setLocalSetupStatus)
+              .catch(() => {});
+          })
+          .catch((e: unknown) => {
+            toaster.toast({
+              title: "Setup RPC failed",
+              body: formatDeckyRpcError(e),
+              duration: 6000,
+            });
+          });
+      };
+      // This box is the download notice itself (plan72-F-DL): the sites and sizes, the permission
+      // question while downloads are off, and the ring on "Not now" -- never on "Start update".
+      void confirmDownload(localSetupDownloadNotices(profile), { always: true, title, body, actionLabel }).then(
+        (go) => {
+          if (!go) return;
+          setupAutoTestRanRef.current = false;
+          lastCompletedSetupProfileRef.current = profile;
+          if (isTier2 && onApplyTier2MultimodalPolicy) {
+            void Promise.resolve(onApplyTier2MultimodalPolicy()).then(startSetup);
+          } else {
+            startSetup();
+          }
+        }
       );
     },
-    [localSetupBusy, onApplyTier2MultimodalPolicy, onBeforeDeckyModal, onCompleteDeckyModalClose]
+    [localSetupBusy, onApplyTier2MultimodalPolicy]
   );
 
   useEffect(() => {

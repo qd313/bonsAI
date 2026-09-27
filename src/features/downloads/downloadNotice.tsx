@@ -21,6 +21,12 @@
  * Does not: enforce anything. The back end refuses every download while the permission is off
  * (capabilities.py, error "downloads_off"); this only asks first.
  *
+ * A button whose own confirm box used to open first (Install Ollama, Update AI & models, Tier 1,
+ * Tier 2, the meaning-search offer) passes `always`: the notice IS that box, shown every time with
+ * the button's own title, text and action label, so no box ever opens on a download choice. On
+ * the Deck (plan72-F-DL) "Update AI & models" opened its older box with the ring on "Start update"
+ * and no site or size.
+ *
  * Focus: the box is Decky's own ConfirmModal, the plugin's usual confirm-box look. Steam opens a
  * ConfirmModal with the ring on its OK button, so OK is the choice that does NOT download ("Not
  * now") and the download sits on the box's middle button. Decky always adds its own Cancel too;
@@ -31,10 +37,10 @@
  * therefore also patches the pending snapshot, and saves straight to the back end, so the download
  * that starts next is not refused by a back end that has not heard yet.
  */
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { ConfirmModal, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import type { BonsaiCapabilities } from "../../data/bonsaiSettingsSchema";
+import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
 
@@ -127,13 +133,38 @@ async function turnOnDownloads(b: PermissionBridge): Promise<void> {
   }
 }
 
+/** For a button whose own confirm box this notice replaces. */
+export type DownloadBoxOptions = {
+  /** Show every time, even when downloads are on and every site was seen. */
+  always?: boolean;
+  /** Title while downloads are on (while off, the box is always "Turn on internet downloads?"). */
+  title?: string;
+  /** The button's own explanation, shown under the site lines. */
+  body?: ReactNode;
+  /** The download choice's label while downloads are on (default "Download"). */
+  actionLabel?: string;
+};
+
+/** No plugin root mounted (a single screen under test): treated as on, and nothing to hook. */
+const NO_ROOT_BRIDGE: PermissionBridge = {
+  enabled: true,
+  kidsLockActive: false,
+  capabilities: { ...DEFAULT_CAPABILITIES, internet_downloads: true },
+  setCapabilities: () => {},
+  onBeforeDeckyModal: () => {},
+  onCompleteDeckyModalClose: (close) => close(),
+};
+
 /**
  * In: the site(s) a download is about to reach. Out: true when the download may start now.
- * Resolves at once (true) when downloads are on and every site's notice was already seen.
+ * Resolves at once (true) when downloads are on and every site's notice was already seen,
+ * unless `always` makes this box the button's own confirm.
  */
-export function confirmDownload(notices: DownloadNotice[]): Promise<boolean> {
-  const b = bridge;
-  if (!b) return Promise.resolve(true); // no plugin root (tests of a single screen): the back end still decides
+export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOptions = {}): Promise<boolean> {
+  // No plugin root (tests of a single screen): the back end still decides. A button's own box
+  // still shows, so it can never turn into a download with no question at all.
+  if (!bridge && !opts.always) return Promise.resolve(true);
+  const b = bridge ?? NO_ROOT_BRIDGE;
   if (b.kidsLockActive) {
     toaster.toast({
       title: "Downloads are off",
@@ -144,7 +175,7 @@ export function confirmDownload(notices: DownloadNotice[]): Promise<boolean> {
   }
   const sites = notices.map((n) => n.site);
   const seen = readSeenSites();
-  if (b.enabled && sites.every((s) => seen.has(s))) return Promise.resolve(true);
+  if (!opts.always && b.enabled && sites.every((s) => seen.has(s))) return Promise.resolve(true);
 
   const asking = !b.enabled;
   return new Promise<boolean>((resolve) => {
@@ -157,7 +188,7 @@ export function confirmDownload(notices: DownloadNotice[]): Promise<boolean> {
     b.onBeforeDeckyModal();
     const handle = showModal(
       <ConfirmModal
-        strTitle={asking ? "Turn on internet downloads?" : "Download from the internet?"}
+        strTitle={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
         strDescription={
           <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
             {notices.map((n) => (
@@ -165,15 +196,19 @@ export function confirmDownload(notices: DownloadNotice[]): Promise<boolean> {
                 {downloadNoticeLine(n)}
               </div>
             ))}
-            <div style={{ color: "#c5d4e3" }}>
-              {asking
-                ? "Internet downloads are off in Permissions. Turning them on lets bonsAI download when you press a download button; nothing downloads on its own. You can turn them off again there."
-                : "This shows once for each site. After that, the size shows on the button."}
-            </div>
+            {opts.body ? <div style={{ marginBottom: 8 }}>{opts.body}</div> : null}
+            {asking ? (
+              <div style={{ color: "#c5d4e3" }}>
+                Internet downloads are off in Permissions. Turning them on lets bonsAI download when you press a
+                download button; nothing downloads on its own. You can turn them off again there.
+              </div>
+            ) : opts.always ? null : (
+              <div style={{ color: "#c5d4e3" }}>This shows once for each site. After that, the size shows on the button.</div>
+            )}
           </div>
         }
         strOKButtonText="Not now"
-        strMiddleButtonText={asking ? "Turn on and download" : "Download"}
+        strMiddleButtonText={asking ? "Turn on and download" : (opts.actionLabel ?? "Download")}
         strCancelButtonText="Cancel"
         onOK={() => {
           b.onCompleteDeckyModalClose(() => handle.Close());

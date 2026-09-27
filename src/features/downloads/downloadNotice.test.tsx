@@ -158,3 +158,29 @@ describe("confirmDownload", () => {
     expect(hoisted.modal).not.toBeNull();
   });
 });
+
+describe("confirmDownload as a button's own box (always)", () => {
+  const opts = { always: true, title: "Update Ollama and models?", actionLabel: "Start update", body: "Re-runs the installer." };
+
+  it("shows every time even when on and seen, opening on the choice that does not download", async () => {
+    bridge(true);
+    window.localStorage.setItem(DOWNLOAD_SITES_SEEN_STORAGE_KEY, JSON.stringify(["https://ollama.com"]));
+    const answer = confirmDownload([OLLAMA], opts);
+    const p = hoisted.modal!.props;
+    expect(p.strTitle).toBe("Update Ollama and models?");
+    expect(p.strOKButtonText).toBe("Not now");
+    expect(p.strMiddleButtonText).toBe("Start update");
+    press("onOK");
+    await expect(answer).resolves.toBe(false);
+  });
+
+  it("while off it is the permission question, and yes turns downloads on", async () => {
+    const setCaps = bridge(false);
+    const answer = confirmDownload([OLLAMA], opts);
+    expect(hoisted.modal!.props.strTitle).toBe("Turn on internet downloads?");
+    expect(hoisted.modal!.props.strMiddleButtonText).toBe("Turn on and download");
+    press("onMiddleButton");
+    await expect(answer).resolves.toBe(true);
+    expect(setCaps).toHaveBeenCalled();
+  });
+});

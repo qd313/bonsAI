@@ -1,0 +1,16 @@
+{
+  "row": "L6.1 The notes block while arriving (Hollow Knight described boss, as flow L5.1)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 18:51-18:52 EDT",
+  "setup": "Nothing running. Main tab, Strategy mode, AI character switched OFF through Settings for these checks (was ON, Ali G heavy). Test chat 1 made tonight with [+] ('in hollow knight how do I defeat the floating wizard boss...'). Questions put in the box with deck_send_ask.py (VERIFIED every time), A on Ask.",
+  "pressed": "Asked 'in hollow knight how do I defeat the floating wizard boss at the very top of the soul sanctum'. The L5 watcher (scratch stream_watch_L5.py, names Soul Master, Soul Tyrant) read the panel every 250 ms: 184 reads over about 45 s.",
+  "seen": {
+    "answer_named_boss": "yes, inside the spoiler cover (saved chat turn text starts '```bonsai-spoiler\\nTo take down the Soul Master...'); on screen the cover read 'Spoiler — tap to show'",
+    "notes_block": "no notes block at any read (0 blocks, no header), although the saved turn lists an attached note named 'Soul Master'",
+    "name_on_screen": "never (0 reads showed 'Soul Master' or 'Soul Tyrant' anywhere: answer, notes header, menu, reasoning lines)",
+    "side_observation": "backticks and the text '-spoiler' showed for about 10 s (23-33 s) inside the model's live reasoning lines, where it quoted its own instructions ('Use `bonsai-spoiler for unavoidable spoilers'); not in the answer. Finished page: 0 backticks, 0 '-spoiler'."
+  },
+  "raw": "scratch L6-1-HK-A.jsonl",
+  "verdict": "PASS"
+}

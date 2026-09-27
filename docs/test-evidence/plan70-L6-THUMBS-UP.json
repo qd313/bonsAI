@@ -1,0 +1,36 @@
+{
+  "row": "L6.1 Thumbs up re-check (fix 34bd9315: pressing Helpful keeps the ring on the row, on the speaker)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 18:53-19:02 EDT",
+  "setup": "Nothing running. Main tab, Strategy mode, AI character switched OFF through Settings for these checks (was ON, Ali G heavy). Test chat 1 made tonight with [+] ('in hollow knight how do I defeat the floating wizard boss...'). Questions put in the box with deck_send_ask.py (VERIFIED every time), A on Ask.",
+  "pressed": "Walked to 'Mark reply helpful' on a fresh finished answer, A, read focus about 1 s later. Three answers. Then 'Mark reply not helpful' on a fourth answer, A, read, then Down, read.",
+  "seen": [
+    {
+      "try": 1,
+      "answer": "floating wizard boss question",
+      "after_A": "ring on 'Read aloud' (speaker) at x 289 y 487 30x32, inside the reply row, row text now 'Saved on this Deck | Show details'",
+      "visible": true,
+      "dock_top": 600
+    },
+    {
+      "try": 2,
+      "answer": "branch-pick follow-up 'I'm at: I need general advice...'",
+      "after_A": "ring on 'Read aloud' x 289 y 487 30x32",
+      "visible": true
+    },
+    {
+      "try": 3,
+      "answer": "'in hollow knight which charms should I equip before fighting soul master'",
+      "after_A": "ring on 'Read aloud' x 289 y 426 30x32",
+      "visible": true
+    },
+    {
+      "not_really": "'in hollow knight what is the best way to beat hornet in greenpath'",
+      "after_A": "ring stays on 'Not really' (x 149 y 426 104x32, class Disabled = greyed), the row now shows 'What went wrong?' chips",
+      "down": "ring on 'Bad information' y 489-521 (first 'What went wrong?' chip), above dock 600"
+    }
+  ],
+  "note": "No feedback chip was pressed. Not saved with deck_saveCheck: the press removes the thumbs, so the walk cannot be replayed.",
+  "verdict": "PASS"
+}

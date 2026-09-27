@@ -2,8 +2,8 @@
   "formatVersion": 2,
   "name": "plan68-SUMUP-04a",
   "tool": "deck_runSequence",
-  "savedAt": "2026-09-26T02:18:41.415Z",
-  "buildHash": "sha256:725106a167500912a837e0ef591c6b2a6c12791f4f8c272258a0a7893bcc637b",
+  "savedAt": "2026-09-26T23:40:14.140Z",
+  "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
@@ -164,11 +164,11 @@
     "visited": [
       "<DIV> \"Show details\"",
       "<DIV> \"Hide details\"",
-      "<DIV> \"This answerSession · 1\"",
+      "<DIV> \"This answerSession · 7\"",
       "<DIV> \"Sum up this chat\""
     ],
     "cycle": {
-      "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+      "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)",
       "seenAt": [
         0,
         1,
@@ -177,8 +177,8 @@
       "loop": [
         "<DIV> \"Show details\"",
         "<DIV> \"Hide details\"",
-        "<DIV> \"This answerSession · 1\"",
-        "<DIV> \"This answerSession · 1\"",
+        "<DIV> \"This answerSession · 7\"",
+        "<DIV> \"This answerSession · 7\"",
         "<DIV> \"Sum up this chat\"",
         "<DIV> \"Show details\""
       ],
@@ -202,7 +202,7 @@
         "matched": true,
         "from": "<DIV> \"Show details\"",
         "to": "<DIV> \"Hide details\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -222,8 +222,8 @@
         "moved": true,
         "matched": true,
         "from": "<DIV> \"Hide details\"",
-        "to": "<DIV> \"This answerSession · 1\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(6) > div.Panel.Focusable:nth-child(1)",
+        "to": "<DIV> \"This answerSession · 7\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -242,9 +242,9 @@
         "pass": true,
         "moved": false,
         "matched": true,
-        "from": "<DIV> \"This answerSession · 1\"",
-        "to": "<DIV> \"This answerSession · 1\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(6) > div.Panel.Focusable:nth-child(1)",
+        "from": "<DIV> \"This answerSession · 7\"",
+        "to": "<DIV> \"This answerSession · 7\"",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -263,9 +263,9 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<DIV> \"This answerSession · 1\"",
+        "from": "<DIV> \"This answerSession · 7\"",
         "to": "<DIV> \"Sum up this chat\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(7) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -286,7 +286,7 @@
         "matched": true,
         "from": "<DIV> \"Sum up this chat\"",
         "to": "<DIV> \"Show details\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2)",
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",

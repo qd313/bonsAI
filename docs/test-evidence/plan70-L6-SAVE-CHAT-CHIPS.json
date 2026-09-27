@@ -1,0 +1,20 @@
+{
+  "row": "L6.1 Save chat from the chips re-check (fix 74c28d5a)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 19:03-19:05 EDT",
+  "setup": "Nothing running. Main tab, Strategy mode, AI character switched OFF through Settings for these checks (was ON, Ali G heavy). Test chat 1 made tonight with [+] ('in hollow knight how do I defeat the floating wizard boss...'). Questions put in the box with deck_send_ask.py (VERIFIED every time), A on Ask. A fifth question asked first ('in hollow knight where can I find more mask shards early on') because the Save chat button only shows when this session has a last answer (after switching chats it was gone: 0 buttons).",
+  "pressed": "box -> Up -> Up -> Up -> Down -> Down; then Up, A, B",
+  "seen": [
+    "Up from box: chip 'When should I use Expert mode instead of Speed?' y 600-630",
+    "Up: 'Save chat to Desktop' y 562-600 (dock top 600), fully visible",
+    "Up: 'Show details' of the newest answer y 531 (the next row up)",
+    "Down: 'Save chat to Desktop' y 562",
+    "Down: back on the chip y 600",
+    "Up, A: dialog 'Save to Desktop note' opened, ring on its 'Note name (saved as name.md)' box",
+    "B: dialog closed, ring back on 'Save chat to Desktop' y 562-600",
+    "Nothing saved: ~/Desktop listing unchanged (newest entries 22:27 bonsAI_logs, 21:54, 12:46)"
+  ],
+  "saved_check": "checks/plan70-L6-SAVE-CHAT-FROM-CHIPS.json (5/5 steps, every stop visible)",
+  "verdict": "PASS"
+}

@@ -1,0 +1,44 @@
+{
+  "row": "PRESET-ONE-LINE-04 - decode half (frame rate while chips churn and scroll)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6...)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 (855x845 over the game); chip column 300 px wide (x 48 to 348)",
+  "deck_time": "2026-09-26 19:22-19:23 EDT",
+  "setup": "Half-Life 2 launched from Recent Games at 19:14 (launcher's second try; the first could not read an empty ring on Home). No plugin reload (tonight's rule). Quick Access opened on bonsAI: Context line 'Context: active game Half-Life 2' on the first read. Knowledge base on. Chip settings as the maintainer left them: one chip (preset_single_chip true), decode style (preset_chip_animation decode). AI character off. Nothing touched while watching. Watcher: scratch chip_watch_L6.py reading every chip once a second. Decode chips were already on (preset_chip_animation 'decode'), so no setting was changed.",
+  "pressed": "nothing; scratch fps8_L6.py counted requestAnimationFrame callbacks on the Quick Access page in four 8-second windows (first 0.3 s dropped).",
+  "seen": [
+    {
+      "window": 1,
+      "frames": 480,
+      "fps": 60.0,
+      "worst_gap_ms": 16.8,
+      "gaps_over_50ms": 0,
+      "chip": "When should I use Expert mode instead of Speed? (scrolling)"
+    },
+    {
+      "window": 2,
+      "frames": 478,
+      "fps": 59.8,
+      "worst_gap_ms": 50.0,
+      "gaps_over_50ms": 0,
+      "chip": "changed to 'What are the best settings for 60fps?' during the window (decode churn)"
+    },
+    {
+      "window": 3,
+      "frames": 478,
+      "fps": 59.8,
+      "worst_gap_ms": 50.0,
+      "gaps_over_50ms": 0,
+      "chip": "changed to 'How do I start a new named chat?' during the window (decode churn)"
+    },
+    {
+      "window": 4,
+      "frames": 480,
+      "fps": 60.0,
+      "worst_gap_ms": 16.8,
+      "gaps_over_50ms": 0,
+      "chip": "How do I start a new named chat? (scrolling)"
+    }
+  ],
+  "raw": "scratch L6-2-HL2-fps8.jsonl",
+  "verdict": "PASS - about 60 fps in all four windows; the worst gap was 50 ms (two windows, each containing a chip change), none over 50 ms."
+}

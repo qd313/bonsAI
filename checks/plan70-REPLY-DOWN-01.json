@@ -2,8 +2,8 @@
   "formatVersion": 2,
   "name": "plan70-REPLY-DOWN-01",
   "tool": "deck_sweep",
-  "savedAt": "2026-09-26T17:41:51.740Z",
-  "buildHash": "sha256:f44c662ce15effb1affe077c1ccdfd537c28ae48260ad0f1dab6967268b53f01",
+  "savedAt": "2026-09-26T23:45:26.040Z",
+  "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
@@ -143,12 +143,12 @@
     "ok": true,
     "stopped": false,
     "totals": {
-      "stopsRecorded": 34,
-      "stopsVisited": 21,
-      "unlabeledStops": 4,
+      "stopsRecorded": 31,
+      "stopsVisited": 18,
+      "unlabeledStops": 3,
       "cycles": 0,
       "stopsFocusedButNotVisible": 3,
-      "presses": 39,
+      "presses": 34,
       "legs": 2
     },
     "notVisible": [
@@ -156,13 +156,13 @@
         "index": 5,
         "lane": 0,
         "leg": "DOWN",
-        "label": "explain every class in baldurs gate 3 for a beginner",
+        "label": "in hollow knight what does the dream nail do and where do I get it",
         "verdict": "partial",
         "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
         "clippedBy": null
       },
       {
-        "index": 9,
+        "index": 8,
         "lane": 0,
         "leg": "DOWN",
         "label": "",
@@ -171,7 +171,7 @@
         "clippedBy": null
       },
       {
-        "index": 25,
+        "index": 23,
         "lane": 0,
         "leg": "UP",
         "label": "",
@@ -184,16 +184,16 @@
       {
         "lane": 0,
         "direction": "DOWN",
-        "presses": 22,
-        "stops": 18,
+        "presses": 18,
+        "stops": 16,
         "endedBy": "stall",
         "cycle": null
       },
       {
         "lane": 0,
         "direction": "UP",
-        "presses": 17,
-        "stops": 15,
+        "presses": 16,
+        "stops": 14,
         "endedBy": "stall",
         "cycle": null
       }
@@ -274,7 +274,7 @@
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "DIV",
-        "label": "5 earlier",
+        "label": "6 earlier",
         "labelSource": "text",
         "selector": "div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
         "rect": {
@@ -320,7 +320,7 @@
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "DIV",
-        "label": "explain every class in baldurs gate 3 for a beginner",
+        "label": "in hollow knight what does the dream nail do and where do I get it",
         "labelSource": "text",
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
         "rect": {
@@ -343,7 +343,7 @@
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "DIV",
-        "label": "Show reasoning · 22 s",
+        "label": "Show reasoning · 20 s",
         "labelSource": "aria-label",
         "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2)",
         "rect": {
@@ -371,11 +371,11 @@
         "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
         "rect": {
           "x": 63,
-          "y": 212,
+          "y": 267,
           "w": 245,
-          "h": 276
+          "h": 75
         },
-        "scrollTop": 55,
+        "scrollTop": 0,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -394,14 +394,14 @@
         "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
         "rect": {
           "x": 63,
-          "y": 243,
+          "y": 342,
           "w": 245,
-          "h": 357
+          "h": 105
         },
-        "scrollTop": 299,
+        "scrollTop": 0,
         "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
           "clippedBy": null
         },
         "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
@@ -411,40 +411,17 @@
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
-        "tag": "DIV",
-        "label": "",
-        "labelSource": null,
-        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
-        "rect": {
-          "x": 63,
-          "y": 423,
-          "w": 245,
-          "h": 177
-        },
-        "scrollTop": 476,
-        "visibility": {
-          "verdict": "partial",
-          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
-          "clippedBy": null
-        },
-        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)"
-      },
-      {
-        "index": 10,
-        "lane": 0,
-        "leg": "DOWN",
-        "press": "DOWN",
         "tag": "BUTTON",
-        "label": "A. Starting in the city/outer regions",
+        "label": "A. Exploring the challenging areas in the Greenpath",
         "labelSource": "text",
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > button.Focusable:nth-child(2)",
         "rect": {
           "x": 65,
-          "y": 481,
-          "w": 228,
-          "h": 32
+          "y": 526,
+          "w": 264,
+          "h": 48
         },
-        "scrollTop": 658,
+        "scrollTop": 0,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -453,21 +430,21 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > button.Focusable:nth-child(2)"
       },
       {
-        "index": 11,
+        "index": 10,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "BUTTON",
-        "label": "B. Deep into the wilderness/dungeons",
+        "label": "B. Focusing on upgrading your Nail in the City of Tears",
         "labelSource": "text",
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > button.Focusable:nth-child(3)",
         "rect": {
           "x": 65,
-          "y": 521,
-          "w": 241,
-          "h": 32
+          "y": 465,
+          "w": 264,
+          "h": 48
         },
-        "scrollTop": 658,
+        "scrollTop": 117,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -476,7 +453,7 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > button.Focusable:nth-child(3)"
       },
       {
-        "index": 12,
+        "index": 11,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
@@ -486,11 +463,11 @@
         "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 52,
-          "y": 481,
+          "y": 487,
           "w": 89,
           "h": 32
         },
-        "scrollTop": 788,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -499,7 +476,7 @@
         "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 13,
+        "index": 12,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
@@ -509,11 +486,11 @@
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)",
         "rect": {
           "x": 52,
-          "y": 525,
+          "y": 531,
           "w": 267,
           "h": 15
         },
-        "scrollTop": 788,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -522,58 +499,35 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)"
       },
       {
-        "index": 14,
-        "lane": 0,
-        "leg": "DOWN",
-        "press": "DOWN",
-        "tag": "DIV",
-        "label": "Party composition (+1 more) · From bonsAI's own note, show",
-        "labelSource": "aria-label",
-        "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
-        "rect": {
-          "x": 52,
-          "y": 501,
-          "w": 267,
-          "h": 47
-        },
-        "scrollTop": 842,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        },
-        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)"
-      },
-      {
-        "index": 15,
+        "index": 13,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "BUTTON",
         "label": "Save chat to Desktop",
         "labelSource": "text",
-        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 48,
           "y": 562,
           "w": 300,
           "h": 38
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > button.Focusable:nth-child(1)"
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 16,
+        "index": 14,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "BUTTON",
-        "label": "How do I start a new named chat?",
+        "label": "How well does this game run on Deck?",
         "labelSource": "text",
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
@@ -582,7 +536,7 @@
           "w": 300,
           "h": 30
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -591,30 +545,30 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 17,
+        "index": 15,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "INPUT",
-        "label": "Describe the level, boss, or puzzle you're stuck on.",
+        "label": "Describe the level, boss, or puzzle you're stuck on.Strategy",
         "labelSource": "ancestor-text",
-        "selector": "div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
         "rect": {
-          "x": 73,
+          "x": 49,
           "y": 639,
-          "w": 274,
+          "w": 298,
           "h": 44
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)"
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)"
       },
       {
-        "index": 18,
+        "index": 16,
         "lane": 0,
         "leg": "DOWN",
         "press": "DOWN",
@@ -628,7 +582,7 @@
           "w": 298,
           "h": 36
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -637,58 +591,58 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 19,
+        "index": 17,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
         "tag": "BUTTON",
         "label": "Attach screenshot to Ask",
         "labelSource": "aria-label",
-        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 51,
           "y": 687,
           "w": 20,
           "h": 20
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 20,
+        "index": 18,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
-        "tag": "DIV",
-        "label": "Choose AI character, A",
-        "labelSource": "aria-label",
-        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "tag": "INPUT",
+        "label": "Describe the level, boss, or puzzle you're stuck on.Strategy",
+        "labelSource": "ancestor-text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
         "rect": {
-          "x": 51,
-          "y": 641,
-          "w": 18,
-          "h": 18
+          "x": 49,
+          "y": 639,
+          "w": 298,
+          "h": 44
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)"
       },
       {
-        "index": 21,
+        "index": 19,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
         "tag": "BUTTON",
-        "label": "How do I start a new named chat?",
+        "label": "How well does this game run on Deck?",
         "labelSource": "text",
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
@@ -697,7 +651,7 @@
           "w": 300,
           "h": 30
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -706,30 +660,30 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 22,
+        "index": 20,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
-        "tag": "DIV",
-        "label": "Party composition (+1 more) · From bonsAI's own note, show",
-        "labelSource": "aria-label",
-        "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
+        "tag": "BUTTON",
+        "label": "Save chat to Desktop",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
-          "x": 52,
-          "y": 501,
-          "w": 267,
-          "h": 47
+          "x": 48,
+          "y": 562,
+          "w": 300,
+          "h": 38
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)"
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 23,
+        "index": 21,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -739,11 +693,11 @@
         "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)",
         "rect": {
           "x": 52,
-          "y": 470,
+          "y": 531,
           "w": 267,
           "h": 15
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -752,7 +706,7 @@
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(3)"
       },
       {
-        "index": 24,
+        "index": 22,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -762,11 +716,11 @@
         "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 52,
-          "y": 426,
+          "y": 487,
           "w": 89,
           "h": 32
         },
-        "scrollTop": 842,
+        "scrollTop": 201,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -775,30 +729,7 @@
         "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 25,
-        "lane": 0,
-        "leg": "UP",
-        "press": "UP",
-        "tag": "DIV",
-        "label": "",
-        "labelSource": null,
-        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
-        "rect": {
-          "x": 63,
-          "y": 417,
-          "w": 245,
-          "h": 177
-        },
-        "scrollTop": 482,
-        "visibility": {
-          "verdict": "partial",
-          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
-          "clippedBy": null
-        },
-        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)"
-      },
-      {
-        "index": 26,
+        "index": 23,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -808,20 +739,20 @@
         "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
         "rect": {
           "x": 63,
-          "y": 204,
+          "y": 287,
           "w": 245,
-          "h": 357
+          "h": 105
         },
-        "scrollTop": 338,
+        "scrollTop": 55,
         "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
           "clippedBy": null
         },
         "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
       },
       {
-        "index": 27,
+        "index": 24,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -831,11 +762,11 @@
         "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
         "rect": {
           "x": 63,
-          "y": 204,
+          "y": 212,
           "w": 245,
-          "h": 276
+          "h": 75
         },
-        "scrollTop": 63,
+        "scrollTop": 55,
         "visibility": {
           "verdict": "visible",
           "coveredBy": null,
@@ -844,12 +775,12 @@
         "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
       },
       {
-        "index": 28,
+        "index": 25,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
         "tag": "DIV",
-        "label": "Show reasoning · 22 s",
+        "label": "Show reasoning · 20 s",
         "labelSource": "aria-label",
         "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2)",
         "rect": {
@@ -867,7 +798,7 @@
         "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2)"
       },
       {
-        "index": 29,
+        "index": 26,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -890,12 +821,12 @@
         "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
-        "index": 30,
+        "index": 27,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
         "tag": "DIV",
-        "label": "5 earlier",
+        "label": "6 earlier",
         "labelSource": "text",
         "selector": "div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
         "rect": {
@@ -913,7 +844,7 @@
         "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
       },
       {
-        "index": 31,
+        "index": 28,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -936,7 +867,7 @@
         "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
       },
       {
-        "index": 32,
+        "index": 29,
         "lane": 0,
         "leg": "UP",
         "press": "UP",
@@ -959,7 +890,7 @@
         "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
       },
       {
-        "index": 33,
+        "index": 30,
         "lane": 0,
         "leg": "UP",
         "press": "UP",

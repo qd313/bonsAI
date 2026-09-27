@@ -1,0 +1,16 @@
+{
+  "row": "L6.1 Branch pick waiting line re-check (fix 2e13421d)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 18:54-18:58 EDT",
+  "setup": "Nothing running. Main tab, Strategy mode, AI character switched OFF through Settings for these checks (was ON, Ali G heavy). Test chat 1 made tonight with [+] ('in hollow knight how do I defeat the floating wizard boss...'). Questions put in the box with deck_send_ask.py (VERIFIED every time), A on Ask. Answer to the floating wizard question ended with a branch menu: A. 'I need help with a specific combat move or pattern.' / B. 'I need general advice on how to progress through the Soul Sanctum.'",
+  "pressed": "Walked Down to branch B (the buttons are only reachable walking Down, as noted on 2026-09-26), A. A watcher read the whole panel every 250 ms (238 reads) while it waited and answered.",
+  "seen": {
+    "waiting_line": "Waking the model up for \"I'm at: I need general advice on how to progress throug…\"… (screenshot plan70-L6-BRANCH-WAIT-waiting-line.png)",
+    "turn_header": "I'm at: I need general advice on how to progress through the Soul Sanctum.",
+    "strategy_follow_up_on_screen": "appeared at 14.5-19.5 s only inside the model's live reasoning lines (the model quoting its instructions: 'Must *not* repeat the branch fence if the user starts with `[Strategy follow-up]`'); never in the waiting line or turn header; 0 times in the finished page",
+    "show_details_this_answer_tab": "no '[Strategy follow-up]' (0 counts); the question shows as 'I'm at: ...'",
+    "show_details_session_tab": "lists three lines: 'in hollow knight how do I defeat the floating wi', '[Strategy follow-up] I'm at: I need general advi', 'I'm at: I need general advice on how to progress' (screenshot plan70-L6-BRANCH-WAIT-session-tab.png)"
+  },
+  "verdict": "UNCLEAR - the waiting line and the turn header pass; Show details' 'This answer' tab passes; but the 'Session' tab of Show details lists the raw '[Strategy follow-up] I'm at: ...' line (and a second, clean copy of the same turn). The owner decides whether the Session list counts as 'Show details on that turn'."
+}

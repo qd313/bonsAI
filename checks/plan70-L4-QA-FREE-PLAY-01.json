@@ -2,8 +2,8 @@
   "formatVersion": 2,
   "name": "plan70-L4-QA-FREE-PLAY-01",
   "tool": "deck_runSequence",
-  "savedAt": "2026-09-26T19:39:08.847Z",
-  "buildHash": "sha256:38ff9ca4679fead89866f1849d18e2a754b9a528869214c3bdff29d8d3f78301",
+  "savedAt": "2026-09-26T23:41:17.243Z",
+  "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
@@ -147,7 +147,7 @@
     "passed": 2,
     "failed": 0,
     "visited": [
-      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> \"in hollow knight what does the dream nail do and where do I get it\"",
       "<BUTTON> \"Retry same prompt\""
     ],
     "cycle": {
@@ -157,9 +157,9 @@
         2
       ],
       "loop": [
-        "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "<DIV> \"in hollow knight what does the dream nail do and where do I get it\"",
         "<BUTTON> \"Retry same prompt\"",
-        "<DIV> (unnamed - the only text around it is a container's, not a label)"
+        "<DIV> \"in hollow knight what does the dream nail do and where do I get it\""
       ],
       "escaped": false,
       "stepsAfterLoop": 0
@@ -167,8 +167,8 @@
     "neverReached": [],
     "stopsFocusedButNotVisible": 2,
     "notVisibleStops": [
-      "step 0: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
-      "step 2: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable"
+      "step 0: <DIV> \"in hollow knight what does the dream nail do and where do I get it\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+      "step 2: <DIV> \"in hollow knight what does the dream nail do and where do I get it\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable"
     ],
     "steps": [
       {
@@ -182,7 +182,7 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "from": "<DIV> \"in hollow knight what does the dream nail do and where do I get it\"",
         "to": "<BUTTON> \"Retry same prompt\"",
         "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
@@ -204,7 +204,7 @@
         "moved": true,
         "matched": true,
         "from": "<BUTTON> \"Retry same prompt\"",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+        "to": "<DIV> \"in hollow knight what does the dream nail do and where do I get it\"",
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
         "visible": false,
         "visibility": {

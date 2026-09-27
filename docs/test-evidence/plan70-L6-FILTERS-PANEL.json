@@ -1,0 +1,18 @@
+{
+  "row": "L6.1 The Filters panel re-check (fix 2b482be0)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 19:10-19:13 EDT",
+  "setup": "Ollama tab -> 'Browse models…' -> AI models screen (dialog on the Big Picture page, 1500x844). Filters at start: 'Filters, 2 on: Also try open-weight models, Essentials only'. Never changed a filter.",
+  "pressed": "Filters: A then read, Up or B then read, six times (Up closes x3, B closes x3). 'Type a model name by hand': A then read, B then read, five times. Left with Cancel.",
+  "seen": {
+    "filters": "6/6: A put the ring at once on the panel's first row 'Open source only (recommended)' (x 464 y 280, visible); 6/6 closes returned it to the Filters button (aria-expanded false), visible. runs/plan70-L6-FILTERS-PANEL-open-close.json",
+    "type_a_name": "5/5: A put the ring on 'Close typing a model name by hand' (x 1010 y 312 23x24, visible); B returned it to 'Type a model name by hand'. runs/plan70-L6-TYPE-A-NAME-open-close.json",
+    "filters_after": "still '2 on: Also try open-weight models, Essentials only'; settings model_policy_tier open_weight, non_foss_unlocked false (same as before)"
+  },
+  "saved_checks": [
+    "checks/plan70-L6-FILTERS-PANEL.json",
+    "checks/plan70-L6-TYPE-A-NAME.json"
+  ],
+  "verdict": "PASS"
+}

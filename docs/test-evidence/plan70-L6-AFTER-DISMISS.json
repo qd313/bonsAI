@@ -1,0 +1,13 @@
+{
+  "row": "L6.1 After Dismiss re-check (fix 6116f33c; PERMS-CLEAN-06 setup)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6..., installed copies match)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 CSS px; dock top y 600 (585 once the ban-lookup/hint rows show)",
+  "deck_time": "2026-09-26 19:05-19:10 EDT",
+  "setup": "Permissions through the screen: 'Read game & screenshot context' on -> off (media_library_access and steam_logs_read false), 'Steam ban lookup' on -> off (steam_web_api false). Part 1: new test chat 2 ('bonsai:vac-check' sent; reply 'Steam Web API is off for bonsAI.' plus the ban-lookup row), crash question 'my game keeps crashing right after launch with a proton error' put in the box, not sent. Part 2: test chat 1; the dismissed hint stays hidden until the panel is redrawn, so Quick Access was closed and reopened (no plugin reload); the ban-lookup row came back in chat 1 after the reopen, so one ordinary question was asked there ('in hollow knight how do I get the mothwing cloak quickly'), then the crash question put in the box.",
+  "pressed_part1": "box -> Up (chip y 585) -> Up (Save chat y 547-585) -> Up (ban-lookup 'Open Permissions' y 499-533) -> Up (hint 'Open Permissions' y 428) -> Right ('Dismiss' x 171 y 428) -> A",
+  "seen_part1": "about 1 s after A: hint gone; ring on the ban-lookup row's 'Open Permissions' y 499-533, dock top 585, visible",
+  "pressed_part2": "box -> Up (chip) -> Up (Save chat) -> Up (hint 'Open Permissions') -> Right ('Dismiss') -> A (runs/plan70-L6-AFTER-DISMISS-hint-only-walk.json, all stops visible)",
+  "seen_part2": "about 1 s after A: hint gone; ring on 'Save chat to Desktop' y 547-585, dock top 585, visible",
+  "cleanup": "box emptied with deck_send_ask.py --clear; both switches turned back on through the screen; settings read back: all five capabilities true",
+  "verdict": "PASS"
+}

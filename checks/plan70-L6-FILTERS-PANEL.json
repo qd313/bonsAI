@@ -1,8 +1,8 @@
 {
   "formatVersion": 2,
-  "name": "plan70-KB-FOCUS-01-v2",
+  "name": "plan70-L6-FILTERS-PANEL",
   "tool": "deck_runSequence",
-  "savedAt": "2026-09-26T23:47:30.938Z",
+  "savedAt": "2026-09-26T23:10:59.432Z",
   "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
@@ -125,28 +125,28 @@
   "runOptions": {
     "steps": [
       {
-        "press": "RIGHT",
-        "label": "Update -> Remove"
-      },
-      {
-        "press": "LEFT",
-        "label": "Remove -> Update"
+        "press": "A",
+        "label": "open Filters",
+        "expect": ".bonsai-pullmodels-filterpanel-row"
       },
       {
         "press": "UP",
-        "label": "Update -> KB switch"
+        "label": "Up closes",
+        "expect": ".bonsai-pullmodels-filters-button"
       },
       {
-        "press": "DOWN",
-        "label": "KB switch -> Update"
+        "press": "A",
+        "label": "open Filters",
+        "expect": ".bonsai-pullmodels-filterpanel-row"
+      },
+      {
+        "press": "B",
+        "label": "B closes",
+        "expect": ".bonsai-pullmodels-filters-button"
       }
     ],
     "stopOnFailure": true,
-    "mustReachText": [
-      "Update knowledge base",
-      "Remove",
-      "Use local knowledge base"
-    ],
+    "mustReachText": [],
     "requireVisible": true,
     "acquireFocus": false
   },
@@ -157,23 +157,22 @@
     "passed": 4,
     "failed": 0,
     "visited": [
-      "<DIV> \"Update knowledge base\"",
-      "<DIV> \"Remove\"",
-      "<DIV> \"Use local knowledge base\""
+      "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+      "<BUTTON> \"Open source only (recommended)\""
     ],
     "cycle": {
-      "key": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "key": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
       "seenAt": [
         0,
         2,
         4
       ],
       "loop": [
-        "<DIV> \"Update knowledge base\"",
-        "<DIV> \"Remove\"",
-        "<DIV> \"Update knowledge base\"",
-        "<DIV> \"Use local knowledge base\"",
-        "<DIV> \"Update knowledge base\""
+        "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "<BUTTON> \"Open source only (recommended)\"",
+        "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "<BUTTON> \"Open source only (recommended)\"",
+        "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\""
       ],
       "escaped": false,
       "stepsAfterLoop": 0
@@ -184,18 +183,18 @@
     "steps": [
       {
         "index": 1,
-        "label": "Update -> Remove",
+        "label": "open Filters",
         "press": [
-          "RIGHT"
+          "A"
         ],
-        "expect": null,
+        "expect": ".bonsai-pullmodels-filterpanel-row",
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": null,
-        "from": "<DIV> \"Update knowledge base\"",
-        "to": "<DIV> \"Remove\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "matched": true,
+        "from": "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "to": "<BUTTON> \"Open source only (recommended)\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -205,18 +204,18 @@
       },
       {
         "index": 2,
-        "label": "Remove -> Update",
+        "label": "Up closes",
         "press": [
-          "LEFT"
+          "UP"
         ],
-        "expect": null,
+        "expect": ".bonsai-pullmodels-filters-button",
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": null,
-        "from": "<DIV> \"Remove\"",
-        "to": "<DIV> \"Update knowledge base\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "matched": true,
+        "from": "<BUTTON> \"Open source only (recommended)\"",
+        "to": "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -226,18 +225,18 @@
       },
       {
         "index": 3,
-        "label": "Update -> KB switch",
+        "label": "open Filters",
         "press": [
-          "UP"
+          "A"
         ],
-        "expect": null,
+        "expect": ".bonsai-pullmodels-filterpanel-row",
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": null,
-        "from": "<DIV> \"Update knowledge base\"",
-        "to": "<DIV> \"Use local knowledge base\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+        "matched": true,
+        "from": "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "to": "<BUTTON> \"Open source only (recommended)\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -247,18 +246,18 @@
       },
       {
         "index": 4,
-        "label": "KB switch -> Update",
+        "label": "B closes",
         "press": [
-          "DOWN"
+          "B"
         ],
-        "expect": null,
+        "expect": ".bonsai-pullmodels-filters-button",
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": null,
-        "from": "<DIV> \"Use local knowledge base\"",
-        "to": "<DIV> \"Update knowledge base\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "matched": true,
+        "from": "<BUTTON> \"Open source only (recommended)\"",
+        "to": "<BUTTON> \"Filters, 2 on: Also try open-weight models, Essentials only\"",
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",

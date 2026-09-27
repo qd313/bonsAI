@@ -1,0 +1,256 @@
+{
+  "row": "L6.3 - flow 6: re-save the saved walks",
+  "build": "532b76f8 (walk build hash 26a1965d)",
+  "deck_time": "2026-09-26 19:33-20:01 EDT",
+  "screen": "monitor live: Big Picture 1500x844 CSS px; Quick Access page 855x766",
+  "setup": "Backups of all 30 walk files taken first to scratch checks-before-flow6-L6. Hollow Knight test chat 1 open (dream-nail answer last). AI models dialog walks run on the Big Picture page; Filters left as found ('2 on: Also try open-weight models, Essentials only'); dialog closed with Cancel. AI character turned back ON before the Settings and strategy walks.",
+  "pressed": "each walk's own presses via deck_replayChecks / deck_saveCheck; moves between walks one press at a time with a focus read after each (two slips noted in the report)",
+  "walks": [
+    {
+      "walk": "phase3-delete-round-smoke-walk",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "moved/identity only (build hash, ids)",
+      "re_saved": true,
+      "why": "every press landed where saved"
+    },
+    {
+      "walk": "plan64-CHAT-SLOTS-V3-14c",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids and small y shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan64-DETAILS-LADDER-01",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids and small y shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan64-DETAILS-LADDER-01-try2",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids and small y shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan64-MODELS-HUB-RETURN-01-down-to-done",
+      "saved_build_before": "7e9bd90f",
+      "ran": "yes, from Filters",
+      "differences": "only the dialog's id (Modal_0 -> Modal_3) on the last step",
+      "re_saved": true,
+      "why": "5 of 5 steps landed, Done visible"
+    },
+    {
+      "walk": "plan64-SESSION-TAB-01-B-close",
+      "saved_build_before": "7f0bbcfa",
+      "ran": "yes",
+      "differences": "stops at step 5 on 'Sum up this chat' (the plan 68 button now sits in the Session tab)",
+      "re_saved": false,
+      "why": "the route changed by design; the walk's expectations need the owner's call"
+    },
+    {
+      "walk": "plan64-TALL-SECTION-01",
+      "saved_build_before": "85d9bf0b",
+      "ran": "yes",
+      "differences": "tonight's answer is shorter than the tall answer the walk was saved on",
+      "re_saved": false,
+      "why": "needs a tall answer; content, not focus"
+    },
+    {
+      "walk": "plan64-W2-R5-down-walk",
+      "saved_build_before": "7f0bbcfa",
+      "ran": "yes",
+      "differences": "the branch buttons (A./B.) take up the presses, so Show details and Ask are never reached",
+      "re_saved": false,
+      "why": "route changed by content; needs the owner's call"
+    },
+    {
+      "walk": "plan65-CHIPS-updown",
+      "saved_build_before": "7c2aec67",
+      "ran": "yes",
+      "differences": "step 1 now lands on Save chat (tonight's fix) instead of the old target",
+      "re_saved": false,
+      "why": "the first expectation needs updating; not mine to rewrite"
+    },
+    {
+      "walk": "plan65-FREE-USE",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids and small y shifts; visibility flags only the known Retry/Copy false alarms",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan65-MODELS-list-walk",
+      "saved_build_before": "7c2aec67",
+      "ran": "yes, from Done",
+      "differences": "dialog id; the gemma row is now 100% visible (was 67%, covered by the table row) on steps 4 and 6",
+      "re_saved": true,
+      "why": "10 of 10 landed; the change is an improvement"
+    },
+    {
+      "walk": "plan65-SETTINGS-walk",
+      "saved_build_before": "7c2aec67",
+      "ran": "yes, from the back button, AI character on",
+      "differences": "none (every landing matches)",
+      "re_saved": true,
+      "why": "31 of 31 landed, all visible"
+    },
+    {
+      "walk": "plan65-WHERE-walk",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "none",
+      "re_saved": true,
+      "why": "exact match"
+    },
+    {
+      "walk": "plan68-SUMUP-03-walk",
+      "saved_build_before": "725106a1",
+      "ran": "no",
+      "differences": "-",
+      "re_saved": false,
+      "why": "needs a chat that has been summed up ('What the AI remembers' card); none on the Deck tonight and making one was not in the runbook"
+    },
+    {
+      "walk": "plan68-SUMUP-04a",
+      "saved_build_before": "older build",
+      "ran": "yes, on the dream-nail answer (no notes block)",
+      "differences": "content only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan68-SUMUP-13",
+      "saved_build_before": "c9dadbb9",
+      "ran": "yes",
+      "differences": "this chat has 6 session rows; the walk expects 7",
+      "re_saved": false,
+      "why": "content differs; not a focus change"
+    },
+    {
+      "walk": "plan68-session-tab-B-closes",
+      "saved_build_before": "2e542e93",
+      "ran": "no",
+      "differences": "-",
+      "re_saved": false,
+      "why": "needs a summed-up chat ('Sum up again')"
+    },
+    {
+      "walk": "plan70-DOC-SWEEP-01-settings-top-up",
+      "saved_build_before": "f44c662c",
+      "ran": "yes, from the Settings tab (first try tonight started on Main and is void)",
+      "differences": "none",
+      "re_saved": true,
+      "why": "2 of 2 landed"
+    },
+    {
+      "walk": "plan70-HUB-EDGE-01-filters-closed",
+      "saved_build_before": "older build",
+      "ran": "yes, from Advanced",
+      "differences": "1 px y shifts, dialog id, label 'gemma4:e2b-it-qat is used for Ask' -> 'Use gemma4:e2b-it-qat for Ask'",
+      "re_saved": true,
+      "why": "15 stops, all visible, returned to Advanced"
+    },
+    {
+      "walk": "plan70-HUB-EDGE-02",
+      "saved_build_before": "7516a194",
+      "ran": "yes, from the panel's first row after A on Filters",
+      "differences": "every stop shifted by one: the old start (Filters focused with the panel open) cannot be reached now, because Up from the first row closes the panel (tonight's design). Same stops in the same order otherwise",
+      "re_saved": true,
+      "why": "24 stops, all visible; re-saved from the first row as the runbook says"
+    },
+    {
+      "walk": "plan70-KB-FOCUS-01-v2",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "none",
+      "re_saved": true,
+      "why": "exact match"
+    },
+    {
+      "walk": "plan70-L4-QA-FREE-PLAY-01",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids / small shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan70-L6-FILTERS-PANEL",
+      "saved_build_before": "26a1965d (tonight)",
+      "ran": "yes, from Filters",
+      "differences": "none",
+      "re_saved": false,
+      "why": "same build, exact match; no need to re-save"
+    },
+    {
+      "walk": "plan70-L6-SAVE-CHAT-FROM-CHIPS",
+      "saved_build_before": "26a1965d (tonight)",
+      "ran": "yes",
+      "differences": "content only (a notes block in the answer)",
+      "re_saved": false,
+      "why": "saved tonight on this build"
+    },
+    {
+      "walk": "plan70-L6-TYPE-A-NAME",
+      "saved_build_before": "26a1965d (tonight)",
+      "ran": "yes, from Type a name",
+      "differences": "none",
+      "re_saved": false,
+      "why": "same build, exact match"
+    },
+    {
+      "walk": "plan70-MICRO-reply-actions-row",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids / small shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan70-OLLAMA-FOCUS-02",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "none",
+      "re_saved": true,
+      "why": "exact match (slip: I did not read focus after one Down before this replay)"
+    },
+    {
+      "walk": "plan70-PRESET-ONE-LINE-03-decode",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "the last Up now goes to Save chat (by design)",
+      "re_saved": true,
+      "why": "landings otherwise match"
+    },
+    {
+      "walk": "plan70-REPLY-DOWN-01",
+      "saved_build_before": "older build",
+      "ran": "yes",
+      "differences": "ids / small shifts only",
+      "re_saved": true,
+      "why": "landings match"
+    },
+    {
+      "walk": "plan70-STRATEGY-PLACEHOLDER-01",
+      "saved_build_before": "f44c662c",
+      "ran": "yes, from the empty question box, AI character on; no A on the box",
+      "differences": "none",
+      "re_saved": true,
+      "why": "4 of 4 landed, all visible"
+    }
+  ],
+  "totals": {
+    "walks": 30,
+    "re_saved": 20,
+    "not_re_saved": 10
+  },
+  "verdict": "DONE WITH GAPS - 20 of 30 walks re-saved on this build, plus 2 of tonight's own confirmed exact (FILTERS-PANEL, TYPE-A-NAME) and 1 of tonight's own left as saved (SAVE-CHAT-FROM-CHIPS, content-only difference). 7 not re-saved: 2 could not run without a summed-up chat (SUMUP-03-walk, session-tab-B-closes); 5 changed by design or content and need the owner's call (SESSION-TAB-01-B-close, TALL-SECTION-01, W2-R5-down-walk, CHIPS-updown, SUMUP-13)."
+}

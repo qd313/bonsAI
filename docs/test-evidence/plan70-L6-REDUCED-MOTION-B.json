@@ -1,0 +1,14 @@
+{
+  "row": "Reduced-motion box (b): a long chip label is cut off with '…', no crawl (with Half-Life 2 running)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6...)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 (855x845 over the game); chip column 300 px wide (x 48 to 348)",
+  "deck_time": "2026-09-26 19:23-19:28 EDT",
+  "setup": "Half-Life 2 launched from Recent Games at 19:14 (launcher's second try; the first could not read an empty ring on Home). No plugin reload (tonight's rule). Quick Access opened on bonsAI: Context line 'Context: active game Half-Life 2' on the first read. Knowledge base on. Chip settings as the maintainer left them: one chip (preset_single_chip true), decode style (preset_chip_animation decode). AI character off. Nothing touched while watching. Watcher: scratch chip_watch_L6.py reading every chip once a second. Steam Settings -> Accessibility -> Reduce Motion turned ON through Steam's screen at about 19:24 (switch aria-checked false -> true; the page's prefers-reduced-motion false -> true).",
+  "seen": {
+    "watch": "90 reads (1 s apart) plus a 120 s wait for any overflowing label (188 reads)",
+    "crawl": "none: all 7 labels were drawn plainly (no Marquee element), text-overflow ellipsis, overflow hidden",
+    "overflowing_label": "none offered: every label's text width equalled its box (282 of 282 px; the Tip label 269 of 269), so no '…' was needed or seen"
+  },
+  "restored": "Reduce Motion turned OFF again at about 19:28 through the same switch (aria-checked true -> false; prefers-reduced-motion false)",
+  "verdict": "UNCLEAR - no crawl under reduced motion (pass part), but no label long enough to be cut off came up in about 210 s, so the '…' was not seen."
+}

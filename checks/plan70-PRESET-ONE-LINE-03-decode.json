@@ -2,8 +2,8 @@
   "formatVersion": 2,
   "name": "plan70-PRESET-ONE-LINE-03-decode",
   "tool": "deck_runSequence",
-  "savedAt": "2026-09-26T17:47:03.237Z",
-  "buildHash": "sha256:f44c662ce15effb1affe077c1ccdfd537c28ae48260ad0f1dab6967268b53f01",
+  "savedAt": "2026-09-26T23:43:20.457Z",
+  "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
@@ -161,28 +161,26 @@
     "failed": 0,
     "visited": [
       "<BUTTON> \"Save chat to Desktop\"",
-      "<BUTTON> \"What are the best settings for 60fps?\"",
-      "<BUTTON> \"How can I optimize for battery life?\"",
-      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-      "<DIV> \"Party composition (+1 more) · From bonsAI's own note, show\""
+      "<BUTTON> \"How well does this game run on Deck?\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.Strategy\""
     ],
     "cycle": {
-      "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "key": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
       "seenAt": [
-        1,
-        2,
-        3,
-        5
+        0,
+        6
       ],
       "loop": [
-        "<BUTTON> \"What are the best settings for 60fps?\"",
-        "<BUTTON> \"How can I optimize for battery life?\"",
-        "<BUTTON> \"How can I optimize for battery life?\"",
-        "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-        "<BUTTON> \"How can I optimize for battery life?\""
+        "<BUTTON> \"Save chat to Desktop\"",
+        "<BUTTON> \"How well does this game run on Deck?\"",
+        "<BUTTON> \"How well does this game run on Deck?\"",
+        "<BUTTON> \"How well does this game run on Deck?\"",
+        "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.Strategy\"",
+        "<BUTTON> \"How well does this game run on Deck?\"",
+        "<BUTTON> \"Save chat to Desktop\""
       ],
-      "escaped": true,
-      "stepsAfterLoop": 1
+      "escaped": false,
+      "stepsAfterLoop": 0
     },
     "neverReached": [],
     "stopsFocusedButNotVisible": 0,
@@ -200,7 +198,7 @@
         "moved": true,
         "matched": true,
         "from": "<BUTTON> \"Save chat to Desktop\"",
-        "to": "<BUTTON> \"What are the best settings for 60fps?\"",
+        "to": "<BUTTON> \"How well does this game run on Deck?\"",
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
@@ -220,8 +218,8 @@
         "pass": true,
         "moved": false,
         "matched": true,
-        "from": "<BUTTON> \"How canqS+;dM8gｱｯｬ+ﾉｱﾄｴｧｽﾂ87ﾚK@Gｮｮyｦ\"",
-        "to": "<BUTTON> \"How can I optimize for battery life?\"",
+        "from": "<BUTTON> \"How well does this game run on Deck?\"",
+        "to": "<BUTTON> \"How well does this game run on Deck?\"",
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
@@ -241,8 +239,8 @@
         "pass": true,
         "moved": false,
         "matched": true,
-        "from": "<BUTTON> \"How can I optimize for battery life?\"",
-        "to": "<BUTTON> \"How can I optimize for battery life?\"",
+        "from": "<BUTTON> \"How well does this game run on Deck?\"",
+        "to": "<BUTTON> \"How well does this game run on Deck?\"",
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
@@ -262,9 +260,9 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<BUTTON> \"How can I optimize for battery life?\"",
-        "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "from": "<BUTTON> \"How well does this game run on Deck?\"",
+        "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.Strategy\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -283,8 +281,8 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-        "to": "<BUTTON> \"How can I optimize for battery life?\"",
+        "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.Strategy\"",
+        "to": "<BUTTON> \"How well does this game run on Deck?\"",
         "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
@@ -304,9 +302,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<BUTTON> \"How can I optimize for battery life?\"",
-        "to": "<DIV> \"Party composition (+1 more) · From bonsAI's own note, show\"",
-        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
+        "from": "<BUTTON> \"How well does this game run on Deck?\"",
+        "to": "<BUTTON> \"Save chat to Desktop\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",

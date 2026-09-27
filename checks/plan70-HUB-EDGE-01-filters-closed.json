@@ -2,8 +2,8 @@
   "formatVersion": 2,
   "name": "plan70-HUB-EDGE-01-filters-closed",
   "tool": "deck_sweep",
-  "savedAt": "2026-09-26T17:10:22.280Z",
-  "buildHash": "sha256:487cfd31c2b4372754c798ad107ebecd22209f3672b3e69d3547165a70408048",
+  "savedAt": "2026-09-26T23:49:33.131Z",
+  "buildHash": "sha256:26a1965d05ad028faa161279e7172973ca8647c877700bcab8d20c56097c123d",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
@@ -144,7 +144,7 @@
     "stopped": false,
     "totals": {
       "stopsRecorded": 15,
-      "stopsVisited": 9,
+      "stopsVisited": 8,
       "unlabeledStops": 0,
       "cycles": 0,
       "stopsFocusedButNotVisible": 0,
@@ -179,10 +179,10 @@
         "tag": "BUTTON",
         "label": "Advanced ›",
         "labelSource": "text",
-        "selector": "#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "selector": "#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 962,
-          "y": 256,
+          "y": 255,
           "w": 71,
           "h": 22
         },
@@ -192,7 +192,7 @@
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)"
+        "focusKey": "sel:#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)"
       },
       {
         "index": 1,
@@ -202,10 +202,10 @@
         "tag": "BUTTON",
         "label": "Refresh model catalog",
         "labelSource": "aria-label",
-        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Disabled.Focusable:nth-child(1)",
+        "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Focusable:nth-child(1)",
         "rect": {
-          "x": 827,
-          "y": 290,
+          "x": 813,
+          "y": 289,
           "w": 20,
           "h": 16
         },
@@ -215,7 +215,7 @@
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Disabled.Focusable:nth-child(1)"
+        "focusKey": "sel:div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Focusable:nth-child(1)"
       },
       {
         "index": 2,
@@ -228,7 +228,7 @@
         "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 464,
-          "y": 312,
+          "y": 311,
           "w": 492,
           "h": 26
         },
@@ -246,12 +246,12 @@
         "leg": "DOWN",
         "press": "DOWN",
         "tag": "BUTTON",
-        "label": "gemma4:e2b-it-qat is used for Ask",
+        "label": "Use gemma4:e2b-it-qat for Ask",
         "labelSource": "aria-label",
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 473,
-          "y": 400,
+          "y": 399,
           "w": 24,
           "h": 24
         },
@@ -274,7 +274,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 472,
-          "y": 435,
+          "y": 434,
           "w": 24,
           "h": 24
         },
@@ -297,7 +297,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 472,
-          "y": 470,
+          "y": 469,
           "w": 24,
           "h": 24
         },
@@ -320,7 +320,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 473,
-          "y": 531,
+          "y": 530,
           "w": 24,
           "h": 24
         },
@@ -340,10 +340,10 @@
         "tag": "BUTTON",
         "label": "Done",
         "labelSource": "text",
-        "selector": "#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)",
+        "selector": "#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)",
         "rect": {
           "x": 464,
-          "y": 586,
+          "y": 585,
           "w": 272,
           "h": 40
         },
@@ -353,7 +353,7 @@
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)"
+        "focusKey": "sel:#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)"
       },
       {
         "index": 8,
@@ -366,7 +366,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 473,
-          "y": 531,
+          "y": 530,
           "w": 24,
           "h": 24
         },
@@ -389,7 +389,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 472,
-          "y": 470,
+          "y": 469,
           "w": 24,
           "h": 24
         },
@@ -412,7 +412,7 @@
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 472,
-          "y": 435,
+          "y": 434,
           "w": 24,
           "h": 24
         },
@@ -430,12 +430,12 @@
         "leg": "UP",
         "press": "UP",
         "tag": "BUTTON",
-        "label": "gemma4:e2b-it-qat is used for Ask",
+        "label": "Use gemma4:e2b-it-qat for Ask",
         "labelSource": "aria-label",
         "selector": "div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 473,
-          "y": 400,
+          "y": 399,
           "w": 24,
           "h": 24
         },
@@ -458,7 +458,7 @@
         "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 464,
-          "y": 312,
+          "y": 311,
           "w": 492,
           "h": 26
         },
@@ -481,7 +481,7 @@
         "selector": "div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(3) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 813,
-          "y": 290,
+          "y": 289,
           "w": 20,
           "h": 16
         },
@@ -501,10 +501,10 @@
         "tag": "BUTTON",
         "label": "Advanced ›",
         "labelSource": "text",
-        "selector": "#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "selector": "#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
         "rect": {
           "x": 962,
-          "y": 256,
+          "y": 255,
           "w": 71,
           "h": 22
         },
@@ -514,7 +514,7 @@
           "coveredBy": null,
           "clippedBy": null
         },
-        "focusKey": "sel:#ModalDialogOverlay_Modal_7 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)"
+        "focusKey": "sel:#ModalDialogOverlay_Modal_3 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)"
       }
     ]
   }

@@ -1,0 +1,41 @@
+{
+  "row": "PHASE4-CHIPS-01 - widest labels, Tip badge (flow 3 section D row 8, run in L6.2)",
+  "build": "532b76f8 (dist/index.js e3d87901..., main.py f098c0b6...)",
+  "screen": "monitor live: Big Picture 1500x844 CSS px at 1.28 (1920x1080); Quick Access page 855x766 (855x845 over the game); chip column 300 px wide (x 48 to 348)",
+  "deck_time": "2026-09-26 19:15-19:30 EDT",
+  "setup": "Half-Life 2 launched from Recent Games at 19:14 (launcher's second try; the first could not read an empty ring on Home). No plugin reload (tonight's rule). Quick Access opened on bonsAI: Context line 'Context: active game Half-Life 2' on the first read. Knowledge base on. Chip settings as the maintainer left them: one chip (preset_single_chip true), decode style (preset_chip_animation decode). AI character off. Nothing touched while watching. Watcher: scratch chip_watch_L6.py reading every chip once a second.",
+  "chip_labels_seen_in_order": {
+    "watch1 (panel open since before the launch), 86 reads": [
+      "How can I optimize for battery life?",
+      "Which Ollama model fits my Deck setup?"
+    ],
+    "watch2 (after closing and reopening Quick Access), 95 reads": [
+      "What should I expect while answers stream in?",
+      "How do I beat Strider? [Tip]",
+      "How well does this game run on Deck?",
+      "bonsai:vac-check",
+      "How do I enable token streaming?",
+      "Why is my Deck running hot?"
+    ],
+    "wait for any Tip chip, 150 s after watch2": [
+      "no Tip chip appeared"
+    ],
+    "watch3 (Reduce Motion on, after another reopen), 90 reads": [
+      "How do I ask about a game that isn't running?",
+      "How do I beat Strider? [Tip]",
+      "How can I reduce input lag?",
+      "Diagnose a slow Ollama response",
+      "Recommended TDP for this game?",
+      "How do I turn on Thinking mode?",
+      "What does Kids master lock do?"
+    ]
+  },
+  "tip_chip_on_screen": "Only one Half-Life 2 chip ever showed: 'How do I beat Strider?' with the Tip mark. It showed right after the panel opened (about 9 of 95 s in watch2, about 8 s in watch3) and then rotated away; no Tip chip for the rest of watch1 (86 s), watch2, the 150 s wait, or watch3.",
+  "label_fit": "Every label stayed inside its chip. The label box clips at x 339 (chip right edge 348). The widest scrolling label ('What should I expect while answers stream in?', scrolling by Steam's Marquee) had inner content reaching x 623.4, clipped by the label box (overflow hidden). No Half-Life 2 label long enough to overflow was offered, so the 59-character label named in the row was not seen.",
+  "raw": [
+    "scratch L6-2-HL2-chips.jsonl",
+    "scratch L6-2-HL2-chips-try2.jsonl",
+    "scratch L6-2-HL2-chips-rm.jsonl"
+  ],
+  "verdict": "FAIL - labels fit (no overflow past the chip), but a Half-Life 2 Tip chip does not 'always show': it was on screen for about 17 s of about 420 s watched, only right after the panel opened. Note for the owner: the one-chip setting is on, which leaves one slot for the guarantee to use."
+}

@@ -248,7 +248,7 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 3. Merge into main with one merge commit.
 4. **The maintainer pushes main.** The robot builds, checks and publishes the release.
 5. Download the published zip and install it once more, as a player would.
-6. Announce.
+6. Announce on Reddit, with the drafted posts (section 6, item 4).
 
 ### Stage G — clean-up, second pass (right after the release)
 
@@ -317,24 +317,34 @@ The full first sort, every open bug, is in [plan 72](72-release-bug-session.md),
 **Answered 2026-09-26:** 2 (yes, the library passes on the Deck first), 3 (yes), 4 (yes: GIFs, a long
 real-time video with the maintainer's voice-over, short pieces, vertical shorts, better screenshots),
 6 (keep "qwert" for now), 7 (yes, a fix goes out as 0.6.1 when needed), 8 (yes), 9 (yes, and lead with
-the free-and-open, self-hosted, privacy-first spirit). **Still open:** 1 (what ships), 5 (the Decky
-store — see below), and where to announce.
+the free-and-open, self-hosted, privacy-first spirit). Later the same day: 1 (yes — hide anything
+half-built) and 4 (announce on Reddit). **Still open:** 5 (the Decky store — see below) and the
+last-call date.
 
 **On the Decky store (5):** the maintainer is not sure the store would take a plugin written largely
 with AI help. Before deciding, someone reads the store's own submission rules and recent review threads
 for anything on AI-written code, and reports back in plain words. No application is made until then.
 
-1. **What is in 0.6.0?** Recommended: everything landed by the freeze ships; plan 70's work ships if it lands
-   and passes on the Deck by then. Anything half-built that a player could stumble on is hidden, not shipped
-   half-working.
+1. **What is in 0.6.0? — agreed 2026-09-26: hide anything half-built.** Everything landed and working by
+   the freeze ships; plan 70's work ships if it lands and passes on the Deck by then. Anything half-built
+   that a player could stumble on is hidden, not shipped half-working. **How:** during the first-impression
+   check, the session lists every feature a player can reach, marked working, half-built or broken,
+   using the roadmap's PARTIAL and Verify entries as the starting point. The maintainer confirms the
+   list, and a lane hides the half-built ones behind a setting that stays off (or behind the Developer
+   tab), so they can come back in a later release without being rebuilt. The README and videos only show
+   what is on the "working" list.
 2. **The knowledge library a new player downloads.** Plan 70 is about to publish a new one. The release must
    point at a library that has passed on the Deck, and the fresh install must download that one.
 3. **What a brand-new player sees first.** Review every setting's starting value, the first-run notice, the
    first model suggested for a Deck, and that the Developer tab and test chips stay hidden. This is the
    re-launch's first impression, so it gets its own check before the README is written.
-4. **Where the re-launch is announced**, and what goes with it. What goes with it is agreed (GIFs of the
-   best features, a real-time video, better screenshots); where to announce it is still open. The README
-   has one picture today.
+4. **Where the re-launch is announced — agreed 2026-09-26: Reddit.** What goes with it: GIFs of the
+   best features, the real-time video, better screenshots. **Before posting:** pick the communities
+   (the Steam Deck ones first; the self-hosting, open-source and local-AI ones fit the privacy-first
+   pitch), and read each one's rules on self-promotion, how often a project may post, and anything
+   about AI-written code, then report back in plain words. The session drafts one post per community,
+   each leading with what that community cares about; the maintainer posts them. Posting waits until
+   the release page, README and video are live, so every link works on the first click.
 5. **The Decky plugin store.** bonsAI is not in it; players download a zip from the GitHub page. A re-launch
    is the natural moment to decide whether to apply. Recommended: decide now, apply after 0.6.0 has been
    out a week without a serious bug.

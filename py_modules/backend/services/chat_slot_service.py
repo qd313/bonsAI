@@ -602,10 +602,16 @@ def delete_slot(settings_dir: str, slot_id: str, logger: Any = None) -> bool:
     sid = _sanitize_slot_id(slot_id)
     try:
         os.remove(slot_path(settings_dir, sid))
+        file_removed = True
     except FileNotFoundError:
-        return False
+        # The list is read from the index, so a chat whose file is already gone must still lose
+        # its row here, or it stays in the list with no way to remove it.
+        file_removed = False
     index = load_index(settings_dir, logger)
-    rows = [r for r in (index.get("slots") or []) if str(r.get("id", "")) != sid]
+    all_rows = index.get("slots") or []
+    rows = [r for r in all_rows if str(r.get("id", "")) != sid]
+    if not file_removed and len(rows) == len(all_rows):
+        return False
     save_index(settings_dir, {"version": SCHEMA_VERSION, "slots": rows}, logger)
     return True
 

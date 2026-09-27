@@ -481,6 +481,31 @@ class ChatSlotServiceTests(unittest.TestCase):
         self.assertTrue(delete_slot(self.settings_dir, sid))
         self.assertIsNone(load_slot(self.settings_dir, sid))
 
+    def test_deleting_a_chat_whose_file_is_already_gone_still_removes_its_row(self):
+        """The list is read from the index, not from the chat files. A chat whose file vanished
+        (removed by hand, or a failed write) kept its row forever: delete gave up on the missing
+        file before it ever reached the index, and said the chat was not found."""
+        import os
+
+        from backend.services.chat_slot_service import slot_path
+
+        slot = create_slot(self.settings_dir, label="file-already-gone")
+        sid = slot["id"]
+        keep = create_slot(self.settings_dir, label="keep-me")
+        os.remove(slot_path(self.settings_dir, sid))
+        self.assertIn(sid, [r["id"] for r in list_slot_summaries(self.settings_dir)])
+
+        self.assertTrue(delete_slot(self.settings_dir, sid))
+
+        ids = [r["id"] for r in list_slot_summaries(self.settings_dir)]
+        self.assertNotIn(sid, ids)
+        self.assertIn(keep["id"], ids)
+
+    def test_deleting_a_chat_that_never_existed_still_says_not_found(self):
+        create_slot(self.settings_dir, label="keep-me")
+        self.assertFalse(delete_slot(self.settings_dir, "no-such-chat"))
+        self.assertEqual(len(list_slot_summaries(self.settings_dir)), 1)
+
     def test_rename_persists_and_reindexes(self):
         slot = create_slot(self.settings_dir, label="old-name")
         sid = slot["id"]

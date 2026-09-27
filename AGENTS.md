@@ -155,31 +155,17 @@ Full patterns:
   ones. They read Steam's own on-screen ring marker, where the older active-element check can return
   a confident wrong answer. Two shipped bugs came from exactly that.
 - **The plugin now places the ring on the question box when it opens, unless something else already
-  owns it** (fixed 2026-09-15, confirmed on the Deck twice out of three tries). Opening a Decky
-  plugin used to leave the ring unowned, with the first Down landing on the Back button in the
-  header and the second reaching the tab bar; that was normal Steam behaviour and not a bug, but it
-  cost a person two wasted presses. **The one time it still does not hold:** the very first open
-  right after a fresh deploy's loader restart, when Decky's own navigation node for the field is not
-  ready inside the plugin's one-second attempt. A test step that opens the plugin right after a
-  deploy and immediately asks where focus is may still read *unowned* — reproduce a report of "the
-  first press does nothing" from an ordinary fresh open, not a just-deployed one, before treating it
-  as a regression.
+  owns it** — except on the very first open right after a deploy. Details and how to test it:
+  [focus-graph.md § Where the ring starts](docs/focus-graph.md#where-the-ring-starts-when-the-plugin-opens).
 - **Never mark Deck-facing work done without a D-pad row** in [docs/testing.md](docs/testing.md) or
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
-- **Plan 62, 2026-09-20 — three controls landed together, left to this note on purpose:** the AI models
-  screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
-  closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
-  Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
-  panel); Read aloud is now a small speaker on the Helpful/Not row, reached by Left/Right once the thumbs
-  are greyed out. None of the three has a device check yet — see [docs/testing.md](docs/testing.md).
+- **Plan 62's three controls (Filters panel, Show details' Session tab, the Read aloud speaker)** have
+  their D-pad routes written down in [focus-graph.md](docs/focus-graph.md#three-controls-from-plan-62).
 
 ### The "From the notes" block — a worked example
 
-One control wired end to end, with every trap it hit on the Steam Deck: where it sits in the walk, what Up
-and Down do, why it uses `onOKButton` and not `onActivate`, why it is registered in a local map rather than
-the shared one, and why a finished reply is not `"live"` by the time someone walks up to it. Read it before
-adding a control that sits between two existing stops:
-[docs/focus-graph.md](docs/focus-graph.md).
+One control wired end to end, with every trap it hit on the Deck. Read it before adding a control
+between two existing stops: [docs/focus-graph.md](docs/focus-graph.md).
 
 ### A check backs three of these up
 

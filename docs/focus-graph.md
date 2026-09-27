@@ -7,6 +7,8 @@ every trap it hit on the device written down._
 
 ### The "From the notes" block (plan 58 phase 1)
 
+_What AGENTS.md used to say about this example, moved here 2026-09-27:_ One control wired end to end, with every trap it hit on the Steam Deck: where it sits in the walk, what Up and Down do, why it uses `onOKButton` and not `onActivate`, why it is registered in a local map rather than the shared one, and why a finished reply is not `"live"` by the time someone walks up to it. Read it before adding a control that sits between two existing stops: this section.
+
 A new stop under a reply that used a note or a shared troubleshooting tip
 (`MainTabChatTranscript.tsx`, `buildKbNotesBlockElement`), one per turn ("live" or an archived
 turn's own id). It sits after Show details / Read aloud in the walk, before whatever the utility
@@ -73,3 +75,29 @@ the session context strip)
 - **Not yet backed by a device row.** `docs/testing.md` / `docs/testing-manual.md` still owe the
   D-pad walk this section's own rule asks for — recorded here, not skipped silently, because the
   bookkeeper owns those files, not this lane.
+
+### Where the ring starts when the plugin opens
+
+_Moved here from AGENTS.md on 2026-09-27, word for word, to keep that file under its size limit._
+
+**The plugin now places the ring on the question box when it opens, unless something else already
+owns it** (fixed 2026-09-15, confirmed on the Deck twice out of three tries). Opening a Decky
+plugin used to leave the ring unowned, with the first Down landing on the Back button in the
+header and the second reaching the tab bar; that was normal Steam behaviour and not a bug, but it
+cost a person two wasted presses. **The one time it still does not hold:** the very first open
+right after a fresh deploy's loader restart, when Decky's own navigation node for the field is not
+ready inside the plugin's one-second attempt. A test step that opens the plugin right after a
+deploy and immediately asks where focus is may still read *unowned* — reproduce a report of "the
+first press does nothing" from an ordinary fresh open, not a just-deployed one, before treating it
+as a regression.
+
+### Three controls from plan 62
+
+_Moved here from AGENTS.md on 2026-09-27, word for word, for the same reason._
+
+**Plan 62, 2026-09-20 — three controls landed together, left to this note on purpose:** the AI models
+screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
+closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
+Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
+panel); Read aloud is now a small speaker on the Helpful/Not row, reached by Left/Right once the thumbs
+are greyed out. None of the three has a device check yet — see [docs/testing.md](testing.md).

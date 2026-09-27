@@ -98,6 +98,25 @@ def reset_embed_availability_cache() -> None:
         _AVAILABILITY_CACHE.clear()
 
 
+def forget_embed_availability_after_pull(
+    pulled_tags: list[str], *, model: str = DEFAULT_EMBEDDING_MODEL
+) -> bool:
+    """Drop the remembered answer once a pull that included ``model`` finishes.
+
+    Otherwise a "missing" read just before the pull keeps answering for up to the TTL: the
+    knowledge-base hint stays up and Ask skips meaning search after the model has landed.
+    A pull of any other model changes nothing here, so the memory is kept. Returns whether
+    it was dropped.
+    """
+    base_model = str(model or "").strip().lower()
+    for tag in pulled_tags or []:
+        t = str(tag or "").strip().lower()
+        if t == base_model or t.startswith(f"{base_model}:"):
+            reset_embed_availability_cache()
+            return True
+    return False
+
+
 def nomic_embed_available(
     pc_ip: str,
     *,

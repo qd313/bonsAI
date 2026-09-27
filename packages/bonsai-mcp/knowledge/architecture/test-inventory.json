@@ -237,6 +237,7 @@
     "tests/test_desktop_note_service.py",
     "tests/test_destructive_advice_guard.py",
     "tests/test_destructive_advice_wiring.py",
+    "tests/test_embed_availability_after_pull.py",
     "tests/test_eval_kb_answers.py",
     "tests/test_eval_kb_arms.py",
     "tests/test_eval_kb_tie_break.py",

@@ -51,6 +51,7 @@ from backend.ollama_routing import (
 from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
+from backend.services.ollama_embed_service import forget_embed_availability_after_pull
 
 import decky
 
@@ -240,14 +241,19 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
 
         async def runner() -> None:
             assert self._local_ollama_cancel_event is not None
-            await run_local_setup(
-                profile="custom",
-                state=self._local_ollama_setup_state,
-                logger=logger,
-                cancel_event=self._local_ollama_cancel_event,
-                on_stage=on_stage,
-                on_verbose_line=on_verbose_line,
-            )
+            try:
+                await run_local_setup(
+                    profile="custom",
+                    state=self._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=self._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
+                )
+            finally:
+                # A pull of the meaning-search model must be seen at once, not after the
+                # 30 s "is it installed" memory runs out (plan70-R5.json).
+                forget_embed_availability_after_pull(tags)
 
         self._local_ollama_setup_task = asyncio.create_task(runner())
 

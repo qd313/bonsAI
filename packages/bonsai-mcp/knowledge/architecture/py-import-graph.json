@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 260,
+  "edgeCount": 261,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -163,6 +163,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/ollama_embed_service.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/ollama_window_fit.py",
       "count": 3
     },
@@ -240,10 +244,6 @@
     },
     {
       "path": "py_modules/backend/services/ollama_chat_stream.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/ollama_embed_service.py",
       "count": 2
     },
     {
@@ -1063,6 +1063,7 @@
       ],
       "importedBy": [
         "py_modules/backend/services/knowledge_base_service.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/rag_corpus_status.py"
       ]
     },
@@ -1086,6 +1087,7 @@
         "py_modules/backend/services/async_background_job.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_catalog_service.py",
+        "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/pull_model_catalog_service.py"
       ],
       "importedBy": [

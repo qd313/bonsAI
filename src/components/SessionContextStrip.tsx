@@ -124,9 +124,10 @@ export type SessionContextTabBodyProps = {
    */
   onRequestClose?: () => void;
   /**
-   * D-pad Down off the last chip of the ladder, the last stop in this tab: on to whatever sits below
-   * Show details, through Steam's own transfer. False lets Steam's own navigation carry the press.
-   * Absent: the press is consumed, as it was before plan 72.
+   * D-pad Down off the last stop in this tab -- the last chip of the ladder, or, in a chat with no
+   * rows, Sum up or the summary card under it: on to whatever sits below Show details, through
+   * Steam's own transfer. False lets Steam's own navigation carry the press. Absent: the press is
+   * consumed, as it was before plan 72.
    */
   onMoveDownPastTab?: () => boolean;
   /** Plan 68: the open chat's summary and the Sum up button's job, from the back end. */
@@ -192,6 +193,15 @@ export function SessionContextTabBody({
    * (buildDetailsPanelElement.tsx, focusChipLadderRow), never by a page search.
    */
   const downFromLastRow = () => (sessionLadderEl ? focusRowElement(sessionLadderEl) : false) || true;
+  /*
+   * Down off the Sum up section: the first row when there is one (consumed either way, as before).
+   * With no rows, Sum up or its card is the tab's last stop, and swallowing Down there was the same
+   * trap as the ladder's last chip (plan 72), so it leaves by the same route.
+   */
+  const downPastSumUp = () =>
+    rows.length > 0
+      ? focusDeckOwner(firstSessionRowEl) || true
+      : onMoveDownPastTab?.() ?? true;
 
   return (
     <Focusable
@@ -226,7 +236,7 @@ export function SessionContextTabBody({
         state={sumUp}
         answerInFlight={answerInFlight}
         onMoveUpFromButton={() => onMoveUpFromTop?.() ?? false}
-        onMoveDownPastSection={() => focusDeckOwner(firstSessionRowEl)}
+        onMoveDownPastSection={downPastSumUp}
       />
       {rows.map((row, index) => {
         const isFirst = index === 0;

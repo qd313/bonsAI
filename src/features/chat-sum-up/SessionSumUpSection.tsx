@@ -27,9 +27,9 @@
  * The card is a stop because it is usually taller than the room left under the button (83 px on
  * the measured screen against a 200-280 px card), so its bottom sits behind the dock until the ring
  * lands on it and the dock lift scrolls it clear — and a chat with no rows under the card would
- * otherwise have nothing to scroll it into view at all. Down from the last thing here stays put:
- * when nothing follows, the press is consumed rather than left to Steam's own guess, which once
- * threw the ring into the dock from the end of this tab.
+ * otherwise have nothing to scroll it into view at all. Down from the last thing here does whatever
+ * `onMoveDownPastSection` says: the first turn row when there is one, else (plan 72) the way out of
+ * the whole panel that the chip ladder's last Down uses; the caller decides when to consume it.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -102,7 +102,8 @@ export function SessionSumUpSection(props: {
   answerInFlight: boolean;
   /** Up off the button: the tabs row above. */
   onMoveUpFromButton: () => boolean;
-  /** Down past this section: the first turn row, or false when there is none. */
+  /** Down past this section: the first turn row, else the way out of the panel. Its result is
+   *  returned as is, so false leaves the press to Steam's own navigation. */
   onMoveDownPastSection: () => boolean;
 }): React.ReactElement {
   const { state, answerInFlight, onMoveUpFromButton, onMoveDownPastSection } = props;
@@ -113,8 +114,7 @@ export function SessionSumUpSection(props: {
     if (view.disabled || !state) return;
     state.startSumUp();
   };
-  // Nothing below: consume Down so Steam's own guess cannot carry the ring into the dock.
-  const downFromCard = () => onMoveDownPastSection() || true;
+  const downFromCard = () => onMoveDownPastSection();
   const downFromButton = () => (summary ? focusSummaryCard() : false) || downFromCard();
 
   return (

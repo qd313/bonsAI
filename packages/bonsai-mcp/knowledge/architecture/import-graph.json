@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 566,
-  "edgeCount": 1552,
+  "fileCount": 567,
+  "edgeCount": 1556,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2019,7 +2019,8 @@
         "src/components/MainTab.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
-        "src/features/chat-slots/ChatSlotRow.test.tsx"
+        "src/features/chat-slots/ChatSlotRow.test.tsx",
+        "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx"
       ]
     },
     "src/features/chat-slots/useChatSlotBumpers.ts": {
@@ -2426,6 +2427,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/plugin-shell/useDesktopNoteSaveModal.tsx": {
       "imports": [
         "src/components/DesktopNoteSaveModal.tsx",
@@ -2434,6 +2444,7 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -4285,6 +4296,7 @@
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
@@ -4414,6 +4426,7 @@
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
+        "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",

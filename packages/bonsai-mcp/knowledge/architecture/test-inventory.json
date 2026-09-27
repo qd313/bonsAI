@@ -107,6 +107,7 @@
     "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
     "src/features/plugin-shell/tabBarNav.test.ts",
     "src/features/plugin-shell/tabTitles.test.tsx",
+    "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
     "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
     "src/features/preset-carousel/carouselState.test.ts",
     "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",

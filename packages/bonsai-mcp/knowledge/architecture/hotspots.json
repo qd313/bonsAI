@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1338,
+      "lines": 1339,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {

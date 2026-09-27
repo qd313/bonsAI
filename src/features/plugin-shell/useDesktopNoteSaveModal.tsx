@@ -11,8 +11,9 @@
  * message explaining that and a shortcut to turn it on, instead of the
  * save button silently doing nothing.
  *
- * Does not: Decide what gets saved — the caller hands over the question
- * and answer to save; this hook only asks for a file name and writes it.
+ * Does not: Save the whole chat. It saves one question and answer: this
+ * session's newest, or, for an older chat with nothing asked yet this
+ * session, the newest loaded turn that has an answer (desktopNoteExchangeFor).
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
@@ -35,11 +36,36 @@ type DesktopNoteExchange = {
   answer: string;
 };
 
+/**
+ * In: this session's newest question and answer (or null), and the chat's turns as loaded from its
+ * file, oldest first.
+ * Out: the one question and answer the Desktop note saves, or null when the chat has no answer at
+ * all (an empty chat) -- the chat row draws its save icon only when this is not null.
+ * Plan 72 job E: this used to be this session's answer alone, so an older saved chat (the Deck's
+ * "Hades" chat, every answer from earlier sessions) had nothing to save and showed no icon.
+ */
+export function desktopNoteExchangeFor(
+  lastExchange: DesktopNoteExchange | null,
+  loadedTurns: readonly DesktopNoteExchange[],
+): DesktopNoteExchange | null {
+  if (lastExchange) return { question: lastExchange.question, answer: lastExchange.answer };
+  for (let i = loadedTurns.length - 1; i >= 0; i--) {
+    const turn = loadedTurns[i]!;
+    if (turn.answer.trim()) return { question: turn.question, answer: turn.answer };
+  }
+  return null;
+}
+
+/** One shared empty list, so a caller that passes no turns does not remake the opener each render. */
+const NO_TURNS: readonly DesktopNoteExchange[] = [];
+
 export type UseDesktopNoteSaveModalArgs = {
   /** `filesystem_write` capability; without it the action explains and redirects. */
   filesystemWrite: boolean;
-  /** Most recent question/answer pair, or null when there is nothing to save. */
+  /** Most recent question/answer pair from this session, or null. */
   lastExchange: DesktopNoteExchange | null;
+  /** The chat's turns as loaded from its file, oldest first; the fallback when `lastExchange` is null. */
+  loadedTurns?: readonly DesktopNoteExchange[];
   jumpToPermission: (capability: BonsaiCapabilityKey) => void;
   currentTab: string;
   finalizeShowModalAndRestoreActiveTab: (close: () => void) => void;
@@ -57,6 +83,7 @@ export type UseDesktopNoteSaveModalArgs = {
 export function useDesktopNoteSaveModal({
   filesystemWrite,
   lastExchange,
+  loadedTurns = NO_TURNS,
   jumpToPermission,
   currentTab,
   finalizeShowModalAndRestoreActiveTab,
@@ -79,10 +106,10 @@ export function useDesktopNoteSaveModal({
       );
       return;
     }
-    if (!lastExchange) {
+    const ex = desktopNoteExchangeFor(lastExchange, loadedTurns);
+    if (!ex) {
       return;
     }
-    const ex = lastExchange;
     // Deliberately does not call captureSessionBeforeModal(), matching the behavior this was
     // extracted from. The other showModal openers do capture first; whether this one should
     // is tracked separately rather than changed inside a behavior-preserving move.
@@ -121,6 +148,7 @@ export function useDesktopNoteSaveModal({
     );
   }, [
     lastExchange,
+    loadedTurns,
     filesystemWrite,
     jumpToPermission,
     currentTab,

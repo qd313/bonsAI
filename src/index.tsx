@@ -163,7 +163,7 @@ import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./featu
 import { useRoutingOrderModal } from "./features/model-routing/useRoutingOrderModal";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
-import { useDesktopNoteSaveModal } from "./features/plugin-shell/useDesktopNoteSaveModal";
+import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/plugin-shell/useDesktopNoteSaveModal";
 import { usePluginHelpModal } from "./features/plugin-shell/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";
@@ -804,6 +804,7 @@ const Content: React.FC = () => {
   const openDesktopNoteSaveModal = useDesktopNoteSaveModal({
     filesystemWrite: gatedCapabilities.filesystem_write,
     lastExchange,
+    loadedTurns: askThreadCollapsed,
     jumpToPermission,
     currentTab,
     finalizeShowModalAndRestoreActiveTab,
@@ -951,7 +952,7 @@ const Content: React.FC = () => {
     elapsedSeconds,
     lastApplied,
     ollamaContext,
-    canSaveDesktopNote: Boolean(lastExchange),
+    canSaveDesktopNote: desktopNoteExchangeFor(lastExchange, askThreadCollapsed) !== null,
     onOpenDesktopNoteSave: openDesktopNoteSaveModal,
     mediaLibraryEnabled: gatedCapabilities.media_library_access,
     gameContextReadEnabled: gatedCapabilities.media_library_access && gatedCapabilities.steam_logs_read,

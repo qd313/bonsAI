@@ -38,24 +38,51 @@ const REASONING_LIVE_SLICE_CHARS = 600;
  * newest lines in view.
  *
  * Once the thinking is longer than the slice, the slice starts part way through a word. That
- * fragment -- everything up to the first sentence end or line break -- is dropped, so the block
- * never opens on half a word. A slice with no sentence end at all is drawn whole.
+ * fragment is dropped, so the block never opens on half a word: up to the first line break when
+ * one is near, otherwise up to the first sentence end. A slice with neither is drawn whole.
+ *
+ * The length alone does not tell a cut slice: the computer side cuts at 600 characters and only
+ * then swaps a sentence naming a protected thing for "[hidden]", so a cut slice can arrive much
+ * shorter (the Deck showed "ess:", the tail of "Thinking Process:", on a slice well under 600,
+ * docs/test-evidence/plan72-F-THINK.json). So a slice that opens the way no line does -- a small
+ * letter, a stop or comma, or a closing bracket with no opening one before it -- counts as cut too,
+ * and starts at the next line. Only when a line break is near: a short one-line think is never cut
+ * by this. The cost: a whole think that opens on a small letter and then breaks the line loses its
+ * first line; the model's own thinking opens on "Thinking Process:" or a numbered step.
  */
 export function liveReasoningText(partial: string | null | undefined): string {
   const text = partial ?? "";
   let shown = text;
+  const lineBreak = text.indexOf("\n");
+  const nearLineBreak = lineBreak !== -1 && lineBreak <= FRAGMENT_LINE_MAX_CHARS;
   if (text.length >= REASONING_LIVE_SLICE_CHARS) {
     const firstEnd = /[.!?](?=\s)|\n/.exec(text);
-    shown = firstEnd ? text.slice(firstEnd.index + 1) : text;
+    if (nearLineBreak) shown = text.slice(lineBreak + 1);
+    else if (firstEnd) shown = text.slice(firstEnd.index + 1);
+  } else if (nearLineBreak && opensPartWayThroughALine(text)) {
+    shown = text.slice(lineBreak + 1);
   }
   const tidied = tidyReasoningText(shown, { dropRuleChecklist: true });
   /*
    * A slice that was nothing but the model re-checking its rules would leave the block empty, and
    * the stock waiting phrase has already stepped aside for this turn -- one plain line says what
-   * is happening instead (the roadmap's own first option: "a short status line").
+   * is happening instead (the roadmap's own first option: "a short status line"). The same goes
+   * for a slice left with no word at all: the Deck once drew a lone "." here.
    */
-  if (!tidied && shown.trim()) return LIVE_RULE_CHECK_LINE;
+  if (!HAS_WORD_RE.test(tidied) && shown.trim()) return LIVE_RULE_CHECK_LINE;
   return tidied;
+}
+
+/** A cut first line longer than this is cut at its first sentence end instead, keeping the rest. */
+const FRAGMENT_LINE_MAX_CHARS = 300;
+const HAS_WORD_RE = /[\p{L}\p{N}]/u;
+
+function opensPartWayThroughALine(text: string): boolean {
+  const start = text.trimStart();
+  if (/^[\p{Ll}.,;:!?)\]}]/u.test(start)) return true;
+  const firstLine = start.split("\n", 1)[0];
+  const close = firstLine.indexOf(")");
+  return close !== -1 && !firstLine.slice(0, close).includes("(");
 }
 
 /** What the live line says while the model is only re-checking its own rules. */
@@ -84,6 +111,12 @@ const SELF_CHECK_RE =
   /^(?!(?:is|are|does|do|did|can|could|should|would|will|what|which|how|why|where|when|who)\b)[^?]{1,120}\?\s*(?:yes|no)\b/i;
 /** A restated rule: "Must start with `<bonsai-status>`." */
 const RESTATED_RULE_RE = /^must\b/i;
+/**
+ * A setup line: "Mode: Strategy Guide mode (active).", "Voice: Ali G (...)", "Constraint (Content):
+ * Must lead with tactics, ..." -- the model listing how it was told to answer (plan 72 Deck check,
+ * docs/test-evidence/plan72-F-THINK.json). A line keyed on anything else ("Game:", "Boss:") stays.
+ */
+const SETUP_LINE_RE = /^(?:mode|voice|persona|character|tone|constraints?)\b[^:\n]{0,40}:/i;
 /** The heading the model puts on top of its own notes. */
 const THINKING_HEADING_RE = /^\s*(?:\*\*)?Thinking Process:?(?:\*\*)?\s*/i;
 
@@ -107,7 +140,9 @@ function stripMarks(line: string): string {
  * With `dropRuleChecklist` (the live line): a step whose title is about constraints, rules, the
  * output format or a final check is left out whole, and so is any "Must ..." rule line or
  * "...? Yes." self-check that shows before the first step heading of the slice (the heading was
- * cut off above it). Inside a step about the question itself, every line is kept. The opened
+ * cut off above it). A "Mode:", "Voice:", "Persona:", "Character:", "Tone:" or "Constraint:" list
+ * line, restating how the model was set up, is left out wherever it is. Inside a step about the
+ * question itself, every other line is kept. The opened
  * reasoning block keeps the checklist: it is the whole record the person chose to open.
  */
 export function tidyReasoningText(
@@ -126,6 +161,7 @@ export function tidyReasoningText(
       if (listed && !heading) {
         const body = stripMarks(listed[1]).trim();
         if (SELF_CHECK_RE.test(body)) continue;
+        if (SETUP_LINE_RE.test(body)) continue;
         if (step === "none" && RESTATED_RULE_RE.test(body)) continue;
       }
     }

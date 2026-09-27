@@ -21,17 +21,17 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
-import { focusBottomOfNewestReply } from "../utils/liveTurnFocusGraph";
+import { registerSaveChatRowEl } from "../utils/saveChatRowNav";
 
 /**
- * Up goes to the rows above in the order they sit, lowest first: the ban-lookup row, the
- * troubleshooting hint, then the bottom of the newest answer. Down goes to the chips when they
- * show; otherwise Steam carries on down as it always did.
+ * Up goes to the permission rows above, lowest first, through Steam's own transfer; with neither
+ * showing, the move is left to Steam, as it was before this row was registered. It used to fall
+ * back to a hop into the newest answer, and on the Deck over a running game Up from here then did
+ * nothing at all (plan70-R-R3-try2.json). Down goes to the chips when they show; otherwise Steam
+ * carries on down as it always did.
  */
-const upFromSaveChat = () =>
-  takeNavFocus("chat-perm-hint-deny") ||
-  takeNavFocus("chat-perm-hint-troubleshoot") ||
-  focusBottomOfNewestReply();
+export const upFromSaveChat = (): boolean =>
+  takeNavFocus("chat-perm-hint-deny") || takeNavFocus("chat-perm-hint-troubleshoot");
 
 export function SaveChatToDesktopRow(props: { enabled: boolean; onOpen: () => void }) {
   const { enabled, onOpen } = props;
@@ -44,6 +44,7 @@ export function SaveChatToDesktopRow(props: { enabled: boolean; onOpen: () => vo
     <PanelSectionRow>
       <Focusable
         className="bonsai-save-chat-desktop-row"
+        ref={registerSaveChatRowEl}
         {...({
           navRef,
           onMoveUp: upFromSaveChat,

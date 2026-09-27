@@ -23,6 +23,7 @@ import { buildChipNavHandlers } from "./presetRowNav";
 import { PRESET_CHIP_BLOCKED_EDGE_FLASH_MS } from "./presetRowLayout";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { focusBottomOfNewestReply } from "../../utils/liveTurnFocusGraph";
+import { focusSaveChatRowIfInView } from "../../utils/saveChatRowNav";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 
 /**
@@ -170,9 +171,10 @@ export function usePresetRowNav(
         //
         // Save chat to Desktop and the two permission rows sit between the reply and the chips when
         // they show, lowest first; Up skipped all three for Show details (plan70-SMOKE-C.json,
-        // plan70-PERMS-CLEAN-05-06.json).
+        // plan70-PERMS-CLEAN-05-06.json). Save chat only while it is not behind the dock
+        // (plan70-R-R3-try2.json; saveChatRowNav.ts).
         exitUp: () =>
-          takeNavFocus("save-chat-desktop") ||
+          focusSaveChatRowIfInView() ||
           takeNavFocus("chat-perm-hint-deny") ||
           takeNavFocus("chat-perm-hint-troubleshoot") ||
           focusBottomOfNewestReply() ||

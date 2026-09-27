@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 529,
-  "edgeCount": 1431,
+  "fileCount": 530,
+  "edgeCount": 1434,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1124,8 +1124,8 @@
     "src/components/SaveChatToDesktopRow.tsx": {
       "imports": [
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/utils/liveTurnFocusGraph.ts",
-        "src/utils/navFocusRegistry.ts"
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/saveChatRowNav.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
@@ -2456,6 +2456,7 @@
         "src/features/preset-carousel/presetRowNav.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
+        "src/utils/saveChatRowNav.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
@@ -4646,6 +4647,7 @@
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatPanelScroll.test.ts",
         "src/utils/revealOpenedDetails.test.tsx",
+        "src/utils/saveChatRowNav.ts",
         "src/utils/settingsPanelScroll.ts"
       ]
     },
@@ -5095,7 +5097,6 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
-        "src/components/SaveChatToDesktopRow.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
@@ -5220,7 +5221,8 @@
         "src/utils/navFocusRegistry.test.ts",
         "src/utils/permHintRowNav.test.ts",
         "src/utils/permissionJumpRegistry.test.ts",
-        "src/utils/permissionJumpRegistry.ts"
+        "src/utils/permissionJumpRegistry.ts",
+        "src/utils/saveChatRowNav.ts"
       ]
     },
     "src/utils/ollamaTabLocalSurvival.ts": {
@@ -5432,6 +5434,16 @@
       "importedBy": [
         "src/components/CharacterPickerModal.tsx",
         "src/utils/runningGameCharacterSuggestions.test.ts"
+      ]
+    },
+    "src/utils/saveChatRowNav.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/SaveChatToDesktopRow.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.tsx"
       ]
     },
     "src/utils/sessionRagChipCandidates.ts": {

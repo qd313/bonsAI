@@ -13,6 +13,10 @@
  *          called from, and both were checked before the move: it must come after the request id
  *          it saves alongside exists, and before the Ask bar's clear button, which wipes the chip
  *          error. Nothing between the old and new position reads or writes any of this state.
+ *
+ *          The rating and "a chip was used" are also remembered outside the hook, per reply (see
+ *          rememberedFeedback below): the panel remounts every time Steam's side panel closes and
+ *          opens again, and a rating kept only in hook state came back as "not rated".
  */
 import { useCallback, useEffect, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
@@ -53,6 +57,48 @@ export interface ReplyFeedbackChips {
   resetReplyFeedback: () => void;
 }
 
+type RememberedFeedback = { rating: "up" | "down" | null; chipUsed: boolean };
+
+/*
+ * The rating given to each recent reply, kept for as long as the plugin's screen code is loaded.
+ * Hook state starts over whenever the panel remounts -- Steam closes and reopens its side panel
+ * for its own windows (the chat row's save icon does this), and on every QAM close and reopen --
+ * while the answer itself comes back from the session-survival snapshot. Without this the
+ * restored answer drew as never rated: thumbs live again and the "What went wrong?" chips gone
+ * (plan 72, docs/test-evidence/plan72-F-ROW.json). A chat switch away and back is the same
+ * story. Keyed by request id as well as the words, so the same words served again for a new
+ * question (the answer cache) start unrated. A plugin reload still forgets; the rating is not
+ * written into the chat's saved file.
+ */
+const REMEMBERED_LIMIT = 32;
+const rememberedFeedback = new Map<string, RememberedFeedback>();
+
+function feedbackKey(exchange: LastExchangeSnapshot | null, requestId: number | null): string | null {
+  if (!exchange?.answer?.trim()) return null;
+  return JSON.stringify([requestId ?? null, exchange.question, exchange.answer]);
+}
+
+function recall(key: string | null): RememberedFeedback {
+  return (key && rememberedFeedback.get(key)) || { rating: null, chipUsed: false };
+}
+
+function remember(key: string | null, patch: Partial<RememberedFeedback>): void {
+  if (!key) return;
+  const next = { ...recall(key), ...patch };
+  rememberedFeedback.delete(key);
+  rememberedFeedback.set(key, next);
+  while (rememberedFeedback.size > REMEMBERED_LIMIT) {
+    const oldest = rememberedFeedback.keys().next().value;
+    if (oldest === undefined) break;
+    rememberedFeedback.delete(oldest);
+  }
+}
+
+/** Tests only: forget every remembered rating, so one test's rating cannot leak into the next. */
+export function resetRememberedReplyFeedbackForTests(): void {
+  rememberedFeedback.clear();
+}
+
 /**
  * Own the rating on the reply that is on screen, and the chips that reword the question.
  *
@@ -61,10 +107,16 @@ export interface ReplyFeedbackChips {
 export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedbackChips {
   const { lastExchange, lastRequestId, setUnifiedInput, askMode, pendingReplyFollowUpRef } = a;
 
-  const [liveReplyFeedbackRating, setLiveReplyFeedbackRating] = useState<"up" | "down" | null>(null);
-  const [liveReplyChipUsed, setLiveReplyChipUsed] = useState(false);
+  const replyKey = feedbackKey(lastExchange, lastRequestId);
+  /* Started from what this reply was already given, so a remount draws the row as it was left. */
+  const [liveReplyFeedbackRating, setLiveReplyFeedbackRating] = useState<"up" | "down" | null>(
+    () => recall(replyKey).rating
+  );
+  const [liveReplyChipUsed, setLiveReplyChipUsed] = useState(() => recall(replyKey).chipUsed);
   const [liveReplyChipError, setLiveReplyChipError] = useState<string | null>(null);
 
+  /* Clears what is drawn, not what is remembered: a chat switch runs this, and switching back to
+     the same reply should find its rating again. */
   const resetReplyFeedback = useCallback(() => {
     setLiveReplyFeedbackRating(null);
     setLiveReplyChipUsed(false);
@@ -72,14 +124,16 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
   }, []);
 
   useEffect(() => {
-    setLiveReplyFeedbackRating(null);
-    setLiveReplyChipUsed(false);
+    const kept = recall(replyKey);
+    setLiveReplyFeedbackRating(kept.rating);
+    setLiveReplyChipUsed(kept.chipUsed);
     setLiveReplyChipError(null);
-  }, [lastExchange?.question, lastExchange?.answer]);
+  }, [replyKey]);
 
   const onReplyFeedback = useCallback(
     async (rating: "up" | "down") => {
       setLiveReplyFeedbackRating(rating);
+      remember(replyKey, { rating });
       setLiveReplyChipError(null);
       try {
         await callDeckyWithTimeout<[string, number, number, boolean, string], { ok?: boolean }>(
@@ -99,7 +153,7 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
         toaster.toast({ title: "Feedback not saved", body: formatDeckyRpcError(e), duration: 4000 });
       }
     },
-    [lastExchange?.question, lastRequestId]
+    [lastExchange?.question, lastRequestId, replyKey]
   );
 
   const onReplyMicroAction = useCallback(
@@ -119,6 +173,7 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
         askMode: lastExchange.askMode ?? askMode,
       };
       setLiveReplyChipUsed(true);
+      remember(feedbackKey(lastExchange, lastRequestId), { chipUsed: true });
       setLiveReplyChipError(null);
       setUnifiedInput(composeChipAutofillPrefix(action, originalQ));
 

@@ -229,9 +229,6 @@ starts work outside this.
   **OPEN — found by reading the code (plan 68), not yet seen on the Deck.** Deck check owed.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
-- ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **OPEN,
-  found on the Deck 2026-09-26, row STOP-PARTIAL-01. The maintainer's call 2026-09-26: Stop must not unload
-  the model.** Close the connection instead; the next question should start warm. Plan 72 must-fix.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -532,6 +529,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
+- ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **VERIFY,
+  fixed 2026-09-26 (`59123c1b`).** Stop now only closes the connection, so the model stays loaded. On the
+  Deck's own AI a short watch runs after Stop; the old unload fires only if the AI stays busy for 90 seconds
+  with no new question. Picked by a blind model trial (plan 33 § 4b). **Deck check owed:** row
+  **STOP-KEEPS-MODEL-01** in [testing.md](testing.md).
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
   **VERIFY, fixed 2026-09-26 (helper K, `2e13421d`), mostly passed on the Deck 2026-09-26.** The waiting
   line, the turn header and Show details' own "This answer" tab all show the friendly wording now. **Still

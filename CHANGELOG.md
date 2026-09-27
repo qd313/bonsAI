@@ -5,6 +5,11 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **Pressing Stop no longer throws the AI model out of memory:** the question after a Stop used to start
+  slowly, because Stop unloaded the model every time. Stop now just ends the answer and leaves the model
+  loaded, so the next question starts warm. On the Deck's own AI a short watch runs after Stop, and only
+  if the AI is still busy after 90 seconds does the old unload run, as a safety net. `ollama_stop_service.py`.
+  On-Deck check owed.
 - **A question about the game you are playing now finds that game's own Deck tip:** asking "the text on
   the screen looks blurry" with Deep Rock Galactic: Survivor running, or about mod launch options for
   Fallout 4, used to get generic advice while the game's own tip sat unused in the library. The game's own

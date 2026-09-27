@@ -551,3 +551,8 @@ land.
   F4-EMPTY and F4-CARD — no chat on the Deck has an empty Session tab or a summary card now (unit-tested). New
   sighting, second time: the "Enable local knowledge base" chip showed during an answer that used the knowledge
   base, its text running to the panel's edge → lane 11's job D.
+- **17:15 — landed** `06e9c83b` (lane 11): the "Enable local knowledge base" chip never shows while the knowledge
+  base is on. Cause: the after-answer chip pick reused a copy of itself from before settings loaded. Found and
+  listed for after the release (behind the scenes, not reshaping in this session): the Ask code's after-answer
+  step may hold other stale copies the same way — it broke the Strategy checklist once before; worth a read-only
+  sweep. Deck row owed: knowledge base on, reload, three answers, the chip never offered.

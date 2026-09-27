@@ -1,0 +1,26 @@
+{
+ "row": "plan72-F4-EMPTY",
+ "buildCommit": "84049cfac6fb3cbc0a621da190f2b64e19ea2511",
+ "deckBundleMd5": "7f7c8440010735e70e32c508db7dc62a",
+ "check": "F4-EMPTY \u2014 Down leaves an empty Session tab",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "dpr": 1.28,
+  "which": "external monitor"
+ },
+ "deckTime": "2026-09-27 16:54\u201316:56 EDT",
+ "setup": "Looked for a chat whose Session tab shows no rows or chips. Read the 8 saved chats' files over SSH (read only), then opened two short chats on the Deck.",
+ "pressed": [
+  "Chat row -> RB to 'how should i spend my first hour in a new open world game' -> Down to Show details -> A -> Down (tab row) -> Right (Session)",
+  "Up back to the chat row, Hide details (A), RB to 'what is the safest way to approach a group of enemies at once' -> Show details -> A -> Down -> Right (Session)"
+ ],
+ "seen": {
+  "chatFiles": "All 8 chats: every assistant turn has a 'transparency' snapshot (smallest 1824 bytes). The Session tab lists a row for every turn whose snapshot yields at least one chip (SessionContextStrip.tsx computeSessionContextRows).",
+  "chat1": "how should i spend my first hour...: Session \u00b7 1 -> 'Sum up this chat' (off: 'The whole chat still fits, so there's nothing to sum up yet.'), 1 row, 1 ladder of 6 chips (KB: no game running, Reply style, Thinking, Spoiler risk, Routed gemma4:e2b-it-qat, Developer details).",
+  "chat2": "what is the safest way to approach a group of enemies at once: Session \u00b7 1 -> same shape: Sum up (off), 1 row, 1 ladder of 6 chips.",
+  "otherChats": "Not opened on the Deck: 'is it better to explore everything...' and 'how do i unlock the next area...' have the same 1824-byte snapshots as the two opened; 'Hades', 'how do i beat the boss...', 'wheatley fight', 'what is a good way to practice parrying' have larger snapshots. None can show an empty tab."
+ },
+ "reads": "b6/raw-F4EMPTY-session.json, b6/raw-F4EMPTY-session-chat2.json (scratch)",
+ "verdict": "COULD NOT RUN \u2014 no saved chat on the Deck has a Session tab without rows and chips; every answer carries at least one chip. A chat was not created, per the runbook."
+}

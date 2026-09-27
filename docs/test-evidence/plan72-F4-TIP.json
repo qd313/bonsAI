@@ -1,0 +1,42 @@
+{
+ "row": "plan72-F4-TIP",
+ "buildCommit": "84049cfac6fb3cbc0a621da190f2b64e19ea2511",
+ "deckBundleMd5": "7f7c8440010735e70e32c508db7dc62a",
+ "check": "F4-TIP \u2014 the Source line, thinking off",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "dpr": 1.28,
+  "which": "external monitor"
+ },
+ "deckTime": "2026-09-27 17:00:40 \u2013 17:03 EDT",
+ "setup": "Settings edit then reload at once: ask_mode strategy -> speed, ask_think_effort medium -> off. After reload the file still read speed/off; the panel showed 'Speed'. Chat: 'what is the safest way to approach a group of enemies at once'. No game running ('Context: no active game detected').",
+ "pressed": [
+  "send-question script: VERIFIED, field held the whole question",
+  "DOWN x3 to Ask (walkTo, ring placed first); box re-read before A",
+  "A on Ask at ~17:01:44",
+  "answer finished by 17:02:03",
+  "UP x3 to Show details",
+  "A (open details)"
+ ],
+ "question": "deep rock galactic survivor the text in this game looks blurry on my deck, how do i fix it",
+ "seen": {
+  "answerStart": "Fixing blurry text in Deep Rock Galactic Survivor on your Steam Deck ... Render Scale ...",
+  "tipCardUnderAnswer": "Display \u00b7 From this game's Deck tips",
+  "thisAnswerTab": [
+   "Chip 1 of 6: Keyword search, KB: 13 sections, Reply style: balanced, Spoiler risk: low, Routed gemma4:e2b-it-qat, Developer details",
+   "Local knowledge base",
+   "credit: steamcommunity.com \u00b7 bonsAI-maintainer, tag 'Deep Rock Galactic: Surviv\u2026' (full text 'Deep Rock Galactic: Survivor \u2014 display')",
+   "Retrieval: Keyword search",
+   "Source: Deck tips for Deep Rock Galactic: Survivor",
+   "Trust tier: wiki_no_patch",
+   "compat_tips"
+  ],
+  "sharedTroubleshootingTipsShown": false
+ },
+ "screenshots": [
+  "screenshots/plan72/F4-TIP-details.png"
+ ],
+ "settingsRestored": "ask_mode strategy, ask_think_effort medium written back 17:02:50, plugin reloaded, file re-read: strategy medium",
+ "verdict": "PASS \u2014 the knowledge-base card reads 'Source: Deck tips for Deep Rock Galactic: Survivor' (not shared troubleshooting tips) and the credit names the game."
+}

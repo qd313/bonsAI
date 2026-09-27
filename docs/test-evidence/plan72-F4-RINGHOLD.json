@@ -1,0 +1,36 @@
+{
+ "row": "plan72-F4-RINGHOLD",
+ "buildCommit": "84049cfac6fb3cbc0a621da190f2b64e19ea2511",
+ "deckBundleMd5": "7f7c8440010735e70e32c508db7dc62a",
+ "check": "F4-RINGHOLD \u2014 a chip keeps its words under the ring",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "dpr": 1.28,
+  "which": "external monitor"
+ },
+ "deckTime": "2026-09-27 16:58:49 \u2013 17:00:24 EDT",
+ "setup": "Chip style in effect: preset_chip_animation 'decode', preset_single_chip true, preset_chip_fade_animation_enabled false (settings file, read 16:42). Chat 'what is the safest way to approach a group of enemies at once' (Session tab open). Panel opened 16:42:35; ~16 min open at the first read.",
+ "pressed": [
+  "DOWN x9 from the Session tab row to the suggestion chip (runs/plan72-F4-RINGHOLD-walk.json)",
+  "read 1 at 16:58:49",
+  "L3 at ~16:59:03",
+  "read 2 at 16:59:13 (24 s after read 1)",
+  "L3 at ~16:59:18",
+  "A on the chip at ~16:59:24 (ring confirmed on the chip at 16:59:20)",
+  "read 3 at 16:59:26 (question box value read from the page; A never pressed on the box)",
+  "UP x18 to the chat row (runs/plan72-F4-RINGHOLD-up.json and single presses)",
+  "ring on the chat row at 17:00:03, L3 at ~17:00:16, read at 17:00:24 (21 s)"
+ ],
+ "seen": {
+  "read1_chip": "Any known issues running this on Deck?",
+  "read2_chip_after_24s": "Any known issues running this on Deck?",
+  "read3_questionBox_after_A": "Any known issues running this on Deck?",
+  "ringAfterA": "stayed on the chip (.bonsai-preset-glass--decode), not moved into the box; no on-screen keyboard",
+  "chipAfter21sOnChatRow": "Any known issues running this on Deck? (unchanged)",
+  "sameChipSince": "16:46:26 (first seen in F4-LADDER), i.e. unchanged for 14 minutes",
+  "minutesSincePanelOpened": "about 17.8 at the last read \u2014 well past the one-minute rest"
+ },
+ "leftBehind": "The question box of this chat still holds 'Any known issues running this on Deck?' \u2014 left in place (harmless), not cleared.",
+ "verdict": "PASS \u2014 the same words all three times (chip at 0 s, chip at 24 s, question box after A). The second part: no chip change in 21 s on the chat row, as expected with the one-minute rest long past (panel open ~18 min)."
+}

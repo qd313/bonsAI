@@ -1,0 +1,23 @@
+{
+ "row": "plan72-F4-CARD",
+ "buildCommit": "84049cfac6fb3cbc0a621da190f2b64e19ea2511",
+ "deckBundleMd5": "7f7c8440010735e70e32c508db7dc62a",
+ "check": "F4-CARD \u2014 the summary card is fully in view when it takes the ring",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "dpr": 1.28,
+  "which": "external monitor"
+ },
+ "deckTime": "2026-09-27 16:43\u201316:58 EDT",
+ "setup": "Looked for a chat with a summary card (the task named 'wheatley fight').",
+ "pressed": [
+  "none extra \u2014 the Session tab of 'wheatley fight' was already open during F4-LADDER and read then"
+ ],
+ "seen": {
+  "onDeck": "'wheatley fight' Session tab (16:43:38 read, raw-F4LADDER-order.json): first stop 'Sum up this chat' (y 301), then the 71 rows; no summary card element and the button reads 'Sum up this chat', not 'Sum up again'.",
+  "chatFiles": "A chat's summary is saved inside its own chat file under the key 'summary' (chat_slot_service.save_slot_summary). None of the 8 current chat files has that key; nor do the chat copies in the block 1, 2, 3, 4 or 5 backups.",
+  "note": "The briefing said 'wheatley fight' has a summary card; on this build and these chats it does not."
+ },
+ "verdict": "COULD NOT RUN \u2014 no chat on the Deck has a summary card. Making one needs a press on 'Sum up this chat', which the runbook does not ask for; left for the owner to decide."
+}

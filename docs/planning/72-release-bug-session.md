@@ -544,3 +544,10 @@ land.
   Listed, not changed: the "This answer" tab's ladder hands its last Down to Steam's own navigation; the rare
   "Open Controller settings" button is skipped by the new route; if the ring sits on the chips past the one-minute
   rest, they stay still after it leaves until the panel reopens (tied to the maintainer's call on the rest).
+- **17:05 — block 5 (flow F4) finished** on `84049cfa`, monitor; everything restored. **Passed:** F4-LADDER
+  (81 of 81 steps down and back, the ladder above the question box at every chip, Down past the last chip to a
+  suggestion chip, then the box, then Ask; saved as `checks/F4-LADDER-EXIT.json`), F4-RINGHOLD (same words
+  after 24 s; A took them), F4-TIP ("Source: Deck tips for Deep Rock Galactic: Survivor"). **Could not run:**
+  F4-EMPTY and F4-CARD — no chat on the Deck has an empty Session tab or a summary card now (unit-tested). New
+  sighting, second time: the "Enable local knowledge base" chip showed during an answer that used the knowledge
+  base, its text running to the panel's edge → lane 11's job D.

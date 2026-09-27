@@ -1,0 +1,474 @@
+{
+ "row": "plan72-F4-LADDER",
+ "buildCommit": "84049cfac6fb3cbc0a621da190f2b64e19ea2511",
+ "deckBundleMd5": "7f7c8440010735e70e32c508db7dc62a",
+ "check": "F4-LADDER \u2014 Down leaves the Session tab's chip ladder",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "dpr": 1.28,
+  "which": "external monitor (not the Deck's own screen)"
+ },
+ "deckTime": "2026-09-27 16:42:58 to 16:51 EDT",
+ "setup": "Chat 'wheatley fight' (the chat the panel opened on). Panel opened 16:42:35 (second openPlugin try; first failed as expected after deploy). Newest answer ('how useful is the magnum revolver in half life 2') -> Show details (A) -> Down x2 to the tab row -> Right: Session \u00b7 71 active. Session tab: 'Sum up this chat', 71 question rows, one chip ladder (6 chips) under the last row. UI size unchanged from previous blocks.",
+ "pressed": [
+  "DOWN x7 (walkTo Show details)",
+  "A (open details)",
+  "DOWN x2 (tab row)",
+  "RIGHT (Session)",
+  "DOWN x72 recorded as runs/plan72-F4-LADDER-approach.json (all moved, all visible)",
+  "DOWN x6 into and through the ladder (chip 1..6), read after each",
+  "DOWN (exit)",
+  "DOWN",
+  "DOWN",
+  "UP x9 back through box, chip and ladder chips 6..1, read after each",
+  "UP x73 recorded as runs/plan72-F4-LADDER-return.json (last row .. Sum up .. tab row; all moved, all visible)",
+  "saved check checks/F4-LADDER-EXIT.json: replayed 81 Downs from the tab row to Ask, 81/81 passed, 0 stops focused-but-not-visible"
+ ],
+ "seen": {
+  "ladderSteps": [
+   {
+    "file": "raw-F4LADDER-s72-lastrow.json",
+    "deckTime": null,
+    "focus": "bonsai-details-session-row",
+    "aria": null,
+    "text": "how useful is the magnum revolver in hal",
+    "focusRect": {
+     "x": 52,
+     "y": 484.9,
+     "w": 290,
+     "h": 29.2,
+     "bottom": 514.1
+    },
+    "ladderRect": null,
+    "activeChip": "Keyword + meaning",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-s73.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 1 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 273.4,
+     "w": 290,
+     "h": 328,
+     "bottom": 601.4
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 273.4,
+     "w": 290,
+     "h": 328,
+     "bottom": 601.4
+    },
+    "activeChip": "Keyword + meaning",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -31.9
+   },
+   {
+    "file": "raw-F4LADDER-s74.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 2 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "activeChip": "KB: 9 sections",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-s75.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 3 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "activeChip": "Reply style: balanced",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-s76.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 4 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 351.5,
+     "w": 290,
+     "h": 249.9,
+     "bottom": 601.5
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 351.5,
+     "w": 290,
+     "h": 249.9,
+     "bottom": 601.5
+    },
+    "activeChip": "Spoiler risk: high",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -31.8
+   },
+   {
+    "file": "raw-F4LADDER-s77.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 5 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 430.4,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 600.6
+    },
+    "activeChip": "Routed qwen2.5:1.5b",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-s78.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 6 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 232,
+     "w": 290,
+     "h": 368.7,
+     "bottom": 600.7
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 232,
+     "w": 290,
+     "h": 368.7,
+     "bottom": 600.7
+    },
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -32.6
+   },
+   {
+    "file": "raw-F4LADDER-s79-exit.json",
+    "deckTime": null,
+    "focus": "bonsai-preset-glass bonsai-preset-glass--decode",
+    "aria": null,
+    "text": "Any known issues running this on Deck?",
+    "focusRect": {
+     "x": 48,
+     "y": 601.4,
+     "w": 300,
+     "h": 30,
+     "bottom": 631.3
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-s80.json",
+    "deckTime": null,
+    "focus": "(unclassed element inside question box)",
+    "aria": null,
+    "text": "",
+    "focusRect": {
+     "x": 72.8,
+     "y": 634.1,
+     "w": 274.5,
+     "h": 44,
+     "bottom": 678.1
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-s81.json",
+    "deckTime": null,
+    "focus": "bonsai-askbar-target bonsai-ask-primary",
+    "aria": null,
+    "text": "ask",
+    "focusRect": {
+     "x": 48.8,
+     "y": 710.7,
+     "w": 298.4,
+     "h": 36,
+     "bottom": 746.7
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-u1.json",
+    "deckTime": null,
+    "focus": "bonsai-askbar-target bonsai-unified-input-corner-left",
+    "aria": "Attach screenshot to Ask",
+    "text": "",
+    "focusRect": {
+     "x": 53.8,
+     "y": 682.1,
+     "w": 20,
+     "h": 20,
+     "bottom": 702.1
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-u2.json",
+    "deckTime": null,
+    "focus": "bonsai-ai-character-avatar",
+    "aria": "Choose AI character, A",
+    "text": "A",
+    "focusRect": {
+     "x": 50.8,
+     "y": 636.1,
+     "w": 18,
+     "h": 18,
+     "bottom": 654.1
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-u3.json",
+    "deckTime": null,
+    "focus": "bonsai-preset-glass bonsai-preset-glass--decode",
+    "aria": null,
+    "text": "Any known issues running this on Deck?",
+    "focusRect": {
+     "x": 48,
+     "y": 601.4,
+     "w": 300,
+     "h": 30,
+     "bottom": 631.3
+    },
+    "ladderRect": null,
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6
+   },
+   {
+    "file": "raw-F4LADDER-u4.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 6 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 232,
+     "w": 290,
+     "h": 368.7,
+     "bottom": 600.7
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 232,
+     "w": 290,
+     "h": 368.7,
+     "bottom": 600.7
+    },
+    "activeChip": "Developer details",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -32.6
+   },
+   {
+    "file": "raw-F4LADDER-u5.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 5 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "activeChip": "Routed qwen2.5:1.5b",
+    "questionBoxTop": 599.8,
+    "dockTop": 567.1,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-u6.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 4 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 351.5,
+     "w": 290,
+     "h": 249.9,
+     "bottom": 601.5
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 351.5,
+     "w": 290,
+     "h": 249.9,
+     "bottom": 601.5
+    },
+    "activeChip": "Spoiler risk: high",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -31.8
+   },
+   {
+    "file": "raw-F4LADDER-u7.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 3 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "activeChip": "Reply style: balanced",
+    "questionBoxTop": 599.8,
+    "dockTop": 567.1,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-u8.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 2 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 396.9,
+     "w": 290,
+     "h": 170.2,
+     "bottom": 567.1
+    },
+    "activeChip": "KB: 9 sections",
+    "questionBoxTop": 599.8,
+    "dockTop": 567.1,
+    "ladderBottomMinusBoxTop": -32.7
+   },
+   {
+    "file": "raw-F4LADDER-u9.json",
+    "deckTime": null,
+    "focus": "bonsai-chip-ladder",
+    "aria": null,
+    "text": "Chip 1 of 6Keyword + meaningKB: 9 sectio",
+    "focusRect": {
+     "x": 52,
+     "y": 273.4,
+     "w": 290,
+     "h": 328,
+     "bottom": 601.4
+    },
+    "ladderRect": {
+     "x": 52,
+     "y": 273.4,
+     "w": 290,
+     "h": 328,
+     "bottom": 601.4
+    },
+    "activeChip": "Keyword + meaning",
+    "questionBoxTop": 633.3,
+    "dockTop": 600.6,
+    "ladderBottomMinusBoxTop": -31.9
+   }
+  ],
+  "summary": {
+   "ladderHeights": "328 (chip 1), 170.2 (chips 2,3,5), 249.9 (chip 4), 368.7 (chip 6) \u2014 the ladder grows with the open chip's explanation",
+   "ladderBottomVsQuestionBoxTop": "every chip step bottom 600.6\u2013601.5 against box top 633.3: 31.8\u201332.7 px above the box. Ladder always shorter than the room (pane top 88 to box top 633.3 = 545 px).",
+   "noteDockTop": "the dock's box starts at 600.6 (the suggestion chip row, chip top 601.4). At chips 1 and 4 the ladder bottom is 601.4/601.5, i.e. 0.8\u20130.9 px lower than the dock box's top; the rig rated every stop 100% visible and the screenshot shows the ring's bottom edge clear.",
+   "exit": "Down past chip 6 -> suggestion chip 'Any known issues running this on Deck?' (.bonsai-preset-glass--decode, y 601.4\u2013631.3). Next Down -> the question box's inner field (y 634.1, no A pressed). Next Down -> Ask (.bonsai-ask-primary, y 710.7).",
+   "upReturn": "Up from Ask -> Attach screenshot icon -> AI character avatar -> suggestion chip -> ladder chip 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> last row -> ... -> Sum up this chat -> tab row. Nothing skipped or stuck."
+  }
+ },
+ "screenshots": [
+  "screenshots/plan72/F4-LADDER-lastchip.png (ring on ladder, chip 6 of 6, suggestion chip directly under it)"
+ ],
+ "runs": [
+  "runs/plan72-F4-LADDER-approach.json",
+  "runs/plan72-F4-LADDER-return.json"
+ ],
+ "savedCheck": "checks/F4-LADDER-EXIT.json",
+ "verdict": "PASS on the ladder's position (bottom above the question box at all 6 chip steps) and on leaving it (one Down past the last chip lands on the suggestion chip, never stays). One difference from the runbook's wording for the owner: from the suggestion chip, Ask came after TWO Downs, with the question box in between (the runbook said 'the next Down reaches Ask'). Up back through the chips to the tab: PASS."
+}

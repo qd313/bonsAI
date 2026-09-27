@@ -62,11 +62,13 @@ describe("the [+] create-position screen", () => {
     expect(container.querySelector(".bonsai-save-chat-desktop-row")).toBeNull();
   });
 
-  /* The strip itself renders only when turns carry transparency snapshots (its own suite covers
-     that); Save chat is unconditional, so it is the witness that the gate is [+]-only. */
-  it("keeps Save chat on an ordinary slot", () => {
-    const { container } = renderTranscript();
-    expect(container.querySelector(".bonsai-save-chat-desktop-row")).not.toBeNull();
+  /* The transcript is the witness that the gate is [+]-only. Save chat used to be one too; since
+     plan 72 it is the chat row's save icon (ChatSlotRow.tsx), so no chat draws the old button under
+     its last answer any more, even one with an answer to save. */
+  it("keeps an ordinary slot's transcript, with no Save chat button under it", () => {
+    const { container } = renderTranscript({ canSaveDesktopNote: true });
     expect(container.textContent).toContain("old question");
+    expect(container.querySelector(".bonsai-save-chat-desktop-row")).toBeNull();
+    expect(container.textContent).not.toContain("Save chat to Desktop");
   });
 });

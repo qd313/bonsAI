@@ -24,7 +24,6 @@
  *     (situational hints: no game detected, a troubleshooting-shaped
  *      question with game-reading off, a permission denial)
  *     (slow-answer and applied-tuning banners)
- *     [ Save chat to Desktop ]
  *
  * Used for: MainTab, filling the space above the dock that holds the
  * suggestion row and the Ask bar.
@@ -59,7 +58,8 @@
  *    detected, a troubleshooting-shaped question with game-reading
  *    permission off, a VAC-check permission denial), then the slow-answer
  *    and applied-tuning banners.
- * 6. Finally, when this chat can be saved, the Save chat to Desktop button.
+ * 6. (Save chat to Desktop is no longer here: since plan 72 it is the save
+ *    icon at the left end of the chat row, ChatSlotRow.tsx.)
  *    (The separate "Session context (N turns)" box that used to sit here is
  *    gone — plan 62 3c folded its row list, chips and Clear into the newest
  *    answer's own Show details panel as a second tab; see
@@ -199,7 +199,6 @@ import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
 } from "../utils/drgGlossaryAsk";
-import { SaveChatToDesktopRow } from "./SaveChatToDesktopRow";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
@@ -231,6 +230,8 @@ export type MainTabChatTranscriptProps = {
   ollamaResponse: string;
   elapsedSeconds: number | null;
   lastApplied: AppliedResult | null;
+  /* Read by MainTab for the chat row's save icon (ChatSlotRow.tsx); the transcript itself no
+     longer draws a save button (plan 72). Kept here because MainTab hands its props on whole. */
   canSaveDesktopNote: boolean;
   onOpenDesktopNoteSave: () => void;
   desktopNoteSaveEnabled?: boolean;
@@ -341,7 +342,6 @@ export {
  *    just above this function.
  * 4. Fold in a Strategy Guide branch picker or checklist where one applies.
  * 5. Draw the situational hint rows and warning banners below the turns.
- * 6. Draw the Save chat to Desktop button.
  */
 export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const {
@@ -357,9 +357,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     ollamaResponse,
     elapsedSeconds,
     lastApplied,
-    canSaveDesktopNote,
-    onOpenDesktopNoteSave,
-    desktopNoteSaveEnabled = true,
     transparencySnapshot = null,
     strategyGuideBranches = null,
     onStrategyBranchPick,
@@ -1631,9 +1628,6 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
  * where the strip used to sit — left as a working, tested utility rather than deleted, since
  * deciding whether anything else should reach for it belongs to whoever reviews this next.
  */}
-{canSaveDesktopNote && !showEmptySlotPreview && (
-  <SaveChatToDesktopRow enabled={desktopNoteSaveEnabled} onOpen={onOpenDesktopNoteSave} />
-)}
     </>
   );
 }

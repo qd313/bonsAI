@@ -45,9 +45,7 @@ describe("Dismiss on the troubleshooting hint", () => {
   it("hands the ring to the ban-lookup row below when the hint goes away", () => {
     const { dismissBtn, buttons, dismiss } = mountHint();
     const deny = fakeNavHolder();
-    const save = fakeNavHolder();
     registerNavFocus("chat-perm-hint-deny", deny);
-    registerNavFocus("save-chat-desktop", save);
     dismissBtn.focus();
 
     dismissHintKeepingRing(buttons, dismiss);
@@ -55,10 +53,9 @@ describe("Dismiss on the troubleshooting hint", () => {
 
     expect(dismiss).toHaveBeenCalledTimes(1);
     expect(deny.current.TakeFocus).toHaveBeenCalledWith(true);
-    expect(save.current.TakeFocus).not.toHaveBeenCalled();
   });
 
-  it("falls through to the chips when neither the ban-lookup row nor Save chat is showing", () => {
+  it("falls through to the chips when the ban-lookup row is not showing", () => {
     const { dismissBtn, buttons, dismiss } = mountHint();
     const chips = fakeNavHolder();
     registerNavFocus("preset-carousel", chips);

@@ -315,6 +315,9 @@ export function MainTab(props: MainTabProps) {
               onCreatePositionChange={setSlotRowAtCreate}
               generatingSlotId={props.generatingSlotId}
               unreadSlotIds={props.unreadSlotIds}
+              onSaveChat={props.onOpenDesktopNoteSave}
+              canSaveChat={props.canSaveDesktopNote}
+              saveChatEnabled={props.desktopNoteSaveEnabled ?? true}
             />
           </PanelSectionRow>
         ) : null}

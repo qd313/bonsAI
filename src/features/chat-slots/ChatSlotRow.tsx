@@ -4,8 +4,10 @@
  * Purpose: The row that always sits at the top of the main tab, above the
  * preset chips. It is a small carousel of your saved chats: press LB/RB (or
  * step the D-pad through it) to flip between them, press A on the middle to
- * rename the current chat, or move onto its × to delete it. Step right past
- * your newest chat to reach [+] and start a new one. Dots below show your
+ * rename the current chat, move onto its × to delete it, or onto the save
+ * icon at the left end to save it to the Desktop. Step left past your newest
+ * chat to reach the new-chat spot (a pencil and "New chat") and start a new
+ * one. Dots below show your
  * recent chats at a glance, and a small dot lights up on any chat that is
  * still generating a reply or has one waiting that you have not read yet.
  *
@@ -80,13 +82,40 @@ export type ChatSlotRowProps = {
   generatingSlotId?: string | null;
   /** Slots that finished an answer while the user was looking at a different slot. */
   unreadSlotIds?: ReadonlySet<string>;
+  /** Opens the save-to-Desktop window, from the save icon at the row's left end. */
+  onSaveChat?: () => void;
+  /** The chat has an answer to save; the save icon is drawn only then. */
+  canSaveChat?: boolean;
+  /** Saving is allowed; when not, the icon is dimmed and A opens the window's permission prompt. */
+  saveChatEnabled?: boolean;
 };
 
-type RowFocusStop = "title" | "delete";
+type RowFocusStop = "save" | "title" | "delete";
 
 const MAX_DOTS = 8;
-/** What the create position shows, both as the centre label and as the ghost to a slot's left. */
-const CREATE_LABEL = "[+]";
+
+/*
+ * The two icons the maintainer picked from the true-size drawing of 2026-09-27 (plan 72): save
+ * option B, a floppy disk at the row's left end facing the ×, and new-chat option 4, a pencil. Both
+ * are copied exactly from that drawing, stroked in the current text colour.
+ */
+function DiskIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 5a1 1 0 0 1 1-1h11.5L20 7.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+      <path d="M8 4v5h7V4" />
+      <path d="M7 20v-6h10v6" />
+    </svg>
+  );
+}
+function PencilIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6" />
+      <path d="M17.5 3.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z" />
+    </svg>
+  );
+}
 
 /**
  * The whole slot row: the LB/RB carousel, its center label, the activity
@@ -104,15 +133,16 @@ const CREATE_LABEL = "[+]";
  * effect that re-syncs carouselIndex from activeSlotId is what catches that
  * back up.
  *
- * 1. Track carouselIndex, the on-screen position — 0 is always "[+] new
- *    chat", 1..N are the saved chats.
+ * 1. Track carouselIndex, the on-screen position — 0 is always the new-chat
+ *    spot, 1..N are the saved chats.
  * 2. Work out what is visible at the current position and its two
  *    neighbours, for the ghost previews to either side.
- * 3. On LB/RB (handled by useChatSlotBumpers) or a D-pad Left/Right step,
- *    move carouselIndex and, unless it landed on [+], call onSelectSlot.
- * 4. Pressing A: on [+], calls onCreateSlot; otherwise opens the rename
- *    modal (useChatSlotRenameModal), or, if focus is on the × stop, the
- *    delete confirmation.
+ * 3. On LB/RB (handled by useChatSlotBumpers), move carouselIndex and, unless
+ *    it landed on the new-chat spot, call onSelectSlot. D-pad Left/Right walk
+ *    the row's three stops: save icon, name, ×.
+ * 4. Pressing A: on the new-chat spot, calls onCreateSlot; otherwise opens
+ *    the rename modal (useChatSlotRenameModal), or, on the × stop, the delete
+ *    confirmation, or, on the save stop, the save-to-Desktop window.
  * 5. A layout effect measures whether the title text is wider than its box
  *    and, only while focused, swaps it for Steam's Marquee with the chips'
  *    own scroll settings, so a long name scrolls exactly like a long chip.
@@ -129,6 +159,9 @@ export function ChatSlotRow({
   onCreatePositionChange,
   generatingSlotId = null,
   unreadSlotIds,
+  onSaveChat,
+  canSaveChat = false,
+  saveChatEnabled = true,
 }: ChatSlotRowProps) {
   /*
    * Summaries arrive most-recently-updated first (chat_slot_service sorts by updated_at, newest
@@ -174,6 +207,12 @@ export function ChatSlotRow({
   const nextSlot =
     !isCreatePosition && carouselIndex < orderedSlots.length ? orderedSlots[carouselIndex] : null;
   const showGhosts = orderedSlots.length > 1;
+  /* Never at the new-chat spot, where there is nothing to save; and only once the chat has an
+     answer, the same rule that drew the old Save chat button under the last answer. */
+  const showSave = !isCreatePosition && canSaveChat && onSaveChat !== undefined;
+  /* The save stop with no icon to stand on (the chat has nothing to save yet, or LB/RB moved to a
+     chat without an answer) is the name; so the ring can never sit on an invisible stop. */
+  const stop: RowFocusStop = focusStop === "save" && !showSave ? "title" : focusStop;
 
   useEffect(() => {
     onCreatePositionChange?.(isCreatePosition);
@@ -240,7 +279,7 @@ export function ChatSlotRow({
     return "";
   };
 
-  const centerLabel = isCreatePosition ? CREATE_LABEL : (activeSlot?.label ?? "New chat");
+  const centerLabel = isCreatePosition ? "New chat" : (activeSlot?.label ?? "New chat");
 
   // CSS cannot detect overflow, so measure the plain name here and, only when it is wider than its
   // window, swap it for Steam's Marquee with the suggestion chips' own settings (SteamMarqueeText):
@@ -281,6 +320,7 @@ export function ChatSlotRow({
         ref={(el: HTMLElement | null) => {
           rowFocusElRef.current = el;
           registerModalReturnFocusOwner("chat-slot-rename", el);
+          registerModalReturnFocusOwner("desktop-note-save", el);
         }}
         {...({
           navRef,
@@ -301,14 +341,22 @@ export function ChatSlotRow({
           */
           focusable: true,
           onMoveLeft: () => {
-            if (focusStop === "delete") {
+            if (stop === "delete") {
+              setFocusStop("title");
+            } else if (stop === "title" && showSave) {
+              setFocusStop("save");
+            }
+            /* Claimed even when nothing moves (the save icon itself, a name with no icon, the
+               new-chat spot): nothing in bonsAI lies to the row's left, and Steam's own answer
+               was to leave the plugin for its side menu (plan 72 must-fix list). */
+            return true;
+          },
+          onMoveRight: () => {
+            if (stop === "save") {
               setFocusStop("title");
               return true;
             }
-            return false;
-          },
-          onMoveRight: () => {
-            if (focusStop === "title" && !isCreatePosition) {
+            if (stop === "title" && !isCreatePosition) {
               setFocusStop("delete");
               return true;
             }
@@ -334,7 +382,12 @@ export function ChatSlotRow({
             void onCreateSlot();
             return true;
           }
-          if (focusStop === "delete" && activeSlot) {
+          if (stop === "save" && onSaveChat) {
+            rememberModalReturnFocus("desktop-note-save");
+            onSaveChat();
+            return true;
+          }
+          if (stop === "delete" && activeSlot) {
             openDeleteConfirm(activeSlot.id, activeSlot.label);
             return true;
           }
@@ -365,7 +418,7 @@ export function ChatSlotRow({
             <div className="bonsai-chat-slot-game">
               {isCreatePosition || !focused ? "" : (activeSlot?.origin_app_name ?? "")}
             </div>
-            <div className="bonsai-chat-slot-title-row">
+            <div className={`bonsai-chat-slot-title-row${showSave ? " bonsai-chat-slot-title-row--has-save" : ""}`}>
               {showGhosts && prevSlot && (prevSlot.id === generatingSlotId || unreadSlotIds?.has(prevSlot.id)) ? (
                 <span
                   className={`bonsai-chat-slot-ghost-spark${prevSlot.id === generatingSlotId ? " bonsai-chat-slot-ghost-spark--pending" : " bonsai-chat-slot-ghost-spark--unread"}`}
@@ -374,31 +427,46 @@ export function ChatSlotRow({
               ) : null}
               {showGhosts && prevIsCreatePosition ? (
                 <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev bonsai-chat-slot-ghost--create">
-                  {CREATE_LABEL}
+                  <PencilIcon />
                 </span>
               ) : null}
               {showGhosts && prevSlot ? (
                 <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev">{prevSlot.label}</span>
               ) : null}
-              <span
-                ref={titleWindowRef}
-                className={`bonsai-chat-slot-title${focusStop === "title" ? " bonsai-chat-slot-title--active-stop" : ""}${isCreatePosition ? " bonsai-chat-slot-title--create" : ""}${titleScrolls ? " bonsai-chat-slot-title--overflowing" : ""}`}
-              >
-                {titleScrolls ? (
-                  <SteamMarqueeText
-                    text={centerLabel}
-                    className="bonsai-chat-slot-title-marquee"
-                    fallback={<span className="bonsai-chat-slot-title-inner">{centerLabel}</span>}
-                  />
-                ) : (
-                  <span ref={titleInnerRef} className="bonsai-chat-slot-title-inner">
-                    {centerLabel}
-                  </span>
-                )}
-              </span>
+              {showSave ? (
+                <span
+                  className={`bonsai-chat-slot-save${stop === "save" ? " bonsai-chat-slot-save--active-stop" : ""}${saveChatEnabled ? "" : " bonsai-chat-slot-save--disabled"}`}
+                  aria-hidden
+                >
+                  <DiskIcon />
+                </span>
+              ) : null}
+              {isCreatePosition ? (
+                <span className="bonsai-chat-slot-newchat">
+                  <PencilIcon />
+                  New chat
+                </span>
+              ) : (
+                <span
+                  ref={titleWindowRef}
+                  className={`bonsai-chat-slot-title${stop === "title" ? " bonsai-chat-slot-title--active-stop" : ""}${titleScrolls ? " bonsai-chat-slot-title--overflowing" : ""}`}
+                >
+                  {titleScrolls ? (
+                    <SteamMarqueeText
+                      text={centerLabel}
+                      className="bonsai-chat-slot-title-marquee"
+                      fallback={<span className="bonsai-chat-slot-title-inner">{centerLabel}</span>}
+                    />
+                  ) : (
+                    <span ref={titleInnerRef} className="bonsai-chat-slot-title-inner">
+                      {centerLabel}
+                    </span>
+                  )}
+                </span>
+              )}
               {!isCreatePosition ? (
                 <span
-                  className={`bonsai-chat-slot-delete${focusStop === "delete" ? " bonsai-chat-slot-delete--active-stop" : ""}`}
+                  className={`bonsai-chat-slot-delete${stop === "delete" ? " bonsai-chat-slot-delete--active-stop" : ""}`}
                   aria-hidden
                 >
                   ×

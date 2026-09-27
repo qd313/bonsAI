@@ -204,21 +204,29 @@ export function buildSavedChatSlotsRowSection(): string {
           text-shadow: 0 0 16px rgba(156, 231, 255, 0.3);
         }
         /*
-          The create position keeps one quiet size whether the row is focused or not.
-
-          Both selectors are needed. The --focused .bonsai-chat-slot-title rule above is three
-          classes (0-3-0); a lone .bonsai-chat-slot-title--create is two (0-2-0), so it loses on
-          specificity no matter where it sits in the file — source order only breaks ties.
-          Measured on device 2026-08-30: the focused create position computed 14px / #f2f7fc,
-          the focused title's values, instead of this rule's. The second selector matches the
-          focused rule's specificity and wins on order. Same trap the dot rules below guard.
+          The new-chat spot (plan 72, the maintainer's option 4 from the true-size drawing of
+          2026-09-27): a pencil in the accent blue and the words "New chat", in place of the old
+          quiet "[+]". The words fit easily: the new-chat spot has no x or save icon to make room
+          for. Values copied from the drawing.
         */
-        .bonsai-scope .bonsai-chat-slot-title--create,
-        .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-title--create {
+        .bonsai-scope .bonsai-chat-slot-newchat {
+          display: inline-flex;
+          align-items: center;
+          gap: ${uiScalePx(5)};
+          font-size: ${uiScalePx(12)};
           font-weight: 700;
-          font-size: ${uiScalePx(13)};
-          color: rgba(200, 214, 230, 0.45);
-          text-shadow: none;
+          line-height: 1.2;
+          white-space: nowrap;
+          color: rgba(200, 214, 230, 0.72);
+        }
+        .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-newchat {
+          color: #f2f7fc;
+        }
+        .bonsai-scope .bonsai-chat-slot-newchat svg {
+          width: ${uiScalePx(14)};
+          height: ${uiScalePx(14)};
+          display: block;
+          color: #9ce7ff;
         }
         .bonsai-scope .bonsai-chat-slot-title-inner {
           display: inline-block;
@@ -269,6 +277,46 @@ export function buildSavedChatSlotsRowSection(): string {
           color: rgba(168, 182, 198, 0.55);
           opacity: 0.85;
         }
+        /*
+          The save icon (plan 72, the maintainer's option B): the mirror of the x at the row's left
+          end - the same 22x22 box, corner and quiet look, pinned to the title row's left edge the
+          way the x is pinned to its right. The name is centred, so the room it needs was already
+          empty. When the D-pad lands on it, it lights in the panel's usual blue rather than the
+          x's red, because saving is safe. Values copied from the drawing.
+        */
+        .bonsai-scope .bonsai-chat-slot-save {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          box-sizing: border-box;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: ${uiScalePx(22)};
+          height: ${uiScalePx(22)};
+          border-radius: ${uiScalePx(6)};
+          border: 1px solid transparent;
+          color: rgba(168, 182, 198, 0.55);
+          opacity: 0.85;
+        }
+        .bonsai-scope .bonsai-chat-slot-save svg {
+          width: ${uiScalePx(14)};
+          height: ${uiScalePx(14)};
+          display: block;
+        }
+        .bonsai-scope .bonsai-chat-slot-save--active-stop {
+          color: #9ce7ff;
+          border-color: rgba(156, 231, 255, 0.8);
+          background: rgba(12, 22, 30, 0.55);
+          box-shadow: 0 0 10px 1px rgba(156, 231, 255, 0.25);
+          opacity: 1;
+        }
+        /* Saving is not allowed yet: dimmed the way the old Save chat button was; A still opens the
+           window, which asks for the permission. */
+        .bonsai-scope .bonsai-chat-slot-save--disabled {
+          opacity: 0.45;
+        }
         .bonsai-scope .bonsai-chat-slot-delete--active-stop {
           color: #f16a5a;
           border-color: rgba(224, 74, 58, 0.8);
@@ -291,16 +339,15 @@ export function buildSavedChatSlotsRowSection(): string {
           pointer-events: none;
         }
         /* Slightly brighter and unblurred-looking than a name ghost: it is a destination, not a
-           neighbouring title, and at 15% of the row it has to stay legible at two words. */
+           neighbouring title. Since plan 72 it is just the pencil the new-chat spot shows, no
+           words (the maintainer's option 4). */
         .bonsai-scope .bonsai-chat-slot-ghost--create {
-          /* Sizes to its content and does not shrink. Under the 15% cap the other ghosts share it
-             measured 28px on device, which ellipsized the old "+ New chat" wording down to
-             "+ N..." - noise rather than an indicator. A name ghost may truncate, because a
-             partial name still hints at which neighbour it is; this one means nothing unless it
-             is readable. It carries the same [+] token the create position shows as its centre
-             label, so cycling left onto it is one glyph growing rather than one label swapping
-             for another. */
+          /* Sizes to its content and does not shrink: a name ghost may truncate, because a partial
+             name still hints at which neighbour it is; this one means nothing unless it is whole.
+             It carries the same pencil the new-chat spot shows beside its words. */
           flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
           max-width: none;
           font-size: ${uiScalePx(11)};
           color: rgba(156, 231, 255, 0.42);
@@ -310,9 +357,25 @@ export function buildSavedChatSlotsRowSection(): string {
              than as the neighbour to its left. */
           margin-right: ${uiScalePx(8)};
         }
+        .bonsai-scope .bonsai-chat-slot-ghost--create svg {
+          width: ${uiScalePx(12)};
+          height: ${uiScalePx(12)};
+          display: block;
+        }
+        /*
+          At rest on the newest chat with a long name, the name and the ghosts fill the whole row,
+          so the pencil ghost sits at the row's left edge - under the save icon, which would hide
+          it. A name ghost is meant to be overlapped there (the icon sits over its faded start, the
+          way the x sits over the next one); the pencil is not a fragment, so it steps clear of the
+          icon's 22px box and a 6px gap. The drawing never showed the two together; this is the
+          smallest change that keeps both visible.
+        */
+        .bonsai-scope .bonsai-chat-slot-title-row--has-save .bonsai-chat-slot-ghost--create {
+          margin-left: ${uiScalePx(28)};
+        }
         /* No directional fade on the create ghost: the prev mask hides everything left of 55%
-           of the span, which on a three-character token eats the opening bracket. A name ghost
-           wants the fade because it is a fragment; this one is whole. */
+           of the span, which on a small whole glyph eats half of it. A name ghost wants the fade
+           because it is a fragment; this one is whole. */
         .bonsai-scope .bonsai-chat-slot-ghost--prev.bonsai-chat-slot-ghost--create {
           -webkit-mask-image: none;
           mask-image: none;

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 548,
-  "edgeCount": 1481,
+  "fileCount": 547,
+  "edgeCount": 1477,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -537,7 +537,6 @@
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/PermissionDenyAction.tsx",
-        "src/components/SaveChatToDesktopRow.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/components/icons.tsx",
@@ -1141,26 +1140,6 @@
       "importedBy": [
         "src/components/ReplyCopyButton.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx"
-      ]
-    },
-    "src/components/SaveChatToDesktopRow.test.tsx": {
-      "imports": [
-        "src/components/SaveChatToDesktopRow.tsx",
-        "src/features/preset-carousel/presetRowFocusNav.tsx",
-        "src/test-harness/fakeDeckyUi.tsx",
-        "src/utils/navFocusRegistry.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/SaveChatToDesktopRow.tsx": {
-      "imports": [
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/utils/navFocusRegistry.ts",
-        "src/utils/saveChatRowNav.ts"
-      ],
-      "importedBy": [
-        "src/components/MainTabChatTranscript.tsx",
-        "src/components/SaveChatToDesktopRow.test.tsx"
       ]
     },
     "src/components/SessionContextStrip.test.tsx": {
@@ -1910,6 +1889,15 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx"
       ]
     },
+    "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/chatSlotsApi.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/ChatSlotRow.scroll.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -1940,6 +1928,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx"
       ]
@@ -2136,7 +2125,6 @@
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/components/SaveChatToDesktopRow.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -2539,15 +2527,22 @@
         "src/features/preset-carousel/presetRowNav.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
-        "src/utils/saveChatRowNav.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
-        "src/components/SaveChatToDesktopRow.test.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/utils/permHintRowNav.test.ts"
       ]
+    },
+    "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx": {
+      "imports": [
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
     },
     "src/features/preset-carousel/presetRowLayout.test.ts": {
       "imports": [
@@ -4093,14 +4088,15 @@
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
-        "src/components/SaveChatToDesktopRow.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/test-harness/setup.ts",
@@ -4771,7 +4767,6 @@
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatPanelScroll.test.ts",
         "src/utils/revealOpenedDetails.test.tsx",
-        "src/utils/saveChatRowNav.ts",
         "src/utils/settingsPanelScroll.ts"
       ]
     },
@@ -4798,6 +4793,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -5347,14 +5343,14 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
-        "src/components/SaveChatToDesktopRow.test.tsx",
-        "src/components/SaveChatToDesktopRow.tsx",
+        "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useEarlierTurnsPill.ts",
@@ -5369,8 +5365,7 @@
         "src/utils/navFocusRegistry.test.ts",
         "src/utils/permHintRowNav.test.ts",
         "src/utils/permissionJumpRegistry.test.ts",
-        "src/utils/permissionJumpRegistry.ts",
-        "src/utils/saveChatRowNav.ts"
+        "src/utils/permissionJumpRegistry.ts"
       ]
     },
     "src/utils/ollamaTabLocalSurvival.ts": {
@@ -5603,16 +5598,6 @@
       "importedBy": [
         "src/components/CharacterPickerModal.tsx",
         "src/utils/runningGameCharacterSuggestions.test.ts"
-      ]
-    },
-    "src/utils/saveChatRowNav.ts": {
-      "imports": [
-        "src/utils/chatPanelScroll.ts",
-        "src/utils/navFocusRegistry.ts"
-      ],
-      "importedBy": [
-        "src/components/SaveChatToDesktopRow.tsx",
-        "src/features/preset-carousel/presetRowFocusNav.tsx"
       ]
     },
     "src/utils/sessionRagChipCandidates.ts": {

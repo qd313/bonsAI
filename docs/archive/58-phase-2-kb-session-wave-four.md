@@ -8,7 +8,7 @@ a list of questions only they can answer.
 **Status: nothing started. Runs after [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md) has
 landed. Waiting on the answers in § 8, then on the word "go".**
 
-**Replaced 2026-09-25 by [plan 70](../planning/70-kb-wave-four-and-deck-test-wave.md)**, which re-read § 1
+**Replaced 2026-09-25 by [plan 70](70-kb-wave-four-and-deck-test-wave.md)**, which re-read § 1
 against the code and took the § 8 answers as D112. Kept for history.
 
 **Changed by phase 1 (2026-09-17).** This was plan 58 until the maintainer asked for two fixes to land

@@ -353,6 +353,12 @@ long prompt on the Deck's processor instead of its graphics chip took about 220 
 so much slower that it is not a real way to buy the panel more frames during an answer, whatever it might
 save it.
 
+**A saving measured on the PC may not show on the Deck with a game running.** Drawing an arriving answer
+piece by piece made one update several times cheaper on the PC at every answer length, and on the Deck,
+with Deep Rock Galactic: Survivor running, it made no clear difference: the game and the AI were taking
+most of the processor between them. Measure on the Deck, with the game running, before building a second
+round of the same kind of saving.
+
 ---
 
 ## 4. Briefing helpers
@@ -469,6 +475,12 @@ prompt had once been seen bringing a session back after it hit its usage limit. 
 2026-09-26 it did not: the session hit its usage limit twice, and both times it sat there until the
 maintainer's own message woke it back up, not the schedule. Send a message to resume unattended work
 rather than assuming the schedule will do it.
+
+**A tool that seems to hang for hours overnight is more likely the PC asleep.** In the VS Code extension
+the desktop goes to sleep during a long unattended session, and everything freezes until it wakes; on
+2026-09-27 a Deck wait set to stop after 90 seconds looked hung for almost four hours for exactly that
+reason. Start the keep-awake at the start of a long session (see AGENTS.md, "Long sessions: keep this PC
+awake") before blaming the tool.
 
 ---
 

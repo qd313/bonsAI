@@ -41,6 +41,34 @@ out of [roadmap.md](../roadmap.md) on 2026-09-27 during plan 70's final bookkeep
 line apart from link paths adjusted for this folder, to keep that document under its size limit. The
 roadmap keeps one pointer line to them._
 
+**Closed 2026-09-27 (plan 70, flows L8 to L10, and the maintainer's calls):**
+
+- ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **DONE, fixed
+  2026-09-26 (plan 70, helper I), passed on the Deck 2026-09-27 with the maintainer's own key.** Row
+  **VAC-03-07**. Evidence `docs/test-evidence/plan70-VAC-03-07-try2.json` (+ `.png`).
+  [Detail](../roadmap-details.md#the-steam-ban-lookups-report-shows-as-raw-text-not-a-table).
+- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **DONE, retired by
+  the maintainer 2026-09-27 (helper Q, `db4b3b4a`).** "Not in my notes" and "No close match" are unchanged.
+  [Detail](../roadmap-details.md#no-tip-line-numbers).
+- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **DONE, fixed
+  2026-09-27 (helper R, `6d31bc1d`, `8bba1f00`), passed on the Deck 2026-09-27.** On an answer that hid a
+  spoiler it reads "Sources hidden — open the notes to see them" until the notes block is opened. Evidence
+  `docs/test-evidence/plan70-SPOILER-CREDITS-01.json` (+ 3 screenshots). [Detail](../roadmap-details.md#flow-l10-findings).
+- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **DONE, published by
+  the maintainer 2026-09-27 and checked by the session:** both download sites serve 2026.09.26, byte for
+  byte the release build. The fresh download from the published site passed on the Deck (R.5).
+  **KB-FORMAT-REFUSE-01** is still owed: no too-new library exists to test it. Evidence `docs/test-evidence/plan70-R5.json`.
+  [Detail](../roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **DONE, built 2026-09-26
+  (helper D), passed on the Deck 2026-09-27.** Row **KB-NOMIC-OFFER-01**. Evidence `docs/test-evidence/plan70-R5.json`.
+  [Detail](../roadmap-details.md#pull-the-embedding-model-as-part-of-installing-the-library).
+- ★ `[ollama]` **The meaning-search hint stayed on the open Ollama tab after the model landed** — **DONE,
+  fixed 2026-09-27 (helper U, `6885d5d7`, `7c924310`), passed on the Deck 2026-09-27:** gone 0.7 s after the
+  download finished. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`. [Detail](../roadmap-details.md#flow-l10-findings).
+- ★ `[ollama]` **"Update knowledge base" showed nothing and logged nothing** — **DONE, fixed 2026-09-27
+  (helper U, `03c8e25d`, `2644d5df`), passed on the Deck 2026-09-27:** it says what it did, and logs one
+  line per press. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`. [Detail](../roadmap-details.md#flow-l10-findings).
+
 **Closed 2026-09-26 (plan 70, flow L1, missed in the earlier bookkeeping pass):**
 
 - ★ `[KB]` **"What time is it" can still get a troubleshooting tip** — **DONE, fixed 2026-09-26, passed

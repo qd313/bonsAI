@@ -1897,7 +1897,7 @@ first step.
 ### D112 — LOCKED 2026-09-25 (raised 2026-09-25) — Plan 70, knowledge-base wave four with an automated Deck test wave: the twelve calls before go
 
 The number was kept for 58 phase 2's answers on 2026-09-16. That plan went stale before it ran and was
-replaced by [plan 70](../planning/70-kb-wave-four-and-deck-test-wave.md), so its answers take the number here,
+replaced by [plan 70](../archive/70-kb-wave-four-and-deck-test-wave.md), so its answers take the number here,
 after D119. The maintainer answered all twelve on 2026-09-25, in three rounds, before "go".
 
 1. **Fitting around plan 68, which was building in parallel:** start now and share. Leave its files alone until
@@ -1959,3 +1959,7 @@ demote is marked drawn and planned only; the controller rig entry gains the two 
 - **The ban-lookup check (18):** the maintainer's own Steam Web API key is now saved in the plugin's settings on
   the Deck, taken from their private settings file that git ignores; it was never committed. The VAC-03-07
   check is no longer blocked and is running on the Deck.
+- **The decode effect with a game running (19), 2026-09-27, about 06:10, watching the Deck:** keep it, and
+  measure what it costs. Landed as `4c7edeb6`: the decode effect now plays while a game runs; the slower
+  update pace and the still small animations stay. Measured the same morning: it costs about 5 to 9 frames a
+  second in the panel with a game running.

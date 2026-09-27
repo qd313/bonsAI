@@ -1,0 +1,23 @@
+{
+  "row": "VAC-03-07 — the ban report reads as plain lines (plan 70 flow L8.1, with the maintainer's own Steam Web API key)",
+  "build_commit": "Deck runs the build whose dist/index.js sha256 is 942a432a28ab9f56... (same as the PC's dist at tip 65b3d2a6); not redeployed",
+  "deck_time": "2026-09-27 00:18 EDT",
+  "screen": "external monitor (Quick Access page 855x766; Deck capture 1920x1080)",
+  "setup": "Nothing running. AI characters switched OFF through the Settings tab for the checks. Permissions: 'Steam ban lookup' read as ON (aria-checked true), not changed. Key present in settings: length 32 (the key itself was never printed or saved). New chat from the chat row's [+].",
+  "pressed": "chat row LB to [+]; question put in with scripts/deck_send_ask.py (VERIFIED, full text 'bonsai:vac-check 76561197983599210'); walked Down to Ask (3 presses), A on Ask",
+  "seen": {
+    "reply_kind": "a real report, not the 'no key saved' message; arrived in under 2 s (command reply, no model)",
+    "reply_text": "Steam ban status (GetPlayerBans) / Limitation: This reflects these Steam accounts only. bonsAI does not prove someone was your opponent unless you copied their verified 64-bit SteamID (or trusted profile URL) yourself. / [bullet] SteamID 76561197983599210 — VAC: False · #VAC bans: 0 · Game bans: 0 · Days since last ban: 0 · Community banned: False · Trade ban: none / Interpret bans as account-level history, not proof of behavior in this match.",
+    "reply_characters": 435,
+    "bullet_lines_li": 1,
+    "accounts_in_reply": 1,
+    "tables": 0,
+    "pipe_characters": 0,
+    "runs_of_two_or_more_hyphens": 0,
+    "single_hyphens": "2, both inside words ('64-bit', 'account-level')",
+    "em_dashes": "1, the separator between the SteamID and 'VAC:' inside the bullet line",
+    "key_in_log_or_chat_files": "0 matches in today's plugin log, 0 files in chat_slots/chat_threads (checked on the Deck without printing the key)"
+  },
+  "screenshot": "plan70-VAC-03-07-try2.png",
+  "verdict": "PASS against the runbook's test (a report; the account's facts are one plain bullet line; no | and no run of -). Owner call: the row text says 'no pipe or dash characters anywhere' and the bullet line carries one em dash as a separator."
+}

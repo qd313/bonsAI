@@ -1,0 +1,38 @@
+{
+ "row": "plan70 flow L10.1 - the two download-screen fixes: 'Update knowledge base says what it did' and 'the meaning-search hint clears by itself'",
+ "build_commit": "tip 7c924310 deployed 05:48 (Deck dist/index.js c71642f26a613e3a... = PC dist; main.py a2295571fe0c4d8e... = PC)",
+ "deck_time": "2026-09-27 05:49 to 05:56 EDT",
+ "screen": "external monitor; Quick Access page 855x766; captures 1920x1080",
+ "setup": "nothing running; plugin open on the Ollama tab; AI characters OFF (switched on the Settings tab for this flow); knowledge base installed, version 2026.09.26",
+ "update_says_what_it_did": {
+  "pressed": "Ollama tab, walked Down to 'Update knowledge base' (7 presses), A; 18 s later A again; then Right, Right, Left, Left (never A on Remove)",
+  "seen_press_1": "page recorder (100 ms): 05:49:58 'Checking for a newer version...' appeared under the Installed/path lines; 0.4 s later it read 'Already up to date (version 2026.09.26).'",
+  "log_press_1": "[05:49:58,844] update_rag_corpus: checked; installed=2026.09.26 newest=2026.09.26 outcome=up_to_date",
+  "seen_press_2": "05:50:16 'Checking for a newer version...', 05:50:17 'Already up to date (version 2026.09.26).'",
+  "log_press_2": "[05:50:16,976] update_rag_corpus: checked; installed=2026.09.26 newest=2026.09.26 outcome=up_to_date (second line; 0 such lines before the first press)",
+  "focus": "stayed on 'Update knowledge base' after both presses (button moved down 23 px, y 641 -> 664, as the message line appeared above it)",
+  "row_stops": "Right -> Remove, Right -> no move (edge), Left -> Update, Left -> Quick Access tab rail. Only two stops in the row, both fully visible. Saved as check plan70-KB-UPDATE-row-walk.",
+  "side_note": "in the screenshot taken 0.1 s after the first press, the white focus ring is drawn about 30 px above the button (over the new message line) - probably caught mid-move; not re-checked",
+  "screenshot": "plan70-KB-UPDATE-HINT-1-already-up-to-date.png",
+  "verdict": "PASS"
+ },
+ "hint_clears_by_itself": {
+  "removal": "05:51:07 ~/.local/bin/ollama rm nomic-embed-text:latest (the one removal allowed); api/tags then listed only gemma4:e2b-it-qat",
+  "hint_on_open_tab": "the Ollama tab was open during the removal; the hint did NOT appear by itself within 60 s (page recorder, 100 ms: no 'nomic' line from 05:51:02 to 05:52:24). The tab reads the model status when it opens and does not re-check while idle. Went RB then LB (to the Settings tab and back); the hint showed at once: 'Install nomic-embed-text in Ollama for Keyword + meaning search.' with the button 'Pull nomic-embed-text'",
+  "pressed": "walked Up to 'Pull nomic-embed-text' (8 presses), A at 05:52:58, tab left open",
+  "button_after_A": "'Pulling... (Ollama -> Where AI runs)' (screenshot) plus toast 'Pulling nomic-embed-text / Watch progress in Ollama -> Where AI runs.'",
+  "model_landed": "05:53:06.555 (api/tags polled every 0.25 s on the Deck) - nomic-embed-text:latest listed again",
+  "plugin_log_success": "[05:53:06,318] local_ollama_setup: success; [05:53:06,321] Local Ollama setup finished.",
+  "hint_gone": "05:53:07 (page recorder; t=124.8 s) - the whole hint including the button unmounted without leaving the tab",
+  "seconds_landing_to_hint_gone": "about 0.5 s after api/tags listed it; about 0.7 s after the log's success line (limit 5 s)",
+  "focus_after": "the ring had been on the Pull button; when the hint unmounted nothing owned the ring (no focused element); the next LB press worked normally",
+  "question_after": "new chat ([+]), Strategy, 'in hollow knight where do i find the mantis claw and how do i get there' (send script VERIFIED), Ask; Show details: chip 'Keyword + meaning', 'Retrieval: Keyword + meaning', Embed 536.09 ms, Re-rank 21.13 ms, three Hollow Knight notes",
+  "screenshots": [
+   "plan70-KB-UPDATE-HINT-2-pulling.png",
+   "plan70-KB-UPDATE-HINT-3-hint-gone.png",
+   "plan70-KB-UPDATE-HINT-4-keyword-meaning.png"
+  ],
+  "verdict": "PASS on the runbook's pass line (Pulling..., model landed, hint gone without leaving the tab within about 0.5-0.7 s, Keyword + meaning after). Separate note for the owner: the hint only appeared after leaving and re-entering the tab; the runbook expected it to show on the open tab"
+ },
+ "other_observation": "on the finished mantis-claw answer, walking UP from the question box went Save chat to Desktop -> Retry same prompt -> Main tab, skipping the turn's Show details, the helpful buttons and the two branch choices; walking DOWN from the top reached them all (question, Show reasoning, A., B., Mark reply helpful, Show details)"
+}

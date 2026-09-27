@@ -1,0 +1,1381 @@
+{
+ "row": "plan70 flow L8.2 - frame-rate baseline of the Quick Access panel while an answer arrives, with and without a game, scramble on and off",
+ "build_commit": "Deck build dist/index.js sha256 942a432a28ab9f56... (same as the PC dist at tip 65b3d2a6); not redeployed",
+ "deck_time": "2026-09-27 00:21 to 00:33 EDT",
+ "screen": "external monitor; Quick Access page 855x766 with nothing running, 855x845 with the game running; Deck captures 1920x1080",
+ "model": "gemma4:e2b-it-qat (answers) plus nomic-embed-text:latest, both fully in graphics memory (api/ps size_vram = size) before and after the runs",
+ "method": "As plan69-answer-frame-rate-2026-09-25.json: requestAnimationFrame callbacks per second in the Quick Access page, 2.5 s slices back to back inside ONE answer, first 0.3 s of each slice dropped (2.2 s counted). Counter started by the page reader right after A on Ask, one new chat per run, Strategy mode, reasoning effort medium (as set). Phase per slice read from the turn's own classes: 'thinking' = the live reasoning box changing; 'answer_arriving' = the answer bubble in stream-preview and growing; 'mixed_edge' = the slice where thinking ended and the answer began, or the last partial slice; 'after_finish' = idle after the answer.",
+ "AI_characters": "OFF for the checks (switched on the Settings tab), back ON at the end",
+ "runs": [
+  {
+   "run": "A",
+   "setup": "nothing running, scramble ON (as found: stream_scramble_enabled true, style settle, green)",
+   "question": "in hollow knight walk me through a detailed plan for the early game, which areas to explore in order, which charms to pick up first, and how to beat each early boss step by step",
+   "answer_chars": 1466,
+   "reasoning_shown": "Show reasoning 20 s",
+   "glows": "question-box breathing glow (bonsai-ask-input-breathe) running while thinking; green scramble on the arriving text",
+   "slices_fps_by_phase": {
+    "thinking": [
+     58.6,
+     57.7,
+     59.5,
+     59.1,
+     59.5,
+     57.3,
+     58.2
+    ],
+    "answer_arriving": [
+     50.5,
+     49.5,
+     47.7,
+     40.9
+    ],
+    "mixed_edge": [
+     55
+    ],
+    "after_finish": [
+     57.7,
+     60,
+     60,
+     60
+    ]
+   },
+   "median_by_phase": {
+    "thinking": 58.6,
+    "answer_arriving": 48.6,
+    "mixed_edge": 55,
+    "after_finish": 60.0
+   },
+   "raw_slices": [
+    {
+     "i": 0,
+     "fps": 58.6,
+     "frames": 129,
+     "secs": 2.2,
+     "r0": 329,
+     "r1": 588,
+     "a0": 0,
+     "a1": 0,
+     "t0": 4,
+     "live": "thinking"
+    },
+    {
+     "i": 1,
+     "fps": 57.7,
+     "frames": 127,
+     "secs": 2.2,
+     "r0": 588,
+     "r1": 594,
+     "a0": 0,
+     "a1": 0,
+     "t0": 2520,
+     "live": "thinking"
+    },
+    {
+     "i": 2,
+     "fps": 59.5,
+     "frames": 131,
+     "secs": 2.201,
+     "r0": 594,
+     "r1": 547,
+     "a0": 0,
+     "a1": 0,
+     "t0": 5038,
+     "live": "thinking"
+    },
+    {
+     "i": 3,
+     "fps": 59.1,
+     "frames": 130,
+     "secs": 2.199,
+     "r0": 547,
+     "r1": 594,
+     "a0": 0,
+     "a1": 0,
+     "t0": 7554,
+     "live": "thinking"
+    },
+    {
+     "i": 4,
+     "fps": 59.5,
+     "frames": 131,
+     "secs": 2.201,
+     "r0": 594,
+     "r1": 594,
+     "a0": 0,
+     "a1": 0,
+     "t0": 10075,
+     "live": "thinking"
+    },
+    {
+     "i": 5,
+     "fps": 57.3,
+     "frames": 126,
+     "secs": 2.2,
+     "r0": 594,
+     "r1": 594,
+     "a0": 0,
+     "a1": 0,
+     "t0": 12586,
+     "live": "thinking"
+    },
+    {
+     "i": 6,
+     "fps": 58.2,
+     "frames": 128,
+     "secs": 2.2,
+     "r0": 594,
+     "r1": 555,
+     "a0": 0,
+     "a1": 0,
+     "t0": 15101,
+     "live": "thinking"
+    },
+    {
+     "i": 7,
+     "fps": 55,
+     "frames": 121,
+     "secs": 2.2,
+     "r0": 555,
+     "r1": 21,
+     "a0": 0,
+     "a1": 294,
+     "t0": 17620,
+     "live": "answer"
+    },
+    {
+     "i": 8,
+     "fps": 50.5,
+     "frames": 111,
+     "secs": 2.2,
+     "r0": 21,
+     "r1": 21,
+     "a0": 294,
+     "a1": 577,
+     "t0": 20135,
+     "live": "answer"
+    },
+    {
+     "i": 9,
+     "fps": 49.5,
+     "frames": 109,
+     "secs": 2.2,
+     "r0": 21,
+     "r1": 21,
+     "a0": 577,
+     "a1": 863,
+     "t0": 22710,
+     "live": "answer"
+    },
+    {
+     "i": 10,
+     "fps": 47.7,
+     "frames": 105,
+     "secs": 2.2,
+     "r0": 21,
+     "r1": 21,
+     "a0": 863,
+     "a1": 1134,
+     "t0": 25253,
+     "live": "answer"
+    },
+    {
+     "i": 11,
+     "fps": 40.9,
+     "frames": 90,
+     "secs": 2.2,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1134,
+     "a1": 1431,
+     "t0": 27806,
+     "live": "answer"
+    },
+    {
+     "i": 12,
+     "fps": 57.7,
+     "frames": 127,
+     "secs": 2.2,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1431,
+     "a1": 1466,
+     "t0": 30321,
+     "live": "done"
+    },
+    {
+     "i": 13,
+     "fps": 60,
+     "frames": 132,
+     "secs": 2.201,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1466,
+     "a1": 1466,
+     "t0": 32834,
+     "live": "done"
+    },
+    {
+     "i": 14,
+     "fps": 60,
+     "frames": 132,
+     "secs": 2.201,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1466,
+     "a1": 1466,
+     "t0": 35351,
+     "live": "done"
+    },
+    {
+     "i": 15,
+     "fps": 60,
+     "frames": 132,
+     "secs": 2.201,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1466,
+     "a1": 1466,
+     "t0": 37869,
+     "live": "done"
+    }
+   ]
+  },
+  {
+   "run": "B",
+   "setup": "nothing running, scramble switched OFF on the Developer tab",
+   "question": "in hades give me a thorough guide to the whole first run, which boons to take from each god, how to handle each region, and how to prepare for the fight at the end of the first region",
+   "answer_chars": 1523,
+   "reasoning_shown": "Show reasoning 19 s",
+   "glows": "question-box breathing glow while thinking; no page animation running while the answer arrived",
+   "slices_fps_by_phase": {
+    "thinking": [
+     59.6,
+     59.5,
+     59.1,
+     58.6,
+     58.2,
+     59.5,
+     60
+    ],
+    "answer_arriving": [
+     60,
+     59.5,
+     60,
+     60
+    ],
+    "mixed_edge": [
+     58.6
+    ],
+    "after_finish": [
+     59.5,
+     60,
+     60
+    ]
+   },
+   "median_by_phase": {
+    "thinking": 59.5,
+    "answer_arriving": 60.0,
+    "mixed_edge": 58.6,
+    "after_finish": 60
+   },
+   "raw_slices": [
+    {
+     "i": 0,
+     "fps": 59.6,
+     "frames": 131,
+     "r0": 21,
+     "r1": 340,
+     "a0": 0,
+     "a1": 0,
+     "t0": 2,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 1,
+     "fps": 59.5,
+     "frames": 131,
+     "r0": 340,
+     "r1": 596,
+     "a0": 0,
+     "a1": 0,
+     "t0": 2513,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 2,
+     "fps": 59.1,
+     "frames": 130,
+     "r0": 596,
+     "r1": 577,
+     "a0": 0,
+     "a1": 0,
+     "t0": 5030,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 3,
+     "fps": 58.6,
+     "frames": 129,
+     "r0": 577,
+     "r1": 583,
+     "a0": 0,
+     "a1": 0,
+     "t0": 7546,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 4,
+     "fps": 58.2,
+     "frames": 127,
+     "r0": 583,
+     "r1": 481,
+     "a0": 0,
+     "a1": 0,
+     "t0": 10065,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 5,
+     "fps": 59.5,
+     "frames": 131,
+     "r0": 481,
+     "r1": 548,
+     "a0": 0,
+     "a1": 0,
+     "t0": 12582,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 6,
+     "fps": 60,
+     "frames": 132,
+     "r0": 548,
+     "r1": 556,
+     "a0": 0,
+     "a1": 0,
+     "t0": 15098,
+     "live": "thinking",
+     "anims": "bonsai-ask-input-breathe"
+    },
+    {
+     "i": 7,
+     "fps": 58.6,
+     "frames": 129,
+     "r0": 556,
+     "r1": 21,
+     "a0": 0,
+     "a1": 108,
+     "t0": 17614,
+     "live": "answer",
+     "anims": ""
+    },
+    {
+     "i": 8,
+     "fps": 60,
+     "frames": 132,
+     "r0": 21,
+     "r1": 21,
+     "a0": 108,
+     "a1": 419,
+     "t0": 20130,
+     "live": "answer",
+     "anims": ""
+    },
+    {
+     "i": 9,
+     "fps": 59.5,
+     "frames": 131,
+     "r0": 21,
+     "r1": 21,
+     "a0": 419,
+     "a1": 780,
+     "t0": 22662,
+     "live": "answer",
+     "anims": ""
+    },
+    {
+     "i": 10,
+     "fps": 60,
+     "frames": 132,
+     "r0": 21,
+     "r1": 21,
+     "a0": 780,
+     "a1": 1122,
+     "t0": 25186,
+     "live": "answer",
+     "anims": ""
+    },
+    {
+     "i": 11,
+     "fps": 60,
+     "frames": 132,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1122,
+     "a1": 1472,
+     "t0": 27696,
+     "live": "answer",
+     "anims": ""
+    },
+    {
+     "i": 12,
+     "fps": 59.5,
+     "frames": 131,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1472,
+     "a1": 1523,
+     "t0": 30212,
+     "live": "done",
+     "anims": ""
+    },
+    {
+     "i": 13,
+     "fps": 60,
+     "frames": 132,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1523,
+     "a1": 1523,
+     "t0": 32729,
+     "live": "done",
+     "anims": ""
+    },
+    {
+     "i": 14,
+     "fps": 60,
+     "frames": 132,
+     "r0": 21,
+     "r1": 21,
+     "a0": 1523,
+     "a1": 1523,
+     "t0": 35246,
+     "live": "done",
+     "anims": ""
+    }
+   ]
+  },
+  {
+   "run": "C_first_try",
+   "setup": "Deep Rock Galactic: Survivor running (title screen), scramble ON. Not counted as C: the model gave no reasoning (only the spinner line for ~2.5 s) and the answer was short and refused the guide",
+   "question": "in hollow knight explain in detail how to get through the city of tears, which paths to take, what upgrades to grab there, and how to beat the soul master boss step by step",
+   "answer_chars": 875,
+   "reasoning_shown": "none",
+   "glows": "spinner (bonsai-thinking-spin) and question-box glow at the start; scramble on the arriving text",
+   "slices_fps_by_phase": {
+    "waiting_line": [
+     44.5
+    ],
+    "answer_arriving": [
+     16.3,
+     11,
+     15.1,
+     11.8,
+     17.8
+    ],
+    "after_finish": [
+     45.8,
+     60,
+     60.1
+    ]
+   },
+   "median_by_phase": {
+    "waiting_line": 44.5,
+    "answer_arriving": 15.1,
+    "after_finish": 60
+   },
+   "raw_slices": [
+    {
+     "i": 0,
+     "fps": 44.5,
+     "frames": 98,
+     "r0": 97,
+     "r1": 97,
+     "a0": 0,
+     "a1": 0,
+     "t0": 43,
+     "live": "chat-turn-row-header--live chat-turn-row-header--streaming chat-thinking-line",
+     "anims": "bonsai-thinking-spin,bonsai-ask-input-breathe"
+    },
+    {
+     "i": 1,
+     "fps": 16.3,
+     "frames": 36,
+     "r0": 97,
+     "r1": 70,
+     "a0": 0,
+     "a1": 103,
+     "t0": 2579,
+     "live": "... stream-preview stream-scramble ...",
+     "anims": "bonsai-thinking-spin"
+    },
+    {
+     "i": 2,
+     "fps": 11,
+     "frames": 24,
+     "r0": 70,
+     "r1": 70,
+     "a0": 103,
+     "a1": 336,
+     "t0": 5161,
+     "live": "answer+scramble",
+     "anims": "bonsai-thinking-spin"
+    },
+    {
+     "i": 3,
+     "fps": 15.1,
+     "frames": 33,
+     "r0": 70,
+     "r1": 70,
+     "a0": 336,
+     "a1": 602,
+     "t0": 7907,
+     "live": "answer+scramble",
+     "anims": "bonsai-thinking-spin"
+    },
+    {
+     "i": 4,
+     "fps": 11.8,
+     "frames": 25,
+     "r0": 70,
+     "r1": 70,
+     "a0": 602,
+     "a1": 785,
+     "t0": 10562,
+     "live": "answer+scramble",
+     "anims": "bonsai-thinking-spin"
+    },
+    {
+     "i": 5,
+     "fps": 17.8,
+     "frames": 38,
+     "r0": 70,
+     "r1": 15,
+     "a0": 785,
+     "a1": 875,
+     "t0": 13198,
+     "live": "answer+scramble",
+     "anims": "bonsai-thinking-spin"
+    },
+    {
+     "i": 6,
+     "fps": 45.8,
+     "frames": 100,
+     "r0": 15,
+     "r1": 0,
+     "a0": 875,
+     "a1": 875,
+     "t0": 15737,
+     "live": "done",
+     "anims": ""
+    },
+    {
+     "i": 7,
+     "fps": 60,
+     "frames": 132,
+     "t0": 18244,
+     "live": "done"
+    },
+    {
+     "i": 8,
+     "fps": 60.1,
+     "frames": 132,
+     "t0": 20762,
+     "live": "done"
+    }
+   ]
+  },
+  {
+   "run": "C",
+   "setup": "Deep Rock Galactic: Survivor running (title screen), scramble ON, same answer model",
+   "question": "in this game give me a detailed plan for my first few runs, which weapons and upgrades to pick, how to handle the swarms, and how to prepare for the dreadnought fight",
+   "answer_chars": 1517,
+   "reasoning_shown": "Show reasoning 29 s",
+   "glows": "question-box breathing glow while thinking; scramble on arriving text",
+   "screenshot_during_slice": 14,
+   "slices_fps_by_phase": {
+    "waiting_line": [
+     42.1
+    ],
+    "thinking": [
+     32.2,
+     35,
+     36.4,
+     37.1,
+     39.1,
+     37,
+     36.5,
+     34.5,
+     35.6,
+     35,
+     35
+    ],
+    "answer_arriving": [
+     13.7,
+     14.1,
+     11.9,
+     14,
+     10.4,
+     11,
+     11.2,
+     8.3
+    ],
+    "mixed_edge": [
+     33.6,
+     20.9
+    ],
+    "after_finish": [
+     54.5,
+     59.9,
+     60
+    ]
+   },
+   "median_by_phase": {
+    "waiting_line": 42.1,
+    "thinking": 35.6,
+    "answer_arriving": 11.6,
+    "mixed_edge": 27.2,
+    "after_finish": 59.9
+   },
+   "raw_slices": [
+    [
+     0,
+     42.1,
+     93,
+     2,
+     8,
+     0,
+     0,
+     12,
+     "waitline",
+     "bonsai-thinking-spin,bonsai-ask-input-breathe"
+    ],
+    [
+     1,
+     32.2,
+     71,
+     8,
+     232,
+     0,
+     0,
+     2549,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     2,
+     35,
+     77,
+     232,
+     415,
+     0,
+     0,
+     5080,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     3,
+     36.4,
+     80,
+     415,
+     584,
+     0,
+     0,
+     7607,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     4,
+     37.1,
+     81,
+     584,
+     541,
+     0,
+     0,
+     10142,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     5,
+     39.1,
+     86,
+     541,
+     469,
+     0,
+     0,
+     12677,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     6,
+     37,
+     83,
+     469,
+     575,
+     0,
+     0,
+     15200,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     7,
+     36.5,
+     81,
+     575,
+     477,
+     0,
+     0,
+     17774,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     8,
+     34.5,
+     76,
+     477,
+     477,
+     0,
+     0,
+     20369,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     9,
+     35.6,
+     79,
+     477,
+     452,
+     0,
+     0,
+     22892,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     10,
+     35,
+     77,
+     452,
+     557,
+     0,
+     0,
+     25438,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     11,
+     35,
+     77,
+     557,
+     578,
+     0,
+     0,
+     28050,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     12,
+     33.6,
+     77,
+     578,
+     21,
+     0,
+     5,
+     30574,
+     "answer",
+     ""
+    ],
+    [
+     13,
+     13.7,
+     30,
+     21,
+     21,
+     5,
+     224,
+     33344,
+     "answer",
+     ""
+    ],
+    [
+     14,
+     14.1,
+     31,
+     21,
+     21,
+     224,
+     400,
+     36009,
+     "answer",
+     ""
+    ],
+    [
+     15,
+     11.9,
+     26,
+     21,
+     21,
+     400,
+     543,
+     38557,
+     "answer",
+     ""
+    ],
+    [
+     16,
+     14,
+     31,
+     21,
+     21,
+     543,
+     704,
+     41094,
+     "answer",
+     ""
+    ],
+    [
+     17,
+     10.4,
+     23,
+     21,
+     21,
+     704,
+     903,
+     43741,
+     "answer",
+     ""
+    ],
+    [
+     18,
+     11,
+     25,
+     21,
+     21,
+     903,
+     1113,
+     46332,
+     "answer",
+     ""
+    ],
+    [
+     19,
+     11.2,
+     25,
+     21,
+     21,
+     1113,
+     1252,
+     49002,
+     "answer",
+     ""
+    ],
+    [
+     20,
+     8.3,
+     19,
+     21,
+     21,
+     1252,
+     1390,
+     51560,
+     "answer",
+     ""
+    ],
+    [
+     21,
+     20.9,
+     45,
+     21,
+     21,
+     1390,
+     1518,
+     54207,
+     "answer",
+     ""
+    ],
+    [
+     22,
+     54.5,
+     120,
+     21,
+     21,
+     1518,
+     1517,
+     56729,
+     "done",
+     ""
+    ],
+    [
+     23,
+     59.9,
+     132,
+     21,
+     21,
+     1517,
+     1517,
+     59243,
+     "done",
+     ""
+    ],
+    [
+     24,
+     60,
+     132,
+     21,
+     21,
+     1517,
+     1517,
+     61763,
+     "done",
+     ""
+    ]
+   ]
+  },
+  {
+   "run": "D",
+   "setup": "game still running, scramble switched OFF on the Developer tab",
+   "question": "for this game lay out a full plan for my early runs on my deck, what gear and upgrades to choose, how to survive big enemy waves, and how to get ready for the dreadnought boss",
+   "answer_chars": 1485,
+   "reasoning_shown": "Show reasoning 41 s",
+   "glows": "question-box breathing glow while thinking; two Steam-owned animations (not bonsAI) running from slice 10 on",
+   "screenshot_during_slice": 19,
+   "slices_fps_by_phase": {
+    "thinking": [
+     38.3,
+     33.9,
+     34.3,
+     33.7,
+     34.8,
+     27.3,
+     35.1,
+     34.5,
+     35.4,
+     25.5,
+     32.3,
+     29.3,
+     31.4,
+     26.3,
+     31.1,
+     31.1,
+     36.1
+    ],
+    "answer_arriving": [
+     13.7,
+     14.3,
+     12.5,
+     11.6,
+     9.6,
+     8.7,
+     10.8,
+     8.7
+    ],
+    "mixed_edge": [
+     22.9,
+     24.8
+    ],
+    "after_finish": [
+     50.2,
+     60,
+     60
+    ]
+   },
+   "median_by_phase": {
+    "thinking": 33.7,
+    "answer_arriving": 11.2,
+    "mixed_edge": 23.9,
+    "after_finish": 60
+   },
+   "raw_slices": [
+    [
+     0,
+     38.3,
+     85,
+     138,
+     93,
+     0,
+     0,
+     8,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     1,
+     33.9,
+     74,
+     93,
+     262,
+     0,
+     0,
+     2562,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     2,
+     34.3,
+     75,
+     262,
+     445,
+     0,
+     0,
+     5103,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     3,
+     33.7,
+     73,
+     445,
+     402,
+     0,
+     0,
+     7661,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     4,
+     34.8,
+     76,
+     402,
+     577,
+     0,
+     0,
+     10203,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     5,
+     27.3,
+     60,
+     577,
+     539,
+     0,
+     0,
+     12762,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     6,
+     35.1,
+     76,
+     539,
+     520,
+     0,
+     0,
+     15299,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     7,
+     34.5,
+     77,
+     520,
+     551,
+     0,
+     0,
+     17838,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     8,
+     35.4,
+     79,
+     551,
+     539,
+     0,
+     0,
+     20401,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     9,
+     25.5,
+     56,
+     539,
+     561,
+     0,
+     0,
+     22956,
+     "thinking",
+     "bonsai-ask-input-breathe"
+    ],
+    [
+     10,
+     32.3,
+     71,
+     561,
+     555,
+     0,
+     0,
+     25520,
+     "thinking",
+     "steam-internal x2,bonsai-ask-input-breathe"
+    ],
+    [
+     11,
+     29.3,
+     64,
+     555,
+     564,
+     0,
+     0,
+     28040,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     12,
+     31.4,
+     69,
+     564,
+     546,
+     0,
+     0,
+     30552,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     13,
+     26.3,
+     57,
+     546,
+     592,
+     0,
+     0,
+     33110,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     14,
+     31.1,
+     69,
+     592,
+     570,
+     0,
+     0,
+     35654,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     15,
+     31.1,
+     68,
+     570,
+     557,
+     0,
+     0,
+     38192,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     16,
+     36.1,
+     79,
+     557,
+     444,
+     0,
+     0,
+     40731,
+     "thinking",
+     "steam-internal,bonsai-ask-input-breathe"
+    ],
+    [
+     17,
+     22.9,
+     50,
+     444,
+     21,
+     0,
+     105,
+     43275,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     18,
+     13.7,
+     30,
+     21,
+     21,
+     105,
+     261,
+     45816,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     19,
+     14.3,
+     32,
+     21,
+     21,
+     261,
+     437,
+     48394,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     20,
+     12.5,
+     27,
+     21,
+     21,
+     437,
+     565,
+     50990,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     21,
+     11.6,
+     26,
+     21,
+     21,
+     565,
+     748,
+     53656,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     22,
+     9.6,
+     22,
+     21,
+     21,
+     748,
+     897,
+     56213,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     23,
+     8.7,
+     19,
+     21,
+     21,
+     897,
+     1101,
+     58874,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     24,
+     10.8,
+     23,
+     21,
+     21,
+     1101,
+     1251,
+     61600,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     25,
+     8.7,
+     20,
+     21,
+     21,
+     1251,
+     1449,
+     64155,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     26,
+     24.8,
+     55,
+     21,
+     21,
+     1449,
+     1485,
+     66905,
+     "answer",
+     "steam-internal"
+    ],
+    [
+     27,
+     50.2,
+     111,
+     21,
+     21,
+     1485,
+     1485,
+     69461,
+     "done",
+     ""
+    ],
+    [
+     28,
+     60,
+     132,
+     21,
+     21,
+     1485,
+     1485,
+     71981,
+     "done",
+     ""
+    ],
+    [
+     29,
+     60,
+     132,
+     21,
+     21,
+     1485,
+     1485,
+     74499,
+     "done",
+     ""
+    ]
+   ]
+  }
+ ],
+ "game_frame_rate": {
+  "how": "Steam performance overlay already on (GAMESCOPE line) read from a Deck screenshot; no mangohud log configured",
+  "C_idle_after_answer": "60 FPS, frametime 16.6 ms (plan70-FPS-baseline-C-game-overlay-idle.png)",
+  "C_while_answer_arriving": "14 FPS, frametime 69.5 ms, CPU 96% (plan70-FPS-baseline-C2-game-overlay-answer.png)",
+  "D_while_answer_arriving": "17 FPS, frametime 60.2 ms, CPU 98% (plan70-FPS-baseline-D-game-overlay-answer.png)",
+  "note": "The game sat on its title screen (Press any key), not in a mission. The screenshot itself fell inside slice 14 of C and slice 19 of D; their neighbours read the same, so no slice was dropped."
+ },
+ "summary": {
+  "nothing_running": "thinking ~59/s; answer arriving 48.6/s with scramble, 60/s without",
+  "game_running": "thinking 35.6/s (C) and 33.7/s (D); answer arriving 11.6/s with scramble and 11.2/s without - scramble makes no difference with a game running; the game itself fell from 60 to 14-17 FPS while the answer arrived",
+  "against_target_30": "with a game running, the thinking phase stays just above 30; the answer-arriving phase is well below 30 in both scramble settings"
+ },
+ "verdict": "Measurement recorded (a baseline, no pass/fail in the runbook). Against the maintainer's aim of at least 30 a second with a game running: answer arriving measured about 11 a second, so the aim is not met."
+}

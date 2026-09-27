@@ -1,0 +1,58 @@
+{
+ "row": "plan70 flow L9.4 restore of the maintainer's eight chats, plus the End section",
+ "build_commit": "tip 49622e21 deployed 00:51 (Deck dist/index.js 0d12da9def5ea264...)",
+ "deck_time": "backup 2026-09-27 00:52 EDT; restore 05:16 to 05:18 EDT",
+ "screen": "external monitor; Quick Access page 855x805 during the restore, 855x766 at the end",
+ "setup": "Nothing running (Deep Rock Galactic: Survivor exited 05:02; no AppId= process over SSH).",
+ "backup": {
+  "file": "~/bonsai-backup-plan70-L9.tgz",
+  "entries": 17,
+  "titles_on_screen_before": [
+   "what is a good way to practice parrying in action games",
+   "wheatley fight",
+   "how should i spend my first hour in a new open world game",
+   "what is the safest way to approach a group of enemies at once",
+   "is it better to explore everything or rush the main objective",
+   "how do i unlock the next area after finishing the tutorial",
+   "how do i beat the boss at the end of the first area",
+   "Hades"
+  ]
+ },
+ "test_chats_made": [
+  "in hollow knight how can i defeat the spell casting boss at the top of the soul sanctum (L9.1)",
+  "how can i beat hornet in hollow knight (L9.1 control)",
+  "Deep Rock Galactic: Survivor (01:03 bonus answer)",
+  "Deep Rock Galactic: Survivor x5 (L9.2 answers 1-3, A/B answer, look-check answer)",
+  "in hollow knight give me a detailed step by step route through the whole midgame... (L9.3 on)",
+  "in hades give me a detailed step by step plan for getting through elysium... (L9.3 off; R.5 step 5 question asked in this chat)"
+ ],
+ "restore": {
+  "step1": "copied chat_slots and chat_threads aside to ~/bonsai-plan70-L9-test-chats (8 test chats + index)",
+  "step2": "rm -rf chat_slots chat_threads, tar xzf ~/bonsai-backup-plan70-L9.tgz in ~/homebrew/settings (backup holds only the four chat items); exit 0",
+  "step3": "deck_reloadPlugin at once, nothing running; loader ready in 285 ms",
+  "sha256": "all 15 files match the backup's copy extracted to /tmp/p70L9chk (bonsai_feedback.jsonl 8027070f972bbade, chat_slots/index.json e03c93e17447739c, chat_threads/index.json 4e6706742ea00add, strategy_checklist_session.json 936702b9ba7e082c, and all 11 chat files); no extra files; re-checked after browsing the row: 15 of 15 still match",
+  "titles_on_screen_after": [
+   "what is a good way to practice parrying in action games",
+   "wheatley fight",
+   "how should i spend my first hour in a new open world game",
+   "what is the safest way to approach a group of enemies at once",
+   "is it better to explore everything or rush the main objective",
+   "how do i unlock the next area after finishing the tutorial",
+   "how do i beat the boss at the end of the first area",
+   "Hades"
+  ],
+  "how_read": "plugin reopened (first open after the reload failed once, as expected; second worked), chat row from [+], RB one press at a time, active title read after each press",
+  "verdict": "PASS"
+ },
+ "end": {
+  "ai_characters": "turned back ON on the Settings tab; file reads ai_character_enabled true, preset alig_ali_g, accent heavy",
+  "scramble": "ON (true, green, settle, 400) as at the start",
+  "thinking": "medium, unchanged",
+  "settings_file_vs_settings-before-L9.json": "no differences at all (every key equal); steam_web_api_key 32 characters and unchanged (not printed)",
+  "game": "none running",
+  "plugin": "open on the Main tab",
+  "keep_awake": "released (deck_restorePowerSettings: released)",
+  "offline_mode": "not touched",
+  "lock": "untouched; reads bonsai-50 2026-09-27T04:53 2026-09-27T07:00"
+ }
+}

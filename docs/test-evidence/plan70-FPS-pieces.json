@@ -1,0 +1,6215 @@
+{
+ "row": "plan70 flow L10.2 (STREAM-PIECES-01, long answers with a game running, piece-by-piece drawing), L10.2b (decode kept with a game, the maintainer's addition), L10.3 (no harm with nothing running), and the end-of-block run on the new build 4c7edeb6",
+ "build_commit": "L10.2, L10.2b, L10.3: tip 7c924310 deployed 05:48 (Deck dist/index.js c71642f26a613e3a... = PC). End-of-block run: tip 4c7edeb6 'Keep the decode effect while a game runs' deployed 06:38 (Deck dist/index.js 7c75eb49eee57b7d... = PC; main.py a2295571... unchanged)",
+ "deck_time": "2026-09-27 05:57 to 06:43 EDT",
+ "screen": "external monitor; Quick Access page 855x845 with the game running, 855x766 with nothing running; captures 1920x1080",
+ "method": "As plan70-FPS-after.json: requestAnimationFrame callbacks per second in the Quick Access page, 2.5 s slices back to back inside one answer, first 0.3 s of each dropped (2.2 s counted), counter started by the page reader right after A on Ask, one new chat per answer ([+] on the chat row), Strategy, thinking medium, AI characters OFF. Phases: 'arriving' = [data-bonsai-stream-preview=\"true\"] present at both ends of the slice AND the answer grew; 'tail' = preview still present but nothing grew (the finish); 'edge' = preview at one end only; 'thinking' = reasoning text changing with no answer yet. CPU: top -b -n1 | head -15 over SSH the moment the answer passed about 400 characters. The switch (window.__bonsaiGameLoad) was set in the Quick Access page by the recorder at the start of each slice.",
+ "setup_game": "Deep Rock Galactic: Survivor launched from Recent Games at 05:57 (title screen, 'Press any key'), panel opened after the launch, Context line read 'Context: active game Deep Rock Galactic: Survivor'. No plugin reload while the game ran. Exited 06:32 (process gone over SSH). Relaunched 06:39 on the new build, exited 06:42 (process gone).",
+ "L10_2_step1_main_pass": {
+  "runs": [
+   {
+    "setup": "game running (answer began about 2.5 min after the launch), no switch, scramble ON in settings",
+    "question": "give me a very detailed step by step guide to this game for a new player, with a separate section for each weapon class and the best upgrades for it, a section on each class of dwarf, how to handle swarms and elite enemies, and how to beat the dreadnought bosses",
+    "answer_chars": 2933,
+    "cpu_mid_answer": "05:59:31 load 6.54; CPU 65.4 us 18.9 sy 11.0 id; game (Unity Main) 136.4%, llama-server 117.8%, steamwebhelper 99.2%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      36.1,
+      251
+     ],
+     [
+      38.4,
+      405
+     ],
+     [
+      29,
+      581
+     ],
+     [
+      30.2,
+      762
+     ],
+     [
+      25,
+      982
+     ],
+     [
+      27.4,
+      1165
+     ],
+     [
+      30.2,
+      1322
+     ],
+     [
+      28.6,
+      1499
+     ],
+     [
+      29.9,
+      1668
+     ],
+     [
+      27,
+      1823
+     ],
+     [
+      28.2,
+      1991
+     ],
+     [
+      26.1,
+      2133
+     ],
+     [
+      26.6,
+      2311
+     ],
+     [
+      23.3,
+      2487
+     ],
+     [
+      25.7,
+      2683
+     ],
+     [
+      24.9,
+      2864
+     ],
+     [
+      34.6,
+      2933
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 50.9,
+     "edge": 49.7,
+     "arriving": 28.2,
+     "done": 60.0
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 50.4,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 51.3,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 50,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 54.2,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 50.9,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 50.5,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 47.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 48.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 50.9,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 53.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 51.4,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 49.9,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 51.4,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 45.8,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 22,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 36.1,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 251,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 38.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 405,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 29,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 581,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 30.2,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 762,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 25,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 982,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 27.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1165,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 30.2,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1322,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 28.6,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1499,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 29.9,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1668,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 27,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1823,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 28.2,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1991,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 26.1,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2133,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 26.6,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2311,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 23.3,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2487,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 25.7,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2683,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 24.9,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2864,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 34.6,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2933,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 31,
+      "fps": 53.6,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 2933,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 32,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2933,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 33,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2933,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2-run1.json (scratch folder)"
+   },
+   {
+    "setup": "game running, no switch",
+    "question": "give me a very detailed step by step guide to getting good at this game, with a separate section for each dwarf class and its best weapons, a section for each weapon upgrade path, a section on artifacts and overclocks, how to survive the late waves, and how to beat each boss",
+    "answer_chars": 2263,
+    "cpu_mid_answer": "06:04:20 load 7.09; CPU 59.5 us 18.3 sy 17.5 id; game 167.0%, llama-server 142.2%, steamwebhelper 92.8%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      45,
+      354
+     ],
+     [
+      46.1,
+      558
+     ],
+     [
+      40.9,
+      722
+     ],
+     [
+      37.5,
+      878
+     ],
+     [
+      37,
+      1038
+     ],
+     [
+      39.4,
+      1193
+     ],
+     [
+      37.3,
+      1385
+     ],
+     [
+      38,
+      1558
+     ],
+     [
+      36.1,
+      1731
+     ],
+     [
+      34.8,
+      1908
+     ],
+     [
+      28.4,
+      2141
+     ],
+     [
+      35,
+      2264
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 58.6,
+     "wait": 60,
+     "edge": 54.1,
+     "arriving": 37.4,
+     "tail": 60,
+     "done": 60
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 58.4,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 60,
+      "phase": "wait",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 52.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 58.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 57.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 57.8,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 57.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 58.5,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 49.1,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 139,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 45,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 354,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 46.1,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 558,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 40.9,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 722,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 37.5,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 878,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 37,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1038,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 39.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1193,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 37.3,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1385,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 38,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1558,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 36.1,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1731,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 34.8,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1908,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 31,
+      "fps": 28.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2141,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 32,
+      "fps": 35,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2264,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 33,
+      "fps": 60,
+      "phase": "tail",
+      "switch": "none",
+      "chars_at_end": 2264,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 34,
+      "fps": 59.1,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 2263,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 35,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2263,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 36,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2263,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 37,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2263,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2-run3.json (scratch folder)"
+   },
+   {
+    "setup": "game running, no switch",
+    "question": "give me a very detailed step by step guide to this game from the first mission onward, with a separate section for each weapon class and its upgrades, a section on every hazard level, a section on the mining and resource loop, how to fight elite enemies, and how to beat each dreadnought",
+    "answer_chars": 2077,
+    "cpu_mid_answer": "06:06:28 load 6.42; CPU 56.5 us 15.7 sy 23.1 id; game 179.2%, llama-server 172.0%, steamwebhelper 86.0%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      47.7,
+      173
+     ],
+     [
+      46.9,
+      384
+     ],
+     [
+      41.4,
+      555
+     ],
+     [
+      43.4,
+      755
+     ],
+     [
+      41.8,
+      942
+     ],
+     [
+      38.3,
+      1162
+     ],
+     [
+      40.6,
+      1320
+     ],
+     [
+      38.4,
+      1552
+     ],
+     [
+      35.9,
+      1736
+     ],
+     [
+      35.4,
+      1958
+     ],
+     [
+      38.2,
+      2077
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 59.1,
+     "wait": 42.8,
+     "edge": 56.0,
+     "arriving": 40.6,
+     "tail": 59.3,
+     "done": 60.0
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 58.3,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 42.8,
+      "phase": "wait",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 58.9,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 57.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "none",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 56.3,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 4,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 47.7,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 173,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 46.9,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 384,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 41.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 555,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 43.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 755,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 41.8,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 942,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 38.3,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1162,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 40.6,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1320,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 38.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1552,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 35.9,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1736,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 35.4,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 1958,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 38.2,
+      "phase": "arriving",
+      "switch": "none",
+      "chars_at_end": 2077,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 59.3,
+      "phase": "tail",
+      "switch": "none",
+      "chars_at_end": 2077,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 55.6,
+      "phase": "edge",
+      "switch": "none",
+      "chars_at_end": 2077,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2077,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 31,
+      "fps": 60,
+      "phase": "done",
+      "switch": "none",
+      "chars_at_end": 2077,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2-run4.json (scratch folder)"
+   }
+  ],
+  "not_counted": {
+   "setup": "game running, no switch",
+   "question": "write me a long and thorough step by step walkthrough for mastering this game on my deck, ... every boss fight",
+   "answer_chars": 878,
+   "cpu_mid_answer": "06:02:18 load 7.57; CPU 55.9 us 20.3 sy 19.5 id; game 186.3%, llama-server 126.4%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     48.2,
+     196
+    ],
+    [
+     48.6,
+     377
+    ],
+    [
+     45.4,
+     559
+    ],
+    [
+     42.8,
+     776
+    ],
+    [
+     44.9,
+     878
+    ]
+   ],
+   "median_by_phase": {
+    "thinking": 59.1,
+    "wait": 60,
+    "edge": 56.3,
+    "arriving": 45.4,
+    "tail": 58.6,
+    "done": 60.0
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.4,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 53.9,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 59.3,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 59,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 59.9,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 56.8,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 16,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 48.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 196,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 48.6,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 377,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 45.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 559,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 42.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 776,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 44.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 878,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 58.6,
+     "phase": "tail",
+     "switch": "none",
+     "chars_at_end": 878,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 55.9,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 878,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 878,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 29,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 878,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-run2.json (scratch folder)",
+   "why_not_counted": "the model declined to write a long answer (878 characters: 'Since I can't write a thousand-page manual here...')"
+  },
+  "pooled_answer_arriving_median_3_answers": 36.0,
+  "pooled_slices": 40,
+  "slices_below_30": 13,
+  "verdict": "FAIL - the pooled answer median is 36.0 (needs 30), but the answer does not hold 30 to the end: answer 1 sank below 30 from about 580 characters and stayed 23-30 to the end (median 28.2); answer 2 dipped to 28.4 at 2141 characters; answer 3 held 35-48 throughout. 12 of 40 answer slices were under 30, 11 of them in answer 1, which began about 2.5 minutes after the game launched (the game was using 136% CPU then). Answers 2 and 3 alone would nearly pass (one slice at 28.4). The owner decides whether answer 1 counts."
+ },
+ "L10_2_step2_switch_and_AB": {
+  "switch_confirm": {
+   "setup": "game running, window.__bonsaiGameLoad = {off:true} set in the Quick Access page before A, held all answer, deleted at the end",
+   "question": "in this game which dwarf class should a beginner pick first and why (asked in the test chat of answer 3)",
+   "answer_chars": 796,
+   "cpu_mid_answer": "06:08:50 load 9.12; CPU 65.1 us 15.1 sy 17.0 id; game 199.3%, llama-server 177.9%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     30,
+     355
+    ],
+    [
+     31.6,
+     562
+    ],
+    [
+     24.9,
+     773
+    ],
+    [
+     50.2,
+     796
+    ]
+   ],
+   "median_by_phase": {
+    "wait": 37.3,
+    "thinking": 51.8,
+    "edge": 44.4,
+    "arriving": 30.8,
+    "done": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 37.3,
+     "phase": "wait",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 1,
+     "fps": 30.9,
+     "phase": "wait",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 2,
+     "fps": 48.7,
+     "phase": "wait",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 3,
+     "fps": 44.1,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 4,
+     "fps": 51.4,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 5,
+     "fps": 52.2,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 6,
+     "fps": 49.2,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 7,
+     "fps": 53.1,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 8,
+     "fps": 51.8,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 9,
+     "fps": 52.3,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 10,
+     "fps": 51.8,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 11,
+     "fps": 51.4,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 12,
+     "fps": 53.6,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 13,
+     "fps": 51.8,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 14,
+     "fps": 50.9,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 15,
+     "fps": 51.8,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 16,
+     "fps": 56.4,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 17,
+     "fps": 31.6,
+     "phase": "edge",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 189,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 18,
+     "fps": 30,
+     "phase": "arriving",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 355,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 19,
+     "fps": 31.6,
+     "phase": "arriving",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 562,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 20,
+     "fps": 24.9,
+     "phase": "arriving",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 773,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 21,
+     "fps": 50.2,
+     "phase": "arriving",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 796,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 22,
+     "fps": 57.2,
+     "phase": "edge",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 796,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 23,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 796,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 24,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 796,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 25,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"off\":true}",
+     "chars_at_end": 796,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-confirm-off.json (scratch folder)",
+   "what_showed_it_took": "from the first slice the hold-still class was gone and the spinner, question-box breathing and caret blink animations ran; the scramble class was on while the answer arrived; a 20 ms probe for 4 s mid-answer saw 22 text updates (5.5 a second, 2-32 characters each) against about 4 a second in word groups without the switch",
+   "verdict": "PASS - the Quick Access page switch now reaches the plugin (it did not in L9)"
+  },
+  "AB_answer_1": {
+   "setup": "game running; slices alternate {pieces:false} (answer drawn whole) and switch deleted (piece by piece), starting with {pieces:false}",
+   "question": "lay out a very detailed step by step plan for this game from my first run to clearing the hardest hazard, with a separate section for each weapon class and its best overclocks, a section for each biome, a section on gold and upgrades between runs, and how to beat every boss",
+   "answer_chars": 2524,
+   "cpu_mid_answer": "06:10:39 load 7.83; CPU 58.3 us 15.7 sy 20.4 id; game 199.6%, llama-server 171.1%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     48.7,
+     233
+    ],
+    [
+     45.4,
+     419
+    ],
+    [
+     42.8,
+     627
+    ],
+    [
+     41.8,
+     802
+    ],
+    [
+     40.9,
+     962
+    ],
+    [
+     44,
+     1138
+    ],
+    [
+     42.8,
+     1279
+    ],
+    [
+     36.1,
+     1492
+    ],
+    [
+     37.1,
+     1708
+    ],
+    [
+     35.5,
+     1904
+    ],
+    [
+     39.1,
+     2104
+    ],
+    [
+     36.8,
+     2322
+    ],
+    [
+     38.2,
+     2504
+    ],
+    [
+     54.8,
+     2524
+    ]
+   ],
+   "median_by_phase": {
+    "thinking|{\"pieces\":false}": 58.1,
+    "wait|none": 60,
+    "thinking|none": 59.5,
+    "edge|none": 52.3,
+    "arriving|{\"pieces\":false}": 40.9,
+    "arriving|none": 41.8,
+    "edge|{\"pieces\":false}": 54.1,
+    "done|none": 60,
+    "done|{\"pieces\":false}": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 34.4,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 53.6,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 52.7,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 57.8,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 58.7,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 59,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 57.4,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 58.3,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 58.1,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 52.3,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 61,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 48.7,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 233,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 45.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 419,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 42.8,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 627,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 41.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 802,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 40.9,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 962,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 44,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1138,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 42.8,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 1279,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 29,
+     "fps": 36.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1492,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 30,
+     "fps": 37.1,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 1708,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 31,
+     "fps": 35.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1904,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 32,
+     "fps": 39.1,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2104,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 33,
+     "fps": 36.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2322,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 34,
+     "fps": 38.2,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2504,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 35,
+     "fps": 54.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2524,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 36,
+     "fps": 54.1,
+     "phase": "edge",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2524,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 37,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2524,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 38,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2524,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-AB1.json (scratch folder)"
+  },
+  "AB_answer_2": {
+   "setup": "game running; alternating, starting with the switch deleted",
+   "question": "explain in a very detailed step by step way how to become an expert at this game, with a separate section for each dwarf class, a section for each kind of weapon and its upgrade choices, a section on the elite and boss enemies, a section on artifacts, and a full plan for the last waves",
+   "answer_chars": 2578,
+   "cpu_mid_answer": "06:12:55 load 7.85; CPU 59.7 us 17.8 sy 17.8 id; game 188.2%, llama-server 151.8%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     42.9,
+     307
+    ],
+    [
+     44.6,
+     494
+    ],
+    [
+     41.2,
+     665
+    ],
+    [
+     39.5,
+     814
+    ],
+    [
+     40.5,
+     1015
+    ],
+    [
+     34.5,
+     1196
+    ],
+    [
+     37.8,
+     1406
+    ],
+    [
+     32.2,
+     1552
+    ],
+    [
+     29.5,
+     1742
+    ],
+    [
+     28.9,
+     1929
+    ],
+    [
+     30.5,
+     2100
+    ],
+    [
+     31.8,
+     2272
+    ],
+    [
+     28.4,
+     2479
+    ],
+    [
+     35.9,
+     2578
+    ]
+   ],
+   "median_by_phase": {
+    "thinking|none": 58.6,
+    "wait|{\"pieces\":false}": 60,
+    "thinking|{\"pieces\":false}": 59.2,
+    "edge|{\"pieces\":false}": 52.7,
+    "arriving|none": 37.8,
+    "arriving|{\"pieces\":false}": 34.5,
+    "tail|none": 60,
+    "done|none": 60,
+    "done|{\"pieces\":false}": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 53.3,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 59.2,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 58.7,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 58.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 58.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 48.6,
+     "phase": "edge",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 130,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 42.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 307,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 44.6,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 494,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 41.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 665,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 39.5,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 814,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 40.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1015,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 34.5,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 1196,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 37.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1406,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 29,
+     "fps": 32.2,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 1552,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 30,
+     "fps": 29.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1742,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 31,
+     "fps": 28.9,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 1929,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 32,
+     "fps": 30.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2100,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 33,
+     "fps": 31.8,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2272,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 34,
+     "fps": 28.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2479,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 35,
+     "fps": 35.9,
+     "phase": "arriving",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2578,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 36,
+     "fps": 60,
+     "phase": "tail",
+     "switch": "none",
+     "chars_at_end": 2578,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 37,
+     "fps": 56.8,
+     "phase": "edge",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2578,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 38,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2578,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 39,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"pieces\":false}",
+     "chars_at_end": 2578,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-AB2.json (scratch folder)"
+  },
+  "late_pairs_past_1200_chars": {
+   "answer_1 (whole | piece by piece)": [
+    [
+     42.8,
+     36.1
+    ],
+    [
+     37.1,
+     35.5
+    ],
+    [
+     39.1,
+     36.8
+    ]
+   ],
+   "answer_2 (whole | piece by piece)": [
+    [
+     32.2,
+     37.8
+    ],
+    [
+     28.9,
+     29.5
+    ],
+    [
+     31.8,
+     30.5
+    ]
+   ],
+   "reading": "no consistent gain from piece-by-piece drawing late in the answer: in answer 1 drawing whole was 1.6-6.7 higher in each pair, in answer 2 the pairs split (-5.6, -0.6, +1.3). Medians of all answer slices: answer 1 whole 40.9 / pieces 41.8; answer 2 whole 34.5 / pieces 39.1"
+  },
+  "verdict": "UNCLEAR - the switch works; piece-by-piece drawing shows no measurable frame-rate gain over drawing the answer whole in these two answers. The owner decides."
+ },
+ "L10_2_step3_look_check": {
+  "answer": {
+   "setup": "game running, no switch",
+   "question": "write a detailed guide to this game using markdown: a heading for each section, bold key terms, a bullet list of weapon tips, a numbered list of steps for the first run, and one short quote of advice",
+   "answer_chars": 2542,
+   "cpu_mid_answer": "not taken (screenshot and walks in this answer instead; its slices 30-31 at 18.7 and 23.0 were taken while I was walking the D-pad and do not count)",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     48.4,
+     247
+    ],
+    [
+     44.7,
+     413
+    ],
+    [
+     39.4,
+     575
+    ],
+    [
+     38.9,
+     700
+    ],
+    [
+     38.6,
+     842
+    ],
+    [
+     40.4,
+     1033
+    ],
+    [
+     39.1,
+     1192
+    ],
+    [
+     38.2,
+     1364
+    ],
+    [
+     36.9,
+     1543
+    ],
+    [
+     34,
+     1714
+    ],
+    [
+     27.5,
+     1876
+    ],
+    [
+     30,
+     2019
+    ],
+    [
+     28.2,
+     2158
+    ],
+    [
+     18.7,
+     2350
+    ],
+    [
+     23,
+     2496
+    ],
+    [
+     43.5,
+     2543
+    ]
+   ],
+   "median_by_phase": {
+    "thinking": 58.2,
+    "wait": 60.0,
+    "edge": 57.3,
+    "arriving": 38.4,
+    "done": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 55,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 58.2,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 37,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 48.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 247,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 44.7,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 413,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 39.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 575,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 38.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 700,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 38.6,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 842,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 40.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1033,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 39.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1192,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 38.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1364,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 36.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1543,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 34,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1714,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 27.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1876,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 30,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2019,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 29,
+     "fps": 28.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2158,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 30,
+     "fps": 18.7,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2350,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 31,
+     "fps": 23,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2496,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 32,
+     "fps": 43.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2543,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 33,
+     "fps": 56.4,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2542,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 34,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2542,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 35,
+     "fps": 59.6,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2542,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 36,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2542,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-look.json (scratch folder)"
+  },
+  "formatting_mid_vs_finished": "mid-answer at 1116 characters: 3 headings, 17 bold, 2 bullet lists (5 items), heading font 24px 700. Finished at 2542: 4 headings, 32 bold, 3 bullet lists (9 items), 1 numbered list (5 items), 1 quote, same font. Positions of the first 25 elements inside the answer were the same mid and finished to within 2 px (headings 24 and 265 px both times; list items 338/431/465/512/578 mid vs 337/429/463/510/576 finished, a 1-2 px shift up after the finish). Screenshots plan70-FPS-pieces-look-mid-answer.png and plan70-FPS-pieces-look-finished.png",
+  "dpad_walk_finished": "from the header, 12 Downs: header, Main tab, chat row, Retry, question (behind the Retry icon, known false alarm), Show reasoning, answer part 1, answer part 2, 'kite', (one Down scrolls), 'kiting', 'kiting' - every stop visible. Same on a second finished answer (runs plan70-L10-2-look-walk-finished and -finished-try2)",
+  "dpad_walk_arriving": "second answer ('write a long guide to this game in markdown ...', 2871 characters): 12 Downs started from the header while the answer was arriving (about 290 characters in): header, Main tab, chat row (reported OFFSCREEN), Retry (disabled while arriving), question, Show reasoning, answer part 1 (67% visible), then three Downs did not move (answer part 1 at 33% visible, partly covered), then the ring was LOST - no element owned focus and the next two presses could not be read (run plan70-L10-2-look-walk-arriving-try2). The first try (run plan70-L10-2-look-walk-arriving) mostly ran after that answer had finished and matched the finished walk.",
+  "second_look_answer": {
+   "setup": "game running, no switch; D-pad walk during the answer (slices during the walk are disturbed)",
+   "question": "write a long guide to this game in markdown with a heading for each part, bold key words, a bullet list of tips for each dwarf, a numbered list of steps for beating the first boss, and one quote of advice at the end",
+   "answer_chars": 2871,
+   "cpu_mid_answer": "not taken",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     44.1,
+     236
+    ],
+    [
+     46.8,
+     389
+    ],
+    [
+     39.9,
+     568
+    ],
+    [
+     31.4,
+     735
+    ],
+    [
+     31.9,
+     906
+    ],
+    [
+     27.1,
+     1097
+    ],
+    [
+     32.3,
+     1234
+    ],
+    [
+     28.4,
+     1422
+    ],
+    [
+     26.5,
+     1584
+    ],
+    [
+     29.5,
+     1776
+    ],
+    [
+     37.8,
+     1941
+    ],
+    [
+     32.8,
+     2142
+    ],
+    [
+     33.1,
+     2326
+    ],
+    [
+     32.3,
+     2513
+    ],
+    [
+     28.9,
+     2688
+    ]
+   ],
+   "median_by_phase": {
+    "thinking": 58.2,
+    "wait": 55.6,
+    "edge": 55.2,
+    "arriving": 32.3,
+    "done": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 52.1,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 55,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 60.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 59.9,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 59.1,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 57.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 55,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 85,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 44.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 236,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 46.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 389,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 39.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 568,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 31.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 735,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 31.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 906,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 27.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1097,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 32.3,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1234,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 28.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1422,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 26.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1584,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 29.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1776,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 37.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1941,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 29,
+     "fps": 32.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2142,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 30,
+     "fps": 33.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2326,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 31,
+     "fps": 32.3,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2513,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 32,
+     "fps": 28.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2688,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 33,
+     "fps": 25.7,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2892,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 34,
+     "fps": 57.2,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2872,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 35,
+     "fps": 55.4,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2871,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 36,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2871,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 37,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2871,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 38,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2871,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2-look2.json (scratch folder)"
+  },
+  "verdict": "FAIL on the D-pad part - walking Down through an arriving answer stops on the first answer part while it is partly off screen, sticks there for three presses, then loses the ring altogether; on the finished answer the same walk moves through every part and every stop is visible. Formatting: PASS (same structure and font; nothing moved more than 2 px at the finish)."
+ },
+ "decode_kept_with_a_game_L10_2b": {
+  "answers_with_switch_all_answer": [
+   {
+    "setup": "game running, window.__bonsaiGameLoad = {scramble:false} set before A and held all answer",
+    "question": "give me a very detailed step by step guide to this game for a new player, with a separate section for each weapon type and the best upgrades for it, a section on each dwarf class, a section on mining and gold, how to handle elite enemies, and how to beat the dreadnought bosses",
+    "answer_chars": 2483,
+    "cpu_mid_answer": "06:25:39 load 6.07; CPU 67.2 us 17.2 sy 10.3 id; game 235.6%, llama-server 202.0%, steamwebhelper 80.8%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      38.3,
+      323
+     ],
+     [
+      36.4,
+      491
+     ],
+     [
+      35.1,
+      677
+     ],
+     [
+      29.5,
+      845
+     ],
+     [
+      24.4,
+      1000
+     ],
+     [
+      27.2,
+      1189
+     ],
+     [
+      21.9,
+      1347
+     ],
+     [
+      23.2,
+      1599
+     ],
+     [
+      30,
+      1768
+     ],
+     [
+      32.7,
+      1909
+     ],
+     [
+      20.5,
+      2076
+     ],
+     [
+      24.6,
+      2269
+     ],
+     [
+      21.8,
+      2443
+     ],
+     [
+      45.3,
+      2483
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 59,
+     "edge": 50.5,
+     "arriving": 28.4,
+     "done": 60.0
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 52.3,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 55,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 59.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 59,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 59.3,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 59,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 58.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 58.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 58.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 59.9,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 46.4,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 122,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 38.3,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 323,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 36.4,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 491,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 35.1,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 677,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 29.5,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 845,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 24.4,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1000,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 27.2,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1189,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 21.9,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1347,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 23.2,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1599,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 30,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1768,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 32.7,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1909,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 20.5,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2076,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 31,
+      "fps": 24.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2269,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 32,
+      "fps": 21.8,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2443,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 33,
+      "fps": 45.3,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2483,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 34,
+      "fps": 54.6,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2483,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 35,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2483,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 36,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2483,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2b-dec3.json (scratch folder)"
+   },
+   {
+    "setup": "game running, {scramble:false} all answer",
+    "question": "give me a very detailed step by step guide to winning runs in this game, with a separate section for each weapon class and how to upgrade it, a section on each dwarf class, a section on the biomes and their dangers, how to deal with swarms, and how to beat every dreadnought",
+    "answer_chars": 2116,
+    "cpu_mid_answer": "06:27:53 load 8.24; CPU 60.0 us 19.0 sy 17.1 id; llama-server 183.2%, game 168.0%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      40,
+      283
+     ],
+     [
+      37.6,
+      476
+     ],
+     [
+      36.7,
+      635
+     ],
+     [
+      36.3,
+      805
+     ],
+     [
+      30,
+      998
+     ],
+     [
+      27.8,
+      1180
+     ],
+     [
+      25.6,
+      1393
+     ],
+     [
+      30,
+      1564
+     ],
+     [
+      29.5,
+      1702
+     ],
+     [
+      31.6,
+      1921
+     ],
+     [
+      24.4,
+      2056
+     ],
+     [
+      44.1,
+      2117
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 58.6,
+     "wait": 60,
+     "edge": 55.0,
+     "arriving": 30.8,
+     "done": 60
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 42.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 60,
+      "phase": "wait",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 53.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 55,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 56,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 57.3,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 57.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 57.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 59.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 58.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 58.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 53.2,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 79,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 40,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 283,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 37.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 476,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 36.7,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 635,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 36.3,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 805,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 30,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 998,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 27.8,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1180,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 25.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1393,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 30,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1564,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 29.5,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1702,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 31,
+      "fps": 31.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1921,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 32,
+      "fps": 24.4,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2056,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 33,
+      "fps": 44.1,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2117,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 34,
+      "fps": 56.8,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2116,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 35,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2116,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 36,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2116,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 37,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 2116,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2b-dec4.json (scratch folder)"
+   }
+  ],
+  "shorter_answers_not_counted": [
+   {
+    "setup": "game running, {scramble:false} all answer",
+    "question": "give me a very detailed step by step guide to this game for someone coming back after a break, ... how to beat each dreadnought",
+    "answer_chars": 1540,
+    "cpu_mid_answer": "06:21:58 load 10.47; CPU 64.5 us 15.9 sy 15.9 id; game 190.3%, llama-server 161.0%",
+    "answer_arriving_fps_in_order_with_chars_reached": [
+     [
+      37.4,
+      173
+     ],
+     [
+      41.9,
+      353
+     ],
+     [
+      38.6,
+      521
+     ],
+     [
+      34.3,
+      731
+     ],
+     [
+      33.6,
+      934
+     ],
+     [
+      35,
+      1082
+     ],
+     [
+      36.4,
+      1265
+     ],
+     [
+      36.9,
+      1451
+     ],
+     [
+      36.8,
+      1540
+     ]
+    ],
+    "median_by_phase": {
+     "thinking": 59.1,
+     "wait": 59.5,
+     "edge": 57.0,
+     "arriving": 36.8,
+     "tail": 60,
+     "done": 60.0
+    },
+    "slices": [
+     {
+      "i": 0,
+      "fps": 58.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 1,
+      "fps": 60,
+      "phase": "wait",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 2,
+      "fps": 53.3,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 3,
+      "fps": 58.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 4,
+      "fps": 60,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 5,
+      "fps": 57.8,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 6,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 7,
+      "fps": 59.4,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 8,
+      "fps": 57.8,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 9,
+      "fps": 59.1,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 10,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 11,
+      "fps": 59.1,
+      "phase": "wait",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 12,
+      "fps": 59.9,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 13,
+      "fps": 59.2,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 14,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 15,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 16,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 17,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 18,
+      "fps": 58.7,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 19,
+      "fps": 59.5,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 20,
+      "fps": 58.6,
+      "phase": "thinking",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 0,
+      "scramble_seen": false,
+      "hold_still_class": true
+     },
+     {
+      "i": 21,
+      "fps": 55.9,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 5,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 22,
+      "fps": 37.4,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 173,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 23,
+      "fps": 41.9,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 353,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 24,
+      "fps": 38.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 521,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 25,
+      "fps": 34.3,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 731,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 26,
+      "fps": 33.6,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 934,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 27,
+      "fps": 35,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1082,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 28,
+      "fps": 36.4,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1265,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 29,
+      "fps": 36.9,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1451,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 30,
+      "fps": 36.8,
+      "phase": "arriving",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1540,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 31,
+      "fps": 60,
+      "phase": "tail",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1540,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 32,
+      "fps": 58.1,
+      "phase": "edge",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1540,
+      "scramble_seen": true,
+      "hold_still_class": true
+     },
+     {
+      "i": 33,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1540,
+      "scramble_seen": false,
+      "hold_still_class": false
+     },
+     {
+      "i": 34,
+      "fps": 60,
+      "phase": "done",
+      "switch": "{\"scramble\":false}",
+      "chars_at_end": 1540,
+      "scramble_seen": false,
+      "hold_still_class": false
+     }
+    ],
+    "raw_file": "L10-2b-dec1.json (scratch folder)",
+    "why": "1540 characters, under 2000",
+    "screenshot": "plan70-FPS-pieces-decode-kept-mid-answer.png (the last line of the arriving text shows green scrambled letters settling; the game overlay read 31 FPS)",
+    "text_updates_20ms_probe": "17 updates in 3.9 s, 3-41 characters each, one update of -4 characters (the text got shorter for a moment)"
+   },
+   {
+    "answer": "L10-2b-dec2-short.json",
+    "chars": 364,
+    "why": "the model declined ('Creating a full, detailed manual ... is beyond a single response')"
+   }
+  ],
+  "pooled_answer_median_2000plus": 30.0,
+  "against_no_switch": "the three main-pass answers without the switch pooled 36.0; with the decode kept, 30.0 (answer medians 28.4 and 30.8; slices fell to 20.5-24.6 past 2000 characters in one answer)",
+  "AB_alternating": {
+   "setup": "game running; slices alternate {scramble:false} and deleted, starting with {scramble:false}",
+   "question": "give me a very detailed step by step guide to this game for a beginner on my deck, ... how to beat the dreadnought bosses",
+   "answer_chars": 1530,
+   "cpu_mid_answer": "06:31:43 load 7.70; CPU 64.9 us 18.4 sy 12.3 id; game 196.5%, llama-server 175.4%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     49.2,
+     282
+    ],
+    [
+     38.9,
+     447
+    ],
+    [
+     47.7,
+     650
+    ],
+    [
+     40.3,
+     802
+    ],
+    [
+     45.1,
+     988
+    ],
+    [
+     33.8,
+     1137
+    ],
+    [
+     41.2,
+     1306
+    ],
+    [
+     36.3,
+     1515
+    ],
+    [
+     55,
+     1530
+    ]
+   ],
+   "median_by_phase": {
+    "thinking|{\"scramble\":false}": 58.2,
+    "thinking|none": 59.5,
+    "edge|{\"scramble\":false}": 46.6,
+    "arriving|none": 47.7,
+    "arriving|{\"scramble\":false}": 37.6,
+    "done|none": 60,
+    "done|{\"scramble\":false}": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.1,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 1,
+     "fps": 55,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 2,
+     "fps": 56.7,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 3,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 4,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 5,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 6,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 7,
+     "fps": 53.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 8,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 9,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 10,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 11,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 12,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 13,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 14,
+     "fps": 58.1,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 15,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 16,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 17,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 18,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 19,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 20,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 21,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 22,
+     "fps": 44.5,
+     "phase": "edge",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 94,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 23,
+     "fps": 49.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 282,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 24,
+     "fps": 38.9,
+     "phase": "arriving",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 447,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 25,
+     "fps": 47.7,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 650,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 26,
+     "fps": 40.3,
+     "phase": "arriving",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 802,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 27,
+     "fps": 45.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 988,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 28,
+     "fps": 33.8,
+     "phase": "arriving",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 1137,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 29,
+     "fps": 41.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1306,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 30,
+     "fps": 36.3,
+     "phase": "arriving",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 1515,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 31,
+     "fps": 55,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1530,
+     "scramble_seen": true,
+     "hold_still_class": true
+    },
+    {
+     "i": 32,
+     "fps": 48.7,
+     "phase": "edge",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 1530,
+     "scramble_seen": false,
+     "hold_still_class": true
+    },
+    {
+     "i": 33,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 1530,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 34,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"scramble\":false}",
+     "chars_at_end": 1530,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-2b-decAB2.json (scratch folder)",
+   "note": "1530 characters (a 2000+ answer was asked twice; the first try gave 660, file L10-2b-decAB.json)",
+   "pairs_decode_kept_vs_plain": [
+    [
+     38.9,
+     47.7
+    ],
+    [
+     40.3,
+     45.1
+    ],
+    [
+     33.8,
+     41.2
+    ]
+   ],
+   "reading": "keeping the decode cost 5-9 frames a second in every pair; the late pair (past 1000 characters) was 33.8 against 41.2"
+  },
+  "look_note": "the decode shows only on the newest few words at the end of the arriving text: they appear as green scrambled symbols and settle into letters; the rest of the answer stays still. At about 4 updates a second it reads as the tail flickering then settling, not as letters decoding one by one. In the 20 ms probes the text length went backwards by 1-5 characters several times (the scrambled tail is replaced), which a reader sees as a small stutter at the end of the line. Nothing looked broken. Judged from two screenshots and page reads, not by eye on the device.",
+  "switch_deleted_after": "window.__bonsaiGameLoad read 'undefined' after the last run"
+ },
+ "L10_3_nothing_running": {
+  "scramble_ON": {
+   "setup": "nothing running (Context: no active game detected), scramble ON as set",
+   "question": "in deep rock galactic survivor give me a very detailed step by step guide for a new player, with a separate section for each weapon class and the best upgrades for it, a section on each dwarf class, how to handle swarms and elite enemies, and how to beat the dreadnoughts",
+   "answer_chars": 2945,
+   "cpu_mid_answer": "06:34:40 load 5.52; CPU 68.3 us 10.9 sy 17.8 id; llama-server 180.3%, steamwebhelper 117.6%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     45.1,
+     469
+    ],
+    [
+     41.4,
+     761
+    ],
+    [
+     35.3,
+     1032
+    ],
+    [
+     36.5,
+     1315
+    ],
+    [
+     40,
+     1578
+    ],
+    [
+     37.7,
+     1835
+    ],
+    [
+     36.9,
+     2090
+    ],
+    [
+     34.4,
+     2383
+    ],
+    [
+     29.6,
+     2627
+    ],
+    [
+     34.3,
+     2903
+    ],
+    [
+     54.9,
+     2946
+    ]
+   ],
+   "median_by_phase": {
+    "wait": 56.4,
+    "thinking": 59.5,
+    "edge": 54.7,
+    "arriving": 36.9,
+    "done": 60
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 56.4,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 1,
+     "fps": 56.3,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 2,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 3,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 4,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 5,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 6,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 7,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 8,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 9,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 10,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 11,
+     "fps": 50.3,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 238,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 12,
+     "fps": 45.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 469,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 13,
+     "fps": 41.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 761,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 14,
+     "fps": 35.3,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1032,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 15,
+     "fps": 36.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1315,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 16,
+     "fps": 40,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1578,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 17,
+     "fps": 37.7,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1835,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 18,
+     "fps": 36.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2090,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 19,
+     "fps": 34.4,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2383,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 20,
+     "fps": 29.6,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2627,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 21,
+     "fps": 34.3,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2903,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 22,
+     "fps": 54.9,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2946,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 23,
+     "fps": 59.1,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2945,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 24,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2945,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 25,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2945,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 26,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2945,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-3-ON2.json (scratch folder)"
+  },
+  "scramble_ON_short_first_try": {
+   "setup": "nothing running, scramble ON",
+   "question": "in hollow knight give me a very detailed step by step guide to the whole game, ...",
+   "answer_chars": 679,
+   "cpu_mid_answer": "06:33:30 load 5.64; CPU 39.8 us 5.1 sy 53.1 id; llama-server 176.7%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     53.2,
+     410
+    ],
+    [
+     52.7,
+     679
+    ]
+   ],
+   "median_by_phase": {
+    "thinking": 58.6,
+    "wait": 60,
+    "edge": 59.3,
+    "arriving": 53.0,
+    "done": 60.0
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 55,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 2,
+     "fps": 57.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 3,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 4,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 5,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 6,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 7,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 8,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 9,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 10,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 11,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 12,
+     "fps": 59.1,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 95,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 13,
+     "fps": 53.2,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 410,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 14,
+     "fps": 52.7,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 679,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 15,
+     "fps": 59.5,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 679,
+     "scramble_seen": true,
+     "hold_still_class": false
+    },
+    {
+     "i": 16,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 679,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 17,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 679,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-3-ON.json (scratch folder)",
+   "why_not_counted": "679 characters"
+  },
+  "scramble_OFF": {
+   "setup": "nothing running, scramble switched OFF on the Developer tab (file read false), put back ON after (file read true)",
+   "question": "in deep rock galactic survivor give me a very detailed step by step guide for someone learning the game, with a separate section for each weapon class and its best upgrades, a section on each dwarf class, a section on mining, how to survive swarms, and how to beat each dreadnought",
+   "answer_chars": 2436,
+   "cpu_mid_answer": "06:37:30 load 2.34; CPU 40.6 us 5.9 sy 50.5 id; llama-server 164.9%, steamwebhelper 31.4%",
+   "answer_arriving_fps_in_order_with_chars_reached": [
+    [
+     60,
+     403
+    ],
+    [
+     59.1,
+     707
+    ],
+    [
+     59.5,
+     1030
+    ],
+    [
+     59.5,
+     1318
+    ],
+    [
+     57.3,
+     1615
+    ],
+    [
+     56.8,
+     1879
+    ],
+    [
+     53.6,
+     2156
+    ],
+    [
+     55,
+     2436
+    ]
+   ],
+   "median_by_phase": {
+    "thinking": 59.1,
+    "edge": 58.2,
+    "arriving": 58.2,
+    "done": 60.0
+   },
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 1,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 2,
+     "fps": 59.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 3,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 4,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 5,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 6,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 7,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 8,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 9,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 10,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 11,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "chars_at_end": 0,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 12,
+     "fps": 56.8,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 92,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 13,
+     "fps": 60,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 403,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 14,
+     "fps": 59.1,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 707,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 15,
+     "fps": 59.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1030,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 16,
+     "fps": 59.5,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1318,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 17,
+     "fps": 57.3,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1615,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 18,
+     "fps": 56.8,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 1879,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 19,
+     "fps": 53.6,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2156,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 20,
+     "fps": 55,
+     "phase": "arriving",
+     "switch": "none",
+     "chars_at_end": 2436,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 21,
+     "fps": 59.6,
+     "phase": "edge",
+     "switch": "none",
+     "chars_at_end": 2436,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 22,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2436,
+     "scramble_seen": false,
+     "hold_still_class": false
+    },
+    {
+     "i": 23,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "chars_at_end": 2436,
+     "scramble_seen": false,
+     "hold_still_class": false
+    }
+   ],
+   "raw_file": "L10-3-OFF.json (scratch folder)"
+  },
+  "verdict": "OFF: PASS on the median (58.2, needs 58) but it eased from 60 to 53.6-55.0 past 2100 characters. ON: FAIL - median 36.9 (needs 50), falling from 45 at the start to 29.6 at 2627 characters. For comparison L9.3 measured 50.1 with scramble ON on a 1102-character answer; the drop shows up on long answers."
+ },
+ "end_of_block_new_build_4c7edeb6": {
+  "setup": "new build, Deep Rock Galactic: Survivor running (relaunched after the deploy; the first launch try stopped because Steam's menu did not open, the second worked), panel opened after the launch, Context named the game, NO switch set",
+  "question": "give me a very detailed step by step guide to this game for a player starting fresh, with a separate section for each weapon class and the best upgrades for it, a section on each dwarf class, how to handle swarms and elite enemies, and how to beat each dreadnought",
+  "answer_chars": 1800,
+  "cpu_mid_answer": "06:41:43 load 8.14; CPU 61.5 us 14.4 sy 19.2 id; game 188.5%, llama-server 145.0%, steamwebhelper 65.3%",
+  "answer_arriving_fps_in_order_with_chars_reached": [
+   [
+    41.8,
+    309
+   ],
+   [
+    35.7,
+    473
+   ],
+   [
+    32.8,
+    687
+   ],
+   [
+    35.4,
+    817
+   ],
+   [
+    28.4,
+    1035
+   ],
+   [
+    27.3,
+    1216
+   ],
+   [
+    33.9,
+    1375
+   ],
+   [
+    26.3,
+    1579
+   ],
+   [
+    29.3,
+    1800
+   ]
+  ],
+  "median_by_phase": {
+   "thinking": 58.7,
+   "edge": 50.2,
+   "arriving": 32.8,
+   "tail": 55.8,
+   "done": 60.0
+  },
+  "slices": [
+   {
+    "i": 0,
+    "fps": 58.4,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 1,
+    "fps": 50.5,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 2,
+    "fps": 59.1,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 3,
+    "fps": 58.2,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 4,
+    "fps": 59.1,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 5,
+    "fps": 59.5,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 6,
+    "fps": 51.4,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 7,
+    "fps": 59.1,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 8,
+    "fps": 57.7,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 9,
+    "fps": 57.8,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 10,
+    "fps": 59,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 11,
+    "fps": 59.6,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 12,
+    "fps": 59.1,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 13,
+    "fps": 58.7,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 14,
+    "fps": 57.7,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 15,
+    "fps": 59.5,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 16,
+    "fps": 58.6,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 17,
+    "fps": 57.3,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 18,
+    "fps": 59,
+    "phase": "thinking",
+    "switch": "none",
+    "chars_at_end": 0,
+    "scramble_seen": false,
+    "hold_still_class": true
+   },
+   {
+    "i": 19,
+    "fps": 45,
+    "phase": "edge",
+    "switch": "none",
+    "chars_at_end": 94,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 20,
+    "fps": 41.8,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 309,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 21,
+    "fps": 35.7,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 473,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 22,
+    "fps": 32.8,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 687,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 23,
+    "fps": 35.4,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 817,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 24,
+    "fps": 28.4,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 1035,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 25,
+    "fps": 27.3,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 1216,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 26,
+    "fps": 33.9,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 1375,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 27,
+    "fps": 26.3,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 1579,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 28,
+    "fps": 29.3,
+    "phase": "arriving",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 29,
+    "fps": 56.3,
+    "phase": "tail",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 30,
+    "fps": 55.4,
+    "phase": "tail",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 31,
+    "fps": 55.5,
+    "phase": "edge",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": true,
+    "hold_still_class": true
+   },
+   {
+    "i": 32,
+    "fps": 60,
+    "phase": "done",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": false,
+    "hold_still_class": false
+   },
+   {
+    "i": 33,
+    "fps": 60,
+    "phase": "done",
+    "switch": "none",
+    "chars_at_end": 1800,
+    "scramble_seen": false,
+    "hold_still_class": false
+   }
+  ],
+  "raw_file": "L10-5-newbuild.json (scratch folder)",
+  "decode_visible": "yes - the scramble class was on during the answer by default; the mid-answer screenshot shows green scrambled letters settling at the end of the text (plan70-FPS-pieces-newbuild-decode-default-mid-answer.png; the game overlay read 23 FPS)",
+  "text_updates_20ms_probe": "20 updates in 3.9 s, 4 of them negative (-1 to -5 characters)",
+  "note": "1800 characters, under the 2000 asked for",
+  "answer_median": "32.8 (slices 41.8, 35.7, 32.8, 35.4, 28.4, 27.3, 33.9, 26.3, 29.3)"
+ },
+ "game_frame_rate": "Steam's performance overlay was on: 28 FPS (36.2 ms) mid-answer in the look-check answer at 06:15, 60 FPS after it finished; 31 FPS mid-answer with the decode kept at 06:22; 23 FPS mid-answer on the new build at 06:41 (screenshots above)",
+ "settings_changed": "ai_character_enabled true -> false at 05:49 (Settings tab), back to true at 06:44; stream_scramble_enabled true -> false at 06:36 (Developer tab), back to true at 06:38. Settings file at 06:44 has no differences from the copy taken at 05:47 (steam_web_api_key 32 characters, not printed)."
+}

@@ -1,0 +1,1683 @@
+{
+ "row": "plan70 flow L9.2 (GAME-LIGHT-01, -03) and L9.3 (GAME-LIGHT-02): the panel's frame rate after helper S's changes, with Deep Rock Galactic: Survivor running and with nothing running",
+ "build_commit": "tip 49622e21 deployed 00:51 (Deck dist/index.js 0d12da9def5ea264...); not redeployed or reloaded since",
+ "deck_time": "2026-09-27 04:52 to 05:07 EDT",
+ "screen": "external monitor; Quick Access page 855x845 with the game running, 855x805 with nothing running; captures 1920x1080",
+ "method": "As plan70-FPS-baseline.json (L8.2): requestAnimationFrame callbacks per second in the Quick Access page, 2.5 s slices back to back inside one answer, first 0.3 s of each dropped (2.2 s counted), counter started by the page reader right after A on Ask, one new chat per answer, Strategy, thinking medium, AI characters OFF. Phase per slice: 'answer' = [data-bonsai-stream-preview=\"true\"] present at both ends; 'edge' = present at one end (the change from thinking, or the finish); 'thinking' = reasoning text changing with no answer yet; 'wait' = nothing growing yet. One CPU reading mid-answer (top -b -n1, the moment the answer passed about 400 characters).",
+ "setup_game": "Deep Rock Galactic: Survivor launched at 01:02 and still running (title screen; the game area captures as black); not relaunched. Panel closed and reopened at 04:52 (screensaver woken with a left-stick click first); Context line read 'Context: active game Deep Rock Galactic: Survivor'. No reload.",
+ "runs": [
+  {
+   "run": "L9.2 step 1, answer 1",
+   "question": "give me a detailed step by step guide to this game for a new player, covering the classes and which one to start with, the best weapon upgrades, how to handle the elite enemies and swarms, and how to beat the dreadnought",
+   "answer_chars": 1812,
+   "cpu_mid_answer": "04:54:29 load 4.21; CPU 60.9 us 17.2 sy 15.9 id; llama-server 166.8%, game (Unity Main) 91.5%, steamwebhelper 69.9%, steam 26.9%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 50.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 56.4,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 56.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 42.8,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 192,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 38.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 433,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 30.5,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 691,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 31.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 976,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 26.9,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1211,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 24.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1458,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 28.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1710,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 20,
+     "fps": 41.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1812,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 21,
+     "fps": 60,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 1812,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 22,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1812,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 23,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1812,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 57.5,
+    "wait": 60,
+    "edge": 51.4,
+    "answer": 30.5,
+    "done": 60.0
+   }
+  },
+  {
+   "run": "L9.2 step 1, answer 2",
+   "question": "write me a detailed step by step walkthrough for getting good at this game, which biomes to play first, what to spend gold and materials on between runs, which weapon builds work together, and how to survive the late waves",
+   "answer_chars": 1744,
+   "cpu_mid_answer": "04:56:07 load 4.82; CPU 60.6 us 14.4 sy 19.7 id; llama-server 179.2%, game 104.1%, steamwebhelper 75.2%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 47,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 49.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 56.4,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 56.8,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 20,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 39.6,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 310,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 39.6,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 551,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 31.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 801,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 31.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1060,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 30.2,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1306,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 29.6,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1535,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 20,
+     "fps": 28.6,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1744,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 21,
+     "fps": 59.1,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 1744,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 22,
+     "fps": 59.9,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1744,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 23,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1744,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 57.05,
+    "wait": 60,
+    "edge": 57.95,
+    "answer": 31.4,
+    "done": 59.95
+   }
+  },
+  {
+   "run": "L9.2 step 1, answer 3",
+   "question": "explain in a detailed step by step way how to master this game, the mining and resource loop, how each class plays differently, how artifacts and overclocks change a build, and a plan for clearing the hardest hazard levels",
+   "answer_chars": 2143,
+   "cpu_mid_answer": "04:57:33 load 6.10; CPU 59.6 us 16.9 sy 17.6 id; llama-server 164.6%, game 82.3%, steamwebhelper 50.7%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.4,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 44.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 56.4,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 39.1,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 42.4,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 52.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 53.2,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 69,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 36.6,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 358,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 36.1,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 609,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 28.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 844,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 26,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1076,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 24,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1336,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 24.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1595,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 20,
+     "fps": 24.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1824,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 21,
+     "fps": 21.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 2076,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 22,
+     "fps": 37.3,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 2144,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 23,
+     "fps": 59.5,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 2143,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 24,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 2143,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 25,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 2143,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 26,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 2143,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 56.599999999999994,
+    "wait": 60,
+    "edge": 56.35,
+    "answer": 26,
+    "done": 60
+   }
+  },
+  {
+   "run": "L9.2 step 2, A/B answer 1 (switch set in the Quick Access page, alternating {off:true} / deleted each slice)",
+   "question": "lay out a detailed step by step beginner plan for this game, from the first mission to unlocking every class, with the weapons to favour at each stage, the upgrades to buy first, and how to handle the bosses at the end of each level",
+   "answer_chars": 2247,
+   "cpu_mid_answer": "04:59:21 load 5.53; CPU 58.9 us 17.9 sy 16.6 id; llama-server 181.1%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 56.2,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 39.4,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 57.2,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 58.3,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 57.8,
+     "phase": "thinking",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 51.8,
+     "phase": "edge",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 23,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 39.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 309,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 33.3,
+     "phase": "answer",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 557,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 28.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 755,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 28.6,
+     "phase": "answer",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 1004,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 30.9,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1230,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 28.7,
+     "phase": "answer",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 1476,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 23.4,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1691,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 20,
+     "fps": 23.7,
+     "phase": "answer",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 1944,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 21,
+     "fps": 26.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 2162,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 22,
+     "fps": 44.3,
+     "phase": "answer",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 2247,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 23,
+     "fps": 58.1,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 2247,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 24,
+     "fps": 60,
+     "phase": "done",
+     "switch": "{\"off\":true}",
+     "answer_len_end": 2247,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 25,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 2247,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "('thinking', '{\"off\":true}')": 58.0,
+    "('wait', 'none')": 39.4,
+    "('thinking', 'none')": 57.3,
+    "('edge', '{\"off\":true}')": 51.8,
+    "('answer', 'none')": 28.4,
+    "('answer', '{\"off\":true}')": 28.7,
+    "('edge', 'none')": 58.1,
+    "('done', '{\"off\":true}')": 60,
+    "('done', 'none')": 60
+   }
+  },
+  {
+   "run": "L9.2 steps 5-6, default answer used for the look check (a 20 ms page probe ran for 4 s mid-answer)",
+   "question": "give me a thorough step by step guide to the dreadnought fights in this game, how each phase works, which weapons and perks beat them, how to dodge their attacks, and how to set up a run so I arrive ready",
+   "answer_chars": 1354,
+   "cpu_mid_answer": "05:01:42 load 4.36; CPU 65.4 us 13.8 sy 16.2 id; llama-server 174.9%, game 84.4%, steamwebhelper 54.3%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 58.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 60,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 51.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 58.2,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 55.9,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 53.2,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 57,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 40.1,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 285,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 38,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 535,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 34.3,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 746,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 30.9,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1002,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 31.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1227,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 35,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1354,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 60,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 1354,
+     "hold_still_class": true,
+     "scramble_seen": false
+    },
+    {
+     "i": 20,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1354,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 21,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1354,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 57.3,
+    "wait": 60,
+    "edge": 56.6,
+    "answer": 34.65,
+    "done": 60.0
+   }
+  },
+  {
+   "run": "L9.3, nothing running, scramble ON (as set)",
+   "question": "in hollow knight give me a detailed step by step route through the whole midgame, which areas to visit after the city of tears, which charms and upgrades to collect along the way, and how to prepare for each tough fight",
+   "answer_chars": 1102,
+   "cpu_mid_answer": "05:03:36 load 4.14; CPU 33.3 us 5.9 sy 58.8 id; llama-server 197.8%, steamwebhelper 107.2%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 59.9,
+     "phase": "wait",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 56.8,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 59.5,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 52.3,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 195,
+     "hold_still_class": false,
+     "scramble_seen": true
+    },
+    {
+     "i": 14,
+     "fps": 54.5,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 485,
+     "hold_still_class": false,
+     "scramble_seen": true
+    },
+    {
+     "i": 15,
+     "fps": 50.1,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 868,
+     "hold_still_class": false,
+     "scramble_seen": true
+    },
+    {
+     "i": 16,
+     "fps": 48.8,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1102,
+     "hold_still_class": false,
+     "scramble_seen": true
+    },
+    {
+     "i": 17,
+     "fps": 60,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 1102,
+     "hold_still_class": false,
+     "scramble_seen": true
+    },
+    {
+     "i": 18,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1102,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 19,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1102,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 59.5,
+    "wait": 59.9,
+    "edge": 56.15,
+    "answer": 50.1,
+    "done": 60.0
+   }
+  },
+  {
+   "run": "L9.3, nothing running, scramble switched OFF on the Developer tab (then back ON)",
+   "question": "in hades give me a detailed step by step plan for getting through elysium, which weapon aspects and boons work best there, how to handle the champions and the exalted enemies, and how to prepare for the final stretch",
+   "answer_chars": 1452,
+   "cpu_mid_answer": "05:05:53 load 2.27; CPU 44.9 us 10.2 sy 41.8 id; llama-server 170.0%, steamwebhelper 48.6%",
+   "slices": [
+    {
+     "i": 0,
+     "fps": 44.6,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 1,
+     "fps": 59,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 2,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 3,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 4,
+     "fps": 60,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 5,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 6,
+     "fps": 59.1,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 7,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 8,
+     "fps": 57.7,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 9,
+     "fps": 57.3,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 10,
+     "fps": 58.6,
+     "phase": "thinking",
+     "switch": "none",
+     "answer_len_end": 0,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 11,
+     "fps": 59.1,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 215,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 12,
+     "fps": 60,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 567,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 13,
+     "fps": 58.7,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 919,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 14,
+     "fps": 58.2,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1290,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 15,
+     "fps": 57.3,
+     "phase": "answer",
+     "switch": "none",
+     "answer_len_end": 1452,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 16,
+     "fps": 59.1,
+     "phase": "edge",
+     "switch": "none",
+     "answer_len_end": 1452,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 17,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1452,
+     "hold_still_class": false,
+     "scramble_seen": false
+    },
+    {
+     "i": 18,
+     "fps": 60,
+     "phase": "done",
+     "switch": "none",
+     "answer_len_end": 1452,
+     "hold_still_class": false,
+     "scramble_seen": false
+    }
+   ],
+   "median_by_phase": {
+    "thinking": 59,
+    "edge": 59.1,
+    "answer": 58.45,
+    "done": 60.0
+   }
+  }
+ ],
+ "GAME_LIGHT_01": {
+  "answers_1_to_3_answer_phase_medians": [
+   30.5,
+   31.4,
+   26
+  ],
+  "all_23_answer_slices_pooled_median": 30.2,
+  "thinking_medians": [
+   57.5,
+   57.05,
+   56.599999999999994
+  ],
+  "thinking_pooled_median": 57.099999999999994,
+  "pattern": "the frame rate falls as the answer grows: about 37-40 in the first slice, 24-28 once the answer passes about 1200 characters",
+  "against_L8": "L8 run C (same game, scramble on): thinking 35.6, answer arriving 11.6. Now thinking about 57, answer arriving about 30.",
+  "bonus_run_0103": "the 01:03 answer (721 characters, plan70-FPS-after-partial.json): thinking 58.6, answer 43.7 (2 slices)",
+  "verdict": "UNCLEAR - thinking passes easily (57 against 35 needed). Answer phase: 30.5 and 31.4 pass, 26.0 fails; all 23 answer slices pooled give 30.2, on the line. The owner decides."
+ },
+ "step2_AB": {
+  "what_was_done": "one answer alternating window.__bonsaiGameLoad = {off:true} and delete every slice, typed into the Quick Access page as the runbook says",
+  "result": "no effect: answer slices with the switch deleted 28.4, with {off:true} 28.7 (5 each); the hold-still class stayed on and the scramble never appeared during the {off:true} slices, though scramble was ON in settings",
+  "why": "read-only check: the plugin's code runs in Steam's SharedJSContext page (DeckyPluginLoader and SP_REACT exist there, neither exists in the Quick Access page), so a switch set on the Quick Access page's window is never seen by the plugin",
+  "verdict": "UNCLEAR - the runbook's route to the switch cannot reach the plugin. Not re-routed (setting it in SharedJSContext would be a new route; the owner decides). Second A/B answer not run for the same reason."
+ },
+ "step3_rank_parts": "COULD NOT RUN - needs the same switch (see step 2)",
+ "step4_pace_sweep": "COULD NOT RUN - needs the same switch (see step 2)",
+ "step5_game_frame_rate": "COULD NOT RUN - Steam's performance overlay was not on screen with the game running (captures at 04:52 and 05:01 show no overlay; at 00:57, before the game, it showed). Not switched on, as it is a Steam setting. mangoapp was running.",
+ "step6_look_check": {
+  "text_updates": "sampled every 20 ms for 4 s mid-answer: 15 updates in 3.86 s = 3.9 a second, gaps 170-345 ms, 6-40 characters each (word groups)",
+  "raw_updates_ms_chars": [
+   [
+    170,
+    23
+   ],
+   [
+    452,
+    34
+   ],
+   [
+    706,
+    40
+   ],
+   [
+    972,
+    18
+   ],
+   [
+    1239,
+    20
+   ],
+   [
+    1530,
+    31
+   ],
+   [
+    1875,
+    26
+   ],
+   [
+    2052,
+    19
+   ],
+   [
+    2328,
+    28
+   ],
+   [
+    2586,
+    24
+   ],
+   [
+    2853,
+    18
+   ],
+   [
+    3159,
+    30
+   ],
+   [
+    3407,
+    20
+   ],
+   [
+    3651,
+    31
+   ],
+   [
+    3863,
+    6
+   ]
+  ],
+  "scramble": "never present during any game-running answer (scramble setting ON)",
+  "hold_still": "the hold-still class was on for the whole question and came off one slice after the answer finished; during thinking and answering no bonsAI CSS animation was running (only one Steam-owned animation); with nothing running (L9.3) the spinner and question-box breathing ran as before",
+  "finish": "answer length unchanged at finish (1354 before and after); not judged by eye",
+  "screenshot": "plan70-FPS-after-look-mid-answer.png",
+  "verdict": "PASS on the numbers (about 4 updates a second in word groups, no scramble, animations held still and back after); 'nothing jumps at finish' not seen by eye"
+ },
+ "step7_profile": "skipped (pooled median 30.2 is not under 30; the owner's instruction)",
+ "step8_chip_rotation": "not run (optional)",
+ "GAME_LIGHT_02": {
+  "scramble_ON_answer_median": 50.1,
+  "scramble_OFF_answer_median": 58.45,
+  "L8_reference": "A (on) 48.6, B (off) 60.0",
+  "scramble_played_when_on": "yes - the stream-scramble class was present in every answer slice; the spinner and breathing glow ran while thinking (old behaviour)",
+  "verdict": "PASS - 50.1 with scramble on (about 49 expected), 58.5 with it off (about 60 expected)"
+ },
+ "settings_changed": "stream_scramble_enabled true -> false for L9.3's OFF answer, then back to true (file read True, green, settle, 400)"
+}

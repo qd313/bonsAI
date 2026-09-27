@@ -115,6 +115,17 @@ starts work outside this.
 - ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
   games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
   on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
+- ★ `[chips]` **The suggestion chips keep rotating and animating while a question is being answered** —
+  **OPEN, found 2026-09-27 (plan 70, helper S).** [Detail](roadmap-details.md#flow-l10-findings).
+- ★ `[reply]` **With thinking off, the waiting spinner can keep spinning through the whole answer** —
+  **OPEN, found 2026-09-27 (plan 70, helper S).** Held still while a game runs. [Detail](roadmap-details.md#flow-l10-findings).
+- ★ `[layout]` **The panel-height check rewrites a style value that has not changed** — **OPEN, found
+  2026-09-27 (plan 70, helper S).** May be behind the "ResizeObserver loop" errors, unproven.
+  [Detail](roadmap-details.md#flow-l10-findings).
+- ★ `[ollama]` **The meaning-search hint does not appear until the Ollama tab is reopened** — **OPEN, found
+  2026-09-27 (plan 70, flow L10).** After removing the model with the tab open. [Detail](roadmap-details.md#flow-l10-findings).
+- ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **OPEN, sighting 2026-09-27
+  (plan 70, flow L10).** The next press recovers. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[chips]` **The "Enable local knowledge base" chip showed while the knowledge base was on** — **OPEN,
   seen once 2026-09-26 (plan 70, flow L7).** [Detail](roadmap-details.md#flow-l7-findings).
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows**
@@ -168,10 +179,6 @@ starts work outside this.
 - ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** —
   **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **OLLAMA-TAB-AFTER-RELOAD-02** in
   [testing.md](testing.md). [Detail](roadmap-details.md#the-plugin-log-writes-one-false-non-loopback-connection-failure-right-at-start-up).
-- ★ `[platform]` **The Steam ban lookup's report shows as raw text, not a table** — **VERIFY, fixed
-  2026-09-26 (plan 70, helper I).** The maintainer's own Steam Web API key is now saved on the Deck
-  (2026-09-27, never committed); the Deck check is running. Row **VAC-03-07** in [testing-manual.md](testing-manual.md).
-  [Detail](roadmap-details.md#the-steam-ban-lookups-report-shows-as-raw-text-not-a-table).
 - ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
   maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
   does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
@@ -210,6 +217,17 @@ starts work outside this.
   project. Row **TAB-BAR-GHOST-01**. The session's guess, shared with the two bugs above: closing a Decky
   popup rebuilds the plugin, and the highlight lands on the top bar, which then opens — each of these three
   needs a Deck walk with the focus recorder before any fix.
+- ★★ `[focus]` **Up from "Save chat to Desktop" jumps to the top of the turn, skipping the answer** —
+  **OPEN, found 2026-09-27 (plan 70, flow L9).** It skips the answer, Show details and the notes block; Down
+  from the top reaches them all. Seen again from the question box (flow L10). [Detail](roadmap-details.md#flow-l10-findings).
+- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **OPEN,
+  found 2026-09-27 (plan 70, flow L9).** Coming Down onto the cover works. [Detail](roadmap-details.md#flow-l10-findings).
+- ★★ `[focus]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
+  (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
+  finished answer. [Detail](roadmap-details.md#flow-l10-findings).
+- ★★ `[reply]` **With nothing running, the decode effect slows long answers** — **OPEN, found 2026-09-27
+  (plan 70, flow L10).** About 37 frames a second on a 2,900-letter answer, against about 50 on shorter
+  ones; not yet known whether it was always so. [Detail](roadmap-details.md#flow-l10-findings).
 - ★★ `[chat]` `[focus]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its
   question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
   [Detail](roadmap-details.md#flow-l7-findings).
@@ -398,8 +416,10 @@ replace it with a specific issue when one exists.
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
   **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
   night. **Target set by the maintainer 2026-09-27:** at least 30 frames a second in the panel while an answer
-  arrives with a game running (today 10–20); being worked (helper S), a Deck baseline being measured (D112).
-  [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+  arrives with a game running. **PARTIAL, measured 2026-09-27:** from about 12 to 36 with the decode effect off
+  and 30–33 with it kept (the maintainer's call), dipping into the 20s late in long answers; the game itself
+  went from 14–17 to 23–31. Rows **GAME-LIGHT-01**, **STREAM-PIECES-01** partial. Next: a Deck processor
+  profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).
 - ★★★ `[perms]` **Say where a download goes before it starts, and a download permission to gate it** —
   **OPEN, from the maintainer 2026-09-26, wanted before 0.6.0.** Install/update Ollama, model downloads,
   voice models and the knowledge library each show a clear notice first ("bonsAI will connect to
@@ -686,8 +706,8 @@ evening ran the same evening, once the Deck was free.
 
 1. ~~**Finish the device evening.**~~ **Done 2026-09-15.** The two checks that had never run — the honesty
    line, and tips still attaching when one fits — both pass on the device. The speed check passes three
-   times with its fix. The one row still blocked is the *No tip for this* line, because no question yet
-   found reaches the tip sheet and comes back empty, so there is nothing for it to fire on.
+   times with its fix. The *No tip for this* line never had a question that made it appear, and was
+   retired by the maintainer on 2026-09-27 (`db4b3b4a`).
 2. ~~**Fix the speed check.**~~ **Done.** It now refuses to pass a reading taken without a reply first, and
    read 547, 23 and 28 thousandths of a second against a one-second budget on 2026-09-15. Read that with
    the range in mind — the number swings with what is loaded in memory.
@@ -719,7 +739,7 @@ evening ran the same evening, once the Deck was free.
    the Deck too; what is left is the read-aloud row and the maintainer's publish call; phase 2 can
    start.
 7. **Then wave four, now plan 70** — writing more notes. 58 phase 2 was replaced 2026-09-25 by
-   [plan 70](planning/70-kb-wave-four-and-deck-test-wave.md), which re-read § 1 against the code and took
+   [plan 70](archive/70-kb-wave-four-and-deck-test-wave.md), which re-read § 1 against the code and took
    its answers as D112.
 
 **Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
@@ -737,7 +757,7 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
   2026-09-17 and locked as D111. Two things are still open: the block's look waits on lane A's drawings,
   and trim-only for wiki notes stands unless the maintainer overturns it.
 - **58 phase 2, seven questions:** answered 2026-09-25 as D112, for
-  [plan 70](planning/70-kb-wave-four-and-deck-test-wave.md), which replaces 58 phase 2.
+  [plan 70](archive/70-kb-wave-four-and-deck-test-wave.md), which replaces 58 phase 2.
 
 A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
@@ -745,6 +765,9 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
+- ★ `[KB]` **"Not in my notes" can show on a covered game although its notes were never searched** —
+  **OPEN, found 2026-09-27 (plan 70, helper Q), optional.** When a tip was found but cut for lack of room, in
+  Strategy or Expert. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[KB]` **A game's own Deck tip is labelled "shared" in Show details and the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L7).** It should say it is that game's own tip. [Detail](roadmap-details.md#flow-l7-findings).
 - ★ `[KB]` **A game's own tip is found only by its own words** — **OPEN, found 2026-09-26 (plan 70, flow
@@ -770,14 +793,6 @@ ones from this month are D81 to D88.
   words, not just its title, so it stops appearing under an answer that clearly used a note. Wired into
   real answers (`e4c24bdd`). **Deck check owed:** row **KB-NOCLOSE-TEXT-01** in [testing.md](testing.md).
   [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
-- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, being retired
-  (helper Q), the maintainer's call 2026-09-27 (D112).** "Not in my notes" and "No close match" stay. [Detail](roadmap-details.md#no-tip-line-numbers).
-- ★★ `[KB]` **Show details' own sources credit line still names a protected boss** — **OPEN, being fixed
-  (helper R); the maintainer's call 2026-09-27 (D112): hidden until the notes block is opened, only when the
-  answer hid a spoiler.** The protected note's tag reads "Boss note
-  (spoiler)" until the answer's cover or the notes block is opened, then the real name; no new button.
-  Drawing: [Show Details Credit Line](https://claude.ai/artifact/K4u5dy7hNZ7cLKsh4fhWTW). Plan 72 must-fix.
-  [Detail](roadmap-details.md#spoiler-leak-family).
 - ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
   thing** — **VERIFY, both gaps closed 2026-09-26 (helper M, `679452e5`, `7b2bc753`).** A game's own name
   is now cut from the question before matching; a routed-to-tips turn now reads as troubleshooting even
@@ -842,9 +857,6 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
-- ★★ `[KB]` **Pull the embedding model as part of installing the library** — **VERIFY, built 2026-09-26
-  (plan 70, helper D).** Deck check owed: row **KB-NOMIC-OFFER-01** in [testing.md](testing.md).
-  [Detail](roadmap-details.md#pull-the-embedding-model-as-part-of-installing-the-library).
 - ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the 139 prose cards as labelled short
   lines, the shape the 16 structured cards use. Facts kept is already 92%, so the ceiling is low; do it only if the answer
   test shows the labelled shape scores better. Two to three days of content plus a rebuild.
@@ -858,12 +870,6 @@ ones from this month are D81 to D88.
   policy and a corpus rebuild. Research first. [Detail](roadmap-details.md#kb-visual-maps).
 - `[KB]` **Idea for wave four: dungeon maps** — raised by the maintainer 2026-09-07, no stars and no plan yet. Picks up
   the dungeon-map half of the visual-maps idea above when the time comes.
-- ★★★ `[KB]` **The next corpus release carries everything that needs a rebuild** — **VERIFY, built;
-  Deck check passed 2026-09-26 (install, notes, starting-out chips, and the per-game tips once fixed).
-  NOT published:** Claude Code's permission check refused the push, so the maintainer runs `python
-  scripts/publish_corpus.py --build-dir build/kb-release --hf-clone-dir ../bonsai-knowledge-base --push-hf
-  --push-github`. **Owed until then:** R.5, a fresh download plus the meaning-search model offer (rows
-  **KB-NOMIC-OFFER-01**, **KB-FORMAT-REFUSE-01**). [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a
@@ -872,7 +878,7 @@ ones from this month are D81 to D88.
   Measured 2026-09-07: nine of ten ordinary problem sentences ("my game keeps crashing", "my game won't
   launch") reach nothing at all, since the word "crash" alone is deliberately too weak to route a question.
   **Related work landed 2026-09-26:** the tip cut-off and a false-positive word match are now fixed, and the
-  "no tip for this" line has real numbers, but is still waiting on the maintainer. (D81, D85) [Detail](roadmap-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips).
+  "no tip for this" line was retired by the maintainer 2026-09-27 (`db4b3b4a`). (D81, D85) [Detail](roadmap-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips).
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get cards; today they get nothing specific. New card kinds and a spoiler table update, Left 4
   Dead 2 first, then Counter-Strike 2, from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md)
@@ -955,7 +961,7 @@ during the twelfth bookkeeping pass, again to keep this document under its size 
 - ★★ `[docs]` **Some long-notes blocks and testing rows didn't match what was found** — **DONE
   2026-09-26, docs only.** [Full detail](archive/roadmap-bugs-fixed.md#some-long-notes-blocks-and-testing-rows-dont-match-what-was-found-closed-2026-09-26).
 
-**Plan 70 (2026-09-26): 34 items closed** — the knowledge-base wave four and the Deck test wave,
+**Plan 70 (2026-09-26 to 2026-09-27): 41 items closed** — the knowledge-base wave four and the Deck test wave,
 flows L1 to L7 and the helpers' landings. Each one, word for word, with its evidence: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the long notes in
 [roadmap-details.md](roadmap-details.md); the plan's own record in
-[planning/70-kb-wave-four-and-deck-test-wave.md](planning/70-kb-wave-four-and-deck-test-wave.md) § 11.
+[archive/70-kb-wave-four-and-deck-test-wave.md](archive/70-kb-wave-four-and-deck-test-wave.md) § 11.

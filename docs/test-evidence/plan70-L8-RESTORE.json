@@ -1,0 +1,58 @@
+{
+  "row": "plan70 flow L8.0 backup and L8.3 restore of the maintainer's eight chats, plus the End section",
+  "build_commit": "Deck build dist/index.js sha256 942a432a28ab9f56... (same as the PC dist at tip 65b3d2a6); not redeployed",
+  "deck_time": "backup 2026-09-27 00:16 EDT; restore 00:34 to 00:36 EDT",
+  "screen": "external monitor (Quick Access page 855x766)",
+  "setup": "Nothing running at restore time (checked over SSH: no game process left after the exit).",
+  "L8_0_backup": {
+    "command": "tar czf ~/bonsai-backup-plan70-L8.tgz of chat_slots, chat_threads, bonsai_feedback.jsonl, strategy_checklist_session.json (new file, did not exist before)",
+    "entries_in_backup": 17,
+    "entries_detail": "15 files + 2 folders: chat_slots (index.json + 8 chats), chat_threads (index.json + 3), bonsai_feedback.jsonl, strategy_checklist_session.json",
+    "titles_on_screen_before": [
+      "what is a good way to practice parrying in action games",
+      "wheatley fight",
+      "how should i spend my first hour in a new open world game",
+      "what is the safest way to approach a group of enemies at once",
+      "is it better to explore everything or rush the main objective",
+      "how do i unlock the next area after finishing the tutorial",
+      "how do i beat the boss at the end of the first area",
+      "Hades"
+    ],
+    "how_read": "chat row, LB one press at a time from the 8th chat back to the 1st, reading the title after each press; titles also match chat_slots/index.json order"
+  },
+  "new_chats_made_during_L8": [
+    "bonsai:vac-check 76561197983599210",
+    "in hollow knight walk me through a detailed plan for the early game... (run A)",
+    "in hades give me a thorough guide to the whole first run... (run B)",
+    "Deep Rock Galactic: Survivor (first C try, Hollow Knight question)",
+    "Deep Rock Galactic: Survivor (run C)",
+    "Deep Rock Galactic: Survivor (run D)"
+  ],
+  "L8_3_restore": {
+    "step1_test_chats_copied_aside": "~/bonsai-plan70-L8-test-chats now holds chat_slots and chat_threads as they were after the tests (8 slots: the 6 test chats plus parrying and wheatley)",
+    "step2": "ran the runbook's command exactly (rm chat_slots and chat_threads, tar xzf the L8 backup; settings.json is not in the backup); exit code 0",
+    "step3_reload": "deck_reloadPlugin straight after, nothing running; loader ready in 266 ms",
+    "step4_sha256_first16": "all 15 files MATCH the backup's copy extracted to /tmp/p70L8chk (bonsai_feedback.jsonl 8027070f972bbade, chat_slots/index.json e03c93e17447739c, chat_threads/index.json 4e6706742ea00add, strategy_checklist_session.json 936702b9ba7e082c, and all 11 chat files); no extra files in chat_slots or chat_threads",
+    "recheck_after_browsing": "15 of 15 still match at 00:35:45 after walking the chat row on screen",
+    "titles_on_screen_after": [
+      "what is a good way to practice parrying in action games",
+      "wheatley fight",
+      "how should i spend my first hour in a new open world game",
+      "what is the safest way to approach a group of enemies at once",
+      "is it better to explore everything or rush the main objective",
+      "how do i unlock the next area after finishing the tutorial",
+      "how do i beat the boss at the end of the first area",
+      "Hades"
+    ],
+    "how_read_after": "plugin reopened (first open after the reload failed once, as expected; second worked), chat row from [+], RB one press at a time, title read after each press; 9 dots = [+] plus 8 chats"
+  },
+  "end_state": {
+    "settings_diff_against_before_L8": "none (every key equal; the API key compared only by length 32 and a short hash, both unchanged)",
+    "ai_character_enabled": "true again (Ali G, heavy), switched back on the Settings tab",
+    "stream_scramble_enabled": "true (as found)",
+    "game_running": "none",
+    "plugin": "open on Main, on the Hades chat (the same chat that was showing at the start)",
+    "deck_lock": "untouched, still reads bonsai-50 ... 02:00"
+  },
+  "verdict": "PASS - the same eight chats, byte for byte, and the same eight titles on screen as before L8"
+}

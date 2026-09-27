@@ -20,7 +20,7 @@ every landing and after every block of Deck checks.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which model
 does which work"; [lessons-learned.md](../lessons-learned.md), sections 1 to 4; the roadmap's
-[Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag) section; [the status report](37-rag-status-report.md).
+[Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag) section; [the status report](../planning/37-rag-status-report.md).
 
 **The maintainer's own list of checks only a person can do:**
 [Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4).

@@ -5,7 +5,7 @@ the knowledge base against a list of lessons from someone running this kind of s
 for a year and a half. Two of those lessons land squarely on this plugin, and the maintainer asked for
 both fixed **before** the wave-four session runs. That session was
 [58 phase 2](58-phase-2-kb-session-wave-four.md), replaced 2026-09-25 by
-[plan 70](../planning/70-kb-wave-four-and-deck-test-wave.md).
+[plan 70](70-kb-wave-four-and-deck-test-wave.md).
 
 **Status, corrected 2026-09-24: FINISHED.** The library this phase built, 2026.09.18, was published
 2026-09-23 to both download sites and read back afterwards (the roadmap's knowledge-base section,

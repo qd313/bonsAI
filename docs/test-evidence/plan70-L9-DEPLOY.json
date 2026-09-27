@@ -1,0 +1,50 @@
+{
+ "row": "plan70 flow L9.0 - deploy the tip, back up the chats, AI characters off",
+ "build_commit": "tip 49622e21 on experimental (49622e21 S: 4 updates a second while a game runs; f52e6822; a0584bd2; 75c32ace; 8bba1f00 and 6d31bc1d R: the credit line - all present in git log)",
+ "deck_time": "2026-09-27 00:50 to 00:55 EDT",
+ "screen": "external monitor; Quick Access page 855x766",
+ "setup": "Nothing running (no game process over SSH). Deck lock read 'bonsai-50 2026-09-27T00:50 2026-09-27T03:00'. Keep-awake taken for 480 min (expires 2026-09-27T12:50Z).",
+ "deploy": {
+  "before": {
+   "deck_index_js": "942a432a28ab9f56...",
+   "deck_main_py": "f098c0b665ed3f61..."
+  },
+  "pressed": "plugin_build then deck_deploy (loader ready in 274 ms)",
+  "after": {
+   "pc_index_js": "0d12da9def5ea264b0d0d258dd0d8405fab93169b75b9344d6843b943570f8ed",
+   "deck_index_js": "0d12da9def5ea264b0d0d258dd0d8405fab93169b75b9344d6843b943570f8ed",
+   "pc_main_py": "a2295571fe0c4d8ef64a502d8da902330aeb9482dc4ebeda6a21c8463b25de38",
+   "deck_main_py": "a2295571fe0c4d8ef64a502d8da902330aeb9482dc4ebeda6a21c8463b25de38",
+   "match": true
+  },
+  "plugin_log": "new log 2026-09-27 00.51.10.log: 'bonsAI plugin loaded!'; 0 lines with error/traceback",
+  "side_effect": "the build touched src/pluginVersion.ts in the checkout (git shows it modified, line endings only, no content diff)"
+ },
+ "backup": {
+  "file": "~/bonsai-backup-plan70-L9.tgz (did not exist before)",
+  "entries": 17,
+  "detail": "2 folders + 15 files: chat_slots index + 8 chats, chat_threads index + 3, bonsai_feedback.jsonl, strategy_checklist_session.json",
+  "titles_on_screen": [
+   "what is a good way to practice parrying in action games",
+   "wheatley fight",
+   "how should i spend my first hour in a new open world game",
+   "what is the safest way to approach a group of enemies at once",
+   "is it better to explore everything or rush the main objective",
+   "how do i unlock the next area after finishing the tutorial",
+   "how do i beat the boss at the end of the first area",
+   "Hades"
+  ],
+  "how_read": "chat row: LB x7 from Hades to the first chat, then RB one press at a time reading the active title after each; same order as chat_slots/index.json"
+ },
+ "settings_at_start": {
+  "ai_character_enabled": true,
+  "ai_character_preset_id": "alig_ali_g (heavy)",
+  "stream_scramble_enabled": true,
+  "ask_think_effort": "medium",
+  "strategy_spoiler_masking_enabled": true,
+  "ask_mode": "strategy",
+  "steam_web_api_key_length": 32
+ },
+ "characters_off": "Settings tab > AI voice & personality toggle, A once; file then read ai_character_enabled false",
+ "verdict": "DONE - deploy proven by both fingerprints, log clean, backup taken, characters off"
+}

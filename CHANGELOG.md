@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **Show details no longer names a boss an answer hid:** on an answer with a spoiler cover, its credit
+  area reads "Sources hidden — open the notes to see them" until you open the notes; a note the answer
+  didn't use shows only its neutral title. `6d31bc1d`, `8bba1f00`. Passed on the Deck.
+- **With a game running, the panel stays smoother while an answer arrives:** the text appears in small
+  steps about four times a second and the small animations pause during the question; the decode effect
+  still plays. About 11 frames a second before, 30 to 36 now. Passed in part on the Deck.
+- **Long answers no longer slow the panel down as they arrive:** only the newest paragraph is redrawn.
+- **The meaning-search hint clears by itself once the model has downloaded, and "Update knowledge base"
+  says what it did:** "Checking…", then "Already up to date", a new version downloading, or a plain
+  error — and it never says "failed" just because the network is slow. Passed on the Deck.
 - **Pressing Stop no longer throws the AI model out of memory:** the question after a Stop used to start
   slowly, because Stop unloaded the model every time. Stop now just ends the answer and leaves the model
   loaded, so the next question starts warm. On the Deck's own AI a short watch runs after Stop, and only
@@ -721,6 +731,8 @@ All notable changes to this project are documented in this file.
   styles (thinking).
 
 ### Removed
+- **The "No tip for this" line, which could never appear.** Retired by the maintainer; "Not in my
+  notes" and "No close match" are unchanged. `db4b3b4a`.
 - **Two re-export shims (no user-visible change):** `refactor_helpers.py` and `src/utils/settingsAndResponse.ts` held no logic — only forwarding — and hid which module a consumer actually depended on. Their 9 and 22 importers now name `backend.ollama_routing` / `ollama_urls` / `tdp_intent` and `bonsaiSettingsSchema` / `bonsaiSettingsNormalizers` / `settingsPayload` directly. Deploy scripts and the zip verifier no longer ship or require `refactor_helpers.py`. Tests follow their subjects: `test_refactor_helpers.py` → `test_backend_helpers.py`, `settingsAndResponse.test.ts` → `settingsContracts.test.ts`. `settingsPayload.ts` also gives up its reply-text formatting to a new `appliedTuningText.ts`.
 - **Dead backend from removed features (no user-visible change):** the five Proton experiment journal RPCs and `proton_experiment_journal_service.py` (the journal UI went on 2026-07-30; its file wipe moved to `plugin_data_reset.py`, which **Clear all data** still needs), `thinking_tiny_model_service.py` (no importer anywhere), `log_navigation`, the legacy `capture_screenshot` RPC and the gamescope helper only it called, and the TDP sysfs **write** path — `apply_tdp`, `write_sysfs`, `append_sandbox_sysfs_write` — which nothing but its own test had reached since TDP became suggestion-only. TDP reads and clamp bounds are unchanged. `tests/test_tdp_sandbox_sysfs.py` becomes `tests/test_tdp_service.py`; the `UNIT-B-pytest-sandbox-tdp` preview gate follows it. RPC surface 57 → 50.
 - **`src/config.ts`** and its `scripts/build.sh` generator (`do_generate_config`), plus the now-unused `PC_IP` build preflight. The exported `HostIp`/`PcIp` constants had no importers; `PC_IP` remains a runtime `.env` value.

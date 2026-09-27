@@ -1,0 +1,40 @@
+{
+ "row": "plan70 flow L9.1 - SPOILER-CREDITS-01: Show details never names a boss the answer hid; the credit line appears once the notes are opened",
+ "build_commit": "tip 49622e21 deployed (Deck dist/index.js 0d12da9def5ea264..., main.py a2295571fe0c4d8e...)",
+ "deck_time": "2026-09-27 00:56 to 01:01 EDT",
+ "screen": "external monitor; Quick Access page 855x766; captures 1920x1080",
+ "setup": "Nothing running. Strategy mode, thinking effort medium, AI characters OFF, Settings tab reads 'Story spoilers: Hide spoilers until I tap' (strategy_spoiler_masking_enabled true, the default). New chat from the chat row's [+] for each question.",
+ "step1": {
+  "try": 1,
+  "question": "in hollow knight how can i defeat the spell casting boss at the top of the soul sanctum",
+  "pressed": "send-question script (VERIFIED, full text), Down x3 to Ask, A; answer finished in ~40 s (Show reasoning 21 s)",
+  "seen_answer": "two spoiler covers ('Spoiler - tap to show / Hidden until you reveal (Strategy Guide).'), the first sentence and the last were covered; the middle strategy text names no boss; no notes block shown while covers were closed",
+  "pressed_details": "walked Down to Show details, A",
+  "credit_area": "Local knowledge base: 'Sources hidden - open the notes to see them', then Retrieval / Trust tier / text:hollow knight / Embed / Re-rank lines; no credit line",
+  "soul_master_on_page": "0 matches for 'Soul Master' or 'Soul Tyrant' in the whole Quick Access page text, on 'This answer' AND on the 'Session - 1' tab (Right on the tabs row)",
+  "screenshot": "plan70-SPOILER-CREDITS-01-step1-sources-hidden.png",
+  "verdict": "PASS"
+ },
+ "step2": {
+  "pressed": "walked back up to the first cover (from above: Show reasoning then Down lands on the cover itself), A -> 'Spoiler - tap to hide', the covered sentence reads 'Reviewing the Soul Master fight involves learning his movement patterns.'; a closed notes block 'Boss note (spoiler) - From the Hollow Knight wiki' appeared; walked Down to it, A",
+  "seen": "block opened, title became 'Soul Master', note text shown; Show details (still open from step 1) now reads the credit line: 'hollowknight.wiki - CC-BY-SA-3.0 - as of 2026-09-05', 'Hollow Knight - Soul, Focus and spells', 'Hollow Knight - Soul Master', 'Hollow Knight - Starting out in Hollow Knight'; 'Sources hidden' sentence gone",
+  "note": "Show details was not closed and reopened; it updated in place when the block opened",
+  "screenshot": "plan70-SPOILER-CREDITS-01-step2-note-open.png",
+  "verdict": "PASS"
+ },
+ "step3_control": {
+  "question": "how can i beat hornet in hollow knight (reworded from 'how do i beat hornet in hollow knight' against the answer cache)",
+  "pressed": "new chat ([+]), send-question script VERIFIED, Down x3 to Ask, A; finished in ~37 s; walked to Show details, A",
+  "seen": "answer names Hornet in plain text, no covers; but the notes block under it read 'Boss note (spoiler) (+1 more)' closed, and Show details read 'Sources hidden - open the notes to see them' with NO credit line",
+  "after_opening_block": "block title became 'Hornet in Greenpath (+1 more)' and held two notes: Hornet in Greenpath and Watcher Knights; credit line then listed Starting out in Hollow Knight, Hornet in Greenpath, Watcher Knights",
+  "likely_reason_not_judged": "the second note (Watcher Knights, a boss the question did not name) seems to make the whole block count as a spoiler",
+  "screenshot": "plan70-SPOILER-CREDITS-01-step3-hornet-control.png",
+  "verdict": "FAIL against the runbook's expectation (credit line not shown straight away)"
+ },
+ "tries_used": "1 of 4 for step 1",
+ "focus_notes": [
+  "From below the answer, Up from 'Save chat to Desktop' jumps straight to 'Retry same prompt' at the top, skipping the whole answer, Show details and the notes block (seen on both answers); Down from the top reaches everything.",
+  "Coming Up into a covered section the ring lands on the answer section around the cover, and A there does nothing; coming Down from Show reasoning it lands on the cover itself and A reveals it."
+ ],
+ "verdict": "Steps 1 and 2 PASS. Step 3 (control) FAIL: the Hornet answer also hid its sources, because its notes block carried a second boss note and was labelled as a spoiler."
+}

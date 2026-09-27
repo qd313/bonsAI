@@ -494,3 +494,21 @@ testing-manual.md. Found by the planning-folder review
   (`docs/test-evidence/plan70-R4-try3.json`); Fallout 4 named (the box was dead over the running game), the
   F4SE tip first in Speed and Strategy (`docs/test-evidence/plan70-R4-try4.json`); Deep Rock Galactic:
   Survivor named, the Render Scale tip first (`docs/test-evidence/plan70-R4-try6.json`).
+
+### Plan 70 flows L8 to L10 (2026-09-27)
+
+- [x] **VAC-03-07** Fixed 2026-09-26 (plan 70, helper I): the ban report used to be written as a markdown
+  table, which the Deck's answer renderer showed as one run-on line of pipe characters. Run a ban lookup
+  with a real account number — each account's facts must read as a plain bullet line, same facts and
+  wording, no pipe or dash characters anywhere. **COULD NOT RUN (Deck) 2026-09-26 (plan 70, flow L1):** no
+  Steam Web API key is saved on the Deck, and the runbook forbids setting one by hand — the one try got
+  the plain "no key saved" message, not a report to read. Needs the maintainer's own key; on their own
+  checklist. Evidence `docs/test-evidence/plan70-VAC-03-07.json`. **PASS (Deck) 2026-09-27 (flow L8), with the
+  maintainer's own key:** a real report in under 2 s, the account as one plain bullet line, no pipes, no
+  runs of dashes, no table; the one long dash before "VAC:" is ordinary punctuation. The key appears in no
+  log and no chat file. Evidence `docs/test-evidence/plan70-VAC-03-07-try2.json` (+ `.png`).
+- [x] **KB-NOMIC-OFFER-01** After a fresh install, the plugin offers the meaning-search model once.
+  **PASS (Deck) 2026-09-27 (flows L9 and L10):** from the published library the box asked once, Download
+  landed the model in about 10 s, Update did not ask again, and the next answer read "Keyword + meaning"
+  (`docs/test-evidence/plan70-R5.json`); the old hint that stayed on the open tab was fixed and passed in
+  flow L10 (`docs/test-evidence/plan70-KB-UPDATE-HINT.json`).

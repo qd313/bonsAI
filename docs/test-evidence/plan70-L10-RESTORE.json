@@ -1,0 +1,55 @@
+{
+ "row": "plan70 flow L10.4 restore of the maintainer's eight chats, plus the End section",
+ "build_commit": "at the restore: tip 4c7edeb6 deployed 06:38 (Deck dist/index.js 7c75eb49eee57b7d... = PC)",
+ "deck_time": "backup 2026-09-27 05:48 EDT; restore 06:42 to 06:44 EDT",
+ "screen": "external monitor; Quick Access page 855x766",
+ "setup": "Nothing running (Deep Rock Galactic: Survivor exited 06:42; 0 AppId= processes over SSH).",
+ "backup": {
+  "file": "~/bonsai-backup-plan70-L10.tgz",
+  "entries": 17,
+  "titles_before": [
+   "what is a good way to practice parrying in action games",
+   "wheatley fight",
+   "how should i spend my first hour in a new open world game",
+   "what is the safest way to approach a group of enemies at once",
+   "is it better to explore everything or rush the main objective",
+   "how do i unlock the next area after finishing the tutorial",
+   "how do i beat the boss at the end of the first area",
+   "Hades"
+  ],
+  "how_read_before": "chat row on screen, LB one press at a time from the active chat, title read after each press (05:54), and the index file over SSH - same eight"
+ },
+ "test_chats_made": 20,
+ "test_chats_note": "about 20 new chats ([+]) during L10.1-L10.3 and the new-build run; each pushed out the oldest; all set aside",
+ "restore": {
+  "step1": "copied chat_slots and chat_threads aside to ~/bonsai-plan70-L10-test-chats (8 test chats + index)",
+  "step2": "rm -rf chat_slots chat_threads, tar xzf ~/bonsai-backup-plan70-L10.tgz in ~/homebrew/settings (backup holds only the four chat items, never settings.json); exit 0",
+  "step3": "deck_reloadPlugin at once, nothing running; loader ready in 282 ms",
+  "sha256": "15 of 15 files match the backup's copy extracted to /tmp/p70L10chk; no extra or missing files (bonsai_feedback.jsonl 8027070f972bbade, chat_slots/index.json e03c93e17447739c, chat_threads/index.json 4e6706742ea00add, strategy_checklist_session.json 936702b9ba7e082c - the same as after L9's restore)",
+  "titles_on_screen_after": [
+   "what is a good way to practice parrying in action games",
+   "wheatley fight",
+   "how should i spend my first hour in a new open world game",
+   "what is the safest way to approach a group of enemies at once",
+   "is it better to explore everything or rush the main objective",
+   "how do i unlock the next area after finishing the tutorial",
+   "how do i beat the boss at the end of the first area",
+   "Hades"
+  ],
+  "how_read_after": "plugin reopened (first open after the reload failed once, as expected; second worked), chat row from [+], RB one press at a time, titles recorded by a 100 ms page reader: [+] then the eight in order",
+  "verdict": "PASS"
+ },
+ "end": {
+  "ai_characters": "turned back ON on the Settings tab at 06:44; file reads ai_character_enabled true, preset alig_ali_g, accent heavy",
+  "scramble": "ON (true, green, settle, 400) as at the start; it was OFF only for L10.3's OFF answer (06:36-06:38)",
+  "thinking": "medium, unchanged",
+  "settings_file_vs_settings-before-L10.json": "no differences at all (every key equal); steam_web_api_key 32 characters and unchanged (not printed)",
+  "nomic_embed_text": "removed once at 05:51 (L10.1) and pulled back through the plugin at 05:53; api/tags lists it",
+  "game": "none running",
+  "plugin": "open on the Main tab (Hades chat active)",
+  "keep_awake": "released (deck_restorePowerSettings: released)",
+  "offline_mode": "not touched",
+  "lock": "untouched; reads bonsai-50 2026-09-27T05:46 2026-09-27T07:46",
+  "installed_build": "4c7edeb6 (the session's new commit), not 7c924310 as at the start of L10"
+ }
+}

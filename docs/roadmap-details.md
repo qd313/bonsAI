@@ -1801,6 +1801,11 @@ tips (33 → 27 right, 1 → 7 wrong). Why: every hard sentence gets its tip fro
 the topic sorter, so the line can only appear if the word search for tips gets its own cut-off — not
 built this wave.
 
+**Retired by the maintainer 2026-09-27 (D112 item 14; helper Q, `db4b3b4a`).** The line and its code were
+removed; nothing a person sees changes, since it never appeared. "Not in my notes" and "No close match in my
+notes" are unchanged, and the check that keeps "Not in my notes" off a tip-sheet turn stays, renamed. Two
+finished one-off scripts in `scripts/archive/` still call the removed function; noted only.
+
 ## Tip cut-off fix
 
 **Fixed 2026-09-26 (`27fd9aee`).** The tip cut-off's own note said it sat just above the worst junk
@@ -1930,6 +1935,19 @@ coincidence. This runs for every keyword search — notes and the whole tip shee
 per-game tip check, which E2 wrote to avoid it. Needs a measurement across the full question set before
 it is touched, since fixing it may move many scores at once, for better or worse. **Fixed the same night
 (helper O, `55719a6e`), measured first** — see [Flow L7 findings](#flow-l7-findings).
+
+**Published by the maintainer 2026-09-27, about 00:03,** as the permission check required ("Corpus point
+release 2026.09.26" on the Hugging Face dataset; the GitHub release's files updated too). Checked by the
+session: both sites' manifests read version 2026.09.26, format 4, identical to the release build, and both
+sites' library files match it byte for byte; the Hugging Face credits page matches too.
+
+**R.5, the fresh download from the published site — passed on the Deck 2026-09-27 (flow L9).** The
+meaning-search model was removed once and the library removed; the plugin's own Download fetched
+2026.09.26 from Hugging Face; the offer "Also download the meaning-search model (about 270 MB)?" appeared,
+and the model landed in about 10 seconds; Update did not ask again; the next question read "Retrieval:
+Keyword + meaning". Row **KB-NOMIC-OFFER-01** passes. **Still owed:** row **KB-FORMAT-REFUSE-01** — no
+library too new for this plugin exists yet to test the refusal with. Evidence `docs/test-evidence/plan70-R5.json`
+(+ 2 screenshots).
 
 ## The live thinking line shows the model's own rule checklist
 
@@ -2546,6 +2564,13 @@ and the runbook forbids setting one by hand — the one try got the plain "no ke
 report to read. Needs the maintainer's own key; on their own checklist. Evidence
 `docs/test-evidence/plan70-VAC-03-07.json`.
 
+**Passed on the Deck 2026-09-27 (plan 70, flow L8), with the maintainer's own key.** The key was saved
+into the plugin's settings on the Deck from the maintainer's private file, which git ignores; it appears in
+no log and no chat file (checked without printing it). A real Steam report came back in under 2 seconds,
+the account as one plain bullet line: no pipes, no runs of dashes, no table. The one long dash between the
+account number and "VAC:" is ordinary punctuation, not a table row — the session's reading of the row's
+"no dash characters". Evidence `docs/test-evidence/plan70-VAC-03-07-try2.json` (+ `.png`).
+
 ## Flow L7 findings
 
 Long version of the fixes closed and the problems found in plan 70's last Deck block, flow L7
@@ -2648,3 +2673,106 @@ release build byte for byte, but Claude Code's permission check refused the push
 so it is not published. The maintainer runs
 `python scripts/publish_corpus.py --build-dir build/kb-release --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`;
 R.5 follows. No released plugin can download a library yet (0.4.9 and main have no knowledge base).
+
+## Flow L10 findings
+
+Long version of what plan 70's last three Deck blocks (flows L8, L9 and L10, 2026-09-27, just after
+midnight to about 06:45) closed and found, and the helpers' landings between them. Moved here to keep
+the roadmap under its size limit.
+
+**Show details' credit line hides a hidden spoiler's source (helper R, `6d31bc1d`, `8bba1f00`) — passed on
+the Deck.** On an answer that hid a spoiler, Show details' credit area reads "Sources hidden — open the
+notes to see them" until that answer's notes block is opened; the Session tab's row follows the same rule.
+If the answer attached a protected note but used no notes block, the credit line shows the note's neutral
+title ("Hollow Knight — Boss note (spoiler)") instead. On the Deck, the Hollow Knight sanctum-boss question
+came back with two covers, and "Soul Master" appeared nowhere on the page, Session tab included; once the
+cover was revealed and the notes block opened, the credit line listed "Hollow Knight — Soul Master ·
+hollowknight.wiki · CC-BY-SA-3.0", updating live. The Hornet question, meant as a control, also hid its
+sources: a second boss it never named (the Watcher Knights) came attached behind "Boss note (spoiler) (+1
+more)" — the rule working as the maintainer set it, not a fail. Left as is: the Developer tab's raw data
+still names the note, only with desktop verbose logging on. Evidence
+`docs/test-evidence/plan70-SPOILER-CREDITS-01.json` (+ 3 screenshots).
+
+**The meaning-search hint clears by itself, and "Update knowledge base" says what it did (helper U,
+`6885d5d7`, `03c8e25d`, `2644d5df`, `7c924310`) — passed on the Deck.** The flow-L9 run of R.5 found both
+problems: the "Pull nomic-embed-text" hint stayed on the open Ollama tab after the model landed, and
+Update showed and logged nothing (`docs/test-evidence/plan70-R5.json`). After the fixes: Update reads
+"Checking for a newer version…" then "Already up to date (version 2026.09.26)." in 0.4 seconds, writes one
+log line per press, and the ring stays on Update; the hint was gone 0.7 seconds after the download's
+"success" line, and the next question read "Keyword + meaning". Update now waits as long as the back
+end's check can take and never says "failed" early. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`
+(+ 4 screenshots); saved walk `checks/plan70-KB-UPDATE-row-walk.json`.
+
+**The frame rate with a game running — partial.** The maintainer's target is at least 30 frames a second
+in the panel while an answer arrives with a game running. Every number below is from Deep Rock Galactic:
+Survivor on the Deck.
+- **Before (flow L8):** thinking about 34–36, answer arriving about 11, whatever the decode effect was set
+  to; the processor 96–98% busy; the game itself fell from 60 to 14–17 while answers arrived. With nothing
+  running: 60 with the decode effect off, 48.6 with it on. Evidence `docs/test-evidence/plan70-FPS-baseline.json`.
+- **Round one (helper S, `75c32ace`, `a0584bd2`, `f52e6822`, `49622e21`, flow L9):** with a game running,
+  the answer's text updates about 4 times a second in small groups of words, and the small animations hold
+  still during a question. Three long answers: answer-arriving medians 30.5, 31.4 and 26.0, pooled 30.2;
+  thinking about 57. Each answer started near 37–40 and sank to 21–28 past about 1,200 letters. With
+  nothing running: 58.5 decode off, 50.1 decode on — row **GAME-LIGHT-02** passes. Evidence
+  `docs/test-evidence/plan70-FPS-after.json`, `plan70-FPS-after-partial.json`.
+- **Round two (helper S, `521a090a`, `7ead9b06`, `453635d9`, flow L10):** an arriving answer is drawn piece
+  by piece, so finished paragraphs are never redrawn. On the PC one update got cheaper at every length; on
+  the Deck, drawing whole against drawing in pieces past 1,200 letters showed no clear gain (42.8|36.1,
+  37.1|35.5, 39.1|36.8, 32.2|37.8, 28.9|29.5, 31.8|30.5), because the game and the AI take most of the
+  processor there (the game 136–236% of a core, the AI 118–202%). Long answers of 2,077–2,933 letters, the
+  decode effect off: medians 28.2, 37.4 and 40.6, pooled 36.0; 12 of 40 slices under 30, 11 of them in the
+  first answer, started about 2.5 minutes after the game launched. The game's own frame rate during answers
+  rose to 23–31. So rows **GAME-LIGHT-01** and **STREAM-PIECES-01** are partial: the pooled median passes,
+  but not "at least 30 from start to end".
+- **The decode effect kept with a game running (the maintainer's call, `4c7edeb6`, D112 item 19):** medians
+  28.4 and 30.8, and 32.8 on the default build, dipping to 20–25 late in long answers; keeping it costs
+  about 5–9 frames a second (side by side 38.9|47.7, 40.3|45.1, 33.8|41.2). Only the last few words decode;
+  at about 4 updates a second the end of the line flickers then settles, and the text sometimes shrinks by
+  1–5 letters for a moment. Row **GAME-LIGHT-03** passes, reworded to "the decode effect plays".
+- **Formatting while arriving** matches the finished answer, within 2 pixels at the finish.
+- **Next step:** a processor profile on the Deck taken mid-answer (`scripts/probe_deck_cpu_profile.py`), to
+  see where the time goes before a third round. Evidence for L10: `docs/test-evidence/plan70-FPS-pieces.json`
+  (+ 4 screenshots).
+
+**New, open: walking Down while an answer is still arriving loses the ring (★★).** Header, tab, chat row,
+Retry, question, Show reasoning, then the first answer part, partly off screen; three Downs do nothing,
+then nothing has focus. The same walk on the finished answer is fine. Not yet known whether the
+piece-by-piece drawing is involved; worth checking with it switched off. Evidence
+`docs/test-evidence/plan70-FPS-pieces.json`.
+
+**New, open: with nothing running, the decode effect slows long answers (★★).** On a 2,945-letter answer,
+about 37 frames a second with the decode effect on, falling from 45 at the start to about 30 near the end,
+against about 50 measured on 1,100–1,500-letter answers. With it off, 58.2, easing to about 54 past 2,100
+letters. Not yet known whether this is new or always so on long answers. Evidence
+`docs/test-evidence/plan70-FPS-pieces.json`.
+
+**New, open: Up from "Save chat to Desktop" jumps to the top of the turn (★★).** It lands on "Retry same
+prompt", skipping the answer, Show details and the notes block, on both answers tried; Down from the top
+reaches everything. Seen again in flow L10 from the question box, skipping Show details and the branch
+choices. Evidence `docs/test-evidence/plan70-SPOILER-CREDITS-01.json`.
+
+**New, open: reaching a spoiler cover by Up lands the ring on the section around it, and A does nothing
+(★★).** Coming Down from "Show reasoning" lands on the cover itself, and A opens it. Evidence
+`docs/test-evidence/plan70-SPOILER-CREDITS-01.json`.
+
+**New, open, small (★), found by helper S while working, not fixed:** the suggestion chips keep rotating
+and animating every 5.8 seconds while a question is answered; with thinking off, the waiting spinner can
+spin through the whole answer, because nothing clears the waiting line when the answer starts (it now holds
+still while a game runs); and the panel-height check rewrites a style value that has not changed
+(`tabBodyViewport.ts` line ~27, via `useQamPanelHeightGuard.ts`), which may be behind the "ResizeObserver
+loop completed with undelivered notifications" errors that piled up in the Developer tab during the game
+runs — unproven. Also noted by S: the back end re-sends the whole answer on every check and may run its
+live spoiler cover over all of it each time, a share of the AI's processor time not yet measured.
+
+**New, open, small (★):** after removing the meaning-search model with the Ollama tab open, its hint does
+not appear until the tab is reopened (it checks only when the tab opens); and when the Pull button
+disappears, nothing holds the ring until the next press. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`.
+
+**New, open, optional (★ [KB], helper Q):** when a tip was found but cut for lack of room, "Not in my
+notes" can still show on a covered game in Strategy or Expert, although the notes were never searched.
+Old behaviour, visible now that the "No tip for this" line is gone.
+
+**Sightings, not filed separately:** with a game running the plugin showed "answer took 64.6 s (>60 s)"
+with an Ollama processor tip whose wording is garbled on screen; the Remove confirm box closed the Quick
+Access panel; the model sometimes refuses long questions, especially ones with the word "manual". The
+"Enable local knowledge base" chip and the follow-up-choices sighting (flow L7) are still open.

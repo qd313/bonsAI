@@ -328,7 +328,7 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    upward walk and the ladder walk both now pass on the Deck, and the reason the block sometimes
    arrived late is found, fixed on the branch, and confirmed passing on the Deck too; what is left
    is the read-aloud row and the maintainer's publish call on the library. Wave four (phase 2) can
-   start. **Update 2026-09-25:** wave four is now [plan 70](70-kb-wave-four-and-deck-test-wave.md), with
+   start. **Update 2026-09-25:** wave four is now [plan 70](../archive/70-kb-wave-four-and-deck-test-wave.md), with
    the maintainer's answers locked as D112: three new games (Brotato, Palworld and Skyrim), the
    starting-out notes, the per-game Deck tips, one release the session may publish once its Deck check
    passes, a spoiler safety net that hides the sentences naming the protected thing, and the thumbs-down

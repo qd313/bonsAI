@@ -1,0 +1,58 @@
+{
+ "row": "plan70 R.5 (flow-L7 L7.4 / flow-R R.5): the fresh download of the published library and the meaning-search model offer",
+ "build_commit": "tip 49622e21 deployed 00:51 (Deck dist/index.js 0d12da9def5ea264...)",
+ "deck_time": "2026-09-27 05:08 to 05:16 EDT",
+ "screen": "external monitor; Quick Access page 855x805; captures 1920x1080",
+ "setup": "Nothing running (game exited 05:02, process gone). AI characters OFF. The maintainer published the library (2026.09.26) before this run.",
+ "step0_network": "curl -sI https://huggingface.co from the Deck: 'HTTP/2 200'",
+ "before": {
+  "api_tags": [
+   "nomic-embed-text:latest (274302450 bytes)",
+   "gemma4:e2b-it-qat"
+  ],
+  "installed_library": "~/.bonsai/rag, corpus-manifest.json version 2026.09.26, schema_version 4, embedding_model nomic-embed-text, files dated 2026-09-26 20:06 (the seed install from flow R)"
+ },
+ "step1_remove_model": {
+  "exact_tag_confirmed": "nomic-embed-text:latest",
+  "note": "'ollama rm' is not on the PATH over SSH; the running server is /home/deck/.local/bin/ollama, so ran '~/.local/bin/ollama rm nomic-embed-text:latest' once",
+  "result": "deleted 'nomic-embed-text:latest'; api/tags then listed only gemma4:e2b-it-qat",
+  "panel_after": "Ollama tab knowledge-base row showed 'Install nomic-embed-text in Ollama for Keyword + meaning search.' and a 'Pull nomic-embed-text' button"
+ },
+ "step2_remove_library": {
+  "pressed": "Ollama tab: walked Down to 'Update knowledge base', Right to 'Remove' (read focus: 'Remove'), A; confirm box 'Remove knowledge base? Deletes the offline corpus from disk and turns off Use local knowledge base...' with the ring on Remove, A",
+  "result": "~/.bonsai/rag gone; settings use_local_knowledge_base false, rag_corpus_path '', rag_corpus_version ''",
+  "side_note": "the Quick Access panel was closed after the confirm box (had to reopen it)"
+ },
+ "step2_download": {
+  "pressed": "'Download knowledge base', A; box 'Choose download location' with 'Internal storage (~729 GB free)' and 'SD card (~1141 GB free)'; ring on Internal storage, A",
+  "plugin_log": [
+   "05:10:29 rag_corpus_download: Downloading corpus.db.zlib from https://huggingface.co/datasets/qd313/bonsai-knowledge-base/resolve/main/corpus...",
+   "05:10:30 Decompressing corpus...",
+   "05:10:30 Knowledge base installed at /home/deck/.bonsai/rag (version 2026.09.26)."
+  ],
+  "result": "~/.bonsai/rag holds corpus.db, corpus-manifest.json, ATTRIBUTIONS.md dated 05:10:30; row reads 'Installed - version 2026.09.26 /home/deck/.bonsai/rag'; settings use_local_knowledge_base true, rag_corpus_path /home/deck/.bonsai/rag, rag_corpus_version 2026.09.26",
+  "verdict": "PASS - downloaded 2026.09.26 from the published Hugging Face site to the same internal place"
+ },
+ "step3_model_offer": {
+  "seen": "a confirm box: 'Also download the meaning-search model (about 270 MB)? Better note matching for your questions.' with 'Download' (ring on it) and 'Not now'",
+  "pressed": "A on Download",
+  "result": "plugin log local_ollama_setup pulling 274 MB at about 40 MB/s, 'success' at 05:11:10; api/tags listed nomic-embed-text:latest (274302450 bytes) about 10 s after the press; the panel's 'Installed: 2' and 'Connected - 2 models' updated",
+  "hint": "the row's 'Install nomic-embed-text ... Pull nomic-embed-text' hint did NOT clear while the Ollama tab stayed open: still there at 05:12:13, about 1 min after the model landed (screenshot plan70-R5-hint-still-showing.png). It was gone at 05:16 after switching to Main and back to the Ollama tab.",
+  "progress_under_where_ai_runs": "not seen - the pull took about 10 s and the box had just closed",
+  "verdict": "Offer and download PASS; 'the hint clears when it lands' FAIL while the tab stays open (clears only when the tab is reopened)"
+ },
+ "step4_update_again": {
+  "pressed": "'Update knowledge base', A (05:12:14), and once more (05:12:49)",
+  "seen": "no box of any kind within 15 s and 13 s; no new plugin log line; library files unchanged (still 05:10:30)",
+  "verdict": "PASS for 'the offer does not appear again'. UNCLEAR whether Update did anything at all: nothing visible, nothing in the log"
+ },
+ "step5_meaning_search": {
+  "chat": "the existing Hades test chat (no new chat)",
+  "question": "in hollow knight what is the best way to fight the mantis lords",
+  "result": "answer in 37.5 s; Show details: 'Keyword + meaning' chip, 'Retrieval: Keyword + meaning', 'Embed: 538.12 ms', 'Re-rank: 22.02 ms', credit line hollowknight.wiki with Mantis Lords, Starting out in Hollow Knight and 'Hollow Knight - Boss note (spoiler)'; api/ps shows nomic-embed-text:latest loaded (size_vram 488825159) next to gemma4",
+  "screenshot": "plan70-R5-meaning-search-details.png",
+  "verdict": "PASS"
+ },
+ "settings_changed_by_this_row": "use_local_knowledge_base went false (Remove) then true (Download); rag_corpus_path and rag_corpus_version cleared then set back to the same values; no manual edits",
+ "verdict": "PASS on the main path (published download, model offer, model lands, meaning search works, no second offer). Two things for the owner: the 'Pull nomic-embed-text' hint stays on the open Ollama tab after the model lands, and Update knowledge base showed and logged nothing."
+}

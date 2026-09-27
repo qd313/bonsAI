@@ -178,18 +178,20 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 |---|---|---|---|---|
 | | | | | |
 
-### 4b. The Opus-low lane trial (proposed 2026-09-26, the maintainer's idea)
+### 4b. The lane model trial: Sonnet high, Opus low, Opus medium (proposed 2026-09-26, the maintainer's idea)
 
-Can Opus 5.5 at low effort replace Sonnet 5 high for cause-known lanes? Nothing measured it yet. Tried
-first in the release bug session ([plan 72](72-release-bug-session.md) § 3): two lanes on Opus low, one on
-Sonnet high, same kind of work, no Deck needed to build. One row per lane. **Verdict:** Opus low replaces
-Sonnet high for cause-known lanes if it needs no more landing redos and passes the Deck first time as
-often, at no more than about a third higher cost per turn; otherwise Sonnet high stays. Screen work
-(`[focus]`, `[layout]`, `[ui]`) is not part of the trial.
+Which lane model gives the best fix per unit of usage? Nothing measured Opus low or medium as a lane yet.
+First run in the release bug session ([plan 72](72-release-bug-session.md) § 3): a few tasks done two or
+three ways from the same brief and start point, reviewed blind (labelled A, B, C), the best one landed.
+Efficiency numbers come from a script that reads each helper's log, priced the way § 1 was.
 
-| Date | Session and lane | Model and effort | Cost per turn | Landing redos | Passed the Deck first time? |
-|---|---|---|---|---|---|
-| | | | | | |
+**Verdict rule:** a cheaper model wins if its quality numbers are no worse; a dearer one must show fewer
+review problems or fewer redos to earn its cost. Say plainly how many rows the verdict rests on. Screen
+work (`[focus]`, `[layout]`, `[ui]`) stays out of the paired runs.
+
+| Date | Task | Label | Model and effort | Checks green first time? | Review problems | Rounds to land | New tests fail without the fix? | Deck first time? | Tokens in / out / cache read | Turns | Tool calls | Minutes | $ at list |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | | | | | | |
 
 ## 5. Where Haiku fits
 

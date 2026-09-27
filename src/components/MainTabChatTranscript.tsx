@@ -119,8 +119,8 @@ import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 import {
   BONSAI_CHAT_AI_MAX_WIDTH_CSS,
 } from "../features/unified-input/constants";
-import { liveReasoningText } from "../utils/reasoningDisplay";
 import {
+  buildLiveReasoningSteps,
   buildReasoningFoldRow,
   buildReasoningOpenBlock,
 } from "../utils/buildReasoningFoldElement";
@@ -503,7 +503,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const liveReasoningPartial = liveThinking?.reasoning?.partial ?? "";
   const hasLiveReasoning = liveReasoningPartial.trim().length > 0;
-  const liveReasoningShown = hasLiveReasoning ? liveReasoningText(liveReasoningPartial) : "";
   const liveQuestion = askThreadDisplayQuestion.trim();
   const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
   /* The live turn's notes: the poll's while asking, then the fetched snapshot once it lands (see the notes block). */
@@ -547,7 +546,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* The Show reasoning row's own open/closed state — lifted into its own hook, called from
      exactly the spot this block occupied (tests/test_ask_hook_order.py). */
-  const { reasoningOpenFor, setReasoningOpenFor } = useReasoningFoldState(expandedTurnKey);
+  const { reasoningOpenFor, setReasoningOpenFor, liveSteps } = useReasoningFoldState(expandedTurnKey, liveReasoningPartial);
 
   /* Which turns have their "From the notes" block open, and scrolling a block's own header into
      view the moment it opens — lifted into its own hook, called from exactly the spot this block
@@ -1321,16 +1320,16 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,
             })}
-            {showLiveReasoningBlock ? (
+            {showLiveReasoningBlock && liveSteps.length > 0 ? (
               /*
-               * The model's own newest thinking, where the stock waiting phrase would be, drawn as
-               * ordinary wrapping text (the maintainer's call, 2026-09-24; it used to be three
-               * cut-off one-line sentences). The stylesheet keeps the newest lines in view
-               * (section-6.ts). No spinner: the text changing is the only "still working" signal
-               * this needs.
+               * The titles of the model's thinking steps, where the stock waiting phrase would be:
+               * finished ones faded with a tick, the current one last (the maintainer's option B,
+               * 2026-09-27 -- nothing else from the thinking shows live). Nothing is drawn until
+               * the first step title is whole. No spinner: the list growing is the "still working"
+               * signal.
                */
               <div className="bonsai-chat-reasoning-live" role="status" aria-live="polite">
-                {liveReasoningShown}
+                {buildLiveReasoningSteps(liveSteps)}
               </div>
             ) : null}
             {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning ? (

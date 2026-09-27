@@ -171,6 +171,78 @@ export function tidyReasoningText(
   return kept.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
+/** One numbered step of the model's thinking: its number and its cleaned title. */
+export type LiveStep = { n: number; title: string };
+
+/** One line of the live thinking block: a step title, and whether the model has moved past it. */
+export type LiveStepLine = { text: string; done: boolean };
+
+/*
+ * The maintainer's option B, 2026-09-27: the live line shows the model's step titles only. Every
+ * line-by-line clean-up before it still let something through on the Deck -- new rule-shaped
+ * lines, and a game note quoted word for word, reward included, that the answer itself would put
+ * behind a spoiler cover (docs/test-evidence/plan72-F3-THINK.json). A step title is short, is
+ * written by the model about its own work, and never holds a note.
+ *
+ * A step heading starts a line with its number and is whole: bold with both pairs of stars
+ * ("1.  **Analyze the Request:** ...") or plain up to its colon ("5.  Consult Local Knowledge
+ * Base:"). An indented number is a list inside a step, not a step; a heading still being written
+ * waits until it is whole, so a half title never flashes.
+ */
+const LIVE_STEP_BOLD_RE = /^(\d+)\.\s+\*\*([^*\n]+?)\*\*/;
+const LIVE_STEP_PLAIN_RE = /^(\d+)\.\s+([^*\n:]{2,80}):/;
+/** Steps about how the model was set up rather than about the question. */
+const LIVE_SETUP_STEP_RE = /\b(?:mode|voice|persona|tone|character)\b/i;
+/** The six-line box, less one line of room. */
+const LIVE_STEPS_SHOWN = 5;
+
+function cleanStepTitle(raw: string): string {
+  return raw
+    .replace(/\([^)]*\)/g, "")
+    .replace(/[*`]/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/[\s:.]+$/, "")
+    .trim();
+}
+
+/**
+ * Feature: the step titles seen so far in this turn's thinking.
+ * In: the steps already seen, and the newest slice the screen received. Out: every step seen,
+ * in step order.
+ *
+ * The computer side sends only the newest 600 characters, so an early step's heading leaves the
+ * slice while the model writes on; keeping what was seen is what stops early steps vanishing. A
+ * step number seen again keeps its newest title.
+ */
+export function mergeLiveSteps(prev: readonly LiveStep[], slice: string): LiveStep[] {
+  const byNumber = new Map<number, string>(prev.map((s) => [s.n, s.title]));
+  for (const line of slice.split("\n")) {
+    const m = LIVE_STEP_BOLD_RE.exec(line) ?? LIVE_STEP_PLAIN_RE.exec(line);
+    if (!m) continue;
+    const title = cleanStepTitle(m[2]);
+    if (title) byNumber.set(Number(m[1]), title);
+  }
+  return [...byNumber.entries()].sort((a, b) => a[0] - b[0]).map(([n, title]) => ({ n, title }));
+}
+
+/**
+ * Feature: what the live thinking block draws.
+ * In: the steps seen so far. Out: at most five lines, the newest last.
+ *
+ * Steps about the model's own rules, mode, voice, output format or checks never show; while the
+ * model is on one, the last step that does show stays current. Earlier steps read "Title ✓" and
+ * the current one "Title…". No steps yet, or none that show: nothing at all.
+ */
+export function liveStepLines(steps: readonly LiveStep[]): LiveStepLine[] {
+  const shown = steps.filter(
+    (s) => !RULE_STEP_TITLE_RE.test(s.title) && !LIVE_SETUP_STEP_RE.test(s.title),
+  );
+  return shown.slice(-LIVE_STEPS_SHOWN).map((s, i, all) => {
+    const done = i < all.length - 1;
+    return { text: done ? `${s.title} ✓` : `${s.title}…`, done };
+  });
+}
+
 /**
  * Feature: the "· 41 s" on the fold row.
  * In: whole seconds, or nothing at all. Out: the text to draw.

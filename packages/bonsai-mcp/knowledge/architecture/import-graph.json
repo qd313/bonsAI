@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 574,
-  "edgeCount": 1583,
+  "fileCount": 575,
+  "edgeCount": 1584,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -612,7 +612,6 @@
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/permissionDeepLink.ts",
-        "src/utils/reasoningDisplay.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/troubleshootingAskHeuristic.ts",
         "src/utils/uiDocument.ts",
@@ -3600,7 +3599,9 @@
       ]
     },
     "src/hooks/useReasoningFoldState.ts": {
-      "imports": [],
+      "imports": [
+        "src/utils/reasoningDisplay.ts"
+      ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx"
       ]
@@ -5854,6 +5855,12 @@
       ],
       "importedBy": []
     },
+    "src/utils/reasoningDisplay.liveSteps.test.ts": {
+      "imports": [
+        "src/utils/reasoningDisplay.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/reasoningDisplay.test.ts": {
       "imports": [
         "src/utils/reasoningDisplay.ts"
@@ -5871,11 +5878,12 @@
         "src/types/bonsaiUi.ts"
       ],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useReasoningFoldState.ts",
         "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/chatSlotTurns.ts",
         "src/utils/reasoningDisplay.liveSlice.test.ts",
+        "src/utils/reasoningDisplay.liveSteps.test.ts",
         "src/utils/reasoningDisplay.test.ts",
         "src/utils/reasoningDisplay.tidy.test.ts"
       ]

@@ -31,7 +31,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 
-import { reasoningFoldLabel, tidyReasoningText } from "./reasoningDisplay";
+import { reasoningFoldLabel, tidyReasoningText, type LiveStepLine } from "./reasoningDisplay";
 import { registerReplyStop } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "./focusNavigation";
@@ -144,4 +144,24 @@ export function buildReasoningOpenBlock(turnId: string, text: string): React.Rea
       {tidyReasoningText(text)}
     </div>
   );
+}
+
+/**
+ * Feature: the live thinking block's lines, while the model works (the maintainer's option B,
+ * 2026-09-27).
+ * In: the step lines from useReasoningFoldState. Out: one line each, finished steps faded.
+ *
+ * The fade is set here rather than in the stylesheet so the block's rule in section-6.ts (size,
+ * italics, six-line height, newest line at the bottom) stays exactly as it was.
+ */
+export function buildLiveReasoningSteps(lines: readonly LiveStepLine[]): React.ReactElement[] {
+  return lines.map((line, i) => (
+    <div
+      key={`live-step-${i}`}
+      className="bonsai-chat-reasoning-live-step"
+      style={line.done ? { opacity: 0.55 } : undefined}
+    >
+      {line.text}
+    </div>
+  ));
 }

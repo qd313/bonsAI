@@ -211,6 +211,7 @@
     "src/utils/pullModelRecommendations.test.ts",
     "src/utils/questionBubbleFit.test.tsx",
     "src/utils/reasoningDisplay.liveSlice.test.ts",
+    "src/utils/reasoningDisplay.liveSteps.test.ts",
     "src/utils/reasoningDisplay.test.ts",
     "src/utils/reasoningDisplay.tidy.test.ts",
     "src/utils/redactThinkingBlurbSpoilers.test.ts",

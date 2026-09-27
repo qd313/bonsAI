@@ -51,6 +51,7 @@
     "src/components/MainTabUnifiedAskBar.test.tsx",
     "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
     "src/components/ModelRoutingOrderModal.test.tsx",
+    "src/components/OllamaFindLanHidden.test.tsx",
     "src/components/OllamaModelsHubModal.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",
     "src/components/OllamaThinkingEffortRow.test.tsx",

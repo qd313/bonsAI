@@ -108,6 +108,7 @@ import { normalizeSettings } from "../data/bonsaiSettingsNormalizers";
 import { diffBonsaiSettingsPayload, toBonsaiSettingsPayload } from "../utils/settingsPayload";
 import { saveTabResumeMode } from "../features/plugin-shell/pluginStorage";
 import { markSettingsLoaded } from "../features/plugin-shell/settingsLoadedSignal";
+import { publishDeveloperTabShown } from "../features/plugin-shell/developerTabSignal";
 
 /**
  * THE one field list left in this file: every key of `BonsaiSettingsSnapshotInput` (the
@@ -289,6 +290,11 @@ export function usePluginSettings() {
   useEffect(() => {
     saveTabResumeMode(settings.tabResumeMode);
   }, [settings.tabResumeMode]);
+
+  // For controls that are Developer-tab only but sit where no prop reaches (developerTabSignal.ts).
+  useEffect(() => {
+    publishDeveloperTabShown(settings.showDeveloperTab);
+  }, [settings.showDeveloperTab]);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);

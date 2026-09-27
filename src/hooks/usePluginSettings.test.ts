@@ -5,12 +5,26 @@ import { usePluginSettings } from "./usePluginSettings";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { DEFAULT_LATENCY_WARNING_SECONDS } from "../data/bonsaiSettingsSchema";
+import { peekDeveloperTabShown, resetDeveloperTabSignalForTests } from "../features/plugin-shell/developerTabSignal";
 describe("usePluginSettings", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
     vi.mocked(call).mockImplementation((method: string, ...args: unknown[]) =>
       dispatchFakeRpc(method, args) as ReturnType<typeof call>
     );
+  });
+
+  it("publishes the Developer tab setting for controls no prop reaches (plan 72, Find LAN)", async () => {
+    resetDeveloperTabSignalForTests();
+    const custom = defaultSettingsFixture();
+    custom.show_developer_tab = true;
+    setRpcHandler("load_settings", () => custom);
+
+    const { result } = renderHook(() => usePluginSettings());
+
+    await waitFor(() => expect(peekDeveloperTabShown()).toBe(true));
+    act(() => result.current.setShowDeveloperTab(false));
+    expect(peekDeveloperTabShown()).toBe(false);
   });
 
   it("loads settings on mount via load_settings RPC", async () => {

@@ -103,6 +103,7 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
+import { useDeveloperTabShown } from "../features/plugin-shell/developerTabSignal";
 import { useLocalOllamaSetupFlow } from "../hooks/useLocalOllamaSetupFlow";
 import { useSettingsLoadedFlag } from "../hooks/useSettingsLoadedFlag";
 import type {
@@ -159,6 +160,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   // Not a prop -- see settingsLoadedSignal.ts for why the automatic connection check below
   // needs this without index.tsx threading a value down through the tab's own payload hook.
   const settingsLoaded = useSettingsLoadedFlag();
+  // 0.6.0 (plan 72): Find LAN and its results are Developer-tab only (half-built; see developerTabSignal.ts).
+  const findLanShown = useDeveloperTabShown() && !ollamaLocalOnDeck;
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
     () => peekOllamaTabLocalPending()?.connectionStatus ?? null
@@ -907,7 +910,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               >
                 {connectionTesting ? "…" : "Test connection"}
               </Button>
-              {!ollamaLocalOnDeck ? (
+              {findLanShown ? (
                 <Button
                   onClick={openMdnsDiscoveryConfirm}
                   disabled={mdnsDiscovering || connectionTesting || localSetupBusy}
@@ -952,7 +955,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             ) : null}
           </div>
         </PanelSectionRow>
-        {!ollamaLocalOnDeck && mdnsHosts.length > 0 ? (
+        {findLanShown && mdnsHosts.length > 0 ? (
           <PanelSectionRow>
             <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Found on LAN (mDNS)</div>
             <Focusable flow-children="vertical" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -1001,7 +1004,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             </Focusable>
           </PanelSectionRow>
         ) : null}
-        {!ollamaLocalOnDeck && mdnsDiscoveryMessage ? (
+        {findLanShown && mdnsDiscoveryMessage ? (
           <PanelSectionRow>
             <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#8fa0b4" }}>
               {mdnsDiscoveryMessage}

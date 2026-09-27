@@ -1,0 +1,54 @@
+{
+  "row": "plan70 flow R, R.4 per-game Deck tips (retry after the Deck was put in offline mode)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901... matches the PC",
+  "library": "2026.09.26, format 4, at /home/deck/.bonsai/rag",
+  "deck_time": "2026-09-26 20:59 to 21:08 EDT",
+  "screen": "external monitor (capture 1920x1080; page window 855x766)",
+  "setup": "Steam offline mode; AI character off; no plugin reload while a game ran (panel closed and reopened instead)",
+  "library_check": "the tips are in the installed library (compat_patterns table): #162 display, app 2321470, source https://steamcommunity.com/app/2321470/discussions/2/6292161380818836463/, 'Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text ... raise Render Scale'; #160 proton, app 377160, no source url, 'Launch option moshortcut://\"F4SE\" ... Confirmed on the maintainer's own Deck'; #161 app 1547000 '-dx12' (GTA San Andreas is not on Recent Games, not run)",
+  "drg_survivor": {
+    "launch": "deck_launchGame (appid 2321470), no dialog",
+    "context_line": "first panel open read 'active game Brotato' (stale, from two games earlier); within about 1 s it changed to 'active game Deep Rock Galactic: Survivor'",
+    "ask_1": {
+      "mode": "Strategy (the mode it was left in)",
+      "question": "the text on screen looks blurry on my deck",
+      "new_chat": true,
+      "answer": "generic display-scaling advice; ends '- No close match in my notes, this answer leans on the model's own knowledge.'; offers a strategy-guide branch menu",
+      "details": "Keyword + meaning; KB: 13 sections; No source page; notes attached: DRG Survivor - Hollow Bough, Glyphid Dreadnought, Red Sugar; trust tier fallback_no_source; app_id:2321470",
+      "tip_shown": "none"
+    },
+    "ask_2": {
+      "mode": "Speed (changed through the screen's mode button: old value strategy, put back at the end)",
+      "question": "the text in this game looks blurry on my deck, how do I fix it (reworded for the answer cache)",
+      "new_chat": true,
+      "answer_time_s": 25,
+      "answer": "generic: in-game resolution scaling / text size, Deck scaling, drivers, Vulkan vs OpenGL; does not name Render Scale",
+      "details": "'Knowledge base (skipped)'; KB: 13 sections; Local knowledge base: 'no_hit (app_id:2321470)'",
+      "tip_shown": "none",
+      "screenshot": "plan70-R-R4-try2-drgs-speed-details.png"
+    },
+    "result": "FAIL - the game's own Render Scale tip never showed, so its source-page credit line could not be checked either",
+    "exit": "deck_exitGame; left the running list after 148 ms; no process over SSH at 21:03:58"
+  },
+  "fallout_4": {
+    "launch": "deck_launchGame (appid 377160); the first panel open failed while the game was still loading (the chord landed, no pane appeared); worked 20 s later",
+    "context_line": "'active game Fallout 4'",
+    "focus_trap": "twice the ring could not leave the question area: Up from the box stopped on 'Save chat to Desktop' (33% visible, covered by the dock) and did not move; after a tab switch the ring landed there again; after the question was put in, Down and Left in the box were dead. Cleared by closing and reopening the panel, which put the ring on the tab bar",
+    "ask": {
+      "mode": "Speed",
+      "question": "how do I get mods working, what launch options should I use (the runbook's words plus 'should I use', because the unchanged sentence had been put into the box before the reopen emptied it)",
+      "new_chat": true,
+      "answer_time_s": 27,
+      "answer": "generic: Mod Organizer 2 or Vortex; launch options '-windowed', '-fullscreen', '-high', '-force-fps 60'. The maintainer's F4SE launch option is not mentioned",
+      "details": "Keyword search (not keyword + meaning); KB: 15 sections; fallout.fandom.com CC-BY-SA-3.0 as of 2025-06-01; one note: Fallout 4 - Stimpaks and chems; app_id:377160",
+      "tip_shown": "none",
+      "screenshot": "plan70-R-R4-try2-fo4-details.png"
+    },
+    "result": "FAIL - the maintainer's launch-option tip did not show; an unrelated note (Stimpaks and chems) was attached",
+    "exit": "deck_exitGame; left the running list after 1261 ms; no process over SSH at 21:07:44"
+  },
+  "gta_san_andreas": "not on the Recent Games shelf; not run",
+  "new_chats_made": ["Deep Rock Galactic: Survivor (Strategy ask)", "Deep Rock Galactic: Survivor (Speed ask)", "Fallout 4"],
+  "plugin_log": "the current plugin log (104 lines) has no lines about tips or the knowledge base for these asks",
+  "verdict": "FAIL"
+}

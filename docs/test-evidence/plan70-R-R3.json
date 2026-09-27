@@ -1,0 +1,21 @@
+{
+  "row": "plan70 flow R, R.3 the starting-out chip with a game running (Brotato, then the Palworld shortcut)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901... matches the PC",
+  "deck_time": "2026-09-26 20:15 to 20:17 EDT",
+  "screen": "external monitor (capture 1920x1080)",
+  "setup": "library 2026.09.26 installed; AI character off; nothing running before the launch",
+  "pressed": [
+    "deck_launchGame name=Brotato: Home, 6 RIGHT to the Brotato tile (appid 1942280), A, A on Play; Brotato entered Steam's running list after 151 ms (rig record runs/plan70-R-R3-brotato-launch.json)",
+    "Steam then showed a dialog instead of starting the game (see seen); RIGHT to 'Cancel' (read back as Cancel), A",
+    "deck_launchGame name=Palworld (non-Steam shortcut, id 4049860804): refused before any A - the rig walked the whole Recent Games shelf (20 RIGHT) and did not recognise the tile; the shelf does show a tile labelled 'Palworld' (rig record runs/plan70-R-R3-palworld-launch.json)"
+  ],
+  "seen": {
+    "brotato_dialog": "'Error - Steam. You are logged in on another computer already playing Left 4 Dead 2. Launching Brotato here will disconnect the other session from Steam.' Buttons Continue / Cancel, ring on Continue",
+    "why_not_continue": "Continue would disconnect someone's Left 4 Dead 2 session on another computer on the same Steam account; not the helper's call",
+    "after_cancel": "Steam running list empty; no Brotato process over SSH (20:16:30)",
+    "palworld": "the rig matches Recent Games tiles by the Steam game number in the tile picture; a non-Steam shortcut's tile has none, so it cannot find it (rig limitation, not a plugin result)"
+  },
+  "screenshot": "plan70-R-R3-brotato-blocked.png",
+  "chip_watch": "not run - no game could be started",
+  "verdict": "COULD NOT RUN"
+}

@@ -1,0 +1,32 @@
+{
+  "row": "plan70 flow R, R.3 the starting-out chip with a game running (retry after the Deck was put in offline mode)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901... matches the PC",
+  "library": "2026.09.26, format 4",
+  "deck_time": "2026-09-26 20:46 to 20:59 EDT",
+  "screen": "external monitor (capture 1920x1080; page window 855x766)",
+  "setup": "Deck in Steam offline mode (a 'Go Online' button held the ring at start); AI character switched off with the Settings toggle (true -> false, confirmed in settings.json); no plugin reload while a game ran - the Quick Access panel was closed and reopened instead",
+  "brotato": {
+    "launch": "deck_launchGame Brotato (appid 1942280), no 'logged in elsewhere' dialog; game on its title screen; reaper process AppId=1942280 seen over SSH",
+    "context_line": "'Context: active game Brotato' on the first panel open after launch, no reload",
+    "chip_watch": "the chip read 'How do I get started in Brotato?' at the first read (within 1 s of watching); the chips rotate about every 14 s",
+    "chip_press_1": "ring on the chip while it read the Brotato text, but by the time A landed (about 6 s later) the chip had rotated: the box held 'Help me troubleshoot a Proton issue'. Not asked; box emptied with deck_send_ask.py --clear",
+    "hidden_ring_seen": "before that, walking Up from the question box, the ring stopped on 'Save chat to Desktop' with visibility 0% (covered by the question box in the dock) and Up did nothing (verified: focus did not change). Cleared by a Quick Access close and reopen. Screenshot plan70-R-R3-try2-hidden-ring.png",
+    "screensaver": "came on during the second chip watch (chips frozen for 270 s); left-stick click woke it; the panel had remounted with the ring on the tab bar",
+    "chip_press_2": "new chat: tab bar -> Down -> chat row -> LB to [+] -> Down onto the chip, which read 'How do I get started in Brotato?' -> A once. The box then held exactly 'How do I get started in Brotato?'",
+    "trap_after_chip": "with the box filled by the chip, the ring sat on the question box and Down (3 presses) and Right (1 press, verified) did not move it: Ask could not be reached. This is the known chip -> box focus trap. Screenshot plan70-R-R3-try2-chip-trap.png. Cleared by a Quick Access close and reopen, which emptied the box; the Context line read 'no active game detected' for under 1 s after the reopen, then 'active game Brotato'",
+    "ask": "in a new chat, the chip's exact words 'How do I get started in Brotato?' were put back with deck_send_ask.py (VERIFIED), walk to 'ask' (3 presses), A",
+    "answer": "about Brotato: pick a character, survive early waves, spend materials in the shop; the new chat was named 'Brotato'",
+    "notes_block": "Starting out in Brotato (+1 more) - From brotato.wiki.spellsandguns.com",
+    "details": "Brotato - Starting out in Brotato; Brotato - Characters and item tags in Brotato; Brotato - Early regular enemies in Brotato; Keyword + meaning; KB: 12 sections; matched on app_id:1942280; Spoiler risk: low",
+    "exit": "deck_exitGame: Exit game, Confirm; left Steam's running list after 188 ms; no Brotato process over SSH at 20:57:44"
+  },
+  "palworld": {
+    "launch": "by hand: GUIDE, Home (A), Right x6 reading each tile (Brotato, Left 4 Dead 2, Half-Life 2, Black Mesa, Hades, DRG Survivor, Palworld), A on 'Palworld', ring on 'Play', A. Running as 4049860804:Palworld; Proton process seen over SSH",
+    "context_line": "'Context: active game Palworld' on the first panel open, no reload",
+    "chip": "'How do I get started in Palworld?' within 3 s of watching, in a new chat (screenshot plan70-R-R3-try2-palworld-chip.png)",
+    "exit": "deck_exitGame: Exit game, Confirm; left the running list after 1282 ms; no Palworld process over SSH at 20:58:57"
+  },
+  "new_chats_made": ["Brotato (How do I get started in Brotato?)", "an empty new chat opened for the Palworld chip watch (nothing asked)"],
+  "verdict": "PASS",
+  "verdict_note": "Both chips appeared and the Brotato answer attached 'Starting out in Brotato'. The runbook's exact route (A on the chip, then walk to Ask) did not work: after the chip fills the box, Ask cannot be reached (the known trap), so the Ask was made with the chip's own words typed in by script. The owner may prefer to count the Ask half as UNCLEAR for that reason."
+}

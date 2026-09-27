@@ -1,0 +1,26 @@
+{
+  "row": "plan70 flow R, R.1 install the new library locally (before it is published)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901c485f10da6a20cd03e9eebb29e7f8e79158750098cd0b47eb27b7754 matches the PC's dist/index.js",
+  "deck_time": "2026-09-26 20:05 to 20:07 EDT",
+  "screen": "external monitor: capture 1920x1080; page window 855x766, screen 1500x843",
+  "setup": {
+    "seed_folder": "~/homebrew/settings/bonsAI/seed-knowledge-base/corpus-manifest.json: version 2026.09.26, schema_version 4, published_at 2026-09-26T13:51:38Z, 414 sections embedded (nomic-embed-text, 768)",
+    "before": "Ollama tab row: 'Installed - version 2026.09.18' at /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag (SD card); that manifest: version 2026.09.18, schema_version 3; settings rag_corpus_path = SD card path, rag_corpus_version = 2026.09.18",
+    "characters": "ai_character_enabled switched true -> false with the Settings tab toggle before this row (confirmed in settings.json)",
+    "game": "none running"
+  },
+  "pressed": [
+    "Developer tab (RB); ring already on 'Install seed knowledge base' (visible, 268x40 at y=232)",
+    "A once"
+  ],
+  "seen": {
+    "ollama_tab_row_after": "Installed - version 2026.09.26 /home/deck/.bonsai/rag",
+    "installed_manifest": "/home/deck/.bonsai/rag/corpus-manifest.json version 2026.09.26 schema_version 4; corpus.db 2998272 bytes (same size as the seed)",
+    "settings_after": "rag_corpus_path=/home/deck/.bonsai/rag, rag_corpus_version=2026.09.26 (written by the plugin)",
+    "plugin_log": "current log holds only 'bonsAI plugin loaded!' (20:04:16); no error or traceback; the install itself logged nothing either way; user journal since 20:05 has no bonsAI errors",
+    "api_ps": "curl localhost:11434/api/ps returns HTTP 200, gemma4:e2b-it-qat loaded",
+    "side_effect": "the install went to the internal drive (~/.bonsai/rag), not the SD card where the old library lived; the old 2026.09.18 copy stays on the SD card unused"
+  },
+  "screenshot": "plan70-R-R1-ollama-tab.png (panel top; the knowledge-base row is below the fold in this capture; the row text above is read from the page)",
+  "verdict": "PASS"
+}

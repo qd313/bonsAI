@@ -1,0 +1,21 @@
+{
+  "row": "plan70 flow R, R.4 per-game Deck tips (Deep Rock Galactic: Survivor, Fallout 4, GTA San Andreas)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901... matches the PC",
+  "deck_time": "2026-09-26 20:17 to 20:18 EDT",
+  "screen": "external monitor (capture 1920x1080)",
+  "setup": "library 2026.09.26 installed; AI character off; nothing running",
+  "pressed": [
+    "deck_launchGame Deep Rock Galactic: Survivor, first try: refused with zero A presses - the Home shelf ring was remembered at its far end ('View more in your Library') and the rig only walks right (runs/plan70-R-R4-drgs-launch.json)",
+    "walked LEFT 20 presses back to 'Half-Life 2' at the start of the shelf",
+    "deck_launchGame again: 4 RIGHT to the tile (appid 2321470), A, A on Play; entered Steam's running list after 134 ms (runs/plan70-R-R4-drgs-launch-try2.json)",
+    "Steam dialog again; RIGHT to 'Cancel' (read back as Cancel), A"
+  ],
+  "seen": {
+    "dialog": "'Error - Steam. You are logged in on another computer already playing Left 4 Dead 2. Launching Deep Rock Galactic: Survivor here will disconnect the other session from Steam.' Continue / Cancel",
+    "after_cancel": "Steam running list empty; no game process over SSH (20:18:29)",
+    "fallout_4": "not tried - it is a Steam game on the same account, so the same dialog would stop it; it is on the Recent Games shelf",
+    "gta_san_andreas": "not on the Recent Games shelf (shelf read: Half-Life 2, Left 4 Dead 2, Black Mesa, Hades, DRG Survivor, Palworld, Brotato, Persona 3 Reload, Hollow Knight, God of War, Sifu, Portal 2, Ship of Harkinian, Fallout 4, Baldur's Gate 3, Team Fortress 2, State of Emergency, Cyberpunk 2077, Spider-Man Remastered, Wreckfest)"
+  },
+  "screenshot": "plan70-R-R4-drgs-blocked.png",
+  "verdict": "COULD NOT RUN"
+}

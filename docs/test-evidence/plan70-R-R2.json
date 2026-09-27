@@ -1,0 +1,68 @@
+{
+  "row": "plan70 flow R, R.2 the new games and notes (nothing running; the game named in the question)",
+  "build_commit": "PC tip 7379a043; Deck dist/index.js sha256 e3d87901... matches the PC",
+  "library": "2026.09.26, format 4, installed at /home/deck/.bonsai/rag (R.1)",
+  "deck_time": "2026-09-26 20:08 to 20:15 EDT",
+  "screen": "external monitor (capture 1920x1080; page window 855x766)",
+  "setup": "no game running (Context line: 'no active game detected'); Strategy mode; AI character off; Reply style Balanced; hybrid search on. Each question in a new chat: slot row -> LB to the [+] create position (read back as '[+]'), text put in with deck_send_ask.py (VERIFIED, whole text), walk to 'ask', A. Show details opened with A on 'Show details'.",
+  "new_chats_made": [
+    "in brotato what should I do in the shop between waves",
+    "in palworld how do I catch pals",
+    "in skyrim how do dragon shouts work",
+    "just started fallout 4 what should I do first",
+    "where do I start in red dead redemption 2"
+  ],
+  "questions": [
+    {
+      "q": "in brotato what should I do in the shop between waves",
+      "answer_time_s": 38.3,
+      "cached": false,
+      "notes_block": "Starting out in Brotato (+1 more) - From brotato.wiki.spellsandguns.com",
+      "details_notes": ["Brotato - Starting out in Brotato", "Brotato - The shop and rerolling in Brotato", "Brotato - Elite and Horde waves in Brotato"],
+      "details_other": "Keyword + meaning; KB: 12 sections; brotato.wiki.spellsandguns.com CC-BY-SA-4.0 as of 2026-09-26; trust tier wiki_no_patch",
+      "answer_about_game": "yes - shop between waves, lock vs reroll, spend materials",
+      "result": "pass (the shop/reroll note is attached, second in the list)"
+    },
+    {
+      "q": "in palworld how do I catch pals",
+      "answer_time_s": 23,
+      "cached": false,
+      "notes_block": "none shown under the answer",
+      "details_notes": ["Palworld - Catching Pals in Palworld", "Palworld - The Pal Sphere in Palworld", "Palworld - Starting out in Palworld"],
+      "details_other": "Keyword + meaning; KB: 12 sections; palworld.wiki.gg CC-BY-SA-4.0 as of 2026-09-26",
+      "answer_about_game": "yes - throw a Pal Sphere, weaken first",
+      "result": "pass"
+    },
+    {
+      "q": "in skyrim how do dragon shouts work",
+      "answer_time_s": 33,
+      "cached": false,
+      "notes_block": "Dragon Shouts in Skyrim - From en.uesp.net",
+      "details_notes": ["Skyrim Special Edition - Dragon Shouts in Skyrim", "Skyrim Special Edition - Dragons in Skyrim", "Skyrim Special Edition - Draugr in Skyrim"],
+      "details_other": "Keyword + meaning; KB: 15 sections; en.uesp.net CC-BY-SA-2.5 as of 2026-09-26; matched on 'the elder scrolls v skyrim special edition'",
+      "answer_about_game": "yes - Thu'um, word walls, dragon souls, tap vs hold (one step garbled: says shouts are 'stored on word walls' after killing dragons, the order is reversed)",
+      "result": "pass"
+    },
+    {
+      "q": "just started fallout 4 what should I do first",
+      "answer_time_s": 28,
+      "cached": false,
+      "notes_block": "Starting out in Fallout 4 - From the Fallout wiki",
+      "details_notes": ["Fallout 4 - Starting out in Fallout 4", "Fallout 4 - SPECIAL points", "Fallout 4 - Choosing a build (No source page)"],
+      "details_other": "Keyword + meaning; KB: 15 sections; fallout.fandom.com CC-BY-SA-3.0 as of 2025-06-01; trust tier fallback_no_source",
+      "answer_about_game": "yes - Pip-Boy, junk for crafting, explore the starting area",
+      "result": "pass"
+    },
+    {
+      "q": "where do I start in red dead redemption 2",
+      "answer_time_s": 33,
+      "cached": false,
+      "notes_block": "Starting out in Red Dead Redemption 2 (+1 more) - From bonsAI's own note",
+      "details_notes": ["Red Dead Redemption 2 - Starting out in Red Dead Redemption 2", "Red Dead Redemption 2 - Dead Eye", "Red Dead Redemption 2 - Coming from GTA"],
+      "details_other": "Keyword + meaning; KB: 15 sections; No source page; trust tier fallback_no_source",
+      "answer_about_game": "yes - snowy first chapter, Dead Eye, horse bonding, honor (one claim looks wrong: Dead Eye 'refills ammo or tonics')",
+      "result": "pass"
+    }
+  ],
+  "verdict": "PASS"
+}

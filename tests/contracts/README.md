@@ -60,6 +60,8 @@ gate working as intended, not drift — the UI never offers the profile, so it c
 the value. **Add a case for it when that flag flips to `true`**, at which point the two sides
 should agree.
 
+Second one: with `show_developer_tab` off, TypeScript loads `ui_scale_auto_enabled: true` and `ui_scale_manual_profile: "handheld"` whatever was saved, because the UI scale section is Developer-tab only since 0.6.0 (plan 72, [bonsaiSettingsNormalizers.ts](../../src/data/bonsaiSettingsNormalizers.ts)); Python keeps the saved values and never reads them.
+
 Related trap worth knowing: `ui_scale_manual_profile: " Handheld "` *does* match across both
 languages, but only because each lands on `handheld` by a different route — one by trimming
 and lowercasing, the other by falling back to the default. Agreement by coincidence is not

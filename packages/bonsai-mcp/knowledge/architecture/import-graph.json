@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 547,
-  "edgeCount": 1475,
+  "fileCount": 548,
+  "edgeCount": 1481,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1910,6 +1910,15 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx"
       ]
     },
+    "src/features/chat-slots/ChatSlotRow.scroll.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/preset-carousel/presetRowLayout.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/chatSlotsApi.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/ChatSlotRow.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -1923,12 +1932,15 @@
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/preset-carousel/presetChipButton.tsx",
+        "src/features/preset-carousel/presetChipShared.ts",
         "src/utils/chatSlotsApi.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx"
       ]
     },
@@ -2478,6 +2490,7 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx"
       ]
     },
@@ -2498,6 +2511,7 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx"
       ]
@@ -2550,6 +2564,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/MainTabPresetRow.tsx",
+        "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
@@ -4082,6 +4097,7 @@
         "src/components/SessionContextStrip.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
@@ -4782,6 +4798,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/chatSumUpModel.test.ts",

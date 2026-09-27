@@ -48,8 +48,11 @@ export const PRESET_CHIP_BLOCKED_EDGE_FLASH_MS = 320;
 /*
  * Steam Marquee settings. "Slow and calm" per the maintainer (2026-09-01). The units are Steam's and
  * undocumented; these are calibrated on device (row PRESET-ONE-LINE-04) and only ever change here.
+ * The chat row's long chat name scrolls with these same settings (ChatSlotRow.tsx, through
+ * SteamMarqueeText), so a chip label and a chat name always move alike. Speed lowered 20%, 25 to
+ * 20, by the maintainer's call in plan 72 (2026-09-27); the pause before the start is unchanged.
  */
-export const PRESET_MARQUEE_SPEED = 25;
+export const PRESET_MARQUEE_SPEED = 20;
 export const PRESET_MARQUEE_DELAY_S = 1.5;
 export const PRESET_MARQUEE_FADE_LENGTH = 8;
 /** Pause after a label has scrolled to its end before a chip may rotate out. */

@@ -57,6 +57,8 @@ import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
 } from "../plugin-shell/modalReturnFocusRegistry";
+import { SteamMarqueeText } from "../preset-carousel/presetChipButton";
+import { prefersReducedMotion } from "../preset-carousel/presetChipShared";
 import { useChatSlotBumpers } from "./useChatSlotBumpers";
 import { useChatSlotRenameModal } from "./useChatSlotRenameModal";
 
@@ -112,8 +114,8 @@ const CREATE_LABEL = "[+]";
  *    modal (useChatSlotRenameModal), or, if focus is on the × stop, the
  *    delete confirmation.
  * 5. A layout effect measures whether the title text is wider than its box
- *    and, only while focused, publishes the overflow amount as a CSS
- *    variable so the stylesheet can scroll long titles into view.
+ *    and, only while focused, swaps it for Steam's Marquee with the chips'
+ *    own scroll settings, so a long name scrolls exactly like a long chip.
  */
 export function ChatSlotRow({
   summaries,
@@ -240,30 +242,29 @@ export function ChatSlotRow({
 
   const centerLabel = isCreatePosition ? CREATE_LABEL : (activeSlot?.label ?? "New chat");
 
-  // CSS cannot detect overflow, and `text-overflow: ellipsis` clips the text so a plain
-  // transform would only slide the ellipsized fragment. So measure here, publish the
-  // distance as a CSS var, and let the stylesheet attach the sweep only when it is needed.
+  // CSS cannot detect overflow, so measure the plain name here and, only when it is wider than its
+  // window, swap it for Steam's Marquee with the suggestion chips' own settings (SteamMarqueeText):
+  // a long chat name and a long chip label scroll at one speed with the same pauses. It used to be
+  // its own 6-second CSS sweep, whose speed changed with the name's length (plan 72, 2026-09-27).
+  // `overflowLabel` names the label that was measured as too wide, so a new name or a return of
+  // the ring starts from the plain span again and is measured afresh before it may scroll.
   // Known accepted edge: this re-runs on [focused, centerLabel] only, so a resize with both
-  // unchanged (a UI-scale change, or a ghost mounting from a summaries refresh) can leave a
-  // stale distance until the next focus change. No ResizeObserver unless device QA shows it.
+  // unchanged (a UI-scale change) can leave a stale answer until the next focus change.
   const titleWindowRef = useRef<HTMLSpanElement | null>(null);
   const titleInnerRef = useRef<HTMLSpanElement | null>(null);
-  const [titleOverflows, setTitleOverflows] = useState(false);
+  const [overflowLabel, setOverflowLabel] = useState<string | null>(null);
+  const titleScrolls = focused && overflowLabel === centerLabel && !prefersReducedMotion();
 
   useLayoutEffect(() => {
     const win = titleWindowRef.current;
     const inner = titleInnerRef.current;
-    if (!focused || !win || !inner) {
-      setTitleOverflows(false);
+    if (!focused) {
+      setOverflowLabel(null);
       return;
     }
-    const overflow = inner.scrollWidth - win.clientWidth;
-    if (overflow > 1) {
-      win.style.setProperty("--bonsai-slot-title-overflow", `${overflow}px`);
-      setTitleOverflows(true);
-    } else {
-      setTitleOverflows(false);
-    }
+    // The Marquee is already showing (the plain span, and so its ref, is gone): nothing to measure.
+    if (!win || !inner) return;
+    setOverflowLabel(inner.scrollWidth - win.clientWidth > 1 ? centerLabel : null);
   }, [focused, centerLabel]);
 
   return (
@@ -381,11 +382,19 @@ export function ChatSlotRow({
               ) : null}
               <span
                 ref={titleWindowRef}
-                className={`bonsai-chat-slot-title${focusStop === "title" ? " bonsai-chat-slot-title--active-stop" : ""}${isCreatePosition ? " bonsai-chat-slot-title--create" : ""}${titleOverflows ? " bonsai-chat-slot-title--overflowing" : ""}`}
+                className={`bonsai-chat-slot-title${focusStop === "title" ? " bonsai-chat-slot-title--active-stop" : ""}${isCreatePosition ? " bonsai-chat-slot-title--create" : ""}${titleScrolls ? " bonsai-chat-slot-title--overflowing" : ""}`}
               >
-                <span ref={titleInnerRef} className="bonsai-chat-slot-title-inner">
-                  {centerLabel}
-                </span>
+                {titleScrolls ? (
+                  <SteamMarqueeText
+                    text={centerLabel}
+                    className="bonsai-chat-slot-title-marquee"
+                    fallback={<span className="bonsai-chat-slot-title-inner">{centerLabel}</span>}
+                  />
+                ) : (
+                  <span ref={titleInnerRef} className="bonsai-chat-slot-title-inner">
+                    {centerLabel}
+                  </span>
+                )}
               </span>
               {!isCreatePosition ? (
                 <span

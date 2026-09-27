@@ -224,22 +224,21 @@ export function buildSavedChatSlotsRowSection(): string {
           display: inline-block;
           white-space: nowrap;
         }
+        /*
+          A long name, while the ring is on the row, scrolls through Steam's own Marquee with the
+          suggestion chips' settings (ChatSlotRow.tsx, plan 72). The window is held at its full
+          width while it scrolls - it was already that wide, since the name overflowed it - so the
+          Marquee always has a definite box to measure, whatever its own inner layout does. Reduced
+          motion is honoured in the component: the Marquee is never drawn then.
+        */
         .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-title--overflowing {
           text-overflow: clip;
+          width: calc(88% - ${uiScalePx(28)});
         }
-        .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-title--overflowing .bonsai-chat-slot-title-inner {
-          animation: bonsai-slot-title-scrub 6s ease-in-out infinite;
-        }
-        @keyframes bonsai-slot-title-scrub {
-          0% { transform: translateX(0); }
-          75% { transform: translateX(calc(-1 * var(--bonsai-slot-title-overflow, 0px))); }
-          83% { transform: translateX(calc(-1 * var(--bonsai-slot-title-overflow, 0px))); }
-          100% { transform: translateX(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .bonsai-scope .bonsai-chat-slot-title-inner {
-            animation: none !important;
-          }
+        .bonsai-scope .bonsai-chat-slot-title-marquee {
+          display: block;
+          min-width: 0;
+          max-width: 100%;
         }
         /*
           Taken out of the centred flex group on purpose (2026-09-20): the x used to sit as an

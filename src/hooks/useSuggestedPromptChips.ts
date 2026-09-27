@@ -10,7 +10,7 @@
  *          hooks unchanged, because React only tolerates a fixed order. It is called from
  *          exactly the position the block used to occupy. Keep it there.
  */
-import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
 
 import {
@@ -18,7 +18,12 @@ import {
   setSessionRagCarouselCandidates,
 } from "../features/preset-carousel/composePresetSeedsWithSessionRag";
 import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";
-import { getContextualPresets, getRandomPresets, type PresetPrompt } from "../data/presets";
+import {
+  getContextualPresets,
+  getRandomPresets,
+  LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT,
+  type PresetPrompt,
+} from "../data/presets";
 import { fetchSessionRagChipCandidates } from "../utils/sessionRagChipCandidates";
 import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurvival";
 import type { AppliedResult } from "../types/bonsaiUi";
@@ -131,7 +136,7 @@ export function useSuggestedPromptChips(
     [a.devForceSessionRagChips],
   );
 
-  const reseedSuggestedPrompts = useCallback(
+  const reseedNow = useCallback(
     async (mode: "random" | "contextual", category?: string, forceRefresh = false) => {
       const appId = Router.MainRunningApp?.appid?.toString() ?? "";
       const appName = Router.MainRunningApp?.display_name ?? "";
@@ -148,6 +153,33 @@ export function useSuggestedPromptChips(
       applyComposedSuggestedPrompts(staticSeeds, candidates);
     },
     [a.useLocalKnowledgeBase, applyComposedSuggestedPrompts, loadSessionRagCandidates],
+  );
+  /*
+   * One identity for the life of the hook, always running the newest reseedNow. The Ask hook calls
+   * this after every answer from applyBackgroundStatusToUi, a useCallback that does not list it as
+   * a dependency, so it kept the copy from its first render -- when the knowledge-base setting still
+   * read its UI default (off) because settings had not loaded. Every after-answer reseed then drew
+   * from the pool that holds the "Enable local knowledge base" chip, with the knowledge base on
+   * (plan 70 flow L7; plan72-F4-TIP.json), and never mixed in the game's own note chips.
+   */
+  const reseedNowRef = useRef(reseedNow);
+  reseedNowRef.current = reseedNow;
+  const reseedSuggestedPrompts = useCallback(
+    (mode: "random" | "contextual", category?: string, forceRefresh = false) =>
+      reseedNowRef.current(mode, category, forceRefresh),
+    [],
+  );
+  /*
+   * And whatever reaches the row -- chips kept from before the panel closed, or drawn on the first
+   * render before settings loaded -- never offers to turn on a knowledge base that is already on.
+   * The row's own rotation fills a gap from the filtered pool (normalizeThreeSeeds).
+   */
+  const shownPrompts = useMemo(
+    () =>
+      a.useLocalKnowledgeBase
+        ? suggestedPrompts.filter((p) => p.text !== LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT)
+        : suggestedPrompts,
+    [suggestedPrompts, a.useLocalKnowledgeBase],
   );
 
   useEffect(() => {
@@ -192,7 +224,7 @@ export function useSuggestedPromptChips(
   return {
     lastApplied,
     setLastApplied,
-    suggestedPrompts,
+    suggestedPrompts: shownPrompts,
     setSuggestedPrompts,
     reseedSuggestedPrompts,
   };

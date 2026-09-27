@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 573,
-  "edgeCount": 1582,
+  "fileCount": 574,
+  "edgeCount": 1584,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1821,6 +1821,7 @@
         "src/features/preset-carousel/sessionRagComposer.ts",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useSuggestedPromptChips.test.ts",
         "src/hooks/useSuggestedPromptChips.ts",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
@@ -3760,6 +3761,13 @@
         "src/hooks/useStreamScrollPin.test.ts"
       ]
     },
+    "src/hooks/useSuggestedPromptChips.test.ts": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/hooks/useSuggestedPromptChips.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useSuggestedPromptChips.ts": {
       "imports": [
         "src/data/presets.ts",
@@ -3770,7 +3778,8 @@
         "src/utils/sessionRagChipCandidates.ts"
       ],
       "importedBy": [
-        "src/hooks/useBonsaiAskOrchestration.ts"
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useSuggestedPromptChips.test.ts"
       ]
     },
     "src/hooks/useTabStripBodyOffset.ts": {

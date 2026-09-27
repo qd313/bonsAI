@@ -31,7 +31,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 
-import { reasoningFoldLabel } from "./reasoningDisplay";
+import { reasoningFoldLabel, tidyReasoningText } from "./reasoningDisplay";
 import { registerReplyStop } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "./focusNavigation";
@@ -132,13 +132,16 @@ export function buildReasoningFoldRow({
  * In: the whole thinking the computer side kept. Out: it, as written, above the answer.
  *
  * Line breaks are kept as the model wrote them and nothing inside is masked — the maintainer's
- * call: the closed line is the fence, not the words inside. Not a controller stop: the ring stays
- * on the line above, so a press of B closes the block from where you already are.
+ * call: the closed line is the fence, not the words inside. Only the marks the model writes for
+ * itself go: its "Thinking Process:" heading, stars and backticks (a quoted tag showed as
+ * `<bonsai-status>` with its backticks in 3 of 6 Deck tries, plan70-THINKING-SPOILER-01-try2.json).
+ * Not a controller stop: the ring stays on the line above, so a press of B closes the block from
+ * where you already are.
  */
 export function buildReasoningOpenBlock(turnId: string, text: string): React.ReactElement {
   return (
     <div key={`reasoning-block-${turnId}`} className="bonsai-chat-reasoning-block">
-      {text}
+      {tidyReasoningText(text)}
     </div>
   );
 }

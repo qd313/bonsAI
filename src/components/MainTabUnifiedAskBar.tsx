@@ -290,6 +290,18 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   }, [isAsking, unifiedInput, onAskOllama, focusAskPrimary]);
 
   /*
+   * Stop hands the ring to the question box, like a send does. Measured on the Deck 2026-09-27
+   * (plan 72, docs/test-evidence/plan72-A2-STOP-RING-try1..3.json): Stop and Voice input are the
+   * same corner button, so React keeps the one element when the answer ends and the ring stayed on
+   * it, now reading "Voice input" -- the very next A turned the microphone on, 3 tries of 3. The
+   * box is where a person goes next after cutting an answer short (a new or reworded question).
+   */
+  const handleStopPress = useCallback(() => {
+    onCancelAsk();
+    takeNavFocus("unified-input");
+  }, [onCancelAsk]);
+
+  /*
    * The text field's own Steam nav node, so a hop from another container (a preset chip's Down,
    * the help chip, the avatar) can use Steam's transfer instead of a plain `focus()` that only
    * moves `activeElement` (navFocusRegistry). `navRef` is a real Steam Focusable prop that Decky's
@@ -809,10 +821,10 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   onMoveLeft: () => focusAskModeButton(),
                   onOKButton: (evt: { stopPropagation: () => void }) => {
                     evt.stopPropagation();
-                    onCancelAsk();
+                    handleStopPress();
                   },
                 } as Record<string, unknown>)}
-                onClick={onCancelAsk}
+                onClick={handleStopPress}
                 aria-label="Stop generation"
                 style={{
                   minWidth: 20,

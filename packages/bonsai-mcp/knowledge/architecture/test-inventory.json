@@ -3,6 +3,7 @@
     "src/components/BonsaiPluginShell.test.tsx",
     "src/components/CharacterPickerModal.test.tsx",
     "src/components/CharacterRoleplayEmoticon.test.tsx",
+    "src/components/ContextChipLadder.reveal.test.tsx",
     "src/components/ContextChipLadder.test.tsx",
     "src/components/DeveloperTab.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 572,
-  "edgeCount": 1576,
+  "fileCount": 573,
+  "edgeCount": 1582,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -130,6 +130,15 @@
         "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
+    "src/components/ContextChipLadder.reveal.test.tsx": {
+      "imports": [
+        "src/components/ContextChipLadder.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/ContextChipLadder.test.tsx": {
       "imports": [
         "src/components/ContextChipLadder.tsx",
@@ -141,11 +150,14 @@
     "src/components/ContextChipLadder.tsx": {
       "imports": [
         "src/features/unified-input/constants.ts",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
-        "src/utils/inputTransparency.ts"
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/utils/buildDetailsPanelElement.tsx"
@@ -4295,6 +4307,7 @@
     "src/test-harness/fakeDeckyUi.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
@@ -5035,6 +5048,7 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/ContextChipLadder.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
@@ -5400,6 +5414,7 @@
         "src/data/modelPolicy.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/MainTab.tsx",
@@ -6178,6 +6193,8 @@
       "importedBy": [
         "src/components/BonsaiPluginShell.test.tsx",
         "src/components/BonsaiPluginShell.tsx",
+        "src/components/ContextChipLadder.reveal.test.tsx",
+        "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",

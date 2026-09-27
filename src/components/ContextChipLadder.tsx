@@ -29,7 +29,7 @@
  * license tier and credits, a real D-pad ring showed up on top of all of it
  * and was unreadable.
  */
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 import type {
   AskDiagnosticsSnapshot,
@@ -54,6 +54,8 @@ import {
   windowRange,
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
+import { revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
+import { elementHasGamepadFocus } from "../utils/uiDocument";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
@@ -159,6 +161,7 @@ export function ContextChipLadder({
   const chips = chipsFromSnapshot(snapshot);
   const [expanded, setExpanded] = useState(!collapsedHint);
   const [activeIndex, setActiveIndex] = useState(0);
+  const ladderElRef = useRef<HTMLElement | null>(null);
 
   const setExpandedBoth = useCallback(
     (v: boolean) => {
@@ -218,8 +221,22 @@ export function ContextChipLadder({
     );
   }
 
+  /*
+   * Keep the ladder holding the ring clear of the dock, its own top (the chip row) kept on screen.
+   * A step changes the details drawn under the chips, so the ladder grows or shrinks with no new
+   * focus event for the dock lift to answer: measured on the Deck, the ringed ladder read 33% to
+   * 67% visible at several steps (plan64-DETAILS-LADDER-01-try2.json) and sat 67 px under the
+   * question box on its last chip (plan72-Z-FREEPLAY.json finding 1). Scrolls only, on the settle
+   * schedule, after the new chip has drawn; never moves the ring.
+   */
+  const revealWhileRinged = () => {
+    const el = ladderElRef.current;
+    if (el && elementHasGamepadFocus(el)) revealBelowKeepingAsItSettles(el, () => el);
+  };
+
   const stepChip = (delta: number) => {
     setActiveIndex((i) => Math.max(0, Math.min(chips.length - 1, i + delta)));
+    revealWhileRinged();
   };
 
   const moveLeft = () => {
@@ -258,7 +275,11 @@ export function ContextChipLadder({
   return (
     <Focusable
       className="bonsai-chip-ladder"
-      ref={(el: HTMLElement | null) => rootRef?.(el)}
+      ref={(el: HTMLElement | null) => {
+        ladderElRef.current = el;
+        rootRef?.(el);
+      }}
+      onFocus={revealWhileRinged}
       style={{ marginTop: 8, width: "100%", maxWidth: "100%", minWidth: 0 }}
       {...deckNav({
         onMoveLeft: moveLeft,

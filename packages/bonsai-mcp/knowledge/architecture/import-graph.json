@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 537,
-  "edgeCount": 1451,
+  "edgeCount": 1453,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5137,13 +5137,15 @@
     },
     "src/utils/lighterWhileGameRuns.test.ts": {
       "imports": [
-        "src/utils/lighterWhileGameRuns.ts"
+        "src/utils/lighterWhileGameRuns.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": []
     },
     "src/utils/lighterWhileGameRuns.ts": {
       "imports": [
-        "src/types/bonsaiUi.ts"
+        "src/types/bonsaiUi.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -5805,6 +5807,8 @@
         "src/utils/focusPerTurnRow.ts",
         "src/utils/handRingOnWhenGone.test.ts",
         "src/utils/handRingOnWhenGone.ts",
+        "src/utils/lighterWhileGameRuns.test.ts",
+        "src/utils/lighterWhileGameRuns.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/settingsPanelScroll.ts",

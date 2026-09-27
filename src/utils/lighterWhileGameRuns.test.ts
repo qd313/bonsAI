@@ -13,6 +13,7 @@ import {
   smoothRevealFor,
   streamPollMsFor,
 } from "./lighterWhileGameRuns";
+import { rememberUiDocument, resetUiDocument } from "./uiDocument";
 
 type SwitchWindow = Window & { __bonsaiGameLoad?: unknown };
 
@@ -22,6 +23,26 @@ function setSwitch(value: unknown): void {
 
 afterEach(() => {
   delete (window as SwitchWindow).__bonsaiGameLoad;
+  resetUiDocument();
+  document.body.replaceChildren();
+});
+
+/*
+ * Deck, 2026-09-27 (plan 70): the driver set the switch in the Quick Access page's console and
+ * nothing changed -- the plugin's code runs in Steam's hidden main page and only draws into the
+ * Quick Access page. The switch is now read from both.
+ */
+describe("the switch set in the page the panel draws into", () => {
+  it("is read there too, not only in the page the code runs in", () => {
+    const frame = document.createElement("iframe");
+    document.body.appendChild(frame);
+    const qamWindow = frame.contentWindow as SwitchWindow;
+    rememberUiDocument(frame.contentDocument!.body);
+    qamWindow.__bonsaiGameLoad = { off: true };
+    expect(lighterWhileGameRuns(true).pace).toBe(false);
+    delete qamWindow.__bonsaiGameLoad;
+    expect(lighterWhileGameRuns(true).pace).toBe(true);
+  });
 });
 
 describe("gameIsRunning", () => {

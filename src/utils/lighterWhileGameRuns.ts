@@ -19,7 +19,8 @@
  * the question box reads (Steam's running app, kept in step by useOllamaGameContextSync and the
  * Ask's own status polls).
  *
- * The Deck's switch, for measuring: in the Quick Access page's console,
+ * The Deck's switch, for measuring: in the console of either the Quick Access page (where the
+ * panel draws) or Steam's hidden main page, SharedJSContext (where the plugin's code runs),
  *   window.__bonsaiGameLoad = { off: true }       -- never lighter, even with a game running
  *   window.__bonsaiGameLoad = { force: true }     -- lighter even with nothing running
  *   window.__bonsaiGameLoad = { scramble: false } -- leave one part out (pace, scramble, steady)
@@ -28,6 +29,7 @@
  * It is read on every render and every status check, so an answer already arriving picks it up.
  */
 import type { OllamaContextUi } from "../types/bonsaiUi";
+import { getUiDocument } from "./uiDocument";
 
 /** The whole feature's off switch: false keeps the panel drawing the same with or without a game. */
 const LIGHTER_WHILE_A_GAME_RUNS = true;
@@ -61,9 +63,17 @@ export function gameIsRunning(ctx: OllamaContextUi | null | undefined): boolean 
   return Boolean(ctx && ctx.app_context === "active" && ctx.app_id);
 }
 
+type SwitchWindow = Window & { __bonsaiGameLoad?: unknown };
+
+/**
+ * The switch from the page the code runs in, else from the page the panel draws into. Both,
+ * because on the Deck the first is Steam's hidden main page and a person measuring naturally sets
+ * it in the second (plan 70: set there, it changed nothing).
+ */
 function readDeckSwitch(): Record<string, unknown> | null {
   try {
-    const raw = (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad;
+    const own = (window as SwitchWindow).__bonsaiGameLoad;
+    const raw = own ?? (getUiDocument().defaultView as SwitchWindow | null)?.__bonsaiGameLoad;
     return raw && typeof raw === "object" ? (raw as Record<string, unknown>) : null;
   } catch {
     return null;

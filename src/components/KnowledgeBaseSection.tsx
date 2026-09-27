@@ -147,6 +147,13 @@ type Props = {
 const KB_UNAVAILABLE_SESSION_KEY = "bonsai_kb_unavailable_warned";
 const KB_FAILURE_TOAST_KEY = "bonsai_kb_failure_toast";
 const KB_NOMIC_HINT_SESSION_KEY = "bonsai_kb_nomic_hint_warned";
+/**
+ * How long the screen waits for Update's check. The back end tries 2 mirrors
+ * (MANIFEST_MIRROR_COUNT) for up to 60 s each (MANIFEST_FETCH_TIMEOUT_S, in
+ * rag_corpus_download_service.py) = 120 s worst case; this adds 30 s of margin.
+ * tests/test_rag_update_deadline.py fails if the two drift apart.
+ */
+const RAG_UPDATE_RPC_TIMEOUT_MS = 150_000;
 /** Shared row height so Update (long label) and Remove match on Deck (stretch alone fails on Decky Button). */
 const KB_ACTION_ROW_MIN_HEIGHT = 44;
 
@@ -643,7 +650,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const runUpdate = () => {
     if (updateNote?.kind === "checking") return;
     setUpdateNote({ kind: "checking", text: "Checking for a newer version…" });
-    void callDeckyWithTimeout<[], RagUpdateResult>("update_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
+    void callDeckyWithTimeout<[], RagUpdateResult>("update_rag_corpus", [], RAG_UPDATE_RPC_TIMEOUT_MS)
       .then((out) => {
         if (!out?.ok) {
           const err = out?.error ?? out?.reason ?? "Unknown error";
@@ -669,6 +676,16 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       })
       .catch((e) => {
         const err = formatDeckyRpcError(e);
+        if (err.startsWith("RPC timeout after")) {
+          // Only the screen gave up; the back end may still be checking or downloading, so
+          // "failed" would be untrue. Re-read status so a download it started shows up.
+          setUpdateNote({
+            kind: "current",
+            text: "Still checking — the network is slow. Press Update again in a minute to see the result.",
+          });
+          void refreshStatus();
+          return;
+        }
         setUpdateNote({ kind: "error", text: `Update failed: ${err}` });
         toaster.toast({ title: "Update failed", body: err, duration: 8000 });
       });

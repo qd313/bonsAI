@@ -7,7 +7,7 @@
  * date with the version, a newer version downloading, or a plain error — with no new button.
  */
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
 import { getRpcCallLog, ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
@@ -38,6 +38,46 @@ describe("KnowledgeBaseSection Update reports its outcome", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
     resetKbDownloadInFlightForTests();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("keeps Checking… through a slow check and ends on the real outcome, not a timeout", async () => {
+    // The back end tries two mirrors with up to 60 s each; the screen used to give up
+    // after 15 s and say "Update failed" while the back end was still checking.
+    let finish: (v: unknown) => void = () => {};
+    setRpcHandler("update_rag_corpus", () => new Promise((resolve) => (finish = resolve)));
+    renderInstalled();
+    await screen.findByText("Update knowledge base");
+    vi.useFakeTimers();
+    fireEvent.click(screen.getByText("Update knowledge base"));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(110_000);
+    });
+    expect(screen.getByText("Checking for a newer version…")).toBeTruthy();
+    expect(screen.queryByText(/Update failed/)).toBeNull();
+
+    await act(async () => {
+      finish({ ok: true, updated: false, outcome: "up_to_date", version: "2026.09.26" });
+    });
+    expect(screen.getByText("Already up to date (version 2026.09.26).")).toBeTruthy();
+  });
+
+  it("never says Update failed when the screen's own deadline passes", async () => {
+    setRpcHandler("update_rag_corpus", () => new Promise(() => {}));
+    renderInstalled();
+    await screen.findByText("Update knowledge base");
+    vi.useFakeTimers();
+    fireEvent.click(screen.getByText("Update knowledge base"));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10 * 60_000);
+    });
+    expect(screen.queryByText(/Update failed/)).toBeNull();
+    expect(screen.getByText(/still checking/i)).toBeTruthy();
   });
 
   it("says Checking… while the check runs, and a second press does not start another", async () => {

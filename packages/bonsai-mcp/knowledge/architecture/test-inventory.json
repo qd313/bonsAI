@@ -308,6 +308,7 @@
     "tests/test_rag_corpus_local_install.py",
     "tests/test_rag_corpus_saves_before_done.py",
     "tests/test_rag_corpus_status.py",
+    "tests/test_rag_update_deadline.py",
     "tests/test_reply_followup.py",
     "tests/test_reply_language_service.py",
     "tests/test_reply_language_snapshot_rpc.py",

@@ -61,17 +61,17 @@
       "role": ""
     },
     {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 1001,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/bonsai_stream_tags.py",
       "lines": 988,
       "role": ""
     },
     {
       "path": "py_modules/backend/services/screenshot_media.py",
-      "lines": 984,
-      "role": ""
-    },
-    {
-      "path": "src/components/KnowledgeBaseSection.tsx",
       "lines": 984,
       "role": ""
     },

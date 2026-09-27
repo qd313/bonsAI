@@ -99,7 +99,15 @@ def _sha256_file(path: str) -> str:
     return h.hexdigest()
 
 
-def _fetch_json_url(url: str, timeout: float = 60.0) -> dict[str, Any]:
+# How long one mirror gets to answer the manifest fetch, and how many mirrors are tried in
+# turn. Their product is the Update check's worst case; the screen's own deadline for
+# update_rag_corpus (RAG_UPDATE_RPC_TIMEOUT_MS in KnowledgeBaseSection.tsx) must stay above
+# it, which tests/test_rag_update_deadline.py checks.
+MANIFEST_FETCH_TIMEOUT_S = 60.0
+MANIFEST_MIRROR_COUNT = 2
+
+
+def _fetch_json_url(url: str, timeout: float = MANIFEST_FETCH_TIMEOUT_S) -> dict[str, Any]:
     req = urllib.request.Request(url, headers={"User-Agent": "bonsAI/1.0"})
     with urlopen_with_ca_fallback(req, timeout=timeout) as resp:
         return parse_manifest_json(json.loads(resp.read().decode("utf-8")))

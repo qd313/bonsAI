@@ -1,0 +1,227 @@
+{
+ "row": "plan72-F-STOP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:34:47 to 14:36:40 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "Steam on the external monitor (per the session); same size as part 1"
+ },
+ "setup": {
+  "ask_mode": "speed (was strategy)",
+  "ask_think_effort": "off (was medium)",
+  "chat": "slot titled Hades (current chat at start)",
+  "ai_character_enabled": true,
+  "ai_character_preset_id": "alig_ali_g"
+ },
+ "try1": {
+  "question": "Walk me through every display setting on the Steam Deck and what each one changes",
+  "pressed": "A on Ask (ring placed by walkTo DOWN, 3 presses)",
+  "seen": "about 2.6 s after install the ring moved from Ask to the question box (Steam DialogInput) and the Stop generation button appeared 0.07 s later. Real answer words appeared at about 5.9 s after the ring left Ask. The ring stayed on the question box, not on Stop. I did not press A (question box). The whole answer finished at 17.6 s (plugin log: completed in 17.6s) before any other press, so Stop was never pressed on try 1.",
+  "ringAbout3sAfterFirstWords": "question box (DialogInput), expected Stop generation"
+ },
+ "try2": {
+  "question": "Give me a long detailed rundown of every Steam Deck screen option, including brightness, refresh rate, scaling and color, and what each one does",
+  "pressed": "A on Ask; ring went to the question box again (t=3.1 s, Stop appeared same read). Then DOWN once: ring landed on the Stop generation button (visible 100%). RIGHT twice: did not move. Read at t=15.3 s: ring on Stop generation, answer still arriving (1040 chars). Pressed A once.",
+  "ringOnStopByItself": false,
+  "afterStop": {
+   "apiPs_14_36_01": "gemma4:e2b-it-qat listed, expires_at 18:35:57 (keep-alive renewed at the Stop), nomic-embed-text also listed",
+   "pluginLog": "14:35:57 ask_ollama: read interrupted by cancel model=gemma4:e2b-it-qat",
+   "answerShows": "Stopped \u2014 partial answer kept. (partial text kept)",
+   "ringAfterStop": "question box (DialogInput) - matches the expected hand-off. A not pressed."
+  }
+ },
+ "nextAnswer": {
+  "question": "Name three quick ways to save battery on the Steam Deck",
+  "pressed": "DOWN once from the question box -> Ask (1 press), A",
+  "secondsAskToFirstWords": "about 5.2 to 5.8 (ring left Ask at 1.6 s on the sampler clock; first real words by 6.8 s; press sent between 0.2 and 1.6 s)",
+  "pluginLogCompletion": "run_game_ai_request: completed in 12.0s (14:36:34)",
+  "ollamaJournal": "POST /api/chat 12.03 s; 0 model-load lines (llama_model_loader/load_tensors/starting runner) since 14:34:00; prompt cache reused (selected slot by LCP similarity 0.284)",
+  "compare": "try 1 (before any Stop) took about 5.9 s to first words; after Stop about 5.2-5.8 s: no cold load"
+ },
+ "verdict": "UNCLEAR",
+ "verdictReason": "The three fix parts pass: the model stays loaded after Stop, the ring lands on the question box after Stop, and the next answer starts warm (about 5.5 s, 0 load lines). But the runbook expected the ring on the Stop control a few seconds after the first words; twice it was on the question box instead, and I reached Stop only by pressing Down once myself. The session decides whether that is the intended place.",
+ "reads": {
+  "try1Timeline": {
+   "deckTime": "2026-09-27 14:35:20 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 33482,
+    "rows": [
+     {
+      "t": 100,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 1,
+      "lastLen": 403,
+      "lastHead": "Is there a day limit in Pikmin 2?\nShow reasoning \u00b7 11 s\n\nListen up, mate! Nah, t"
+     },
+     {
+      "t": 200,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 1,
+      "lastLen": 403,
+      "lastHead": "Is there a day limit in Pikmin 2?\nShow reasoning \u00b7 11 s\n\nListen up, mate! Nah, t"
+     },
+     {
+      "t": 2636,
+      "stop": false,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 403,
+      "lastHead": "Is there a day limit in Pikmin 2?\nShow reasoning \u00b7 11 s\n\nListen up, mate! Nah, t"
+     },
+     {
+      "t": 2708,
+      "stop": true,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 2,
+      "lastLen": 91,
+      "lastHead": "Walk me through every display setting on the Steam Deck and what each one change"
+     },
+     {
+      "t": 20460,
+      "stop": false,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 2,
+      "lastLen": 1490,
+      "lastHead": "Walk me through every display setting on the Steam Deck and what each one change"
+     },
+     {
+      "t": 26100,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary cXzBZxhPBl",
+      "slots": 2,
+      "lastLen": 1490,
+      "lastHead": "Walk me through every display setting on the Steam Deck and what each one change"
+     }
+    ],
+    "ring": {
+     "aria": null,
+     "cls": "bonsai-askbar-target bonsai-ask-primary cXzBZxhPBl7fZs9LODEnc Focusable gpfocus ",
+     "text": "ask"
+    },
+    "stop": false,
+    "lastLen": 1490,
+    "lastText": "Walk me through every display setting on the Steam Deck and what each one changes\n\nAlright, listen up, mate! Here's the lowdown on the display settings on the Steam Deck. It ain't rocket science, but you gotta know what you're doin'.\n\nFirst off, the Display settings. This is where you set the resolution. You got options for different resolutions, like 1280x800 or higher. Higher resolution means sh"
+   }
+  },
+  "try2AfterStop": {
+   "deckTime": "2026-09-27 14:36:06 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 26200,
+    "rows": [
+     {
+      "t": 100,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 2,
+      "lastLen": 1490,
+      "lastHead": "Walk me through every display setting on the Steam Deck and what each one change"
+     },
+     {
+      "t": 200,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 2,
+      "lastLen": 1490,
+      "lastHead": "Walk me through every display setting on the Steam Deck and what each one change"
+     },
+     {
+      "t": 3115,
+      "stop": true,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 154,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     },
+     {
+      "t": 7188,
+      "stop": true,
+      "ring": "Stop generation",
+      "slots": 1,
+      "lastLen": 228,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     },
+     {
+      "t": 16848,
+      "stop": false,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 1247,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     }
+    ],
+    "ring": {
+     "aria": null,
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase F",
+     "text": ""
+    },
+    "stop": false,
+    "lastLen": 1284,
+    "lastText": "Give me a long detailed rundown of every Steam Deck screen option, including brightness, refresh rate, scaling and color, and what each one does\nStopped \u2014 partial answer kept.\n\nListen up, mate! You wanna know every single screen setting on the Steam Deck? Alright, pull up a chair, 'cause I'm gonna lay down the full rundown on how to tweak that display. It ain't rocket science, but you gotta know w"
+   }
+  },
+  "nextTimeline": {
+   "deckTime": "2026-09-27 14:36:41 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "now": 20049,
+    "rows": [
+     {
+      "t": 100,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 1,
+      "lastLen": 1284,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     },
+     {
+      "t": 200,
+      "stop": false,
+      "ring": "bonsai-askbar-target bonsai-ask-primary bonsai-ask",
+      "slots": 1,
+      "lastLen": 1284,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     },
+     {
+      "t": 1629,
+      "stop": false,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 1284,
+      "lastHead": "Give me a long detailed rundown of every Steam Deck screen option, including bri"
+     },
+     {
+      "t": 1728,
+      "stop": true,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 147,
+      "lastHead": "Name three quick ways to save battery on the Steam Deck\nPower math on \"Name thre"
+     },
+     {
+      "t": 13927,
+      "stop": false,
+      "ring": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPla",
+      "slots": 1,
+      "lastLen": 839,
+      "lastHead": "Name three quick ways to save battery on the Steam Deck\n\nListen up, mate! You wa"
+     }
+    ],
+    "ring": {
+     "aria": null,
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase F",
+     "text": ""
+    },
+    "stop": false,
+    "lastLen": 839,
+    "lastText": "Name three quick ways to save battery on the Steam Deck\n\nListen up, mate! You wanna know how to keep that battery going longer on the Deck? It ain't rocket science, but you gotta keep it simple. Here are three quick things you can do:\n\nFirst off, lower the brightness. Yeah, turn that down a bit. The screen is a big power hog, so if you ain't lookin' for the sun, keep it dim.\n\nSecond, manage your p"
+   }
+  }
+ }
+}

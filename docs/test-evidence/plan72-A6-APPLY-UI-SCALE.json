@@ -1,0 +1,33 @@
+{
+ "row": "plan72-A6-APPLY-UI-SCALE",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 13:03-13:06 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSizeBefore": "handheld, automatic on (settings ui_scale_auto_enabled true, ui_scale_manual_profile handheld; --bonsai-ui-scale 1)",
+  "whyRun": "part 1's D-6 changed the size by editing the settings file, not with the Apply button, so it did not record where the ring lands after Apply"
+ },
+ "pressed": [
+  "Main tab bar: RB x2 -> Settings tab",
+  "Down -> 'Adjust UI automatically' toggle; A (automatic off; a 'Profile: Handheld / Couch' slider and 'Reset to automatic' appeared)",
+  "Down x2 -> profile slider; Right x1 -> 'Profile: Couch'",
+  "Down x2 (via 'Reset to automatic', not pressed) -> 'Apply UI scale'; A",
+  "read focus",
+  "RB once",
+  "read tab",
+  "Put back: Down -> slider, Left x1 -> Handheld; Up -> toggle, A (automatic on); Down -> Apply; A"
+ ],
+ "seen": {
+  "afterApply": "the ring was lost: no element with Steam's focus mark (0 .gpfocus), document.activeElement = BODY, document.hasFocus true. Size applied: --bonsai-ui-scale 1.18 (Couch). Still on the Settings tab.",
+  "afterRB": "the tab did NOT change (still 'Settings tab', tab strip reads 'LB SETTINGS RB'). The RB press only put the ring back, on the 'Adjust UI automatically' toggle.",
+  "restoreApply": "the second Apply (back to automatic/Handheld) lost the ring the same way: 0 .gpfocus, activeElement BODY; --bonsai-ui-scale back to 1.",
+  "otherNote": "with automatic on, Down from the tab bar skips the 'Handheld (1.00x)' size label and lands on the toggle; the size slider only exists while automatic is off"
+ },
+ "settingsAfter": "read over SSH after the restore: ui_scale_auto_enabled true, ui_scale_manual_profile handheld (same as before)",
+ "walkFiles": [
+  "runs/plan72-A6-apply.json",
+  "runs/plan72-A6-apply-restore.json"
+ ],
+ "verdict": "MEASURED: after 'Apply UI scale' the ring is lost (nothing has it). The first RB after that does not change tab; it only brings the ring back onto the automatic toggle."
+}

@@ -4,6 +4,43 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 72, the release bug session (2026-09-27)
+
+**Controller**
+- **After Stop, the ring lands on the question box**, not one press from turning the microphone on. Passed on the Deck.
+- **Left on the chat row stays in bonsAI** instead of jumping to Steam's side rail. Passed on the Deck.
+- **Up and Down under an answer now visit every row in order**, both ways, instead of skipping whole rows. Passed on the Deck.
+- **The "What went wrong?" chips scroll into view by themselves** instead of hiding behind the dock. Passed on the Deck.
+- **The chat summary card scrolls into view by itself.** A very tall card can still leave a sliver behind the dock.
+
+**Look**
+- **Save chat is now an icon in the chat tab**, and the "+" for a new chat has a clearer icon. Passed on the Deck.
+- **The dots under the chat name line up exactly.** Passed on the external monitor; the Deck's own screen is still owed.
+- **A long chat name scrolls at the same speed as a long chip label.** Passed on the Deck.
+- **The preset chip sits as close to the question box as the Ask button does.** Passed on the Deck.
+- **The mic button's ring is no longer cut off at the panel's edge.** Passed on the Deck.
+- **The "Not helpful" reasons fit on two rows**, with shorter words. Passed on the Deck.
+- **Your question's bubble splits into lines of about equal length** and hugs its longest line. On-Deck check owed.
+- **The suggestion chips hold still while an answer is being written.** On-Deck check owed.
+- **The first-run notices read more plainly.** Passed on the Deck.
+
+**Answers**
+- **Pressing Stop keeps the AI model loaded**, so the next question starts warm. Passed on the Deck.
+- **Strategy answers no longer open with the plugin's own instruction wording.** Passed on the Deck.
+- **The live thinking line no longer shows the model's rule checklist.** On-Deck check owed.
+- **A game's own tip is credited as that game's own**, not as shared troubleshooting. On-Deck check owed.
+- **A one-line hidden block is no longer doubled, shown openly or given away by Copy and Read aloud.**
+- **A typed command no longer comes back later as a suggestion chip.**
+- **The "Was this helpful?" row survives closing and reopening the panel.** Switching chats can still lose it.
+- **Clearing a chat while an answer is being written keeps that answer**, and deleting a chat whose file is already gone removes its row.
+
+**Downloads and permissions**
+- **A new "Internet downloads" permission, off by default**, and a notice saying where each download comes from before it starts. On-Deck check owed.
+- **A model downloaded from the first-tick picker joins your saved try order.** On-Deck check owed.
+
+**Hidden for 0.6.0**
+- Six "[beta]" chips, "Open Steam Input config", the quick-launch chip and its setup commands, Find LAN and its chips, and the UI scale section (which returns with the Developer tab on).
+
 ### Fixed
 - **Show details no longer names a boss an answer hid:** on an answer with a spoiler cover, its credit
   area reads "Sources hidden — open the notes to see them" until you open the notes; a note the answer
@@ -19,7 +56,7 @@ All notable changes to this project are documented in this file.
   slowly, because Stop unloaded the model every time. Stop now just ends the answer and leaves the model
   loaded, so the next question starts warm. On the Deck's own AI a short watch runs after Stop, and only
   if the AI is still busy after 90 seconds does the old unload run, as a safety net. `ollama_stop_service.py`.
-  On-Deck check owed.
+  Passed on the Deck.
 - **A question about the game you are playing now finds that game's own Deck tip:** asking "the text on
   the screen looks blurry" with Deep Rock Galactic: Survivor running, or about mod launch options for
   Fallout 4, used to get generic advice while the game's own tip sat unused in the library. The game's own

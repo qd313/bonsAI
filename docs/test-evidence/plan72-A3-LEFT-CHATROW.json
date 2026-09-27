@@ -1,0 +1,35 @@
+{
+ "row": "plan72-A3-LEFT-CHATROW",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:39-12:41 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades (after A-2's answers it moved to the first position, right after the '+' new-chat spot)"
+ },
+ "pressed": [
+  "walk Up from the mic to the top (overshot to the Decky back button), Down x2 back onto the chat row",
+  "LEFT from the chat name",
+  "deck_openPlugin (panel still open; it pressed Right once to return)",
+  "RIGHT (onto x, internal stop)",
+  "LEFT from x",
+  "LB once (to the new-chat position '[+]')",
+  "LEFT from the new-chat position",
+  "deck_openPlugin (panel still open, 1 press back)",
+  "RB once back to Hades"
+ ],
+ "seen": {
+  "fromName": "LEFT left bonsAI: the ring went to Steam's own side menu, the Decky tab icon (#quickaccess_tab_999, rect x 0 y 542.8 w 48 h 64). The panel stayed open (.bonsai-scope mounted).",
+  "fromX": "RIGHT from the name kept Steam's ring on the row (.bonsai-chat-slot-row-focus) and marked the x as the active stop (class bonsai-chat-slot-delete--active-stop; x rect x 274.5 y 106.7 w 22). LEFT from x stayed inside bonsAI: the x lost its active-stop class and the ring stayed on the row (back on the name). It did NOT leave to Steam's menu.",
+  "fromNewChat": "at the new-chat position (title '[+]', class bonsai-chat-slot-title--active-stop --create; chat area shows the empty-chat hint) LEFT left bonsAI: ring to Steam's side menu (#quickaccess_tab_999).",
+  "return": "RB from '[+]' returned to Hades; title 'Hades' confirmed. A was never pressed on the row, x or '+'.",
+  "upWalkBonus": "the Up walk from the mic stopped at: Voice input, question box, preset chip, Retry same prompt, '3 earlier', chat row, Main tab, Decky back button. The answer text, 'Was this helpful' thumbs and 'Show details' were skipped going Up."
+ },
+ "walkFiles": [
+  "runs/plan72-A3-left-name.json",
+  "runs/plan72-A3-left-x.json",
+  "runs/plan72-A3-left-plus.json"
+ ],
+ "verdict": "MEASURED: 2 of 3 positions let the ring leave bonsAI on Left (the chat name and the new-chat spot); from the x it stays inside."
+}

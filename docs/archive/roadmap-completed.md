@@ -6,6 +6,17 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon (closed 2026-09-27)
+
+- ★★ `[chat]` **Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon** — **OPEN,
+  from the maintainer 2026-09-26.** "Save chat to Desktop" moves from its own row under the answer to a
+  save icon in the chat tab; the "+" (new chat) gets a clearer, more obvious icon. Draw the options at
+  true size first, which also settles exactly where the icon sits. Plan 72, lane 5, for 0.6.0.
+
+**Closed 2026-09-27 (plan 72, `dfd133c9`, `4b32343b`).** Save is now an icon in the chat tab, the old row under
+  the answer is gone, and the "+" has a clearer icon. The older-chat icon is re-checked in the next Deck block.
+  Evidence `docs/test-evidence/plan72-F-ROW.json`, `docs/test-evidence/plan72-F-NOSAVEROW.json`.
+
 ### The chat sums itself up instead of being cleared (closed 2026-09-26)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-26 during the twelfth bookkeeping pass — copied line for line from roadmap-details.md, nothing reworded, with the closing note added at the end._

@@ -1,0 +1,1445 @@
+{
+ "row": "plan72-F-ROW",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:03 - 14:21 EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld"
+ },
+ "pressed": "Part 1 (14:03, chat 'Hades', one saved answer from an earlier session): ring on the name; Left, Left, Right, Right, Left in one run, then Right and Left one at a time with a read after each. Part 2 (14:04): LB x8 to the new-chat spot, Left, read, then the saved check (Left, Left), RB x8 back. Part 3 (14:19, chat 'how do i beat the boss at the end of the first area' right after asking it a new question): Left, Left, Right, Right, Left, Left one at a time with a read after each; A on the save icon; read the window; B; read. Then the saved check of the Left/Right walk. Then back to 'Hades' (RB x7) and a rest screenshot with the ring on a chip.",
+ "seen": {
+  "part1_chatWithOnlyOlderAnswers": {
+   "saveIconInRow": false,
+   "LeftFromName": "stays on the name (no save stop exists)",
+   "RightFromName": "the x",
+   "LeftFromX": "the name",
+   "note": "The code draws the icon only when the chat has an answer from this session (the same rule the old Save row had); a chat whose answers are only saved from before shows no icon"
+  },
+  "part2_newChatSpot": {
+   "centre": "pencil (14 px svg) + 'New chat', centred on the row (label centre 198.0 = row centre 198.0)",
+   "saveIcon": false,
+   "x": false,
+   "Left": "ring stays on the chat row inside bonsAI (twice)"
+  },
+  "part3_chatWithAnAnswerFromThisSession": {
+   "Left1": "save icon lit (--active-stop); icon box x 99.548-121.545, y 105.737-127.734 with the ring on the row: fully inside the 48-348 column",
+   "Left2": "stays on the save icon, still inside bonsAI",
+   "Right1": "the name",
+   "Right2": "the x",
+   "Left3": "the name",
+   "Left4 then A": "a Steam window opens: title 'Save to Desktop note', text field 'Note name (saved as name.md)' prefilled 'bonsai-debug', Save and Cancel; the QAM closes behind it; the ring is on the name field",
+   "B": "window closes, the QAM comes back, ring on the chat row (name lit); nothing was saved (Desktop/bonsAI_logs has no bonsai-debug.md)"
+  },
+  "restRow_thatChat": "with the ring off the row (on Retry, see F-BUBBLE.png): disk icon x 55.99-77.99 at the left end, then the previous spot's faded pencil (the new-chat spot, since answering moved this chat to the front) x 83.98-95.98, then the name from x 109.97, the next chat's faded name, and the x. The icon and the faded pencil do not overlap (6 px apart).",
+  "restScreenshotWithRingOnChip": "on that chat the row scrolls out of view when the ring is on the chip (row y -476); the rest picture with the ring on a chip was taken on 'Hades', which has no save icon",
+  "sideEffect": "after the save window closed, the 'What went wrong?' chips under the answer were gone (the QAM had closed and reopened)"
+ },
+ "expected": "on a chat with at least one answer: Left -> save icon (fully visible), Left stays, Right -> name, Right -> x, Left -> name; A opens the save window, B closes it with the ring back on the row; the new-chat spot shows a pencil and 'New chat', no save icon, no x, Left stays inside bonsAI; a rest screenshot with the ring on a chip showing the icon over the previous chat's faded name",
+ "judgement": "Everything matches on a chat that got an answer this session, and on the new-chat spot. On a chat whose answers are only from earlier sessions ('Hades'), there is no save icon, so Left does nothing. The rest picture with the ring on a chip could not show the icon (the only chat with the icon is long enough to scroll the row away). The session decides whether the icon should also show for older saved answers.",
+ "savedChecks": [
+  "checks/F-ROW-newchat-left-stays.json",
+  "checks/F-ROW-saveicon-left-right.json"
+ ],
+ "screenshots": [
+  "screenshots/plan72/F-ROW-saveicon.png",
+  "screenshots/plan72/F-ROW-savewindow.png",
+  "screenshots/plan72/F-ROW-rest-chip-Hades.png",
+  "screenshots/plan72/F-DOTS-plus.png (new-chat spot)",
+  "screenshots/plan72/F-BUBBLE.png (resting row with the icon)"
+ ],
+ "verdict": "UNCLEAR",
+ "reads": {
+  "p1_left": {
+   "deckTime": "2026-09-27 14:02:53 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "row": {
+     "x": 47.998,
+     "y": 87.952,
+     "w": 300,
+     "h": 48.547,
+     "right": 347.998,
+     "bottom": 136.499
+    },
+    "rowText": "LBHadeshow do i beat the boss at the end of the first areaHades\u00d7+RB",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "ring": {
+     "tag": "DIV",
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "LBHadeshow do i beat the boss at the end of the first areaHa",
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 48.547,
+      "right": 347.998,
+      "bottom": 136.499
+     }
+    },
+    "els": [
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-row-inner",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 47.998,
+       "y": 87.952,
+       "w": 300,
+       "h": 48.547,
+       "right": 347.998,
+       "bottom": 136.499
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "LB",
+      "rect": {
+       "x": 55.994,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 91.553,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-center",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 32.996,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-game",
+      "aria": null,
+      "text": "Hades",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 10.999,
+       "right": 296.448,
+       "bottom": 106.726
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-row",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 196.899,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 180.09,
+       "y": 109.534,
+       "w": 35.815,
+       "h": 14.392,
+       "right": 215.906,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title-inner",
+      "aria": null,
+      "text": "Hades",
+      "rect": {
+       "x": 180.09,
+       "y": 109.534,
+       "w": 35.815,
+       "h": 14.392,
+       "right": 215.906,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-delete",
+      "aria": null,
+      "text": "\u00d7",
+      "rect": {
+       "x": 274.451,
+       "y": 105.737,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-dots",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 124.731,
+       "w": 196.899,
+       "h": 3.992,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156.055,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 160.046,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.04,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 170.032,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176.025,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 180.017,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186.011,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 190.002,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.996,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 199.988,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 205.981,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 209.973,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 215.967,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 219.958,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 225.952,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 229.944,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 235.938,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 239.929,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill bonsai-chat-slot-bumper-pill--dead",
+      "aria": null,
+      "text": "RB",
+      "rect": {
+       "x": 304.443,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 340.002,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     }
+    ]
+   }
+  },
+  "p1_stops": {
+   "deckTime": "2026-09-27 14:03:29 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": null,
+    "saveRect": null,
+    "title": "Hades",
+    "newchat": false
+   }
+  },
+  "p1_right": {
+   "deckTime": "2026-09-27 14:03:35 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-delete bonsai-chat-slot-delete--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete bonsai-chat-slot-delete--active-stop",
+    "saveCls": null,
+    "saveRect": null,
+    "title": "Hades",
+    "newchat": false
+   }
+  },
+  "p1_left2": {
+   "deckTime": "2026-09-27 14:03:41 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": null,
+    "saveRect": null,
+    "title": "Hades",
+    "newchat": false
+   }
+  },
+  "p2_newchat": {
+   "deckTime": "2026-09-27 14:02:01 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "row": {
+     "x": 47.998,
+     "y": 87.952,
+     "w": 300,
+     "h": 48.547,
+     "right": 347.998,
+     "bottom": 136.499
+    },
+    "rowText": "LBNew chat+RB",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "ring": {
+     "tag": "DIV",
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "LBNew chat+RB",
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 48.547,
+      "right": 347.998,
+      "bottom": 136.499
+     }
+    },
+    "els": [
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-row-inner",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 47.998,
+       "y": 87.952,
+       "w": 300,
+       "h": 48.547,
+       "right": 347.998,
+       "bottom": 136.499
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill bonsai-chat-slot-bumper-pill--dead",
+      "aria": null,
+      "text": "LB",
+      "rect": {
+       "x": 55.994,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 91.553,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-center",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 32.996,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-game",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 95.728,
+       "w": 196.899,
+       "h": 10.999,
+       "right": 296.448,
+       "bottom": 106.726
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-row",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 105.737,
+       "w": 196.899,
+       "h": 21.997,
+       "right": 296.448,
+       "bottom": 127.734
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-newchat",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 161.682,
+       "y": 109.534,
+       "w": 72.632,
+       "h": 14.392,
+       "right": 234.314,
+       "bottom": 123.926
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "svg",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 161.682,
+       "y": 109.729,
+       "w": 13.989,
+       "h": 13.989,
+       "right": 175.671,
+       "bottom": 123.718
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 164.014,
+       "y": 112.061,
+       "w": 9.326,
+       "h": 9.326,
+       "right": 173.34,
+       "bottom": 121.387
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.345,
+       "y": 111.407,
+       "w": 7.648,
+       "h": 7.648,
+       "right": 173.993,
+       "bottom": 119.055
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-dots",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 99.548,
+       "y": 124.731,
+       "w": 196.899,
+       "h": 3.992,
+       "right": 296.448,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156.055,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 160.046,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.04,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 170.032,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176.025,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 180.017,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186.011,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 190.002,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.996,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 199.988,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 205.981,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 209.973,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 215.967,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 219.958,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 225.952,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 229.944,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 235.938,
+       "y": 124.731,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 239.929,
+       "bottom": 128.723
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-bumper-pill",
+      "aria": null,
+      "text": "RB",
+      "rect": {
+       "x": 304.443,
+       "y": 98.45,
+       "w": 35.559,
+       "h": 27.551,
+       "right": 340.002,
+       "bottom": 126.001
+      },
+      "opacity": "1",
+      "focusable": false
+     }
+    ]
+   }
+  },
+  "p2_left": {
+   "deckTime": "2026-09-27 14:04:02 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [],
+    "deleteCls": null,
+    "saveCls": null,
+    "saveRect": null,
+    "title": null,
+    "newchat": true
+   }
+  },
+  "p3_left1": {
+   "deckTime": "2026-09-27 14:19:18 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_left2": {
+   "deckTime": "2026-09-27 14:19:30 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_right1": {
+   "deckTime": "2026-09-27 14:19:35 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_right2": {
+   "deckTime": "2026-09-27 14:19:39 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-delete bonsai-chat-slot-delete--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete bonsai-chat-slot-delete--active-stop",
+    "saveCls": "bonsai-chat-slot-save",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_left3": {
+   "deckTime": "2026-09-27 14:19:44 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_beforeA": {
+   "deckTime": "2026-09-27 14:19:50 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save bonsai-chat-slot-save--active-stop",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "p3_afterB": {
+   "deckTime": "2026-09-27 14:20:13 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ringInBonsai": true,
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "activeStops": [
+     "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing"
+    ],
+    "deleteCls": "bonsai-chat-slot-delete",
+    "saveCls": "bonsai-chat-slot-save",
+    "saveRect": {
+     "x": 99.548,
+     "y": 105.737,
+     "w": 21.997,
+     "h": 21.997
+    },
+    "title": "how do i beat the boss at the end of the first areahow do i beat the boss at the end of the first area",
+    "newchat": false
+   }
+  },
+  "rest": {
+   "deckTime": "2026-09-27 14:20:52 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "row": {
+     "x": 47.998,
+     "y": -476.892,
+     "w": 300,
+     "h": 44.543,
+     "right": 347.998,
+     "bottom": -432.349
+    },
+    "rowText": "how do i beat the boss at the end of the first area\u00d7what is a good way to practice parrying in action games+",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "ring": {
+     "tag": "BUTTON",
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "Why is my Deck running hot?",
+     "rect": {
+      "x": 47.998,
+      "y": 601.355,
+      "w": 300,
+      "h": 29.993,
+      "right": 347.998,
+      "bottom": 631.348
+     }
+    },
+    "els": [
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-row-inner",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 47.998,
+       "y": -476.892,
+       "w": 300,
+       "h": 44.543,
+       "right": 347.998,
+       "bottom": -432.349
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-center",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 55.994,
+       "y": -471.118,
+       "w": 284.009,
+       "h": 32.996,
+       "right": 340.002,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-game",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 55.994,
+       "y": -471.118,
+       "w": 284.009,
+       "h": 10.999,
+       "right": 340.002,
+       "bottom": -460.12
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-title-row bonsai-chat-slot-title-row--has-save",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 55.994,
+       "y": -461.108,
+       "w": 284.009,
+       "h": 21.997,
+       "right": 340.002,
+       "bottom": -439.111
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev bonsai-chat-slot-ghost--create",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 83.984,
+       "y": -456.116,
+       "w": 12,
+       "h": 12,
+       "right": 95.984,
+       "bottom": -444.116
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "svg",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 83.984,
+       "y": -456.116,
+       "w": 12,
+       "h": 12,
+       "right": 95.984,
+       "bottom": -444.116
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 85.984,
+       "y": -454.116,
+       "w": 8,
+       "h": 8,
+       "right": 93.984,
+       "bottom": -446.116
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 87.984,
+       "y": -454.676,
+       "w": 6.56,
+       "h": 6.56,
+       "right": 94.545,
+       "bottom": -448.116
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-save",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 55.994,
+       "y": -461.108,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 77.991,
+       "bottom": -439.111
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "svg",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 59.998,
+       "y": -457.104,
+       "w": 13.989,
+       "h": 13.989,
+       "right": 73.987,
+       "bottom": -443.115
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 62.329,
+       "y": -454.773,
+       "w": 9.326,
+       "h": 9.326,
+       "right": 71.655,
+       "bottom": -445.447
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 64.661,
+       "y": -454.773,
+       "w": 4.08,
+       "h": 2.914,
+       "right": 68.741,
+       "bottom": -451.859
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "path",
+      "cls": "",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 64.078,
+       "y": -448.944,
+       "w": 5.829,
+       "h": 3.497,
+       "right": 69.907,
+       "bottom": -445.447
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 109.973,
+       "y": -457.312,
+       "w": 177.454,
+       "h": 14.392,
+       "right": 287.427,
+       "bottom": -442.92
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-title-inner",
+      "aria": null,
+      "text": "how do i beat the boss at the end of the first are",
+      "rect": {
+       "x": 109.973,
+       "y": -457.312,
+       "w": 283.362,
+       "h": 14.392,
+       "right": 393.335,
+       "bottom": -442.92
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-delete",
+      "aria": null,
+      "text": "\u00d7",
+      "rect": {
+       "x": 318.005,
+       "y": -461.108,
+       "w": 21.997,
+       "h": 21.997,
+       "right": 340.002,
+       "bottom": -439.111
+      },
+      "opacity": "0.85",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-ghost bonsai-chat-slot-ghost--next",
+      "aria": null,
+      "text": "what is a good way to practice parrying in action ",
+      "rect": {
+       "x": 293.42,
+       "y": -457.922,
+       "w": 42.59,
+       "h": 15.625,
+       "right": 336.011,
+       "bottom": -442.297
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-slot-dots",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 55.994,
+       "y": -442.114,
+       "w": 284.009,
+       "h": 3.992,
+       "right": 340.002,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 156.055,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 160.046,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 166.04,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 170.032,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 176.025,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 180.017,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 186.011,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 190.002,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.996,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 199.988,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 205.981,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 209.973,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 215.967,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 219.958,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 225.952,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 229.944,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 235.938,
+       "y": -442.114,
+       "w": 3.992,
+       "h": 3.992,
+       "right": 239.929,
+       "bottom": -438.123
+      },
+      "opacity": "1",
+      "focusable": false
+     }
+    ]
+   }
+  }
+ }
+}

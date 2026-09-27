@@ -1,0 +1,80 @@
+{
+ "row": "plan72-F-TIP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:44:30 to 14:45:01 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "speed (was strategy)",
+  "ask_think_effort": "off",
+  "chat": "the new chat from F-STRAT (Hollow Knight question)",
+  "gameRunning": "none (Context: no active game detected)"
+ },
+ "question": "deep rock galactic survivor the text looks blurry on my deck, how do i fix it",
+ "pressed": "send script; walkTo DOWN 3 to Ask; A; answer done in about 10 s; walkTo UP 3 to Show details; A",
+ "seen": {
+  "answerMentionsRenderScale": true,
+  "notesBlock": "a card titled 'Display' with the line 'From this game's Deck tips'",
+  "knowledgeBaseCard": "steamcommunity.com \u00b7 bonsAI-maintainer, with a chip reading 'Deep Rock Galactic: Surviv...' (full text 'Deep Rock Galactic: Survivor \u2014 display')",
+  "developerBullets": [
+   "Retrieval: Keyword search",
+   "Source: shared troubleshooting tips",
+   "Trust tier: wiki_no_patch",
+   "compat_tips"
+  ],
+  "otherChips": [
+   "Keyword search",
+   "KB: 13 sections",
+   "Reply style: balanced",
+   "Spoiler risk: low",
+   "Routed gemma4:e2b-it-qat",
+   "Developer details"
+  ]
+ },
+ "screenshot": "screenshots/plan72/F-TIP-details.png",
+ "verdict": "UNCLEAR",
+ "verdictReason": "The credit chip names 'Deep Rock Galactic: Survivor \u2014 display' and the notes card says 'From this game's Deck tips', as expected. But the same panel still lists 'Source: shared troubleshooting tips' under the knowledge-base card. The session decides whether that bullet is the credit line the fix was meant to change.",
+ "reads": {
+  "details": {
+   "deckTime": "2026-09-27 14:44:57 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "Hide details",
+    "answer": "deep rock galactic survivor the text looks blurry on my deck, how do i fix it\n\nListen up, mate, if the text in Deep Rock Galactic Survivor looks like a blurry mess, it's usually down to how the game is scaling things on your screen. Don't go blaming the screen or anything, yeah?\n\nYou gotta look at the Render Scale setting in the game's options. If that slider is way off, it can make everything look dodgy. Try bumping the Render Scale up a bit. The local knowledge says that if it's below about 90%, things get hard to read. Just crank it up till it looks right for ya.\n\nWas this helpful?\nHelpful\nNot really\nHide details \u2191\nDisplay\n\u25b8\nFrom this game's Deck tips\nThis answer\nSession \u00b7 2\nChip 1 of 6\nKeyword search\nKB: 13 sections\nReply style: balanced\nSpoiler risk: low\nRouted gemma4:e2b-it-qat\nDeveloper details\nLocal knowledge base\nsteamcommunity.com \u00b7 bonsAI-maintainer\nDeep Rock Galactic: Survivor \u2014 display\nRetrieval: Keyword search\nSource: shared troubleshooting tips\nTrust tier: wiki_no_patch\ncompat_tips",
+    "hits": [
+     {
+      "cls": "bonsai-chat-turn-row-title",
+      "text": "deep rock galactic survivor the text looks blurry on my deck, how do i fix it"
+     },
+     {
+      "cls": "bonsai-md-p",
+      "text": "Listen up, mate, if the text in Deep Rock Galactic Survivor looks like a blurry mess, it's usually down to how the game is scaling things on your screen. Don't "
+     },
+     {
+      "cls": "bonsai-md-p",
+      "text": "You gotta look at the Render Scale setting in the game's options. If that slider is way off, it can make everything look dodgy. Try bumping the Render Scale up "
+     },
+     {
+      "cls": "",
+      "text": "From this game's Deck tips"
+     },
+     {
+      "cls": "",
+      "text": "Deep Rock Galactic: Survivor \u2014 display"
+     },
+     {
+      "cls": "",
+      "text": "Source: shared troubleshooting tips"
+     }
+    ],
+    "scopeText": "LB\nMAIN\nRB\nHollow Knight how do I beat the big guy in the arena with the green sword\n\u00d7\nHades the boss at the end of the first area keeps killing me, any tips\n+\nHollow Knight how do I beat the big guy in the arena with t\u2026\ndeep rock galactic survivor the text looks blurry on my deck, how do i fix it\n\nListen up, mate, if the text in Deep Rock Galactic Survivor looks like a blurry mess, it's usually down to how the game is scaling things on your screen. Don't go blaming the screen or anything, yeah?\n\nYou gotta look at the Render Scale setting in the game's options. If that slider is way off, it can make everything look dodgy. Try bumping the Render Scale up a bit. The local knowledge says that if it's below about 90%, things get hard to read. Just crank it up till it looks right for ya.\n\nWas this helpful?\nHelpful\nNot really\nHide details \u2191\nDisplay\n\u25b8\nFrom this game's Deck tips\nThis answer\nSession \u00b7 2\nChip 1 of 6\nKeyword search\nKB: 13 sections\nReply style: balanced\nSpoiler risk: low\nRouted gemma4:e2b-it-qat\nDeveloper details\nLocal knowledge base\nsteamcommunity.com \u00b7 bonsAI-maintainer\nDeep Rock Galactic: Survivor \u2014 display\nRetrieval: Keyword search\nSource: shared troubleshooting tips\nTrust tier: wiki_no_patch\ncompat_tips\nWhat are the best FSR settings?\nA\nSpeed\nask\nContext: no active game detected"
+   }
+  }
+ }
+}

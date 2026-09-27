@@ -1,0 +1,2938 @@
+{
+ "row": "plan72-F-SCROLL",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:04:55 (name) and 14:06:00 (chip) EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld"
+ },
+ "pressed": "name: ring on the chat row, LB to 'how do i beat the boss at the end of the first area' (title class --overflowing); sampler every 100 ms for 26 s; RB then LB to remount the name. chip: ring on the chip 'Which Ollama essentials should I pull for this Deck?'; sampler every 100 ms for 26 s; Down then Up (the chip kept scrolling, it did not restart). In F-HIDDEN, 5 more minutes of chip samples: no other chip long enough to scroll appeared.",
+ "seen": {
+  "name": {
+   "howItScrollsNow": "Steam's own marquee (same as the chips): two copies of the name, linear, infinite; CSS delay 1.75 s, duration 14.168 s, copy width 307.36 px, edge fades 8 px",
+   "startPause_s": "1.75 measured (name back on screen at about 0.85-0.9 s, first movement between 2.6 and 2.7 s)",
+   "speed_px_per_s": 21.69,
+   "loop": "seamless: at -305.5 px the next copy takes over (-0.3 px), no rewind"
+  },
+  "chip": {
+   "animation": "same Steam marquee: linear, infinite, CSS delay 1.75 s, duration 14.404 s, copy width 312.07 px",
+   "startPause_s": "1.75 from its CSS; not caught on screen (the chip was already scrolling when sampled and no new long chip mounted in 5 minutes)",
+   "speed_px_per_s": 21.67,
+   "loop": "seamless at -311.9 px -> -2.0 px, no rewind"
+  },
+  "comparison": {
+   "startPauseDifference_s": "0 by CSS (both 1.75); name measured 1.75",
+   "speedDifference": "21.69 vs 21.67 px/s: 0.1%",
+   "loopSame": true,
+   "bothSlowerThanBlock1Chip_27_4": true
+  }
+ },
+ "expected": "both wait about the same before moving (+-0.3 s), move at the same steady speed (+-15%), loop the same way; both slower than block 1's chip (27.4 px/s)",
+ "judgement": "Speed, steadiness and loop match, and both are slower than 27.4 px/s. The start pause matches by the settings the page gives both (1.75 s) and by measurement for the name; the chip's pause was not caught live.",
+ "screenshot": null,
+ "verdict": "PASS",
+ "reads": {
+  "nameSeries": {
+   "deckTime": "2026-09-27 14:05:19 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "t0": 337034.6000000015,
+    "samples": [
+     [
+      0.1,
+      "how do i bea",
+      -73.37
+     ],
+     [
+      0.2,
+      "how do i bea",
+      -75.55
+     ],
+     [
+      0.3,
+      "how do i bea",
+      -77.71
+     ],
+     [
+      0.4,
+      "how do i bea",
+      -79.88
+     ],
+     [
+      0.51,
+      "Hades",
+      null
+     ],
+     [
+      0.6,
+      "Hades",
+      null
+     ],
+     [
+      0.7,
+      "Hades",
+      null
+     ],
+     [
+      0.8,
+      "Hades",
+      null
+     ],
+     [
+      0.9,
+      "how do i bea",
+      0
+     ],
+     [
+      1,
+      "how do i bea",
+      0
+     ],
+     [
+      1.1,
+      "how do i bea",
+      0
+     ],
+     [
+      1.2,
+      "how do i bea",
+      0
+     ],
+     [
+      1.3,
+      "how do i bea",
+      0
+     ],
+     [
+      1.4,
+      "how do i bea",
+      0
+     ],
+     [
+      1.5,
+      "how do i bea",
+      0
+     ],
+     [
+      1.6,
+      "how do i bea",
+      0
+     ],
+     [
+      1.7,
+      "how do i bea",
+      0
+     ],
+     [
+      1.8,
+      "how do i bea",
+      0
+     ],
+     [
+      1.9,
+      "how do i bea",
+      0
+     ],
+     [
+      2,
+      "how do i bea",
+      0
+     ],
+     [
+      2.1,
+      "how do i bea",
+      0
+     ],
+     [
+      2.2,
+      "how do i bea",
+      0
+     ],
+     [
+      2.3,
+      "how do i bea",
+      0
+     ],
+     [
+      2.4,
+      "how do i bea",
+      0
+     ],
+     [
+      2.5,
+      "how do i bea",
+      0
+     ],
+     [
+      2.6,
+      "how do i bea",
+      0
+     ],
+     [
+      2.7,
+      "how do i bea",
+      -1.81
+     ],
+     [
+      2.8,
+      "how do i bea",
+      -3.98
+     ],
+     [
+      2.9,
+      "how do i bea",
+      -6.15
+     ],
+     [
+      3,
+      "how do i bea",
+      -8.32
+     ],
+     [
+      3.1,
+      "how do i bea",
+      -10.49
+     ],
+     [
+      3.2,
+      "how do i bea",
+      -12.66
+     ],
+     [
+      3.3,
+      "how do i bea",
+      -14.83
+     ],
+     [
+      3.4,
+      "how do i bea",
+      -17
+     ],
+     [
+      3.5,
+      "how do i bea",
+      -19.17
+     ],
+     [
+      3.6,
+      "how do i bea",
+      -21.34
+     ],
+     [
+      3.7,
+      "how do i bea",
+      -23.51
+     ],
+     [
+      3.8,
+      "how do i bea",
+      -25.65
+     ],
+     [
+      3.9,
+      "how do i bea",
+      -27.82
+     ],
+     [
+      4,
+      "how do i bea",
+      -29.99
+     ],
+     [
+      4.1,
+      "how do i bea",
+      -32.16
+     ],
+     [
+      4.2,
+      "how do i bea",
+      -34.34
+     ],
+     [
+      4.3,
+      "how do i bea",
+      -36.51
+     ],
+     [
+      4.4,
+      "how do i bea",
+      -38.68
+     ],
+     [
+      4.5,
+      "how do i bea",
+      -40.85
+     ],
+     [
+      4.6,
+      "how do i bea",
+      -43.02
+     ],
+     [
+      4.7,
+      "how do i bea",
+      -45.19
+     ],
+     [
+      4.8,
+      "how do i bea",
+      -47.36
+     ],
+     [
+      4.9,
+      "how do i bea",
+      -49.53
+     ],
+     [
+      5,
+      "how do i bea",
+      -51.7
+     ],
+     [
+      5.1,
+      "how do i bea",
+      -53.87
+     ],
+     [
+      5.2,
+      "how do i bea",
+      -56.04
+     ],
+     [
+      5.3,
+      "how do i bea",
+      -58.21
+     ],
+     [
+      5.4,
+      "how do i bea",
+      -60.38
+     ],
+     [
+      5.5,
+      "how do i bea",
+      -62.55
+     ],
+     [
+      5.6,
+      "how do i bea",
+      -64.72
+     ],
+     [
+      5.7,
+      "how do i bea",
+      -66.89
+     ],
+     [
+      5.8,
+      "how do i bea",
+      -69.06
+     ],
+     [
+      5.9,
+      "how do i bea",
+      -71.23
+     ],
+     [
+      6,
+      "how do i bea",
+      -73.4
+     ],
+     [
+      6.1,
+      "how do i bea",
+      -75.57
+     ],
+     [
+      6.2,
+      "how do i bea",
+      -77.74
+     ],
+     [
+      6.3,
+      "how do i bea",
+      -79.91
+     ],
+     [
+      6.4,
+      "how do i bea",
+      -82.08
+     ],
+     [
+      6.5,
+      "how do i bea",
+      -84.25
+     ],
+     [
+      6.6,
+      "how do i bea",
+      -86.42
+     ],
+     [
+      6.7,
+      "how do i bea",
+      -88.59
+     ],
+     [
+      6.8,
+      "how do i bea",
+      -90.75
+     ],
+     [
+      6.9,
+      "how do i bea",
+      -92.92
+     ],
+     [
+      7,
+      "how do i bea",
+      -95.09
+     ],
+     [
+      7.1,
+      "how do i bea",
+      -97.26
+     ],
+     [
+      7.2,
+      "how do i bea",
+      -99.43
+     ],
+     [
+      7.31,
+      "how do i bea",
+      -101.6
+     ],
+     [
+      7.4,
+      "how do i bea",
+      -103.77
+     ],
+     [
+      7.5,
+      "how do i bea",
+      -105.94
+     ],
+     [
+      7.6,
+      "how do i bea",
+      -108.11
+     ],
+     [
+      7.7,
+      "how do i bea",
+      -110.28
+     ],
+     [
+      7.8,
+      "how do i bea",
+      -112.45
+     ],
+     [
+      7.9,
+      "how do i bea",
+      -114.62
+     ],
+     [
+      8,
+      "how do i bea",
+      -116.79
+     ],
+     [
+      8.1,
+      "how do i bea",
+      -118.96
+     ],
+     [
+      8.2,
+      "how do i bea",
+      -121.13
+     ],
+     [
+      8.3,
+      "how do i bea",
+      -123.3
+     ],
+     [
+      8.4,
+      "how do i bea",
+      -125.47
+     ],
+     [
+      8.5,
+      "how do i bea",
+      -127.64
+     ],
+     [
+      8.6,
+      "how do i bea",
+      -129.8
+     ],
+     [
+      8.7,
+      "how do i bea",
+      -131.98
+     ],
+     [
+      8.8,
+      "how do i bea",
+      -134.15
+     ],
+     [
+      8.9,
+      "how do i bea",
+      -136.31
+     ],
+     [
+      9,
+      "how do i bea",
+      -138.48
+     ],
+     [
+      9.1,
+      "how do i bea",
+      -140.65
+     ],
+     [
+      9.2,
+      "how do i bea",
+      -142.82
+     ],
+     [
+      9.3,
+      "how do i bea",
+      -144.99
+     ],
+     [
+      9.4,
+      "how do i bea",
+      -147.16
+     ],
+     [
+      9.5,
+      "how do i bea",
+      -149.33
+     ],
+     [
+      9.6,
+      "how do i bea",
+      -151.5
+     ],
+     [
+      9.7,
+      "how do i bea",
+      -153.67
+     ],
+     [
+      9.8,
+      "how do i bea",
+      -155.84
+     ],
+     [
+      9.9,
+      "how do i bea",
+      -158.01
+     ],
+     [
+      10,
+      "how do i bea",
+      -160.18
+     ],
+     [
+      10.1,
+      "how do i bea",
+      -162.35
+     ],
+     [
+      10.2,
+      "how do i bea",
+      -164.52
+     ],
+     [
+      10.3,
+      "how do i bea",
+      -166.69
+     ],
+     [
+      10.4,
+      "how do i bea",
+      -168.85
+     ],
+     [
+      10.5,
+      "how do i bea",
+      -171.03
+     ],
+     [
+      10.6,
+      "how do i bea",
+      -173.19
+     ],
+     [
+      10.7,
+      "how do i bea",
+      -175.36
+     ],
+     [
+      10.8,
+      "how do i bea",
+      -177.53
+     ],
+     [
+      10.9,
+      "how do i bea",
+      -179.7
+     ],
+     [
+      11,
+      "how do i bea",
+      -181.88
+     ],
+     [
+      11.1,
+      "how do i bea",
+      -184.04
+     ],
+     [
+      11.2,
+      "how do i bea",
+      -186.21
+     ],
+     [
+      11.3,
+      "how do i bea",
+      -188.38
+     ],
+     [
+      11.4,
+      "how do i bea",
+      -190.55
+     ],
+     [
+      11.5,
+      "how do i bea",
+      -192.72
+     ],
+     [
+      11.6,
+      "how do i bea",
+      -194.89
+     ],
+     [
+      11.7,
+      "how do i bea",
+      -197.06
+     ],
+     [
+      11.8,
+      "how do i bea",
+      -199.23
+     ],
+     [
+      11.9,
+      "how do i bea",
+      -201.4
+     ],
+     [
+      12,
+      "how do i bea",
+      -203.57
+     ],
+     [
+      12.1,
+      "how do i bea",
+      -205.74
+     ],
+     [
+      12.2,
+      "how do i bea",
+      -207.91
+     ],
+     [
+      12.3,
+      "how do i bea",
+      -210.08
+     ],
+     [
+      12.4,
+      "how do i bea",
+      -212.25
+     ],
+     [
+      12.55,
+      "how do i bea",
+      -215.5
+     ],
+     [
+      12.6,
+      "how do i bea",
+      -216.58
+     ],
+     [
+      12.7,
+      "how do i bea",
+      -218.75
+     ],
+     [
+      12.8,
+      "how do i bea",
+      -220.92
+     ],
+     [
+      12.9,
+      "how do i bea",
+      -223.09
+     ],
+     [
+      13,
+      "how do i bea",
+      -225.26
+     ],
+     [
+      13.1,
+      "how do i bea",
+      -227.43
+     ],
+     [
+      13.2,
+      "how do i bea",
+      -229.6
+     ],
+     [
+      13.3,
+      "how do i bea",
+      -231.77
+     ],
+     [
+      13.4,
+      "how do i bea",
+      -233.94
+     ],
+     [
+      13.5,
+      "how do i bea",
+      -236.11
+     ],
+     [
+      13.6,
+      "how do i bea",
+      -238.28
+     ],
+     [
+      13.7,
+      "how do i bea",
+      -240.45
+     ],
+     [
+      13.8,
+      "how do i bea",
+      -242.62
+     ],
+     [
+      13.9,
+      "how do i bea",
+      -244.79
+     ],
+     [
+      14,
+      "how do i bea",
+      -246.96
+     ],
+     [
+      14.1,
+      "how do i bea",
+      -249.13
+     ],
+     [
+      14.2,
+      "how do i bea",
+      -251.29
+     ],
+     [
+      14.3,
+      "how do i bea",
+      -253.46
+     ],
+     [
+      14.4,
+      "how do i bea",
+      -255.63
+     ],
+     [
+      14.5,
+      "how do i bea",
+      -257.8
+     ],
+     [
+      14.6,
+      "how do i bea",
+      -259.97
+     ],
+     [
+      14.7,
+      "how do i bea",
+      -262.14
+     ],
+     [
+      14.8,
+      "how do i bea",
+      -264.31
+     ],
+     [
+      14.9,
+      "how do i bea",
+      -266.48
+     ],
+     [
+      15,
+      "how do i bea",
+      -268.65
+     ],
+     [
+      15.1,
+      "how do i bea",
+      -270.82
+     ],
+     [
+      15.2,
+      "how do i bea",
+      -272.99
+     ],
+     [
+      15.3,
+      "how do i bea",
+      -275.16
+     ],
+     [
+      15.4,
+      "how do i bea",
+      -277.33
+     ],
+     [
+      15.5,
+      "how do i bea",
+      -279.5
+     ],
+     [
+      15.6,
+      "how do i bea",
+      -281.67
+     ],
+     [
+      15.7,
+      "how do i bea",
+      -283.84
+     ],
+     [
+      15.8,
+      "how do i bea",
+      -286.01
+     ],
+     [
+      15.9,
+      "how do i bea",
+      -288.18
+     ],
+     [
+      16,
+      "how do i bea",
+      -290.35
+     ],
+     [
+      16.1,
+      "how do i bea",
+      -292.51
+     ],
+     [
+      16.2,
+      "how do i bea",
+      -294.68
+     ],
+     [
+      16.3,
+      "how do i bea",
+      -296.85
+     ],
+     [
+      16.4,
+      "how do i bea",
+      -299.02
+     ],
+     [
+      16.5,
+      "how do i bea",
+      -301.19
+     ],
+     [
+      16.6,
+      "how do i bea",
+      -303.36
+     ],
+     [
+      16.7,
+      "how do i bea",
+      -305.53
+     ],
+     [
+      16.8,
+      "how do i bea",
+      -0.34
+     ],
+     [
+      16.9,
+      "how do i bea",
+      -2.51
+     ],
+     [
+      17,
+      "how do i bea",
+      -4.68
+     ],
+     [
+      17.1,
+      "how do i bea",
+      -6.85
+     ],
+     [
+      17.2,
+      "how do i bea",
+      -9.02
+     ],
+     [
+      17.3,
+      "how do i bea",
+      -11.19
+     ],
+     [
+      17.4,
+      "how do i bea",
+      -13.36
+     ],
+     [
+      17.5,
+      "how do i bea",
+      -15.53
+     ],
+     [
+      17.6,
+      "how do i bea",
+      -17.69
+     ],
+     [
+      17.7,
+      "how do i bea",
+      -19.86
+     ],
+     [
+      17.8,
+      "how do i bea",
+      -22.03
+     ],
+     [
+      17.9,
+      "how do i bea",
+      -24.2
+     ],
+     [
+      18,
+      "how do i bea",
+      -26.37
+     ],
+     [
+      18.1,
+      "how do i bea",
+      -28.54
+     ],
+     [
+      18.2,
+      "how do i bea",
+      -30.71
+     ],
+     [
+      18.3,
+      "how do i bea",
+      -32.88
+     ],
+     [
+      18.4,
+      "how do i bea",
+      -35.05
+     ],
+     [
+      18.5,
+      "how do i bea",
+      -37.22
+     ],
+     [
+      18.6,
+      "how do i bea",
+      -39.39
+     ],
+     [
+      18.7,
+      "how do i bea",
+      -41.56
+     ],
+     [
+      18.8,
+      "how do i bea",
+      -43.73
+     ],
+     [
+      18.9,
+      "how do i bea",
+      -45.9
+     ],
+     [
+      19,
+      "how do i bea",
+      -48.07
+     ],
+     [
+      19.1,
+      "how do i bea",
+      -50.24
+     ],
+     [
+      19.2,
+      "how do i bea",
+      -52.41
+     ],
+     [
+      19.3,
+      "how do i bea",
+      -54.58
+     ],
+     [
+      19.4,
+      "how do i bea",
+      -56.74
+     ],
+     [
+      19.5,
+      "how do i bea",
+      -58.91
+     ],
+     [
+      19.6,
+      "how do i bea",
+      -61.08
+     ],
+     [
+      19.7,
+      "how do i bea",
+      -63.25
+     ],
+     [
+      19.8,
+      "how do i bea",
+      -65.42
+     ],
+     [
+      19.9,
+      "how do i bea",
+      -67.59
+     ],
+     [
+      20,
+      "how do i bea",
+      -69.76
+     ],
+     [
+      20.1,
+      "how do i bea",
+      -71.93
+     ],
+     [
+      20.2,
+      "how do i bea",
+      -74.1
+     ],
+     [
+      20.3,
+      "how do i bea",
+      -76.27
+     ],
+     [
+      20.4,
+      "how do i bea",
+      -78.44
+     ],
+     [
+      20.5,
+      "how do i bea",
+      -80.61
+     ],
+     [
+      20.6,
+      "how do i bea",
+      -82.78
+     ],
+     [
+      20.7,
+      "how do i bea",
+      -84.95
+     ],
+     [
+      20.8,
+      "how do i bea",
+      -87.12
+     ],
+     [
+      20.9,
+      "how do i bea",
+      -89.29
+     ],
+     [
+      21,
+      "how do i bea",
+      -91.46
+     ],
+     [
+      21.1,
+      "how do i bea",
+      -93.63
+     ],
+     [
+      21.2,
+      "how do i bea",
+      -95.79
+     ],
+     [
+      21.3,
+      "how do i bea",
+      -97.96
+     ],
+     [
+      21.4,
+      "how do i bea",
+      -100.13
+     ],
+     [
+      21.5,
+      "how do i bea",
+      -102.3
+     ],
+     [
+      21.6,
+      "how do i bea",
+      -104.47
+     ],
+     [
+      21.7,
+      "how do i bea",
+      -106.64
+     ],
+     [
+      21.8,
+      "how do i bea",
+      -108.81
+     ],
+     [
+      21.9,
+      "how do i bea",
+      -110.98
+     ],
+     [
+      22,
+      "how do i bea",
+      -113.15
+     ],
+     [
+      22.1,
+      "how do i bea",
+      -115.32
+     ],
+     [
+      22.2,
+      "how do i bea",
+      -117.49
+     ],
+     [
+      22.3,
+      "how do i bea",
+      -119.66
+     ],
+     [
+      22.4,
+      "how do i bea",
+      -121.83
+     ],
+     [
+      22.5,
+      "how do i bea",
+      -124
+     ],
+     [
+      22.6,
+      "how do i bea",
+      -126.17
+     ],
+     [
+      22.7,
+      "how do i bea",
+      -128.34
+     ],
+     [
+      22.8,
+      "how do i bea",
+      -130.5
+     ],
+     [
+      22.9,
+      "how do i bea",
+      -132.68
+     ],
+     [
+      23,
+      "how do i bea",
+      -134.84
+     ],
+     [
+      23.1,
+      "how do i bea",
+      -137.01
+     ],
+     [
+      23.2,
+      "how do i bea",
+      -139.18
+     ],
+     [
+      23.3,
+      "how do i bea",
+      -141.35
+     ],
+     [
+      23.4,
+      "how do i bea",
+      -143.52
+     ],
+     [
+      23.5,
+      "how do i bea",
+      -145.69
+     ],
+     [
+      23.6,
+      "how do i bea",
+      -147.86
+     ],
+     [
+      23.7,
+      "how do i bea",
+      -150.03
+     ],
+     [
+      23.8,
+      "how do i bea",
+      -152.2
+     ],
+     [
+      23.9,
+      "how do i bea",
+      -154.37
+     ],
+     [
+      24,
+      "how do i bea",
+      -156.54
+     ],
+     [
+      24.1,
+      "how do i bea",
+      -158.71
+     ],
+     [
+      24.2,
+      "how do i bea",
+      -160.88
+     ],
+     [
+      24.3,
+      "how do i bea",
+      -163.05
+     ],
+     [
+      24.4,
+      "how do i bea",
+      -165.22
+     ],
+     [
+      24.5,
+      "how do i bea",
+      -167.39
+     ],
+     [
+      24.6,
+      "how do i bea",
+      -169.56
+     ],
+     [
+      24.7,
+      "how do i bea",
+      -171.72
+     ],
+     [
+      24.8,
+      "how do i bea",
+      -173.89
+     ],
+     [
+      24.9,
+      "how do i bea",
+      -176.06
+     ],
+     [
+      25,
+      "how do i bea",
+      -178.23
+     ],
+     [
+      25.1,
+      "how do i bea",
+      -180.4
+     ],
+     [
+      25.2,
+      "how do i bea",
+      -182.57
+     ],
+     [
+      25.3,
+      "how do i bea",
+      -184.74
+     ],
+     [
+      25.4,
+      "how do i bea",
+      -186.91
+     ],
+     [
+      25.5,
+      "how do i bea",
+      -189.08
+     ],
+     [
+      25.6,
+      "how do i bea",
+      -191.25
+     ],
+     [
+      25.7,
+      "how do i bea",
+      -193.42
+     ],
+     [
+      25.8,
+      "how do i bea",
+      -195.59
+     ],
+     [
+      25.9,
+      "how do i bea",
+      -197.76
+     ],
+     [
+      26,
+      "how do i bea",
+      -199.93
+     ]
+    ]
+   }
+  },
+  "chipSeries": {
+   "deckTime": "2026-09-27 14:06:30 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "t0": 407499.30000000447,
+    "samples": [
+     [
+      0.1,
+      "Which Ollama e",
+      -298.97,
+      1
+     ],
+     [
+      0.2,
+      "Which Ollama e",
+      -301.13,
+      1
+     ],
+     [
+      0.35,
+      "Which Ollama e",
+      -304.38,
+      0
+     ],
+     [
+      0.4,
+      "Which Ollama e",
+      -305.47,
+      0
+     ],
+     [
+      0.5,
+      "Which Ollama e",
+      -307.63,
+      0
+     ],
+     [
+      0.6,
+      "Which Ollama e",
+      -309.8,
+      0
+     ],
+     [
+      0.7,
+      "Which Ollama e",
+      -311.97,
+      1
+     ],
+     [
+      0.8,
+      "Which Ollama e",
+      -2.06,
+      1
+     ],
+     [
+      0.9,
+      "Which Ollama e",
+      -4.23,
+      1
+     ],
+     [
+      1,
+      "Which Ollama e",
+      -6.39,
+      1
+     ],
+     [
+      1.1,
+      "Which Ollama e",
+      -8.56,
+      1
+     ],
+     [
+      1.2,
+      "Which Ollama e",
+      -10.73,
+      1
+     ],
+     [
+      1.3,
+      "Which Ollama e",
+      -12.89,
+      1
+     ],
+     [
+      1.4,
+      "Which Ollama e",
+      -15.06,
+      1
+     ],
+     [
+      1.5,
+      "Which Ollama e",
+      -17.23,
+      1
+     ],
+     [
+      1.6,
+      "Which Ollama e",
+      -19.39,
+      1
+     ],
+     [
+      1.7,
+      "Which Ollama e",
+      -21.56,
+      1
+     ],
+     [
+      1.8,
+      "Which Ollama e",
+      -23.73,
+      1
+     ],
+     [
+      1.9,
+      "Which Ollama e",
+      -25.89,
+      1
+     ],
+     [
+      2,
+      "Which Ollama e",
+      -28.06,
+      1
+     ],
+     [
+      2.1,
+      "Which Ollama e",
+      -30.23,
+      1
+     ],
+     [
+      2.2,
+      "Which Ollama e",
+      -32.39,
+      1
+     ],
+     [
+      2.3,
+      "Which Ollama e",
+      -34.56,
+      1
+     ],
+     [
+      2.4,
+      "Which Ollama e",
+      -36.73,
+      1
+     ],
+     [
+      2.5,
+      "Which Ollama e",
+      -38.89,
+      1
+     ],
+     [
+      2.6,
+      "Which Ollama e",
+      -41.06,
+      1
+     ],
+     [
+      2.7,
+      "Which Ollama e",
+      -43.23,
+      1
+     ],
+     [
+      2.8,
+      "Which Ollama e",
+      -45.39,
+      1
+     ],
+     [
+      2.9,
+      "Which Ollama e",
+      -47.56,
+      1
+     ],
+     [
+      3,
+      "Which Ollama e",
+      -49.73,
+      1
+     ],
+     [
+      3.1,
+      "Which Ollama e",
+      -51.89,
+      1
+     ],
+     [
+      3.2,
+      "Which Ollama e",
+      -54.06,
+      1
+     ],
+     [
+      3.3,
+      "Which Ollama e",
+      -56.23,
+      1
+     ],
+     [
+      3.4,
+      "Which Ollama e",
+      -58.4,
+      1
+     ],
+     [
+      3.5,
+      "Which Ollama e",
+      -60.56,
+      1
+     ],
+     [
+      3.6,
+      "Which Ollama e",
+      -62.73,
+      1
+     ],
+     [
+      3.7,
+      "Which Ollama e",
+      -64.9,
+      1
+     ],
+     [
+      3.8,
+      "Which Ollama e",
+      -67.06,
+      1
+     ],
+     [
+      3.9,
+      "Which Ollama e",
+      -69.23,
+      1
+     ],
+     [
+      4,
+      "Which Ollama e",
+      -71.39,
+      1
+     ],
+     [
+      4.1,
+      "Which Ollama e",
+      -73.56,
+      1
+     ],
+     [
+      4.2,
+      "Which Ollama e",
+      -75.73,
+      1
+     ],
+     [
+      4.3,
+      "Which Ollama e",
+      -77.89,
+      1
+     ],
+     [
+      4.4,
+      "Which Ollama e",
+      -80.06,
+      1
+     ],
+     [
+      4.5,
+      "Which Ollama e",
+      -82.23,
+      1
+     ],
+     [
+      4.6,
+      "Which Ollama e",
+      -84.39,
+      1
+     ],
+     [
+      4.7,
+      "Which Ollama e",
+      -86.56,
+      1
+     ],
+     [
+      4.8,
+      "Which Ollama e",
+      -88.73,
+      1
+     ],
+     [
+      4.9,
+      "Which Ollama e",
+      -90.89,
+      1
+     ],
+     [
+      5,
+      "Which Ollama e",
+      -93.06,
+      1
+     ],
+     [
+      5.1,
+      "Which Ollama e",
+      -95.23,
+      1
+     ],
+     [
+      5.2,
+      "Which Ollama e",
+      -97.39,
+      1
+     ],
+     [
+      5.3,
+      "Which Ollama e",
+      -99.56,
+      1
+     ],
+     [
+      5.4,
+      "Which Ollama e",
+      -101.73,
+      1
+     ],
+     [
+      5.5,
+      "Which Ollama e",
+      -103.89,
+      1
+     ],
+     [
+      5.6,
+      "Which Ollama e",
+      -106.06,
+      1
+     ],
+     [
+      5.7,
+      "Which Ollama e",
+      -108.23,
+      1
+     ],
+     [
+      5.8,
+      "Which Ollama e",
+      -110.39,
+      1
+     ],
+     [
+      5.9,
+      "Which Ollama e",
+      -112.56,
+      1
+     ],
+     [
+      6,
+      "Which Ollama e",
+      -114.73,
+      1
+     ],
+     [
+      6.1,
+      "Which Ollama e",
+      -116.89,
+      1
+     ],
+     [
+      6.2,
+      "Which Ollama e",
+      -119.06,
+      1
+     ],
+     [
+      6.3,
+      "Which Ollama e",
+      -121.23,
+      1
+     ],
+     [
+      6.4,
+      "Which Ollama e",
+      -123.39,
+      1
+     ],
+     [
+      6.5,
+      "Which Ollama e",
+      -125.56,
+      1
+     ],
+     [
+      6.6,
+      "Which Ollama e",
+      -127.73,
+      1
+     ],
+     [
+      6.7,
+      "Which Ollama e",
+      -129.89,
+      1
+     ],
+     [
+      6.8,
+      "Which Ollama e",
+      -132.06,
+      1
+     ],
+     [
+      6.9,
+      "Which Ollama e",
+      -134.23,
+      1
+     ],
+     [
+      7,
+      "Which Ollama e",
+      -136.39,
+      1
+     ],
+     [
+      7.1,
+      "Which Ollama e",
+      -138.56,
+      1
+     ],
+     [
+      7.2,
+      "Which Ollama e",
+      -140.73,
+      1
+     ],
+     [
+      7.3,
+      "Which Ollama e",
+      -142.89,
+      1
+     ],
+     [
+      7.4,
+      "Which Ollama e",
+      -145.06,
+      1
+     ],
+     [
+      7.5,
+      "Which Ollama e",
+      -147.23,
+      1
+     ],
+     [
+      7.6,
+      "Which Ollama e",
+      -149.4,
+      1
+     ],
+     [
+      7.7,
+      "Which Ollama e",
+      -151.56,
+      1
+     ],
+     [
+      7.8,
+      "Which Ollama e",
+      -153.73,
+      1
+     ],
+     [
+      7.9,
+      "Which Ollama e",
+      -155.9,
+      1
+     ],
+     [
+      8,
+      "Which Ollama e",
+      -158.06,
+      1
+     ],
+     [
+      8.1,
+      "Which Ollama e",
+      -160.23,
+      1
+     ],
+     [
+      8.2,
+      "Which Ollama e",
+      -162.4,
+      1
+     ],
+     [
+      8.3,
+      "Which Ollama e",
+      -164.56,
+      1
+     ],
+     [
+      8.4,
+      "Which Ollama e",
+      -166.73,
+      1
+     ],
+     [
+      8.5,
+      "Which Ollama e",
+      -168.89,
+      1
+     ],
+     [
+      8.6,
+      "Which Ollama e",
+      -171.06,
+      1
+     ],
+     [
+      8.7,
+      "Which Ollama e",
+      -173.23,
+      1
+     ],
+     [
+      8.8,
+      "Which Ollama e",
+      -175.4,
+      1
+     ],
+     [
+      8.9,
+      "Which Ollama e",
+      -177.56,
+      1
+     ],
+     [
+      9,
+      "Which Ollama e",
+      -179.73,
+      1
+     ],
+     [
+      9.1,
+      "Which Ollama e",
+      -181.9,
+      1
+     ],
+     [
+      9.2,
+      "Which Ollama e",
+      -184.06,
+      1
+     ],
+     [
+      9.3,
+      "Which Ollama e",
+      -186.23,
+      1
+     ],
+     [
+      9.4,
+      "Which Ollama e",
+      -188.39,
+      1
+     ],
+     [
+      9.5,
+      "Which Ollama e",
+      -190.56,
+      1
+     ],
+     [
+      9.6,
+      "Which Ollama e",
+      -192.73,
+      1
+     ],
+     [
+      9.7,
+      "Which Ollama e",
+      -194.89,
+      1
+     ],
+     [
+      9.8,
+      "Which Ollama e",
+      -197.06,
+      1
+     ],
+     [
+      9.9,
+      "Which Ollama e",
+      -199.23,
+      1
+     ],
+     [
+      10,
+      "Which Ollama e",
+      -201.39,
+      1
+     ],
+     [
+      10.1,
+      "Which Ollama e",
+      -203.56,
+      1
+     ],
+     [
+      10.2,
+      "Which Ollama e",
+      -205.73,
+      1
+     ],
+     [
+      10.3,
+      "Which Ollama e",
+      -207.89,
+      1
+     ],
+     [
+      10.4,
+      "Which Ollama e",
+      -210.06,
+      1
+     ],
+     [
+      10.5,
+      "Which Ollama e",
+      -212.23,
+      1
+     ],
+     [
+      10.6,
+      "Which Ollama e",
+      -214.39,
+      1
+     ],
+     [
+      10.7,
+      "Which Ollama e",
+      -216.56,
+      1
+     ],
+     [
+      10.8,
+      "Which Ollama e",
+      -218.73,
+      1
+     ],
+     [
+      10.9,
+      "Which Ollama e",
+      -220.89,
+      1
+     ],
+     [
+      11,
+      "Which Ollama e",
+      -223.06,
+      1
+     ],
+     [
+      11.1,
+      "Which Ollama e",
+      -225.23,
+      1
+     ],
+     [
+      11.2,
+      "Which Ollama e",
+      -227.39,
+      1
+     ],
+     [
+      11.3,
+      "Which Ollama e",
+      -229.56,
+      1
+     ],
+     [
+      11.4,
+      "Which Ollama e",
+      -231.73,
+      1
+     ],
+     [
+      11.5,
+      "Which Ollama e",
+      -233.9,
+      1
+     ],
+     [
+      11.6,
+      "Which Ollama e",
+      -236.06,
+      1
+     ],
+     [
+      11.7,
+      "Which Ollama e",
+      -238.23,
+      1
+     ],
+     [
+      11.8,
+      "Which Ollama e",
+      -240.4,
+      1
+     ],
+     [
+      11.9,
+      "Which Ollama e",
+      -242.56,
+      1
+     ],
+     [
+      12,
+      "Which Ollama e",
+      -244.73,
+      1
+     ],
+     [
+      12.1,
+      "Which Ollama e",
+      -246.9,
+      1
+     ],
+     [
+      12.2,
+      "Which Ollama e",
+      -249.06,
+      1
+     ],
+     [
+      12.3,
+      "Which Ollama e",
+      -251.23,
+      1
+     ],
+     [
+      12.4,
+      "Which Ollama e",
+      -253.4,
+      1
+     ],
+     [
+      12.5,
+      "Which Ollama e",
+      -255.56,
+      1
+     ],
+     [
+      12.6,
+      "Which Ollama e",
+      -257.73,
+      1
+     ],
+     [
+      12.7,
+      "Which Ollama e",
+      -259.89,
+      1
+     ],
+     [
+      12.8,
+      "Which Ollama e",
+      -262.06,
+      1
+     ],
+     [
+      12.9,
+      "Which Ollama e",
+      -264.23,
+      1
+     ],
+     [
+      13,
+      "Which Ollama e",
+      -266.39,
+      1
+     ],
+     [
+      13.1,
+      "Which Ollama e",
+      -268.56,
+      1
+     ],
+     [
+      13.2,
+      "Which Ollama e",
+      -270.73,
+      1
+     ],
+     [
+      13.3,
+      "Which Ollama e",
+      -272.89,
+      1
+     ],
+     [
+      13.4,
+      "Which Ollama e",
+      -275.06,
+      1
+     ],
+     [
+      13.5,
+      "Which Ollama e",
+      -277.23,
+      1
+     ],
+     [
+      13.6,
+      "Which Ollama e",
+      -279.39,
+      1
+     ],
+     [
+      13.7,
+      "Which Ollama e",
+      -281.56,
+      1
+     ],
+     [
+      13.8,
+      "Which Ollama e",
+      -283.73,
+      1
+     ],
+     [
+      13.9,
+      "Which Ollama e",
+      -285.89,
+      1
+     ],
+     [
+      14,
+      "Which Ollama e",
+      -288.06,
+      1
+     ],
+     [
+      14.1,
+      "Which Ollama e",
+      -290.23,
+      1
+     ],
+     [
+      14.2,
+      "Which Ollama e",
+      -292.39,
+      1
+     ],
+     [
+      14.3,
+      "Which Ollama e",
+      -294.56,
+      1
+     ],
+     [
+      14.4,
+      "Which Ollama e",
+      -296.73,
+      1
+     ],
+     [
+      14.5,
+      "Which Ollama e",
+      -298.89,
+      1
+     ],
+     [
+      14.6,
+      "Which Ollama e",
+      -301.06,
+      1
+     ],
+     [
+      14.7,
+      "Which Ollama e",
+      -303.23,
+      1
+     ],
+     [
+      14.8,
+      "Which Ollama e",
+      -305.39,
+      1
+     ],
+     [
+      14.9,
+      "Which Ollama e",
+      -307.56,
+      1
+     ],
+     [
+      15,
+      "Which Ollama e",
+      -309.73,
+      1
+     ],
+     [
+      15.1,
+      "Which Ollama e",
+      -311.89,
+      1
+     ],
+     [
+      15.2,
+      "Which Ollama e",
+      -1.99,
+      1
+     ],
+     [
+      15.3,
+      "Which Ollama e",
+      -4.15,
+      1
+     ],
+     [
+      15.4,
+      "Which Ollama e",
+      -6.32,
+      1
+     ],
+     [
+      15.5,
+      "Which Ollama e",
+      -8.49,
+      1
+     ],
+     [
+      15.6,
+      "Which Ollama e",
+      -10.65,
+      1
+     ],
+     [
+      15.7,
+      "Which Ollama e",
+      -12.82,
+      1
+     ],
+     [
+      15.8,
+      "Which Ollama e",
+      -14.99,
+      1
+     ],
+     [
+      15.9,
+      "Which Ollama e",
+      -17.16,
+      1
+     ],
+     [
+      16,
+      "Which Ollama e",
+      -19.32,
+      1
+     ],
+     [
+      16.1,
+      "Which Ollama e",
+      -21.49,
+      1
+     ],
+     [
+      16.2,
+      "Which Ollama e",
+      -23.66,
+      1
+     ],
+     [
+      16.3,
+      "Which Ollama e",
+      -25.82,
+      1
+     ],
+     [
+      16.4,
+      "Which Ollama e",
+      -27.99,
+      1
+     ],
+     [
+      16.5,
+      "Which Ollama e",
+      -30.16,
+      1
+     ],
+     [
+      16.6,
+      "Which Ollama e",
+      -32.32,
+      1
+     ],
+     [
+      16.7,
+      "Which Ollama e",
+      -34.49,
+      1
+     ],
+     [
+      16.8,
+      "Which Ollama e",
+      -36.66,
+      1
+     ],
+     [
+      16.9,
+      "Which Ollama e",
+      -38.82,
+      1
+     ],
+     [
+      17,
+      "Which Ollama e",
+      -40.99,
+      1
+     ],
+     [
+      17.1,
+      "Which Ollama e",
+      -43.16,
+      1
+     ],
+     [
+      17.2,
+      "Which Ollama e",
+      -45.32,
+      1
+     ],
+     [
+      17.3,
+      "Which Ollama e",
+      -47.49,
+      1
+     ],
+     [
+      17.4,
+      "Which Ollama e",
+      -49.66,
+      1
+     ],
+     [
+      17.5,
+      "Which Ollama e",
+      -51.82,
+      1
+     ],
+     [
+      17.6,
+      "Which Ollama e",
+      -53.99,
+      1
+     ],
+     [
+      17.7,
+      "Which Ollama e",
+      -56.16,
+      1
+     ],
+     [
+      17.8,
+      "Which Ollama e",
+      -58.32,
+      1
+     ],
+     [
+      17.9,
+      "Which Ollama e",
+      -60.49,
+      1
+     ],
+     [
+      18,
+      "Which Ollama e",
+      -62.66,
+      1
+     ],
+     [
+      18.1,
+      "Which Ollama e",
+      -64.82,
+      1
+     ],
+     [
+      18.2,
+      "Which Ollama e",
+      -66.99,
+      1
+     ],
+     [
+      18.3,
+      "Which Ollama e",
+      -69.16,
+      1
+     ],
+     [
+      18.4,
+      "Which Ollama e",
+      -71.32,
+      1
+     ],
+     [
+      18.5,
+      "Which Ollama e",
+      -73.49,
+      1
+     ],
+     [
+      18.6,
+      "Which Ollama e",
+      -75.66,
+      1
+     ],
+     [
+      18.7,
+      "Which Ollama e",
+      -77.82,
+      1
+     ],
+     [
+      18.8,
+      "Which Ollama e",
+      -79.99,
+      1
+     ],
+     [
+      18.9,
+      "Which Ollama e",
+      -82.16,
+      1
+     ],
+     [
+      19,
+      "Which Ollama e",
+      -84.32,
+      1
+     ],
+     [
+      19.1,
+      "Which Ollama e",
+      -86.49,
+      1
+     ],
+     [
+      19.2,
+      "Which Ollama e",
+      -88.66,
+      1
+     ],
+     [
+      19.3,
+      "Which Ollama e",
+      -90.82,
+      1
+     ],
+     [
+      19.4,
+      "Which Ollama e",
+      -92.99,
+      1
+     ],
+     [
+      19.5,
+      "Which Ollama e",
+      -95.16,
+      1
+     ],
+     [
+      19.6,
+      "Which Ollama e",
+      -97.32,
+      1
+     ],
+     [
+      19.7,
+      "Which Ollama e",
+      -99.49,
+      1
+     ],
+     [
+      19.8,
+      "Which Ollama e",
+      -101.66,
+      1
+     ],
+     [
+      19.9,
+      "Which Ollama e",
+      -103.82,
+      1
+     ],
+     [
+      20,
+      "Which Ollama e",
+      -105.99,
+      1
+     ],
+     [
+      20.1,
+      "Which Ollama e",
+      -108.16,
+      1
+     ],
+     [
+      20.2,
+      "Which Ollama e",
+      -110.32,
+      1
+     ],
+     [
+      20.3,
+      "Which Ollama e",
+      -112.49,
+      1
+     ],
+     [
+      20.4,
+      "Which Ollama e",
+      -114.66,
+      1
+     ],
+     [
+      20.5,
+      "Which Ollama e",
+      -116.82,
+      1
+     ],
+     [
+      20.6,
+      "Which Ollama e",
+      -118.99,
+      1
+     ],
+     [
+      20.7,
+      "Which Ollama e",
+      -121.16,
+      1
+     ],
+     [
+      20.8,
+      "Which Ollama e",
+      -123.32,
+      1
+     ],
+     [
+      20.9,
+      "Which Ollama e",
+      -125.49,
+      1
+     ],
+     [
+      21,
+      "Which Ollama e",
+      -127.66,
+      1
+     ],
+     [
+      21.1,
+      "Which Ollama e",
+      -129.82,
+      1
+     ],
+     [
+      21.2,
+      "Which Ollama e",
+      -131.99,
+      1
+     ],
+     [
+      21.3,
+      "Which Ollama e",
+      -134.16,
+      1
+     ],
+     [
+      21.4,
+      "Which Ollama e",
+      -136.32,
+      1
+     ],
+     [
+      21.5,
+      "Which Ollama e",
+      -138.49,
+      1
+     ],
+     [
+      21.6,
+      "Which Ollama e",
+      -140.66,
+      1
+     ],
+     [
+      21.7,
+      "Which Ollama e",
+      -142.82,
+      1
+     ],
+     [
+      21.8,
+      "Which Ollama e",
+      -144.99,
+      1
+     ],
+     [
+      21.9,
+      "Which Ollama e",
+      -147.16,
+      1
+     ],
+     [
+      22,
+      "Which Ollama e",
+      -149.32,
+      1
+     ],
+     [
+      22.1,
+      "Which Ollama e",
+      -151.49,
+      1
+     ],
+     [
+      22.2,
+      "Which Ollama e",
+      -153.66,
+      1
+     ],
+     [
+      22.3,
+      "Which Ollama e",
+      -155.82,
+      1
+     ],
+     [
+      22.4,
+      "Which Ollama e",
+      -157.99,
+      1
+     ],
+     [
+      22.5,
+      "Which Ollama e",
+      -160.16,
+      1
+     ],
+     [
+      22.6,
+      "Which Ollama e",
+      -162.32,
+      1
+     ],
+     [
+      22.7,
+      "Which Ollama e",
+      -164.49,
+      1
+     ],
+     [
+      22.8,
+      "Which Ollama e",
+      -166.66,
+      1
+     ],
+     [
+      22.9,
+      "Which Ollama e",
+      -168.82,
+      1
+     ],
+     [
+      23,
+      "Which Ollama e",
+      -170.99,
+      1
+     ],
+     [
+      23.1,
+      "Which Ollama e",
+      -173.16,
+      1
+     ],
+     [
+      23.2,
+      "Which Ollama e",
+      -175.32,
+      1
+     ],
+     [
+      23.3,
+      "Which Ollama e",
+      -177.49,
+      1
+     ],
+     [
+      23.4,
+      "Which Ollama e",
+      -179.66,
+      1
+     ],
+     [
+      23.5,
+      "Which Ollama e",
+      -181.82,
+      1
+     ],
+     [
+      23.6,
+      "Which Ollama e",
+      -183.99,
+      1
+     ],
+     [
+      23.7,
+      "Which Ollama e",
+      -186.16,
+      1
+     ],
+     [
+      23.8,
+      "Which Ollama e",
+      -188.32,
+      1
+     ],
+     [
+      23.9,
+      "Which Ollama e",
+      -190.49,
+      1
+     ],
+     [
+      24,
+      "Which Ollama e",
+      -192.66,
+      1
+     ],
+     [
+      24.1,
+      "Which Ollama e",
+      -194.82,
+      1
+     ],
+     [
+      24.2,
+      "Which Ollama e",
+      -196.99,
+      1
+     ],
+     [
+      24.3,
+      "Which Ollama e",
+      -199.16,
+      1
+     ],
+     [
+      24.4,
+      "Which Ollama e",
+      -201.32,
+      1
+     ],
+     [
+      24.5,
+      "Which Ollama e",
+      -203.49,
+      1
+     ],
+     [
+      24.6,
+      "Which Ollama e",
+      -205.66,
+      1
+     ],
+     [
+      24.7,
+      "Which Ollama e",
+      -207.82,
+      1
+     ],
+     [
+      24.8,
+      "Which Ollama e",
+      -209.99,
+      1
+     ],
+     [
+      24.9,
+      "Which Ollama e",
+      -212.16,
+      1
+     ],
+     [
+      25,
+      "Which Ollama e",
+      -214.32,
+      1
+     ],
+     [
+      25.1,
+      "Which Ollama e",
+      -216.49,
+      1
+     ],
+     [
+      25.2,
+      "Which Ollama e",
+      -218.66,
+      1
+     ],
+     [
+      25.3,
+      "Which Ollama e",
+      -220.82,
+      1
+     ],
+     [
+      25.4,
+      "Which Ollama e",
+      -222.99,
+      1
+     ],
+     [
+      25.5,
+      "Which Ollama e",
+      -225.16,
+      1
+     ],
+     [
+      25.6,
+      "Which Ollama e",
+      -227.32,
+      1
+     ],
+     [
+      25.7,
+      "Which Ollama e",
+      -229.49,
+      1
+     ],
+     [
+      25.8,
+      "Which Ollama e",
+      -231.66,
+      1
+     ],
+     [
+      25.9,
+      "Which Ollama e",
+      -233.82,
+      1
+     ],
+     [
+      26,
+      "Which Ollama e",
+      -235.99,
+      1
+     ]
+    ]
+   }
+  },
+  "chipAtStart": {
+   "deckTime": "2026-09-27 14:05:52 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7f",
+    "chipText": "Which Ollama essentials should I pull for this Deck?Which Ollama essentials should I pull for this Deck?",
+    "chipRect": {
+     "x": 47.998046875,
+     "y": 601.35498046875,
+     "width": 300,
+     "height": 29.99267578125,
+     "top": 601.35498046875,
+     "right": 347.998046875,
+     "bottom": 631.34765625,
+     "left": 47.998046875
+    },
+    "marquee": true,
+    "style": "--fade-length-left: 8px; --fade-length-right: 8px; --delay: 1.5s; --direction: normal; --duration: 14.4036865234375s;",
+    "copyWidth": 312.07275390625,
+    "anim": "EGDylCwHuNurOwj9Jww0E|14.4037s|linear|1.75s|infinite",
+    "transform": "matrix(1, 0, 0, 1, -187.013, 0)"
+   }
+  }
+ }
+}

@@ -1,0 +1,1607 @@
+{
+ "row": "plan72-A4-UP-FAMILY-c",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:51-12:57 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "chat": "parrying chat",
+  "state": "(c) newest answer's details still open (from (b)); walked Up to '42 earlier' (20 presses from Ask) and pressed A once. The pill turned into 42 one-line question rows (27.84 px tall each; answers not shown). The ring landed on the first (oldest) row 'what is a good way to practice parrying in action games'. Scroll height grew 1618 -> 3085."
+ },
+ "pressed": "deck_sweep DOWN from that first older row to the bottom (Ask), then back UP to the top (Decky back button); stall limit 8, 143 presses. Note: the runbook says start at the preset chip and go up; I started at the top because A on the pill put the ring there. Both directions are covered.",
+ "seen": {
+  "stops": [
+   "0 start | what is a good way to practice parrying in action games | y144 h28 | top0 | visible",
+   "1 DOWN | In Hades what does the Chaos boon do | y180 h28 | top0 | visible",
+   "2 DOWN | What are good early weapon upgrades for the Driller in Deep\u2026 | y216 h28 | top0 | visible",
+   "3 DOWN | What are good early weapon upgrades for the Scout in Deep R\u2026 | y252 h28 | top0 | visible",
+   "4 DOWN | What are good early weapon upgrades for the Gunner in Deep\u2026 | y288 h28 | top0 | visible",
+   "5 DOWN | What are good early weapon upgrades for the Engineer in Dee\u2026 | y324 h28 | top0 | visible",
+   "6 DOWN | Which early weapon upgrades should the Scout pick first in\u2026 | y360 h28 | top0 | visible",
+   "7 DOWN | Which early weapon upgrades should the Gunner pick first in\u2026 | y395 h28 | top0 | visible",
+   "8 DOWN | Which early weapon upgrades should the Engineer pick first\u2026 | y431 h28 | top0 | visible",
+   "9 DOWN | What should the Scout spend nitra on first in Deep Rock Gal\u2026 | y467 h28 | top0 | visible",
+   "10 DOWN | What should the Gunner spend nitra on first in Deep Rock Ga\u2026 | y503 h28 | top0 | visible",
+   "11 DOWN | What should the Engineer spend nitra on first in Deep Rock\u2026 | y539 h28 | top0 | visible",
+   "12 DOWN | Which weapon upgrades are worth skipping early in Deep Rock\u2026 | y485 h28 | top90 | visible",
+   "13 DOWN | Which weapon upgrades are worth skipping early as the Drill\u2026 | y521 h28 | top90 | visible",
+   "14 DOWN | What are good early weapon upgrades for the Driller in Deep\u2026 | y556 h28 | top90 | visible",
+   "15 DOWN | What are good early weapon upgrades for the Scout in Deep R\u2026 | y485 h28 | top197 | visible",
+   "16 DOWN | What are good early weapon upgrades for the Engineer in Dee\u2026 | y521 h28 | top197 | visible",
+   "17 DOWN | What are good early weapon upgrades for the Driller when mi\u2026 | y557 h28 | top197 | visible",
+   "18 DOWN | What are good early weapon upgrades for the Gunner when fac\u2026 | y485 h28 | top305 | visible",
+   "19 DOWN | What are good early weapon upgrades for the Scout when kiti\u2026 | y521 h28 | top305 | visible",
+   "20 DOWN | What are good early weapon upgrades for the Engineer when d\u2026 | y557 h28 | top305 | visible",
+   "21 DOWN | What are good early weapon upgrades for the Driller when fa\u2026 | y485 h28 | top412 | visible",
+   "22 DOWN | Give me a longer rundown of how the Gunner plays in Deep Ro\u2026 | y521 h28 | top412 | visible",
+   "23 DOWN | Give me a longer rundown of how the Engineer plays in Deep\u2026 | y557 h28 | top412 | visible",
+   "24 DOWN | What are good early weapon upgrades for the Scout when mini\u2026 | y485 h28 | top520 | visible",
+   "25 DOWN | Give me a longer rundown of how the Driller plays in Deep R\u2026 | y521 h28 | top520 | visible",
+   "26 DOWN | Give me a longer rundown of how the Scout plays in Deep Roc\u2026 | y557 h28 | top520 | visible",
+   "27 DOWN | Give me a longer rundown of how the Gunner handles bosses i\u2026 | y485 h28 | top627 | visible",
+   "28 DOWN | Give me a longer rundown of how the Engineer handles swarms\u2026 | y521 h28 | top627 | visible",
+   "29 DOWN | Give me a longer rundown of how the Driller handles bosses\u2026 | y557 h28 | top627 | visible",
+   "30 DOWN | Give me a longer rundown of how the Scout handles elites in\u2026 | y485 h28 | top734 | visible",
+   "31 DOWN | Give me a longer rundown of how the Gunner handles elites i\u2026 | y521 h28 | top734 | visible",
+   "32 DOWN | Give me a longer rundown of how the Scout handles bosses in\u2026 | y557 h28 | top734 | visible",
+   "33 DOWN | Give me a longer rundown of how the Engineer handles bosses\u2026 | y485 h28 | top842 | visible",
+   "34 DOWN | Give me a longer rundown of how the Driller handles swarms\u2026 | y521 h28 | top842 | visible",
+   "35 DOWN | Give me a longer rundown of how the Gunner handles swarms i\u2026 | y557 h28 | top842 | visible",
+   "36 DOWN | Give me a longer rundown of how the Scout handles swarms in\u2026 | y485 h28 | top950 | visible",
+   "37 DOWN | Give me a longer rundown of how the Driller handles elites\u2026 | y521 h28 | top950 | visible",
+   "38 DOWN | Give me a longer rundown of how the Gunner handles bosses i\u2026 | y556 h28 | top950 | visible",
+   "39 DOWN | Give me a longer rundown of how the Engineer handles elites\u2026 | y485 h28 | top1057 | visible",
+   "40 DOWN | Give me a longer rundown of how the Driller handles the lat\u2026 | y521 h28 | top1057 | visible",
+   "41 DOWN | Give me a longer rundown of how the Scout handles the late\u2026 | y557 h28 | top1057 | visible",
+   "42 DOWN | Retry same prompt | y493 h20 | top1190 | visible",
+   "43 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y467 h43 | top1190 | partial 89% under Focusable",
+   "44 DOWN | Show reasoning \u00b7 21 s | y526 h15 | top1190 | visible",
+   "45 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y204 h327 | top1544 | visible",
+   "46 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y405 h195 | top1670 | visible",
+   "47 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y369 h231 | top1900 | partial 89% under Focusable",
+   "48 DOWN | Read aloud | y553 h32 | top1980 | visible",
+   "49 DOWN | Hide details | y498 h15 | top2079 | visible",
+   "50 DOWN | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y529 h47 | top2079 | visible",
+   "51 DOWN | This answerSession \u00b7 42 | y485 h28 | top2184 | visible",
+   "52 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y298 h302 | top2408 | visible",
+   "53 DOWN | How do I fix Steam Input for this game? | y600 h30 | top2408 | visible",
+   "54 DOWN | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top2408 | visible",
+   "55 DOWN | ask | y711 h36 | top2444 | visible",
+   "56 UP | Voice input | y687 h20 | top2444 | visible",
+   "57 UP | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top2444 | visible",
+   "58 UP | How do I fix Steam Input for this game? | y600 h30 | top2444 | visible",
+   "59 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y262 h338 | top2444 | visible",
+   "60 UP | This answerSession \u00b7 42 | y261 h28 | top2408 | visible",
+   "61 UP | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y204 h47 | top2404 | visible",
+   "62 UP | Hide details | y204 h15 | top2373 | visible",
+   "63 UP | Read aloud | y204 h32 | top2329 | visible",
+   "64 UP | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y363 h231 | top1906 | partial 89% under Focusable",
+   "65 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y204 h195 | top1870 | visible",
+   "66 UP | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y186 h327 | top1562 | visible",
+   "67 UP | Show reasoning \u00b7 21 s | y204 h15 | top1513 | visible",
+   "68 UP | Retry same prompt | y204 h20 | top1478 | visible",
+   "69 UP | Give me a longer rundown of how the Scout handles the late\u2026 | y204 h28 | top1410 | visible",
+   "70 UP | Give me a longer rundown of how the Driller handles the lat\u2026 | y204 h28 | top1374 | visible",
+   "71 UP | Give me a longer rundown of how the Engineer handles elites\u2026 | y204 h28 | top1338 | visible",
+   "72 UP | Give me a longer rundown of how the Gunner handles bosses i\u2026 | y204 h28 | top1302 | visible",
+   "73 UP | Give me a longer rundown of how the Driller handles elites\u2026 | y204 h28 | top1266 | visible",
+   "74 UP | Give me a longer rundown of how the Scout handles swarms in\u2026 | y204 h28 | top1230 | visible",
+   "75 UP | Give me a longer rundown of how the Gunner handles swarms i\u2026 | y204 h28 | top1195 | visible",
+   "76 UP | Give me a longer rundown of how the Driller handles swarms\u2026 | y204 h28 | top1159 | visible",
+   "77 UP | Give me a longer rundown of how the Engineer handles bosses\u2026 | y204 h28 | top1123 | visible",
+   "78 UP | Give me a longer rundown of how the Scout handles bosses in\u2026 | y204 h28 | top1088 | visible",
+   "79 UP | Give me a longer rundown of how the Gunner handles elites i\u2026 | y204 h28 | top1052 | visible",
+   "80 UP | Give me a longer rundown of how the Scout handles elites in\u2026 | y204 h28 | top1016 | visible",
+   "81 UP | Give me a longer rundown of how the Driller handles bosses\u2026 | y204 h28 | top980 | visible",
+   "82 UP | Give me a longer rundown of how the Engineer handles swarms\u2026 | y204 h28 | top944 | visible",
+   "83 UP | Give me a longer rundown of how the Gunner handles bosses i\u2026 | y204 h28 | top909 | visible",
+   "84 UP | Give me a longer rundown of how the Scout plays in Deep Roc\u2026 | y204 h28 | top873 | visible",
+   "85 UP | Give me a longer rundown of how the Driller plays in Deep R\u2026 | y204 h28 | top837 | visible",
+   "86 UP | What are good early weapon upgrades for the Scout when mini\u2026 | y204 h28 | top801 | visible",
+   "87 UP | Give me a longer rundown of how the Engineer plays in Deep\u2026 | y204 h28 | top765 | visible",
+   "88 UP | Give me a longer rundown of how the Gunner plays in Deep Ro\u2026 | y204 h28 | top729 | visible",
+   "89 UP | What are good early weapon upgrades for the Driller when fa\u2026 | y204 h28 | top693 | visible",
+   "90 UP | What are good early weapon upgrades for the Engineer when d\u2026 | y204 h28 | top657 | visible",
+   "91 UP | What are good early weapon upgrades for the Scout when kiti\u2026 | y204 h28 | top622 | visible",
+   "92 UP | What are good early weapon upgrades for the Gunner when fac\u2026 | y204 h28 | top586 | visible",
+   "93 UP | What are good early weapon upgrades for the Driller when mi\u2026 | y204 h28 | top550 | visible",
+   "94 UP | What are good early weapon upgrades for the Engineer in Dee\u2026 | y204 h28 | top514 | visible",
+   "95 UP | What are good early weapon upgrades for the Scout in Deep R\u2026 | y204 h28 | top478 | visible",
+   "96 UP | What are good early weapon upgrades for the Driller in Deep\u2026 | y204 h28 | top442 | visible",
+   "97 UP | Which weapon upgrades are worth skipping early as the Drill\u2026 | y204 h28 | top406 | visible",
+   "98 UP | Which weapon upgrades are worth skipping early in Deep Rock\u2026 | y204 h28 | top370 | visible",
+   "99 UP | What should the Engineer spend nitra on first in Deep Rock\u2026 | y204 h28 | top335 | visible",
+   "100 UP | What should the Gunner spend nitra on first in Deep Rock Ga\u2026 | y204 h28 | top299 | visible",
+   "101 UP | What should the Scout spend nitra on first in Deep Rock Gal\u2026 | y204 h28 | top263 | visible",
+   "102 UP | Which early weapon upgrades should the Engineer pick first\u2026 | y204 h28 | top227 | visible",
+   "103 UP | Which early weapon upgrades should the Gunner pick first in\u2026 | y204 h28 | top191 | visible",
+   "104 UP | Which early weapon upgrades should the Scout pick first in\u2026 | y204 h28 | top155 | visible",
+   "105 UP | What are good early weapon upgrades for the Engineer in Dee\u2026 | y204 h28 | top120 | visible",
+   "106 UP | What are good early weapon upgrades for the Gunner in Deep\u2026 | y204 h28 | top84 | visible",
+   "107 UP | What are good early weapon upgrades for the Scout in Deep R\u2026 | y204 h28 | top48 | visible",
+   "108 UP | What are good early weapon upgrades for the Driller in Deep\u2026 | y204 h28 | top13 | visible",
+   "109 UP | In Hades what does the Chaos boon do | y180 h28 | top0 | visible",
+   "110 UP | what is a good way to practice parrying in action games | y144 h28 | top0 | visible",
+   "111 UP | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "112 UP | Main tab | y64 h20 | topNone | visible",
+   "113 UP | bonsAIv0.5.0 | y20 h28 | topNone | visible"
+  ],
+  "upVsDown": "All 42 older question rows were visited both ways, in order, all fully visible. The only stop Up skipped was again the newest question's text (Up: Show reasoning -> Retry -> older row 'Give me a longer rundown of how the Scout handles the late...'). Down leg 71 presses for 55 stops, Up leg 72 presses for 58 stops; the extra presses were used up inside the chip ladder and the two end stalls.",
+  "notVisible": "only the two known false alarms (question text under Retry, last answer section under Copy). No stop behind the dock.",
+  "surprise": "this parrying chat's history includes an unrelated Hades question ('In Hades what does the Chaos boon do') as its 2nd turn and dozens of Deep Rock Galactic questions"
+ },
+ "walkFile": "runs/plan72-A4c-sweep.json",
+ "verdict": "MEASURED: Up skips 1 stop (the newest question's text); all 42 older rows reachable and visible both ways.",
+ "reads": {
+  "controlsAfterPill": {
+   "deckTime": "2026-09-27 12:49:42 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "title": "what is a good way to practice parrying in action games",
+    "scrollTop": 0,
+    "scrollHeight": 3085,
+    "clientHeight": 677,
+    "dockTop": 599.58,
+    "innerHeight": 766,
+    "details": [
+     "Hide details \u2191"
+    ],
+    "focusables": [
+     {
+      "tag": "DIV",
+      "aria": "Main tab",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "cls": "bonsai-tab-bar",
+      "rect": [
+       48,
+       63.96,
+       300,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hadeswhat is a good way to practice parrying in ac",
+      "cls": "",
+      "rect": [
+       48,
+       83.96,
+       300,
+       680.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hadeswhat is a good way to practice parrying in ac",
+      "cls": "",
+      "rect": [
+       48,
+       83.96,
+       300,
+       0
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hadeswhat is a good way to practice parrying in ac",
+      "cls": "",
+      "rect": [
+       48,
+       87.95,
+       300,
+       676.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hadeswhat is a good way to practice parrying in ac",
+      "cls": "",
+      "rect": [
+       48,
+       87.95,
+       300,
+       676.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hadeswhat is a good way to practice parrying in ac",
+      "cls": "bonsai-chat-slot-row-focus",
+      "rect": [
+       48,
+       87.95,
+       300,
+       44.54
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "what is a good way to practice parrying in action ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       144.49,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "what is a good way to practice parrying in action ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       144.49,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "In Hades what does the Chaos boon do",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       180.33,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "In Hades what does the Chaos boon do",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       116.11,
+       180.33,
+       225.89,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       216.17,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       216.17,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       252.01,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       252.01,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Gunner",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       287.85,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Gunner",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       287.85,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       323.69,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       323.69,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Scout pick ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       359.53,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Scout pick ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       359.53,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Gunner pick",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       395.37,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Gunner pick",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       395.37,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Engineer pi",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       431.21,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which early weapon upgrades should the Engineer pi",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       431.21,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Scout spend nitra on first in Deep",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       467.05,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Scout spend nitra on first in Deep",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       467.05,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Gunner spend nitra on first in Dee",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       502.89,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Gunner spend nitra on first in Dee",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       502.89,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Engineer spend nitra on first in D",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       538.73,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What should the Engineer spend nitra on first in D",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       538.73,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which weapon upgrades are worth skipping early in ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       574.57,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which weapon upgrades are worth skipping early in ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       574.57,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which weapon upgrades are worth skipping early as ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       610.41,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Which weapon upgrades are worth skipping early as ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       610.41,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       646.25,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       646.25,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       682.09,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       682.09,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       717.93,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       717.93,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       753.77,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       753.77,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Gunner",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       789.61,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Gunner",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       789.61,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       825.45,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       825.45,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       861.29,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Engine",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       861.29,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       897.13,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Drille",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       897.13,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner plays i",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       932.97,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner plays i",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       932.97,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer plays",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       968.81,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer plays",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       968.81,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1004.65,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "What are good early weapon upgrades for the Scout ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1004.65,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller plays ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1040.49,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller plays ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1040.49,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout plays in",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1076.33,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout plays in",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1076.33,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1112.17,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1112.17,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1148.01,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1148.01,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1183.85,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1183.85,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1219.69,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1219.69,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1255.53,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1255.53,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1291.37,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1291.37,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1327.21,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1327.21,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1363.05,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1363.05,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1398.89,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1398.89,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1434.73,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1434.73,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1470.57,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1470.57,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1506.41,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1506.41,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1542.25,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Engineer handl",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1542.25,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1578.09,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Driller handle",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1578.09,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1613.93,
+       290.01,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Scout handles ",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1613.93,
+       266.81,
+       27.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       1649.77,
+       290.01,
+       1357.91
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       1649.77,
+       266.81,
+       56.43
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-turn-retry-corner-slot",
+      "rect": [
+       81.97,
+       1682.43,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Retry same prompt",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+      "rect": [
+       81.97,
+       1682.43,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-body",
+      "rect": [
+       85.97,
+       1656.54,
+       245.25,
+       42.88
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Show reasoning \u00b7 21 s",
+      "text": "Show reasoning \u00b7 21 s",
+      "cls": "bonsai-chat-details-divider bonsai-chat-reasoning-fold",
+      "rect": [
+       51.99,
+       1716.19,
+       290.01,
+       14.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Right, listen up, you wanna know how to run that G",
+      "cls": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy",
+      "rect": [
+       51.99,
+       1739.01,
+       266.81,
+       770.06
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Right, listen up, you wanna know how to run that G",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       1747.79,
+       245.25,
+       326.78
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Then, you gotta get your Nitra sorted. That resour",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       2074.57,
+       245.25,
+       194.87
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "And listen to me on survivability. This ain't a ti",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       2269.45,
+       245.25,
+       230.85
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-reply-copy-corner-slot",
+      "rect": [
+       51.99,
+       2485.07,
+       266.81,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Copy reply text",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-reply-copy-corner bonsai-reply-copy-corner--idle",
+      "rect": [
+       291.81,
+       2485.07,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Hide details \u2191",
+      "cls": "bonsai-chat-reply-actions",
+      "rect": [
+       51.99,
+       2533.06,
+       266.81,
+       60.82
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-chat-reply-actions-row",
+      "rect": [
+       51.99,
+       2533.06,
+       266.81,
+       31.99
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Read aloud",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-chat-read-aloud-btn",
+      "rect": [
+       288.81,
+       2533.06,
+       29.99,
+       31.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Hide details",
+      "text": "Hide details \u2191",
+      "cls": "bonsai-chat-details-divider",
+      "rect": [
+       51.99,
+       2577.04,
+       266.81,
+       14.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note, show",
+      "text": "Upgrades and overclocks(+2 more)\u25b8From bonsAI's own",
+      "cls": "bonsai-kb-notes-block",
+      "rect": [
+       51.99,
+       2607.86,
+       266.81,
+       47.23
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "This answerSession \u00b7 42",
+      "cls": "bonsai-details-tabs-row",
+      "rect": [
+       51.99,
+       2669.08,
+       290.01,
+       28.39
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Chip 1 of 7Keyword + meaningKB: 13 sectionsReply s",
+      "cls": "bonsai-chip-ladder",
+      "rect": [
+       51.99,
+       2705.47,
+       290.01,
+       302.21
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "How do I fix Steam Input for this game?",
+      "cls": "bonsai-preset-carousel-focus-root bonsai-preset-across",
+      "rect": [
+       48,
+       600.37,
+       300,
+       29.99
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": null,
+      "text": "How do I fix Steam Input for this game?",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode",
+      "rect": [
+       48,
+       600.37,
+       300,
+       29.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Choose AI character, A",
+      "text": "A",
+      "cls": "bonsai-ai-character-avatar",
+      "rect": [
+       50.77,
+       641.13,
+       17.99,
+       17.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "",
+      "rect": [
+       72.75,
+       639.14,
+       274.46,
+       43.99
+      ]
+     },
+     {
+      "tag": "INPUT",
+      "aria": null,
+      "text": "",
+      "cls": "",
+      "rect": [
+       72.75,
+       639.14,
+       274.46,
+       43.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Strategy",
+      "cls": "bonsai-unified-input-actions-row",
+      "rect": [
+       50.77,
+       683.13,
+       294.46,
+       24
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Attach screenshot to Ask",
+      "text": "",
+      "cls": "bonsai-askbar-target bonsai-unified-input-corner-left",
+      "rect": [
+       50.77,
+       687.13,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Strategy",
+      "cls": "bonsai-unified-input-actions-right",
+      "rect": [
+       265.33,
+       687.13,
+       79.9,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Inference mode: Strategy. Open to change.",
+      "text": "Strategy",
+      "cls": "bonsai-askbar-target bonsai-ask-mode-trigger",
+      "rect": [
+       265.33,
+       687.13,
+       54.91,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Voice input",
+      "text": "",
+      "cls": "bonsai-askbar-target bonsai-unified-input-corner-right",
+      "rect": [
+       327.23,
+       687.13,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "ask",
+      "cls": "",
+      "rect": [
+       48.78,
+       710.68,
+       298.44,
+       36
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": null,
+      "text": "ask",
+      "cls": "bonsai-askbar-target bonsai-ask-primary",
+      "rect": [
+       48.78,
+       710.68,
+       298.44,
+       36
+      ]
+     }
+    ]
+   }
+  }
+ }
+}

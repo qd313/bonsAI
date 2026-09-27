@@ -1,0 +1,235 @@
+{
+ "row": "plan72-P-QBUBBLE-handheld",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:10 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades (includes the one-line question 'Is there a day limit in Pikmin 2?' and the three-line question this session added in D-4)"
+ },
+ "pressed": "none after D-5 (ring on the chat row)",
+ "seen": {
+  "oneLine": {
+   "text": "Is there a day limit in Pikmin 2?",
+   "bubble": "x 156.409 y 148.499 w 185.596 h 27.844 (right 342.004)",
+   "bubbleStyle": "text-align right, padding 6px 10px, max-width min(92%, 280px), white-space normal, text-wrap wrap",
+   "titleStyle": "white-space nowrap, text-overflow ellipsis, overflow hidden (collapsed history row)",
+   "lineBoxes": "1 line, x 167.188 w 164.038",
+   "retry": "none on this row"
+  },
+  "threeLine": {
+   "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+   "bubble": "x 75.195 y 184.338 w 266.809 h 56.433 (right 342.004)",
+   "titleStyle": "white-space normal, text-wrap wrap (not balance or pretty), text-align right",
+   "lineBoxes": [
+    "line 1 x 137.634 w 193.591",
+    "line 2 x 106.274 w 224.951",
+    "line 3 x 225.464 w 105.762"
+   ],
+   "widestLine": 224.951,
+   "titleBoxWidth": 245.251,
+   "emptyInsideTitleBoxLeftOfWidestLine": 20.3,
+   "retry": "x 81.970 y 217.004 20x20 (right 101.965); nearest text line (line 3) starts at x 225.464, line 2 at x 106.274 is 4.3 px right of the icon's right edge and its bottom 218.689 overlaps the icon's top 217.004 by 1.7 px vertically"
+  }
+ },
+ "screenshot": "screenshots/plan72/P-2-qbubble-handheld.png (1920x1080)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:10:12 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "focus": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "chatTitle": "Hades",
+    "bubbles": [
+     {
+      "text": "Is there a day limit in Pikmin 2?",
+      "headerCls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-header--collapsed Panel Focusable",
+      "header": {
+       "x": 156.409,
+       "y": 148.499,
+       "w": 185.596,
+       "h": 27.844,
+       "right": 342.004,
+       "bottom": 176.343
+      },
+      "headerStyle": {
+       "textAlign": "right",
+       "padding": "6px 10px",
+       "maxWidth": "min(92%, 280px)",
+       "width": "185.596px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "flex-end",
+       "marginLeft": "104.419px",
+       "marginRight": "0px",
+       "fontSize": "16px",
+       "lineHeight": "normal",
+       "overflow": "visible",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "titleCls": "bonsai-chat-turn-row-title",
+      "title": {
+       "x": 167.188,
+       "y": 155.273,
+       "w": 164.038,
+       "h": 14.294,
+       "right": 331.226,
+       "bottom": 169.568
+      },
+      "titleStyle": {
+       "textAlign": "right",
+       "padding": "0px",
+       "maxWidth": "none",
+       "width": "164.038px",
+       "whiteSpace": "nowrap",
+       "textWrap": "nowrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "auto",
+       "marginLeft": "0px",
+       "marginRight": "0px",
+       "fontSize": "11px",
+       "lineHeight": "14.3px",
+       "overflow": "hidden",
+       "textOverflow": "ellipsis",
+       "webkitLineClamp": "none"
+      },
+      "textLineBoxes": [
+       {
+        "x": 167.188,
+        "y": 155.273,
+        "w": 164.038,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 168.555
+       }
+      ],
+      "lineCountDistinctY": 1,
+      "retry": null,
+      "visibleInScope": true
+     },
+     {
+      "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+      "headerCls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-header--expanded bonsai-chat-turn-row-header--with-retry Panel Focusable",
+      "header": {
+       "x": 75.195,
+       "y": 184.338,
+       "w": 266.809,
+       "h": 56.433,
+       "right": 342.004,
+       "bottom": 240.771
+      },
+      "headerStyle": {
+       "textAlign": "right",
+       "padding": "6px 10px",
+       "maxWidth": "min(92%, 280px)",
+       "width": "266.809px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "flex-end",
+       "marginLeft": "23.2056px",
+       "marginRight": "0px",
+       "fontSize": "16px",
+       "lineHeight": "normal",
+       "overflow": "visible",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "titleCls": "bonsai-chat-turn-row-title",
+      "title": {
+       "x": 85.974,
+       "y": 191.113,
+       "w": 245.251,
+       "h": 42.883,
+       "right": 331.226,
+       "bottom": 233.997
+      },
+      "titleStyle": {
+       "textAlign": "right",
+       "padding": "0px",
+       "maxWidth": "none",
+       "width": "245.251px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "auto",
+       "marginLeft": "0px",
+       "marginRight": "0px",
+       "fontSize": "11px",
+       "lineHeight": "14.3px",
+       "overflow": "hidden",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "textLineBoxes": [
+       {
+        "x": 137.634,
+        "y": 191.113,
+        "w": 193.591,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 204.395
+       },
+       {
+        "x": 106.274,
+        "y": 205.408,
+        "w": 224.951,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 218.689
+       },
+       {
+        "x": 225.464,
+        "y": 219.702,
+        "w": 105.762,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 232.983
+       }
+      ],
+      "lineCountDistinctY": 3,
+      "retry": {
+       "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner cXzBZxhPBl7fZs9LODEnc Focusable",
+       "rect": {
+        "x": 81.97,
+        "y": 217.004,
+        "w": 19.995,
+        "h": 19.995,
+        "right": 101.965,
+        "bottom": 237
+       }
+      },
+      "visibleInScope": true
+     }
+    ]
+   }
+  }
+ }
+}

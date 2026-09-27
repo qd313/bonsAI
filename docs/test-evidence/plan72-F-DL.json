@@ -1,0 +1,93 @@
+{
+ "row": "plan72-F-DL",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:48:15 to 14:49:45 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "a_permissionsTab": {
+  "pressed": "from the Main tab bar, RIGHT three times (Ollama, Settings, Permissions tab)",
+  "seen": "a switch labelled 'Internet downloads' with the line 'Lets bonsAI download Ollama, AI models, voice models and the knowledge library, and refresh the recommended-models list. Off, nothing downloads.' The switch is role=checkbox aria-checked=false (off).",
+  "result": "PASS"
+ },
+ "b_ollamaTab": {
+  "pressed": "LEFT twice on the tab bar (Settings, Ollama tab); DOWN one press at a time reading focus: Run AI on this Deck, Start the AI with the Deck, 'Update AI engine and installed models' (button text 'Update AI & models'); A once",
+  "seen": "a Steam confirm box titled 'Update Ollama and models?' (text: re-runs the official Ollama installer, then re-pulls each installed model...), NOT a box titled 'Turn on internet downloads?'. It names no site and no size. Two buttons, in order: 'Start update' (ring on it) then 'Cancel'. No 'Not now'.",
+  "action": "ring was not on 'Not now', so pressed B. The box closed; the ring went to the Ollama tab bar (not back to the button).",
+  "secondTry": "walked back DOWN 3 to the same button, A once: the same 'Update Ollama and models?' box, ring on 'Start update'; B; box closed.",
+  "journalPullCountAfterEach": [
+   0,
+   0
+  ],
+  "note": "an earlier grep hit for 'pull' at 14:46:32 was a llama.cpp log line quoting a GitHub URL (pull/13194), not a download. No 'ollama pull' or installer process ran; knowledge library folder unchanged (05:10).",
+  "buttonsInOrder": [
+   "Start update",
+   "Cancel"
+  ]
+ },
+ "screenshot": "screenshots/plan72/F-DL-box.png",
+ "otherDownloadButtonsSeenNotPressed": [
+  "Browse models\u2026",
+  "Install options\u2026",
+  "Update knowledge base"
+ ],
+ "verdict": "UNCLEAR",
+ "verdictReason": "Part (a) passes: the switch is there and off. Part (b) did not show the expected 'Turn on internet downloads?' box: the button I reached first opens the older 'Update Ollama and models?' confirm with the ring on 'Start update', so the new download notice was never seen. Nothing downloaded (0 pull lines twice). The downloads box may only come after 'Start update', which I must not press; the session decides whether to try 'Install options\u2026 > Tier 1 essentials' or 'Update knowledge base' another time.",
+ "reads": {
+  "permsSwitch": {
+   "deckTime": "2026-09-27 14:48:24 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "containerCls": "eKmEXJCm_lgme24Fp_HWt _2QgNsvFPYTZ5yRiTm7mUyu _16vVnDqpbNs-zIH-EdV6Vz GxgIyq8R5xTOeu4ftGrgX _3nLNLFMUMSt4jvxIayuPV3 xIITXDcM70faUNqssgUyx _2HFrmMgB38Ike5w4rVxzEX Panel Focusable",
+    "containerText": "Internet downloads\nLets bonsAI download Ollama, AI models, voice models and the knowledge library, and refresh the recommended-models list. Off, nothing downloads.",
+    "parts": [
+     {
+      "tag": "DIV",
+      "cls": "_1W1to_azoBRG95oNAFpf9Q",
+      "aria": null
+     },
+     {
+      "tag": "DIV",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable",
+      "aria": "false"
+     }
+    ],
+    "html": "<div class=\"eKmEXJCm_lgme24Fp_HWt _2QgNsvFPYTZ5yRiTm7mUyu _16vVnDqpbNs-zIH-EdV6Vz GxgIyq8R5xTOeu4ftGrgX _3nLNLFMUMSt4jvxIayuPV3 xIITXDcM70faUNqssgUyx _2HFrmMgB38Ike5w4rVxzEX Panel Focusable\" ><div class=\"_2tALpM7z8naXJ35Pp5fNAG\"><div class=\"_2VcTlXFC64Jtg9gvtT6cmY\"><div class=\"_3jMlJm4PQCA8SfNlUR99Fo\" id=\"\u00abr5u\u00bb_Label\">Internet downloads</div></div><div class=\"_1W1to_azoBRG95oNAFpf9Q\" id=\"\u00abr5u\u00bb_Description_Description\">Lets bonsAI download Ollama, AI models, voice models and the knowledge library, and refresh the recommended-models list. Off, nothing downloads.</div></div><div class=\"PSZtxj2h3MlyYv-c9dgke\"><div class=\"_1aw7cA3mAZfWt8idAlVJWi\"><div class=\"_2o2fXzn99OddeqZMjbDuxQ\"><div aria-labelledby=\"\u00abr5u\u00bb_Label\" aria-describedby=\"\u00abr5u\u00bb_Description\" role=\"checkbox\" aria-checked=\"false\" class=\"_9Ql-oVe_j8E-vsDdyVdWo  Focusable\" tabindex=\"0\"><div class=\"_2bl0iQ9xigbq4Zd1NI6NZl\"></div><div class=\"_1PQppcgkuXQAiFPar9AGi-\"></div></div></div></div></div></div>"
+   }
+  },
+  "ollamaControls": {
+   "deckTime": "2026-09-27 14:48:43 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "tab": "Ollama tab",
+    "focusables": [
+     "Ollama tab",
+     "",
+     "",
+     "Update AI engine and installed models",
+     "Browse and pull Ollama models",
+     "Install model bundles",
+     "Test connection to Ollama",
+     "",
+     "Update knowledge base",
+     "Remove",
+     "",
+     "Set thinking to Off",
+     "Set thinking to Brief",
+     "Set thinking to Balanced",
+     "Set thinking to Deep",
+     "",
+     "",
+     "Manage AI models",
+     "Set text model try order",
+     "Set vision model try order"
+    ]
+   }
+  }
+ }
+}

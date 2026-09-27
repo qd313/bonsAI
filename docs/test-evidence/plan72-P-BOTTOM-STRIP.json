@@ -1,0 +1,157 @@
+{
+ "row": "plan72-P-BOTTOM-STRIP",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:17 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades, with the long overlay answer added in D-4 (scrollHeight 911 vs visible 677)"
+ },
+ "pressed": "ring on the preset chip 'Recommended TDP for this game?' (DOWN walk to the question box, UP x1)",
+ "seen": {
+  "dock": ".bonsai-main-tab-dock y 599.585 h 165.356 bottom 764.941; background rgba(18,26,34,0.92) (8% see-through); padding-bottom 0; margin-bottom 0; position sticky; bottom 0; no box-shadow, no bottom border",
+  "dockChildren": [
+   "chip row y 600.366 h 37.988",
+   "question box block y 638.354 h 71.545",
+   "Ask row y 709.900 h 37.561",
+   "context line wrapper y 747.461 h 17.480 bottom 764.941"
+  ],
+  "contextLine": ".bonsai-context-footnote 'Context: no active game detected' y 751.453 h 13.489 bottom 764.941; font-size 10px, line-height 13.5px; margin-bottom 0, padding-bottom 0",
+  "scrollPane": "._TabContentsScroll y 87.952 h 676.990 bottom 764.941; scrollTop 233.59 = scrollHeight 911 - clientHeight 677, so it is scrolled to the very end; padding-bottom 0",
+  "scope": ".bonsai-scope bottom 764.954",
+  "innerHeight": 766,
+  "gaps_css_px": {
+   "contextLineBottomToDockBottom": 0.0,
+   "dockBottomToScopeBottom": 0.012,
+   "scopeBottomToWindowBottom": 1.046,
+   "scrollPaneBottomToWindowBottom": 1.059
+  },
+  "note": "With the ring on a chip the chat is always scrolled to its end, so in this capture no answer text sits behind the dock (the answer ends at 'Show details' just above the chip). The strip below the dock is 1.06 CSS px (about 1.4 screen px) between the pane's bottom and the window's bottom."
+ },
+ "screenshot": "screenshots/plan72/P-7-bottom-strip-handheld.png (1920x1080)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:17:01 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1",
+    "focus": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7f",
+    "dock": {
+     "x": 47.998,
+     "y": 599.585,
+     "w": 300,
+     "h": 165.356,
+     "bottom": 764.941,
+     "right": 347.998
+    },
+    "dockStyle": {
+     "background": "rgba(18, 26, 34, 0.92) none repeat scroll 0% 0% / auto padding-box border-box",
+     "backgroundColor": "rgba(18, 26, 34, 0.92)",
+     "paddingBottom": "0px",
+     "marginBottom": "0px",
+     "position": "sticky",
+     "bottom": "0px",
+     "boxShadow": "none",
+     "borderBottom": "0px none rgb(150, 150, 150)"
+    },
+    "dockChildren": [
+     {
+      "cls": "_3LM_ZckJp5yJYrL1OI_WqW",
+      "r": {
+       "x": 47.998,
+       "y": 600.366,
+       "w": 300,
+       "h": 37.988,
+       "bottom": 638.354,
+       "right": 347.998
+      }
+     },
+     {
+      "cls": "",
+      "r": {
+       "x": 47.998,
+       "y": 638.354,
+       "w": 300,
+       "h": 71.545,
+       "bottom": 709.9,
+       "right": 347.998
+      }
+     },
+     {
+      "cls": "_3LM_ZckJp5yJYrL1OI_WqW",
+      "r": {
+       "x": 47.998,
+       "y": 709.9,
+       "w": 300,
+       "h": 37.561,
+       "bottom": 747.461,
+       "right": 347.998
+      }
+     },
+     {
+      "cls": "_3LM_ZckJp5yJYrL1OI_WqW",
+      "r": {
+       "x": 47.998,
+       "y": 747.461,
+       "w": 300,
+       "h": 17.48,
+       "bottom": 764.941,
+       "right": 347.998
+      }
+     }
+    ],
+    "footnote": {
+     "tag": "DIV",
+     "cls": "bonsai-context-footnote",
+     "text": "Context: no active game detected",
+     "r": {
+      "x": 47.998,
+      "y": 751.453,
+      "w": 300,
+      "h": 13.489,
+      "bottom": 764.941,
+      "right": 347.998
+     },
+     "style": {
+      "marginBottom": "0px",
+      "paddingBottom": "0px",
+      "lineHeight": "13.5px",
+      "fontSize": "10px"
+     }
+    },
+    "tabContentsScroll": {
+     "r": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 676.99,
+      "bottom": 764.941,
+      "right": 347.998
+     },
+     "scrollTop": 233.59375,
+     "scrollHeight": 911,
+     "clientHeight": 677,
+     "paddingBottom": "0px"
+    },
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "bottom": 764.954,
+     "right": 347.998
+    },
+    "gaps": {
+     "footBottomToDockBottom": 0,
+     "dockBottomToScopeBottom": 0.012,
+     "scopeBottomToInnerHeight": 1.046,
+     "scrollBottomToInnerHeight": 1.059
+    }
+   }
+  }
+ }
+}

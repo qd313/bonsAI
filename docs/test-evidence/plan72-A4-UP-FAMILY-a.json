@@ -1,0 +1,582 @@
+{
+ "row": "plan72-A4-UP-FAMILY-a",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:41-12:43 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "'what is a good way to practice parrying in action games' (86 saved entries; the screen shows the newest turn plus a '42 earlier' pill). Picked with RB from Hades; no new chat. Hades was not used because its newest answer was the stopped A-2 answer, which has no 'Show details'.",
+  "state": "(a) Show details closed; older turns folded behind '42 earlier'; reasoning fold closed"
+ },
+ "pressed": "ring on preset chip 'How do I fix Steam Input for this game?'; deck_sweep UP (14 presses) then back DOWN (19 presses); directions only",
+ "seen": {
+  "stops": [
+   "0 start | How do I fix Steam Input for this game? | y600 h30 | top588 | visible",
+   "1 UP | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y553 h47 | top588 | visible",
+   "2 UP | Show details | y522 h15 | top588 | visible",
+   "3 UP | Read aloud | y478 h32 | top588 | visible",
+   "4 UP | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y363 h231 | top439 | partial 89% under Focusable",
+   "5 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y204 h195 | top404 | visible",
+   "6 UP | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y186 h327 | top95 | visible",
+   "7 UP | Show reasoning \u00b7 21 s | y204 h15 | top45 | visible",
+   "8 UP | Retry same prompt | y204 h20 | top12 | visible",
+   "9 UP | 42 earlier | y146 h22 | top0 | visible",
+   "10 UP | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "11 UP | Main tab | y64 h20 | topNone | visible",
+   "12 UP | bonsAIv0.5.0 | y20 h28 | topNone | visible",
+   "13 DOWN | Main tab | y64 h20 | topNone | visible",
+   "14 DOWN | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "15 DOWN | 42 earlier | y146 h22 | top0 | visible",
+   "16 DOWN | Retry same prompt | y216 h20 | top0 | visible",
+   "17 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y190 h43 | top0 | partial 89% under Focusable",
+   "18 DOWN | Show reasoning \u00b7 21 s | y249 h15 | top0 | visible",
+   "19 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y204 h327 | top77 | visible",
+   "20 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y405 h195 | top202 | visible",
+   "21 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y369 h231 | top434 | partial 89% under Focusable",
+   "22 DOWN | Read aloud | y553 h32 | top513 | visible",
+   "23 DOWN | Show details | y522 h15 | top588 | visible",
+   "24 DOWN | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y553 h47 | top588 | visible",
+   "25 DOWN | How do I fix Steam Input for this game? | y600 h30 | top588 | visible",
+   "26 DOWN | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top588 | visible",
+   "27 DOWN | ask | y711 h36 | top588 | visible"
+  ],
+  "upVsDown": "Going UP the ring skipped the question text (the question row body): Show reasoning -> Retry -> '42 earlier'. Going DOWN it stopped on it: Retry -> question body -> Show reasoning. Every other stop was the same both ways. The Copy reply button was never a stop in either direction.",
+  "notVisible": "3 stops flagged 'partial 89%': the question body under the Retry icon (down leg) and the last answer section under the Copy icon (both legs). These are the two known false alarms. Line-box check: the question's middle line (bottom -371.07) overlaps the Retry icon (top -372.75) by 1.68 px high x 3.69 px wide; the answer's second-to-last line (bottom 429.97) touches the Copy icon (top 429.88) by 0.09 px. No words sit under either icon.",
+  "behindDock": "none: every stop was fully above the dock (dock top 599.58)"
+ },
+ "walkFile": "runs/plan72-A4a-sweep.json",
+ "verdict": "MEASURED: Up skips 1 stop that Down visits (the question text). No stop hidden behind the dock.",
+ "reads": {
+  "controlsBefore": {
+   "deckTime": "2026-09-27 12:41:13 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "title": "what is a good way to practice parrying in action games",
+    "scrollTop": 0,
+    "scrollHeight": 1270,
+    "clientHeight": 677,
+    "dockTop": 599.58,
+    "innerHeight": 766,
+    "details": [
+     "42 earlier",
+     "Show details \u2193"
+    ],
+    "focusables": [
+     {
+      "tag": "DIV",
+      "aria": "Main tab",
+      "text": "LBMainRBLBmainollamasettingspermsdevaboutRB",
+      "cls": "bonsai-tab-bar",
+      "rect": [
+       48,
+       63.96,
+       300,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "LBHadeswhat is a good way to practice parrying in ",
+      "cls": "",
+      "rect": [
+       48,
+       83.96,
+       300,
+       680.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "LBHadeswhat is a good way to practice parrying in ",
+      "cls": "",
+      "rect": [
+       48,
+       83.96,
+       300,
+       0
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "LBHadeswhat is a good way to practice parrying in ",
+      "cls": "",
+      "rect": [
+       48,
+       87.95,
+       300,
+       676.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "LBHadeswhat is a good way to practice parrying in ",
+      "cls": "",
+      "rect": [
+       48,
+       87.95,
+       300,
+       676.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "LBHadeswhat is a good way to practice parrying in ",
+      "cls": "bonsai-chat-slot-row-focus",
+      "rect": [
+       48,
+       87.95,
+       300,
+       48.55
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "42 earlier",
+      "cls": "bonsai-chat-earlier-pill-row",
+      "rect": [
+       51.99,
+       150.49,
+       290.01,
+       22.39
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-slot",
+      "rect": [
+       51.99,
+       186.87,
+       290.01,
+       1005.32
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-head",
+      "rect": [
+       75.2,
+       186.87,
+       266.81,
+       56.43
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-turn-retry-corner-slot",
+      "rect": [
+       81.97,
+       219.53,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Retry same prompt",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner",
+      "rect": [
+       81.97,
+       219.53,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Give me a longer rundown of how the Gunner handles",
+      "cls": "bonsai-chat-turn-row-body",
+      "rect": [
+       85.97,
+       193.64,
+       245.25,
+       42.88
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Show reasoning \u00b7 21 s",
+      "text": "Show reasoning \u00b7 21 s",
+      "cls": "bonsai-chat-details-divider bonsai-chat-reasoning-fold",
+      "rect": [
+       51.99,
+       253.28,
+       290.01,
+       14.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Right, listen up, you wanna know how to run that G",
+      "cls": "bonsai-chat-ai-bubble bonsai-glass-panel bonsai-chat-ai-bubble--with-copy",
+      "rect": [
+       51.99,
+       276.11,
+       266.81,
+       770.06
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Right, listen up, you wanna know how to run that G",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       284.89,
+       245.25,
+       326.78
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Then, you gotta get your Nitra sorted. That resour",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       611.67,
+       245.25,
+       194.87
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "And listen to me on survivability. This ain't a ti",
+      "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop",
+      "rect": [
+       62.77,
+       806.54,
+       245.25,
+       230.85
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-reply-copy-corner-slot",
+      "rect": [
+       51.99,
+       1022.17,
+       266.81,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Copy reply text",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-reply-copy-corner bonsai-reply-copy-corner--idle",
+      "rect": [
+       291.81,
+       1022.17,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Show details \u2193",
+      "cls": "bonsai-chat-reply-actions",
+      "rect": [
+       51.99,
+       1070.15,
+       266.81,
+       60.82
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "bonsai-chat-reply-actions-row",
+      "rect": [
+       51.99,
+       1070.15,
+       266.81,
+       31.99
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Read aloud",
+      "text": "",
+      "cls": "bonsai-chat-secondary-btn bonsai-chat-read-aloud-btn",
+      "rect": [
+       288.81,
+       1070.15,
+       29.99,
+       31.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Show details",
+      "text": "Show details \u2193",
+      "cls": "bonsai-chat-details-divider",
+      "rect": [
+       51.99,
+       1114.14,
+       266.81,
+       14.84
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note, show",
+      "text": "Upgrades and overclocks(+2 more)\u25b8From bonsAI's own",
+      "cls": "bonsai-kb-notes-block",
+      "rect": [
+       51.99,
+       1144.96,
+       266.81,
+       47.23
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "How do I fix Steam Input for this game?",
+      "cls": "bonsai-preset-carousel-focus-root bonsai-preset-across",
+      "rect": [
+       48,
+       600.37,
+       300,
+       29.99
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": null,
+      "text": "How do I fix Steam Input for this game?",
+      "cls": "bonsai-preset-glass bonsai-preset-glass--decode",
+      "rect": [
+       48,
+       600.37,
+       300,
+       29.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": "Choose AI character, A",
+      "text": "A",
+      "cls": "bonsai-ai-character-avatar",
+      "rect": [
+       50.77,
+       641.13,
+       17.99,
+       17.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "",
+      "cls": "",
+      "rect": [
+       72.75,
+       639.14,
+       274.46,
+       43.99
+      ]
+     },
+     {
+      "tag": "INPUT",
+      "aria": null,
+      "text": "",
+      "cls": "",
+      "rect": [
+       72.75,
+       639.14,
+       274.46,
+       43.99
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Strategy",
+      "cls": "bonsai-unified-input-actions-row",
+      "rect": [
+       50.77,
+       683.13,
+       294.46,
+       24
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Attach screenshot to Ask",
+      "text": "",
+      "cls": "bonsai-askbar-target bonsai-unified-input-corner-left",
+      "rect": [
+       50.77,
+       687.13,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "Strategy",
+      "cls": "bonsai-unified-input-actions-right",
+      "rect": [
+       265.33,
+       687.13,
+       79.9,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Inference mode: Strategy. Open to change.",
+      "text": "Strategy",
+      "cls": "bonsai-askbar-target bonsai-ask-mode-trigger",
+      "rect": [
+       265.33,
+       687.13,
+       54.91,
+       20
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": "Voice input",
+      "text": "",
+      "cls": "bonsai-askbar-target bonsai-unified-input-corner-right",
+      "rect": [
+       327.23,
+       687.13,
+       20,
+       20
+      ]
+     },
+     {
+      "tag": "DIV",
+      "aria": null,
+      "text": "ask",
+      "cls": "",
+      "rect": [
+       48.78,
+       710.68,
+       298.44,
+       36
+      ]
+     },
+     {
+      "tag": "BUTTON",
+      "aria": null,
+      "text": "ask",
+      "cls": "bonsai-askbar-target bonsai-ask-primary",
+      "rect": [
+       48.78,
+       710.68,
+       298.44,
+       36
+      ]
+     }
+    ]
+   }
+  },
+  "lineBoxes": {
+   "deckTime": "2026-09-27 12:43:37 EDT",
+   "target": "QuickAccess_uid2",
+   "value": [
+    {
+     "text": ".bonsai-chat-turn-row-body",
+     "icon": ".bonsai-turn-retry-corner",
+     "elementBox": {
+      "x": 85.97,
+      "y": -398.65,
+      "r": 331.23,
+      "b": -355.76
+     },
+     "iconBox": {
+      "x": 81.97,
+      "y": -372.75,
+      "r": 101.97,
+      "b": -352.76
+     },
+     "lineCount": 3,
+     "overlapping": [
+      {
+       "x": 98.28,
+       "y": -384.35,
+       "r": 331.23,
+       "b": -371.07
+      }
+     ],
+     "lastLine": {
+      "x": 120.52,
+      "y": -370.06,
+      "r": 331.23,
+      "b": -356.77
+     },
+     "firstLine": {
+      "x": 93.21,
+      "y": -398.65,
+      "r": 331.23,
+      "b": -385.36
+     }
+    },
+    {
+     "text": ".bonsai-chat-ai-bubble .bonsai-ai-response-chunk:last-of-type",
+     "icon": ".bonsai-reply-copy-corner",
+     "elementBox": {
+      "x": 62.77,
+      "y": 214.26,
+      "r": 308.02,
+      "b": 445.1
+     },
+     "iconBox": {
+      "x": 291.81,
+      "y": 429.88,
+      "r": 311.8,
+      "b": 449.88
+     },
+     "lineCount": 15,
+     "overlapping": [
+      {
+       "x": 70.32,
+       "y": 415.12,
+       "r": 295.1,
+       "b": 429.97
+      }
+     ],
+     "lastLine": {
+      "x": 70.32,
+      "y": 430.11,
+      "r": 279.94,
+      "b": 444.96
+     },
+     "firstLine": {
+      "x": 70.32,
+      "y": 214.26,
+      "r": 306.71,
+      "b": 229.1
+     }
+    }
+   ]
+  }
+ }
+}

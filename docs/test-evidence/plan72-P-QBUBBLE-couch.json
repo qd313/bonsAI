@@ -1,0 +1,233 @@
+{
+ "row": "plan72-P-QBUBBLE-couch",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:24 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "couch (scale 1.18)",
+  "chat": "how should i spend my first hour in a new open world game (its first question is one line cut with an ellipsis; the second, added this session in couch D-4, wraps to two lines)"
+ },
+ "pressed": "none after couch D-5 (ring on the chat row)",
+ "seen": {
+  "oneLine": {
+   "text": "how should i spend my first hour in a new open world game",
+   "bubble": "x 75.195 y 162.976 w 266.809 h 27.844",
+   "titleStyle": "white-space nowrap, text-overflow ellipsis, text-align right, font-size 11px, line-height 14.3px",
+   "lineBoxes": "Range rects: one 311.523 wide (runs 66 px past the title box's right edge 331.226, hidden by the ellipsis) and one 234.241 wide, same y",
+   "retry": "none"
+  },
+  "twoLine": {
+   "text": "Describe in detail what each Steam Deck power setting changes and when to use it",
+   "bubble": "x 75.195 y 198.816 w 266.809 h 42.139",
+   "titleStyle": "white-space normal, text-wrap wrap, text-align right, 11px",
+   "lineBoxes": [
+    "line 1 x 118.689 w 212.537",
+    "line 2 x 113.184 w 218.042"
+   ],
+   "widestLine": 218.042,
+   "titleBoxWidth": 245.251,
+   "retry": "x 83.044 y 213.049 23.596x23.596 (right 106.641); line 2 starts at x 113.184, 6.5 px right of the icon"
+  },
+  "sizeVsHandheld": "the question text is 11px at both sizes and the bubble keeps the same max-width min(92%, 280px) and padding 6px 10px; only the Retry icon grew (20.0 -> 23.6 px)"
+ },
+ "screenshot": "screenshots/plan72/P-2-qbubble-couch.png (1920x1080)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:24:30 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1.18",
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "focus": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+    "chatTitle": "how should i spend my first hour in a new open world game",
+    "bubbles": [
+     {
+      "text": "how should i spend my first hour in a new open world game",
+      "headerCls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-header--collapsed Panel Focusable",
+      "header": {
+       "x": 75.195,
+       "y": 162.976,
+       "w": 266.809,
+       "h": 27.844,
+       "right": 342.004,
+       "bottom": 190.82
+      },
+      "headerStyle": {
+       "textAlign": "right",
+       "padding": "6px 10px",
+       "maxWidth": "min(92%, 280px)",
+       "width": "266.809px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "flex-end",
+       "marginLeft": "23.2056px",
+       "marginRight": "0px",
+       "fontSize": "16px",
+       "lineHeight": "normal",
+       "overflow": "visible",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "titleCls": "bonsai-chat-turn-row-title",
+      "title": {
+       "x": 85.974,
+       "y": 169.751,
+       "w": 245.251,
+       "h": 14.294,
+       "right": 331.226,
+       "bottom": 184.045
+      },
+      "titleStyle": {
+       "textAlign": "right",
+       "padding": "0px",
+       "maxWidth": "none",
+       "width": "245.251px",
+       "whiteSpace": "nowrap",
+       "textWrap": "nowrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "auto",
+       "marginLeft": "0px",
+       "marginRight": "0px",
+       "fontSize": "11px",
+       "lineHeight": "14.3px",
+       "overflow": "hidden",
+       "textOverflow": "ellipsis",
+       "webkitLineClamp": "none"
+      },
+      "textLineBoxes": [
+       {
+        "x": 85.974,
+        "y": 169.751,
+        "w": 311.523,
+        "h": 13.281,
+        "right": 397.498,
+        "bottom": 183.032
+       },
+       {
+        "x": 85.974,
+        "y": 169.751,
+        "w": 234.241,
+        "h": 13.281,
+        "right": 320.215,
+        "bottom": 183.032
+       }
+      ],
+      "lineCountDistinctY": 1,
+      "retry": null,
+      "visibleInScope": true
+     },
+     {
+      "text": "Describe in detail what each Steam Deck power setting changes and when to use it",
+      "headerCls": "bonsai-chat-turn-row-header bonsai-chat-turn-row-header--history bonsai-chat-turn-row-header--expanded bonsai-chat-turn-row-header--with-retry Panel Focusable",
+      "header": {
+       "x": 75.195,
+       "y": 198.816,
+       "w": 266.809,
+       "h": 42.139,
+       "right": 342.004,
+       "bottom": 240.955
+      },
+      "headerStyle": {
+       "textAlign": "right",
+       "padding": "6px 10px",
+       "maxWidth": "min(92%, 280px)",
+       "width": "266.809px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "flex-end",
+       "marginLeft": "23.2056px",
+       "marginRight": "0px",
+       "fontSize": "16px",
+       "lineHeight": "normal",
+       "overflow": "visible",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "titleCls": "bonsai-chat-turn-row-title",
+      "title": {
+       "x": 85.974,
+       "y": 205.591,
+       "w": 245.251,
+       "h": 28.589,
+       "right": 331.226,
+       "bottom": 234.18
+      },
+      "titleStyle": {
+       "textAlign": "right",
+       "padding": "0px",
+       "maxWidth": "none",
+       "width": "245.251px",
+       "whiteSpace": "normal",
+       "textWrap": "wrap",
+       "textWrapMode": "",
+       "textWrapStyle": "",
+       "display": "block",
+       "justifyContent": "normal",
+       "alignSelf": "auto",
+       "marginLeft": "0px",
+       "marginRight": "0px",
+       "fontSize": "11px",
+       "lineHeight": "14.3px",
+       "overflow": "hidden",
+       "textOverflow": "clip",
+       "webkitLineClamp": "none"
+      },
+      "textLineBoxes": [
+       {
+        "x": 118.689,
+        "y": 205.591,
+        "w": 212.537,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 218.872
+       },
+       {
+        "x": 113.184,
+        "y": 219.885,
+        "w": 218.042,
+        "h": 13.281,
+        "right": 331.226,
+        "bottom": 233.167
+       }
+      ],
+      "lineCountDistinctY": 2,
+      "retry": {
+       "cls": "bonsai-chat-secondary-btn bonsai-turn-retry-corner cXzBZxhPBl7fZs9LODEnc Focusable",
+       "rect": {
+        "x": 83.044,
+        "y": 213.049,
+        "w": 23.596,
+        "h": 23.596,
+        "right": 106.641,
+        "bottom": 236.646
+       }
+      },
+      "visibleInScope": true
+     }
+    ]
+   }
+  }
+ }
+}

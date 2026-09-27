@@ -1,0 +1,37 @@
+{
+ "row": "plan72-A7-GAME-i",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 13:04-13:09 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "game": "Fallout 4 (appid 377160) launched with deck_launchGame from Recent Games; Fallout4.exe process confirmed over SSH at 13:05:14; plugin reloaded after launch; the panel shows 'Context: active game Fallout 4' and the chip 'How do I get started in Fallout 4?' among the rotating chips",
+  "chat": "Hades",
+  "open": "deck_openPlugin needed 4 calls after the reload (twice 'debugger connection reset', once 'QAM chord sent but no pane appeared'); it reopened on the Settings tab (the tab left from A-6), so LB x2 on the tab bar to Main"
+ },
+ "pressed": [
+  "from the preset chip 'How do I set up voice input on the Deck?': DOWN onto the question box (A not pressed)",
+  "DOWN",
+  "RIGHT",
+  "UP",
+  "LEFT",
+  "extra: UP, UP, DOWN, RIGHT"
+ ],
+ "seen": {
+  "chipToBox": "moved onto the box INPUT, visible",
+  "down": "box -> Ask (moved, visible)",
+  "right": "Ask -> Ask (no move; right-most)",
+  "up": "Ask -> 'Attach screenshot to Ask'",
+  "left": "Attach -> Attach (no move; left-most)",
+  "extra": "Up -> 'Choose AI character, A'; Up -> chip 'How do I use strategy mode?'; Down -> box; Right from the box -> 'Inference mode: Strategy' chip. Every move visible 100%.",
+  "stuck": false
+ },
+ "walkFiles": [
+  "runs/plan72-A7i-chip-to-box.json",
+  "runs/plan72-A7i-down.json",
+  "runs/plan72-A7i-right.json",
+  "runs/plan72-A7i-rest.json"
+ ],
+ "verdict": "NOT STUCK with Fallout 4 running: Down and Right from the box both move normally."
+}

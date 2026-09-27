@@ -1,0 +1,34 @@
+{
+ "row": "plan72-F-NOSAVEROW",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:14:40 EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld",
+  "chat": "'how do i beat the boss at the end of the first area', with the new answer to the performance overlay question asked this session"
+ },
+ "pressed": "from Retry, walkTo Down one press at a time to the question box: 11 presses. No A.",
+ "seen": {
+  "namedStopsGoingDown": [
+   "Retry same prompt",
+   "Show reasoning \u00b7 13 s",
+   "(answer sections, unnamed to the tool)",
+   "A. Exploring the first area",
+   "B. Tackling the final boss",
+   "Mark reply helpful",
+   "Show details",
+   "chip 'How can I reduce input lag?'",
+   "question box"
+  ],
+  "pageRead": {
+   "text 'Save chat to Desktop' anywhere in bonsAI": false,
+   ".bonsai-save-chat-desktop-row": false,
+   "aria-labels containing 'save'": [],
+   "disk icon in the chat row (.bonsai-chat-slot-save)": true
+  },
+  "underTheAnswer": "answer text, then the question it asks with choices A and B, then 'Was this helpful? Helpful / Not really', then 'Show details'"
+ },
+ "expected": "no 'Save chat to Desktop' anywhere",
+ "verdict": "PASS"
+}

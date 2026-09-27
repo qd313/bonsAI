@@ -1,0 +1,295 @@
+{
+ "row": "plan72-D-DOTS-writing-couch",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:22 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "couch (scale 1.18)",
+  "writingChat": "how should i spend my first hour in a new open world game (dot 4 when asked)"
+ },
+ "pressed": [
+  "send-question script: 'Describe in detail what each Steam Deck power setting changes and when to use it' (VERIFIED, whole text read back)",
+  "walkTo DOWN to Ask (10 presses), A once at ~12:22:08; answer started",
+  "UP x4 (question box, chip, Retry, question, chat row)",
+  "RB once: moved to dot 5 'what is the safest way to approach a group of enemies at once' (the runbook's route worked here)",
+  "3 captures 12:22:19, 12:22:30, 12:22:34 with the ring on the row; read at 12:22:25",
+  "DOWN x6 then walkTo DOWN x4 to the question box, UP x1 to the chip, capture 12:22:59"
+ ],
+ "seen": {
+  "writingDot": "dot 4 class --pending at 12:22:25: transparent fill, box-shadow 'rgba(56,189,248,0.9) 0 0 0 1px inset, rgba(56,189,248,0.55) 0 0 5px 0', box 195.496,134.802 4.993x4.993 (same y as every dot)",
+  "activeDot": "dot 5, rgb(156,231,255)",
+  "titleMark": "in all three frames a small hollow circle sits just left of the scrolling title",
+  "ringOffRowCapture": "NOT CAPTURED while writing: the answer finished at 12:22:36 (journal: POST /api/chat 200 in 26.55 s); the ring reached the chip at 12:22:57. The chip capture shows the unread state and is filed under D-5 couch."
+ },
+ "writingChatIndex": 4,
+ "screenshots": [
+  "screenshots/plan72/D-4-writing-rowlit-f1-couch.png",
+  "screenshots/plan72/D-4-writing-rowlit-f2-couch.png",
+  "screenshots/plan72/D-4-writing-rowlit-f3-couch.png"
+ ],
+ "verdict": "PARTLY MEASURED: writing dot with the ring on the row captured (3 frames + read); ring-off-row writing frame missed again (answer took 26.5 s; the walk down a long answer at couch size takes about 10 presses).",
+ "reads": {
+  "dotsRowlitWriting": {
+   "deckTime": "2026-09-27 12:22:25 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "sw": 1500,
+    "sh": 843,
+    "dpr": 1.2799999713897705,
+    "uiScale": "1.18",
+    "focus": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "text": "LBhow should i spend my first hour in a new open world gamewhat is the safest wa",
+     "aria": null,
+     "rect": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     }
+    },
+    "title": "what is the safest way to approach a group of enemies at once",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing",
+    "rects": {
+     "dots": {
+      "x": 108.545,
+      "y": 134.802,
+      "w": 178.906,
+      "h": 4.993
+     },
+     "title": {
+      "x": 143.652,
+      "y": 118.042,
+      "w": 124.39,
+      "h": 16.992
+     },
+     "row": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     },
+     "scope": {
+      "x": 47.998,
+      "y": 63.965,
+      "w": 300,
+      "h": 700.989
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 147.546,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 159.534,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 171.521,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 183.508,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--pending",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.496,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "rgba(56, 189, 248, 0.9) 0px 0px 0px 1px inset, rgba(56, 189, 248, 0.55) 0px 0px 5px 0px",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 207.483,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgb(156, 231, 255)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 219.47,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 231.458,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 243.445,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  }
+ }
+}

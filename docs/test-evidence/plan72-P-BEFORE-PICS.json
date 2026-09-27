@@ -1,0 +1,19 @@
+{
+ "row": "plan72-P-BEFORE-PICS",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:18 EDT (picture 1); 12:10-12:31 checks for picture 2",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)"
+ },
+ "pressed": "picture 1: on the chat row RB x3 to the short chat 'how should i spend my first hour in a new open world game' (the Hades chat had grown long enough that its chat row scrolls off the top with the ring on a chip), walkTo DOWN to the question box, UP to the chip 'Recommended TDP for this game?', capture. Picture 2: looked for the 'Save chat to Desktop' row on the Hades chat (handheld), on the open-world chat (couch) and on Hades after the final reload; A never pressed.",
+ "seen": {
+  "picture1": "chat row visible with the ring on the chip: faded neighbour names at both ends ('whea...' left, 'what i' right), title cut at 'how should i spend my first hou'",
+  "picture2": "COULD NOT CAPTURE: no 'Save chat to Desktop' element in the page on any chat tried. src/index.tsx:944 shows it only when there is a live last exchange (canSaveDesktopNote: Boolean(lastExchange)); switching chats or reloading clears that, the same reason the thumbs are missing (see plan72-P-REASON-CHIPS-*.json)."
+ },
+ "screenshots": [
+  "screenshots/plan72/P-5-before-chatrow-handheld.png (1920x1080)"
+ ],
+ "verdict": "HALF DONE: chat-row picture taken; Save-chat-to-Desktop picture could not be taken"
+}

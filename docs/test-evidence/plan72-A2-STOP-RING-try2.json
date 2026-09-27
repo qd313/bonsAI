@@ -1,0 +1,28 @@
+{
+ "row": "plan72-A2-STOP-RING-try2",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:37-12:38 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades",
+  "question": "Walk me through every audio setting in a typical PC game and what each one costs in performance",
+  "sendScript": "VERIFIED, whole question read back"
+ },
+ "pressed": [
+  "DOWN mic -> Ask (1 press)",
+  "A on Ask (one press started it)",
+  "waited for answer words (25.5 s after Ask: 'Show reasoning 21 s' then 'Right, listen up, you w...')",
+  "RIGHT x2 box -> Strategy chip -> Stop",
+  "A on Stop",
+  "read focus. No A after."
+ ],
+ "seen": {
+  "afterAskA": "ring moved Ask -> question box INPUT (not Stop), same as try 1; still on the INPUT when answer words were arriving",
+  "afterStopA": "answer stopped; the ring stayed on the corner button, which now reads 'Voice input' (rect 327,687 20x20, fully visible)",
+  "pressesFromMic": 0
+ },
+ "walkFile": "runs/plan72-A2-try2-stop.json",
+ "verdict": "MEASURED: ring ON the microphone after Stop (0 presses). Same route deviation as try 1: after Ask the ring is on the question box, not Stop."
+}

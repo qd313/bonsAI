@@ -1,0 +1,194 @@
+{
+ "row": "plan72-A8-BOTTOM-STRIP-READING",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 13:01 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (scale 1)",
+  "chat": "Hades (long: scrollHeight 1704 vs visible 677), with A-5's network answer as the newest turn and the reason chips still open"
+ },
+ "pressed": "from Ask, walk Up: Voice input, box, preset chip, Save chat to Desktop, Show details, Read aloud (6 presses); Up onto the last answer section (text all above the dock there: last line bottom 593.47 vs dock top 599.585); one more Up onto the middle answer section. Read, screenshot. Directions only.",
+ "seen": {
+  "ringOn": "middle answer section, x 62.769 y 204.102 w 245.251 h 245.837",
+  "dock": ".bonsai-main-tab-dock x 47.998 y 599.585 w 300 h 165.356 bottom 764.941; background rgba(18,26,34,0.92); padding-bottom 0; margin-bottom 0",
+  "contextLine": ".bonsai-context-footnote 'Context: no active game detected' y 751.453 h 13.489 bottom 764.941",
+  "scrollPane": "._TabContentsScroll y 87.952 h 676.99 bottom 764.941; scrollTop 358.59; scrollHeight 1704",
+  "scope": ".bonsai-scope y 63.965 h 700.989 bottom 764.954",
+  "innerHeight": 766,
+  "answerTextBehindDock": "20 answer text lines sit behind the dock (from y 590.84 to the last line at y 731.75, bottom 746.59). The line nearest the dock's top ('So, the trick is this: for performance...' next line) runs 590.84-605.69, so it is cut by the dock's top edge at 599.585; in the screenshot it shows as a half line 'gotta balance those things. If you got a' right above the question chips.",
+  "belowContextLine": "0 answer lines below the context line or below the dock's bottom (last line bottom 746.59 < context line top 751.453)",
+  "throughDock": "by eye in the full-size screenshot, no answer text shows through the dock (it is 92% opaque); the session should confirm by pixels"
+ },
+ "screenshot": "screenshots/plan72/A-8-bottom-strip-answer-behind-dock.png (1920x1080)",
+ "walkFiles": [
+  "runs/plan72-A8-up-into-answer.json",
+  "runs/plan72-A8-up-into-answer-2.json"
+ ],
+ "verdict": "MEASURED: answer text runs behind the dock (20 lines); none shows below the context line; one line is cut in half at the dock's top edge.",
+ "reads": {
+  "ringOnLastSection": {
+   "deckTime": "2026-09-27 13:01:35 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-an",
+     "rect": {
+      "x": 62.769,
+      "y": 296.814,
+      "w": 245.251,
+      "h": 296.802,
+      "bottom": 593.616
+     }
+    },
+    "dock": {
+     "x": 47.998,
+     "y": 599.585,
+     "w": 300,
+     "h": 165.356,
+     "bottom": 764.941
+    },
+    "dockBg": "rgba(18, 26, 34, 0.92)",
+    "dockPaddingBottom": "0px",
+    "dockMarginBottom": "0px",
+    "contextLine": {
+     "text": "Context: no active game detected",
+     "rect": {
+      "x": 47.998,
+      "y": 751.453,
+      "w": 300,
+      "h": 13.489,
+      "bottom": 764.941
+     }
+    },
+    "scrollPane": {
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 676.99,
+      "bottom": 764.941
+     },
+     "scrollTop": 511.71875,
+     "scrollHeight": 1704,
+     "clientHeight": 677
+    },
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "bottom": 764.954
+    },
+    "answerLinesBehindDock": 0,
+    "answerLinesBehindDockSample": [],
+    "answerLinesBelowDockBottom": 0,
+    "nearestLineAboveDock": {
+     "y": 578.63,
+     "bottom": 593.47,
+     "text": "Now, I ain't got the name of the game yo"
+    },
+    "lastLineOverall": {
+     "y": 578.63,
+     "bottom": 593.47,
+     "text": "Now, I ain't got the name of the game yo"
+    }
+   }
+  },
+  "ringOnMiddleSection": {
+   "deckTime": "2026-09-27 13:01:47 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "cls": "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-an",
+     "rect": {
+      "x": 62.769,
+      "y": 204.102,
+      "w": 245.251,
+      "h": 245.837,
+      "bottom": 449.939
+     }
+    },
+    "dock": {
+     "x": 47.998,
+     "y": 599.585,
+     "w": 300,
+     "h": 165.356,
+     "bottom": 764.941
+    },
+    "dockBg": "rgba(18, 26, 34, 0.92)",
+    "dockPaddingBottom": "0px",
+    "dockMarginBottom": "0px",
+    "contextLine": {
+     "text": "Context: no active game detected",
+     "rect": {
+      "x": 47.998,
+      "y": 751.453,
+      "w": 300,
+      "h": 13.489,
+      "bottom": 764.941
+     }
+    },
+    "scrollPane": {
+     "rect": {
+      "x": 47.998,
+      "y": 87.952,
+      "w": 300,
+      "h": 676.99,
+      "bottom": 764.941
+     },
+     "scrollTop": 358.59375,
+     "scrollHeight": 1704,
+     "clientHeight": 677
+    },
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "bottom": 764.954
+    },
+    "answerLinesBehindDock": 20,
+    "answerLinesBehindDockSample": [
+     {
+      "y": 590.84,
+      "bottom": 605.69,
+      "text": "So, the trick is this: for performance, "
+     },
+     {
+      "y": 605.83,
+      "bottom": 620.68,
+      "text": "So, the trick is this: for performance, "
+     },
+     {
+      "y": 620.83,
+      "bottom": 635.67,
+      "text": "So, the trick is this: for performance, "
+     },
+     {
+      "y": 635.82,
+      "bottom": 650.66,
+      "text": "So, the trick is this: for performance, "
+     }
+    ],
+    "answerLinesBelowDockBottom": 0,
+    "nearestLineAboveDock": {
+     "y": 590.84,
+     "bottom": 605.69,
+     "text": "So, the trick is this: for performance, "
+    },
+    "lastLineOverall": {
+     "y": 731.75,
+     "bottom": 746.59,
+     "text": "Now, I ain't got the name of the game yo"
+    }
+   }
+  }
+ }
+}

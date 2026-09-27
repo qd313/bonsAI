@@ -1,0 +1,36 @@
+{
+ "row": "plan72-A5-DOWN-WHILE-ARRIVING",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:55-12:57 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "chat": "Hades (LB x2 from 'wheatley fight'; title read back 'Hades')",
+  "question": "Walk me through every network setting in a typical PC game and what each one costs in performance",
+  "sendScript": "VERIFIED, whole question read back"
+ },
+ "pressed": [
+  "walk Down to Ask (10 presses)",
+  "A on Ask (one press started it; ring went to the question box)",
+  "walkTo UP to the chat row (4 presses: box, preset chip, Retry, '4 earlier', row)",
+  "then 12 single Down presses, reading focus and visibility after each (requireVisible on)"
+ ],
+ "seen": {
+  "downWalk": [
+   "1 row -> '4 earlier' (visible)",
+   "2 -> Retry same prompt (Disabled while asking; visible)",
+   "3 -> the new question's text (89% visible, under the Retry icon: the known false alarm)",
+   "4 -> preset chip 'How do I fix Steam Input for this game?' (visible) - the arriving answer was NOT a stop",
+   "5 -> question box INPUT (visible)",
+   "6 -> 'Stop generation' (the corner button; visible)",
+   "7 -> Ask (Disabled; visible)",
+   "8-12 -> no move, ring stays on Ask"
+  ],
+  "ringLost": "never; every stop was on screen",
+  "answerTiming": "the walk ran for 24.8 s starting a few seconds after the Ask press. At 12:56:52, just after it, answer words were arriving ('network settings, you're usually talkin' about things like resolution, frame rate...'). I cannot say exactly which of the 12 presses happened before the first answer words showed.",
+  "secondLook": "I walked Up again to the chat row at once to repeat it, but the answer finished during that Up walk (the thumbs and 'Save chat to Desktop' appeared), so there is no second reading while arriving. On that Up walk the ring went Ask -> Stop -> question box -> 'Save chat to Desktop' -> Retry -> '4 earlier' -> row, skipping the preset chip and the answer."
+ },
+ "walkFile": "runs/plan72-A5-down-while-arriving.json",
+ "verdict": "MEASURED: while the answer was arriving, Down went from the question straight to the preset chip (the arriving answer and its reasoning line were not stops), then box, Stop, Ask. The ring was never lost. UNCLEAR how many presses fell after the first words."
+}

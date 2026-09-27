@@ -1,0 +1,31 @@
+{
+ "row": "plan72-A2-STOP-RING-try1",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:35-12:36 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades",
+  "question": "Walk me through every graphics setting in a typical PC game and what each one costs in performance",
+  "sendScript": "VERIFIED, field held the whole question"
+ },
+ "pressed": [
+  "DOWN chip -> box",
+  "DOWN box -> Ask",
+  "A on Ask (one press started the answer)",
+  "read focus",
+  "RIGHT x2 (walkTo 'Stop generation': box -> 'Inference mode: Strategy' chip -> Stop)",
+  "A on Stop",
+  "read focus. No A after that."
+ ],
+ "seen": {
+  "afterAskA": "the ring did NOT go to Stop. It moved from Ask to the question box INPUT (x 72.754 y 639.136) as the box emptied. Ask became 'Disabled'. Stop is not the Ask button: it is the small corner button at the right of the question box's bottom row (aria 'Stop generation', x 327.232 y 687.134 w 19.995 h 19.995), the same slot the microphone ('Voice input') uses.",
+  "ruleNote": "Because the ring was on the question box, pressing A there would open Steam's keyboard (the rule-1 trap). I did not press A there. I walked Right twice to Stop instead. That is a different route from the runbook's.",
+  "timing": "the question row appeared about 8 s after the Ask press; reasoning then streamed ('Show reasoning 17 s'); answer words were streaming ('If yo...') when A was pressed on Stop",
+  "afterStopA": "the answer stopped mid-sentence (ends '...will make the game stutter and run slow,'), then 'Was this helpful? Helpful / Not really' appeared under it. The ring stayed on the same button, which now reads 'Voice input' (same rect 327.232,687.134 20x20, fully visible, above nothing; dock top 599.585). activeElement = ring. Ask back to ready.",
+  "pressesFromMic": 0
+ },
+ "walkFile": "runs/plan72-A2-try1-stop.json",
+ "verdict": "MEASURED: after Stop the ring sits ON the microphone button (0 presses away). UNCLEAR on the route: the runbook expected the ring on Stop after the Ask press; it was on the question box, 2 presses Left of Stop."
+}

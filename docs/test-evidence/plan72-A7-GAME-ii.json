@@ -1,0 +1,35 @@
+{
+ "row": "plan72-A7-GAME-ii",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 13:09-13:11 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "game": "Fallout 4 still running (same session as A7-GAME-i); panel shows 'Context: active game Fallout 4'",
+  "clearBefore": "no reload: (i) did not get stuck"
+ },
+ "pressed": "walk Up to the chat row (11 presses), RB once (Hades -> 'what is a good way to practice parrying in action games'), then Down one press at a time (deck_sweep, no return) until the ring stopped",
+ "seen": {
+  "stops": [
+   "0 start | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "1 DOWN | 42 earlier | y146 h22 | top0 | visible",
+   "2 DOWN | Retry same prompt | y216 h20 | top0 | visible",
+   "3 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y190 h43 | top0 | partial 89% under Focusable",
+   "4 DOWN | Show reasoning \u00b7 21 s | y249 h15 | top0 | visible",
+   "5 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y186 h327 | top95 | visible",
+   "6 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y405 h195 | top202 | visible",
+   "7 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y369 h231 | top434 | partial 89% under Focusable",
+   "8 DOWN | Read aloud | y553 h32 | top513 | visible",
+   "9 DOWN | Show details | y522 h15 | top588 | visible",
+   "10 DOWN | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y553 h47 | top588 | visible",
+   "11 DOWN | How do I use strategy mode? | y600 h30 | top588 | visible",
+   "12 DOWN | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top588 | visible",
+   "13 DOWN | ask | y711 h36 | top588 | visible"
+  ],
+  "whereDownStops": "Down went all the way: chat row -> '42 earlier' -> Retry -> question text -> Show reasoning -> 3 answer sections -> Read aloud -> Show details -> KB notes card -> preset chip -> question box -> Ask, and stopped at Ask (3 presses with no move). 13 moves in 18 presses.",
+  "notVisible": "only the two known false alarms (question text under Retry, last answer section under Copy)"
+ },
+ "walkFile": "runs/plan72-A7ii-down-after-RB.json",
+ "verdict": "NOT STUCK: after RB on the chat row with Fallout 4 running, Down walks the whole chat to Ask."
+}

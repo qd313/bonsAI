@@ -1,0 +1,59 @@
+{
+ "row": "plan72-F-UP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:17 - 14:19 EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld",
+  "chat": "same chat, right after F-CHIPS; Show details closed; the 'What went wrong?' chips showing"
+ },
+ "pressed": "ring on the preset chip 'How can I reduce input lag?'; deck_sweep Up one press at a time (reading focus and visibility each press) until the ring stopped (the plugin header), then back Down to Ask. Then the Up walk again from the chip as a saved check (13 presses, chip to chat row).",
+ "seen": {
+  "upStops": [
+   "Show details",
+   "Spoiled it",
+   "Bad info",
+   "Read aloud",
+   "B. Tackling the final boss",
+   "A. Exploring the first area",
+   "answer section 2 of 2 (last)",
+   "answer section 1 of 2",
+   "Show reasoning \u00b7 13 s",
+   "the question's own text",
+   "Retry same prompt",
+   "2 earlier",
+   "chat row",
+   "(beyond: Main tab header, then the plugin's back arrow)"
+  ],
+  "downStops": [
+   "(from the back arrow) Main tab",
+   "chat row",
+   "2 earlier",
+   "Retry same prompt",
+   "the question's own text",
+   "Show reasoning \u00b7 13 s",
+   "answer section 1",
+   "answer section 2",
+   "A. Exploring the first area",
+   "B. Tackling the final boss",
+   "Read aloud",
+   "Bad info",
+   "Spoiled it",
+   "Show details",
+   "chip",
+   "question box",
+   "Ask"
+  ],
+  "visibility": "every stop 100% visible above the dock except the two known false alarms: the question's text (89%, the Retry icon's box) and the last answer section (89%, the Copy icon's box)",
+  "falseAlarmChecks": {
+   "questionVsRetry": "no question line overlaps the Retry icon; nearest line starts 3.49 px right of it (F-BUBBLE read)",
+   "lastSectionVsCopy": "21 text lines; one line box's bottom edge (220.96) reaches 0.09 px into the Copy icon's top (220.87) where that line runs to x 298.41 past the icon's left 291.81 - a 0.09 px touch of the line box, the words stay clear by eye"
+  },
+  "downNote": "Down from 'Bad info' goes straight to 'Spoiled it' and Down from 'Read aloud' goes to 'Bad info'; 'Wrong game or topic', 'Too long', 'Too short', 'Helpful' and 'Not really' are reached sideways only"
+ },
+ "expected": "Show details -> Spoiled it -> Bad info -> Read aloud (or Helpful) -> the answer's choice buttons (last, then first) -> the answer's sections bottom-up -> Show reasoning -> the question's own text -> Retry -> the N earlier pill -> the chat row; every stop fully visible above the dock",
+ "savedCheck": "checks/F-UP-WALK.json (13 of 13 steps passed on replay)",
+ "sweepRun": "runs/plan72-F-UP-sweep.json",
+ "verdict": "PASS"
+}

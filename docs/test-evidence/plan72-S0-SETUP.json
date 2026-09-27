@@ -1,0 +1,54 @@
+{
+ "row": "plan72-S0-SETUP",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:03 EDT",
+ "setup": {
+  "rigUsb": "lsusb lists 303a:1001 Espressif ESP32S3_DEV (Bus 001 Device 004)",
+  "keepAwake": {
+   "ttlMinutes": 480,
+   "expiresAt": "2026-09-28T00:01:20.137Z",
+   "held": true
+  },
+  "backup": "~/qa-backups/settings-plan72-block1 (chat_slots: 9 files in original, 9 in copy)",
+  "deckBundle": "md5 58a66a90eb632b0d939f3b8d92e90286 of ~/homebrew/plugins/bonsAI/dist/index.js (matches the session's note)",
+  "settingsBefore": {
+   "ui_scale_auto_enabled": true,
+   "ui_scale_manual_profile": "handheld"
+  },
+  "screen": "External monitor: DP-1 enabled, dpms On, 1920x1080; built-in eDP-1 disabled, dpms Off. Page: innerWidth 855, innerHeight 766, screen 1500x843, devicePixelRatio 1.28 (1500*1.28 = 1920). Screenshots come back 1920x1080.",
+  "uiSizeInEffect": "auto on; --bonsai-ui-scale reads 1 on .bonsai-scope, which is the handheld size",
+  "plugin": "open on the Main tab, chat 'Hades' (9th of 9 dots, the active one), ring was on the chat row at start",
+  "screenshotTool": "scripts/screenshot-deck.ps1 -Mode game failed twice (it asks for the deck user's sudo password; stdin is not a terminal; 'Failed to capture the screen'). Used the rig's deck_captureScreenshot mode game instead (gamescope atom, full size 1920x1080, not scaled), then moved each PNG into screenshots/plan72/."
+ },
+ "pressed": "nothing for S0",
+ "verdict": "SETUP DONE",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:03:35 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 766,
+    "screenWidth": 1500,
+    "screenHeight": 843,
+    "devicePixelRatio": 1.2799999713897705,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Valve Steam Client Safari/537.36",
+    "textWrapBalance": true,
+    "textWrapPretty": true,
+    "uiScaleVar": "1",
+    "scopeRect": {
+     "x": 47.998046875,
+     "y": 63.96484375,
+     "width": 300,
+     "height": 700.98876953125,
+     "top": 63.96484375,
+     "right": 347.998046875,
+     "bottom": 764.95361328125,
+     "left": 47.998046875
+    },
+    "chatTitle": "Hades"
+   }
+  }
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "row": "plan72-F-CLEAR",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:51:49 to 14:52:51 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "strategy",
+  "ask_think_effort": "medium",
+  "note": "the original values, put back before this check so the answer would take longer than in speed mode",
+  "chat": "wheatley fight"
+ },
+ "question": "Explain every Steam Deck controller setting in detail",
+ "pressed": "send script; walkTo DOWN 13 to Ask; A; ring moved to the question box with Stop showing; walkTo UP 5 to the Main tab bar; RIGHT twice to the Settings tab; walkTo DOWN 15 to 'Clear cache...' (the control whose confirm box is titled 'Clear session cache?')",
+ "seen": "When the ring reached 'Clear cache...' (14:52:51), the plugin log already said 'run_game_ai_request: completed in 33.2s' at 14:52:45. The answer had finished during the walk (about 20 presses), so the clear could no longer happen while it was arriving.",
+ "notPressed": "I did not press A on 'Clear cache...': the one try the runbook allows was spent, and clearing after the answer finished would test nothing.",
+ "controlNote": "the Settings tab has no control named 'Clear session'; the matching one is labelled 'Clear cache...' (confirm title 'Clear session cache?', OK button 'Clear'). The other button beside it is 'Clear all data...', which was not touched.",
+ "verdict": "COULD NOT RUN",
+ "verdictReason": "The walk from Ask to the Settings tab's clear button takes about 20 presses, and even a strategy answer with medium thinking finished (33 s) before the ring got there."
+}

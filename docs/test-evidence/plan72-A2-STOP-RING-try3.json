@@ -1,0 +1,32 @@
+{
+ "row": "plan72-A2-STOP-RING-try3",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:38 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades",
+  "question": "Walk me through every controller setting in a typical PC game and what each one costs in performance",
+  "sendScript": "VERIFIED, whole question read back"
+ },
+ "pressed": [
+  "DOWN mic -> Ask",
+  "A on Ask (one press started it)",
+  "waited for answer words (25.7 s: 'Show reasoning 21 s' then 'Right, listen up, you wanna know...')",
+  "RIGHT box -> Strategy chip",
+  "RIGHT -> Stop",
+  "A on Stop",
+  "read focus, screenshot. No A after."
+ ],
+ "seen": {
+  "afterAskA": "ring moved Ask -> question box INPUT (not Stop), third time the same",
+  "afterStopA": "answer stopped; 'Was this helpful? Helpful / Not really' shown; ring on the same corner button, now 'Voice input' (rect 327,687 20x20). In the screenshot the ring's white outline is cut at the panel's right edge (the known mic-ring clipping).",
+  "pressesFromMic": 0,
+  "oddity": "the stopped answer to the controller question talks about graphics and audio settings and ends with a lone word 'Ricochet' on its own line (visible in the screenshot)"
+ },
+ "screenshot": "screenshots/plan72/A-2-after-stop-try3.png (1920x1080)",
+ "walkFile": "runs/plan72-A2-try3-stop.json",
+ "summaryOfThree": "3 of 3: after Stop the ring is on the microphone button itself (0 presses away). 3 of 3: after the Ask press the ring was on the question box, not on Stop; Stop was reached with Right x2.",
+ "verdict": "MEASURED: ring on the microphone after Stop, 0 presses. UNCLEAR on the runbook's expected route (ring on the box after Ask, not on Stop)."
+}

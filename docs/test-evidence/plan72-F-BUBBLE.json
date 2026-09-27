@@ -1,0 +1,239 @@
+{
+ "row": "plan72-F-BUBBLE",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:13:38 (first read, bubble scrolled above view) and 14:14:11 EDT (visible)",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld",
+  "chat": "'how do i beat the boss at the end of the first area' (index 7)",
+  "game": "none"
+ },
+ "pressed": "send-question script put in 'Explain in detail how the Steam Deck performance overlay levels differ and what each number means' (VERIFIED, full text). Ring Down from Voice input to Ask, A once: the answer started at once (ring went to the question box as block 1 saw). Waited about 4 minutes for it to finish (Helpful / Not helpful buttons appeared). To bring the bubble into view: a walkTo Up for the question's text overshot to the plugin's back-arrow header (the question text stop is not labelled for the tool; no A pressed), then walkTo Down 4 presses to Retry.",
+ "seen": {
+  "bubble": {
+   "rect": "x 76.013-342.004, y 182.861-239.294 (w 265.991, h 56.433)",
+   "padding": "6px 10px",
+   "border": "0.78125px, border-box",
+   "maxWidth": "min(92%, 280px)",
+   "textAlign": "right",
+   "textWrap": "balance"
+  },
+  "lines": [
+   {
+    "text": "Explain in detail how the Steam Deck",
+    "left": 137.634,
+    "right": 331.226,
+    "width": 193.592
+   },
+   {
+    "text": "performance overlay levels differ and what",
+    "left": 106.274,
+    "right": 331.226,
+    "width": 224.952
+   },
+   {
+    "text": "each number means",
+    "left": 225.464,
+    "right": 331.226,
+    "width": 105.762
+   }
+  ],
+  "retryArrow": "x 82.788-102.783, y 215.527-235.522",
+  "widestLinePlus19PlusPadding": 263.952,
+  "bubbleWidthMinusThat": 2.039,
+  "bubbleWidthMinusThatAndBorders(1.5625)": 0.477,
+  "widestLineStartMinusArrowRight_px": 3.491,
+  "anyLineOverlapsArrow": false,
+  "lineLengths_now": [
+   193.592,
+   224.952,
+   105.762
+  ],
+  "lineLengths_block1": [
+   193.6,
+   225.0,
+   105.8
+  ]
+ },
+ "expected": "width = widest line + 19 (+-1) + padding; widest line starts 3-4 px right of the arrow; no line overlaps the arrow; lines closer in length than 193.6 / 225.0 / 105.8",
+ "judgement": "The gap to the arrow (3.49 px) and no-overlap parts match. The width is 2.04 px over widest+19+padding if the border is not counted (0.48 over if the two 0.78 px borders are counted). The line lengths are exactly the same as block 1 (193.6 / 225.0 / 105.8): the lines are not more even. text-wrap reports 'balance' but the third line is still about half the others.",
+ "screenshot": "screenshots/plan72/F-BUBBLE.png",
+ "verdict": "FAIL",
+ "reads": {
+  "scrolledAway": {
+   "deckTime": "2026-09-27 14:13:38 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+    "header": {
+     "x": 76.013,
+     "y": -381.982,
+     "w": 265.991,
+     "h": 56.433,
+     "right": 342.004,
+     "bottom": -325.549
+    },
+    "headerStyle": {
+     "padding": "6px 10px",
+     "width": "265.991px",
+     "maxWidth": "min(92%, 280px)",
+     "textAlign": "right",
+     "borderWidth": "0.78125px",
+     "boxSizing": "border-box"
+    },
+    "titleRect": {
+     "x": 86.792,
+     "y": -375.208,
+     "w": 244.434,
+     "h": 42.883,
+     "right": 331.226,
+     "bottom": -332.324
+    },
+    "titleStyle": {
+     "textWrap": "balance",
+     "textWrapStyle": "",
+     "paddingLeft": "0px",
+     "marginLeft": "0px"
+    },
+    "lines": [
+     {
+      "y": -375.208,
+      "left": 137.634,
+      "right": 331.226,
+      "width": 193.592
+     },
+     {
+      "y": -360.913,
+      "left": 106.274,
+      "right": 331.226,
+      "width": 224.952
+     },
+     {
+      "y": -346.619,
+      "left": 225.464,
+      "right": 331.226,
+      "width": 105.762
+     }
+    ],
+    "lineWidths": [
+     193.592,
+     224.952,
+     105.762
+    ],
+    "retry": {
+     "x": 82.788,
+     "y": -349.316,
+     "w": 19.995,
+     "h": 19.995,
+     "right": 102.783,
+     "bottom": -329.321
+    },
+    "widest": {
+     "y": -360.913,
+     "left": 106.274,
+     "right": 331.226,
+     "width": 224.952
+    },
+    "checks": {
+     "bubbleWidth": 265.991,
+     "widestPlus19PlusPadding": 263.952,
+     "diff": 2.039,
+     "widestStartMinusRetryRight": 3.491,
+     "anyLineOverlapsRetry": false,
+     "minLeftMinusRetryRight": 3.491
+    }
+   }
+  },
+  "visible": {
+   "deckTime": "2026-09-27 14:14:11 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "text": "Explain in detail how the Steam Deck performance overlay levels differ and what each number means",
+    "header": {
+     "x": 76.013,
+     "y": 182.861,
+     "w": 265.991,
+     "h": 56.433,
+     "right": 342.004,
+     "bottom": 239.294
+    },
+    "headerStyle": {
+     "padding": "6px 10px",
+     "width": "265.991px",
+     "maxWidth": "min(92%, 280px)",
+     "textAlign": "right",
+     "borderWidth": "0.78125px",
+     "boxSizing": "border-box"
+    },
+    "titleRect": {
+     "x": 86.792,
+     "y": 189.636,
+     "w": 244.434,
+     "h": 42.883,
+     "right": 331.226,
+     "bottom": 232.52
+    },
+    "titleStyle": {
+     "textWrap": "balance",
+     "textWrapStyle": "",
+     "paddingLeft": "0px",
+     "marginLeft": "0px"
+    },
+    "lines": [
+     {
+      "y": 189.636,
+      "left": 137.634,
+      "right": 331.226,
+      "width": 193.592
+     },
+     {
+      "y": 203.931,
+      "left": 106.274,
+      "right": 331.226,
+      "width": 224.952
+     },
+     {
+      "y": 218.225,
+      "left": 225.464,
+      "right": 331.226,
+      "width": 105.762
+     }
+    ],
+    "lineWidths": [
+     193.592,
+     224.952,
+     105.762
+    ],
+    "retry": {
+     "x": 82.788,
+     "y": 215.527,
+     "w": 19.995,
+     "h": 19.995,
+     "right": 102.783,
+     "bottom": 235.522
+    },
+    "widest": {
+     "y": 203.931,
+     "left": 106.274,
+     "right": 331.226,
+     "width": 224.952
+    },
+    "checks": {
+     "bubbleWidth": 265.991,
+     "widestPlus19PlusPadding": 263.952,
+     "diff": 2.039,
+     "widestStartMinusRetryRight": 3.491,
+     "anyLineOverlapsRetry": false,
+     "minLeftMinusRetryRight": 3.491
+    }
+   }
+  }
+ }
+}

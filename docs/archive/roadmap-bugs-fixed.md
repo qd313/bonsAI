@@ -1946,3 +1946,115 @@ MODELS-FILTERS-01 pointed at a half that had already passed as MODELS-LIST-CAP-0
 now says its other half is a separate roadmap bug. DESTRUCT-ADVICE-01's streaming-off half can no longer
 be run, since replies always stream now. CONST-SPOIL-CONSENT-01 read "owed, passed weakly"; it now
 reads Open, as it is still owed.
+
+## Moved from the roadmap 2026-09-27 (plan 72)
+
+_Copied line for line from the roadmap, nothing reworded, with the closing note added under each entry._
+
+- ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from
+  turning the microphone on** — **OPEN, found on the Deck 2026-09-26, row STOP-PARTIAL-01.**
+
+**Closed 2026-09-27 (plan 72, `66d60b40`).** After Stop the ring now lands on the question box, not the
+  microphone. Before the fix: `docs/test-evidence/plan72-A2-STOP-RING-try1.json` (and try2, try3). Evidence
+  `docs/test-evidence/plan72-F-STOP.json`.
+
+- ★★ `[ollama]` **Stop unloads the answer model on purpose, so the next question starts cold** — **VERIFY,
+  fixed 2026-09-26 (`59123c1b`).** Stop now only closes the connection, so the model stays loaded. On the
+  Deck's own AI a short watch runs after Stop; the old unload fires only if the AI stays busy for 90 seconds
+  with no new question. Picked by a blind model trial (plan 33 § 4b). **Deck check owed:** row
+  **STOP-KEEPS-MODEL-01** in [testing.md](../testing.md).
+
+**Closed 2026-09-27 (plan 72, `59123c1b`).** The model was still listed two seconds after Stop, and the next
+  answer started warm, with no loading line. Row **STOP-KEEPS-MODEL-01**. Evidence
+  `docs/test-evidence/plan72-F-STOP.json`.
+
+- ★ `[focus]` **D-pad Left on the chat row leaves the plugin for Steam's side rail** — **OPEN, measured
+  2026-09-26.** [Detail](../roadmap-details.md#flow-2b-bugs).
+
+**Closed 2026-09-27 (plan 72, `dfd133c9`).** Left now stays in bonsAI from the chat name, the save icon and the
+  new-chat spot. Before: `docs/test-evidence/plan72-A3-LEFT-CHATROW.json`. Evidence
+  `docs/test-evidence/plan72-F-ROW.json`.
+
+- ★★ `[focus]` **Up under an answer skips whole rows of controls** — **OPEN, found by the plan 65 Deck
+  check 2026-09-24.** With details open, Up from "Save chat to Desktop" jumps past the chip ladder and
+  the tabs row straight to the notes block, 3 of 3 tries. With details closed, Up from there skips the
+  choice buttons too. The chip ladder can also shrink small enough to leave its own ring above the
+  visible area, with the panel half blank.
+
+**Closed 2026-09-27 (plan 72, `8294e75b`, `29c0b075`, `9feef4e1`).** Up and Down now visit every row in order
+  both ways. Replayable walk `checks/F-UP-WALK.json`. Before: `docs/test-evidence/plan72-A4-UP-FAMILY-a.json`
+  (and b to d). Evidence `docs/test-evidence/plan72-F-UP.json`.
+
+- ★★ `[focus]` **Up from "Save chat to Desktop" jumps to the top of the turn, skipping the answer** —
+  **OPEN, found 2026-09-27 (plan 70, flow L9).** It skips the answer, Show details and the notes block; Down
+  from the top reaches them all. Seen again from the question box (flow L10). [Detail](../roadmap-details.md#flow-l10-findings).
+
+**Closed 2026-09-27 (plan 72, `8294e75b`, `29c0b075`, `9feef4e1`).** Closed with the entry above: the same Up
+  walk passes through the answer, Show details and the notes block. Evidence
+  `docs/test-evidence/plan72-F-UP.json`.
+
+- ★ `[tabs]` `[layout]` **The dots under the chat name don't line up: the active dot looks a hair above or
+  below the rest** — **OPEN, the maintainer's call 2026-09-26: keep the dots, make them line up exactly.**
+  Every dot has the same box, so the offset is in the painted pixels (about 1.28 screen pixels per page
+  pixel). Measure each dot's lit-pixel centre in full-size screenshots, every state, both screens; also the
+  0.2px gap to the chat name. Plan 72 must-fix. Screenshot `docs/test-evidence/plan64-BYEYE-01-chat-row.png`.
+
+**Closed 2026-09-27 (plan 72, `e3e849bd`).** Every dot and the "+" sit on the same five screen rows, and the
+  name's glow ends a clear row above. **Checked on the external monitor only; the Deck's own screen is still
+  owed** (see Verify). Evidence `docs/test-evidence/plan72-F-DOTS-plain.json`,
+  `docs/test-evidence/plan72-F-DOTS-rowlit.json`, `docs/test-evidence/plan72-F-DOTS-plus.json`.
+
+- ★ `[ui]` **The chat name's scroll doesn't match the chip scroll** — **OPEN, from the maintainer
+  2026-09-26.** A long chat name should scroll at the same speed and with the same pauses as a long chip
+  label; then slow both slightly so the panel feels less busy. Plan 72 must-fix.
+
+**Closed 2026-09-27 (plan 72, `bdd19507`).** The name and the chips now scroll at the same speed: 21.69 against
+  21.67 pixels a second. Evidence `docs/test-evidence/plan72-F-SCROLL.json`.
+
+- ★ `[layout]` **The preset chip sits too far above the question box** — **OPEN, from the maintainer
+  2026-09-26.** The gap between the chip and the question box should equal the gap between the question
+  box and the Ask button. Measure both gaps on the Deck first, at every UI size. Plan 72 must-fix.
+
+**Closed 2026-09-27 (plan 72, `0dde6860`).** The two gaps now match: 2.002 against 1.990. Evidence
+  `docs/test-evidence/plan72-F-GAP.json`.
+
+- ★ `[ui]` **The voice mic button's ring is cut off at the panel's right edge** — **OPEN, found by the
+  plan 65 Deck check 2026-09-24.**
+
+**Closed 2026-09-27 (plan 72, `810cb160`).** The ring shows on all four sides, checked by eye; the paperclip and
+  mode chip too. Evidence `docs/test-evidence/plan72-F-RING.json`.
+
+- ★ `[ui]` **The "Not helpful" reason chips sit almost one to a row** — **OPEN, from the maintainer
+  2026-09-26.** Under "What went wrong?", Bad information, Misidentified game/problem, Unfenced spoiler,
+  Too long and Too short mostly each take a whole row. Make the chips tighter and closer together so
+  they share rows. Measure each chip's width and padding on the Deck first. Option: shorter labels
+  ("Wrong game or topic", "Showed a spoiler"), drawn beside spacing-only for the maintainer to pick. Plan 72.
+
+**Closed 2026-09-27 (plan 72, `83de02ff`, `d66f6f40`, `8a832ccb`).** The chips now fit on two rows with shorter
+  words, 28 pixels tall and 6 apart, and the block scrolls above the dock by itself. Evidence
+  `docs/test-evidence/plan72-F-CHIPS.json`.
+
+- ★ `[reply]` **A reply can quote one of its own steering instructions back to the player** — **OPEN,
+  the maintainer's call 2026-09-26: soften it.** Not a spoiler leak — the plugin's own prompt deliberately
+  tells the model to open Strategy answers this way (`strategy_spoiler_policy.py` ~line 287); it reads like
+  machine text. Plan 72 must-fix. Evidence `docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json`.
+
+**Closed 2026-09-27 (plan 72, `9dd6db16`).** Strategy answers no longer open with the plugin's own instruction
+  wording. Evidence `docs/test-evidence/plan72-F-STRAT.json`.
+
+- ★ `[focus]` **After pressing "Apply UI scale" on the Settings tab, nothing holds the D-pad ring** — **OPEN,
+  found on the Deck 2026-09-23.** The button takes the press, but nothing after it takes the ring: the next
+  press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
+  not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
+
+**Closed 2026-09-27 (plan 72, `12227980`).** Closed by hiding the UI scale section unless the Developer tab is
+  on. **The maintainer ruled 2026-09-27 that hiding counts as the fix.** Evidence
+  `docs/test-evidence/plan72-A6-APPLY-UI-SCALE.json` (the old fault).
+
+- ★ `[chips]` **A typed command shows up later as a suggestion chip** — **OPEN, found 2026-09-26 (plan 70,
+  flow L6).** Typing `bonsai:vac-check` earlier in the session, the same text later rotated through the
+  suggestion chips like an ordinary question. [Detail](../roadmap-details.md#flow-l6-findings).
+
+**Closed 2026-09-27 (plan 72, `7ea4f378`, `7b8b5139`).** Typed commands no longer come back as chips. The
+  maintainer kept the ban lookup; its chip now reads "Check Steam players for bans". Evidence
+  `docs/test-evidence/plan72-F-HIDDEN.json` (no "bonsai:" chip seen) and unit tests.

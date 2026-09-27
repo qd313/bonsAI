@@ -1,0 +1,244 @@
+{
+ "row": "plan72-F-SUMUP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:45:59 to 14:47:25 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "screenshotSize": "1920x1080",
+  "note": "external monitor"
+ },
+ "setup": {
+  "chat": "wheatley fight (144 saved entries, the longest; reached with RB four times from the new Hollow Knight chat, title read after each)",
+  "ask_mode": "speed",
+  "newestAnswer": "how useful is the magnum revolver in half life 2 (71 earlier)"
+ },
+ "pressed": "walkTo DOWN 8 to Show details (newest answer), A; DOWN 2 to the details tabs row; RIGHT once (Session \u00b7 71 became active); DOWN 1 to 'Sum up this chat'; A; then nothing until the card was filled (33 s)",
+ "seen": {
+  "buttonAfter": "'Sum up again', ring on it, rect x 51.99 y 96.47 w 290.01 h 33.18 (bottom 129.65) - on screen",
+  "card": "rect x 51.99 y 135.64 w 290.01 h 475.37, bottom 611.01",
+  "dockTop": 600.57,
+  "dockHeight": 164.37,
+  "cardBottomMinusDockTop": 10.44,
+  "reasonLine": "none (button not greyed)",
+  "scrollPaneScrollTop": 913.28,
+  "cardText": "What the AI remembers / 70 turns \u00b7 just now / 11 bullets / 'Plus the newest 2 turns, word for word \u00b7 2 hidden notes left out'",
+  "byEye": "in the screenshot the card's last line wraps and its second line 'left out' is cut by the top of the question area"
+ },
+ "screenshot": "screenshots/plan72/F-SUMUP-card.png",
+ "verdict": "FAIL",
+ "verdictReason": "The Sum up button stays on screen, but the card's bottom sits 10.4 CSS px below the dock's top (611.01 against 600.57), so the last words of the card's footer are hidden behind the question area. The card is 475 px tall; the space between the button and the dock is about 471 px, so it cannot fully fit while the button stays on screen.",
+ "reads": {
+  "final": {
+   "deckTime": "2026-09-27 14:47:16 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "aria": "Sum up again",
+     "cls": "bonsai-sumup-btn Panel Focusable gpfocus gpfocuswithin"
+    },
+    "card": {
+     "x": 51.99,
+     "y": 135.64,
+     "w": 290.01,
+     "h": 475.37,
+     "bottom": 611.01
+    },
+    "cardText": "What the AI remembers\n70 turns \u00b7 just now\nGame: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games, RPGs.\nWheatley fight involves shielding and bombing to break pipes.\nPickaxe is used for smashing rocks and clearing debris.\nBeating Megaera involves watching dash patterns and punishing recovery windows.\nBeating the Broken Vessel in Hollow Knight requires watching moves and dodging.\nBeating the Bone Hydra in Hades requires keeping distance and hitting weak spots.\nBeating the Gonarch in Black Mesa involves aiming for the egg sac.\nCrossing electrified water in Black Mesa means looking up for platforms.\nDealing with Antlions involves using pheropods as bait.\nGeneral advice for new playthroughs is to play smart and focus on immediate needs.\nGeneral advice for clearing areas requires knowing the specific game.\nPlus the newest 2 turns, word for word \u00b7 2 hidden notes left out",
+    "btn": {
+     "x": 51.99,
+     "y": 96.47,
+     "w": 290.01,
+     "h": 33.18,
+     "bottom": 129.65
+    },
+    "btnText": "Sum up again",
+    "btnCls": "bonsai-sumup-btn Panel Focusable gpfocus gpfocuswithin",
+    "reason": null,
+    "reasonText": null,
+    "dock": {
+     "x": 48,
+     "y": 600.57,
+     "w": 300,
+     "h": 164.37,
+     "bottom": 764.94
+    },
+    "pane": {
+     "x": 48,
+     "y": 87.95,
+     "w": 300,
+     "h": 676.99,
+     "bottom": 764.94
+    },
+    "paneScrollTop": 913.28125
+   }
+  },
+  "tabsAfterRight": {
+   "deckTime": "2026-09-27 14:46:24 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": {
+     "aria": null,
+     "cls": "bonsai-details-tabs-row Panel Focusable gpfocus gpfocuswithin",
+     "text": "This answerSession \u00b7 71"
+    },
+    "tabs": [
+     {
+      "text": "This answer",
+      "cls": "bonsai-details-tab"
+     },
+     {
+      "text": "Session \u00b7 71",
+      "cls": "bonsai-details-tab bonsai-details-tab--active"
+     }
+    ],
+    "sumup": [
+     {
+      "tag": "DIV",
+      "cls": "_3IBLc81yyL08OJ7rfKtF00 Panel Focusable gpfocuswithin",
+      "text": "what is a good way to practice parrying in action gameswheatley fight\u00d7how should",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 47.998046875,
+       "y": 83.9599609375,
+       "width": 300,
+       "height": 680.99365234375,
+       "top": 83.9599609375,
+       "right": 347.998046875,
+       "bottom": 764.95361328125,
+       "left": 47.998046875
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "WDa0_WKNSWIa38S26gl_T _3I3IMjI1KLE-MxCViJ_6Np Panel Focusable gpfocuswithin",
+      "text": "what is a good way to practice parrying in action gameswheatley fight\u00d7how should",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 47.998046875,
+       "y": 83.9599609375,
+       "width": 300,
+       "height": 0,
+       "top": 83.9599609375,
+       "right": 347.998046875,
+       "bottom": 83.9599609375,
+       "left": 47.998046875
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "Panel Focusable gpfocuswithin",
+      "text": "what is a good way to practice parrying in action gameswheatley fight\u00d7how should",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 47.998046875,
+       "y": 87.95166015625,
+       "width": 300,
+       "height": 676.98974609375,
+       "top": 87.95166015625,
+       "right": 347.998046875,
+       "bottom": 764.94140625,
+       "left": 47.998046875
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "_1X4dtbZ_AMX_DXT-SGiK01 _TabContentsScroll _3td3cAnGbbbAOXW8x2pD-j _29WypCpglgRK",
+      "text": "what is a good way to practice parrying in action gameswheatley fight\u00d7how should",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 47.998046875,
+       "y": 87.95166015625,
+       "width": 300,
+       "height": 676.98974609375,
+       "top": 87.95166015625,
+       "right": 347.998046875,
+       "bottom": 764.94140625,
+       "left": 47.998046875
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-turn-slot Panel Focusable gpfocuswithin",
+      "text": "how useful is the magnum revolver in half life 2The Magnum Revolver in Half-Life",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 51.98974609375,
+       "y": -525.732421875,
+       "width": 290.0146484375,
+       "height": 3698.98681640625,
+       "top": -525.732421875,
+       "right": 342.00439453125,
+       "bottom": 3173.25439453125,
+       "left": 51.98974609375
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-details-session-body Panel Focusable",
+      "text": "Sum up this chatwheatley fightwhat does the pickaxe dowhat does the pickaxe dowh",
+      "aria": null,
+      "disabled": null,
+      "r": {
+       "x": 51.98974609375,
+       "y": 301.15966796875,
+       "width": 290.0146484375,
+       "height": 2872.0947265625,
+       "top": 301.15966796875,
+       "right": 342.00439453125,
+       "bottom": 3173.25439453125,
+       "left": 51.98974609375
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-sumup-btn Panel Focusable",
+      "text": "Sum up this chat",
+      "aria": "Sum up this chat",
+      "disabled": "false",
+      "r": {
+       "x": 51.98974609375,
+       "y": 301.15966796875,
+       "width": 290.0146484375,
+       "height": 33.1787109375,
+       "top": 301.15966796875,
+       "right": 342.00439453125,
+       "bottom": 334.33837890625,
+       "left": 51.98974609375
+      }
+     }
+    ]
+   }
+  },
+  "rowAfterRB4": {
+   "deckTime": "2026-09-27 14:45:59 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswi",
+    "title": "wheatley fight",
+    "rowText": "LB\nwheatley fight\n\u00d7\n+\nRB",
+    "dots": [
+     "bonsai-chat-slot-dot--create",
+     "",
+     "",
+     "",
+     "",
+     "bonsai-chat-slot-dot--active",
+     "",
+     "",
+     ""
+    ]
+   }
+  }
+ }
+}

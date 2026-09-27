@@ -1,0 +1,131 @@
+{
+ "row": "plan72-P-CHIP-GAP-couch",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:20 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "couch (scale 1.18)",
+  "chat": "how should i spend my first hour in a new open world game"
+ },
+ "pressed": "none since D-1 couch (ring on the preset chip 'What do the model policy tiers mean?')",
+ "seen": {
+  "chipButton": "y 603.967 h 29.993 bottom 633.960 (same height as handheld: 29.993)",
+  "presetRowHost": "y 603.967 h 37.988",
+  "questionBox": ".bonsai-unified-input-host y 641.956 h 69.556 bottom 711.511 (same height as handheld); text field INPUT y 642.737 h 43.994",
+  "ask": "y 714.282 h 35.999 bottom 750.281",
+  "dock": "y 603.186 h 165.356 bottom 768.542",
+  "gaps_css_px": {
+   "chipBottomToBoxTop": 7.996,
+   "chipBottomToTextFieldTop": 8.777,
+   "boxBottomToAskTop": 2.771,
+   "textFieldBottomToAskTop": 27.551
+  },
+  "sameAsHandheld": "every gap and every height here is identical to handheld; only the positions moved down 3.601 px",
+  "dockPastWindow": "dock bottom 768.542 vs window height 766: the dock runs 2.542 px past the bottom of the page. In the screenshot the context line's letters are cut at the bottom.",
+  "placeholderOverflow": "in the screenshot the question box's placeholder text 'Describe the level, boss, or puzzle you're' runs into the right edge (larger couch type in an unscaled box)"
+ },
+ "screenshot": "screenshots/plan72/P-1-chip-gap-couch.png (1920x1080, the same frame as D-1-plain-couch.png)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:20:10 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1.18",
+    "focus": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "text": "How do I find Ollama on my LAN?",
+     "rect": {
+      "x": 47.998,
+      "y": 603.967,
+      "w": 300,
+      "h": 29.993,
+      "bottom": 633.96,
+      "right": 347.998
+     }
+    },
+    "chipButton": {
+     "tag": "BUTTON",
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "rect": {
+      "x": 47.998,
+      "y": 603.967,
+      "w": 300,
+      "h": 29.993,
+      "bottom": 633.96,
+      "right": 347.998
+     }
+    },
+    "presetGlass": {
+     "x": 47.998,
+     "y": 603.967,
+     "w": 300,
+     "h": 29.993,
+     "bottom": 633.96,
+     "right": 347.998
+    },
+    "presetRowHost": {
+     "x": 47.998,
+     "y": 603.967,
+     "w": 300,
+     "h": 37.988,
+     "bottom": 641.956,
+     "right": 347.998
+    },
+    "inputHost": {
+     "x": 47.998,
+     "y": 641.956,
+     "w": 300,
+     "h": 69.556,
+     "bottom": 711.511,
+     "right": 347.998
+    },
+    "textField": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable",
+     "rect": {
+      "x": 72.754,
+      "y": 642.737,
+      "w": 274.463,
+      "h": 43.994,
+      "bottom": 686.731,
+      "right": 347.217
+     }
+    },
+    "ask": {
+     "x": 48.779,
+     "y": 714.282,
+     "w": 298.438,
+     "h": 35.999,
+     "bottom": 750.281,
+     "right": 347.217
+    },
+    "dock": {
+     "x": 47.998,
+     "y": 603.186,
+     "w": 300,
+     "h": 165.356,
+     "bottom": 768.542,
+     "right": 347.998
+    },
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "bottom": 764.954,
+     "right": 347.998
+    },
+    "gaps": {
+     "chipBottomToBoxTop": 7.996,
+     "chipBottomToFieldTop": 8.777,
+     "boxBottomToAskTop": 2.771,
+     "fieldBottomToAskTop": 27.551
+    }
+   }
+  }
+ }
+}

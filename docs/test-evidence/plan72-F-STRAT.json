@@ -1,0 +1,113 @@
+{
+ "row": "plan72-F-STRAT",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:41:30 to 14:43:15 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "strategy",
+  "ask_think_effort": "off (was low, set by me for F-THINK)",
+  "character": "Ali G voice on (settings ai_character_enabled true, preset alig_ali_g) - colours every opening",
+  "strategy_spoiler_masking_enabled": true
+ },
+ "pressed": "chat row: LB twice from 'what is a good way to practice parrying' to the New chat spot (title read after each), A (new chat 07af9a23 created; the oldest chat 'how do i beat the boss at the end of the first area' dropped from the index). Send script, walk DOWN 3 to Ask, A. Second: Down twice from the header to the row, LB once to New chat, A (new chat a6be3bb2; 'how do i unlock the next area after finishing the tutorial' dropped). Send script, DOWN 3 to Ask, A.",
+ "chat1": {
+  "question": "Hades the boss at the end of the first area keeps killing me, any tips",
+  "answerSeconds": "about 10",
+  "firstTwoSentences": "Listen up, mate. That boss is a proper pain in the arse, I know.",
+  "fullAnswerText": "Listen up, mate. That boss is a proper pain in the arse, I know. The trick is usually just knowing what to do before you even start swinging. You gotta keep your shield up, see? Blocking is key because it turns a bad hit into nothing, and it sets you up to rush him.\n\nIt's all about defence and offence being the same button, you get me?\n\nWhere are you at in Hades?\nA. Early in the game\nB. Later in the game",
+  "spoilerCovers": 0,
+  "nameInvolved": "no boss name in the answer, so no cover expected",
+  "notesCredit": "Shield of Chaos - From bonsAI's own note"
+ },
+ "chat2": {
+  "question": "Hollow Knight how do I beat the big guy in the arena with the green sword",
+  "answerSeconds": "about 12",
+  "firstTwoSentences": "Listen up, mate. I'm keeping it real with you, so no fancy spoilers about how to beat the big guy.",
+  "fullAnswerText": "Listen up, mate. I'm keeping it real with you, so no fancy spoilers about how to beat the big guy. We gotta focus on how you're playing right now.\n\nSpoiler \u2014 tap to show\nHidden until you reveal (Strategy Guide).\n\n\u2014 No close match in my notes, this answer leans on the model's own knowledge.\n\nWhere are you at in Hollow Knight?\nA. Starting out in Hollow Knight\nB. Later in Hollow Knight",
+  "spoilerCovers": 1
+ },
+ "checks": {
+  "modeActive": 0,
+  "spoilerMinimized": 0,
+  "quotedInstruction": 0,
+  "spoilerCoverWhereNameInvolved": "chat2 has 1 cover; chat1 names no one and has none"
+ },
+ "verdict": "PASS",
+ "verdictNote": "Neither opening says 'mode active' or 'spoiler-minimized' or quotes an instruction. The second opening still talks about its own spoiler rule in its own words ('no fancy spoilers about how to beat the big guy'), and the whole visible answer is that sentence plus a cover - the session may want to judge whether that sounds like a person.",
+ "reads": {
+  "chat1": {
+   "deckTime": "2026-09-27 14:42:08 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "stop": false,
+    "slots": 1,
+    "text": "Hades the boss at the end of the first area keeps killing me, any tips\n\nListen up, mate. That boss is a proper pain in the arse, I know. The trick is usually just knowing what to do before you even start swinging. You gotta keep your shield up, see? Blocking is key because it turns a bad hit into nothing, and it sets you up to rush him.\n\nIt's all about defence and offence being the same button, you get me?\n\nWhere are you at in Hades?\nA. Early in the game\nB. Later in the game\nWas this helpful?\nHelpful\nNot really\nShow details \u2193\nShield of Chaos\n\u25b8\nFrom bonsAI's own note",
+    "spoilers": [],
+    "title": "Hades the boss at the end of the first area keeps killing me, any tips"
+   }
+  },
+  "chat2": {
+   "deckTime": "2026-09-27 14:43:13 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "stop": false,
+    "slots": 1,
+    "text": "Hollow Knight how do I beat the big guy in the arena with the green sword\n\nListen up, mate. I'm keeping it real with you, so no fancy spoilers about how to beat the big guy. We gotta focus on how you're playing right now.\n\nSpoiler \u2014 tap to show\nHidden until you reveal (Strategy Guide).\n\n\u2014 No close match in my notes, this answer leans on the model's own knowledge.\n\nWhere are you at in Hollow Knight?\nA. Starting out in Hollow Knight\nB. Later in Hollow Knight\nWas this helpful?\nHelpful\nNot really\nShow details \u2193",
+    "spoilers": [
+     {
+      "cls": "bonsai-spoiler-reveal-target Panel Focusable",
+      "text": "Spoiler \u2014 tap to show\nHidden until you reveal (Strategy Guide).",
+      "aria": null
+     }
+    ],
+    "title": "Hollow Knight how do I beat the big guy in the arena with the green sword"
+   }
+  },
+  "rowAfterNew1": {
+   "deckTime": "2026-09-27 14:41:38 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswi",
+    "title": "New chat",
+    "rowText": "LB\nNew chat\n\u00d7\n+\nRB",
+    "dots": [
+     "bonsai-chat-slot-dot--create",
+     "bonsai-chat-slot-dot--active",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ]
+   }
+  },
+  "rowAfterNew2": {
+   "deckTime": "2026-09-27 14:42:46 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "ring": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswi",
+    "title": "New chat",
+    "rowText": "LB\nNew chat\n\u00d7\n+\nRB",
+    "dots": [
+     "bonsai-chat-slot-dot--create",
+     "bonsai-chat-slot-dot--active",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ]
+   }
+  }
+ }
+}

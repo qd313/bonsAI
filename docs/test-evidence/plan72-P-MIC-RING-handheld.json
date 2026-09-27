@@ -1,0 +1,207 @@
+{
+ "row": "plan72-P-MIC-RING-handheld",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:18 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades"
+ },
+ "pressed": "from the preset chip: DOWN (question box, A not pressed), DOWN (Ask), UP (Attach screenshot), RIGHT (Strategy mode), RIGHT (Voice input). Every step read and matched. A was never pressed on the mic.",
+ "seen": {
+  "mic": "BUTTON aria 'Voice input' .bonsai-unified-input-corner-right, rect x 327.232 y 687.134 19.995x19.995, right 347.227",
+  "micRing": "outline rgba(255,255,255,0.9) solid 1.5625px, outline-offset 1.98975px (reaches 3.552 px past the button); box-shadow 'rgba(255,255,255,0.92) 0 0 0 2px, rgba(255,255,255,0.2) 0 0 0 5px' (reaches 5 px past); border 0; border-radius 0; no ::before/::after",
+  "parent": ".bonsai-unified-input-actions-right, right 345.227 (the button sticks out 2.000 px past its parent); no outline, no shadow, overflow visible",
+  "clipper": ".bonsai-unified-input-host has overflow hidden, right 347.998; .bonsai-scope also overflow hidden, right 347.998",
+  "roomRightOfButton": 0.771,
+  "ringCutOff_css_px": {
+   "outlineOuterEdge": 350.779,
+   "outlinePastClip": 2.781,
+   "shadowOuterEdge": 352.227,
+   "shadowPastClip": 4.229
+  },
+  "bySight": "in the screenshot the ring shows its top and left sides only; the right side is missing"
+ },
+ "screenshot": "screenshots/plan72/P-6-mic-ring-handheld.png (1920x1080)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:18:00 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1",
+    "scopeRight": 347.998,
+    "scopeStyle": {
+     "overflow": "hidden",
+     "overflowX": "hidden"
+    },
+    "focused": {
+     "cls": "bonsai-askbar-target bonsai-unified-input-corner-right cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "aria": "Voice input",
+     "rect": {
+      "x": 327.232,
+      "y": 687.134,
+      "w": 19.995,
+      "h": 19.995,
+      "right": 347.227,
+      "bottom": 707.129
+     },
+     "outline": "rgba(255, 255, 255, 0.9) solid 1.5625px",
+     "outlineOffset": "1.98975px",
+     "boxShadow": "rgba(255, 255, 255, 0.92) 0px 0px 0px 2px, rgba(255, 255, 255, 0.2) 0px 0px 0px 5px",
+     "border": "0px none rgb(219, 230, 243)",
+     "borderRadius": "0px",
+     "overflow": "visible",
+     "overflowX": "visible",
+     "clipPath": "none",
+     "paddingRight": "0px",
+     "before": {
+      "content": "none",
+      "boxShadow": "none",
+      "outline": "rgb(219, 230, 243) none 0px",
+      "border": "0px none rgb(219, 230, 243)",
+      "inset": "auto"
+     },
+     "after": {
+      "content": "none",
+      "boxShadow": "none",
+      "outline": "rgb(219, 230, 243) none 0px",
+      "border": "0px none rgb(219, 230, 243)",
+      "inset": "auto"
+     }
+    },
+    "parent": {
+     "cls": "bonsai-unified-input-actions-right Panel Focusable gpfocuswithin",
+     "aria": null,
+     "rect": {
+      "x": 265.332,
+      "y": 687.134,
+      "w": 79.895,
+      "h": 19.995,
+      "right": 345.227,
+      "bottom": 707.129
+     },
+     "outline": "rgb(150, 150, 150) none 0px",
+     "outlineOffset": "0px",
+     "boxShadow": "none",
+     "border": "0px none rgb(150, 150, 150)",
+     "borderRadius": "0px",
+     "overflow": "visible",
+     "overflowX": "visible",
+     "clipPath": "none",
+     "paddingRight": "0px",
+     "before": {
+      "content": "none",
+      "boxShadow": "none",
+      "outline": "rgb(150, 150, 150) none 0px",
+      "border": "0px none rgb(150, 150, 150)",
+      "inset": "auto"
+     },
+     "after": {
+      "content": "none",
+      "boxShadow": "none",
+      "outline": "rgb(150, 150, 150) none 0px",
+      "border": "0px none rgb(150, 150, 150)",
+      "inset": "auto"
+     }
+    },
+    "ancestors": [
+     {
+      "cls": "bonsai-unified-input-actions-right Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 265.332,
+       "y": 687.134,
+       "w": 79.895,
+       "h": 19.995,
+       "right": 345.227,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "overflowX": "visible",
+      "clipPath": "none",
+      "contain": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-actions-row Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 50.769,
+       "y": 683.13,
+       "w": 294.458,
+       "h": 23.999,
+       "right": 345.227,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "overflowX": "visible",
+      "clipPath": "none",
+      "contain": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-bottom-actions",
+      "rect": {
+       "x": 48.779,
+       "y": 683.13,
+       "w": 298.438,
+       "h": 23.999,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "overflowX": "visible",
+      "clipPath": "none",
+      "contain": "none"
+     },
+     {
+      "cls": "",
+      "rect": {
+       "x": 48.779,
+       "y": 639.136,
+       "w": 298.438,
+       "h": 67.993,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "overflowX": "visible",
+      "clipPath": "none",
+      "contain": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bonsai-unified-input--a",
+      "rect": {
+       "x": 47.998,
+       "y": 638.354,
+       "w": 300,
+       "h": 69.556,
+       "right": 347.998,
+       "bottom": 707.91
+      },
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "clipPath": "none",
+      "contain": "none"
+     },
+     {
+      "cls": "_3LM_ZckJp5yJYrL1OI_WqW",
+      "rect": {
+       "x": 47.998,
+       "y": 638.354,
+       "w": 300,
+       "h": 69.556,
+       "right": 347.998,
+       "bottom": 707.91
+      },
+      "overflow": "visible",
+      "overflowX": "visible",
+      "clipPath": "none",
+      "contain": "none"
+     }
+    ],
+    "gapFocusRightToScopeRight": 0.771
+   }
+  }
+ }
+}

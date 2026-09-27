@@ -1,0 +1,41 @@
+{
+ "row": "plan72-F-0-SETUP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "setup": {
+  "screen": "external monitor, page 855x766, screen 1500x843, dpr 1.28 (1920x1080 physical)",
+  "uiSize": "handheld (scale 1; auto on, manual profile handheld; the UI size section is hidden in this build)",
+  "chat": "Hades (index 8, last of 8 saved chats)",
+  "game": "none running"
+ },
+ "deckTime": "2026-09-27 13:59:40 EDT",
+ "pressed": "none (setup)",
+ "seen": {
+  "md5": "167064d0c2655a7f47ff87bac4ac6b33 on the Deck, matches the task",
+  "rig": "lsusb lists 303a:1001",
+  "keepAwake": "block inhibitor 'bonsai-72 block1 DP' still held (28800 s lease from block 1, ends about 20:01 EDT)",
+  "backup": "~/qa-backups/settings-plan72-block2 made; chat_slots 9 files in both",
+  "screen": "page 855x766, screen 1500x843, dpr 1.28: the external monitor",
+  "pluginOpen": "was closed; deck_openPlugin opened it on the first try",
+  "internetDownloads": "no internet-downloads key in settings capabilities (filesystem_write, media_library_access, microphone_access, steam_logs_read, steam_web_api all true) - so the new permission is at its default, off; left alone",
+  "uiScaleKeys": "ui_scale_auto_enabled true, ui_scale_manual_profile handheld (not changed)",
+  "repoHead": "ac09f688 at start (the build on the Deck is from 0065fccb)"
+ },
+ "verdict": "SETUP OK",
+ "reads": {
+  "screen": {
+   "deckTime": "2026-09-27 14:00:23 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "sw": 1500,
+    "sh": 843,
+    "dpr": 1.2799999713897705,
+    "open": true,
+    "title": "Hades",
+    "ring": null
+   }
+  }
+ }
+}

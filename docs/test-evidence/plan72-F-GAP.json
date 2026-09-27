@@ -1,0 +1,137 @@
+{
+ "row": "plan72-F-GAP",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:06:47 EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld (scale 1)",
+  "chat": "'how do i beat the boss at the end of the first area' (Hades)",
+  "game": "none"
+ },
+ "pressed": "ring walked Down from the chat row to the question box (no A), Up once onto the preset chip 'Which Ollama essentials should I pull for this Deck?'",
+ "seen": {
+  "chipButton": {
+   "y": 601.355,
+   "bottom": 631.348,
+   "h": 29.993
+  },
+  "questionBoxHost": {
+   "y": 633.35,
+   "bottom": 707.91,
+   "h": 74.561
+  },
+  "askBarOuter": {
+   "y": 709.9,
+   "bottom": 747.461,
+   "h": 37.561
+  },
+  "askButton": {
+   "y": 710.681,
+   "bottom": 746.68
+  },
+  "dock": {
+   "y": 600.574,
+   "bottom": 764.941,
+   "height": 164.368
+  },
+  "chipBottomToBoxTop_px": 2.002,
+  "boxBottomToAskBarTop_px": 1.99,
+  "difference_px": 0.012,
+  "boxBottomToAskButtonTop_px": 2.771,
+  "dockHeightVsBlock1": "164.368 now against 165.36 in block 1 (0.99 px shorter)"
+ },
+ "expected": "chip bottom to box top and box bottom to Ask bar top equal within 0.3 CSS px (about 2.0 each)",
+ "screenshot": "screenshots/plan72/F-GAP-chip.png",
+ "verdict": "PASS",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 14:06:47 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc ",
+     "text": "Which Ollama essentials should I pull for this Dec",
+     "rect": {
+      "x": 47.998,
+      "y": 601.355,
+      "w": 300,
+      "h": 29.993,
+      "right": 347.998,
+      "bottom": 631.348
+     }
+    },
+    "chipButton": {
+     "tag": "BUTTON",
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc ",
+     "rect": {
+      "x": 47.998,
+      "y": 601.355,
+      "w": 300,
+      "h": 29.993,
+      "right": 347.998,
+      "bottom": 631.348
+     }
+    },
+    "presetGlass": {
+     "x": 47.998,
+     "y": 601.355,
+     "w": 300,
+     "h": 29.993,
+     "right": 347.998,
+     "bottom": 631.348
+    },
+    "inputHost": {
+     "x": 47.998,
+     "y": 633.35,
+     "w": 300,
+     "h": 74.561,
+     "right": 347.998,
+     "bottom": 707.91
+    },
+    "askbarMerged": {
+     "x": 47.998,
+     "y": 709.9,
+     "w": 300,
+     "h": 37.561,
+     "right": 347.998,
+     "bottom": 747.461
+    },
+    "askButton": {
+     "x": 48.779,
+     "y": 710.681,
+     "w": 298.438,
+     "h": 35.999,
+     "right": 347.217,
+     "bottom": 746.68
+    },
+    "askButtonCls": "bonsai-askbar-target bonsai-ask-primary cXzBZxhPBl7fZs9LODEnc Focusable",
+    "dock": {
+     "x": 47.998,
+     "y": 600.574,
+     "w": 300,
+     "h": 164.368,
+     "right": 347.998,
+     "bottom": 764.941
+    },
+    "dockHeight": 164.368,
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "right": 347.998,
+     "bottom": 764.954
+    },
+    "gaps": {
+     "chipBottomToBoxTop": 2.002,
+     "boxBottomToAskbarTop": 1.99,
+     "boxBottomToAskButtonTop": 2.771
+    }
+   }
+  }
+ }
+}

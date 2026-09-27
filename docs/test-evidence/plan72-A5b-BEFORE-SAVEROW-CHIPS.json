@@ -1,0 +1,279 @@
+{
+ "row": "plan72-A5b-BEFORE-SAVEROW-CHIPS",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:57-12:58 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (scale 1)",
+  "chat": "Hades, right after A-5's answer finished; no chat switch, no reload"
+ },
+ "pressed": [
+  "from the chat row, walkTo DOWN 'Save chat to Desktop' (14 presses; A NOT pressed on it)",
+  "screenshot",
+  "Up x2 (Save -> Show details -> 'Mark reply helpful'), Right x1 -> 'Mark reply not helpful'",
+  "A once on 'Not really'",
+  "read the chips",
+  "Down x1 to the first chip (needed to put the ring there for the screenshot)",
+  "screenshot. Nothing else pressed."
+ ],
+ "seen": {
+  "saveRow": "'Save chat to Desktop' button rect x 48 y 562 w 300 h 38 (bottom 600, dock top 599.585), inside .bonsai-save-chat-desktop-row, fully visible with the ring on it. Above it: 'Show details', the thumbs row, and a question card from the answer ('What kind of game are you trying to get the best performance out of?' with choices A and B).",
+  "afterNotHelpful": "the ring stayed on 'Not really' (now Disabled; 'Helpful' also Disabled). A second label 'What went wrong?' appeared (x 51.99 y 527.002 w 96.838 h 14.844) with 5 chips.",
+  "chips": [
+   "Bad information: x 51.99 y 549.841 w 118.274 h 31.995",
+   "Misidentified game/problem: x 51.99 y 589.832 w 187.268 h 31.995",
+   "Unfenced spoiler: x 51.99 y 629.822 w 122.021 h 31.995",
+   "Too long: x 51.99 y 669.812 w 74.805 h 31.995",
+   "Too short: x 134.79 y 669.812 w 80.139 h 31.995"
+  ],
+  "chipStyle": "every chip: padding 6px 12px, min-height 32px, min-width auto, font-size 12px, font-weight 600, letter-spacing normal, border 0.78125px, box-sizing border-box, height 31.995",
+  "rows": "the 5 chips take 4 rows: 'Bad information' / 'Misidentified game/problem' / 'Unfenced spoiler' each alone, then 'Too long' + 'Too short'. They sit in two containers (.bonsai-chat-reply-actions-row--chips): the first 266.809 x 111.975 (3 rows), the second 266.809 x 31.995. Gap 8px (row and column), flex-wrap wrap, row width 266.809.",
+  "behindDock": "with the ring on the first chip the page did not scroll: in the screenshot only 'Bad information' shows; the other 4 chips (y 589.8 to 701.8) sit behind the dock (dock top 599.585)."
+ },
+ "screenshots": [
+  "screenshots/plan72/A-5b-before-saverow.png (1920x1080, ring on Save chat to Desktop)",
+  "screenshots/plan72/A-5b-reason-chips-first-ring.png (1920x1080, ring on the first chip)"
+ ],
+ "walkFiles": [
+  "runs/plan72-A5b-to-thumbs.json",
+  "runs/plan72-A5b-to-first-chip.json"
+ ],
+ "verdict": "MEASURED (catch-up for part 1's P-3 and P-5 picture 2). The rating 'Not helpful' was given on Hades and is undone by the chat restore at the end.",
+ "reads": {
+  "chips": {
+   "deckTime": "2026-09-27 12:58:22 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "boxCls": "bonsai-chat-reply-actions Panel Focusable gpfocuswithin",
+    "boxRect": {
+     "x": 51.99,
+     "y": 464.172,
+     "w": 266.809,
+     "h": 266.455
+    },
+    "boxChildren": [
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-feedback-row__label",
+      "rect": {
+       "x": 51.99,
+       "y": 464.172,
+       "w": 87.415,
+       "h": 14.844
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-reply-actions-row Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 51.99,
+       "y": 487.012,
+       "w": 266.809,
+       "h": 31.995
+      }
+     },
+     {
+      "tag": "SPAN",
+      "cls": "bonsai-chat-feedback-row__label",
+      "rect": {
+       "x": 51.99,
+       "y": 527.002,
+       "w": 96.838,
+       "h": 14.844
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips Panel Focusab",
+      "rect": {
+       "x": 51.99,
+       "y": 549.841,
+       "w": 266.809,
+       "h": 111.975
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips Panel Focusab",
+      "rect": {
+       "x": 51.99,
+       "y": 669.812,
+       "w": 266.809,
+       "h": 31.995
+      }
+     },
+     {
+      "tag": "DIV",
+      "cls": "bonsai-chat-details-divider Panel Focusable",
+      "rect": {
+       "x": 51.99,
+       "y": 713.794,
+       "w": 266.809,
+       "h": 14.844
+      }
+     }
+    ],
+    "rowCls": "bonsai-chat-reply-actions-row Panel Focusable gpfocuswithin",
+    "rowRect": {
+     "x": 51.99,
+     "y": 487.012,
+     "w": 266.809,
+     "h": 31.995
+    },
+    "gap": "8px",
+    "rowGap": "8px",
+    "columnGap": "8px",
+    "flexWrap": "wrap",
+    "display": "flex",
+    "chips": [
+     {
+      "text": "Helpful",
+      "rect": {
+       "x": 51.99,
+       "y": 487.012,
+       "w": 88.989,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Not really",
+      "rect": {
+       "x": 148.975,
+       "y": 487.012,
+       "w": 103.918,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "",
+      "rect": {
+       "x": 288.806,
+       "y": 487.012,
+       "w": 29.993,
+       "h": 31.995
+      },
+      "padding": "0px",
+      "minHeight": "32px",
+      "minWidth": "30px",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Bad information",
+      "rect": {
+       "x": 51.99,
+       "y": 549.841,
+       "w": 118.274,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Misidentified game/problem",
+      "rect": {
+       "x": 51.99,
+       "y": 589.832,
+       "w": 187.268,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Unfenced spoiler",
+      "rect": {
+       "x": 51.99,
+       "y": 629.822,
+       "w": 122.021,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Too long",
+      "rect": {
+       "x": 51.99,
+       "y": 669.812,
+       "w": 74.805,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     },
+     {
+      "text": "Too short",
+      "rect": {
+       "x": 134.79,
+       "y": 669.812,
+       "w": 80.139,
+       "h": 31.995
+      },
+      "padding": "6px 12px",
+      "minHeight": "32px",
+      "minWidth": "auto",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "letterSpacing": "normal",
+      "borderWidth": "0.78125px",
+      "boxSizing": "border-box",
+      "whiteSpace": "normal"
+     }
+    ],
+    "rowsUsed": 5
+   }
+  }
+ }
+}

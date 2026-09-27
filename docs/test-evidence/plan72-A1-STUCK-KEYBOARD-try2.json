@@ -1,0 +1,233 @@
+{
+ "row": "plan72-A1-STUCK-KEYBOARD-try2",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:33 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades again (same chat as try 1)",
+  "try": "(b) same chat again, after clearing try 1 with a plugin reload",
+  "clearBefore": "deck_reloadPlugin 12:32; deck_openPlugin failed twice (1st: debugger connection reset right after the reload, as expected; 2nd: 'QAM chord delivered but no quickaccess pane appeared'), opened on the 3rd call",
+  "route": "panel freshly opened with no ring; walkTo DOWN: press 1 placed the ring on the preset chip 'How can I optimize for battery life?', press 2 moved it onto the question box INPUT"
+ },
+ "pressed": [
+  "A on the question box (deliberate)",
+  "B",
+  "DOWN",
+  "RIGHT",
+  "UP",
+  "LEFT",
+  "extra: UP, UP, DOWN"
+ ],
+ "seen": {
+  "afterA": "on-screen keyboard open: innerHeight 766 -> 566; ring and activeElement on the INPUT (y 474.292); hasFocus true; 1 gpfocus element",
+  "afterB": "keyboard closed; innerHeight 766; ring and activeElement still on the INPUT (x 72.754 y 639.136 w 274.463 h 43.994); hasFocus true",
+  "down": "INPUT -> Ask (moved, visible 100%)",
+  "right": "Ask -> Ask (no move; right-most)",
+  "up": "Ask -> 'Attach screenshot to Ask' (moved, visible)",
+  "left": "Attach -> Attach (no move; left-most)",
+  "extra": "Up -> 'Choose AI character, A'; Up -> preset chip (label mid-scramble); Down -> question box INPUT. All visible 100%.",
+  "stuck": false
+ },
+ "walkFiles": [
+  "runs/plan72-A1b-down.json",
+  "runs/plan72-A1b-rest.json"
+ ],
+ "verdict": "NOT STUCK (try 2 of 3)",
+ "reads": {
+  "before": {
+   "deckTime": "2026-09-27 12:33:05 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 766,
+    "dpr": 1.2799999713897705,
+    "hasFocus": true,
+    "active": {
+     "tag": "BODY",
+     "cls": "",
+     "aria": null,
+     "text": "NotificationsQuick SettingsBrightnessAudioOtherAirplane modeWi-FiBluetoothAirPods QWireless Controlleri4StadiaKZLX-5fe9P",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 855.469,
+      "h": 0
+     }
+    },
+    "gpfocus": null,
+    "gpfocusCount": 0,
+    "dockTop": 599.585,
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989
+    },
+    "chatTitle": "Hades",
+    "osk": false,
+    "inputHost": {
+     "tag": "DIV",
+     "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bonsai-unified-input--ai-character",
+     "aria": null,
+     "text": "A\u00a0Describe the level, boss, or puzzle you're stuck on.Strategy",
+     "rect": {
+      "x": 47.998,
+      "y": 638.354,
+      "w": 300,
+      "h": 69.556
+     }
+    },
+    "textarea": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 639.136,
+      "w": 274.463,
+      "h": 43.994
+     }
+    }
+   }
+  },
+  "afterA": {
+   "deckTime": "2026-09-27 12:33:19 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 566,
+    "dpr": 1.2799999713897705,
+    "hasFocus": true,
+    "active": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 474.292,
+      "w": 274.463,
+      "h": 43.994
+     }
+    },
+    "gpfocus": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 474.292,
+      "w": 274.463,
+      "h": 43.994
+     }
+    },
+    "gpfocusCount": 1,
+    "dockTop": 434.741,
+    "scope": {
+     "x": 47.998,
+     "y": -100.879,
+     "w": 300,
+     "h": 700.989
+    },
+    "chatTitle": "Hades",
+    "osk": false,
+    "inputHost": {
+     "tag": "DIV",
+     "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bonsai-unified-input--ai-character",
+     "aria": null,
+     "text": "A\u00a0Describe the level, boss, or puzzle you're stuck on.Strategy",
+     "rect": {
+      "x": 47.998,
+      "y": 473.511,
+      "w": 300,
+      "h": 69.556
+     }
+    },
+    "textarea": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 474.292,
+      "w": 274.463,
+      "h": 43.994
+     }
+    }
+   }
+  },
+  "afterB": {
+   "deckTime": "2026-09-27 12:33:26 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "innerWidth": 855,
+    "innerHeight": 766,
+    "dpr": 1.2799999713897705,
+    "hasFocus": true,
+    "active": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 639.136,
+      "w": 274.463,
+      "h": 43.994
+     }
+    },
+    "gpfocus": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 639.136,
+      "w": 274.463,
+      "h": 43.994
+     }
+    },
+    "gpfocusCount": 1,
+    "dockTop": 599.585,
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989
+    },
+    "chatTitle": "Hades",
+    "osk": false,
+    "inputHost": {
+     "tag": "DIV",
+     "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bonsai-unified-input--ai-character",
+     "aria": null,
+     "text": "A\u00a0Describe the level, boss, or puzzle you're stuck on.Strategy",
+     "rect": {
+      "x": 47.998,
+      "y": 638.354,
+      "w": 300,
+      "h": 69.556
+     }
+    },
+    "textarea": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "",
+     "rect": {
+      "x": 72.754,
+      "y": 639.136,
+      "w": 274.463,
+      "h": 43.994
+     }
+    }
+   }
+  }
+ }
+}

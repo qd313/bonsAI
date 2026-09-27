@@ -1,0 +1,9 @@
+{
+ "row": "plan72-D-DOTS-writing-handheld",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:07 EDT",
+ "correctionOf": "plan72-D-DOTS-writing-handheld.json",
+ "correction": "The summary in that file says border-radius read 0px on the writing dot and the plain dots. That was a misreading of the border column by the driver. The raw read embedded in that same file is right: border-radius is 50% on dots 1-8 (writing dot included) and 0px only on the '+' (dot 0). Border is 0px on every dot. Everything else in that file stands.",
+ "verdict": "CORRECTION ONLY"
+}

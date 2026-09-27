@@ -1,0 +1,15 @@
+{
+ "row": "plan72-A4-UP-FAMILY-e",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:58 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "chat": "'wheatley fight' (144 saved entries = 72 turns; the screen shows the newest turn plus '71 earlier')"
+ },
+ "search": "Over SSH, the saved chats' answer text holds a spoiler block (```bonsai-spoiler) in exactly two places, both in 'wheatley fight': entry 7 (answer to 'what is waiting at the end of the game', the 4th turn) and entry 75 (the 38th turn). No other chat has one.",
+ "pressed": "RB from the parrying chat to 'wheatley fight'; Down onto '71 earlier'; A on it (the runbook's pill press). Nothing else.",
+ "seen": "The pill opened into 72 one-line question rows; only the newest turn shows an answer (1 answer bubble on the page). No element with 'spoiler' in its class exists on the page (0 found). The 4th row reads 'what is waiting at the end of the game', but its answer, where the cover would be, is not drawn. Showing it would need A on an old question row, which the runbook does not describe, so I did not press it.",
+ "verdict": "COULD NOT RUN: the only spoiler covers are inside old turns whose answers the screen does not draw"
+}

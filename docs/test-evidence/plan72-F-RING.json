@@ -1,0 +1,465 @@
+{
+ "row": "plan72-F-RING",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:07:26 - 14:08:38 EDT",
+ "setup": {
+  "screen": "external monitor, page 855x766, dpr 1.28",
+  "uiSize": "handheld",
+  "chat": "'how do i beat the boss at the end of the first area'"
+ },
+ "pressed": "from the chip: Down (question box, no A), Down (Ask). Then Up -> 'Attach screenshot to Ask' (paperclip); Right -> 'Inference mode: Strategy. Open to change.' (mode chip); Right -> 'Voice input'. Focus read after each press. No A on any of them.",
+ "seen": {
+  "boxClip": {
+   "hostRect": "x 47.998-347.998, y 633.35-707.91",
+   "border": 0.78125,
+   "innerClip": {
+    "left": 48.779,
+    "top": 634.131,
+    "right": 347.217,
+    "bottom": 707.129
+   },
+   "overflow": "hidden"
+  },
+  "paperclip": {
+   "rect": "x 53.772-73.767, y 682.141-702.136 (19.995 square)",
+   "outline": "1.5625px solid white 0.9, offset 1.99",
+   "boxShadow": "2px white 0.92 + 5px white 0.2",
+   "marginsToClip_if_outer_edge_is_the_5px_glow": {
+    "left": -0.007,
+    "top": 46.99,
+    "right": 268.45,
+    "bottom": -0.007
+   },
+   "marginsToClip_if_outer_edge_is_outline(3.55px)": {
+    "left": 1.44,
+    "bottom": 1.44
+   },
+   "marginsToClip_if_outline_plus_5px_stacked(8.55px)": {
+    "left": -3.559,
+    "bottom": -3.559
+   },
+   "byEye": "white ring shows on all four sides, 4 screen px thick; left side then 2 px of bright glow, then the box's own border line; the faint outer glow is cut at the box edge on the left and bottom"
+  },
+  "modeChip": {
+   "rect": "x 262.329-317.236, y 682.141-702.136",
+   "ringStyle": "no outline and no box-shadow on the button; the ring is a ::before with inset 1px 1px -1px -1px and a 1px inset line (rgba 200,223,245,0.8), radius 5px - a thin line inside the chip, not an outline plus glow",
+   "painted edge": "left 261.33, bottom 703.14; 3.99 px inside the clip bottom",
+   "byEye": "thin rounded rectangle, all four sides show"
+  },
+  "voice": {
+   "rect": "x 322.229-342.224, y 682.141-702.136",
+   "outline/boxShadow": "same as paperclip",
+   "marginsToClip_if_outer_edge_is_the_5px_glow": {
+    "left": 274.45,
+    "top": 46.99,
+    "right": -0.007,
+    "bottom": -0.007
+   },
+   "marginsToClip_if_outline(3.55px)": {
+    "right": 1.44,
+    "bottom": 1.44
+   },
+   "byEye": "white ring shows on all four sides, 4 screen px thick; on the right, 2 px of bright glow reach the last screen column (1919)"
+  }
+ },
+ "expected": "ring's outer edge (outline plus 5px glow) inside the clip on every side for all three; all four sides of each ring show by eye",
+ "judgement": "By eye: all four sides show on all three (meets the eye half). By numbers: the solid ring (outline) is 1.44 px inside the clip; the 5px faint glow's edge lands 0.007 px past the clip on two sides of the paperclip (left, bottom) and of the voice button (right, bottom) - on the line, not clearly inside. If 'outline plus 5px' means the two stacked (8.55 px), it is 3.56 px outside. The mode chip has a different, thin inset ring with no glow. The session decides which reading applies.",
+ "screenshots": [
+  "screenshots/plan72/F-RING-paperclip.png",
+  "screenshots/plan72/F-RING-modechip.png",
+  "screenshots/plan72/F-RING-voice.png"
+ ],
+ "verdict": "UNCLEAR",
+ "reads": {
+  "paperclip": {
+   "deckTime": "2026-09-27 14:07:26 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "tag": "BUTTON",
+     "cls": "bonsai-askbar-target bonsai-unified-input-corner-left cXzBZxhPBl7fZs9LODEnc Focusable gpfo",
+     "aria": "Attach screenshot to Ask",
+     "title": null,
+     "text": "",
+     "rect": {
+      "x": 53.772,
+      "y": 682.141,
+      "w": 19.995,
+      "h": 19.995,
+      "right": 73.767,
+      "bottom": 702.136
+     },
+     "outline": "rgba(255, 255, 255, 0.9) solid 1.5625px",
+     "outlineOffset": "1.98975px",
+     "boxShadow": "rgba(255, 255, 255, 0.92) 0px 0px 0px 2px, rgba(255, 255, 255, 0.2) 0px 0px 0px 5px",
+     "border": "0px none rgb(219, 230, 243)"
+    },
+    "host": {
+     "rect": {
+      "x": 47.998,
+      "y": 633.35,
+      "w": 300,
+      "h": 74.561,
+      "right": 347.998,
+      "bottom": 707.91
+     },
+     "border": [
+      0.78125,
+      0.78125,
+      0.78125,
+      0.78125
+     ],
+     "overflow": "hidden",
+     "clip": {
+      "left": 48.779,
+      "top": 634.131,
+      "right": 347.217,
+      "bottom": 707.129
+     }
+    },
+    "ringOuterAssumed": {
+     "extentPx": 8.55225,
+     "outer": {
+      "left": 45.22,
+      "top": 673.589,
+      "right": 82.319,
+      "bottom": 710.688
+     }
+    },
+    "insideClipMargins": {
+     "left": -3.559,
+     "top": 39.458,
+     "right": 264.898,
+     "bottom": -3.559
+    },
+    "allInside": false,
+    "ancestors": [
+     {
+      "cls": "bonsai-unified-input-actions-row Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 53.772,
+       "y": 678.137,
+       "w": 288.452,
+       "h": 23.999,
+       "right": 342.224,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-bottom-actions",
+      "rect": {
+       "x": 48.779,
+       "y": 678.137,
+       "w": 298.438,
+       "h": 28.992,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "",
+      "rect": {
+       "x": 48.779,
+       "y": 634.131,
+       "w": 298.438,
+       "h": 72.998,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bon",
+      "rect": {
+       "x": 47.998,
+       "y": 633.35,
+       "w": 300,
+       "h": 74.561,
+       "right": 347.998,
+       "bottom": 707.91
+      },
+      "overflow": "hidden",
+      "clipPath": "none"
+     }
+    ]
+   }
+  },
+  "mode": {
+   "deckTime": "2026-09-27 14:08:12 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "tag": "BUTTON",
+     "cls": "bonsai-askbar-target bonsai-ask-mode-trigger cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfoc",
+     "aria": "Inference mode: Strategy. Open to change.",
+     "title": null,
+     "text": "Strategy",
+     "rect": {
+      "x": 262.329,
+      "y": 682.141,
+      "w": 54.907,
+      "h": 19.995,
+      "right": 317.236,
+      "bottom": 702.136
+     },
+     "outline": "color(srgb 0.820941 0.746353 0.343137) none 0px",
+     "outlineOffset": "1.98975px",
+     "boxShadow": "none",
+     "border": "0px none color(srgb 0.820941 0.746353 0.343137)"
+    },
+    "host": {
+     "rect": {
+      "x": 47.998,
+      "y": 633.35,
+      "w": 300,
+      "h": 74.561,
+      "right": 347.998,
+      "bottom": 707.91
+     },
+     "border": [
+      0.78125,
+      0.78125,
+      0.78125,
+      0.78125
+     ],
+     "overflow": "hidden",
+     "clip": {
+      "left": 48.779,
+      "top": 634.131,
+      "right": 347.217,
+      "bottom": 707.129
+     }
+    },
+    "ringOuterAssumed": {
+     "extentPx": 6.98975,
+     "outer": {
+      "left": 255.339,
+      "top": 675.151,
+      "right": 324.226,
+      "bottom": 709.126
+     }
+    },
+    "insideClipMargins": {
+     "left": 206.56,
+     "top": 41.02,
+     "right": 22.991,
+     "bottom": -1.997
+    },
+    "allInside": false,
+    "ancestors": [
+     {
+      "cls": "",
+      "rect": {
+       "x": 262.329,
+       "y": 682.141,
+       "w": 54.907,
+       "h": 19.995,
+       "right": 317.236,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-actions-right Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 262.329,
+       "y": 682.141,
+       "w": 79.895,
+       "h": 19.995,
+       "right": 342.224,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-actions-row Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 53.772,
+       "y": 678.137,
+       "w": 288.452,
+       "h": 23.999,
+       "right": 342.224,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-bottom-actions",
+      "rect": {
+       "x": 48.779,
+       "y": 678.137,
+       "w": 298.438,
+       "h": 28.992,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "",
+      "rect": {
+       "x": 48.779,
+       "y": 634.131,
+       "w": 298.438,
+       "h": 72.998,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     }
+    ]
+   }
+  },
+  "voice": {
+   "deckTime": "2026-09-27 14:08:38 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "dpr": 1.2799999713897705,
+    "ring": {
+     "tag": "BUTTON",
+     "cls": "bonsai-askbar-target bonsai-unified-input-corner-right cXzBZxhPBl7fZs9LODEnc Focusable gpf",
+     "aria": "Voice input",
+     "title": null,
+     "text": "",
+     "rect": {
+      "x": 322.229,
+      "y": 682.141,
+      "w": 19.995,
+      "h": 19.995,
+      "right": 342.224,
+      "bottom": 702.136
+     },
+     "outline": "rgba(255, 255, 255, 0.9) solid 1.5625px",
+     "outlineOffset": "1.98975px",
+     "boxShadow": "rgba(255, 255, 255, 0.92) 0px 0px 0px 2px, rgba(255, 255, 255, 0.2) 0px 0px 0px 5px",
+     "border": "0px none rgb(219, 230, 243)"
+    },
+    "host": {
+     "rect": {
+      "x": 47.998,
+      "y": 633.35,
+      "w": 300,
+      "h": 74.561,
+      "right": 347.998,
+      "bottom": 707.91
+     },
+     "border": [
+      0.78125,
+      0.78125,
+      0.78125,
+      0.78125
+     ],
+     "overflow": "hidden",
+     "clip": {
+      "left": 48.779,
+      "top": 634.131,
+      "right": 347.217,
+      "bottom": 707.129
+     }
+    },
+    "ringOuterAssumed": {
+     "extentPx": 8.55225,
+     "outer": {
+      "left": 313.677,
+      "top": 673.589,
+      "right": 350.776,
+      "bottom": 710.688
+     }
+    },
+    "insideClipMargins": {
+     "left": 264.898,
+     "top": 39.458,
+     "right": -3.559,
+     "bottom": -3.559
+    },
+    "allInside": false,
+    "ancestors": [
+     {
+      "cls": "bonsai-unified-input-actions-right Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 262.329,
+       "y": 682.141,
+       "w": 79.895,
+       "h": 19.995,
+       "right": 342.224,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-actions-row Panel Focusable gpfocuswithin",
+      "rect": {
+       "x": 53.772,
+       "y": 678.137,
+       "w": 288.452,
+       "h": 23.999,
+       "right": 342.224,
+       "bottom": 702.136
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-bottom-actions",
+      "rect": {
+       "x": 48.779,
+       "y": 678.137,
+       "w": 298.438,
+       "h": 28.992,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "",
+      "rect": {
+       "x": 48.779,
+       "y": 634.131,
+       "w": 298.438,
+       "h": 72.998,
+       "right": 347.217,
+       "bottom": 707.129
+      },
+      "overflow": "visible",
+      "clipPath": "none"
+     },
+     {
+      "cls": "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row bon",
+      "rect": {
+       "x": 47.998,
+       "y": 633.35,
+       "w": 300,
+       "h": 74.561,
+       "right": 347.998,
+       "bottom": 707.91
+      },
+      "overflow": "hidden",
+      "clipPath": "none"
+     }
+    ]
+   }
+  }
+ }
+}

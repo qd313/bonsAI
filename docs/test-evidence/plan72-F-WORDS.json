@@ -1,0 +1,17 @@
+{
+ "row": "plan72-F-WORDS",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:50:03 EDT",
+ "setup": "read-only grep of the deployed bundle on the Deck; no reset, no presses",
+ "command": "grep -c on ~/homebrew/plugins/bonsAI/dist/index.js for three phrases",
+ "seen": {
+  "modifies system hardware": 0,
+  "Adjust power limits": 0,
+  "Where AI runs": 10
+ },
+ "alsoSeenOnScreen": "the Ollama tab's first section heading reads 'Where AI runs' (F-DL walk)",
+ "note": "grep -c counts matching lines, not occurrences",
+ "verdict": "PASS",
+ "verdictReason": "0, 0 and 10 (at least 1), as expected."
+}

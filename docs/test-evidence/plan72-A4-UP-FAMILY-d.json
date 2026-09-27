@@ -1,0 +1,59 @@
+{
+ "row": "plan72-A4-UP-FAMILY-d",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:59-13:01 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "chat": "Hades, straight after A-5b (same chat, answer asked on it, so 'Save chat to Desktop' exists). State at start: newest answer has a question card with choices A and B; thumbs given 'Not really' in A-5b (both thumbs now Disabled); the 'What went wrong?' row is open with its 5 chips; Show details closed.",
+  "note": "(d) was run after A-5/A-5b instead of in A-4's order, because 'Save chat to Desktop' only exists under an answer asked on the chat being viewed."
+ },
+ "pressed": "walkTo DOWN from the first reason chip to 'Save chat to Desktop' (5 presses), then deck_sweep UP one press at a time to the top and back DOWN; directions only",
+ "seen": {
+  "stops": [
+   "0 start | Save chat to Desktop | y562 h38 | top1027 | visible",
+   "1 UP | Show details | y531 h15 | top1027 | visible",
+   "2 UP | Read aloud | y304 h32 | top1027 | visible",
+   "3 UP | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y297 h297 | top512 | partial 89% under Focusable",
+   "4 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y204 h246 | top359 | visible",
+   "5 UP | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y204 h282 | top77 | visible",
+   "6 UP | Show reasoning \u00b7 21 s | y204 h15 | top45 | visible",
+   "7 UP | Retry same prompt | y204 h20 | top12 | visible",
+   "8 UP | 4 earlier | y146 h22 | top0 | visible",
+   "9 UP | LBHades[+]Hades\u00d7what is a good way to practice parrying in a | y88 h49 | top0 | visible",
+   "10 UP | Main tab | y64 h20 | topNone | visible",
+   "11 UP | bonsAIv0.5.0 | y20 h28 | topNone | visible",
+   "12 DOWN | Main tab | y64 h20 | topNone | visible",
+   "13 DOWN | LBHades[+]Hades\u00d7what is a good way to practice parrying in a | y88 h49 | top0 | visible",
+   "14 DOWN | 4 earlier | y146 h22 | top0 | visible",
+   "15 DOWN | Retry same prompt | y216 h20 | top0 | visible",
+   "16 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y190 h43 | top0 | partial 89% under Focusable",
+   "17 DOWN | Show reasoning \u00b7 21 s | y249 h15 | top0 | visible",
+   "18 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y212 h282 | top69 | visible",
+   "19 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y354 h246 | top209 | visible",
+   "20 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y303 h297 | top505 | partial 89% under Focusable",
+   "21 DOWN | A. A fast-paced shooter or action game | y481 h32 | top704 | visible",
+   "22 DOWN | B. A strategy or RPG game with lots of loading screens | y521 h48 | top704 | visible",
+   "23 DOWN | Read aloud | y481 h32 | top850 | visible",
+   "24 DOWN | Unfenced spoiler | y481 h32 | top993 | visible",
+   "25 DOWN | Too long | y521 h32 | top993 | visible",
+   "26 DOWN | Show details | y565 h15 | top993 | visible",
+   "27 DOWN | Save chat to Desktop | y562 h38 | top1027 | visible",
+   "28 DOWN | How do I fix Steam Input for this game? | y600 h30 | top1027 | visible",
+   "29 DOWN | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top1027 | visible",
+   "30 DOWN | ask | y711 h36 | top1027 | visible"
+  ],
+  "upLeg": "Save chat to Desktop -> Show details -> Read aloud (y 304) -> last answer section -> middle section -> first section -> Show reasoning -> Retry -> '4 earlier' -> chat row -> Main tab -> Decky back button. 11 stops in 14 presses.",
+  "skippedGoingUp": [
+   "all 5 'What went wrong?' chips (Bad information, Misidentified game/problem, Unfenced spoiler, Too long, Too short)",
+   "the question card's two choice buttons 'A. A fast-paced shooter or action game' and 'B. A strategy or RPG game with lots of loading screens'",
+   "the question text of the newest turn"
+  ],
+  "downLegForComparison": "... Retry -> question text -> Show reasoning -> 3 answer sections -> choice A -> choice B -> Read aloud -> 'Unfenced spoiler' -> 'Too long' -> Show details -> Save chat to Desktop -> preset chip -> box -> Ask. Going Down also skipped 3 of the 5 reason chips ('Bad information', 'Misidentified game/problem', 'Too short').",
+  "bothWaysSkipped": "'Helpful' and 'Not really' (both Disabled after the rating) were not stops in either direction",
+  "notVisible": "only the two known false alarms (question text under Retry, last answer section under Copy); nothing behind the dock"
+ },
+ "walkFile": "runs/plan72-A4d-sweep.json",
+ "verdict": "MEASURED: going Up from 'Save chat to Desktop', 8 stops that exist below the answer or in it are skipped (5 reason chips, 2 choice buttons, the question text). Going Down, 3 of the 5 reason chips are skipped."
+}

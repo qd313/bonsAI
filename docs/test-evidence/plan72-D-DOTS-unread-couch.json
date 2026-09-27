@@ -1,0 +1,815 @@
+{
+ "row": "plan72-D-DOTS-unread-couch",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:22-12:24 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "couch (scale 1.18)",
+  "viewing": "what is the safest way to approach a group of enemies at once",
+  "writingChat": "how should i spend my first hour in a new open world game"
+ },
+ "pressed": [
+  "ring on the chip: capture 12:22:59 + read 12:23:03",
+  "UP x8 to the chat row: capture 12:23:36 + read",
+  "LB x4 back to the writing chat: capture 12:23:50 + read"
+ ],
+ "seen": {
+  "reorder": "again the chat that got the answer jumped to dot 1 (it had been dot 4); the viewed chat stayed dot 5 (dots 1-3 shifted right by one)",
+  "unreadDot": "dot 1 --unread, bg rgb(74,222,128), box-shadow rgba(74,222,128,0.65) 0 0 5px 0; y 128.540 with ring on chip (visible this time, the chat row did not scroll away: row y 87.646), y 134.802 with ring on row",
+  "activeDot": "ring on chip: dot 5 rgba(200,214,230,0.5); ring on row: rgb(156,231,255)",
+  "rowShiftWithRingOnChip": "row y 87.646 here vs 91.553 in couch D-1 (the page scrolled 3.9 px)",
+  "backOnWritingChat": "LB x4 reached it (dot 1 active); its answer is shown; no --unread left. The model declined the question ('not my gig ... we stick to the game')."
+ },
+ "screenshots": [
+  "screenshots/plan72/D-5-unread-chip-couch.png",
+  "screenshots/plan72/D-5-unread-rowlit-couch.png",
+  "screenshots/plan72/D-5-unread-cleared-couch.png"
+ ],
+ "verdict": "MEASURED. Unread cleared on return: yes. Return took LB x4 because of the re-sort.",
+ "reads": {
+  "ringOnChip": {
+   "deckTime": "2026-09-27 12:23:03 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "sw": 1500,
+    "sh": 843,
+    "dpr": 1.2799999713897705,
+    "uiScale": "1.18",
+    "focus": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "text": "Can you set a quiet fan profile?[beta]",
+     "aria": null,
+     "rect": {
+      "x": 47.998,
+      "y": 598.401,
+      "w": 300,
+      "h": 29.993
+     }
+    },
+    "title": "what is the safest way to approach a group of enemies at once",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop",
+    "rects": {
+     "dots": {
+      "x": 57.434,
+      "y": 128.54,
+      "w": 281.128,
+      "h": 4.993
+     },
+     "title": {
+      "x": 106.018,
+      "y": 111.78,
+      "w": 178.601,
+      "h": 16.992
+     },
+     "row": {
+      "x": 47.998,
+      "y": 87.646,
+      "w": 300,
+      "h": 52.563
+     },
+     "scope": {
+      "x": 47.998,
+      "y": 63.965,
+      "w": 300,
+      "h": 700.989
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 147.546,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--unread",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 159.534,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgb(74, 222, 128)",
+      "boxShadow": "rgba(74, 222, 128, 0.65) 0px 0px 5px 0px",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 171.521,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 183.508,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.496,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 207.483,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(200, 214, 230, 0.5)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 219.47,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 231.458,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 243.445,
+       "y": 128.54,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  },
+  "ringOnRow": {
+   "deckTime": "2026-09-27 12:23:42 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "sw": 1500,
+    "sh": 843,
+    "dpr": 1.2799999713897705,
+    "uiScale": "1.18",
+    "focus": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "text": "LBwheatley fightwhat is the safest way to approach a group of enemies at once\u00d7is",
+     "aria": null,
+     "rect": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     }
+    },
+    "title": "what is the safest way to approach a group of enemies at once",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing",
+    "rects": {
+     "dots": {
+      "x": 108.545,
+      "y": 134.802,
+      "w": 178.906,
+      "h": 4.993
+     },
+     "title": {
+      "x": 135.803,
+      "y": 118.042,
+      "w": 124.39,
+      "h": 16.992
+     },
+     "row": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     },
+     "scope": {
+      "x": 47.998,
+      "y": 63.965,
+      "w": 300,
+      "h": 700.989
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 147.546,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--unread",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 159.534,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgb(74, 222, 128)",
+      "boxShadow": "rgba(74, 222, 128, 0.65) 0px 0px 5px 0px",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 171.521,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 183.508,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.496,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 207.483,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgb(156, 231, 255)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 219.47,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 231.458,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 243.445,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  },
+  "backOnWritingChat": {
+   "deckTime": "2026-09-27 12:23:56 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "sw": 1500,
+    "sh": 843,
+    "dpr": 1.2799999713897705,
+    "uiScale": "1.18",
+    "focus": {
+     "cls": "bonsai-chat-slot-row-focus Panel Focusable gpfocus gpfocuswithin",
+     "text": "LB[+]how should i spend my first hour in a new open world game\u00d7Hades+RB",
+     "aria": null,
+     "rect": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     }
+    },
+    "title": "how should i spend my first hour in a new open world game",
+    "titleCls": "bonsai-chat-slot-title bonsai-chat-slot-title--active-stop bonsai-chat-slot-title--overflowing",
+    "rects": {
+     "dots": {
+      "x": 108.545,
+      "y": 134.802,
+      "w": 178.906,
+      "h": 4.993
+     },
+     "title": {
+      "x": 135.803,
+      "y": 118.042,
+      "w": 124.39,
+      "h": 16.992
+     },
+     "row": {
+      "x": 47.998,
+      "y": 91.553,
+      "w": 300,
+      "h": 57.275
+     },
+     "scope": {
+      "x": 47.998,
+      "y": 63.965,
+      "w": 300,
+      "h": 700.989
+     }
+    },
+    "dotsWrapCls": "bonsai-chat-slot-dots",
+    "dots": [
+     {
+      "i": 0,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--create",
+      "aria": null,
+      "text": "+",
+      "rect": {
+       "x": 147.546,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgba(143, 168, 196, 0.5)",
+      "animationName": "none"
+     },
+     {
+      "i": 1,
+      "cls": "bonsai-chat-slot-dot bonsai-chat-slot-dot--active",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 159.534,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgb(156, 231, 255)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 2,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 171.521,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 3,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 183.508,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 4,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 195.496,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 5,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 207.483,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 6,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 219.47,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 7,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 231.458,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     },
+     {
+      "i": 8,
+      "cls": "bonsai-chat-slot-dot",
+      "aria": null,
+      "text": "",
+      "rect": {
+       "x": 243.445,
+       "y": 134.802,
+       "w": 4.993,
+       "h": 4.993
+      },
+      "width": "4.99268px",
+      "height": "4.99268px",
+      "borderRadius": "50%",
+      "bg": "rgba(143, 168, 196, 0.3)",
+      "boxShadow": "none",
+      "transform": "none",
+      "opacity": "1",
+      "margin": "0px",
+      "verticalAlign": "baseline",
+      "border": "0px none rgb(150, 150, 150)",
+      "animationName": "none"
+     }
+    ]
+   }
+  }
+ }
+}

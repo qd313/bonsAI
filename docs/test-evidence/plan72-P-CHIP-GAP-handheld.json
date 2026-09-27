@@ -1,0 +1,132 @@
+{
+ "row": "plan72-P-CHIP-GAP-handheld",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:04 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld (auto on, scale 1)",
+  "chat": "Hades"
+ },
+ "pressed": "none since D-1 (ring stayed on the preset chip)",
+ "seen": {
+  "chipButton": "BUTTON .bonsai-preset-glass y 600.366 h 29.993 bottom 630.359 (same box as .bonsai-preset-glass)",
+  "presetRowHost": "y 600.366 h 37.988 bottom 638.354",
+  "questionBox": ".bonsai-unified-input-host y 638.354 h 69.556 bottom 707.910; text field inside is an INPUT, y 639.136 h 43.994 bottom 683.130, x 72.754 w 274.463",
+  "ask": ".bonsai-ask-primary y 710.681 h 35.999 bottom 746.680, x 48.779 w 298.438",
+  "dock": ".bonsai-main-tab-dock y 599.585 h 165.356 bottom 764.941",
+  "gaps_css_px": {
+   "chipBottomToBoxTop": 7.996,
+   "chipBottomToTextFieldTop": 8.777,
+   "boxBottomToAskTop": 2.771,
+   "textFieldBottomToAskTop": 27.551
+  },
+  "gaps_screen_px_at_dpr_1.28": {
+   "chipBottomToBoxTop": 10.23,
+   "boxBottomToAskTop": 3.55
+  }
+ },
+ "screenshot": "screenshots/plan72/P-1-chip-gap-handheld.png (1920x1080)",
+ "verdict": "MEASURED",
+ "reads": {
+  "page": {
+   "deckTime": "2026-09-27 12:04:06 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "iw": 855,
+    "ih": 766,
+    "uiScale": "1",
+    "focus": {
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "text": "How do I bind a BonsAI quick-launch chord?",
+     "rect": {
+      "x": 47.998,
+      "y": 600.366,
+      "w": 300,
+      "h": 29.993,
+      "bottom": 630.359,
+      "right": 347.998
+     }
+    },
+    "chipButton": {
+     "tag": "BUTTON",
+     "cls": "bonsai-preset-glass bonsai-preset-glass--decode cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+     "rect": {
+      "x": 47.998,
+      "y": 600.366,
+      "w": 300,
+      "h": 29.993,
+      "bottom": 630.359,
+      "right": 347.998
+     }
+    },
+    "presetGlass": {
+     "x": 47.998,
+     "y": 600.366,
+     "w": 300,
+     "h": 29.993,
+     "bottom": 630.359,
+     "right": 347.998
+    },
+    "presetRowHost": {
+     "x": 47.998,
+     "y": 600.366,
+     "w": 300,
+     "h": 37.988,
+     "bottom": 638.354,
+     "right": 347.998
+    },
+    "inputHost": {
+     "x": 47.998,
+     "y": 638.354,
+     "w": 300,
+     "h": 69.556,
+     "bottom": 707.91,
+     "right": 347.998
+    },
+    "textField": {
+     "tag": "INPUT",
+     "cls": "_3ZR32BdxJUNwAA6Fu6n00p DialogInput DialogInputPlaceholder DialogTextInputBase Focusable",
+     "rect": {
+      "x": 72.754,
+      "y": 639.136,
+      "w": 274.463,
+      "h": 43.994,
+      "bottom": 683.13,
+      "right": 347.217
+     }
+    },
+    "ask": {
+     "x": 48.779,
+     "y": 710.681,
+     "w": 298.438,
+     "h": 35.999,
+     "bottom": 746.68,
+     "right": 347.217
+    },
+    "dock": {
+     "x": 47.998,
+     "y": 599.585,
+     "w": 300,
+     "h": 165.356,
+     "bottom": 764.941,
+     "right": 347.998
+    },
+    "scope": {
+     "x": 47.998,
+     "y": 63.965,
+     "w": 300,
+     "h": 700.989,
+     "bottom": 764.954,
+     "right": 347.998
+    },
+    "gaps": {
+     "chipBottomToBoxTop": 7.996,
+     "chipBottomToFieldTop": 8.777,
+     "boxBottomToAskTop": 2.771,
+     "fieldBottomToAskTop": 27.551
+    }
+   }
+  }
+ }
+}

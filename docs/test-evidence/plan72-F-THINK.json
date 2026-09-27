@@ -1,0 +1,132 @@
+{
+ "row": "plan72-F-THINK",
+ "buildCommit": "0065fccb2d851a00ec947c36ad7ced950c4290db",
+ "deckBundleMd5": "167064d0c2655a7f47ff87bac4ac6b33",
+ "deckTime": "2026-09-27 14:38:31 to 14:39:55 EDT",
+ "screen": {
+  "innerWidth": 855,
+  "innerHeight": 766,
+  "devicePixelRatio": 1.28,
+  "note": "external monitor"
+ },
+ "setup": {
+  "ask_mode": "strategy (was speed, set by me for F-STOP; original strategy)",
+  "ask_think_effort": "low (was off, set by me for F-STOP; original medium)",
+  "chat": "Hades slot",
+  "character": "Ali G voice on (ai_character_enabled true)"
+ },
+ "question": "In Hollow Knight the big mantis boss keeps beating me, how do I learn its pattern",
+ "pressed": "walkTo DOWN to Ask (ring placed, 6+2 presses; passed over the question box without A), A on Ask; after the answer, walkTo UP 7 presses to 'Show reasoning \u00b7 24 s', A once",
+ "sampler": {
+  "everyMs": 250,
+  "totalSamples": 208,
+  "samplesWithLiveLine": 97,
+  "liveLineShownFromMs": 9000,
+  "liveLineShownToMs": 33017,
+  "stopButtonShownMs": [
+   520,
+   43750
+  ],
+  "stopShownButNoLiveLine": [
+   [
+    520,
+    8750
+   ],
+   [
+    33259,
+    43750
+   ]
+  ],
+  "note": "times from sampler start; A pressed a few hundred ms after start"
+ },
+ "checks": {
+  "lineStartingMust": 0,
+  "selfCheckQYesNo": 0,
+  "backticks": 0,
+  "thinkingProcessWords": 0,
+  "emptyTextWhileLineShown": 0,
+  "fallbackDoubleCheckingSeen": false
+ },
+ "oddities": [
+  "one sample began 'ess:' followed by the numbered plan: the tail end of a heading (probably 'Thinking Process:') showed in the live line",
+  "one sample was a lone '.'",
+  "the live line quoted the instructions: 'Mode: Strategy Guide mode (active)', 'Voice: Ali G ...', 'Constraint (Structure): Start with a status line, use the required opening fence...' and a line containing 'Must lead with tactics' (bullet, not at line start)",
+  "for the first 8.2 s after Stop appeared, no live line element existed at all (not empty, absent), and no fallback text"
+ ],
+ "showReasoning": {
+  "label": "Show reasoning \u00b7 24 s -> Hide reasoning \u00b7 24 s",
+  "blockClass": "bonsai-chat-reasoning-block",
+  "chars": 2484,
+  "backticks": 0,
+  "thinkingProcessHeading": false,
+  "note": "the block itself does contain '? Yes' self-checks near the end ('Ends with correct JSON fence? Yes.') - the runbook only rules those out for the live line"
+ },
+ "distinctLiveLines": [
+  "1.  Analyze the Request",
+  "1.  Analyze the Request: The user",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. The local knowledge base",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. The local knowledge base contains specific boss information: \"",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]\n3",
+  "1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]\n3.  Determine Mode and",
+  "ess:\n\n1.  Analyze the Request: The user is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "er is asking for help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "or help learning the pattern of the \"big mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "mantis boss\" in Hollow Knight.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "night.\n2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "Identify Context/Game: The game is Hollow Knight. [hidden]",
+  "ollow Knight. [hidden]",
+  "[hidden]",
+  ".",
+  "straints:\n    \u2022 Mode: Strategy Guide mode (active).\n    \u2022 Voice: Ali G (streetwise interviewer humor, pronounced accent, rhythm, idioms).\n    \u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on",
+  "\u2022 Mode: Strategy Guide mode (active).\n    \u2022 Voice: Ali G (streetwise interviewer humor, pronounced accent, rhythm, idioms).\n    \u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in",
+  ".\n    \u2022 Voice: Ali G (streetwise interviewer humor, pronounced accent, rhythm, idioms).\n    \u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you",
+  "viewer humor, pronounced accent, rhythm, idioms).\n    \u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with",
+  "ounced accent, rhythm, idioms).\n    \u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either",
+  "\u2022 Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first:",
+  "Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole",
+  "of spoilers. Only use bonsai-spoiler for unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly",
+  "unavoidable spoilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown",
+  "poilers.\n    \u2022 Constraint (Structure): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall",
+  "): Start with a status line, use the required opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack",
+  "uired opening fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is",
+  "ng fence, and end only with the closing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one",
+  "ing fence.\n    \u2022 Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quick",
+  "nstraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal",
+  "th tactics, skip orientation, and end with the branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest",
+  "he branch fence.\n\n4.  [hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight",
+  "[hidden]\n    \u2022 \"The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side.\"\n    \u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both",
+  "\u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when",
+  "\u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc",
+  "\u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades",
+  "\u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two",
+  "\u2022 \"One fights first: a lance dash along the whole floor, a drop from directly above you, and a spinning boomerang blade thrown from the wall in a rising or falling arc. Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to",
+  "Each attack ends with her vanishing, so the rhythm is dodge, one or two hits, reset; the attacks quicken as she weakens. Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n\n5.  Form",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n\n5.  Formulate Strategy (Applying Constraints):",
+  "Heal during the boomerang, the slowest attack. When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"",
+  "When she yields the other two fight together, sometimes dashing from both ends at once; stand near the centre when they throw the short-arc boomerangs and the blades pass over you, long enough to heal two masks. Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"",
+  "Go in with at least one nail upgrade and Quick Focus if you have it. Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"",
+  "Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n\n6.  Draft the Response (Ali G Voice): (Self-",
+  "Win and the whole village stands down, a bench opens, and Mark of Pride waits in a chest to the northeast.\"\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014ener",
+  "6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly",
+  "6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)\n\n7.",
+  "6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)",
+  "\u2022 The user wants to learn the pattern. I have specific mechanics described in the knowledge base. I must explain the rhythm and key actions without giving away the exact sequence of every hit, focusing on how to approach the fight.\n    \u2022 I need to use the Ali G voice.\n    \u2022 I need to end with the required branching question.\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)",
+  "I have specific mechanics described in the knowledge base. I must explain the rhythm and key actions without giving away the exact sequence of every hit, focusing on how to approach the fight.\n    \u2022 I need to use the Ali G voice.\n    \u2022 I need to end with the required branching question.\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)",
+  "I must explain the rhythm and key actions without giving away the exact sequence of every hit, focusing on how to approach the fight.\n    \u2022 I need to use the Ali G voice.\n    \u2022 I need to end with the required branching question.\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)",
+  "\u2022 I need to use the Ali G voice.\n    \u2022 I need to end with the required branching question.\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)",
+  "\u2022 I need to end with the required branching question.\n\n6.  Draft the Response (Ali G Voice): (Self-Correction: Ensure the tone is right\u2014energetic, slightly exaggerated, streetwise.)"
+ ],
+ "rawSamplesFile": "scratch deck/b3/raw-FTHINK-samples.json",
+ "verdict": "UNCLEAR",
+ "verdictReason": "Every rule the runbook lists holds by the letter: no line starting 'Must', no '? Yes'/'? No', no backticks, no 'Thinking Process', never an empty line while it showed, and Show reasoning has no backticks and no heading. But the live line once began with 'ess:' (the leftover tail of a heading), once showed only '.', quoted the hidden instructions word for word, and was missing for the first 8 s of the wait. The session decides whether those count."
+}

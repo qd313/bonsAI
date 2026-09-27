@@ -1,0 +1,117 @@
+{
+ "row": "plan72-A4-UP-FAMILY-b",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:44-12:50 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "handheld",
+  "chat": "parrying chat (same as (a))",
+  "state": "(b) Show details opened on the newest answer: walked Up to 'Show details' (5 presses from Ask) and pressed A once; it became 'Hide details'. The details area shows a 'This answer / Session 42' switch and a 7-chip ladder ('Chip 1 of 7' ... Keyword + meaning, KB 13 sections, Reply style balanced, Thinking Balanced 21 s ~530 tokens, Spoiler risk low, Routed gemma...)."
+ },
+ "pressed": "from 'Hide details' walked Down to the preset chip (the ladder took extra presses, see below), then deck_sweep UP and back DOWN with a stall limit of 8 (budget 60 ran out exactly on Ask at the end of the Down leg)",
+ "seen": {
+  "stops": [
+   "0 start | How do I fix Steam Input for this game? | y600 h30 | top941 | visible",
+   "1 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y262 h338 | top977 | visible",
+   "2 UP | This answerSession \u00b7 42 | y262 h28 | top941 | visible",
+   "3 UP | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y204 h47 | top937 | visible",
+   "4 UP | Hide details | y204 h15 | top906 | visible",
+   "5 UP | Read aloud | y204 h32 | top863 | visible",
+   "6 UP | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y204 h231 | top598 | partial 89% under Focusable",
+   "7 UP | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y204 h195 | top404 | visible",
+   "8 UP | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y186 h327 | top95 | visible",
+   "9 UP | Show reasoning \u00b7 21 s | y204 h15 | top45 | visible",
+   "10 UP | Retry same prompt | y204 h20 | top12 | visible",
+   "11 UP | 42 earlier | y146 h22 | top0 | visible",
+   "12 UP | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "13 UP | Main tab | y64 h20 | topNone | visible",
+   "14 UP | bonsAIv0.5.0 | y20 h28 | topNone | visible",
+   "15 DOWN | Main tab | y64 h20 | topNone | visible",
+   "16 DOWN | LBHadeswhat is a good way to practice parrying in action gam | y88 h49 | top0 | visible",
+   "17 DOWN | 42 earlier | y146 h22 | top0 | visible",
+   "18 DOWN | Retry same prompt | y216 h20 | top0 | visible",
+   "19 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y190 h43 | top0 | partial 89% under Focusable",
+   "20 DOWN | Show reasoning \u00b7 21 s | y249 h15 | top0 | visible",
+   "21 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(1)> | y204 h327 | top77 | visible",
+   "22 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y405 h195 | top202 | visible",
+   "23 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(3)> | y369 h231 | top434 | partial 89% under Focusable",
+   "24 DOWN | Read aloud | y553 h32 | top513 | visible",
+   "25 DOWN | Hide details | y498 h15 | top612 | visible",
+   "26 DOWN | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y529 h47 | top612 | visible",
+   "27 DOWN | This answerSession \u00b7 42 | y484 h28 | top718 | visible",
+   "28 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y298 h302 | top941 | visible",
+   "29 DOWN | How do I fix Steam Input for this game? | y600 h30 | top941 | visible",
+   "30 DOWN | Describe the level, boss, or puzzle you're stuck on. | y639 h44 | top941 | visible",
+   "31 DOWN | ask | y711 h36 | top977 | visible"
+  ],
+  "preWalkDown": [
+   "0 start | Hide details | y170 h15 | top941 | visible",
+   "1 DOWN | Upgrades and overclocks (+2 more) \u00b7 From bonsAI's own note,  | y204 h47 | top937 | visible",
+   "2 DOWN | This answerSession \u00b7 42 | y265 h28 | top937 | visible",
+   "3 DOWN | <unnamed DIV div.Panel.Focusable:nth-child(2)> | y298 h302 | top941 | visible"
+  ],
+  "chipLadder": "The 7-chip ladder (.bonsai-chip-ladder) holds Steam's ring while D-pad presses step its own chip index: Down/Right +1, Up/Left -1 (read after each: chip 3 -> Down 4? -> Right 5 -> Up 4 -> Left 3 -> Down 4, 5, 6, 7 -> next Down leaves to the preset chip). A person sees no ring move for up to 6 presses. The first Down sweep stopped here after 2 'no move' presses and reported a dead end. At chip 7 the ladder box ran from y 297.9 to 636.2, so its bottom 36.6 px sat behind the dock (dock top 599.6); the runner scored it 67% visible, covered by the preset chip. Every other ladder position ended at y 600.0-600.2, right at the dock's top.",
+  "upVsDown": "Same as (a): Up skips the question text (Show reasoning -> Retry -> '42 earlier'); Down visits it. With details open both legs also pass: Hide details, the KB notes card, the 'This answer / Session' switch and the ladder. Up leg: 28 presses for 14 stops; Down leg: 32 presses for 17 stops. The extra presses were used up inside the ladder.",
+  "notVisible": "the same two known false alarms as (a) (question text under Retry, last answer section under Copy), plus the ladder at chip 7 partly behind the dock"
+ },
+ "walkFiles": [
+  "runs/plan72-A4b-down-to-chip.json",
+  "runs/plan72-A4b-stuck-down.json",
+  "runs/plan72-A4b-stuck-right.json",
+  "runs/plan72-A4b-past-ladder.json",
+  "runs/plan72-A4b-sweep.json"
+ ],
+ "verdict": "MEASURED: Up still skips the question text. The chip ladder swallows up to 6 presses in each direction with no visible ring movement, and at its last chip its lower 36.6 px sit behind the dock.",
+ "reads": {
+  "ladderState": {
+   "deckTime": "2026-09-27 12:45:43 EDT",
+   "target": "QuickAccess_uid2",
+   "value": {
+    "hasFocus": true,
+    "ring": {
+     "tag": "DIV",
+     "cls": "bonsai-chip-ladder Panel Focusable gpfocus gpfocuswithin",
+     "aria": null,
+     "text": "Chip 3 of 7Keyword + meaningKB: 13 sectionsReply style: balancedThinking: Balanced \u00b7 21 s \u00b7 ~530 tokensSpoiler risk: lowReply verbosityActive style: balanced",
+     "rect": [
+      51.99,
+      399.5,
+      290.01,
+      200.59,
+      600.09
+     ],
+     "overflowY": "visible",
+     "scrollTop": 0,
+     "scrollHeight": 201,
+     "clientHeight": 201,
+     "childCount": 3,
+     "childClasses": [
+      "",
+      "",
+      ""
+     ]
+    },
+    "active": {
+     "same": true,
+     "tag": "DIV",
+     "cls": "bonsai-chip-ladder Panel Focusable gpfocus gpfocuswithin"
+    },
+    "pane": {
+     "scrollTop": 839.0625,
+     "scrollHeight": 1517,
+     "clientHeight": 677
+    },
+    "dockTop": 599.58,
+    "parentCls": "",
+    "parentRect": [
+     51.99,
+     355.11,
+     290.01,
+     244.97,
+     600.09
+    ]
+   }
+  }
+ }
+}

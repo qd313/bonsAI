@@ -1,0 +1,18 @@
+{
+ "row": "plan72-P-REASON-CHIPS-couch",
+ "buildCommit": "71225356b881b76f39ed6368487b32499964ff34",
+ "deckBundleMd5": "58a66a90eb632b0d939f3b8d92e90286",
+ "deckTime": "2026-09-27 12:1x-12:25 EDT",
+ "setup": {
+  "screen": "external monitor 1920x1080 (page 855x766, dpr 1.28)",
+  "uiSize": "couch"
+ },
+ "pressed": "handheld: walkTo DOWN 'Not helpful' from the Hades chat row (15 presses, stalled on Ask, not found). couch: walkTo DOWN from the open-world chat row to Ask (10 presses); no 'Not helpful' stop on the way. No A pressed anywhere near an answer.",
+ "seen": {
+  "thumbsInPage": "no element with aria-label 'Mark reply not helpful' (or 'Mark reply helpful') in the page on Hades (both sizes, also after the reload) or on the open-world chat, both of which had an answer added this session; the only reply controls were Copy, Read aloud and Show details",
+  "why": "src/components/MainTabChatTranscript.tsx line ~1169: the thumbs render only when isNewestArchivedTurn && !isAsking && lastExchange has an answer; src/index.tsx:944 ties 'Save chat to Desktop' to the same lastExchange. The runbook's D-4 route switches chat while the answer is being written, and after switching back (or after a reload) there is no live last exchange, so neither control shows.",
+  "whatWouldUnblock": "ask one question on a chat and stay on that chat until the answer finishes; the owner decides whether to add that step"
+ },
+ "screenshot": null,
+ "verdict": "COULD NOT RUN"
+}

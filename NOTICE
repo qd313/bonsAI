@@ -37,21 +37,34 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------------------------
 
-Offline knowledge base (corpus) — separate distribution
+Third-party code in the download
+
+The screen code (dist/index.js) bundles open-source packages from npm. Their names,
+versions, licences and full licence texts are in dist/THIRD-PARTY-LICENSES.txt, which is
+written at every build and ships in the plugin download.
+
+---------------------------------------------------------------------------
+
+The bonsAI logo
+
+The bonsAI logo (src/assets/icons/bonsai-logo.svg, whose outline is also copied into
+src/components/bonsaiLogoPath.ts, and shipped in the download as
+dist/assets/bonsai-logo-*.svg) is the maintainer's own work.
+
+---------------------------------------------------------------------------
+
+Game notes and the knowledge library — separate licence
 
 The bonsAI *plugin* (this package / release zip) is Apache-2.0 and ships **no**
-knowledge-base corpus content: no `corpus.db`, no compressed corpus chunk, no
+knowledge-base content: no game notes, no `corpus.db`, no compressed corpus chunk, no
 `corpus-manifest.json`, and no corpus `ATTRIBUTIONS.md`.
 
-The optional offline strategy / troubleshooting corpus is a **separate download**
-(Hugging Face primary, GitHub Releases mirror), installed at runtime under the
-user's knowledge-base path. That package is **not** Apache-2.0. Cards that adapt
-third-party wiki material carry their own licences (e.g. CC BY 4.0, CC BY-SA,
-GFDL) recorded per card as `source_license`; the corpus `ATTRIBUTIONS.md` lists
-sources and answers redistribution questions for that package.
+The optional offline knowledge library is a **separate download** (Hugging Face primary,
+GitHub Releases mirror), installed at runtime under the user's knowledge-base path. The
+published library as a whole is shared under **CC BY-SA 4.0**. Notes that adapt fan-wiki
+material keep their source link and licence (CC BY-SA 4.0, 3.0 or 2.5, or CC BY 4.0),
+recorded per note as `source_license`; the library's `ATTRIBUTIONS.md` lists every source.
 
-If you are auditing this plugin zip for CC BY-SA / GFDL material: it should not
-contain those corpus files. Look for attributions in the separately installed
-corpus package's `ATTRIBUTIONS.md`, and for the architectural separation in
-`docs/archive/15-corpus-licensing-attribution-plan.md` and
-`docs/knowledge-base.md` (Source attribution / Phase 6).
+The game notes this library is built from are in this repository under data/kb/. They
+are not Apache-2.0: see data/kb/NOTICE.md for which wiki each comes from, its licence,
+and the terms for that folder (CC BY-SA 4.0 as a whole).

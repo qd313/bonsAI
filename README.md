@@ -190,6 +190,16 @@ how the plugin is put together. If you are working on the code with an AI tool, 
 | [roadmap.md](docs/roadmap.md) | Anyone curious | Bugs, planned features, what is waiting to be checked |
 | [CHANGELOG.md](CHANGELOG.md) | Anyone | What changed in each release |
 
+## Licence
+
+- **The code** is [Apache-2.0](LICENSE). A little of it comes from the Decky plugin template, under
+  its own BSD licence; [NOTICE](NOTICE) has the details.
+- **The game notes** and the **downloadable knowledge library** are CC BY-SA 4.0. Many notes are
+  reworded from fan wikis, and each keeps a link to its source and that wiki's licence. See
+  [data/kb/NOTICE.md](data/kb/NOTICE.md) for the list.
+- **Other people's code** that bonsAI uses keeps its own licence. The download carries every one of
+  them in `dist/THIRD-PARTY-LICENSES.txt`.
+
 ## Buy me a beer
 
 Supporting my Steam sale habit — scan or tap:

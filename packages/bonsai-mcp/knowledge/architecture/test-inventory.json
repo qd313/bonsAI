@@ -295,6 +295,7 @@
     "tests/test_kb_followup_memory.py",
     "tests/test_kb_not_in_notes_notice.py",
     "tests/test_kb_not_in_notes_wiring.py",
+    "tests/test_kb_notice.py",
     "tests/test_kb_own_game_tip_label.py",
     "tests/test_kb_per_game_compat_pull.py",
     "tests/test_kb_ranking_starting_out_demotion.py",

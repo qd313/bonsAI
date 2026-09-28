@@ -230,7 +230,8 @@ class EspeakSentenceMaker:
         os.close(fd)
         try:
             proc = subprocess.run(
-                ["espeak-ng", "-v", "en-us", "-s", "165", "-w", path, sentence],
+                # "--" so a sentence that starts with a dash is spoken, never read as an option.
+                ["espeak-ng", "-v", "en-us", "-s", "165", "-w", path, "--", sentence],
                 capture_output=True,
                 text=True,
                 timeout=30,

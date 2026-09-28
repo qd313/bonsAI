@@ -458,5 +458,21 @@ class SessionAudioPlayerTests(unittest.TestCase):
                 player.play("/tmp/some.wav")
 
 
+class EspeakSentenceMakerTests(unittest.TestCase):
+    def test_a_dash_led_sentence_is_never_read_as_an_option(self):
+        """A sentence like "-f/etc/hostname" must reach espeak-ng as text, after "--".
+
+        Without the "--", espeak-ng takes a sentence starting with a dash as one of its own
+        options (-f reads a file aloud). The Deck's espeak-ng accepts "--" and speaks the text.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            done = mock.Mock(returncode=0, stderr="")
+            with mock.patch.object(ra.subprocess, "run", return_value=done) as run:
+                path = ra.EspeakSentenceMaker(tmp).make("-f/etc/hostname is a test")
+            argv = run.call_args.args[0]
+            self.assertEqual(argv[-2:], ["--", "-f/etc/hostname is a test"])
+            self.assertEqual(argv[argv.index("-w") + 1], path)
+
+
 if __name__ == "__main__":
     unittest.main()

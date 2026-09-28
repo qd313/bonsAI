@@ -1,7 +1,8 @@
 /**
- * Title: Settings tab modal return-focus wiring
+ * Title: Settings tab's Clear cache... / Clear all data... row: return focus and placement
  * Purpose: Pin that Clear cache... and Clear all data... arm and register themselves with the modal
- *          return-focus registry, the same way the character-picker opener already does.
+ *          return-focus registry, the same way the character-picker opener already does; and that
+ *          their row is inset like every other Settings button (plan 72 free play).
  * Used for: plan 32 bug 4 -- the ring landing on a hidden Steam tab button after either confirmation
  *           closed (runs/CLEAR-CACHE-01-b-after-modal-back-to-main.json,
  *           runs/CLEAR-CACHE-01-c-close-panel-for-remount.json).
@@ -109,5 +110,36 @@ describe("SettingsTab modal return focus", () => {
 
     expect(clearAllFocus).toHaveBeenCalled();
     expect(cacheFocus).not.toHaveBeenCalled();
+  });
+});
+
+/*
+ * Roadmap "Settings' "Clear cache..." sits 16 pixels left of the other buttons" (plan 72 free play,
+ * docs/test-evidence/plan72-Z-FREEPLAY.json finding 14, runs/plan72-Z-settings-sweep.json): on the
+ * Deck Clear cache... started at x 48, the column's own left edge, while every other Settings button
+ * started at x 64 and ended at 332. The others sit inside one of Steam's panel sections, which pads
+ * its rows 16 on each side (measured 15.99 by scripts/probe_deck_ask_row_width.py); this row sits
+ * outside any section, so it had no inset at all. jsdom cannot measure where it lands, so this pins
+ * what the code sets: the same inset, on both sides, inside the row's full width.
+ */
+describe("SettingsTab Clear cache... row lines up with the other buttons", () => {
+  it("insets the row 16 on each side, the same as Steam's panel sections inset theirs", () => {
+    const { getByText } = render(<SettingsTab {...buildProps()} />);
+    const row = getByText("Clear cache...").closest(".bonsai-settings-cache-row") as HTMLElement | null;
+    expect(row).not.toBeNull();
+    expect(row!.style.paddingLeft).toBe("16px");
+    expect(row!.style.paddingRight).toBe("16px");
+    // Inside the width, not added to it: the two buttons share what is left, as before.
+    expect(row!.style.boxSizing).toBe("border-box");
+    expect(row!.style.width).toBe("100%");
+  });
+
+  it("keeps both buttons in that one row, Clear cache... first", () => {
+    const { getByText } = render(<SettingsTab {...buildProps()} />);
+    const row = getByText("Clear cache...").closest(".bonsai-settings-cache-row")!;
+    expect(Array.from(row.querySelectorAll("button")).map((b) => b.textContent)).toEqual([
+      "Clear cache...",
+      "Clear all data...",
+    ]);
   });
 });

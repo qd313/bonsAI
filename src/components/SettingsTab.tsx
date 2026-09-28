@@ -623,6 +623,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
+      {/*
+        Every other Settings button sits inside one of Steam's panel sections, which pads its rows
+        16 on each side (15.99 by scripts/probe_deck_ask_row_width.py). This row sits outside any
+        section, so on the Deck Clear cache... started at the column's own edge, 16 left of the
+        rest (plan72-Z-FREEPLAY.json finding 14: x 48 against x 64). The same 16 is padded in here,
+        raw rather than UI-scaled because Steam's own padding does not scale either.
+      */}
       <Focusable
         className="bonsai-settings-cache-row"
         flow-children="horizontal"
@@ -635,6 +642,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           display: "flex",
           flexDirection: "row",
           gap: 8,
+          paddingLeft: 16,
+          paddingRight: 16,
         }}
       >
         <Button

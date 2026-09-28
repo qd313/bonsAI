@@ -206,6 +206,7 @@ starts work outside this.
   [Detail](roadmap-details.md#flow-l7-findings).
   **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-ii.json`.
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
+  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18, seen three times, stays open — the maintainer's call.** Switch away from a chat that is
   still writing and nothing says so; the code looks right on paper. Two clean measured sessions since
@@ -252,18 +253,24 @@ starts work outside this.
   did not reproduce the chip route (0 of 6). [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
   **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
+  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
 - ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **OPEN, found
   2026-09-26 (plan 70, flow L7), same family as the entry above.** Down and Right leave the ring in the box;
   only Up works, and closing and reopening the panel does not clear it while the game runs.
   [Detail](roadmap-details.md#flow-l7-findings).
   **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-i.json`.
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
+  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
-  2026-09-25 (plan 68).** Deck check owed.
+  2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
   **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
   **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
   `docs/test-evidence/plan72-F6-SUMUP.json`. A fix is being built.
+  **2026-09-27 (plan 72, `01127c79`, `5dbb9bff`):** two more tries FAILED the same way, `docs/test-evidence/plan72-F7-SUMUP.json`,
+  `plan72-F8-SUMUP.json`: Steam keeps the ring on the greyed "Sum up again". **The maintainer's call: leave it as is for 0.6.0** —
+  the card shows itself and one Down reaches it; named in the release notes (plan 72 § 8). After the release: finish the
+  hand-off or take the tries out of the code (they do no harm).
 - ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** —
   **VERIFY, fixed 2026-09-26 (helper A, `7c93d5e8`).** A third leak in the same family as the two above.
   **Deck re-check owed:** row **NO-CLOSE-MATCH-HK-02** re-check.
@@ -334,6 +341,8 @@ replace it with a specific issue when one exists.
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
+  **Not needed for 0.6.0 (2026-09-27, plan 72):** the characters are text only (a name and a letter, no pictures or voices), and
+  the same list shipped in 0.4.9. Still the gate before any character gets a voice.
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
   follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
   "go on" unhides and reads it, anything else skips it. The block on screen unhides with the spoken one, so the two never

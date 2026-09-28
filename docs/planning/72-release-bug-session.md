@@ -4,9 +4,10 @@ Written 2026-09-26 as part of [plan 71](71-merge-experimental-into-main.md), the
 maintainer asked for "a list, a plan for a massive bug fix session, and new bugs get checked against the
 line". This is that plan. It starts once plan 70 has landed.
 
-**Status: running since 2026-09-27, 11:38 (the maintainer's "go"). Section 2 was re-sorted the same
-morning (flow 0) against the roadmap after plan 70 closed; what changed is marked "re-sort 09-27". The
-running record is section 7.**
+**Status: finished 2026-09-27 (ran from 11:38, the maintainer's "go"; the last calls came in at 20:55).
+Section 2 was re-sorted the same morning (flow 0) against the roadmap after plan 70 closed; what changed is
+marked "re-sort 09-27". The running record is section 7. The known issues for the release notes are section 8.
+What is left for the maintainer is its own plan, [73](73-maintainer-checks-before-0.6.0.md).**
 
 **This plan may sit for a while before it runs.** Whoever picks it up first checks it against the roadmap
 and the code, and updates anything stale before starting — the bugs, who has already fixed what, and the
@@ -602,3 +603,37 @@ land.
   fixed and proven, still open (the summary card hand-off for the maintainer; the three comes-and-goes traps,
   unseen in eight blocks), fixed in code only, "if there is room", the known issues for the release notes in plain
   words, and what waits on the maintainer (hand checks, the characters' ownership check).
+- **20:55 — the maintainer's last calls.** (1) The summary card stays as it is for 0.6.0: it shows itself and
+  one Down reaches it. The three tries at moving the ring onto it stay in the code; they do no harm, and are
+  finished or taken out after the release (roadmap). (2) The four hand checks are now their own plan for the
+  maintainer, [plan 73](73-maintainer-checks-before-0.6.0.md). (3) The characters' ownership check: asked how
+  urgent it is. Not for 0.6.0: the characters are text only (a name and a letter, no pictures, no voices) and
+  have been in every public release since 0.4.9 (checked against the 0.4.9 tag). It stays the gate before any
+  character gets a voice. (4) "Go with your leans": the three comes-and-goes problems are named in the release
+  notes and watched, not chased. The known issues list is section 8.
+
+---
+
+## 8. Known issues for the 0.6.0 release notes (final, 2026-09-27)
+
+In plain words, ready to paste under "Known issues" (plan 71, Stage D). The maintainer accepted these leans
+on 2026-09-27. Each line matches an open roadmap entry; take a line out if its bug is fixed and proven
+before the release.
+
+- Rarely, pressing Down stops part way down the panel and the Ask button can't be reached. Closing and
+  reopening the Quick Access menu sometimes clears it; restarting the Deck always does.
+- Rarely, with a game running, the question box stops responding to Down and Right (Up still works).
+  Restarting the Deck clears it.
+- Rarely, a chat opened with the right shoulder button while a game runs is missing the buttons under its
+  newest answer, and Down stops on the question. Closing and reopening the Quick Access menu fixes it.
+- After "Sum up this chat", a long summary can run past the bottom of the panel. Press Down to bring it into
+  view.
+- After switching to another chat and back, the newest answer's "Was this helpful?" buttons don't come back.
+  Any rating you gave is still saved.
+- With a game running, the panel updates about 30 times a second while an answer arrives, and can dip lower
+  late in very long answers.
+- If the plugin reloads during a model download, the download stops. Asking for it again picks up where it
+  left off.
+- Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
+  answer, and questions unrelated to a game can pick up game notes.
+- bonsAI's highlight ring looks slightly different from Steam's own on some controls.

@@ -226,7 +226,8 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 - **A bug-report form and a short "how to help" page** on GitHub (item 8 in section 6). The form asks for
   the bonsAI version, the Deck model, SteamOS version, where the AI runs, and the plugin's log.
 - **Release notes for 0.6.0:** a short re-introduction a player can read in a minute, then the highlights,
-  then "Known issues" from Stage B. The long changelog list goes below it, not at the top.
+  then "Known issues" from Stage B (written and accepted 2026-09-27: [plan 72](72-release-bug-session.md)
+  section 8). The long changelog list goes below it, not at the top.
 - **One line for past 0.4.9 users:** what to expect if they install over the old version.
 - Check every link the plugin itself opens points to something that exists on main after the merge.
 
@@ -270,6 +271,7 @@ Only clean-up that cannot change how the plugin behaves goes here, so it cannot 
 | The fresh install on the Deck | The Deck helper, from rows Opus writes; one at a time |
 | Security review, licence check | The two read-only review helpers |
 | Confirming the blocker list, pushing main, the final install as a player | The maintainer |
+| Four hand checks before the release (Clear mid-answer, the real microphone, the parental lock, a first install) | The maintainer: [plan 73](73-maintainer-checks-before-0.6.0.md) |
 
 ---
 

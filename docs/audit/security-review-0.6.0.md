@@ -22,6 +22,12 @@ against the code by the session, and one fix was also tried on the Deck.
 - **The README's internet list needed corrections**, now made. One gap, pictures inside answers, is
   closed by fix 1.
 
+**Status, 2026-09-28 00:50: the five "fix before release" findings are fixed and landed on experimental**
+(`52688e65` pictures, `5ecdb221` library removal, `7e8bde91` read aloud, `8a312e2b` the leftover route,
+`162d613b` the network search), each with a test that fails on the old code; all six checks pass. Left out of
+fix 4 on purpose: limiting attachments to Steam's screenshot folders (the permission check alone closes the
+route). The other three are on the roadmap.
+
 ## The findings, sorted
 
 The release line (plan 71 § 5): a bug blocks the release if a new player, using bonsAI normally, would

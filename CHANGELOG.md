@@ -4,6 +4,20 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### The 0.6.0 security review (2026-09-28)
+
+Three reviewers read everything changed since 0.4.9; nothing lets anyone on the internet reach the Deck, and
+there is no tracking. Five small holes were closed before the release
+([the review](docs/audit/security-review-0.6.0.md)):
+- **A picture written into an answer is never loaded.** Its description shows as text instead, so no website
+  learns the Deck's address, or words from a question, just because an answer was drawn.
+- **Removing the knowledge library can never delete the home folder or an SD card**, whatever folder it has been
+  told; outside its standard folder it removes only its own files.
+- **Read aloud speaks a sentence that starts with a dash** instead of passing it to the speech program as an
+  instruction.
+- **Pictures can never be sent to the AI with the screenshot permission off or the parental lock on**, by any route.
+- **"Find on network" can no longer be made to hang** by one crafted reply from the home network.
+
 ### Plan 72, the release bug session (2026-09-27)
 
 **Controller**

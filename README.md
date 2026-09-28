@@ -16,8 +16,8 @@ bonsAI is free and open source. You host it yourself, and it puts your privacy f
 - There is no account, no cloud service, and nothing is collected.
 - Every line of code is here to read.
 
-<!-- CONFIRM: this list matches the 0.6.0 security review (docs/audit/security-review-0.6.0.md, 2026-09-28).
-     Remove this note once that review's fix 1 (pictures in answers are never loaded) has landed. -->
+<!-- This list matches the 0.6.0 security review (docs/audit/security-review-0.6.0.md, 2026-09-28).
+     Anything new that reaches the internet must be added here. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 
 - **Installing Ollama** on the Deck — from ollama.com (the program itself is served from GitHub).

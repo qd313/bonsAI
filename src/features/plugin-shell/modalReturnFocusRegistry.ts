@@ -42,6 +42,12 @@ export type ModalReturnFocusId =
    * showed armedId: null for this modal") -- it was right, and this is the other half.
    */
   | "ollama-models-hub-settings"
+  /**
+   * Where AI runs' "Update AI & models" / "Install Ollama" button, whose box is the download
+   * notice (plan 74 lane 3). On the Deck the ring went to the Ollama tab bar once that box closed
+   * (docs/test-evidence/plan72-F3-DL.json, ringAfterBoxClosed).
+   */
+  | "ollama-local-setup"
   | "chat-slot-rename"
   /** The collapsing tab bar (plan 30): where a picker's return lands when its opener is gone. */
   | "tab-bar"

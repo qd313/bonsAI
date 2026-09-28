@@ -519,10 +519,16 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 <Button
                   ref={(el) => {
                     installUpdateBtnRef.current = el as HTMLButtonElement | null;
+                    // Its box (the download notice) rebuilds this tab on close; the shell hands the
+                    // ring back here rather than leaving it on the tab bar (plan72-F3-DL.json).
+                    registerModalReturnFocusOwner("ollama-local-setup", el as HTMLElement | null);
                   }}
                   className="bonsai-settings-focus-btn"
                   disabled={localSetupBusy}
-                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED)}
+                  onClick={() => {
+                    rememberModalReturnFocus("ollama-local-setup");
+                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED);
+                  }}
                   {...({
                     onMoveUp: () => focusAutostartToggle(),
                     onMoveDown: () => focusBrowseModelsBtn(),

@@ -342,6 +342,7 @@
     "tests/test_rag_corpus_cancel_state.py",
     "tests/test_rag_corpus_download.py",
     "tests/test_rag_corpus_local_install.py",
+    "tests/test_rag_corpus_remove_guard.py",
     "tests/test_rag_corpus_saves_before_done.py",
     "tests/test_rag_corpus_status.py",
     "tests/test_rag_update_deadline.py",

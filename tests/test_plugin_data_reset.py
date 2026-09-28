@@ -102,8 +102,9 @@ class PluginDataResetTests(unittest.TestCase):
             settings_path = str(settings_dir / "settings.json")
             runtime_dir = str(root / "runtime")
             log_dir = str(root / "logs")
-            corpus_dir = root / "rag"
-            corpus_dir.mkdir()
+            # The real install shape: only a `.bonsai/rag` folder is deleted whole.
+            corpus_dir = root / ".bonsai" / "rag"
+            corpus_dir.mkdir(parents=True)
             (corpus_dir / "corpus.db").write_bytes(b"sqlite")
             (corpus_dir / "manifest.json").write_text("{}", encoding="utf-8")
             Path(runtime_dir).mkdir()

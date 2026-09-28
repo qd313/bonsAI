@@ -171,13 +171,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 600,
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 601,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 599,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 600,
       "role": ""
     },
     {

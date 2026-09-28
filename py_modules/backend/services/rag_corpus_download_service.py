@@ -312,7 +312,35 @@ def install_corpus_from_manifest(
     return root
 
 
+def _known_corpus_file_names(target: Path) -> set[str]:
+    """Every file name the install code writes into a library folder, and nothing else."""
+    names = {
+        CORPUS_DB_FILENAME,
+        f"{CORPUS_DB_FILENAME}-wal",
+        f"{CORPUS_DB_FILENAME}-shm",
+        f"{CORPUS_DB_FILENAME}-journal",
+        CORPUS_MANIFEST_FILENAME,
+        CORPUS_ATTRIBUTIONS_FILENAME,
+    }
+    chunk_names = {f"{CORPUS_DB_FILENAME}.zlib"}
+    try:
+        with open(target / CORPUS_MANIFEST_FILENAME, "r", encoding="utf-8") as fp:
+            chunks = json.load(fp).get("chunks")
+        for chunk in chunks if isinstance(chunks, list) else []:
+            raw = str(chunk.get("filename") or "").strip() if isinstance(chunk, dict) else ""
+            if raw and os.path.basename(raw) == raw and raw not in (".", ".."):
+                chunk_names.add(raw)
+    except (OSError, ValueError, AttributeError):
+        pass
+    for name in chunk_names:
+        names.add(name)
+        names.add(f"{name}.part")
+    return names
+
+
 def remove_corpus_at_path(install_path: str, logger: Any) -> bool:
+    """Remove the installed library. Only the standard `.bonsai/rag` folder is deleted whole;
+    any other allowed folder loses just the library's own files, and goes only if then empty."""
     root = corpus_install_root(install_path)
     if not root or not os.path.isdir(root):
         return False
@@ -323,7 +351,17 @@ def remove_corpus_at_path(install_path: str, logger: Any) -> bool:
             return False
         db = str(target / CORPUS_DB_FILENAME)
         close_connection(db)
-        shutil.rmtree(target, ignore_errors=True)
+        if target.name == "rag" and target.parent.name == ".bonsai":
+            shutil.rmtree(target, ignore_errors=True)
+            return True
+        for name in _known_corpus_file_names(target):
+            path = target / name
+            if path.is_symlink() or path.is_file():  # a link is removed, never what it points to
+                os.remove(path)
+        try:
+            target.rmdir()
+        except OSError:
+            pass  # something of the user's is still in there; leave it
         return True
     except OSError as exc:
         logger.warning("remove_corpus failed: %s", exc)

@@ -269,18 +269,20 @@ def default_corpus_dir_sd(sd_mount: Optional[str] = None) -> str:
 
 
 def is_allowed_corpus_install_path(target: Path) -> bool:
-    """Allow install roots under home or SteamOS SD mounts (/run/media/<user>/…)."""
+    """Allow install roots under home or SteamOS SD mounts (/run/media/<user>/<card>/…).
+
+    Never the home folder itself, the mount folder itself, or a card's root: Remove and Clear
+    all data delete this folder, and the path comes from a setting the screen can save.
+    """
     resolved = target.resolve()
     home = Path.home().resolve()
     try:
-        resolved.relative_to(home)
-        return True
+        return len(resolved.relative_to(home).parts) >= 1
     except ValueError:
         pass
     media_base = Path(f"/run/media/{home.name}").resolve()
     try:
-        resolved.relative_to(media_base)
-        return True
+        return len(resolved.relative_to(media_base).parts) >= 2
     except ValueError:
         return False
 

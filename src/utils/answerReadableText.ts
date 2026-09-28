@@ -1,10 +1,10 @@
 /**
  * Title: Answer readable text builder
  * Purpose: Turn a stored answer (the plugin's markdown, tags and fences) into plain spoken text.
- * Used for: useReadAloud, building the text handed to start_voice_read_aloud. Shaped so the
- *   plan 38 toast preview can reuse the same step order once it is built (strip tags, resolve
- *   spoiler fences, then flatten markdown) — that helper is not built yet; this file does not
- *   build it.
+ * Used for: useReadAloud, building the text handed to start_voice_read_aloud. The reply-ready
+ *   notification's text (toastAnswerPreview) borrows only this file's table finder: it reads
+ *   fences with the same markdown reader the panel uses, where this file still matches fences as
+ *   pairs of backtick runs, so the rest is not shared.
  * Solves: Reading internal control tags, a hidden spoiler's actual text, table cells, code, or
  *   markdown punctuation out loud instead of the words a person would read on screen.
  * Does not: Split the result into sentences — the background reader (Python) does that. Does not
@@ -41,8 +41,10 @@ export type BuildAnswerReadableTextArgs = {
   protectedNames?: readonly string[] | null;
 };
 
+/** A row with a bar in it. A fence marker line never counts, even with a bar in its label, so
+ *  taking a table out can never take out a fence's opening line and bare what it hides. */
 function isTableRowLine(line: string): boolean {
-  return line.includes("|") && line.trim().length > 0;
+  return line.includes("|") && line.trim().length > 0 && !/^\s*(`{3,}|~{3,})/.test(line);
 }
 
 const TABLE_SEPARATOR_ROW_RE = /^\s*\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)+\|?\s*$/;
@@ -51,8 +53,12 @@ function isTableSeparatorLine(line: string): boolean {
   return TABLE_SEPARATOR_ROW_RE.test(line);
 }
 
-/** Replace each GFM pipe-table block with one spoken phrase. */
-function replaceTables(text: string): string {
+/**
+ * Replace each GFM pipe-table block (a row with a bar, then a dashes row, then more rows with a
+ * bar) with `replacement`. The header row needs no leading bar. Read aloud says one phrase; the
+ * reply-ready notification passes "" to drop the table.
+ */
+export function replaceMarkdownTables(text: string, replacement: string): string {
   const lines = text.split("\n");
   const out: string[] = [];
   let i = 0;
@@ -64,7 +70,7 @@ function replaceTables(text: string): string {
       while (i < lines.length && isTableRowLine(lines[i]!)) {
         i++;
       }
-      out.push(TABLE_SPOKEN_PHRASE);
+      out.push(replacement);
       continue;
     }
     out.push(line);
@@ -134,7 +140,7 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
   }
 
   text = text.replace(CODE_FENCE_RE, CODE_SPOKEN_PHRASE);
-  text = replaceTables(text);
+  text = replaceMarkdownTables(text, TABLE_SPOKEN_PHRASE);
 
   text = text
     .split("\n")

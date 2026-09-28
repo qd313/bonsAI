@@ -15,6 +15,9 @@
  * would go unnoticed instead of being called out — and calling it out from more than one place risked
  * the same finished question getting notified about twice.
  *
+ * Shows: the start of the answer (title line, then body line) instead of "Reply ready", unless the
+ * answer has nothing safe to show (see toastAnswerPreview).
+ *
  * Does not: bring the player back to the reply itself, or bring the plugin's panel to the front —
  * tapping the notification only queues that request; bonsaiReplySurface.openBonsaiReplyFromToast is
  * what actually does it.
@@ -22,6 +25,7 @@
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
 import { formatDeckyRpcError } from "./deckyCall";
 import { showPhaseToast } from "./bonsaiPhaseToast";
+import { buildToastAnswerLines } from "./toastAnswerPreview";
 import { isReplySurfaceVisible, openBonsaiReplyFromToast } from "./bonsaiReplySurface";
 
 const toastedRequestIds = new Set<number>();
@@ -54,10 +58,12 @@ export function handleAskTerminalForToast(status: BackgroundRequestStatus): void
   }
 
   if (status.status === "completed" && status.success) {
+    // The answer's first words across Steam's two lines; plain notice when nothing safe is left.
+    const lines = buildToastAnswerLines(status.response ?? "");
     showPhaseToast({
-      title: "Reply ready",
-      body: "Tap to open",
-      duration: 4000,
+      title: lines?.title ?? "Reply ready",
+      body: lines?.body ?? "Tap to open",
+      duration: lines ? 8000 : 4000,
       onClick: openBonsaiReplyFromToast,
     });
     markRequestToasted(requestId);

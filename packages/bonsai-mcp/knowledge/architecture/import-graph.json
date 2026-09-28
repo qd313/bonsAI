@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 585,
-  "edgeCount": 1615,
+  "fileCount": 587,
+  "edgeCount": 1620,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4720,7 +4720,8 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useReadAloud.ts",
         "src/utils/answerReadableText.test.ts",
-        "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts"
+        "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts",
+        "src/utils/toastAnswerPreview.ts"
       ]
     },
     "src/utils/answerStopRegistry.test.ts": {
@@ -4883,7 +4884,8 @@
         "src/types/backgroundAsk.ts",
         "src/utils/bonsaiPhaseToast.ts",
         "src/utils/bonsaiReplySurface.ts",
-        "src/utils/deckyCall.ts"
+        "src/utils/deckyCall.ts",
+        "src/utils/toastAnswerPreview.ts"
       ],
       "importedBy": [
         "src/utils/bonsaiAskCompletionWatch.test.ts",
@@ -5425,7 +5427,8 @@
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
-        "src/utils/oneLineSpoilerBlock.test.tsx"
+        "src/utils/oneLineSpoilerBlock.test.tsx",
+        "src/utils/toastAnswerPreview.ts"
       ]
     },
     "src/utils/focusNavigation.test.ts": {
@@ -6251,7 +6254,8 @@
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
-        "src/utils/stripAssistantDisplayTags.test.ts"
+        "src/utils/stripAssistantDisplayTags.test.ts",
+        "src/utils/toastAnswerPreview.ts"
       ]
     },
     "src/utils/stripSoftContinueCue.test.ts": {
@@ -6293,6 +6297,23 @@
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/thinkingSummaryText.test.ts"
+      ]
+    },
+    "src/utils/toastAnswerPreview.test.ts": {
+      "imports": [
+        "src/utils/toastAnswerPreview.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/toastAnswerPreview.ts": {
+      "imports": [
+        "src/utils/answerReadableText.ts",
+        "src/utils/expandOneLineSpoilerFences.ts",
+        "src/utils/stripAssistantDisplayTags.ts"
+      ],
+      "importedBy": [
+        "src/utils/bonsaiReplyReadyToast.ts",
+        "src/utils/toastAnswerPreview.test.ts"
       ]
     },
     "src/utils/troubleshootHintDismissals.ts": {

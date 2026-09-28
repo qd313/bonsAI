@@ -81,6 +81,38 @@ class PluginZipCorpusGuardTests(unittest.TestCase):
             self.assertEqual(guard.find_forbidden_corpus_paths_in_zip(zpath), [])
             self.assertEqual(guard.main(["--zip", str(zpath)]), 0)
 
+    def test_game_note_sources_fail(self):
+        # data/kb/ holds the CC BY-SA / CC BY game notes the library is built from; the
+        # Apache-2.0 plugin package must never carry them, wherever they land.
+        for name in ("strategy_seed.json", "compat_patterns.json", "Strategy_Seed.JSON"):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / "main.py").write_text("# plugin\n", encoding="utf-8")
+                (root / "data" / "kb").mkdir(parents=True)
+                (root / "data" / "kb" / name).write_text("{}\n", encoding="utf-8")
+                self.assertEqual(guard.find_forbidden_corpus_paths(root), [f"data/kb/{name}"])
+                self.assertEqual(guard.main(["--dir", str(root)]), 1)
+
+    def test_zip_with_game_notes_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            zpath = Path(tmp) / "plugin.zip"
+            with zipfile.ZipFile(zpath, "w") as zf:
+                zf.writestr("bonsAI/main.py", "# ok\n")
+                zf.writestr("bonsAI/data/compat_patterns.json", "[]\n")
+            self.assertEqual(
+                guard.find_forbidden_corpus_paths_in_zip(zpath),
+                ["bonsAI/data/compat_patterns.json"],
+            )
+            self.assertEqual(guard.main(["--zip", str(zpath)]), 1)
+
+    def test_runtime_data_the_back_end_reads_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "data" / "intent-packs").mkdir(parents=True)
+            (root / "data" / "settings-search-targets.json").write_text("[]\n", encoding="utf-8")
+            (root / "data" / "intent-packs" / "deck-basics.json").write_text("{}\n", encoding="utf-8")
+            self.assertEqual(guard.find_forbidden_corpus_paths(root), [])
+
 
 if __name__ == "__main__":
     unittest.main()

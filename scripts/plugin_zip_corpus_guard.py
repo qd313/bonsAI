@@ -2,7 +2,8 @@
 
 Purpose: Fail a release (or a planted staging tree) if knowledge-base corpus files are bundled.
 Used for: scripts/verify-decky-plugin-zip.sh and unit tests (ATTR-4.2).
-Solves: Apache-2.0 plugin zip must not include CC BY / BY-SA / GFDL corpus material.
+Solves: Apache-2.0 plugin zip must not include CC BY / BY-SA corpus material or the game notes
+    in data/kb/ it is built from.
 Does not: Build the corpus, verify ATTRIBUTIONS.md content, or download HF assets.
 """
 
@@ -13,13 +14,17 @@ import sys
 import zipfile
 from pathlib import Path
 
-# Basenames that belong only in a separately distributed knowledge-base package.
+# Basenames that belong only in a separately distributed knowledge-base package, or in the
+# repo's data/kb/ folder the library is built from (CC BY-SA / CC BY game notes; see
+# data/kb/NOTICE.md). All compared case-insensitively.
 FORBIDDEN_CORPUS_BASENAMES = frozenset(
     {
         "corpus.db",
         "corpus.db.zlib",
         "corpus-manifest.json",
-        "attributions.md",  # compared case-insensitively
+        "attributions.md",
+        "strategy_seed.json",
+        "compat_patterns.json",
     }
 )
 

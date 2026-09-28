@@ -35,10 +35,25 @@ def _encode_dns_name(name: str) -> bytes:
     return bytes(out)
 
 
+_MAX_NAME_POINTER_JUMPS = 16
+_MAX_NAME_BYTES = 255
+
+
 def _decode_dns_name(msg: bytes, offset: int) -> tuple[str, int]:
+    """Read one DNS name at ``offset``; returns the name and the offset just past it.
+
+    Bounded against a crafted reply: at most 16 pointer jumps, each landing strictly before where
+    the current stretch of the name began (so reading only ever moves backwards and can never
+    loop), a stop on the reserved label types, and a stop once the name passes 255 bytes.
+    Without these, one packet whose pointer pointed at itself kept this loop running forever,
+    growing memory.
+    """
     labels: list[str] = []
     jumped = False
     jump_offset = offset
+    jumps = 0
+    name_bytes = 0
+    stretch_start = offset
     while True:
         if offset >= len(msg):
             break
@@ -52,12 +67,20 @@ def _decode_dns_name(msg: bytes, offset: int) -> tuple[str, int]:
             pointer = ((length & 0x3F) << 8) | msg[offset + 1]
             if not jumped:
                 jump_offset = offset + 2
-            offset = pointer
             jumped = True
+            jumps += 1
+            if pointer >= stretch_start or jumps > _MAX_NAME_POINTER_JUMPS:
+                break
+            offset = stretch_start = pointer
             continue
+        if length & 0xC0:  # 0x40 and 0x80 are reserved label types
+            break
         offset += 1
         end = offset + length
         if end > len(msg):
+            break
+        name_bytes += length + 1
+        if name_bytes > _MAX_NAME_BYTES:
             break
         labels.append(msg[offset:end].decode("utf-8", errors="ignore"))
         offset = end

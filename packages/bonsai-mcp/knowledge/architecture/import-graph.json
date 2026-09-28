@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 576,
-  "edgeCount": 1588,
+  "edgeCount": 1591,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -674,6 +674,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/data/presets.ts",
         "src/features/preset-carousel/carouselState.ts",
+        "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/utils/navFocusRegistry.ts"
@@ -1696,7 +1697,8 @@
       ],
       "importedBy": [
         "src/data/characterUiAccent.test.ts",
-        "src/features/plugin-shell/useBonsaiScopeStyle.ts"
+        "src/features/plugin-shell/useBonsaiScopeStyle.ts",
+        "src/styles/sections/section-4.test.ts"
       ]
     },
     "src/data/deckEssentialsTags.ts": {
@@ -2686,6 +2688,7 @@
         "src/data/presets.ts"
       ],
       "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/streamScrambleMath.ts"
@@ -4045,6 +4048,7 @@
       ],
       "importedBy": [
         "src/styles/sections/answerBubble.test.ts",
+        "src/styles/sections/section-4.test.ts",
         "src/styles/sections/section-6.ts"
       ]
     },
@@ -4159,8 +4163,10 @@
     },
     "src/styles/sections/section-4.test.ts": {
       "imports": [
+        "src/data/characterUiAccent.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/unified-input/constants.ts",
+        "src/styles/sections/answerBubble.ts",
         "src/styles/sections/section-4.ts",
         "src/styles/sections/section-6.ts"
       ],

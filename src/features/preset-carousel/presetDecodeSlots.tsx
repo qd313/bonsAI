@@ -9,8 +9,9 @@
  * when the chip-animation setting is "decode".
  *
  * Solves: Runs the reveal on a single shared requestAnimationFrame loop, writing straight to each
- * label's textContent through a ref rather than React state, so a churning chip does not force a
- * re-render on every frame (measured cost on Deck hardware).
+ * label's text through refs rather than React state, so a churning chip does not force a
+ * re-render on every frame (measured cost on Deck hardware). The caret has its own span, so it can
+ * be drawn in the accent colour while the letters keep theirs.
  *
  * Does not: Compute the reveal text itself -- see presetChipDecodeText.ts for the pure
  * lock-boundary/churn maths this row's effect calls into. Also does not own
@@ -29,8 +30,9 @@ import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSl
 import { seedsKeyFrom } from "./carouselState";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 import {
-  composeDecodeText,
+  composeDecodeParts,
   type DecodeSlotAnim,
+  type DecodeTextParts,
   makeDecodeChurn,
   PRESET_DECODE_CARET_BLINK_MS,
   PRESET_DECODE_CHAR_MS,
@@ -47,10 +49,35 @@ import {
 const PRESET_DECODE_HOLD_RECHECK_MS = 500;
 
 /**
+ * A churning label's three spans, one per part of `composeDecodeParts`: the locked letters, the
+ * caret (in the accent colour, section-4.ts) and the still-churning tail.
+ */
+type DecodeLabelPart = keyof DecodeTextParts;
+type DecodeLabelNodes = Record<DecodeLabelPart, HTMLSpanElement | null>;
+type DecodeLabelRefs = Record<DecodeLabelPart, (el: HTMLSpanElement | null) => void>;
+
+/**
+ * Writes one frame of a reveal into a label's spans. It runs only when the old single whole-label
+ * write ran -- a lock advance, a churn refresh or a blink, never every frame -- and a part that did
+ * not change is not written: a blink touches the caret alone, a churn refresh the tail (and the
+ * caret only if it blinked too). Plan 69's frame-rate lesson is that what costs frames is how often
+ * and how much of the panel changes, and neither grows here: the label is redrawn on the same ticks
+ * as before, one chip-sized box, still with no React render.
+ */
+function paintDecodeLabel(nodes: DecodeLabelNodes | undefined, parts: DecodeTextParts): void {
+  if (!nodes) return;
+  for (const part of ["locked", "caret", "tail"] as const) {
+    const el = nodes[part];
+    if (el && el.textContent !== parts[part]) el.textContent = parts[part];
+  }
+}
+
+/**
  * The label's text is owned by the reveal effect below while the prompt is still churning, written
- * straight to the churn span's `textContent` via `setLabelRef` — never through React state. The JSX
- * child there is only what paints during a slot's stagger delay, before its first `begin` call;
- * every frame after that bypasses React entirely, which is the point of the rewrite (see the module
+ * straight to the churn span's three parts via `labelRefs` — never through React state. React
+ * renders those spans empty and never writes into them, so the effect's writes are never fought
+ * over; they are blank only during a slot's stagger delay, before its first `begin` call. Every
+ * frame after that bypasses React entirely, which is the point of the rewrite (see the module
  * header comment on frame cost). Once the prompt has resolved the churn span is replaced by the
  * ordinary label, so Steam's Marquee measures settled text, never a mid-churn frame.
  */
@@ -58,7 +85,7 @@ function DecodePresetChipButton(props: {
   preset: PresetPrompt;
   resolved: boolean;
   scroll: boolean;
-  setLabelRef: (el: HTMLSpanElement | null) => void;
+  labelRefs: DecodeLabelRefs;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   onPreferAskMode?: (mode: AskModeId) => void;
   buttonRef?: (el: HTMLElement | null) => void;
@@ -70,7 +97,7 @@ function DecodePresetChipButton(props: {
     preset: p,
     resolved,
     scroll,
-    setLabelRef,
+    labelRefs,
     setUnifiedInput,
     onPreferAskMode,
     buttonRef,
@@ -116,8 +143,10 @@ function DecodePresetChipButton(props: {
         {resolved ? (
           <PresetChipText text={p.text} scroll={scroll} />
         ) : (
-          <span className="bonsai-preset-chip-text bonsai-preset-chip-text--churn" ref={setLabelRef}>
-            {" "}
+          <span className="bonsai-preset-chip-text bonsai-preset-chip-text--churn">
+            <span ref={labelRefs.locked} />
+            <span className="bonsai-preset-chip-caret" ref={labelRefs.caret} />
+            <span ref={labelRefs.tail} />
           </span>
         )}
         {p.beta ? (
@@ -146,10 +175,10 @@ function DecodePresetChipButton(props: {
  *
  * Per-slot animation state lives in a plain object inside the effect closure (`DecodeSlotAnim`),
  * not React state, and a single shared `requestAnimationFrame` loop drives every slot, writing
- * straight to each label's `textContent` through a ref. `slots` and `resolved` React state still
- * exist, but only change once per prompt cycle (when a prompt begins and when it settles) — that's
- * the frequency a Button's onClick closure, the beta badge and the scrolling label need, not
- * per-frame.
+ * straight to each label's three spans through refs (`paintDecodeLabel`). `slots` and `resolved`
+ * React state still exist, but only change once per prompt cycle (when a prompt begins and when it
+ * settles) — that's the frequency a Button's onClick closure, the beta badge and the scrolling
+ * label need, not per-frame.
  */
 export function MainTabPresetDecodeSlots(
   props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">,
@@ -178,13 +207,18 @@ export function MainTabPresetDecodeSlots(
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
 
-  const labelRefs = useRef<(HTMLSpanElement | null)[]>(Array.from({ length: slotCount }, () => null));
+  const labelRefs = useRef<DecodeLabelNodes[]>([]);
   /** Stable per-slot ref callbacks — an inline arrow per render would churn ref identity and
    *  briefly null the target between renders for no reason (`slots` only updates once a cycle). */
   const labelRefSetters = useMemo(
     () =>
-      Array.from({ length: slotCount }, (_, i) => (el: HTMLSpanElement | null) => {
-        labelRefs.current[i] = el;
+      Array.from({ length: slotCount }, (_, i): DecodeLabelRefs => {
+        const setPart = (part: DecodeLabelPart) => (el: HTMLSpanElement | null) => {
+          const nodes = labelRefs.current[i] ?? { locked: null, caret: null, tail: null };
+          nodes[part] = el;
+          labelRefs.current[i] = nodes;
+        };
+        return { locked: setPart("locked"), caret: setPart("caret"), tail: setPart("tail") };
       }),
     [slotCount],
   );
@@ -268,8 +302,7 @@ export function MainTabPresetDecodeSlots(
       // Frame 0: paint the full-length scramble immediately rather than waiting for the next rAF
       // tick. On a re-begin the churn span is remounting and the ref may still be null; the first
       // tick after React commits repaints it (lastRevealedCount starts at -1).
-      const el = labelRefs.current[slotIndex];
-      if (el) el.textContent = composeDecodeText(prompt.text, 0, churn, true);
+      paintDecodeLabel(labelRefs.current[slotIndex], composeDecodeParts(prompt.text, 0, churn, true));
     };
 
     const process = (slotIndex: number, now: number, churnDue: boolean, blinkDue: boolean) => {
@@ -291,8 +324,7 @@ export function MainTabPresetDecodeSlots(
       if (revealedCount >= text.length) {
         anim.resolved = true;
         anim.holdEndAt = now + presetHoldMs(text);
-        const el = labelRefs.current[slotIndex];
-        if (el) el.textContent = text;
+        paintDecodeLabel(labelRefs.current[slotIndex], { locked: text, caret: "", tail: "" });
         // Hands the label to React: the churn span gives way to the ordinary label, which is where
         // Steam's Marquee measures the settled text and starts its crawl.
         markResolved(slotIndex, true);
@@ -304,8 +336,7 @@ export function MainTabPresetDecodeSlots(
       }
       if (revealedCount !== anim.lastRevealedCount || churnDue || blinkDue) {
         anim.lastRevealedCount = revealedCount;
-        const el = labelRefs.current[slotIndex];
-        if (el) el.textContent = composeDecodeText(text, revealedCount, anim.churn, caretOn);
+        paintDecodeLabel(labelRefs.current[slotIndex], composeDecodeParts(text, revealedCount, anim.churn, caretOn));
       }
     };
 
@@ -347,7 +378,7 @@ export function MainTabPresetDecodeSlots(
             preset={p}
             resolved={resolved[i] ?? false}
             scroll={!reducedMotion}
-            setLabelRef={labelRefSetters[i]!}
+            labelRefs={labelRefSetters[i]!}
             setUnifiedInput={setUnifiedInput}
             onPreferAskMode={onPreferAskMode}
             buttonRef={nav.setButtonRef[i]}

@@ -132,7 +132,13 @@ describe("preset chip focus cue", () => {
     // (now-removed) rule still names the variable in prose while explaining why it is gone.
     const css = buildSection4Section();
     expect(selectorsOf(css)).not.toContain(".bonsai-scope button.bonsai-preset-glass--decode .bonsai-preset-chip-label");
-    expect(css).not.toContain("color: var(--bonsai-ui-accent-toned");
+    // The one rule allowed to use the accent is the typing caret's own span (roadmap "The decode
+    // chip's typing caret is pale, not the accent green", row PRESET-STREAM-ANIM-01): the caret is
+    // not the words. This used to ask that the variable appear nowhere at all, which the caret's
+    // rule now rightly breaks; what it guards is that no OTHER rule takes the accent.
+    const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const accentRules = withoutComments.match(/[^{}]+\{[^}]*color:\s*var\(--bonsai-ui-accent-toned[^}]*\}/g) ?? [];
+    expect(accentRules.map((rule) => rule.split("{")[0]!.trim())).toEqual([".bonsai-scope .bonsai-preset-chip-caret"]);
   });
 
   it("still marks the current row for mouse, touch and the preview, where no ring exists", () => {

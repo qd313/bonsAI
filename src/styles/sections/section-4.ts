@@ -256,7 +256,16 @@ export function buildSection4Section(): string {
           accent family as its Tip dot (maintainer bug report, 2026-09-19; only the dot should carry
           that colour). Removed: DecodePresetChipButton now sets the label colour inline instead,
           the same \`#c4d3e2\` every other mode already uses (PresetChipButton below).
+
+          The typing caret is the one part that does carry the accent (row PRESET-STREAM-ANIM-01:
+          "green, the accent colour"). It failed on the Deck 2026-09-26 at about RGB 214,228,236,
+          the letters' own colour, because it was a character inside the letters' string; it has
+          its own span now (presetDecodeSlots.tsx). The same toned accent the chips' [beta] tag
+          uses, whose default is exactly the answer scramble's own green (#5b9e7e, answerBubble.ts).
         */
+        .bonsai-scope .bonsai-preset-chip-caret {
+          color: var(--bonsai-ui-accent-toned, #5b9e7e) !important;
+        }
 
         .bonsai-scope .bonsai-chat-response-stack {
           margin-top: ${uiScalePx(BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX)} !important;

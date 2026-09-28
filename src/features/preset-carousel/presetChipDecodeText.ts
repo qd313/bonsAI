@@ -12,8 +12,8 @@
  * Solves: Keeps the "what does the label show at revealedCount N" question testable on its own
  * (see composeDecodeText's tests), separately from the animation-frame plumbing that drives it.
  *
- * Does not: Read or write the DOM, schedule anything, or know about React. `composeDecodeText` is
- * a plain function of its four arguments.
+ * Does not: Read or write the DOM, schedule anything, or know about React. `composeDecodeText` and
+ * `composeDecodeParts` are plain functions of their four arguments.
  */
 import type { PresetPrompt } from "../../data/presets";
 
@@ -28,7 +28,11 @@ export const PRESET_DECODE_CHAR_MS = 42;
 export const PRESET_DECODE_CHURN_REFRESH_MS = 55;
 /** Caret blink period, ms. */
 export const PRESET_DECODE_CARET_BLINK_MS = 450;
-/** Block caret glyph, drawn inline at the lock boundary rather than as a separate CSS ::after. */
+/**
+ * Block caret glyph, drawn at the lock boundary rather than as a separate CSS ::after. It sits in
+ * its own span (see composeDecodeParts) so it can take the accent colour while the letters keep
+ * theirs.
+ */
 export const PRESET_DECODE_CARET_CHAR = "▋";
 
 /**
@@ -65,11 +69,30 @@ export function composeDecodeText(
   churn: readonly string[],
   caretOn: boolean,
 ): string {
-  if (revealedCount >= text.length) return text;
-  const prefix = text.slice(0, revealedCount);
-  const boundaryChar = caretOn ? PRESET_DECODE_CARET_CHAR : (churn[revealedCount] ?? " ");
-  const tail = churn.slice(revealedCount + 1).join("");
-  return prefix + boundaryChar + tail;
+  const parts = composeDecodeParts(text, revealedCount, churn, caretOn);
+  return parts.locked + parts.caret + parts.tail;
+}
+
+/**
+ * The same label, cut where the colour changes: the locked real letters, the caret (empty while
+ * it blinks off), and everything after it. The caret used to be a character inside one string with
+ * the letters, so it could only ever be drawn in their colour -- pale, not the accent green (row
+ * PRESET-STREAM-ANIM-01, failed on the Deck 2026-09-26). While the caret is off, the churn glyph
+ * under it belongs to the tail, so it keeps the letters' colour too.
+ */
+export type DecodeTextParts = { locked: string; caret: string; tail: string };
+
+export function composeDecodeParts(
+  text: string,
+  revealedCount: number,
+  churn: readonly string[],
+  caretOn: boolean,
+): DecodeTextParts {
+  if (revealedCount >= text.length) return { locked: text, caret: "", tail: "" };
+  const locked = text.slice(0, revealedCount);
+  const rest = churn.slice(revealedCount + 1).join("");
+  if (caretOn) return { locked, caret: PRESET_DECODE_CARET_CHAR, tail: rest };
+  return { locked, caret: "", tail: (churn[revealedCount] ?? " ") + rest };
 }
 
 /** Per-slot decode animation state, owned by the reveal effect's closure — never React state, so a

@@ -20,6 +20,7 @@ import {
   usePresetRowNav,
 } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "../data/presets";
+import { composeDecodeParts } from "../features/preset-carousel/presetChipDecodeText";
 import { CAROUSEL_STEP_MS, CAROUSEL_HISTORY_MAX } from "../features/preset-carousel/carouselState";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
@@ -343,6 +344,42 @@ describe("composeDecodeText", () => {
   });
 });
 
+/*
+ * Roadmap "The decode chip's typing caret is pale, not the accent green" (row
+ * PRESET-STREAM-ANIM-01, FAILED on the Deck 2026-09-26: the caret measured about RGB 214,228,236,
+ * the letters' own colour). The caret was a character inside the same string as the letters, so
+ * it could only ever take their colour. composeDecodeParts hands it back on its own so it can be
+ * drawn in its own element, with its own colour.
+ */
+describe("composeDecodeParts", () => {
+  const churn = ["1", "2", "3", "4", "5"];
+
+  it("puts the caret, and only the caret, in its own part while it is showing", () => {
+    expect(composeDecodeParts("alpha", 2, churn, true)).toEqual({
+      locked: "al",
+      caret: PRESET_DECODE_CARET_CHAR,
+      tail: "45",
+    });
+  });
+
+  it("leaves the caret part empty while it blinks off: the churn glyph beneath it is a letter", () => {
+    expect(composeDecodeParts("alpha", 2, churn, false)).toEqual({ locked: "al", caret: "", tail: "345" });
+  });
+
+  it("joins back into exactly what composeDecodeText shows, at every step", () => {
+    for (let revealed = 0; revealed <= 6; revealed += 1) {
+      for (const caretOn of [true, false]) {
+        const parts = composeDecodeParts("alpha", revealed, churn, caretOn);
+        expect(parts.locked + parts.caret + parts.tail).toBe(composeDecodeText("alpha", revealed, churn, caretOn));
+      }
+    }
+  });
+
+  it("once every character is locked, it is all letters and no caret", () => {
+    expect(composeDecodeParts("alpha", 5, churn, true)).toEqual({ locked: "alpha", caret: "", tail: "" });
+  });
+});
+
 describe("MainTabPresetAnimatedChips decode mode", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
@@ -413,6 +450,50 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
 
     expect(setUnifiedInput).toHaveBeenCalledTimes(1);
     expect(setUnifiedInput).toHaveBeenCalledWith(expect.stringContaining("alpha"));
+  });
+
+  /*
+   * Roadmap "The decode chip's typing caret is pale, not the accent green" (PRESET-STREAM-ANIM-01).
+   * The accent colour is a stylesheet rule on `.bonsai-preset-chip-caret` (section-4.test.ts pins
+   * it); this pins the half a stylesheet cannot: the caret really is drawn in that element on every
+   * frame of a reveal, and never as a character mixed in with the letters, which would take the
+   * letters' colour again. Walked one frame at a time across the first chip's whole reveal, so the
+   * caret is read both on and off.
+   */
+  it("draws the typing caret in its own element on every frame, never mixed into the letters", () => {
+    vi.useFakeTimers();
+    try {
+      const { container } = render(
+        <MainTabPresetAnimatedChips
+          seeds={[seed("How can I optimize for battery life?"), seed("bravo"), seed("charlie")]}
+          setUnifiedInput={vi.fn()}
+          animationMode="decode"
+        />,
+      );
+      let framesWithCaret = 0;
+      let framesRead = 0;
+      for (let elapsed = 0; elapsed < 2600; elapsed += 16) {
+        act(() => {
+          vi.advanceTimersByTime(16);
+        });
+        const label = container.querySelector(".bonsai-preset-chip-text--churn");
+        if (!label?.textContent) continue;
+        framesRead += 1;
+        const caret = label.querySelector(".bonsai-preset-chip-caret");
+        expect(caret).toBeTruthy();
+        const caretText = caret!.textContent ?? "";
+        expect(["", PRESET_DECODE_CARET_CHAR]).toContain(caretText);
+        // Every caret character on the label is the one inside the caret element.
+        const caretsOnLabel = label.textContent.split(PRESET_DECODE_CARET_CHAR).length - 1;
+        expect(caretsOnLabel).toBe(caretText ? 1 : 0);
+        if (caretText) framesWithCaret += 1;
+      }
+      expect(framesRead).toBeGreaterThan(10);
+      expect(framesWithCaret).toBeGreaterThan(0);
+      expect(framesWithCaret).toBeLessThan(framesRead);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("prefers-reduced-motion swaps each chip's text in instantly, with no caret and no scroll", () => {

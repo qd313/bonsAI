@@ -15,6 +15,8 @@
 import { describe, expect, it } from "vitest";
 import { buildSection4Section } from "./section-4";
 import { buildSection6Section } from "./section-6";
+import { buildAnswerBubbleSection } from "./answerBubble";
+import { buildBonsaiScopeAccentInlineStyle } from "../../data/characterUiAccent";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,
@@ -141,6 +143,36 @@ describe("the settings-results card's surface is fully opaque (section 4 CSS)", 
     expect(baseSelectorClassCount).toBe(2);
     expect(baseMatch![2]).toMatch(/background:\s*rgba\([^)]*\)\s*!important/);
     expect(classCount).toBeGreaterThan(baseSelectorClassCount);
+  });
+});
+
+/*
+ * Roadmap "The decode chip's typing caret is pale, not the accent green" (row
+ * PRESET-STREAM-ANIM-01, FAILED on the Deck 2026-09-26 at about RGB 214,228,236 -- the letters'
+ * own colour). The caret now has its own element (presetDecodeSlots.tsx); this pins its colour.
+ */
+describe("the decode chip's typing caret (section 4 CSS)", () => {
+  const css = buildSection4Section();
+
+  it("draws the caret in the character's toned accent, falling back to the default green's", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-chip-caret\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]).toMatch(/color:\s*var\(--bonsai-ui-accent-toned,\s*#5b9e7e\)\s*!important/);
+  });
+
+  it("uses a fallback that is exactly what the scope sets with no character chosen", () => {
+    // The variable is always set on the scope, character or not (characterUiAccent.ts); the
+    // fallback only matters if it ever is not, and must then be the same green, not another one.
+    // It is also the answer scramble's own "green" (answerBubble.ts), so the two read as one colour.
+    const scope = buildBonsaiScopeAccentInlineStyle(null) as Record<string, string>;
+    expect(scope["--bonsai-ui-accent-toned"]).toBe("#5b9e7e");
+    expect(buildAnswerBubbleSection()).toMatch(/\.bonsai-stream-scramble-churn--green\s*\{\s*color:\s*#5b9e7e;/);
+  });
+
+  it("leaves the letters alone: nothing tints the decode label or its churn with the accent", () => {
+    // Maintainer's report 2026-09-19: only a chip's icon carries the accent, never its words.
+    expect(css).not.toMatch(/bonsai-preset-glass--decode[^{]*\{[^}]*accent/);
+    expect(css).not.toMatch(/bonsai-preset-chip-text--churn[^{]*\{[^}]*accent/);
   });
 });
 

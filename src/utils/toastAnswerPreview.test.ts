@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   BODY_LINE_BUDGET,
+  BODY_LINE_WIDTH,
   buildToastAnswerLines,
   TITLE_LINE_BUDGET,
+  TITLE_LINE_WIDTH,
   TOAST_TAP_HINT,
   toastSafeText,
+  toastTextWidth,
 } from "./toastAnswerPreview";
 
 describe("toastSafeText", () => {
@@ -30,7 +33,12 @@ describe("toastSafeText", () => {
 
   it("flattens markdown to plain words", () => {
     const out = toastSafeText("# Title\n- **bold** and *it* and `code`\n1. [link](http://x.y) here\n> quote");
-    expect(out).toBe("Title bold and it and code link here quote");
+    expect(out).toBe("Title. bold and it and code. link here. quote");
+  });
+
+  it("ends a heading or list item with a full stop so items do not run together", () => {
+    const out = toastSafeText("# Boss fight\n- Dodge left\n- Hit the back!\n\nThen rest");
+    expect(out).toBe("Boss fight. Dodge left. Hit the back! Then rest");
   });
 
   it("drops table rows", () => {
@@ -109,19 +117,44 @@ describe("buildToastAnswerLines", () => {
     expect(text[shown.length]).toBe(" ");
   });
 
-  it("keeps every line inside its measured budget for ordinary prose", () => {
-    const text = "Wide words like mammoth and wobbling swimmers matter more than narrow ones like illicit little pills ".repeat(3);
-    const r = buildToastAnswerLines(text)!;
-    expect(r.title.length).toBeLessThanOrEqual(43);
-    expect(r.body.length).toBeLessThanOrEqual(35);
-    expect(TITLE_LINE_BUDGET).toBeGreaterThan(30);
-    expect(BODY_LINE_BUDGET).toBeGreaterThan(25);
+  it("keeps every line inside its width budget, for prose, dashes, CJK and emoji", () => {
+    const texts = [
+      "Wide words like mammoth and wobbling swimmers matter more than narrow ones like illicit little pills ".repeat(3),
+      "Go left — then right — then left — then jump — then duck — then run — then stop — ".repeat(3),
+      "攻略のコツ は 盾 を 先に 壊す こと です 次に 背中 の 弱点 を 狙って ください ".repeat(3),
+      "Nice 🎉 run 🎉 keep 🎉 going 🎉 you 🎉 are 🎉 close 🎉 now 🎉 ".repeat(3),
+    ];
+    for (const text of texts) {
+      const r = buildToastAnswerLines(text)!;
+      expect(toastTextWidth(r.title)).toBeLessThanOrEqual(TITLE_LINE_BUDGET);
+      expect(toastTextWidth(r.body)).toBeLessThanOrEqual(BODY_LINE_BUDGET);
+    }
+  });
+
+  it("gives the long dash, CJK text and emoji a wide width", () => {
+    const wide = toastTextWidth("M");
+    for (const ch of ["—", "漢", "한", "🙂", "…"]) {
+      expect(toastTextWidth(ch)).toBeGreaterThanOrEqual(wide);
+    }
+  });
+
+  it("matches the device measurement: the counting strings fit their lines, one more piece does not", () => {
+    const pieces = (prefix: string, sep: string, n: number) =>
+      Array.from({ length: n }, (_, i) => `${prefix}${String(i + 1).padStart(2, "0")}`).join(sep);
+    // Plan 38 M2: the title line held T01-...-T11, the body line w01 ... w09, same on both screens.
+    expect(toastTextWidth(pieces("T", "-", 11))).toBeLessThanOrEqual(TITLE_LINE_WIDTH);
+    expect(toastTextWidth(pieces("T", "-", 12))).toBeGreaterThan(TITLE_LINE_WIDTH);
+    expect(toastTextWidth(pieces("w", " ", 9))).toBeLessThanOrEqual(BODY_LINE_WIDTH);
+    expect(toastTextWidth(pieces("w", " ", 10))).toBeGreaterThan(BODY_LINE_WIDTH);
+    // The budgets keep a margin inside the measured lines.
+    expect(TITLE_LINE_BUDGET).toBeLessThan(TITLE_LINE_WIDTH);
+    expect(BODY_LINE_BUDGET).toBeLessThan(BODY_LINE_WIDTH);
   });
 
   it("marks a single over-wide word instead of overflowing", () => {
     const r = buildToastAnswerLines("https://example.com/a/very/long/address/that/never/ends/anywhere/at/all ok")!;
     expect(r.title.endsWith("…")).toBe(true);
-    expect(r.title.length).toBeLessThanOrEqual(43);
+    expect(toastTextWidth(r.title)).toBeLessThanOrEqual(TITLE_LINE_BUDGET);
   });
 
   it("uses the words around a fence, never the fenced words", () => {

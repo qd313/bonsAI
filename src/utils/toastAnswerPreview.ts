@@ -13,7 +13,10 @@
  *   - Steam draws each line on one row and cuts it with its own ellipsis. Measured on the Deck and
  *     on a monitor (plan 38 § 3, same on both): the title line held `T01-T02-…-T11` (43 characters)
  *     and the body line `w01 w02 … w09` (35 characters). The font is proportional, so the budgets
- *     below are widths worked out from those two strings, not letter counts, with 10 percent to spare.
+ *     below are widths worked out from those two strings, not letter counts, with 18 percent to
+ *     spare. The long dash, CJK text and emoji count as wide; a letter count let a dash-heavy line
+ *     run past the edge.
+ *   - A heading or list item with no closing mark gets a full stop, so items do not run together.
  *   - Lines break at a space, so Steam's cut never lands in the middle of a word. The one exception
  *     is a single word wider than a whole line (a web address); it is cut and marked with an ellipsis.
  *   - Fences are found line by line with the panel's own markdown reader, not by pairing backtick
@@ -33,18 +36,28 @@ export const TOAST_TAP_HINT = "Tap to open";
 
 const ELLIPSIS = "…";
 
-/** Rough width of one character, in units where a digit is 1. */
+/** Chinese, Japanese and Korean letters and full-width forms: about a whole em each. */
+const CJK_RE = /[⺀-鿿가-힯豈-﫿︰-﹏＀-￯]/u;
+const EMOJI_RE = /\p{Extended_Pictographic}/u;
+
+/** Rough width of one character, in units where a digit is 1 (a digit is about 0.55 em). */
 function charWidth(ch: string): number {
   if (/[0-9]/.test(ch)) return 1;
+  if (EMOJI_RE.test(ch)) return 2.2;
+  // The long dash, the ellipsis and CJK text are a whole em: nearly two digits.
+  if (ch === "—" || ch === ELLIPSIS || CJK_RE.test(ch)) return 1.8;
   if (/[mwMW@%]/.test(ch)) return ch === "m" || ch === "w" ? 1.45 : 1.75;
   if (/[A-Z]/.test(ch)) return 1.2;
   if (/[ijlIt.,;:'!|]/.test(ch)) return 0.5;
   if (/[fr\-()\[\]"]/.test(ch)) return 0.65;
   if (ch === " ") return 0.5;
+  // A variation selector or joiner inside an emoji takes no room of its own.
+  if (/[︀-️‍]/u.test(ch)) return 0;
   return 1;
 }
 
-function textWidth(text: string): number {
+/** The estimated width of a line of text, in the units charWidth uses. */
+export function toastTextWidth(text: string): number {
   let w = 0;
   for (const ch of text) w += charWidth(ch);
   return w;
@@ -54,11 +67,17 @@ function countingString(prefix: string, sep: string, count: number): string {
   return Array.from({ length: count }, (_, i) => `${prefix}${String(i + 1).padStart(2, "0")}`).join(sep);
 }
 
-const SAFETY = 0.9;
-/** What the title line held on the Deck: T01-T02-...-T11. */
-export const TITLE_LINE_BUDGET = textWidth(countingString("T", "-", 11)) * SAFETY;
-/** What the body line held on the Deck: w01 w02 ... w09. */
-export const BODY_LINE_BUDGET = textWidth(countingString("w", " ", 9)) * SAFETY;
+/**
+ * How wide each line is, from what Steam drew before its own ellipsis (plan 38 M2): the title
+ * line showed `T01-…-T11-` and the body line `w01 … w09 w`, each followed by the ellipsis.
+ */
+export const TITLE_LINE_WIDTH = toastTextWidth(`${countingString("T", "-", 11)}-${ELLIPSIS}`);
+export const BODY_LINE_WIDTH = toastTextWidth(`${countingString("w", " ", 9)} w${ELLIPSIS}`);
+
+/** What this file lets itself use of each line: the rest covers the width guesses being rough. */
+const SAFETY = 0.82;
+export const TITLE_LINE_BUDGET = TITLE_LINE_WIDTH * SAFETY;
+export const BODY_LINE_BUDGET = BODY_LINE_WIDTH * SAFETY;
 
 /** The little of a markdown tree this file reads (the reader's own types are not a direct
  *  dependency here). Offsets are into the text that was parsed. */
@@ -125,8 +144,23 @@ function inlineText(node: MdNode): string {
   }
 }
 
-/** Walk the blocks in order, keeping each paragraph's and heading's words. */
-function collectBlocks(node: MdNode, source: string, out: string[], state: { stopped: boolean }): void {
+/** A heading or list item that ends in a letter, digit, bracket or quote gets a full stop. */
+function withFullStop(text: string): string {
+  const t = text.trimEnd();
+  return /[\p{L}\p{N})"'”’]$/u.test(t) ? `${t}.` : t;
+}
+
+/**
+ * Walk the blocks in order, keeping each paragraph's and heading's words. `inItem` is true inside
+ * a list item, whose lines, like a heading, get a full stop so the next one does not run on.
+ */
+function collectBlocks(
+  node: MdNode,
+  source: string,
+  out: string[],
+  state: { stopped: boolean },
+  inItem = false,
+): void {
   for (const child of node.children ?? []) {
     if (state.stopped) return;
     if (child.type === "code" && isUnclosedFence(child, source)) {
@@ -135,10 +169,11 @@ function collectBlocks(node: MdNode, source: string, out: string[], state: { sto
     }
     if (DROPPED_BLOCKS.has(child.type)) continue;
     if (child.type === "paragraph" || child.type === "heading") {
-      out.push(inlineText(child));
+      const words = inlineText(child);
+      out.push(child.type === "heading" || inItem ? withFullStop(words) : words);
       continue;
     }
-    collectBlocks(child, source, out, state);
+    collectBlocks(child, source, out, state, inItem || child.type === "listItem");
   }
 }
 
@@ -176,7 +211,7 @@ function fillLine(
   let width = 0;
   let i = 0;
   for (; i < words.length; i++) {
-    const add = textWidth(words[i]!) + (used.length ? charWidth(" ") : 0);
+    const add = toastTextWidth(words[i]!) + (used.length ? charWidth(" ") : 0);
     if (width + add > budget) break;
     used.push(words[i]!);
     width += add;
@@ -185,7 +220,7 @@ function fillLine(
   // One word wider than the whole line: cut it, mark it, drop its tail.
   let cut = "";
   for (const ch of words[0]!) {
-    if (textWidth(cut + ch + ELLIPSIS) > budget) break;
+    if (toastTextWidth(cut + ch + ELLIPSIS) > budget) break;
     cut += ch;
   }
   return { line: cut + ELLIPSIS, rest: words.slice(1), hardCut: true };
@@ -210,7 +245,7 @@ export function buildToastAnswerLines(raw: string): ToastAnswerLines | null {
   if (wholeRest.rest.length === 0 && !wholeRest.hardCut) {
     return { title: first.line, body: wholeRest.line };
   }
-  const room = BODY_LINE_BUDGET - textWidth(ELLIPSIS);
+  const room = BODY_LINE_BUDGET - toastTextWidth(ELLIPSIS);
   const cut = fillLine(first.rest, room);
   if (cut.hardCut) return { title: first.line, body: cut.line };
   return { title: first.line, body: cut.line + ELLIPSIS };

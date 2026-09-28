@@ -97,6 +97,20 @@ describe("bonsaiReplyReadyToast", () => {
     expect(`${call.title} ${call.body}`).not.toContain("Secret");
   });
 
+  it("shows today's Reply ready when only punctuation is left", () => {
+    setReplySurfaceVisible(false);
+    handleAskTerminalForToast(terminalStatus({ response: "..." }));
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Reply ready", body: "Tap to open", duration: 4000 }),
+    );
+  });
+
+  it("shows nothing when an Ask was stopped", () => {
+    setReplySurfaceVisible(false);
+    handleAskTerminalForToast(terminalStatus({ status: "cancelled", success: false }));
+    expect(toaster.toast).not.toHaveBeenCalled();
+  });
+
   it("skips toast when the reply surface is already visible", () => {
     setReplySurfaceVisible(true);
     handleAskTerminalForToast(terminalStatus());
@@ -127,6 +141,7 @@ describe("bonsaiReplyReadyToast", () => {
       expect.objectContaining({
         title: "Ask failed",
         body: "Ollama unreachable",
+        duration: 5000,
       }),
     );
   });

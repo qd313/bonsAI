@@ -974,7 +974,8 @@ async def run_game_ai_request(
         # game whose notes are covered, where this particular question read as troubleshooting
         # and got routed to the tip sheet instead (kb_domain == "compat"), and nothing there
         # matched either. The line would be true but misleading -- the search never looked in
-        # the notes this turn.
+        # the notes this turn. Nor on a turn whose note or tip was found but cut for room
+        # (kb_notes, plan 74 lane 5): the notes did not come up empty there.
         if ollama_result.get("success"):
             tip_sheet_came_back_empty = tip_sheet_turn_came_back_empty(
                 kb_attached=bool(kb_transparency.get("kb_attached")),
@@ -986,6 +987,7 @@ async def run_game_ai_request(
                 ask_mode=ask_mode,
                 kb_attached=bool(kb_transparency.get("kb_attached")),
                 kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
+                kb_notes=str(kb_transparency.get("kb_notes") or ""),
             ) and not tip_sheet_came_back_empty
             # The second line (D88). It fires on the case the first cannot reach: a note DID
             # come back, and it was a stretch. No tie-break is needed or written -- "Not in my

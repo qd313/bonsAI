@@ -45,7 +45,7 @@ _COVERED_STATUS = "sections"
 
 
 def should_show_not_in_notes_notice(
-    *, ask_mode: str, kb_attached: bool, kb_coverage_status: str
+    *, ask_mode: str, kb_attached: bool, kb_coverage_status: str, kb_notes: str = ""
 ) -> bool:
     """True when the notes cover this game but nothing in them matched the question this turn.
 
@@ -54,11 +54,18 @@ def should_show_not_in_notes_notice(
     `kb_coverage_to_transparency`'s `kb_coverage_status` field -- whether the corpus has
     anything for this game at all. Both are already computed once per turn in
     run_game_ai_request; this just reads them.
+
+    ``kb_notes`` is the same result's `kb_notes` field. When it reads "dropped for room" (see
+    `_BUDGET_DROPPED_NOTE` below), a note or tip WAS found and the context budget cut it before
+    it reached the model -- so `kb_attached` is False, but "nothing in my notes" would be a false
+    claim. On a tip turn the notes were not even searched. Plan 74 lane 5: no line either way.
     """
     mode = (ask_mode or "").strip().lower()
     if mode not in _ELIGIBLE_ASK_MODES:
         return False
     if kb_attached:
+        return False
+    if (kb_notes or "").strip() == _BUDGET_DROPPED_NOTE:
         return False
     return kb_coverage_status == _COVERED_STATUS
 

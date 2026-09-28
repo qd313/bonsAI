@@ -171,6 +171,33 @@ class NotInNotesNeedsTheCallSitesTipSheetGuardTests(unittest.TestCase):
         self.assertTrue(tip_sheet_empty)
 
 
+class NotInNotesStaysOffWhatWasCutForRoomTests(unittest.TestCase):
+    """Plan 74 lane 5: a note or tip that was found but cut for room is not "nothing in my
+    notes" -- the line must not claim the notes lacked something they may well have had."""
+
+    def test_a_note_cut_for_room_shows_no_line(self):
+        self.assertFalse(
+            should_show_not_in_notes_notice(
+                ask_mode="strategy",
+                kb_attached=False,
+                kb_coverage_status="sections",
+                kb_notes="dropped_by_context_budget",
+            )
+        )
+
+    def test_any_other_empty_turn_still_shows_the_line(self):
+        for notes in ("", "no_hit (keyword)", "routed_nothing_fit (x)"):
+            self.assertTrue(
+                should_show_not_in_notes_notice(
+                    ask_mode="expert",
+                    kb_attached=False,
+                    kb_coverage_status="sections",
+                    kb_notes=notes,
+                ),
+                notes,
+            )
+
+
 def _thin(**overrides):
     """A turn where a note attached and nothing pointed at it but the meaning search."""
     base = dict(

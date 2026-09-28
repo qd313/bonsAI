@@ -14,6 +14,7 @@ install_pwd_stub()  # so this file also runs on its own on Windows, not only aft
 
 from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.services.knowledge_base_chips import StackedContext  # noqa: E402
 from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
 _NOT_IN_NOTES_TEXT = "Not in my notes — this answer is from the model's own knowledge."
@@ -237,6 +238,45 @@ class TipSheetTurnShowsNoNotInNotesWiringTests(unittest.TestCase):
         response = result.get("response", "")
         self.assertNotIn(_NOT_IN_NOTES_TEXT, response)
         self.assertNotIn(_RETIRED_NO_TIP_TEXT, response)
+
+
+class CutForRoomShowsNoNotInNotesWiringTests(unittest.TestCase):
+    """Plan 74 lane 5, found by plan 70 helper Q: a note or tip was found, then the context
+    budget cut it before it reached the model. "Not in my notes" used to show under that reply
+    on a covered game, although the notes were never searched (a tip turn) or did have
+    something (a note turn)."""
+
+    def _run_cut_for_room(self, retrieval: KnowledgeRetrievalResult, ask_mode: str) -> str:
+        plugin = _FakePlugin(_base_settings())
+        plugin._ollama_result = {"success": True, "response": "Try this.", "model": "m"}
+        kb_followup_memory.forget()
+        try:
+            with patch(
+                "backend.services.game_ai_request.summarize_kb_coverage",
+                return_value=KbCoverageSummary(status="sections", section_count=4),
+            ), patch(
+                "backend.services.game_ai_request.retrieve_knowledge_context",
+                return_value=retrieval,
+            ), patch(
+                "backend.services.game_ai_request.stack_context_blocks",
+                return_value=StackedContext(text="", knowledge_attached=False),
+            ):
+                return _run(plugin, ask_mode=ask_mode).get("response", "")
+        finally:
+            kb_followup_memory.forget()
+
+    def test_a_rerouted_tip_cut_for_room_shows_no_line(self):
+        retrieval = KnowledgeRetrievalResult(
+            attached=True, text_block="[Tip: display] Raise Render Scale.", notes="compat_tips"
+        )
+        for mode in ("strategy", "expert"):
+            self.assertNotIn(_NOT_IN_NOTES_TEXT, self._run_cut_for_room(retrieval, mode), mode)
+
+    def test_a_note_cut_for_room_shows_no_line(self):
+        retrieval = KnowledgeRetrievalResult(
+            attached=True, text_block="Boss note: focus the adds first.", trust_tier="wiki"
+        )
+        self.assertNotIn(_NOT_IN_NOTES_TEXT, self._run_cut_for_room(retrieval, "strategy"))
 
 
 def _attached(*, best_meaning, keyword_score, notes: str = "") -> KnowledgeRetrievalResult:

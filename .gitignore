@@ -72,6 +72,11 @@ backend/out
 # Make sure to ignore any instance of the loader's decky_plugin.py
 decky_plugin.py
 
+# Staged into defaults/ by scripts/stage_zip_extras.py right before a zip build; the real
+# copies live at the repo root and in data/.
+defaults/NOTICE
+defaults/data/
+
 # Ignore decky CLI for building plugins
 out
 out/*

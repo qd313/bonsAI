@@ -231,6 +231,9 @@ do_release() {
         exit 1
     fi
 
+    bold "Staging NOTICE and runtime data into defaults/..."
+    python3 "$REPO_ROOT/scripts/stage_zip_extras.py" || exit 1
+
     bold "Building plugin zip with Decky CLI..."
     sudo "$CLI_BIN" plugin build "$REPO_ROOT"
 

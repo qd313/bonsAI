@@ -16,13 +16,19 @@ bonsAI is free and open source. You host it yourself, and it puts your privacy f
 - There is no account, no cloud service, and nothing is collected.
 - Every line of code is here to read.
 
-<!-- CONFIRM: the 0.6.0 security review checks this list against the code before release. -->
+<!-- CONFIRM: this list matches the 0.6.0 security review (docs/audit/security-review-0.6.0.md, 2026-09-28).
+     Remove this note once that review's fix 1 (pictures in answers are never loaded) has landed. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 
-- **Installing Ollama and downloading AI models** — from Ollama and GitHub.
-- **The knowledge library and the voice models** — from Hugging Face and GitHub.
-- **The recommended-models list**, which refreshes itself from GitHub.
-- **The Steam lookup**, only if you give it your own Steam key.
+- **Installing Ollama** on the Deck — from ollama.com (the program itself is served from GitHub).
+- **Downloading AI models** — from Ollama's own model library.
+- **The recommended-models list**, which refreshes itself from GitHub at most once a week.
+- **The knowledge library** — from Hugging Face, or from GitHub if Hugging Face is unavailable.
+- **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's software servers,
+  and the speech model from Hugging Face.
+- **The Steam ban lookup** — Valve's servers, only if you give it your own Steam key.
+
+Links inside answers open only when you tap them.
 
 Downloads ask first. The **Internet downloads** permission is off until you allow it, and while it is
 off nothing downloads. Before each download starts, bonsAI tells you where it comes from.

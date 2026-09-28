@@ -232,6 +232,16 @@ starts work outside this.
   none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
   writes an explicit list instead. Same order shown, a paper difference today. Evidence
   `docs/test-evidence/plan70-ROUTING-01-02.json`.
+- ★ `[ollama]` **Replies from the Ollama address have no size limit** — **OPEN, found 2026-09-28 (0.6.0
+  security review, finding 6), after the release.** A fake Ollama the user pointed bonsAI at can fill the
+  Deck's memory. Twelve places, including how answers stream in. [Review](audit/security-review-0.6.0.md).
+- ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **OPEN, found 2026-09-28
+  (security review, finding 7), after the release; needs the maintainer's call first:** support https, or
+  refuse it and say so. [Review](audit/security-review-0.6.0.md).
+- ★ `[voice]` **The speech model is downloaded from a changing address and not checked** — **OPEN, found
+  2026-09-28 (security review, finding 8), after the release.** Pin the address, check the file's
+  checksum, cap its size; also refuse a knowledge-library file list with no checksums.
+  [Review](audit/security-review-0.6.0.md).
 - ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
   found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
   shared checkout, so a copy's own generated files go stale and its full checks fail one step.

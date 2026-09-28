@@ -22,14 +22,12 @@ itself -- this only says where things are and whether a copy can be trusted;
 running it is left to the two files that use this one.
 
 Gotchas:
- - The shared background server's real limit lives one level up, in
-   voice_whisper_daemon, not here: if a recording asks for a speech model
-   while the server is already running a different one, the server is
-   stopped and restarted for the new model, and whichever recording was
-   already using the old one is never told -- it just finds the server gone
-   the next time it tries to use it. This is a known, already-reported gap;
-   this file only supplies the pieces the server is built from, so it cannot
-   fix that on its own.
+ - The shared background server's rules live one level up, in
+   voice_whisper_daemon, not here: it runs one speech model at a time, first
+   come first served. A second asker wanting a different model while the
+   server is held is told no (acquire() returns False) and the server is left
+   alone, so whoever already uses it is never cut off. This file only supplies
+   the pieces the server is built from.
 """
 
 from __future__ import annotations

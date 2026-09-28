@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "node scripts/sync-version-from-plugin.mjs",
-    "build": "rollup -c",
+    "build": "rollup -c && node scripts/third_party_licenses.mjs",
     "prewatch": "node scripts/sync-version-from-plugin.mjs",
     "watch": "rollup -c -w",
     "pretest": "node scripts/sync-version-from-plugin.mjs",

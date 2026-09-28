@@ -63,6 +63,7 @@ roadmap keeps one pointer line to them._
 - ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and its "Chip 1 of 7" counter above the visible area** — **DONE 2026-09-28 (fixed in `4c0605c2`), passed on the Deck's own screen:** chip row and counter fully in view at chips 1, 5 and 7. Row **DETAILS-LADDER-01**. Evidence `docs/test-evidence/plan74-DETAILS-LADDER-01.json`.
 - ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **DONE 2026-09-28 (fixed in `58f60c0a`, `e4c24bdd`), passed on the Deck:** a Half-Life 2 Ravenholm question built on the Ravenholm note showed no line. Row **KB-NOCLOSE-TEXT-01**. Evidence `docs/test-evidence/plan74-KB-NOCLOSE-TEXT-01.json`.
 - ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **DONE 2026-09-28, tested on the PC (no Deck needed).** The fault no longer happens, so the workaround is no longer needed. Evidence `docs/test-evidence/plan74-HOOK-IN-COPY.json`.
+- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **DONE 2026-09-28 (plan 74, `7543270f`, `cb88c012`), passed on the Deck:** Up lands on every hidden cover, the first one included, and A opens it. Row **P74-COVER-UP**. Evidence `docs/test-evidence/plan74-P74-COVER-UP.json`, `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
 
 **Closed 2026-09-28 (release clean-up, first pass):**
 

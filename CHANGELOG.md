@@ -33,8 +33,7 @@ All notable changes to this project are documented in this file.
 - **After the "Update Ollama and models?" box closes, the ring goes back to its button.** Passed on the Deck.
 - **Up from Ask always goes to the question box.** Passed on the Deck.
 - **A straight Down lands on Helpful, and Up from Helpful lands on choice B.** Passed on the Deck.
-- **Up onto the last spoiler cover in an answer lands on the cover, so A opens it.** A cover at the very top of an
-  answer still needs work.
+- **Up now lands on every hidden spoiler cover, the first one included, and A opens it.** Passed on the Deck.
 
 ### The 0.6.0 security review (2026-09-28)
 

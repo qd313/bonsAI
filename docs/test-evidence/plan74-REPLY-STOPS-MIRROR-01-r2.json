@@ -1,0 +1,53 @@
+{
+  "row": "REPLY-STOPS-MIRROR-01",
+  "round": "2 (Deck pass 3)",
+  "plan": "74, Deck pass 3",
+  "build_commit": "cb88c012",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental, clean). Deployed bundle dist/index.js md5 906c6b2bbc43fdefb01a37a9bf829bb9 on PC and Deck. Deployed 2026-09-28 about 11:19 EDT.",
+  "screen": "Deck built-in screen (QuickAccess page 854x454 window, screen 853x533 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 about 11:22 to 11:24 EDT (sweep); second sample 11:34 to 11:35",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, spoiler covers on. Reply = the first ask of pass 3, 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (fresh, about 60 s). Shape: Show reasoning; section 1 = hidden cover at top + 1 paragraph (245x191); section 2 = a hidden cover on its own (245x71, cover 237x55 inside); section 3 = 1 paragraph (245x180); a 'chat summed itself up' notice; choices A and B; Helpful row; Show details. Both covers hidden for the whole walk (D-pad only).",
+  "pressed": [
+    "Ring on the question row (after an 8-press Up walk used for P74-COVER-UP, D-pad only)",
+    "deck_sweep: DOWN until the ring stopped (19 presses), then UP until it stopped (21 presses), stall limit 4. Raw run: runs/plan74-REPLY-STOPS-MIRROR-01-r2.json"
+  ],
+  "seen": {
+    "down_stops": [
+      "question row",
+      "Show reasoning - 18 s",
+      "first cover (x 71 y 149 w 237 h 55)",
+      "SECTION 2 box (x 63 y 220 w 245 h 71) - not the cover inside it",
+      "section 3 (245x180)",
+      "'The chat summed itself up before this answer' notice",
+      "A. Starting out in Dirtmouth",
+      "B. Exploring the City of Tears",
+      "Mark reply helpful",
+      "Show details",
+      "chip",
+      "question box",
+      "ask"
+    ],
+    "up_stops": [
+      "question box",
+      "chip",
+      "Show details",
+      "Mark reply helpful",
+      "B. Exploring the City of Tears",
+      "A. Starting out in Dirtmouth",
+      "'The chat summed itself up' notice",
+      "section 3 (245x180)",
+      "COVER inside section 2 (x 71 y 204 w 237 h 55)",
+      "first cover (x 71 y 204 w 237 h 55)",
+      "Show reasoning - 18 s",
+      "question row",
+      "(then Retry, 79 earlier, chat row, Main tab, back button)"
+    ],
+    "mismatch": "One stop differs: going Down the ring lands on section 2's box (245x71); going Up it lands on the cover inside it (237x55). The first cover now matches both ways (last round's odd stop is fixed). 12 of 13 reply-area stops match.",
+    "second_sample": "Answer 6 of pass 3 has the same kind of lone-cover section 2. Down from Show reasoning: first cover (71,149,237x55), one scroll-only press (cover moved to y 69, partly above the pane top at 88), then section 2's BOX (x 63 y 219 w 245 h 71). Up earlier on that answer landed on section 2's cover (237x55). Same mismatch.",
+    "A_on_section_box": "Extra press, not in the runbook: A with the ring on section 2's box (answer 6) did nothing. The cover stayed hidden ('tap to show') and the ring stayed on the box.",
+    "visibility": "4 partly covered stops, all the two known false alarms: the question row behind the Retry icon (78%) both ways, and the last text section behind the Copy icon (89%) both ways."
+  },
+  "verdict": "FAIL",
+  "verdict_reason": "The Up stops are not the exact mirror of the Down stops. The first cover is now fine both ways, but a section that holds only a cover is entered on its outer box going Down and on the cover going Up; A on that outer box does not open the cover.",
+  "notes": "The chip stop showed different text down and up ('What do the model policy tiers mean?' then 'What's the efficiency sweet spot for this game?'); that is the rotating chip, same control. The 'chat summed itself up' notice is a new stop compared with pass 2 because this chat summed itself up before this answer."
+}

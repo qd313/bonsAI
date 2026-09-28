@@ -1,0 +1,43 @@
+{
+  "row": "P74-COVER-UP",
+  "round": "2 (Deck pass 3, re-check after the second fix)",
+  "plan": "74, Deck pass 3",
+  "build_commit": "cb88c012",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental, clean). Deployed bundle checked: dist/index.js md5 906c6b2bbc43fdefb01a37a9bf829bb9 on both the PC and the Deck. Deployed 2026-09-28 about 11:19 EDT Deck time.",
+  "screen": "Deck built-in screen (QuickAccess page 854x454 window, screen 853x533 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 11:20:43 to 11:35 EDT",
+  "first_time": "Steps 2 and 3: yes (passed on the first answer of the right shape, no fix in between). Step 4: held, but on an answer of a different shape (see below).",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, spoiler covers on (strategy_spoiler_masking_enabled true, unchanged). Question put in with the send-question script (VERIFIED every time), A on Ask. The same question was asked six times; none was a cache hit (each took about 50-60 s and gave a different answer). Only the newest answer stays drawn with its sections.",
+  "answers": [
+    "Ask 1 (11:20): section 1 = cover at top + 1 paragraph (245x191); section 2 = a lone cover (245x71); section 3 = 1 paragraph (245x180). Wrong shape: section 2 is not tall. Used for REPLY-STOPS-MIRROR-01.",
+    "Ask 2 (11:25): section 1 starts with a short line of text, cover 23 px below the section top; section 2 = lone cover. Wrong shape.",
+    "Ask 3 (11:26): section 1 = cover at top (237x55, 8 px below the section top) + 1 paragraph, 245x146; section 2 = 2 paragraphs, 245x306; section 3 = 1 paragraph 245x60; no last cover; choices A and B. RIGHT SHAPE (took 3 questions). Steps 1-3 run on this.",
+    "Ask 4 (11:29): section 1 = cover at top + 1 paragraph; section 2 = lone cover. Wrong shape; walked as an extra sample.",
+    "Ask 5 (11:31): section 1 starts with text, cover below it; section 2 = 1 paragraph 245x120. Wrong shape.",
+    "Ask 6 (11:33): section 1 = cover at top + 1 paragraph (245x206); section 2 = lone cover (245x71). Step 4 run on this (closest shape found; section 2 is not tall text)."
+  ],
+  "pressed": [
+    "Answer 3: ring to 'Mark reply helpful' (Up x3 from Ask)",
+    "UP -> B, UP -> A, UP -> section 3, UP -> section 2, UP (scroll only), UP (scroll only), UP -> first cover",
+    "A on the first cover",
+    "Answer 6 (fresh, first cover hidden): ring to Helpful; UP -> B, UP -> A, UP -> section 2's cover, UP -> first cover, UP -> Show reasoning"
+  ],
+  "seen": {
+    "step1_section2": "Section 2 (245x306) took the ring at y 8 (its top above the pane top at 88), then 2 scroll-only presses of 80 px each (y 8 -> 88 -> 168), ring stayed on section 2. The runbook expected about three; two were needed.",
+    "step2_first_cover": "The next Up put the ring on the first cover itself: rect x 71 y 204 w 237 h 55, class bonsai-spoiler-reveal-target, still hidden. Fully on screen: the visible pane runs y 88 to 454. The 245-wide section around it (x 63 y 196 w 245 h 146) was NOT the focused element. Screenshot plan74-P74-COVER-UP-r2-first-cover.png shows the ring on the cover.",
+    "step3_A": "A opened the cover: section text now reads 'Spoiler - tap to hide ...' followed by the revealed words; ring moved to the 'Spoiler - tap to hide' control, rect x 81 y 213 w 216 h 15, inside section 1.",
+    "step4_answer6": "From section 2's cover, Up landed on the hidden first cover (x 71 y 204 w 237 h 55, isFirstCover true). One more Up went straight to 'Show reasoning - 18 s' (x 52 y 204 w 290 h 15). No scroll-only press, not back onto the cover.",
+    "extra_answer1": "On answer 1 (D-pad only), Up from Helpful: B, A, 'chat summed itself up' notice, section 3, section 2's cover, first cover, Show reasoning. So Up reached the first cover there too.",
+    "extra_answer4": "On answer 4, Up from Helpful: B, A, section 2's cover, first cover, Show reasoning."
+  },
+  "verdict": "UNCLEAR",
+  "verdict_reason": "Steps 2 and 3 pass on the first run with the right answer shape: Up from the tall section 2 lands on the first cover itself (237 wide, fully on screen), and A opens it with the ring moving to 'tap to hide'. Step 4 also held (one Up from the hidden first cover goes to Show reasoning), but only on an answer whose section 2 is a lone cover, not tall text; three more asks never gave the tall shape again. The owner decides whether that counts for step 4.",
+  "notes": [
+    "The first cover of answer 3, opened by A at about 11:28:50, read as hidden again at about 11:29:30. In between: D-pad presses only (walk down to Ask) and the send-question script typing into the box (it fires only input and change events). Not investigated further.",
+    "No settings changed. Settings file identical before and after (compared byte for byte)."
+  ],
+  "raw_runs": [
+    "runs/plan74-pass3-answer1-up-walk.json",
+    "runs/plan74-pass3-answer4-up-walk.json"
+  ]
+}

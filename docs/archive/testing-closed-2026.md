@@ -229,7 +229,7 @@ _Plan 65 trim. Copied line for line from the "Shipped feature coverage" table, n
 
 ## Plan 74 (2026-09-28)
 
-Written straight here from plan 74's two Deck passes, to keep testing.md under its size limit. The one row that failed, P74-COVER-UP, stays in testing.md.
+Written straight here from plan 74's two Deck passes, to keep testing.md under its size limit. P74-COVER-UP failed at first and moved here once its second round passed.
 
 | Area | Covered by | Status | Notes |
 |------|------------|--------|-------|
@@ -252,3 +252,4 @@ Written straight here from plan 74's two Deck passes, to keep testing.md under i
 | Up from Ask always goes to the question box | P74-ASK-UP | **Done — passed (Deck) 2026-09-28** | Plan 74 (`29788626`). Evidence `docs/test-evidence/plan74-P74-ASK-UP.json`; replayable walk `checks/plan74-P74-ASK-UP.json`. |
 | A straight Down lands on Helpful, and Up from Helpful lands on choice B | P74-HELPFUL-DOWN-UP | **Done — passed (Deck) 2026-09-28, by the session's ruling** | Plan 74 (`05fa15f4`). The planned route could not be pressed; by a corrected route every pass condition held (Down visits A, B, then Helpful; Up from Helpful lands on B; nothing else moved). Evidence `docs/test-evidence/plan74-P74-HELPFUL-DOWN-UP.json`. |
 | Entering the Show details chip ladder at its first chip shows the whole chip row, on the Deck's own screen | DETAILS-LADDER-01 | **Done — passed (Deck) 2026-09-28** | Fixed in `4c0605c2`. The chip row and its counter were fully in view at chips 1, 5 and 7, "This answer" tab. Evidence `docs/test-evidence/plan74-DETAILS-LADDER-01.json` (+ screenshot). |
+| Up onto a spoiler cover lands on the cover, so A opens it | P74-COVER-UP | **Done — passed (Deck) 2026-09-28** | Plan 74 (`7543270f`, `cb88c012`). Round one fixed the last cover; the first cover then failed (`docs/test-evidence/plan74-P74-COVER-UP.json`). Round two: Up landed on the first cover itself (237×55, fully on screen) and A opened it. Its last step, Up from the first cover leaving the answer for "Show reasoning", held on a slightly different answer shape, because the same tall shape did not come up again in three more questions. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`, screenshot `docs/test-evidence/plan74-P74-COVER-UP-r2-first-cover.png`. |

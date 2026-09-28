@@ -2339,3 +2339,11 @@ _Copied line for line from the roadmap, nothing reworded apart from link paths, 
   pre-commit hook analyzing wrong worktree") is working on it.
 
 **Closed 2026-09-28 (plan 74).** Tested by the session on the PC, no Deck needed: the hook now rebuilds the copy it runs in, so the workaround is no longer needed. Evidence `docs/test-evidence/plan74-HOOK-IN-COPY.json`.
+
+- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **PARTIAL,
+  found 2026-09-27 (plan 70, flow L9).** Coming Down onto the cover works. [Detail](../roadmap-details.md#flow-l10-findings).
+  **2026-09-28 (plan 74, `7543270f`):** the last cover in an answer is fixed: Up lands on it and A opens it. A cover at
+  the very top of the answer still fails: Up lands on the whole first section and A does nothing
+  (`docs/test-evidence/plan74-P74-COVER-UP.json`, FAIL). A second round is in progress (plan 74).
+
+**Closed 2026-09-28 (plan 74, `7543270f`, `cb88c012`).** Up now lands on every hidden cover, the first one included, and A opens it. Round one fixed the last cover (`docs/test-evidence/plan74-P74-COVER-UP.json`); round two fixed a cover at the top of the answer: on the Deck Up landed on the first cover itself, fully on screen, and A opened it (`docs/test-evidence/plan74-P74-COVER-UP-r2.json`). Its last step, Up from the first cover leaving the answer for "Show reasoning", held on a slightly different answer shape, because the same tall shape did not come up again in three more questions. Row **P74-COVER-UP**.

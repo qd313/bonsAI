@@ -85,6 +85,18 @@ starts work outside this.
   later slips. [Detail](roadmap-details.md#flow-2b-bugs).
   **2026-09-28 (plan 74):** with a hidden spoiler on screen, 17 of 18 stops now mirror; the one mismatch is the top spoiler
   cover, the same fault as the spoiler-cover entry below (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01.json`).
+  **2026-09-28 (plan 74, Deck pass 3, after `cb88c012`):** the first cover now mirrors. One stop of 13 still differs: on a
+  section that holds only a cover, Down lands on the section's outer box (245×71) while Up lands on the cover inside it
+  (237×55). Seen on two answers (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`, FAIL). Still owed: row **REPLY-STOPS-MIRROR-01**.
+- ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
+  does nothing** — **OPEN, found 2026-09-28 (plan 74, Deck pass 3).** A player walking Down cannot open that cover from
+  where the ring lands; walking Up works. Evidence `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`.
+- ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **OPEN, one
+  sighting 2026-09-28 (plan 74, Deck pass 3).** The cover's top was at y 69 while the visible area starts at 88, so about
+  a third of it was hidden. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
+- ★ `[reply]` **An opened spoiler cover closed again by itself** — **OPEN, one sighting 2026-09-28 (plan 74, Deck pass
+  3).** Opened with A, it read as hidden about 40 seconds later, with only D-pad moves and the next question typed in
+  between. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
@@ -169,11 +181,6 @@ starts work outside this.
   project. Row **TAB-BAR-GHOST-01**. The session's guess: closing a Decky popup rebuilds the plugin, and
   the highlight lands on the top bar, which then opens. Needs a Deck walk with the focus recorder before any
   fix.
-- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **PARTIAL,
-  found 2026-09-27 (plan 70, flow L9).** Coming Down onto the cover works. [Detail](roadmap-details.md#flow-l10-findings).
-  **2026-09-28 (plan 74, `7543270f`):** the last cover in an answer is fixed: Up lands on it and A opens it. A cover at
-  the very top of the answer still fails: Up lands on the whole first section and A does nothing
-  (`docs/test-evidence/plan74-P74-COVER-UP.json`, FAIL). A second round is in progress (plan 74).
 - ★★ `[focus]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
   finished answer. [Detail](roadmap-details.md#flow-l10-findings).

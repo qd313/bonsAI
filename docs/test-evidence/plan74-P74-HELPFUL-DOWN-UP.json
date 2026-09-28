@@ -1,0 +1,31 @@
+{
+  "row": "P74-HELPFUL-DOWN-UP",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:51:15 to 10:53:30 EDT",
+  "first_time": "fix behaved as wanted on the first run; the runbook's own route needed one change (see route_problem), so the verdict is UNCLEAR, not PASS",
+  "setup": "Main tab, chat 'wheatley fight', Strategy. Asked 'Explain each class in Baldurs Gate 3 for a new player' (send-question script VERIFIED, A on Ask). Answer in about 49 s: 3 answer sections, choices 'A. Starting the game and figuring out the basics' and 'B. In the middle of a major quest with a tough challenge', Helpful / Not really / Read aloud row, Show details, notes block 'Party composition'. Answer not rated.",
+  "route_problem": "The runbook says 'Right to Read aloud' from choice B. RIGHT on B did nothing, twice (ring stayed on B at x 65 y 156). Read aloud is in the row under the choices, not beside B. To give the row its memory of Read aloud I went DOWN from B (landed on Helpful), RIGHT, RIGHT (Read aloud). Everything after that follows the runbook.",
+  "pressed": [
+    "Ring placed at Ask; UP x7 to choice A (passing Show details -> 'Mark reply helpful' -> B -> A)",
+    "DOWN (A -> B)",
+    "RIGHT, RIGHT (no move, both times)",
+    "DOWN (B -> 'Mark reply helpful'), RIGHT, RIGHT (-> 'Read aloud' x 289 y 204)",
+    "UP (Read aloud -> B)",
+    "UP, UP (B -> A -> last answer section 'And finally, you got the Social classes...')",
+    "DOWN x5: the first two only scrolled inside the last section (it is 282 px tall; ring stayed on it, top y 88 -> 8 -> -72), then A, B, Helpful",
+    "UP from Helpful"
+  ],
+  "seen": {
+    "down_stops_after_last_section": ["A. Starting the game... (x 65 y 156)", "B. In the middle of... (x 65 y 212)", "Mark reply helpful (x 52 y 172 w 89 h 32)"],
+    "down_from_B_lands_on": "'Mark reply helpful', not 'Read aloud', even though Read aloud was the last button the row held",
+    "up_from_Helpful_lands_on": "'B. In the middle of a major quest with a tough challenge' (x 65 y 156 w 265 h 48)",
+    "up_from_Read_aloud_lands_on": "B (not asked by the row, recorded)",
+    "helpful_and_B_did_not_move": "Gap from B's top to Helpful's top 106 px before the Up (B y 66, Helpful y 172) and 106 px after (B y 156, Helpful y 262); sizes unchanged (B 265x48, Helpful 89x32). Only the pane scrolled. Screenshots plan74-P74-HELPFUL-DOWN-UP-on-helpful.png and plan74-P74-HELPFUL-DOWN-UP-up-to-b.png look the same apart from the scroll."
+  },
+  "verdict": "UNCLEAR",
+  "verdict_reason": "Every 'Pass when' measurement matched (Downs visit A, B, then Helpful, not Read aloud; Up from Helpful lands on B; nothing moved). UNCLEAR only because the runbook's 'Right to Read aloud' from B cannot be pressed as written, so the row was reached by a slightly different route. The owner decides.",
+  "notes": "No retries of the fix itself."
+}

@@ -1,0 +1,30 @@
+{
+  "row": "DETAILS-LADDER-01",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:27-10:32 EDT",
+  "setup": "The Deck's own screen (checked at the start: 854x534 CSS at scale 1.5 = 1280x800; the Quick Access page is 854x454). Chat 'wheatley fight'. The visible band for the chat is y 88 (top of the scroll area) to y 290.2 (top of the question dock).",
+  "pressed": [
+    "Try 1 (thinking off, newest answer = the Valheim question): Show details (A) -> DOWN to 'This answer | Session' -> DOWN into the ladder. That answer had only 6 chips ('Chip 1 of 6'), so chip 7 did not exist. RIGHT stepped chips 2..6.",
+    "Try 2 (after settings were put back, thinking on): asked the Half-Life 2 question from the next row, so the newest answer had 7 chips. Show details (A) -> DOWN to the notes block -> DOWN to 'This answer | Session - 73' -> DOWN into the ladder at chip 1 -> RIGHT x4 to chip 5 -> RIGHT x2 to chip 7."
+  ],
+  "seen": {
+    "try1_6_chips": {
+      "chip1": "counter 'Chip 1 of 6' y 88.3-102.9 = 100%; chip row y 108.9-193.6 = 100%",
+      "chip5": "counter y 122.3-136.9 = 100%; chip row y 142.9-227.6 = 100%",
+      "chip6_last": "counter y 96.3-110.9 = 100%; chip row y 116.9-201.6 = 100%"
+    },
+    "try2_7_chips": {
+      "chip1": "counter 'Chip 1 of 7' y 88.4-103.1 = 100%; chip row y 109.1-163.8 = 100%; active chip 'Keyword + meaning' 100%",
+      "chip5": "counter 'Chip 5 of 7' y 96.4-111.1 = 100%; chip row y 117.1-231.8 = 100%; active chip 'Spoiler risk: high' 100%",
+      "chip7": "counter 'Chip 7 of 7' y 96.4-111.1 = 100%; chip row y 117.1-171.8 = 100%; active chip 'Developer details' 100%"
+    },
+    "rig_whole_ladder_box": "The rig's own visibility number for the whole ladder box (which also holds the open detail text below the chips) read 67% at chip 1, 67% at chip 5 and 33% at chip 7 in try 2 - the same three numbers as the first measurement quoted in the row. The part that falls outside is the detail text below the chips, behind the question dock.",
+    "screenshot": "plan74-DETAILS-LADDER-01-chip7.png: 'Chip 7 of 7' and the chip row are fully on screen under the tab bar; the white focus outline of the ladder box runs down over the question box area."
+  },
+  "pass_when": "The chip row and its 'Chip 1 of 7' counter are 100% on screen at every step (the first measurement read 67%, 67% and 33%)",
+  "verdict": "PASS",
+  "verdict_note": "Pass on the row's stated measure (counter and chip row, 100% at chips 1, 5 and 7). The owner should know the rig's whole-ladder-box number is unchanged at 67 / 67 / 33, so if the first measurement was of that box, the box itself still reaches behind the dock; and the white ring outline is drawn over the question box at chip 7."
+}

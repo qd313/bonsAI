@@ -4,6 +4,38 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 74, the second release wave (2026-09-28)
+
+**The download**
+- **The release download now carries its notice, the licence texts and the settings-search word lists**, so typing
+  "mic" finds the Voice settings again on a fresh install.
+- **The game notes' licence is written down.**
+
+**Answers and chats**
+- **With thinking off, the waiting spinner stops once the answer starts.** Passed on the Deck.
+- **A dismissed troubleshooting hint stays gone** after Quick Access is closed and reopened, and the ban-lookup row
+  stays in its own chat. Passed on the Deck.
+- **The Session tab agrees when the chat has summed itself up.** Passed on the Deck.
+- **The meaning-search hint shows up by itself** after its model is removed, without reopening the Ollama tab. Passed on the Deck.
+- **After Stop or Helpful, Read aloud no longer sits alone above a blank gap.** Passed on the Deck.
+- **"Not in my notes" no longer shows when the notes were never searched.**
+- **The plugin's log now says which notes and tips each question chose**, one line per question, without the question's words. Passed on the Deck.
+- **"Reset to defaults" in the try-order picker really goes back to the default.** Passed on the Deck.
+
+**Look**
+- **The decode chip's typing mark takes the character's colour**, green with no character. Passed on the Deck.
+- **Settings' "Clear cache…" lines up with the other buttons, and About's support button is the same size as the
+  other link buttons.** Passed on the Deck.
+
+**Controller**
+- **B on the notes block, or on Hide details, closes Show details** instead of throwing the ring to the tab bar. Passed on the Deck.
+- **Two older boxes open with the ring on the safe choice**, not the action button. Passed on the Deck.
+- **After the "Update Ollama and models?" box closes, the ring goes back to its button.** Passed on the Deck.
+- **Up from Ask always goes to the question box.** Passed on the Deck.
+- **A straight Down lands on Helpful, and Up from Helpful lands on choice B.** Passed on the Deck.
+- **Up onto the last spoiler cover in an answer lands on the cover, so A opens it.** A cover at the very top of an
+  answer still needs work.
+
 ### The 0.6.0 security review (2026-09-28)
 
 Three reviewers read everything changed since 0.4.9; nothing lets anyone on the internet reach the Deck, and

@@ -1,0 +1,26 @@
+{
+  "row": "P74-ASK-UP",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:49:20 to 10:50:32 EDT",
+  "first_time": true,
+  "setup": "Main tab, chat 'wheatley fight', Strategy mode. Question put in the box with the send-question script (VERIFIED, full text 'What is a good early build for a mage in Elden Ring'); not asked. Ring walked Down to the question box (no A on the box).",
+  "pressed": [
+    "Round 1: DOWN (box -> Ask), UP",
+    "Round 2: RIGHT (mode 'Strategy'), RIGHT (mic 'Voice input'), DOWN (-> Ask), UP",
+    "Round 3: RIGHT (mode), LEFT (paperclip 'Attach screenshot to Ask'), DOWN (-> Ask), UP",
+    "Then all three rounds again as a saved replay check (deck_saveCheck plan74-P74-ASK-UP): 10 of 10 steps passed"
+  ],
+  "seen": {
+    "ask_button": "'ask' x 49 y 400 w 263 h 36",
+    "question_box": "INPUT x 73 y 309 w 275 h 59, still holding the full question",
+    "round_1_up_from_ask": "question box (10:49:47)",
+    "round_2_up_from_ask_after_mic": "question box (10:50:01)",
+    "round_3_up_from_ask_after_paperclip": "question box (10:50:12)",
+    "visibility": "every stop 100% visible in the replay"
+  },
+  "verdict": "PASS",
+  "notes": "Passed on the first run; no retries. The mic and paperclip sit in the box's bottom strip; the mic was reached with RIGHT, RIGHT from the box as the runbook says, and the paperclip with RIGHT then LEFT (RIGHT goes to the mode button first)."
+}

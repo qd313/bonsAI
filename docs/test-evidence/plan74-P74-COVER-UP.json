@@ -1,0 +1,33 @@
+{
+  "row": "P74-COVER-UP",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:54:40 to 10:57:31 EDT",
+  "first_time": false,
+  "setup": "Main tab, chat 'wheatley fight', Strategy, spoiler covers on. Asked fresh: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (send-question script VERIFIED, A on Ask), answer in about 49 s. Shape of the answer: Show reasoning; section 1 = first cover (hidden) + one paragraph (section box 245x131, the cover 237x55 inside its top); section 2 = four paragraphs in one tall section (245x327); last cover (hidden) after section 2; choices A and B; Helpful / Not really / Read aloud; Show details.",
+  "pressed": [
+    "Ring placed at Ask; UP x4 to 'Mark reply helpful'",
+    "UP (-> B), UP (-> A), UP (-> last cover)",
+    "A",
+    "UP x4 (-> section 2, then 3 presses that scroll inside section 2, 80 px each)",
+    "UP (-> section 1, NOT its cover)",
+    "UP (-> 'Show reasoning - 22 s')",
+    "Second try of the same route: DOWN (-> first cover), DOWN (no move), DOWN (-> section 2), UP (-> section 1 again, not its cover)",
+    "A on section 1 (to see whether A reaches the cover)"
+  ],
+  "seen": {
+    "last_cover": "Ring landed ON the last cover (x 71 y 204 w 237 h 55, 100% visible). A revealed it; ring moved to its 'Spoiler - tap to hide' control (x 81 y 213).",
+    "up_from_revealed_last_cover": "Went to section 2 (the section above), not back onto a cover",
+    "first_cover_try_1": "Up from section 2 put the ring on section 1 as a whole (x 63 y 159 w 245 h 131); the cover inside it (y 167 h 55) was NOT focused",
+    "final_up": "From section 1 the next Up went to 'Show reasoning - 22 s' (not back onto a cover)",
+    "first_cover_try_2": "Same: Up from section 2 landed on section 1 (x 63 y 159 w 245 h 131), cover not focused",
+    "A_on_section_1": "Nothing happened: the first cover stayed hidden (still 'Spoiler - tap to show'), ring stayed on the section",
+    "down_for_comparison": "Down from 'Show reasoning' lands on the first cover itself (x 71 y 149 w 237 h 55)",
+    "screenshot": "plan74-P74-COVER-UP-first-cover.png (ring drawn around the whole first section, cover inside it)"
+  },
+  "verdict": "FAIL",
+  "verdict_reason": "The last cover works (Up lands on it, A opens it). The first cover does not: Up lands on the section around it, twice, and A there does nothing. That is the original bug, still present for a cover at the top of the first section.",
+  "notes": "Possibly relevant: section 2 is taller than the view, so the Up presses before the hand-over were scroll steps inside it. The fix's commit says a still-hidden cover should take the ring 'stepping up from the section below'."
+}

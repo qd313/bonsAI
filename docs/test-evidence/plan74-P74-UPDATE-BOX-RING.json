@@ -1,0 +1,26 @@
+{
+  "row": "P74-UPDATE-BOX-RING",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:48:20 to 10:48:52 EDT",
+  "first_time": true,
+  "setup": "AI runs on the Deck (Run AI on this Deck on; Ollama at 127.0.0.1:11434, v0.34.1, 2 models). Internet downloads off. Ollama tab open after a plugin reload.",
+  "pressed": [
+    "walkTo DOWN to 'Update AI & models' (aria 'Update AI engine and installed models'), 5 presses",
+    "A (download notice opened: 'bonsAI will connect to https://ollama.com ...'; ring on 'Not now')",
+    "B",
+    "A (notice opened again; ring on 'Not now')",
+    "A on 'Not now'",
+    "Then the same four presses again as a saved replay check (deck_saveCheck plan74-P74-UPDATE-BOX-RING): 4 of 4 steps passed"
+  ],
+  "seen": {
+    "after_B": "Notice closed; ring on 'Update AI engine and installed models' (x 64 y 338 w 268 h 36, fully visible) at 10:48:28",
+    "after_Not_now": "Notice closed; ring on 'Update AI engine and installed models' (x 64 y 338 w 268 h 36, fully visible) at 10:48:34",
+    "nothing_started": "At 10:48:37 no installer or pull process on the Deck; model list unchanged (nomic-embed-text:latest, gemma4:e2b-it-qat)",
+    "replay": "The saved check ran the same presses again and matched the button both times"
+  },
+  "verdict": "PASS",
+  "notes": "Passed on the first run; no retries."
+}

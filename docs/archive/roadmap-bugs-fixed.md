@@ -2215,3 +2215,127 @@ _Copied line for line from the roadmap, nothing reworded apart from link paths, 
 **Retired, not fixed, 2026-09-28.** Its cause, the two models pushing each other out of memory, is fixed and
   already in Done (`409de9f6`, passed 2026-09-26; see [roadmap-done-v0.5.0.md](roadmap-done-v0.5.0.md)). The one open
   fact, a single 1,070 ms reading with a game running on 2026-09-23, stays on the roadmap as its own one-line entry.
+
+## Moved from the roadmap 2026-09-28 (plan 74, release wave two)
+
+_Copied line for line from the roadmap, nothing reworded apart from link paths, with the closing note added under each entry._
+
+- ★ `[reply]` **With thinking off, the waiting spinner can keep spinning through the whole answer** —
+  **OPEN, found 2026-09-27 (plan 70, helper S).** Held still while a game runs. [Detail](../roadmap-details.md#flow-l10-findings).
+
+**Closed 2026-09-28 (plan 74, `2b8eac0f`).** Once the answer starts, the spinner stops. Row **P74-THINK-OFF-SPINNER**. Evidence `docs/test-evidence/plan74-P74-THINK-OFF-SPINNER.json`.
+
+- ★ `[chat]` **A dismissed troubleshooting hint comes back once Quick Access is closed and reopened, and
+  the ban-lookup row can follow it into a different chat** — **OPEN, found 2026-09-26 (plan 70, flow
+  L6).** [Detail](../roadmap-details.md#l3-and-2d-findings).
+
+**Closed 2026-09-28 (plan 74, `0486419c`, `9c56344c`).** A dismissed hint stays gone after Quick Access is closed and reopened, and the ban-lookup row stays in its own chat. Rows **P74-HINT-DISMISS**, **P74-LOCAL-CMD-CHAT**. Evidence `docs/test-evidence/plan74-P74-HINT-DISMISS.json`, `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
+
+- ★ `[chat]` **The Session tab says "nothing to sum up yet" while the answer and the card say the chat summed itself up**
+  — **OPEN, found 2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F6-SUMUP.json`.
+
+**Closed 2026-09-28 (plan 74, `529b409e`).** The Session tab now agrees the chat summed itself up. Row **P74-SUMUP-REASON**. Evidence `docs/test-evidence/plan74-P74-SUMUP-REASON.json`.
+
+- ★ `[ollama]` **The meaning-search hint does not appear until the Ollama tab is reopened** — **OPEN, found
+  2026-09-27 (plan 70, flow L10).** After removing the model with the tab open. [Detail](../roadmap-details.md#flow-l10-findings).
+
+**Closed 2026-09-28 (plan 74, `b00abb45`).** The hint showed at most 40.3 seconds after the model was removed, with no press. Row **P74-NOMIC-HINT**. Evidence `docs/test-evidence/plan74-P74-NOMIC-HINT.json`.
+
+- ★ `[layout]` **The panel-height check rewrites a style value that has not changed** — **OPEN, found
+  2026-09-27 (plan 70, helper S).** May be behind the "ResizeObserver loop" errors, unproven.
+  [Detail](../roadmap-details.md#flow-l10-findings).
+
+**Closed 2026-09-28 (plan 74, `323903ea`).** Nothing to see on screen, so no Deck check applies. Unit test `src/utils/tabBodyViewport.test.ts`.
+
+- ★ `[layout]` **The decode chip's typing caret is pale, not the accent green** — **OPEN, FAILED
+  2026-09-26.** Row **PRESET-STREAM-ANIM-01**. [Detail](../roadmap-details.md#flow-2b-bugs).
+
+**Closed 2026-09-28 (plan 74, `13ad6566`).** The typing mark now takes the chosen character's colour: all 37 readings on the Deck, letters unchanged. With no character it is the default green; that half is unit-tested, not read on the Deck. Rows **P74-CARET-COLOUR**, **PRESET-STREAM-ANIM-01** (its caret box). Evidence `docs/test-evidence/plan74-P74-CARET-COLOUR.json`.
+
+- ★ `[layout]` **After Stop or Helpful, Read aloud sits alone above a blank gap** — **OPEN, found 2026-09-27 (plan 72,
+  free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+
+**Closed 2026-09-28 (plan 74, `9158047d`, `fb68ef3c`).** No blank gap after Stop or after Helpful. Rows **P74-EMPTY-STOP**, **P74-HELPFUL-ROW-LOOK**. Evidence `docs/test-evidence/plan74-P74-EMPTY-STOP.json`, `docs/test-evidence/plan74-P74-HELPFUL-ROW-LOOK.json`.
+
+- ★ `[ui]` **Settings' "Clear cache…" sits 16 pixels left of the other buttons, and About's support button is 192 pixels
+  tall to press** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+
+**Closed 2026-09-28 (plan 74, `64c49e00`, `d39de9d1`).** Clear cache lines up with the other buttons (row **P74-CLEAR-CACHE-ROW**, passed). About's support button is now sized like the other three link buttons: the evidence file says unclear only because the row asked for 42 pixels and all four measure 41.3; the session ruled that a pass, since matching the others is what the bug asked (row **P74-ABOUT-SUPPORT**). Evidence `docs/test-evidence/plan74-P74-CLEAR-CACHE-ROW.json`, `docs/test-evidence/plan74-P74-ABOUT-SUPPORT.json`.
+
+- ★ `[KB]` **"Not in my notes" can show on a covered game although its notes were never searched** —
+  **OPEN, found 2026-09-27 (plan 70, helper Q), optional.** When a tip was found but cut for lack of room, in
+  Strategy or Expert. [Detail](../roadmap-details.md#flow-l10-findings).
+
+**Closed 2026-09-28 (plan 74, `c95443ae`).** Unit tests `tests/test_kb_not_in_notes_notice.py`, `tests/test_kb_not_in_notes_wiring.py`. A note cut for room has never been reproduced on the Deck (three tries in plan 64), so no Deck check applies.
+
+- ★ `[KB]` **The plugin's own log says nothing about which notes or tips a question chose** — **OPEN, found
+  2026-09-26 (plan 70, flow R).** That makes a routing problem hard to diagnose from the log alone. (Its twin, a
+  rotating chip taking a press meant for another, closed 2026-09-27.) [Detail](../roadmap-details.md#library-format-bump-and-per-game-deck-tips).
+
+**Closed 2026-09-28 (plan 74, `5443c402`).** The log now writes one line per question, for game notes and for tips alike, with no question words. The evidence file says unclear only because the row asked the log's note titles to match the notes block, and the block shows only the notes the answer used while the log names every note sent to the AI (3 against 1); the session ruled it a pass. Row **P74-KB-LOG-LINE**. Evidence `docs/test-evidence/plan74-P74-KB-LOG-LINE.json`.
+
+- ★ `[ollama]` **"Reset to defaults" in the try-order picker saves an explicit list where there used to be
+  none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
+  writes an explicit list instead. Same order shown, a paper difference today. Evidence
+  `docs/test-evidence/plan70-ROUTING-01-02.json`.
+
+**Closed 2026-09-28 (plan 74, `83019886`).** Row **P74-TRYORDER-RESET**. Evidence `docs/test-evidence/plan74-P74-TRYORDER-RESET.json`.
+
+- ★ `[focus]` **B on the notes block sends the ring to the tab bar and leaves Show details open** —
+  **OPEN, found 2026-09-26 (plan 70, flow L6).** [Detail](../roadmap-details.md#flow-l6-findings).
+
+**Closed 2026-09-28 (plan 74, `2502f10e`).** B now closes Show details and keeps the ring in the answer. Row **P74-B-CLOSES-DETAILS**. Evidence `docs/test-evidence/plan74-P74-B-CLOSES-DETAILS.json`.
+
+- ★★ `[focus]` **Three D-pad slips seen in the plan 68 Deck pass, may predate it** — **PARTIAL, found
+  2026-09-25.** With older turns open: Up from the chip row skips the newest answer and lands on an older
+  answer's Show details; B on "Hide details" moves the ring to the tab strip and leaves the details open;
+  Up from a chat's first question skips the chat row and lands on the tab strip.
+  **2026-09-27 (plan 72, `8294e75b`, `29c0b075`, `9feef4e1`):** the two Up slips passed in the new Up walk, `docs/test-evidence/plan72-F-UP.json`. The B-on-"Hide details" slip is still owed.
+
+**Closed 2026-09-28 (plan 74, `2502f10e`).** Its last open part, B on "Hide details", is fixed by the same commit as the notes-block entry above and passed in the same check. Rows **P74-B-CLOSES-DETAILS**, **PLAN72-F-UP** (the B half). Evidence `docs/test-evidence/plan74-P74-B-CLOSES-DETAILS.json`.
+
+- ★ `[focus]` **Two older boxes open with the ring on their action button, not the safe choice** — **OPEN, found 2026-09-27
+  (plan 72).** "Enable Tier 2 before pulling?" and the library's "Choose download location"; the download notice follows both.
+
+**Closed 2026-09-28 (plan 74, `d7ead6b1`).** Both boxes now open on the safe choice. Rows **P74-SAFE-FIRST-TIER2**, **P74-SAFE-FIRST-PICKER**. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`, `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
+
+- ★ `[focus]` **After the "Update Ollama and models?" box closes with B, the ring goes to the Ollama tab bar** — **OPEN,
+  found 2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-DL.json`. The button now opens the download
+  notice first (`eb4f4d16`), and the ring still lands on the Ollama tab bar once that box closes
+  (`docs/test-evidence/plan72-F3-DL.json`).
+
+**Closed 2026-09-28 (plan 74, `cb48f031`).** The ring goes back to its button. Row **P74-UPDATE-BOX-RING**. Evidence `docs/test-evidence/plan74-P74-UPDATE-BOX-RING.json`; replayable walk `checks/plan74-P74-UPDATE-BOX-RING.json`.
+
+- ★ `[focus]` **Up from Ask lands on the mic one time and on the paperclip another** — **OPEN, found 2026-09-27 (plan 72).**
+
+**Closed 2026-09-28 (plan 74, `29788626`).** Up from Ask always goes to the question box. Row **P74-ASK-UP**. Evidence `docs/test-evidence/plan74-P74-ASK-UP.json`; replayable walk `checks/plan74-P74-ASK-UP.json`.
+
+- ★ `[focus]` **A straight Down lands on Read aloud, not Helpful; Up from Helpful lands on choice A, skipping B** —
+  **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+
+**Closed 2026-09-28 (plan 74, `05fa15f4`).** Its file says unclear only because the planned route (Right to Read aloud from choice B) could not be pressed. By a corrected route every pass condition held: Down visits A, B, then Helpful; Up from Helpful lands on B; nothing else moved. The session ruled it a pass. Row **P74-HELPFUL-DOWN-UP**. Evidence `docs/test-evidence/plan74-P74-HELPFUL-DOWN-UP.json`.
+
+- ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
+  its "Chip 1 of 7" counter above the visible area** — **VERIFY, fixed in `4c0605c2`** (unit test
+  `src/components/ContextChipLadder.reveal.test.tsx`). Passed on the Session tab on the external monitor
+  (`docs/test-evidence/plan72-F4-LADDER.json`). **Still owed:** the original setup — the Deck's own screen, the
+  "This answer" tab: re-run row **DETAILS-LADDER-01** (first measured in `docs/test-evidence/plan64-DETAILS-LADDER-01.json`).
+
+**Closed 2026-09-28 (plan 74 Deck pass, fixed earlier in `4c0605c2`).** Passed on the Deck's own screen, the "This answer" tab: the chip row and its counter were fully in view at chips 1, 5 and 7. Row **DETAILS-LADDER-01**. Evidence `docs/test-evidence/plan74-DETAILS-LADDER-01.json`.
+
+- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **PARTIAL, fixed
+  2026-09-26 (`58f60c0a`, wired into answers `e4c24bdd`).** On the Deck 2026-09-26 a Hollow Knight answer built on the
+  Soul Master note showed no line — the fix working (`docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`); it was
+  logged a fail only because a control question sat on the cut-off (0.6508 against 0.65). **Still owed:** row
+  **KB-NOCLOSE-TEXT-01** as written, and its Half-Life 2 half. [Detail](../roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+
+**Closed 2026-09-28 (plan 74 Deck pass, fixed earlier in `58f60c0a`, `e4c24bdd`).** The Half-Life 2 half passed: a Ravenholm question built on the Ravenholm note showed no line. Row **KB-NOCLOSE-TEXT-01**. Evidence `docs/test-evidence/plan74-KB-NOCLOSE-TEXT-01.json`.
+
+- ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
+  found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
+  shared checkout, so a copy's own generated files go stale and its full checks fail one step.
+  Workaround: commit with `git -c core.hooksPath=.githooks commit`. **Cause:** the shared setting points
+  hooks at the main checkout's path, where setup uses a relative one; a separate cloud session ("Fix
+  pre-commit hook analyzing wrong worktree") is working on it.
+
+**Closed 2026-09-28 (plan 74).** Tested by the session on the PC, no Deck needed: the hook now rebuilds the copy it runs in, so the workaround is no longer needed. Evidence `docs/test-evidence/plan74-HOOK-IN-COPY.json`.

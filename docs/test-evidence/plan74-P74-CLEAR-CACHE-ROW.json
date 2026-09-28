@@ -1,0 +1,20 @@
+{
+  "row": "P74-CLEAR-CACHE-ROW",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:26 EDT",
+  "setup": "Settings tab (RB twice from Main). UI scale Handheld 1.00x.",
+  "pressed": "RB, RB to the Settings tab; walked DOWN 14 presses to 'Clear cache...' (ring rests on it, 100% visible at y 376; A NOT pressed). Measured every button's box on the tab.",
+  "seen": {
+    "clear_cache": "x 64, width 130, right edge 194, height 38",
+    "clear_all_data": "x 202, width 130, right edge 332, height 38, same top as Clear cache (both y 2091.2 in page terms before scrolling)",
+    "gap_between": "8 px",
+    "neighbour_rows": "Apply UI scale x 64 to 332 (268 wide); Save memory / Balanced / Best detail x 64 to 332; All / Search / None x 64 to 332; Voice replies Off / By voice / Always x 64 to 332; character button 'Ali G - Other' x 64 to 332. So the row's left edge (64) and right edge (332) line up with every other full row."
+  },
+  "screenshot": "plan74-P74-CLEAR-CACHE-ROW.png",
+  "pass_when": "'Clear cache...' starts at x 64 and 'Clear all data...' ends at 332, each 130 wide, level with the other rows",
+  "verdict": "PASS",
+  "side_note": "Not asked: the 'Accent intensity' menu button just above reads 'STRONG' in a small red-bordered box 62.6 wide at x 64, unlike the full-width rows; noted only."
+}

@@ -1,0 +1,28 @@
+{
+  "row": "P74-SAFE-FIRST-PICKER",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:44 to 10:47 EDT",
+  "first_time": true,
+  "setup": "Library installed on INTERNAL storage at /home/deck/.bonsai/rag, version 2026.09.26 (corpus.db 2998272 bytes, corpus-manifest.json 29838, ATTRIBUTIONS.md 26743). A copy was kept in the session's scratch folder as a safety net (not needed). Removed with the plugin's own Remove button (A on Remove, A on 'Remove' in 'Remove knowledge base?'). After removal: folder gone, rag_corpus_path '', rag_corpus_version '', use_local_knowledge_base false (the plugin turns it off on remove), internet_downloads false.",
+  "pressed": [
+    "Ollama tab: DOWN to 'Download knowledge base' (8 presses); A",
+    "read the ring",
+    "DOWN",
+    "B",
+    "Reinstall: DOWN to 'Download knowledge base'; A; DOWN; A on 'Internal storage (~728 GB free)'; the download notice opened (ring on 'Not now'); RIGHT to 'Turn on and download'; A"
+  ],
+  "seen": {
+    "box": "'Choose download location' with three buttons top to bottom: 'Not now' (x 123 y 234 w 608 h 36), 'Internal storage (~728 GB free)' (y 278), 'SD card (~1141 GB free)' (y 322)",
+    "ring_when_box_opened": "'Not now'",
+    "after_one_DOWN": "'Internal storage (~728 GB free)' (y 278)",
+    "after_B": "Box closed. At 10:45:59 no /home/deck/.bonsai/rag folder, rag_corpus_path still '', nothing downloaded. The ring was on the Ollama tab bar, not on 'Download knowledge base'.",
+    "reinstall": "Landed by 10:46:31 at /home/deck/.bonsai/rag (internal, same place as before): corpus.db 2998272 bytes, corpus-manifest.json 29838, ATTRIBUTIONS.md 26743; rag_corpus_path '/home/deck/.bonsai/rag', rag_corpus_version '2026.09.26', use_local_knowledge_base true again.",
+    "screenshot": "plan74-P74-SAFE-FIRST-PICKER.png (box as opened, ring on 'Not now'). By eye: the three choices are the same grey; only the white outline marks the ring. 'Not now' reads as the first and safe choice."
+  },
+  "settings_changed": "Internet downloads was off (key absent, then written false by the plugin); turned on only by the reinstall's own 'Turn on and download' button, then set back to false over SSH at 10:47 with an immediate reload (read back false at 10:47:39).",
+  "verdict": "PASS",
+  "notes": "Passed on the first run; no retries. Not asked: after B closes the box the ring goes to the Ollama tab bar rather than back to 'Download knowledge base'; also after Remove the ring went to the tab bar. The 'Remove knowledge base?' box opens with the ring on 'Remove' (its action), not on Cancel."
+}

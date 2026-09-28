@@ -1,0 +1,25 @@
+{
+  "row": "P74-NOMIC-HINT",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:16:40-10:18:40 EDT",
+  "setup": "Knowledge library on (use_local_knowledge_base true) and installed (version 2026.09.26, /home/deck/.bonsai/rag). Internet downloads: the key capabilities.internet_downloads was absent (counts as off); set to true in the settings file, plugin reloaded, re-read true. nomic-embed-text present before (digest 0a109f42...). Ollama tab open, no hint and no Pull button on it before the removal.",
+  "pressed": [
+    "No press during the wait. A script on the Deck read the Ollama tab every 5 s for 120 s.",
+    "Over SSH: ~/.local/bin/ollama rm nomic-embed-text at 10:16:43.72 ('deleted nomic-embed-text'). The reader was started a moment before this.",
+    "Once the hint showed: walked DOWN 7 presses to 'Pull nomic-embed-text - about 270 MB' (100% visible); A once.",
+    "Steam dialog 'Download from the internet? bonsAI will connect to https://registry.ollama.ai to download nomic-embed-text (about 270 MB)' opened with the ring on 'Not now'; RIGHT once to 'Download' (checked by focus read); A once."
+  ],
+  "seen": {
+    "samples_t0_to_t35": "8 reads (t = 0 ... 35.01 s after the reader started): no hint, no Pull button",
+    "first_hint_sample": "t = 40.02 s after the reader started, which is at most 40.3 s after the remove (the Deck clock read 10:17:24 just after this sample was seen): lines 'Install nomic-embed-text in Ollama for Keyword + meaning search.' and button 'Pull nomic-embed-text - about 270 MB' (enabled)",
+    "after_pull": "Pull progress line 'Pull 1/1 - nomic-embed-text' at t=75; from t=80 on the hint and button were gone (8 reads). Ollama's model list at 10:18:02 again holds nomic-embed-text:latest with the same digest 0a109f42... as before.",
+    "note": "Reads at t=60 and t=65 found no bonsAI panel because Steam's download dialog was covering the menu; not part of the verdict."
+  },
+  "screenshot": "plan74-P74-NOMIC-HINT-download-notice.png (the download notice, before Download was pressed)",
+  "pass_when": "The hint and its Pull button appear within 45 seconds with no press. Then press Pull once to restore the model, and confirm it lands",
+  "verdict": "PASS",
+  "build_commit_correction": "Corrected by the session on 2026-09-28: the Deck helper recorded 6e15e562, the newest commit when it wrote the file; the build deployed for pass 1 was 94cbfc73 (dist built 10:03:59). Row times in this pass's rows 2 to 4 are later than the real run, which was about 10:08-10:15."
+}

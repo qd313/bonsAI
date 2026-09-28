@@ -1,0 +1,39 @@
+{
+  "row": "REPLY-STOPS-MIRROR-01",
+  "plan": "74, Deck pass 2 (row that waited for lane 3)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:57:40 to 11:03 EDT",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, spoiler covers on. Two earlier asks gave no spoiler cover ('What is the best way to fight the Soul Master boss in Hollow Knight' and 'How do I get the true ending in Hollow Knight'), so a third was asked: 'What should I know before I fight the boss in the Soul Sanctum in Hollow Knight' (send-question script VERIFIED). Reply: 4 paragraphs in 4 sections; section 1 starts with a hidden cover, section 3 is a hidden cover; menu with choices A and B; Helpful row; Show details. Both covers hidden for the whole walk (only D-pad pressed).",
+  "pressed": [
+    "DOWN (ring placed at Ask), B (ring to the 'Main tab' tab bar, so the walk starts above the reply without passing a cover)",
+    "deck_sweep: DOWN until the ring stopped (23 presses), then UP until it stopped (21 presses); stall limit 4 because tall sections take scroll presses. Raw run: runs/plan74-REPLY-STOPS-MIRROR-01.json"
+  ],
+  "seen": {
+    "down_stops": [
+      "Main tab", "chat row", "78 earlier", "Retry same prompt", "question row",
+      "Show reasoning - 23 s",
+      "COVER in section 1 (x 71 y 149 w 237 h 55)",
+      "section 2 (245x201)",
+      "cover in section 3 (x 71 y 218 w 237 h 55)",
+      "section 4 (245x75)",
+      "A. Focus on aggressive close-quarters combat", "B. Focus on patient dodging and exploiting openings",
+      "Mark reply helpful", "Show details", "chip", "question box", "ask"
+    ],
+    "up_stops": [
+      "question box", "chip", "Show details", "Mark reply helpful",
+      "B. Focus on patient dodging...", "A. Focus on aggressive...",
+      "section 4 (245x75)",
+      "cover in section 3 (x 71 y 204 w 237 h 55)",
+      "section 2 (245x201)",
+      "SECTION 1 as a whole (x 63 y 144 w 245 h 146) - not its cover",
+      "Show reasoning - 23 s", "question row", "Retry same prompt", "78 earlier", "chat row", "Main tab", "(then the plugin's back button)"
+    ],
+    "mismatch": "One stop differs: going Down the ring lands on the first cover; going Up it lands on the section around that cover instead. Every other stop is the exact mirror (17 of 18 reply-area stops match).",
+    "visibility": "4 stops partly covered, all the two known false alarms: the question row behind the Retry icon (78%) both ways, and the last section behind the Copy icon (89%) both ways"
+  },
+  "verdict": "FAIL",
+  "verdict_reason": "The Up stops are not the exact mirror of the Down stops: the first cover is skipped going Up (the ring takes its section instead). Same cause as the P74-COVER-UP failure.",
+  "notes": "The chip stop showed different text on the way down and up ('Where do your game tips come from?' then 'What's the efficiency sweet spot for this game?'); that is the rotating chip, same control."
+}

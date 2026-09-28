@@ -1,0 +1,27 @@
+{
+  "row": "P74-B-CLOSES-DETAILS",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (QuickAccess page 853x533 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:38:10 to 10:38:45 EDT",
+  "first_time": true,
+  "setup": "Main tab, chat 'wheatley fight'. Newest answer: 'How do I get through the Ravenholm chapter in Half-Life 2 without running out of ammo', with one notes block 'Ravenholm / From the Half-Life wiki'. No game running.",
+  "pressed": [
+    "walkTo DOWN to 'Show details' (8 presses, ring unowned at start)",
+    "A (details open: divider reads 'Hide details', ring on it at y 97)",
+    "DOWN (ring on the notes block 'Ravenholm - From the Half-Life wiki, show', y 204 h 47)",
+    "B",
+    "A on 'Show details' (details open, ring on 'Hide details')",
+    "B",
+    "DOWN (details shut; ring on the notes block, y 243)",
+    "B"
+  ],
+  "seen": {
+    "first_B_on_notes_block": "Details closed (divider back to 'Show details'); ring on 'Show details' (x 52 y 213 w 267 h 15). Panel still open.",
+    "second_B_on_hide_details": "Details closed (divider 'Show details'); ring still on that line (x 52 y 213 w 267 h 15). Panel still open.",
+    "third_B_on_notes_block_details_shut": "Ring went to the 'Main tab' in the tab bar; panel still open. This is Steam's back-out, the same as before the fix (the fix commit 2502f10e says B there used to send the ring to the tab bar)."
+  },
+  "verdict": "PASS",
+  "notes": "Passed on the first run; no retries."
+}

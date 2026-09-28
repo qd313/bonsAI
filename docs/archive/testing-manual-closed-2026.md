@@ -512,3 +512,19 @@ testing-manual.md. Found by the planning-folder review
   landed the model in about 10 s, Update did not ask again, and the next answer read "Keyword + meaning"
   (`docs/test-evidence/plan70-R5.json`); the old hint that stayed on the open tab was fixed and passed in
   flow L10 (`docs/test-evidence/plan70-KB-UPDATE-HINT.json`).
+
+## Moved from testing-manual.md, plan 74, 2026-09-28
+
+### PRESET-STREAM-ANIM-01 — decode preset chip animation (P1)
+
+- [x] Glyphs lock into the real prompt left to right behind a blinking block caret, green (accent
+      colour, not a different hardcoded green). **FAILED (Deck) 2026-09-26, not fixed this wave:** the
+      caret is there and moves left to right, but its colour measures about RGB 214,228,236 — a pale
+      white-blue, the same as the settled letters, not green. New bug filed on the roadmap.
+      **PASS (Deck) 2026-09-28 (plan 74, `13ad6566`), closed:** the caret now takes the chosen character's
+      colour in all 37 readings, letters unchanged; with no character it is the default green (unit-tested,
+      not read on the Deck). Evidence `docs/test-evidence/plan74-P74-CARET-COLOUR.json`.
+
+### Open regression IDs (bugs / recent ships)
+
+- [x] **KB-NOCLOSE-TEXT-01** Fixed in code 2026-09-26 (plan 70, helper B, `58f60c0a`), wired into answers (`e4c24bdd`), Deck check owed. Hollow Knight, Strategy mode, knowledge base on. Describe a boss without naming it ("the boss past the crystal spike area") and read Show details — the "no close match" line must not appear, since the reply is built on the Broken Vessel note. Also try a Half-Life 2 walkthrough question built on real chapter notes; same pass condition. **PASS (Deck) 2026-09-28 (plan 74), closed:** a Half-Life 2 Ravenholm question built on the Ravenholm note showed no line. Evidence `docs/test-evidence/plan74-KB-NOCLOSE-TEXT-01.json`.

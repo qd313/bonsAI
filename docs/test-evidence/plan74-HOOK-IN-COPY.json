@@ -1,0 +1,25 @@
+{
+  "row": "HOOK-IN-COPY (roadmap: The commit hook rebuilds the shared checkout, not the copy it runs in)",
+  "plan": "74, run by the session on the PC (no Deck)",
+  "date": "2026-09-28",
+  "base_commit": "323903ea",
+  "setting": "git config --show-origin --get core.hooksPath -> file:.git/config  .githooks (relative, so each copy runs its own .githooks from its own root)",
+  "setup": "A fresh repo copy made with `python scripts/worktree.py create p74-hooktest --base experimental`; commits made with a plain `git commit` (no `-c core.hooksPath=.githooks` workaround).",
+  "commit_1": {
+    "change": "HOOKTEST.txt only (changes no generated file)",
+    "hook_output": "regenerated and staged 7 generated files",
+    "copy_commit_files": ["HOOKTEST.txt"],
+    "shared_checkout_status_after": "clean"
+  },
+  "commit_2": {
+    "change": "tests/test_hooktest_tmp.py (a new test file, which changes the generated test list)",
+    "hook_output": "regenerated and staged 7 generated files",
+    "copy_commit_files": ["packages/bonsai-mcp/knowledge/architecture/test-inventory.json", "tests/test_hooktest_tmp.py"],
+    "new_test_in_copy_test_inventory": 1,
+    "new_test_in_shared_test_inventory": 0,
+    "shared_checkout_status_after": "clean"
+  },
+  "cleanup": "Copy removed with scripts/worktree.py's link-safe steps (links stripped first); branch refactor/p74-hooktest deleted; shared node_modules entries 25 before and after.",
+  "verdict": "PASS",
+  "verdict_reason": "The hook ran inside the copy and rebuilt the copy's own generated files into the copy's own commit; the shared checkout was not touched. The fault the roadmap entry describes no longer happens, so the `-c core.hooksPath=.githooks` workaround is no longer needed (it is harmless to keep)."
+}

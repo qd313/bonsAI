@@ -1,0 +1,27 @@
+{
+  "row": "P74-HINT-DISMISS",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 ~10:12-10:16 EDT",
+  "setup": "Settings file: capabilities.media_library_access true -> false and capabilities.steam_logs_read true -> false (together they are the 'Read game & screenshot context' switch); also capabilities.steam_web_api true -> false for the next row. Plugin reloaded, file re-read: all three false. Chat 1 = 'wheatley fight' (newest), chat 2 = 'what is a good way to practice parrying in action games' (next older, one RB away).",
+  "pressed": [
+    "Chat 1: question put in the box with the send-question script (VERIFIED): 'why is my game crashing after the latest update'. (A first try, 'why does my game keep crashing on startup', did not match the plugin's crash-question wording, so no hint showed; that is expected behaviour, not part of the verdict.)",
+    "Hint showed: 'Troubleshooting Ask detected. Enable Read game & screenshot context in Permissions ...' with Open Permissions and Dismiss.",
+    "Walked DOWN 12 presses to Dismiss (100% visible, at y 241); A once. Hint element gone, box still held the question.",
+    "Closed Quick Access with the Steam+A chord (panel unmounted, page hidden); reopened it (panel already on bonsAI, Main tab, chat 1).",
+    "After reopening the box was empty (the plugin does not keep typed text), so the same crash question was put back with the script (VERIFIED).",
+    "DOWN once from the tab bar to the chat row; RB once -> chat 2 active (dot 3 of 9 lit).",
+    "Chat 2: put 'why is my game crashing when I load a save' with the script (VERIFIED).",
+    "Extra: LB once back to chat 1 with the crash question still in the box."
+  ],
+  "seen": {
+    "chat1_after_dismiss": "hint element count 0",
+    "chat1_after_close_and_reopen_with_crash_question_in_box": "hint element count 0",
+    "chat2_with_crash_question": "hint element count 1, text starts 'Troubleshooting Ask detected. Enable Read game & screenshot'",
+    "chat1_again_after_switch_back": "hint element count 0"
+  },
+  "pass_when": "The hint is still gone in the first chat after reopening, and shows in the other chat",
+  "verdict": "PASS"
+}

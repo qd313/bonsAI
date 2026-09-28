@@ -1,0 +1,18 @@
+{
+  "row": "P74-ABOUT-SUPPORT",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:27 EDT",
+  "setup": "About tab (RB three times from Settings). Panel page 854x454 CSS px inside the Quick Access menu.",
+  "pressed": "Walked DOWN 4 presses: Follow system -> GitHub -> Built on Ollama! -> Bugs & Feature Requests -> Support my Steam Sale habit (ring on the support button, 100% visible). A NOT pressed.",
+  "seen": {
+    "link_buttons": "GitHub, Built on Ollama!, Bugs & Feature Requests, Support my Steam Sale habit: all four x 64, width 268, height 41.33 (62 screen pixels at the Deck's 1.5 scale). Identical to each other.",
+    "qr_picture_with_ring_on_support": "132x132 at x 132..264, y 196.6..328.6; the scroll area runs y 88..454 and x 48..348, so the picture is fully inside it; all four corners and the centre of the picture hit the picture itself (nothing covering it). Support button at y 339, bottom 380.",
+    "screenshot": "plan74-P74-ABOUT-SUPPORT.png shows the whole QR code above the highlighted support button"
+  },
+  "pass_when": "The support button is 268 x 42 at x 64 like the other three, and the QR picture is fully on screen while the ring is on it",
+  "verdict": "UNCLEAR",
+  "why_unclear": "Everything matches except the height number: the support button is 268 x 41.33, not 42. The other three link buttons are also 41.33, so it is sized exactly like them. The runbook's 42 looks like a rounded figure; the owner decides."
+}

@@ -1,0 +1,21 @@
+{
+  "row": "P74-THINK-OFF-SPINNER",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 ~10:06-10:08 EDT",
+  "setup": "Settings file: ask_think_effort changed medium -> off, plugin reloaded, file re-read after reload still 'off'. Ask mode Strategy. Chat: the existing 'wheatley fight' chat (long, 71 earlier turns).",
+  "pressed": "Question put in the box with scripts/deck_send_ask.py (VERIFIED, whole text 'what are three good habits for surviving the early nights in Valheim'); walked DOWN 8 presses to the 'ask' button (100% visible); A once on ask.",
+  "method": "A script on the Deck read the page every 0.25 s for 100 s (395 samples): whether the waiting line (.bonsai-chat-thinking-line) and its spinner (.bonsai-thinking-spinner) exist, their text, and the length of the newest answer bubble's text.",
+  "seen": {
+    "before_first_words": "t=0.00 to t=51.12 s (203 samples): waiting line and spinner present in every sample, answer bubble text length 0. Phrases shown in turn: 'Pulling local tips about ...', 'Summing up the chat so far - 0 s ... 38 s' (the chat summed itself up first because it is long), the question-echo phrase '... is in good hands now...', then 'Coaching on surviving early nights in Valheim'.",
+    "first_answer_words": "t=51.37 s: answer bubble text 'Listen' (6 characters).",
+    "same_sample": "t=51.37 s: waiting line absent, spinner absent.",
+    "after": "Waiting line and spinner absent in every sample from t=51.37 to t=99.93 (192 samples); answer grew to 1022 characters.",
+    "gap_first_words_to_spinner_gone_s": "0.00 (gone in the same 0.25 s sample the first words appeared)"
+  },
+  "pass_when": "Spinner and waiting phrase are there before any answer text, and gone within one second of the first answer words",
+  "verdict": "PASS",
+  "raw_samples": "kept in the session scratch folder (p74deck/row1-samples.jsonl), not in the repo"
+}

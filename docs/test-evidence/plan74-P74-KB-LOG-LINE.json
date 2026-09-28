@@ -1,0 +1,26 @@
+{
+  "row": "P74-KB-LOG-LINE",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:20:30-10:23 EDT",
+  "setup": "Knowledge library on and installed (2026.09.26), nomic-embed-text back in place from the previous row. Strategy mode. Chat 2 ('what is a good way to practice parrying in action games'). Thinking off. Plugin log read from ~/homebrew/logs/bonsAI/*.log over SSH (the journal holds none of these lines).",
+  "pressed": [
+    "Put 'How do I beat the Soul Master in Hollow Knight?' with the send-question script (VERIFIED); DOWN 9 to ask; A. Answer done (916 characters).",
+    "UP 2 to the notes block 'Soul Master - From the Hollow Knight wiki, show'; A to open it.",
+    "Put 'my game stutters on the Deck' with the script (VERIFIED); DOWN 3 to ask; A. Answer done (434 characters).",
+    "UP 2 to its notes block 'Performance (+1 more) - From the shared Deck tips, show'; A to open it."
+  ],
+  "seen": {
+    "log_first_question": "Exactly one line: [10:20:45,050] kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight - Starting out in Hollow Knight; Hollow Knight - Soul Master; Hollow Knight - False Knight] dropped_for_room=0",
+    "notes_block_first_question": "One note only: 'Soul Master' (From the Hollow Knight wiki), no '(+N more)'.",
+    "log_second_question": "Exactly one line: [10:21:49,159] kb: question chose domain=compat route=compat_tips method=hybrid attached=3 [Shared troubleshooting - performance; Shared troubleshooting - performance; Shared troubleshooting - deck] dropped_for_room=0 (preceded by 'kb: no game running or named -- using the chat's own game Hollow Knight')",
+    "notes_block_second_question": "Two tips: 'Performance' (shaders compiling stutter) and 'Deck' (reboot clears stuck GPU/audio states), both 'From the shared Deck tips'.",
+    "question_words_in_log": "grep for 'beat the soul master' and 'my game stutters' across today's plugin logs: 0 hits each. Neither kb line holds the question's own words (route is the game label or compat_tips)."
+  },
+  "pass_when": "Exactly one kb: question chose domain=strategy ... attached=N [...] line for the first question, its titles matching the notes block; one domain=compat line naming the tip for the second; the question's own words appear in neither",
+  "verdict": "UNCLEAR",
+  "why_unclear": "Everything holds except 'its titles matching the notes block' for the first question: the log names 3 notes (Starting out in Hollow Knight, Soul Master, False Knight) while the notes block names 1 (Soul Master). The block appears to list only the notes the answer actually used (the screen code filters with kbNotesUsedByAnswer), while the log lists every note sent to the model. The one title the block shows is in the log's list. Same shape on the second question: log 3 entries, block 2 (the two 'performance' tips share one log title). The owner decides whether 'matching' means the same list or 'the block's notes are in the log'.",
+  "build_commit_correction": "Corrected by the session on 2026-09-28: the Deck helper recorded 6e15e562, the newest commit when it wrote the file; the build deployed for pass 1 was 94cbfc73 (dist built 10:03:59). Row times in this pass's rows 2 to 4 are later than the real run, which was about 10:08-10:15."
+}

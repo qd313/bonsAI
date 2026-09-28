@@ -1,0 +1,23 @@
+{
+  "row": "P74-TRYORDER-RESET",
+  "plan": "74, Deck pass 1",
+  "build_commit": "6e15e562",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:19-10:20 EDT",
+  "setup": "Original text_model_routing_order in the settings file: [] (automatic). Ollama tab open. Installed models: gemma4:e2b-it-qat, nomic-embed-text:latest.",
+  "pressed": [
+    "Walked DOWN 14 presses to 'Set text model try order...' (100% visible); A. The picker listed gemma4:e2b-it-qat then nomic-embed-text:latest (the latter marked 'Tier blocked').",
+    "RIGHT to 'Move gemma4:e2b-it-qat down'; A. The list became nomic-embed-text:latest, gemma4:e2b-it-qat; picker stayed open.",
+    "DOWN 2 to Done; A. Read the file (10:19:40).",
+    "Ring came back on 'Set text model try order...'; A to reopen (list showed nomic first, as saved). DOWN 2 to 'Reset to defaults'; A (picker stayed open, list back to gemma first). DOWN 1 to Done; A. Read the file (10:20:02)."
+  ],
+  "seen": {
+    "after_first_done": "text_model_routing_order = [\"nomic-embed-text:latest\", \"gemma4:e2b-it-qat\"]",
+    "after_reset_and_done": "text_model_routing_order = []",
+    "vision_order_untouched": "vision_model_routing_order = [\"gemma4:e2b-it-qat\"] throughout"
+  },
+  "restore": "Original value was [], and the file already holds [] after the reset, so nothing more to restore.",
+  "pass_when": "After the first Done the file holds a list; after Reset and Done, text_model_routing_order is []. Restore the original value",
+  "verdict": "PASS"
+}

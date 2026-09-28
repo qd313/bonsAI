@@ -1,0 +1,22 @@
+{
+  "row": "P74-HELPFUL-ROW-LOOK",
+  "plan": "74, Deck pass 2 (lane 4 row that waited for this pass)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; QuickAccess page 853x533 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:53:57 to 10:54:14 EDT",
+  "setup": "Newest answer 'Explain each class in Baldurs Gate 3 for a new player', not yet rated.",
+  "pressed": ["DOWN from choice B to 'Mark reply helpful'", "A"],
+  "seen": {
+    "row_text": "'Saved on this Deck' then 'Show details' below; 'Was this helpful?' line gone",
+    "saved_label": "x 52 y 212.8 w 97 h 14.8 -> vertical centre 220.2",
+    "speaker_button": "'Read aloud' x 288.8 y 204.3 w 30 h 32 -> vertical centre 220.3 (its icon 16x16 at y 212.3, centre 220.3)",
+    "centre_difference": "0.1 px",
+    "same_row": "both inside .bonsai-chat-reply-actions-row (x 52 y 204 w 267 h 32)",
+    "line_above": "none: no top border, shadow or ::before/::after on the label, the row, or its two parents; no element 3 px or thinner in the 20 px above the row",
+    "ring": "on 'Read aloud' (x 289 y 204 w 30 h 32), shown in the screenshot",
+    "screenshot": "plan74-P74-HELPFUL-ROW-LOOK.png"
+  },
+  "verdict": "PASS",
+  "notes": "First run. Not asked: the question-box preview line in the screenshot shows a chip label mid-scramble ('Why can't bonsAI reach my' plus scrambled letters), which is the decode chip animation."
+}

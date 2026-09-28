@@ -81,12 +81,12 @@ starts work outside this.
   keyboard on the question box — worth trying on this hidden-block case too.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
   more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
-  same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01** needs a
-  reply with a hidden spoiler block, and plan 72 saw three later slips. [Detail](roadmap-details.md#flow-2b-bugs).
+  same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
+  later slips. [Detail](roadmap-details.md#flow-2b-bugs).
+  **2026-09-28 (plan 74):** with a hidden spoiler on screen, 17 of 18 stops now mirror; the one mismatch is the top spoiler
+  cover, the same fault as the spoiler-cover entry below (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01.json`).
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[layout]` **The decode chip's typing caret is pale, not the accent green** — **OPEN, FAILED
-  2026-09-26.** Row **PRESET-STREAM-ANIM-01**. [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
@@ -98,24 +98,9 @@ starts work outside this.
 - ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
-- ★ `[focus]` **B on the notes block sends the ring to the tab bar and leaves Show details open** —
-  **OPEN, found 2026-09-26 (plan 70, flow L6).** [Detail](roadmap-details.md#flow-l6-findings).
-- ★ `[KB]` **The plugin's own log says nothing about which notes or tips a question chose** — **OPEN, found
-  2026-09-26 (plan 70, flow R).** That makes a routing problem hard to diagnose from the log alone. (Its twin, a
-  rotating chip taking a press meant for another, closed 2026-09-27.) [Detail](roadmap-details.md#library-format-bump-and-per-game-deck-tips).
-- ★ `[chat]` **A dismissed troubleshooting hint comes back once Quick Access is closed and reopened, and
-  the ban-lookup row can follow it into a different chat** — **OPEN, found 2026-09-26 (plan 70, flow
-  L6).** [Detail](roadmap-details.md#l3-and-2d-findings).
 - ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
   games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
   on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
-- ★ `[reply]` **With thinking off, the waiting spinner can keep spinning through the whole answer** —
-  **OPEN, found 2026-09-27 (plan 70, helper S).** Held still while a game runs. [Detail](roadmap-details.md#flow-l10-findings).
-- ★ `[layout]` **The panel-height check rewrites a style value that has not changed** — **OPEN, found
-  2026-09-27 (plan 70, helper S).** May be behind the "ResizeObserver loop" errors, unproven.
-  [Detail](roadmap-details.md#flow-l10-findings).
-- ★ `[ollama]` **The meaning-search hint does not appear until the Ollama tab is reopened** — **OPEN, found
-  2026-09-27 (plan 70, flow L10).** After removing the model with the tab open. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **OPEN, sighting 2026-09-27
   (plan 70, flow L10).** The next press recovers. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows**
@@ -139,27 +124,12 @@ starts work outside this.
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
   not survive a reload. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
-- ★ `[focus]` **Two older boxes open with the ring on their action button, not the safe choice** — **OPEN, found 2026-09-27
-  (plan 72).** "Enable Tier 2 before pulling?" and the library's "Choose download location"; the download notice follows both.
-- ★ `[focus]` **After the "Update Ollama and models?" box closes with B, the ring goes to the Ollama tab bar** — **OPEN,
-  found 2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-DL.json`. The button now opens the download
-  notice first (`eb4f4d16`), and the ring still lands on the Ollama tab bar once that box closes
-  (`docs/test-evidence/plan72-F3-DL.json`).
 - ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
-- ★ `[focus]` **Up from Ask lands on the mic one time and on the paperclip another** — **OPEN, found 2026-09-27 (plan 72).**
-- ★ `[chat]` **The Session tab says "nothing to sum up yet" while the answer and the card say the chat summed itself up**
-  — **OPEN, found 2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F6-SUMUP.json`.
-- ★ `[focus]` **A straight Down lands on Read aloud, not Helpful; Up from Helpful lands on choice A, skipping B** —
-  **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-- ★ `[layout]` **After Stop or Helpful, Read aloud sits alone above a blank gap** — **OPEN, found 2026-09-27 (plan 72,
-  free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[layout]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
   (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[reply]` **Copy joined two paragraphs into one** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence
   `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-- ★ `[ui]` **Settings' "Clear cache…" sits 16 pixels left of the other buttons, and About's support button is 192 pixels
-  tall to press** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
   **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
@@ -168,6 +138,28 @@ starts work outside this.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
+- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **OPEN,
+  found 2026-09-28 (plan 74), seen once.** The row, with Open Permissions, sits on the new-chat spot. Evidence
+  `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes).
+- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **OPEN, found
+  2026-09-28 (plan 74, lane 4's note).** One line in `docs/design-tokens.md`.
+- ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **OPEN,
+  found 2026-09-28 (plan 74).** It should go back to its button, the same family as the "Update Ollama and models?" box
+  fixed this wave. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
+- ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **OPEN, found 2026-09-28
+  (plan 74).** Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
+- ★ `[focus]` **Two more boxes may start on their action button, found in the code** — **OPEN, found 2026-09-28 (plan 74
+  lane 3's report), not yet seen on the Deck.** The per-model "Enable Tier 2 for this model?" box starts on its action
+  button, and the Tier 1 and Tier 2 install buttons on the Ollama tab do not get the ring back after their box closes.
+- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **OPEN, found 2026-09-28 (plan 74).**
+  It shows as "Tier blocked" and can be moved to the top of the answer order. Evidence
+  `docs/test-evidence/plan74-P74-TRYORDER-RESET.json`.
+- ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **OPEN, found 2026-09-28
+  (plan 74).** It says "This reply used an 'open model'" although no reply is involved. Evidence
+  `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`.
+- ★ `[ui]` **Small leftovers from plan 74** — **OPEN, found 2026-09-28 (plan 74's lanes).** The "Request cancelled."
+  bubble still has a Copy button; the rarely seen "nothing to sum up" pop-up still says "the whole chat still fits";
+  removing a model inside the plugin does not reset its 30-second memory, so the note-search hint can take up to 40 s.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -177,8 +169,11 @@ starts work outside this.
   project. Row **TAB-BAR-GHOST-01**. The session's guess: closing a Decky popup rebuilds the plugin, and
   the highlight lands on the top bar, which then opens. Needs a Deck walk with the focus recorder before any
   fix.
-- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **OPEN,
+- ★★ `[focus]` **Reaching a spoiler cover by Up lands the ring beside it, and A does nothing** — **PARTIAL,
   found 2026-09-27 (plan 70, flow L9).** Coming Down onto the cover works. [Detail](roadmap-details.md#flow-l10-findings).
+  **2026-09-28 (plan 74, `7543270f`):** the last cover in an answer is fixed: Up lands on it and A opens it. A cover at
+  the very top of the answer still fails: Up lands on the whole first section and A does nothing
+  (`docs/test-evidence/plan74-P74-COVER-UP.json`, FAIL). A second round is in progress (plan 74).
 - ★★ `[focus]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
   finished answer. [Detail](roadmap-details.md#flow-l10-findings).
@@ -202,6 +197,11 @@ starts work outside this.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
+- ★★ `[ollama]` **After the release: the model tiers' licence labels** — **OPEN, found 2026-09-28 (the licence check);
+  the maintainer's call: labels only, after the release.** From memory, to confirm on each model's page: Qwen 2.5's 3B
+  and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
+  sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
+  Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -213,10 +213,6 @@ starts work outside this.
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
   never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
   the moment a second listener is added, a wake word for example.
-- ★ `[ollama]` **"Reset to defaults" in the try-order picker saves an explicit list where there used to be
-  none** — **OPEN, found 2026-09-26.** The setting started out empty; Reset to defaults, then Done, now
-  writes an explicit list instead. Same order shown, a paper difference today. Evidence
-  `docs/test-evidence/plan70-ROUTING-01-02.json`.
 - ★ `[ollama]` **Replies from the Ollama address have no size limit** — **OPEN, found 2026-09-28 (0.6.0
   security review, finding 6), after the release.** A fake Ollama the user pointed bonsAI at can fill the
   Deck's memory. Twelve places, including how answers stream in. [Review](audit/security-review-0.6.0.md).
@@ -227,20 +223,9 @@ starts work outside this.
   2026-09-28 (security review, finding 8), after the release.** Pin the address, check the file's
   checksum, cap its size; also refuse a knowledge-library file list with no checksums.
   [Review](audit/security-review-0.6.0.md).
-- ★★ `[platform]` **The commit hook rebuilds the shared checkout, not the copy it runs in** — **OPEN,
-  found by plan 65 2026-09-24 (another session was already looking at it).** Its path is set to the
-  shared checkout, so a copy's own generated files go stale and its full checks fail one step.
-  Workaround: commit with `git -c core.hooksPath=.githooks commit`. **Cause:** the shared setting points
-  hooks at the main checkout's path, where setup uses a relative one; a separate cloud session ("Fix
-  pre-commit hook analyzing wrong worktree") is working on it.
 - ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
   from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
   another desk test on real chats.
-- ★★ `[focus]` **Three D-pad slips seen in the plan 68 Deck pass, may predate it** — **PARTIAL, found
-  2026-09-25.** With older turns open: Up from the chip row skips the newest answer and lands on an older
-  answer's Show details; B on "Hide details" moves the ring to the tab strip and leaves the details open;
-  Up from a chat's first question skips the chat row and lands on the tab strip.
-  **2026-09-27 (plan 72, `8294e75b`, `29c0b075`, `9feef4e1`):** the two Up slips passed in the new Up walk, `docs/test-evidence/plan72-F-UP.json`. The B-on-"Hide details" slip is still owed.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
   out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Usually only a full
   loader restart clears it; closing and reopening Quick Access cleared one flow-R occurrence too, this
@@ -506,11 +491,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
-- ★ `[focus]` `[layout]` **Entering the Show details chip ladder at its first chip leaves the chip row and
-  its "Chip 1 of 7" counter above the visible area** — **VERIFY, fixed in `4c0605c2`** (unit test
-  `src/components/ContextChipLadder.reveal.test.tsx`). Passed on the Session tab on the external monitor
-  (`docs/test-evidence/plan72-F4-LADDER.json`). **Still owed:** the original setup — the Deck's own screen, the
-  "This answer" tab: re-run row **DETAILS-LADDER-01** (first measured in `docs/test-evidence/plan64-DETAILS-LADDER-01.json`).
 - ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** —
   **VERIFY, fixed 2026-09-27 (plan 72, `409cd3aa`).** Ticking the first tickable model in a fresh download picker now correctly
   only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
@@ -717,9 +697,6 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
-- ★ `[KB]` **"Not in my notes" can show on a covered game although its notes were never searched** —
-  **OPEN, found 2026-09-27 (plan 70, helper Q), optional.** When a tip was found but cut for lack of room, in
-  Strategy or Expert. [Detail](roadmap-details.md#flow-l10-findings).
 - ★ `[KB]` **A game's own tip is found only by its own words** — **OPEN, found 2026-09-26 (plan 70, flow
   L7).** "The words look blurry" misses the Render Scale tip that "the text looks blurry" finds.
   [Detail](roadmap-details.md#flow-l7-findings).
@@ -730,6 +707,9 @@ ones from this month are D81 to D88.
   time. A fallback to the plain page would cover it for good.
 - ★ `[KB]` **With a game running, the meaning search once read about a second (1,070 ms, 2026-09-23)** — **OPEN, one
   sighting.** [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
+- ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **OPEN, found 2026-09-28 (plan 74,
+  Deck pass 1).** A Valheim question in a Half-Life 2 chat got Half-Life 2 notes ("using the chat's own game"), and a
+  stutter question in a Hollow Knight chat did the same. Evidence `docs/test-evidence/plan74-P74-KB-LOG-LINE.json`.
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
   notes are named underneath it instead of the real one, which does exist and now attaches too, but still
@@ -761,11 +741,6 @@ ones from this month are D81 to D88.
   boss up front keeps the answer in plain text. **DRG-01b passed on the Deck 2026-09-23:** the boss tactics
   came back in plain text with no cover, as expected. **Still owed:** STRAT-SPOIL-NAME-01, blocked since its
   game cannot be launched. [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
-- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **PARTIAL, fixed
-  2026-09-26 (`58f60c0a`, wired into answers `e4c24bdd`).** On the Deck 2026-09-26 a Hollow Knight answer built on the
-  Soul Master note showed no line — the fix working (`docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`); it was
-  logged a fail only because a control question sat on the cut-off (0.6508 against 0.65). **Still owed:** row
-  **KB-NOCLOSE-TEXT-01** as written, and its Half-Life 2 half. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, passed 2026-09-22,** once the
   answer-lines lane added the missing log line. Row **KB-TRANSPARENCY-01**. **All attached names confirmed
   on the Deck 2026-09-23**, both with nothing running and with Half-Life 2 running. **Still owed:** a case
@@ -882,6 +857,11 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Plan 74, release wave two (2026-09-28): 20 items closed** — fixes from the second release wave, proven in two
+Deck passes (three by unit test or on the PC). One line each, with its evidence, in
+[archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full entries in
+[archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 
 **Release clean-up, first pass (2026-09-28): 8 items closed, 3 retired** — entries the code and the Deck had already
 settled. One line each, with its evidence, in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full

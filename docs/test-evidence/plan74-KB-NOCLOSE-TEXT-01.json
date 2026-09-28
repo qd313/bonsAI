@@ -1,0 +1,20 @@
+{
+  "row": "KB-NOCLOSE-TEXT-01",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 10:29-10:31 EDT",
+  "setup": "Knowledge library on (2026.09.26), Strategy mode, settings back to the owner's values (thinking medium). Chat 'wheatley fight' (a Half-Life 2 chat).",
+  "pressed": "Put 'How do I get through the Ravenholm chapter in Half-Life 2 without running out of ammo' with the send-question script (VERIFIED); DOWN 13 to ask; A. Waited for the answer (719 characters, 18 s of thinking). UP 3 to Show details; A.",
+  "seen": {
+    "log": "[10:30:05] kb: question chose domain=strategy route=text:half life 2 method=hybrid attached=3 [Half-Life 2 - Ravenholm; Half-Life 2 - Sandtraps; Half-Life 2 - Hunter-Chopper (helicopter)] dropped_for_room=0",
+    "notes_block": "'Ravenholm - From the Half-Life wiki' under the reply",
+    "answer": "Talks about Ravenholm's car traps, blade traps, poison zombies and saw blades as gravity gun ammo (matches the note)",
+    "show_details": "This answer tab: Chip 1 of 7 (Keyword + meaning, KB: 9 sections, Reply style: balanced, ...), Local knowledge base block naming Ravenholm, Sandtraps and a spoiler-covered boss note, trust tier wiki_no_patch",
+    "no_close_match_line": "Absent. Searched the whole turn (reply, notes block, Show details text): 'no close match' 0 hits, 'not in my notes' 0 hits"
+  },
+  "pass_when": "The 'no close match' line does not appear under a reply built on a matching note",
+  "verdict": "PASS",
+  "side_note": "Not asked: an OLDER turn in the same chat ('how useful is the magnum revolver in half life 2', from before this session) shows both a 'No close match in my notes' line and a notes block (Gravity Gun, From the Half-Life wiki). It was built before this build was deployed, so it says nothing about this fix; noted in case the owner wants it."
+}

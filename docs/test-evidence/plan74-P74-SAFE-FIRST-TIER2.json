@@ -1,0 +1,30 @@
+{
+  "row": "P74-SAFE-FIRST-TIER2",
+  "plan": "74, Deck pass 2 (lane 3 trial row)",
+  "build_commit": "6e15e562",
+  "build": "pnpm build then decky-plugin-studio deck_deploy from the shared checkout (branch experimental), deployed 2026-09-28 about 10:37 EDT Deck time",
+  "screen": "Deck built-in screen (1280x800; Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5)",
+  "deck_time": "2026-09-28 10:39 to 10:44 EDT",
+  "first_time": true,
+  "setup": "Settings file model_policy_tier was 'open_weight'; set to 'open_source_only' over SSH at 10:39 and the plugin reloaded at once (edit survived the reload). Installed models before: nomic-embed-text:latest, gemma4:e2b-it-qat. Internet downloads permission is off in the settings file (key absent).",
+  "route_note": "With the policy on 'open source only' the AI models list hides every open-weight model (the licence filter IS the policy), so there is no open-weight row to queue. Route used: Filters -> 'Also try open-weight models' (policy to Tier 2), Essentials only off, queue gemma3:1b (open-weight, 0.8 GB), Filters -> 'Open source only (recommended)' (policy back to Tier 1; queue stayed at 1), Close filters. The settings file read 'open_source_only' just before Pull selected.",
+  "pressed": [
+    "Ollama tab -> 'Browse models...' A",
+    "Filters A; 'Also try open-weight models' A; 'Essentials only' A (off); Close filters A",
+    "DOWN to 'Select gemma3:1b to pull' (7 presses); A -> 'Queue 1 - 0.8 GB'",
+    "UP to Filters; A; 'Open source only (recommended)' A; DOWN to Close filters; A -> summary 'Filters - 1 on: Open source only', queue still 1",
+    "DOWN to 'Pull selected (1) - 0.8 GB' (19 presses); A",
+    "A (on the box's first button)",
+    "RIGHT to Cancel, A (closed AI models without pulling)"
+  ],
+  "seen": {
+    "box": "'Enable Tier 2 before pulling?' naming gemma3:1b; buttons in order: 'Not now', 'Enable Tier 2 and pull', 'Cancel'",
+    "ring_when_box_opened": "'Not now' (x 123 y 311 w 194 h 60 in the 854x534 frame), shown blue in the screenshot",
+    "after_A": "Box closed, ring back on 'Pull selected (1) - 0.8 GB'; AI models screen still open, queue still 1",
+    "downloads": "Ollama model list unchanged at 10:43:33 and 10:43:53 (nomic-embed-text:latest, gemma4:e2b-it-qat); 0 partial blobs; plugin log has no line containing 'pull'",
+    "policy_after": "model_policy_tier still 'open_source_only' at 10:43:33 and 10:43:53",
+    "screenshot": "plan74-P74-SAFE-FIRST-TIER2.png"
+  },
+  "verdict": "PASS",
+  "notes": "Passed on the first run; no retries. Odd wording, not asked about: the box's second paragraph says 'This reply used an \"open model\"' although no reply is involved (it is a pull box)."
+}

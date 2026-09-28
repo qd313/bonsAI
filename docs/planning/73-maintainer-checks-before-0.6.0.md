@@ -138,6 +138,9 @@ finished.
 - Nothing downloads without asking first, and the highlight ring starts on **Not now**.
 - The knowledge library downloads, and a question about a game uses it.
 - There is no Developer tab, no test chips, and nothing half-built showing.
+- The plugin's folder on the Deck holds a `NOTICE` file, a `data` folder and `dist/THIRD-PARTY-LICENSES.txt`,
+  and nothing from the game notes.
+- Typing "mic" into the question box's setting search finds the Voice settings.
 - Each setting's starting value looks right for someone new. (Plan 71 asks a session to prepare a list of
   every setting and its starting value; go down it here.)
 

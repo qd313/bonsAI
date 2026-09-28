@@ -1,0 +1,18 @@
+{
+  "row": "P74-SUMUP-REASON",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 ~10:23-10:24 EDT (screenshot clock 10:14 AM on the Deck's status bar)",
+  "setup": "Chat 2 'what is a good way to practice parrying in action games', 43 earlier turns, never summed up (the Session tab showed an active 'Sum up this chat' with no reason line). Newest turn in it: the bonsai:vac-check command from the previous row.",
+  "pressed": "Walked DOWN 6 to 'Show details', A; DOWN to the 'This answer | Session - 43' tabs row; RIGHT (Session became the active tab, ring stays on the row); DOWN to 'Sum up this chat' (checked by selector, 100% visible); A once.",
+  "seen": {
+    "during": "Button read 'Summing up ...' until done",
+    "after_24_s": "Button now 'Sum up again', greyed (class bonsai-sumup-btn--off, aria-disabled true). The line under it reads exactly: 'This chat is already summed up. Ask more, then you can sum up again.' The card 'What the AI remembers - 38 turns - just now' follows below."
+  },
+  "screenshot": "plan74-P74-SUMUP-REASON.png",
+  "pass_when": "The line under the greyed button reads 'This chat is already summed up. Ask more, then you can sum up again.'",
+  "verdict": "PASS",
+  "build_commit_correction": "Corrected by the session on 2026-09-28: the Deck helper recorded 7543270f, the newest commit when it wrote the file; the build deployed for pass 1 was 94cbfc73 (dist built 10:03:59). Row times in this pass's rows 2 to 4 are later than the real run, which was about 10:08-10:15."
+}

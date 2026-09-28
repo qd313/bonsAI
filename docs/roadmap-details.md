@@ -1390,7 +1390,8 @@ flip it. A measured cut-off is not retuned for one question; no code change made
 note's own text, where the matching word usually lives, not just its title, plus a small tolerance for
 plurals. A 104-question sweep after the fix: 1 answer changed, for the better. **Now wired into real
 answers (commit `e4c24bdd`)**, tested through the real path: a Hollow Knight-shaped note stops showing
-the line, and a note sharing no word still shows it. Deck check owed: row **KB-NOCLOSE-TEXT-01**.
+the line, and a note sharing no word still shows it. Row **KB-NOCLOSE-TEXT-01** passed on the Deck 2026-09-28 (plan 74), closed; evidence
+`docs/test-evidence/plan74-KB-NOCLOSE-TEXT-01.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 

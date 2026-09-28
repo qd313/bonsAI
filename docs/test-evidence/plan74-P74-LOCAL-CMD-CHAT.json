@@ -1,0 +1,30 @@
+{
+  "row": "P74-LOCAL-CMD-CHAT",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 ~10:17-10:22 EDT",
+  "setup": "Settings file: capabilities.steam_web_api true -> false (Steam ban lookup off), plugin reloaded, re-read false. Chat 1 = 'wheatley fight'; chat 2 = 'what is a good way to practice parrying in action games'.",
+  "pressed": [
+    "Chat row: RB once -> chat 2.",
+    "Put 'bonsai:vac-check' in the box with the send-question script (VERIFIED); walked DOWN 16 presses to 'ask' (100% visible); A once.",
+    "Within 0.2 s chat 2 showed the reply 'Steam Web API is off for bonsAI. ...' and one ban-lookup row ('Enable Steam ban lookup in Permissions to use bonsai:vac-check.' + Open Permissions).",
+    "Walked back up to the chat row (UP walk overshot to the Decky header back arrow; DOWN twice back to the chat row, checked by selector; nothing pressed there).",
+    "Because chat 2 had just been used, it became the newest chat, so LB went to the 'New chat' spot, not chat 1 (no A pressed, no chat made). RB twice -> chat 1 ('wheatley fight', dot 3 of 9).",
+    "Chat 1 before closing: no reply text, no ban-lookup row.",
+    "Closed Quick Access (Steam+A chord; panel unmounted) and reopened it: bonsAI Main tab, chat 1 showing.",
+    "Read chat 1. Then DOWN to the chat row, LB once -> chat 2, read it."
+  ],
+  "seen": {
+    "chat1_after_reopen": "'Steam Web API is off' text present: false; ban-lookup row count 0; any 'vac-check' text: false; any 'ban lookup' text: false. Only turn visible: the Valheim question from row 1.",
+    "chat2_after_reopen": "Reply bubble reads 'Steam Web API is off for bonsAI. Enable Permissions -> Steam ban lookup, add your Web API key under Developer -> Integrat...'; turn title 'bonsai:vac-check'. Ban-lookup row (with Open Permissions) count 0.",
+    "side_notes": [
+      "While LB rested on the 'New chat' spot (before closing), the ban-lookup row with Open Permissions WAS drawn there (count 1, at y 257, 300x71). It is not a chat, and nothing was created, but the row followed the carousel to a spot that is not chat 2.",
+      "Back in chat 2 after switching away (both before and after the close and reopen), its own ban-lookup row is no longer drawn; only the reply text remains. The row only appears right after the reply lands."
+    ]
+  },
+  "pass_when": "Chat 1 shows neither the 'Steam Web API is off' reply nor the ban-lookup row; chat 2 still shows its own reply",
+  "verdict": "PASS",
+  "verdict_note": "Pass on the row's own words. The two side notes are for the owner to judge; neither is in chat 1."
+}

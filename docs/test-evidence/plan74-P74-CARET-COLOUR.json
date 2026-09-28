@@ -1,0 +1,19 @@
+{
+  "row": "P74-CARET-COLOUR",
+  "plan": "74, Deck pass 1",
+  "build_commit": "94cbfc73",
+  "build": "development deploy via decky-plugin-studio deck_deploy, dist built 2026-09-28 10:03:59 -0400 from the shared checkout",
+  "screen": "Deck built-in screen (Steam Big Picture window 854x534 CSS px at devicePixelRatio 1.5 = 1280x800)",
+  "deck_time": "2026-09-28 ~10:24 EDT",
+  "setup": "preset_chip_animation = decode (already set, not changed). Character chosen: Ali G (ai_character_enabled true, preset alig_ali_g, not random). The panel's own colour variables read: --bonsai-ui-accent-main #f1c40f, --bonsai-ui-accent-toned #e4c94e (= RGB 228,201,78), which is the chosen character's toned colour the caret rule uses.",
+  "pressed": "A read-only page observer recorded, on every change inside the panel, the typing mark's text and colour and the letters' colours. Then RB (to the Ollama tab) and LB (back to Main), which redraws the chip row and starts a decode.",
+  "seen": {
+    "records": "75 records during the decode; 37 with the typing mark drawn ('▋')",
+    "typing_mark_colour": "rgb(228, 201, 78) in all 37 of 37",
+    "letters_colour_while_typing": "locked letters rgb(196, 211, 226) in all 69 records that had letters; churning tail rgb(196, 211, 226)",
+    "letters_colour_at_rest": "after the decode settled, the chip's label ('Check Steam players for bans') is rgb(196, 211, 226), no typing mark"
+  },
+  "pass_when": "The mark is RGB 91,158,126 with no character chosen, or the chosen character's own colour; the letters stay RGB 196,211,226 at rest",
+  "verdict": "PASS",
+  "note": "Only the 'character chosen' branch was measured (Ali G, 228,201,78). The no-character branch (91,158,126) was not run, to avoid changing the character setting."
+}

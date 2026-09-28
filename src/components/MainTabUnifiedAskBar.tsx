@@ -248,6 +248,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     focusAskModeButton,
     unifiedInputDeckNavHandlers,
     avatarDeckNavHandlers,
+    askRowDeckNavHandlers,
   } = useMainTabAskBarFocus(
     {
       unifiedInputFieldLayerRef,
@@ -1236,7 +1237,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
       }}
     >
       <Focusable
+        className="bonsai-ask-row"
         flow-children="horizontal"
+        {...askRowDeckNavHandlers}
         style={{
           position: "relative",
           display: "flex",

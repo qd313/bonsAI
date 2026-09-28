@@ -26,14 +26,14 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1339,
+      "role": ""
+    },
+    {
       "path": "src/index.tsx",
       "lines": 1339,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1336,
-      "role": ""
     },
     {
       "path": "src/components/PullModelsModal.tsx",

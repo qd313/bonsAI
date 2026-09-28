@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 583,
-  "edgeCount": 1607,
+  "fileCount": 584,
+  "edgeCount": 1610,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -790,6 +790,14 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/components/MainTabUnifiedAskBar.askUp.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -881,6 +889,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
@@ -4407,6 +4416,7 @@
         "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
@@ -5716,6 +5726,7 @@
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
+        "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",

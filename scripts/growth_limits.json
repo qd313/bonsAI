@@ -9,9 +9,9 @@
       "limit": 1104
     },
     "src/components/MainTabUnifiedAskBar.tsx": {
-      "limit": 1128,
-      "reason": "plan 72: Stop hands the ring to the question box (one small handler; measured 3 of 3 on the Deck that the ring stayed on the mic after Stop). A new file for four lines would split the ask bar's own press handling.",
-      "date": "2026-09-27"
+      "limit": 1131,
+      "reason": "plan 74 lane 3: Up from Ask goes to the question box instead of whichever icon was used last (the mic one time, the paperclip another). Three lines here (a class name, the row's handler, one name from the hook); the handler and its explanation live in useMainTabAskBarFocus.ts with the box's own Down.",
+      "date": "2026-09-28"
     },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "limit": 884,

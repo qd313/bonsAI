@@ -253,6 +253,19 @@ export function useMainTabAskBarFocus(
     ],
   );
 
+  /**
+   * The Ask row's own Up (plan 74 lane 3): back to the question box, the mirror of the box's own
+   * Down onto Ask above. Left to Steam, Up from Ask entered the icon row along the box's bottom
+   * edge on whichever icon was used last -- the mic one time, the paperclip another
+   * (docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json). Steam's own transfer, since the box is
+   * a different container; wired on the row, not the Ask button, because a Decky Button does not
+   * forward move props on the device.
+   */
+  const askRowDeckNavHandlers = useMemo(
+    () => ({ onMoveUp: () => focusUnifiedTextField() }) as Record<string, unknown>,
+    [focusUnifiedTextField],
+  );
+
   const avatarDeckNavHandlers = useMemo(
     () =>
       ({
@@ -272,5 +285,6 @@ export function useMainTabAskBarFocus(
     focusAskModeButton,
     unifiedInputDeckNavHandlers,
     avatarDeckNavHandlers,
+    askRowDeckNavHandlers,
   };
 }

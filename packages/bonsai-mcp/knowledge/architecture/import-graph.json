@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 579,
-  "edgeCount": 1598,
+  "fileCount": 580,
+  "edgeCount": 1599,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6211,11 +6211,18 @@
         "src/utils/stripSoftContinueCue.test.ts"
       ]
     },
+    "src/utils/tabBodyViewport.test.ts": {
+      "imports": [
+        "src/utils/tabBodyViewport.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/tabBodyViewport.ts": {
       "imports": [],
       "importedBy": [
         "src/hooks/useQamPanelHeightGuard.ts",
-        "src/hooks/useTabStripBodyOffset.ts"
+        "src/hooks/useTabStripBodyOffset.ts",
+        "src/utils/tabBodyViewport.test.ts"
       ]
     },
     "src/utils/thinkingSummaryText.test.ts": {

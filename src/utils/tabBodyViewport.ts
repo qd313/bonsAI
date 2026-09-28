@@ -24,6 +24,11 @@ export function syncTabBodyViewportHeight(scope: HTMLElement): boolean {
 
   const topOffset = Math.max(0, tabContents.getBoundingClientRect().top - scopeRect.top);
   const bodyH = Math.max(MIN_BODY_PX, Math.floor(scopeH - topOffset));
-  scope.style.setProperty("--bonsai-tab-body-height", `${bodyH}px`);
+  const next = `${bodyH}px`;
+  // Write only on a change: this runs from ResizeObserver callbacks, and a same-value style write
+  // still dirties layout, which can feed "ResizeObserver loop" warnings on the Deck.
+  if (scope.style.getPropertyValue("--bonsai-tab-body-height") !== next) {
+    scope.style.setProperty("--bonsai-tab-body-height", next);
+  }
   return true;
 }

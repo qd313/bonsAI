@@ -1189,7 +1189,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const transparencyAvailableHere = transparencyUiAvailable(
                     archivedTransparencyFor(turn, turnIndex)
                   );
-                  const readAloudAvailableHere = Boolean(turn.answer?.trim());
+                  /* Not on the back end's own stop placeholder ("Request cancelled."): nothing
+                     readable was kept, so the speaker would sit alone above an empty row and read
+                     that status aloud (plan72-Z-FREEPLAY.json finding 9). Same test as Retry's. */
+                  const readAloudAvailableHere =
+                    Boolean(turn.answer?.trim()) && !isStopNoticeResponse(turn.answer);
                   if (!showFeedbackHere && !transparencyAvailableHere && !readAloudAvailableHere) {
                     return null;
                   }

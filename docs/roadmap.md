@@ -314,11 +314,12 @@ replace it with a specific issue when one exists.
   soon" on 2026-08-07 (its P6): today an answer is laid out one way while it arrives and re-laid out when it
   finishes, and two ways of drawing it can drift apart. Written before September's reply changes: check today's
   code first, it may be moot. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md).
-- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
-  answer finishes while the menu is closed, the toast says only *Reply ready*. It would read *bonsAI* over the first lines of
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63), measured
+  2026-09-28.** When an answer finishes while the menu is closed, the toast says only *Reply ready*. It would show the start of
   the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.
-  Hidden blocks are skipped; if nothing safe is left the toast stays as it is. **Measure first, on two screens with screenshots:**
-  the Deck's own screen and a 24-inch 1080p monitor; the popup is expected to be small. [Plan and mockup](planning/38-toast-answer-lines.md).
+  Hidden blocks are skipped; if nothing safe is left the toast stays as it is. **Measured on both screens:** one title line and
+  one body line, about 43 and 35 characters, the same on each; so the maintainer's call (2026-09-28): the answer runs across both
+  lines and the *bonsAI* title is dropped. Evidence `docs/test-evidence/plan38-M*-*.json`. [Plan and mockup](planning/38-toast-answer-lines.md).
 - ★★ `[reply]` **Which bundled characters copy a real person** — **OPEN, filed 2026-09-08 (D74); the gate for the shelved character
   voices.** All 31 characters in the picker are named characters from games or TV, each voiced by a real actor, and one is a living
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for

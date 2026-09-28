@@ -193,3 +193,13 @@ Written as work lands.
   maintainer expects Steam's popup to be smaller than assumed, so § 3 became a two-screen measurement with
   screenshots: the Deck's own screen and a 24-inch 1080p monitor. The plan's commits moved to the
   experimental branch at the maintainer's request; copies remain on the feature session's branch.
+- **2026-09-28** — § 3 measured on both screens (evidence `docs/test-evidence/plan38-M1-deck.json` to
+  `plan38-M3-monitor.json`; crops `plan38-M2-deck-crop.png`, `plan38-M1-monitor-crop.png`). **M1:** the real
+  *Reply ready* toast shows over a running game, bottom right, 0.2 s after the answer finishes (caught on the
+  monitor; on the Deck's screen the menu took too long to close, so the 4-second toast came and went unseen).
+  **M2:** exactly one title line and one body line, neither wraps, Steam cuts each with an ellipsis; a counting
+  string read to `T01-…-T11` (43 characters) and `w01 … w09` (35 characters), the same on both screens, although
+  the box is 450 × 61 on the Deck and 384 × 51 on the monitor. **M3:** eight seconds holds on both. **The
+  maintainer's call, same day, after the numbers:** the answer runs across both lines (title line first, body
+  line carrying on), and the *bonsAI* title is dropped; every other rule in § 4 stands. Built next as the feature
+  job of the Sonnet 5.5 trial (plan 75).

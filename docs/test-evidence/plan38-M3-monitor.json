@@ -1,0 +1,39 @@
+{
+  "row": "plan38-M3-monitor",
+  "plan": "docs/planning/38-toast-answer-lines.md section 3, M3 on the 24-inch 1080p monitor: does eight seconds hold, and what does it cover?",
+  "build": "cb88c012 on the Deck (not redeployed); local checkout HEAD bff046f1",
+  "deckTime": "2026-09-28T15:50:37.21-04:00 (fired); video started about 15:50:33.7",
+  "screen": "external monitor, 1920 x 1080 physical (1500 x 843 CSS at 1.28)",
+  "setup": "Game on its main menu, in front, Quick Access closed. Same strings, duration 8000. Page read every 0.25 s; 22 s video (deck_record, quality full) at the same time, frames 4 per second, text pixels counted in the corner.",
+  "pressed": "nothing",
+  "seen": {
+    "pageTimeline_secondsAfterFire": {
+      "0.02": "in the page, window hidden, card sliding in from 300 CSS right",
+      "0.28": "window visible",
+      "0.54-7.83": "fully shown, opacity 1",
+      "8.10": "opacity 0.35 (fading)",
+      "8.36": "opacity 0",
+      "8.62": "window hidden",
+      "9.66": "removed from the page"
+    },
+    "videoTimeline_secondsIntoVideo": {
+      "3.50": "not there",
+      "3.75": "arriving (1673 text pixels)",
+      "4.00-11.25": "fully shown (1725 pixels in every frame)",
+      "11.50": "gone (0)"
+    },
+    "secondsOnScreen": "7.75 to 8.0 by the video (quarter-second frames), about 8.1 by the page",
+    "eightSecondsHolds": true,
+    "whereItSits": "bottom-right corner, about 1536-1920 x 1017-1068 physical px (384 x 51), 12 px above the bottom, touching the right edge",
+    "whatItCovers": "on the game's main menu: the dark band along the bottom of the menu art, to the right of the game's tip line ('Choosing weapons with similar tags...'); no menu button or text of the game is covered. The game fills the full monitor width on this screen."
+  },
+  "files": [
+    "screenshots/plan38-M3-monitor-t3-50.png (before)",
+    "screenshots/plan38-M3-monitor-t3-75.png (arriving)",
+    "screenshots/plan38-M3-monitor-t7-50.png (showing)",
+    "screenshots/plan38-M3-monitor-t11-25.png (last frame showing)",
+    "screenshots/plan38-M3-monitor-t11-50.png (gone)",
+    "recordings/DeckRecord_20260928_155030_auto.mkv (the video, 253 MB)"
+  ],
+  "verdict": "measured: an 8000 ms notification stays about 8 s on the monitor too; bottom-right corner, 384 x 51 px"
+}

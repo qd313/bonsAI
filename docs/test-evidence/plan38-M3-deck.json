@@ -1,0 +1,41 @@
+{
+  "row": "plan38-M3-deck",
+  "plan": "docs/planning/38-toast-answer-lines.md section 3, M3: does eight seconds hold, and what does the popup cover?",
+  "build": "cb88c012 on the Deck (not redeployed); local checkout HEAD bff046f1",
+  "deckTime": "2026-09-28T15:45:49.36-04:00 (fired); video started about 15:45:45",
+  "screen": "Deck's own screen, 1280 x 800 physical (853 x 533 CSS at 1.5)",
+  "setup": "Same as M2: game title screen in front, Quick Access closed, same title/body, duration 8000, fired from SharedJSContext with DeckyPluginLoader.toaster.toast. Page read every 0.25 s; 22 s video recorded at the same time with deck_record (quality full, 45 fps), frames taken 4 per second and the text pixels in the corner counted.",
+  "pressed": "nothing",
+  "seen": {
+    "pageTimeline_secondsAfterFire": {
+      "0.02": "in the page, window still hidden, card shifted 300 CSS to the right (sliding in)",
+      "0.27": "window visible, card 2.6 CSS from its place",
+      "0.53": "card in place",
+      "0.53-7.96": "fully shown, opacity 1",
+      "8.22": "opacity 0.04 (fading)",
+      "8.48": "opacity 0",
+      "8.73": "window hidden",
+      "9.75": "removed from the page"
+    },
+    "videoTimeline_secondsIntoVideo": {
+      "4.00": "no notification (0 bright text pixels)",
+      "4.25": "arriving (1550 pixels)",
+      "4.50-12.00": "fully shown (2457 pixels in every frame)",
+      "12.25": "gone (0 pixels)"
+    },
+    "secondsOnScreen": "8.0 by the video (first frame 4.25, first empty frame 12.25; fully drawn 7.5 to 7.75 s); 8.0 to 8.2 by the page",
+    "eightSecondsHolds": true,
+    "whereItSits": "bottom-right corner, about 830-1280 x 725-786 physical px (450 x 61): 35% of the screen width, 8% of its height, touching the right edge and about 14 px above the bottom",
+    "whatItCovers": "on this game's title screen, dark background art to the right of the centred 'PRESS ANY KEY TO CONTINUE' prompt (the prompt ends near x 762, the card starts near x 830, so they do not overlap). In-game play was not measured (the game stayed on its title screen).",
+    "fromM2_sameShape": "M2 run: page showed it present 0.02 to 9.44 s after firing with the same slide-in"
+  },
+  "files": [
+    "screenshots/plan38-M3-deck-t3-75.png (before)",
+    "screenshots/plan38-M3-deck-t4-25.png (arriving)",
+    "screenshots/plan38-M3-deck-t8-00.png (showing)",
+    "screenshots/plan38-M3-deck-t12-00.png (last frame showing)",
+    "screenshots/plan38-M3-deck-t12-25.png (gone)",
+    "recordings/DeckRecord_20260928_154542_auto.mkv (the video, 178 MB)"
+  ],
+  "verdict": "measured: an 8000 ms notification stays on screen about 8.0 s; bottom-right corner, 450 x 61 px"
+}

@@ -1,0 +1,39 @@
+{
+  "row": "plan38-M2-monitor",
+  "plan": "docs/planning/38-toast-answer-lines.md section 3, M2 on the 24-inch 1080p monitor: how much text fits?",
+  "build": "cb88c012 on the Deck (not redeployed); local checkout HEAD bff046f1",
+  "deckTime": "2026-09-28T15:49:47.34-04:00 (fired)",
+  "screen": {
+    "live": "external monitor, read 15:49: Quick Access window 1002 x 626 CSS, screen 1500 x 843 CSS at devicePixelRatio 1.28 = 1920 x 1080 physical",
+    "notificationWindow": "notificationtoasts_uid2, 321 x 81 CSS (about 411 x 104 physical)"
+  },
+  "setup": "Deep Rock Galactic: Survivor running, in front, Quick Access closed. Same probe script and strings as plan38-M2-deck: title T01-...-T15, body w01..w90, duration 8000, via DeckyPluginLoader.toaster.toast from SharedJSContext.",
+  "pressed": "nothing",
+  "seen": {
+    "titleLine": {
+      "readOnScreen": "T01-T02-T03-T04-T05-T06-T07-T08-T09-T10-T11-...",
+      "lastWholePiece": "T11",
+      "charactersBeforeEllipsis": 44,
+      "cutEnds": "ellipsis",
+      "lines": 1,
+      "box": "276 x 14 CSS, 11px bold (same CSS numbers as the Deck screen)"
+    },
+    "bodyLine": {
+      "readOnScreen": "w01 w02 w03 w04 w05 w06 w07 w08 w09 w...",
+      "lastWholeWord": "w09",
+      "charactersBeforeEllipsis": 37,
+      "cutEnds": "ellipsis",
+      "lines": 1,
+      "box": "276 x 16 CSS, 12px regular"
+    },
+    "cardOnScreen": "about 1536-1920 x 1017-1068 physical px (384 x 51), bottom-right corner, running to the right edge; 20% of the screen width, 4.7% of its height",
+    "comparedWithDeckScreen": "same text fits on both screens (T11 / w09, one body line). In page units the box is the same; the monitor draws it at 1.28 instead of 1.5, so it is 384 x 51 px of 1920 x 1080 against 450 x 61 px of 1280 x 800 on the Deck",
+    "gameMovedOnItsOwn": "between screenshots at 15:49:43 and 15:49:49 the game went from its title screen ('PRESS ANY KEY TO CONTINUE') to its main menu with no press from this session; most likely the maintainer's handling during the screen switch",
+    "cornerPicture": "the face picture in the top-right is now labelled 'the Implication / Offline' on the game's main menu: it is the game's own player badge, not Steam's and not the plugin's"
+  },
+  "screenshotsSaved": [
+    "screenshots/plan38-M2-monitor.png (15:49:49, notification showing)",
+    "screenshots/plan38-M2-monitor-crop.png (corner enlarged 3x)"
+  ],
+  "verdict": "measured: title one line, 11 pieces (44 characters) then ellipsis; body one line, 9 words (about 37 characters) then ellipsis; same as the Deck screen"
+}

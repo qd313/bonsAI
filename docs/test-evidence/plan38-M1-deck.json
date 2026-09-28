@@ -1,0 +1,48 @@
+{
+  "row": "plan38-M1-deck",
+  "plan": "docs/planning/38-toast-answer-lines.md section 3, M1: does the Reply ready notification show over a running game, and where?",
+  "build": "cb88c012 on the Deck (not redeployed); local checkout HEAD bff046f1",
+  "deckTime": "2026-09-28T15:39:50-04:00 to 15:43:10-04:00",
+  "screen": {
+    "live": "Deck's own screen",
+    "quickAccessWindow": "854 x 454 CSS at devicePixelRatio 1.5",
+    "screen": "853 x 533 CSS = 1280 x 800 physical",
+    "notificationWindow": "notificationtoasts_uid2 page is 320 x 80 CSS (480 x 120 physical), empty at 15:42:40"
+  },
+  "setup": {
+    "game": "Deep Rock Galactic: Survivor (appid 2321470) - the library name; 'Deep Rock Survivor' is not a library name. Launched from Recent Games on the third try (first: name not found; second: Home had no focused tile; third: launched). Sitting on its title screen 'PRESS ANY KEY TO CONTINUE'.",
+    "pluginReload": "after the game ran; the reload put Steam's Home in front, the game was brought back through the Steam menu's running-game entry",
+    "tab": "Main",
+    "mode": "Speed (changed from Strategy on the panel's mode picker)",
+    "question": "what does the pickaxe do (send-question script printed VERIFIED, field read back the whole question)"
+  },
+  "pressed": [
+    "A on Ask (about 15:39:58; log shows the request at 15:40:03.123)",
+    "B - panel left, Quick Access showed the Decky plugin list (screenshot 15:40:12)",
+    "B - Quick Access still open on the Decky list (screenshot 15:40:27)",
+    "B - focus moved to the side rail, Quick Access still open",
+    "B - Quick Access closed, game in front (screenshot 15:40:45)",
+    "No menu opened again until the 90-second mark had passed"
+  ],
+  "seen": {
+    "answerFinished": "plugin log 15:40:39.631 'completed in 36.4s', 360 visible characters",
+    "notificationSeen": false,
+    "screenshots": {
+      "15:40:12": "Quick Access open on Decky list, no notification",
+      "15:40:27": "Quick Access open on Decky list, no notification",
+      "15:40:45": "menu closed, game title screen, no notification",
+      "15:42:30": "90+ seconds after the answer finished, game title screen, no notification"
+    },
+    "timingProblem": "The plugin's Reply ready notification is set to 4000 ms (src/utils/bonsaiReplyReadyToast.ts). The answer finished at 15:40:39.6, so a notification would have been on screen from about 15:40:40 to 15:40:44. No screenshot fell in that window, and Quick Access was still open (on the Decky list, not the bonsAI panel) for all of it. It took four B presses over about 35 seconds to close Quick Access. So this run neither shows nor rules out the notification.",
+    "steamNotificationStore": "at 15:41:20: current toast null, pending 0, toast-last-shown map empty (Decky's toaster draws its own toasts, so this is not proof either way)",
+    "panelAfter": "panel reopened 15:43; the answer is there under the question (Speed, context: active game Deep Rock Galactic: Survivor)",
+    "unexplainedOverlay": "a small face picture captioned 'the implication' sits in the top-right corner over the game (about 1145-1280 x 30-190 physical px) whenever the game is in front; it is not in Steam's notification window and was there before any Ask"
+  },
+  "screenshotsSaved": [
+    "screenshots/plan38-M1-deck-a-1540-12-menu-open.png",
+    "screenshots/plan38-M1-deck-b-1540-27-menu-open.png",
+    "screenshots/plan38-M1-deck-c-1540-45-menu-closed.png",
+    "screenshots/plan38-M1-deck.png"
+  ],
+  "verdict": "no notification seen - but the 4-second window fell while Quick Access was still open and between screenshots, so the result is UNCLEAR, not a proof that it does not show"
+}

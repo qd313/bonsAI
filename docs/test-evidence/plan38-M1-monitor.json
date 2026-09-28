@@ -1,0 +1,51 @@
+{
+  "row": "plan38-M1-monitor",
+  "plan": "docs/planning/38-toast-answer-lines.md section 3, M1 retry on the 24-inch 1080p monitor: does the real Reply ready notification show over a running game, and where?",
+  "build": "cb88c012 on the Deck (not redeployed); local checkout HEAD bff046f1",
+  "deckTime": "2026-09-28T15:52:34-04:00 to 15:54:21-04:00",
+  "screen": "external monitor, 1920 x 1080 physical (1500 x 843 CSS at 1.28), read 15:49",
+  "setup": {
+    "game": "Deep Rock Galactic: Survivor running, on its title screen (it had gone to its main menu and back to the title screen with no press from this session; see notes)",
+    "tab": "Main",
+    "mode": "Speed (already set in part A)",
+    "question": "give me ten tips for a new player (send-question script printed VERIFIED, whole question read back)",
+    "watcher": "scratchpad deck/plan38_toast_watch.py read Steam's notification window every 0.25 s from 15:52:34"
+  },
+  "pressed": [
+    "plugin open: first try failed (expected after the earlier reload), second try opened it",
+    "walk DOWN 10 presses to Ask, A on Ask (log: request 15:53:35.773)",
+    "B - ring to the Main tab, panel still open (read 15:53:37)",
+    "B - panel gone (read 15:53:41); screenshot shows Quick Access on Decky's plugin list",
+    "B - ring on the side rail, Quick Access still open (screenshot named 15:53:57)",
+    "B - Quick Access closed, game in front (screenshot named 15:54:12, which already shows the notification)"
+  ],
+  "seen": {
+    "answerFinished": "plugin log 15:54:14.569 'completed in 38.7s', 1782 visible characters",
+    "quickAccessClosedBeforeFinish": "yes, by a few seconds: the closing B went in after the 15:53:57 screenshot and before the finish; the first screenshot after it shows the menu closed and the notification up",
+    "notificationSeen": true,
+    "text": "title 'Reply ready', body 'Tap to open'",
+    "watcherTimeline": {
+      "15:54:14.75": "present, opacity 1, sliding in (0.18 s after the log's finish line)",
+      "15:54:18.78": "opacity 0.4 (fading)",
+      "15:54:19.03": "opacity 0",
+      "15:54:19.54": "window hidden",
+      "15:54:20.55": "removed"
+    },
+    "secondsOnScreen": "about 4.1 (14.75 to about 18.9), matching the plugin's 4000 ms",
+    "whereItSits": "bottom-right corner, 1536-1920 x 1017-1068 physical px (384 x 51): the same box as the counting notification in plan38-M2-monitor, so the card does not shrink for short text",
+    "textBoxes": "title 61.6 x 14 CSS, 11px bold; body 66.3 x 16 CSS, 12px; neither cut",
+    "whatItCovers": "on the title screen, the bottom-right corner right of 'PRESS ANY KEY TO CONTINUE'; its right part sits over the black bar the game leaves at the side on this screen",
+    "captureTimingNote": "the capture helper names a file 2-3 s before the picture is actually grabbed: the file named 15:54:12 shows a notification that the page only held from 15:54:14.75. This also explains the empty screenshot in plan38-M2-deck"
+  },
+  "notes": [
+    "The game changed screen twice with no press from this session: title screen to main menu between 15:49:43 and 15:49:49 (just after the switch to the monitor), and back to the title screen by 15:52:41. Possibly the maintainer handling the Deck, or the game going back to its title screen by itself after sitting idle; not proven either way. Nothing moved in Steam or in the plugin without a press of mine."
+  ],
+  "screenshotsSaved": [
+    "screenshots/plan38-M1-monitor-a-menu-open.png (named 15:53:44, Quick Access on the Decky list)",
+    "screenshots/plan38-M1-monitor-a2-menu-open.png (named 15:53:57, ring on the side rail)",
+    "screenshots/plan38-M1-monitor.png (named 15:54:12, menu closed, Reply ready showing)",
+    "screenshots/plan38-M1-monitor-crop.png (corner enlarged 3x)",
+    "screenshots/plan38-M1-monitor-b-gone.png (named 15:54:21, gone)"
+  ],
+  "verdict": "Reply ready appears over a running game on the monitor: bottom-right, 384 x 51 px, about 4 s, text 'Reply ready' / 'Tap to open'"
+}

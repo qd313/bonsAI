@@ -1336,12 +1336,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 {buildLiveReasoningSteps(liveSteps)}
               </div>
             ) : null}
-            {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning ? (
+            {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning && !showLiveResponse ? (
               /*
                * The stock waiting phrase, unchanged — and still the whole story with thinking
                * off, on a model that cannot think, and in the seconds before the model's first
                * thought arrives. It steps aside for good once that first thought has landed,
                * because a composed stand-in above the model's own words is worse than nothing.
+               * It also goes once the answer's first words arrive: the wait is over, and with
+               * thinking off nothing else would ever clear it.
                */
               <div
                 className="bonsai-chat-status-line bonsai-chat-thinking-line"

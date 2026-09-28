@@ -192,4 +192,25 @@ describe("the space under the question while a thinking model works", () => {
       "Reading the wiki.",
     );
   });
+
+  /* Roadmap: "With thinking off, the waiting spinner can keep spinning through the whole answer". */
+  it("with thinking off, drops the waiting line and its spinner once the answer's first words arrive", () => {
+    const props = baseProps({ liveThinking: { summary: "Reading the wiki.", reasoning: null } });
+    const { container, rerender } = render(<MainTabChatTranscript {...props} />);
+    expect(container.querySelector(".bonsai-thinking-spinner")).not.toBeNull();
+
+    rerender(<MainTabChatTranscript {...props} isStreamingPreview streamDisplayText="Flank it and" />);
+
+    expect(container.querySelector(".bonsai-chat-thinking-line")).toBeNull();
+    expect(container.querySelector(".bonsai-thinking-spinner")).toBeNull();
+  });
+
+  it("with thinking off and no streaming preview, drops the waiting line once real answer text lands", () => {
+    const props = baseProps({ liveThinking: { summary: "Reading the wiki.", reasoning: null } });
+    const { container, rerender } = render(<MainTabChatTranscript {...props} />);
+    rerender(<MainTabChatTranscript {...props} ollamaResponse="Flank it and shoot the soft belly." />);
+
+    expect(container.querySelector(".bonsai-chat-thinking-line")).toBeNull();
+    expect(container.querySelector(".bonsai-thinking-spinner")).toBeNull();
+  });
 });

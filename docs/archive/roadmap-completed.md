@@ -6,6 +6,48 @@
 
 Headings group related work. Star counts match the historical list.
 
+### A latency budget for a game question (closed 2026-09-28)
+
+- ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
+  one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
+  regression fails a check instead of relying on luck. Planned as wave three ([48](48-kb-wave-three-session.md)).
+
+**Closed 2026-09-28 (release clean-up).** The budget is written in [knowledge-base.md](../knowledge-base.md)
+("Time budget for a game question"); its check was fixed in `7be015a5` and passed three times on the Deck
+2026-09-15: 547, 23 and 28 ms against 1000. Evidence: [wave three's report](48-kb-wave-three-session.md), row W3-R6.
+
+### Eval tooling: the weight sweep, per-question results for what ships, a second right answer (closed 2026-09-28)
+
+- ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
+  agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
+  the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
+  answers. No row uses the second-answer option yet. One to two days. (D51, D68)
+
+**Closed 2026-09-28 (release clean-up).** Built 2026-09-06 (`33de65d2`, `097aa726`, `c9c37789`); the sweep was run
+for D82. Test tooling only, so no Deck check applies.
+
+### A measured context-window experiment (closed 2026-09-28)
+
+- ★★ `[KB]` **A measured context-window experiment** — **OPEN, research, added 2026-09-05, re-measured 2026-09-06.** The
+  Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
+  instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
+  first token, before it becomes a setting. Agreed as "later, its own call". (D46)
+
+**Closed 2026-09-28 (release clean-up): replaced, not run.** The plugin now asks for 16,384 tokens, twice the
+planned 8,192, proven on the Deck 2026-09-21 (`e6223c1a`). Written up further down this file, under "The window is assumed, not asked for."
+
+### Five checks from the August retrieval rework were never run on the Deck (closed 2026-09-28)
+
+- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
+  retire.** Four of the five now have real answers: the corpus-format check is retired (D116 #7, its own
+  unit tests cover it); the follow-up check passed in full on the Deck 2026-09-23. The relevance floor's
+  on-topic half passed; its off-topic half still waits on the maintainer to retire or reword it against an
+  earlier accepted decision. [Detail](../roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
+
+**Closed 2026-09-28 (release clean-up).** Per D113 #10, the relevance-floor row was reworded to match the
+behaviour accepted 2026-08-27; its on-topic half passed 2026-09-15 and 2026-09-19
+(`docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`). All five settled: rows **W2-R8**, **KB-FLOOR-01**.
+
 ### Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon (closed 2026-09-27)
 
 - ★★ `[chat]` **Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon** — **OPEN,

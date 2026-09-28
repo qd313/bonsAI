@@ -41,6 +41,35 @@ out of [roadmap.md](../roadmap.md) on 2026-09-27 during plan 70's final bookkeep
 line apart from link paths adjusted for this folder, to keep that document under its size limit. The
 roadmap keeps one pointer line to them._
 
+**Closed 2026-09-28 (release clean-up, first pass):**
+
+- ★ `[ollama]` **Remove greys out once a model has answered a question, until the plugin reloads** — **DONE
+  2026-09-28 (plan 70, `0eedab85`), passed on the Deck 2026-09-26.** Row **PRELOAD-RM-01**. Evidence
+  `docs/test-evidence/plan70-PRELOAD-RM-01.json`.
+- ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** — **DONE
+  2026-09-28 (plan 70, `6864e5e2`), passed on the Deck.** Row **OLLAMA-TAB-AFTER-RELOAD-02**. Evidence
+  `docs/test-evidence/plan70-OLLAMA-TAB-AFTER-RELOAD-02.json`.
+- ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** — **DONE
+  2026-09-28 (plan 70, `7c93d5e8`, `cb708b37`), passed on the Deck.** Row **NO-CLOSE-MATCH-HK-02** re-check. Evidence
+  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02-try2.json`.
+- ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong thing** —
+  **DONE 2026-09-28 (plan 70, `804bd004`, `f14de761`, `679452e5`, `7b2bc753`), passed on the Deck 2026-09-26** on build
+  `8c4e0e4f`. Row **SPOILER-RISK-CHIP-01**. Evidence `docs/test-evidence/plan70-L3-3-NAMED-ENTITY.json`,
+  `docs/test-evidence/plan70-L3-3-SPOILER-BAND.json`.
+- ★★ `[KB]` **A latency budget for a game question** — **DONE 2026-09-28.** Written in knowledge-base.md ("Time budget for
+  a game question"); the check was fixed in `7be015a5` and passed three times on the Deck 2026-09-15 (547, 23 and 28 ms
+  against 1000). Evidence: [wave three's report](48-kb-wave-three-session.md), row W3-R6.
+- ★★ `[KB]` **Eval tooling: the weight sweep, per-question results, a second right answer** — **DONE 2026-09-28,
+  built 2026-09-06 (`33de65d2`, `097aa726`, `c9c37789`).** The sweep was run for D82. Test tooling only, so no Deck
+  check applies.
+- ★★ `[KB]` **A measured context-window experiment** — **DONE 2026-09-28, replaced by a bigger change rather than
+  run.** The plugin now asks for 16,384 tokens, twice the planned 8,192, proven on the Deck 2026-09-21 (`e6223c1a`).
+  Written up in [roadmap-completed.md](roadmap-completed.md).
+- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **DONE 2026-09-28.** All
+  five settled: one retired, three passed, and the relevance floor's row reworded to match the accepted behaviour
+  (D113 #10), its on-topic half passed 2026-09-15 and 2026-09-19. Rows **W2-R8**, **KB-FLOOR-01**. Evidence
+  `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`.
+
 **Closed 2026-09-27 (plan 72, the release bug session):**
 
 - ★ `[focus]` **After pressing Stop mid-answer, the ring lands on the Voice input button, one press from turning

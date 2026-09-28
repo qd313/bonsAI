@@ -2018,7 +2018,8 @@ very loud while sitting idle" got a troubleshooting tip attached (the knowledge-
 it to the shared tip sheet), but still read "med" because the troubleshooting check was a fixed word
 list that question does not match. This turn's own routing decision is now read alongside the word list,
 not instead of it — either one being true counts as troubleshooting. Both evidence questions from the
-same Deck pass now read "low". Deck re-check owed for both.
+same Deck pass now read "low". **Re-checked on the Deck 2026-09-26 on build `8c4e0e4f`: both PASS** —
+`docs/test-evidence/plan70-L3-3-NAMED-ENTITY.json`, `docs/test-evidence/plan70-L3-3-SPOILER-BAND.json`. Closed 2026-09-28.
 
 ## Model size fix and re-check
 

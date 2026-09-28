@@ -2140,3 +2140,78 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 
 **Closed 2026-09-27, by design.** The maintainer chose option A: keep the order, and move the dots at once.
   [Drawing](https://claude.ai/artifact/8JNrfSqrRMhJKCvGSfBzLY). Not a bug.
+
+## Moved from the roadmap 2026-09-28 (release clean-up, first pass)
+
+_Copied line for line from the roadmap, nothing reworded apart from link paths, with the closing note added under each entry._
+
+- ★ `[ollama]` **Remove greys out once a model has answered a question, until the plugin reloads** —
+  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **PRELOAD-RM-01** in
+  [testing.md](../testing.md). [Detail](../roadmap-details.md#remove-greys-out-once-a-model-has-answered-a-question-until-the-plugin-reloads).
+
+**Closed 2026-09-28 (release clean-up, `0eedab85`).** Passed on the Deck 2026-09-26, row **PRELOAD-RM-01**.
+  Evidence `docs/test-evidence/plan70-PRELOAD-RM-01.json`.
+
+- ★ `[ollama]` **The plugin log writes one false "non-loopback" connection failure right at start-up** —
+  **VERIFY, fixed 2026-09-26 (plan 70, helper I).** Deck check owed: row **OLLAMA-TAB-AFTER-RELOAD-02** in
+  [testing.md](../testing.md). [Detail](../roadmap-details.md#the-plugin-log-writes-one-false-non-loopback-connection-failure-right-at-start-up).
+
+**Closed 2026-09-28 (release clean-up, `6864e5e2`).** Passed on the Deck, row **OLLAMA-TAB-AFTER-RELOAD-02**.
+  Evidence `docs/test-evidence/plan70-OLLAMA-TAB-AFTER-RELOAD-02.json`.
+
+- ★★★ `[reply]` **The suggestion menu under an answer can name a protected boss in plain view** —
+  **VERIFY, fixed 2026-09-26 (helper A, `7c93d5e8`).** A third leak in the same family as the two above.
+  **Deck re-check owed:** row **NO-CLOSE-MATCH-HK-02** re-check.
+  [Detail](../roadmap-details.md#spoiler-leak-family).
+
+**Closed 2026-09-28 (release clean-up, `7c93d5e8`, `cb708b37`).** Passed on the Deck, row **NO-CLOSE-MATCH-HK-02**
+  re-check. Evidence `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02-try2.json`.
+
+- ★★ `[KB]` **The spoiler-risk band reads "med" on every answer, and the named entity can be the wrong
+  thing** — **VERIFY, both gaps closed 2026-09-26 (helper M, `679452e5`, `7b2bc753`).** A game's own name
+  is now cut from the question before matching; a routed-to-tips turn now reads as troubleshooting even
+  off the word list. Deck re-check owed. [Detail](../roadmap-details.md#spoiler-risk-band-fixes).
+
+**Closed 2026-09-28 (release clean-up, `804bd004`, `f14de761`, `679452e5`, `7b2bc753`).** Passed on the Deck
+  2026-09-26 on build `8c4e0e4f`, which contains the fixes. Row **SPOILER-RISK-CHIP-01**. Evidence
+  `docs/test-evidence/plan70-L3-3-NAMED-ENTITY.json`, `docs/test-evidence/plan70-L3-3-SPOILER-BAND.json`.
+
+- ★ `[focus]` **The Session tab's Clear did nothing when pressed, on one chat** — **OPEN, found by the
+  maintainer by hand on the Deck 2026-09-23 (build `a224fb6`), after the Deck work ended.** The maintainer
+  does not remember whether they pressed A or tapped the touchscreen, and thinks it may be because that
+  chat had only one turn. **Reproduction plan, to try all four combinations:** on a one-turn chat's Session
+  tab, press Clear with A, and separately by tap; try each once right after opening the Clear confirm box,
+  and again after switching to that chat from another one. Needs a Deck walk with the focus recorder before
+  any fix — the session thinks this is the same family as the tab-bar ghost below. **Retired 2026-09-25
+  (plan 68):** the Clear button this reproduction plan presses is gone, replaced by "Sum up this chat," so
+  this exact repro can no longer be run. The button was replaced, not fixed.
+
+**Retired, not fixed, 2026-09-28.** The Clear button was replaced by "Sum up this chat" on 2026-09-25
+  (`35224450`, plan 68), so there is nothing left to reproduce.
+
+- ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
+  out of the panel** — **VERIFY, fixed in `e163d8c`.** The confirm box used to open with the ring on the
+  destructive Clear button rather than Cancel, and cancelling threw the ring out to the tab bar with the
+  whole details panel closed. **Could not run on the Deck 2026-09-23:** Claude Code's own permission check
+  refused the walk to the Clear button before any press was sent, so nothing was tried (0 "clear" lines in
+  the log — confirms nothing was cleared either). Evidence
+  `docs/test-evidence/plan64-SESSION-CLEAR-BOX-01.json`. **Checked by hand by the maintainer on the Deck
+  2026-09-23 (build `a224fb6`), after the Deck work ended: the "where you land" half still fails.** After
+  Clear then Cancel, the plugin came back "not in the same spot, back at the top," instead of staying on the
+  Session tab with the ring on Clear. Whether the box itself still opens on Cancel rather than Clear is
+  unconfirmed either way. Not fixed for this half yet. **Retired 2026-09-25 (plan 68):** the Clear button
+  itself is gone, replaced by "Sum up this chat," so this box and its "where you land" bug can no longer be
+  reproduced as written. The button was replaced, not fixed.
+
+**Retired, not fixed, 2026-09-28.** The Clear button was replaced by "Sum up this chat" on 2026-09-25
+  (`35224450`, plan 68), so this box no longer exists.
+
+- ★★★ `[KB]` **Searching the notes by meaning costs about a second, every time, on the Deck** — **ACCEPTED
+  2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same
+  band as first measured — the maintainer said that is fine next to an answer that then takes tens of
+  seconds to write. **The cause is now measured:** the two models pushing each other out of memory, which
+  reads as cheap to fix; the acceptance stands until the maintainer says otherwise. (D84) [Detail](../roadmap-details.md#searching-the-notes-by-meaning-costs-about-a-second-every-time-on-the-deck) · [Cause](../roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads).
+
+**Retired, not fixed, 2026-09-28.** Its cause, the two models pushing each other out of memory, is fixed and
+  already in Done (`409de9f6`, passed 2026-09-26; see [roadmap-done-v0.5.0.md](roadmap-done-v0.5.0.md)). The one open
+  fact, a single 1,070 ms reading with a game running on 2026-09-23, stays on the roadmap as its own one-line entry.

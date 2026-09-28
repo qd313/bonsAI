@@ -1,0 +1,22 @@
+{
+  "row": "Q2-SAFE-FIRST-TIER2",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:30 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5; AI models box drawn in the Big Picture window 853x534)",
+  "setup": "model_policy_tier was open_weight; set to open_source_only over SSH, plugin reloaded, value confirmed still open_source_only after reload. Plugin opened (first open failed as expected after reload, second worked).",
+  "pressed": [
+    "Ollama tab: DOWN to 'Browse and pull Ollama models', A (AI models box opened, ring on 'Advanced')",
+    "DOWN, DOWN to Filters, A. Filter panel: LICENCE group is the policy itself (Open source only ticked; 'Also try open-weight models'; 'Any installed model' disabled)",
+    "Walked DOWN to 'Essentials only', A to turn that display filter off, DOWN DOWN to Close filters, A",
+    "B to leave the AI models box"
+  ],
+  "seen": {
+    "rowsWithEssentialsOn": "3 catalog rows, all tagged FOSS",
+    "rowsWithEssentialsOff": "18 catalog rows, every one tagged FOSS; no open-weight row anywhere",
+    "why": "with the policy on open source only, the licence filter hides every open-weight model. The only control that shows them is 'Also try open-weight models', which changes the policy itself, so the runbook's setup and its step 'queue one open-weight model' cannot both hold.",
+    "tier2Box": "never reached; 'Pull selected' never pressed; nothing downloaded (model folders on the Deck: gemma4, nomic-embed-text only)"
+  },
+  "restored": "model_policy_tier put back to open_weight, plugin reloaded; whole settings file identical to the snapshot taken at the start (diff empty)",
+  "verdict": "UNCLEAR - runbook route not possible as written; owner to decide whether to reach the box by picking 'Also try open-weight models' first or by another route"
+}

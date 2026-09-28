@@ -1,0 +1,7 @@
+{"row":"Q2-SAFE-FIRST-TIER2","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:10-17:25-04:00","screen":"built-in (QAM window 854x454, dpr 1.5)","driver":2,
+"setup":"Settings file said model_policy_tier=open_weight at start (old value). Set to open_source_only through the plugin's own Filters panel in Browse models (no SSH edit). Filters turned off Essentials only and on Also-try-open-weight only to reach gemma3:1b (open_weight, 0.8 GB), selected it, then switched back to Open source only; queue kept 1 selected.",
+"pressed":"Pull selected (1) 0.8 GB, A; then A on the ring.",
+"seen":{"box":"Enable Tier 2 before pulling? (queue includes gemma3:1b)","buttons":["Not now","Enable Tier 2 and pull","Cancel"],"ring_on_open":"Not now (x123 y311 w194 h60)","after_A":"box closed; ollama list still 2 models (nomic-embed-text, gemma4:e2b-it-qat), no gemma3:1b, ollama ps no pull; settings file model_policy_tier still open_source_only"},
+"restore":"Policy put back to open_weight through Filters + Done; settings file diff against pre-run snapshot is empty (identical).",
+"note":"Settings file only wrote the new policy some time after the change; Filters UI can show a stale value after a Cancel.",
+"verdict":"PASS"}

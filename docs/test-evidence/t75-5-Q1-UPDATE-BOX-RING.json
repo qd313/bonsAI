@@ -1,0 +1,24 @@
+{
+  "row": "Q1-UPDATE-BOX-RING",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012 (deployed by the session owner); checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:38:50-04:00 to 17:39:26-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, screen 853x533 at devicePixelRatio 1.5 (1280x800), screenshot 1280x800",
+  "setup": "Run AI on this Deck on; Ollama v0.34.1 connected, 2 models; Internet downloads permission off; plugin open on Ollama tab",
+  "pressed": [
+    "Down x10 from tab bar (walk overshot: the button's name is 'Update AI engine and installed models', visible text 'Update AI & models'), Up x7 back to it",
+    "A -> box opened in the main Steam window, ring on 'Not now' (123,382 194x60); buttons: Not now / Turn on and download / Cancel",
+    "B -> box closed",
+    "A -> box opened again, ring on 'Not now'",
+    "A on 'Not now' -> box closed",
+    "Then deck_saveCheck repeated the same four presses: 4/4 steps passed"
+  ],
+  "seen": {
+    "afterB": {"focus": "button 'Update AI engine and installed models' (text 'Update AI & models')", "rect": [64, 204, 268, 36], "scrollPaneVisible": "y 88..454", "visibility": "visible 100%"},
+    "afterNotNow": {"focus": "button 'Update AI engine and installed models'", "rect": [64, 204, 268, 36], "visibility": "visible 100%"},
+    "saveCheckRun": "steps 2 and 4 matched the button, visible, settle 715 ms and 758 ms"
+  },
+  "screenshot": "screenshots/DeckCapture_20260928_173850_auto.png (box open, ring on Not now) - in the rig's screenshots folder",
+  "savedCheck": "checks/t75-5-Q1-UPDATE-BOX-RING.json",
+  "verdict": "PASS"
+}

@@ -1,0 +1,5 @@
+{"row":"Q4-ASK-UP","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"Question 'what is the best way to learn enemy attack patterns' put in the box by deck_send_ask.py (VERIFIED). Never pressed A on the box, never sent.",
+"pressed":"Box: DOWN, UP. Box: RIGHT (mode chip), RIGHT (Voice input), DOWN, UP. Box: LEFT (Attach screenshot), DOWN, UP.",
+"seen":"Down from box -> ask; Up -> question box (INPUT, rect 73,309,275x59). From Voice input Down -> ask; Up -> question box. From Attach screenshot Down -> ask; Up -> question box. Three of three on the box. Side note: walking Down through the old long answer needed ~8 presses where focus sat on 'overclock' offscreen while the pane scrolled.",
+"verdict":"PASS"}

@@ -1,0 +1,23 @@
+{
+  "row": "Q4-ASK-UP",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:32 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5)",
+  "setup": "Main tab. Question put in the box by the send-question script from Git Bash: 'which early weapon works best for a new player' (script printed VERIFIED, read back the whole question). (A first try from PowerShell delivered only the first word 'which'; it was overwritten by the Bash try.) Question never sent; A never pressed on the box. Walked DOWN through the chat to the box (the Retry and Copy partial-cover flags on the way are the two known false alarms).",
+  "pressed": [
+    "Trial 1: box DOWN -> Ask, UP",
+    "Trial 2: box RIGHT (mode) RIGHT (mic 'Voice input'), DOWN -> Ask, UP",
+    "Trial 3: box LEFT (paperclip 'Attach screenshot to Ask'), DOWN -> Ask, UP",
+    "All three repeated once more as saved check t75-4-Q4-ASK-UP (9 of 9 steps passed)"
+  ],
+  "seen": {
+    "trial1": "UP from Ask landed on the question box input, 100 percent visible",
+    "trial2": "mic DOWN landed on Ask; UP landed on the question box, 100 percent visible",
+    "trial3": "paperclip DOWN landed on Ask; UP landed on the question box, 100 percent visible",
+    "boxText": "still 'which early weapon works best for a new player' after the walks"
+  },
+  "note": "The paperclip is reached with LEFT from the box (the runbook did not name the press).",
+  "runFiles": ["runs/t75-4-Q4-trial1.json", "runs/t75-4-Q4-trial2.json", "runs/t75-4-Q4-trial3.json", "runs/t75-4-Q4-trial3-up.json"],
+  "verdict": "PASS"
+}

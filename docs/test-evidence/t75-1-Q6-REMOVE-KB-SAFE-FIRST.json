@@ -1,0 +1,6 @@
+{"row":"Q6-REMOVE-KB-SAFE-FIRST","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"rag_corpus_path /home/deck/.bonsai/rag, version 2026.09.26, folder holds ATTRIBUTIONS.md corpus-manifest.json corpus.db",
+"pressed":"Ollama tab: RIGHT from Update knowledge base to Remove, A, read, B only",
+"seen":"Box 'Remove knowledge base?' buttons Remove / Cancel; ring (highlight) on 'Remove'. B closed the box. rag_corpus_path, use_local_knowledge_base true and the three files unchanged.",
+"screenshot":"screenshots/DeckCapture_20260928_165200_auto.png",
+"verdict":"FAIL"}

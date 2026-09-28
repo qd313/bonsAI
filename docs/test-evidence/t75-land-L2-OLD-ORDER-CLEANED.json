@@ -1,0 +1,23 @@
+{
+  "row": "L2-OLD-ORDER-CLEANED",
+  "build": "8ec3426a (tip of experimental, deployed by the session owner at 18:14; not redeployed)",
+  "deck_time": "2026-09-28T18:17:38-04:00 to 18:19:10-04:00",
+  "screen": "Deck's own screen: Big Picture page 854x534 at 1.5x (1280x800); panel page 854x454; screenshot 1280x800",
+  "setup": {
+    "text_model_routing_order_noted_in_L1": [],
+    "edit": "SSH: set text_model_routing_order to [\"nomic-embed-text:latest\", \"gemma4:e2b-it-qat\"] at 18:17:38, plugin reloaded straight after; file re-read at 18:17:48 still held the edit",
+    "edit_refused": false
+  },
+  "pressed": ["open plugin (first try failed as expected after reload; second try opened, Ollama tab)", "DOWN x16 to 'Set text model try order' (visible 100%)", "A (picker opened)", "DOWN x2 to 'Done' (visible 100%), no Up/Down/Reset pressed", "A (Done)"],
+  "seen": {
+    "picker_rows": ["gemma4:e2b-it-qat"],
+    "nomic_embed_text_row_count": 0,
+    "picker_closed_after_Done": true,
+    "text_model_routing_order_after_Done": ["gemma4:e2b-it-qat"],
+    "settings_file_written_at": "2026-09-28 18:18:54",
+    "other_keys_changed_vs_start_snapshot": "none (only text_model_routing_order differed)"
+  },
+  "restore": "18:19: text_model_routing_order set back to [] over SSH, plugin reloaded; read back [] (see final check)",
+  "screenshots": ["t75-land-L2-OLD-ORDER-CLEANED-picker.png"],
+  "verdict": "PASS"
+}

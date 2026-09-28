@@ -1,0 +1,23 @@
+{
+  "row": "Q4-ASK-UP",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:20 to 17:22 -04:00",
+  "screen": "built-in (QAM window 854x454, screen 853x533 at devicePixelRatio 1.5)",
+  "setup": "Main tab. Question put in with scripts/deck_send_ask.py --text \"how do I beat the first boss\" over the plain ssh form; script printed VERIFIED and read back exactly 'how do I beat the first boss'. A was never pressed on the box. The question was not sent.",
+  "pressed": [
+    "Walk DOWN through the chat to the box and on to Ask (the ring passed the box on the way; a stalled scroll on a glossary word 'overclock' needed 4 extra DOWN presses)",
+    "Run 1 (box, then Down, Up): DOWN from box, UP from Ask",
+    "Run 2 (mic): from box RIGHT, RIGHT, then DOWN, then UP",
+    "Run 3 (paperclip): from box LEFT, then DOWN, then UP"
+  ],
+  "seen": {
+    "box": "input 'Describe the level, boss, or puzzle you're stuck on.' rect x73 y323 w275 h44, value 'how do I beat the first boss'",
+    "ask": "button 'ask' rect x49 y400 w263 h36, 100 percent visible",
+    "run1": "Down from box -> ask; Up from ask -> the question box (element is the box input, rect 73,323,275,44)",
+    "run2": "Right from box -> 'Inference mode: Strategy. Open to change.' (262,371,55,20); Right again -> 'Voice input' mic (322,371,20,20). Down from the mic -> ask. Up from ask -> the question box (same rect)",
+    "run3": "Left from box -> 'Attach screenshot to Ask' paperclip (54,371,20,20). Down -> ask. Up -> the question box (same rect)"
+  },
+  "note": "The mic is two Rights from the box (the mode chip is in between). Down from both icons lands on ask, not on Clear.",
+  "verdict": "PASS"
+}

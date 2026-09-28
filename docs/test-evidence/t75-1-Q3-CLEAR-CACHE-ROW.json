@@ -1,0 +1,5 @@
+{"row":"Q3-CLEAR-CACHE-ROW","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"Settings tab",
+"pressed":"RB from Ollama tab",
+"seen":"Clear cache... x 64 to 194, w 130; Clear all data... x 202 to 332, w 130; both y 2091.2, h 38 (level with each other). Other full-width rows in the tab run x 64 to 332 (e.g. Apply UI scale 64-332, Ali G 64-332).",
+"verdict":"PASS"}

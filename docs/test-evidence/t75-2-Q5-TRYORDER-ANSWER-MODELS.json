@@ -1,0 +1,5 @@
+{"row":"Q5-TRYORDER-ANSWER-MODELS","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:32-04:00","screen":"built-in (QAM window 854x454, dpr 1.5)","driver":2,
+"setup":"ollama list: nomic-embed-text:latest (274 MB) and gemma4:e2b-it-qat installed. Settings text_model_routing_order = [] before.",
+"pressed":"Ollama tab, walk DOWN to Set text model try order, A; read rows; B.",
+"seen":{"rows":["gemma4:e2b-it-qat (Up, Down)","nomic-embed-text:latest (Tier blocked, Size unknown - may be too large, Up, Down)"],"buttons":["Move nomic-embed-text:latest up","Move nomic-embed-text:latest down"],"after_B":"picker closed; settings file identical to pre-run snapshot, text_model_routing_order still []"},
+"verdict":"FAIL - the note-search model nomic-embed-text:latest IS a row in the text try-order picker (shown greyed as Tier blocked). Saved order unchanged."}

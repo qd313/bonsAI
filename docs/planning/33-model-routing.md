@@ -197,8 +197,8 @@ work (`[focus]`, `[layout]`, `[ui]`) stays out of the paired runs.
 | 2026-09-26 | same | A | Opus 5.5 low | Yes (1,978 green); same roadmap-size note, which it disclosed | Blind score 15/25. **Should fix, and fails the goal:** one 2-second reading 4 s after Stop, so a Stop while the model still "thinks" usually unloads anyway — the commonest Stop. Also: no owner check on the processes it measures; stale diagram left in the second file; the new-question check in the main file untested | Not landed | Its own check: 3 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 32 / 16,125 / 928,769 (52,450 cache write) | 16 | 16 | 7.6 (shared the PC) | $0.77 |
 | 2026-09-26 | same | B | Opus 5.5 medium | Yes (1,989 green); same roadmap-size note, disclosed; skipped the build step, said so | **Blind score 21/25, the reviewer's pick.** Should fix: the same stale diagram in the second file. Minor: a new question is only seen once its model call begins; a long unrelated job busy for 90 s straight would still be stopped; a test that only checks a number. Strengths: watches the worker over time, clear outcome on every path including "can't measure", keeps the owner check, fake clock with no real sleeps, tests the real Stop wiring | Not landed yet | Its own check: 9 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 68 / 43,353 / 2,775,055 (93,658 cache write) | 34 | 40 | 16.4 (shared the PC) | $1.89 |
 
-Priced at list: Opus 5.5 $4 in, $20 out; Sonnet 5 $2 in, $10 out; cache reads a tenth of the input price, cache
-writes 1.25 times it. The blind review itself (Opus 5.5 at the session's high effort) cost $0.82 and 2.6 minutes.
+Priced at list: Opus 5.5 $4 in, $20 out; Sonnet 5 $2 in, $10 out; cache reads $0.20 per million on both (the
+figures below use that; corrected wording 2026-09-28), cache writes 1.25 times the input price. The blind review itself (Opus 5.5 at the session's high effort) cost $0.82 and 2.6 minutes.
 
 **First verdict (2026-09-26, one task, three runs — a small sample, so provisional):**
 
@@ -248,18 +248,23 @@ the way § 1 was, taking each reply's largest usage count.
 
 | Date | Task | Model and effort | Checks green first time? | Review problems | Rounds to land | New tests fail without the fix? | Deck first time? | Tokens in / out / cache read | Turns | Tool calls | Minutes | $ at list |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-09-28 | Round 1: six D-pad fixes (five ★, one ★★) | Opus 5.5 high, **run as its own session** | 5 of 6 (one file-size refusal; the lane raised that file's limit by 4 lines, with a reason) | None must-fix. Noted: one box rebuilt on a base part the repo had not used before; a new wrapper that might shift Helpful (measured on the Deck: it did not) | 1 for five fixes, 2 for the ★★ | Yes, all six | **5 of 6.** The sixth, the ★★ spoiler cover, worked for the last cover and failed for a cover at the top of the answer: the one case its own report had flagged as unmeasured | 398 / 156,042 / 51,970,640 (421,652 cache write) | 199 | 250 | ~41 of work (56 in the log) | $26.02 |
-| 2026-09-28 | Round 2: the top cover | Opus 5.5 high, a normal helper | Yes | None | — | Yes (3 of 5 new tests; the other 2 guard its limits and were broken on purpose) | **Yes**: Up landed on the first cover and A opened it | 52 / 34,844 / 2,643,882 (98,973 cache write) | 26 | 29 | 10.5 | $2.25 |
+| 2026-09-28 | Round 1: six D-pad fixes (five ★, one ★★) | Opus 5.5 high, **run as its own session** | 5 of 6 (one file-size refusal; the lane raised that file's limit by 4 lines, with a reason) | None must-fix. Noted: one box rebuilt on a base part the repo had not used before; a new wrapper that might shift Helpful (measured on the Deck: it did not) | 1 for five fixes, 2 for the ★★ | Yes, all six | **5 of 6.** The sixth, the ★★ spoiler cover, worked for the last cover and failed for a cover at the top of the answer: the one case its own report had flagged as unmeasured | 398 / 156,042 / 51,970,640 (421,652 cache write) | 199 | 250 | ~41 of work (56 in the log) | $15.63 (first written as $26.02, see the note below) |
+| 2026-09-28 | Round 2: the top cover | Opus 5.5 high, a normal helper | Yes | None | — | Yes (3 of 5 new tests; the other 2 guard its limits and were broken on purpose) | **Yes**: Up landed on the first cover and A opened it | 52 / 34,844 / 2,643,882 (98,973 cache write) | 26 | 29 | 10.5 | $1.72 (first written as $2.25) |
 
 The rest of the wave, for comparison (different kinds of work, so only a rough guide):
 
 | Lane | Model and effort | Bugs (commits) | Deck first time | $ at list | $ per commit |
 |---|---|---|---|---|---|
-| 1, the release download and licences | Opus medium | 4 (4) | Not checkable on the Deck until the release download is built | $6.48 | $1.62 |
-| 2, answers and chats | Opus medium | 6 (7) | 5 of 5 checked | $9.30 | $1.33 |
-| 5, back end | Opus medium | 3 (3) | 2 of 2 checked; the third cannot be made to happen on the Deck | $4.91 | $1.64 |
-| 4, looks | Opus xhigh (general helper at the session's effort) | 3 (5) | 5 of 5 | $16.61 | $3.32 |
-| 3, D-pad, both rounds | Opus high | 6 (7) | 5 of 6, then the sixth on round 2 | $28.27 | $4.04 (see below) |
+| 1, the release download and licences | Opus medium | 4 (4) | Not checkable on the Deck until the release download is built | $4.99 | $1.25 |
+| 2, answers and chats | Opus medium | 6 (7) | 5 of 5 checked | $5.72 | $0.82 |
+| 5, back end | Opus medium | 3 (3) | 2 of 2 checked; the third cannot be made to happen on the Deck | $3.40 | $1.13 |
+| 4, looks | Opus xhigh (general helper at the session's effort) | 3 (5) | 5 of 5 | about $10.70 | about $2.14 |
+| 3, D-pad, both rounds | Opus high | 6 (7) | 5 of 6, then the sixth on round 2 | $17.35 | $2.48 (see below) |
+
+**Pricing slip, corrected 2026-09-28 ([plan 75](75-sonnet-5-5-trial.md) § 10).** This trial's first write-up
+priced Opus 5.5 cache reads at $0.40 per million; the list price is $0.20. Every figure in the two tables above is
+re-priced from the same token counts; lane 4's log has grown since, so its figure is scaled from the ratio. The
+verdict does not change.
 
 **Verdict (provisional: one lane, six bugs, seven commits):**
 
@@ -267,13 +272,22 @@ The rest of the wave, for comparison (different kinds of work, so only a rough g
   the first time, the review found nothing that had to be sent back, and the one miss was the case the lane had
   itself flagged as unmeasured. Every lane in this wave passed the Deck at a similar rate, so these numbers do not
   separate the models; they show Opus high did not fall below the others.
-- **Cost: round 1's $26 is not a fair number.** The app loads a new helper setting only when a session starts, so
+- **Cost: round 1's $15.63 is not a fair number.** The app loads a new helper setting only when a session starts, so
   round 1 ran as its own session, which carries a far bigger standing context: it grew to 436,000 tokens, and
-  52 million cached tokens were re-read. Round 2, a normal helper at the same setting, cost $2.25 for one hard ★★
+  52 million cached tokens were re-read. Round 2, a normal helper at the same setting, cost $1.72 for one hard ★★
   fix in 10.5 minutes, close to the medium lanes' cost per fix.
 - **Suggestion for the maintainer (not adopted):** let D-pad fixes with a Deck-measured cause run on an Opus-high
   helper, with Opus xhigh still reviewing and landing them. Measure one more wave with Opus high as a normal helper
   from the start, to get a clean cost per fix, before changing the table.
+
+### 4c. The Sonnet 5.5 trial (2026-09-28, the maintainer's idea)
+
+Five settings (Sonnet 5.5 low, medium, high; Opus 5.5 low, medium) each did the same five jobs, reviewed blind:
+a simple fix, a fix needing judgment, a feature, a bookkeeping replay and a Deck check list. Full tables in
+[plan 75](75-sonnet-5-5-trial.md). In short: Sonnet 5.5 no longer runs up cost the way Sonnet 5 did; Sonnet high
+scored best overall (82 of 100) and Opus medium next (81); only those two passed the judgment job; no Deck run
+passed a check that should fail. Suggested, not adopted: Sonnet medium for mechanical fixes and for running
+written Deck checks, Opus medium for bookkeeping, no change for features. One run per setting per job.
 
 ## 5. Where Haiku fits
 

@@ -1,0 +1,24 @@
+{
+  "row": "Q5-TRYORDER-ANSWER-MODELS",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012; checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:48:30-04:00 to 17:48:54-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, dpr 1.5 (1280x800); picker box drawn in the main Steam window (1280x800 screenshot)",
+  "setup": {
+    "ollamaList": ["nomic-embed-text:latest (274 MB, Ollama reports capabilities ['embedding'] only)", "gemma4:e2b-it-qat (4.3 GB, capabilities completion/vision/audio/tools/thinking)"],
+    "textModelRoutingOrderBefore": [],
+    "modelPolicyTier": "open_weight (the value at the start, put back after Q2)"
+  },
+  "pressed": ["RB to Ollama tab", "Down x13 to 'Set text model try order…'", "A (picker opened, ring on 'Move gemma4:e2b-it-qat up')", "B (picker closed, ring back on 'Set text model try order')"],
+  "seen": {
+    "rows": [
+      {"model": "gemma4:e2b-it-qat", "state": "normal", "buttons": "Up / Down"},
+      {"model": "nomic-embed-text:latest", "state": "greyed", "notes": "Tier blocked; Size unknown - may be too large", "buttons": "Up / Down"}
+    ],
+    "otherControls": "Reset to defaults, Done, Cancel",
+    "textModelRoutingOrderAfter": [],
+    "visionModelRoutingOrder": ["gemma4:e2b-it-qat"]
+  },
+  "screenshot": "t75-5-Q5-TRYORDER-ANSWER-MODELS.png",
+  "verdict": "FAIL - the note-search model nomic-embed-text:latest is one of the two rows (greyed, labelled 'Tier blocked', not hidden). The saved order is unchanged ([] before and after)."
+}

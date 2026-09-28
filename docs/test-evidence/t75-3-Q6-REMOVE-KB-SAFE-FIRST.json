@@ -1,0 +1,17 @@
+{
+  "row": "Q6-REMOVE-KB-SAFE-FIRST",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:23 -04:00",
+  "screen": "built-in (Big Picture window 854x534; screenshot 1280x800)",
+  "setup": "Knowledge library installed: rag_corpus_path = /home/deck/.bonsai/rag, rag_corpus_version = 2026.09.26, use_local_knowledge_base = true. Folder holds ATTRIBUTIONS.md (26743 bytes), corpus-manifest.json (29838), corpus.db (2998272).",
+  "pressed": "Ollama tab; walked to 'Update knowledge base'; RIGHT to 'Remove'; A on Remove (opens the box); read the ring; screenshot; B only. A was never pressed inside the box.",
+  "seen": {
+    "box": "'Remove knowledge base?' - 'Deletes the offline corpus from disk and turns off Use local knowledge base. Strategy cards will stop grounding until you download again.' Buttons: Remove, Cancel.",
+    "ringWhenBoxOpened": "'Remove' (the destructive button), rect x123 y295 w290 h40, drawn solid blue in the screenshot. Cancel was not highlighted.",
+    "afterB": "box closed. Ring landed on the 'Ollama tab' label row (48,64,300,20), not back on the Remove button.",
+    "libraryAfter": "rag_corpus_path still /home/deck/.bonsai/rag, version still 2026.09.26, use_local_knowledge_base still true; the three files are unchanged (same sizes and 10:46 timestamps) at 17:23:38."
+  },
+  "screenshot": "t75-3-Q6-REMOVE-KB-SAFE-FIRST.png (same folder)",
+  "verdict": "FAIL - the box opens with the ring on 'Remove' (the action that deletes the library), not on 'Cancel'. B closed it and the library is intact."
+}

@@ -1,0 +1,29 @@
+{
+  "row": "L3-MIC-STARTS-AND-STOPS",
+  "build": "8ec3426a (tip of experimental, deployed by the session owner at 18:14; not redeployed)",
+  "deck_time": "2026-09-28T18:21:27-04:00 to 18:22:15-04:00",
+  "screen": "Deck's own screen: panel page 854x454 at 1.5x; screenshots 1280x800",
+  "setup": {
+    "tab": "Main",
+    "plugin_log": "2026-09-28 18.19.20.log",
+    "plugin_log_last_line_before": "[2026-09-28 18:19:21,159][INFO]: bonsAI plugin loaded! (1 line)",
+    "whisper_server_before": "none running",
+    "watcher": "ps -C whisper-server plus a recorder list, every 0.5 s for 45 s, 76 samples (scratch watch_ws.log)"
+  },
+  "pressed": ["reach mic: DOWN walk to Ask (passed over the question box, no A), UP x1, RIGHT x2 to 'Voice input' (visible 100%)", "A (start, ~18:21:35)", "screenshot", "A (stop, ~18:21:47)"],
+  "seen": {
+    "mic_label_while_recording": "Stop voice input (class bonsai-voice-recording-active)",
+    "mic_label_after_stop": "Voice input",
+    "question_box_after_stop": "empty (no speech was given)",
+    "error_on_screen": "none",
+    "whisper_server": "pid 242452 appeared 18:21:35.998, ran through 18:21:46.584 (20 samples), gone by the next sample and absent for the remaining ~28 s",
+    "whisper_server_command": "voice_bin/whisper-server -m voice_models/ggml-tiny.en.bin -l en -t 4 -ng -nt --host 127.0.0.1 --port 18765",
+    "recorder": "pw-record pid 242475 from 18:21:36.549 until 18:21:46.584",
+    "one_shot_whisper_process_seen": false,
+    "plugin_log_after": "still 1 line, nothing new (no error, no traceback, no voice lines)",
+    "plugin_loader_journal_18_21_25_to_18_22_30": "only wsrouter DEBUG call lines and 'Getting app as Unknown'; no error, traceback or exception",
+    "recording_length": "about 11 s, longer than the 4 s asked, because a screenshot was taken while recording"
+  },
+  "screenshots": ["t75-land-L3-MIC-STARTS-AND-STOPS-recording.png", "t75-land-L3-MIC-STARTS-AND-STOPS-stopped.png"],
+  "verdict": "PASS"
+}

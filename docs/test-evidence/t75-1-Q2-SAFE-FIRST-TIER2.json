@@ -1,0 +1,6 @@
+{"row":"Q2-SAFE-FIRST-TIER2","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"Policy was open_weight (not open_source_only); changed model_policy_tier to open_source_only by sed over SSH + plugin reload. Old value open_weight. Catalog hides open-weight rows under open source only, so: Filters licence -> Also try open-weight, queued gemma3:1b (0.8 GB), Filters licence -> Open source only, Pull selected. Essentials only filter was also switched off in the modal (view filter, no settings key changed).",
+"pressed":"A on Pull selected; read ring; A",
+"seen":"Box 'Enable Tier 2 before pulling?' buttons Not now / Enable Tier 2 and pull / Cancel; ring on 'Not now'. After A: box closed, queue still 1, settings model_policy_tier still open_source_only, no gemma3 manifest, no pull process, ollama api lists only nomic-embed-text and gemma4. Policy restored to open_weight afterwards; settings file identical to start snapshot.",
+"note":"Routine selecting the model while policy was open-weight avoided the earlier 'Enable Tier 2 for this model?' box; with policy already open_source_only, selecting an open-weight row shows that other box instead.",
+"verdict":"PASS"}

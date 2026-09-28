@@ -1,0 +1,22 @@
+{
+  "row": "Q5-TRYORDER-ANSWER-MODELS",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:22 -04:00",
+  "screen": "built-in (Big Picture window 854x534; screenshot 1280x800)",
+  "setup": "nomic-embed-text:latest installed (Ollama /api/tags lists it, capabilities: embedding, 274 MB; the Deck has no 'ollama' on the plain ssh path, so the API was used instead of 'ollama list'). Other installed model: gemma4:e2b-it-qat. text_model_routing_order before = [] (vision order ['gemma4:e2b-it-qat'] untouched).",
+  "pressed": "RB to the Ollama tab; walked DOWN to 'Set text model try order...'; A; read every row; screenshot; B only (nothing moved, no A inside the picker).",
+  "seen": {
+    "picker": "'Text model try order' - 'Installed models only. Use a row's Up and Down buttons ... Grayed models stay in the list but are skipped at Ask time when blocked by tier or high-VRAM policy.'",
+    "rows": [
+      "gemma4:e2b-it-qat  (Up, Down)",
+      "nomic-embed-text:latest  (greyed; notes 'Tier blocked' and 'Size unknown - may be too large'; Up, Down)"
+    ],
+    "other": "Reset to defaults, Done, Cancel",
+    "afterB": "picker closed, ring back on 'Set text model try order...' (64,359,268,36)",
+    "settingsBefore": "text_model_routing_order = []",
+    "settingsAfter": "text_model_routing_order = [] (read over SSH at 17:22:42; unchanged)"
+  },
+  "screenshot": "t75-3-Q5-TRYORDER-ANSWER-MODELS.png (same folder)",
+  "verdict": "FAIL - the note-search model nomic-embed-text:latest is still one of the rows in the text try-order picker (shown greyed, with working-looking Up and Down buttons). The runbook expects it not to be a row. The saved order was unchanged."
+}

@@ -769,6 +769,19 @@ export function buildReplyActionsElement(
             onMoveUp: upFromDivider,
             onMoveDown: downFromDivider,
             onButtonDown: pressHandler(dividerEl, downFromDivider, upFromDivider),
+            /*
+             * B on "Hide details" shuts the panel and the ring stays on this line, which does not
+             * remount (plan 74 lane 3). Only while open: the handler's mere presence eats B on the
+             * device, so "Show details" leaves B to Steam as before.
+             */
+            ...(transparencyOpen && onToggleTransparency && !askInFlight
+              ? {
+                  onCancelButton: (evt: unknown) => {
+                    onToggleTransparency();
+                    (evt as { preventDefault?: () => void })?.preventDefault?.();
+                  },
+                }
+              : {}),
           } as Record<string, unknown>)}
         >
           <span className="bonsai-chat-details-divider-rule" />

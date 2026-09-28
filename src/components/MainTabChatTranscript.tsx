@@ -136,6 +136,7 @@ import {
 } from "../utils/buildKbNotesBlockElement";
 import {
   buildDetailsPanelElement,
+  closeDetailsPanel,
   focusChipLadderRow,
   focusDetailsTabsRow,
 } from "../utils/buildDetailsPanelElement";
@@ -1264,6 +1265,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         headerRef: (el: HTMLElement | null) => {
                           kbNotesHeaderElRefs.current[turn.id] = el;
                         },
+                        onCancel:
+                          transparencyDetailsOpen && transparencyAvailableHere
+                            ? () => closeDetailsPanel({
+                                setTransparencyDetailsOpen,
+                                setSessionHighlightTurnId,
+                                querySlot: () => queryTurnSlot(turn.id),
+                              })
+                            : undefined,
                       })}
                     </>
                   );
@@ -1470,6 +1479,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     headerRef: (el: HTMLElement | null) => {
                       kbNotesHeaderElRefs.current.live = el;
                     },
+                    onCancel: renderInlineLadder
+                      ? () => closeDetailsPanel({
+                          setTransparencyDetailsOpen,
+                          setSessionHighlightTurnId,
+                          querySlot: () => queryLiveTurnSlot(),
+                        })
+                      : undefined,
                   });
                 })()
               : null}

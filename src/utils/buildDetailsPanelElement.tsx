@@ -104,6 +104,22 @@ export function focusChipLadderRow(turnKey: string): boolean {
   return focusPerTurnRow(chipLadderEls, turnKey);
 }
 
+/**
+ * B's one way out of an open Show details panel: shut it and hand the ring back to the Show
+ * details line that opened it. The tabs row and the ladder below use it, and so does the "From
+ * the notes" block above the panel (plan 74 lane 3) -- a stop with no B of its own let the press
+ * fall through to Steam's back-out, which threw the ring to the tab bar and left the panel open.
+ */
+export function closeDetailsPanel(args: {
+  setTransparencyDetailsOpen: (open: boolean) => void;
+  setSessionHighlightTurnId: (id: string | null) => void;
+  querySlot: () => HTMLElement | null;
+}): void {
+  args.setTransparencyDetailsOpen(false);
+  args.setSessionHighlightTurnId(null);
+  focusReplyShowDetails(args.querySlot());
+}
+
 /** Panels already brought into view once; a later render of the same open panel leaves it be. */
 const revealedPanels = new WeakSet<HTMLElement>();
 
@@ -234,11 +250,8 @@ export function buildDetailsPanelElement(args: {
 
   const sessionRowCount = computeSessionContextRows(sessionLiveTurn, archivedTurns).length;
 
-  const closePanel = () => {
-    setTransparencyDetailsOpen(false);
-    setSessionHighlightTurnId(null);
-    focusReplyShowDetails(querySlot());
-  };
+  const closePanel = () =>
+    closeDetailsPanel({ setTransparencyDetailsOpen, setSessionHighlightTurnId, querySlot });
   const focusFirstTabContent = () =>
     detailsTab === "answer"
       ? focusChipLadderRow(turnKey) || focusContextChipLadder(querySlot())

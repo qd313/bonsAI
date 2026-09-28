@@ -276,8 +276,15 @@ export function buildKbNotesBlockElement(args: {
   onMoveUp: () => boolean;
   onMoveDown: () => boolean;
   headerRef: (el: HTMLElement | null) => void;
+  /**
+   * B, passed only while Show details is open below the block: closes the panel (plan 74 lane 3).
+   * Absent otherwise on purpose -- on the device the handler's mere presence eats B even when it
+   * does nothing (MainTabChatTranscript.tsx's header, the Show reasoning row), so a block with no
+   * panel open leaves B to Steam.
+   */
+  onCancel?: () => void;
 }): React.ReactElement | null {
-  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef } = args;
+  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef, onCancel } = args;
   if (!notes.length) return null;
   const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
@@ -300,6 +307,14 @@ export function buildKbNotesBlockElement(args: {
           if (isDeckDirectionDownEvent(evt)) return onMoveDown();
           return false;
         },
+        ...(onCancel
+          ? {
+              onCancelButton: (evt: unknown) => {
+                onCancel();
+                (evt as { preventDefault?: () => void })?.preventDefault?.();
+              },
+            }
+          : {}),
       } as Record<string, unknown>)}
       style={{
         marginTop: 8,

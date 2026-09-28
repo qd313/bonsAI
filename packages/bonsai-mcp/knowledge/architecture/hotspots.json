@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1673,
+      "lines": 1689,
       "role": ""
     },
     {
@@ -112,7 +112,7 @@
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 784,
+      "lines": 797,
       "role": ""
     },
     {
@@ -166,6 +166,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
+      "lines": 609,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "lines": 607,
       "role": ""
@@ -194,11 +199,6 @@
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 578,
       "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 569,
-      "role": "Prompt build, Ollama HTTP, streaming"
     }
   ]
 }

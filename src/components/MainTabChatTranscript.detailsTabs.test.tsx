@@ -132,6 +132,41 @@ function tabsRowProps(): Record<string, unknown> | undefined {
   return latestPropsFor("bonsai-details-tabs-row");
 }
 
+/* The Show details / Hide details line; its class carries a "--disabled" suffix while asking. */
+function dividerProps(): Record<string, unknown> | undefined {
+  const matches = hoisted.focusableProps.filter((p) =>
+    String(p.className ?? "").startsWith("bonsai-chat-details-divider")
+  );
+  return matches[matches.length - 1];
+}
+
+/*
+ * An answer with a "From the notes" block under it. The answer names the note's subject when the
+ * question did not, which is what makes the block show (kbNoteUsedByAnswer.ts, step 4).
+ */
+const WITH_NOTES: Partial<MainTabChatTranscriptProps> = {
+  ollamaResponse: "Keep your distance from the Glyphid Exploder and strafe.",
+  lastExchange: {
+    question: "how do i dodge the exploders",
+    answer: "Keep your distance from the Glyphid Exploder and strafe.",
+  },
+  transparencySnapshot: snapshot({
+    final_response: "Keep your distance from the Glyphid Exploder and strafe.",
+    kb_attached_notes: [
+      {
+        name: "Glyphid Exploder",
+        kind: "enemy",
+        card: "Explodes on contact; shoot its glowing sac.",
+        trust_tier: "wiki_verified",
+        source_host: "deeprockgalactic.wiki.gg",
+        source_license: "CC-BY-SA-3.0",
+        domain: "strategy",
+        game_title: "Deep Rock Galactic",
+      },
+    ],
+  }),
+};
+
 function activeTabText(container: HTMLElement): string {
   return container.querySelector(".bonsai-details-tab--active")?.textContent ?? "";
 }
@@ -423,6 +458,61 @@ describe("the This answer / Session tabs, on the newest answer", () => {
       expect(container.querySelector(".bonsai-details-session-body")).toBeNull();
       const divider = container.querySelector('[aria-label="Show details"]');
       expect(document.activeElement).toBe(divider);
+    });
+
+    /*
+     * Plan 74 lane 3, bug 1 (the "B on the notes block" entry, and the B-on-"Hide details" half of
+     * "Three D-pad slips seen in the plan 68 Deck pass"; testing row PLAN72-F-UP). Neither stop had
+     * a B of its own, so B fell through to Steam's back-out: the ring went to the tab bar and the
+     * panel stayed open. Both now close the panel the same way the tabs row does.
+     */
+    it("from the notes block: closes the whole panel and returns focus to Show details", () => {
+      const { container } = renderTranscript(WITH_NOTES);
+      clickShowDetails(container);
+      const notesBlock = container.querySelector(".bonsai-kb-notes-block") as HTMLElement;
+      expect(notesBlock).not.toBeNull();
+      notesBlock.focus();
+
+      const onCancelButton = latestPropsFor("bonsai-kb-notes-block")?.onCancelButton as (e: unknown) => void;
+      expect(onCancelButton).toBeTypeOf("function");
+      let prevented = false;
+      act(() => {
+        onCancelButton({ preventDefault: () => (prevented = true) });
+      });
+
+      expect(prevented).toBe(true);
+      expect(container.querySelector(".bonsai-details-tabs-row")).toBeNull();
+      expect(document.activeElement).toBe(container.querySelector('[aria-label="Show details"]'));
+    });
+
+    it("from the Hide details line itself: closes the whole panel and the ring stays on the line", () => {
+      const { container } = renderTranscript();
+      clickShowDetails(container);
+      const divider = container.querySelector('[aria-label="Hide details"]') as HTMLElement;
+      expect(divider).not.toBeNull();
+
+      const onCancelButton = dividerProps()?.onCancelButton as (e: unknown) => void;
+      expect(onCancelButton).toBeTypeOf("function");
+      let prevented = false;
+      act(() => {
+        onCancelButton({ preventDefault: () => (prevented = true) });
+      });
+
+      expect(prevented).toBe(true);
+      expect(container.querySelector(".bonsai-details-tabs-row")).toBeNull();
+      /* The very same node, not a rebuilt one: the ring sitting on it has nowhere to be lost to. */
+      expect(divider.isConnected).toBe(true);
+      expect(divider.getAttribute("aria-label")).toBe("Show details");
+    });
+
+    it("with the panel shut, neither the notes block nor Show details takes B -- it stays Steam's", () => {
+      renderTranscript(WITH_NOTES);
+      /* The handler's mere presence eats B on the device (reasoningFold's header comment), so a
+         closed panel must not carry one at all, not just one that does nothing. */
+      expect(latestPropsFor("bonsai-kb-notes-block")).toBeDefined();
+      expect(latestPropsFor("bonsai-kb-notes-block")?.onCancelButton).toBeUndefined();
+      expect(dividerProps()).toBeDefined();
+      expect(dividerProps()?.onCancelButton).toBeUndefined();
     });
   });
 

@@ -144,7 +144,7 @@ session's mistake, not theirs. Every run also restored every setting it changed.
 Trial overheads: four blind reviews $17.0; the popup measurement $6.25; the landing check on the Deck $3.32.
 The five jobs themselves: $48.39.
 
-## 5. Suggested routing (for the maintainer; nothing changed yet)
+## 5. Suggested routing (what the maintainer decided is in § 9)
 
 The verdict rule is plan 33's: a cheaper setting wins if its quality is no worse; a dearer one must show fewer
 problems to earn its cost. One run per cell, so each line is a suggestion to try, not a proof.
@@ -197,11 +197,16 @@ Evidence: `docs/test-evidence/t75-<n>-<CHECK>.json`, n = 1 to 5 in the run order
 - **The popup's title font is bold and its measuring string had no lowercase.** Every feature attempt guessed
   bold lowercase widths. The Deck check of the feature needs an ordinary, an all-capitals and an m/w-heavy line.
 
-## 9. For the maintainer
+## 9. The maintainer's calls (2026-09-28, the same evening)
 
-1. The routing suggestions in § 5: adopt, adopt some, or run one more wave first.
-2. The popup feature: land the pick with its fixes before 0.6.0, or after.
-3. The trial helper files (15) and the 25 repo copies are removed once you have decided.
+1. **Routing, adopted with one change from § 5:** every helper runs on Sonnet 5.5. Mechanical fixes and moves,
+   the bookkeeper and the Deck helper on **medium**; fixes that need a judgment on **high**; and, going further than
+   § 5, **everywhere an Opus medium helper ran (features, knowledge base, the bigger jobs) moves to Sonnet high**.
+   Opus stays for whoever plans, orchestrates and lands. Written into AGENTS.md, the reminder hook, plan 33 § 2,
+   the roadmap's note and the helper files the same day; a new `bugfix-lane-sonnet-medium` helper carries the
+   mechanical fixes. The feature finish already under way stayed on Opus medium.
+2. **The popup feature lands now,** on `experimental`, with the review's fixes (§ 4, J3).
+3. **Clean-up:** the 15 trial helper files and the 25 repo copies go once the feature has landed.
 
 ## 10. A pricing slip found while setting up
 

@@ -58,10 +58,10 @@ lists plus one section for the knowledge base, each sorted from one star to six.
 **Every Main-tab UI change also owes the free-play sweep** (standing row **QA-FREE-PLAY-01** in
 [testing-manual.md](testing-manual.md)): walk the pane like a user and require every focused stop to also be visible.
 
-**Maintainer note (2026-09-05, helpers updated 2026-09-26): pick the model before you pick up an item.** Helpers run
-on Opus 5.5: medium by default, low only when the fix is mechanical · ★★★–★★★★ Opus xhigh plans and lands · ★★★★★+
-Fable max plans only, Opus medium helpers build, Opus xhigh lands · `[focus]` `[layout]` `[ui]` measure on the Deck
-first, then Opus xhigh, never a lane without the measurement · docs and bookkeeping the bookkeeper on Opus low. The full policy — the bookkeeper guard, the escalation rule,
+**Maintainer note (2026-09-05, helpers updated 2026-09-28): pick the model before you pick up an item.** Helpers run
+on Sonnet 5.5: high by default, medium only when the fix is mechanical · ★★★–★★★★ Opus xhigh plans and lands · ★★★★★+
+Fable max plans only, Sonnet high helpers build, Opus xhigh lands · `[focus]` `[layout]` `[ui]` measure on the Deck
+first, then Opus xhigh, never a lane without the measurement · docs and bookkeeping the bookkeeper on Sonnet medium. The full policy — the bookkeeper guard, the escalation rule,
 the Haiku trial — is in [AGENTS.md § 3](../AGENTS.md), the evidence in
 [planning/33-model-routing.md](planning/33-model-routing.md). A prompt-time hook gives a gentle heads-up when a session
 starts work outside this.

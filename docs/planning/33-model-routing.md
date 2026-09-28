@@ -60,16 +60,16 @@ means: write the code and tests. "Land" means: review each diff, cherry-pick, ke
 
 | Work | Plan | Implement | Land and review | Deck |
 |---|---|---|---|---|
-| ★★★★★ and ★★★★★★ feature | Fable 5.1 max, decisions and briefs only, not a 9,000-word document | Opus 5.5 medium lanes | Opus xhigh | Opus xhigh or the orchestrator |
-| ★★★ and ★★★★ feature or bug | Opus xhigh | Opus 5.5 medium lanes when the cause is known; Opus xhigh itself when it is not | Opus xhigh | same |
-| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Opus 5.5 medium; Opus 5.5 low when the fix is mechanical | Opus xhigh if it touches focus or settings plumbing, else none | same |
+| ★★★★★ and ★★★★★★ feature | Fable 5.1 max, decisions and briefs only, not a 9,000-word document | Sonnet 5.5 high lanes | Opus xhigh | Opus xhigh or the orchestrator |
+| ★★★ and ★★★★ feature or bug | Opus xhigh | Sonnet 5.5 high lanes when the cause is known; Opus xhigh itself when it is not | Opus xhigh | same |
+| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Sonnet 5.5 high; Sonnet 5.5 medium when the fix is mechanical | Opus xhigh if it touches focus or settings plumbing, else none | same |
 | Focus and layout (`[focus]`, `[layout]`, `[ui]`) | Opus xhigh, **after** a device measurement | Opus xhigh with the measurement in hand; Sonnet only for a fix whose cause the measurement already named | Opus xhigh | required; no fix is done until the row passes |
 | Pixel polish (dots, rings, fonts) | do not use Fable; the tools cannot see pixels | Opus xhigh with a measurement, else a human | | human eyes |
-| Backend and retrieval (`[KB]`, `[ollama]`) | Opus xhigh | Opus 5.5 medium | Opus xhigh | the eval harness, not the Deck |
-| Refactor | Opus xhigh (§ 3) | Opus 5.5 low lanes for moves; Opus xhigh for behavior-touching steps | Opus xhigh | after each landing batch |
-| Docs, roadmap bookkeeping, plain explanations | | the `bookkeeper` helper (Opus 5.5 low); every status it changes names its evidence | | |
-| Read-only lookups with a checkable answer | | Haiku 4.5 on trial (§ 4a) or Sonnet 5 low | the caller greps to confirm | |
-| Deck QA driving | Opus xhigh writes the rows and expect strings | the `deck-driver` helper (Opus 5.5 medium) runs rows already written | Opus xhigh reads the failures | |
+| Backend and retrieval (`[KB]`, `[ollama]`) | Opus xhigh | Sonnet 5.5 high | Opus xhigh | the eval harness, not the Deck |
+| Refactor | Opus xhigh (§ 3) | Sonnet 5.5 medium lanes for moves; Opus xhigh for behavior-touching steps | Opus xhigh | after each landing batch |
+| Docs, roadmap bookkeeping, plain explanations | | the `bookkeeper` helper (Sonnet 5.5 medium); every status it changes names its evidence | | |
+| Read-only lookups with a checkable answer | | Haiku 4.5 on trial (§ 4a) or Sonnet 5.5 low | the caller greps to confirm | |
+| Deck QA driving | Opus xhigh writes the rows and expect strings | the `deck-driver` helper (Sonnet 5.5 medium) runs rows already written | Opus xhigh reads the failures | |
 
 Escalation rule: go up one tier only after the tier below has failed **on the device** twice with a
 measurement in hand. Going up because a fix "feels hard" is what the history says does not help.
@@ -286,8 +286,10 @@ Five settings (Sonnet 5.5 low, medium, high; Opus 5.5 low, medium) each did the 
 a simple fix, a fix needing judgment, a feature, a bookkeeping replay and a Deck check list. Full tables in
 [plan 75](75-sonnet-5-5-trial.md). In short: Sonnet 5.5 no longer runs up cost the way Sonnet 5 did; Sonnet high
 scored best overall (82 of 100) and Opus medium next (81); only those two passed the judgment job; no Deck run
-passed a check that should fail. Suggested, not adopted: Sonnet medium for mechanical fixes and for running
-written Deck checks, Opus medium for bookkeeping, no change for features. One run per setting per job.
+passed a check that should fail. One run per setting per job. **Adopted 2026-09-28, the maintainer's call:** every
+helper moves to Sonnet 5.5 -- high wherever an Opus medium helper ran (features, knowledge base, fixes that need a
+judgment), medium for mechanical fixes and moves, the bookkeeper and the Deck helper. Opus stays for whoever
+plans, orchestrates and lands. The table in § 2 is updated; keep adding a row per helper run.
 
 ## 5. Where Haiku fits
 

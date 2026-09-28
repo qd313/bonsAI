@@ -166,9 +166,17 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
                 </div>
               </div>
             }
-            strOKButtonText="Enable Tier 2 and pull"
+            /*
+             * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that changes
+             * nothing and the action sits on the middle button -- the download notice's own shape
+             * (downloadNotice.tsx). On the Deck (plan 72) this box opened with the ring on the
+             * action. B and Cancel also change nothing.
+             */
+            strOKButtonText="Not now"
+            strMiddleButtonText="Enable Tier 2 and pull"
             strCancelButtonText="Cancel"
-            onOK={() => {
+            onOK={() => completeNestedModalClose(() => handle.Close())}
+            onMiddleButton={() => {
               for (const tag of openWeightTags) {
                 openWeightTierConfirmedRef.current.add(tag);
               }

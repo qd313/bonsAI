@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 580,
-  "edgeCount": 1599,
+  "fileCount": 582,
+  "edgeCount": 1603,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -253,6 +253,13 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.storagePicker.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -272,6 +279,7 @@
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+        "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/OllamaTab.tsx"
@@ -1874,6 +1882,7 @@
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelDownloadNotice.test.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
+        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
@@ -3515,6 +3524,13 @@
         "src/components/PullModelsModal.tsx"
       ]
     },
+    "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts",
+        "src/hooks/usePullModelSubmitSelected.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/usePullModelSubmitSelected.tsx": {
       "imports": [
         "src/components/PullModelsModal.types.ts",
@@ -3527,7 +3543,8 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
-        "src/hooks/usePullModelDownloadNotice.test.tsx"
+        "src/hooks/usePullModelDownloadNotice.test.tsx",
+        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx"
       ]
     },
     "src/hooks/usePullModelTableData.ts": {
@@ -4352,6 +4369,7 @@
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",

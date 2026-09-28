@@ -69,7 +69,7 @@
  *   D-pad would skip straight over that button to Download/Update.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
+import { Button, ConfirmModal, Focusable, ModalRoot, PanelSection, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
@@ -232,55 +232,58 @@ type StoragePickerModalProps = {
   onClose: () => void;
 };
 
-const RagCorpusStoragePickerModal: React.FC<StoragePickerModalProps> = ({
+/** One full-width choice in the picker, wired for both A and a finger, the way the choices always were. */
+const StoragePickerChoice: React.FC<{ onChoose: () => void; children: React.ReactNode }> = ({
+  onChoose,
+  children,
+}) => (
+  <div className="bonsai-settings-focus-btn-host" style={{ width: "100%" }}>
+    <Focusable onOKButton={onChoose}>
+      <Button className="bonsai-settings-focus-btn" onClick={onChoose} style={{ ...SETTINGS_GLASS_BTN, width: "100%" }}>
+        {children}
+      </Button>
+    </Focusable>
+  </div>
+);
+
+/**
+ * Focus: Steam starts the ring on the first button in a box. As a ConfirmModal the storage buttons
+ * sat in its text, ahead of its own Close, so the box opened with the ring on "Internal storage" and
+ * one A started a download (Deck: plan64-TWO-TAPS-DOWNLOAD-try3.json, plan70-R5.json). A
+ * ConfirmModal has no safe slot for a third choice -- its Cancel is also B -- so the picker is drawn
+ * on ModalRoot, the base a ConfirmModal is built on, with "Not now" first and the two storage
+ * choices after it: the download notice's own rule (downloadNotice.tsx), same actions as before.
+ * B also closes it, downloading nothing.
+ */
+export const RagCorpusStoragePickerModal: React.FC<StoragePickerModalProps> = ({
   internal,
   sdCard,
   onPick,
   onClose,
 }) => (
-  <ConfirmModal
-    strTitle="Choose download location"
-    strDescription={
-      <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ marginBottom: 10 }}>
-          Wiki-derived strategy cards and compat notes (small — well under 5 MB). No Ask text is uploaded.
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <div className="bonsai-settings-focus-btn-host" style={{ width: "100%" }}>
-            <Focusable onOKButton={() => onPick(internal.install_path ?? "~/.bonsai/rag", "internal")}>
-              <Button
-                className="bonsai-settings-focus-btn"
-                onClick={() => onPick(internal.install_path ?? "~/.bonsai/rag", "internal")}
-                style={{ ...SETTINGS_GLASS_BTN, width: "100%" }}
-              >
-                Internal storage ({formatFreeGb(internal.free_bytes)})
-              </Button>
-            </Focusable>
-          </div>
-          {sdCard?.install_path ? (
-            <div className="bonsai-settings-focus-btn-host" style={{ width: "100%" }}>
-              <Focusable onOKButton={() => onPick(sdCard.install_path!, "sd_card")}>
-                <Button
-                  className="bonsai-settings-focus-btn"
-                  onClick={() => onPick(sdCard.install_path!, "sd_card")}
-                  style={{ ...SETTINGS_GLASS_BTN, width: "100%" }}
-                >
-                  SD card ({formatFreeGb(sdCard.free_bytes)})
-                </Button>
-              </Focusable>
-            </div>
-          ) : (
-            <div style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
-              No SD card detected. Insert a microSD formatted for Steam Deck storage, then try again.
-            </div>
-          )}
-        </div>
+  <ModalRoot onCancel={onClose}>
+    <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+      <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Choose download location</div>
+      <div style={{ marginBottom: 10 }}>
+        Wiki-derived strategy cards and compat notes (small — well under 5 MB). No Ask text is uploaded.
       </div>
-    }
-    bAlertDialog={true}
-    strOKButtonText="Close"
-    onOK={onClose}
-  />
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <StoragePickerChoice onChoose={onClose}>Not now</StoragePickerChoice>
+        <StoragePickerChoice onChoose={() => onPick(internal.install_path ?? "~/.bonsai/rag", "internal")}>
+          Internal storage ({formatFreeGb(internal.free_bytes)})
+        </StoragePickerChoice>
+        {sdCard?.install_path ? (
+          <StoragePickerChoice onChoose={() => onPick(sdCard.install_path!, "sd_card")}>
+            SD card ({formatFreeGb(sdCard.free_bytes)})
+          </StoragePickerChoice>
+        ) : (
+          <div style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
+            No SD card detected. Insert a microSD formatted for Steam Deck storage, then try again.
+          </div>
+        )}
+      </div>
+    </div>
+  </ModalRoot>
 );
 
 /**

@@ -126,53 +126,30 @@ export const AboutTab: React.FC<Props> = ({
             <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
           </ButtonItem>
         </PanelSectionRow>
+        {/*
+          The PayPal QR code is a picture to scan with a phone, not part of the button. It used to be
+          drawn inside the support button, which made that one button 180 x 192 on the Deck against
+          268 x 42 for the three above (plan72-Z-FREEPLAY.json finding 14). It sits just above the
+          button, not below: the ring can only stop on the button, so the page scrolls to the
+          button, and a code under the tab's last button could be left off the bottom of the screen.
+        */}
         <PanelSectionRow>
-          <div
+          <img
+            src={supportPaypalQr}
+            alt="Support on PayPal — Support my Steam Sale habit"
             style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              boxSizing: "border-box",
+              display: "block",
+              width: 132,
+              maxWidth: "100%",
+              height: "auto",
+              margin: "0 auto",
             }}
-          >
-            <div
-              style={{
-                width: "100%",
-                maxWidth: 180,
-                margin: "0 auto",
-                minWidth: 0,
-                boxSizing: "border-box",
-              }}
-            >
-              <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 6,
-                    textAlign: "center",
-                    width: "100%",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <span style={{ fontSize: 14, lineHeight: 1.2 }}>Support my Steam Sale habit</span>
-                  <img
-                    src={supportPaypalQr}
-                    alt="Support on PayPal — Support my Steam Sale habit"
-                    style={{
-                      display: "block",
-                      width: 132,
-                      maxWidth: "100%",
-                      height: "auto",
-                      margin: "0 auto",
-                    }}
-                  />
-                </div>
-              </ButtonItem>
-            </div>
-          </div>
+          />
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
+            <span style={{ fontSize: 13 }}>Support my Steam Sale habit</span>
+          </ButtonItem>
         </PanelSectionRow>
       </PanelSection>
     </>

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 576,
-  "edgeCount": 1591,
+  "fileCount": 577,
+  "edgeCount": 1592,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -24,6 +24,12 @@
         "src/components/AboutTab.tsx"
       ]
     },
+    "src/components/AboutTab.test.tsx": {
+      "imports": [
+        "src/components/AboutTab.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/AboutTab.tsx": {
       "imports": [
         "src/components/AboutReplyLanguageSection.tsx",
@@ -32,6 +38,7 @@
         "src/i18n/keys.ts"
       ],
       "importedBy": [
+        "src/components/AboutTab.test.tsx",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx"
       ]
     },

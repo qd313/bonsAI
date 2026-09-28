@@ -302,7 +302,10 @@ class WhisperEngine:
             others_hold = any(
                 count > 0 for held, count in self._reason_refcount.items() if held != reason
             )
-            if others_hold and self._daemon_ready and self._model_path != model_path:
+            # Judge by the model the holders started, not by whether the server
+            # is answering right now: a failed transcribe marks it not ready but
+            # the holders still expect their model, so a newcomer must not swap it.
+            if others_hold and self._model_path and self._model_path != model_path:
                 return False
             self._reason_refcount[reason] = self._reason_refcount.get(reason, 0) + 1
             if self._daemon_ready and self._model_path == model_path:

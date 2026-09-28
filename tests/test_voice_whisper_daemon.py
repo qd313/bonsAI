@@ -117,6 +117,31 @@ class WhisperDaemonTests(unittest.TestCase):
     @patch("backend.services.voice_whisper_daemon.whisper_server_binary_usable", return_value="/bin/whisper-server")
     @patch.object(WhisperEngine, "_wait_for_health", return_value=True)
     @patch("backend.services.voice_whisper_daemon.subprocess.Popen")
+    def test_different_model_is_refused_while_the_holders_server_is_not_answering(
+        self, mock_popen, _health, _usable
+    ):
+        """A failed transcribe marks the server not ready, but the mic still holds
+        it for its own model: a second reason with another model is still refused
+        and nothing restarts under the mic."""
+        procs = self._fake_server(mock_popen)
+        engine = WhisperEngine()
+        with tempfile.TemporaryDirectory() as plugin_root, tempfile.TemporaryDirectory() as settings_dir:
+            self.assertTrue(engine.acquire("mic", "/models/base.bin", plugin_root, settings_dir))
+            with patch(
+                "backend.services.voice_whisper_daemon._post_inference_wav",
+                side_effect=OSError("server stopped answering"),
+            ):
+                self.assertEqual(engine.transcribe(b"\x00\x01" * 800), "")
+            self.assertFalse(engine.daemon_available())
+            self.assertFalse(engine.acquire("wake", "/models/tiny.bin", plugin_root, settings_dir))
+            self.assertEqual(len(procs), 1)
+            procs[0].terminate.assert_not_called()
+            self.assertEqual(engine._model_path, "/models/base.bin")
+            self.assertNotIn("wake", engine._reason_refcount)
+
+    @patch("backend.services.voice_whisper_daemon.whisper_server_binary_usable", return_value="/bin/whisper-server")
+    @patch.object(WhisperEngine, "_wait_for_health", return_value=True)
+    @patch("backend.services.voice_whisper_daemon.subprocess.Popen")
     def test_sole_holder_may_switch_model(self, mock_popen, _health, _usable):
         """Today's mic behaviour: with nobody else holding, a new model restarts the server."""
         procs = self._fake_server(mock_popen)

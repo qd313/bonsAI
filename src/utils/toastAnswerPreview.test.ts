@@ -36,6 +36,41 @@ describe("toastSafeText", () => {
   it("drops table rows", () => {
     expect(toastSafeText("Intro\n| a | b |\n|---|---|\n| 1 | 2 |\nOutro")).toBe("Intro Outro");
   });
+
+  it("drops a table written without a leading bar", () => {
+    const out = toastSafeText("Intro\n\nSetting | Value\n--- | ---\nTDP | 10W\n\nOutro");
+    expect(out).toBe("Intro Outro");
+  });
+
+  it("never takes a fence's opening line for a table row", () => {
+    expect(toastSafeText("Intro.\n```a|b\n---|---\nSECRET\n```\nAfter.")).toBe("Intro. After.");
+  });
+
+  it("drops a ~~~ fence, on its own lines or on one line", () => {
+    expect(toastSafeText("Before.\n~~~bonsai-spoiler\nSECRET\n~~~\nAfter.")).toBe("Before. After.");
+    expect(toastSafeText("Before. ~~~bonsai-spoiler SECRET ~~~ After.")).toBe("Before. After.");
+    expect(toastSafeText("Fine.\n~~~\nSECRET")).toBe("Fine.");
+  });
+
+  it("keeps a block hidden when its closer is glued onto a sentence, as the panel does", () => {
+    // The panel reads fences line by line: "dies.```" does not close the block, the ``` line does.
+    const out = toastSafeText("Intro.\n```bonsai-spoiler\nThe Soul dies.```\nStill hidden.\n```\nAfter.");
+    expect(out).toBe("Intro. After.");
+  });
+
+  it("treats a four-backtick fence as one block, even with a ``` line inside it", () => {
+    expect(toastSafeText("Intro.\n````\n```\nSECRET\n```\n````\nAfter.")).toBe("Intro. After.");
+    expect(toastSafeText("Fine.\n````\nSECRET\n```\nmore")).toBe("Fine.");
+  });
+
+  it("drops a fence inside a list item or a quote", () => {
+    expect(toastSafeText("- Tip\n- ```bonsai-spoiler\n  SECRET\n  ```\n- Next")).not.toContain("SECRET");
+    expect(toastSafeText("> ```bonsai-spoiler\n> SECRET\n> ```\n\nAfter.")).not.toContain("SECRET");
+  });
+
+  it("an unclosed fence inside a quote still hides everything after it", () => {
+    expect(toastSafeText("Fine.\n\n> ```\n> SECRET\n\nMORE")).toBe("Fine.");
+  });
 });
 
 describe("buildToastAnswerLines", () => {
@@ -45,6 +80,12 @@ describe("buildToastAnswerLines", () => {
     expect(buildToastAnswerLines("<bonsai-status>x</bonsai-status>")).toBeNull();
     expect(buildToastAnswerLines("```bonsai-spoiler\nall hidden\n```")).toBeNull();
     expect(buildToastAnswerLines("```bonsai-spoiler\nunclosed")).toBeNull();
+  });
+
+  it("returns null when only punctuation is left", () => {
+    for (const marks of ["...", "---", "**", "#", "* * *", "> .", "?!","```x\nhidden\n```\n..."]) {
+      expect(buildToastAnswerLines(marks)).toBeNull();
+    }
   });
 
   it("puts a short answer whole on the title line with the tap hint", () => {

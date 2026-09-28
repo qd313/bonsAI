@@ -16,8 +16,14 @@
  *     below are widths worked out from those two strings, not letter counts, with 10 percent to spare.
  *   - Lines break at a space, so Steam's cut never lands in the middle of a word. The one exception
  *     is a single word wider than a whole line (a web address); it is cut and marked with an ellipsis.
- *   - Anything doubtful is left out, never shown: an unclosed fence drops everything after it.
+ *   - Fences are found line by line with the panel's own markdown reader, not by pairing backtick
+ *     runs anywhere, so the notification never shows a word the panel keeps inside a block.
+ *   - Anything doubtful is left out, never shown: an unclosed fence drops everything after it, and
+ *     a leftover fence marker inside a sentence drops its words too.
  */
+import ReactMarkdown, { type Options } from "react-markdown";
+import { replaceMarkdownTables } from "./answerReadableText";
+import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 
 export type ToastAnswerLines = { title: string; body: string };
@@ -54,36 +60,111 @@ export const TITLE_LINE_BUDGET = textWidth(countingString("T", "-", 11)) * SAFET
 /** What the body line held on the Deck: w01 w02 ... w09. */
 export const BODY_LINE_BUDGET = textWidth(countingString("w", " ", 9)) * SAFETY;
 
+/** The little of a markdown tree this file reads (the reader's own types are not a direct
+ *  dependency here). Offsets are into the text that was parsed. */
+type MdNode = {
+  type: string;
+  value?: string;
+  alt?: string | null;
+  children?: MdNode[];
+  position?: { start: { offset?: number }; end: { offset?: number } };
+};
+
+/**
+ * Read the text with the markdown reader the panel draws answers with (react-markdown, with no
+ * extra reading plugins, as MainTabBonsaiAiMarkdownChunk uses it), so a line is inside a fence
+ * here exactly when the panel draws it inside one: ``` or ~~~ fences, four-backtick fences, a
+ * closer glued onto a sentence that does not close anything. The step below keeps the parsed
+ * tree and hands the renderer an empty one, so nothing is drawn.
+ */
+function parseLikeThePanel(text: string): MdNode {
+  let tree: MdNode = { type: "root", children: [] };
+  const keepTree = () => (parsed: MdNode) => {
+    tree = parsed;
+    return { type: "root", children: [] };
+  };
+  ReactMarkdown({ children: text, remarkPlugins: [keepTree] as unknown as Options["remarkPlugins"] });
+  return tree;
+}
+
+/**
+ * True when a fenced block never closes. The panel then draws the rest of its container as code;
+ * here everything after it is left out, the safe direction. An indented code block is not fenced.
+ * A block the reader gave no position for counts as unclosed.
+ */
+function isUnclosedFence(node: MdNode, source: string): boolean {
+  const from = node.position?.start.offset;
+  const to = node.position?.end.offset;
+  if (from == null || to == null) return true;
+  const lines = source.slice(from, to).split("\n");
+  const opener = /^(`{3,}|~{3,})/.exec(lines[0]!);
+  if (!opener) return false;
+  if (lines.length < 2) return true;
+  // The closing line, with any quote marks and indent in front of it taken off.
+  const last = lines[lines.length - 1]!.replace(/^[\s>]*/, "").trimEnd();
+  const run = opener[1]!;
+  return !(last.length >= run.length && /^(`+|~+)$/.test(last) && last[0] === run[0]);
+}
+
+/** Blocks that never reach the notification: every fence and indented code, raw HTML, rules. */
+const DROPPED_BLOCKS = new Set(["code", "html", "thematicBreak", "definition"]);
+
+/** The plain words of one paragraph or heading. */
+function inlineText(node: MdNode): string {
+  switch (node.type) {
+    case "text":
+    case "inlineCode":
+      return node.value ?? "";
+    case "image":
+      return node.alt ?? "";
+    case "break":
+    case "html":
+      return " ";
+    default:
+      return (node.children ?? []).map(inlineText).join("");
+  }
+}
+
+/** Walk the blocks in order, keeping each paragraph's and heading's words. */
+function collectBlocks(node: MdNode, source: string, out: string[], state: { stopped: boolean }): void {
+  for (const child of node.children ?? []) {
+    if (state.stopped) return;
+    if (child.type === "code" && isUnclosedFence(child, source)) {
+      state.stopped = true;
+      return;
+    }
+    if (DROPPED_BLOCKS.has(child.type)) continue;
+    if (child.type === "paragraph" || child.type === "heading") {
+      out.push(inlineText(child));
+      continue;
+    }
+    collectBlocks(child, source, out, state);
+  }
+}
+
 /** Plain words left after dropping fences and tags, or "" when nothing safe remains. */
 export function toastSafeText(raw: string): string {
-  let text = stripAssistantDisplayTags(raw || "");
-  // Whole fenced blocks, one-line or many, whatever their label.
-  text = text.replace(/```[\s\S]*?```/g, "\n\n");
-  // An unclosed fence: drop it and everything after it.
-  const open = text.indexOf("```");
-  if (open >= 0) text = text.slice(0, open);
-  text = text
+  // The same first steps the panel takes: tags out, a one-line hidden block given its own lines.
+  let source = expandOneLineSpoilerFences(stripAssistantDisplayTags(raw || ""));
+  source = replaceMarkdownTables(source, "")
     .split("\n")
-    .filter((line) => !(line.includes("|") && /^\s*\|/.test(line)))
-    .map((line) =>
-      line
-        .replace(/^\s{0,3}#{1,6}\s+/, "")
-        .replace(/^\s*>+\s?/, "")
-        .replace(/^\s*[-*+]\s+/, "")
-        .replace(/^\s*\d+[.)]\s+/, ""),
-    )
+    .filter((line) => !/^\s*\|/.test(line))
     .join("\n");
-  text = text
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/<\/?[a-z][^>]*>/gi, " ")
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/__([^_]+)__/g, "$1")
-    .replace(/\*([^*\n]+)\*/g, "$1")
-    .replace(/(?<![A-Za-z0-9])_([^_\n]+)_(?![A-Za-z0-9])/g, "$1")
-    .replace(/`([^`]*)`/g, "$1")
-    .replace(/[`*#]/g, "");
-  return text.replace(/\s+/g, " ").trim();
+
+  const blocks: string[] = [];
+  collectBlocks(parseLikeThePanel(source), source, blocks, { stopped: false });
+  let text = blocks.join("\n");
+
+  // Stricter than the panel, never looser: a fence marker left inside a sentence (a one-line
+  // ~~~ block, a glued opener) still takes its words, and one with no partner takes the rest.
+  text = text.replace(/`{3,}[\s\S]*?`{3,}|~{3,}[\s\S]*?~{3,}/g, " ");
+  const stray = text.search(/`{3,}|~{3,}/);
+  if (stray >= 0) text = text.slice(0, stray);
+  text = text.replace(/~~([^~\n]+)~~/g, "$1").replace(/`/g, "");
+
+  text = text.replace(/\s+/g, " ").trim();
+  // Only marks left ("...", "**", "#"): nothing worth showing.
+  return /[\p{L}\p{N}]/u.test(text) ? text : "";
 }
 
 /** Fit words into one line. Returns the line and the words not used. */

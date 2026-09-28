@@ -173,3 +173,20 @@ on the real release download, and lane 3 is still being built.
 
 **Pass 2, after lane 3 lands:** lane 3's six rows, the Helpful row's look after A on Helpful, and
 REPLY-STOPS-MIRROR-01 (Down and Up through a reply with a hidden spoiler block visit the same stops).
+
+## Deck runbook, pass 2 (lane 3, the Opus-high trial, plus two rows that waited for it)
+
+Same rules as pass 1. Build: the tip of `experimental` at `7543270f` or later, freshly deployed. **These rows
+decide the trial:** a lane 3 row passes "first time" only if it passes on this first run, with no fix in between.
+
+| Row | What it proves | Setup | Do | Pass when |
+|---|---|---|---|---|
+| P74-B-CLOSES-DETAILS | B on the notes block or on "Hide details" closes Show details | An answer with a notes block | Walk to Show details, A; Down to the notes block, B. Then A again, stay on "Hide details", B. Then, with details shut, B on the notes block's line | First B: details closed, ring on "Show details". Second B: details closed, ring still on that line. Third: B backs out as it always did |
+| P74-SAFE-FIRST-TIER2 | "Enable Tier 2 before pulling?" opens on its safe choice | Model policy "open source only" | Pull models: queue one open-weight model, Pull selected; read the ring; press A | The ring starts on "Not now"; after A nothing downloads and the policy is unchanged |
+| P74-SAFE-FIRST-PICKER | The library's location box opens on its safe choice | No library installed: remove it first, note where it was | Ollama tab: "Download knowledge base"; read the ring; Down once; B. Then reinstall the library to where it was | The ring starts on "Not now"; Down reaches "Internal storage"; B closes the box with nothing downloaded; the reinstall lands. Also a screenshot of the box for a look by eye |
+| P74-UPDATE-BOX-RING | The ring returns to "Update AI & models" after its box | Running the AI on the Deck | Ollama tab: Down to "Update AI & models", A, then B. Repeat, closing with "Not now" | Both times the ring is back on "Update AI & models", not the tab bar |
+| P74-ASK-UP | Up from Ask always goes to the question box | A question in the box (text route) | Down from the box to Ask, Up. Then visit the mic (Right, Right from the box), come back Down to Ask, Up. Then the same via the paperclip | All three times the ring lands on the question box |
+| P74-HELPFUL-DOWN-UP | Down lands on Helpful, and Up from Helpful lands on choice B | A Strategy answer with two choices | Walk Down to choice A, then B; Right to Read aloud (so the row "remembers" it); Up into the answer's last section; Down, Down, Down. Then Up from Helpful | The Downs visit A, B, then Helpful (not Read aloud); Up from Helpful lands on B. By eye: Helpful and B have not moved |
+| P74-COVER-UP | Up onto a spoiler cover lands on it, and A opens it | Ask "How do I beat the boss in the Soul Sanctum in Hollow Knight?" (covers on its first and last sentences) | From Read aloud or Helpful press Up until the ring reaches the last cover; A. Keep pressing Up to the first cover; A. Then Up once more | The ring lands on each cover and A reveals it; the final Up goes to Show reasoning or the question, not back onto the same cover |
+| P74-HELPFUL-ROW-LOOK | After Helpful, the row reads as one row (lane 4) | Newest answer, not yet rated | A on Helpful; measure the row | "Saved on this Deck" and the speaker share one row, vertical centres within 1 pixel, no line above the row; the ring is on the speaker |
+| REPLY-STOPS-MIRROR-01 | Down and Up through a reply visit the same stops | A reply with two paragraphs, a hidden spoiler block and a two-button menu | Walk Down through every stop, then Up through every stop | The Up stops are the exact mirror of the Down stops |

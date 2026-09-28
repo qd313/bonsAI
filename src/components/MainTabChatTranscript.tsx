@@ -190,6 +190,8 @@ import {
   queryLiveTurnSlot,
   registerStrategyBranchPickerNav,
   ringIsOnFirstStrategyBranch,
+  ringIsOnLastStrategyBranch,
+  strategyLastBranchNavRef,
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
 import { focusAnswerChunkAtIndex, focusFirstAnswerChunk, focusLastAnswerChunk } from "../utils/answerBubbleNavigation";
@@ -899,12 +901,23 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       if (focusRegisteredReplyStop("summary-note")) return true;
       return focusLastAnswerChunk(placementKey);
     };
+    /*
+     * Down from the LAST button onto Helpful (plan 74 lane 3), through Helpful's own nav node, so it
+     * does not land on whichever button the reply row last held (Read aloud, on the Deck:
+     * plan72-Z-FREEPLAY.json). Not while a checklist sits between, nor when Helpful is greyed or
+     * gone: Steam's own step already reaches the next row there.
+     */
+    const downOutOfChoices = () => {
+      if (strategyChecklistReady && strategyChecklist) return false;
+      if (!ringIsOnLastStrategyBranch(queryTurnSlot(placementKey) ?? queryLiveTurnSlot())) return false;
+      return focusRegisteredReplyStop("helpful");
+    };
     return (
       <Focusable
         key={`strategy-branches-${placementKey}`}
         className="bonsai-glass-panel bonsai-strategy-branch-picker"
         flow-children="vertical"
-        {...({ navRef: pickerNav, onMoveUp: upOutOfChoices } as Record<string, unknown>)}
+        {...({ navRef: pickerNav, onMoveUp: upOutOfChoices, onMoveDown: downOutOfChoices } as Record<string, unknown>)}
         style={{
           width: "100%",
           display: "flex",
@@ -937,7 +950,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   ...(idx === lastIdx ? { onMoveDown: () => false } : {}),
                 }
               : undefined;
-          return (
+          const button = (
             <BonsaiChatSecondaryButton
               key={`sg-branch-${opt.id}-${idx}`}
               className="bonsai-strategy-branch-btn"
@@ -959,6 +972,17 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
             >
               {`${String.fromCharCode(65 + idx)}. ${opt.label}`}
             </BonsaiChatSecondaryButton>
+          );
+          /* The last button's own nav node, so Up from the reply row lands on it, not on A. */
+          return idx === lastIdx ? (
+            <Focusable
+              key={`sg-branch-last-${opt.id}-${idx}`}
+              {...({ navRef: strategyLastBranchNavRef } as Record<string, unknown>)}
+            >
+              {button}
+            </Focusable>
+          ) : (
+            button
           );
         })}
       </Focusable>

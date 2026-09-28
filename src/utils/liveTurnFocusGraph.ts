@@ -303,14 +303,26 @@ export function registerStrategyBranchPickerNav(holder: SteamNavHolder | null): 
 }
 
 /**
+ * The LAST choice button's own nav node (plan 74 lane 3), handed to a Focusable wrapped around just
+ * that button. Steam hands the ring into the choices on the one they last held, and a plain focus()
+ * after that does not reliably move it on: on the Deck, Up from Helpful landed on choice A, skipping
+ * B (plan 72 § 7, 18:10). A node around the last button alone has nothing else to land on. Stable,
+ * since only the newest answer draws choices.
+ */
+export const strategyLastBranchNavRef: SteamNavHolder = { current: null };
+
+/**
  * Up onto the LAST choice button, from the row below (plan 72 A-4). The buttons are their own
- * container, so Steam's transfer goes first and the plain focus after it only moves between the
- * buttons inside it; the focus check decides the result.
+ * container, so Steam's transfer goes first -- onto the last button's own node when it has one,
+ * else into the choices -- and the plain focus after it only moves between the buttons inside;
+ * the focus check decides the result.
  */
 function focusLastStrategyBranchFromBelow(slot: HTMLElement | null): boolean {
   if (!branchButtons(slot).length) return false;
   try {
-    strategyBranchPickerNav?.current?.TakeFocus?.(true);
+    const lastOwn = strategyLastBranchNavRef.current;
+    if (lastOwn?.TakeFocus) lastOwn.TakeFocus(true);
+    else strategyBranchPickerNav?.current?.TakeFocus?.(true);
   } catch {
     /* the focus + check below decides */
   }
@@ -320,6 +332,12 @@ function focusLastStrategyBranchFromBelow(slot: HTMLElement | null): boolean {
 /** True while the ring is on the FIRST choice button: an Up there leaves the choices. */
 export function ringIsOnFirstStrategyBranch(slot: HTMLElement | null): boolean {
   return elementHasGamepadFocus(branchButtons(slot)[0] ?? null);
+}
+
+/** True while the ring is on the LAST choice button: a Down there leaves the choices. */
+export function ringIsOnLastStrategyBranch(slot: HTMLElement | null): boolean {
+  const buttons = branchButtons(slot);
+  return elementHasGamepadFocus(buttons[buttons.length - 1] ?? null);
 }
 
 /**

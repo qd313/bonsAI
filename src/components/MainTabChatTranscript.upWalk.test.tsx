@@ -30,6 +30,9 @@ import { resetUiDocument } from "../utils/uiDocument";
 type NavHandlers = Partial<Record<"onMoveUp" | "onMoveDown", () => unknown>>;
 type NavEl = HTMLElement & { __nav?: NavHandlers };
 
+/* Every container Steam's transfer was asked to take the ring into, in order (plan 74 lane 3). */
+const transfers = vi.hoisted(() => ({ into: [] as HTMLElement[] }));
+
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
   const Base = stubs.Focusable;
@@ -48,6 +51,7 @@ vi.mock("@decky/ui", async () => {
           if (navRef) {
             navRef.current = {
               TakeFocus: () => {
+                transfers.into.push(el);
                 const first = el.querySelector<HTMLElement>("button:not([disabled]), [tabindex]");
                 (first ?? el).focus();
                 return true;
@@ -318,5 +322,59 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
       "A.",
       "answer's last section",
     ]);
+  });
+});
+
+/*
+ * Plan 74 lane 3, bug 5 (roadmap: "A straight Down lands on Read aloud, not Helpful; Up from
+ * Helpful lands on choice A, skipping B"; plan72-Z-FREEPLAY.json and plan 72 § 7, 18:10). Steam
+ * hands the ring into a row on the button that row last held, and a plain focus() after it does not
+ * reliably move it on. This harness cannot show that memory -- a plain focus always lands here -- so
+ * these tests pin the hand-over itself: it goes through a nav node around the one button wanted,
+ * which has nothing else to land on.
+ */
+describe("Helpful and the last choice are reached exactly (plan 74)", () => {
+  beforeEach(() => {
+    resetUiDocument();
+    transfers.into = [];
+  });
+  afterEach(() => cleanup());
+
+  /** The transfer went into a node holding exactly this one button. */
+  const tookInto = (button: HTMLElement) =>
+    transfers.into.some((el) => el.contains(button) && el.querySelectorAll("button").length === 1);
+
+  it("a straight Down from the answer's last section lands on Helpful, through Helpful's own node", () => {
+    const { container } = renderTurn({ liveReplyFeedbackRating: null, strategyGuideBranches: null });
+    const stops = answerStops(container);
+    focusOn(stops[stops.length - 1]!);
+    expect(press("onMoveDown")).toBe(true);
+    const helpful = byLabel(container, "Mark reply helpful");
+    expect(document.activeElement).toBe(helpful);
+    expect(tookInto(helpful)).toBe(true);
+  });
+
+  it("Up from Helpful lands on the last choice, B, through B's own node", () => {
+    const { container } = renderTurn({ liveReplyFeedbackRating: null });
+    focusOn(byLabel(container, "Mark reply helpful"));
+    expect(press("onMoveUp")).toBe(true);
+    const b = byText(container, `B. ${BRANCHES.options[1]!.label}`);
+    expect(document.activeElement).toBe(b);
+    expect(tookInto(b)).toBe(true);
+  });
+
+  it("Down from the last choice lands on Helpful, through Helpful's own node", () => {
+    const { container } = renderTurn({ liveReplyFeedbackRating: null });
+    focusOn(byText(container, `B. ${BRANCHES.options[1]!.label}`));
+    expect(press("onMoveDown")).toBe(true);
+    const helpful = byLabel(container, "Mark reply helpful");
+    expect(document.activeElement).toBe(helpful);
+    expect(tookInto(helpful)).toBe(true);
+  });
+
+  it("with Helpful greyed after a rating, Down from the last choice stays Steam's own step", () => {
+    const { container } = renderTurn();
+    focusOn(byText(container, `B. ${BRANCHES.options[1]!.label}`));
+    expect(press("onMoveDown")).toBe(false);
   });
 });

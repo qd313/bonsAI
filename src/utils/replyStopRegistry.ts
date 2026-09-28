@@ -84,6 +84,26 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
 const stops = new Map<ReplyStopId, HTMLElement>();
 const unavailableStops = new Set<ReplyStopId>();
 
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
+const stopNavs = new Map<ReplyStopId, SteamNavHolder>();
+
+/**
+ * The holder for a stop's own Steam nav node, handed to a Focusable wrapped around just that stop
+ * as its `navRef` (plan 74 lane 3: Helpful). Steam hands the ring into a row on the button that row
+ * last held, and a plain focus() after that does not reliably move it on: on the Deck a straight
+ * Down from the answer landed on Read aloud, not Helpful (plan72-Z-FREEPLAY.json). A node around the
+ * stop alone has nothing else to land on. One stable holder per stop, since only one of each is
+ * mounted at a time.
+ */
+export function replyStopNavRef(id: ReplyStopId): SteamNavHolder {
+  let holder = stopNavs.get(id);
+  if (!holder) {
+    holder = { current: null };
+    stopNavs.set(id, holder);
+  }
+  return holder;
+}
+
 export function registerReplyStop(id: ReplyStopId, el: HTMLElement | null): void {
   if (el) stops.set(id, el);
   else stops.delete(id);
@@ -134,6 +154,13 @@ export function focusRegisteredReplyStop(id: ReplyStopId): boolean {
   if (unavailableStops.has(id)) return false;
   const el = stops.get(id);
   if (!el) return false;
+  /* A stop with its own nav node (replyStopNavRef) takes Steam's transfer first, from wherever the
+     ring is; the focus and the check below still decide the answer. */
+  try {
+    stopNavs.get(id)?.current?.TakeFocus?.(true);
+  } catch {
+    /* the focus + check below decides */
+  }
   const button = (el.matches?.("button") ? el : el.querySelector?.("button")) as HTMLElement | null;
   const panel = (
     el.matches?.(".Panel.Focusable") ? el : el.closest?.(".Panel.Focusable")

@@ -97,6 +97,7 @@ import {
   focusRegisteredReplyStop,
   getReplyStop,
   registerReplyStop,
+  replyStopNavRef,
   setReplyStopUnavailable,
 } from "./replyStopRegistry";
 import { elementHasFocus, elementHasGamepadFocus, uiGamepadFocusElement } from "./uiDocument";
@@ -658,15 +659,19 @@ export function buildReplyActionsElement(
             {showReadAloudRow ? savedLabel : null}
             {showThumbs ? (
               <>
-                <BonsaiChatSecondaryButton
-                  disabled={feedbackDisabled || thumbsLocked}
-                  onClick={() => rateKeepingRing("up")}
-                  aria-label="Mark reply helpful"
-                  replyStop="helpful"
-                >
-                  <ThumbUpOutlineIcon size={14} />
-                  Helpful
-                </BonsaiChatSecondaryButton>
+                {/* Helpful's own nav node, so a move in from outside the row lands here rather than
+                    on the button the row last held (replyStopNavRef, plan 74 lane 3). */}
+                <Focusable {...({ navRef: replyStopNavRef("helpful") } as Record<string, unknown>)}>
+                  <BonsaiChatSecondaryButton
+                    disabled={feedbackDisabled || thumbsLocked}
+                    onClick={() => rateKeepingRing("up")}
+                    aria-label="Mark reply helpful"
+                    replyStop="helpful"
+                  >
+                    <ThumbUpOutlineIcon size={14} />
+                    Helpful
+                  </BonsaiChatSecondaryButton>
+                </Focusable>
                 <BonsaiChatSecondaryButton
                   disabled={feedbackDisabled || thumbsLocked}
                   onClick={() => rateKeepingRing("down")}

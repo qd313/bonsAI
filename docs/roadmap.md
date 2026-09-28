@@ -158,14 +158,19 @@ starts work outside this.
 - ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **OPEN,
   found 2026-09-28 (plan 74).** It should go back to its button, the same family as the "Update Ollama and models?" box
   fixed this wave. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
+- ★ `[focus]` **Cancel on the AI models screen, with a model queued, sends the ring to the tab rail** — **OPEN, found
+  2026-09-28 (plan 75).** The ring lands on the far-left tab rail instead of back on "Browse models…"; Done puts it back
+  correctly. Evidence `docs/test-evidence/t75-3-Q2-SAFE-FIRST-TIER2.json`.
 - ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **OPEN, found 2026-09-28
-  (plan 74).** Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
+  (plan 74).** Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`. Seen again on all five plan 75 Deck runs,
+  2026-09-28 (`t75-1-Q6-REMOVE-KB-SAFE-FIRST.json` to `t75-5-Q6-REMOVE-KB-SAFE-FIRST.json`).
 - ★ `[focus]` **Two more boxes may start on their action button, found in the code** — **OPEN, found 2026-09-28 (plan 74
   lane 3's report), not yet seen on the Deck.** The per-model "Enable Tier 2 for this model?" box starts on its action
   button, and the Tier 1 and Tier 2 install buttons on the Ollama tab do not get the ring back after their box closes.
-- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **OPEN, found 2026-09-28 (plan 74).**
-  It shows as "Tier blocked" and can be moved to the top of the answer order. Evidence
-  `docs/test-evidence/plan74-P74-TRYORDER-RESET.json`.
+- ★ `[focus]` **Walking Down through a long answer, the ring sticks on a highlighted word** — **OPEN, found 2026-09-28
+  (plan 75).** It stays on a word like "overclock" for three to eight presses while the answer scrolls under it, the word
+  above the visible area, then moves on. Seen on every Deck run that day (the popup measurement and all six plan 75 runs).
+  Evidence `docs/test-evidence/t75-5-Q4-ASK-UP-answer-scroll.png`, `docs/test-evidence/t75-5-Q4-ASK-UP.json`.
 - ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **OPEN, found 2026-09-28
   (plan 74).** It says "This reply used an 'open model'" although no reply is involved. Evidence
   `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`.
@@ -215,11 +220,6 @@ starts work outside this.
   D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
   on the device. Needs a reproduction with an empty download queue.
   [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
-- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
-  found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
-  speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
-  never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
-  the moment a second listener is added, a wake word for example.
 - ★ `[ollama]` **Replies from the Ollama address have no size limit** — **OPEN, found 2026-09-28 (0.6.0
   security review, finding 6), after the release.** A fake Ollama the user pointed bonsAI at can fill the
   Deck's memory. Twelve places, including how answers stream in. [Review](audit/security-review-0.6.0.md).
@@ -314,12 +314,11 @@ replace it with a specific issue when one exists.
   soon" on 2026-08-07 (its P6): today an answer is laid out one way while it arrives and re-laid out when it
   finishes, and two ways of drawing it can drift apart. Written before September's reply changes: check today's
   code first, it may be moot. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md).
-- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63), measured
-  2026-09-28.** When an answer finishes while the menu is closed, the toast says only *Reply ready*. It would show the start of
-  the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.
-  Hidden blocks are skipped; if nothing safe is left the toast stays as it is. **Measured on both screens:** one title line and
-  one body line, about 43 and 35 characters, the same on each; so the maintainer's call (2026-09-28): the answer runs across both
-  lines and the *bonsAI* title is dropped. Evidence `docs/test-evidence/plan38-M*-*.json`. [Plan and mockup](planning/38-toast-answer-lines.md).
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05 (D63); built five ways in the
+  plan 75 trial 2026-09-28, not landed.** The toast would show the start of the answer for eight seconds instead of *Reply ready*.
+  Measured on both screens: one title and one body line, about 43 and 35 characters; the maintainer's call (2026-09-28): the answer
+  runs across both lines, the *bonsAI* title dropped. The reviewer's pick needs fixes; landing before 0.6.0 is the maintainer's call
+  ([plan 75 § 9](planning/75-sonnet-5-5-trial.md)). Evidence `docs/test-evidence/plan38-M*-*.json`. [Plan and mockup](planning/38-toast-answer-lines.md).
 - ★★ `[reply]` **Which bundled characters copy a real person** — **OPEN, filed 2026-09-08 (D74); the gate for the shelved character
   voices.** All 31 characters in the picker are named characters from games or TV, each voiced by a real actor, and one is a living
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
@@ -865,6 +864,17 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-28 (plan 75, the Sonnet 5.5 trial):**
+
+- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **DONE 2026-09-28 (plan 75, `a877a321`,
+  `2cd68796`), passed on the Deck.** The picker lists only models that can answer, and an older saved order holding the
+  note-search model is cleaned on Done. Evidence `docs/test-evidence/t75-land-L1-PICKER-ANSWER-MODELS.json`,
+  `docs/test-evidence/t75-land-L2-OLD-ORDER-CLEANED.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
+- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **DONE 2026-09-28
+  (plan 75, `8ec3426a`, `54643d2f`), by unit test.** Nothing a person can do today reaches the two-caller case (the mic is the
+  only caller), so it rests on the unit tests in `tests/test_voice_whisper_daemon.py`; the mic's own check passed on the Deck,
+  `docs/test-evidence/t75-land-L3-MIC-STARTS-AND-STOPS.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
 
 **Plan 74, release wave two (2026-09-28): 20 items closed** — fixes from the second release wave, proven in two
 Deck passes (three by unit test or on the PC). One line each, with its evidence, in

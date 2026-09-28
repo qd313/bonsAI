@@ -265,6 +265,15 @@ function buildMdComponents(args: MdArgs): Components {
       const Tag = drgGlossaryEnabled ? "div" : "p";
       return <Tag className="bonsai-md-p">{linkify(children)}</Tag>;
     },
+    /*
+     * Never draw a real <img>: Steam's browser would fetch whatever web address an answer or a
+     * saved chat names the moment it is drawn, with no press (0.6.0 security review). Show the
+     * picture's description as plain text; the address itself is dropped.
+     */
+    img: ({ alt }) => {
+      const label = typeof alt === "string" ? alt.trim() : "";
+      return <span className="bonsai-md-img-alt">{label ? `[image: ${label}]` : "[image]"}</span>;
+    },
     ul: ({ children }) => <ul className="bonsai-md-ul">{children}</ul>,
     ol: ({ children }) => <ol className="bonsai-md-ol">{children}</ol>,
     li: ({ children }) => <li className="bonsai-md-li">{linkify(children)}</li>,

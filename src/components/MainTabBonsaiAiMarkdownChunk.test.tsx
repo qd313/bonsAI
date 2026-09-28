@@ -229,3 +229,37 @@ describe("MainTabBonsaiAiMarkdownChunk, the scramble's slot (plan 69)", () => {
     expect(items[1]!.querySelector(".bonsai-stream-scramble")).not.toBeNull();
   });
 });
+
+describe("MainTabBonsaiAiMarkdownChunk pictures", () => {
+  /*
+   * Security review before 0.6.0: react-markdown draws `![alt](url)` as a real <img>, so Steam's
+   * browser fetched any web address an answer (or a saved chat) named the moment it was drawn —
+   * no press needed. A picture must never load; its description is shown as plain text instead.
+   */
+  const PICTURE = "Look: ![a boss map](https://x.test/p.png?leak=1) there.";
+
+  it("draws no <img> for a top-level picture and shows its description", () => {
+    const { container } = render(<MainTabBonsaiAiMarkdownChunk source={PICTURE} />);
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.innerHTML).not.toContain("x.test");
+    expect(container.textContent).toContain("[image: a boss map]");
+  });
+
+  it("shows [image] when the picture has no description", () => {
+    const { container } = render(<MainTabBonsaiAiMarkdownChunk source="![](https://x.test/p.png)" />);
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.textContent).toContain("[image]");
+  });
+
+  it("draws no <img> inside a spoiler body, masked-then-revealed or unmasked", () => {
+    const src = "```bonsai-spoiler\n![a](https://x.test/p.png)\n```";
+    const open = render(
+      <MainTabBonsaiAiMarkdownChunk source={src} spoilerMaskingEnabled={true} spoilerDefaultExpanded={true} />
+    );
+    expect(open.container.textContent).toContain("[image: a]");
+    expect(open.container.querySelector("img")).toBeNull();
+    const inline = render(<MainTabBonsaiAiMarkdownChunk source={src} spoilerMaskingEnabled={false} />);
+    expect(inline.container.textContent).toContain("[image: a]");
+    expect(inline.container.querySelector("img")).toBeNull();
+  });
+});

@@ -7,8 +7,12 @@
  * RPC the Pull Models modal already uses, with the model tag it exists to install.
  */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
-import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  KB_STATUS_IDLE_RECHECK_MS,
+  KnowledgeBaseSection,
+  resetKbDownloadInFlightForTests,
+} from "./KnowledgeBaseSection";
 import { getRpcCallLog, ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 function renderInstalled(overrides: Record<string, unknown> = {}) {
@@ -198,5 +202,61 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
 
     expect(await screen.findByText(/version 2026\.08\.14/)).toBeTruthy();
     expect(screen.queryByText(/version 2026\.08\.12/)).toBeNull();
+  });
+});
+
+/* Roadmap: "The meaning-search hint does not appear until the Ollama tab is reopened". */
+describe("KnowledgeBaseSection re-checks the meaning-search model while the tab stays open", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    resetKbDownloadInFlightForTests();
+    // Only the intervals are faked, so testing-library's own waits still run on real time.
+    vi.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("shows the hint once the model is removed, without leaving the tab", async () => {
+    // Measured on the Deck (docs/test-evidence/plan70-KB-UPDATE-HINT.json): nomic-embed-text was
+    // removed with the Ollama tab open, and the hint did not show within 60 s -- only after
+    // leaving the tab and coming back, because status was read on open and never again.
+    renderInstalled({ embed_model_available: true });
+    await screen.findByText("Installed");
+    expect(screen.queryByText("Pull nomic-embed-text · about 270 MB")).toBeNull();
+
+    setRpcHandler("get_rag_corpus_status", () =>
+      ragCorpusStatusFixture({
+        installed: true,
+        corpus_version: "1.0.0",
+        embeddings_populated: true,
+        embed_model_available: false,
+      }),
+    );
+    vi.advanceTimersByTime(KB_STATUS_IDLE_RECHECK_MS);
+
+    expect(await screen.findByText("Pull nomic-embed-text · about 270 MB")).toBeTruthy();
+  });
+
+  it("does not re-check while the knowledge base is off", async () => {
+    setRpcHandler("get_rag_corpus_status", () =>
+      ragCorpusStatusFixture({ installed: true, embeddings_populated: true, embed_model_available: true }),
+    );
+    render(
+      <KnowledgeBaseSection
+        useLocalKnowledgeBase={false}
+        setUseLocalKnowledgeBase={() => {}}
+        ragCorpusVersion="1.0.0"
+        ollamaIp="127.0.0.1"
+        ollamaLocalOnDeck={true}
+        onBeforeDeckyModal={() => {}}
+        onCompleteDeckyModalClose={(close) => close()}
+      />,
+    );
+    await screen.findByText("Installed");
+    const reads = () => getRpcCallLog().filter((c) => c.method === "get_rag_corpus_status").length;
+    const before = reads();
+    vi.advanceTimersByTime(KB_STATUS_IDLE_RECHECK_MS * 3);
+    expect(reads()).toBe(before);
   });
 });

@@ -31,7 +31,9 @@
  * 1. refreshStatus() polls the backend for corpus status once on mount and
  *    whenever ragCorpusVersion changes, then again every 1.5 seconds while
  *    a download is running, stopping itself once the backend reports
- *    done, failed, or cancelled.
+ *    done, failed, or cancelled. With vectors installed and nothing
+ *    running, it also re-reads every 10 seconds so the nomic hint follows
+ *    a model removed or added outside this screen.
  * 2. Toggling "Use local knowledge base" only flips the setting — it does
  *    not start a download by itself.
  * 3. Pressing the primary button calls openStoragePicker() when nothing is
@@ -191,6 +193,14 @@ let kbInstallNomicOfferPending = false;
  */
 let kbNomicPullStartedAtMs: number | null = null;
 const KB_NOMIC_PULL_RESUME_WINDOW_MS = 15 * 60 * 1000;
+
+/*
+ * How often an open, idle section re-reads status. The meaning-search model can be removed (or
+ * added) outside this screen -- a shell `ollama rm`, another tool -- and a status read only on
+ * open left the hint missing until the tab was reopened (plan70-KB-UPDATE-HINT.json). The back
+ * end remembers "is the model there" for up to 30 s, so the hint shows within about 40 s.
+ */
+export const KB_STATUS_IDLE_RECHECK_MS = 10 * 1000;
 
 function kbDownloadLikelyInFlight(): boolean {
   return kbDownloadStartedAtMs != null && Date.now() - kbDownloadStartedAtMs < KB_DOWNLOAD_RESUME_WINDOW_MS;
@@ -480,6 +490,20 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     }, 4000);
     return () => window.clearInterval(id);
   }, [nomicPullStarted, refreshStatus]);
+
+  /*
+   * While the tab sits open with nothing running, re-read status now and then, so a hint that
+   * starts to apply (the meaning-search model removed outside this screen) shows without
+   * leaving the tab. Only when the hint could matter at all: knowledge base on, installed, with
+   * baked vectors. A download or a pull already polls faster on its own.
+   */
+  const idleRecheckApplies =
+    useLocalKnowledgeBase && status?.installed === true && status.embeddings_populated === true;
+  useEffect(() => {
+    if (!idleRecheckApplies || downloadBusy || nomicPullStarted) return;
+    const id = window.setInterval(() => void refreshStatus(), KB_STATUS_IDLE_RECHECK_MS);
+    return () => window.clearInterval(id);
+  }, [idleRecheckApplies, downloadBusy, nomicPullStarted, refreshStatus]);
 
   const startDownload = async (installPath: string, storage: string) => {
     if (!(await confirmDownload(KNOWLEDGE_LIBRARY_NOTICES))) return;

@@ -1330,6 +1330,7 @@ class Plugin:
             now=now,
             shortcut_setup=shortcut_setup_for_state,
             app_name=app_name,
+            chat_slot_id=chat_slot_id,
         )
         self._background_task = None
         out: dict[str, Any] = {

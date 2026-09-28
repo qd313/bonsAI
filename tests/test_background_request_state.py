@@ -224,6 +224,21 @@ class TestCompletedLocalCommandState(unittest.TestCase):
         self.assertEqual(state["started_at"], 777.25)
         self.assertEqual(state["completed_at"], 777.25)
 
+    def test_chat_slot_id_is_carried(self):
+        """The screen tells whose answer a status is by this; without it, another chat paints it."""
+        state = completed_local_command_state(
+            request_id=1, question="q", app_id="", app_context="none", response="r", now=0.0,
+            chat_slot_id="slot-a",
+        )
+        self.assertEqual(state["chat_slot_id"], "slot-a")
+
+    def test_chat_slot_id_blank_is_none(self):
+        state = completed_local_command_state(
+            request_id=1, question="q", app_id="", app_context="none", response="r", now=0.0,
+            chat_slot_id="",
+        )
+        self.assertIsNone(state["chat_slot_id"])
+
     def test_shortcut_setup_absent_by_default(self):
         """Absent and null are different to the frontend: absent means 'no shortcut prompt'."""
         state = completed_local_command_state(

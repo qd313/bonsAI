@@ -119,11 +119,14 @@ def completed_local_command_state(
     now: float,
     shortcut_setup: Any = OMIT,
     app_name: str = "",
+    chat_slot_id: Optional[str] = None,
 ) -> dict[str, Any]:
     """Terminal state for a local keyword branch (sanitizer / shortcut / VAC).
 
     These never spawn a background task, so they publish `completed` directly. `started_at` and
-    `completed_at` are both `now` because no work was awaited.
+    `completed_at` are both `now` because no work was awaited. `chat_slot_id` names the chat it
+    answered, as an ordinary Ask's state does: without it the screen's status read on a Quick
+    Access reopen painted this reply (and the ban-lookup row under it) into whichever chat was open.
     """
     state = new_background_state()
     state.update(
@@ -139,6 +142,7 @@ def completed_local_command_state(
             "elapsed_seconds": 0.0,
             "started_at": now,
             "completed_at": now,
+            "chat_slot_id": chat_slot_id or None,
         }
     )
     if shortcut_setup is not OMIT:

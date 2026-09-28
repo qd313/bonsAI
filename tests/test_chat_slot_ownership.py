@@ -272,6 +272,23 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(loaded["label"], "bonsai:vac-check")
         self.assertNotEqual(loaded["label"], "New chat")
 
+    async def test_local_command_status_names_its_chat(self) -> None:
+        """Roadmap: "the ban-lookup row can follow it into a different chat". The finished status
+        of a local command (here bonsai:vac-check with ban lookup off) carried no chat_slot_id, so
+        the screen's one status read on a Quick Access reopen could not tell it belonged to another
+        chat and painted it -- and the ban-lookup row under it -- into whichever chat was open
+        (docs/test-evidence/plan70-L6-AFTER-DISMISS.json). An ordinary Ask's status already names it.
+        """
+        sid = create_slot(self.tmp)["id"]
+        with patch.object(Plugin, "load_settings", return_value={}):
+            await self.plugin.start_background_game_ai(
+                {"question": "bonsai:vac-check", "PcIp": "", "chat_slot_id": sid}
+            )
+            status = await self.plugin.get_background_game_ai_status()
+
+        self.assertEqual(status.get("status"), "completed")
+        self.assertEqual(status.get("chat_slot_id"), sid)
+
     async def test_shortcut_setup_reply_also_persists_to_chat_slot(self) -> None:
         """Same fix, second call site: sanitizer / shortcut-setup / VAC check all finalize through
         the same shared helper, so a passed chat_slot_id has to reach every one of them, not just

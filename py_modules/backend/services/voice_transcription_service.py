@@ -475,8 +475,9 @@ class VoiceTranscriptionSession:
 
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
         engine = get_whisper_engine()
-        engine.acquire("mic", model_path, self.plugin_root, self.settings_dir)
-        self._use_daemon = engine.daemon_available()
+        # acquire() answers for this model; daemon_available() would say yes
+        # to a server another reason holds for a different one.
+        self._use_daemon = engine.acquire("mic", model_path, self.plugin_root, self.settings_dir)
 
         try:
             cmd, backend, capture_env = _resolve_capture_command()

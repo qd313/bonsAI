@@ -23,6 +23,16 @@ class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             ["gemma4:e2b", "tinyllama", "mistral:7b"],
         )
 
+    async def test_note_search_model_is_not_merged_into_a_saved_order(self) -> None:
+        """The knowledge base's nomic pull goes through here; it must not join the answer order."""
+        self._write_settings({"text_model_routing_order": ["gemma4:e2b"]})
+
+        out = await merge_pulled_tags_into_routing_orders(self.plugin, ["nomic-embed-text"])
+
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["merged"], [])
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b"])
+
     async def test_vision_capable_tag_reaches_both_orders(self) -> None:
         self._write_settings(
             {

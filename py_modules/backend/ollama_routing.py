@@ -409,9 +409,9 @@ def merge_pulled_tag(
     *,
     size_gb: float | None = None,
 ) -> list[str]:
-    """Append pulled tag to bottom, or top when high-VRAM + toggle on."""
+    """Append pulled tag to bottom, or top when high-VRAM + toggle on. A note-search model never joins."""
     t = (tag or "").strip()
-    if not t:
+    if not t or is_embedding_only_tag(t):
         return list(order)
     base = [x for x in order if x != t]
     if high_vram_enabled and is_high_vram_tag(t, size_gb):

@@ -176,6 +176,10 @@ export function ModelRoutingOrderModal({
     [kind, installedTags, savedOrder],
   );
   const [order, setOrder] = useState<string[]>(initial);
+  // True from Reset until a row moves. Done then saves an empty list -- "automatic", what a fresh
+  // install holds -- not a copy of today's default list, which would stop following the defaults
+  // (a model pulled later, a changed seed list). Deck, 2026-09-26: plan70-ROUTING-01-02.json.
+  const [resetToAutomatic, setResetToAutomatic] = useState(false);
 
   const rows: RowMeta[] = useMemo(
     () =>
@@ -198,6 +202,7 @@ export function ModelRoutingOrderModal({
   );
 
   const move = useCallback((index: number, delta: number) => {
+    setResetToAutomatic(false);
     setOrder((prev) => {
       const next = index + delta;
       if (next < 0 || next >= prev.length) return prev;
@@ -258,6 +263,7 @@ export function ModelRoutingOrderModal({
     let tail = installedTags.filter((t) => !head.includes(t));
     if (kind === "vision") tail = tail.filter((t) => isVisionCapableTag(t, catalogByTag.get(t)));
     setOrder([...head, ...tail]);
+    setResetToAutomatic(true);
   }, [kind, installedTags, catalogByTag]);
 
   const title = kind === "vision" ? "Vision model try order" : "Text model try order";
@@ -281,6 +287,15 @@ export function ModelRoutingOrderModal({
         // settings.json): the file's checksum and save time both changed with only one model
         // listed and nothing pressed but Done. onSave used to run unconditionally here; now it
         // only runs when the order actually differs from what the picker opened with.
+        if (resetToAutomatic) {
+          // Already automatic: nothing to write, same rule as above.
+          if (savedOrder.length === 0) {
+            onClose();
+            return;
+          }
+          void Promise.resolve(onSave([])).then(() => onClose());
+          return;
+        }
         const changed =
           order.length !== initial.length || order.some((tag, i) => tag !== initial[i]);
         if (!changed) {

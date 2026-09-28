@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 575,
-  "edgeCount": 1586,
+  "fileCount": 576,
+  "edgeCount": 1588,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -898,6 +898,13 @@
       ],
       "importedBy": []
     },
+    "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx": {
+      "imports": [
+        "src/components/ModelRoutingOrderModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/ModelRoutingOrderModal.test.tsx": {
       "imports": [
         "src/components/ModelRoutingOrderModal.tsx",
@@ -918,6 +925,7 @@
       ],
       "importedBy": [
         "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
+        "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts"
@@ -4353,6 +4361,7 @@
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
+        "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",

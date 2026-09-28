@@ -312,6 +312,7 @@
     "tests/test_no_unreachable_code.py",
     "tests/test_ollama_abort_transport.py",
     "tests/test_ollama_ask_budgets.py",
+    "tests/test_ollama_ask_media_permission.py",
     "tests/test_ollama_ask_service.py",
     "tests/test_ollama_catalog_service.py",
     "tests/test_ollama_connection_test.py",

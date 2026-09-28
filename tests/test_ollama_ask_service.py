@@ -48,6 +48,8 @@ class _FakePlugin:
             "screenshot_attachment_preset": "low",
             "ai_character_enabled": False,
             "ollama_keep_alive": "",
+            # The real Ask path only reaches run_ask_ollama with pictures once this is on.
+            "capabilities": {"media_library_access": True},
         }
 
     def _active_request_id(self) -> Any:

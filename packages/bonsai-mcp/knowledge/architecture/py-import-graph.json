@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 264,
+  "edgeCount": 265,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -59,12 +59,12 @@
       "count": 8
     },
     {
-      "path": "py_modules/backend/services/token_accounting_service.py",
+      "path": "py_modules/backend/services/capabilities.py",
       "count": 8
     },
     {
-      "path": "py_modules/backend/services/capabilities.py",
-      "count": 7
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 8
     },
     {
       "path": "py_modules/backend/ollama_routing.py",
@@ -594,6 +594,7 @@
     },
     "py_modules/backend/services/ask_payload.py": {
       "imports": [
+        "py_modules/backend/services/capabilities.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/settings_service.py",
         "py_modules/backend/services/strategy_checklist_session_service.py"
@@ -649,6 +650,7 @@
       "imports": [],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/media_desktop_rpc.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",

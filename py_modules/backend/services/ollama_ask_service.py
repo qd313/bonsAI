@@ -75,7 +75,7 @@ from backend.services.local_ollama_setup_service import (
     recover_loopback_ollama_listening,
 )
 from backend.services.model_policy import disclosure_for_model, empty_filter_user_message
-from backend.services.ask_payload import sanitize_attachments
+from backend.services.ask_payload import screen_ask_attachments
 from backend.services.chat_memory_step import add_chat_memory_to_prompt
 from backend.services.ollama_ask_extras import (
     build_ollama_request_extras,
@@ -148,12 +148,10 @@ async def run_ask_ollama(
     # random.choice, so a second call here would roll a different character -- and this function
     # used to make two, one for the screenshot_prep blurb and one for the reply's actual voice.
     rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
-    normalized_attachments = sanitize_attachments(attachments or [])
-    attachment_paths = [
-        str(a.get("path", "") or "").strip()
-        for a in normalized_attachments
-        if isinstance(a, dict) and str(a.get("path", "") or "").strip()
-    ]
+    # Refuses pictures here too when the permission is off: see screen_ask_attachments().
+    normalized_attachments, attachment_paths, refused = screen_ask_attachments(settings, attachments)
+    if refused:
+        return refused
     if normalized_attachments and isinstance(active_request_id, int):
         plugin_inst._publish_thinking_phase_key(
             active_request_id,

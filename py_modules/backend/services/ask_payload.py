@@ -26,6 +26,7 @@ from __future__ import annotations
 import os
 from typing import Any, Optional, Tuple
 
+from backend.services.capabilities import capability_enabled
 from backend.services.settings_service import sanitize_ask_mode
 from backend.services.strategy_checklist_session_service import normalize_ask_checklist_state
 
@@ -68,6 +69,28 @@ def sanitize_attachments(raw_attachments: Any) -> list:
             }
         )
     return sanitized
+
+
+MEDIA_ACCESS_REFUSAL = (
+    "Screenshot attachments require media library access. "
+    "Enable it in the Permissions tab, then try again."
+)
+
+
+def screen_ask_attachments(settings: dict, raw_attachments: Any) -> Tuple[list, list, Optional[dict]]:
+    """Clean one Ask's attachments, and refuse them when pictures are not allowed.
+
+    Out: (cleaned attachments, their file paths, None), or a ready refusal as the third item
+    when there are attachments and media library access is off (the parental lock turns it
+    off too). ask_ollama is a public plugin method, so the screen can reach it without
+    run_game_ai_request's own check; this keeps that route from reading any picture or sending
+    anything. The normal Ask path has already passed the same check, so it never sees a refusal.
+    """
+    cleaned = sanitize_attachments(raw_attachments or [])
+    if cleaned and not capability_enabled(settings, "media_library_access"):
+        refusal = {"success": False, "response": MEDIA_ACCESS_REFUSAL, "model_policy_disclosure": None}
+        return cleaned, [], refusal
+    return cleaned, [a["path"] for a in cleaned], None
 
 
 def parse_ask_payload(

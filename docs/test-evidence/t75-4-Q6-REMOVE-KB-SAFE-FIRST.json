@@ -1,0 +1,17 @@
+{
+  "row": "Q6-REMOVE-KB-SAFE-FIRST",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:34 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5; box drawn in the Big Picture window 853x534; screenshot 1280x800)",
+  "setup": "Knowledge library installed: rag_corpus_path /home/deck/.bonsai/rag, version 2026.09.26, use_local_knowledge_base true.",
+  "pressed": "Ollama tab: ring on 'Update knowledge base', RIGHT to 'Remove', A (opens the box), read the ring, B. A was never pressed inside the box.",
+  "seen": {
+    "box": "'Remove knowledge base?' with two buttons: Remove (left, blue, primary) and Cancel (right)",
+    "ringOnOpen": "Remove (the destructive choice), not Cancel",
+    "afterB": "box closed (0 dialogs left on the page)",
+    "libraryAfter": "rag_corpus_path still /home/deck/.bonsai/rag; use_local_knowledge_base still true; folder still holds ATTRIBUTIONS.md, corpus-manifest.json, corpus.db"
+  },
+  "screenshot": "t75-4-Q6-REMOVE-KB-SAFE-FIRST.png (ring shown on the blue Remove button)",
+  "verdict": "FAIL - the box opens with the ring on Remove, not Cancel. B closed it safely and the library is still installed."
+}

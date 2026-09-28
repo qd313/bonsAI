@@ -1,0 +1,17 @@
+{
+  "row": "Q1-UPDATE-BOX-RING",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:25 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5)",
+  "setup": "Run AI on this Deck on (ollama_local_on_deck true). Plugin already open on the Ollama tab, ring on the tab bar. DOWN x3 reached 'Update AI engine and installed models' (overshot once to Browse, UP back).",
+  "pressed": ["Trial 1: A, then B", "Trial 2: A, then A on 'Not now' (ring started there)", "Replay saved as check t75-4-Q1-UPDATE-BOX-RING: A, B again"],
+  "seen": {
+    "boxOpen": "ring on 'Not now' each time, 100 percent visible",
+    "afterB": "ring on 'Update AI engine and installed models', 100 percent visible (twice: trial 1 and the saved replay)",
+    "afterNotNow": "ring on 'Update AI engine and installed models', 100 percent visible",
+    "tabBar": "never landed on the tab bar"
+  },
+  "runFile": "runs/t75-4-Q1-part1.json",
+  "verdict": "PASS"
+}

@@ -1,0 +1,28 @@
+{
+  "row": "Q2-SAFE-FIRST-TIER2",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:12 to 17:19 -04:00",
+  "screen": "built-in (Big Picture window 854x534, screen 853x533 at devicePixelRatio 1.5)",
+  "setup": {
+    "oldPolicy": "model_policy_tier = open_weight (screen label: Also try open-weight models), Essentials only = on, internet_downloads = false",
+    "howPolicyWasSet": "Through the plugin's own AI models > Filters screen (no SSH edit). Set to 'Open source only (recommended)'. The settings file changed to open_source_only at 17:17:13 when Pull selected was pressed.",
+    "openWeightModelQueued": "gemma3:1b (0.8 GB). Open-weight models are hidden from the list while the policy is Open source only, so the route was: policy back to open-weight and Essentials off, tick gemma3:1b (Queue 1, 0.8 GB), then policy to Open source only, then Pull selected. The queue stayed at 1 across the policy change."
+  },
+  "pressed": "Filters > Open source only; Filters > Also try open-weight + Essentials off; tick gemma3:1b; Filters > Open source only; walk to 'Pull selected (1) - 0.8 GB'; A; read box; A on the ring's button.",
+  "seen": {
+    "box": "'Enable Tier 2 before pulling?' - 'Your queue includes open-weight model(s): gemma3:1b'. Buttons: Not now, Enable Tier 2 and pull, Cancel.",
+    "ringWhenBoxOpened": "'Not now' (rect x123 y311 w194 h60)",
+    "afterA": "box closed, back on the AI models screen with Pull selected (1) focused, Queue still 1",
+    "download": "Nothing downloaded: ollama manifests unchanged (gemma4, nomic-embed-text only), no pull lines in the ollama journal, blobs folder unchanged (9), internet_downloads still false",
+    "policyAfterA": "model_policy_tier still open_source_only (unchanged by the box)"
+  },
+  "restore": {
+    "done": "Filters set back to 'Also try open-weight models' and 'Essentials only' on; queue cleared with Cancel; then reopened AI models and pressed Done because Cancel had not saved the policy. Settings file read back over SSH at 17:19:36: model_policy_tier = open_weight (the old value)."
+  },
+  "observations": [
+    "Pressing Cancel on the AI models screen (with a non-empty queue) put the ring on the QAM side tab rail (element #quickaccess_tab_999, x0 y387), not on the 'Browse and pull Ollama models' button. Done returned it to 'Browse and pull Ollama models'.",
+    "The filters-only changes were not saved to the settings file until Pull selected (policy) or Done; Cancel dropped them."
+  ],
+  "verdict": "PASS"
+}

@@ -419,6 +419,16 @@ can be resumed after the reset with one short message that keeps its context —
 over; and while landings run in the shared checkout, tell the bookkeeper to finish its edits and
 report the file list rather than commit, so the two do not fight over the index.
 
+**A runbook step that cannot be met as written splits careful helpers from resourceful ones.** Three helpers
+found a route round it and two stopped. Write the route into the step (plan 75: queue the model before switching the
+policy).
+
+**Helpers in parallel copies share the system temp folder.** Two picked the same script name, and one ran the other's
+script inside the other's copy. Tell each helper to keep its scratch files in a folder of its own.
+
+**"Do not run pnpm install. Go straight to the baseline gates." was read as "skip the baseline".** Several helpers
+skipped the before-you-start gates. Say "run the baseline gates now, without an install".
+
 ---
 
 ## 5. Design and screen work

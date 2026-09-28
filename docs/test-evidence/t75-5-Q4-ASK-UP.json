@@ -1,0 +1,26 @@
+{
+  "row": "Q4-ASK-UP",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012; checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:45:00-04:00 to 17:47:43-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, dpr 1.5 (1280x800)",
+  "setup": "Main tab, Strategy mode. Question put in with scripts/deck_send_ask.py --text 'How do I beat the first boss in this game quickly': VERIFIED, read back whole. A was never pressed on the box; the question was never sent. Box emptied afterwards with --clear (VERIFIED, field '').",
+  "pressed": [
+    "Walk down from the tab bar to the box through the last answer (Down presses only)",
+    "Trip 1: Down (box -> Ask), Up",
+    "Trip 2: Right (box -> Strategy mode button), Right (-> Voice input / mic), Down (-> Ask), Up",
+    "Trip 3: Left (box -> Attach screenshot / paperclip), Down (-> Ask), Up",
+    "deck_saveCheck repeated all nine presses: 9/9"
+  ],
+  "seen": {
+    "questionBox": {"rect": [73, 309, 275, 59], "onlyInputOnPanel": true, "valueDuringTest": "How do I beat the first boss in this game quickly"},
+    "askButton": {"rect": [49, 400, 263, 36]},
+    "trip1": "Up from Ask -> question box input, visible 100%",
+    "trip2": "Up from Ask (after mic) -> question box input, visible 100%",
+    "trip3": "Up from Ask (after paperclip) -> question box input, visible 100%",
+    "runs": ["runs/t75-5-Q4-ASK-UP-first.json (6/6)", "runs/t75-5-Q4-ASK-UP-paperclip.json (2/2)", "checks/t75-5-Q4-ASK-UP.json (9/9)"],
+    "sideObservation": "On the way down to the box, the ring sat on the highlighted word 'overclock' inside the long answer for 4 Down presses while the answer scrolled under it (scroll 587 -> 667 -> ...); its box was at y -66 then -146, above the visible area (88..454), so the ring was off screen for those presses. Then it moved on to the last answer section. Not part of this row."
+  },
+  "screenshots": ["t75-5-Q4-ASK-UP.png (ring on box, question in it)", "t75-5-Q4-ASK-UP-answer-scroll.png (ring off screen on 'overclock' while the answer scrolled)"],
+  "verdict": "PASS"
+}

@@ -1,0 +1,5 @@
+{"row":"Q6-REMOVE-KB-SAFE-FIRST","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:38-04:00","screen":"built-in (QAM window 854x454, dpr 1.5)","driver":2,
+"setup":"rag_corpus_path = /home/deck/.bonsai/rag (corpus.db 2998272 bytes, corpus-manifest.json, ATTRIBUTIONS.md present). Ollama tab.",
+"pressed":"walk UP to Update knowledge base, RIGHT (ring confirmed on Remove), A, read box, B only. A was never pressed inside the box.",
+"seen":{"box":"Remove knowledge base? Deletes the offline corpus from disk and turns off Use local knowledge base.","footer_buttons":["Remove","Cancel"],"ring_on_open":"Remove","after_B":"box closed, ring went to the Ollama tab (not back to the Remove button); rag folder listing unchanged (same 3 files, dated Sep 28 10:46); settings file identical to pre-run snapshot incl. rag_corpus_path"},
+"verdict":"FAIL - the box opens with the ring on Remove (the destructive choice), not Cancel. B is safe and the library is still installed."}

@@ -1,0 +1,29 @@
+{
+  "row": "Q2-SAFE-FIRST-TIER2",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012; checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:39:40-04:00 to 17:42:42-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, dpr 1.5 (1280x800)",
+  "setup": {
+    "settingChanged": "model_policy_tier",
+    "oldValue": "open_weight",
+    "setTo": "open_source_only",
+    "method": "SSH edit of settings.json, plugin reloaded at once; value read back after reload: open_source_only",
+    "restored": "open_weight, plugin reloaded, read back 17:42:42: open_weight"
+  },
+  "pressed": [
+    "openPlugin (first try failed after reload as expected, second opened)",
+    "Down x6 to 'Browse models…', A -> AI models screen",
+    "Down x2 (Advanced -> Refresh -> Filters), A -> Filters panel",
+    "B (panel closed), B (screen closed, ring back on 'Browse models…')"
+  ],
+  "seen": {
+    "modelsTable": "Filters '2 on: Open source only, Essentials only'. Rows: gemma4:e2b-it-qat (installed, FOSS), qwen3.5:4b (FOSS), qwen2.5vl:3b (FOSS), nomic-embed-text:latest (installed, other). No open-weight row. Queue 0. Footer buttons Done / Cancel.",
+    "filtersPanel": "No 'Suggested' chips. Rows: Licence (Open source only [ticked] / Also try open-weight models / Any installed model), Speed, Strategy, Expert, Vision, Installed only, Essentials only, Recently added, Close filters.",
+    "code": "src/utils/pullModelFilters.ts entryMatchesLicenceTier: under open_source_only only licenseClass 'foss' rows are shown, so no open-weight model can appear in the table. The Licence rows call onSelectModelPolicyTier, i.e. they change the saved policy, so they were not pressed.",
+    "remainingRoute": "'Type a name' (types a tag by hand through Steam's on-screen keyboard) - not the runbook's route, not tried",
+    "afterwards": "ollama list unchanged: nomic-embed-text:latest, gemma4:e2b-it-qat"
+  },
+  "screenshots": ["t75-5-Q2-SAFE-FIRST-TIER2.png (models table)", "t75-5-Q2-SAFE-FIRST-TIER2-filters.png (filters panel)"],
+  "verdict": "COULD NOT RUN - with the policy on open source only, the models screen shows no open-weight model to queue, so the 'Enable Tier 2 before pulling?' box could not be reached by the runbook's route. The box's first choice was not observed."
+}

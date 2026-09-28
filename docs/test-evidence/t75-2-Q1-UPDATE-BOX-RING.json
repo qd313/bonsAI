@@ -1,0 +1,5 @@
+{"row":"Q1-UPDATE-BOX-RING","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:03-04:00","screen":"built-in (QAM window 854x454, dpr 1.5, screen 853x533)","driver":2,
+"setup":"Plugin open, Ollama tab, AI running on Deck (Installed: 2, Connected Ollama v0.34.1)",
+"pressed":"walk DOWN to Update AI & models; A; (box 'Turn on internet downloads?' ring on 'Not now'); B. Then A; A on 'Not now'.",
+"seen":{"try1_B":"ring on button 'Update AI engine and installed models' (text 'Update AI & models'), y 317","try2_NotNow":"ring on same button, y 338"},
+"verdict":"PASS"}

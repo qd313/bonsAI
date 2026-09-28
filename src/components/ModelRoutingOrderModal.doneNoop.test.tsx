@@ -104,3 +104,39 @@ describe("ModelRoutingOrderModal -- Done with nothing reordered", () => {
     expect(onSave).toHaveBeenCalledWith(["model-b", "model-a"]);
   });
 });
+
+describe("ModelRoutingOrderModal -- note-search models are not choices", () => {
+  const embed = "nomic-embed-text:latest";
+
+  it("does not list a note-search model, even one already in the saved order", () => {
+    const { container } = render(
+      <ModelRoutingOrderModal
+        {...baseProps({ kind: "text", installedTags: ["model-a", embed], savedOrder: [embed, "model-a"] })}
+      />
+    );
+    expect(container.textContent).not.toContain(embed);
+    expect(container.querySelector('[aria-label="Move model-a down"]')).not.toBeNull();
+  });
+
+  it("Done rewrites an old saved order that still names one, even with nothing moved", () => {
+    const onSave = vi.fn();
+    render(
+      <ModelRoutingOrderModal
+        {...baseProps({ kind: "text", installedTags: ["model-a", embed], savedOrder: [embed, "model-a"], onSave })}
+      />
+    );
+    (latestConfirmModalProps().onOK as () => void)();
+    expect(onSave).toHaveBeenCalledWith(["model-a"]);
+  });
+
+  it("Reset to defaults does not bring a note-search model back", () => {
+    const { container } = render(
+      <ModelRoutingOrderModal {...baseProps({ kind: "text", installedTags: ["model-a", embed], savedOrder: [] })} />
+    );
+    const reset = Array.from(container.querySelectorAll("button")).find((b) =>
+      /Reset to defaults/.test(b.textContent ?? "")
+    ) as HTMLButtonElement;
+    fireEvent.click(reset);
+    expect(container.textContent).not.toContain(embed);
+  });
+});

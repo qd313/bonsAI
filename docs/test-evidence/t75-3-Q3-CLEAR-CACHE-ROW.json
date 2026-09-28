@@ -1,0 +1,18 @@
+{
+  "row": "Q3-CLEAR-CACHE-ROW",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:20 -04:00",
+  "screen": "built-in (QAM window 854x454, screen 853x533 at devicePixelRatio 1.5; screenshot 1280x800)",
+  "setup": "Plugin open; RB to the Settings tab; walked DOWN to 'Clear cache...' (14 presses, D-pad only, nothing activated).",
+  "pressed": "RB, then 14 DOWN presses",
+  "seen": {
+    "Clear cache": "x 64, right edge 194, width 130, height 38, y 376 (in view), ring on it, 100 percent visible",
+    "Clear all data": "x 202, right edge 332, width 130, height 38, y 376 (same y, same height)",
+    "rowBox": "bonsai-settings-cache-row x 48 to 348 (300 wide), flex, gap 8px",
+    "neighbours": "full-width buttons and toggles in the tab: x 64, right edge 332, width 268 (Apply UI scale, Ali G row, all inner controls above the row). Three-way rows: 64-149, 155-241, 247-332 (85 wide each).",
+    "alignment": "Left edge of Clear cache (64) equals the left edge of every other control; right edge of Clear all data (332) equals their right edge; the two buttons plus the 8px gap fill 64 to 332."
+  },
+  "screenshot": "t75-3-Q3-CLEAR-CACHE-ROW.png (same folder)",
+  "verdict": "PASS"
+}

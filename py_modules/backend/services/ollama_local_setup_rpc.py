@@ -44,6 +44,7 @@ from backend.services.ollama_catalog_service import (
     normalize_ollama_pull_tags,
 )
 from backend.ollama_routing import (
+    is_embedding_only_tag,
     is_valid_setup_pull_profile,
     is_vision_capable_tag,
     merge_pulled_tag,
@@ -312,6 +313,10 @@ async def merge_pulled_tags_into_routing_orders(self, tags: Any = None):
     # extending it, so empty orders are left alone.
     merged: list[str] = []
     for tag in pulled:
+        # The knowledge base's note-search pull comes through here too; it cannot answer, so it
+        # joins neither answer order (merge_pulled_tag would also refuse it).
+        if is_embedding_only_tag(tag):
+            continue
         changed = False
         if text_order:
             text_order = merge_pulled_tag(text_order, tag, high_vram)

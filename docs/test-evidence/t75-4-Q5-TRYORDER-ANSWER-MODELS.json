@@ -1,0 +1,21 @@
+{
+  "row": "Q5-TRYORDER-ANSWER-MODELS",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:33 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5; box drawn in the Big Picture window 853x534; screenshot 1280x800)",
+  "setup": "nomic-embed-text:latest installed (Ollama's own list over SSH: nomic-embed-text:latest with capabilities ['embedding'], and gemma4:e2b-it-qat). Settings text_model_routing_order before: []. Policy open_weight (restored after Q2).",
+  "pressed": "Ollama tab: DOWN to 'Set text model try order', A; read the rows; B. Nothing moved inside the box.",
+  "seen": {
+    "rows": [
+      "gemma4:e2b-it-qat (Up, Down)",
+      "nomic-embed-text:latest, greyed, tagged 'Tier blocked' and 'Size unknown - may be too large' (Up, Down)"
+    ],
+    "rowCount": 2,
+    "noteSearchModelShown": true,
+    "afterB": "ring back on 'Set text model try order'",
+    "savedOrderAfter": "[] (unchanged)"
+  },
+  "screenshot": "t75-4-Q5-TRYORDER-ANSWER-MODELS.png",
+  "verdict": "FAIL - the note-search model is still offered as a row (greyed, labelled Tier blocked). The saved order did not change."
+}

@@ -23,8 +23,10 @@ Gotchas:
  - The server remembers who asked for it ("mic" is the only asker today, a
    short label called a reason) and only stops once every asker that called
    `acquire()` has let go through `release()`, so it can be shared without one
-   caller stopping it out from under another. See `acquire()` below for the
-   rules that make that work.
+   caller stopping it out from under another. Whoever holds it first decides
+   the model: a later asker wanting a different one is turned away (told by
+   `acquire()` returning False) rather than cutting the first off. See
+   `acquire()` below for the full rules.
  - A crash, a kill, or the Deck sleeping mid-transcribe can leave the
    whisper-server process running after the plugin itself has stopped. Every
    `acquire()` reads a PID file left behind by whatever ran before it and
@@ -226,10 +228,15 @@ def _post_inference_wav(base_url: str, wav_bytes: bytes, timeout: float) -> str:
 
 
 class WhisperEngine:
-    """Module singleton: one whisper-server per active mic/wake session reasons."""
+    """Module singleton: one whisper-server, shared by every reason holding it
+    for the same model (see `acquire()` for who wins when models differ)."""
 
     def __init__(self) -> None:
         self._lock = threading.Lock()
+        # Signalled when a server start (seconds of model load) finishes, so a
+        # second acquire waits for it instead of launching a rival process.
+        self._start_done = threading.Condition(self._lock)
+        self._starting = False
         self._transcribe_lock = threading.Lock()
         self._reason_refcount: dict[str, int] = {}
         self._proc: Optional[subprocess.Popen[Any]] = None
@@ -237,6 +244,7 @@ class WhisperEngine:
         self._model_path = ""
         self._plugin_root = ""
         self._settings_dir = ""
+
     def daemon_available(self) -> bool:
         with self._lock:
             return self._daemon_ready
@@ -247,9 +255,9 @@ class WhisperEngine:
         model_path: str,
         plugin_root: str,
         settings_dir: str,
-    ) -> None:
-        """Ask for the shared whisper-server to be running and ready, starting
-        it if it is not.
+    ) -> bool:
+        """Ask for the shared whisper-server to be running and ready for
+        `model_path`, starting it if it is not.
 
         In: `reason` is a short label for who is asking -- only "mic" is used
         today, but a future caller (a wake-word listener, say) could ask under
@@ -257,33 +265,69 @@ class WhisperEngine:
         model to run; `plugin_root` and `settings_dir` say where to find the
         server program and where to write its PID file.
 
-        Out: nothing. A caller finds out whether the server is actually ready
-        by asking `daemon_available()` afterwards, or by trying `transcribe()`
-        and getting an empty string back on failure.
+        Out: True when the server is up and running `model_path` for this
+        caller. False when it is not -- the server program is missing, it
+        failed to start, or it is busy with another holder's model (below).
+        On False the caller should use the one-off whisper-cli path instead
+        of `transcribe()`. Trust this answer, not `daemon_available()`: that
+        one only says *some* server is up, not that it runs this caller's
+        model. Either way, pair every call with one `release(reason)`.
 
-        Two or more reasons holding the server at once is fine by design: each
-        is counted, and the server only stops once every reason that asked has
-        let go through `release()`. What can go wrong: a reason that calls
-        `acquire()` and never calls `release()` leaks -- the server keeps
-        running until `force_whisper_engine_stop()` is called and clears every
-        reason at once. And if a different model is asked for while the server
-        is already running for an older one, the running server is stopped and
-        restarted for the new model even if another reason is still holding
-        onto the old one; that older holder is not told, it just finds the
-        server gone the next time it tries to use it.
+        Sharing rules. Two or more reasons holding the server for the same
+        model is fine: each is counted, and the server only stops once every
+        reason has let go through `release()`.
+
+        When a reason asks for a *different* model while another reason holds
+        the running server, the first holder keeps it: this returns False, the
+        asker is not counted, and nothing restarts. Restarting would cut the
+        first holder off mid-sentence without telling it, and on a Deck a model
+        load takes seconds of the same CPU a running game needs; a second
+        server for the second model would double that cost and the memory. The
+        refused caller uses whisper-cli for now and can ask again later. A
+        reason that is the only holder may still switch models -- the server
+        restarts for the new one, as the mic has always done.
+
+        A start already underway (the model load takes seconds) is waited for,
+        not raced: a second caller blocks until it finishes, then shares it or
+        is refused by the rule above, so two server processes never fight over
+        the one port.
+
+        What can still go wrong: a reason that calls `acquire()` and never
+        calls `release()` leaks -- the server keeps running until
+        `force_whisper_engine_stop()` is called and clears every reason at once.
         """
         with self._lock:
+            while self._starting:
+                self._start_done.wait()
+            others_hold = any(
+                count > 0 for held, count in self._reason_refcount.items() if held != reason
+            )
+            # Judge by the model the holders started, not by whether the server
+            # is answering right now: a failed transcribe marks it not ready but
+            # the holders still expect their model, so a newcomer must not swap it.
+            if others_hold and self._model_path and self._model_path != model_path:
+                return False
             self._reason_refcount[reason] = self._reason_refcount.get(reason, 0) + 1
             if self._daemon_ready and self._model_path == model_path:
-                return
-            if self._proc is not None and self._model_path != model_path:
+                return True
+            if self._proc is not None:
                 self._stop_server_locked()
+            self._starting = True
+        try:
+            return self._start_server(model_path, plugin_root, settings_dir)
+        finally:
+            with self._lock:
+                self._starting = False
+                self._start_done.notify_all()
 
+    def _start_server(self, model_path: str, plugin_root: str, settings_dir: str) -> bool:
+        """Launch whisper-server for `model_path` and wait for it to answer;
+        True once it is ready. Called by `acquire()` with `_starting` set."""
         server_bin = whisper_server_binary_usable(plugin_root, settings_dir)
         if not server_bin:
             with self._lock:
                 self._daemon_ready = False
-            return
+            return False
 
         _reap_stale_server_pid(plugin_root, settings_dir)
         env = voice_whisper_runtime_env(plugin_root, settings_dir)
@@ -312,11 +356,13 @@ class WhisperEngine:
         except Exception:
             with self._lock:
                 self._daemon_ready = False
-            return
+            return False
 
         ready = self._wait_for_health()
         with self._lock:
-            if not ready or proc.poll() is not None:
+            # Everyone let go (or force_stop ran) while the model was loading:
+            # do not leave a server running that no one holds.
+            if not ready or proc.poll() is not None or not self._reason_refcount:
                 try:
                     proc.terminate()
                     proc.wait(timeout=2)
@@ -326,16 +372,23 @@ class WhisperEngine:
                     except Exception:
                         pass
                 self._daemon_ready = False
-                return
+                return False
             self._proc = proc
             self._daemon_ready = True
             self._model_path = model_path
             self._plugin_root = plugin_root
             self._settings_dir = settings_dir
             _write_pid_file(_pid_file_path(plugin_root, settings_dir), proc.pid)
+            return True
 
     def release(self, reason: str) -> None:
+        """Let go of a hold taken by `acquire(reason, ...)`; the server stops
+        when the last holder lets go. A reason that holds nothing (its
+        `acquire()` was refused) changes nothing, so it cannot stop a server
+        someone else is using."""
         with self._lock:
+            if reason not in self._reason_refcount:
+                return
             count = self._reason_refcount.get(reason, 0)
             if count <= 1:
                 self._reason_refcount.pop(reason, None)

@@ -1,0 +1,6 @@
+{"row":"Q1-UPDATE-BOX-RING","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"Ollama tab, ring on Update AI & models",
+"pressed":"A, then B; A, then A on Not now",
+"seen":"Box 'Turn on internet downloads?' opened with ring on 'Not now'. After B: ring on 'Update AI engine and installed models' button (rect 64,338,268x36). After A on Not now: same button again. Never on tab bar.",
+"screenshot":"screenshots/DeckCapture_20260928_164530_auto.png",
+"verdict":"PASS"}

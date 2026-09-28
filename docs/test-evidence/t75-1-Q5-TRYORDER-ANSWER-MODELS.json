@@ -1,0 +1,6 @@
+{"row":"Q5-TRYORDER-ANSWER-MODELS","build_commit":"cb88c012 (deployed; branch tip bff046f1)","screen":"built-in Deck screen (page window 854x454, screen 853x533)","deck_time":"2026-09-28 16:43-16:56 EDT",
+"setup":"nomic-embed-text installed (manifest on disk, in ollama api tags)",
+"pressed":"Ollama tab, Set text model try order, read, B",
+"seen":"Rows: gemma4:e2b-it-qat, and nomic-embed-text:latest (greyed, tags 'Tier blocked' and 'Size unknown - may be too large', still with Up/Down). So the note-search model IS a row. text_model_routing_order before [] and after [].",
+"screenshot":"screenshots/DeckCapture_20260928_165101_auto.png",
+"verdict":"FAIL"}

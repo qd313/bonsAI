@@ -1,0 +1,8 @@
+{"row":"Q4-ASK-UP","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:45-04:00","screen":"built-in (QAM window 854x454, dpr 1.5)","driver":2,
+"setup":"Question put in by scripts/deck_send_ask.py (VERIFIED: 'which pickaxe upgrade should I buy first'). A never pressed on the box; Ask never pressed; question not sent. Field cleared with --clear afterwards.",
+"pressed_and_seen":[
+"Down from box -> ask; Up -> question box (INPUT, y 323, value intact)",
+"Right from box -> 'Inference mode: Strategy' button (x262); Right -> 'Voice input' (mic, x322,y371); Down -> ask; Up -> question box (INPUT, y 323)",
+"Right then Left from box -> 'Attach screenshot to Ask' (paperclip, x54,y371); Down -> ask; Up -> question box (INPUT, y 323)"],
+"note":"Runbook said Right, Right reaches the mic; true, but the first Right stops on the Inference mode button. Paperclip was reached by Right, Left (no direct Left/Right press from the box reached it). Getting the ring down the long answer to the box took extra Down presses: the ring stalled on answer glossary words (overclock) that were off screen (y -51, -131).",
+"verdict":"PASS (3 of 3 Up presses land on the question box)"}

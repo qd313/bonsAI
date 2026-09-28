@@ -1,0 +1,6 @@
+{"row":"Q3-CLEAR-CACHE-ROW","build_commit":"cb88c012 (deployed; branch tip bff046f1)","deck_time":"2026-09-28T17:27-04:00","screen":"built-in (QAM window 854x454, dpr 1.5)","driver":2,
+"setup":"Plugin open, Settings tab (RB from Ollama tab). Measured with getBoundingClientRect, not scrolled into view.",
+"pressed":"RB only",
+"seen":{"Clear cache...":{"x":64,"right":194,"w":130,"y":2091.2,"h":38},"Clear all data...":{"x":202,"right":332,"w":130,"y":2091.2,"h":38},
+"neighbours":{"Apply UI scale":"x64 right332 w268","Reinstall voice engine":"x64 w146.1","screenshot quality trio":"x64 / 155.3 / 246.7, right edge 332","Ali G voice row":"x64 right332"}},
+"verdict":"PASS (Clear cache starts at 64, Clear all data ends at 332, each 130 wide, same y and height; left and right edges match the full-width rows)"}

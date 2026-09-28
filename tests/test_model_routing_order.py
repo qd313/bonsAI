@@ -4,6 +4,7 @@ from backend.ollama_routing import (
     build_host_fallback_tail,
     build_initial_routing_order,
     default_text_routing_seed,
+    is_embedding_only_tag,
     is_high_vram_tag,
     merge_pulled_tag,
     remove_tag_from_routing_orders,
@@ -12,6 +13,16 @@ from backend.ollama_routing import (
 
 
 class ModelRoutingOrderTests(unittest.TestCase):
+    def test_note_search_model_is_never_tried_for_an_answer(self):
+        emb = "nomic-embed-text:latest"
+        self.assertTrue(is_embedding_only_tag(emb))
+        self.assertFalse(is_embedding_only_tag("gemma4:e2b-it-qat"))
+        installed = ["gemma4:e2b-it-qat", emb]
+        self.assertNotIn(emb, build_initial_routing_order(False, installed))
+        saved = {"text_model_routing_order": [emb, "gemma4:e2b-it-qat"]}
+        self.assertEqual(resolve_routing_order(False, saved, installed), ["gemma4:e2b-it-qat"])
+        self.assertNotIn(emb, build_host_fallback_tail([], installed))
+
     def test_default_seed_intersect_installed(self):
         installed = ["gemma4:latest", "qwen2.5vl:3b", "tinyllama"]
         order = build_initial_routing_order(False, installed)

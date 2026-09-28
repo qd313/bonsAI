@@ -2347,3 +2347,21 @@ _Copied line for line from the roadmap, nothing reworded apart from link paths, 
   (`docs/test-evidence/plan74-P74-COVER-UP.json`, FAIL). A second round is in progress (plan 74).
 
 **Closed 2026-09-28 (plan 74, `7543270f`, `cb88c012`).** Up now lands on every hidden cover, the first one included, and A opens it. Round one fixed the last cover (`docs/test-evidence/plan74-P74-COVER-UP.json`); round two fixed a cover at the top of the answer: on the Deck Up landed on the first cover itself, fully on screen, and A opened it (`docs/test-evidence/plan74-P74-COVER-UP-r2.json`). Its last step, Up from the first cover leaving the answer for "Show reasoning", held on a slightly different answer shape, because the same tall shape did not come up again in three more questions. Row **P74-COVER-UP**.
+
+## Moved from the roadmap 2026-09-28 (plan 75, the Sonnet 5.5 trial)
+
+_Copied line for line from the roadmap, nothing reworded, with the closing note added under each entry._
+
+- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **OPEN, found 2026-09-28 (plan 74).**
+  It shows as "Tier blocked" and can be moved to the top of the answer order. Evidence
+  `docs/test-evidence/plan74-P74-TRYORDER-RESET.json`.
+
+**Closed 2026-09-28 (plan 75, `a877a321`, `2cd68796`).** The picker lists only models that can answer, before and after Reset, and an older saved order with the note-search model first is cleaned on Done. Rows **T75-LAND-L1-PICKER-ANSWER-MODELS**, **T75-LAND-L2-OLD-ORDER-CLEANED**. Evidence `docs/test-evidence/t75-land-L1-PICKER-ANSWER-MODELS.json`, `docs/test-evidence/t75-land-L2-OLD-ORDER-CLEANED.json`.
+
+- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
+  found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
+  speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
+  never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
+  the moment a second listener is added, a wake word for example.
+
+**Closed 2026-09-28 (plan 75, `8ec3426a`, `54643d2f`), by unit test.** Nothing a person can do today reaches the two-caller case, since the mic is the only caller, so this rests on the unit tests in `tests/test_voice_whisper_daemon.py`. The mic's own check passed on the Deck: it starts the speech server while recording and stops it within half a second. Row **T75-LAND-L3-MIC-STARTS-AND-STOPS**. Evidence `docs/test-evidence/t75-land-L3-MIC-STARTS-AND-STOPS.json`.

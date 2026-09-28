@@ -134,4 +134,26 @@ describe("useRoutingOrderModal", () => {
     expect(restored?.visionModelRoutingOrder).toEqual(["qwen3.5:4b"]);
     expect(restored?.textModelRoutingOrder).toEqual(["gemma4:e2b-it-qat"]);
   });
+
+  it("does not offer a note-search model as a choice in the picker", async () => {
+    setRpcHandler("test_ollama_connection", () => ({
+      reachable: true,
+      version: "0.5.0",
+      models: ["gemma4:e2b-it-qat", "nomic-embed-text:latest"],
+    }));
+    let open: ((kind: ModelRoutingOrderKind) => Promise<void>) | null = null;
+    function Probe() {
+      open = useRoutingOrderModal(buildArgs());
+      return null;
+    }
+    render(<Probe />);
+    await open!("text");
+    expect(hoisted.captured?.props.installedTags).toEqual(["gemma4:e2b-it-qat"]);
+  });
+
+  it("never saves a note-search model into the answer order", async () => {
+    await openPickerAndSave("text", ["nomic-embed-text:latest", "gemma4:e2b-it-qat"]);
+    const save = getRpcCallLog().find((c) => c.method === "save_settings");
+    expect((save?.args[0] as BonsaiSettings).text_model_routing_order).toEqual(["gemma4:e2b-it-qat"]);
+  });
 });

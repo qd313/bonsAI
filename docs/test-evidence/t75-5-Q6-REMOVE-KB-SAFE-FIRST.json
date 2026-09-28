@@ -1,0 +1,22 @@
+{
+  "row": "Q6-REMOVE-KB-SAFE-FIRST",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012; checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:49:30-04:00 to 17:49:56-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, dpr 1.5 (1280x800); box drawn in the main Steam window",
+  "setup": {
+    "ragCorpusPathBefore": "/home/deck/.bonsai/rag",
+    "ragCorpusVersion": "2026.09.26",
+    "folder": "exists: ATTRIBUTIONS.md, corpus-manifest.json, corpus.db (3.0M)"
+  },
+  "pressed": ["Up x6 to 'Update knowledge base'", "Right -> panel 'Remove' button (238,267 94x44), confirmed by read", "A -> 'Remove knowledge base?' box opened", "B only (A never pressed inside the box)"],
+  "seen": {
+    "boxButtons": ["Remove (Primary, blue, ring on it)", "Cancel"],
+    "ringInBox": {"text": "Remove", "rect": [123, 295, 290, 40]},
+    "afterB": "box closed (title no longer on the page); ring went to the tab bar (48,64 300x20), not back to the Remove button",
+    "libraryAfter": {"rag_corpus_path": "/home/deck/.bonsai/rag", "rag_corpus_version": "2026.09.26", "use_local_knowledge_base": true, "folder": "still there, same three files, 3.0M", "panelText": "Installed - version 2026.09.26"}
+  },
+  "code": "src/components/KnowledgeBaseSection.tsx confirmRemove: ConfirmModal with strOKButtonText 'Remove' and strCancelButtonText 'Cancel'; Steam opens it with the ring on OK, which here is the destructive Remove",
+  "screenshot": "t75-5-Q6-REMOVE-KB-SAFE-FIRST.png",
+  "verdict": "FAIL - the box opens with the ring on 'Remove', not 'Cancel'. B closed it and the library is untouched (same path, folder still there)."
+}

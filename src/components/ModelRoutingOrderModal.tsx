@@ -43,7 +43,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
-import type { PullModelEntry } from "../data/pullModelCatalog";
+import { isEmbeddingOnlyTag, type PullModelEntry } from "../data/pullModelCatalog";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { elementHasFocus } from "../utils/uiDocument";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
@@ -162,7 +162,7 @@ type RowMeta = {
  */
 export function ModelRoutingOrderModal({
   kind,
-  installedTags,
+  installedTags: allInstalledTags,
   catalogByTag,
   modelPolicyTier,
   modelPolicyNonFossUnlocked,
@@ -171,6 +171,16 @@ export function ModelRoutingOrderModal({
   onSave,
   onClose,
 }: ModelRoutingOrderModalProps) {
+  // A note-search (embedding) model can never answer a question, so it is never offered here and
+  // never saved. Plan 74 Deck pass 1 (P74-TRYORDER-RESET): it was listed, marked "Tier blocked",
+  // and could be moved to the top of the answer order.
+  const installedTags = useMemo(
+    () => allInstalledTags.filter((t) => !isEmbeddingOnlyTag(t)),
+    [allInstalledTags],
+  );
+  // An order saved before this fix may still name one. Done must rewrite it clean even when the
+  // person moved nothing, otherwise the stale name would stay in the settings file.
+  const savedOrderHasEmbedding = useMemo(() => savedOrder.some(isEmbeddingOnlyTag), [savedOrder]);
   const initial = useMemo(
     () => buildPickerOrder(kind, installedTags, savedOrder),
     [kind, installedTags, savedOrder],
@@ -297,6 +307,7 @@ export function ModelRoutingOrderModal({
           return;
         }
         const changed =
+          savedOrderHasEmbedding ||
           order.length !== initial.length || order.some((tag, i) => tag !== initial[i]);
         if (!changed) {
           onClose();

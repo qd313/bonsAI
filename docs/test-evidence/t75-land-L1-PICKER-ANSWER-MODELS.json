@@ -1,0 +1,22 @@
+{
+  "row": "L1-PICKER-ANSWER-MODELS",
+  "build": "8ec3426a (tip of experimental, deployed by the session owner at 18:14; not redeployed)",
+  "deck_time": "2026-09-28T18:16:29-04:00 to 18:16:51-04:00",
+  "screen": "Deck's own screen: Big Picture page 854x534 at 1.5x (1280x800); screenshots 1280x800",
+  "setup": {
+    "ollama_models": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"],
+    "text_model_routing_order_before": []
+  },
+  "pressed": ["RB (placed focus only)", "RB (Main -> Ollama tab)", "DOWN x13 to 'Set text model try order' (visible 100%)", "A (picker opened)", "DOWN x1 to 'Reset to defaults' (visible 100%)", "A", "B"],
+  "seen": {
+    "picker_rows_on_open": ["gemma4:e2b-it-qat"],
+    "picker_rows_after_reset": ["gemma4:e2b-it-qat"],
+    "nomic_embed_text_row_count": 0,
+    "picker_buttons": ["Move gemma4:e2b-it-qat up", "Move gemma4:e2b-it-qat down", "Reset to defaults", "Done", "Cancel"],
+    "picker_closed_after_B": true,
+    "text_model_routing_order_after_B": [],
+    "settings_file_mtime_after_B": "2026-09-28 17:42:28 (unchanged, before the check)"
+  },
+  "screenshots": ["t75-land-L1-PICKER-ANSWER-MODELS-open.png", "t75-land-L1-PICKER-ANSWER-MODELS-after-reset.png"],
+  "verdict": "PASS"
+}

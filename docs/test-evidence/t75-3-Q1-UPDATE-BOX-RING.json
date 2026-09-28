@@ -1,0 +1,19 @@
+{
+  "row": "Q1-UPDATE-BOX-RING",
+  "driver": 3,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:11 -04:00",
+  "screen": "built-in (page window 854x534 in the Big Picture window, screen 853x533 at devicePixelRatio 1.5; QAM window 854x454)",
+  "setup": "Run AI on this Deck on (ollama_local_on_deck true). Plugin already open on the Main tab; RB pressed to reach the Ollama tab; walked DOWN then UP to 'Update AI & models' (aria-label 'Update AI engine and installed models', rect x64 y204 w268 h36).",
+  "pressed": [
+    "Trial 1: A on Update AI & models; read box; B",
+    "Trial 2: A on Update AI & models; read box; A on 'Not now' (ring was on Not now first)"
+  ],
+  "seen": {
+    "box": "'Turn on internet downloads?' buttons: Not now, Turn on and download, Cancel. Ring inside box started on 'Not now' both times (rect 123,382 194x60 on trial 1).",
+    "afterB": "ring on 'Update AI engine and installed models' button, rect 64,204,268,36, visible 100 percent; box gone (no buttons in overlay)",
+    "afterNotNow": "ring on the same button, rect 64,204,268,36; box gone",
+    "settingsAfter": "internet_downloads still false; nothing downloaded"
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,18 @@
+{
+  "row": "Q3-CLEAR-CACHE-ROW",
+  "driver": 4,
+  "buildCommit": "cb88c012 (deployed; branch tip bff046f1)",
+  "deckTime": "2026-09-28T17:30 -04:00",
+  "screen": "built-in (QAM window 854x454 at devicePixelRatio 1.5; screenshot 1280x800)",
+  "setup": "Plugin opened fresh; DOWN onto the tab bar, RB to Settings; 15 DOWN presses to 'Clear cache...' (D-pad only, nothing activated).",
+  "pressed": "DOWN, RB, then DOWN x15",
+  "seen": {
+    "Clear cache": "x 64, right edge 194, width 130, height 38, y 376; ring on it, 100 percent visible",
+    "Clear all data": "x 202, right edge 332, width 130, height 38, y 376 (same y and height)",
+    "rowBox": "x 48 to 348, 300 wide",
+    "neighbours": "full-width controls x 64 to 332 (268 wide): Apply UI scale, Ali G row. Three-way rows 64-149, 155-241, 247-332. Clear cache left edge 64 and Clear all data right edge 332 match them."
+  },
+  "screenshot": "t75-4-Q3-CLEAR-CACHE-ROW.png",
+  "runFile": "runs/t75-4-Q3-walk.json",
+  "verdict": "PASS"
+}

@@ -1,0 +1,21 @@
+{
+  "row": "Q3-CLEAR-CACHE-ROW",
+  "driver": "t75-5 (driver 5)",
+  "build": "Deck runs the local build of cb88c012; checkout HEAD at run time c45610c2",
+  "deckTime": "2026-09-28T17:43:40-04:00 to 17:44:33-04:00",
+  "screen": "built-in Deck screen: QAM page 854x454 CSS px, dpr 1.5 (1280x800); UI scale Handheld (1.00x)",
+  "setup": "none; plugin opened after the Q2 reload",
+  "pressed": ["Down (acquire), Down to tab bar, RB -> Settings tab", "Down x15 to 'Clear cache...' (direction presses only, no A)", "saveCheck walk: Up, Down, Right, Left"],
+  "seen": {
+    "clearCache": {"left": 64, "right": 194, "width": 130, "top": 375.9, "height": 38},
+    "clearAllData": {"left": 202, "right": 332, "width": 130, "top": 375.9, "height": 38},
+    "gapBetween": 8,
+    "rowContainer": {"left": 48, "right": 348, "width": 300},
+    "otherFullWidthButtonsOnTab": "Apply UI scale 64..332 (w 268); 'Ali G - Other' 64..332 (w 268); three-way button rows start at 64 and end at 332",
+    "neighbourAbove": "Show Developer tab row (48..348), its text and divider line start and end at the same screen x as the two buttons (screenshot x 855 and 1257)",
+    "visibility": "Clear cache ring visible 100%, inside the scroll pane (88..454)"
+  },
+  "savedCheck": "checks/t75-5-Q3-CLEAR-CACHE-ROW.json (4/4 steps, all visible)",
+  "screenshot": "t75-5-Q3-CLEAR-CACHE-ROW.png",
+  "verdict": "PASS"
+}

@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 75 (2026-09-28)
+
+- **The text try-order picker now offers only models that can answer**, and an older saved order that held the
+  note-search model is cleaned. Passed on the Deck.
+- **The shared speech server can no longer be restarted under the mic by a second listener.** Nothing changes today —
+  the mic is the only one.
+
 ### Plan 74, the second release wave (2026-09-28)
 
 **The download**

@@ -196,6 +196,7 @@ import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
 import { questionLooksLikeTroubleshootingAsk } from "../utils/troubleshootingAskHeuristic";
+import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../utils/troubleshootHintDismissals";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import {
   composeDrgGlossaryExplainFurtherQuestion,
@@ -286,6 +287,8 @@ export type MainTabChatTranscriptProps = {
   askMode: AskModeId;
   /** When false, troubleshooting-shaped Asks show a dismissible hint to enable game-context permission. */
   gameContextReadEnabled?: boolean;
+  /** The open chat, from MainTabProps via the spread: the troubleshooting hint's Dismiss is kept per chat. */
+  activeChatSlotId?: string | null;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
   /**
    * Starts a new Ask turn programmatically — same function preset chips and strategy branches
@@ -386,6 +389,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     liveReplyChipError = null,
     askMode,
     gameContextReadEnabled = false,
+    activeChatSlotId = null,
     onNavigateToPermissions,
     onAskOllama,
     chatSumUp = null,
@@ -401,7 +405,17 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * on above.
    */
   const [detailsTab, setDetailsTab] = useState<"answer" | "session">("answer");
-  const [troubleshootingPermHintDismissed, setTroubleshootingPermHintDismissed] = useState(false);
+  /*
+   * Kept outside this component, per chat: a Quick Access close and reopen rebuilds the panel,
+   * and plain state brought a dismissed hint back (plan70-L6-AFTER-DISMISS.json). The counter
+   * only re-renders after a press; the answer itself is read from troubleshootHintDismissals.
+   */
+  const [, setTroubleshootHintDismissTick] = useState(0);
+  const troubleshootingPermHintDismissed = isTroubleshootHintDismissed(activeChatSlotId);
+  const dismissTroubleshootingPermHint = () => {
+    dismissTroubleshootHint(activeChatSlotId);
+    setTroubleshootHintDismissTick((n) => n + 1);
+  };
 
   /*
    * Read aloud / Stop (plan 42 step 3a). One instance for the whole transcript — the background
@@ -1578,7 +1592,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
           <Button
             focusable
             ref={troubleshootHintButtonRefs[1]}
-            onClick={() => dismissHintKeepingRing(troubleshootHintButtonEls, () => setTroubleshootingPermHintDismissed(true))}
+            onClick={() => dismissHintKeepingRing(troubleshootHintButtonEls, dismissTroubleshootingPermHint)}
             style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
           >
             Dismiss

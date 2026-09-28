@@ -39,6 +39,7 @@
     "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
     "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
     "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+    "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
     "src/components/MainTabChatTranscript.turnTitle.test.tsx",
     "src/components/MainTabChatTranscript.upWalk.test.tsx",
     "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",

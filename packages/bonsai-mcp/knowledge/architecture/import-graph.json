@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 577,
-  "edgeCount": 1592,
+  "fileCount": 579,
+  "edgeCount": 1596,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -572,6 +572,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/troubleshootHintDismissals.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.tsx": {
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
@@ -620,6 +628,7 @@
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/replyStopRegistry.ts",
+        "src/utils/troubleshootHintDismissals.ts",
         "src/utils/troubleshootingAskHeuristic.ts",
         "src/utils/uiDocument.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
@@ -647,6 +656,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx"
       ]
@@ -4363,6 +4373,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
@@ -6215,6 +6226,13 @@
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/thinkingSummaryText.test.ts"
+      ]
+    },
+    "src/utils/troubleshootHintDismissals.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
+        "src/components/MainTabChatTranscript.tsx"
       ]
     },
     "src/utils/troubleshootingAskHeuristic.ts": {

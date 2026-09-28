@@ -277,3 +277,19 @@ describe("the 'What went wrong?' reason chips are tighter than the other reply b
     expect(match![1]!).toContain(`margin-top: calc(${scaled(6)} - 8px) !important`);
   });
 });
+
+describe("after Helpful, \"Saved on this Deck\" shares the speaker's row (section 6 CSS)", () => {
+  // Roadmap "After Stop or Helpful, Read aloud sits alone above a blank gap" (plan 72 free play).
+  // The words sit where the thumbs were, in a row that lines its items up along the top; the
+  // speaker's glyph is centred in its own 32-tall box, so the words are centred on the row to
+  // read level with it rather than riding up at its top edge.
+  const css = buildSection6Section();
+
+  it("centres the words vertically on the row", () => {
+    const match = css.match(
+      /\.bonsai-scope \.bonsai-chat-reply-actions-row > \.bonsai-chat-feedback-row__label\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/align-self:\s*center\s*!important/);
+  });
+});

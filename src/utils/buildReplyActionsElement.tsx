@@ -10,6 +10,7 @@
  *
  *     ┌─ reply actions ─────────────────────┐
  *     │   Helpful   Not really   (speaker)  │  <- thumbs + Read aloud
+ *     │   Saved on this Deck     (speaker)  │  <- the same row once Helpful is picked
  *     │   (only once Not really is picked)  │
  *     │   [chip] [chip]                     │  <- bad info / wrong game
  *     │   [chip] [chip] [chip]              │  <- spoiled / too long / short
@@ -328,6 +329,20 @@ export function buildReplyActionsElement(
      "Saved on this Deck" label instead) — same condition the row used before Read aloud moved in. */
   const showThumbs = showFeedback && (rating === null || rating === "down");
   /*
+   * "Saved on this Deck" takes the thumbs' place: inside the speaker's row, to its left, when there
+   * is a speaker. It used to be a line of its own above that row, which left the speaker alone at
+   * the right of an otherwise empty row under it (roadmap "After Stop or Helpful, Read aloud sits
+   * alone above a blank gap", plan72-Z-FREEPLAY.json finding 10). Plain words, not a D-pad stop,
+   * so the row's stops, their order and every hand-off below are unchanged. With no speaker there
+   * is no row to share, and it keeps its own line.
+   */
+  const showSavedLabel = showFeedback && rating === "up";
+  const savedLabel = showSavedLabel ? (
+    <span className="bonsai-chat-feedback-row__label bonsai-chat-feedback-row--rated">
+      Saved on this Deck
+    </span>
+  ) : null;
+  /*
    * The row of buttons under a reply is gone (D76, D77): Show details became the line below,
    * Copy moved into the answer bubble's corner and Retry onto the question bubble's. What is left
    * is the thumbs and the line.
@@ -614,11 +629,7 @@ export function buildReplyActionsElement(
         onMoveUp: moveUpFromReply,
       } as Record<string, unknown>)}
     >
-      {showFeedback && rating === "up" ? (
-        <span className="bonsai-chat-feedback-row__label bonsai-chat-feedback-row--rated">
-          Saved on this Deck
-        </span>
-      ) : null}
+      {showReadAloudRow ? null : savedLabel}
       {showThumbs || showReadAloudRow ? (
         <>
           {showThumbs ? (
@@ -644,6 +655,7 @@ export function buildReplyActionsElement(
               },
             } as Record<string, unknown>)}
           >
+            {showReadAloudRow ? savedLabel : null}
             {showThumbs ? (
               <>
                 <BonsaiChatSecondaryButton

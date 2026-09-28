@@ -782,3 +782,56 @@ describe("buildReplyActionsElement Read aloud speaker", () => {
     expect(getReplyStop("read-aloud")).toBe(screen.getByLabelText("Read aloud"));
   });
 });
+
+/*
+ * Roadmap "After Stop or Helpful, Read aloud sits alone above a blank gap" (plan 72 free play,
+ * docs/test-evidence/plan72-Z-FREEPLAY.json finding 10, screenshots/plan72/Z-after-helpful.png):
+ * Helpful swaps the thumbs for "Saved on this Deck", which was drawn as a line of its own ABOVE the
+ * thumbs row -- leaving the speaker alone at the right of an otherwise empty row under it. The words
+ * now take the thumbs' place in that row, so the row still reads as one row.
+ */
+describe("buildReplyActionsElement after Helpful", () => {
+  const rated = (over: Record<string, unknown> = {}) =>
+    render(
+      buildReplyActionsElement({
+        replyKey: "live",
+        rating: "up",
+        onRate: () => {},
+        showFeedback: true,
+        onToggleTransparency: () => {},
+        onReadAloudToggle: () => {},
+        ...over,
+      })!,
+    );
+
+  afterEach(() => {
+    registerReplyStop("read-aloud", null);
+  });
+
+  it("puts \"Saved on this Deck\" in the speaker's own row, to its left", () => {
+    const { container } = rated();
+    const saved = screen.getByText("Saved on this Deck");
+    const speaker = screen.getByLabelText("Read aloud");
+    const row = saved.closest(".bonsai-chat-reply-actions-row");
+    expect(row).not.toBeNull();
+    expect(row!.contains(speaker)).toBe(true);
+    expect(saved.compareDocumentPosition(speaker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // Nothing is left on a line of its own above the row: the block opens with the row itself.
+    const block = container.querySelector(".bonsai-chat-reply-actions")!;
+    expect(block.firstElementChild).toBe(row);
+  });
+
+  it("is still not a D-pad stop: the row's only button is the speaker", () => {
+    rated();
+    const row = screen.getByText("Saved on this Deck").closest(".bonsai-chat-reply-actions-row")!;
+    expect(Array.from(row.querySelectorAll("button")).map((b) => b.getAttribute("aria-label"))).toEqual([
+      "Read aloud",
+    ]);
+  });
+
+  it("keeps its own line when there is no speaker to share a row with", () => {
+    rated({ onReadAloudToggle: undefined });
+    const saved = screen.getByText("Saved on this Deck");
+    expect(saved.closest(".bonsai-chat-reply-actions-row")).toBeNull();
+  });
+});

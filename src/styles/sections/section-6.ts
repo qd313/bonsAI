@@ -517,6 +517,13 @@ ${buildAnswerBubbleSection()}
           color: #8fa6bd !important;
           font-style: italic !important;
         }
+        /* After Helpful, "Saved on this Deck" sits in the speaker's row where the thumbs were
+           (buildReplyActionsElement.tsx). The row lines its items up along the top and the
+           speaker's glyph is centred in its own box, so the words are centred too, to read level
+           with it. */
+        .bonsai-scope .bonsai-chat-reply-actions-row > .bonsai-chat-feedback-row__label {
+          align-self: center !important;
+        }
 
         /*
           Main tab bottom dock. The column stretches to the scroll viewport's bottom edge

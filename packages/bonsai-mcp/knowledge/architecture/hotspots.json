@@ -96,23 +96,23 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 838,
+      "role": ""
+    },
+    {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 836,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 833,
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 829,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 785,
-      "role": ""
-    },
-    {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 772,
+      "lines": 784,
       "role": ""
     },
     {

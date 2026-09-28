@@ -68,7 +68,7 @@ describe("bonsaiAskCompletionWatch", () => {
     await vi.runOnlyPendingTimersAsync();
 
     expect(toaster.toast).toHaveBeenCalledWith(
-      expect.objectContaining({ title: "Reply ready" }),
+      expect.objectContaining({ title: "done", body: "Tap to open" }),
     );
     expect(getAskCompletionWatchSeq()).toBeGreaterThan(seqBefore);
   });

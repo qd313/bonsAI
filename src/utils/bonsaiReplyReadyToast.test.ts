@@ -45,12 +45,13 @@ describe("bonsaiReplyReadyToast", () => {
 
   it("shows Reply ready with onClick when the reply surface is hidden", () => {
     setReplySurfaceVisible(false);
-    handleAskTerminalForToast(terminalStatus());
+    handleAskTerminalForToast(terminalStatus({ response: "```bonsai-spoiler\nhidden\n```" }));
 
     expect(toaster.toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Reply ready",
         body: "Tap to open",
+        duration: 4000,
         onClick: expect.any(Function),
       }),
     );
@@ -60,6 +61,40 @@ describe("bonsaiReplyReadyToast", () => {
     expect(Navigation.OpenQuickAccessMenu).toHaveBeenCalledWith(999);
     expect(consumePendingFocusMainTab()).toBe(true);
     expect(consumePendingFocusMainTab()).toBe(false);
+  });
+
+  it("shows the answer across both lines for eight seconds, tap still opens", () => {
+    setReplySurfaceVisible(false);
+    handleAskTerminalForToast(
+      terminalStatus({
+        response:
+          "Use the pickaxe on the glowing ore veins first, then swap to the drill once the armoured bug boss appears near the exit door",
+      }),
+    );
+    const call = vi.mocked(toaster.toast).mock.calls[0]![0]!;
+    expect(call.title).toMatch(/^Use the pickaxe/);
+    expect(call.title).not.toBe("Reply ready");
+    expect(call.body).toMatch(/…$/);
+    expect(call.duration).toBe(8000);
+    call.onClick?.();
+    expect(consumePendingFocusMainTab()).toBe(true);
+  });
+
+  it("shows a short answer whole with the tap hint underneath", () => {
+    setReplySurfaceVisible(false);
+    handleAskTerminalForToast(terminalStatus({ response: "Yes, it does." }));
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Yes, it does.", body: "Tap to open", duration: 8000 }),
+    );
+  });
+
+  it("never puts a hidden spoiler on the toast", () => {
+    setReplySurfaceVisible(false);
+    handleAskTerminalForToast(
+      terminalStatus({ response: "Careful now.\n```bonsai-spoiler\nSecret twist\n```\nOk." }),
+    );
+    const call = vi.mocked(toaster.toast).mock.calls[0]![0]!;
+    expect(`${call.title} ${call.body}`).not.toContain("Secret");
   });
 
   it("skips toast when the reply surface is already visible", () => {

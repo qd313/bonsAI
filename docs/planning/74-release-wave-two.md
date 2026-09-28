@@ -82,3 +82,66 @@ bookkeeper sweep for that lane's roadmap, testing and changelog rows. Then one d
 ## Log
 
 - **2026-09-28:** plan written; five repo copies made from `c8fa25d9`; lanes started.
+
+## Appendix — lane 3's brief (the Opus-high trial)
+
+Lane 3 runs as its own session, not a helper inside the session that runs the wave: the app only loads a new
+helper setting when a session starts, and the Opus-high helper was added mid-session. The session running the
+wave sets lane 3's session to Opus 5.5 at high effort before sending it this brief.
+
+**Where to work:** the repo copy `C:\Users\still\Documents\BonsAI\.claude\worktrees\p74-l3-focus` (branch
+`refactor/p74-l3-focus`), by absolute path in every command. Never change the shared checkout at
+`C:\Users\still\Documents\BonsAI`, never switch its branch.
+
+**Ground rules:**
+1. First act: `git merge-base --is-ancestor c8fa25d9 HEAD` in the copy. If it fails, stop and report.
+2. Do **not** run `pnpm install` or any install: `node_modules` in the copy is a link to the shared checkout's.
+3. Six checks before every commit: `npx tsc --noEmit`, `npm test`, `npm run test:py`, `npm run build`,
+   `node scripts/check-focus-patterns.mjs`, `python scripts/verify.py --quick`.
+4. Commit with `git -c core.hooksPath=.githooks commit ...`, files staged by name, never `git add -A`. One fix
+   per commit, failing test first. Plain-language messages ending with
+   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
+5. Never edit `docs/roadmap.md`, `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`. Never touch
+   the Deck (no `deck_*` tools, no SSH, no deploy). Never push, never `git rebase -i`. Never hand-edit
+   `packages/bonsai-mcp/knowledge/architecture/`.
+6. **The focus law.** On the device, Steam calls `Focusable` move handlers (`onMoveUp`, `onMoveDown`, ...) and
+   `onActivate`, and moves the ring across containers only through its own transfer (`takeNavFocus`, a
+   registered nav node's `TakeFocus`). It never delivers DOM `keydown` for the D-pad, and direction presses
+   inside `onButtonDown` do not consume the press. A fix built on those is dead on the Deck and is sent back.
+   A plain `focus()` is only safe between siblings inside one container.
+7. If a fix resists, stop, commit nothing half-done, and write up what you learned.
+
+**Read first:** `CLAUDE.md`, `AGENTS.md` (the Decky focus graph section), `docs/lessons-learned.md`. Then, per
+bug, its roadmap entry (find it by the bold title), its "Detail" link in `docs/roadmap-details.md`, and the
+evidence named.
+
+**The six bugs** (★ unless marked):
+1. **"B on the notes block sends the ring to the tab bar and leaves Show details open"**, plus the same thing on
+   **"Hide details"** (the part still open of the ★★ entry "Three D-pad slips seen in the plan 68 Deck pass";
+   testing row PLAN72-F-UP). The notes block handles only Up and Down, no B
+   (`src/utils/buildKbNotesBlockElement.tsx` around lines 285–300), so B falls through to Steam's back-out.
+   Wanted: B closes Show details and returns the ring to what opened it — reuse the existing close path.
+2. **"Two older boxes open with the ring on their action button, not the safe choice"** — "Enable Tier 2 before
+   pulling?" (`src/hooks/usePullModelSubmitSelected.tsx` around line 169) and the library's folder picker
+   (`src/components/KnowledgeBaseSection.tsx` around line 232). The download notice already does it right
+   (`src/features/downloads/downloadNotice.tsx` around line 210): copy that pattern; do not change the actions.
+3. **"After the \"Update Ollama and models?\" box closes with B, the ring goes to the Ollama tab bar"** — since
+   `eb4f4d16` the button opens the download notice first; the Deck still found the ring on the tab bar after it
+   closed (`docs/test-evidence/plan72-F3-DL.json`, `ringAfterBoxClosed`). Wanted: back on the opening button.
+4. **"Up from Ask lands on the mic one time and on the paperclip another"** — Ask sets no Up target of its own
+   (`src/components/MainTabUnifiedAskBar.tsx`). Set it explicitly to the control directly above, the way its
+   neighbours do.
+5. **"A straight Down lands on Read aloud, not Helpful; Up from Helpful lands on choice A, skipping B"** —
+   `docs/test-evidence/plan72-Z-FREEPLAY.json`; plan 72 § 7, the 18:10 entry. Follow the earlier Up fixes
+   `8294e75b`, `29c0b075`, `9feef4e1` (tests in `src/components/MainTabChatTranscript.upWalk.test.tsx`).
+6. ★★ **"Reaching a spoiler cover by Up lands the ring beside it, and A does nothing"** —
+   `docs/test-evidence/plan70-SPOILER-CREDITS-01.json`.
+
+**Shared area:** lane 4 fixes a look problem in the same row of buttons under an answer, and lane 2 changes the
+waiting spinner and the dismissed hint in `MainTabChatTranscript.tsx`. Keep changes local to the focus wiring.
+
+**Report when done:** commit hashes; tests added by name; for each fix, the roadmap entry, the testing row it
+owes, one plain sentence on what a person would notice, your confidence it holds on the Deck (high, medium or
+low) and why, and the exact button presses a Deck check should make; plus anything found and not fixed. Send
+the report to the session running the wave with `SendMessage` (to
+`local_d5152972-85f4-424b-a3b4-be4d85ebc062`), and also end your turn with it.

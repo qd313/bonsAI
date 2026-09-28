@@ -143,10 +143,13 @@ export type SumUpButtonView = {
 
 export const REASON_ANSWER_IN_FLIGHT = "Wait for the answer to finish, then sum up.";
 export const REASON_NOTHING_TO_SUM = "The whole chat still fits, so there's nothing to sum up yet.";
+/** After a sum-up: the card above is the summary, so "still fits" would contradict it. */
+export const REASON_ALREADY_SUMMED = "This chat is already summed up. Ask more, then you can sum up again.";
 
 /**
  * The button, in the order the plan's § 6 lists its states: working beats everything; an answer
- * being written greys it out; so does a chat that still fits; otherwise it reads "Sum up this
+ * being written greys it out; so does a chat that still fits, or one already summed up with
+ * nothing new since (each with its own reason line); otherwise it reads "Sum up this
  * chat", or "Sum up again" once a summary exists.
  */
 export function sumUpButtonView(args: {
@@ -167,6 +170,9 @@ export function sumUpButtonView(args: {
   if (answerInFlight || state?.otherJobRunning) {
     return { label, busy: false, disabled: true, reason: REASON_ANSWER_IN_FLIGHT };
   }
-  if (!state?.canSumUp) return { label, busy: false, disabled: true, reason: REASON_NOTHING_TO_SUM };
+  if (!state?.canSumUp) {
+    const reason = state?.summary ? REASON_ALREADY_SUMMED : REASON_NOTHING_TO_SUM;
+    return { label, busy: false, disabled: true, reason };
+  }
   return { label, busy: false, disabled: false, reason: null };
 }

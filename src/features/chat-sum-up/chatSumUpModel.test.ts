@@ -9,6 +9,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  REASON_ALREADY_SUMMED,
   REASON_ANSWER_IN_FLIGHT,
   REASON_NOTHING_TO_SUM,
   entriesAsQuestions,
@@ -148,6 +149,13 @@ describe("the button", () => {
       disabled: true,
       reason: REASON_NOTHING_TO_SUM,
     });
+  });
+
+  /* Roadmap: the Session tab said "nothing to sum up yet" while the card showed the chat summed up. */
+  it("once a summary exists, says the chat is already summed up rather than that it still fits", () => {
+    const view = sumUpButtonView({ state: state({ summary: summary(), canSumUp: false }), answerInFlight: false });
+    expect(view).toMatchObject({ label: "Sum up again", disabled: true, reason: REASON_ALREADY_SUMMED });
+    expect(view.reason).not.toMatch(/still fits|nothing to sum up yet/);
   });
 
   it("working beats everything, with the back end's seconds", () => {

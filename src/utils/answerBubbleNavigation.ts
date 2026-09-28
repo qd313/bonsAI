@@ -211,11 +211,47 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
  * a cover first. A plain focus: the cover is inside the answer's own container, the move Down's
  * cover step already makes on the device (spoilerFenceRegistry.ts). Marked visited on landing, so
  * the next Down walks on past it rather than landing on it again.
+ *
+ * A cover still above the screen counts too (plan 74 lane 3, round two). Going Up, a section comes
+ * into view from its bottom, so a cover at its top is the last part of it to appear: the Deck found
+ * Up out of a tall second section landing on the first section around its cover, every time
+ * (docs/test-evidence/plan74-P74-COVER-UP.json). `showCoverFromAbove` brings such a cover down onto
+ * the screen first, when that is no more than a screen's scroll.
  */
 function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): boolean {
   if (!scroll) return false;
-  const cover = findLastSpoilerFenceIn(section, (el) => elementIsWithinViewportOf(el, scroll));
-  return Boolean(cover) && focusSpoilerFence(cover);
+  const inView = findLastSpoilerFenceIn(section, (el) => elementIsWithinViewportOf(el, scroll));
+  if (inView) return focusSpoilerFence(inView);
+  const paneTop = scroll.getBoundingClientRect().top;
+  const above = findLastSpoilerFenceIn(section, (el) => el.getBoundingClientRect().bottom <= paneTop);
+  return Boolean(above) && showCoverFromAbove(section, above!, scroll) && focusSpoilerFence(above);
+}
+
+/** Room left above a cover (or its section) that Up scrolls onto the screen; revealBelowKeeping's. */
+const COVER_TOP_PAD_PX = 8;
+
+/**
+ * Scroll the panel up so `cover`, above the screen, sits on it: the whole of `section` from its top
+ * when the cover still fits that way (the Deck's first section, a cover then one paragraph), else the
+ * cover's own top. True when the cover is on screen afterwards.
+ *
+ * Refuses a scroll of more than one screen's height, the same care Down's step takes: everything
+ * between the cover and the old top of the screen would go past unread. Then the section takes the
+ * ring as before, and its text scrolls by on the presses after.
+ *
+ * Plain scrollTop arithmetic rather than scrollIntoView, which obeys the Quick Access pane's 116 px
+ * scroll-padding-top (scrollElementTopToPaneTop in chatPanelScroll.ts has the measurement).
+ */
+function showCoverFromAbove(section: HTMLElement, cover: HTMLElement, scroll: HTMLElement): boolean {
+  const paneTop = scroll.getBoundingClientRect().top;
+  const band = readableBottomOf(scroll) - paneTop;
+  const sectionTop = section.getBoundingClientRect().top;
+  const coverRect = cover.getBoundingClientRect();
+  const fromSectionTop = coverRect.bottom - sectionTop + COVER_TOP_PAD_PX <= band;
+  const lift = paneTop + COVER_TOP_PAD_PX - (fromSectionTop ? sectionTop : coverRect.top);
+  if (lift <= 0 || lift > band) return false;
+  scroll.scrollTop = Math.max(0, scroll.scrollTop - lift);
+  return elementIsWithinViewportOf(cover, scroll);
 }
 
 /**

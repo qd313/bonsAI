@@ -132,3 +132,114 @@ describe("Up onto a spoiler cover", () => {
     expect(document.activeElement).toBe(stops[2]);
   });
 });
+
+/*
+ * The Deck's shape (docs/test-evidence/plan74-P74-COVER-UP.json): the first section is a hidden cover
+ * at its top plus one paragraph (131 tall, cover 55 tall 8 below its top), the second is four
+ * paragraphs in one tall section (327) that Up scrolls inside, 80 px a press, before leaving. Going
+ * Up, a section comes into view from its bottom, so its cover is the last part of it to appear:
+ * round one's step took the cover only when the cover itself was already on screen, and landed on
+ * the section around it instead. The boxes here move with the panel's scroll, as they do on screen.
+ */
+describe("Up onto a cover that is still above the screen", () => {
+  const PANE = 300;
+
+  function scrollingAnswer(sections: Array<[number, number]>, coverAt = 8) {
+    const pane = document.createElement("div");
+    pane.className = "TabContentsScroll";
+    Object.defineProperty(pane, "scrollHeight", { value: 2000, configurable: true });
+    Object.defineProperty(pane, "clientHeight", { value: PANE, configurable: true });
+    stubRect(pane, 0, PANE);
+    document.body.appendChild(pane);
+    /** Place `el` at `top`..`bottom` in the answer's own coordinates; its box follows the scroll. */
+    const place = (el: HTMLElement, top: number, bottom: number) => {
+      el.getBoundingClientRect = () => {
+        const y = top - pane.scrollTop;
+        return { top: y, bottom: y + bottom - top, left: 0, right: 0, width: 0, height: bottom - top, x: 0, y, toJSON: () => ({}) } as DOMRect;
+      };
+    };
+    const bubble = document.createElement("div");
+    bubble.className = "bonsai-chat-ai-bubble Panel Focusable";
+    bubble.setAttribute("tabindex", "0");
+    place(bubble, 0, sections[sections.length - 1]![1]);
+    pane.appendChild(bubble);
+    registerAnswerBubbleEl(KEY, bubble);
+    const stops = sections.map(([top, bottom], i) => {
+      const stop = document.createElement("div");
+      stop.className = "bonsai-answer-stop Panel Focusable";
+      stop.setAttribute("tabindex", "0");
+      place(stop, top, bottom);
+      bubble.appendChild(stop);
+      registerAnswerStop(KEY, i, stop);
+      return stop;
+    });
+    const cover = document.createElement("div");
+    cover.className = "bonsai-spoiler-reveal-target Panel Focusable";
+    cover.setAttribute("tabindex", "0");
+    place(cover, sections[0]![0] + coverAt, sections[0]![0] + coverAt + 55);
+    stops[0]!.appendChild(cover);
+    registerSpoilerFence("first", cover);
+    const onScreen = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      return r.top >= 0 && r.bottom <= PANE;
+    };
+    return { pane, bubble, stops, cover, onScreen };
+  }
+
+  it("Up out of a tall section that scrolls inside first lands on the first section's cover", () => {
+    const { pane, bubble, stops, cover, onScreen } = scrollingAnswer([[0, 131], [131, 458]]);
+    pane.scrollTop = 360; // the ring came up into the tall section; its top is above the screen
+    stops[1]!.focus();
+
+    let presses = 0;
+    while (document.activeElement === stops[1] && presses < 10) {
+      expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+      presses += 1;
+    }
+
+    expect(presses).toBe(4); // three scroll presses inside it, then the hand-over, as on the Deck
+    expect(document.activeElement).toBe(cover);
+    expect(onScreen(cover)).toBe(true);
+  });
+
+  it("one Up with only the bottom of the first section showing lands on its cover and shows it", () => {
+    const { pane, bubble, stops, cover, onScreen } = scrollingAnswer([[0, 131], [131, 458]]);
+    pane.scrollTop = 120; // 11 px of the first section showing; its cover is above the screen
+    stops[1]!.focus();
+
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+    expect(document.activeElement).toBe(cover);
+    expect(onScreen(cover)).toBe(true);
+    expect(onScreen(stops[0]!)).toBe(true); // the whole short section, text under the cover too
+  });
+
+  it("Up from that cover then leaves the answer, as Up from the first section always did", () => {
+    const { pane, bubble, stops, cover } = scrollingAnswer([[0, 131], [131, 458]]);
+    pane.scrollTop = 120;
+    stops[1]!.focus();
+    handleAnswerBubbleMoveUp(bubble, ref, 2, KEY);
+    expect(document.activeElement).toBe(cover);
+
+    expect(handleUpFromSpoilerCover(bubble, 2, KEY)).toBe(false);
+  });
+
+  it("a cover lower in its section brings the section's text above it onto the screen too", () => {
+    const { pane, bubble, stops, cover, onScreen } = scrollingAnswer([[60, 231], [231, 558]], 40);
+    pane.scrollTop = 220; // 11 px of the first section showing; its cover and the line above it are not
+    stops[1]!.focus();
+
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+    expect(document.activeElement).toBe(cover);
+    expect(onScreen(stops[0]!)).toBe(true);
+  });
+
+  it("a cover more than a screen above stays for later presses, so no text is scrolled past unread", () => {
+    const { pane, bubble, stops } = scrollingAnswer([[0, 700], [700, 900]]);
+    pane.scrollTop = 650; // the first section's last 50 px showing; its cover is 580 px above
+    stops[1]!.focus();
+
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+    expect(document.activeElement).toBe(stops[0]);
+    expect(pane.scrollTop).toBe(650);
+  });
+});

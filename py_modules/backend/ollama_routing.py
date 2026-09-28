@@ -340,6 +340,15 @@ def is_high_vram_tag(tag: str, size_gb: float | None = None) -> bool:
     return False
 
 
+def is_embedding_only_tag(tag: str) -> bool:
+    """True for a note-search (embedding) model, which can never answer a question.
+
+    Name-based, like the screen's ``isEmbeddingOnlyTag``: these models are not in the curated
+    catalogue and Ollama's tag list does not say what a model is for.
+    """
+    return "embed" in (tag or "").lower()
+
+
 def is_vision_capable_tag(tag: str) -> bool:
     """Best-effort vision membership for routing lists (unknown tags allowed with UI warn)."""
     t = (tag or "").strip().lower()
@@ -356,7 +365,7 @@ def is_vision_capable_tag(tag: str) -> bool:
 def build_initial_routing_order(requires_vision: bool, installed: list[str]) -> list[str]:
     """Defaults intersect installed on top, remaining installed appended (picker rule A)."""
     seed = default_vision_routing_seed() if requires_vision else default_text_routing_seed()
-    inst = [t for t in installed if (t or "").strip()]
+    inst = [t for t in installed if (t or "").strip() and not is_embedding_only_tag(t)]
     inst_set = set(inst)
     head = [t for t in seed if t in inst_set]
     tail = [t for t in inst if t not in head]
@@ -387,6 +396,8 @@ def resolve_routing_order(
         gb = sizes.get(tag)
         if not high_vram and is_high_vram_tag(tag, gb):
             continue
+        if is_embedding_only_tag(tag):
+            continue  # an order saved before the picker hid these may still name one
         tryable.append(tag)
     return _dedupe_preserve_order(tryable)[:MAX_MODEL_ROUTING_ORDER_LEN]
 
@@ -426,7 +437,7 @@ def remove_tag_from_routing_orders(settings: dict[str, Any], tag: str) -> dict[s
 def build_host_fallback_tail(user_chain: list[str], installed: list[str]) -> list[str]:
     """Remaining installed tags not in user chain, deprioritized, capped."""
     chain_set = set(user_chain)
-    remaining = [t for t in installed if t not in chain_set]
+    remaining = [t for t in installed if t not in chain_set and not is_embedding_only_tag(t)]
     return sort_models_deprioritized_last(remaining)[:HOST_FALLBACK_TAIL_CAP]
 
 

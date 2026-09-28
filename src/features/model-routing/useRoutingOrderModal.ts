@@ -26,7 +26,7 @@ import { ModelRoutingOrderModal, type ModelRoutingOrderKind } from "../../compon
 import type { DeveloperConnectionStatus } from "../../components/DeveloperTab";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, type BonsaiSettings } from "../../data/bonsaiSettingsSchema";
 import type { ModelPolicyTierId } from "../../data/modelPolicy";
-import type { PullModelEntry } from "../../data/pullModelCatalog";
+import { isEmbeddingOnlyTag, type PullModelEntry } from "../../data/pullModelCatalog";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
 
@@ -100,7 +100,8 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
         );
         a.setLastConnectionStatus(result);
         if (result.reachable && Array.isArray(result.models)) {
-          installed = result.models.filter(Boolean);
+          // Note-search models cannot answer, so they are not choices for an answer order.
+          installed = result.models.filter((t) => Boolean(t) && !isEmbeddingOnlyTag(t));
         }
       } catch (e: unknown) {
         toaster.toast({
@@ -114,7 +115,7 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
       if (installed.length === 0) {
         toaster.toast({
           title: "No installed models",
-          body: "Pull a model on the Ollama tab (Browse models or Install options), then try again.",
+          body: "Pull an answering model on the Ollama tab (Browse models or Install options), then try again.",
           duration: 5000,
         });
         return;
@@ -131,7 +132,9 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
           modelPolicyNonFossUnlocked: a.modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks: a.modelAllowHighVramFallbacks,
           savedOrder,
-          onSave: async (order: string[]) => {
+          onSave: async (rawOrder: string[]) => {
+            // Last line of defence: a note-search model never reaches the saved answer order.
+            const order = rawOrder.filter((t) => !isEmbeddingOnlyTag(t));
             if (kind === "vision") {
               a.setVisionModelRoutingOrder(order);
             } else {

@@ -70,10 +70,10 @@ import {
   resolveFocusedAnswerBubble,
 } from "./answerBubbleElRegistry";
 import {
-  focusFirstAnswerChunk,
   focusLastAnswerChunk,
   handleAnswerBubbleMoveDown,
   handleAnswerBubbleMoveUp,
+  handleUpFromSpoilerCover,
 } from "./answerBubbleNavigation";
 import { registerAnswerStop } from "./answerStopRegistry";
 import {
@@ -434,7 +434,9 @@ export function buildAnswerBubbleElement(
   const moveUp = () => {
     const bubble = captureBubble(answerKey);
     /*
-     * Parked on a fence? Then Up goes back to the top of the answer rather than stepping sections.
+     * Parked on a fence? Then Up steps to the section above the fence's own (plan 74 lane 3;
+     * handleUpFromSpoilerCover). It used to go back to the top of the answer, skipping the sections
+     * between, and from a fence in the first section it landed on that same fence again.
      *
      * Reads the ring, not `activeElement`: the fence is exactly where the two disagree. It is the
      * one stop the D-pad reaches by our own diversion rather than by Steam's graph, so on device
@@ -442,7 +444,7 @@ export function buildAnswerBubbleElement(
      * on-device shape as MICRO-04, in the feature the diversion exists to serve.
      */
     if (uiGamepadFocusElement()?.closest(".bonsai-spoiler-reveal-target, .bonsai-spoiler-collapse-target")) {
-      return focusFirstAnswerChunk(answerKey);
+      return handleUpFromSpoilerCover(bubble, chunkTotal, answerKey);
     }
     if (handleAnswerBubbleMoveUp(bubble, noopChunkRef, chunkTotal, answerKey)) return true;
     /* Yield to turn header (previous sibling in turn-slot). */

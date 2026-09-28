@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 584,
-  "edgeCount": 1610,
+  "fileCount": 585,
+  "edgeCount": 1615,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4633,6 +4633,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/utils/answerBubbleElRegistry.test.ts",
+        "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
@@ -4640,6 +4641,16 @@
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx"
       ]
+    },
+    "src/utils/answerBubbleNavigation.coverUp.test.ts": {
+      "imports": [
+        "src/utils/answerBubbleElRegistry.ts",
+        "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/spoilerFenceRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
     },
     "src/utils/answerBubbleNavigation.test.ts": {
       "imports": [
@@ -4665,6 +4676,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
+        "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -4726,6 +4738,7 @@
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.test.ts",
@@ -6124,6 +6137,7 @@
       ],
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/spoilerFenceRegistry.test.ts"
@@ -6337,6 +6351,7 @@
         "src/preview/replyLayoutReport.ts",
         "src/utils/answerBubbleElRegistry.test.ts",
         "src/utils/answerBubbleElRegistry.ts",
+        "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.test.ts",

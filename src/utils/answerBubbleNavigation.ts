@@ -58,6 +58,7 @@ import {
 import { elementHasFocus, getUiDocument } from "./uiDocument";
 
 import {
+  findLastSpoilerFenceIn,
   findUnvisitedSpoilerFenceInView,
   focusSpoilerFence,
 } from "./spoilerFenceRegistry";
@@ -204,6 +205,41 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
 }
 
 /**
+ * Going Up into `section`: land on a still-hidden spoiler cover inside it instead of on the section
+ * (plan 74 lane 3). A section's own A does nothing, so Up used to leave the ring beside the cover
+ * with no way to open it (docs/test-evidence/plan70-SPOILER-CREDITS-01.json); Down already parks on
+ * a cover first. A plain focus: the cover is inside the answer's own container, the move Down's
+ * cover step already makes on the device (spoilerFenceRegistry.ts). Marked visited on landing, so
+ * the next Down walks on past it rather than landing on it again.
+ */
+function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): boolean {
+  if (!scroll) return false;
+  const cover = findLastSpoilerFenceIn(section, (el) => elementIsWithinViewportOf(el, scroll));
+  return Boolean(cover) && focusSpoilerFence(cover);
+}
+
+/**
+ * Up with the ring on a spoiler cover (plan 74 lane 3): step to the section above the cover's own,
+ * or that section's own cover, exactly as Up from any section does; from the first section, yield
+ * the way the first section does, so the ring leaves the answer upward. This used to send the ring
+ * back to the top of the answer, which skipped every section between and, from a cover in the first
+ * section, landed on that same cover again. A cover outside every section, or one whose step up
+ * cannot run (the section above off screen with nothing left to scroll), keeps that old way back.
+ */
+export function handleUpFromSpoilerCover(
+  bubbleEl: HTMLElement | null,
+  chunkTotal: number,
+  answerKey: string
+): boolean {
+  const bubble = resolveAnswerBubbleEl(answerKey, bubbleEl);
+  if (!bubble) return false;
+  const at = focusedAnswerStopIndex(orderedAnswerStops(answerKey, bubble));
+  if (at < 0) return focusFirstAnswerChunk(answerKey);
+  if (handleAnswerBubbleMoveUp(bubble, { current: 0 }, chunkTotal, answerKey)) return true;
+  return at > 0 ? focusFirstAnswerChunk(answerKey) : false;
+}
+
+/**
  * The reverse of `focusFirstAnswerChunk`, for entering from below: the reply-actions row's Up, once
  * refinement chips and — for the utility row (Retry / Show details) — the opposite thumbs column
  * have declined, and a glossary chip in view has also declined (buildReplyActionsElement.tsx). The
@@ -226,6 +262,7 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
   // Registered handles, not a page query — same registry the section walk itself reads.
   const stops = orderedAnswerStops(answerKey, el);
   const last = stops[stops.length - 1];
+  if (last && focusCoverGoingUp(last, findScrollablePanel(el))) return true;
   if (last && focusAnswerStop(last)) {
     /* Coming into the answer from below — Up out of the Show details line — lands here, and it is
        the one entry point that skipped the dock check (measured 2026-09-06). */
@@ -451,7 +488,8 @@ export function handleAnswerBubbleMoveUp(
    * chips strictly *before* the ring in reading order are eligible, and the registry's ancestor
    * rule keeps the exit intact: with the ring on the bubble itself, no chip is "before" it, so
    * heading out to the header stays one press, exactly like the stop-walk asymmetry below.
-   * No fence equivalent exists on Up — fences keep their shipped Down-only, visited-once shape.
+   * Fences are not diverted to here: going Up, a hidden cover takes the ring when its own section
+   * would (the section step below), not from anywhere in view.
    */
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
@@ -473,6 +511,8 @@ export function handleAnswerBubbleMoveUp(
     const stops = orderedAnswerStops(answerKey, bubble);
     const at = focusedAnswerStopIndex(stops);
     const prev = at > 0 ? stops[at - 1] : undefined;
+    /* A hidden cover in that section takes the ring first (plan 74 lane 3; focusCoverGoingUp). */
+    if (prev && elementIsWithinViewportOf(prev, scroll) && focusCoverGoingUp(prev, scroll)) return true;
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
       /* Same as the Down path: landing on it is not enough if it runs under the dock. */
       revealBelowDock(prev, scroll);

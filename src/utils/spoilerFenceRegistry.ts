@@ -72,6 +72,23 @@ export function findUnvisitedSpoilerFenceInView(
   return null;
 }
 
+/**
+ * The last still-masked fence inside `section` that is on screen, whether or not Down already
+ * parked on it -- for Up (plan 74 lane 3). Up has no trap to avoid: from a fence it steps on to the
+ * section above. Last in reading order, since Up arrives from below.
+ */
+export function findLastSpoilerFenceIn(
+  section: HTMLElement,
+  isInView: (el: HTMLElement) => boolean,
+): HTMLElement | null {
+  let last: HTMLElement | null = null;
+  for (const entry of fences.values()) {
+    if (!section.contains(entry.el) || !isInView(entry.el)) continue;
+    if (!last || last.compareDocumentPosition(entry.el) & Node.DOCUMENT_POSITION_FOLLOWING) last = entry.el;
+  }
+  return last;
+}
+
 /** Mark a fence as parked-on so the next Down continues scrolling rather than re-focusing it. */
 export function markSpoilerFenceVisited(el: HTMLElement): void {
   for (const entry of fences.values()) {

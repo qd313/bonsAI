@@ -66,6 +66,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 1005,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/bonsai_stream_tags.py",
       "lines": 988,
       "role": ""
@@ -73,11 +78,6 @@
     {
       "path": "py_modules/backend/services/screenshot_media.py",
       "lines": 984,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 983,
       "role": ""
     },
     {
@@ -142,7 +142,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 665,
+      "lines": 667,
       "role": ""
     },
     {

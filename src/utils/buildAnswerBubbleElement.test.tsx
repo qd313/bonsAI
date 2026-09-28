@@ -129,13 +129,13 @@ describe("answer bubble section stops", () => {
   });
 
   /*
-   * Up from a revealed spoiler's collapse control (nothing masked left to park on) goes through
-   * `focusFirstAnswerChunk` — "back to the top of the answer" per the comment on `moveUp` below —
-   * which used to land on the bare bubble itself, a stop of its own. One press should reach the
-   * first real section instead, the same fix as Down from the turn header (roadmap: "Down from the
-   * chat slot lands on the whole reply before its first section").
+   * Up from a revealed spoiler's collapse control (nothing masked left to park on) steps to the
+   * section above the control's own (plan 74 lane 3; it used to go "back to the top of the answer",
+   * through `focusFirstAnswerChunk`). The older promise still holds: it never lands on the bare
+   * bubble itself, a stop of its own (roadmap: "Down from the chat slot lands on the whole reply
+   * before its first section").
    */
-  it("Up from a revealed spoiler's collapse control lands on the first section, not the bare bubble", () => {
+  it("Up from a revealed spoiler's collapse control lands on the section above, not the bare bubble", () => {
     const el = buildAnswerBubbleElement({
       body: FENCED_BODY,
       streaming: false,
@@ -153,12 +153,34 @@ describe("answer bubble section stops", () => {
     const collapse = document.createElement("div");
     collapse.className = "bonsai-spoiler-collapse-target Panel Focusable";
     collapse.tabIndex = -1;
-    stops[0]!.appendChild(collapse);
+    stops[1]!.appendChild(collapse);
     collapse.focus();
 
     const onMoveUp = bubbleProps(el!).onMoveUp as () => boolean;
     expect(onMoveUp()).toBe(true);
     expect(document.activeElement).toBe(stops[0]);
+  });
+
+  /* From the first section's own control, Up leaves the answer the way the first section does. */
+  it("Up from a collapse control in the first section yields upward, never onto the bare bubble", () => {
+    const el = buildAnswerBubbleElement({
+      body: FENCED_BODY,
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    const { container } = render(el!);
+    const stops = stopsIn(container);
+    const collapse = document.createElement("div");
+    collapse.className = "bonsai-spoiler-collapse-target Panel Focusable";
+    collapse.tabIndex = -1;
+    stops[0]!.appendChild(collapse);
+    collapse.focus();
+
+    const onMoveUp = bubbleProps(el!).onMoveUp as () => boolean;
+    expect(onMoveUp()).toBe(false);
+    expect(document.activeElement).toBe(collapse);
   });
 
   /*

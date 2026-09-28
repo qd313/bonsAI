@@ -156,6 +156,7 @@ from backend.services.kb_attached_notes import (
     _kb_search_log_fields,
     _parse_kb_attached_notes,
     _publish_kb_attached_notes_live,
+    kb_choice_log_line,
     mark_spoiler_protected_notes,
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
@@ -691,6 +692,14 @@ async def run_game_ai_request(
                         starved=starved,
                     ),
                 )
+        # Always on, unlike the line above: which notes or tips this question chose (plan 74).
+        kb_starved = bool(kb_result and kb_result.attached) and not stacked.knowledge_attached
+        logger.info(
+            "%s",
+            kb_choice_log_line(
+                kb_result, kb_domain=kb_domain, kb_survived=kb_survived, starved=kb_starved
+            ),
+        )
 
         # Plan 58 phase 1: the "From the notes" block's own material -- the notes that actually
         # reached the model, in their own words, from what retrieval attached and nowhere else.

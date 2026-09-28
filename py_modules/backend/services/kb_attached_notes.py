@@ -38,6 +38,7 @@ from backend.services.knowledge_base_service import (
     # from the parsed block and has to know the fixed value the sources side used instead.
     _COMPAT_GAME_TITLE,
 )
+from backend.services.knowledge_base_cards import _omitted_note
 
 # Matches one card's own header line the way knowledge_base_service.py's `_card_lines` writes it:
 # either "\n[Tip: Name] (trust: tier)\n" for a troubleshooting tip, or
@@ -205,6 +206,49 @@ def _kb_search_log_fields(
         "top_keyword_score": kb_result.top_card_keyword_score,
         "best_meaning_score": kb_result.best_meaning,
     }
+
+
+# `_format_block` (knowledge_base_cards.py) drops whole cards that do not fit the mode's own
+# budget and says so in one trailer line. Built from that function's own output, so a reworded
+# trailer changes this pattern with it instead of quietly never matching.
+_OMITTED_CARDS_RE = re.compile(re.escape(_omitted_note(987654)).replace("987654", r"(\d+)"))
+
+
+def kb_choice_log_line(
+    kb_result: Any, *, kb_domain: str, kb_survived: bool, starved: bool
+) -> str:
+    """One always-on plugin-log line naming the notes or tips a question chose (plan 74 lane 5).
+
+    `_kb_search_log_fields` above says the same for the app-activity log, but that log is off by
+    default, so on a Deck nobody had turned it on the plugin log said nothing -- a routing
+    problem could not be traced (plan 70, flow R). Names come from `kb_result.sources` (titles
+    only). "dropped_for_room" is either the whole block cut by `stack_context_blocks` (`starved`,
+    naming what was lost) or cards the search itself cut to fit its budget. Never the question's
+    own words: `route` is the game-match label (`app_id:...`, a game title, `compat_tips`).
+    """
+    prefix = "kb: question chose"
+    if kb_result is None:
+        return f"{prefix} nothing -- notes and tips not searched (domain={kb_domain or 'none'})"
+    titles = [str(source.get("title") or "") for source in (kb_result.sources or [])]
+    attached = titles if kb_survived else []
+    attached_part = f"attached={len(attached)}" + (f" [{'; '.join(attached)}]" if attached else "")
+    omitted = _OMITTED_CARDS_RE.search(kb_result.text_block or "")
+    if starved:
+        dropped = f"dropped_for_room=all {len(titles)} [{'; '.join(titles)}]"
+    elif omitted:
+        dropped = f"dropped_for_room={omitted.group(1)} more"
+    else:
+        dropped = "dropped_for_room=0"
+    parts = [
+        f"{prefix} domain={kb_domain or 'none'}",
+        f"route={kb_result.notes or '-'}",
+        f"method={kb_result.retrieval_method or '-'}",
+        attached_part,
+        dropped,
+    ]
+    if kb_result.unavailable_reason:
+        parts.append(f"unavailable={kb_result.unavailable_reason}")
+    return " ".join(parts).replace("\n", " ")
 
 
 def _publish_kb_attached_notes_live(

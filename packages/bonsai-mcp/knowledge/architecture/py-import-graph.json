@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 102,
-  "edgeCount": 265,
+  "edgeCount": 266,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -71,6 +71,10 @@
       "count": 6
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_cards.py",
+      "count": 6
+    },
+    {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "count": 6
     },
@@ -80,10 +84,6 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_cards.py",
       "count": 5
     },
     {
@@ -834,6 +834,7 @@
     },
     "py_modules/backend/services/kb_attached_notes.py": {
       "imports": [
+        "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_service.py"
       ],
       "importedBy": [
@@ -859,6 +860,7 @@
         "py_modules/backend/services/knowledge_base_schema.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/kb_attached_notes.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/knowledge_base_search.py",

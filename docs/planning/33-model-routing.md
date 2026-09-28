@@ -240,6 +240,41 @@ Opus 5.5 low for mechanical fixes and moves, decided by whether the fix needs a 
 The bookkeeper runs on Opus low (the maintainer's call, see above). AGENTS.md, the reminder hook, the roadmap
 note and the helper settings files were updated the same day.
 
+**Third trial, D-pad fixes on Opus high (2026-09-28, [plan 74](74-release-wave-two.md) lane 3, the maintainer's
+call).** The table above sends D-pad work to Opus xhigh. The maintainer asked for one lane of D-pad fixes whose cause
+the Deck had already shown to run on Opus high instead, and to measure it. No paired run (screen work stays out of
+paired runs); the wave's other lanes give a rough comparison, on different work. Usage priced from each helper's log
+the way § 1 was, taking each reply's largest usage count.
+
+| Date | Task | Model and effort | Checks green first time? | Review problems | Rounds to land | New tests fail without the fix? | Deck first time? | Tokens in / out / cache read | Turns | Tool calls | Minutes | $ at list |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-09-28 | Round 1: six D-pad fixes (five ★, one ★★) | Opus 5.5 high, **run as its own session** | 5 of 6 (one file-size refusal; the lane raised that file's limit by 4 lines, with a reason) | None must-fix. Noted: one box rebuilt on a base part the repo had not used before; a new wrapper that might shift Helpful (measured on the Deck: it did not) | 1 for five fixes, 2 for the ★★ | Yes, all six | **5 of 6.** The sixth, the ★★ spoiler cover, worked for the last cover and failed for a cover at the top of the answer: the one case its own report had flagged as unmeasured | 398 / 156,042 / 51,970,640 (421,652 cache write) | 199 | 250 | ~41 of work (56 in the log) | $26.02 |
+| 2026-09-28 | Round 2: the top cover | Opus 5.5 high, a normal helper | Yes | None | — | Yes (3 of 5 new tests; the other 2 guard its limits and were broken on purpose) | **Yes**: Up landed on the first cover and A opened it | 52 / 34,844 / 2,643,882 (98,973 cache write) | 26 | 29 | 10.5 | $2.25 |
+
+The rest of the wave, for comparison (different kinds of work, so only a rough guide):
+
+| Lane | Model and effort | Bugs (commits) | Deck first time | $ at list | $ per commit |
+|---|---|---|---|---|---|
+| 1, the release download and licences | Opus medium | 4 (4) | Not checkable on the Deck until the release download is built | $6.48 | $1.62 |
+| 2, answers and chats | Opus medium | 6 (7) | 5 of 5 checked | $9.30 | $1.33 |
+| 5, back end | Opus medium | 3 (3) | 2 of 2 checked; the third cannot be made to happen on the Deck | $4.91 | $1.64 |
+| 4, looks | Opus xhigh (general helper at the session's effort) | 3 (5) | 5 of 5 | $16.61 | $3.32 |
+| 3, D-pad, both rounds | Opus high | 6 (7) | 5 of 6, then the sixth on round 2 | $28.27 | $4.04 (see below) |
+
+**Verdict (provisional: one lane, six bugs, seven commits):**
+
+- **Quality: Opus high met the Deck bar for D-pad fixes with a measured cause.** Five of six passed on the Deck
+  the first time, the review found nothing that had to be sent back, and the one miss was the case the lane had
+  itself flagged as unmeasured. Every lane in this wave passed the Deck at a similar rate, so these numbers do not
+  separate the models; they show Opus high did not fall below the others.
+- **Cost: round 1's $26 is not a fair number.** The app loads a new helper setting only when a session starts, so
+  round 1 ran as its own session, which carries a far bigger standing context: it grew to 436,000 tokens, and
+  52 million cached tokens were re-read. Round 2, a normal helper at the same setting, cost $2.25 for one hard ★★
+  fix in 10.5 minutes, close to the medium lanes' cost per fix.
+- **Suggestion for the maintainer (not adopted):** let D-pad fixes with a Deck-measured cause run on an Opus-high
+  helper, with Opus xhigh still reviewing and landing them. Measure one more wave with Opus high as a normal helper
+  from the start, to get a clean cost per fix, before changing the table.
+
 ## 5. Where Haiku fits
 
 Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for under a dollar. There is

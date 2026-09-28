@@ -1,6 +1,6 @@
 # Plan 74 — release wave two: knock the bug list down before 0.6.0
 
-**Status: running, started 2026-09-28.** Asked for by the maintainer ("let's plan for another wave to knock
+**Status: finished 2026-09-28.** Results in [Results](#results). Asked for by the maintainer ("let's plan for another wave to knock
 that list down", then "go"). Part of [plan 71](71-merge-experimental-into-main.md), Stage B: the second pass of
 bug fixing before the last call on Friday 2 October.
 
@@ -79,9 +79,39 @@ Order: lane 1 (no screen change), 5, 2, 4, then 3 last, because lanes 3 and 4 bo
 under an answer. Each landing: review the change, rebase onto the tip, all six checks green, then the
 bookkeeper sweep for that lane's roadmap, testing and changelog rows. Then one deploy and the Deck pass.
 
+## Results
+
+**All 25 planned fixes landed, and every one the Deck can check passed there.** 26 commits in all (lane 3's spoiler
+cover took a second round). All six checks green at every landing. Three Deck passes, 24 rows.
+
+| Lane | Landed | On the Deck |
+|---|---|---|
+| 1, the release download and licences | 4 fixes | Not checkable until the release download is built; added to the maintainer's first-install check (plan 73, check 4) |
+| 2, answers and chats | 7 commits, 6 bugs | 5 of 5 checked passed; Copy and the panel height need no Deck check |
+| 3, D-pad (Opus high trial) | 7 commits, 6 bugs | 5 of 6 first time; the ★★ spoiler cover passed after its second round |
+| 4, looks | 5 commits, 3 bugs | 5 of 5 passed |
+| 5, back end | 3 fixes | 2 of 2 checked passed; the third cannot be made to happen on the Deck |
+| Owed checks | — | The chip ladder on the Deck's own screen and the "no close match" line both passed; the down-and-up mirror walk now differs at 1 stop of 13 (below) |
+
+- **The trial:** Opus high met the Deck bar; its first round's cost is not comparable because it ran as its own
+  session. Full numbers and the verdict are in [plan 33 § 4b](33-model-routing.md), "Third trial".
+- **The commit-hook question:** settled on the PC. A commit in a repo copy now rebuilds only that copy's generated
+  files (`docs/test-evidence/plan74-HOOK-IN-COPY.json`); the old workaround is no longer needed.
+- **New on the roadmap from this wave** (all small): a section holding only a spoiler cover takes the ring as a whole
+  when walked Down, so A cannot open it (the one stop left in the mirror walk); five focus and wording leftovers in the
+  Ollama tab's boxes; the ban-lookup row showing on "New chat"; a question naming another game using the chat's own
+  game's notes; the note-search model offered in the answer try order; the ring's outline over the question box on
+  the chip ladder; three one-off sightings; and, for after the release, the model tiers' licence labels.
+- **Found and left for the maintainer:** the release download also ships the code map, which roughly doubles its size.
+  Allowed now that the licences travel with it; dropping it would make players' bug reports harder to trace.
+
 ## Log
 
-- **2026-09-28:** plan written; five repo copies made from `c8fa25d9`; lanes started.
+- **2026-09-28:** plan written; five repo copies made from `c8fa25d9`; lanes started. The Opus-high helper file
+  added mid-session was not usable until a new session started, so lane 3 ran as its own session.
+- **2026-09-28:** lanes 5, 1, 4 and 2 landed in that order, then lane 3; generated-file clashes only, rebuilt by the
+  commit hook. Deck pass 1 (13 rows) and pass 2 (9 rows) run; the top spoiler cover failed and went back for a second
+  round (an Opus-high helper), which landed as `cb88c012` and passed in Deck pass 3.
 
 ## Appendix — lane 3's brief (the Opus-high trial)
 

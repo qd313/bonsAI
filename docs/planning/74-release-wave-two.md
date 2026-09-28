@@ -145,3 +145,31 @@ owes, one plain sentence on what a person would notice, your confidence it holds
 low) and why, and the exact button presses a Deck check should make; plus anything found and not fixed. Send
 the report to the session running the wave with `SendMessage` (to
 `local_d5152972-85f4-424b-a3b4-be4d85ebc062`), and also end your turn with it.
+
+## Deck runbook, pass 1 (lanes 2, 4 and 5, plus two owed checks)
+
+For the Deck helper. Build: the tip of `experimental` at `323903ea` or later, development deploy. Before
+anything: take the lock, snapshot the settings, and read which screen the Deck is showing (built-in or
+monitor). At the end: restore every setting key you changed, clear any pinned test chips, release the lock.
+One evidence file per row, named `docs/test-evidence/plan74-<ROW>.json`. Pass only on what the row says;
+anything else is a fail or "blocked", with the reason. Lanes 1 and 3 are not in this pass: lane 1 is checked
+on the real release download, and lane 3 is still being built.
+
+| Row | What it proves | Setup | Do | Pass when |
+|---|---|---|---|---|
+| P74-THINK-OFF-SPINNER | The waiting spinner stops once the answer starts (thinking off) | Settings: thinking off | Ask any Strategy question; read the line under the question every quarter second | Spinner and waiting phrase are there before any answer text, and gone within one second of the first answer words |
+| P74-HINT-DISMISS | A dismissed troubleshooting hint stays dismissed in its chat | "Read game & screenshot context" off | Put a crash question in the question box (no A on the box; use the helper's text route), press Dismiss on the hint, close and reopen Quick Access; then switch to another chat and put a crash question in its box | The hint is still gone in the first chat after reopening, and shows in the other chat |
+| P74-LOCAL-CMD-CHAT | A typed command's reply stays in its own chat | Steam ban lookup off | In chat 2 send `bonsai:vac-check`; switch to chat 1; close and reopen Quick Access | Chat 1 shows neither the "Steam Web API is off" reply nor the ban-lookup row; chat 2 still shows its own reply |
+| P74-SUMUP-REASON | The Session tab says a summed-up chat is summed up | A chat long enough to sum up (use one that exists; if none, mark blocked) | Show details → Session → Sum up this chat; wait for the card | The line under the greyed button reads "This chat is already summed up. Ask more, then you can sum up again." |
+| P74-NOMIC-HINT | The note-search model hint appears without leaving the Ollama tab | Knowledge library on and installed; Internet downloads allowed | Leave the Ollama tab open; over SSH run `ollama rm nomic-embed-text`; wait, reading the tab every 5 seconds | The hint and its Pull button appear within 45 seconds with no press. Then press Pull once to restore the model, and confirm it lands |
+| P74-KB-LOG-LINE | The plugin log names the notes and tips a question used | Knowledge library on | Ask "How do I beat the Soul Master in Hollow Knight?" in Strategy; open the notes block; read the plugin log. Then ask a troubleshooting question ("my game stutters on the Deck") and read the log again | Exactly one `kb: question chose domain=strategy ... attached=N [...]` line for the first question, its titles matching the notes block; one `domain=compat` line naming the tip for the second; the question's own words appear in neither |
+| P74-TRYORDER-RESET | "Reset to defaults" returns the try order to automatic | Note the current `text_model_routing_order` in the settings file | Ollama tab → text try order: move a row, Done; read the file. Reopen, Reset to defaults, Done; read the file again | After the first Done the file holds a list; after Reset and Done, `text_model_routing_order` is `[]`. Restore the original value |
+| P74-CARET-COLOUR | The decode chip's typing mark is the accent colour | Chip style that types itself in (decode); note which character is chosen | Trigger a chip decode; sample the typing mark's and the letters' colours mid-animation | The mark is RGB 91,158,126 with no character chosen, or the chosen character's own colour; the letters stay RGB 196,211,226 at rest |
+| P74-EMPTY-STOP | An empty stopped answer offers no Read aloud | — | Ask a long question and press Stop before any answer text arrives | The newest reply ("Request cancelled.") has no Read aloud button, and Show details comes straight after the bubble |
+| P74-CLEAR-CACHE-ROW | "Clear cache…" lines up with the other Settings buttons | — | Settings tab; measure the buttons in that row and its neighbours | "Clear cache…" starts at x 64 and "Clear all data…" ends at 332, each 130 wide, level with the other rows |
+| P74-ABOUT-SUPPORT | About's support button is sized like the other link buttons | — | About tab; measure the four link buttons; move the ring onto the support button | The support button is 268 × 42 at x 64 like the other three, and the QR picture is fully on screen while the ring is on it |
+| DETAILS-LADDER-01 | Entering the chip ladder at its first chip shows the whole chip row | **The Deck's own screen**, not the monitor (if the monitor is showing, mark blocked); an answered chat | Show details → "This answer" tab; enter the chip ladder at chip 1, then step to chips 5 and 7 | The chip row and its "Chip 1 of 7" counter are 100% on screen at every step (the first measurement read 67%, 67% and 33%) |
+| KB-NOCLOSE-TEXT-01 | The "no close match" line stays off when the answer used a matching note | Knowledge library on, Strategy mode | Ask a Half-Life 2 walkthrough question built on real chapter notes; read Show details | The "no close match" line does not appear under a reply built on a matching note |
+
+**Pass 2, after lane 3 lands:** lane 3's six rows, the Helpful row's look after A on Helpful, and
+REPLY-STOPS-MIRROR-01 (Down and Up through a reply with a hidden spoiler block visit the same stops).

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 579,
-  "edgeCount": 1596,
+  "edgeCount": 1598,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4633,13 +4633,15 @@
     },
     "src/utils/answerCopyText.test.ts": {
       "imports": [
-        "src/utils/answerCopyText.ts"
+        "src/utils/answerCopyText.ts",
+        "src/utils/splitResponseIntoChunks.ts"
       ],
       "importedBy": []
     },
     "src/utils/answerCopyText.ts": {
       "imports": [
         "src/utils/expandOneLineSpoilerFences.ts",
+        "src/utils/splitResponseIntoChunks.ts",
         "src/utils/stripAssistantDisplayTags.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
@@ -6048,6 +6050,8 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
+        "src/utils/answerCopyText.test.ts",
+        "src/utils/answerCopyText.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/splitResponseIntoChunks.test.ts"

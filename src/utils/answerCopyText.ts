@@ -5,9 +5,11 @@
  * Solves: Copying internal display tags, or the body of a spoiler fence the user has not
  *   revealed on screen, instead of the answer the user actually reads.
  * Does not: Render markdown to plain prose — copies the same source text
- *   MainTabBonsaiAiMarkdownChunk renders, minus internal tags and hidden spoiler bodies.
+ *   MainTabBonsaiAiMarkdownChunk renders, minus internal tags and hidden spoiler bodies, plus a
+ *   blank line wherever the screen cut one long paragraph into separate blocks.
  */
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
+import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
 
@@ -51,6 +53,17 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
   } = args;
 
   let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
+
+  /*
+   * One long paragraph with no line break and no fence is cut by the screen into pieces of about
+   * 300 letters at sentence ends, each drawn as its own block (splitResponseIntoChunks'
+   * length-only path). Copy gives the same breaks the reader sees, not one run-on block
+   * (plan72-Z-FREEPLAY.json, finding 13). Only this shape: every other answer keeps its own
+   * breaks, and with no fence there is nothing for the spoiler steps below to change.
+   */
+  if (!text.includes("\n") && !text.includes("```")) {
+    return splitResponseIntoChunks(text).join("\n\n");
+  }
 
   const opts: UnwrapSpoilerOpts = {
     question: askQuestion,

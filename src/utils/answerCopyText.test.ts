@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SPOILER_HIDDEN_COPY_PLACEHOLDER, buildAnswerCopyText } from "./answerCopyText";
+import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 
 describe("buildAnswerCopyText", () => {
   it("returns plain body text unchanged when there is no spoiler fence or display tag", () => {
@@ -102,5 +103,46 @@ describe("buildAnswerCopyText", () => {
     });
     expect(out).toContain("Wheatley starts lying the moment you reach the surface.");
     expect(out).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
+  });
+});
+
+/*
+ * Roadmap: "Copy joined two paragraphs into one" (plan72-Z-FREEPLAY.json, finding 13). An answer
+ * written as one long paragraph, with no line breaks, is cut by the screen into pieces of about
+ * 300 letters at sentence ends, each drawn as its own block -- so it reads as two paragraphs.
+ * Copy took the source text, which has only a space there.
+ */
+describe("buildAnswerCopyText keeps the breaks the screen shows", () => {
+  const LONG_ONE_PARAGRAPH =
+    "Megaera is the first Fury you meet in Tartarus, and her fight is mostly about space. " +
+    "She lashes in a wide arc, so dash through her rather than away, and keep moving between her attacks. " +
+    "When her health drops she calls in help from the Underworld's shades, and the room gets crowded fast. " +
+    "Clear the small ones first with a sweeping attack, then turn back to her once the floor is quiet. " +
+    "Pick a boon that adds damage to your dash, because you will be dashing a lot in this fight.";
+
+  it("puts a blank line where the screen cuts one long paragraph into two blocks", () => {
+    const shown = splitResponseIntoChunks(LONG_ONE_PARAGRAPH);
+    expect(shown.length).toBeGreaterThan(1);
+
+    const copied = buildAnswerCopyText({ body: LONG_ONE_PARAGRAPH });
+
+    expect(copied.split("\n\n")).toEqual(shown);
+  });
+
+  it("leaves a short one-paragraph answer exactly as written", () => {
+    const body = "Dash through Megaera's lash rather than away from it.";
+    expect(buildAnswerCopyText({ body })).toBe(body);
+  });
+
+  it("leaves an answer that already has its own paragraphs exactly as written", () => {
+    const body = `${LONG_ONE_PARAGRAPH}\n\nThat is the whole fight.`;
+    expect(buildAnswerCopyText({ body })).toBe(body);
+  });
+
+  it("does not cut an answer the screen keeps whole because it holds a hidden block", () => {
+    const body = `${LONG_ONE_PARAGRAPH}\n\n\`\`\`bonsai-spoiler\nThe second Fury is her sister.\n\`\`\``;
+    const copied = buildAnswerCopyText({ body });
+    expect(copied.startsWith(LONG_ONE_PARAGRAPH)).toBe(true);
+    expect(copied).toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
   });
 });

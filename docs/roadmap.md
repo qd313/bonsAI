@@ -81,6 +81,9 @@ starts work outside this.
   keyboard on the question box — worth trying on this hidden-block case too.
   **2026-09-28 (plan 76):** reproduced in a milder form. Each cover took one extra Down (the first did nothing, and the cover then
   sat 67% behind the tab bar), 2 of 2 runs; Up had none. Handed to lane 3. Evidence `docs/test-evidence/plan76-S1.json`.
+  **2026-09-28 (plan 76 lane 3, `3576846c`):** the milder form seen that night (each cover took one extra Down) has its cause
+  found and fixed: a "this cover was already offered" flag was reset on every redraw. Checked by row **P76-WALK-COVERS**.
+  Kept here, not moved to Verify: the original never-moves form was never reproduced, so it is not fully explained.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
   more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
   same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
@@ -90,18 +93,9 @@ starts work outside this.
   **2026-09-28 (plan 74, Deck pass 3, after `cb88c012`):** the first cover now mirrors. One stop of 13 still differs: on a
   section that holds only a cover, Down lands on the section's outer box (245×71) while Up lands on the cover inside it
   (237×55). Seen on two answers (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`, FAIL). Still owed: row **REPLY-STOPS-MIRROR-01**.
-- ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
-  does nothing** — **OPEN, found 2026-09-28 (plan 74, Deck pass 3).** A player walking Down cannot open that cover from
-  where the ring lands; walking Up works. Evidence `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`.
-  **2026-09-28 (plan 76, build `39c17312`):** measured on a section that starts with a cover (cover, then a paragraph). Down lands on the section's outer box (245×218), where A does nothing; Up lands on the cover (237×55), where A opens it. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-ONLY.json`.
-- ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **OPEN, one
-  sighting 2026-09-28 (plan 74, Deck pass 3).** The cover's top was at y 69 while the visible area starts at 88, so about
-  a third of it was hidden. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
-  **2026-09-28 (plan 76, build `39c17312`):** reproduced. A scroll-only press left a cover's top 19 px above the visible area, and another left a cover fully above it. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-SCROLL.json`.
-- ★ `[reply]` **An opened spoiler cover closed again by itself** — **OPEN, one sighting 2026-09-28 (plan 74, Deck pass
-  3).** Opened with A, it read as hidden about 40 seconds later, with only D-pad moves and the next question typed in
-  between. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
-  **2026-09-28 (plan 76, build `39c17312`):** reproduced, with a trigger. It stays open through D-pad moves and 75 s of nothing, and hides itself within about 2 s of a new question being put in the question box. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json`.
+  **2026-09-28 (plan 76 lane 3, `3576846c`):** fixes the last known stop, a section that holds only a cover. Row
+  **REPLY-STOPS-MIRROR-01** is still owed. One exception is by design: a section the ring was moved onto by a scroll can
+  be a stop going Down only.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
   **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
@@ -122,11 +116,6 @@ starts work outside this.
 - ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
   games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
   on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
-- ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **OPEN, sighting 2026-09-27
-  (plan 70, flow L10).** The next press recovers. [Detail](roadmap-details.md#flow-l10-findings).
-- ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows**
-  — **OPEN, sightings 2026-09-26 (plan 70, flow L7):** the log warned twice, on troubleshooting turns.
-  [Detail](roadmap-details.md#flow-l7-findings).
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -142,13 +131,10 @@ starts work outside this.
   `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
   **Not reproduced 2026-09-27 (plan 72):** not seen with text behind the dock, `docs/test-evidence/plan72-A8-BOTTOM-STRIP-READING.json`.
   **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `docs/test-evidence/plan76-S6.json`.
-- ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
-  2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
-  from the same partial file rather than starting over, so nothing was lost, but a running download does
-  not survive a reload. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
-- ★ `[ollama]` **A removed model's name stays in the saved try order** — **OPEN, found 2026-09-28 (plan 76).** After a model is
-  removed from the Deck, its name stays in the saved order until someone resets it, and the picker cannot clear it.
-  Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
+- ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **OPEN, small note, found 2026-09-28
+  (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
+  Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** checks
+  that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
 - ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
   **2026-09-28 (plan 76):** not reproduced, 6 tries by two routes. Evidence `docs/test-evidence/plan76-S8.json`.
@@ -182,29 +168,11 @@ starts work outside this.
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
 - ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **OPEN, found 2026-09-28 (plan 74),
   confirmed as a separate effect by plan 76 lane 4.** Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
-- ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **OPEN,
-  found 2026-09-28 (plan 74).** It should go back to its button, the same family as the "Update Ollama and models?" box
-  fixed this wave. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
-- ★ `[focus]` **Cancel on the AI models screen, with a model queued, sends the ring to the tab rail** — **OPEN, found
-  2026-09-28 (plan 75).** The ring lands on the far-left tab rail instead of back on "Browse models…"; Done puts it back
-  correctly. Evidence `docs/test-evidence/t75-3-Q2-SAFE-FIRST-TIER2.json`.
-- ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **OPEN, found 2026-09-28
-  (plan 74).** Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`. Seen again on all five plan 75 Deck runs,
-  2026-09-28 (`t75-1-Q6-REMOVE-KB-SAFE-FIRST.json` to `t75-5-Q6-REMOVE-KB-SAFE-FIRST.json`).
-- ★ `[focus]` **Two more boxes may start on their action button, found in the code** — **OPEN, found 2026-09-28 (plan 74
-  lane 3's report), not yet seen on the Deck.** The per-model "Enable Tier 2 for this model?" box starts on its action
-  button, and the Tier 1 and Tier 2 install buttons on the Ollama tab do not get the ring back after their box closes.
-- ★ `[focus]` **Walking Down through a long answer, the ring sticks on a highlighted word** — **OPEN, found 2026-09-28
-  (plan 75).** It stays on a word like "overclock" for three to eight presses while the answer scrolls under it, the word
-  above the visible area, then moves on. Seen on every Deck run that day (the popup measurement and all six plan 75 runs).
-  Evidence `docs/test-evidence/t75-5-Q4-ASK-UP-answer-scroll.png`, `docs/test-evidence/t75-5-Q4-ASK-UP.json`.
-  **2026-09-28 (plan 76, build `39c17312`):** measured. The underlined word sits inside one tall answer section; the next five Down presses only scrolled, 80 px each, and the word left the screen after the first; the sixth reached the next section, 440 px below. Being fixed in plan 76 lane 3. Evidence `docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json`.
-- ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **OPEN, found 2026-09-28
-  (plan 74).** It says "This reply used an 'open model'" although no reply is involved. Evidence
-  `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`.
-- ★ `[ui]` **Small leftovers from plan 74** — **OPEN, found 2026-09-28 (plan 74's lanes).** Removing a model inside the plugin
-  does not reset its 30-second memory, so the note-search hint can take up to 40 s. This is with plan 76 lane 5. The other two
-  leftovers are fixed, see Verify.
+- ★ `[focus]` **The library's Update and "Pull nomic-embed-text" buttons lose the ring to the tab bar after their download notice
+  closes** — **OPEN, found 2026-09-28 by plan 76 lane 2, in the code, being fixed in its follow-up round.** Not yet seen on the Deck.
+- ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
+  **OPEN, found 2026-09-28 by plan 76 lane 2, in the code, not seen on the Deck.** Affects the Tier 1, Tier 2 and "Update AI &
+  models" buttons.
 - ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
   May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
   351 characters).
@@ -526,6 +494,56 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
+- ★ `[ollama]` **A plugin reload stops a model download in progress** — **VERIFY, fixed 2026-09-28 (plan 76 lane 5,
+  `61473aff`).** A download running when the plugin reloads now starts again by itself on load. Found on the Deck 2026-09-23
+  (flow H), `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`. Deck check owed: row **P76-PULL-RESUME**. This is a known
+  issue in the 0.6.0 release notes (plan 72 § 8); that line comes off only once this Deck row passes.
+- ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
+  partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
+  shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
+  (plan 70, flow L7). Deck check owed: row **P76-CHOICES-DRIFT** (the flow L7 troubleshooting questions with a game running,
+  reading the log). [Detail](roadmap-details.md#flow-l7-findings).
+- ★ `[ui]` **The note-search hint can take up to 40 seconds to appear after a model is removed in the plugin** — **VERIFY,
+  fixed 2026-09-28 (plan 76 lane 5, `0f899e4e`).** Removing a model now clears the plugin's 30-second "is it there" memory at
+  once when the removed model is the note-search one. This was the last leftover of "Small leftovers from plan 74"; the other
+  two are in the Verify entry "Two small leftovers from plan 74, now fixed". Deck check owed: row **P76-NOMIC-REMOVE-HINT**.
+- ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **VERIFY, fixed
+  2026-09-28 (plan 76 lane 3, `b2a60359`).** A press that scrolls no longer leaves the ring on a cover the scroll carried off
+  screen. Was found 2026-09-28 (plan 74, Deck pass 3) and measured in plan 76,
+  `docs/test-evidence/plan76-P76-M-COVER-SCROLL.json`. Deck check owed: row **P76-WALK-COVERS**.
+- ★ `[focus]` **Walking Down through a long answer, the ring sticks on a highlighted word** — **VERIFY, fixed 2026-09-28
+  (plan 76 lane 3, `b2a60359`).** A press that scrolls no longer leaves the ring on a word the scroll carried off screen. Was
+  found 2026-09-28 (plan 75) and measured in plan 76, `docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json`. Deck check owed:
+  row **P76-WALK-GLOSSARY** (needs a game running).
+- ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
+  does nothing** — **VERIFY, fixed 2026-09-28 (plan 76 lane 3, `3576846c`).** Down and Up now land on the same covers, and A on
+  a section opens the cover inside it. Was found 2026-09-28 (plan 74, Deck pass 3),
+  `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`. Deck check owed: rows **P76-WALK-COVERS** and **REPLY-STOPS-MIRROR-01**.
+- ★ `[reply]` **An opened spoiler cover closed again by itself** — **VERIFY, fixed 2026-09-28 (plan 76 lane 3, `00049cc0`).**
+  Cause found: the answer was redrawn from scratch on every keystroke in the question box, which drew its covers hidden again.
+  An opened cover now stays open while a question is typed. Was found 2026-09-28 (plan 74),
+  `docs/test-evidence/plan74-P74-COVER-UP-r2.json`. Deck check owed: row **P76-COVER-STAYS-OPEN**.
+- ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **VERIFY, fixed 2026-09-28
+  (plan 76 lane 2, `420c9d9f`).** The wording no longer mentions a reply. Was found 2026-09-28 (plan 74),
+  `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`. Deck check owed: row **P76-TIER2-MODEL-SAFE-FIRST** (read the wording).
+  One more box still uses the old wording, the Tier 2 one-model install box in the local setup flow; lane 2 is fixing it in a
+  follow-up round.
+- ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **VERIFY, fixed 2026-09-28 (plan 76 lane 2,
+  `3f495973`).** When the Pull button goes, the ring is handed on to the next button. Sighting 2026-09-27 (plan 70, flow L10).
+  Deck check owed: row **P76-NOMIC-REMOVE-HINT**. [Detail](roadmap-details.md#flow-l10-findings).
+- ★ `[focus]` **Two more boxes may start on their action button, found in the code** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 2, `15df0bd1`, `aa3454ba`).** The per-model "Enable Tier 2 for this model?" box now opens on "Not now", and the Tier 1 and
+  Tier 2 install buttons get the ring back after their box closes. Never seen on the Deck; found in plan 74 lane 3's report.
+  Deck check owed: rows **P76-TIER2-MODEL-SAFE-FIRST** and **P76-INSTALL-OPTIONS-RING**.
+- ★ `[focus]` **Cancel on the AI models screen, with a model queued, sends the ring to the tab rail** — **VERIFY, fixed
+  2026-09-28 (plan 76 lane 2, `8c76e16d`).** Cancel now puts the ring back on "Browse models…". Was found 2026-09-28 (plan 75),
+  `docs/test-evidence/t75-3-Q2-SAFE-FIRST-TIER2.json`. Deck check owed: row **P76-AI-MODELS-CANCEL-RING**.
+- ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **VERIFY, fixed
+  2026-09-28 (plan 76 lane 2, `d02de439`).** The ring now goes back to the library's own button. Was found 2026-09-28 (plan 74),
+  `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`. Deck check owed: row **P76-KB-BOX-RING-RETURN**.
+- ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 2, `5d9fc717`).** The box now opens on "Not now", with "Remove" as the middle button. Was found 2026-09-28 (plan 74), seen
+  again on all five plan 75 runs. Deck check owed: row **P76-REMOVE-KB-SAFE-FIRST**.
 - ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **VERIFY, fixed 2026-09-28 (plan 76
   lane 1, `69544612`).** For example "we wander,…" (seen in `docs/test-evidence/t75-feature-F2-HARD-LINES.json`). Unit test in
   `src/utils/toastAnswerPreview.test.ts`. Deck check owed: row **T75-FEATURE-F1-REAL-POPUP** (read the second line's end).
@@ -755,16 +773,12 @@ ones from this month are D81 to D88.
 - ★ `[KB]` **A game's own tip is found only by its own words** — **OPEN, found 2026-09-26 (plan 70, flow
   L7).** "The words look blurry" misses the Render Scale tip that "the text looks blurry" finds.
   [Detail](roadmap-details.md#flow-l7-findings).
-- ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **OPEN, found
-  2026-09-26, not fixed.** `knowledge_base_service.py` line ~1121. [Detail](roadmap-details.md#speed-mode-tip-gap).
-- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **OPEN, found 2026-09-26, not fixed.**
-  `scripts/fetch_wiki_live_pages.py`'s page-render call is refused (HTTP 403); worked around by hand this
-  time. A fallback to the plain page would cover it for good.
+- ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** Skipped on
+  purpose by the maintainer's decision D62 #2 (2026-09-05) to save about a second per Speed question. D62 sketched a fallback
+  (run the meaning search only when the word hits are thin); it would need a threshold picked and measured. Kept as an entry.
+  `knowledge_base_service.py` line ~1121. [Detail](roadmap-details.md#speed-mode-tip-gap).
 - ★ `[KB]` **With a game running, the meaning search once read about a second (1,070 ms, 2026-09-23)** — **OPEN, one
   sighting.** [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
-- ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **OPEN, found 2026-09-28 (plan 74,
-  Deck pass 1).** A Valheim question in a Half-Life 2 chat got Half-Life 2 notes ("using the chat's own game"), and a
-  stutter question in a Hollow Knight chat did the same. Evidence `docs/test-evidence/plan74-P74-KB-LOG-LINE.json`.
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
   notes are named underneath it instead of the real one, which does exist and now attaches too, but still
@@ -791,6 +805,11 @@ ones from this month are D81 to D88.
 
 ### Deck check owed
 
+- ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 5, `7bfcc2a3`, `ebd09465`).** A question that names a well-known game the library does not have no longer gets the chat's
+  own game's notes attached. **Limit:** this works from a short list of well-known titles (everyday words left out); a game not on
+  the list behaves as before. A bare follow-up still uses the chat's own game. Found 2026-09-28 (plan 74, Deck pass 1),
+  `docs/test-evidence/plan74-P74-KB-LOG-LINE.json`. Deck check owed: row **P76-OTHER-GAME-NOTES**.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
   boss up front keeps the answer in plain text. **DRG-01b passed on the Deck 2026-09-23:** the boss tactics
@@ -914,6 +933,12 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-28 (plan 76, docs sweep 3):**
+
+- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **DONE 2026-09-28 (plan 76 lane 5, `22f31ee4`).** The maintainer
+  tool now falls back to the plain page when the render call is refused. It is a PC tool, so no Deck check applies; one real fetch
+  of the Pal Sphere page came back clean through the fallback (evidence: the message of commit `22f31ee4`). [Full entry](archive/roadmap-bugs-fixed.md)
 
 **Closed 2026-09-28 (plan 76, docs sweep 2):**
 

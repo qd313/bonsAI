@@ -15,6 +15,16 @@ All notable changes to this project are documented in this file.
 - **Show details' Session tab names a branch pick in plain words**, not the model's own tag.
 - **The "Request cancelled." bubble no longer has a Copy button.**
 - **The rarely seen sum-up pop-up now says "There's nothing new to sum up yet"** instead of claiming the whole chat still fits.
+- **"Remove knowledge base?" and the per-model "Enable Tier 2" box now open on "Not now"**, and the AI models screen, the
+  library boxes and the Tier 1 and Tier 2 install boxes give the ring back to their own button instead of the tab bar. The
+  "Enable Tier 2 before pulling?" box no longer talks about a reply. Unit-tested; owes its Deck checks.
+- **An opened spoiler cover stays open while you type a question**, Down and Up now land on the same covers, and a press that
+  scrolls no longer leaves the ring on a cover or word that scrolled off screen. Unit-tested; owes its Deck checks.
+- **Removing the note-search model in the plugin shows its hint at once**, not after up to 40 seconds.
+- **A question about a well-known game the library does not have no longer gets the chat's own game's notes.** A game not on
+  the short list behaves as before.
+- **The follow-up choice reader accepts more of the shapes a model drifts to.**
+- **A model download running when the plugin reloads now starts again on load.**
 
 ### Plan 75 (2026-09-28)
 

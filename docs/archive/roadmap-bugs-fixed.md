@@ -2401,3 +2401,7 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
   **2026-09-27:** the Steam ban lookup's key box stays on the Developer tab for now, the maintainer's call.
 
 **Closed 2026-09-28 (plan 76), passed on the Deck (row PLAN72-F-HIDDEN).** With the Developer tab off: Settings opens on Screenshot quality with no UI scale controls; both shortcut-setup commands (and the slash form) answer "That command isn't available in this version." with no button; a 6-minute chip watch (1,204 reads, 23 labels) showed none of the ten hidden chips; with the tab back on, the command gives full steps. Find LAN's half rests on its unit test. Evidence `docs/test-evidence/plan76-PLAN72-F-HIDDEN.json`.
+
+## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 3)
+
+- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **DONE 2026-09-28 (plan 76 lane 5, `22f31ee4`).** `scripts/fetch_wiki_live_pages.py`'s page-render call was refused (HTTP 403) by Palworld's wiki, worked around by hand on 2026-09-26. A refused render call (401 or 403) now falls back to the ordinary page of the same revision, keeping only the article box, and prints a "[fallback]" line; a page with no article box is read whole; other errors are retried as before. PC tool, no Deck check. One real fetch of the Pal Sphere page came back clean (evidence: the message of commit `22f31ee4`).

@@ -196,6 +196,7 @@ New questions that come up during the session go here, with the choice taken mea
   borrowed the chat's earlier game. That is a prompt change needing an answer-quality run, so it stays open.
   One test (the plugin's own start-up check) timed out once while five helpers loaded the PC; alone it passes in
   15 s of its 20 s allowance.
+- **Lanes 2, 3 and 5 landed** (D-pad trial for lanes 2 and 3, on Sonnet 5.5 high). Lane 2, seven commits: the library's and the AI models boxes open on their safe choice and give the ring back to their button. Lane 3, three commits: an opened cover stays open while a question is typed, Down and Up land on the same covers, and a press that scrolls no longer leaves the ring on something the scroll carried off screen. Lane 5, six commits, after a trim of 38 everyday titles from its game list: removing a model clears the "is it there" memory, a question about another game no longer gets the chat's own game's notes, the follow-up choice reader and the wiki reader accept more shapes, and a download running at a plugin reload starts again. Every full check green. Lane 5 left the Speed-mode meaning check alone, by the maintainer's earlier decision.
 
 ## Deck block 1, part A — measurements for lane 3
 

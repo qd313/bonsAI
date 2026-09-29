@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 592,
-  "edgeCount": 1637,
+  "fileCount": 593,
+  "edgeCount": 1642,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -261,6 +261,15 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.returnFocus.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -279,6 +288,7 @@
       "imports": [
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/settingsPanelScroll.ts"
@@ -288,6 +298,7 @@
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -2365,6 +2376,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
+        "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
@@ -4367,6 +4380,7 @@
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
@@ -4411,6 +4425,7 @@
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",

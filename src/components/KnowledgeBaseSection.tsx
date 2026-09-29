@@ -76,6 +76,11 @@ import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
+import {
+  clearModalReturnFocus,
+  registerModalReturnFocusOwner,
+  rememberModalReturnFocus,
+} from "../features/plugin-shell/modalReturnFocusRegistry";
 
 type RagStorageOption = {
   id?: string;
@@ -652,6 +657,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   };
 
   const openStoragePicker = () => {
+    // B or "Not now" rebuilds the tab and the ring would land on the tab bar
+    // (plan74-P74-SAFE-FIRST-PICKER.json); the shell hands it back to this button instead.
+    rememberModalReturnFocus("kb-download");
     onBeforeDeckyModal();
     const internal = status?.storage_options?.internal ?? { install_path: "~/.bonsai/rag" };
     const sdCard = status?.storage_options?.sd_card;
@@ -660,6 +668,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         internal={internal}
         sdCard={sdCard}
         onPick={(installPath, storage) => {
+          // A download starts (its own notice may open next): nothing to hand the ring back to.
+          clearModalReturnFocus();
           onCompleteDeckyModalClose(() => handle.Close());
           void startDownload(installPath, storage);
         }}
@@ -727,6 +737,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   };
 
   const confirmRemove = () => {
+    rememberModalReturnFocus("kb-remove");
     onBeforeDeckyModal();
     const handle = showModal(
       <ConfirmModal
@@ -749,6 +760,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         strCancelButtonText="Cancel"
         onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
         onMiddleButton={() => {
+          // The Remove button is about to go; the ring goes to the button that stays in its row.
+          rememberModalReturnFocus("kb-download");
           onCompleteDeckyModalClose(() => handle.Close());
           void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
             .then(() => {
@@ -920,6 +933,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                   const btn = el as HTMLButtonElement | null;
                   if (downloadBtnRefProp) downloadBtnRefProp.current = btn;
                   primaryBtnRefLocal.current = btn;
+                  registerModalReturnFocusOwner("kb-download", btn);
                 }}
                 className="bonsai-settings-focus-btn"
                 onClick={onPrimaryClick}
@@ -1008,6 +1022,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                   ref={(el) => {
                     const btn = el as HTMLButtonElement | null;
                     removeBtnRef.current = btn;
+                    registerModalReturnFocusOwner("kb-remove", btn);
                     if (removeBtnRefProp) {
                       removeBtnRefProp.current = btn;
                     }

@@ -48,6 +48,14 @@ export type ModalReturnFocusId =
    * (docs/test-evidence/plan72-F3-DL.json, ringAfterBoxClosed).
    */
   | "ollama-local-setup"
+  /**
+   * The Knowledge base section's two buttons whose boxes rebuild the tab on close (plan 76 lane 2):
+   * the Download / Update button (its "Choose download location" box; also where the ring goes once
+   * Remove has removed the library, since the Remove button is gone by then) and Remove itself.
+   * On the Deck the ring went to the Ollama tab bar (plan74-P74-SAFE-FIRST-PICKER.json).
+   */
+  | "kb-download"
+  | "kb-remove"
   | "chat-slot-rename"
   /** The collapsing tab bar (plan 30): where a picker's return lands when its opener is gone. */
   | "tab-bar"

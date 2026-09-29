@@ -12,6 +12,7 @@
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+    "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",
     "src/components/KnowledgeBaseSection.update.test.tsx",

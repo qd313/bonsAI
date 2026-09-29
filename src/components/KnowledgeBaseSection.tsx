@@ -75,6 +75,7 @@ import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from 
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
 import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
+import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
@@ -579,7 +580,13 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    */
   const pullNomicEmbed = () => {
     if (nomicPullBusy) return;
-    void confirmDownload([MEANING_SEARCH_MODEL_NOTICE]).then((go) => {
+    // Not now / B return to this button; Download to the library's own button (this one turns into
+    // a disabled "Starting..." and cannot take the ring).
+    void rememberReturnWhileBoxOpens(
+      "kb-nomic-pull",
+      () => confirmDownload([MEANING_SEARCH_MODEL_NOTICE]),
+      "kb-download",
+    ).then((go) => {
       if (go) startNomicPull();
     });
   };
@@ -711,7 +718,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const runUpdate = () => {
     if (updateNote?.kind === "checking") return;
     // Checking for a newer library already reaches the library's sites.
-    void confirmDownload(KNOWLEDGE_LIBRARY_NOTICES).then((go) => {
+    // The notice's box rebuilds the tab on close; the ring returns to this button, not the tab bar.
+    void rememberReturnWhileBoxOpens("kb-download", () => confirmDownload(KNOWLEDGE_LIBRARY_NOTICES)).then((go) => {
       if (go) startUpdate();
     });
   };
@@ -893,6 +901,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                   <Button
                     ref={(el) => {
                       nomicBtnRef.current = el as HTMLButtonElement | null;
+                      registerModalReturnFocusOwner("kb-nomic-pull", el as HTMLElement | null);
                     }}
                     className="bonsai-settings-focus-btn"
                     onClick={pullNomicEmbed}

@@ -62,6 +62,8 @@ export type ModalReturnFocusId =
    */
   | "kb-download"
   | "kb-remove"
+  /** The library's "Pull nomic-embed-text" button, for its download notice's box (plan 76 lane 2). */
+  | "kb-nomic-pull"
   | "chat-slot-rename"
   /** The collapsing tab bar (plan 30): where a picker's return lands when its opener is gone. */
   | "tab-bar"

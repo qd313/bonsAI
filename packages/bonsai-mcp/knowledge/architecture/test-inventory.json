@@ -11,6 +11,7 @@
     "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+    "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
     "src/components/KnowledgeBaseSection.pullHint.test.tsx",
     "src/components/KnowledgeBaseSection.removeBox.test.tsx",
     "src/components/KnowledgeBaseSection.returnFocus.test.tsx",

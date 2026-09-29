@@ -21,6 +21,7 @@
 import { useCallback, useMemo, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
 
+import type { LastExchangeSnapshot } from "../types/backgroundAsk";
 import type { AskThreadCollapsedTurn, AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 import {
   createChatSlot,
@@ -32,7 +33,7 @@ import {
   type ChatSlot,
   type ChatSlotSummary,
 } from "../utils/chatSlotsApi";
-import { turnsToCollapsedTurns } from "../utils/chatSlotTurns";
+import { lastExchangeFromSavedTurn, turnsToCollapsedTurns } from "../utils/chatSlotTurns";
 import {
   questionsIn,
   turnsAfterSummary,
@@ -57,6 +58,12 @@ export type UseChatSlotsArgs = {
   setAskThreadDisplayQuestion: Dispatch<SetStateAction<string>>;
   setExpandedTurnKey: Dispatch<SetStateAction<AskThreadExpandedTurnKey>>;
   resetLiveAskPresentation?: () => void;
+  /**
+   * Called after a saved chat is opened, with its newest answered turn read back as the last
+   * exchange, so the answer keeps its Helpful row. Not called when the chat is empty, ends on a
+   * question still waiting, or the person has already moved on to another chat by the time it loaded.
+   */
+  restoreLastExchange?: (exchange: LastExchangeSnapshot) => void;
   /** True while the backend is generating into this slot. A slot mid-answer is never swept. */
   isSlotGenerating?: (slotId: string) => boolean;
   /** Plan 68: the AI server every Ask uses, so Sum up this chat runs on the same one. */
@@ -115,6 +122,7 @@ export function useChatSlots({
   setAskThreadDisplayQuestion,
   setExpandedTurnKey,
   resetLiveAskPresentation,
+  restoreLastExchange,
   isSlotGenerating,
   ollamaPcIp = "",
 }: UseChatSlotsArgs) {
@@ -180,6 +188,7 @@ export function useChatSlots({
       setAskThreadCollapsed(collapsed);
       setAskThreadDisplayQuestion(pendingQuestion ?? "");
       setExpandedTurnKey(pendingQuestion ? "live" : collapsed.length > 0 ? collapsed[collapsed.length - 1]!.id : "live");
+      return { collapsed, pendingQuestion };
     },
     [setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey],
   );
@@ -262,8 +271,22 @@ export function useChatSlots({
       } else {
         const slot = await getChatSlot(slotId);
         if (slot) {
-          applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
+          const { collapsed, pendingQuestion } = applySlotTranscript(
+            slot.turns,
+            slot.origin_app_id ?? "",
+            slot.origin_app_name ?? "",
+          );
           applySlotMemory(slot);
+          /*
+           * The reply row (Helpful / Not really / chips) is drawn from the last exchange, which a
+           * chat opened from disk does not have: hand it the newest answered turn. Not while the
+           * chat ends on a question still owed an answer, and not if the person moved on during
+           * the load (the same guard the ghost-reply fix above relies on).
+           */
+          if (!pendingQuestion && activeSlotIdRef.current === slotId) {
+            const exchange = lastExchangeFromSavedTurn(collapsed[collapsed.length - 1]);
+            if (exchange) restoreLastExchange?.(exchange);
+          }
         }
       }
       if (leavingId && leavingId !== slotId) {
@@ -274,6 +297,7 @@ export function useChatSlots({
       applySlotMemory,
       applySlotTranscript,
       resetLiveAskPresentation,
+      restoreLastExchange,
       setActiveSlot,
       setAskThreadCollapsed,
       setAskThreadDisplayQuestion,

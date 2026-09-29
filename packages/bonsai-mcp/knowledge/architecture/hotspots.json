@@ -17,7 +17,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1519,
+      "lines": 1526,
       "role": ""
     },
     {
@@ -26,14 +26,14 @@
       "role": ""
     },
     {
+      "path": "src/index.tsx",
+      "lines": 1341,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
+    },
+    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1339,
       "role": ""
-    },
-    {
-      "path": "src/index.tsx",
-      "lines": 1339,
-      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/components/PullModelsModal.tsx",

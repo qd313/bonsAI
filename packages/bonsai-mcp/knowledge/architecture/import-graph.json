@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 590,
-  "edgeCount": 1629,
+  "fileCount": 591,
+  "edgeCount": 1634,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3085,6 +3085,13 @@
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
+    "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts": {
+      "imports": [
+        "src/hooks/useAskSessionSnapshotActions.ts",
+        "src/types/backgroundAsk.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useAskSessionSnapshotActions.ts": {
       "imports": [
         "src/data/modelPolicy.ts",
@@ -3095,6 +3102,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
@@ -3229,6 +3237,7 @@
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/plugin-shell/pluginStorage.ts",
+        "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/chatSlotTurns.ts",
         "src/utils/chatSlotsApi.ts"
@@ -4527,10 +4536,12 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/hooks/useAskMountRestore.ts",
+        "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useChatSlots.ts",
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
@@ -4545,6 +4556,7 @@
         "src/utils/bonsaiReplyReadyToast.test.ts",
         "src/utils/bonsaiReplyReadyToast.ts",
         "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/chatSlotTurns.ts",
         "src/utils/presetCarouselInject.ts"
       ]
     },
@@ -4820,7 +4832,8 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
-        "src/utils/askThinkingPhases.test.ts"
+        "src/utils/askThinkingPhases.test.ts",
+        "src/utils/chatSlotTurns.ts"
       ]
     },
     "src/utils/bonsaiAskCompletionWatch.test.ts": {
@@ -5174,7 +5187,9 @@
     },
     "src/utils/chatSlotTurns.ts": {
       "imports": [
+        "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
+        "src/utils/askThinkingPhases.ts",
         "src/utils/chatSlotsApi.ts",
         "src/utils/reasoningDisplay.ts"
       ],

@@ -154,4 +154,80 @@ describe("the rating while the same hook shows another reply and comes back", ()
     act(() => view.rerender({ ex: { ...REPLY }, rid: 7 }));
     expect(view.result.current.liveReplyFeedbackRating).toBe("down");
   });
+
+  /*
+   * Plan 76 lane 4: the same reply comes back after a chat switch as the saved chat's newest turn,
+   * which carries no request id (only the live poll knows it). It must still find its rating.
+   */
+  it("finds a rating given to the live reply when the reply comes back from the saved chat", async () => {
+    const view = renderHook(
+      (p: { ex: LastExchangeSnapshot | null; rid: number | null }) =>
+        useReplyFeedbackChips({
+          lastExchange: p.ex,
+          lastRequestId: p.rid,
+          setUnifiedInput: () => {},
+          askMode: "speed",
+          pendingReplyFollowUpRef: { current: null },
+        }),
+      { initialProps: { ex: REPLY as LastExchangeSnapshot | null, rid: 7 as number | null } }
+    );
+    await act(async () => {
+      await view.result.current.onReplyFeedback("down");
+    });
+    act(() => view.result.current.resetReplyFeedback());
+    act(() => view.rerender({ ex: null, rid: 7 }));
+    act(() => view.rerender({ ex: { ...REPLY }, rid: null }));
+    expect(view.result.current.liveReplyFeedbackRating).toBe("down");
+  });
+
+  it("a rating given on a reply that came from the saved chat is kept and saved with no request id", async () => {
+    const view = renderHook(
+      (p: { ex: LastExchangeSnapshot | null; rid: number | null }) =>
+        useReplyFeedbackChips({
+          lastExchange: p.ex,
+          lastRequestId: p.rid,
+          setUnifiedInput: () => {},
+          askMode: "speed",
+          pendingReplyFollowUpRef: { current: null },
+        }),
+      { initialProps: { ex: { ...REPLY } as LastExchangeSnapshot | null, rid: null as number | null } }
+    );
+    await act(async () => {
+      await view.result.current.onReplyFeedback("up");
+    });
+    act(() => view.result.current.resetReplyFeedback());
+    act(() => view.rerender({ ex: null, rid: null }));
+    act(() => view.rerender({ ex: { ...REPLY }, rid: null }));
+    expect(view.result.current.liveReplyFeedbackRating).toBe("up");
+  });
+
+  it("finds the rating of a reply whose question was shown under a friendly caption", async () => {
+    const live: LastExchangeSnapshot = {
+      question: "I'm at: the first boss",
+      originalQuestion: "[Strategy follow-up] I'm at: the first boss",
+      answer: "Dodge the slam.",
+    };
+    const saved: LastExchangeSnapshot = {
+      question: "[Strategy follow-up] I'm at: the first boss",
+      originalQuestion: "[Strategy follow-up] I'm at: the first boss",
+      answer: "Dodge the slam.",
+    };
+    const view = renderHook(
+      (p: { ex: LastExchangeSnapshot | null; rid: number | null }) =>
+        useReplyFeedbackChips({
+          lastExchange: p.ex,
+          lastRequestId: p.rid,
+          setUnifiedInput: () => {},
+          askMode: "speed",
+          pendingReplyFollowUpRef: { current: null },
+        }),
+      { initialProps: { ex: live as LastExchangeSnapshot | null, rid: 9 as number | null } }
+    );
+    await act(async () => {
+      await view.result.current.onReplyFeedback("up");
+    });
+    act(() => view.result.current.resetReplyFeedback());
+    act(() => view.rerender({ ex: saved, rid: null }));
+    expect(view.result.current.liveReplyFeedbackRating).toBe("up");
+  });
 });

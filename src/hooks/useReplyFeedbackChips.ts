@@ -70,21 +70,48 @@ type RememberedFeedback = { rating: "up" | "down" | null; chipUsed: boolean };
  * question (the answer cache) start unrated. A plugin reload still forgets; the rating is not
  * written into the chat's saved file.
  */
-const REMEMBERED_LIMIT = 32;
+const REMEMBERED_LIMIT = 64;
 const rememberedFeedback = new Map<string, RememberedFeedback>();
 
 function feedbackKey(exchange: LastExchangeSnapshot | null, requestId: number | null): string | null {
   if (!exchange?.answer?.trim()) return null;
-  return JSON.stringify([requestId ?? null, exchange.question, exchange.answer]);
+  /* The raw question and trimmed words, so the live reply and the same reply read back from the
+     saved chat (which has no friendly caption and no request id) come out as the same key. */
+  return JSON.stringify([
+    requestId ?? null,
+    (exchange.originalQuestion || exchange.question).trim(),
+    exchange.answer.trim(),
+  ]);
 }
 
 function recall(key: string | null): RememberedFeedback {
   return (key && rememberedFeedback.get(key)) || { rating: null, chipUsed: false };
 }
 
+/*
+ * The same reply with no request id. A chat opened from disk brings its newest answer back without
+ * one (only the live poll knows it), so a reply rated when it arrived would not be found again
+ * after a chat switch (plan 76 lane 4). Every rating is also written under this key, and only a
+ * reply with no request id ever reads it, so the answer-cache case above is unaffected.
+ */
+function requestlessKey(key: string): string | null {
+  try {
+    const [id, question, answer] = JSON.parse(key) as [number | null, string, string];
+    return id === null ? null : JSON.stringify([null, question, answer]);
+  } catch {
+    return null;
+  }
+}
+
 function remember(key: string | null, patch: Partial<RememberedFeedback>): void {
   if (!key) return;
   const next = { ...recall(key), ...patch };
+  store(key, next);
+  const alias = requestlessKey(key);
+  if (alias) store(alias, { ...recall(alias), ...patch });
+}
+
+function store(key: string, next: RememberedFeedback): void {
   rememberedFeedback.delete(key);
   rememberedFeedback.set(key, next);
   while (rememberedFeedback.size > REMEMBERED_LIMIT) {

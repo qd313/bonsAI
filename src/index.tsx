@@ -518,6 +518,7 @@ const Content: React.FC = () => {
     onStrategyChecklistToggle,
     resetAskSessionSlice,
     resetLiveAskPresentation,
+    restoreLastExchangeFromSavedChat,
     setStrategyGuideBranches,
     reseedSuggestedPrompts,
     restoreSessionSnapshot,
@@ -577,6 +578,7 @@ const Content: React.FC = () => {
     setAskThreadDisplayQuestion,
     setExpandedTurnKey,
     resetLiveAskPresentation,
+    restoreLastExchange: restoreLastExchangeFromSavedChat,
     isSlotGenerating,
     ollamaPcIp: effectiveOllamaPcIp,
   });

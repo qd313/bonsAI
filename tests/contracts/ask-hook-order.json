@@ -1,5 +1,5 @@
 {
-  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15, updated 2026-09-17 for the new kbAttachedNotes useState (plan 58 phase 1, right after liveReasoning). Asserted by tests/test_ask_hook_order.py.",
+  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15, updated 2026-09-17 for the new kbAttachedNotes useState (plan 58 phase 1, right after liveReasoning), updated 2026-09-28 for the ref and callback that give a chat opened from disk its newest answer back as the last exchange (plan 76 lane 4; the ref is first and the callback last in useAskSessionSnapshotActions; the hooks after them only shift down, and every render runs the same list). Asserted by tests/test_ask_hook_order.py.",
   "recorded": "2026-09-17",
   "extracted_sub_hooks": [
     {
@@ -116,8 +116,10 @@
     "onStrategyBranchPick:useCallback",
     "onStrategyChecklistToggle:useCallback",
     "onRetryLastResponse:useCallback",
+    "lastExchangeRef:useRef",
     "restoreSessionSnapshot:useCallback",
     "resetAskSessionSlice:useCallback",
-    "resetLiveAskPresentation:useCallback"
+    "resetLiveAskPresentation:useCallback",
+    "restoreLastExchangeFromSavedChat:useCallback"
   ]
 }

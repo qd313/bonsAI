@@ -29,7 +29,9 @@
  *     this existed, and it never applies to a turn saved from now on — those always carry their own
  *     game already.
  */
+import type { LastExchangeSnapshot } from "../types/backgroundAsk";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
+import { isStopNoticeResponse } from "./askThinkingPhases";
 import type { ChatSlotTurn } from "./chatSlotsApi";
 import { normalizeTurnReasoning } from "./reasoningDisplay";
 
@@ -126,5 +128,34 @@ export function turnsToCollapsedTurns(
     // The pending question is pure display (the thread header while an answer is still owed),
     // so the friendly caption wins here outright.
     pendingQuestion: pendingQ ? (pendingQ.display_text || "").trim() || pendingQ.text : null,
+  };
+}
+
+/**
+ * A saved question and answer, read back as the "last exchange" the reply row is drawn from.
+ *
+ * A chat opened from disk has no exchange of its own -- the live one is only set when an answer
+ * lands in this session -- so its newest answer came up without the Helpful row (plan 76 lane 4,
+ * roadmap: "Older answers lose their 'Was this helpful?' row after switching chats"). The screen
+ * hands this to that row when a chat is opened.
+ *
+ * `question` is the raw saved question, not the friendly caption: Retry re-asks what was really
+ * asked, and the flush at the next Ask matches the turn already in the thread by that text. What
+ * the saved turn does not record -- the model, the attachments, the ask mode -- is left off; the
+ * chips fall back to the mode the panel is in. Gives nothing for a blank answer or the back end's
+ * own stop placeholder, which is a status and not an answer to rate.
+ */
+export function lastExchangeFromSavedTurn(
+  turn: AskThreadCollapsedTurn | undefined | null
+): LastExchangeSnapshot | null {
+  if (!turn || isStopNoticeResponse(turn.answer)) return null;
+  return {
+    question: turn.question,
+    answer: turn.answer,
+    originalQuestion: turn.question,
+    appName: turn.appName || undefined,
+    askedEntity: turn.askedEntity || undefined,
+    spoilerConsentEffective: false,
+    reasoning: turn.reasoning,
   };
 }

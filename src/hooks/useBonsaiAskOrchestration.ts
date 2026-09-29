@@ -1405,10 +1405,16 @@ export function useBonsaiAskOrchestration(
   // --- Session survival snapshot restore / reset ---
   // Lifted into useAskSessionSnapshotActions. It must stay at exactly this point in the list:
   // React matches hooks by the order they run, not by name.
-  const { restoreSessionSnapshot, resetAskSessionSlice, resetLiveAskPresentation } =
+  const {
+    restoreSessionSnapshot,
+    resetAskSessionSlice,
+    resetLiveAskPresentation,
+    restoreLastExchangeFromSavedChat,
+  } =
     useAskSessionSnapshotActions({
       setOllamaResponse,
       syncOllamaContextFromRunningApp,
+      lastExchange,
       setLastExchange,
       setAskThreadCollapsed,
       setAskThreadDisplayQuestion,
@@ -1511,6 +1517,7 @@ export function useBonsaiAskOrchestration(
     restoreSessionSnapshot,
     resetAskSessionSlice,
     resetLiveAskPresentation,
+    restoreLastExchangeFromSavedChat,
     setStrategyGuideBranches,
     setSuggestedPrompts,
     reseedSuggestedPrompts,

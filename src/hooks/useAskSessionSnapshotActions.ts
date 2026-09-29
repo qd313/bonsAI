@@ -18,7 +18,7 @@
  *          point in the Ask hook's own hook list — React matches hooks by the order they run,
  *          not by name.
  */
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 
 import type { PresetPrompt } from "../data/presets";
@@ -44,6 +44,7 @@ import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurviv
 export type UseAskSessionSnapshotActionsArgs = {
   setOllamaResponse: Dispatch<SetStateAction<string>>;
   syncOllamaContextFromRunningApp: () => void;
+  lastExchange: LastExchangeSnapshot | null;
   setLastExchange: Dispatch<SetStateAction<LastExchangeSnapshot | null>>;
   setAskThreadCollapsed: Dispatch<SetStateAction<AskThreadCollapsedTurn[]>>;
   setAskThreadDisplayQuestion: Dispatch<SetStateAction<string>>;
@@ -82,6 +83,8 @@ export type AskSessionSnapshotActions = {
   restoreSessionSnapshot: (snap: BonsaiSessionSurvivalSnapshot) => void;
   resetAskSessionSlice: () => void;
   resetLiveAskPresentation: () => void;
+  /** Gives a chat just opened from disk its newest answer as the last exchange, so it keeps its Helpful row. */
+  restoreLastExchangeFromSavedChat: (exchange: LastExchangeSnapshot) => void;
 };
 
 // See the file header above for what each of the three returned callbacks does and why they
@@ -89,6 +92,10 @@ export type AskSessionSnapshotActions = {
 export function useAskSessionSnapshotActions(
   a: UseAskSessionSnapshotActionsArgs,
 ): AskSessionSnapshotActions {
+  /* The last exchange as of the latest render, for the one callback below that must not overwrite a live one. */
+  const lastExchangeRef = useRef<LastExchangeSnapshot | null>(a.lastExchange);
+  lastExchangeRef.current = a.lastExchange;
+
   const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
     a.setOllamaResponse(snap.ollamaResponse);
     /*
@@ -196,6 +203,7 @@ export function useAskSessionSnapshotActions(
     a.setAskStopped(false);
     a.setLastApplied(null);
     a.setLastExchange(null);
+    lastExchangeRef.current = null;
     a.setElapsedSeconds(null);
     a.setStrategyGuideBranches(null);
     a.setStrategyChecklist(null);
@@ -207,5 +215,34 @@ export function useAskSessionSnapshotActions(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [a.resetReplyFeedback]);
 
-  return { restoreSessionSnapshot, resetAskSessionSlice, resetLiveAskPresentation };
+  /*
+   * The other half of a chat switch (plan 76 lane 4, roadmap: "Older answers lose their 'Was this
+   * helpful?' row after switching chats"). resetLiveAskPresentation blanks the last exchange, and
+   * the row under the newest answer is drawn from it, so a chat opened from disk showed its newest
+   * answer with the speaker icon alone. useChatSlots hands the saved newest answer back here once
+   * the chat has loaded.
+   *
+   *  - A live exchange that is already there (the remount's own status read can land first) is
+   *    richer -- it knows the model and attachments -- so it is left alone.
+   *  - There is no request id for a saved answer; null it rather than leave the previous chat's id
+   *    on this chat's rating. The rating is still found again (see useReplyFeedbackChips).
+   *  - The flush at the next Ask replays "the turn that just finished" into the thread. This one is
+   *    already in it, from disk, so it is marked as flushed and never replayed under the current
+   *    game's id.
+   */
+  const restoreLastExchangeFromSavedChat = useCallback((exchange: LastExchangeSnapshot) => {
+    if (lastExchangeRef.current) return;
+    lastExchangeRef.current = exchange;
+    a.lastFlushedExchangeQuestionRef.current = exchange.question.trim();
+    a.setLastRequestId(null);
+    a.setLastExchange(exchange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return {
+    restoreSessionSnapshot,
+    resetAskSessionSlice,
+    resetLiveAskPresentation,
+    restoreLastExchangeFromSavedChat,
+  };
 }

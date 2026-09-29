@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { turnsToCollapsedTurns } from "./chatSlotTurns";
+import { lastExchangeFromSavedTurn, turnsToCollapsedTurns } from "./chatSlotTurns";
 
 describe("turnsToCollapsedTurns", () => {
   it("preserves trailing unpaired user turn as pendingQuestion", () => {
@@ -254,5 +254,40 @@ describe("turnsToCollapsedTurns", () => {
       { id: "a1", role: "assistant", text: "answer" },
     ]);
     expect(collapsed[0]?.chatSummary).toBeUndefined();
+  });
+});
+
+/*
+ * Plan 76 lane 4: a chat opened from disk has no "last exchange" of its own, so its newest answer
+ * lost its Helpful row. This reads the saved pair back into the shape the row is drawn from.
+ */
+describe("lastExchangeFromSavedTurn", () => {
+  it("turns the saved question and answer into the newest exchange", () => {
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "[Strategy follow-up] I'm at: the start", display_text: "I'm at: the start" },
+        { id: "a1", role: "assistant", text: "Go left first.", app_name: "Hades", asked_entity: "Megaera" },
+      ],
+      "",
+      "",
+    );
+    const ex = lastExchangeFromSavedTurn(collapsed[0]!);
+    expect(ex).not.toBeNull();
+    /* The raw question, so Retry asks what was really asked and the flush at the next Ask can match
+       the row already in the thread. */
+    expect(ex!.question).toBe("[Strategy follow-up] I'm at: the start");
+    expect(ex!.originalQuestion).toBe("[Strategy follow-up] I'm at: the start");
+    expect(ex!.answer).toBe("Go left first.");
+    expect(ex!.appName).toBe("Hades");
+    expect(ex!.askedEntity).toBe("Megaera");
+    expect(ex!.spoilerConsentEffective).toBe(false);
+  });
+
+  it("gives nothing for a blank answer or the back end's stop placeholder", () => {
+    const blank = { id: "t", question: "q", answer: "   " };
+    const stopped = { id: "t", question: "q", answer: "Request cancelled." };
+    expect(lastExchangeFromSavedTurn(blank)).toBeNull();
+    expect(lastExchangeFromSavedTurn(stopped)).toBeNull();
+    expect(lastExchangeFromSavedTurn(undefined)).toBeNull();
   });
 });

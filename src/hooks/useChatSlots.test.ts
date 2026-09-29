@@ -215,6 +215,90 @@ describe("useChatSlots", () => {
   });
 
   /*
+   * Plan 76 lane 4: "Older answers lose their 'Was this helpful?' row after switching chats". A chat
+   * opened from disk has no last exchange, and the row is drawn from it, so the newest answer of any
+   * chat you switch to came up without its thumbs. Opening a chat now hands its newest answered
+   * turn back to the screen as that exchange.
+   */
+  describe("opening a saved chat", () => {
+    function slotWith(turns: Array<Record<string, unknown>>) {
+      return { id: "slot-b", label: "B", created_at: 0, updated_at: 0, turns };
+    }
+    function open(restoreLastExchange: ReturnType<typeof vi.fn>, activeSlotIdRef = { current: null as string | null }) {
+      return renderHook(() =>
+        useChatSlots({
+          activeSlotIdRef,
+          setAskThreadCollapsed: vi.fn(),
+          setAskThreadDisplayQuestion: vi.fn(),
+          setExpandedTurnKey: vi.fn(),
+          restoreLastExchange,
+        }),
+      );
+    }
+
+    it("hands the newest answered turn back as the last exchange", async () => {
+      vi.mocked(chatSlotsApi.getChatSlot).mockResolvedValueOnce(
+        slotWith([
+          { id: "u1", role: "user", text: "first?" },
+          { id: "a1", role: "assistant", text: "first answer" },
+          { id: "u2", role: "user", text: "second?" },
+          { id: "a2", role: "assistant", text: "second answer" },
+        ]) as never,
+      );
+      const restore = vi.fn();
+      const { result } = open(restore);
+      await act(async () => {
+        await result.current.selectSlot("slot-b");
+      });
+      expect(restore).toHaveBeenCalledTimes(1);
+      expect(restore.mock.calls[0]![0]).toMatchObject({ question: "second?", answer: "second answer" });
+    });
+
+    it("hands back nothing when the chat ends on a question still waiting, or is empty", async () => {
+      const restore = vi.fn();
+      const { result } = open(restore);
+      vi.mocked(chatSlotsApi.getChatSlot).mockResolvedValueOnce(
+        slotWith([
+          { id: "u1", role: "user", text: "first?" },
+          { id: "a1", role: "assistant", text: "first answer" },
+          { id: "u2", role: "user", text: "still waiting" },
+        ]) as never,
+      );
+      await act(async () => {
+        await result.current.selectSlot("slot-b");
+      });
+      vi.mocked(chatSlotsApi.getChatSlot).mockResolvedValueOnce(slotWith([]) as never);
+      await act(async () => {
+        await result.current.selectSlot("slot-b");
+      });
+      expect(restore).not.toHaveBeenCalled();
+    });
+
+    it("does not hand back a chat the user has already left", async () => {
+      const activeSlotIdRef = { current: null as string | null };
+      let release: (value: unknown) => void = () => {};
+      vi.mocked(chatSlotsApi.getChatSlot).mockImplementationOnce(
+        () => new Promise((resolve) => { release = resolve; }) as never,
+      );
+      const restore = vi.fn();
+      const { result } = open(restore, activeSlotIdRef);
+      let pending: Promise<void> = Promise.resolve();
+      await act(async () => {
+        pending = result.current.selectSlot("slot-b");
+      });
+      activeSlotIdRef.current = "slot-c";
+      await act(async () => {
+        release(slotWith([
+          { id: "u1", role: "user", text: "q" },
+          { id: "a1", role: "assistant", text: "a" },
+        ]));
+        await pending;
+      });
+      expect(restore).not.toHaveBeenCalled();
+    });
+  });
+
+  /*
    * The dingleberry sweep (D42, locked 2026-08-31): a chat created and never used — zero turns,
    * still named "New chat" — deletes itself when the user switches away. A rename or a pending
    * answer both mean "in use" and protect the slot.

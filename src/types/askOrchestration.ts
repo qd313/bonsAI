@@ -133,6 +133,8 @@ export interface BonsaiAskOrchestration {
   resetAskSessionSlice: () => void;
   /** Blanks the live-answer view on a plain chat switch, without touching isAsking or the poll. */
   resetLiveAskPresentation: () => void;
+  /** Gives a chat just opened from disk its newest answer as the last exchange (its Helpful row is drawn from it). */
+  restoreLastExchangeFromSavedChat: (exchange: LastExchangeSnapshot) => void;
   setStrategyGuideBranches: Dispatch<SetStateAction<StrategyGuideBranchesPayload | null>>;
   setSuggestedPrompts: Dispatch<SetStateAction<PresetPrompt[]>>;
   reseedSuggestedPrompts: (

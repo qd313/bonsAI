@@ -68,6 +68,7 @@
     "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
     "src/components/ModelRoutingOrderModal.test.tsx",
     "src/components/OllamaFindLanHidden.test.tsx",
+    "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
     "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
     "src/components/OllamaModelsHubModal.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",

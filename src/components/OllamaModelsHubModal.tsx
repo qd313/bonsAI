@@ -151,6 +151,9 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   const lastSavedDraftRef = useRef(
     JSON.stringify({ modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks })
   );
+  /** What was saved when the screen opened: where Cancel puts things back to (see handleHubClose). */
+  const openedPatchRef = useRef({ modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks });
+  const openedJsonRef = useRef(lastSavedDraftRef.current);
 
   const commitPolicyAndAdvanced = useCallback(async () => {
     const patch = draftPatch();
@@ -189,9 +192,25 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
           .finally(() => closeHub());
         return;
       }
+      /*
+       * Cancel means "as it was when I opened this". Licence and Advanced picks are a draft until
+       * Done, which Cancel drops -- but "Pull selected" saves the draft first (the pull needs it),
+       * so a pull declined at its own box and then Cancel left the new licence in the saved file
+       * while the reopened screen showed the old one (plan76-P76-TIER2-MODEL-SAFE-FIRST.json). If
+       * anything was saved during this visit, put the opening values back before closing.
+       */
+      if ((reason === "cancel" || reason === "browseCancel") && lastSavedDraftRef.current !== openedJsonRef.current) {
+        void Promise.resolve(onCommitOllamaModelsHub(openedPatchRef.current))
+          .then(() => {
+            lastSavedDraftRef.current = openedJsonRef.current;
+          })
+          .catch((err) => console.error("save_settings failed (AI models hub, Cancel restore)", err))
+          .finally(() => closeHub());
+        return;
+      }
       closeHub();
     },
-    [commitPolicyAndAdvanced, draftPatch, closeHub]
+    [commitPolicyAndAdvanced, draftPatch, closeHub, onCommitOllamaModelsHub]
   );
 
   /**

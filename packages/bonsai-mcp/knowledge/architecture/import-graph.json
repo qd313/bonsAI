@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 611,
-  "edgeCount": 1698,
+  "fileCount": 612,
+  "edgeCount": 1700,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1039,6 +1039,13 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaModelsHubModal.cancelRestores.test.tsx": {
+      "imports": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaModelsHubModal.returnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaModelsHubModal.tsx",
@@ -1064,6 +1071,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx"
@@ -4623,6 +4631,7 @@
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
         "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
+        "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",

@@ -120,3 +120,42 @@ export function mayHoldFence(text: string): boolean {
   return text.includes("```") || /^\s*~~~/m.test(text);
 }
 
+
+/** A fence that is open: the mark it opened with and how many of them. */
+export type OpenFence = { mark: "`" | "~"; length: number };
+
+const OPENER_RE = /^\s*(`{3,}|~{3,})([^\n]*)$/;
+
+/** What a line does to the fence state. `info` is the text after the opening marks. */
+export type FenceStep =
+  | { kind: "open"; open: OpenFence; info: string }
+  | { kind: "close"; open: null }
+  | { kind: "none"; open: OpenFence | null };
+
+/**
+ * One line's effect on a fence, given the fence open before it (null for none). Outside a fence,
+ * a line starting with three or more backticks or tildes opens one. Inside, only a line holding
+ * nothing but the same mark, at least as long as the opener, closes it; every other line, another
+ * kind of fence marker included, is the block's own text.
+ */
+export function stepFence(line: string, open: OpenFence | null): FenceStep {
+  if (!open) {
+    const m = OPENER_RE.exec(line);
+    if (!m) return { kind: "none", open: null };
+    const run = m[1]!;
+    return { kind: "open", open: { mark: run[0] as "`" | "~", length: run.length }, info: m[2]!.trim() };
+  }
+  // Quote marks and indent in front of a closer are taken off, as the panel's reader does.
+  const t = line.replace(/^[\s>]*/, "").trimEnd();
+  if (t.length >= open.length && t.split(open.mark).join("") === "") {
+    return { kind: "close", open: null };
+  }
+  return { kind: "none", open };
+}
+
+/** Whether every fence in the text is closed by its end. */
+export function hasBalancedFenceMarkers(text: string): boolean {
+  let open: OpenFence | null = null;
+  for (const line of text.split("\n")) open = stepFence(line, open).open;
+  return open === null;
+}

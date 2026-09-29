@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { mayHoldFence, replaceSpoilerFences } from "./markdownFenceReader";
+import {
+  hasBalancedFenceMarkers,
+  mayHoldFence,
+  replaceSpoilerFences,
+  stepFence,
+  type OpenFence,
+} from "./markdownFenceReader";
 
 const F = "`".repeat(3);
 const T = "~~~";
@@ -40,5 +46,55 @@ describe("mayHoldFence", () => {
     expect(mayHoldFence(`a ${F} b`)).toBe(true);
     expect(mayHoldFence(`a\n${T}x\nb`)).toBe(true);
     expect(mayHoldFence("plain ~~strike~~ text")).toBe(false);
+  });
+});
+
+describe("stepFence", () => {
+  const F4 = "`".repeat(4);
+
+  it("opens on three or more backticks or tildes and reports the label", () => {
+    expect(stepFence(`${F}bonsai-spoiler`, null)).toEqual({
+      kind: "open",
+      open: { mark: "`", length: 3 },
+      info: "bonsai-spoiler",
+    });
+    expect(stepFence(`${T}json`, null)).toMatchObject({ kind: "open", open: { mark: "~", length: 3 } });
+    expect(stepFence(`${F4}`, null)).toMatchObject({ kind: "open", open: { mark: "`", length: 4 } });
+    expect(stepFence("Just a sentence.", null)).toEqual({ kind: "none", open: null });
+    expect(stepFence("~~struck~~", null).kind).toBe("none");
+  });
+
+  it("opens on a line that ends with a carriage return", () => {
+    expect(stepFence(`${T}bonsai-spoiler` + String.fromCharCode(13), null)).toMatchObject({ kind: "open", info: "bonsai-spoiler" });
+  });
+
+  it("closes only on its own kind of mark, at least as long, with nothing else on the line", () => {
+    const tilde: OpenFence = { mark: "~", length: 3 };
+    const four: OpenFence = { mark: "`", length: 4 };
+    expect(stepFence(T, tilde).kind).toBe("close");
+    expect(stepFence(`${T}~~  `, tilde).kind).toBe("close");
+    expect(stepFence(F, tilde).kind).toBe("none");
+    expect(stepFence(F, four).kind).toBe("none");
+    expect(stepFence(F4, four).kind).toBe("close");
+    expect(stepFence(`${F4}\`\``, four).kind).toBe("close");
+    expect(stepFence(`${T}json`, tilde).kind).toBe("none");
+    expect(stepFence(`text ${T}`, tilde).kind).toBe("none");
+    expect(stepFence("", tilde).kind).toBe("none");
+  });
+});
+
+describe("hasBalancedFenceMarkers", () => {
+  it("is true when every block is closed and false while one is open", () => {
+    expect(hasBalancedFenceMarkers(`a
+${T}x
+b
+${T}
+c`)).toBe(true);
+    expect(hasBalancedFenceMarkers(`a
+${T}x
+b
+${F}
+c`)).toBe(false);
+    expect(hasBalancedFenceMarkers("no fences")).toBe(true);
   });
 });

@@ -6,6 +6,8 @@
  * Does not: Split chunks for D-pad navigation — see splitResponseIntoChunks.
  */
 
+import { hasBalancedFenceMarkers, stepFence, type OpenFence } from "./markdownFenceReader";
+
 export const SPOILER_STREAM_MASK_LABEL = "Spoiler hidden until complete…";
 export const FENCE_STREAM_WAIT_LABEL = "Code block incoming…";
 
@@ -31,15 +33,15 @@ export type PrepareStreamMarkdownOpts = {
   unwrapOpenSpoilerFence?: (openFenceText: string) => boolean;
 };
 
-function isFenceLine(line: string): boolean {
-  return line.trimStart().startsWith("```");
-}
+/*
+ * Fences are read the way the panel draws them (markdownFenceReader): ``` or ~~~, and a block ends
+ * only on its own closing line holding the same mark, at least as long as the opener. So a blank
+ * line inside a ~~~ block, or a ``` line inside a four-backtick one, never ends it.
+ */
 
-function isSpoilerFenceOpenLine(line: string): boolean {
-  const trimmed = line.trimStart();
-  if (!trimmed.startsWith("```")) return false;
-  const info = trimmed.slice(3).trim().toLowerCase();
-  return info === "bonsai-spoiler" || info.startsWith("bonsai-spoiler");
+/** Whether the info text after an opening mark labels a hidden block. */
+function isSpoilerInfo(info: string): boolean {
+  return info.toLowerCase().startsWith("bonsai-spoiler");
 }
 
 /**
@@ -59,13 +61,9 @@ export function normalizeIncompleteInline(source: string): string {
   return t;
 }
 
-/** Whether ``` fence markers are balanced (even number of fence lines). */
+/** Whether every fence marker is closed by the end of the text. */
 export function hasBalancedFences(s: string): boolean {
-  let inFence = false;
-  for (const line of s.split("\n")) {
-    if (isFenceLine(line)) inFence = !inFence;
-  }
-  return !inFence;
+  return hasBalancedFenceMarkers(s);
 }
 
 /**
@@ -77,7 +75,7 @@ export function didNonSpoilerFenceJustClose(prevTarget: string, nextTarget: stri
   if (!hasBalancedFences(nextTarget)) return false;
   if (hasBalancedFences(prevTarget)) return false;
   const added = nextTarget.slice(prevTarget.length);
-  return added.includes("```");
+  return added.includes("```") || added.includes("~~~");
 }
 
 /**
@@ -93,17 +91,18 @@ export function didNonSpoilerFenceJustClose(prevTarget: string, nextTarget: stri
  */
 export function settleRevealCut(target: string, cut: number): number {
   let end = Math.max(0, Math.min(cut, target.length));
-  let open: { start: number; spoiler: boolean } | null = null;
+  let open: { start: number; spoiler: boolean; fence: OpenFence } | null = null;
   let pos = 0;
   while (pos < target.length && (pos < end || open)) {
     const nl = target.indexOf("\n", pos);
     const next = nl === -1 ? target.length : nl + 1;
     const line = target.slice(pos, nl === -1 ? target.length : nl);
-    if (isFenceLine(line)) {
+    const step = stepFence(line, open?.fence ?? null);
+    if (step.kind !== "none") {
       if (end > pos && end < next) end = next;
-      if (!open) {
-        open = { start: pos, spoiler: isSpoilerFenceOpenLine(line) };
-      } else {
+      if (step.kind === "open") {
+        open = { start: pos, spoiler: isSpoilerInfo(step.info), fence: step.open };
+      } else if (open) {
         if (open.spoiler && end > open.start && end < next) end = next;
         open = null;
       }
@@ -136,28 +135,30 @@ export function prepareStreamMarkdown(
   const proseBuffer: string[] = [];
 
   let i = 0;
-  let inFence = false;
+  let openFence: OpenFence | null = null;
   let fenceIsSpoiler = false;
   const fenceLines: string[] = [];
 
   while (i < lines.length) {
     const line = lines[i]!;
 
-    if (!inFence && isFenceLine(line)) {
+    const step = stepFence(line, openFence);
+
+    if (!openFence && step.kind === "open") {
       flushProseBuffer(proseBuffer, closedBlocks);
-      inFence = true;
-      fenceIsSpoiler = isSpoilerFenceOpenLine(line);
+      openFence = step.open;
+      fenceIsSpoiler = isSpoilerInfo(step.info);
       fenceLines.length = 0;
       fenceLines.push(line);
       i++;
       continue;
     }
 
-    if (inFence) {
+    if (openFence) {
       fenceLines.push(line);
-      if (isFenceLine(line) && fenceLines.length > 1) {
+      if (step.kind === "close") {
         closedBlocks.push(fenceLines.join("\n"));
-        inFence = false;
+        openFence = null;
         fenceLines.length = 0;
       }
       i++;
@@ -168,7 +169,7 @@ export function prepareStreamMarkdown(
     i++;
   }
 
-  if (inFence) {
+  if (openFence) {
     if (fenceIsSpoiler) {
       const openFenceText = fenceLines.join("\n");
       if (opts.unwrapOpenSpoilerFence?.(openFenceText)) {

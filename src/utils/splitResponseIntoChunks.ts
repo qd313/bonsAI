@@ -5,7 +5,7 @@
  * mean a single D-pad press scrolls through all of it with no stopping point along the way, so
  * this file breaks a reply up into a few pieces first, each becoming its own stop the D-pad can
  * land on. It never cuts a piece of code in the middle — a fenced code block (a part of a reply
- * wrapped in three backticks) always stays whole in one piece.
+ * wrapped in three backticks or three tildes) always stays whole in one piece.
  *
  * Used for: `buildAnswerBubbleElement` and the answer bubble's up/down D-pad navigation.
  *
@@ -23,40 +23,23 @@
  * that looks for a natural place to cut — the end of a sentence, or else a gap between two words
  * — rather than cutting through the middle of one, again never cutting inside a fence.
  */
-/**
- * True when a line starts a GFM/Markdown code fence (``` or ```json).
- * Used for fence state toggling, not to detect backticks in prose.
- */
-function isFenceLine(line: string): boolean {
-  return line.trimStart().startsWith("```");
-}
+import { hasBalancedFenceMarkers, mayHoldFence, stepFence, type OpenFence } from "./markdownFenceReader";
 
 /**
- * Per-line fence state up to a character index (treats each line in `before` as complete for toggles).
+ * Per-line fence state up to a character index (treats each line in `before` as complete for
+ * toggles). Fences are read the way the panel draws them (markdownFenceReader): ``` or ~~~, and a
+ * block ends only on its own matching closing line, so a blank line inside one is not a split point.
  */
 function isIndexInsideCodeFence(text: string, index: number): boolean {
   if (index <= 0) {
     return false;
   }
   const before = text.slice(0, index);
-  let inFence = false;
+  let open: OpenFence | null = null;
   for (const line of before.split("\n")) {
-    if (isFenceLine(line)) {
-      inFence = !inFence;
-    }
+    open = stepFence(line, open).open;
   }
-  return inFence;
-}
-
-/** Whether ``` fence markers are balanced (even number of fence lines). */
-function hasBalancedFences(s: string): boolean {
-  let inFence = false;
-  for (const line of s.split("\n")) {
-    if (isFenceLine(line)) {
-      inFence = !inFence;
-    }
-  }
-  return !inFence;
+  return open !== null;
 }
 
 /**
@@ -139,7 +122,7 @@ function findSafeCutInRange(text: string, start: number, maxEnd: number): number
     c = limit;
   }
   for (let tryCut = c; tryCut > start; ) {
-    if (hasBalancedFences(text.slice(start, tryCut))) {
+    if (hasBalancedFenceMarkers(text.slice(start, tryCut))) {
       return tryCut;
     }
     tryCut = text.lastIndexOf(" ", tryCut - 1);
@@ -148,7 +131,7 @@ function findSafeCutInRange(text: string, start: number, maxEnd: number): number
     }
   }
   for (let tryCut = limit; tryCut < text.length; tryCut++) {
-    if (hasBalancedFences(text.slice(start, tryCut))) {
+    if (hasBalancedFenceMarkers(text.slice(start, tryCut))) {
       return tryCut;
     }
   }
@@ -194,7 +177,7 @@ function mergeShortChunks(pieces: string[], joiner: string): string[] {
     }
   };
   for (const piece of pieces) {
-    if (piece.includes("```") || piece.length >= SECTION_MERGE_MAX_CHARS) {
+    if (mayHoldFence(piece) || piece.length >= SECTION_MERGE_MAX_CHARS) {
       flush();
       out.push(piece);
       continue;
@@ -214,7 +197,7 @@ function mergeShortChunks(pieces: string[], joiner: string): string[] {
 
 /**
  * Keep responses readable in Decky by splitting dense output into panel-sized chunks.
- * Code fences (```) are never split across chunks: paragraph/density splits are skipped
+ * Code fences (``` or ~~~) are never split across chunks: paragraph/density splits are skipped
  * when they would break inside a block. Neighbouring short paragraphs (or lines) are then merged
  * back up to SECTION_MERGE_MAX_CHARS, so a finished answer is a few D-pad stops rather than one
  * per paragraph — see mergeShortChunks.
@@ -231,7 +214,7 @@ export function splitResponseIntoChunks(text: string): string[] {
   }
 
   const block = byParagraph[0] ?? t;
-  if (block.includes("```")) {
+  if (mayHoldFence(block)) {
     if (block.length <= 8000) {
       return [block];
     }

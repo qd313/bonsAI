@@ -158,3 +158,81 @@ describe("settleRevealCut", () => {
     expect(settleRevealCut(own, 1)).toBe(1);
   });
 });
+
+/*
+ * Plan 76 lane 1: a ~~~ block, and a block fenced with four backticks, is one block from opener to
+ * closer while the answer streams, exactly as the panel draws it once finished. The live parser
+ * knew only three backticks, so a ~~~ hidden block was drawn as plain prose the whole time.
+ */
+describe("streaming fences other than three backticks", () => {
+  const F = "`".repeat(3);
+  const F4 = "`".repeat(4);
+  const T = "~~~";
+
+  it("masks an open ~~~ hidden block, blank lines and all", () => {
+    const r = prepareStreamMarkdown(`Hint.\n\n${T}bonsai-spoiler\nBoss name\n\nPhase 2`);
+    expect(r.closedBlocks).toEqual(["Hint."]);
+    expect(r.waitChip).toEqual({ kind: "spoiler", label: SPOILER_STREAM_MASK_LABEL });
+    expect(r.liveTail).toBeNull();
+    expect(JSON.stringify(r)).not.toContain("Boss name");
+  });
+
+  it("closes a ~~~ block into one closed piece, blank line inside, and goes on with the prose", () => {
+    const block = `${T}bonsai-spoiler\nBoss name\n\nPhase 2\n${T}`;
+    const r = prepareStreamMarkdown(`Hint.\n\n${block}\n\nAfter it`);
+    expect(r.closedBlocks).toEqual(["Hint.", block]);
+    expect(r.waitChip).toBeNull();
+    expect(r.liveTail).toBe("After it");
+  });
+
+  it("does not let a ``` line close a ~~~ block", () => {
+    const r = prepareStreamMarkdown(`${T}bonsai-spoiler\nBoss name\n${F}\nPhase 2`);
+    expect(r.waitChip).toEqual({ kind: "spoiler", label: SPOILER_STREAM_MASK_LABEL });
+    expect(JSON.stringify(r)).not.toContain("Phase 2");
+  });
+
+  it("reads a four-backtick hidden block as one block, ``` line inside it", () => {
+    const open = prepareStreamMarkdown(`Hint.\n\n${F4}bonsai-spoiler\nBoss name\n${F}\nPhase 2`);
+    expect(open.waitChip).toEqual({ kind: "spoiler", label: SPOILER_STREAM_MASK_LABEL });
+    expect(JSON.stringify(open)).not.toContain("Phase 2");
+    const block = `${F4}bonsai-spoiler\nBoss name\n${F}\nPhase 2\n${F4}`;
+    const done = prepareStreamMarkdown(`Hint.\n\n${block}\n\nAfter`);
+    expect(done.closedBlocks).toEqual(["Hint.", block]);
+  });
+
+  it("shows the code wait chip for an open ~~~ code block", () => {
+    const r = prepareStreamMarkdown(`Before.\n\n${T}json\n{"a": 1`);
+    expect(r.waitChip).toEqual({ kind: "fence", label: FENCE_STREAM_WAIT_LABEL });
+  });
+
+  it("streams an open ~~~ hidden block as prose when the turn unwraps it", () => {
+    const r = prepareStreamMarkdown(`${T}bonsai-spoiler\nBoss name`, { unwrapOpenSpoilerFence: () => true });
+    expect(r.waitChip).toBeNull();
+    expect(r.liveTail).toBe("Boss name");
+  });
+
+  it("does not count a closing mark glued onto a sentence as a closer", () => {
+    const r = prepareStreamMarkdown(`${F}bonsai-spoiler\nOne sentence.${F}\nMore`);
+    expect(r.waitChip).toEqual({ kind: "spoiler", label: SPOILER_STREAM_MASK_LABEL });
+    expect(JSON.stringify(r)).not.toContain("More");
+  });
+
+  it("didNonSpoilerFenceJustClose sees a ~~~ block close", () => {
+    const prev = `text\n\n${T}json\n{"a":1}\n`;
+    expect(didNonSpoilerFenceJustClose(prev, `${prev}${T}\n`)).toBe(true);
+    expect(didNonSpoilerFenceJustClose(prev, `${prev}{"b":2}\n`)).toBe(false);
+  });
+
+  it("settleRevealCut never stops inside a ~~~ hidden block the snapshot has closed", () => {
+    const covered = `Intro.\n\n${T}bonsai-spoiler\nThe Soul Master teleports.\n\nAnd more.\n${T}\nKeep moving.`;
+    const end = covered.indexOf("Keep");
+    expect(settleRevealCut(covered, covered.indexOf("Soul"))).toBe(end);
+    expect(settleRevealCut(covered, covered.indexOf("And"))).toBe(end);
+    expect(settleRevealCut(covered, 3)).toBe(3);
+  });
+
+  it("settleRevealCut finishes a half-typed ~~~ marker line", () => {
+    const open = `Intro.\n${T}bonsai-spoiler\nThe Soul`;
+    expect(settleRevealCut(open, open.indexOf(T) + 5)).toBe(open.indexOf("The"));
+  });
+});

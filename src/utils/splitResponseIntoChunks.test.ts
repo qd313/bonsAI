@@ -129,3 +129,55 @@ describe("splitResponseIntoChunks", () => {
     });
   });
 });
+
+/*
+ * Plan 76 lane 1: the panel draws a ~~~ block, and a block fenced with four backticks, as one block
+ * from opener to closer. The splitter knew only three backticks, so a blank line inside such a
+ * block cut it in two and half of it was drawn as plain text.
+ */
+describe("splitResponseIntoChunks — fences other than three backticks", () => {
+  const F = "`".repeat(3);
+  const F4 = "`".repeat(4);
+  const T = "~~~";
+
+  it("keeps a ~~~ hidden block whole across a blank line inside it", () => {
+    const block = `${T}bonsai-spoiler\nBoss: Ganon\n\nPhase 2: ...\n${T}`;
+    const c = splitResponseIntoChunks(`Hint here.\n\n${block}\n\nAfter.`);
+    expect(c).toEqual(["Hint here.", block, "After."]);
+  });
+
+  it("keeps a four-backtick block whole, even with a ``` line and a blank line inside", () => {
+    const block = `${F4}bonsai-spoiler\nOne.\n${F}\n\nTwo.\n${F4}`;
+    const c = splitResponseIntoChunks(`Hint here.\n\n${block}\n\nAfter.`);
+    expect(c).toEqual(["Hint here.", block, "After."]);
+  });
+
+  it("does not let a ``` line close a ~~~ block, nor a ~~~ line close a ``` block", () => {
+    const a = `${T}bonsai-spoiler\nOne.\n${F}\n\nTwo.\n${T}`;
+    expect(splitResponseIntoChunks(`Hint.\n\n${a}\n\nAfter.`)).toEqual(["Hint.", a, "After."]);
+    const b = `${F}bonsai-spoiler\nOne.\n${T}\n\nTwo.\n${F}`;
+    expect(splitResponseIntoChunks(`Hint.\n\n${b}\n\nAfter.`)).toEqual(["Hint.", b, "After."]);
+  });
+
+  it("keeps everything after an unclosed ~~~ block in that block, as the panel draws it", () => {
+    const open = `${T}bonsai-spoiler\nOne.\n\nTwo.\n\nThree.`;
+    expect(splitResponseIntoChunks(`Hint.\n\n${open}`)).toEqual(["Hint.", open]);
+  });
+
+  it("does not treat a closing mark glued onto a sentence as a closer", () => {
+    const open = `${F}bonsai-spoiler\nOne sentence.${F}\n\nStill inside.`;
+    expect(splitResponseIntoChunks(`Hint.\n\n${open}`)).toEqual(["Hint.", open]);
+  });
+
+  it("never cuts a long ~~~ block that has no blank line, by lines or by length", () => {
+    const lines = Array.from({ length: 30 }, (_, i) => `Line ${i} of the hidden text, long enough to add up.`);
+    const block = `${T}bonsai-spoiler\n${lines.join("\n")}\n${T}`;
+    expect(block.length).toBeGreaterThan(900);
+    expect(splitResponseIntoChunks(block)).toEqual([block]);
+  });
+
+  it("leaves a ~~ strikethrough in a sentence alone", () => {
+    const t = "This is ~~wrong~~ and that is right.\nSecond line.";
+    expect(splitResponseIntoChunks(t)).toEqual([t]);
+  });
+});

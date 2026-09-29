@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 590,
-  "edgeCount": 1626,
+  "edgeCount": 1628,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5695,6 +5695,8 @@
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/markdownFenceReader.test.ts",
+        "src/utils/splitResponseIntoChunks.ts",
+        "src/utils/streamMarkdownPrepare.ts",
         "src/utils/toastAnswerPreview.ts"
       ]
     },
@@ -6123,7 +6125,9 @@
       "importedBy": []
     },
     "src/utils/splitResponseIntoChunks.ts": {
-      "imports": [],
+      "imports": [
+        "src/utils/markdownFenceReader.ts"
+      ],
       "importedBy": [
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
@@ -6258,7 +6262,9 @@
       "importedBy": []
     },
     "src/utils/streamMarkdownPrepare.ts": {
-      "imports": [],
+      "imports": [
+        "src/utils/markdownFenceReader.ts"
+      ],
       "importedBy": [
         "src/features/stream-scramble/streamScrambleMath.ts",
         "src/hooks/useSmoothStreamReveal.test.ts",

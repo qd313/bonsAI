@@ -93,9 +93,18 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
               <div>You can change this later under Ollama → Manage AI models → Policy.</div>
             </div>
           }
-          strOKButtonText="Enable Tier 2 and queue"
+          /*
+           * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that changes
+           * nothing and the action sits on the middle button -- the download notice's own shape
+           * (downloadNotice.tsx), and the sister box in usePullModelSubmitSelected.tsx. This box
+           * used to open with the ring on the action (found in the code, plan 76 lane 2).
+           * B and Cancel also change nothing.
+           */
+          strOKButtonText="Not now"
+          strMiddleButtonText="Enable Tier 2 and queue"
           strCancelButtonText="Cancel"
-          onOK={() => {
+          onOK={() => completeNestedModalClose(() => handle.Close())}
+          onMiddleButton={() => {
             openWeightTierConfirmedRef.current.add(entry.tag);
             void (async () => {
               await onApplyTier2Policy?.();

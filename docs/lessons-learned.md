@@ -399,7 +399,8 @@ it does, each helper that died mid-work comes back with one short message and ke
 same as a manual resume.
 
 **Five helpers at once, each in its own copy, while the session drives the Deck.** The shape that
-worked on 2026-09-15 (plan 55), written down because the maintainer asked for it to be kept. The one
+worked on 2026-09-15 (plan 55), written down because the maintainer asked for it to be kept. (The cap
+is seven since 2026-09-28; see AGENTS.md.) The one
 running the session writes no code itself. It makes each helper its own copy of the repo from the tip
 with the copy script, writes one brief per helper — the tip hash and the base check, the files it
 owns, one fix per commit, the five gates, the focus law, and the override that the copy's packages

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 591,
-  "edgeCount": 1634,
+  "fileCount": 592,
+  "edgeCount": 1637,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -253,6 +253,14 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.removeBox.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -279,6 +287,7 @@
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+        "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -4357,6 +4366,7 @@
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+        "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
@@ -4400,6 +4410,7 @@
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",

@@ -737,9 +737,18 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             cards will stop grounding until you download again.
           </div>
         }
-        strOKButtonText="Remove"
+        /*
+         * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that deletes nothing
+         * and Remove sits on the middle button -- the download notice's own shape
+         * (downloadNotice.tsx). On the Deck this box opened with the ring on "Remove" and one A
+         * deleted the whole library (six runs, plan74-P74-SAFE-FIRST-PICKER.json, t75-*-Q6).
+         * B and Cancel also delete nothing.
+         */
+        strOKButtonText="Not now"
+        strMiddleButtonText="Remove"
         strCancelButtonText="Cancel"
-        onOK={() => {
+        onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
+        onMiddleButton={() => {
           onCompleteDeckyModalClose(() => handle.Close());
           void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
             .then(() => {

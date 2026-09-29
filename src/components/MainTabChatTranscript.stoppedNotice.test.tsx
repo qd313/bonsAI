@@ -211,6 +211,37 @@ describe("stopped turn — notice and reply actions restored on the archived tur
     expect(queryByLabelText("Read aloud")).toBeNull();
   });
 
+  /* Plan 74 leftover (roadmap "Small leftovers from plan 74", part a): fb68ef3c took Read aloud off the
+     "Request cancelled." bubble, but its Copy corner icon stayed, and would copy those words. */
+  it("offers no Copy on an empty stop, and still offers it on a kept partial answer", () => {
+    const emptyStopTurn: AskThreadCollapsedTurn = {
+      id: "stopped-4",
+      question: "any known issues running this on deck?",
+      answer: "Request cancelled.",
+    };
+    const empty = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          askThreadCollapsed: [emptyStopTurn],
+          expandedTurnKey: emptyStopTurn.id,
+          askStopped: true,
+        })}
+      />
+    );
+    expect(empty.queryByLabelText("Copy reply text")).toBeNull();
+    empty.unmount();
+    const kept = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          askThreadCollapsed: [stoppedTurn],
+          expandedTurnKey: stoppedTurn.id,
+          askStopped: true,
+        })}
+      />
+    );
+    expect(kept.queryByLabelText("Copy reply text")).not.toBeNull();
+  });
+
   it("still offers Read aloud on a stop that kept part of the answer", () => {
     const { queryByLabelText } = render(
       <MainTabChatTranscript

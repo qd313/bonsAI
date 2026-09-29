@@ -868,8 +868,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
        * Never while streaming: the bubble has no settled bottom to pin the icon to, and the text
        * would change under the press.
        */
+      /* Nor on the back end's own stop placeholder ("Request cancelled."): nothing readable was kept,
+         so there is nothing to copy (plan 74 leftover; Read aloud already skips it). */
       getAnswerCopyText:
-        !streaming && body.trim()
+        !streaming && body.trim() && !isStopNoticeResponse(body)
           ? () =>
               buildAnswerCopyText({ body, spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,

@@ -104,6 +104,7 @@ starts work outside this.
   **2026-09-28 (plan 76):** the accent-level one reproduced: after choosing an accent level nothing held the ring, and the first LB
   landed on "Show Developer tab" and did not switch tabs (`docs/test-evidence/plan76-S3C.json`); going to a fix this session. The
   folded-turn one did not reproduce (`docs/test-evidence/plan76-S3A.json`).
+  **2026-09-28 (`1785aaaf`):** the accent-level one is fixed; check owed: row **P76-ACCENT-RING**. The other two stay open.
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
   only lets Up leave one chip at a time (and once Down stuck on it, flow L7); two confidently wrong answers.
   [Detail](roadmap-details.md#l3-and-2d-findings).
@@ -113,11 +114,6 @@ starts work outside this.
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
   **2026-09-28 (plan 76, build `39c17312`):** not reproduced. With one turn drawn under "87 earlier", Down visited Retry, the question, the answer parts, the branch buttons, Helpful, Hide details and the tabs in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
-- ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
-  games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
-  on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
-  **2026-09-28 (plan 76, build `c71f1d8b`): reproduced 4 of 4.** With a game running, each reopen read the right game, then "no active game
-  detected" for 1.75 to 1.9 seconds, then the right game again. Evidence `docs/test-evidence/plan76-S5.json`. Lane 6 is fixing it now.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -170,11 +166,9 @@ starts work outside this.
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
 - ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **OPEN, found 2026-09-28 (plan 74),
   confirmed as a separate effect by plan 76 lane 4.** Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
-- ★ `[focus]` **The library's Update and "Pull nomic-embed-text" buttons lose the ring to the tab bar after their download notice
-  closes** — **OPEN, found 2026-09-28 by plan 76 lane 2, in the code, being fixed in its follow-up round.** Not yet seen on the Deck.
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
-  **OPEN, found 2026-09-28 by plan 76 lane 2, in the code, not seen on the Deck.** Affects the Tier 1, Tier 2 and "Update AI &
-  models" buttons.
+  **PARTIAL, found 2026-09-28 (plan 76 lane 2), in the code only.** Fixed (`6ef8cedf`) for the library's Update and "Pull
+  nomic-embed-text" buttons. Still open for "Update AI & models" and the Tier 1 and Tier 2 install buttons (about six lines).
 - ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
   May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
   351 characters).
@@ -538,8 +532,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **VERIFY, fixed 2026-09-28
   (plan 76 lane 2, `420c9d9f`).** The wording no longer mentions a reply. Was found 2026-09-28 (plan 74),
   `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`. Deck check owed: row **P76-TIER2-MODEL-SAFE-FIRST** (read the wording).
-  One more box still uses the old wording, the Tier 2 one-model install box in the local setup flow; lane 2 is fixing it in a
-  follow-up round.
+  The Tier 2 one-model install box is fixed too (`870a1bf7`). Deck check owed: row **P76-TIER2-INSTALL-WORDING**.
 - ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **VERIFY, fixed 2026-09-28 (plan 76 lane 2,
   `3f495973`).** When the Pull button goes, the ring is handed on to the next button. Sighting 2026-09-27 (plan 70, flow L10).
   Deck check owed: row **P76-NOMIC-REMOVE-HINT**. [Detail](roadmap-details.md#flow-l10-findings).
@@ -566,6 +559,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Deck check owed: row **CHAT-DELETE-MISSING-01** (remove a chat file over SSH, then delete it in the list).
   **Blocked 2026-09-28 (plan 76):** the Deck already holds eight chats, so no test chat could be made without deleting one of the
   maintainer's. Evidence `docs/test-evidence/plan76-CHAT-DELETE-MISSING-01.json`.
+- ★ `[focus]` **The library's Update and "Pull nomic-embed-text" buttons lose the ring to the tab bar after their download notice
+  closes** — **VERIFY, fixed 2026-09-28 (`6ef8cedf`).** The ring goes back to the button that opened the notice. Deck check owed:
+  row **P76-KB-NOTICE-RING**.
+- ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
+  games, then corrects itself** — **VERIFY, fixed 2026-09-28 (`ab56e2a2`).** A reopen no longer blanks the running game for about
+  2 s (evidence `plan76-S5.json`). Known limit: a game launched while the panel is open can still show the old name for up to
+  2 s. Deck check owed: row **P76-CONTEXT-REOPEN**.
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
   **VERIFY, fixed 2026-09-26 (helper K, `2e13421d`), mostly passed on the Deck 2026-09-26.** The waiting
   line, the turn header and Show details' own "This answer" tab all show the friendly wording now. **Still
@@ -574,8 +574,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   row **KB-FOLLOWUP-QUOTE-02** is still owed on the Deck. [Detail](roadmap-details.md#flow-l6-findings).
   **2026-09-28 (plan 76, build `c71f1d8b`): FAILED on one line.** The finished answer, the "This answer" tab and the Session tab are clean
   ("I'm at: In the City of Tears", once). But for about 1.5 seconds after picking a choice the waiting line read `Searching knowledge base for
-  "[Strategy follow-up] I'm at: …"`, and for one sample the question box showed the raw text. **Still owed:** a Deck re-check once lane 4's
-  fix for that waiting line lands. Evidence `docs/test-evidence/plan76-KB-FOLLOWUP-QUOTE-02.json`.
+  "[Strategy follow-up] I'm at: …"`, and for one sample the question box showed the raw text. Evidence `docs/test-evidence/plan76-KB-FOLLOWUP-QUOTE-02.json`.
+  **2026-09-28 (`49549a6e`, `7e709a17`):** both leaks fixed. **Still owed:** re-run, row **KB-FOLLOWUP-QUOTE-02**.
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
   the ring on the chip. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer**, from

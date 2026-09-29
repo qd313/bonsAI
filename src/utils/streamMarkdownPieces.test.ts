@@ -57,4 +57,55 @@ describe("splitStreamMarkdownPieces", () => {
     expect(splitStreamMarkdownPieces("")).toEqual([""]);
     expect(splitStreamMarkdownPieces("just one line")).toEqual(["just one line"]);
   });
+
+  /*
+   * Plan 76 lane 1: a block ends only on its own closing line, holding the same mark and at least
+   * as long as the opener (markdownFenceReader). Any fence line used to close any block, so a
+   * hidden block holding another kind of fence line was cut at that line and its second half,
+   * drawn as a piece of its own, showed as plain text while the answer streamed.
+   */
+  describe("fences other than a plain three-backtick block", () => {
+    const F = "`".repeat(3);
+    const F4 = "`".repeat(4);
+    const T = "~~~";
+    const oneBlock = (block: string) => {
+      const text = `Before.\n\n${block}\n\nAfter.`;
+      expect(splitStreamMarkdownPieces(text)).toEqual(["Before.", `\n\n${block}`, "\n\nAfter."]);
+    };
+
+    it("keeps a ~~~ hidden block whole across a blank line inside it", () => {
+      oneBlock(`${T}bonsai-spoiler\nOne.\n\nTwo.\n${T}`);
+    });
+
+    it("does not let a ``` line close a ~~~ block", () => {
+      oneBlock(`${T}bonsai-spoiler\nOne.\n${F}\n\nTwo.\n${T}`);
+    });
+
+    it("does not let a ~~~ line close a ``` block", () => {
+      oneBlock(`${F}bonsai-spoiler\nOne.\n${T}\n\nTwo.\n${F}`);
+    });
+
+    it("keeps a four-backtick block whole, with a ``` line and a blank line inside", () => {
+      oneBlock(`${F4}bonsai-spoiler\nOne.\n${F}\n\nTwo.\n${F4}`);
+    });
+
+    it("does not take a line with a label after its marks for a closer", () => {
+      oneBlock(`${F}bonsai-spoiler\nOne.\n${F}json\n\nTwo.\n${F}`);
+    });
+
+    it("never starts a piece inside an unclosed ~~~ block", () => {
+      const block = `${T}bonsai-spoiler\nOne.\n\nTwo, still arriving`;
+      expect(splitStreamMarkdownPieces(`Before.\n\n${block}`)).toEqual(["Before.", `\n\n${block}`]);
+    });
+
+    it("does not count a closing mark glued onto a sentence as a closer", () => {
+      const text = `${F}bonsai-spoiler\nOne sentence.${F}\n\nStill inside.`;
+      expect(splitStreamMarkdownPieces(text)).toEqual([text]);
+    });
+
+    it("still ends the block on its own closing line, then splits after it", () => {
+      const text = `${T}\nOne.\n\nTwo.\n${T}\n\nAfter.\n\nMore.`;
+      expect(splitStreamMarkdownPieces(text)).toEqual([`${T}\nOne.\n\nTwo.\n${T}`, "\n\nAfter.", "\n\nMore."]);
+    });
+  });
 });

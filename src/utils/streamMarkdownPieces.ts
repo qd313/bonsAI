@@ -10,18 +10,20 @@
  * the panel started each answer at about 38 frames a second and sank to 21-28 once it passed about
  * 1,200 letters. On the PC, one update of the chat took 1.8 ms at 300 letters and 4.3 ms at 3,600.
  * Does not: Change how anything looks. A split is made only where parsing the pieces one by one
- * gives the same blocks as parsing the whole: never inside a code fence, never before an indented
- * line (a list item's next paragraph, indented code), never between two list items (a loose
- * list). Each piece keeps its leading blank lines, so the pieces join back to the exact text, and
+ * gives the same blocks as parsing the whole: never inside a fenced block (``` or ~~~, ended only
+ * by its own closing line, so a hidden block's second half never draws as a piece of its own),
+ * never before an indented line (a list item's next paragraph, indented code), never between two
+ * list items (a loose list). Each piece keeps its leading blank lines, so the pieces join back to the exact text, and
  * a piece's text is the same from one update to the next once a later piece has started.
  */
+
+import { stepFence, type OpenFence } from "./markdownFenceReader";
 
 /** The whole feature's off switch: false draws the live answer as one piece, as before. */
 export const SPLIT_LIVE_ANSWER_INTO_PIECES: boolean = true;
 
 const LIST_ITEM = /^\s{0,3}([-*+]|\d{1,9}[.)])(\s|$)/;
 const INDENTED = /^( {2,}|\t)/;
-const FENCE = /^\s{0,3}(```|~~~)/;
 
 function isBlank(line: string): boolean {
   return line.trim() === "";
@@ -35,7 +37,7 @@ export function splitStreamMarkdownPieces(text: string): string[] {
   const pieces: string[] = [];
   let start = 0; // character offset where the current piece starts
   let offset = 0; // character offset of line i
-  let inFence = false;
+  let openFence: OpenFence | null = null; // the block the line being read is inside, if any
   let lastContent: string | null = null; // the last non-blank line before a blank run
   let blankRunStart = -1; // character offset of the newline that starts the blank run
 
@@ -44,8 +46,11 @@ export function splitStreamMarkdownPieces(text: string): string[] {
     const lineStart = offset;
     offset += line.length + 1;
 
-    if (inFence) {
-      if (FENCE.test(line)) inFence = false;
+    // Read as the panel does (markdownFenceReader): a block ends only on its own closing line, the
+    // same mark and at least as long, so no piece ever starts inside a block, hidden ones included.
+    const step = stepFence(line, openFence);
+    if (openFence) {
+      openFence = step.open;
       lastContent = line;
       continue;
     }
@@ -62,7 +67,7 @@ export function splitStreamMarkdownPieces(text: string): string[] {
       }
     }
     blankRunStart = -1;
-    if (FENCE.test(line)) inFence = true;
+    if (step.kind === "open") openFence = step.open;
     lastContent = line;
   }
   pieces.push(text.slice(start));

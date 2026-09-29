@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   elementHasFocus,
@@ -8,6 +8,7 @@ import {
   resetUiDocument,
   uiActiveElement,
   uiGamepadFocusElement,
+  uiWindowMissingFocus,
 } from "./uiDocument";
 
 /**
@@ -269,6 +270,62 @@ describe("uiDocument", () => {
       setActiveElement(doc, null);
 
       expect(uiGamepadFocusElement()).toBeNull();
+    });
+  });
+
+  /*
+   * Plan 76, measured on the Deck 2026-09-29 (docs/test-evidence/plan76-P76-TRAP-SPLIT.json): with a
+   * game running, Quick Access sometimes reopens without the browser's focus on the panel's own
+   * window, `document.hasFocus()` false. Every reopen that read false split Steam's ring from the
+   * page's own focus on a later press; every one that read true never did. This helper is the read
+   * half of the fix: it names the panel's window only in that state.
+   */
+  describe("uiWindowMissingFocus", () => {
+    function panelDocument(state: { visible: boolean; focused: boolean }) {
+      const doc = makeUiDocument();
+      const win = { focus: vi.fn() };
+      Object.defineProperty(doc, "defaultView", { value: win, configurable: true });
+      Object.defineProperty(doc, "visibilityState", {
+        get: () => (state.visible ? "visible" : "hidden"),
+        configurable: true,
+      });
+      doc.hasFocus = vi.fn(() => state.focused);
+      return { doc, win };
+    }
+
+    it("names the panel's own window when the panel is on screen without focus", () => {
+      const { doc, win } = panelDocument({ visible: true, focused: false });
+      rememberUiDocument(doc.body);
+
+      expect(uiWindowMissingFocus()).toBe(win);
+      // A read only: naming the window never asks it for anything.
+      expect(win.focus).not.toHaveBeenCalled();
+    });
+
+    it("is null when the panel already has focus, the common case", () => {
+      const { doc } = panelDocument({ visible: true, focused: true });
+      rememberUiDocument(doc.body);
+
+      expect(uiWindowMissingFocus()).toBeNull();
+    });
+
+    it("is null when the panel is not on screen", () => {
+      const { doc } = panelDocument({ visible: false, focused: false });
+      rememberUiDocument(doc.body);
+
+      expect(uiWindowMissingFocus()).toBeNull();
+    });
+
+    it("is null before the panel's document is known, so no other window is ever named", () => {
+      // Under Decky the fallback is SharedJSContext's own shell page, never the panel.
+      expect(getUiDocument()).toBe(document);
+      expect(uiWindowMissingFocus()).toBeNull();
+    });
+
+    it("is null when the known document is the global one (desktop, tests)", () => {
+      rememberUiDocument(document.body);
+
+      expect(uiWindowMissingFocus()).toBeNull();
     });
   });
 });

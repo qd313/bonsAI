@@ -115,6 +115,34 @@ export function uiGamepadFocusElement(): HTMLElement | null {
   return ring ?? uiActiveElement();
 }
 
+/**
+ * The panel's own window, but only while the panel is on screen and its page has lost the
+ * browser's focus (`hasFocus()` false); null in every other case. A read only: see
+ * `refocusPanelWindowIfLost` in navFocusRegistry.ts for the one caller that acts on it.
+ *
+ * Why it matters, measured on the Deck 2026-09-29 with a game running
+ * (docs/test-evidence/plan76-P76-TRAP-SPLIT.json): Quick Access sometimes reopens with Steam's
+ * active window still the main one and the panel's `hasFocus()` false. Six reopens: all three that
+ * read false split Steam's ring from `activeElement` later, none of the three that read true did.
+ * Every press that split was one of the plugin's own plain `focus()` hops (Down and Right from the
+ * question box, Right from Retry, Up from the question text); every press that stayed together was
+ * Steam's own move or a `takeNavFocus` transfer. The likely reason, read from that pattern rather
+ * than measured: a page without focus gets no focus events from the browser, and those events are
+ * how Steam learns where a plain `focus()` landed.
+ *
+ * Null before the panel's document is known, and when it is the global one: under Decky that is
+ * SharedJSContext's shell page, whose window must never be asked for anything; on desktop and in
+ * jsdom the panel and the global page are the same and the trap does not exist.
+ */
+export function uiWindowMissingFocus(): Window | null {
+  const doc = uiDocument;
+  if (!doc || doc === document) return null;
+  if (doc.visibilityState !== "visible") return null;
+  if (typeof doc.hasFocus !== "function" || doc.hasFocus()) return null;
+  const win = doc.defaultView;
+  return win && typeof win.focus === "function" ? win : null;
+}
+
 /** Test-only reset. */
 export function resetUiDocument(): void {
   uiDocument = null;

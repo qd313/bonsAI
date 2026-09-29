@@ -56,6 +56,8 @@
  *     nothing visibly moves.
  */
 
+import { uiWindowMissingFocus } from "./uiDocument";
+
 export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-carousel" | "unified-input"
   | "tab-bar"
   /** The settings-results card's own row nearest the question box (plan 45 step 3 / plan 56 lane
@@ -125,13 +127,43 @@ export function unregisterNavFocus(id: NavFocusId, holder: NavRefHolder): void {
 }
 
 /**
+ * Ask the panel's own window for the browser's focus, but only while the panel is on screen
+ * without it. Returns true when it asked. With the focus already there — every ordinary case — it
+ * reads two values and does nothing else.
+ *
+ * Plan 76, measured on the Deck 2026-09-29 with a game running (plan76-P76-TRAP-SPLIT.json,
+ * plan76-P76-TRAP-REPRO.json, plan76-P76-TRAP-CONTROL.json): after Quick Access reopened without
+ * that focus, each plain `focus()` hop moved the page's focus while Steam's ring stayed behind, and
+ * nothing short of closing the game put them back together for good. Why a plain hop splits there:
+ * see
+ * `uiWindowMissingFocus`. Asking the window, never Steam, is deliberate — no Steam object is
+ * touched. A window that refuses is ignored; the caller goes on exactly as it did before.
+ */
+export function refocusPanelWindowIfLost(): boolean {
+  const win = uiWindowMissingFocus();
+  if (!win) return false;
+  try {
+    win.focus();
+  } catch {
+    /* refused: nothing changes, which is where every caller already was */
+  }
+  return true;
+}
+
+/**
  * Hand gamepad focus to a registered target. Returns false when the target is not mounted, when
  * Decky did not populate the ref, or when Steam declines the move — in every one of those cases the
  * caller should fall through to its next option rather than treat the press as handled.
+ *
+ * A transfer is the plugin putting Steam's ring inside the panel, so the panel's page should hold
+ * the browser's focus when it lands; `refocusPanelWindowIfLost` asks for it first when it is
+ * missing (plan 76). That is also what lets a panel already caught in the split state heal on its
+ * next transfer, rather than only until the next plain hop.
  */
 export function takeNavFocus(id: NavFocusId): boolean {
   const node = navRefs.get(id)?.current;
   if (!node || typeof node.TakeFocus !== "function") return false;
+  refocusPanelWindowIfLost();
   try {
     // `true` marks this as a gamepad-sourced move, which is what a D-pad press is.
     return node.TakeFocus(true) !== false;

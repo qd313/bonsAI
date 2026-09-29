@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 614,
-  "edgeCount": 1704,
+  "fileCount": 616,
+  "edgeCount": 1710,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3173,13 +3173,22 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useAskBarInitialRingClaim.test.ts": {
+      "imports": [
+        "src/hooks/useAskBarInitialRingClaim.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useAskBarInitialRingClaim.ts": {
       "imports": [
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTabUnifiedAskBar.tsx"
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useAskBarInitialRingClaim.test.ts"
       ]
     },
     "src/hooks/useAskBarMenuToggles.ts": {
@@ -6015,7 +6024,9 @@
       "importedBy": []
     },
     "src/utils/navFocusRegistry.ts": {
-      "imports": [],
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
       "importedBy": [
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
@@ -6046,6 +6057,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useEarlierTurnsPill.ts",
@@ -6059,10 +6071,18 @@
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.remount.test.ts",
         "src/utils/navFocusRegistry.test.ts",
+        "src/utils/navFocusRegistry.windowFocus.test.ts",
         "src/utils/permHintRowNav.test.ts",
         "src/utils/permissionJumpRegistry.test.ts",
         "src/utils/permissionJumpRegistry.ts"
       ]
+    },
+    "src/utils/navFocusRegistry.windowFocus.test.ts": {
+      "imports": [
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
     },
     "src/utils/ollamaTabLocalSurvival.ts": {
       "imports": [
@@ -6668,6 +6688,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -6705,6 +6726,8 @@
         "src/utils/lighterWhileGameRuns.test.ts",
         "src/utils/lighterWhileGameRuns.ts",
         "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/navFocusRegistry.windowFocus.test.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/settingsPanelScroll.ts",
         "src/utils/spoilerFenceRegistry.ts",

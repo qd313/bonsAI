@@ -16,6 +16,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
+from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import _chat_own_game_title, run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 
@@ -193,6 +194,65 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
         ):
             _run(plugin, "how do I beat portal 2's final chamber")
         self.assertEqual(self._resolved_title(), "Portal 2")
+
+    def test_a_question_naming_a_game_the_library_does_not_know_gets_no_game_at_all(self):
+        # The Deck case (plan 74, Deck pass 1): a Valheim question in a Half-Life 2 chat got
+        # Half-Life 2's notes. Valheim is not in the library, so nothing resolved it, and the
+        # chat's own game was used as if the question had named nothing.
+        plugin = _FakePlugin(_settings(), _half_life_2_chat())
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question",
+            side_effect=_resolves_only_half_life_2,
+        ), patch("backend.services.game_ai_request.logger") as mock_logger:
+            _run(plugin, "what are three good habits for surviving the early nights in Valheim")
+        self.assertEqual(self._resolved_title(), "")
+        used_chat_game = [
+            c
+            for c in mock_logger.info.call_args_list
+            if c.args and "no game running or named" in str(c.args[0])
+        ]
+        self.assertEqual(used_chat_game, [])
+
+    def test_a_question_naming_a_game_the_library_knows_uses_that_game_not_the_chats(self):
+        # Real resolver shape: the question's own words resolve to a library title, so the
+        # chat's game is never consulted.
+        plugin = _FakePlugin(_settings(), _half_life_2_chat())
+
+        def _resolve(_settings, text):
+            return "Hollow Knight" if "hollow knight" in str(text).lower() else ""
+
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question", side_effect=_resolve
+        ):
+            _run(plugin, "How do I beat the Soul Master in Hollow Knight?")
+        self.assertEqual(self._resolved_title(), "Hollow Knight")
+
+    def test_a_question_naming_the_chats_own_unlisted_game_still_uses_it(self):
+        # A chat whose own game is not in the library ("Valheim", used as written) keeps working
+        # when the question names that same game.
+        chat = _half_life_2_chat()
+        chat["turns"][0]["app_name"] = "Valheim"
+        chat["turns"][1]["app_name"] = "Valheim"
+        chat["origin_app_name"] = "Valheim"
+        # This question names a boss, so the follow-up memory keeps a subject for the chat; give
+        # it its own id and clear it, so the memory does not leak into the other tests.
+        chat["id"] = "chat-valheim"
+        self.addCleanup(kb_followup_memory.forget, "chat-valheim")
+        plugin = _FakePlugin(_settings(), chat)
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question", return_value=""
+        ):
+            _run(plugin, "how do I beat Eikthyr in Valheim")
+        self.assertEqual(self._resolved_title(), "Valheim")
+
+    def test_a_bare_followup_that_names_no_game_still_uses_the_chats_own_game(self):
+        plugin = _FakePlugin(_settings(), _half_life_2_chat())
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question",
+            side_effect=_resolves_only_half_life_2,
+        ):
+            _run(plugin, "what about the fourth one, and how do I get there")
+        self.assertEqual(self._resolved_title(), "Half-Life 2")
 
     def test_a_chat_with_no_game_anywhere_keeps_todays_behaviour(self):
         empty_chat = {

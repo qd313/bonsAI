@@ -105,6 +105,7 @@ from backend.services.destructive_advice_guard import (
 from backend.services import chat_turn_recorder
 from backend.services import kb_followup_memory
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
+from backend.services.kb_other_game_named import other_game_besides
 from backend.services.kb_not_in_notes_notice import (
     append_no_close_match_notice,
     append_not_in_notes_notice,
@@ -481,7 +482,17 @@ async def run_game_ai_request(
                 # to get no game at all. Falls back to the chat's own game; still loses to a
                 # running game or a title the question names, both handled above already.
                 chat_own_title = _chat_own_game_title(settings, request_chat)
-                if chat_own_title:
+                # A question naming some other well-known game the library has nothing on is not
+                # a bare follow-up: attach no game's notes rather than the chat's own.
+                other_game = other_game_besides(question_for_retrieval, chat_own_title)
+                if other_game:
+                    logger.info(
+                        "kb: question names a game the library does not know (%s) -- "
+                        "not using the chat's own game %s",
+                        other_game,
+                        chat_own_title,
+                    )
+                elif chat_own_title:
                     text_resolved_title = chat_own_title
                     logger.info(
                         "kb: no game running or named -- using the chat's own game %s",

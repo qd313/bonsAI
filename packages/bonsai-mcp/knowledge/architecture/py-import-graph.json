@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 102,
-  "edgeCount": 266,
+  "fileCount": 103,
+  "edgeCount": 268,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -48,7 +48,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "count": 9
+      "count": 10
     },
     {
       "path": "py_modules/backend/constants.py",
@@ -328,6 +328,10 @@
     },
     {
       "path": "py_modules/backend/services/kb_attached_notes.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/kb_other_game_named.py",
       "count": 1
     },
     {
@@ -789,6 +793,7 @@
         "py_modules/backend/services/kb_attached_notes.py",
         "py_modules/backend/services/kb_followup_memory.py",
         "py_modules/backend/services/kb_not_in_notes_notice.py",
+        "py_modules/backend/services/kb_other_game_named.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
@@ -855,6 +860,14 @@
         "py_modules/backend/services/knowledge_base_game_match.py"
       ]
     },
+    "py_modules/backend/services/kb_other_game_named.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_schema.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/game_ai_request.py"
+      ]
+    },
     "py_modules/backend/services/knowledge_base_cards.py": {
       "imports": [
         "py_modules/backend/services/knowledge_base_schema.py"
@@ -892,6 +905,7 @@
     "py_modules/backend/services/knowledge_base_schema.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/kb_other_game_named.py",
         "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",

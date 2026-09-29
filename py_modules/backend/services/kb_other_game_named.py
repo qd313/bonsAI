@@ -13,8 +13,10 @@ Half-Life 2 chat do exactly that.
 Does not: Search the library, guess at names it has not been told, or handle a game the
 library knows -- the library's own alias match wins before this is asked. The list is a
 deliberate short set of well-known titles, not every game on Steam; a title outside it behaves
-as it did before (the chat's own game is used). Words that are also everyday words (Rust, Ark,
-Control, Inside, Raft) are left out on purpose, because a false match would drop good notes.
+as it did before (the chat's own game is used). Titles a player could type as ordinary words or a
+common phrase in a question about another game (Rust, Ark, Control, Inside, Raft, "Satisfactory",
+"Don't Starve", "Like a Dragon", "Overwatch", "Call of Duty", "God of War", ...) are left out on
+purpose, because a false match would drop the chat's own game's good notes.
 """
 
 from __future__ import annotations
@@ -30,37 +32,37 @@ _WELL_KNOWN_OTHER_GAMES = (
     "dark souls 2", "dark souls 3", "demon's souls", "demons souls", "bloodborne", "sekiro",
     "lies of p", "the witcher 3", "witcher 3", "baldur's gate 3", "baldurs gate 3",
     "baldur's gate", "baldurs gate", "hogwarts legacy", "starfield", "civilization vi",
-    "civilization 6", "stellaris", "factorio", "satisfactory", "subnautica", "no man's sky",
-    "no mans sky", "dota 2", "counter strike", "counter-strike 2", "cs2", "apex legends",
-    "fortnite", "rocket league", "overwatch", "destiny 2", "halo infinite", "halo reach",
+    "civilization 6", "stellaris", "factorio", "subnautica", "no man's sky",
+    "no mans sky", "dota 2", "counter-strike 2", "cs2", "apex legends",
+    "fortnite", "rocket league", "destiny 2", "halo infinite",
     "master chief collection", "persona 5", "persona 4", "monster hunter world",
-    "monster hunter rise", "monster hunter wilds", "god of war", "horizon zero dawn",
+    "monster hunter rise", "monster hunter wilds", "horizon zero dawn",
     "horizon forbidden west", "grand theft auto", "gta v", "gta 5",
     "gta iv", "cuphead", "slay the spire", "vampire survivors",
-    "risk of rain 2", "lethal company", "phasmophobia", "fall guys",
-    "helldivers 2", "warframe", "path of exile", "diablo 4", "diablo iv", "diablo 3",
+    "risk of rain 2", "phasmophobia",
+    "helldivers 2", "warframe", "diablo 4", "diablo iv", "diablo 3",
     "world of warcraft", "final fantasy xiv", "final fantasy 7", "final fantasy vii",
-    "dragon age", "the sims", "cities skylines", "rimworld",
-    "oxygen not included", "kerbal space program", "disco elysium", "undertale", "deltarune",
-    "outer wilds", "sifu", "returnal", "ghost of tsushima", "death stranding",
-    "resident evil", "silent hill", "metal gear solid", "street fighter 6", "tekken 8",
-    "mortal kombat", "super mario", "breath of the wild", "tears of the kingdom",
-    "pokemon", "animal crossing", "splatoon", "super smash bros", "metroid", "like a dragon",
-    "yakuza", "nier automata", "bayonetta", "forza horizon",
-    "assassin's creed", "assassins creed", "borderlands", "bioshock",
+    "rimworld",
+    "kerbal space program", "disco elysium", "undertale", "deltarune",
+    "sifu", "returnal", "ghost of tsushima", "death stranding",
+    "resident evil", "metal gear solid", "street fighter 6", "tekken 8",
+    "mortal kombat", "super mario",
+    "pokemon", "splatoon", "super smash bros", "metroid",
+    "nier automata", "bayonetta", "forza horizon",
+    "assassin's creed", "assassins creed", "bioshock",
     "team fortress 2", "garry's mod", "garrys mod", "half-life alyx", "euro truck simulator",
-    "farming simulator", "project zomboid", "7 days to die", "sons of the forest",
-    "green hell", "don't starve", "dont starve", "binding of isaac", "enter the gungeon",
-    "noita", "balatro", "black myth wukong", "lost ark", "escape from tarkov",
-    "hunt showdown", "rainbow six siege", "pubg", "call of duty", "battlefield 2042",
-    "battlefield 4", "roblox", "genshin impact", "honkai star rail", "hearthstone",
-    "league of legends", "valorant", "chrono trigger", "earthbound", "sonic frontiers",
+    "project zomboid", "sons of the forest",
+    "binding of isaac", "enter the gungeon",
+    "noita", "balatro", "black myth wukong", "escape from tarkov",
+    "rainbow six siege", "pubg", "battlefield 2042",
+    "roblox", "genshin impact", "honkai star rail",
+    "league of legends", "valorant", "chrono trigger", "sonic frontiers",
     "sonic mania", "sonic the hedgehog", "crash bandicoot", "spyro", "shovel knight",
     "hotline miami", "spelunky", "dave the diver", "octopath traveler",
-    "fire emblem", "xenoblade", "dragon quest", "kingdom hearts", "age of empires",
-    "xcom", "crusader kings", "hearts of iron", "europa universalis",
+    "fire emblem", "xenoblade", "kingdom hearts",
+    "xcom", "europa universalis",
     "divinity original sin", "pillars of eternity", "alan wake",
-    "metro exodus", "ori and the blind forest", "blasphemous", "hi-fi rush",
+    "metro exodus", "ori and the blind forest", "hi-fi rush",
     "monster train",
 )
 

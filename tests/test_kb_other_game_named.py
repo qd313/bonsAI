@@ -51,5 +51,54 @@ class OtherGameBesidesTests(unittest.TestCase):
         self.assertEqual(other_game_besides("tips for Valheim nights", ""), "")
 
 
+class OrdinaryWordsAreNotOtherGamesTests(unittest.TestCase):
+    """A sentence a player could type about the chat's own (library) game must never read as
+    naming another game: a false match drops the library game's own notes."""
+
+    SENTENCES = (
+        "is this build satisfactory",
+        "how do I make sure I don't starve on the first night",
+        "how do I make sure I dont starve on the first night",
+        "how do I fight like a dragon",
+        "the timer says 7 days to die",
+        "how do I counter strike back after a parry",
+        "what is the overwatch range of this unit",
+        "the borderlands of the map are empty",
+        "he is a yakuza style boss",
+        "I sat on a hearthstone by the fire",
+        "an earthbound creature",
+        "that was a blasphemous joke",
+        "what are the breath of the wild animals here",
+        "these are tears of the kingdom",
+        "a long path of exile for the character",
+        "the god of war shows up in the story",
+        "beyond the call of duty",
+        "the lost ark of the story",
+        "the sims in this town",
+        "the dragon age of the region",
+        "a dragon quest for the hero",
+        "an animal crossing sign",
+        "the outer wilds of the map",
+        "an age of empires in history",
+        "the crusader kings of old",
+        "hearts of iron and steel",
+        "a farming simulator like this",
+        "oxygen not included in the tank",
+        "a lethal company of men",
+        "the green hell of the jungle",
+        "a silent hill town",
+        "if you fall guys will grab you",
+        "the cities skylines look great",
+        "on battlefield 4 of the map",
+        "the hunt showdown at dusk",
+    )
+
+    def test_each_sentence_names_no_other_game_in_a_library_games_chat(self):
+        for sentence in self.SENTENCES:
+            with self.subTest(sentence=sentence):
+                self.assertEqual(other_game_named_in(sentence), "")
+                self.assertEqual(other_game_besides(sentence, "Palworld"), "")
+
+
 if __name__ == "__main__":
     unittest.main()

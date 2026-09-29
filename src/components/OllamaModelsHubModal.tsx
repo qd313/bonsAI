@@ -46,6 +46,7 @@ import {
 } from "./ModelRoutingAdvancedPanel";
 import { PullModelsModal, type PullModelsFooterState } from "./PullModelsModal";
 import { BonsaiModalScope } from "./BonsaiModalScope";
+import { peekModalReturnFocus, rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
 
 export type OllamaModelsHubSection = "policy" | "browse" | "advanced";
 
@@ -165,17 +166,32 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
    * the one pull the switch was meant for merged into the try order without it. A pending draft
    * is now saved before that close, the same save Done makes.
    */
+  /*
+   * Which button opened this screen, read once as it opens (the button remembers itself in
+   * modalReturnFocusRegistry.ts as it is pressed). A box raised from inside this screen -- the
+   * "Enable Tier 2 before pulling?" box a queued model can open -- closes through the same shell
+   * close, which uses the remembered button up. By the time Cancel or Done closed this screen
+   * nothing was left to return to and the ring went to the tab rail (Deck:
+   * t75-3-Q2-SAFE-FIRST-TIER2.json; Done only worked when no such box had opened). So the id is put
+   * back just before this screen's own close whenever a box has used it up.
+   */
+  const openerRef = useRef(peekModalReturnFocus());
+  const closeHub = useCallback(() => {
+    if (openerRef.current && peekModalReturnFocus() === null) rememberModalReturnFocus(openerRef.current);
+    onClose();
+  }, [onClose]);
+
   const handleHubClose = useCallback(
     (reason: string) => {
       if (reason === "pullAccepted" && JSON.stringify(draftPatch()) !== lastSavedDraftRef.current) {
         void commitPolicyAndAdvanced()
           .catch((err) => console.error("save_settings failed (AI models hub, pull close)", err))
-          .finally(() => onClose());
+          .finally(() => closeHub());
         return;
       }
-      onClose();
+      closeHub();
     },
-    [commitPolicyAndAdvanced, draftPatch, onClose]
+    [commitPolicyAndAdvanced, draftPatch, closeHub]
   );
 
   /**

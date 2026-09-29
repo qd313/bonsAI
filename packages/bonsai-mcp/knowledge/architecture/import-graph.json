@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 593,
-  "edgeCount": 1642,
+  "fileCount": 594,
+  "edgeCount": 1646,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -995,6 +995,14 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaModelsHubModal.returnFocus.test.tsx": {
+      "imports": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaModelsHubModal.test.tsx": {
       "imports": [
         "src/components/OllamaModelsHubModal.tsx",
@@ -1008,9 +1016,11 @@
         "src/components/ModelPolicyTierPanel.tsx",
         "src/components/ModelRoutingAdvancedPanel.tsx",
         "src/components/PullModelsModal.tsx",
-        "src/data/modelPolicy.ts"
+        "src/data/modelPolicy.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx"
       ]
@@ -2379,6 +2389,8 @@
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabPresetRow.tsx",
+        "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
+        "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
@@ -4462,6 +4474,7 @@
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
         "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
+        "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",

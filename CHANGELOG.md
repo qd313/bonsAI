@@ -10,6 +10,9 @@ All notable changes to this project are documented in this file.
   note-search model is cleaned. Passed on the Deck.
 - **The shared speech server can no longer be restarted under the mic by a second listener.** Nothing changes today —
   the mic is the only one.
+- **When an answer finishes with the menu closed, the "Reply ready" popup now shows the start of the answer** across its two
+  lines for eight seconds. Hidden parts never appear, and tapping still opens the answer. The width check passed on the Deck;
+  a real answer over a running game is still owed.
 
 ### Plan 74, the second release wave (2026-09-28)
 

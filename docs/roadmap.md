@@ -150,6 +150,9 @@ starts work outside this.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
+- ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28
+  (plan 75).** Seen twice: once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`); once it never
+  showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
 - ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **OPEN,
   found 2026-09-28 (plan 74), seen once.** The row, with Open Permissions, sits on the new-chat spot. Evidence
   `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes).
@@ -177,6 +180,8 @@ starts work outside this.
 - ★ `[ui]` **Small leftovers from plan 74** — **OPEN, found 2026-09-28 (plan 74's lanes).** The "Request cancelled."
   bubble still has a Copy button; the rarely seen "nothing to sum up" pop-up still says "the whole chat still fits";
   removing a model inside the plugin does not reset its 30-second memory, so the note-search hint can take up to 40 s.
+- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **OPEN, found 2026-09-28 (plan 75).**
+  For example "we wander,…". Seen in notification 3 of `docs/test-evidence/t75-feature-F2-HARD-LINES.json`.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -193,6 +198,13 @@ starts work outside this.
 - ★★ `[reply]` **With nothing running, the decode effect slows long answers** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** About 37 frames a second on a 2,900-letter answer, against about 50 on shorter
   ones; not yet known whether it was always so. [Detail](roadmap-details.md#flow-l10-findings).
+- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **OPEN, found 2026-09-28 (plan 75).** They find
+  hidden blocks by pairing backtick runs anywhere and do not know `~~~` fences, so a `~~~` spoiler, or a closer glued onto a
+  sentence, could be copied or read aloud. Found by reading the code (`src/utils/answerCopyText.ts`, `src/utils/answerReadableText.ts`);
+  not yet seen on the Deck. The popup itself is safe: it reads blocks the way the panel does.
+- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **OPEN, found 2026-09-28 (plan 75).**
+  The panel's chunk splitter and its live-answer parser know only three backticks. Suspected from reading
+  `src/utils/splitResponseIntoChunks.ts` and `src/utils/streamMarkdownPrepare.ts`; not yet seen on the Deck.
 - ★★ `[chat]` `[focus]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its
   question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
   [Detail](roadmap-details.md#flow-l7-findings).
@@ -314,11 +326,6 @@ replace it with a specific issue when one exists.
   soon" on 2026-08-07 (its P6): today an answer is laid out one way while it arrives and re-laid out when it
   finishes, and two ways of drawing it can drift apart. Written before September's reply changes: check today's
   code first, it may be moot. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md).
-- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05 (D63); built five ways in the
-  plan 75 trial 2026-09-28, not landed.** The toast would show the start of the answer for eight seconds instead of *Reply ready*.
-  Measured on both screens: one title and one body line, about 43 and 35 characters; the maintainer's call (2026-09-28): the answer
-  runs across both lines, the *bonsAI* title dropped. The reviewer's pick needs fixes; landing before 0.6.0 is the maintainer's call
-  ([plan 75 § 9](planning/75-sonnet-5-5-trial.md)). Evidence `docs/test-evidence/plan38-M*-*.json`. [Plan and mockup](planning/38-toast-answer-lines.md).
 - ★★ `[reply]` **Which bundled characters copy a real person** — **OPEN, filed 2026-09-08 (D74); the gate for the shelved character
   voices.** All 31 characters in the picker are named characters from games or TV, each voiced by a real actor, and one is a living
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
@@ -560,6 +567,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [Plan 69](planning/69-streamed-answers-scramble.md), D119. Deck rows **SCR-04**, **SCR-06**, **SCR-08**
   and **DEV-01** pass. Owed: the look (**SCR-01**), reopening mid-answer (**SCR-05**), reduced motion
   (**SCR-07**), the game's frame rate (**SCR-03**). Full rows in [testing.md](testing.md).
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **VERIFY, landed 2026-09-28 as `abfdd45e` (plan 75).**
+  The popup shows the answer's first words across its two lines for eight seconds, hidden blocks never appear, and with nothing
+  safe left it shows *Reply ready* as before. Deck: three hard answers (ordinary, all capitals, wide letters) fit both lines with
+  room to spare, `docs/test-evidence/t75-feature-F2-HARD-LINES.json`. **Owed:** a real answer finishing with the menu closed over a
+  running game (**T75-FEATURE-F1-REAL-POPUP**; `t75-feature-F1-REAL-POPUP.json`: could not run). [Plan](planning/38-toast-answer-lines.md).
 - ★★ `[reply]` **The streamed answer's own redraws were costing most of the panel's frame rate** —
   **VERIFY, fixed 2026-09-25 (`bb8d7e5b`, `aae5add6`).** With no game running the panel drew about 19–24
   frames a second while an answer streamed; moving its text on a steady beat instead of every frame, and

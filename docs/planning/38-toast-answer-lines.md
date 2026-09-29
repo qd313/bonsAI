@@ -136,7 +136,7 @@ Opus at extra-high effort lands it because it touches the reply path.
 Rows go in the manual test doc when step 4 lands. Titles come from the test title pool.
 
 - **TOAST-PREVIEW-01** Deep Rock Survivor running, Speed, a fence-free question, menu closed before the
-  answer finishes: the toast shows the question as title and the answer's first lines; tap opens the
+  answer finishes: the toast's title line holds the answer's first words and the body line carries on; tap opens the
   panel on that answer.
 - **TOAST-PREVIEW-02** Same, Strategy: the toast shows the first lines of the answer's text; the branch menu
   and any hidden block are absent from it.
@@ -145,7 +145,7 @@ Rows go in the manual test doc when step 4 lands. Titles come from the test titl
   but the block, the toast is today's.
 - **TOAST-PREVIEW-04** A question with a one-line answer: the whole answer is on the toast, no ellipsis.
 - **TOAST-PREVIEW-05** A long answer: the body ends at a word with an ellipsis, nothing is cut mid-letter
-  by the box, and the title reads *bonsAI*. Run on both screens; a screenshot of each.
+  by the box, and the title line holds the answer's first words with the body line carrying on. Run on both screens; a screenshot of each.
 - **TOAST-PREVIEW-06** Menu open on the Settings tab when the answer finishes: the toast still appears
   (the panel is not showing the answer), with the preview.
 - The five archived rows for the original toast are folded in: M1 is the first of them, and 02 to 05 run
@@ -203,3 +203,6 @@ Written as work lands.
   maintainer's call, same day, after the numbers:** the answer runs across both lines (title line first, body
   line carrying on), and the *bonsAI* title is dropped; every other rule in § 4 stands. Built next as the feature
   job of the Sonnet 5.5 trial (plan 75).
+- **2026-09-28, later** — Built five ways in the plan 75 trial; the blind review's pick finished with its fixes and landed as
+  `abfdd45e`. Deck: the width check passed (`docs/test-evidence/t75-feature-F2-HARD-LINES.json`); the real-answer row is owed
+  (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`: could not run, the game never came to the front).

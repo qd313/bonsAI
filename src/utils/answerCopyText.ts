@@ -9,11 +9,10 @@
  *   blank line wherever the screen cut one long paragraph into separate blocks.
  */
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
+import { mayHoldFence, replaceSpoilerFences } from "./markdownFenceReader";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
-
-const SPOILER_FENCE_RE = /```bonsai-spoiler\s*\n([\s\S]*?)```/gi;
 
 /** Shown in place of a fence the UI still renders masked — never leak unrevealed spoiler text. */
 export const SPOILER_HIDDEN_COPY_PLACEHOLDER = "[Spoiler hidden — reveal it on screen to copy]";
@@ -61,7 +60,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
    * (plan72-Z-FREEPLAY.json, finding 13). Only this shape: every other answer keeps its own
    * breaks, and with no fence there is nothing for the spoiler steps below to change.
    */
-  if (!text.includes("\n") && !text.includes("```")) {
+  if (!text.includes("\n") && !mayHoldFence(text)) {
     return splitResponseIntoChunks(text).join("\n\n");
   }
 
@@ -75,15 +74,13 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
   };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 
-  if (!spoilerMaskingEnabled) {
-    // Masking is off: every fence renders inline as plain prose, so copy does the same.
-    text = text.replace(SPOILER_FENCE_RE, (_full, fenceBody: string) =>
-      String(fenceBody).replace(/\n$/, "")
-    );
-  } else {
-    // Whatever the unwrap above left behind is still a masked, collapsed fence on screen.
-    text = text.replace(SPOILER_FENCE_RE, SPOILER_HIDDEN_COPY_PLACEHOLDER);
-  }
+  /*
+   * Hidden blocks are found the way the panel finds them (markdownFenceReader), so a ~~~ block, a
+   * longer fence, a block with a blank line inside, and one whose closer is glued onto a sentence
+   * are all covered. With masking off every block renders inline as plain prose, so copy does too;
+   * otherwise whatever the unwrap above left behind is still a masked, collapsed block on screen.
+   */
+  text = replaceSpoilerFences(text, spoilerMaskingEnabled ? SPOILER_HIDDEN_COPY_PLACEHOLDER : null);
 
   return text.trim();
 }

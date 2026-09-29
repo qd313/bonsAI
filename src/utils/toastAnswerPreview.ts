@@ -19,14 +19,15 @@
  *   - A heading or list item with no closing mark gets a full stop, so items do not run together.
  *   - Lines break at a space, so Steam's cut never lands in the middle of a word. The one exception
  *     is a single word wider than a whole line (a web address); it is cut and marked with an ellipsis.
- *   - Fences are found line by line with the panel's own markdown reader, not by pairing backtick
- *     runs anywhere, so the notification never shows a word the panel keeps inside a block.
+ *   - Fences are found line by line with the panel's own markdown reader (markdownFenceReader),
+ *     not by pairing backtick runs anywhere, so the notification never shows a word the panel
+ *     keeps inside a block.
  *   - Anything doubtful is left out, never shown: an unclosed fence drops everything after it, and
  *     a leftover fence marker inside a sentence drops its words too.
  */
-import ReactMarkdown, { type Options } from "react-markdown";
 import { replaceMarkdownTables } from "./answerReadableText";
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
+import { parseLikeThePanel, type MdNode } from "./markdownFenceReader";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 
 export type ToastAnswerLines = { title: string; body: string };
@@ -78,33 +79,6 @@ export const BODY_LINE_WIDTH = toastTextWidth(`${countingString("w", " ", 9)} w$
 const SAFETY = 0.82;
 export const TITLE_LINE_BUDGET = TITLE_LINE_WIDTH * SAFETY;
 export const BODY_LINE_BUDGET = BODY_LINE_WIDTH * SAFETY;
-
-/** The little of a markdown tree this file reads (the reader's own types are not a direct
- *  dependency here). Offsets are into the text that was parsed. */
-type MdNode = {
-  type: string;
-  value?: string;
-  alt?: string | null;
-  children?: MdNode[];
-  position?: { start: { offset?: number }; end: { offset?: number } };
-};
-
-/**
- * Read the text with the markdown reader the panel draws answers with (react-markdown, with no
- * extra reading plugins, as MainTabBonsaiAiMarkdownChunk uses it), so a line is inside a fence
- * here exactly when the panel draws it inside one: ``` or ~~~ fences, four-backtick fences, a
- * closer glued onto a sentence that does not close anything. The step below keeps the parsed
- * tree and hands the renderer an empty one, so nothing is drawn.
- */
-function parseLikeThePanel(text: string): MdNode {
-  let tree: MdNode = { type: "root", children: [] };
-  const keepTree = () => (parsed: MdNode) => {
-    tree = parsed;
-    return { type: "root", children: [] };
-  };
-  ReactMarkdown({ children: text, remarkPlugins: [keepTree] as unknown as Options["remarkPlugins"] });
-  return tree;
-}
 
 /**
  * True when a fenced block never closes. The panel then draws the rest of its container as code;

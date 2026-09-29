@@ -2,19 +2,18 @@
  * Title: Answer readable text builder
  * Purpose: Turn a stored answer (the plugin's markdown, tags and fences) into plain spoken text.
  * Used for: useReadAloud, building the text handed to start_voice_read_aloud. The reply-ready
- *   notification's text (toastAnswerPreview) borrows only this file's table finder: it reads
- *   fences with the same markdown reader the panel uses, where this file still matches fences as
- *   pairs of backtick runs, so the rest is not shared.
+ *   notification's text (toastAnswerPreview) borrows only this file's table finder; the two share
+ *   the way of finding hidden blocks in markdownFenceReader.
  * Solves: Reading internal control tags, a hidden spoiler's actual text, table cells, code, or
  *   markdown punctuation out loud instead of the words a person would read on screen.
  * Does not: Split the result into sentences — the background reader (Python) does that. Does not
  *   touch the Strategy branch-menu control; that is stripped along with the other internal tags.
  */
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
+import { replaceSpoilerFences } from "./markdownFenceReader";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
 
-const SPOILER_FENCE_RE = /```bonsai-spoiler\s*\n([\s\S]*?)```/gi;
 const CODE_FENCE_RE = /```[^\n`]*\n[\s\S]*?```/g;
 
 /** Said out loud in place of a spoiler block the screen keeps masked (D74 call 3). */
@@ -131,13 +130,9 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
   };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 
-  if (!spoilerMaskingEnabled) {
-    text = text.replace(SPOILER_FENCE_RE, (_full, fenceBody: string) =>
-      String(fenceBody).replace(/\n$/, "")
-    );
-  } else {
-    text = text.replace(SPOILER_FENCE_RE, SPOILER_HIDDEN_SPOKEN_PHRASE);
-  }
+  // Hidden blocks are found the way the panel finds them (markdownFenceReader): ~~~ and longer
+  // fences, a blank line inside, a closer glued onto a sentence. Masking off reads the words.
+  text = replaceSpoilerFences(text, spoilerMaskingEnabled ? SPOILER_HIDDEN_SPOKEN_PHRASE : null);
 
   text = text.replace(CODE_FENCE_RE, CODE_SPOKEN_PHRASE);
   text = replaceMarkdownTables(text, TABLE_SPOKEN_PHRASE);

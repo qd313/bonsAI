@@ -85,6 +85,7 @@ from backend.services.ollama_prompts import (
     user_asks_ollama_bonsai_host_or_latency,
     user_wants_power_or_performance_topic,
 )
+from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 from backend.tdp_intent import is_current_tdp_read_intent
 
 AskThinkingPhase = Literal[
@@ -251,7 +252,12 @@ def _sanitize_app_name(app_name: str) -> str:
 
 def extract_question_snippet(question: str, max_len: int = _SNIPPET_MAX_LEN) -> str:
     """First meaningful clause from the user question for status-line weaving."""
-    raw = re.sub(r"\s+", " ", (question or "").strip())
+    text = (question or "").strip()
+    # A branch pick is sent to the model as "[Strategy follow-up] I'm at: ...", and the lines built from
+    # this snippet are read by the person: quote their words, not the internal tag (KB-FOLLOWUP-QUOTE-02).
+    if text.startswith(STRATEGY_FOLLOWUP_PREFIX):
+        text = text[len(STRATEGY_FOLLOWUP_PREFIX):].strip()
+    raw = re.sub(r"\s+", " ", text)
     if not raw:
         return ""
     for sep in (". ", "? ", "! ", "; ", " — ", " - "):

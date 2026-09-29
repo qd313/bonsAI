@@ -673,6 +673,28 @@ class BonsaiStreamTagsTests(unittest.TestCase):
             "Searching knowledge base for Elden Ring…",
         )
 
+    def test_a_branch_pick_is_quoted_in_plain_words_not_with_the_internal_tag(self):
+        """KB-FOLLOWUP-QUOTE-02 (plan 76 Deck run): after a branch pick the line under the turn header read
+        Searching knowledge base for "[Strategy follow-up] I'm at: ..." for about 1.5 s, because the
+        phase lines quoted the composed prompt the model is sent. They quote the person's words."""
+        composed = (
+            "[Strategy follow-up] I'm at: In the City of Tears.\n"
+            "Earlier I asked: How do I beat the Soul Master in Hollow Knight?\n\n"
+            "Give controller-friendly coaching for this exact point, then end with "
+            "**If you want to cheat...** as instructed."
+        )
+        self.assertEqual(extract_question_snippet(composed), "I'm at: In the City of Tears")
+        for phase in ("searching_kb", "proton_logs", "tdp_read", "starting"):
+            for rid in range(1, 9):
+                line = format_thinking_phase(
+                    phase, question=composed, app_name="Hollow Knight", request_id=rid
+                )
+                self.assertNotIn("Strategy follow-up", line, msg=(phase, rid, line))
+        self.assertNotIn("Strategy follow-up", compose_thinking_blurb(composed, app_name="Hollow Knight", request_id=3))
+
+    def test_an_ordinary_question_is_quoted_as_before(self):
+        self.assertEqual(extract_question_snippet("why does it crash on launch"), "why does it crash on launch")
+
     def test_format_thinking_phase_woven_no_lazy_prefixes(self):
         samples = [
             format_thinking_phase(

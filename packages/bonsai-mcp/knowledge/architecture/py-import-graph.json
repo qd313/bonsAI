@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 104,
-  "edgeCount": 270,
+  "edgeCount": 271,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -80,6 +80,10 @@
       "count": 6
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 6
+    },
+    {
       "path": "py_modules/backend/services/ai_character_service.py",
       "count": 5
     },
@@ -97,10 +101,6 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
       "count": 5
     },
     {
@@ -648,6 +648,7 @@
       "imports": [
         "py_modules/backend/services/ai_character_service.py",
         "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/tdp_intent.py"
       ],
       "importedBy": [
@@ -1417,6 +1418,7 @@
     "py_modules/backend/services/strategy_guide_parse.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",

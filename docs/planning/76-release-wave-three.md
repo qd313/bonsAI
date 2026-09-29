@@ -176,6 +176,10 @@ New questions that come up during the session go here, with the choice taken mea
 
 - **2026-09-28:** draft written. The Deck was awake, no game running, its build matched this PC's, and nothing else
   was driving it.
+- **2026-09-28, the go:** the maintainer said go; Deep Rock Galactic: Survivor is on the Recent Games row. All checks
+  passed at the tip. Four repo copies made from `39c17312`; lanes 1, 2, 4 and 5 started. The Deck helper started
+  block 1's measurements; a lookup helper is turning the owed checks into exact steps. A timed check every 30
+  minutes is set as a backup in case a usage limit stops the session.
 
 ## Deck block 1, part A — measurements for lane 3
 

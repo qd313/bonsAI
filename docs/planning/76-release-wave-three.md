@@ -176,3 +176,23 @@ New questions that come up during the session go here, with the choice taken mea
 
 - **2026-09-28:** draft written. The Deck was awake, no game running, its build matched this PC's, and nothing else
   was driving it.
+
+## Deck block 1, part A — measurements for lane 3
+
+For the Deck helper. Build: whatever the Deck has now (it matches `2d65eb68`; no deploy). Before anything: check
+the Deck is ready, keep it awake, save a copy of the settings, and read which screen is live (the panel's window
+size). **Reuse existing chats; do not start a new chat unless a row says so** — a new chat deletes the oldest of the
+eight saved ones. Questions go in with the send-question script, never A on the question box. One evidence file per
+row, `docs/test-evidence/plan76-<ROW>.json`; saved walks go under `runs/`; pictures and videos stay out of the repo.
+These rows are measurements: record what happens press by press. There is no pass or fail, only a clear record.
+
+| Row | What it measures | Setup | Do | Record |
+|---|---|---|---|---|
+| P76-M-GLOSSARY-STICK | Why the ring sits on an underlined game word while the answer scrolls away | A finished, long Deep Rock Galactic: Survivor answer with underlined words (plan 75's chats have them). If none is saved: launch the game from Recent Games, then in an existing chat ask "What are the best overclocks and upgrades for the Scout early on" in Strategy | From that turn's question, press Down one at a time until the ring leaves the answer | After every press: the ring's element (tag, first 40 letters of its name, box), whether it is an underlined word, the chat area's scroll position and height, and the visible band (panel top to dock top). Once, with the ring on an underlined word: its ancestors up to the answer section (tag, role, tabindex, box). Which presses only scrolled; how far the word was from the next stop |
+| P76-M-COVER-SCROLL | Why a Down press can only scroll and leave the ring on a cover cut off at the top | An answer with spoiler covers on its first and last sentences: in an existing chat, no game, ask "How do I beat the boss in the Soul Sanctum in Hollow Knight?" in Strategy | Walk Down through the whole answer, one press at a time | Same record as above; mark each press where the ring stayed on a cover whose top was above the visible band |
+| P76-M-COVER-ONLY | Why Down lands on the section's outer box when it holds only a cover, and A does nothing | The same answer, or any with a section holding only a cover | Walk Down onto that section; A. Then walk Up onto it from below; A | Both times: the ring's element and box; the section's and the cover's tags, attributes and boxes (no text past 40 letters); whether A opened the cover |
+| P76-M-NEARLIER-DETAILS | Why Down from "N earlier" skips the newest turn when details are open | A chat with at least three turns, so "N earlier" shows; the newest turn's Show details open | Walk to "N earlier", then Down one press at a time to the notes block | Every stop, in order, with its name and box. By design: Retry, question, answer parts, Hide details, then the notes block |
+| P76-M-COVER-RECLOSE | Whether an opened cover closes by itself, and what sets it off | An answer with a cover | A on the cover to open it. Then every 5 s for 90 s read whether it is open, while doing: three D-pad moves inside the answer, then put a new question in the box with the script (do not send). If it stays open, send the question and watch 60 s more | The moment it went back to hidden, if it did, and what happened just before (a chip change, the question typed, the answer redrawn) |
+| P76-M-TABBAR-GHOST | Whether two tab bars end up drawn at once after Show details → Session | Any answered chat | Record a 10 s video while doing: Show details, Right to the Session tab, wait 3 s, one D-pad press | How many tab bars are drawn (each one's box and opacity) right after the Session tab opens, and after the D-pad press |
+
+At the end: put back every setting you changed, close the game if you launched it, and report per row in plain words.

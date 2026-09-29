@@ -1,0 +1,24 @@
+{
+  "row": "P76-TRAP-CONTROL",
+  "verdict": "REPRODUCED (the ring did NOT stay in step even though the reply finished with the menu open and no popup)",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 00:35-00:42 (Deck clock, -04:00)",
+  "screen": "Deck built-in screen; Quick Access page window 854x534 while a game runs, dpr 1.5",
+  "setup": "Deep Rock Galactic: Survivor relaunched fresh (the trap row had been cleared by exiting the game). No plugin reload. Speed mode, AI character off, no reload. Panel opened with deck_openPlugin, then question by script: what should I upgrade first as a new player (VERIFIED, no apostrophe).",
+  "steps_and_readings": [
+    "Walk Down from the tab bar to Ask: about 22 presses (15, then 7 more after the long earlier answer's tall section scrolled about 80 px a press); every press moved the ring, ring and page agreed at the end on Ask.",
+    "A on Ask (not on the box). Panel kept open. Toast-page watcher installed first: 0 popups in 60.6 s (as expected, the menu was open).",
+    "Log: run_game_ai_request completed in 52.6 s at 00:37:05 with the panel open.",
+    "Right after the finish: ring on the question box, page focus on the question box, agree true, document.hasFocus true; Steam's active window QuickAccess_uid2, active tree QuickAccess-NA.",
+    "Close (GUIDE+A chord), wait 2.3 s, deck_openPlugin (chord reopens; nothing owned the ring; one Down placed it)."
+  ],
+  "press_by_press_after_reopen": [
+    {"moment": "at once after deck_openPlugin, before any press of mine", "ring": "question box (y364)", "page_focus": "Ask button (y440)", "agree": false, "document_hasFocus": false, "steam_active_window": "Steam Big Picture Mode", "steam_active_tree": "QuickAccess-NA", "steam_tree_last_focus_node": "the question box", "input_suppressed": false, "contexts": 1},
+    {"press": "Down", "ring": "question box", "page_focus": "Ask (y440)", "agree": false},
+    {"press": "Right", "ring": "question box", "page_focus": "'Inference mode: Speed' button (y412)", "agree": false},
+    {"press": "Up", "ring": "chip 'How do I beat Glyphid Dreadnought?' (y331)", "page_focus": "the same chip", "agree": true}
+  ],
+  "clearing_attempts": "Not run for this instance (the trap row had already been measured; the runbook asks only whether the ring stays in step). A later plain close and reopen with two GUIDE+A chords (no deck_openPlugin, no Down press) put ring and page together on 'Main tab' (agree, hasFocus true).",
+  "conclusion": "The desync does not need the reply to finish with the menu closed: it showed the same way here (reply finished with the menu open, no popup). What both runs share is closing Quick Access and reopening it over the running game so the ring is unowned, then a D-pad press placing it (deck_openPlugin's acquire-focus Down). After that, document.hasFocus() is false, the page's own focus follows the D-pad and Steam's ring stays on the question box on Down and Right. Up resyncs. Not proven that the acquire Down is the cause: the plain chord reopen at the end kept ring and page together.",
+  "screenshots": "None taken at this stuck moment (the trap row's screenshots DeckCapture_20260929_003208_game.png and _003255_game.png are in the repo screenshots folder, out of docs)."
+}

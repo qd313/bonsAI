@@ -1,0 +1,23 @@
+{
+  "row": "P76-CONTEXT-REOPEN",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 00:26-00:40 (Deck clock, -04:00)",
+  "screen": "Deck built-in screen. In game the Quick Access page reported 854x534 at dpr 1.5 (854x454 with no game).",
+  "setup": "Deep Rock Galactic: Survivor (2321470) launched from the Recent Games row with deck_launchGame, no reload after. Last question asked earlier was with no game (Soul Master, Hollow Knight). Character off. Game process confirmed running over SSH. Note: the launch screenshot (out of docs, screenshots folder) showed the game still black/loading about 20 s after launch; the panel opened over it fine.",
+  "pressed": ["deck_openPlugin (opened over the game), LB to Main, page sampler every 100 ms (Context line text or 'no context line' when the panel is unmounted), then the Quick Access chord (GUIDE+A) to close, wait about 1.5 s, chord to reopen, wait 3.5 s; five reopens in all; then deck_exitGame; deck_openPlugin; sampler read"],
+  "seen": {
+    "reopen_runs_with_context_line": [
+      {"from_ms": 6529, "to_ms": 14101, "reads": 77},
+      {"from_ms": 17852, "to_ms": 24201, "reads": 65},
+      {"from_ms": 27859, "to_ms": 33001, "reads": 53},
+      {"from_ms": 36761, "to_ms": 41901, "reads": 53},
+      {"from_ms": 45589, "to_ms": 52701, "reads": 73}
+    ],
+    "text_in_every_one_of_the_5_reopens_and_the_first_open": "Context: active game Deep Rock Galactic: Survivor",
+    "reads_of_no_active_game_or_another_game_while_game_ran": 0,
+    "reads_taken_with_panel_closed": "the panel is unmounted while shut (page text 19 letters, no Context line); those are not counted as reads of the line",
+    "after_exit": "deck_exitGame: appid left RunningApps in 246 ms; process list over SSH: no DRG process. First read after the panel reopened (about 5 s after the exit press because the panel had to be reopened) said 'Context: no active game detected' and held for 52 reads (5.1 s).",
+    "caveat": "The 'within about 2 s' half was measured from the first read after reopening the panel, not from the exit moment, because the panel is closed during the exit and has no text to read."
+  },
+  "verdict": "PASS"
+}

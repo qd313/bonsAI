@@ -1,0 +1,84 @@
+{
+  "row": "P76-TRAP-REPRO",
+  "verdict": "REPRODUCED (Steam's ring stopped following the D-pad; twice)",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 00:27-00:40 (Deck clock, -04:00)",
+  "screen": "Deck built-in screen; Quick Access page window 854x534 while a game runs (854x454 with no game); dpr 1.5",
+  "setup": "Deep Rock Galactic: Survivor launched from Recent Games (fresh, second launch of the night), no plugin reload after. Ask mode Speed (set with the plugin's own mode picker; was Strategy), AI character off, chat 'wheatley fight' (8 chats, none created). Game sat on its title screen ('press any key').",
+  "words": "'ring' means Steam's gamepad focus ring (the gpfocus marker). 'page focus' means document.activeElement in the Quick Access page. 'agree' means they are the same element.",
+  "baseline_before_asking_with_game_running": [
+    "walk Down to Ask: ring on Ask, agree",
+    "Up: ring and page on the question box (rect y363), agree",
+    "Right: mode button 'Inference mode: Speed', agree",
+    "Left: 'Attach screenshot to Ask', agree",
+    "Down: Ask, agree",
+    "Up: question box, agree",
+    "Steam's shared page (SharedJSContext) then: 1 context, active window QuickAccess_uid2, active nav tree QuickAccess-NA, its last focused node the question box, input not suppressed"
+  ],
+  "made_the_trap_condition": [
+    "question by script: give me ten tips for a new player (VERIFIED)",
+    "Down to Ask (agree), A on Ask (not on the box). Ask at bridge time 1527968495",
+    "B x4 about 1 to 2 s apart: ring to the tab bar, then panel closed, then the plugin list, then side rail, then the Quick Access menu hidden (page visibilityState hidden)",
+    "log: run_game_ai_request completed in 77.7 s at 00:31:15; the reply finished with the menu closed",
+    "popup came up at 78.3 s after the watcher started (text 'Right, here are ten tips for a new player / trying to survive the madness in...'), i.e. about 3 s after the finish; screenshot saved (screenshots folder, out of docs): DeckCapture_20260929_003122_game.png shows the popup at bottom right over the game",
+    "GUIDE+A chord: the Quick Access menu came back on the Decky plugin list with NO ring anywhere (readFocus: no gpfocus in any target; Steam's controller had no active context). deck_openPlugin then pressed Down once (ring placed), Down, A on bonsAI: panel open, ring on the question box, agree"
+  ],
+  "press_by_press_after_reopen": [
+    {"press": "Down", "ring": "question box (y364)", "page_focus": "Ask button (y440)", "agree": false},
+    {"press": "Right", "ring": "question box (y364)", "page_focus": "'Inference mode: Speed' button (y412)", "agree": false}
+  ],
+  "readings_taken_at_once_first_stuck_moment_no_A_pressed": {
+    "1_which_element_holds_steams_ring_and_which_holds_page_focus": {
+      "steam_ring": "INPUT (the question box), class _3ZR32BdxJUNwAA6Fu6n00p DialogInput, rect [49,364,299,44]",
+      "page_focus": "BUTTON 'Inference mode: Speed. Open to change.' (bonsai-ask-mode-trigger), rect [279,412,39,20]"
+    },
+    "2_quick_access_page": {
+      "document_activeElement": "the mode button above",
+      "inside_the_plugin": true,
+      "ring_inside_the_plugin": true,
+      "document_hasFocus": false,
+      "gpfocuswithin_count": 11,
+      "question_box_value": "empty"
+    },
+    "3_steams_shared_page_SharedJSContext": {
+      "window.FocusNavController": "present (per-context: m_rgAllContexts length 1)",
+      "context_active": true,
+      "input_suppressed": false,
+      "root_window": "Steam Big Picture Mode",
+      "active_window": "Steam Big Picture Mode (at baseline it was QuickAccess_uid2)",
+      "active_browser_view": false,
+      "focus_change_stack": 0,
+      "active_focus_change": "present",
+      "active_nav_tree": "QuickAccess-NA (enabled)",
+      "active_tree_last_focused_node": "the question box",
+      "deferred_focus": true,
+      "other_trees_enabled": "GamepadUI_Full_Root enabled; MainNavMenuContainer disabled; ModalDialogOverlay_Modal_0 disabled",
+      "list_of_open_windows": "not exposed as a list; only the one context, root window Steam Big Picture Mode"
+    },
+    "screenshot": "screenshots/DeckCapture_20260929_003208_game.png (out of docs): panel shown over the game, question box at the bottom"
+  },
+  "clearing_attempts_in_order_as_they_happened": [
+    {
+      "step": "(extra, not on the runbook list) one B press",
+      "result": "plugin's own B handling put ring AND page on 'Main tab' (agree). One Down after that went to the first chat row, agree. So a B press re-synced it for one press."
+    },
+    {
+      "step": "second time it went out of step (during a walk Down: ring stopped on the question row body of the earlier turn while page focus moved on to the 'Show reasoning' fold). The three readings again: ring on the turn row body (rect [141,229,190,14]), page on 'Show reasoning . 36 s' fold; document.hasFocus false; Steam's active window still Steam Big Picture Mode, active tree QuickAccess-NA, last focus node = that row body. Screenshot DeckCapture_20260929_003255_game.png"
+    },
+    {
+      "step": "1. close and reopen the panel (B, B to the plugin list, deck_openPlugin: ring on the question box, agree)",
+      "result": "NOT cleared. Down: ring stayed on the box, page on Ask (agree false). Right: ring on the box, page on the mode button (agree false). Up: ring jumped to the chip 'How do I beat Glyphid Dreadnought?' and page too (agree true). Down: ring and page on the box (agree). Down: ring on the box, page on Ask (agree false)."
+    },
+    {
+      "step": "2. Steam button, then B",
+      "result": "NOT cleared. Quick Access closed; deck_openPlugin (chord + one Down): panel back with its state, ring on the question box, page focus on Ask (agree false), same as before."
+    },
+    {
+      "step": "3. exit the game (deck_exitGame; process gone in 246 ms; confirmed over SSH)",
+      "result": "CLEARED. The panel reopened with ring on Main tab (agree). A full Down walk of 16 presses to Ask: every press steam-routed, ring and page agree. Then Up (box), Down (Ask, agree), Up (box), Right (mode button, agree)."
+    }
+  ],
+  "what_stayed_the_same_while_stuck": "The ring never left the question box on Down or Right, but the page's own focus moved (Ask, the mode button), so the D-pad worked on the page while Steam's ring stood still. Leaving the box by Up worked (ring caught up with page focus onto a chip). It also went out of step once on a question-row body during a Down walk.",
+  "what_did_not_happen": "The D-pad was not dead: page focus always moved. No press was ignored.",
+  "verdict_detail": "REPRODUCED, and it cleared only with the game exited (steps 1 and 2 failed). A B press cleared it for one press only."
+}

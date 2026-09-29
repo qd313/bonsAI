@@ -1,0 +1,17 @@
+{
+  "row": "P76-TIER2-INSTALL-WORDING",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 00:35 -04:00",
+  "screen": "Deck built-in, Quick Access window 854x454, dpr 1.5",
+  "setup": "Ollama tab, AI runs on this Deck, internet_downloads false (so the box is the 'Turn on internet downloads?' box).",
+  "pressed": ["walk to 'Install model bundles' (Install options...) ring+page agree", "A (two inline options appear: Tier 1 essentials, Tier 2 one-model multimodal)", "Down, Down (ring on 'Install Tier 2 one-model multimodal', agree true)", "A (box opens in the 'Steam Big Picture Mode' page; ring on 'Not now')", "read the box text", "B", "read ring"],
+  "seen": {
+    "box_text_length": 1289,
+    "contains_word_reply": false,
+    "box_text": "Turn on internet downloads? ... download Ollama ... download gemma4:e2b-it-qat (about 4-5 GiB) ... switch Model policy to Tier 2 (open-weight) ... Default model folder ... avoid suspending ... Use AC power where possible for long Tier-1 batches. Internet downloads are off in Permissions. ... buttons: Not now / Turn on and download / Cancel",
+    "ring_on_open": "Not now",
+    "ring_after_B": "'Install model bundles' (button text 'Install options...') rect [64,235,268,36], page focus agrees",
+    "side_effects": "ollama list unchanged (nomic-embed-text, gemma4:e2b-it-qat); internet_downloads still false; model_policy_tier still open_weight. Nothing downloaded."
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,18 @@
+{
+  "row": "P76-KB-NOTICE-RING",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 01:00-01:20 -04:00",
+  "screen": "Deck built-in, Quick Access window 854x454, dpr 1.5",
+  "setup": "Library installed (version 2026.09.26). Note-search model removed with the plugin's own 'Remove from Deck': AI models screen (opens in Steam's main window), one press at a time, Down x6 to the nomic-embed-text row, Right to its X ('Remove from Deck', row y 362 same as the model row), A. The confirm box named 'Remove nomic-embed-text:latest from the Deck?' and its ring was on the destructive 'Remove model' button (the box opens on it); I pressed A there on purpose. ollama list then showed only gemma4:e2b-it-qat. Done, A.",
+  "settings_changed": "capabilities.internet_downloads was false at the start; the 'Turn on and download' button turned it true; I turned it back off on the Perms tab; file read back false. (Also ai_character_enabled false for the other row, restored later.)",
+  "pressed_and_seen": [
+    {"step": "On the hint 'Pull nomic-embed-text' (ring and page agree), A", "seen": "notice 'Turn on internet downloads?' (Steam main window), ring on 'Not now'"},
+    {"step": "B on the notice", "seen": "ring on 'Pull nomic-embed-text · about 270 MB', rect [64,309,220,44], page focus agrees, visible", "result": "ring on Pull: PASS"},
+    {"step": "A again, Right to 'Turn on and download', A", "seen": "ring on 'Update knowledge base' at once (rect [64,330,166,44]); model landed in ollama list about 6 s later (2 polls, 00:23:14 to 00:23:20 Deck clock); after it landed ring still on 'Update knowledge base' rect [64,240,166,44], agree true, hint gone", "result": "ring on Update knowledge base after the download: PASS"},
+    {"step": "Perms tab, Internet downloads switch A (off); back to Ollama tab; 'Update knowledge base', A", "seen": "notice 'Turn on internet downloads?' for the knowledge library, ring on 'Not now'"},
+    {"step": "B on that notice", "seen": "ring on 'Update knowledge base' rect [64,246,166,44], agree true", "result": "ring on Update knowledge base after its B: PASS"}
+  ],
+  "end_state": "nomic-embed-text:latest is installed again (274 MB), gemma4:e2b-it-qat unchanged; internet_downloads false.",
+  "side_note_for_NOMIC_REMOVE_HINT": "About 1 min after the removal the hint 'Install nomic-embed-text in Ollama for Keyword + meaning search.' and its Pull button were on the Ollama tab. I did not time it to 5 s (not this row).",
+  "verdict": "PASS"
+}

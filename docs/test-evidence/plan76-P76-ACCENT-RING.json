@@ -1,0 +1,25 @@
+{
+  "row": "P76-ACCENT-RING",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29T00:14-00:30 -04:00 (approx.)",
+  "screen": "Deck built-in, Quick Access window 854x454, dpr 1.5",
+  "setup": "Settings tab, AI character on (ai_character_enabled true), accent was heavy ('Strong'). Ring and page focus agreed at every read.",
+  "pressed": [
+    "walk Down to 'Accent intensity: Strong' (13 presses)",
+    "A (menu opens, ring on 'Light')",
+    "Down (ring on 'Default')",
+    "A (pick Default)",
+    "read ring",
+    "LB once",
+    "RB back to Settings, A (menu), B (cancel), read ring",
+    "restore: A, Down to 'Strong', A"
+  ],
+  "seen": {
+    "try1_after_pick": "ring on the accent control 'Default v' rect [64,231,64,26], agree true. Not nothing, not 'Show Developer tab'.",
+    "try1_first_LB": "tab changed on the first LB press (Settings -> Ollama).",
+    "try2_after_A_then_B": "ring on the accent control 'Default v' rect [64,231,64,26], agree true, tab header still SETTINGS.",
+    "restore": "settings.json ai_character_accent_intensity read back 'heavy' (same as start)."
+  },
+  "note": "Side effect: an RB pressed on the Main chat row at the start moved the chat carousel two chats along; two LB presses moved it back. No chat was created or removed.",
+  "verdict": "PASS"
+}

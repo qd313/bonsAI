@@ -1,0 +1,27 @@
+{
+  "row": "KB-FOLLOWUP-QUOTE-02",
+  "file_note": "try2 because plan76-KB-FOLLOWUP-QUOTE-02.json already existed",
+  "build_commit": "ab56e2a2",
+  "deck_time": "2026-09-29 about 00:45-00:58 -04:00",
+  "screen": "Deck built-in, Quick Access window 854x454, dpr 1.5",
+  "setup": "Strategy mode, no game, knowledge base on. AI character turned OFF with the plugin's own switch on the Settings tab (ai_character_enabled true -> false; restored at the end of the night, see the report). Chat: the open chat 'wheatley fight' (8 chats before and after, none created).",
+  "pressed": [
+    "script: How do I beat the Soul Master in Hollow Knight?  (VERIFIED)",
+    "walk Down to Ask (ring and page agree), A",
+    "answer came back with a two-choice menu: A. Yes, I'm in the Soul Sanctum and need fight tips / B. No, I'm stuck before reaching the Soul Sanctum",
+    "walk Up to button B (ring on B, page agrees, rect [65,204,265,48]), A",
+    "answer finished about 130 s later",
+    "Show details, A; Down to notes block, Down to the tab row, Right to Session"
+  ],
+  "deviation_from_runbook": "The runbook names the choice 'B. In the City of Tears'. The model wrote a different menu this time, so I picked its B ('No, I'm stuck before reaching the Soul Sanctum'). The row's point (no internal tag on screen) does not depend on the wording.",
+  "seen": {
+    "watcher": "page watcher installed before Ask, sampling the whole panel text plus every input/textarea value every 200 ms. 1378 samples over 275.8 s; the pick was at sample 722, so 656 samples (about 131 s) from the pick to the end of the answer and after.",
+    "samples_containing_Strategy_follow_up": 0,
+    "question_box_at_end": "empty",
+    "waiting_line_and_turn_header": "turn header reads: I'm at: No, I'm stuck before reaching the Soul Sanctum (once)",
+    "session_tab": "Session tab (open under Show details) lists the newest turns; the pick appears once as 'I'm at: No, I'm stuck before reaching the Soul S...' (cut for width); no 'Strategy follow-up' anywhere in the page text.",
+    "count_of_I_am_at_lines_in_page_with_details_open": 2,
+    "count_explained": "one in the turn header, one in the Session tab list"
+  },
+  "verdict": "PASS"
+}

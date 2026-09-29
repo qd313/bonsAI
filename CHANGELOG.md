@@ -25,6 +25,12 @@ All notable changes to this project are documented in this file.
   the short list behaves as before.
 - **The follow-up choice reader accepts more of the shapes a model drifts to.**
 - **A model download running when the plugin reloads now starts again on load.**
+- **Down no longer bounces between a spoiler cover and its section.** The walk remembers the last cover or word the ring was on
+  in a section and does not offer it again until the ring leaves. One extra Down stop stays by design. Owes its Deck check.
+- **"Remove <model> from the Deck?" opens on "Not now".** Owes its Deck check.
+- **Cancel on the AI models screen puts the saved licence back** to what it was when the screen opened. Owes its Deck check.
+- **The library's status line follows a download that starts after the tab was rebuilt**, instead of reading "Not installed"
+  for about a minute. Owes its Deck check.
 
 ### Plan 75 (2026-09-28)
 

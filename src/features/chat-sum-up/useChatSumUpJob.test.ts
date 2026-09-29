@@ -127,6 +127,26 @@ describe("useChatSumUpJob", () => {
     );
   });
 
+  /*
+   * The pop-up is only ever seen in a race (the button was greyed out a moment ago), and it cannot
+   * tell whether the chat was never long enough or was just summed up. "The whole chat still fits"
+   * is wrong in the second case (plan 74 leftovers; 529b409e fixed the button's own line), so the
+   * pop-up says the one thing true in both.
+   */
+  it("the nothing-to-sum-up pop-up does not claim the chat still fits", async () => {
+    setRpcHandler("sum_up_chat_slot", () => ({ accepted: false, status: "nothing_to_do" }));
+    const { result } = renderHook(() => useChatSumUpJob(vi.fn()));
+    await flush();
+    await act(async () => {
+      result.current.start("chat-1");
+      await Promise.resolve();
+    });
+    await flush();
+    const body = vi.mocked(toaster.toast).mock.calls.map((c) => (c[0] as { body: string }).body).join(" ");
+    expect(body).toContain("nothing new to sum up");
+    expect(body).not.toContain("still fits");
+  });
+
   it("a summary still running when the plugin reopens is picked up, clock and all", async () => {
     current = status({ status: "pending", kind: "sum_up", chat_slot_id: "chat-9", summing_up_seconds: 20 });
     const onWritten = vi.fn();

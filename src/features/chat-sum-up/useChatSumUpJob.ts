@@ -31,7 +31,7 @@ import { toaster } from "@decky/api";
 import { callDeckyWithTimeout } from "../../utils/deckyCall";
 import { sumUpChatSlot } from "../../utils/chatSlotsApi";
 import type { BackgroundRequestStatus } from "../../types/backgroundAsk";
-import { REASON_ANSWER_IN_FLIGHT, REASON_NOTHING_TO_SUM } from "./chatSumUpModel";
+import { REASON_ANSWER_IN_FLIGHT, TOAST_NOTHING_TO_SUM } from "./chatSumUpModel";
 
 /** Same pace as the Ask's own status poll while no words are streaming (useBackgroundGameAi.ts). */
 export const SUM_UP_POLL_MS = 1200;
@@ -121,7 +121,7 @@ export function useChatSumUpJob(onSummaryWritten: (slotId: string) => void): Cha
           }
           // The button is greyed out in both of these cases already; this only covers a race.
           if (res.status === "busy") toaster.toast({ title: "Sum up this chat", body: REASON_ANSWER_IN_FLIGHT, duration: 3500 });
-          else if (res.status === "nothing_to_do") toaster.toast({ title: "Sum up this chat", body: REASON_NOTHING_TO_SUM, duration: 3500 });
+          else if (res.status === "nothing_to_do") toaster.toast({ title: "Sum up this chat", body: TOAST_NOTHING_TO_SUM, duration: 3500 });
         })
         .catch(() => {
           if (mountedRef.current) toaster.toast({ title: "Sum up this chat", body: SUM_UP_FAILED_TOAST, duration: 4000 });

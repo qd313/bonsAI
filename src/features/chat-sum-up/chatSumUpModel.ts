@@ -143,6 +143,12 @@ export type SumUpButtonView = {
 
 export const REASON_ANSWER_IN_FLIGHT = "Wait for the answer to finish, then sum up.";
 export const REASON_NOTHING_TO_SUM = "The whole chat still fits, so there's nothing to sum up yet.";
+/**
+ * The pop-up for a Sum up press the back end turned away as "nothing to do". Only seen in a race
+ * (the button was greyed out a moment before), and it cannot tell a chat that never got long from
+ * one that was just summed up, so it says what is true of both rather than "still fits".
+ */
+export const TOAST_NOTHING_TO_SUM = "There's nothing new to sum up yet. Ask more, then try again.";
 /** After a sum-up: the card above is the summary, so "still fits" would contradict it. */
 export const REASON_ALREADY_SUMMED = "This chat is already summed up. Ask more, then you can sum up again.";
 

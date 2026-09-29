@@ -19,6 +19,10 @@ Does not: Run on device or at plugin build time. Nothing under py_modules/ impor
 
     python scripts/fetch_wiki_live_pages.py --api https://doomwiki.org/w/api.php --search "marauder"
 
+A wiki that refuses the page-render call (Palworld's own wiki, palworld.wiki.gg, answers HTTP 403)
+is read from its plain page instead -- the same revision, article box only -- and the run prints a
+"[fallback]" line saying so.
+
 Each page becomes <out>/<slug>.txt with a short provenance header, and <out>/_manifest.json
 collects url / revid / revision date / licence for every page fetched. Pages that do not
 exist are listed at the end and in the manifest as missing; the exit code stays 0 so a
@@ -72,12 +76,20 @@ _INFOBOX_VALUE_CLASS = re.compile(r"\bpi-data-value\b")
 class _TextExtractor(HTMLParser):
     """Rendered HTML -> plain text that keeps headings, list bullets and table rows."""
 
-    def __init__(self) -> None:
+    def __init__(self, body_only: bool = False) -> None:
         super().__init__(convert_charrefs=True)
         self.out: list[str] = []
         self._stack: list[bool] = []  # True when the element is skipped
         self._skip_depth = 0
         self._heading: str | None = None
+        # body_only reads a whole page (the plain-page fallback): only what sits inside the
+        # article box, `mw-parser-output`, is kept, so site menus, headers and footers stay out.
+        self._body_only = body_only
+        self._body_root: int | None = None  # stack index of the article box while inside it
+        self.found_body = False
+
+    def _live(self) -> bool:
+        return not self._body_only or self._body_root is not None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         cls = " ".join(v or "" for k, v in attrs if k == "class")
@@ -96,6 +108,11 @@ class _TextExtractor(HTMLParser):
             self._skip_depth += 1
             return
         if self._skip_depth:
+            return
+        if self._body_only and self._body_root is None and not self.found_body and "mw-parser-output" in cls:
+            self._body_root = len(self._stack) - 1
+            self.found_body = True
+        if not self._live():
             return
         # Fandom's portable-infobox renders each fact's label as an <h3 class="pi-data-label">
         # -- real heading level 3, styled as one. Treating it as a heading filled the section
@@ -129,6 +146,11 @@ class _TextExtractor(HTMLParser):
             return
         if self._skip_depth:
             return
+        if self._body_root is not None and len(self._stack) == self._body_root:
+            self._body_root = None  # the article box just closed
+            return
+        if not self._live():
+            return
         if tag == self._heading:
             self.out.append("\n")
             self._heading = None
@@ -136,7 +158,7 @@ class _TextExtractor(HTMLParser):
             self.out.append("\n")
 
     def handle_data(self, data: str) -> None:
-        if self._skip_depth:
+        if self._skip_depth or not self._live():
             return
         self.out.append(data)
 
@@ -148,6 +170,10 @@ class _TextExtractor(HTMLParser):
         return raw.strip() + "\n"
 
 
+class ApiRefused(SystemExit):
+    """The wiki answered 401/403: it is refusing this call, and asking again will not change that."""
+
+
 def api_get(api: str, params: dict[str, str], *, retries: int = 3) -> dict:
     params = dict(params, format="json")
     url = api + "?" + urllib.parse.urlencode(params)
@@ -157,10 +183,25 @@ def api_get(api: str, params: dict[str, str], *, retries: int = 3) -> dict:
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=45) as resp:
                 return json.loads(resp.read().decode("utf-8", errors="replace"))
+        except urllib.error.HTTPError as exc:
+            if exc.code in (401, 403):
+                raise ApiRefused(f"API request refused (HTTP {exc.code}): {url}") from exc
+            last = exc
+            time.sleep(1.5 * (attempt + 1))
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:  # noqa: PERF203
             last = exc
             time.sleep(1.5 * (attempt + 1))
     raise SystemExit(f"API request failed after {retries} tries: {url}\n  {last}")
+
+
+def fetch_plain_html(url: str) -> str:
+    """The ordinary page a browser would load, for a wiki that refuses the page-render call."""
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/html"})
+    try:
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            return resp.read().decode("utf-8", errors="replace")
+    except (urllib.error.URLError, TimeoutError) as exc:
+        raise SystemExit(f"Plain page request failed too: {url}\n  {exc}") from exc
 
 
 def site_info(api: str) -> dict:
@@ -218,11 +259,28 @@ def resolve_page(api: str, title: str) -> dict | None:
     return None
 
 
-def render_page(api: str, revid: int) -> str:
-    data = api_get(
-        api,
-        {"action": "parse", "oldid": str(revid), "prop": "text", "disableeditsection": "1", "disablelimitreport": "1"},
-    )
+def render_page(api: str, revid: int, page_url: str = "") -> str:
+    """Rendered text of one revision. When the wiki refuses the page-render call (Palworld's own
+    wiki answers HTTP 403) and ``page_url`` is given, the plain page of the same revision is read
+    instead -- only its article box, so the site's menus and footer stay out."""
+    try:
+        data = api_get(
+            api,
+            {"action": "parse", "oldid": str(revid), "prop": "text", "disableeditsection": "1", "disablelimitreport": "1"},
+        )
+    except ApiRefused:
+        if not page_url:
+            raise
+        sep = "&" if "?" in page_url else "?"
+        print(f"[fallback] render call refused; reading the plain page {page_url} (revision {revid})")
+        html = fetch_plain_html(f"{page_url}{sep}oldid={revid}")
+        parser = _TextExtractor(body_only=True)
+        parser.feed(html)
+        if not parser.found_body:
+            # No article box on this site's page: read the whole page rather than return nothing.
+            parser = _TextExtractor()
+            parser.feed(html)
+        return parser.text()
     html = data.get("parse", {}).get("text", {}).get("*", "")
     parser = _TextExtractor()
     parser.feed(html)
@@ -285,7 +343,7 @@ def main() -> int:
             manifest["pages"] = [p for p in manifest["pages"] if p.get("requested") != title]
             manifest["pages"].append({"requested": title, "missing": True, "read_on": today})
             continue
-        text = render_page(args.api, int(page["revid"]))
+        text = render_page(args.api, int(page["revid"]), page.get("url", ""))
         slug = slugify(page["title"])
         header = (
             f"# source: {page['url']}\n"

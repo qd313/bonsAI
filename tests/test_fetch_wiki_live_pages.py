@@ -153,5 +153,87 @@ class ResolvePageCategoriesTests(unittest.TestCase):
         self.assertEqual(page["categories"], [])
 
 
+class PlainPageFallbackTests(unittest.TestCase):
+    """Palworld's own wiki refuses the page-render call (HTTP 403); the plain page still loads.
+
+    Every network call here is stubbed -- no real request is made.
+    """
+
+    PLAIN_HTML = (
+        "<html><head><title>Lamball - Palworld Wiki</title></head><body>"
+        '<nav class="global-navigation">Sign in | Explore</nav>'
+        '<div class="page-header__actions">Edit</div>'
+        '<div class="mw-content-text"><div class="mw-parser-output">'
+        "<p>Lamball is a Neutral Pal.</p><h2>Drops</h2><ul><li>Wool</li></ul>"
+        "</div></div>"
+        '<footer>Community content is available under CC BY-SA</footer>'
+        "</body></html>"
+    )
+
+    def _refused(self, *_a, **_k):
+        raise fetcher.ApiRefused("HTTP 403")
+
+    def test_a_refused_render_call_falls_back_to_the_plain_page(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._refused), mock.patch.object(
+            fetcher, "fetch_plain_html", return_value=self.PLAIN_HTML
+        ) as plain:
+            text = fetcher.render_page("https://x.example/api.php", 77, "https://x.example/wiki/Lamball")
+        self.assertIn("Lamball is a Neutral Pal.", text)
+        self.assertIn("Wool", text)
+        self.assertNotIn("Sign in", text)
+        self.assertNotIn("Community content", text)
+        self.assertNotIn("Lamball - Palworld Wiki", text)
+        # The same revision is asked for, not whatever is newest.
+        self.assertIn("oldid=77", plain.call_args.args[0])
+
+    def test_a_page_with_no_article_box_is_read_whole_rather_than_empty(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._refused), mock.patch.object(
+            fetcher, "fetch_plain_html", return_value="<html><body><p>Only text.</p></body></html>"
+        ):
+            text = fetcher.render_page("https://x.example/api.php", 5, "https://x.example/wiki/Only")
+        self.assertIn("Only text.", text)
+
+    def test_a_working_render_call_is_still_the_first_choice(self):
+        payload = {"parse": {"text": {"*": "<p>From the API.</p>"}}}
+        with mock.patch.object(fetcher, "api_get", return_value=payload), mock.patch.object(
+            fetcher, "fetch_plain_html"
+        ) as plain:
+            text = fetcher.render_page("https://x.example/api.php", 5, "https://x.example/wiki/Page")
+        self.assertIn("From the API.", text)
+        plain.assert_not_called()
+
+    def test_a_refusal_with_no_page_address_is_not_swallowed(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._refused):
+            with self.assertRaises(SystemExit):
+                fetcher.render_page("https://x.example/api.php", 5)
+
+    def test_if_the_plain_page_fails_too_the_run_stops_with_a_clear_message(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._refused), mock.patch.object(
+            fetcher, "fetch_plain_html", side_effect=SystemExit("plain page failed")
+        ):
+            with self.assertRaises(SystemExit) as ctx:
+                fetcher.render_page("https://x.example/api.php", 5, "https://x.example/wiki/Page")
+        self.assertIn("plain page failed", str(ctx.exception))
+
+    def test_a_403_is_not_retried_three_times(self):
+        err = fetcher.urllib.error.HTTPError("https://x.example/api.php", 403, "Forbidden", {}, None)
+        with mock.patch.object(fetcher.urllib.request, "urlopen", side_effect=err) as opened, mock.patch.object(
+            fetcher.time, "sleep"
+        ) as slept:
+            with self.assertRaises(fetcher.ApiRefused):
+                fetcher.api_get("https://x.example/api.php", {"action": "parse"})
+        self.assertEqual(opened.call_count, 1)
+        slept.assert_not_called()
+
+    def test_other_http_errors_are_still_retried(self):
+        err = fetcher.urllib.error.HTTPError("https://x.example/api.php", 503, "Busy", {}, None)
+        with mock.patch.object(fetcher.urllib.request, "urlopen", side_effect=err) as opened, mock.patch.object(
+            fetcher.time, "sleep"
+        ):
+            with self.assertRaises(SystemExit):
+                fetcher.api_get("https://x.example/api.php", {"action": "parse"}, retries=3)
+        self.assertEqual(opened.call_count, 3)
+
+
 if __name__ == "__main__":
     unittest.main()

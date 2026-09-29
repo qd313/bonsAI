@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 596,
-  "edgeCount": 1652,
+  "fileCount": 597,
+  "edgeCount": 1656,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1946,6 +1946,7 @@
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
         "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/hooks/usePullModelTier2Wording.test.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
         "src/index.tsx",
         "src/utils/mergePullModelCatalog.test.ts",
@@ -3615,13 +3616,15 @@
         "src/data/pullModelCatalog.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/hooks/usePullModelDownloadNotice.test.tsx",
-        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx"
+        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
+        "src/hooks/usePullModelTier2Wording.test.tsx"
       ]
     },
     "src/hooks/usePullModelTableData.ts": {
@@ -3651,8 +3654,18 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
-        "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx"
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
+        "src/hooks/usePullModelTier2Wording.test.tsx"
       ]
+    },
+    "src/hooks/usePullModelTier2Wording.test.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts",
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/hooks/usePullModelTier2Confirm.tsx"
+      ],
+      "importedBy": []
     },
     "src/hooks/usePullModelToggleSelection.tsx": {
       "imports": [

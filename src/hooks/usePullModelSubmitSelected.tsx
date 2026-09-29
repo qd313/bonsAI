@@ -24,7 +24,8 @@ import { useCallback, type Dispatch, type RefObject, type SetStateAction } from 
 import { ConfirmModal, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
-import { disclosureSummaryForSourceClass, type ModelPolicyTierId } from "../data/modelPolicy";
+import type { ModelPolicyTierId } from "../data/modelPolicy";
+import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { findUnavailableRegistryTags } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse } from "../components/PullModelsModal.types";
@@ -149,7 +150,6 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
         openWeightTags.some((tag) => !openWeightTierConfirmedRef.current.has(tag))
       ) {
         const tagList = openWeightTags.join(", ");
-        const tier2Note = disclosureSummaryForSourceClass("open_weight");
         onBeforeNestedDeckyModal?.();
         const handle = showModal(
           <ConfirmModal
@@ -162,7 +162,7 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
                   tags only.
                 </div>
                 <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                  Enable <strong>Tier 2 (open-weight)</strong> before pulling so these models can be used. {tier2Note}
+                  Enable <strong>Tier 2 (open-weight)</strong> before pulling so these models can be used. {TIER2_PULL_NOTE}
                 </div>
               </div>
             }

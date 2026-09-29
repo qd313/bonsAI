@@ -21,8 +21,16 @@
  */
 import { useCallback, type RefObject } from "react";
 import { ConfirmModal, showModal } from "@decky/ui";
-import { disclosureSummaryForSourceClass, type ModelPolicyTierId } from "../data/modelPolicy";
+import type { ModelPolicyTierId } from "../data/modelPolicy";
 import type { PullModelEntry } from "../data/pullModelCatalog";
+
+/**
+ * What the "Enable Tier 2" boxes say about open-weight models, in plain words about the model(s)
+ * about to be pulled. Both boxes used to borrow the Ask-answer footnote ("This reply used an 'open
+ * model'..."), which talks about a reply that does not exist when a model is only being pulled.
+ */
+export const TIER2_PULL_NOTE =
+  "Open-weight models publish their weights for local use, but their training code, data or licence can differ from Tier 1's open-source rules, including limits on use or sharing.";
 
 export type UsePullModelTier2ConfirmArgs = {
   modelPolicyTier: ModelPolicyTierId;
@@ -77,7 +85,6 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
         return;
       }
       onBeforeNestedDeckyModal?.();
-      const tier2Note = disclosureSummaryForSourceClass("open_weight");
       const handle = showModal(
         <ConfirmModal
           strTitle="Enable Tier 2 for this model?"
@@ -88,7 +95,7 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
                 <strong>Tier 1 (open-source only)</strong>, bonsAI will not route Ask to it after download.
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                Enable <strong>Tier 2 (open-weight)</strong> so this tag is eligible for Ask fallbacks. {tier2Note}
+                Enable <strong>Tier 2 (open-weight)</strong> so this tag is eligible for Ask fallbacks. {TIER2_PULL_NOTE}
               </div>
               <div>You can change this later under Ollama → Manage AI models → Policy.</div>
             </div>

@@ -1,0 +1,14 @@
+{
+  "row": "S9 - walking Down while an answer is still arriving loses the ring",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Strategy, chat 'wheatley fight'. Try 1: 'walk me through every network setting in a typical PC game and what each one costs in performance'. Try 2: 'explain how vsync frame limiting and frame pacing interact on the steam deck and which settings to change for each' (first answer words about 31 s after A).",
+  "pressed": "A on Ask, then at once Up x4 to the chat row, then Down x8-12, one press at a time, reading focus after each.",
+  "seen": {
+    "try1": "The presses fell mostly in the thinking phase (answer text length grew 118 -> 141 characters only at the last step). Down went question -> chip -> question box -> Stop generation -> Ask. Ring always on a named element.",
+    "try2": "First words were already showing when the walk started. Down: chat row -> earlier pill -> Retry -> the arriving answer section (89%, then partial 67%/33% while it grew and the pane scrolled) -> Show reasoning -> answer section again. Ring never lost, every press either moved or stayed on the growing answer section, no unnamed loss of focus."
+  },
+  "verdict": "NOT REPRODUCED (2 tries, one covering the answer-arriving phase).",
+  "newFinding": null
+}

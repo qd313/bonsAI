@@ -1,0 +1,16 @@
+{
+  "row": "S3c - after picking a new character Accent, the ring lands on Show Developer tab and the first LB does not switch tabs",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Developer tab ON. Settings tab, Accent intensity control (label 'Strong', key ai_character_accent_intensity = heavy). Opened the menu (Light / Default / Strong / Wild); ring opened on LIGHT.",
+  "pressed": "A on the control, Down once to DEFAULT, A. Then read the ring. Then LB. Then LB again. Then restored: RB, walked to the control, A, Down x2 to STRONG, A.",
+  "seen": {
+    "afterPick": "Nothing owns the ring: no gpfocus element anywhere (deck_readFocus reported none; activeElement = BODY). The control itself showed a thin orange outline.",
+    "firstLB": "Tab did not change (still SETTINGS). The ring appeared on the 'Show Developer tab' switch (box x 290, y 293, 38x22, visible).",
+    "secondLB": "Tab changed to OLLAMA.",
+    "restore": "ai_character_accent_intensity read back 'heavy'"
+  },
+  "verdict": "REPRODUCED. Element: Show Developer tab switch takes the ring after the accent pick; first LB press swallowed (1 dead press), second press switches. Plus a step before it: the ring is lost completely after the pick (no ring owner). Screenshot: c:/Users/still/Documents/BonsAI/screenshots/DeckCapture_20260928_225400_auto.png (outside docs/).",
+  "newFinding": "The ring is lost entirely right after choosing an accent level (no gpfocus owner), before the first LB press puts it on the switch."
+}

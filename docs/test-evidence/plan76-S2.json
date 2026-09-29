@@ -1,0 +1,11 @@
+{
+  "row": "S2 - carousel style: Down lands on a chip mostly off screen",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Developer tab ON. Set preset_chip_animation to carousel through the Developer tab buttons (was decode); preset_chip_fade_animation_enabled false and preset_single_chip true were already right. Restored preset_chip_animation to decode afterwards; file read back decode.",
+  "pressed": "Three ways to make the chip row appear: (c) LB x4 from the Developer tab back to Main, then Show details then Down; (b) close the panel with B, reopen with the rig, walk to Show details, Down; (a) ask a fresh question, wait for the answer to finish, Up from the question box onto the chip, and Up-then-Down from Show details.",
+  "seen": "All four reads: the ring (gpfocus) and activeElement were the same button; that chip's box was x 48..348, y 291..321, exactly the panel column, and it was the highlighted slot (class carousel-slot--foc). Other slots sat at negative x (-1176..42), off screen but not focused.",
+  "verdict": "NOT REPRODUCED (4 tries this build).",
+  "newFinding": null
+}

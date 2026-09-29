@@ -1,0 +1,11 @@
+{
+  "row": "S6 - a thin strip of answer shows under the game-context line",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Deck's own screen (854x454, not the monitor). Context line read 'Context: no active game detected'. Newest answer was a one-sentence Strategy answer, so text ran behind the dock only a little; the long earlier answers were folded. Ring walked Up 4 presses from Show details.",
+  "pressed": "Up x4 from Show details; then read every text line's box below the dock top; deck_captureScreenshot.",
+  "seen": "Window height 454. Dock text row top 324; bottom actions 368-397; context line 441-454 (bottom = window edge). Answer text lines below dock top: 326-355 (answer body, behind the dock), 'Was this helpful?' 389-402, 'Helpful/Not really' 420-434, 'Show details' 456-468 (past the window bottom). Nothing between the context line and the window bottom. Screenshot showed no answer letters under or beside the context line.",
+  "verdict": "NOT REPRODUCED on the Deck's own screen (one try, short newest answer; the monitor is not connected).",
+  "newFinding": null
+}

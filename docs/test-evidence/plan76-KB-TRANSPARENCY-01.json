@@ -1,0 +1,11 @@
+{
+  "row": "KB-TRANSPARENCY-01 (dropped-for-space half, step 1 only)",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Read-only probe: python3 - --app-id ... --modes strategy,expert via scripts/probe_deck_kb_retrieval.py. Nothing running. Scratch dump: scratchpad/deck/kbprobe.txt.",
+  "pressed": "Nothing on the Deck screen. Seven probes.",
+  "seen": "Games and broad questions: Hollow Knight, Half-Life 2, Hades, Black Mesa, Brotato, Palworld, Deep Rock Galactic: Survivor. In each, Strategy attached 3 cards and Expert 5 cards; the probe's '[budget-truncated]' marker never printed (14 mode runs).",
+  "verdict": "BLOCKED. No budget-truncated case found across 7 games x 2 modes; step 2 (the Deck ask) was not run as the runbook says.",
+  "newFinding": null
+}

@@ -1,0 +1,11 @@
+{
+  "row": "S8 - Down from the chat row skipped the whole answer after coming back from Settings",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Chat 'wheatley fight' newest answer 'Soul Sanctum'.",
+  "pressed": "Route 1: on the chat row, RB RB LB LB (three times) - these switch chats, not tabs (the chat row uses LB/RB for chats), ring stayed on the chat row; Down landed on '92 earlier' each of 3 times. Route 2 (the tab-bar route): Up to the 'Main tab' bar, Right, Right (Settings tab lit), Left, Left (Main), Down, Down; repeated 3 times.",
+  "seen": "Every time: first Down went to the chat row, second Down to '<N> earlier', then Retry. Never past the answer. 3 of 3 by route 2 and 3 of 3 by route 1.",
+  "verdict": "NOT REPRODUCED (6 tries).",
+  "newFinding": null
+}

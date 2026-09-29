@@ -1,0 +1,16 @@
+{
+  "row": "S4 - the chip ladder lets Up leave only one chip at a time",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Chat 'wheatley fight', newest answer 'Soul Sanctum'; Show details open, 'This answer' tab has a ladder 'Chip k of 7'. Observed with a page observer that logged the chip label after every press.",
+  "pressed": "Down from the tab row into the ladder and on until it left (11 Downs from Hide details to Ask). Up from Ask: input, preset chip, then 7 Ups in the ladder, then Up to the tab row. Session tab: 10 Downs.",
+  "seen": {
+    "down": "Down from the tab row entered the ladder at chip 1; each Down stepped one chip (the ring element stays the same); after chip 7 the 7th further press left to the preset chip. No dead press beyond the chip steps.",
+    "up": "Up from the preset chip entered at chip 7 (last); Ups stepped 6, 5, 4, 3, 2, 1 (log times 57s, 59s, 62s, 65s, 68s, 70s, 73s); the next Up left to the tab row. So Up needs 7 presses to cross a 7-chip ladder: 1 press to enter at 7, 6 to reach chip 1, 1 to leave.",
+    "visibility": "The ladder container is taller than the pane, so the harness reported 33% or 0% visible for 6 of the stops (ring on a container whose chips scroll inside it); the chips themselves were not measured one by one.",
+    "sessionTab": "Session tab has no ladder: one stop per turn row, each 100% visible except the summary card heading (33% behind the question box)."
+  },
+  "verdict": "NOT REPRODUCED as a dead-press bug. The ladder steps one chip per press in both directions and leaves after the last chip, as the 09-26 note describes. The session decides if one-chip-per-press is the wanted behaviour.",
+  "newFinding": null
+}

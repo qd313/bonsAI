@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 76 (2026-09-28)
+
+- **Copy and Read aloud now leave hidden spoiler blocks out** the same way the screen does, even when a block is written oddly.
+  A block fenced with `~~~` stays one block on screen, and a hidden block's second half can no longer show while an answer
+  arrives. Unit-tested; a normal covered answer still owes its Deck check.
+- **The "Reply ready" popup no longer ends its second line in a comma just before the "…".**
+- **The "New chat" spot no longer shows the last reply's permission row.**
+- **Switching chats keeps the newest answer's "Was this helpful?" row.**
+- **Show details' Session tab names a branch pick in plain words**, not the model's own tag.
+- **The "Request cancelled." bubble no longer has a Copy button.**
+- **The rarely seen sum-up pop-up now says "There's nothing new to sum up yet"** instead of claiming the whole chat still fits.
+
 ### Plan 75 (2026-09-28)
 
 - **The text try-order picker now offers only models that can answer**, and an older saved order that held the

@@ -1,0 +1,45 @@
+{
+  "row": "PULL-TRY-ORDER-01",
+  "build": "39c17312 (Deck matches it per the session)",
+  "deckTime": "2026-09-28 22:21-22:27 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": {
+    "settingsBackup": "scratchpad/deck/settings-backup.json",
+    "before": {
+      "text_model_routing_order": [],
+      "vision_model_routing_order": ["gemma4:e2b-it-qat"],
+      "model_allow_high_vram_fallbacks": false,
+      "capabilities.internet_downloads": false,
+      "installedModels": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"]
+    },
+    "model": "qwen2.5vl:3b, 3.2 GB, the smallest tickable model (qwen3.5:4b is 3.4 GB). It is a vision model.",
+    "textOrderRouteBlocked": "The Set text model try order picker lists only one model (gemma4:e2b-it-qat; the embedding model is not listed), so no reorder can be made. Pressing Done with no change saves nothing: the file stayed []. The merge does nothing while the text list is empty, so the text-list half could not be set up. The vision list was already non-empty, so the vision half was tested instead."
+  },
+  "pressed": [
+    "RB to Ollama tab; Down x13 to Set text model try order, A, Down x2 to Done, A (no change written)",
+    "Walked to Browse models (Down/Up presses only), A; Down x5 to the tick row Select qwen2.5vl:3b to pull (star row Use gemma4 was passed over, never pressed); A once",
+    "Footer read Pull selected (1) 3.2 GB, toast 'Queued to pull', nothing downloading (Ollama blobs unchanged)",
+    "Down x2 to Pull selected, A. A box 'Turn on internet downloads?' appeared (Internet downloads was off in Permissions). Right, A on 'Turn on and download' (allowed by the session for this row)",
+    "B x5 from the Ollama tab: closed the panel, the side rail, then Steam's main menu opened, one more B closed it. Screenshot at 22:23 showed the panel gone. The panel was closed for the whole download."
+  ],
+  "seen": {
+    "pullStarted": "22:22:46 (blob partial files appearing 22:22)",
+    "downloadFinishedBetween": "22:24:19 and 22:24:40 (ollama list showed qwen2.5vl:3b at 22:24:40)",
+    "fileAt22:26:04": {
+      "text_model_routing_order": [],
+      "vision_model_routing_order": ["gemma4:e2b-it-qat", "qwen2.5vl:3b"]
+    },
+    "afterReopen": "deck_openPlugin reported the panel already open with the ring on the tab bar; file read again at reopen time, unchanged (same two entries, none lost or duplicated).",
+    "internet_downloads": "changed false to true by the confirm box; a side effect of the row."
+  },
+  "cleanup": {
+    "modelRemoved": "/home/deck/.local/bin/ollama rm qwen2.5vl:3b: deleted; ollama list back to nomic-embed-text:latest and gemma4:e2b-it-qat",
+    "tryOrderReset": "The vision picker shows only the installed model, and Done with no change writes nothing, so the stale qwen2.5vl:3b entry stayed in the file. Reset to defaults would give [] not the original ['gemma4:e2b-it-qat']. Restored the two changed keys by an SSH edit (vision_model_routing_order back to ['gemma4:e2b-it-qat'], capabilities.internet_downloads back to false) then reloaded the plugin at once. Whole file compared with the backup after: identical.",
+    "note": "A removed model's name stays in a saved try order until someone resets it. Not a fail; worth knowing."
+  },
+  "verdict": "PASS for the vision list (the picked model joined last, gemma4 kept, no duplicate, panel closed while the download ended, no reopen before the file was read). The text-list half is BLOCKED: the Deck has one answering model, so a saved text order cannot be made from the picker. Session to decide whether the vision result is enough.",
+  "newFinding": {
+    "picker": "The try-order pickers cannot save a one-model list, so on a Deck with one model there is no way to make a saved (non-automatic) order from the screen.",
+    "staleName": "A model removed from the Deck stays in the saved try order file."
+  }
+}

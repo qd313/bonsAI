@@ -1,0 +1,15 @@
+{
+  "row": "F4-EMPTY",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 22:21 EDT (read of the page)",
+  "screen": "Deck's own screen (854x454, dpr 1.5)",
+  "setup": "Eight chats on the Deck, so no new chat was made. Used the existing first chat 'wheatley fight' (176 turns), Show details open on the Session tab (tab label 'Session . 87').",
+  "pressed": "Nothing new. Route A was already in that chat: an earlier helper had sent bonsai:vac-check and the reply is there. Read the page's Session tab labels with deck_readPage.",
+  "seen": {
+    "sessionTabRows": "The Session tab lists 15 turn rows in the read, among them 'bonsai:vac-check 76561197983599210' (the typed command's own turn). So a typed command's reply DOES get a row in the Session tab.",
+    "otherContent": "Sum up again button, 'What the AI remembers 81 turns', 'Chip 1 of 7' ladder.",
+    "smallestOtherChats": "Six other chats are 2-4 turns, each with normal answers (previous session: all chips present). Adding a command turn to any of them would still leave chip rows from their real answers."
+  },
+  "verdict": "BLOCKED. Route A cannot give an empty Session tab: the command reply gets a row itself, and every chat has other turns with chips. Route B (editing a chat file) was not allowed. The Down-from-Sum-up walk was not run because there was no empty tab to run it on.",
+  "newFinding": null
+}

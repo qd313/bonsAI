@@ -1,0 +1,12 @@
+{
+  "row": "SOFT-PREDICT-04",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Before: ask_think_effort medium, reply_verbosity balanced, ask_mode strategy. Set through the Ollama tab controls: Thinking -> Off, Reply style -> Detailed. Read file: off / detailed.",
+  "pressed": "Question (script, then Ask): give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter",
+  "seen": "Plugin log: num_predict=1600 think=False; stream done done_reason=stop eval_count=403; soft_continues=0. Finished text 1,391 letters. A page sampler read the answer every 250 ms (98 samples over 24.7 s): no 'Continuing', no fence text, no JSON.",
+  "restore": "Thinking back to Balanced (file: medium), Reply style back to Balanced (file: balanced); both read back from the file.",
+  "verdict": "BLOCKED again: done_reason=stop at 403 tokens against a wall of 1,600, so no join point happened.",
+  "newFinding": null
+}

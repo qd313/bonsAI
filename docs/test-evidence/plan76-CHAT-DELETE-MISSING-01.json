@@ -1,0 +1,11 @@
+{
+  "row": "CHAT-DELETE-MISSING-01",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "index.json listed eight chats (ls of chat_slots showed eight files plus index.json) at the start of this part.",
+  "pressed": "Nothing.",
+  "seen": "Eight chats already, so no scratch chat was made (a new chat would have deleted the oldest). The first chat 'wheatley fight' is the only chat used for turns and was not deleted.",
+  "verdict": "BLOCKED (eight chats, no test chat to delete).",
+  "newFinding": null
+}

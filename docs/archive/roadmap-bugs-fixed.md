@@ -2380,3 +2380,24 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 
 **Closed 2026-09-28.** One line added to `docs/design-tokens.md`, under the `--bonsai-ui-accent-toned` row. Docs only, so no Deck check applies.
 
+
+## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 2)
+
+_Copied line for line from the roadmap, nothing reworded, with the closing note added under each entry._
+
+- ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** —
+  **VERIFY, fixed 2026-09-27 (plan 72, `409cd3aa`).** Ticking the first tickable model in a fresh download picker now correctly
+  only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
+  though, it did not join the saved order used to pick which model answers a question. That half is now
+  fixed in the back end.
+  Deck check owed: row **PULL-TRY-ORDER-01** (save a try order, download from the picker, close the menu; the model is last).
+
+**Closed 2026-09-28 (plan 76), passed on the Deck by the session's ruling.** With the panel closed, the picture-model order took the new download (qwen2.5vl:3b) last, nothing lost or doubled, and the file was unchanged after reopening. The answering-model list could not be tried: this Deck has one answering model, so no saved order could be made from the picker; it goes through the same step. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`. A removed model's name staying in the saved order is a new roadmap bug.
+
+- ★ `[ui]` **Hidden for 0.6.0: six "[beta]" chips, "Open Steam Input config", the quick-launch chip and its setup
+  commands, Find LAN and its chips, and the UI scale section** — **VERIFY, landed 2026-09-27 (plan 72, `169edb07`, `12227980`,
+  `4dc2fbdc`, `8b27e38e`), the maintainer's calls in plan 71 § 6 item 1.** Find LAN is gone, `docs/test-evidence/plan72-F-HIDDEN.json`; UI scale
+  still shows there only because that Deck has the Developer tab on. Deck check owed: each item with the Developer tab off.
+  **2026-09-27:** the Steam ban lookup's key box stays on the Developer tab for now, the maintainer's call.
+
+**Closed 2026-09-28 (plan 76), passed on the Deck (row PLAN72-F-HIDDEN).** With the Developer tab off: Settings opens on Screenshot quality with no UI scale controls; both shortcut-setup commands (and the slash form) answer "That command isn't available in this version." with no button; a 6-minute chip watch (1,204 reads, 23 labels) showed none of the ten hidden chips; with the tab back on, the command gives full steps. Find LAN's half rests on its unit test. Evidence `docs/test-evidence/plan76-PLAN72-F-HIDDEN.json`.

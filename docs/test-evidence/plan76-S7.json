@@ -1,0 +1,11 @@
+{
+  "row": "S7 - the 'What went wrong?' block ended under the dock",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Deck's own screen. Strategy mode (not Speed; changing the mode was not needed). Newest answer 'Soul Sanctum', long, unrated.",
+  "pressed": "Mark reply helpful row, Right to 'Not really', A (no reason picked).",
+  "seen": "Reply-actions block (holds 'What went wrong?' and the reason chips): top 134, bottom 311. Reason chips: Bad info / Wrong game or topic at 220-248; Spoiled it / Too long / Too short at 254-282; Hide details at 294-309. Dock (question text row) top 324. So the block's bottom edge is 13 px above the dock top; every chip visible.",
+  "verdict": "NOT REPRODUCED (one try, long Strategy answer, Deck's own screen; short answer and Speed mode not tried).",
+  "newFinding": null
+}

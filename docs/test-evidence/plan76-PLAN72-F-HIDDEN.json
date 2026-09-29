@@ -1,0 +1,41 @@
+{
+  "row": "PLAN72-F-HIDDEN",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 22:27-22:47 EDT",
+  "screen": "Deck's own screen (854x454, dpr 1.5)",
+  "setup": {
+    "chat": "first chat 'wheatley fight' (eight chats on the Deck, so no scratch chat; commands added 4 turns to it)",
+    "keysBefore": {"show_developer_tab": true, "ui_scale_auto_enabled": true, "ui_scale_manual_profile": "handheld"},
+    "devTabOff": "Settings tab, Show Developer tab switch, A; file read show_developer_tab false; tab strip then read LB main ollama settings perms about RB (no dev)",
+    "pinnedChips": "none (dev_frozen_test_chips is [])"
+  },
+  "stepA_settingsTab": {
+    "seen": "With the Developer tab ON the UI scale section shows first (by design). With it OFF: first control 'Set screenshot quality to Save memory' (section SCREENSHOT QUALITY); Up from it went to the 'Settings tab' header; no 'UI scale', 'Apply UI scale' or 'Adjust UI automatically' in any label on the tab (labels list read from the page).",
+    "verdict": "PASS"
+  },
+  "stepB_commands_devOff": {
+    "bonsai:shortcut-setup-deck": "reply text: \"That command isn't available in this version.\" (no other text, no controller button)",
+    "bonsai:shortcut-setup-stadia": "same single line, no button",
+    "/bonsai:shortcut-setup-deck": "same single line, no button",
+    "verdict": "PASS"
+  },
+  "stepC_chipWatch": {
+    "method": "sampled the chip label every 200 ms in the page for 60 s plus 300 s (1,204 samples in the second run, ring on the Ask button all the time, not on a chip); kept only labels that held still for 5 samples (1 s).",
+    "labelsSettled": ["Which Ollama essentials should I pull for this Deck?", "What's the efficiency sweet spot for this game?", "How can I optimize for battery life?", "How do I turn on Thinking mode?", "What's ahead (without spoilers)?", "How do I use strategy mode?", "I'm stuck - what should I try next?", "What should I do if Ask times out?", "How well does this game run on Deck?", "How do I balance FPS and battery?", "Which Ollama model fits my Deck setup?", "What TDP should I use for menus and idle?", "What are the best FSR settings?", "How do I fix Steam Input for this game?", "What is Caveman reply style?", "Describe what you see in this screenshot", "Where do your game tips come from?", "How do I ask about a game that isn't running?", "What do the model policy tiers mean?", "Help me troubleshoot a Proton issue", "What settings should I use?", "How do I fix stuttering?", "Any known issues running this on Deck?"],
+    "distinctCount": 23,
+    "hiddenLabelsSeen": "none of the ten (six beta chips, Open Steam Input config, quick-launch chip, two Find LAN chips). 'How do I fix Steam Input for this game?' is an ordinary chip, not the beta 'Are there issues with my Steam Input layout?' one.",
+    "watchLength": "about 6 minutes (the runbook asked for 10; the session allowed 6)",
+    "verdict": "PASS (a watch only samples)"
+  },
+  "stepD": "Skipped by the session (Run AI on this Deck stays on).",
+  "stepE_putBack": {
+    "developerTab": "Show Developer tab switched on again; file reads show_developer_tab true; ui_scale_auto_enabled true and ui_scale_manual_profile handheld unchanged",
+    "verdict": "done"
+  },
+  "stepB_again_devOn": {
+    "bonsai:shortcut-setup-deck": "answered with the full summary ('bonsAI cannot create Steam Input macros automatically ... Steps (summary): Open Controller settings ... Guide Button Chord Layout ...'). No 'Open Controller settings' button was on the page (the text says it shows only if enabled in Permissions). So the gate is a gate.",
+    "verdict": "PASS"
+  },
+  "verdict": "PASS for A, B, C, E and the dev-on repeat. D not run (session choice). Find LAN part stays covered only by the unit test.",
+  "newFinding": null
+}

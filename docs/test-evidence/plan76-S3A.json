@@ -1,0 +1,15 @@
+{
+  "row": "S3a - newest answer's turn folded shut after switching tabs and back",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Chat 'wheatley fight'; newest answer 'what does vsync do on the steam deck in one sentence'; Show details open (A on Show details).",
+  "pressed": "RB then LB (Ollama and back); repeat with RB RB then LB LB (Settings and back). Ring stayed in the panel.",
+  "seen": {
+    "before": "turns drawn 1, newest turn text 688 characters, 'Hide details' present, '95 earlier' pill",
+    "afterOllamaTrip": "turns drawn 1, newest turn text 351 characters, 'Show details' present again (details folded), earlier count still 95, answer still drawn, ring still on the Show details divider",
+    "afterSettingsTrip": "same as after the Ollama trip"
+  },
+  "verdict": "NOT REPRODUCED for the sighting as worded (the turn did not fold into the earlier group, the answer stayed drawn). Observation: the open Show details section closes itself on a tab switch, 2 of 2. May be by design; recorded so the session can decide.",
+  "newFinding": "Show details section folds closed after RB/LB tab round trip (688 -> 351 characters, 2 of 2)."
+}

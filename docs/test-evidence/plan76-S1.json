@@ -1,0 +1,17 @@
+{
+  "row": "S1 - Down does not leave an unrevealed spoiler block",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 evening, 22:30-23:05 EDT",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)",
+  "setup": "Chat 'wheatley fight', Strategy, covers on. Asked 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'; reply had two covers (first section, and a last section) around one paragraph, then a two-choice menu (A. Starting out in Dirtmouth / B. Fighting the boss in the Soul Sanctum). Nothing running. Covers never pressed.",
+  "pressed": "Up walk from Ask down to the reasoning line, then Down walk from the question row (deck_runSequence, run twice). One press at a time.",
+  "seen": {
+    "run1_down": "Down onto cover 1 (100% visible). Next Down: ring did not move (same element), visibility 67% (covered by the tab bar). Next Down: moved to cover 2 (89% visible, covered by the Copy icon, the known false alarm). Next Down: did not move again. Next Down: moved to the branch button 'A. Starting out in Dirtmouth'.",
+    "run2_down": "Same result: one dead Down on each cover before the ring left (2 of 2 runs, both covers).",
+    "up_direction": "Up: A -> cover 2 -> cover 1 -> Show reasoning, one press each, no dead press.",
+    "leavesEventually": true,
+    "ringNeverLost": true
+  },
+  "verdict": "REPRODUCED (milder shape than the 2026-09-04 sighting). Element: the spoiler cover (bonsai reply cover section, class Panel Focusable inside the turn). Each cover holds the ring for one extra Down (one dead press), then the next Down leaves. Cover 1 at the dead press sat 67% visible behind the tab bar. Press count to pass both covers going down: 5 Downs for 2 covers (3 moves, 2 dead).",
+  "newFinding": null
+}

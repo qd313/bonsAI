@@ -79,6 +79,8 @@ starts work outside this.
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
   (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
   keyboard on the question box — worth trying on this hidden-block case too.
+  **2026-09-28 (plan 76):** reproduced in a milder form. Each cover took one extra Down (the first did nothing, and the cover then
+  sat 67% behind the tab bar), 2 of 2 runs; Up had none. Handed to lane 3. Evidence `docs/test-evidence/plan76-S1.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
   more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
   same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
@@ -102,14 +104,17 @@ starts work outside this.
   **2026-09-28 (plan 76, build `39c17312`):** reproduced, with a trigger. It stays open through D-pad moves and 75 s of nothing, and hides itself within about 2 s of a new question being put in the question box. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json`.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
+  **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
-- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the
-  speaker icon** — **PARTIAL, seen three times now (2026-09-26).** [Detail](roadmap-details.md#l3-and-2d-findings).
-  **2026-09-27 (plan 72, `17253191`, `f4613e2d`):** the row now survives closing and reopening the panel, passed on the Deck (row **F3-KEEP**, `docs/test-evidence/plan72-F3-KEEP.json`). A chat switch still loses it; the next step is in plan 72 § 7, the 15:20 entry.
+  **2026-09-28 (plan 76):** the accent-level one reproduced: after choosing an accent level nothing held the ring, and the first LB
+  landed on "Show Developer tab" and did not switch tabs (`docs/test-evidence/plan76-S3C.json`); going to a fix this session. The
+  folded-turn one did not reproduce (`docs/test-evidence/plan76-S3A.json`).
 - ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
   only lets Up leave one chip at a time (and once Down stuck on it, flow L7); two confidently wrong answers.
   [Detail](roadmap-details.md#l3-and-2d-findings).
+  **2026-09-28 (plan 76), the chip ladder one measured:** the ladder steps one chip per press both ways, 7 Ups for 7 chips, no dead
+  press. Whether one chip per press is wrong is the maintainer's call. Evidence `docs/test-evidence/plan76-S4.json`.
 - ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
@@ -136,28 +141,47 @@ starts work outside this.
   **Sighting, 2026-09-23:** seen again under the "Context: no active game detected" line. Evidence
   `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
   **Not reproduced 2026-09-27 (plan 72):** not seen with text behind the dock, `docs/test-evidence/plan72-A8-BOTTOM-STRIP-READING.json`.
+  **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `docs/test-evidence/plan76-S6.json`.
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **OPEN, found on the Deck
   2026-09-23 (flow H).** Reloading the plugin mid-download killed the pull at 16%; asking again picked up
   from the same partial file rather than starting over, so nothing was lost, but a running download does
   not survive a reload. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+- ★ `[ollama]` **A removed model's name stays in the saved try order** — **OPEN, found 2026-09-28 (plan 76).** After a model is
+  removed from the Deck, its name stays in the saved order until someone resets it, and the picker cannot clear it.
+  Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
 - ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
+  **2026-09-28 (plan 76):** not reproduced, 6 tries by two routes. Evidence `docs/test-evidence/plan76-S8.json`.
 - ★ `[layout]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
   (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+  **2026-09-28 (plan 76):** not reproduced; the block ended 13 px above the dock. Evidence `docs/test-evidence/plan76-S7.json`.
 - ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
   **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
+  **Cause found 2026-09-28 (plan 76 lane 4):** not a leftover in the code. The Strategy prompt makes a choice menu mandatory on
+  every first Strategy turn, and with no game running or named the model took the game from the chat's earlier question. The fix
+  is prompt wording in the back end (a carve-out for questions about the Deck itself, like the one for model-policy questions),
+  which needs an answer-quality run, so not this week.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[reply]` **The back end's name-covering safety net only knows three-backtick blocks** — **OPEN, found 2026-09-28 by reading
+  the code (plan 76 lane 1), not seen on the Deck.** `py_modules/backend/services/response_verify.py` matches backtick fences only,
+  so a `~~~` hidden block the model writes off-script is never checked by it. Low risk: the model is told to use backticks.
+- ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **OPEN, found 2026-09-28
+  by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
+  aloud still hide it.
+- ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **OPEN, found 2026-09-28 by reading the code (plan 76 lane 1),
+  not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
+- ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
+  buttons** — **OPEN, a known edge of `e5d1ceb9` (plan 76 lane 4), not seen on the Deck.**
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
 - ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28
   (plan 75).** Seen twice: once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`); once it never
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
-- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **OPEN,
-  found 2026-09-28 (plan 74), seen once.** The row, with Open Permissions, sits on the new-chat spot. Evidence
-  `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes).
+- ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **OPEN, found 2026-09-28 (plan 74),
+  confirmed as a separate effect by plan 76 lane 4.** Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
 - ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **OPEN,
   found 2026-09-28 (plan 74).** It should go back to its button, the same family as the "Update Ollama and models?" box
   fixed this wave. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
@@ -178,11 +202,12 @@ starts work outside this.
 - ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **OPEN, found 2026-09-28
   (plan 74).** It says "This reply used an 'open model'" although no reply is involved. Evidence
   `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`.
-- ★ `[ui]` **Small leftovers from plan 74** — **OPEN, found 2026-09-28 (plan 74's lanes).** The "Request cancelled."
-  bubble still has a Copy button; the rarely seen "nothing to sum up" pop-up still says "the whole chat still fits";
-  removing a model inside the plugin does not reset its 30-second memory, so the note-search hint can take up to 40 s.
-- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **OPEN, found 2026-09-28 (plan 75).**
-  For example "we wander,…". Seen in notification 3 of `docs/test-evidence/t75-feature-F2-HARD-LINES.json`.
+- ★ `[ui]` **Small leftovers from plan 74** — **OPEN, found 2026-09-28 (plan 74's lanes).** Removing a model inside the plugin
+  does not reset its 30-second memory, so the note-search hint can take up to 40 s. This is with plan 76 lane 5. The other two
+  leftovers are fixed, see Verify.
+- ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
+  May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
+  351 characters).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -197,16 +222,10 @@ starts work outside this.
   (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
   finished answer. [Detail](roadmap-details.md#flow-l10-findings).
   **Not reproduced 2026-09-27 (plan 72):** the ring was never lost, `docs/test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`.
+  **2026-09-28 (plan 76):** not reproduced again, 2 tries. Evidence `docs/test-evidence/plan76-S9.json`.
 - ★★ `[reply]` **With nothing running, the decode effect slows long answers** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** About 37 frames a second on a 2,900-letter answer, against about 50 on shorter
   ones; not yet known whether it was always so. [Detail](roadmap-details.md#flow-l10-findings).
-- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **OPEN, found 2026-09-28 (plan 75).** They find
-  hidden blocks by pairing backtick runs anywhere and do not know `~~~` fences, so a `~~~` spoiler, or a closer glued onto a
-  sentence, could be copied or read aloud. Found by reading the code (`src/utils/answerCopyText.ts`, `src/utils/answerReadableText.ts`);
-  not yet seen on the Deck. The popup itself is safe: it reads blocks the way the panel does.
-- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **OPEN, found 2026-09-28 (plan 75).**
-  The panel's chunk splitter and its live-answer parser know only three backticks. Suspected from reading
-  `src/utils/splitResponseIntoChunks.ts` and `src/utils/streamMarkdownPrepare.ts`; not yet seen on the Deck.
 - ★★ `[chat]` `[focus]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its
   question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
   [Detail](roadmap-details.md#flow-l7-findings).
@@ -507,12 +526,31 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
-- ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** —
-  **VERIFY, fixed 2026-09-27 (plan 72, `409cd3aa`).** Ticking the first tickable model in a fresh download picker now correctly
-  only queues it instead of starting the download right away (fixed, see Done); once it finishes downloading,
-  though, it did not join the saved order used to pick which model answers a question. That half is now
-  fixed in the back end.
-  Deck check owed: row **PULL-TRY-ORDER-01** (save a try order, download from the picker, close the menu; the model is last).
+- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 1, `69544612`).** For example "we wander,…" (seen in `docs/test-evidence/t75-feature-F2-HARD-LINES.json`). Unit test in
+  `src/utils/toastAnswerPreview.test.ts`. Deck check owed: row **T75-FEATURE-F1-REAL-POPUP** (read the second line's end).
+- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **VERIFY, fixed
+  2026-09-28 (plan 76 lane 4, `7c9006cc`).** The new-chat spot no longer shows the last reply's permission row. Was found
+  2026-09-28 (plan 74), `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes). Deck check owed: row **P76-NEWCHAT-NO-PERM-ROW**.
+- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** —
+  **VERIFY, fixed 2026-09-28 (plan 76 lane 4, `e5d1ceb9`).** Switching chats now keeps the newest answer's Helpful row. Seen
+  three times (2026-09-26); closing and reopening the panel was fixed earlier (row **F3-KEEP**, passed).
+  Deck check owed: row **P76-HELPFUL-AFTER-SWITCH**. This is a known issue in the 0.6.0 release notes (plan 72 § 8); that line
+  comes off only once this Deck row passes. [Detail](roadmap-details.md#l3-and-2d-findings).
+- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **VERIFY, fixed 2026-09-28 (plan 76 lane 4).** The "Request
+  cancelled." bubble no longer has a Copy button (`0b2d2f9b`; Deck check owed: row **P76-CANCELLED-NO-COPY**). The rarely seen
+  "nothing to sum up" pop-up no longer says "the whole chat still fits" (`d647e4f7`; unit test only, since the pop-up
+  appears only in a race and cannot be made on purpose).
+- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **VERIFY, fixed 2026-09-28 (plan 76 lane 1,
+  `3c4f81f7`).** Copy and Read aloud now find hidden blocks the way the panel does, including `~~~` ones and a closer glued onto
+  a sentence. These odd shapes cannot be made to happen on purpose (the model is told to write three backticks), so the fix rests
+  on the unit tests in `src/utils/spoilerFenceOddShapes.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION** (a normal
+  covered answer still draws its covers and sections, and no hidden word shows while it arrives).
+- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 1, `14d79aa4`, `7a2299c5`).** A `~~~` block now stays one block on screen, and the live answer's pieces never split a
+  block, so a hidden block's second half cannot show while an answer arrives. The odd shape cannot be made to happen on purpose,
+  so it rests on the unit tests in `src/utils/markdownFenceReader.test.ts`, `splitResponseIntoChunks.test.ts`,
+  `streamMarkdownPrepare.test.ts` and `streamMarkdownPieces.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -521,11 +559,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★ `[chat]` **Deleting a chat whose file is already missing leaves its row in the list** —
   **VERIFY, fixed 2026-09-27 (plan 72, `b7339ea4`).**
   Deck check owed: row **CHAT-DELETE-MISSING-01** (remove a chat file over SSH, then delete it in the list).
+  **Blocked 2026-09-28 (plan 76):** the Deck already holds eight chats, so no test chat could be made without deleting one of the
+  maintainer's. Evidence `docs/test-evidence/plan76-CHAT-DELETE-MISSING-01.json`.
 - ★★ `[reply]` **Picking a branch menu choice shows the model's own internal tag instead of plain words** —
   **VERIFY, fixed 2026-09-26 (helper K, `2e13421d`), mostly passed on the Deck 2026-09-26.** The waiting
   line, the turn header and Show details' own "This answer" tab all show the friendly wording now. **Still
-  owed:** Show details' separate "Session" tab still lists the raw tag for the same turn. Row
-  **KB-FOLLOWUP-QUOTE-02**. [Detail](roadmap-details.md#flow-l6-findings).
+  owed:** Show details' separate "Session" tab still lists the raw tag for the same turn.
+  **2026-09-28 (plan 76 lane 4, `cba792e8`):** the Session tab half is fixed too (it now names a branch pick in plain words);
+  row **KB-FOLLOWUP-QUOTE-02** is still owed on the Deck. [Detail](roadmap-details.md#flow-l6-findings).
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
   the ring on the chip. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer**, from
@@ -547,11 +588,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 ### Features that need verification
 
-- ★ `[ui]` **Hidden for 0.6.0: six "[beta]" chips, "Open Steam Input config", the quick-launch chip and its setup
-  commands, Find LAN and its chips, and the UI scale section** — **VERIFY, landed 2026-09-27 (plan 72, `169edb07`, `12227980`,
-  `4dc2fbdc`, `8b27e38e`), the maintainer's calls in plan 71 § 6 item 1.** Find LAN is gone, `docs/test-evidence/plan72-F-HIDDEN.json`; UI scale
-  still shows there only because that Deck has the Developer tab on. Deck check owed: each item with the Developer tab off.
-  **2026-09-27:** the Steam ban lookup's key box stays on the Developer tab for now, the maintainer's call.
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
   (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
   instead of the old outline. Rows 02 to 06 and 08 passed by measurement; row 09 failed and is filed as its
@@ -590,6 +626,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   was clean, no half-drawn menu block and no stray JSON, but the reply stopped on its own at 1,117 tokens
   against a 2,112-token limit, so it never had to continue and the row's own join point never happened.
   [Detail](roadmap-details.md#soft-reply-length-cap-and-thinking-budget).
+  **SOFT-PREDICT-04 blocked again 2026-09-28 (plan 76):** cap 1,600 tokens, the reply stopped by itself at 403. Evidence
+  `docs/test-evidence/plan76-SOFT-PREDICT-04.json`.
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
   named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named;
   the strip is taller so the chat row's dots no longer show under it. **Deck run 2026-09-18:** rows 01, 02,
@@ -762,6 +800,8 @@ ones from this month are D81 to D88.
   answer-lines lane added the missing log line. Row **KB-TRANSPARENCY-01**. **All attached names confirmed
   on the Deck 2026-09-23**, both with nothing running and with Half-Life 2 running. **Still owed:** a case
   where a note is dropped for space — not yet reproduced despite trying. [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
+  **Blocked 2026-09-28 (plan 76), dropped-for-space half still owed:** 14 probe runs over 7 games in Strategy and Expert, none cut.
+  Evidence `docs/test-evidence/plan76-KB-TRANSPARENCY-01.json`.
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
   and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
   — the only stop still missing is the chip ladder inside the open block. Why the tip and
@@ -874,6 +914,18 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-28 (plan 76, docs sweep 2):**
+
+- ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** — **DONE 2026-09-28,
+  passed on the Deck by the session's ruling (row PULL-TRY-ORDER-01).** The picture-model order took the new download last, with
+  nothing lost or doubled, while the panel was closed. The answering-model list could not be tried because this Deck has one
+  answering model; it goes through the same step. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
+- ★ `[ui]` **Hidden for 0.6.0: the beta chips, "Open Steam Input config", the quick-launch chip and its setup commands, Find LAN and
+  its chips, and the UI scale section** — **DONE 2026-09-28, passed on the Deck (row PLAN72-F-HIDDEN).** With the Developer tab
+  off, Settings has no UI scale controls and the shortcut-setup commands say "That command isn't available in this version." A
+  6-minute chip watch showed none of the ten hidden chips. Find LAN's half rests on its unit test, since this Deck runs the AI
+  itself. Evidence `docs/test-evidence/plan76-PLAN72-F-HIDDEN.json`.
 
 **Closed 2026-09-28 (plan 76, docs sweep 1):**
 

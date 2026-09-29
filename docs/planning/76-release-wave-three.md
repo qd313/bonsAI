@@ -1,7 +1,7 @@
 # Plan 76 — release wave three: a big bug session, then an unattended Deck pass
 
-**Status: agreed 2026-09-28, waiting for the maintainer's go.** The four questions are answered
-([below](#questions-for-the-maintainer)). Nothing is built yet. Asked for by the maintainer: "Let's get ready to do a massive bug fix session … once we have
+**Status: finished 2026-09-29.** Results, the code summary and a short developer guide are [below](#results).
+Asked for by the maintainer: "Let's get ready to do a massive bug fix session … once we have
 the bugs fixed, do an automated QA pass with the controller rig … I hope it doesn't require me to babysit."
 
 Part of [plan 71](71-merge-experimental-into-main.md), Stage B: the third pass of bug fixing before the last call on
@@ -171,6 +171,198 @@ All answered 2026-09-28:
 4. **Other chats:** none. This session has the repo and the Deck to itself.
 
 New questions that come up during the session go here, with the choice taken meanwhile.
+
+## Results
+
+**36 fixes landed on the working branch, and all checks passed at every landing. 29 Deck checks passed.** Six
+helpers worked side by side in their own copies of the repo, and a seventh made one try at the D-pad trap. The Deck
+ran six blocks through the night with nobody at it. Every change is on the roadmap: fixed and proven items are in
+Done, and anything still owed is in Verify with the reason.
+
+**What a player will notice:**
+- Spoilers are safer. A hidden block written in an unusual way can no longer be copied, read aloud, or drawn half
+  as plain text while an answer arrives.
+- "Remove knowledge base?" and "Remove model" now open on "Not now". One stray A press no longer deletes a
+  long download.
+- The ring comes back to the button you pressed after a box closes, across the Ollama tab, the library, the AI
+  models screen and the accent menu.
+- Walking down a long answer, the ring no longer sits on a word or a spoiler cover that has scrolled off the
+  screen. An opened cover stays open while you type. A cover can be opened from wherever the ring lands.
+- "Was this helpful?" comes back after switching chats.
+- The "New chat" spot no longer shows another chat's permission row.
+- The Context line no longer flashes "no active game" when you reopen the panel over a game.
+- A model download interrupted by a plugin reload picks up again by itself.
+- A question about a game the library doesn't know no longer gets the chat's own game's notes.
+- Tidy-ups: the raw "[Strategy follow-up]" tag no longer flashes after picking a choice. The reply-ready popup no
+  longer ends on a comma. The "Tier 2" boxes no longer mention a reply that doesn't exist.
+
+**Two lines can come off the 0.6.0 release notes' known issues** (done in plan 72, § 8): "Was this helpful?"
+disappearing after a chat switch, and a download stopping on a plugin reload.
+
+**The D-pad trap, now understood.** This is the rare "Down stops working" bug named in the release notes. It
+happens when Quick Access is reopened over a running game and its window has not got the focus. Each press then
+moves the panel's own focus while Steam's highlight stays put, and A acts on the highlight. The fix asks the
+window to take the focus back. On the Deck, all six reopens after the fix came up with the window focused and no
+split, where three of six went bad the night before. It also never pulled focus from the running game. That is a
+strong sign, not proof: the entry stays open to watch, and whether its two release-notes lines stay is your call
+(below).
+
+**The D-pad trial (Sonnet 5.5 high instead of Opus).** 11 D-pad fixes were checked on the Deck. 10 passed the first
+time. The miss was serious: walking Down past a closed spoiler cover looped, which traps the player. Neither the
+helper's own tests nor my review before landing caught it, because the tests did not copy the way Steam scrolls the
+page by itself. The helper's second round fixed it and passed on the Deck, with tests that now copy that scrolling.
+For comparison, Opus high passed 5 of 6 the first time in plan 74. My reading: Sonnet high is good enough for D-pad
+fixes whose cause is already measured, **provided** every brief asks for tests that copy Steam's own scrolling on
+focus, and the session reviews for loops, not only for landing spots.
+
+**Found tonight and filed** (all on the roadmap):
+- A spoiler-cover section's top third can sit under the tab bar after a scroll. This is small.
+- The popup stays up about 10 seconds instead of 8.
+- Show details folds shut after switching chats or tabs. It may be by design.
+- Three code-reading findings about unusual hidden blocks, none seen on the Deck.
+- A stale "return the ring here" note can still be left by three Ollama-tab buttons when the parental lock is on.
+- About 6.6 GB of half-downloaded model files from cancelled test downloads are left on the Deck. To clear them,
+  run the command under "Calls and chores for you" below.
+
+**Not done this session, and why:**
+- Four checks can't run on this Deck:
+  - It has one answering model, so the answering-model try order can't be tried.
+  - It already holds eight chats, so there is no room for a test chat to delete.
+  - No note is long enough to be cut for room.
+  - The long reply stops by itself before the length limit.
+- The Speed-mode tip check was left alone on purpose: your call from 2026-09-05.
+- The Strategy menu that borrows the previous game needs a prompt change and an answer-quality run, so not this
+  week.
+- The rare one-off sightings that did not show up again stay open, each with tonight's dated "not seen again" line.
+
+### Calls and chores for you
+
+0. **The D-pad trap's two lines in the 0.6.0 release notes.** Drop them now that a fix passed 6 of 6, or keep one
+   softened line until a longer play session confirms it? My lean: keep one short line for this release.
+1. **The down-and-up mirror walk has one stop by design.** After a Down press scrolls past a cover, the ring sits on
+   that section's box; walking Up skips the box. Fine as it is, or should Up stop there too? That needs extra rules
+   for Up.
+2. **The rated thumbs look the same as live ones.** After "Not really", both thumbs are switched off but not dimmed.
+   A look by eye.
+3. **Reading aloud beside a game:** does the game stutter? The machine numbers are fine, and it takes an eye to judge.
+4. **Clear the 6.6 GB of partial downloads** on the Deck if you want the space back. Ollama doesn't list them, and
+   restarting its server usually clears unused files. The session did not delete them.
+5. **To unblock the four checks:** a second answering model on the Deck; one free chat slot; a test build with a
+   lower reply limit (or accept the unit tests for those two rows).
+
+## Code summary (what changed, for the maintainer)
+
+**Spoiler safety** (lane 1, `3c4f81f7` `14d79aa4` `7a2299c5` `69544612`). A new `src/utils/markdownFenceReader.ts`
+reads fenced blocks the way the panel's markdown renderer does: three or more backticks or tildes, closed only by
+their own matching line. Copy (`src/utils/answerCopyText.ts`), Read aloud (`src/utils/answerReadableText.ts`), the
+section cutter (`src/utils/splitResponseIntoChunks.ts`), the live parser (`src/utils/streamMarkdownPrepare.ts`) and
+the live piece-splitter (`src/utils/streamMarkdownPieces.ts`) all use it now. The popup's own reader moved there from
+`src/utils/toastAnswerPreview.ts`, which also drops a dangling comma before "…".
+
+**Boxes and the ring on the Ollama tab, library and Settings** (lane 2, eleven commits).
+- **Safe first:** Steam always opens a confirm box with the ring on its OK button, so "Not now" became the OK
+  button and the action moved to the middle one. This covers "Remove knowledge base?" in
+  `src/components/KnowledgeBaseSection.tsx`, the per-model boxes in `src/hooks/usePullModelTier2Confirm.tsx` and
+  `src/hooks/usePullModelDeleteConfirm.tsx`, and "Enable Tier 2 before pulling?" in
+  `src/hooks/usePullModelSubmitSelected.tsx`.
+- **The ring returns after a box:** buttons register a return id in
+  `src/features/plugin-shell/modalReturnFocusRegistry.ts`. `src/utils/rememberReturnWhileBoxOpens.ts` drops that note
+  when no box was shown.
+- **A control that disappears hands the ring on:** a new hook, `src/hooks/useHandRingOnGone.ts`, catches the moment
+  React removes a control that held the ring, and passes the ring on through Steam's own transfer. It is used by
+  the meaning-search Pull button and by the accent menu in `src/components/SettingsTabAccentIntensityMenuPopover.tsx`.
+- **Cancel restores the licence:** Cancel on the AI models screen (`src/components/OllamaModelsHubModal.tsx`) writes
+  back the licence value the screen opened with.
+- **Library status survives a tab rebuild:** a module-level marker, `src/utils/kbDownloadMarker.ts`, carries "a
+  download is running" across the tab rebuild that a Decky popup's close causes.
+
+**Chats and the rows under an answer** (lane 4, seven commits).
+- **The Helpful row after a chat switch:** `src/hooks/useChatSlots.ts` hands the saved newest turn back as the
+  "last exchange" through `restoreLastExchangeFromSavedChat` in `src/hooks/useAskSessionSnapshotActions.ts`. The
+  turn is marked as already in the thread, so the next Ask doesn't replay it.
+- **The rating is remembered after a switch:** `src/hooks/useReplyFeedbackChips.ts` also stores each rating under a
+  key without the request id, because a saved answer has none.
+- **Smaller fixes:**
+  - The Session tab's friendly branch wording, in `src/components/SessionContextStrip.tsx`.
+  - The waiting lines' quote, in `py_modules/backend/services/bonsai_stream_tags.py`.
+  - The raw prompt is no longer written into the question box, in `src/hooks/useStrategyBranchActions.ts`.
+  - The new-chat spot hides three lines in `src/components/MainTabChatTranscript.tsx`.
+  - The sum-up pop-up wording, in `src/features/chat-sum-up/`.
+
+**Walking an answer** (lane 3, `00049cc0` `3576846c` `b2a60359` `8151dd54`).
+- **Why covers closed themselves:** a cover closed when a question was typed because the answer's markdown rules
+  were rebuilt on every keystroke. The explain-further callback now goes through a ref in
+  `src/components/MainTabBonsaiAiMarkdownChunk.tsx`.
+- **The stop rules** are in the header drawing of `src/utils/answerBubbleNavigation.ts`, with covers registered in
+  `src/utils/spoilerFenceRegistry.ts`:
+  - Every section is a stop.
+  - Covers and underlined words inside a section are each a stop once.
+  - A press that scrolls moves the ring off a stop carried out of view and onto its section.
+  - The last inline stop is remembered while the ring stays in that section. This prevents the loop.
+- **Tests that copy the Deck:** `src/test-harness/deckAnswerWalk.ts` models the Deck's real numbers and Steam's own
+  scroll after focus, in three variants.
+
+**Back end** (lane 5, six commits).
+- **Download resume:** `py_modules/backend/services/ollama_pull_resume_service.py` (new) keeps a small note of
+  running downloads and restarts them when the plugin loads. `main.py` and
+  `py_modules/backend/services/ollama_local_setup_rpc.py` wire it in. A cancelled download never returns, and after
+  two restarts it gives up.
+- **Another game's notes:** `py_modules/backend/services/kb_other_game_named.py` (new) holds a short list of
+  well-known games the library doesn't have, with everyday words left out, and `game_ai_request.py` uses it.
+- **Choice menus:** `strategy_guide_parse.py` accepts the menu shapes models drift to.
+- **The model memory:** `ollama_embed_service.py` clears its "is the model there" memory when a model is removed.
+- **Palworld's wiki:** `scripts/fetch_wiki_live_pages.py` falls back to the plain page when Palworld's wiki refuses
+  the page-render call.
+
+**The Context line** (lane 6, `ab56e2a2`). The one status read on reopen no longer overwrites the running game.
+`gameFieldsFromStatus` in `src/utils/askOrchestrationRestore.ts` prefers Steam's running app over a finished old
+status. `src/hooks/useAskMountRestore.ts` marks that read.
+
+**The trap** (lane 7, `7a7d59fe`).
+- `src/utils/uiDocument.ts` gets `uiWindowMissingFocus`, which finds when the panel's own window is on screen but
+  has lost the focus.
+- `src/utils/navFocusRegistry.ts` asks that window for focus before every Steam transfer.
+- `src/hooks/useAskBarInitialRingClaim.ts` asks again on a Quick Access reopen, up to three times.
+
+**What surprised us, and how it was handled:**
+- **Lane 3's first round introduced a trapping loop.** Tests and review both missed it. It was caught on the Deck the
+  same night, and a second round fixed it with tests that copy Steam's scrolling.
+- **The trap's cause surprised us twice.** The popup was first suspected, then the test tool's way of opening the
+  panel. Six side-by-side reopens showed that only the window's focus decided it.
+- **Lane 5's game list first held everyday words** like "satisfactory" and "don't starve", which would have dropped
+  a game's own notes. I caught it in review, and 38 titles came out.
+- **Lane 4's "stale choices" bug** turned out to be the prompt, not the code.
+- **One slow test** (the plugin's start-up check) runs out of time when five helpers load the PC. It passes alone.
+- **A landing step failed once for no clear reason** and worked on retry. The landing script now retries once.
+- **I made one slip of my own:** I staged the plan file while a landing was running. I caught it before any commit
+  took it.
+- **The Deck tool's settings snapshot fails on this PC.** The helpers backed up over SSH instead. This is logged in
+  the tool-findings list.
+
+**What you could have done differently to make this easier:**
+- Everything you did set it up well: one game on Recent Games, the Deck left free, and clear answers up front.
+- A second answering model on the Deck would unblock one owed check.
+- A free chat slot would unblock another.
+- The Deck being on its own screen all night made the measurements consistent. Leave it that way for these sessions.
+
+## How this plan was built (a short developer guide)
+
+1. **Sort first.** Every open bug was sorted against the release rule (traps, data loss, spoilers, first ten
+   minutes, plainly broken). Spoiler leaks, destructive defaults and D-pad walking went first. Sightings got one
+   try each. Anything "after the release" stayed out.
+2. **Lanes by files, not by topic.** Each helper owned a list of files, so two helpers never edited the same code.
+   Where two had to share a file, the one doing focus work landed last.
+3. **Measure before D-pad work.** The answer-walking lane started only after the Deck had measured the ring press by
+   press. Its brief carried the real numbers: the visible band, the 80-pixel scroll step, the boxes.
+4. **Land one lane at a time.** Each lane's commits were cherry-picked onto the branch by a small script. It
+   rebuilds the generated files into each commit and runs the full checks after every lane.
+5. **Deck in blocks between landings.** Each block checked what had just landed, plus owed checks that didn't depend
+   on it, and restored every setting it changed. Rows that need a game ran last, with no plugin reload after the
+   game started.
+6. **The roadmap kept up after every landing and every Deck block**, by the bookkeeping helper from a written list,
+   with every status naming its evidence file.
+7. **A failure goes back to the same helper once with the measurement.** A second failure goes one model tier up. A
+   regression that can't be fixed is reverted before the session ends.
 
 ## Log
 

@@ -1,0 +1,29 @@
+{
+  "row": "P76-M-COVER-ONLY",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 about 22:20-22:30 -04:00 (Deck local)",
+  "screen": "window 854x454 (Deck's own screen size); band y 88 to 290",
+  "setup": "Same Hollow Knight Soul Sanctum answer as P76-M-COVER-SCROLL. No section holds ONLY a cover; section 3 (data-bonsai-chunk-index=2) starts with a cover and then holds a paragraph, so that section was used. Section 3 outer box: DIV role=button tabindex=0, class bonsai-ai-response-chunk bonsai-answer-stop, 245x218. Its children: DIV.bonsai-spoiler-reveal-target (role=button, tabindex=0, Focusable) then P.bonsai-md-p.",
+  "walkDown": {
+    "landedOn": "section 3 OUTER box, fIdx 24",
+    "box": [63,88,245,218],
+    "innerCoverBox": [71,96,237,55],
+    "innerCoverInnerButton": [83,107,212,34],
+    "scrollTop": 549,
+    "pressA": "A pressed with the ring on the outer box: nothing opened. Both covers still read 'Spoiler - tap to show'; scrollTop unchanged 548.67; ring stayed on fIdx 24.",
+    "coverOpened": false
+  },
+  "walkUpFromBelow": {
+    "path": "from the summary note (fIdx 28) UP once",
+    "landedOn": "section 3's INNER cover, fIdx 25, DIV.bonsai-spoiler-reveal-target role=button tabindex=0",
+    "box": [71,204,237,55],
+    "innerButton": [83,215,212,34],
+    "scrollTop": 440.67,
+    "visibleInBand": true,
+    "pressA": "A opened the cover: cover text became 'Spoiler - tap to hide', ring moved to div.bonsai-spoiler-collapse-target fIdx 25 box [81,213,216,15]; section 3 grew to 398 px tall.",
+    "coverOpened": true
+  },
+  "other": "From the inner cover, UP once went to section 2 (fIdx 23), skipping section 3's outer box. From section 2, DOWN went to section 3's outer box (after one scroll-only press).",
+  "screenshots": "none"
+}

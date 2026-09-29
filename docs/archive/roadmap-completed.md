@@ -1649,3 +1649,16 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   thirds smaller, not half, because the screen-drawing code and the one long question-building function
   cannot move without a rewrite. A new check now stops any file over 800 lines of code from growing back.
   [Plan 65](65-trim-docs-split-long-files.md).
+
+## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 1)
+
+_Copied line for line from the roadmap, nothing reworded, with the closing note added under each entry._
+
+- ★ `[ask]` **The Steam settings card: two checks never run** — **VERIFY, landed 2026-09-16 (plan 56).** The
+  card was moved to Done on 2026-09-16 with all seven rows named, but two were never run on the Deck (found
+  2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
+  and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
+  box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
+
+**Closed 2026-09-28.** SETTINGS-CARD-06 and SETTINGS-CARD-07 both passed on the Deck 2026-09-26 (plan 70, flow 2b.2), as `docs/testing.md` already says. Evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made, because the longest setting name fits on two lines; that is not a fail.
+

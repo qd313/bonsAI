@@ -91,12 +91,15 @@ starts work outside this.
 - ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
   does nothing** — **OPEN, found 2026-09-28 (plan 74, Deck pass 3).** A player walking Down cannot open that cover from
   where the ring lands; walking Up works. Evidence `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** measured on a section that starts with a cover (cover, then a paragraph). Down lands on the section's outer box (245×218), where A does nothing; Up lands on the cover (237×55), where A opens it. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-ONLY.json`.
 - ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **OPEN, one
   sighting 2026-09-28 (plan 74, Deck pass 3).** The cover's top was at y 69 while the visible area starts at 88, so about
   a third of it was hidden. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** reproduced. A scroll-only press left a cover's top 19 px above the visible area, and another left a cover fully above it. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-SCROLL.json`.
 - ★ `[reply]` **An opened spoiler cover closed again by itself** — **OPEN, one sighting 2026-09-28 (plan 74, Deck pass
   3).** Opened with A, it read as hidden about 40 seconds later, with only D-pad moves and the next question typed in
   between. Evidence `docs/test-evidence/plan74-P74-COVER-UP-r2.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** reproduced, with a trigger. It stays open through D-pad moves and 75 s of nothing, and hides itself within about 2 s of a new question being put in the question box. Lane 3. Evidence `docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json`.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
 - ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
@@ -110,6 +113,7 @@ starts work outside this.
 - ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
+  **2026-09-28 (plan 76, build `39c17312`):** not reproduced. With one turn drawn under "87 earlier", Down visited Retry, the question, the answer parts, the branch buttons, Helpful, Hide details and the tabs in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
 - ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
   games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
   on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
@@ -140,8 +144,6 @@ starts work outside this.
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
 - ★ `[layout]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
   (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-- ★ `[reply]` **Copy joined two paragraphs into one** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence
-  `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
   **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
@@ -156,8 +158,6 @@ starts work outside this.
 - ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **OPEN,
   found 2026-09-28 (plan 74), seen once.** The row, with Open Permissions, sits on the new-chat spot. Evidence
   `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes).
-- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **OPEN, found
-  2026-09-28 (plan 74, lane 4's note).** One line in `docs/design-tokens.md`.
 - ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **OPEN,
   found 2026-09-28 (plan 74).** It should go back to its button, the same family as the "Update Ollama and models?" box
   fixed this wave. Evidence `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`.
@@ -174,6 +174,7 @@ starts work outside this.
   (plan 75).** It stays on a word like "overclock" for three to eight presses while the answer scrolls under it, the word
   above the visible area, then moves on. Seen on every Deck run that day (the popup measurement and all six plan 75 runs).
   Evidence `docs/test-evidence/t75-5-Q4-ASK-UP-answer-scroll.png`, `docs/test-evidence/t75-5-Q4-ASK-UP.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** measured. The underlined word sits inside one tall answer section; the next five Down presses only scrolled, 80 px each, and the word left the screen after the first; the sixth reached the next section, 440 px below. Being fixed in plan 76 lane 3. Evidence `docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json`.
 - ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **OPEN, found 2026-09-28
   (plan 74).** It says "This reply used an 'open model'" although no reply is involved. Evidence
   `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`.
@@ -191,6 +192,7 @@ starts work outside this.
   project. Row **TAB-BAR-GHOST-01**. The session's guess: closing a Decky popup rebuilds the plugin, and
   the highlight lands on the top bar, which then opens. Needs a Deck walk with the focus recorder before any
   fix.
+  **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
 - ★★ `[focus]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
   finished answer. [Detail](roadmap-details.md#flow-l10-findings).
@@ -545,11 +547,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 ### Features that need verification
 
-- ★ `[ask]` **The Steam settings card: two checks never run** — **VERIFY, landed 2026-09-16 (plan 56).** The
-  card was moved to Done on 2026-09-16 with all seven rows named, but two were never run on the Deck (found
-  2026-09-24): **SETTINGS-CARD-06** (`steam client update channel` still shows its one result at four words)
-  and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
-  box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
 - ★ `[ui]` **Hidden for 0.6.0: six "[beta]" chips, "Open Steam Input config", the quick-launch chip and its setup
   commands, Find LAN and its chips, and the UI scale section** — **VERIFY, landed 2026-09-27 (plan 72, `169edb07`, `12227980`,
   `4dc2fbdc`, `8b27e38e`), the maintainer's calls in plan 71 § 6 item 1.** Find LAN is gone, `docs/test-evidence/plan72-F-HIDDEN.json`; UI scale
@@ -565,8 +562,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-24/25.** A Developer tab switch, *Scramble animation*, off by default, churns a live answer's
   newest letters through placeholder symbols before they settle, the way a suggestion chip does.
   [Plan 69](planning/69-streamed-answers-scramble.md), D119. Deck rows **SCR-04**, **SCR-06**, **SCR-08**
-  and **DEV-01** pass. Owed: the look (**SCR-01**), reopening mid-answer (**SCR-05**), reduced motion
-  (**SCR-07**), the game's frame rate (**SCR-03**). Full rows in [testing.md](testing.md).
+  and **DEV-01** pass, and **SCR-05** (reopening mid-answer, `docs/test-evidence/plan70-SCR-05.json`) and **SCR-07**
+  (reduced motion, `docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`) passed on the Deck 2026-09-26. Owed: the look
+  (**SCR-01**, the maintainer's eye) and the game's own frame rate (**SCR-03**). Full rows in [testing.md](testing.md).
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **VERIFY, landed 2026-09-28 as `abfdd45e` (plan 75).**
   The popup shows the answer's first words across its two lines for eight seconds, hidden blocks never appear, and with nothing
   safe left it shows *Reply ready* as before. Deck: three hard answers (ordinary, all capitals, wide letters) fit both lines with
@@ -876,6 +874,12 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-28 (plan 76, docs sweep 1):**
+
+- ★ `[reply]` **Copy joined two paragraphs into one** — **DONE 2026-09-28 (plan 74 lane 2, `ad3825dd`).** Plan 74's results say Copy needs no Deck check. Original sighting `docs/test-evidence/plan72-Z-FREEPLAY.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
+- ★ `[ask]` **The Steam settings card: two checks never run** — **DONE 2026-09-28, both passed on the Deck 2026-09-26 (plan 70, flow 2b.2).** Rows **SETTINGS-CARD-06** and **SETTINGS-CARD-07**; evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made (the longest setting name fits on two lines); that is not a fail. [Full entry](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
+- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **DONE 2026-09-28.** One line added to `docs/design-tokens.md` (docs only, so no Deck check applies; the colour itself passed on the Deck under plan 74, `13ad6566`). [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
 
 **Closed 2026-09-28 (plan 75, the Sonnet 5.5 trial):**
 

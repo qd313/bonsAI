@@ -2365,3 +2365,18 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
   the moment a second listener is added, a wake word for example.
 
 **Closed 2026-09-28 (plan 75, `8ec3426a`, `54643d2f`), by unit test.** Nothing a person can do today reaches the two-caller case, since the mic is the only caller, so this rests on the unit tests in `tests/test_voice_whisper_daemon.py`. The mic's own check passed on the Deck: it starts the speech server while recording and stops it within half a second. Row **T75-LAND-L3-MIC-STARTS-AND-STOPS**. Evidence `docs/test-evidence/t75-land-L3-MIC-STARTS-AND-STOPS.json`.
+
+## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 1)
+
+_Copied line for line from the roadmap, nothing reworded, with the closing note added under each entry._
+
+- ★ `[reply]` **Copy joined two paragraphs into one** — **OPEN, found 2026-09-27 (plan 72, free play).** Evidence
+  `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+
+**Closed 2026-09-28 (plan 74 lane 2, `ad3825dd`).** Copy now keeps the paragraph breaks the screen shows. Plan 74's results say Copy needs no Deck check; it rests on the unit tests in that commit.
+
+- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **OPEN, found
+  2026-09-28 (plan 74, lane 4's note).** One line in `docs/design-tokens.md`.
+
+**Closed 2026-09-28.** One line added to `docs/design-tokens.md`, under the `--bonsai-ui-accent-toned` row. Docs only, so no Deck check applies.
+

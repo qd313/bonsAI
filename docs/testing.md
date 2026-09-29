@@ -29,8 +29,7 @@ checking the project's whole history shows none ever did — they were not lost,
 written. That means twelve results were recorded as passing on the strength of a file nobody can
 open. Whether the checks really passed is unknown.
 
-**All twelve are to be re-run in the next automated testing session, as one batch.** Until a run
-produces real evidence, treat their result as unknown rather than as a pass. Each row carries an
+**Update 2026-09-28: every one of the twelve has now been re-run, or has a note saying why it could not be.** Each row in the table below carries its own real evidence file or its own closing note. A few still read blocked or owed there (W1-R1 update, the wave-three Deck evening, the follow-up memory re-run, the spoiler check on a real game), and those stay unknown until they are run. The rest is kept as first written. Each row carries an
 inline flag where it makes the claim.
 
 | Check | Where the row lives | Re-run status |

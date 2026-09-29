@@ -1,0 +1,22 @@
+{
+  "row": "P76-M-COVER-RECLOSE",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 about 22:30-22:40 -04:00 (Deck local)",
+  "screen": "window 854x454 (Deck's own screen size)",
+  "setup": "Hollow Knight Soul Sanctum answer, section 3's cover (fIdx 25). Watched with a passive timer inside the page (setInterval every 2 s, then every 5 s, writing to a window array; it presses and changes nothing). The timer array was removed from use afterwards (interval cleared).",
+  "try1": {
+    "steps": "A on the cover (open). Timer started about 20 s later. Then UP, DOWN, UP (three D-pad moves inside the answer, each read back), then the send-question script put 'What upgrades matter most for the Nail in Hollow Knight' in the box (VERIFIED, not sent).",
+    "log": "t=0 to t=10 s open (through all 3 D-pad moves, which happened at t about 4 to 6). Question typed at about t=10 to 12. t=12 s: cover reads hidden ('tap to show') and stayed hidden through t=100 s.",
+    "wentHiddenBetween": "t=10 and t=12 s on the timer, straight after the question was put in the box. Not on the D-pad moves.",
+    "sentQuestion": "no; the question was never sent (left in the box), so the 60 s send branch was not needed"
+  },
+  "try2": {
+    "steps": "Closed the state, walked back, A on the cover again, then no presses and no typing for 75 s, timer every 5 s.",
+    "log": "t=0..75 s every reading 'tap to hide' (open). Never went hidden."
+  },
+  "reading": "The cover stays open at least 75 s by itself and through three D-pad moves. It went hidden within about 2 s of the question text being put into the box (by the script). Cause inside the plugin (chip change vs redraw) not separated.",
+  "sideNote": "While open the cover's 'tap to hide' line is a separate focus stop. Pressing Down on it scrolled 80 px per press with the ring stuck on it (line at y -26, then -106, fully above the band) before it moved on: same shape as the glossary word. A on it re-hid the cover.",
+  "leftBehind": "the second question text 'What upgrades matter most for the Nail in Hollow Knight' remains in the question box unsent",
+  "screenshots": "none"
+}

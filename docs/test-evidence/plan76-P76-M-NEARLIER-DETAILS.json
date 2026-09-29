@@ -1,0 +1,30 @@
+{
+  "row": "P76-M-NEARLIER-DETAILS",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 about 22:45-22:55 -04:00 (Deck local)",
+  "screen": "window 854x454 (Deck's own screen size); band y 88 to 290",
+  "setup": "First chat slot ('wheatley fight'; 9 slots, dots '.A.......'). The chat shows ONE turn (the Hollow Knight Soul Sanctum answer from the earlier rows) under a pill '87 earlier'. So the runbook premise of 'at least three turns' was not literally met: the pill shows, but only one turn is drawn under it. That turn's Show details was opened with A (button became 'Hide details'). The other chat slots were not visited. The pill was not pressed.",
+  "walk": "deck_walkTo UP to '87 earlier' (13 presses), then DOWN one press at a time, focus read after each (read-only page read of .gpfocus; fIdx = index among .bonsai-scope .Focusable).",
+  "stops": [
+    {"n": 0, "landed": "'87 earlier' pill row", "fIdx": 16, "box": [52,146,290,22], "scrollTop": 0},
+    {"n": 1, "landed": "Retry same prompt icon", "fIdx": 17, "box": [140,201,20,20], "scrollTop": 0},
+    {"n": 2, "landed": "question row body", "fIdx": 18, "box": [144,189,188,29], "scrollTop": 0},
+    {"n": 3, "landed": "reasoning fold 'Show reasoning 18 s'", "fIdx": 19, "box": [52,234,290,15], "scrollTop": 0},
+    {"n": 4, "landed": "cover 1 (section 1 outer box fIdx 21 skipped)", "fIdx": 22, "box": [71,134,237,55], "scrollTop": 155},
+    {"n": 5, "landed": "cover 1 again (scroll only; the first read came back unchanged, the next showed the scroll at 235)", "fIdx": 22, "box": [71,54,237,55], "scrollTop": 235, "topAboveBand": true},
+    {"n": 6, "landed": "section 2 outer box", "fIdx": 23, "box": [63,126,245,150], "scrollTop": 361},
+    {"n": 7, "landed": "section 2 again (scroll only)", "fIdx": 23, "box": [63,46,245,150], "scrollTop": 441, "topAboveBand": true},
+    {"n": 8, "landed": "section 3 outer box", "fIdx": 24, "box": [63,88,245,218], "scrollTop": 549},
+    {"n": 9, "landed": "section 3 again (scroll only)", "fIdx": 24, "box": [63,8,245,218], "scrollTop": 629, "topAboveBand": true},
+    {"n": 10, "landed": "chat-summary note", "fIdx": 28, "box": [52,157,267,32], "scrollTop": 721},
+    {"n": 11, "landed": "branch button 'A. Starting out in Dirtmouth'", "fIdx": 30, "box": [65,235,186,32], "scrollTop": 721},
+    {"n": 12, "landed": "branch button 'B. In the City of Tears'", "fIdx": 32, "box": [65,157,148,32], "scrollTop": 839},
+    {"n": 13, "landed": "'Mark reply helpful' button", "fIdx": 36, "box": [52,157,89,32], "scrollTop": 928},
+    {"n": 14, "landed": "'Hide details' divider", "fIdx": 39, "box": [52,204,267,15], "scrollTop": 925},
+    {"n": 15, "landed": "details tab row 'This answer / Session 87'", "fIdx": 40, "box": [52,234,290,28], "scrollTop": 925},
+    {"n": 16, "landed": "chip ladder ('Chip 1 of 7 ... KB: 14 sections', this build's notes block)", "fIdx": 41, "box": [52,88,290,238], "scrollTop": 1107, "bottomBelowDock": true, "note": "bottom 326 is 36 px under dock top 290"}
+  ],
+  "reading": "With one turn drawn under the pill, Down from '87 earlier' went Retry, question, reasoning fold, answer parts (with scroll-only presses between), summary note, branch buttons, Mark reply helpful, Hide details, tabs row, chip ladder. The newest turn was NOT skipped. Not covered: a chat with 3 or more turns drawn. 'Notes block' here is the bonsai-chip-ladder; the bonsai-kb-notes-block class was not present in the page at this time. 'Read aloud' (fIdx 38) and 'Mark reply not helpful' (37) were not landed on going down.",
+  "screenshots": "none"
+}

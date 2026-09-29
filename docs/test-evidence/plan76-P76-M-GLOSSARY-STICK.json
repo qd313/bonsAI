@@ -1,0 +1,33 @@
+{
+  "row": "P76-M-GLOSSARY-STICK",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28T22:07 -04:00 (approx, read after the walk)",
+  "screen": "window 854x454 (Deck's own screen size); panel root box [48,64,300,390]",
+  "setup": "Existing chat (first slot, turn 'give me ten tips for a new player', Deep Rock Galactic: Survivor answer, 86 earlier, no game running, plugin Main tab). Answer holds 4 underlined glossary words: kiting(0), kiting(1), overclock(2), overclock(3). No new chat, no new question asked. Ring was unowned after opening the plugin, so press 0 (DOWN) placed it on the Retry icon.",
+  "measuredWith": "deck_pressButton then a read-only deck_readPage of the .gpfocus element after every press (same gpfocus marker deck_readFocus reports; one full deck_readFocus was taken at press 0). Scroll container = _TabContentsScroll, box [48,88,300,366]. Visible band = y 88 (scroll container top) to y 290 (dock top) = 202 px. Scroll max = 1222-366 = 856.",
+  "presses": [
+    {"n": 0, "press": "DOWN", "landed": "BUTTON Retry same prompt (icon on question row)", "box": [137,186,20,20], "scrollTop": 0},
+    {"n": 1, "press": "DOWN", "landed": "DIV question row body 'give me ten tips for a new player'", "box": [141,189,190,14], "scrollTop": 0},
+    {"n": 2, "press": "DOWN", "landed": "DIV answer chunk (bonsai-answer-stop) 'Right then, listen up! You wanna get sta'", "box": [63,129,245,75], "scrollTop": 95},
+    {"n": 3, "press": "DOWN", "landed": "glossary word 'kiting' (index 0)", "underlined": true, "box": [84,223,31,15], "scrollTop": 95},
+    {"n": 4, "press": "DOWN", "landed": "glossary word 'kiting' (index 1)", "underlined": true, "box": [146,238,31,15], "scrollTop": 95},
+    {"n": 5, "press": "DOWN", "landed": "glossary word 'overclock' (index 2)", "underlined": true, "box": [205,238,53,15], "scrollTop": 95},
+    {"n": 6, "press": "DOWN", "landed": "glossary word 'overclock' (index 3, in item 'Don't Be Afraid to Overclock')", "underlined": true, "box": [208,189,53,15], "contentY": 521, "scrollTop": 332, "note": "moved to a new word, scrolled 237"},
+    {"n": 7, "press": "DOWN", "landed": "same word, index 3", "box": [208,109,53,15], "scrollTop": 412, "aboveBand": false, "note": "SCROLL ONLY; word still inside band (109 >= 88)"},
+    {"n": 8, "press": "DOWN", "landed": "same word, index 3", "box": [208,29,53,15], "scrollTop": 492, "aboveBand": true, "note": "SCROLL ONLY; word now 59 px above band top"},
+    {"n": 9, "press": "DOWN", "landed": "same word, index 3", "box": [208,-51,53,15], "scrollTop": 572, "aboveBand": true, "note": "SCROLL ONLY; 139 px above band top"},
+    {"n": 10, "press": "DOWN", "landed": "same word, index 3", "box": [208,-131,53,15], "scrollTop": 652, "aboveBand": true, "note": "SCROLL ONLY"},
+    {"n": 11, "press": "DOWN", "landed": "same word, index 3", "box": [208,-211,53,15], "scrollTop": 732, "aboveBand": true, "note": "SCROLL ONLY"},
+    {"n": 12, "press": "DOWN", "landed": "DIV last answer chunk 'There you go. Now get out there and star'", "box": [63,229,245,30], "contentY": 961, "scrollTop": 732, "aboveBand": false, "note": "ring finally leaves the word; no scroll change"}
+  ],
+  "summary": {
+    "ringStuckOnWordPresses": "presses 7 to 11 = 5 presses that only scrolled (80 px each) with the ring still on the word at content y 521",
+    "wordVisibleBeforeScrollOnly": "at press 6 y=189, press 7 y=109 (in band). From press 8 on it was above the band top (88): 59, 139, 219, 299 px above the band top... (word y 29, -51, -131, -211)",
+    "distanceToNextStop": "next stop (last answer chunk) top at content y 961; word at 521; 440 px of content between them. Scroll went 332 to 732 = 400 px in 5 presses, 80 px per press",
+    "scrollStep": "80 px per scroll-only press (95 to 332 = 237 on the first jump onto the word)"
+  },
+  "ancestorsOfWord": "measured with ring on 'kiting' (index 0) at press 3: word DIV role=button tabindex=0 [84,223,31,15] -> LI.bonsai-md-li [84,208,224,60] (no role/tabindex) -> OL.bonsai-md-ol [84,208,224,652] -> DIV.bonsai-ai-response-chunk.bonsai-answer-stop role=button tabindex=0 [63,204,245,662] -> DIV.bonsai-ai-response-stack [63,129,245,767] -> DIV.bonsai-chat-ai-bubble-inner [53,121,265,783] -> DIV.bonsai-chat-ai-bubble role=button tabindex=0 [52,121,267,784] -> DIV.bonsai-chat-turn-slot [52,87,290,963]. The word is an inline-block Panel Focusable inside a list item inside ONE big chunk (the chunk is itself a focus stop, 662 px tall). Focused word carries class bonsai-drg-glossary-term--open for presses 3-6, not on 7-12.",
+  "unexpected": "deck_snapshotSettings failed twice with 'spawnSync cmd.exe ENOBUFS'; no settings were changed by this run, so nothing to restore.",
+  "screenshots": "none taken"
+}

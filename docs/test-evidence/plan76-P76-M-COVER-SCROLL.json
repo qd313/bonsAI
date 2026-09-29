@@ -1,0 +1,22 @@
+{
+  "row": "P76-M-COVER-SCROLL",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 about 22:15-22:25 -04:00 (Deck local)",
+  "screen": "window 854x454 (Deck's own screen size); scroll container box [48,88,300,366]; visible band y 88 (container top) to y 290 (dock top)",
+  "setup": "Existing first chat, no game running, Strategy mode. Question put in with the send-question script (VERIFIED), Ask pressed via the rig. Question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Answer has 3 sections (chunks): 1 = paragraph 'Right then, listen up!' + a cover + a paragraph; 2 = one paragraph; 3 = a cover + a paragraph. The covers are NOT on the first and last sentence of the whole answer exactly, but chunk 1 has a cover 2nd, chunk 3 has a cover first. Ring was on the question INPUT after the answer (not pressed); walked UP to Retry (12 presses) then walked DOWN one press at a time.",
+  "measuredWith": "deck_pressButton then read-only deck_readPage of the .gpfocus element after each press. fIdx = index among .bonsai-scope .Focusable elements (identity check). Scroll max was 1238-366 = 872.",
+  "presses": [
+    {"n": 1, "press": "DOWN", "landed": "question row body", "fIdx": 18, "box": [144,189,188,29], "scrollTop": 0},
+    {"n": 2, "press": "DOWN", "landed": "reasoning fold 'Show reasoning 18 s'", "fIdx": 19, "box": [52,234,290,15], "scrollTop": 0},
+    {"n": 3, "press": "DOWN", "landed": "COVER 1 (inner cover, section 1's outer box was skipped)", "fIdx": 22, "box": [71,149,237,55], "contentY": 289, "scrollTop": 140, "coverTopAboveBand": false},
+    {"n": 4, "press": "DOWN", "landed": "same cover 1", "fIdx": 22, "box": [71,69,237,55], "scrollTop": 220, "coverTopAboveBand": true, "note": "SCROLL ONLY. Ring stays on the cover; cover top is 19 px above band top (88)"},
+    {"n": 5, "press": "DOWN", "landed": "section 2 outer box", "fIdx": 23, "box": [63,140,245,150], "contentY": 487, "scrollTop": 347},
+    {"n": 6, "press": "DOWN", "landed": "same section 2", "fIdx": 23, "box": [63,60,245,150], "scrollTop": 427, "note": "SCROLL ONLY; section top 28 px above band (a plain paragraph section, no cover)"},
+    {"n": 7, "press": "DOWN", "landed": "section 3 OUTER box (holds cover + paragraph)", "fIdx": 24, "box": [63,88,245,218], "contentY": 637, "scrollTop": 549, "bottomBelowDock": true, "note": "bottom 306 is 16 px under dock top 290"},
+    {"n": 8, "press": "DOWN", "landed": "same section 3 outer box", "fIdx": 24, "box": [63,8,245,218], "scrollTop": 629, "coverTopAboveBand": true, "note": "SCROLL ONLY. Section 3's own cover was at y 16..71, wholly above the band top 88 while the ring sat on the outer box"},
+    {"n": 9, "press": "DOWN", "landed": "chat-summary note 'The chat summed itself up...'", "fIdx": 28, "box": [52,249,267,32], "scrollTop": 629, "note": "ring leaves the answer; section 3's inner cover (fIdx 25), the copy corner slot (26) and copy button (27) were not visited on the way down"}
+  ],
+  "summary": "Presses that only scrolled with the ring on a cover cut off at the top: press 4 (cover 1, top 19 px above band). Press 8: ring on section 3's outer box, its cover fully above the band. Down never reached section 3's inner cover (fIdx 25) or section 1's outer box (fIdx 21); Up from the summary note lands on inner cover fIdx 25.",
+  "screenshots": "none"
+}

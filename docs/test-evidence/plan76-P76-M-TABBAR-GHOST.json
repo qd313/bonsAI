@@ -1,0 +1,24 @@
+{
+  "row": "P76-M-TABBAR-GHOST",
+  "verdict": "MEASURED",
+  "build": "39c17312",
+  "deckTime": "2026-09-28 22:16 -04:00 (Deck clock in the screenshot: 10:16 PM)",
+  "screen": "window 854x454 (Deck's own screen, capture 1280x800); main tab bar box [48,64,300,20]",
+  "setup": "Existing first chat, one drawn turn with an answer. Details closed first (A on 'Hide details'), then the walk below.",
+  "video": "NOT recorded. deck_record blocks for its whole duration and the rig runs calls one after another, so the presses could not happen during it. In its place a passive timer inside the page sampled every 250 ms for 15.25 s (66 samples) and logged every tab bar's box and its effective opacity (own opacity times all ancestors'). It presses and changes nothing.",
+  "walk": [
+    "t=1090 ms: A on 'Show details' (button became 'Hide details')",
+    "t=2059 ms: DOWN -> ring on details tab row 'This answer / Session 87'",
+    "t=4460 ms: RIGHT -> Session tab became active (class bonsai-details-tab--active); ring stayed on the tab row",
+    "about 3+ s wait (about 7.8 s in fact)",
+    "t=12269 ms: DOWN -> ring on 'Sum up again' button (bonsai-sumup-btn bonsai-sumup-btn--off)"
+  ],
+  "tabBarCount": {
+    "mainBarsDrawn": "1 in all 66 samples. Only element with class bonsai-tab-bar: box [48,64,300,20], opacity 1, visibility visible, display flex. Right after the Session tab opened and after the D-pad press: still exactly one, [48,64,300,20], effective opacity 1.",
+    "detailsTabRow": "1 further element in samples after Show details (bonsai-details-tabs-row, 290x28, opacity 1); its top moved with scroll (y 204, 162, 127, 96). This is the This answer/Session switch, not a second copy of the main bar.",
+    "deckyTabsRoot": "1 (bonsai-decky-tabs-root)"
+  },
+  "screenshot": "C:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260928_221641_auto.png (git-ignored folder), taken with the Session tab open and the ring on 'Sum up again': one MAIN tab bar (LB, dashes, MAIN, RB) at the top, plus the This answer / Session 87 switch. No second bar visible.",
+  "reading": "No ghost second tab bar in this run.",
+  "leftBehind": "question text 'What upgrades matter most for the Nail in Hollow Knight' still in the question box, unsent; the first chat's Show details is open, Session tab active."
+}

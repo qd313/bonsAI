@@ -302,3 +302,14 @@ the ring**; never start a new chat; questions by script; no A on the question bo
 | SCR-10 (game) | The panel's frame rate while an answer arrives, with a game | Only if A above showed a route with no split | Use that route; owed-rows runbook block 6, one answer, scramble as found | Median while the answer arrives at least 30; record it either way |
 | TTS-FEAS-05 (game) | Reading aloud beside a running game (machine half) | Same condition | Owed-rows runbook block 11 | Numbers recorded |
 | QA-FREE-PLAY-01 | The free-play sweep every Main-tab change owes | No game; a long answer on screen | Owed-rows runbook block 14 | As written there; a stop focused but not visible is a fail, except the two known corner-icon false alarms |
+
+## Deck block 4 — the trap fix (lane 7, one try)
+
+Build: the tip of `experimental` with `7a7d59fe`, deployed with no game running. **If part 1 shows the game losing
+focus to the panel, stop at once, report, and the fix is reverted.**
+
+| Part | What it proves | Do | Pass when |
+|---|---|---|---|
+| 1, safety | The fix never pulls focus away from a running game | Launch Deep Rock Galactic: Survivor. With Quick Access CLOSED, read the Quick Access page's `document.visibilityState` and `document.hasFocus()` (read only). Then open the panel, put a question in by script, Ask, close Quick Access at once; wait for the reply-ready popup; screenshot | While closed the page reads "hidden"; the game stays in front after the popup and Quick Access does not reopen by itself |
+| 2, the fix | Reopening Quick Access over the game no longer splits the ring from the page | Six reopens: three with the Quick Access chord only, three with the test tool's open call. About one second after each, before any press, read `document.hasFocus()` and where the ring is; then Down, Right, Up, reading ring and page focus after each | `hasFocus()` reads true after every reopen; no split in any of the six; the ring moves with every press |
+| 3, no harm | The normal path is unchanged | Close the game. Open the panel; walk Down from the tab bar to Ask and back Up, reading ring and page focus each press | They agree at every press |

@@ -13,6 +13,7 @@
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
     "src/components/KnowledgeBaseSection.pullHint.test.tsx",
+    "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
     "src/components/KnowledgeBaseSection.removeBox.test.tsx",
     "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx",

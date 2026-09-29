@@ -76,6 +76,12 @@ import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
 import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
 import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
+import {
+  addKbDownloadListener,
+  kbDownloadLikelyInFlight,
+  resetKbDownloadMarkerForTests,
+  setKbDownloadMarker,
+} from "../utils/kbDownloadMarker";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
@@ -178,14 +184,13 @@ const KB_ACTION_ROW_MIN_HEIGHT = 44;
  * only a second modal (another remount) brought it back. This marker lives at module scope so a
  * remounted section picks the poll back up; it clears when a poll sees the download end.
  */
-let kbDownloadStartedAtMs: number | null = null;
-const KB_DOWNLOAD_RESUME_WINDOW_MS = 10 * 60 * 1000;
+// (Now in kbDownloadMarker.ts, which also tells copies that mounted before the download started.)
 
 /**
  * Set the instant a fresh install (never an Update — that starts already installed) is
  * accepted; consumed the first time that download's completion is seen, whichever
  * component instance is mounted then. Module scope for the same reason
- * `kbDownloadStartedAtMs` is: picking a storage location closes a Decky modal, which
+ * the download marker is: picking a storage location closes a Decky modal, which
  * remounts this section, so a component-local ref would forget the download was ever
  * a fresh install and the ask would never fire.
  */
@@ -210,17 +215,13 @@ const KB_NOMIC_PULL_RESUME_WINDOW_MS = 15 * 60 * 1000;
  */
 export const KB_STATUS_IDLE_RECHECK_MS = 10 * 1000;
 
-function kbDownloadLikelyInFlight(): boolean {
-  return kbDownloadStartedAtMs != null && Date.now() - kbDownloadStartedAtMs < KB_DOWNLOAD_RESUME_WINDOW_MS;
-}
-
 function kbNomicPullLikelyInFlight(): boolean {
   return kbNomicPullStartedAtMs != null && Date.now() - kbNomicPullStartedAtMs < KB_NOMIC_PULL_RESUME_WINDOW_MS;
 }
 
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
-  kbDownloadStartedAtMs = null;
+  resetKbDownloadMarkerForTests();
   kbInstallNomicOfferPending = false;
   kbNomicPullStartedAtMs = null;
 }
@@ -462,6 +463,14 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   }, [refreshStatus, ragCorpusVersion]);
 
   useEffect(() => {
+    const onDownloadChange = (running: boolean) => {
+      setDownloadBusy(running);
+      if (running) void refreshStatus();
+    };
+    return addKbDownloadListener(onDownloadChange);
+  }, [refreshStatus]);
+
+  useEffect(() => {
     if (!downloadBusy) return;
     const id = window.setInterval(() => {
       void callDeckyWithTimeout<[{ pc_ip: string }], RagCorpusStatus>(
@@ -483,7 +492,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             }
           }
           if (st?.done || st?.phase === "failed" || st?.phase === "done" || st?.phase === "cancelled") {
-            kbDownloadStartedAtMs = null;
+            setKbDownloadMarker(null);
             setDownloadBusy(false);
             void refreshStatus();
           }
@@ -539,7 +548,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
 
   const startDownload = async (installPath: string, storage: string) => {
     if (!(await confirmDownload(KNOWLEDGE_LIBRARY_NOTICES))) return;
-    kbDownloadStartedAtMs = Date.now();
+    setKbDownloadMarker(Date.now());
     setDownloadBusy(true);
     try {
       const out = await callDeckyWithTimeout<
@@ -547,7 +556,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         { accepted?: boolean; reason?: string }
       >("start_rag_corpus_download", [{ install_path: installPath, storage }], 15000);
       if (!out?.accepted) {
-        kbDownloadStartedAtMs = null;
+        setKbDownloadMarker(null);
         setDownloadBusy(false);
         toaster.toast({
           title: "Download not started",
@@ -565,7 +574,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       // lands; an Update starts already installed and never sets this.
       kbInstallNomicOfferPending = true;
     } catch (e: unknown) {
-      kbDownloadStartedAtMs = null;
+      setKbDownloadMarker(null);
       setDownloadBusy(false);
       const msg = formatDeckyRpcError(e);
       toaster.toast({ title: "Download failed", body: msg, duration: 8000 });
@@ -747,7 +756,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           kind: "downloading",
           text: out.version ? `Newer version ${out.version} found — downloading…` : "Newer version found — downloading…",
         });
-        kbDownloadStartedAtMs = Date.now();
+        setKbDownloadMarker(Date.now());
         setDownloadBusy(true);
       })
       .catch((e) => {

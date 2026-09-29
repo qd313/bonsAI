@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 612,
-  "edgeCount": 1700,
+  "fileCount": 614,
+  "edgeCount": 1704,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -269,6 +269,14 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.remountDownload.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.removeBox.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -308,6 +316,7 @@
         "src/hooks/useHandRingOnGone.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
+        "src/utils/kbDownloadMarker.ts",
         "src/utils/rememberReturnWhileBoxOpens.ts",
         "src/utils/settingsPanelScroll.ts",
         "src/utils/uiDocument.ts"
@@ -318,6 +327,7 @@
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
+        "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
@@ -4543,6 +4553,7 @@
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
+        "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
@@ -4591,6 +4602,7 @@
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
+        "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
@@ -5824,6 +5836,12 @@
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/utils/joinPresetWithRunningGame.test.ts"
+      ]
+    },
+    "src/utils/kbDownloadMarker.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx"
       ]
     },
     "src/utils/kbNoteUsedByAnswer.test.ts": {

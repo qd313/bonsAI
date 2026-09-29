@@ -62,6 +62,26 @@ describe("the [+] create-position screen", () => {
     expect(container.querySelector(".bonsai-save-chat-desktop-row")).toBeNull();
   });
 
+  /* Plan 74 P74-LOCAL-CMD-CHAT: after the Steam ban lookup was denied in a chat, cycling to [+]
+     drew that reply's "Open Permissions" row on the new-chat spot. It sits outside the transcript
+     column, so the [+] gate never reached it. */
+  it("hides the last reply's ban-lookup permission row and slow-answer lines", () => {
+    const denied = "**Steam Web API is off for bonsAI.** Enable it in Permissions.";
+    const props = {
+      ollamaResponse: denied,
+      elapsedSeconds: 99,
+      onNavigateToPermissions: () => {},
+    };
+    const there = renderTranscript({ ...props, showEmptySlotPreview: true });
+    expect(there.container.querySelector(".bonsai-chat-vac-deny-row")).toBeNull();
+    expect(there.container.textContent).not.toContain("Open Permissions");
+    expect(there.container.textContent).not.toContain("prefer GPU");
+    there.unmount();
+    /* The chat that owns the reply still draws its row. */
+    const own = renderTranscript({ ...props });
+    expect(own.container.querySelector(".bonsai-chat-vac-deny-row")).not.toBeNull();
+  });
+
   /* The transcript is the witness that the gate is [+]-only. Save chat used to be one too; since
      plan 72 it is the chat row's save icon (ChatSlotRow.tsx), so no chat draws the old button under
      its last answer any more, even one with an answer to save. */

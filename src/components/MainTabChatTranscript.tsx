@@ -1642,7 +1642,9 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     </Focusable>
   </PanelSectionRow>
 ) : null}
-{!isAsking && onNavigateToPermissions && isVacCheckCapabilityDenyResponse(ollamaResponse) ? (
+{/* Not on the [+] create-position screen: these lines describe the reply of the chat that is
+    still active behind it (plan 74 P74-LOCAL-CMD-CHAT), and that screen claims to be a new chat. */}
+{!showEmptySlotPreview && !isAsking && onNavigateToPermissions && isVacCheckCapabilityDenyResponse(ollamaResponse) ? (
   <PanelSectionRow>
     {/*
      * Same reasoning as the troubleshooting hint's wrapper just above: this row sits outside the
@@ -1678,7 +1680,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     </div>
   </PanelSectionRow>
 )}
-{!isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
+{!showEmptySlotPreview && !isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
   <PanelSectionRow>
     <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>
       {elapsedSeconds}s (&gt;{latencyWarningSeconds}s): prefer <strong>GPU</strong> for <strong>Ollama</strong>, not{" "}
@@ -1686,7 +1688,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     </div>
   </PanelSectionRow>
 )}
-{appliedTuningBannerText && (
+{!showEmptySlotPreview && appliedTuningBannerText && (
   <PanelSectionRow>
     <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
   </PanelSectionRow>

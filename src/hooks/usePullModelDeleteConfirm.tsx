@@ -68,9 +68,17 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
               depend on this tag will fall back to the next entry in the Ask-mode chain.
             </div>
           }
-          strOKButtonText="Remove model"
+          /*
+           * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that removes
+           * nothing and the action sits on the middle button -- the download notice's own shape
+           * (downloadNotice.tsx). This box used to open with the ring on "Remove model"
+           * (plan76-P76-NOMIC-REMOVE-HINT.json). B and Cancel also remove nothing.
+           */
+          strOKButtonText="Not now"
+          strMiddleButtonText="Remove model"
           strCancelButtonText="Cancel"
-          onOK={() => {
+          onOK={() => completeNestedModalClose(() => handle.Close())}
+          onMiddleButton={() => {
             completeNestedModalClose(() => handle.Close());
             void (async () => {
               setDeleteBusyTag(tag);

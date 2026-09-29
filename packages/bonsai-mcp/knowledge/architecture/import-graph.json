@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 610,
-  "edgeCount": 1697,
+  "fileCount": 611,
+  "edgeCount": 1698,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3632,13 +3632,20 @@
         "src/hooks/usePullModelDownloadNotice.test.tsx"
       ]
     },
+    "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx": {
+      "imports": [
+        "src/hooks/usePullModelDeleteConfirm.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/usePullModelDeleteConfirm.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx"
       ]
     },
     "src/hooks/usePullModelDownloadNotice.test.tsx": {

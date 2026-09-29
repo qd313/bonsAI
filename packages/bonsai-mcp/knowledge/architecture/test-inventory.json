@@ -152,6 +152,7 @@
     "src/hooks/useMainTabAskBarFocus.test.ts",
     "src/hooks/usePermissionJump.test.ts",
     "src/hooks/usePluginSettings.test.ts",
+    "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
     "src/hooks/usePullModelDownloadNotice.test.tsx",
     "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
     "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",

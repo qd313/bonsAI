@@ -22,6 +22,8 @@
  *   - Fences are found line by line with the panel's own markdown reader (markdownFenceReader),
  *     not by pairing backtick runs anywhere, so the notification never shows a word the panel
  *     keeps inside a block.
+ *   - A comma, semicolon, colon or long dash left hanging where the cut lands is dropped before
+ *     the ellipsis ("we wander…", not "we wander,…").
  *   - Anything doubtful is left out, never shown: an unclosed fence drops everything after it, and
  *     a leftover fence marker inside a sentence drops its words too.
  */
@@ -176,6 +178,18 @@ export function toastSafeText(raw: string): string {
   return /[\p{L}\p{N}]/u.test(text) ? text : "";
 }
 
+/** A comma, semicolon, colon or long dash left hanging at the end of a cut line. */
+const DANGLING_MARK_RE = /[\s,;:，；：、—–]+$/;
+
+/**
+ * The cut line without a comma, semicolon, colon or dash at its end, so the notification reads
+ * "we wander…", not "we wander,…". A line that is nothing but such marks is left as it is.
+ */
+function withoutDanglingMark(line: string): string {
+  const trimmed = line.replace(DANGLING_MARK_RE, "");
+  return trimmed.length > 0 ? trimmed : line;
+}
+
 /** Fit words into one line. Returns the line and the words not used. */
 function fillLine(
   words: string[],
@@ -222,5 +236,5 @@ export function buildToastAnswerLines(raw: string): ToastAnswerLines | null {
   const room = BODY_LINE_BUDGET - toastTextWidth(ELLIPSIS);
   const cut = fillLine(first.rest, room);
   if (cut.hardCut) return { title: first.line, body: cut.line };
-  return { title: first.line, body: cut.line + ELLIPSIS };
+  return { title: first.line, body: withoutDanglingMark(cut.line) + ELLIPSIS };
 }

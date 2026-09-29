@@ -117,6 +117,30 @@ describe("buildToastAnswerLines", () => {
     expect(text[shown.length]).toBe(" ");
   });
 
+  it("never ends the body in a comma, semicolon or colon just before the ellipsis", () => {
+    // Slide the same clause along, so the cut falls after it for some length of lead-in. Measured
+    // on the Deck (plan 75, notification 3): "...we wander,…".
+    const tail = "and then some more words follow here that overflow both lines of the notification";
+    let cutRightAfterMark = 0;
+    for (const mark of [",", ";", ":"]) {
+      for (let lead = 0; lead < 60; lead++) {
+        const text = `${"aa ".repeat(lead)}we wander${mark} ${tail}`;
+        const r = buildToastAnswerLines(text)!;
+        expect(r.body).not.toMatch(/[,;:]…$/);
+        if (r.body.endsWith("wander…")) cutRightAfterMark++;
+      }
+    }
+    // The loop must reach the shape it guards, once for each mark at least.
+    expect(cutRightAfterMark).toBeGreaterThanOrEqual(3);
+  });
+
+  it("still cuts a long answer at a word and drops no word but the mark before the ellipsis", () => {
+    const text = "Use the pickaxe on the glowing ore veins first, then swap to the drill once the armoured bug boss appears";
+    const r = buildToastAnswerLines(text)!;
+    const shown = `${r.title} ${r.body.slice(0, -1)}`.replace(/[,;:]$/, "");
+    expect(text.startsWith(shown)).toBe(true);
+  });
+
   it("keeps every line inside its width budget, for prose, dashes, CJK and emoji", () => {
     const texts = [
       "Wide words like mammoth and wobbling swimmers matter more than narrow ones like illicit little pills ".repeat(3),

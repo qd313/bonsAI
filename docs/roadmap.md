@@ -257,34 +257,10 @@ starts work outside this.
   **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
-  **2026-09-28 (plan 76):** the Fallout 4 entry below has a new sighting of the same family, with a likely trigger.
-  **2026-09-29 (plan 76, Deck block 2c):** the Fallout 4 entry below reproduced it on purpose, twice; same family.
-  **2026-09-29 (plan 76, block 3):** the Fallout 4 entry below now has the measurement: the split follows whether the panel's window has focus.
-- ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **OPEN, found
-  2026-09-26 (plan 70, flow L7), same family as the entry above.** Down and Right leave the ring in the box;
-  only Up works, and closing and reopening the panel does not clear it while the game runs.
-  [Detail](roadmap-details.md#flow-l7-findings).
-  **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-i.json`.
-  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
-  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
-  **2026-09-28 (plan 76, `c71f1d8b`), new sighting, likely trigger:** with Deep Rock Galactic: Survivor running, right after a real answer
-  finished with the menu closed (the popup test) and the panel reopened, Steam's ring stayed on the question box (or one stop) while the
-  page's own focus moved on; Down, Up and Right did nothing. Three ways of closing and reopening Quick Access did not clear it (one reopen
-  from the Decky list did, until the next Right); exiting the game cleared it at once. Evidence `docs/test-evidence/plan76-SCR-10.json`,
-  `plan76-TTS-FEAS-05.json`. The session will try to reproduce it on purpose with a measurement.
-  **2026-09-29 (plan 76, Deck block 2c, build `ab56e2a2`), reproduced on purpose, twice, with a game running:** once with the answer finished
-  with the menu closed (popup shown) and once with it open (no popup), so the popup is not the trigger. After Quick Access was closed and
-  reopened over the game, the page did not have the window's attention (`document.hasFocus()` false; Steam's active window read "Steam Big
-  Picture Mode", not the Quick Access window). Each D-pad press then moved the page's own focus but not Steam's ring, and A acted on the
-  ring's control. Up from the question box let the ring catch up. Closing and reopening Quick Access and the Steam button did not clear it;
-  exiting the game did. **Lead:** both reopens used the Deck tool's own "open the plugin" call, which presses Down once to place the ring;
-  a later reopen with plain Quick Access button presses kept ring and page together. The last Deck block tests the two routes side by
-  side. Evidence `docs/test-evidence/plan76-P76-TRAP-REPRO.json`, `docs/test-evidence/plan76-P76-TRAP-CONTROL.json`.
-  **2026-09-29 (plan 76, Deck block 3, build `4af8e7a1`), measured, six reopens with a game running:** every reopen after which the panel's
-  page did not have the window's attention (`document.hasFocus()` false) split later; every one where it did never split. The reopen route did
-  not decide it (a plain Quick Access chord split once, the test tool's open call split twice). It read false when the panel opened with no
-  ring of its own and something then placed one (the plugin's own open-time claim, or a Down press). **So the lead above, that the test tool
-  alone causes it, is ruled out.** A fix on the plugin's side (lane 7) is being built. Evidence `docs/test-evidence/plan76-P76-TRAP-SPLIT.json`.
+  **2026-09-28 (plan 76):** the Fallout 4 entry (now in Verify) has a new sighting of the same family, with a likely trigger.
+  **2026-09-29 (plan 76, Deck block 2c):** the Fallout 4 entry (now in Verify) reproduced it on purpose, twice; same family.
+  **2026-09-29 (plan 76, block 3):** the Fallout 4 entry (now in Verify) now has the measurement: the split follows whether the panel's window has focus.
+  **2026-09-29 (plan 76, Deck block 4):** the Fallout 4 entry, now in Verify › Bugs as fixed, may be this same family (not proven). Its fix passed 6 of 6 reopens with a game running; see row **P76-TRAP-FIX**. Whether this entry stays open is the maintainer's call.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
@@ -566,6 +542,23 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
+- ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **VERIFY, fixed 2026-09-29 (plan 76, `7a7d59fe`), fixed, watch it.** Found
+  2026-09-26 (plan 70, flow L7), same family as the "Down stops half way" entry in Bugs. Down and Right left the ring in the box;
+  only Up worked, and closing and reopening the panel did not clear it while the game ran.
+  **The cause:** when Quick Access is on screen but its window has lost the focus, each D-pad press moved the page's own focus while Steam's
+  ring stayed put. The fix asks that window for the focus back, on a reopen and before each of Steam's own moves.
+  **Deck 2026-09-29 (build with `7a7d59fe`), game running:** 6 of 6 reopens came up focused with no split (the night before, 3 of 6 went bad);
+  with Quick Access closed the fix never pulled focus from the game; no change without a game. Row **P76-TRAP-FIX**, evidence
+  `docs/test-evidence/plan76-P76-TRAP-FIX.json`. Passed once. **Still owed:** a longer play session with a game running.
+  [Detail](roadmap-details.md#flow-l7-findings).
+  **History, kept:** not reproduced 2026-09-27 (plan 72), `docs/test-evidence/plan72-A7-GAME-i.json`; not seen in plan 72's seven Deck blocks.
+  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); "watched, not chased". Whether those release-notes
+  lines now stay is the maintainer's call (plan 76 Results, item 0).
+  **Earlier sightings, kept:** 2026-09-28 (`c71f1d8b`) a new sighting with a likely trigger, after a real answer finished and the panel was
+  reopened over Deep Rock Galactic: Survivor (evidence `plan76-SCR-10.json`, `plan76-TTS-FEAS-05.json`); 2026-09-29 block 2c reproduced it on
+  purpose twice (`plan76-P76-TRAP-REPRO.json`, `plan76-P76-TRAP-CONTROL.json`); block 3 measured six reopens: every reopen where the page's
+  `document.hasFocus()` read false split later, every one reading true never did, so the test tool's own open call was ruled out as the cause
+  (`plan76-P76-TRAP-SPLIT.json`).
 ### Features that need verification
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60

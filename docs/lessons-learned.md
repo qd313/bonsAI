@@ -365,6 +365,12 @@ with Deep Rock Galactic: Survivor running, it made no clear difference: the game
 most of the processor between them. Measure on the Deck, with the game running, before building a second
 round of the same kind of saving.
 
+**When Quick Access loses its window's focus over a running game, a plain focus() splits Steam's ring from the page.** Plan 76's
+six-reopen measurement: every reopen where the Quick Access page's `document.hasFocus()` read false split later (each D-pad press moved the
+page's focus, not Steam's ring, and A acted on the ring). Every reopen reading true never did. The reopen route did not decide it. Asking the
+panel's own window for focus back fixed 6 of 6. Before blaming Steam or a test tool for a ring that stops following the D-pad, read
+`hasFocus()` on the panel's document.
+
 ---
 
 ## 4. Briefing helpers
@@ -429,6 +435,11 @@ script inside the other's copy. Tell each helper to keep its scratch files in a 
 
 **"Do not run pnpm install. Go straight to the baseline gates." was read as "skip the baseline".** Several helpers
 skipped the before-you-start gates. Say "run the baseline gates now, without an install".
+
+**A D-pad walk test that does not model Steam's own scroll-into-view can pass while the Deck loops.** Plan 76 lane 3's first round passed
+every test and the review, then looped on the Deck between a cover and its section, because Steam re-scrolled the page after each focus and put
+the cover back on screen. Brief every walking fix to model that scroll (`src/test-harness/deckAnswerWalk.ts` now does, three ways) and to test a
+bounded walk with no stop visited twice.
 
 ---
 

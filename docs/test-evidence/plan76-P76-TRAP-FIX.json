@@ -1,0 +1,35 @@
+{
+  "row": "P76-TRAP-FIX (Deck block 4, lane 7, one try) - parts 1, 2, 3",
+  "build": "cf13a5a2 (checkout HEAD; fix commit 7a7d59fe); deck_deploy 2026-09-29 ~01:39 EDT, deck_checkReady buildMatches true (118 files) after the loader restart settled",
+  "deckTime": "2026-09-29 01:39-01:47 EDT",
+  "screen": "built-in panel; Quick Access window 854x534 with a game running, 854x454 with none",
+  "setup": "No game at start. Settings backed up over SSH (block4-settings-backup.json in scratch); no setting was changed, live file diffed identical at the end. Keep-awake lock taken with ttlMinutes 480, expiresAt 2026-09-29T13:39:19Z. Deep Rock Galactic: Survivor (2321470) launched from Recent Games by deck_launchGame (4 presses, in RunningApps after 149 ms); plugin not reloaded after launch.",
+  "part1_safety": {
+    "closedRead": "Quick Access page with the panel closed: visibilityState hidden, hasFocus false, innerWidth 1",
+    "steps": "deck_openPlugin (panel opened; first call succeeded). Question by script: 'how do I dodge the grabber enemy in the early waves' (VERIFIED, full text read back). deck_walkTo Ask (16 presses; ring = page focus on the ask button, visible 100 percent). A on Ask; Quick Access chord at once.",
+    "seen": "Immediately after: page hidden, hasFocus false; screenshot shows the game title screen in front. Ollama answer completed 01:42:38 (87.4 s). Screenshot at reply-ready shows the toast popup at bottom right over the game. 15 s later: Quick Access still hidden, game in front, game overlay at 45 fps.",
+    "screenshots": ["screenshots/DeckCapture_20260929_014142_auto.png (before reply)", "screenshots/DeckCapture_20260929_014241_auto.png (popup on screen)", "screenshots/DeckCapture_20260929_014256_auto.png (after popup)"],
+    "verdict": "PASS. The game stayed in front, the panel never opened by itself, the page read hidden throughout. Not proven by a game press: the game only sat on its title screen, so 'the game responds' rests on the frame counter and the picture staying live."
+  },
+  "part2_fix": {
+    "method": "Same as P76-TRAP-SPLIT: close with the chord, confirm hidden, reopen (A route: chord only; B route: deck_openPlugin), read hasFocus, gpfocus ring, activeElement about 1 s after (a page-side 800-1000 ms wait, then the read), then DOWN, RIGHT, UP each followed by a 500 ms-settled read. Reads are of the Quick Access page; the Steam main window held no ring (checked on A3: gpfocus none, hasFocus false).",
+    "reopens": [
+      {"id": "A1", "route": "chord only", "hasFocusAfter1s": true, "ringBeforeFirstPress": "Main tab (48,104,300,20), page focus same", "afterDown": "ring = page = chat row (48,128,300,48)", "afterRight": "same, nothing moved (no target)", "afterUp": "ring = page = Main tab", "split": false},
+      {"id": "A2", "route": "chord only", "hasFocusAfter1s": true, "ringBeforeFirstPress": "Main tab", "afterDown": "chat row", "afterRight": "same", "afterUp": "Main tab", "split": false},
+      {"id": "A3", "route": "chord only", "hasFocusAfter1s": true, "ringBeforeFirstPress": "Main tab; Steam main window no ring", "afterDown": "chat row", "afterRight": "same", "afterUp": "Main tab", "split": false},
+      {"id": "B1", "route": "deck_openPlugin", "openPluginPressed": "blind chord only (alreadyOpen path, 0 D-pad, no A)", "hasFocusAfter": true, "ringBeforeFirstPress": "Main tab", "afterDown": "chat row", "afterRight": "same", "afterUp": "Main tab", "split": false},
+      {"id": "B2", "route": "deck_openPlugin", "openPluginPressed": "blind chord only", "hasFocusAfter": true, "ringBeforeFirstPress": "Main tab", "afterDown": "chat row", "afterRight": "same", "afterUp": "Main tab", "split": false},
+      {"id": "B3", "route": "deck_openPlugin", "openPluginPressed": "blind chord only", "hasFocusAfter": true, "ringBeforeFirstPress": "Main tab", "afterDown": "chat row", "afterRight": "same", "afterUp": "Main tab", "split": false}
+    ],
+    "counts": "0 of 6 split; hasFocus true after all 6; ring moved on every Down and Up (Right had no target at the chat row, same as block 3's good reopens)",
+    "verdict": "PASS on the letter of the pass line. Limit: all six reopens landed on 'Main tab' with hasFocus true, the same starting state as block 3's three good reopens. The bad start (no ring, hasFocus false, needing an extra Down) never occurred, so this run cannot show the fix rescued that case; it shows only that no split appeared in six tries. deck_openPlugin did not press its extra DOWN in any of the three calls this time."
+  },
+  "part3_no_harm": {
+    "setup": "Game exited by deck_exitGame (11 presses, out of RunningApps in 210 ms; pgrep on the Deck found no game process). Panel reopened with deck_openPlugin (alreadyOpen path, ring on Main tab), window 854x454.",
+    "method": "A page-side observer sampling every 50 ms logged (ring == activeElement, hasFocus) on every change while deck_runSequence pressed DOWN 18 times then UP 14 times (32 presses; ring from the bonsAI back button, to Main tab, down to ask at 400 px, and back up to Main tab).",
+    "seen": "38 changes recorded: 0 with ring different from page focus, 0 with hasFocus false. Ring reached ask (visible 100 percent) and returned to Main tab. The tool's own run: 32 of 32 steps passed. Known non-fail stops (partly hidden): the question row behind the Retry icon (78 percent), and three stops on the last answer section behind the Copy icon and the dock/tab bar (22 to 67 percent); dead presses at the reply section, as in earlier runs.",
+    "verdict": "PASS"
+  },
+  "endState": "Game closed, settings unchanged (diff identical), question box empty (value ''), plugin open on Main with ring on Main tab, keep-awake released via deck_restorePowerSettings. No new chat started.",
+  "toolEvidence": ["runs/plan76-block4-launch2.json", "runs/plan76-block4-exit.json", "runs/plan76-block4-part3.json", "runs/plan76-block4-part3-b.json"]
+}

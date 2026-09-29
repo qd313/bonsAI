@@ -281,6 +281,18 @@ verdict does not change.
   helper, with Opus xhigh still reviewing and landing them. Measure one more wave with Opus high as a normal helper
   from the start, to get a clean cost per fix, before changing the table.
 
+**Fifth trial, D-pad fixes on Sonnet 5.5 high ([plan 76](76-release-wave-three.md), 2026-09-29, the maintainer's call).** Both D-pad lanes
+(2 and 3) ran on Sonnet 5.5 high instead of Opus, to measure it. No paired run; screen work stays out of paired runs.
+
+- **Result:** 11 D-pad fixes were checked on the Deck and 10 passed the first time. Lane 2: 9 of 9. Lane 3: 1 of 2. The miss was the cover walk:
+  Down looped past a closed first cover, which traps the player. Neither the lane's tests nor the session's review before landing caught it,
+  because the tests did not model Steam's own scroll-into-view on focus. Round 2 fixed it and passed on the Deck.
+- **Compare:** Opus high passed 5 of 6 the first time in plan 74 (the third trial above).
+- **Suggested, not adopted:** Sonnet high for D-pad fixes with a measured cause, provided every brief requires tests that model Steam's
+  scroll-into-view and the session reviews for loops, not only for landing spots.
+- **Also:** the ★★★ trap fix (lane 7) was done on Opus xhigh, per the house rule, and passed its one Deck try.
+- Evidence: the plan 76 Results section and Deck blocks 2b and 3; no token or cost figures were taken for this trial.
+
 ### 4c. The Sonnet 5.5 trial (2026-09-28, the maintainer's idea)
 
 Five settings (Sonnet 5.5 low, medium, high; Opus 5.5 low, medium) each did the same five jobs, reviewed blind:

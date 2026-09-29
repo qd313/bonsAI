@@ -31,6 +31,7 @@ All notable changes to this project are documented in this file.
 - **Cancel on the AI models screen puts the saved licence back** to what it was when the screen opened. Passed on the Deck.
 - **The library's status line follows a download that starts after the tab was rebuilt**, instead of reading "Not installed"
   for about a minute. Passed on the Deck; the heading line still says "Not installed" until the download lands.
+- **Reopening Quick Access over a running game no longer leaves the D-pad half dead.** When Quick Access is on screen but its window has lost the focus, bonsAI now asks that window for focus back, on a reopen and before each of Steam's own moves. On the Deck with a game running, 6 of 6 reopens came up focused (3 of 6 went bad before), and it never took focus from the game. Passed once; a longer play session is still owed.
 
 ### Plan 75 (2026-09-28)
 

@@ -185,6 +185,19 @@ Evidence: `docs/test-evidence/t75-<n>-<CHECK>.json`, n = 1 to 5 in the run order
   - The mic starts the speech server while recording and stops it within half a second, with no error
     (`t75-land-L3-MIC-STARTS-AND-STOPS.json`).
 
+- **J3** landed as `abfdd45e` on the maintainer's word (§ 9): the pick (Sonnet medium) finished by an Opus medium
+  helper with the review's fixes (`9a95412f`, `3c460586`). The popup now reads the answer with the same markdown
+  reader the panel draws with, so it never shows a word the panel keeps inside a block; `~~~` and four-backtick
+  fences, a closer glued onto a sentence, and punctuation-only answers are all handled; line widths are 82% of
+  what Steam drew. **On the Deck, 2026-09-28 19:10, the Deck's own screen:** three hard answers (ordinary,
+  all capitals, m/w-heavy) fired exactly as the feature builds them all fit, both lines, with 63 to 97 px to
+  spare and no cut by Steam (`t75-feature-F2-HARD-LINES.json`). The real-answer check could not run the first
+  time (the game never came to the front); its retry is recorded in the roadmap's testing rows.
+- **Found while finishing J3, by reading the code, not yet seen on the Deck:** Copy and Read aloud still find
+  fences by pairing backtick runs, so an odd fence (`~~~`, or a closer glued onto a sentence) could let them copy
+  or read hidden words; the panel's own chunk splitter knows only three backticks, so a `~~~` block with a blank
+  line inside may be drawn half as plain text. Filed on the roadmap.
+
 ## 8. Lessons
 
 - **A runbook step that cannot be met as written splits careful helpers from resourceful ones.** Write the route
@@ -206,7 +219,9 @@ Evidence: `docs/test-evidence/t75-<n>-<CHECK>.json`, n = 1 to 5 in the run order
    the roadmap's note and the helper files the same day; a new `bugfix-lane-sonnet-medium` helper carries the
    mechanical fixes. The feature finish already under way stayed on Opus medium.
 2. **The popup feature lands now,** on `experimental`, with the review's fixes (§ 4, J3).
-3. **Clean-up:** the 15 trial helper files and the 25 repo copies go once the feature has landed.
+3. **Clean-up, done 2026-09-28:** the 15 trial helper files, the 25 repo copies and their branches are gone (each
+   copy's shared-packages link removed first). The first finished run under the new routing, the popup's docs
+   sweep, ran on Sonnet 5.5 medium in 2 minutes for $0.33.
 
 ## 10. A pricing slip found while setting up
 

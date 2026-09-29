@@ -1,0 +1,93 @@
+{
+  "row": "F2-HARD-LINES",
+  "build_commit": "abfdd45e (deployed 19:06 by owner; not verified by me)",
+  "deck_time": "2026-09-28 19:12-19:14 EDT",
+  "screen": "Deck's own screen, page window 854x534 (dpr 1.5); toast window 320x80",
+  "setup": "Game 'Deep Rock Galactic: Survivor' running but never came to the front (see F1 evidence). Notifications fired with scratch probe f2_probe.py through DeckyPluginLoader.toaster.toast, duration 8000, one at a time, text exactly as in runbook.",
+  "pressed": "no buttons for this check (GUIDE/B presses belong to game-launch trouble).",
+  "seen": {
+    "card_max_width_px": 276,
+    "cap_test": "a 72-char title measured natural 388.5px, box stayed 276, scrollWidth 388 > clientWidth 276 (so the cap is 276 and scrollWidth does flag overflow)",
+    "notes": "room_px = 276 (cap) - natural text width. Element box = natural width when text is shorter than the cap; so clientWidth-scrollWidth is 0 for every line by construction, and the real room is the cap minus text width.",
+    "notif1": {
+      "title": {
+        "text": "the big armoured bug boss is weak on its",
+        "box_w": 213.3,
+        "scrollWidth": 213,
+        "clientWidth": 213,
+        "natural_text_w": 213.3,
+        "room_px": 62.7,
+        "steam_added_ellipsis": false,
+        "fits": true
+      },
+      "body": {
+        "text": "back, so dodge its charge, circle…",
+        "box_w": 213.3,
+        "scrollWidth": 213,
+        "clientWidth": 213,
+        "natural_text_w": 189.4,
+        "room_px": 86.6,
+        "steam_added_ellipsis": false,
+        "fits": true
+      }
+    },
+    "notif2": {
+      "title": {
+        "text": "USE THE DRILL ON THE GLOWING",
+        "box_w": 179.1,
+        "scrollWidth": 179,
+        "clientWidth": 179,
+        "natural_text_w": 179.1,
+        "room_px": 96.9,
+        "steam_added_ellipsis": false,
+        "fits": true
+      },
+      "body": {
+        "text": "WEAK POINT WHEN THE BOSS…",
+        "box_w": 184.9,
+        "scrollWidth": 185,
+        "clientWidth": 185,
+        "natural_text_w": 184.9,
+        "room_px": 91.1,
+        "steam_added_ellipsis": false,
+        "fits": true
+      }
+    },
+    "notif3": {
+      "title": {
+        "text": "many women mow wide meadows when",
+        "box_w": 208.9,
+        "scrollWidth": 209,
+        "clientWidth": 209,
+        "natural_text_w": 208.9,
+        "room_px": 67.1,
+        "steam_added_ellipsis": false,
+        "fits": true
+      },
+      "body": {
+        "text": "warm winds move; we wander,…",
+        "box_w": 208.9,
+        "scrollWidth": 209,
+        "clientWidth": 209,
+        "natural_text_w": 180.3,
+        "room_px": 95.7,
+        "steam_added_ellipsis": false,
+        "fits": true
+      }
+    },
+    "fonts": "title 11px, body 12px, text-overflow ellipsis, nowrap, overflow hidden",
+    "screenshots": [
+      "t75-feature-F2-HARD-LINES-1.png",
+      "t75-feature-F2-HARD-LINES-2.png",
+      "t75-feature-F2-HARD-LINES-3.png"
+    ],
+    "raw": [
+      "t75-feature-F2-raw-f2_1.out",
+      "t75-feature-F2-raw-f2_1b.out",
+      "t75-feature-F2-raw-f2_2.out",
+      "t75-feature-F2-raw-f2_2b.out",
+      "t75-feature-F2-raw-f2_3.out"
+    ]
+  },
+  "verdict": "PASS: all six lines show whole text, no Steam ellipsis (only the feature's own trailing ... character), scrollWidth <= clientWidth. Room left (of 276 cap): n1 title 62.7 body 86.6; n2 title 96.9 body 91.1; n3 title 67.1 body 95.7"
+}

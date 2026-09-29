@@ -1,0 +1,10 @@
+{
+  "row": "F1-REAL-POPUP",
+  "build_commit": "abfdd45e (deployed 19:06 by owner; not verified by me)",
+  "deck_time": "2026-09-28 19:07-19:15 EDT",
+  "screen": "Deck's own screen, window 854x534",
+  "setup": "deck_launchGame 'Deep Rock Galactic: Survivor' (appid 2321470): ok, appid in RunningApps after 181 ms. Plugin reloaded at ~19:08. Old Ask mode in settings: strategy (unchanged; nothing edited).",
+  "pressed": "deck_launchGame's 4 presses; one DOWN (acquire focus) and one QAM chord by deck_openPlugin; GUIDE + B once; deck_exitGame twice (1 GUIDE each, refused); B after each to close the Steam menu.",
+  "seen": "The game process (DRG Survivor.exe, pid 247251) ran the whole time, about 1 core busy, but Steam never put a game window in front. The screen stayed on Steam Home (Recent Games) for 8+ minutes. Steam route /library/home. deck_openPlugin twice: first ECONNRESET on the debug link (expected after reload), second could not open the QAM chord over Steam Home. GUIDE opens a main menu whose first entry is Home, not the game, so deck_exitGame refuses.",
+  "verdict": "COULD NOT RUN. The check needs the game in front with the panel closed. Not done: Ask, send-question script, watcher, walk to Ask. No answer was produced."
+}

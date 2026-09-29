@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
-  findUnvisitedSpoilerFenceInView,
+  findFirstSpoilerFenceIn,
+  findNextSpoilerFenceInView,
   focusSpoilerFence,
-  markSpoilerFenceVisited,
   registerSpoilerFence,
   resetSpoilerFenceRegistry,
 } from "./spoilerFenceRegistry";
 
 const alwaysInView = () => true;
+/** The walk with no ring anywhere, which offers every fence in view. */
+const findNext = (bubble: HTMLElement, isInView: (el: HTMLElement) => boolean, ring: HTMLElement | null = null) =>
+  findNextSpoilerFenceInView(bubble, isInView, ring);
 const neverInView = () => false;
 
 function makeBubbleWith(...fences: HTMLElement[]): HTMLElement {
@@ -26,14 +29,14 @@ describe("spoiler fence registry", () => {
 
   it("finds nothing when no fence is registered", () => {
     const bubble = makeBubbleWith();
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
+    expect(findNext(bubble, alwaysInView)).toBeNull();
   });
 
   it("finds a masked fence inside the bubble", () => {
     const fence = document.createElement("div");
     const bubble = makeBubbleWith(fence);
     registerSpoilerFence("a", fence);
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBe(fence);
+    expect(findNext(bubble, alwaysInView)).toBe(fence);
   });
 
   it("ignores a fence that belongs to a different reply", () => {
@@ -42,28 +45,26 @@ describe("spoiler fence registry", () => {
     const bubble = makeBubbleWith();
     registerSpoilerFence("a", fence);
     expect(otherBubble.contains(fence)).toBe(true);
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
+    expect(findNext(bubble, alwaysInView)).toBeNull();
   });
 
   it("ignores a fence that is scrolled out of view", () => {
     const fence = document.createElement("div");
     const bubble = makeBubbleWith(fence);
     registerSpoilerFence("a", fence);
-    expect(findUnvisitedSpoilerFenceInView(bubble, neverInView)).toBeNull();
+    expect(findNext(bubble, neverInView)).toBeNull();
   });
 
-  it("offers a fence once, then lets Down scroll past it", () => {
+  it("never offers the fence the ring is on, so Down walks past it instead of being trapped", () => {
     const fence = document.createElement("div");
     const bubble = makeBubbleWith(fence);
     registerSpoilerFence("a", fence);
 
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBe(fence);
-    markSpoilerFenceVisited(fence);
-    // Without this the fence would claim every Down press and trap the user in the bubble.
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
+    expect(findNext(bubble, alwaysInView)).toBe(fence);
+    expect(findNext(bubble, alwaysInView, fence)).toBeNull();
   });
 
-  it("focusSpoilerFence focuses and marks visited in one step", () => {
+  it("focusSpoilerFence focuses the fence, and the walk then skips it because the ring is on it", () => {
     const fence = document.createElement("div");
     const bubble = makeBubbleWith(fence);
     const focus = vi.spyOn(fence, "focus");
@@ -71,7 +72,76 @@ describe("spoiler fence registry", () => {
 
     expect(focusSpoilerFence(fence)).toBe(true);
     expect(focus).toHaveBeenCalled();
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
+    expect(findNext(bubble, alwaysInView, fence)).toBeNull();
+  });
+
+  /*
+   * The bug this replaced (plan 76 lane 3): a flag set when the ring first landed on a cover was
+   * never cleared, so a walk Up that had parked on it made every later walk Down skip it.
+   */
+  it("offers a cover again on a second walk, after the ring has been elsewhere", () => {
+    const first = document.createElement("div");
+    const second = document.createElement("div");
+    const bubble = makeBubbleWith(first, second);
+    registerSpoilerFence("a", first);
+    registerSpoilerFence("b", second);
+    focusSpoilerFence(first);
+    focusSpoilerFence(second);
+
+    // The ring is on the bubble again (re-entering from the header): both covers are ahead of it.
+    expect(findNext(bubble, alwaysInView, bubble)).toBe(first);
+  });
+
+  it("offers only fences after the ring, nearest first, and none the ring has passed", () => {
+    const first = document.createElement("div");
+    const second = document.createElement("div");
+    const third = document.createElement("div");
+    const bubble = makeBubbleWith(first, second, third);
+    registerSpoilerFence("a", first);
+    registerSpoilerFence("b", second);
+    registerSpoilerFence("c", third);
+
+    expect(findNext(bubble, alwaysInView, first)).toBe(second);
+    expect(findNext(bubble, alwaysInView, second)).toBe(third);
+    expect(findNext(bubble, alwaysInView, third)).toBeNull();
+  });
+
+  it("offers a fence inside the section the ring is on, and ignores a ring outside the bubble", () => {
+    const section = document.createElement("div");
+    const fence = document.createElement("div");
+    section.appendChild(fence);
+    const bubble = makeBubbleWith(section);
+    const outside = document.createElement("div");
+    document.body.appendChild(outside);
+    registerSpoilerFence("a", fence);
+
+    expect(findNext(bubble, alwaysInView, section)).toBe(fence);
+    expect(findNext(bubble, alwaysInView, outside)).toBe(fence);
+  });
+
+  it("names the nearest fence in reading order even when they registered out of order", () => {
+    const first = document.createElement("div");
+    const second = document.createElement("div");
+    const bubble = makeBubbleWith(first, second);
+    registerSpoilerFence("b", second);
+    registerSpoilerFence("a", first);
+
+    expect(findNext(bubble, alwaysInView)).toBe(first);
+  });
+
+  it("finds the first fence on screen inside a section, for A on the section", () => {
+    const section = document.createElement("div");
+    const above = document.createElement("div");
+    const shown = document.createElement("div");
+    const alsoShown = document.createElement("div");
+    section.append(above, shown, alsoShown);
+    makeBubbleWith(section);
+    registerSpoilerFence("a", above);
+    registerSpoilerFence("b", shown);
+    registerSpoilerFence("c", alsoShown);
+
+    expect(findFirstSpoilerFenceIn(section, (el) => el !== above)).toBe(shown);
+    expect(findFirstSpoilerFenceIn(section, () => false)).toBeNull();
   });
 
   /*
@@ -134,37 +204,18 @@ describe("spoiler fence registry", () => {
     registerSpoilerFence("a", fence);
     // The fence de-registers itself when it opens.
     registerSpoilerFence("a", null);
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
+    expect(findNext(bubble, alwaysInView)).toBeNull();
   });
 
-  it("walks multiple fences one press at a time", () => {
-    const first = document.createElement("div");
-    const second = document.createElement("div");
-    const bubble = makeBubbleWith(first, second);
-    registerSpoilerFence("a", first);
-    registerSpoilerFence("b", second);
-
-    const one = findUnvisitedSpoilerFenceInView(bubble, alwaysInView);
-    expect(one).toBe(first);
-    markSpoilerFenceVisited(one!);
-
-    const two = findUnvisitedSpoilerFenceInView(bubble, alwaysInView);
-    expect(two).toBe(second);
-    markSpoilerFenceVisited(two!);
-
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBeNull();
-  });
-
-  it("a remounted fence is offered again under its new element", () => {
+  it("a remounted fence is offered under its new element", () => {
     const old = document.createElement("div");
     const bubble = makeBubbleWith(old);
     registerSpoilerFence("a", old);
-    markSpoilerFenceVisited(old);
     registerSpoilerFence("a", null);
 
     const fresh = document.createElement("div");
     bubble.appendChild(fresh);
     registerSpoilerFence("a", fresh);
-    expect(findUnvisitedSpoilerFenceInView(bubble, alwaysInView)).toBe(fresh);
+    expect(findNext(bubble, alwaysInView)).toBe(fresh);
   });
 });

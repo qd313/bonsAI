@@ -480,7 +480,7 @@ function BonsaiSpoilerFence(props: {
         // stale entry would make D-pad Down park on a fence that no longer hides anything.
         ref={(el: HTMLElement | null) => {
           revealElRef.current = el;
-          registerSpoilerFence(fenceIdRef.current, el);
+          registerSpoilerFence(fenceIdRef.current, el, gamepadReveal);
         }}
         onActivate={gamepadReveal}
         onButtonDown={(evt: unknown) => {

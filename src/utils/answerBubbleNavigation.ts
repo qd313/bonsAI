@@ -10,10 +10,25 @@
  * move the ring on to whatever sits outside the bubble entirely.
  *
  *     Pressing Down, in order:
- *       1. an unrevealed spoiler already on screen  -> offer it
- *       2. a glossary-term chip already on screen   -> offer it
+ *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
+ *       2. a glossary-term chip on screen and ahead of the ring    -> land on the chip
  *       3. the next section, but only if it is already on screen
  *       4. otherwise, scroll the panel and try again on the next press
+ *
+ *     Pressing Up is the mirror, and lands on the same stops in reverse:
+ *       1. a glossary-term chip on screen and before the ring      -> land on the chip
+ *       2. the section above -- or, when that section holds a hidden cover, the cover
+ *          (`focusCoverGoingUp`), which is also how the walk enters an answer from below
+ *       3. otherwise, scroll the panel up
+ *
+ *     The stops, in one line: every section, and inside a section every hidden cover and every
+ *     underlined word, once each. A cover is what the ring lands on, in both directions, whenever
+ *     it is on screen when its section is reached, so the section's own box is only a stop when
+ *     the cover is not yet visible (the box of a tall section, read by scrolling). A on a section
+ *     that holds a hidden cover on screen opens it (`openHiddenCoverIn`), so a cover can be opened
+ *     from wherever the ring lands. Which cover is "ahead" is worked out from where the ring is on
+ *     every press, never remembered: an earlier flag set on landing made a walk Down skip every
+ *     cover a walk Up had parked on (Deck, 2026-09-28).
  *
  * Used for: the answer bubble's own Up/Down handlers, and the wider chat
  * screen's movement between turns.
@@ -55,12 +70,14 @@ import {
   resolveFocusedAnswerBubble,
   takeAnswerBubbleNavFocus,
 } from "./answerBubbleElRegistry";
-import { elementHasFocus, getUiDocument } from "./uiDocument";
+import { elementHasFocus, getUiDocument, uiGamepadFocusElement } from "./uiDocument";
 
 import {
+  findFirstSpoilerFenceIn,
   findLastSpoilerFenceIn,
-  findUnvisitedSpoilerFenceInView,
+  findNextSpoilerFenceInView,
   focusSpoilerFence,
+  revealSpoilerFence,
 } from "./spoilerFenceRegistry";
 
 import {
@@ -209,8 +226,8 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
  * (plan 74 lane 3). A section's own A does nothing, so Up used to leave the ring beside the cover
  * with no way to open it (docs/test-evidence/plan70-SPOILER-CREDITS-01.json); Down already parks on
  * a cover first. A plain focus: the cover is inside the answer's own container, the move Down's
- * cover step already makes on the device (spoilerFenceRegistry.ts). Marked visited on landing, so
- * the next Down walks on past it rather than landing on it again.
+ * cover step already makes on the device (spoilerFenceRegistry.ts). The next Down walks on past it
+ * because the ring is on it, not because it was flagged.
  *
  * A cover still above the screen counts too (plan 74 lane 3, round two). Going Up, a section comes
  * into view from its bottom, so a cover at its top is the last part of it to appear: the Deck found
@@ -393,6 +410,22 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
   return scroll.scrollTop < before;
 }
 
+/**
+ * A on a section that holds a cover the ring never landed on: open the first hidden cover inside it
+ * that is on screen, the way A on the cover itself does (plan 76 lane 3). A section's own A used to
+ * do nothing there. Walking Down onto a cover-only section landed on the section, not the cover
+ * (docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json), and A on it left the cover hidden; the
+ * walk now lands on the cover itself, and this keeps the section a fair place to press A from too.
+ * Calls the cover's own reveal, which also hands the ring to its "tap to hide" line, exactly as A on
+ * the cover does.
+ */
+export function openHiddenCoverIn(section: HTMLElement): boolean {
+  const scroll = findScrollablePanel(section);
+  if (!scroll) return false;
+  const cover = findFirstSpoilerFenceIn(section, (el) => elementIsWithinViewportOf(el, scroll));
+  return cover ? revealSpoilerFence(cover) : false;
+}
+
 /*
  * In: the answer bubble element (or null, if the caller has to ask this file
  * to find it), how many sections the answer has, and the answer's own key.
@@ -435,17 +468,18 @@ export function handleAnswerBubbleMoveDown(
    * (reported 2026-08-04). Diverting here rather than restructuring the bubble keeps the scroll-step
    * logic intact, which the roadmap explicitly says not to disturb without on-Deck proof.
    *
-   * Only fences already on screen are eligible, and each is offered once: press A to reveal, or
-   * press Down again to scroll on. Without the visited flag a fence you chose not to open would
-   * trap Down forever.
+   * Only fences already on screen and ahead of the ring are eligible: press A to reveal, or press
+   * Down again to walk on. The cover the ring is on is not "ahead", so a cover you chose not to
+   * open cannot trap Down. That used to be a flag set on landing and never cleared, which made a
+   * walk Down skip every cover an earlier walk Up had parked on (plan 76 lane 3: it landed on the
+   * section around the cover instead, where A does nothing).
    *
    * The first two attempts at this diversion never ran at all: `bubble` could not resolve, because
    * both routes to it asked the global `document` (uiDocument.ts). Everything below this point was
    * dead code on device, which is why the instrumentation added for it logged nothing.
    */
-  const fence = findUnvisitedSpoilerFenceInView(bubble, (el) =>
-    elementIsWithinViewportOf(el, scroll),
-  );
+  const inView = (el: HTMLElement) => elementIsWithinViewportOf(el, scroll);
+  const fence = findNextSpoilerFenceInView(bubble, inView, uiGamepadFocusElement());
   if (fence && focusSpoilerFence(fence)) return true;
 
   /*
@@ -456,12 +490,12 @@ export function handleAnswerBubbleMoveDown(
    * order between the two diversions has no other significance since they can never overlap in the
    * same reply (spoilers are Strategy-mode only, the glossary is DRG Survivor only).
    *
-   * Unlike the fence, eligibility is geometric (chips *after* the ring) rather than visited-once,
+   * Like the fence, eligibility is geometric (chips *after* the ring) rather than visited-once,
    * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts.
    */
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
-    (el) => elementIsWithinViewportOf(el, scroll),
+    inView,
     "down",
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) return true;
@@ -480,7 +514,6 @@ export function handleAnswerBubbleMoveDown(
    */
   if (answerKey) {
     const stops = orderedAnswerStops(answerKey, bubble);
-    const inView = (el: HTMLElement) => elementIsWithinViewportOf(el, scroll);
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
     if (next && inView(next) && focusAnswerStop(next)) {

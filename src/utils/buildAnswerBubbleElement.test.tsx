@@ -617,7 +617,9 @@ describe("answer bubble section stops", () => {
         }
       });
 
-      it("does nothing when the ring sits on a masked reveal target instead", () => {
+      /* A masked cover the walk has not registered as on screen (openHiddenCoverIn's rule, tested in
+         answerBubbleNavigation.walkKeepsRing.test.ts) is never opened early by A on its section. */
+      it("does nothing when the masked reveal target inside is not a registered, on-screen cover", () => {
         const stop = stopWithGpFocus();
         const revealTarget = document.createElement("div");
         revealTarget.className = "bonsai-spoiler-reveal-target";

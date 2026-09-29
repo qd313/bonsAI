@@ -67,7 +67,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 1005,
+      "lines": 1007,
       "role": ""
     },
     {
@@ -142,7 +142,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 667,
+      "lines": 676,
       "role": ""
     },
     {
@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 602,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 601,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "py_modules/backend/services/response_verify.py",
       "lines": 590,
-      "role": ""
-    },
-    {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 578,
       "role": ""
     }
   ]

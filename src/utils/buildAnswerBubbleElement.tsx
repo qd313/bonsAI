@@ -74,6 +74,7 @@ import {
   handleAnswerBubbleMoveDown,
   handleAnswerBubbleMoveUp,
   handleUpFromSpoilerCover,
+  openHiddenCoverIn,
 } from "./answerBubbleNavigation";
 import { registerAnswerStop } from "./answerStopRegistry";
 import {
@@ -166,10 +167,12 @@ const STOP_CLASS = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble
  * that control (`.bonsai-spoiler-collapse-target`) is a healthy `Focusable` with its own
  * `onActivate`, but the D-pad walk parks on the stop, not on it, so it never takes the ring on its
  * own. A masked reveal target renders `.bonsai-spoiler-reveal-target` instead, and a wait chip
- * renders neither, so the query simply finds nothing there — the exclusion STREAM-03 needs (A must
- * not early-reveal a masked fence or act on a wait chip) falls out of the DOM shape rather than
- * needing its own check. Reads the ring, not `activeElement`, for the same reason `moveUp` below
- * does: Steam moves `.gpfocus` without moving `activeElement`.
+ * renders neither, so the query simply finds nothing there. With no revealed cover to close, A opens
+ * the first HIDDEN cover inside this section that is on screen (`openHiddenCoverIn`), so a section
+ * the ring landed on instead of the cover inside it is not a dead press. A wait chip has no cover
+ * and does nothing, and A must not early-reveal a cover that is off screen (STREAM-03). Reads the
+ * ring, not `activeElement`, for the same reason `moveUp` below does: Steam moves `.gpfocus`
+ * without moving `activeElement`.
  *
  * `onMoveLeft`/`onMoveRight` hold still (claim the press, do nothing) rather than returning
  * `false`. Measured on the Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.json, steps 4-5):
@@ -191,7 +194,13 @@ export function stopNavProps(
       const collapseButton = stop?.querySelector<HTMLButtonElement>(
         ".bonsai-spoiler-collapse-target button"
       );
-      collapseButton?.click();
+      if (collapseButton) {
+        collapseButton.click();
+        return;
+      }
+      /* No revealed cover to close: open the first hidden one on screen instead, so A on the section
+         around a cover is never a dead press (plan 76 lane 3; openHiddenCoverIn). */
+      if (stop) openHiddenCoverIn(stop);
     },
     onMoveDown: () => moveDown(),
     onMoveUp: () => moveUp(),

@@ -17,7 +17,7 @@ import { resetUiDocument } from "../utils/uiDocument";
 
 const KEY = "turn-1";
 const ref = { current: 0 };
-const PANE_TOP = 88;
+export const PANE_TOP = 88;
 const DOCK_TOP = 290;
 const PANE_BOTTOM = 366;
 

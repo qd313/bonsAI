@@ -13,13 +13,15 @@
  *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
  *       2. a glossary-term chip on screen and ahead of the ring    -> land on the chip
  *       3. the next section, but only if it is already on screen
- *       4. otherwise, scroll the panel and try again on the next press
+ *       4. otherwise, scroll the panel and try again on the next press; if that scroll carries
+ *          the stop the ring is on off the screen (a cover, an opened cover's "tap to hide"
+ *          line, an underlined word), the ring moves to the section that holds it
  *
  *     Pressing Up is the mirror, and lands on the same stops in reverse:
  *       1. a glossary-term chip on screen and before the ring      -> land on the chip
  *       2. the section above -- or, when that section holds a hidden cover, the cover
  *          (`focusCoverGoingUp`), which is also how the walk enters an answer from below
- *       3. otherwise, scroll the panel up
+ *       3. otherwise, scroll the panel up, with the same ring-follows-the-section step as Down
  *
  *     The stops, in one line: every section, and inside a section every hidden cover and every
  *     underlined word, once each. A cover is what the ring lands on, in both directions, whenever
@@ -90,6 +92,9 @@ import {
   focusedAnswerStopIndex,
   orderedAnswerStops,
 } from "./answerStopRegistry";
+
+/** The stop the ring was last moved off by a scroll, and the section it went to; see `keepRingOnScreen`. */
+let hop: { from: HTMLElement; to: HTMLElement } | null = null;
 
 /**
  * True when `el` overlaps the READABLE band of its scroll container.
@@ -194,6 +199,7 @@ function focusPanelEl(el: HTMLElement): boolean {
  * fence anywhere in the bubble still wins over the first section, exactly as before.
  */
 export function focusFirstAnswerChunk(answerKey: string): boolean {
+  hop = null;
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -305,6 +311,7 @@ export function handleUpFromSpoilerCover(
  * `focusFirstAnswerChunk`'s comment for why the transfer is needed.
  */
 export function focusLastAnswerChunk(answerKey: string): boolean {
+  hop = null;
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -341,6 +348,7 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
  * ring was just destroyed, so "the bubble around the ring" can only name the old, detached one.
  */
 export function focusAnswerChunkAtIndex(answerKey: string, index: number): boolean {
+  hop = null;
   if (index < 0) return false;
   const el = findAnswerBubbleByKey(answerKey);
   if (!el) return false;
@@ -408,6 +416,77 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
   const step = Math.max(80, Math.floor(scroll.clientHeight * 0.35));
   scroll.scrollTop = Math.max(0, before - step);
   return scroll.scrollTop < before;
+}
+
+/*
+ * Down and Up press on: keep the ring on something that is still on the screen.
+ *
+ * A cover, a revealed cover's "tap to hide" line and an underlined game word are stops the ring can
+ * sit on INSIDE a section, and they are small. When a press has nothing to step to and scrolls the
+ * panel instead, the ring stays where it is while its stop slides away under it. The Deck measured it
+ * both ways (docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json, plan76-P76-M-COVER-SCROLL.json): on
+ * a word five presses in a row scrolled it 300 px above the screen with the ring still on it, and a
+ * cover was left with a third of it cut off at the top.
+ *
+ * So after the scroll, if the inline stop the ring is on is cut off at the edge the scroll pushed it
+ * toward (its top above the pane going Down, its bottom below the readable band going Up), the ring
+ * moves to the section that holds it. That section is still on screen, the scroll has already
+ * happened, and reading a tall section by scrolling goes on exactly as before. Measured after the
+ * scroll rather than predicted, so the answer is right whatever step the panel actually took.
+ *
+ * `focusAnswerStop` is a plain focus() between two Focusables of the same answer: the same call the
+ * walk already makes from a cover or a word to the next section, and Steam invokes the press handler
+ * that got us here (a section's onMoveDown/onMoveUp, reached from the inline stop because it has none
+ * of its own). It moves nothing across containers.
+ *
+ * `hop` remembers the stop the ring was moved off. The ring is then on the whole section,
+ * which counts every cover and word inside it as "ahead", the one just left included; without this
+ * the next Down would land on it again and the two would trade places forever.
+ */
+
+/** A pixel or two of an edge is rounding, not a cut. */
+const CUT_TOLERANCE_PX = 1;
+
+/**
+ * The stop the ring was just moved off, while that still matters: the ring is on the section it was
+ * moved to and the stop is still cut off above the pane. Enter the answer again by any other way, or
+ * scroll the stop back into view, and it no longer applies, so the chips above the old stop are
+ * offered again instead of being skipped for good. Only a walk Down needs it: going Up, a section
+ * never offers the chips inside it (drgGlossaryTermRegistry.ts), so nothing can be offered twice.
+ */
+function liveHoppedFrom(scroll: HTMLElement): HTMLElement | null {
+  const ring = uiGamepadFocusElement();
+  if (
+    hop &&
+    ring === hop.to &&
+    hop.to.contains(hop.from) &&
+    hop.from.getBoundingClientRect().top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
+  ) {
+    return hop.from;
+  }
+  hop = null;
+  return null;
+}
+
+function keepRingOnScreen(
+  bubble: HTMLElement,
+  answerKey: string | undefined,
+  scroll: HTMLElement,
+  direction: "down" | "up"
+): void {
+  if (!answerKey) return;
+  const ring = uiGamepadFocusElement();
+  if (!ring || !bubble.contains(ring)) return;
+  const stops = orderedAnswerStops(answerKey, bubble);
+  const section = stops[focusedAnswerStopIndex(stops)];
+  /* On the section itself (or on nothing inside one): reading it by scrolling is the design. */
+  if (!section || section === ring) return;
+  const rect = ring.getBoundingClientRect();
+  const cut =
+    direction === "down"
+      ? rect.top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
+      : rect.bottom > readableBottomOf(scroll) + CUT_TOLERANCE_PX;
+  if (cut && focusAnswerStop(section) && direction === "down") hop = { from: ring, to: section };
 }
 
 /**
@@ -479,8 +558,12 @@ export function handleAnswerBubbleMoveDown(
    * dead code on device, which is why the instrumentation added for it logged nothing.
    */
   const inView = (el: HTMLElement) => elementIsWithinViewportOf(el, scroll);
-  const fence = findNextSpoilerFenceInView(bubble, inView, uiGamepadFocusElement());
-  if (fence && focusSpoilerFence(fence)) return true;
+  const hopped = liveHoppedFrom(scroll);
+  const fence = findNextSpoilerFenceInView(bubble, inView, hopped ?? uiGamepadFocusElement());
+  if (fence && focusSpoilerFence(fence)) {
+    hop = null;
+    return true;
+  }
 
   /*
    * Same diversion, same reason, for a DRG Survivor glossary term chip (roadmap: tap-to-define
@@ -491,14 +574,19 @@ export function handleAnswerBubbleMoveDown(
    * same reply (spoilers are Strategy-mode only, the glossary is DRG Survivor only).
    *
    * Like the fence, eligibility is geometric (chips *after* the ring) rather than visited-once,
-   * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts.
+   * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts. When
+   * the ring was just moved off an inline stop by a scroll (`keepRingOnScreen`), "the ring" for this
+   * purpose is that stop, so the one it left and the ones above it are not offered again.
    */
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
-    inView,
+    (el) => inView(el) && (!hopped || Boolean(hopped.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
     "down",
   );
-  if (termChip && focusDrgGlossaryTermChip(termChip)) return true;
+  if (termChip && focusDrgGlossaryTermChip(termChip)) {
+    hop = null;
+    return true;
+  }
 
   /*
    * Then step section by section, before scrolling.
@@ -517,6 +605,7 @@ export function handleAnswerBubbleMoveDown(
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
     if (next && inView(next) && focusAnswerStop(next)) {
+      hop = null;
       /* Landing on it is not enough — if it runs under the dock, bring it out. */
       revealBelowDock(next, scroll);
       return true;
@@ -533,12 +622,19 @@ export function handleAnswerBubbleMoveDown(
   }
 
   const max = panelScrollMax(scroll);
-  if (max > 0 && panelStepDown(bubble)) {
+  if ((max > 0 && panelStepDown(bubble)) || tryGeometryPanelScroll(bubble, "down")) {
+    keepRingOnScreen(bubble, answerKey, scroll, "down");
     return true;
   }
-  return tryGeometryPanelScroll(bubble, "down");
+  return false;
 }
 
+/**
+ * Up with the ring inside the answer: mirror of `handleAnswerBubbleMoveDown` (the drawing at the top
+ * of this file). A chip before the ring, then the section above (or the cover inside it), then a
+ * scroll up, after which the ring follows its section if the scroll cut its inline stop off.
+ * True when the press was handled here; false lets Steam move the ring out of the answer.
+ */
 export function handleAnswerBubbleMoveUp(
   bubbleEl: HTMLElement | null,
   _focusedChunkRef: { current: number },
@@ -565,7 +661,10 @@ export function handleAnswerBubbleMoveUp(
     (el) => elementIsWithinViewportOf(el, scroll),
     "up",
   );
-  if (termChip && focusDrgGlossaryTermChip(termChip)) return true;
+  if (termChip && focusDrgGlossaryTermChip(termChip)) {
+    hop = null;
+    return true;
+  }
 
   /*
    * Step back through the sections, and note the asymmetry with Down: Up walks only when a stop
@@ -581,8 +680,12 @@ export function handleAnswerBubbleMoveUp(
     const at = focusedAnswerStopIndex(stops);
     const prev = at > 0 ? stops[at - 1] : undefined;
     /* A hidden cover in that section takes the ring first (plan 74 lane 3; focusCoverGoingUp). */
-    if (prev && elementIsWithinViewportOf(prev, scroll) && focusCoverGoingUp(prev, scroll)) return true;
+    if (prev && elementIsWithinViewportOf(prev, scroll) && focusCoverGoingUp(prev, scroll)) {
+      hop = null;
+      return true;
+    }
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
+      hop = null;
       /* Same as the Down path: landing on it is not enough if it runs under the dock. */
       revealBelowDock(prev, scroll);
       return true;
@@ -594,8 +697,8 @@ export function handleAnswerBubbleMoveUp(
     return false;
   }
 
-  if (scroll.scrollTop <= 0) {
-    return tryGeometryPanelScroll(bubble, "up");
-  }
-  return panelStepUp(bubble);
+  const scrolled =
+    scroll.scrollTop <= 0 ? tryGeometryPanelScroll(bubble, "up") : panelStepUp(bubble);
+  if (scrolled) keepRingOnScreen(bubble, answerKey, scroll, "up");
+  return scrolled;
 }

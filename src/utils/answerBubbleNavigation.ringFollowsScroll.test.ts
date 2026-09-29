@@ -100,19 +100,24 @@ describe("Down through a tall section with the ring on an underlined word", () =
     expect(document.activeElement).toBe(below);
   });
 
-  it("forgets the word it left once the ring comes back to the section with that word in view", () => {
+  it("keeps skipping the words it has passed for as long as the ring stays in that section", () => {
+    // Round two: the memory used to end when the word came back on screen, which is exactly what
+    // Steam's own scroll does after the ring moves to the section, and the walk then went round
+    // in a circle (plan76-P76-WALK-COVERS.json). It now belongs to the section, whatever the panel does.
     const a = deckAnswer([[299, 961], [961, 991]], 332);
     const first = a.word(a.stops[0]!, [430, 445]);
     const second = a.word(a.stops[0]!, [572, 587]);
     second.focus();
     a.down();
-    a.down(); // the second word is cut: the ring is on the section, the walk remembers the word
+    a.down(); // the second word is cut: the ring is on the section
     expect(document.activeElement).toBe(a.stops[0]);
 
-    a.pane.scrollTop = 332; // the reader scrolled back: both words are on screen, the ring is unchanged
-    expect(a.down()).toBe(true);
+    a.pane.scrollTop = 332; // the panel is put back: both words are on screen, the ring is unchanged
+    a.down();
 
-    expect(document.activeElement).toBe(first); // offered again, in reading order, not skipped
+    expect(document.activeElement).not.toBe(first); // it is before the word the ring left
+    expect(document.activeElement).not.toBe(second);
+    expect(document.activeElement).toBe(a.stops[0]);
   });
 
   it("leaves the ring alone when the word is still wholly on screen after the scroll", () => {

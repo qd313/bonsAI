@@ -185,6 +185,7 @@
     "src/utils/answerBubbleNavigation.coverUp.test.ts",
     "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",
+    "src/utils/answerBubbleNavigation.walkThrough.test.ts",
     "src/utils/answerCopyText.test.ts",
     "src/utils/answerReadableText.test.ts",
     "src/utils/answerStopRegistry.test.ts",

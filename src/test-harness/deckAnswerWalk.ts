@@ -5,8 +5,13 @@
  *          pane shaped like the Deck's own screen: the pane runs from y 88 to y 366, the dock starts
  *          at y 290 (so the readable band is 202 px), and every box follows the pane's scrollTop.
  * Used for: answerBubbleNavigation.ringFollowsScroll.test.ts and answerBubbleNavigation.coverMirror.test.ts.
- * Does not: emulate Steam's own scroll when the ring lands (on the device Steam glides the panel to
- *           show a landed stop; here only the code's own scrolling moves the panel).
+ * Does not: know Steam's real scroll rule. On the device Steam glides the panel a moment AFTER a stop
+ *           takes focus, and the Deck showed several landings (a cover moved 69 px down, then 37 px
+ *           back up; a section's box pulled to the top of the pane). `steamScroll` models that
+ *           glide, applied after the press returns, in three deliberately different rules, so a walk
+ *           that only works under one of them is caught: "top" aligns a stop that is not wholly on
+ *           screen to the top of the pane, "padded" puts a small stop 116 px below it (Steam's
+ *           scroll padding), "center" also re-centres a small stop that was already on screen.
  */
 import { handleAnswerBubbleMoveDown, handleAnswerBubbleMoveUp, handleUpFromSpoilerCover } from "../utils/answerBubbleNavigation";
 import { registerAnswerStop, resetAnswerStopRegistry } from "../utils/answerStopRegistry";
@@ -27,7 +32,9 @@ export type Box = [top: number, bottom: number];
  * An answer inside a scroll pane, in the Deck's numbers. A box is given as [top, bottom] in the
  * answer's own coordinates (its screen y when the panel is scrolled to 0), and follows the scroll.
  */
-export function deckAnswer(sections: Box[], scrollTop = 0) {
+export type SteamScrollRule = "top" | "padded" | "center";
+
+export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamScrollRule) {
   const pane = document.createElement("div");
   pane.className = "TabContentsScroll";
   Object.defineProperty(pane, "scrollHeight", { value: 2000, configurable: true });
@@ -94,18 +101,47 @@ export function deckAnswer(sections: Box[], scrollTop = 0) {
     return el;
   };
 
+  /* Steam's glide to a stop that just took focus, applied once the press that moved the ring is over. */
+  let landed: HTMLElement | null = null;
+  pane.addEventListener("focusin", (event) => {
+    landed = event.target as HTMLElement;
+  });
+  const settle = () => {
+    const el = landed;
+    landed = null;
+    if (!steamScroll || !el || el === bubble || !bubble.contains(el)) return;
+    const r = el.getBoundingClientRect();
+    const height = r.bottom - r.top;
+    const small = height < 100;
+    const inside = r.top >= PANE_TOP && r.bottom <= DOCK_TOP;
+    let target: number | null = null;
+    if (steamScroll === "center" && small) target = PANE_TOP + (DOCK_TOP - PANE_TOP - height) / 2;
+    else if (!inside) target = steamScroll === "padded" && small ? PANE_TOP + 116 : PANE_TOP;
+    if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
+  };
+
   const top = (el: HTMLElement) => el.getBoundingClientRect().top;
   const bottom = (el: HTMLElement) => el.getBoundingClientRect().bottom;
   /** The press Steam routes to the answer, the way buildAnswerBubbleElement's moveDown/moveUp do. */
-  const down = () => handleAnswerBubbleMoveDown(bubble, ref, sections.length, KEY);
+  const down = () => {
+    const handled = handleAnswerBubbleMoveDown(bubble, ref, sections.length, KEY);
+    settle();
+    return handled;
+  };
   const up = () => {
     const ring = document.activeElement as HTMLElement | null;
-    if (ring?.closest(".bonsai-spoiler-reveal-target, .bonsai-spoiler-collapse-target")) {
-      return handleUpFromSpoilerCover(bubble, sections.length, KEY);
-    }
-    return handleAnswerBubbleMoveUp(bubble, ref, sections.length, KEY);
+    const handled = ring?.closest(".bonsai-spoiler-reveal-target, .bonsai-spoiler-collapse-target")
+      ? handleUpFromSpoilerCover(bubble, sections.length, KEY)
+      : handleAnswerBubbleMoveUp(bubble, ref, sections.length, KEY);
+    settle();
+    return handled;
   };
-  return { pane, bubble, stops, cover, word, hideLine, top, bottom, down, up };
+  /** Put the ring on `el` the way Steam does when a press lands there (the glide follows). */
+  const land = (el: HTMLElement) => {
+    el.focus();
+    settle();
+  };
+  return { pane, bubble, stops, cover, word, hideLine, top, bottom, down, up, land };
 }
 
 /** Clear every registry and the page, for a test's beforeEach. */

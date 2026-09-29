@@ -29,8 +29,16 @@
  *     the cover is not yet visible (the box of a tall section, read by scrolling). A on a section
  *     that holds a hidden cover on screen opens it (`openHiddenCoverIn`), so a cover can be opened
  *     from wherever the ring lands. Which cover is "ahead" is worked out from where the ring is on
- *     every press, never remembered: an earlier flag set on landing made a walk Down skip every
- *     cover a walk Up had parked on (Deck, 2026-09-28).
+ *     every press, never remembered across walks: an earlier flag set on landing made a walk Down
+ *     skip every cover a walk Up had parked on (Deck, 2026-09-28).
+ *
+ *     The one memory a walk Down does keep is inside a section: the last cover or word the ring was
+ *     on there (`walkAnchor`). When a scroll moves the ring from that stop up to its section, the
+ *     stop and everything before it are never offered again until the ring leaves the section,
+ *     whatever Steam then does to the panel. That is what stops a cover and its section trading the
+ *     ring for ever (Deck, 2026-09-29). It also means a section whose text runs on past the screen
+ *     shows Down one stop more than Up: cover, then the section's box once a scroll has moved the
+ *     ring up to it, then the next section; Up goes next section, cover.
  *
  * Used for: the answer bubble's own Up/Down handlers, and the wider chat
  * screen's movement between turns.
@@ -93,8 +101,8 @@ import {
   orderedAnswerStops,
 } from "./answerStopRegistry";
 
-/** The stop the ring was last moved off by a scroll, and the section it went to; see `keepRingOnScreen`. */
-let hop: { from: HTMLElement; to: HTMLElement } | null = null;
+/** The section a walk Down is in and the last small stop in it the ring has been on; see `walkAnchor`. */
+let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
 
 /**
  * True when `el` overlaps the READABLE band of its scroll container.
@@ -199,7 +207,7 @@ function focusPanelEl(el: HTMLElement): boolean {
  * fence anywhere in the bubble still wins over the first section, exactly as before.
  */
 export function focusFirstAnswerChunk(answerKey: string): boolean {
-  hop = null;
+  walk = null;
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -311,7 +319,7 @@ export function handleUpFromSpoilerCover(
  * `focusFirstAnswerChunk`'s comment for why the transfer is needed.
  */
 export function focusLastAnswerChunk(answerKey: string): boolean {
-  hop = null;
+  walk = null;
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -348,7 +356,7 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
  * ring was just destroyed, so "the bubble around the ring" can only name the old, detached one.
  */
 export function focusAnswerChunkAtIndex(answerKey: string, index: number): boolean {
-  hop = null;
+  walk = null;
   if (index < 0) return false;
   const el = findAnswerBubbleByKey(answerKey);
   if (!el) return false;
@@ -439,33 +447,43 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
  * that got us here (a section's onMoveDown/onMoveUp, reached from the inline stop because it has none
  * of its own). It moves nothing across containers.
  *
- * `hop` remembers the stop the ring was moved off. The ring is then on the whole section,
- * which counts every cover and word inside it as "ahead", the one just left included; without this
- * the next Down would land on it again and the two would trade places forever.
+ * The walk remembers the last small stop the ring was on in a section (`walkAnchor`), so that when
+ * the ring is moved up to the section the stop is not offered to it again. See there.
  */
 
 /** A pixel or two of an edge is rounding, not a cut. */
 const CUT_TOLERANCE_PX = 1;
 
 /**
- * The stop the ring was just moved off, while that still matters: the ring is on the section it was
- * moved to and the stop is still cut off above the pane. Enter the answer again by any other way, or
- * scroll the stop back into view, and it no longer applies, so the chips above the old stop are
- * offered again instead of being skipped for good. Only a walk Down needs it: going Up, a section
- * never offers the chips inside it (drgGlossaryTermRegistry.ts), so nothing can be offered twice.
+ * Where a walk Down is, for choosing the next cover or word: the ring itself, except when the ring is
+ * on a section that holds small stops it has already been on. Then it is the LAST of them, so the
+ * section around a cover the ring has been on (or was moved off by a scroll) does not count that
+ * cover, or any stop before it, as still ahead.
+ *
+ * Without this the first version looped on the Deck (docs/test-evidence/plan76-P76-WALK-COVERS.json):
+ * the ring went from cover 1 to its section, Steam then glided the panel so the cover was fully on
+ * screen again, and a rule that only remembered the cover while it was cut off forgot it; the cover,
+ * which sits inside its section, counted as ahead of the section, so Down landed on it again, the
+ * next scroll cut it off, the ring moved to the section, and so on for ever.
+ *
+ * So the memory belongs to the section, not to any geometry: it is kept for as long as the ring stays
+ * in that section, and dropped the moment a press finds the ring in another one, or the ring lands
+ * on something new (`walk = null`). Nothing here moves the ring.
  */
-function liveHoppedFrom(scroll: HTMLElement): HTMLElement | null {
+function walkAnchor(bubble: HTMLElement, answerKey: string | undefined): HTMLElement | null {
   const ring = uiGamepadFocusElement();
-  if (
-    hop &&
-    ring === hop.to &&
-    hop.to.contains(hop.from) &&
-    hop.from.getBoundingClientRect().top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
-  ) {
-    return hop.from;
+  const stops = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
+  const section = stops[focusedAnswerStopIndex(stops)];
+  if (!ring || !section) {
+    walk = null;
+    return ring;
   }
-  hop = null;
-  return null;
+  if (!walk || walk.section !== section) walk = { section, passed: null };
+  const passed = walk.passed;
+  if (ring !== section && (!passed || passed.compareDocumentPosition(ring) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+    walk.passed = ring;
+  }
+  return ring === section && walk.passed ? walk.passed : ring;
 }
 
 function keepRingOnScreen(
@@ -486,7 +504,7 @@ function keepRingOnScreen(
     direction === "down"
       ? rect.top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
       : rect.bottom > readableBottomOf(scroll) + CUT_TOLERANCE_PX;
-  if (cut && focusAnswerStop(section) && direction === "down") hop = { from: ring, to: section };
+  if (cut) focusAnswerStop(section);
 }
 
 /**
@@ -558,10 +576,12 @@ export function handleAnswerBubbleMoveDown(
    * dead code on device, which is why the instrumentation added for it logged nothing.
    */
   const inView = (el: HTMLElement) => elementIsWithinViewportOf(el, scroll);
-  const hopped = liveHoppedFrom(scroll);
-  const fence = findNextSpoilerFenceInView(bubble, inView, hopped ?? uiGamepadFocusElement());
+  const anchor = walkAnchor(bubble, answerKey);
+  /* True when the walk is somewhere other than where the ring sits (the ring is on a section, see walkAnchor). */
+  const anchored = anchor !== uiGamepadFocusElement();
+  const fence = findNextSpoilerFenceInView(bubble, inView, anchor);
   if (fence && focusSpoilerFence(fence)) {
-    hop = null;
+    walk = null;
     return true;
   }
 
@@ -575,16 +595,16 @@ export function handleAnswerBubbleMoveDown(
    *
    * Like the fence, eligibility is geometric (chips *after* the ring) rather than visited-once,
    * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts. When
-   * the ring was just moved off an inline stop by a scroll (`keepRingOnScreen`), "the ring" for this
-   * purpose is that stop, so the one it left and the ones above it are not offered again.
+   * the ring was moved up to a section from a small stop in it (`keepRingOnScreen`), "the ring" for
+   * this purpose is that stop (`walkAnchor`), so it and the ones before it are not offered again.
    */
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
-    (el) => inView(el) && (!hopped || Boolean(hopped.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    (el) => inView(el) && (!anchored || Boolean(anchor!.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
     "down",
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) {
-    hop = null;
+    walk = null;
     return true;
   }
 
@@ -605,7 +625,7 @@ export function handleAnswerBubbleMoveDown(
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
     if (next && inView(next) && focusAnswerStop(next)) {
-      hop = null;
+      walk = null;
       /* Landing on it is not enough — if it runs under the dock, bring it out. */
       revealBelowDock(next, scroll);
       return true;
@@ -662,7 +682,7 @@ export function handleAnswerBubbleMoveUp(
     "up",
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) {
-    hop = null;
+    walk = null;
     return true;
   }
 
@@ -681,11 +701,11 @@ export function handleAnswerBubbleMoveUp(
     const prev = at > 0 ? stops[at - 1] : undefined;
     /* A hidden cover in that section takes the ring first (plan 74 lane 3; focusCoverGoingUp). */
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusCoverGoingUp(prev, scroll)) {
-      hop = null;
+      walk = null;
       return true;
     }
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
-      hop = null;
+      walk = null;
       /* Same as the Down path: landing on it is not enough if it runs under the dock. */
       revealBelowDock(prev, scroll);
       return true;

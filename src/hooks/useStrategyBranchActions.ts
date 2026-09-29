@@ -116,7 +116,9 @@ export function useStrategyBranchActions(a: UseStrategyBranchActionsArgs): Strat
       ]
         .filter((line) => line.length > 0)
         .join("\n");
-      setUnifiedInput(composed);
+      /* Not written into the question box: the Ask takes the text as its override and clears the box
+         when the request starts, so the box only ever showed the raw prompt the model is sent, for as
+         long as the start took (KB-FOLLOWUP-QUOTE-02, plan 76 Deck run). */
       void onAskOllama(composed, { threadQuestionDisplay: `I'm at: ${opt.label}` });
     },
     [

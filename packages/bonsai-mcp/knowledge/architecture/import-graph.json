@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 608,
-  "edgeCount": 1694,
+  "fileCount": 609,
+  "edgeCount": 1696,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2140,6 +2140,7 @@
       "importedBy": [
         "src/data/strategyGuideFollowup.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useStrategyBranchActions.test.ts",
         "src/hooks/useStrategyBranchActions.ts"
       ]
     },
@@ -3944,6 +3945,13 @@
         "src/styles/sections/section-4.ts"
       ]
     },
+    "src/hooks/useStrategyBranchActions.test.ts": {
+      "imports": [
+        "src/data/strategyGuideFollowup.ts",
+        "src/hooks/useStrategyBranchActions.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useStrategyBranchActions.ts": {
       "imports": [
         "src/data/strategyGuideFollowup.ts",
@@ -3952,7 +3960,8 @@
         "src/utils/strategyChecklistPersistence.ts"
       ],
       "importedBy": [
-        "src/hooks/useBonsaiAskOrchestration.ts"
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useStrategyBranchActions.test.ts"
       ]
     },
     "src/hooks/useStrategyChecklistSession.ts": {

@@ -180,6 +180,22 @@ New questions that come up during the session go here, with the choice taken mea
   passed at the tip. Four repo copies made from `39c17312`; lanes 1, 2, 4 and 5 started. The Deck helper started
   block 1's measurements; a lookup helper is turning the owed checks into exact steps. A timed check every 30
   minutes is set as a backup in case a usage limit stops the session.
+- **Deck block 1, part A (measurements):** all six measured. The ring sits on an underlined word or a cover while
+  Down only scrolls, 80 px a press, until the word is off screen; a section starting with a cover is walked
+  differently each way; an opened cover hides itself about 2 s after a question is typed. The tab-bar ghost and
+  the "N earlier" skip did not show. Lane 3 started with these measurements (repo copy from `85af4721`).
+- **The helper limit is seven from now on** (the maintainer, mid-session), committed `3f6c7e9f`.
+- **Lane 1 landed** (`3c4f81f7`, `14d79aa4`, `69544612`, then its follow-up `7a2299c5` for the live answer's pieces):
+  hidden blocks are read one way everywhere, `~~~` included. All checks green.
+- **Deck block 1, part B:** the items hidden for 0.6.0 pass; the picture-model try order takes a new download
+  last; four checks could not run (one answering model, eight chats already, no note long enough to be cut, a
+  reply that stops itself early). Sightings: covers each swallow one Down (to lane 3); after picking an accent
+  level nothing holds the ring (to lane 2's follow-up); six others not reproduced.
+- **Lane 4 landed** (`7c9006cc`, `e5d1ceb9`, `cba792e8`, `0b2d2f9b`, `d647e4f7`). Its fifth bug is not a leftover
+  in the code: the Strategy prompt makes a choice menu mandatory on a first turn, and with no game named the model
+  borrowed the chat's earlier game. That is a prompt change needing an answer-quality run, so it stays open.
+  One test (the plugin's own start-up check) timed out once while five helpers loaded the PC; alone it passes in
+  15 s of its 20 s allowance.
 
 ## Deck block 1, part A — measurements for lane 3
 
@@ -200,3 +216,24 @@ These rows are measurements: record what happens press by press. There is no pas
 | P76-M-TABBAR-GHOST | Whether two tab bars end up drawn at once after Show details → Session | Any answered chat | Record a 10 s video while doing: Show details, Right to the Session tab, wait 3 s, one D-pad press | How many tab bars are drawn (each one's box and opacity) right after the Session tab opens, and after the D-pad press |
 
 At the end: put back every setting you changed, close the game if you launched it, and report per row in plain words.
+
+## Deck block 2a — lanes 1 and 4, then the rows that need a game
+
+Build: the tip of `experimental` after lane 4's landing, deployed at the start **with no game running**. Same rules
+as block 1 (reuse chats; no A on the question box; one evidence file per row, `plan76-<ROW>.json`; back the settings
+file up over SSH first). Launch Deep Rock Galactic: Survivor only after the non-game rows, and **never deploy or
+reload the plugin while it runs**.
+
+| Row | What it proves | Setup | Do | Pass when |
+|---|---|---|---|---|
+| P76-NEWCHAT-NO-PERM-ROW | The ban lookup's permission row stays in its own chat | Steam ban lookup off | In a chat, put `bonsai:vac-check` in the box (script), Ask, wait for the reply. LB/RB until the "New chat" spot shows; read it. Go back to that chat | The "New chat" spot shows no "Open Permissions" row and no slow-answer line; the chat itself still shows its reply |
+| P76-HELPFUL-AFTER-SWITCH | The newest answer keeps "Was this helpful?" after a chat switch | Two chats with answers | In chat A ask a short question (script), wait, press "Not really" once. RB to chat B, then LB back to A. Then switch to a chat not asked this session. Then close and reopen Quick Access | Chat A: greyed thumbs and "What went wrong?" with its five chips; the other chat's newest answer shows live Helpful / Not really; **the newest answer is drawn once, not twice**; its Show details still opens and lists what it did before the switch |
+| KB-FOLLOWUP-QUOTE-02 | Show details' Session tab names a branch pick in plain words | Strategy mode | Ask a first Strategy question that offers choices (e.g. "How do I beat the Soul Master in Hollow Knight?"), pick a choice, wait. Show details → Session | The row reads "I'm at: …"; "[Strategy follow-up]" appears nowhere; the turn is counted once |
+| P76-CANCELLED-NO-COPY | "Request cancelled." has no Copy | — | Ask a long question, press Stop before any answer text | The "Request cancelled." bubble has no corner Copy icon (and no Read aloud) |
+| P76-SPOILER-REGRESSION | Covers and answer sections still work after lane 1's fence change | Strategy, covers on | Ask "How do I beat the boss in the Soul Sanctum in Hollow Knight?"; while it arrives read the live answer every second; then walk Down through the finished answer | While arriving: no hidden words ever show as plain text (a "Spoiler hidden until complete" chip or a cover instead); finished: covers drawn, the answer cut into sections as before |
+| T75-FEATURE-F1-REAL-POPUP | The reply-ready popup over a real game | Game running (launch now) | As in the owed-rows runbook, block 7 (in the scratch folder) | As written there; also note whether the second line ends in a comma before "…" (lane 1's fix) |
+| TTS-FEAS-05 | Reading aloud beside a running game (machine half) | Game running | Owed-rows runbook, block 11 | Numbers recorded; no pass line |
+| SCR-10 | The panel's frame rate while an answer arrives, with a game (after lane 1 changed the live drawing) | Game running | Owed-rows runbook, block 6, one answer with the scramble off | Median while the answer arrives at least 30 (the maintainer's target); record it either way |
+| S5 | The Context line reading the wrong game briefly | Game running | Owed-rows runbook, S5 part (a) only | Not reproduced = the right name from the first read every time |
+
+At the end: close the game, restore settings, empty the question box, plugin open on Main.

@@ -15,6 +15,7 @@ from unittest.mock import AsyncMock, patch
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
 import main
+from backend.services import ollama_embed_service as embed
 
 
 class DeleteModelCleansRoutingOrdersTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
@@ -27,6 +28,8 @@ class DeleteModelCleansRoutingOrdersTests(PluginSettingsFileMixin, unittest.Isol
         )
         gate.start()
         self.addCleanup(gate.stop)
+        embed.reset_embed_availability_cache()
+        self.addCleanup(embed.reset_embed_availability_cache)
 
     async def _delete(self, tag: str, rm_ok: bool = True) -> dict:
         rm = AsyncMock(return_value=(rm_ok, "" if rm_ok else "rm failed"))
@@ -64,6 +67,38 @@ class DeleteModelCleansRoutingOrdersTests(PluginSettingsFileMixin, unittest.Isol
 
         self.assertFalse(out["ok"])
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["qwen2.5:1.5b"])
+
+    # Removing the meaning-search model must not leave the 30 s "it is installed" memory saying
+    # yes: before, the note-search hint took up to 40 s to appear after the model was removed
+    # inside the plugin, because only a finished pull cleared that memory.
+    @staticmethod
+    def _available_with(tags: list[str]) -> bool:
+        with patch.object(embed, "list_installed_ollama_tags", return_value=tags):
+            return embed.nomic_embed_available("127.0.0.1")
+
+    async def test_removing_the_meaning_model_makes_the_next_check_fresh(self) -> None:
+        self.assertTrue(self._available_with(["nomic-embed-text:latest"]))
+
+        out = await self._delete("nomic-embed-text:latest")
+
+        self.assertTrue(out["ok"])
+        self.assertFalse(self._available_with([]))
+
+    async def test_removing_another_model_keeps_the_memory(self) -> None:
+        self.assertTrue(self._available_with(["nomic-embed-text:latest"]))
+
+        await self._delete("qwen2.5:1.5b")
+
+        # Still remembered as installed: nothing about the meaning model changed.
+        self.assertTrue(self._available_with([]))
+
+    async def test_a_failed_remove_keeps_the_memory(self) -> None:
+        self.assertTrue(self._available_with(["nomic-embed-text:latest"]))
+
+        out = await self._delete("nomic-embed-text:latest", rm_ok=False)
+
+        self.assertFalse(out["ok"])
+        self.assertTrue(self._available_with([]))
 
 
 if __name__ == "__main__":

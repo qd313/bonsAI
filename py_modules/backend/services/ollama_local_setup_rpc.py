@@ -390,6 +390,9 @@ async def delete_ollama_model(self, tag: str = ""):
         "ollama rm succeeded",
         fields={"ok": True},
     )
+    # Removing the meaning-search model must be seen at once too, not after the 30 s "is it
+    # installed" memory runs out (otherwise the note-search hint took up to 40 s to appear).
+    forget_embed_availability_after_pull([t])
     # A removed model also leaves the saved try orders. remove_tag_from_routing_orders was
     # written for this and never called: on the Deck (plan 64 flow H) qwen2.5:1.5b was removed
     # through its row and the saved text order still read ['qwen2.5:1.5b'], so Ask's first

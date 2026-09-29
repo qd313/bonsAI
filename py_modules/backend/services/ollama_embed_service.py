@@ -101,7 +101,9 @@ def reset_embed_availability_cache() -> None:
 def forget_embed_availability_after_pull(
     pulled_tags: list[str], *, model: str = DEFAULT_EMBEDDING_MODEL
 ) -> bool:
-    """Drop the remembered answer once a pull that included ``model`` finishes.
+    """Drop the remembered answer once a pull (or a removal) that included ``model`` finishes.
+
+    Also called with the one tag ``delete_ollama_model`` just removed.
 
     Otherwise a "missing" read just before the pull keeps answering for up to the TTL: the
     knowledge-base hint stays up and Ask skips meaning search after the model has landed.

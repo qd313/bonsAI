@@ -7,6 +7,7 @@
  */
 import React, { useLayoutEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
+import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
 import {
   ASK_LABEL_COLOR,
   DECK_MENU_FONT_PX,
@@ -38,6 +39,12 @@ const ACCENT_MENU_ROW_GAP_PX = 0;
 export function SettingsTabAccentIntensityMenuPopover(props: SettingsTabAccentIntensityMenuPopoverProps) {
   const { open, firstMenuItemRef, selectedId, onSelect, onRequestClose, onFocusTrigger } = props;
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // A pick or B removes the rows with the ring on one of them; nothing owned the ring afterwards and
+  // the first LB was swallowed (plan76-S3C.json). Once the menu is gone with the ring in it, the
+  // ring goes to the accent control (onFocusTrigger: Steam's own transfer, then a focus fallback).
+  const floaterRef = useHandRingOnGone(() => {
+    onFocusTrigger();
+  });
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -64,6 +71,7 @@ export function SettingsTabAccentIntensityMenuPopover(props: SettingsTabAccentIn
 
   return (
     <div
+      ref={floaterRef}
       className="bonsai-accent-intensity-menu-floater"
       style={{
         position: "absolute",

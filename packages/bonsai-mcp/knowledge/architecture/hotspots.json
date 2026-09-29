@@ -121,17 +121,17 @@
       "role": ""
     },
     {
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 744,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 743,
       "role": ""
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 727,
-      "role": ""
-    },
-    {
-      "path": "src/components/SettingsTab.tsx",
       "lines": 727,
       "role": ""
     },

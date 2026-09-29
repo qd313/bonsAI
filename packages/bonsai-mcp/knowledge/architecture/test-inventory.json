@@ -87,6 +87,7 @@
     "src/components/PullModelsModal.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",
+    "src/components/SettingsTab.accentMenuRing.test.tsx",
     "src/components/SettingsTab.mdns.test.ts",
     "src/components/SettingsTab.modalReturnFocus.test.tsx",
     "src/components/SettingsTabPresetSingleChip.test.tsx",

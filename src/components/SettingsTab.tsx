@@ -80,6 +80,7 @@ import {
 } from "../data/aiCharacterAccentIntensity";
 import { formatAiCharacterSelectionLine } from "../data/characterCatalog";
 import { SettingsTabAccentIntensityMenuPopover } from "./SettingsTabAccentIntensityMenuPopover";
+import { elementHasGamepadFocus } from "../utils/uiDocument";
 import { ASK_LABEL_COLOR_50 } from "../features/unified-input/constants";
 import {
   consumeSettingsTabLocalPending,
@@ -255,6 +256,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
   const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
   const accentIntensityMenuToggleOnceRef = useRef(false);
+  /** Steam's nav node for the wrapper around the accent control: the approved way to move the ring onto it. */
+  const accentTriggerNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
   const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
   const uiScaleApplyButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -299,7 +302,15 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const focusAccentIntensityTrigger = useCallback((): boolean => {
     const btn = accentIntensityMenuAnchorRef.current?.querySelector<HTMLElement>("button.bonsai-accent-intensity-trigger");
     if (!btn) return false;
-    btn.focus();
+    // The menu's rows are removed with the ring on one of them (a pick, or B), so nothing would own
+    // the ring (plan76-S3C.json). Steam's own transfer to the control first, its own focus if that
+    // did not land it.
+    try {
+      accentTriggerNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    if (!elementHasGamepadFocus(btn.parentElement ?? btn)) btn.focus();
     return true;
   }, []);
 
@@ -553,6 +564,11 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     — use the menu for full descriptions.
                   </div>
                   <div ref={accentIntensityMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
+                    <Focusable
+                      style={{ display: "flex", flexShrink: 0 }}
+                      onOKButton={toggleAccentIntensityMenu}
+                      {...({ navRef: accentTriggerNavRef } as Record<string, unknown>)}
+                    >
                     <Button
                       className="bonsai-accent-intensity-trigger"
                       {...({
@@ -596,6 +612,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         ▾
                       </span>
                     </Button>
+                    </Focusable>
                     <SettingsTabAccentIntensityMenuPopover
                       open={accentIntensityMenuOpen}
                       firstMenuItemRef={accentIntensityMenuFirstItemRef}

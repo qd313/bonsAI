@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 604,
-  "edgeCount": 1681,
+  "fileCount": 605,
+  "edgeCount": 1685,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1402,6 +1402,13 @@
         "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
+    "src/components/SettingsTab.accentMenuRing.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.mdns.test.ts": {
       "imports": [
         "src/test-harness/fakeDeckyRpc.ts"
@@ -1427,9 +1434,11 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
         "src/utils/permissionDeepLink.ts",
-        "src/utils/settingsTabLocalSurvival.ts"
+        "src/utils/settingsTabLocalSurvival.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
@@ -1439,7 +1448,8 @@
     "src/components/SettingsTabAccentIntensityMenuPopover.tsx": {
       "imports": [
         "src/data/aiCharacterAccentIntensity.ts",
-        "src/features/unified-input/constants.ts"
+        "src/features/unified-input/constants.ts",
+        "src/hooks/useHandRingOnGone.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx"
@@ -3373,7 +3383,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/KnowledgeBaseSection.tsx"
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/SettingsTabAccentIntensityMenuPopover.tsx"
       ]
     },
     "src/hooks/useInputTransparencyRefresh.ts": {
@@ -4576,6 +4587,7 @@
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
+        "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
@@ -6562,6 +6574,7 @@
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/components/SettingsTab.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",

@@ -140,6 +140,7 @@ import { peekBonsaiSessionPendingRestore } from "../utils/bonsaiSessionSurvival"
 import {
   initialExpandedTurnKeyFromSurvival,
   resolveInitialOllamaContext,
+  gameFieldsFromStatus,
 } from "../utils/askOrchestrationRestore";
 import { type ReplyMicroActionId } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
@@ -440,11 +441,18 @@ export function useBonsaiAskOrchestration(
 
   // --- Poll bridge: map get_background_game_ai_status → UI state ---
   const applyBackgroundStatusToUi = useCallback(
-    (status: BackgroundRequestStatus, fallbackQuestion: string = "") => {
+    (status: BackgroundRequestStatus, fallbackQuestion: string = "", fromMountRead: boolean = false) => {
       /* Plan 68: the Sum up button's own job has no question and no answer to paint (useChatSumUpJob). */
       if (status.kind === "sum_up") return;
       const appId = status.app_id ?? "";
       const appContext = status.app_context === "active" ? "active" : "none";
+      // The line's game: this status's, unless it names none while Steam has one running (PLAN76-L6).
+      const statusGame = gameFieldsFromStatus(
+        appId,
+        appContext,
+        status.app_name ?? "",
+        fromMountRead && status.status !== "pending",
+      );
 
       /*
        * After Stop, only `cancelled` may still touch this turn. The poll is left running on purpose
@@ -473,11 +481,9 @@ export function useBonsaiAskOrchestration(
         // keepIfUnchanged: this arrives as a new object on every 150 ms poll; the same one must
         // not re-render the whole plugin (keepIfUnchanged.ts has the Deck measurement).
         setOllamaContext((prev) => keepIfUnchanged(prev, {
-          app_id: appId,
-          app_context: appContext,
           // Plan 54 gap 1/2: the pending poll is the only source of these while the answer is
           // still streaming — lastExchange stays empty until completion.
-          app_name: status.app_name ?? "",
+          ...statusGame,
           asked_entity: status.strategy_spoiler_asked_entity ?? "",
         }));
         setIsAsking(true);
@@ -595,9 +601,7 @@ export function useBonsaiAskOrchestration(
         setIsStreamingPreview(false);
         setAskStopped(true);
         setOllamaContext({
-          app_id: appId,
-          app_context: appContext,
-          app_name: status.app_name ?? "",
+          ...statusGame,
           asked_entity: status.strategy_spoiler_asked_entity ?? "",
         });
         setIsAsking(false);
@@ -629,9 +633,7 @@ export function useBonsaiAskOrchestration(
         setLiveReasoning(null);
         const terminalText = buildResponseText(status.response ?? "No response text.", applied);
         setOllamaContext({
-          app_id: appId,
-          app_context: appContext,
-          app_name: status.app_name ?? "",
+          ...statusGame,
           asked_entity: status.strategy_spoiler_asked_entity ?? "",
         });
         setIsAsking(false);

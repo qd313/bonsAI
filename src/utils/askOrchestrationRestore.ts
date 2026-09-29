@@ -13,6 +13,8 @@
  * Does not: Read or write the survival snapshot itself — see bonsaiSessionSurvival.ts for
  * that. Does not run on every render; each is called once, at mount.
  */
+import { Router } from "@decky/ui";
+
 import { peekBonsaiSessionPendingRestore } from "./bonsaiSessionSurvival";
 import type { AskThreadExpandedTurnKey, OllamaContextUi } from "../types/bonsaiUi";
 
@@ -52,4 +54,45 @@ export function resolveInitialOllamaContext(
     return { app_id: trimmed, app_context: "active" };
   }
   return survived ?? null;
+}
+
+/**
+ * The game fields the footnote should take from a back-end status (pending, finished or stopped).
+ *
+ * The back end's status names the game the question was asked about. A question asked before the
+ * game was launched says "none" — and the mount-time status read on every panel reopen hands that
+ * old status straight back. Written verbatim it blanked the line for ~1.8 s (until the next 2 s
+ * poll) while the game was running the whole time (PLAN76-L6, Deck: 4 of 4). So when the status
+ * names no game (no id and no name) but Steam reports one running right now, the running game wins. When the status
+ * names a game, or nothing is running, the status is used exactly as before — a real "the game
+ * closed" still shows "none" because the poll and the sync read Steam, not this status.
+ */
+export function gameFieldsFromStatus(
+  statusAppId: string,
+  statusAppContext: "active" | "none",
+  statusAppName: string,
+  /**
+   * True for the one status read made when the panel mounts and the question it describes is
+   * already over: that status is history, so what Steam reports now wins even over a game it
+   * names (a previous game after a switch) or over a closed one.
+   */
+  isFinishedHistory = false,
+): { app_id: string; app_context: "active" | "none"; app_name: string } {
+  if (isFinishedHistory) {
+    const running = Router.MainRunningApp;
+    const liveAppId = (running?.appid?.toString() ?? "").trim();
+    return liveAppId
+      ? { app_id: liveAppId, app_context: "active", app_name: (running?.display_name ?? "").trim() }
+      : { app_id: "", app_context: "none", app_name: "" };
+  }
+  // A status that names its game, by id or (a shortcut with no Steam id) by name, is kept as is.
+  if ((statusAppContext === "active" && statusAppId.trim()) || statusAppName.trim()) {
+    return { app_id: statusAppId, app_context: statusAppContext, app_name: statusAppName };
+  }
+  const running = Router.MainRunningApp;
+  const liveAppId = (running?.appid?.toString() ?? "").trim();
+  if (liveAppId) {
+    return { app_id: liveAppId, app_context: "active", app_name: (running?.display_name ?? "").trim() };
+  }
+  return { app_id: statusAppId, app_context: statusAppContext, app_name: statusAppName };
 }

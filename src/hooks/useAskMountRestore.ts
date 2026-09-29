@@ -24,7 +24,11 @@ import { startAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
 
 export type UseAskMountRestoreArgs = {
-  applyBackgroundStatusToUi: (status: BackgroundRequestStatus, fallbackQuestion?: string) => void;
+  applyBackgroundStatusToUi: (
+    status: BackgroundRequestStatus,
+    fallbackQuestion?: string,
+    fromMountRead?: boolean,
+  ) => void;
   isRequestActive: (seq: number) => boolean;
   startBackgroundStatusPolling: (seq: number, question: string) => void;
   startNextRequest: () => number;
@@ -45,7 +49,8 @@ export function useAskMountRestore(a: UseAskMountRestoreArgs): void {
         if (!f.isRequestActive(seq)) return;
         // Plan 68: a Sum up job still running is picked up by useChatSumUpJob, not the Ask.
         if (status.kind === "sum_up") return;
-        f.applyBackgroundStatusToUi(status);
+        // `true`: this read describes a question that may be long over, so the game line takes Steam's word.
+        f.applyBackgroundStatusToUi(status, "", true);
         if (status.status === "pending") {
           f.startBackgroundStatusPolling(seq, status.question ?? "");
           startAskCompletionWatch();

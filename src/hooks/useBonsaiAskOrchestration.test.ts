@@ -1716,6 +1716,143 @@ describe("ollamaContext on mount (CHIP-ROTATION-01)", () => {
 });
 
 /*
+ * PLAN76-L6: reopening the panel with a game running drew the right name, then about 0.1 s later
+ * "Context: no active game detected", then the right name again ~1.8 s after (the next 2 s poll) —
+ * measured 4 of 4 on the Deck (docs/test-evidence/plan76-S5.json). The mount-time restore reads the
+ * back end's last status once; when the last question was asked with no game running, that status
+ * says "none" and used to overwrite the live game. The order below is the Deck's own: mount with a
+ * game running, then the status read lands.
+ */
+describe("ollamaContext after the mount-time status read (PLAN76-L6)", () => {
+  const originalMainRunningApp = Router.MainRunningApp;
+
+  afterEach(() => {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      originalMainRunningApp;
+    vi.useRealTimers();
+  });
+
+  function runningDrg() {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = {
+      appid: 2680160,
+      display_name: "Deep Rock Galactic: Survivor",
+    } as unknown as typeof Router.MainRunningApp;
+  }
+
+  for (const status of ["completed", "failed", "cancelled", "pending"] as const) {
+    it(`a ${status} status from a question asked with no game does not blank the running game`, async () => {
+      resetFakeDeckyRpc();
+      runningDrg();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status,
+        success: status === "completed",
+        request_id: 7,
+        question: "How do I win?",
+        response: "Try the tutorial.",
+        app_id: "",
+        app_context: "none",
+        app_name: "",
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+      const seen: unknown[] = [result.current.ollamaContext];
+      await act(async () => {
+        await Promise.resolve();
+        await Promise.resolve();
+        await Promise.resolve();
+      });
+      seen.push(result.current.ollamaContext);
+
+      for (const ctx of seen) {
+        expect((ctx as { app_context?: string } | null)?.app_context).toBe("active");
+      }
+      expect(result.current.ollamaContext).toMatchObject({
+        app_id: "2680160",
+        app_context: "active",
+        app_name: "Deep Rock Galactic: Survivor",
+      });
+    });
+  }
+
+  it("a finished status naming the previous game does not replace the game running now", async () => {
+    resetFakeDeckyRpc();
+    runningDrg();
+    setRpcHandler("get_background_game_ai_status", () => ({
+      ...idleBackgroundStatusFixture(),
+      status: "completed",
+      success: true,
+      request_id: 7,
+      question: "How do I win?",
+      response: "Try the tutorial.",
+      app_id: "1942280",
+      app_context: "active",
+      app_name: "Brotato",
+    }));
+
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(result.current.ollamaContext).toMatchObject({
+      app_id: "2680160",
+      app_context: "active",
+      app_name: "Deep Rock Galactic: Survivor",
+    });
+  });
+
+  it("a finished status naming a game that has since closed does not bring it back", async () => {
+    resetFakeDeckyRpc();
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      undefined as unknown as typeof Router.MainRunningApp;
+    setRpcHandler("get_background_game_ai_status", () => ({
+      ...idleBackgroundStatusFixture(),
+      status: "completed",
+      success: true,
+      request_id: 7,
+      question: "How do I win?",
+      response: "Try the tutorial.",
+      app_id: "1942280",
+      app_context: "active",
+      app_name: "Brotato",
+    }));
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(result.current.ollamaContext?.app_context).not.toBe("active");
+  });
+
+  it("still shows no game when the status says none and nothing is running", async () => {
+    resetFakeDeckyRpc();
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      undefined as unknown as typeof Router.MainRunningApp;
+    setRpcHandler("get_background_game_ai_status", () => ({
+      ...idleBackgroundStatusFixture(),
+      status: "completed",
+      success: true,
+      request_id: 7,
+      question: "How do I win?",
+      response: "Try the tutorial.",
+      app_id: "",
+      app_context: "none",
+    }));
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(result.current.ollamaContext?.app_context).not.toBe("active");
+  });
+});
+
+/*
  * The Ask-bar footnote kept naming a game after it was closed. Traced to the panel's session
  * survival: a snapshot captured while a game was running (e.g. right before the QAM closes)
  * still names that game, and re-showing the panel used to restore it verbatim even after the

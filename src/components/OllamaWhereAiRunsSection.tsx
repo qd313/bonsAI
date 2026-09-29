@@ -404,6 +404,14 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     onTestConnectionRef,
   });
 
+  // The install menu closes as a choice is pressed, so its buttons are gone when the box closes;
+  // the ring goes back to "Install options..", which stays (plan 76 lane 2).
+  const openInstallBox = (profile: Parameters<typeof openLocalSetupConfirm>[0]) => {
+    setLocalInstallMenuOpen(false);
+    rememberModalReturnFocus("ollama-install-options");
+    openLocalSetupConfirm(profile);
+  };
+
   const { handleToggleAutostart } = useOllamaLocalAutostart({
     setAutostartStatus,
     setAutostartBusy,
@@ -613,6 +621,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 <Button
                   ref={(el) => {
                     installOptionsBtnRef.current = el as HTMLButtonElement | null;
+                    registerModalReturnFocusOwner("ollama-install-options", el as HTMLElement | null);
                   }}
                   disabled={localSetupBusy}
                   onClick={() => setLocalInstallMenuOpen((o) => !o)}
@@ -650,10 +659,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                         tier1EssentialsBtnRef.current = el as HTMLButtonElement | null;
                       }}
                       disabled={localSetupBusy}
-                      onClick={() => {
-                        setLocalInstallMenuOpen(false);
-                        openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS);
-                      }}
+                      onClick={() => openInstallBox(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS)}
                       {...({
                         onMoveUp: () => focusInstallOptionsBtn(),
                         onMoveDown: () => focusTier2Btn(),
@@ -668,10 +674,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                         tier2MultimodalBtnRef.current = el as HTMLButtonElement | null;
                       }}
                       disabled={localSetupBusy}
-                      onClick={() => {
-                        setLocalInstallMenuOpen(false);
-                        openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL);
-                      }}
+                      onClick={() => openInstallBox(LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL)}
                       {...({
                         onMoveUp: () => focusTier1Btn(),
                         onMoveDown: () => focusConnectionTestBtn(),

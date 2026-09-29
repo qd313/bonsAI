@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 595,
-  "edgeCount": 1648,
+  "fileCount": 596,
+  "edgeCount": 1652,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1088,6 +1088,15 @@
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -1123,6 +1132,7 @@
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx"
       ]
@@ -2394,6 +2404,7 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
@@ -2431,6 +2442,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/hooks/usePluginSettings.ts",
@@ -4411,6 +4423,7 @@
         "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",

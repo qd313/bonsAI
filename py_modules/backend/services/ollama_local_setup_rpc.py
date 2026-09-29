@@ -53,6 +53,7 @@ from backend.ollama_routing import (
 from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
+from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
 
@@ -128,15 +129,21 @@ async def start_local_ollama_setup(self, data: Any = None):
 
         async def runner() -> None:
             assert self._local_ollama_cancel_event is not None
-            await run_local_setup(
-                profile=prof,
-                state=self._local_ollama_setup_state,
-                logger=logger,
-                cancel_event=self._local_ollama_cancel_event,
-                on_stage=on_stage,
-                on_verbose_line=on_verbose_line,
-            )
+            try:
+                await run_local_setup(
+                    profile=prof,
+                    state=self._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=self._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
+                )
+            finally:
+                # Ended (done, failed or cancelled): forget it. A plugin reload ends it too, and
+                # keeps the note, so the download starts again on load.
+                pull_resume.clear_note_unless_unloading(decky.DECKY_PLUGIN_SETTINGS_DIR)
 
+        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile=prof, tags=[])
         self._local_ollama_setup_task = asyncio.create_task(runner())
 
     await self._maybe_app_log(
@@ -157,6 +164,8 @@ async def cancel_local_ollama_setup(self):
     ce = getattr(self, "_local_ollama_cancel_event", None)
     if isinstance(ce, asyncio.Event):
         ce.set()
+    # A download the person cancelled must never come back on its own after a reload.
+    pull_resume.clear_note(decky.DECKY_PLUGIN_SETTINGS_DIR)
     return {"cancel_requested": True}
 
 
@@ -276,7 +285,9 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
                 # A pull of the meaning-search model must be seen at once, not after the
                 # 30 s "is it installed" memory runs out (plan70-R5.json).
                 forget_embed_availability_after_pull(tags)
+                pull_resume.clear_note_unless_unloading(decky.DECKY_PLUGIN_SETTINGS_DIR)
 
+        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile="custom", tags=tags)
         self._local_ollama_setup_task = asyncio.create_task(runner())
 
     await self._maybe_app_log(

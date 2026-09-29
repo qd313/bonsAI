@@ -211,6 +211,7 @@ from backend.services.ollama_mdns_discovery_service import (
     discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
 )
 from backend.services import ollama_local_setup_rpc
+from backend.services import ollama_pull_resume_service
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
     new_voice_install_state,
@@ -350,6 +351,12 @@ class Plugin:
         logger.info("bonsAI plugin loaded!")
         await self._maybe_app_log("plugin.lifecycle", "plugin loaded")
         self._schedule_preload_ask_model()
+        # A model download running when the plugin last went away starts again by itself.
+        asyncio.create_task(
+            ollama_pull_resume_service.resume_interrupted_download(
+                self, decky.DECKY_PLUGIN_SETTINGS_DIR, ollama_local_setup_rpc
+            )
+        )
 
     def _schedule_preload_ask_model(self) -> None:
         """Fire off the boot-time model warm-up without waiting on it.
@@ -400,6 +407,8 @@ class Plugin:
     async def _unload(self):
         """Run plugin shutdown logging for Decky unload events."""
         await self._maybe_app_log("plugin.lifecycle", "plugin unloading")
+        # Before the cancel below, so a download cut short by this unload keeps its note.
+        ollama_pull_resume_service.mark_unloading()
         ce = getattr(self, "_local_ollama_cancel_event", None)
         if isinstance(ce, asyncio.Event):
             ce.set()

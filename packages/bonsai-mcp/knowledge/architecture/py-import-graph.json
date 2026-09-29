@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 103,
-  "edgeCount": 268,
+  "fileCount": 104,
+  "edgeCount": 270,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -24,6 +24,7 @@
     "py_modules/backend/services/network_service.py",
     "py_modules/backend/services/ollama_ask_budgets.py",
     "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_pull_resume_service.py",
     "py_modules/backend/services/prompt_budget_service.py",
     "py_modules/backend/services/proton_troubleshooting_logs.py",
     "py_modules/backend/services/reply_followup_blocks.py",
@@ -244,6 +245,10 @@
     },
     {
       "path": "py_modules/backend/services/ollama_chat_stream.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/ollama_pull_resume_service.py",
       "count": 2
     },
     {
@@ -487,6 +492,7 @@
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
+        "py_modules/backend/services/ollama_pull_resume_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/plugin_data_reset.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
@@ -1110,6 +1116,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_catalog_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
+        "py_modules/backend/services/ollama_pull_resume_service.py",
         "py_modules/backend/services/pull_model_catalog_service.py"
       ],
       "importedBy": [
@@ -1150,6 +1157,13 @@
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/spoiler_risk_service.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_pull_resume_service.py": {
+      "imports": [],
+      "importedBy": [
+        "main.py",
+        "py_modules/backend/services/ollama_local_setup_rpc.py"
       ]
     },
     "py_modules/backend/services/ollama_service.py": {

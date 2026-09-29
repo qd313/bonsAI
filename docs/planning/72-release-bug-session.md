@@ -628,8 +628,6 @@ before the release.
   newest answer, and Down stops on the question. Closing and reopening the Quick Access menu fixes it.
 - After "Sum up this chat", a long summary can run past the bottom of the panel. Press Down to bring it into
   view.
-- After switching to another chat and back, the newest answer's "Was this helpful?" buttons don't come back.
-  Any rating you gave is still saved.
 - With a game running, the panel updates about 30 times a second while an answer arrives, and can dip lower
   late in very long answers.
 - If the plugin reloads during a model download, the download stops. Asking for it again picks up where it
@@ -637,3 +635,5 @@ before the release.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
 - bonsAI's highlight ring looks slightly different from Steam's own on some controls.
+
+_2026-09-28: the line about the newest answer's "Was this helpful?" buttons after a chat switch came off this list. It was fixed and proven on the Deck in plan 76._

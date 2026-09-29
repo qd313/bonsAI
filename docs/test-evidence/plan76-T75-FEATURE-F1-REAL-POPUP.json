@@ -1,0 +1,17 @@
+{
+  "row": "T75-FEATURE-F1-REAL-POPUP",
+  "deckTime": "2026-09-28 23:23-23:28 EDT",
+  "setup": "Deployed c71f1d8b with no game running BEFORE launching. Launched Deep Rock Galactic: Survivor (2321470) with deck_launchGame (4 presses, appid in RunningApps after 234 ms; run file runs/plan76-2a-launch-drg.json). Game window in front, proved by screenshots: Ghost Ship logo, then the title screen 'PRESS ANY KEY TO CONTINUE' (screenshots/DeckCapture_20260928_232349..232621_auto.png). No plugin reload after the launch. Panel opened with deck_openPlugin: Context read 'Context: active game Deep Rock Galactic: Survivor'. Window 854x534, dpr 1.5 (Deck's own screen). Mode set to Speed through the mode chip menu (ask_mode strategy -> speed; to be put back). Popup reader: a 150 ms poll of the text on the notification-toasts page (read-only), installed first.",
+  "pressed": "Question by script 'how do i kill the big armoured bug boss' (VERIFIED), walked to Ask, A, then at once the Quick Access chord (hold GUIDE, tap A) to close the menu (one call closed it), screenshot to prove the menu was shut and the game in front (title screen, no panel), then waited.",
+  "seen": {
+    "menu_closed_before_finish": "Yes. Screenshot at 23:26:21 shows the game alone, no menu; the answer completed at 23:27:09 (log: run_game_ai_request: completed in 49.5s).",
+    "popup": "A toast bottom right over the game: 'Kite between waves and focus on hitting' on line 1 and 'the weak-point armor plates as they...' on line 2 (screenshot DeckCapture_20260928_232711_auto.png). The reader logged the single string 'Kite between waves and focus on hitting the weak-point armor plates as they...' at t=53157 ms and blank again at t=63237 ms, so it was up 10.08 s.",
+    "comma_before_ellipsis": "No. Line 1 ends 'hitting' (no comma), line 2 ends 'as they' then the ellipsis. The known comma bug did not show here.",
+    "answer_start": "After reopening the panel the newest answer starts 'Kite between waves and focus on hitting the weak-point armor plates as they open up.' - the popup is the first words of the answer, cut at the ellipsis.",
+    "hidden_blocks": "The answer has no spoiler cover; nothing hidden appeared in the popup."
+  },
+  "verdict": "PASS on the written line (popup showed the start of the answer across two lines, ended in an ellipsis, matched the answer, about 10 s visible; no comma before the ellipsis). One caveat: it was up 10.08 s where the runbook says about 8 s.",
+  "newFinding": "The popup stayed 10.08 s, not about 8 s (measured with a 150 ms poll, so at most 0.15 s error).",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

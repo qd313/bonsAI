@@ -1,0 +1,17 @@
+{
+  "row": "KB-FOLLOWUP-QUOTE-02",
+  "deckTime": "2026-09-28 23:23-23:32 EDT",
+  "setup": "No game running. Chat 'wheatley fight', Strategy mode, knowledge base on. AI character turned OFF first (Settings tab toggle 'AI voice & personality'; ai_character_enabled true -> false, read back over SSH; the preset id and intensity untouched). A read-only page watcher (setInterval every 250 ms, logs when the panel text contains 'Strategy follow-up') was installed before the branch pick.",
+  "pressed": "Question by script: 'How do I beat the Soul Master in Hollow Knight?' (VERIFIED), Ask by A, waited for the answer (24 s reasoning). Menu offered 'A. Starting out in Dirtmouth' / 'B. In the City of Tears'. Walked to B, A. Waited for the second answer to finish. Down to Show details, A; Down to the tab row; read 'This answer'; Right to 'Session' tab and read it.",
+  "seen": {
+    "watcher": "189 samples over about 47 s. The raw tag '[Strategy follow-up]' was on the page in samples 1 to 6 (about 1.5 s right after the press of B), then gone for the other 183 samples. Sample 1: in the box area above the Ask row (text '[Strategy follow-up] I'm at: In the City of Tears. Earlier I asked: How do I beat the Soul Master in Hollow Knight? Give controller-friendly coaching for this exact point, then end with **If you want to cheat...** as instructed.'). Samples 2 to 6: the waiting line under the turn header read: Searching knowledge base for \"[Strategy follow-up] I'm at: In the City of Tears\". From sample 7: \"Model's warming up for \"I'm at: In the City of Tears\". Hang in there...\" (clean). Turn header read 'I'm at: In the City of Tears' throughout.",
+    "finished_page": "Turn header 'I'm at: In the City of Tears'. The whole finished page text contains no 'Strategy follow-up' (regex over the full panel text, false).",
+    "this_answer_tab": "No tag. Lists Chip 1 of 7, Keyword + meaning, KB: 14 sections, Hollow Knight - Soul Master / Starting out / Boss note (spoiler), Embed 73.71 ms, Re-rank 37.2 ms.",
+    "session_tab": "Tab 'Session - 99' lists the summary and the newest 20 turns. For this turn it lists the friendly text once: '... How do I beat the Soul Master in Hollow Knight? | I'm at: In the City of Tears | ...'. The count of \"I'm at:\" on the whole page was 2 (the turn header and the Session tab), no tag text.",
+    "reasoning_quote": "Not checked: I did not open the reasoning fold during the 24 s of thinking; the watcher only sees the visible text."
+  },
+  "verdict": "FAIL on the pass line as written ('no line anywhere on the page ... contains [Strategy follow-up]'): the waiting line 'Searching knowledge base for \"[Strategy follow-up] I'm at: ...\"' showed the raw tag for about 1.25 to 1.5 s (5 of 189 samples), and the composer text showed it for one sample. The finished page, the 'This answer' tab and the Session tab are all clean and the Session tab shows the friendly text once. So the Session tab part of lane 4's fix works; the short-lived waiting line still leaks. Owner decides whether 1.5 s of the waiting line counts.",
+  "newFinding": "The Down walk from the branch button to 'Show details' stalled 3 presses on the tall answer chunk (22 percent visible, scrollTop 403 -> 536 -> 665) before moving on; it did move on with more presses (one press at a time). Looks like a long single answer stop taking several scroll steps; not a lost ring.",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

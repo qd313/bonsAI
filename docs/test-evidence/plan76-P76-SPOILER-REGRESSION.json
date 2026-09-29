@@ -1,0 +1,16 @@
+{
+  "row": "P76-SPOILER-REGRESSION",
+  "deckTime": "2026-09-28 23:45-23:58 EDT",
+  "setup": "No game. Chat 'wheatley fight', Strategy mode, covers on (strategy_spoiler_masking_enabled true, auto reveal false), AI character off. A read-only page watcher polled the newest answer bubble every 200 ms (207 polls, 34 changes logged) from before A on Ask until the answer finished.",
+  "pressed": "Question by script: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (VERIFIED), walked to Ask, A. After it finished: Up to the chat row, then Down x12 one press at a time (deck_runSequence). Walk saved as checks/plan76-P76-SPOILER-REGRESSION.json (replays from the chat row).",
+  "seen": {
+    "timing": "About 28 s of waiting (chat sum-up plus thinking, 14 s), then text streamed for about 10 s (bubble 17 -> 843 characters).",
+    "while_arriving": "First text at 28.0 s. First cover ('Spoiler - tap to show / Hidden until you reveal') appeared in the same poll the fence opened (poll 145, 29.0 s, 1 cover). The 'Spoiler hidden until complete...' wait chip was on the page for one logged change at 33.6 s (while the second spoiler fence was open), covers went 1 -> 2, chip gone by 36.6 s. Hidden words checked against the saved chat file: the two hidden paragraphs contain 'swinging your sword', 'movement and timing', 'trickery', 'move around the arena', 'teleports between attacks' - none of these strings, nor the fence marker 'bonsai-spoiler' or three backticks, appeared in ANY of the 34 logged bubble texts or the final bubble text (0 of 9 strings, 0 leaks).",
+    "finished_answer": "Two covers drawn ('Spoiler - tap to show', 'Hidden until you reveal (Strategy Guide).'), answer cut into four stops: lead-in paragraph (before cover 1), 'The main thing to focus on...' paragraph, cover 2, closing paragraph. No hidden word shown as plain text.",
+    "down_walk": "12 presses: chat row -> 99 earlier -> Retry icon -> question row (78 percent, behind the Retry icon, the known false alarm) -> Show reasoning -> cover 1 (100 percent) -> [dead press] -> answer chunk 2 (100 percent) -> [dead press at 67 percent, covered by the tab bar] -> cover 2 (100 percent) -> closing chunk (89 percent, behind the Copy icon, the known false alarm) -> [dead press] -> Mark reply helpful -> Show details. Ring never lost, every stop reachable, 4 stops reported partly hidden (2 known false alarms, cover 1's dead press and chunk 2 at 67 percent behind the tab bar)."
+  },
+  "verdict": "PASS. No hidden words showed as plain text while the answer arrived (a cover or the wait chip took their place), and the finished answer had its covers and was cut into sections as before.",
+  "newFinding": "Three dead Down presses in the finished answer (on cover 1, on chunk 2, and on the closing chunk) - one dead press per tall stop, the same milder shape as S1 and the S8 note. Chunk 2 sits 67 percent visible behind the tab bar at that dead press. Not new (S1 already recorded it).",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

@@ -1,0 +1,16 @@
+{
+  "row": "P76-NEWCHAT-NO-PERM-ROW",
+  "deckTime": "2026-09-28 23:05-23:10 EDT",
+  "setup": "Deployed c71f1d8b with no game running; deck_checkReady buildMatches true (116 files). Steam ban lookup turned off with the Permissions tab toggle (capabilities.steam_web_api true -> false, read back false over SSH). Chat 'wheatley fight'. Eight chats existed (index.json), none started.",
+  "pressed": "Question box filled with the send-question script (bonsai:vac-check 76561198000000000, VERIFIED), walked Down to Ask, A. Then Up to the chat row, RB x7 to the oldest chat (Hades; RB stopped there), LB x8 back round to the new-chat spot at the newest end, read it; RB once back to wheatley fight.",
+  "seen": {
+    "reply_in_chat": "Steam Web API is off for bonsAI. Enable Permissions -> Steam ban lookup ... plus, below the reply, the line 'Enable Steam ban lookup in Permissions to use bonsai:vac-check.' and an 'Open Permissions' row (read before the switch).",
+    "new_chat_spot": "Chat row read 'LB | New chat | + | RB'. Whole panel text: 'Ask anything - this slot keeps its own history.' and the box/Ask. No 'Open Permissions' text, no permission line, no slow-answer line (text search for slow/taking longer/still working false; Open Permissions button present false).",
+    "back_in_chat": "wheatley fight shows the question and the reply text and Was this helpful / Show details. NOTE: the 'Open Permissions' row and the 'Enable Steam ban lookup in Permissions' line were NOT there any more after coming back (text search false).",
+    "chat_files_after": "ls chat_slots = 9 entries (8 chats + index.json), unchanged; no chat was created."
+  },
+  "verdict": "PASS on the written pass line: the New chat spot showed no Open Permissions row and no slow-answer line, and wheatley fight still showed its reply.",
+  "newFinding": "The permission row and its line vanished from the chat that made them once I left and returned. The runbook title says the row 'stays in its own chat' but the pass line only asks that it stay out of the new chat. Owner to decide whether the row was meant to persist.",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

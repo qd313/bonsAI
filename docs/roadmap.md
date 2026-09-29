@@ -116,6 +116,8 @@ starts work outside this.
 - ★ `[ui]` **The Context line briefly reads the wrong thing after reopening the panel or switching
   games, then corrects itself** — **OPEN, seen 2026-09-26 (flow L6 once, flow R twice), not reproduced
   on purpose yet.** [Detail](roadmap-details.md#flow-l6-findings).
+  **2026-09-28 (plan 76, build `c71f1d8b`): reproduced 4 of 4.** With a game running, each reopen read the right game, then "no active game
+  detected" for 1.75 to 1.9 seconds, then the right game again. Evidence `docs/test-evidence/plan76-S5.json`. Lane 6 is fixing it now.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -176,6 +178,10 @@ starts work outside this.
 - ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
   May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
   351 characters).
+  **2026-09-28 (plan 76, build `c71f1d8b`):** it also folds shut after a chat switch (RB then LB), `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`.
+- ★ `[ui]` **The reply-ready popup stays up about 10 seconds, not the 8 planned** — **OPEN, found 2026-09-28 (plan 76, build `c71f1d8b`).**
+  Measured 10.08 seconds over Deep Rock Galactic: Survivor (150 ms polling, so at most 0.15 s off). Small. Evidence
+  `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -242,6 +248,7 @@ starts work outside this.
   **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
+  **2026-09-28 (plan 76):** the Fallout 4 entry below has a new sighting of the same family, with a likely trigger.
 - ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **OPEN, found
   2026-09-26 (plan 70, flow L7), same family as the entry above.** Down and Right leave the ring in the box;
   only Up works, and closing and reopening the panel does not clear it while the game runs.
@@ -249,6 +256,11 @@ starts work outside this.
   **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-i.json`.
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
+  **2026-09-28 (plan 76, `c71f1d8b`), new sighting, likely trigger:** with Deep Rock Galactic: Survivor running, right after a real answer
+  finished with the menu closed (the popup test) and the panel reopened, Steam's ring stayed on the question box (or one stop) while the
+  page's own focus moved on; Down, Up and Right did nothing. Three ways of closing and reopening Quick Access did not clear it (one reopen
+  from the Decky list did, until the next Right); exiting the game cleared it at once. Evidence `docs/test-evidence/plan76-SCR-10.json`,
+  `plan76-TTS-FEAS-05.json`. The session will try to reproduce it on purpose with a measurement.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
@@ -544,31 +556,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **VERIFY, fixed 2026-09-28 (plan 76
   lane 2, `5d9fc717`).** The box now opens on "Not now", with "Remove" as the middle button. Was found 2026-09-28 (plan 74), seen
   again on all five plan 75 runs. Deck check owed: row **P76-REMOVE-KB-SAFE-FIRST**.
-- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **VERIFY, fixed 2026-09-28 (plan 76
-  lane 1, `69544612`).** For example "we wander,…" (seen in `docs/test-evidence/t75-feature-F2-HARD-LINES.json`). Unit test in
-  `src/utils/toastAnswerPreview.test.ts`. Deck check owed: row **T75-FEATURE-F1-REAL-POPUP** (read the second line's end).
-- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **VERIFY, fixed
-  2026-09-28 (plan 76 lane 4, `7c9006cc`).** The new-chat spot no longer shows the last reply's permission row. Was found
-  2026-09-28 (plan 74), `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes). Deck check owed: row **P76-NEWCHAT-NO-PERM-ROW**.
-- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** —
-  **VERIFY, fixed 2026-09-28 (plan 76 lane 4, `e5d1ceb9`).** Switching chats now keeps the newest answer's Helpful row. Seen
-  three times (2026-09-26); closing and reopening the panel was fixed earlier (row **F3-KEEP**, passed).
-  Deck check owed: row **P76-HELPFUL-AFTER-SWITCH**. This is a known issue in the 0.6.0 release notes (plan 72 § 8); that line
-  comes off only once this Deck row passes. [Detail](roadmap-details.md#l3-and-2d-findings).
-- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **VERIFY, fixed 2026-09-28 (plan 76 lane 4).** The "Request
-  cancelled." bubble no longer has a Copy button (`0b2d2f9b`; Deck check owed: row **P76-CANCELLED-NO-COPY**). The rarely seen
-  "nothing to sum up" pop-up no longer says "the whole chat still fits" (`d647e4f7`; unit test only, since the pop-up
-  appears only in a race and cannot be made on purpose).
-- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **VERIFY, fixed 2026-09-28 (plan 76 lane 1,
-  `3c4f81f7`).** Copy and Read aloud now find hidden blocks the way the panel does, including `~~~` ones and a closer glued onto
-  a sentence. These odd shapes cannot be made to happen on purpose (the model is told to write three backticks), so the fix rests
-  on the unit tests in `src/utils/spoilerFenceOddShapes.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION** (a normal
-  covered answer still draws its covers and sections, and no hidden word shows while it arrives).
-- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **VERIFY, fixed 2026-09-28 (plan 76
-  lane 1, `14d79aa4`, `7a2299c5`).** A `~~~` block now stays one block on screen, and the live answer's pieces never split a
-  block, so a hidden block's second half cannot show while an answer arrives. The odd shape cannot be made to happen on purpose,
-  so it rests on the unit tests in `src/utils/markdownFenceReader.test.ts`, `splitResponseIntoChunks.test.ts`,
-  `streamMarkdownPrepare.test.ts` and `streamMarkdownPieces.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -585,6 +572,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   owed:** Show details' separate "Session" tab still lists the raw tag for the same turn.
   **2026-09-28 (plan 76 lane 4, `cba792e8`):** the Session tab half is fixed too (it now names a branch pick in plain words);
   row **KB-FOLLOWUP-QUOTE-02** is still owed on the Deck. [Detail](roadmap-details.md#flow-l6-findings).
+  **2026-09-28 (plan 76, build `c71f1d8b`): FAILED on one line.** The finished answer, the "This answer" tab and the Session tab are clean
+  ("I'm at: In the City of Tears", once). But for about 1.5 seconds after picking a choice the waiting line read `Searching knowledge base for
+  "[Strategy follow-up] I'm at: …"`, and for one sample the question box showed the raw text. **Still owed:** a Deck re-check once lane 4's
+  fix for that waiting line lands. Evidence `docs/test-evidence/plan76-KB-FOLLOWUP-QUOTE-02.json`.
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
   the ring on the chip. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer**, from
@@ -619,11 +610,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   and **DEV-01** pass, and **SCR-05** (reopening mid-answer, `docs/test-evidence/plan70-SCR-05.json`) and **SCR-07**
   (reduced motion, `docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`) passed on the Deck 2026-09-26. Owed: the look
   (**SCR-01**, the maintainer's eye) and the game's own frame rate (**SCR-03**). Full rows in [testing.md](testing.md).
-- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **VERIFY, landed 2026-09-28 as `abfdd45e` (plan 75).**
-  The popup shows the answer's first words across its two lines for eight seconds, hidden blocks never appear, and with nothing
-  safe left it shows *Reply ready* as before. Deck: three hard answers (ordinary, all capitals, wide letters) fit both lines with
-  room to spare, `docs/test-evidence/t75-feature-F2-HARD-LINES.json`. **Owed:** a real answer finishing with the menu closed over a
-  running game (**T75-FEATURE-F1-REAL-POPUP**; `t75-feature-F1-REAL-POPUP.json`: could not run). [Plan](planning/38-toast-answer-lines.md).
 - ★★ `[reply]` **The streamed answer's own redraws were costing most of the panel's frame rate** —
   **VERIFY, fixed 2026-09-25 (`bb8d7e5b`, `aae5add6`).** With no game running the panel drew about 19–24
   frames a second while an answer streamed; moving its text on a steady beat instead of every frame, and
@@ -933,6 +919,33 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-28 (plan 76, docs sweep 4, Deck block 2a):**
+
+- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **DONE 2026-09-28,
+  passed on the Deck (row P76-NEWCHAT-NO-PERM-ROW).** The "New chat" spot showed no permission row or slow-answer line; the chat kept
+  its reply. Evidence `docs/test-evidence/plan76-P76-NEWCHAT-NO-PERM-ROW.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** — **DONE
+  2026-09-28, passed on the Deck (row P76-HELPFUL-AFTER-SWITCH).** After RB and LB the chat kept "What went wrong?" and its five chips,
+  the answer was drawn once, Show details listed the same 15 lines, and another chat's newest answer was live; same after reopen.
+  Off the 0.6.0 known issues. **For the maintainer's eye:** the rated thumbs carry the disabled state but are not visibly dimmer
+  (opacity 1); a look, not a fail. Evidence `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **DONE 2026-09-28.** (a) "Request cancelled." has no Copy or Read aloud:
+  passed on the Deck (row P76-CANCELLED-NO-COPY, `docs/test-evidence/plan76-P76-CANCELLED-NO-COPY.json`). (b) The "nothing to sum
+  up" pop-up wording rests on its unit test (the pop-up only appears in a race). [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **DONE 2026-09-28.** The odd shapes rest on their unit
+  tests; the normal covered answer passed on the Deck (row P76-SPOILER-REGRESSION): no hidden word in 34 live changes sampled every
+  200 ms. Evidence `docs/test-evidence/plan76-P76-SPOILER-REGRESSION.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **DONE 2026-09-28.** The odd shape rests on
+  its unit tests; on the Deck the wait chip showed, the answer drew 2 covers and 4 stops, and a 12-press Down walk passed (row
+  P76-SPOILER-REGRESSION, same evidence). [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **DONE 2026-09-28, passed on the Deck (row
+  T75-FEATURE-F1-REAL-POPUP).** Over Deep Rock Galactic: Survivor, menu closed early, the popup showed the answer's start across
+  two lines and matched it. Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. [Full entry](archive/roadmap-completed.md)
+- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **DONE 2026-09-28, by the session's
+  ruling (row T75-FEATURE-F1-REAL-POPUP).** The Deck sample's cut did not land after a comma; the unit test reproduces the earlier
+  line. [Full entry](archive/roadmap-bugs-fixed.md)
+
 
 **Closed 2026-09-28 (plan 76, docs sweep 3):**
 

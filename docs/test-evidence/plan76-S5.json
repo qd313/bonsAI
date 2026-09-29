@@ -1,0 +1,17 @@
+{
+  "row": "S5",
+  "deckTime": "2026-09-28 23:23-23:26 EDT",
+  "setup": "Game running (Deep Rock Galactic: Survivor, launched by deck_launchGame, no plugin reload after). Built-in screen. A read-only 100 ms watcher on the Context line (.bonsai-context-footnote) logged every change and the moments the panel was absent.",
+  "pressed": "Part (a) only: close and reopen Quick Access by the QAM chord (hold GUIDE, tap A) - once with deck_openPlugin, then three times with two chords, each time waiting 2.5 to 4.5 s. That is 4 reopens, not 10 (time box; the result was identical every time).",
+  "seen": {
+    "reopen_1": "'active game Deep Rock Galactic: Survivor' at 4086 ms, then 'no active game detected' at 4122 ms (36 ms later), back to 'active game ...' at 6013 ms: wrong for about 1.89 s.",
+    "reopen_2": "right name at 16355, wrong at 16547, right at 18300: wrong for about 1.75 s.",
+    "reopen_3": "right name at 29488, wrong at 29611, right at 31424: wrong for about 1.81 s.",
+    "reopen_4": "right name at 40504, wrong at 40639, right at 42408: wrong for about 1.77 s.",
+    "pattern": "Each time the line first draws the right name (from memory), within 0.04 to 0.19 s it is replaced by 'no active game detected', and about 1.8 s after the reopen it returns to the right name."
+  },
+  "verdict": "REPRODUCED 4 of 4: the line reads the wrong text ('no active game detected') for about 1.75 to 1.9 s after every reopen with a game running. Not the 'right name from the first read every time' the row wants.",
+  "newFinding": "The wrong read is in a fixed shape: right name, then wrong, then right. Part (b) (switching to a second game) not run: the runbook says part (a) only.",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

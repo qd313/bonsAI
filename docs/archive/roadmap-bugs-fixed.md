@@ -2405,3 +2405,51 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 ## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 3)
 
 - ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **DONE 2026-09-28 (plan 76 lane 5, `22f31ee4`).** `scripts/fetch_wiki_live_pages.py`'s page-render call was refused (HTTP 403) by Palworld's wiki, worked around by hand on 2026-09-26. A refused render call (401 or 403) now falls back to the ordinary page of the same revision, keeping only the article box, and prints a "[fallback]" line; a page with no article box is read whole; other errors are retried as before. PC tool, no Deck check. One real fetch of the Pal Sphere page came back clean (evidence: the message of commit `22f31ee4`).
+
+## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 4, Deck block 2a)
+
+_Copied line for line from the roadmap's Verify entries, with the closing note added at the end of each._
+
+- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **VERIFY, fixed
+  2026-09-28 (plan 76 lane 4, `7c9006cc`).** The new-chat spot no longer shows the last reply's permission row. Was found
+  2026-09-28 (plan 74), `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json` (notes). Deck check owed: row **P76-NEWCHAT-NO-PERM-ROW**.
+
+**Closed 2026-09-28 (plan 76), passed on the Deck (row P76-NEWCHAT-NO-PERM-ROW, build `c71f1d8b`).** With the ban lookup off, a reply in "wheatley fight" showed its permission row; on the "New chat" spot there was no "Open Permissions" row and no slow-answer line, and the chat itself still showed its reply when the ring came back. Evidence `docs/test-evidence/plan76-P76-NEWCHAT-NO-PERM-ROW.json`.
+
+- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** —
+  **VERIFY, fixed 2026-09-28 (plan 76 lane 4, `e5d1ceb9`).** Switching chats now keeps the newest answer's Helpful row. Seen
+  three times (2026-09-26); closing and reopening the panel was fixed earlier (row **F3-KEEP**, passed).
+  Deck check owed: row **P76-HELPFUL-AFTER-SWITCH**. This is a known issue in the 0.6.0 release notes (plan 72 § 8); that line
+  comes off only once this Deck row passes. [Detail](roadmap-details.md#l3-and-2d-findings).
+
+**Closed 2026-09-28 (plan 76), passed on the Deck (row P76-HELPFUL-AFTER-SWITCH, build `c71f1d8b`).** After RB and LB the chat kept "What went wrong?" with its five chips; the newest answer was drawn once; Show details listed the same 15 lines as before; another chat's newest answer showed live Helpful and "Not really"; the same after closing and reopening Quick Access. **For the maintainer's eye:** the rated thumbs carry the disabled state but are not visibly dimmer (opacity 1). Evidence `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`. Its 0.6.0 known-issue line was taken out of plan 72 § 8.
+
+- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **VERIFY, fixed 2026-09-28 (plan 76 lane 4).** The "Request
+  cancelled." bubble no longer has a Copy button (`0b2d2f9b`; Deck check owed: row **P76-CANCELLED-NO-COPY**). The rarely seen
+  "nothing to sum up" pop-up no longer says "the whole chat still fits" (`d647e4f7`; unit test only, since the pop-up
+  appears only in a race and cannot be made on purpose).
+
+**Closed 2026-09-28 (plan 76).** (a) Passed on the Deck (row P76-CANCELLED-NO-COPY, build `c71f1d8b`): after Stop before any answer text, the "Request cancelled." bubble had no corner Copy icon and no Read aloud. Evidence `docs/test-evidence/plan76-P76-CANCELLED-NO-COPY.json`. (b) Rests on its unit test: the pop-up appears only in a race and cannot be made on purpose.
+
+- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **VERIFY, fixed 2026-09-28 (plan 76 lane 1,
+  `3c4f81f7`).** Copy and Read aloud now find hidden blocks the way the panel does, including `~~~` ones and a closer glued onto
+  a sentence. These odd shapes cannot be made to happen on purpose (the model is told to write three backticks), so the fix rests
+  on the unit tests in `src/utils/spoilerFenceOddShapes.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION** (a normal
+  covered answer still draws its covers and sections, and no hidden word shows while it arrives).
+
+**Closed 2026-09-28 (plan 76).** The odd shapes rest on their unit tests (they cannot be made to happen on purpose). The normal covered answer passed on the Deck (row P76-SPOILER-REGRESSION, build `c71f1d8b`): no hidden word showed in 34 live changes sampled every 200 ms, the wait chip showed, the finished answer drew 2 covers and 4 stops, and a 12-press Down walk passed. Evidence `docs/test-evidence/plan76-P76-SPOILER-REGRESSION.json`, walk `checks/plan76-P76-SPOILER-REGRESSION.json`.
+
+- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 1, `14d79aa4`, `7a2299c5`).** A `~~~` block now stays one block on screen, and the live answer's pieces never split a
+  block, so a hidden block's second half cannot show while an answer arrives. The odd shape cannot be made to happen on purpose,
+  so it rests on the unit tests in `src/utils/markdownFenceReader.test.ts`, `splitResponseIntoChunks.test.ts`,
+  `streamMarkdownPrepare.test.ts` and `streamMarkdownPieces.test.ts`. Deck check owed: row **P76-SPOILER-REGRESSION**.
+
+**Closed 2026-09-28 (plan 76).** The odd shape rests on its unit tests. The Deck run of row P76-SPOILER-REGRESSION (build `c71f1d8b`) passed the normal case: no hidden word showed while the answer arrived, and the finished answer drew 2 covers and 4 stops. Evidence `docs/test-evidence/plan76-P76-SPOILER-REGRESSION.json`.
+
+- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **VERIFY, fixed 2026-09-28 (plan 76
+  lane 1, `69544612`).** For example "we wander,…" (seen in `docs/test-evidence/t75-feature-F2-HARD-LINES.json`). Unit test in
+  `src/utils/toastAnswerPreview.test.ts`. Deck check owed: row **T75-FEATURE-F1-REAL-POPUP** (read the second line's end).
+
+**Closed 2026-09-28 (plan 76), by the session's ruling.** On the Deck (row T75-FEATURE-F1-REAL-POPUP, build `c71f1d8b`) the popup's second line ended "as they…" with no comma, so the cut did not land after a comma; the unit test in `src/utils/toastAnswerPreview.test.ts` reproduces the exact line from the earlier evidence. Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`.
+

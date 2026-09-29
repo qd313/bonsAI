@@ -6,6 +6,16 @@
 
 Headings group related work. Star counts match the historical list.
 
+### The answer's first lines in the reply-ready toast (closed 2026-09-28)
+
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **VERIFY, landed 2026-09-28 as `abfdd45e` (plan 75).**
+  The popup shows the answer's first words across its two lines for eight seconds, hidden blocks never appear, and with nothing
+  safe left it shows *Reply ready* as before. Deck: three hard answers (ordinary, all capitals, wide letters) fit both lines with
+  room to spare, `docs/test-evidence/t75-feature-F2-HARD-LINES.json`. **Owed:** a real answer finishing with the menu closed over a
+  running game (**T75-FEATURE-F1-REAL-POPUP**; `t75-feature-F1-REAL-POPUP.json`: could not run). [Plan](planning/38-toast-answer-lines.md).
+
+**Closed 2026-09-28 (plan 76), passed on the Deck (row T75-FEATURE-F1-REAL-POPUP, build `c71f1d8b`).** Over Deep Rock Galactic: Survivor, with the menu closed before the answer finished (49.5 s), the popup showed "Kite between waves and focus on hitting" and "the weak-point armor plates as they…" across two lines, matching the answer's start, with no comma before the "…". Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. The popup stayed up 10.08 s rather than about 8; that is filed as a small roadmap bug.
+
 ### A latency budget for a game question (closed 2026-09-28)
 
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because

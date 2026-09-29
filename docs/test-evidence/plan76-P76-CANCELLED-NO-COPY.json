@@ -1,0 +1,18 @@
+{
+  "row": "P76-CANCELLED-NO-COPY",
+  "deckTime": "2026-09-28 23:38-23:42 EDT",
+  "setup": "No game. Chat 'wheatley fight', Strategy, AI character off. The chat was long (about 100 turns), so the panel showed 'Summing up the chat so far - 4 s' right after Ask.",
+  "pressed": "Question by script: 'give me a very long thorough walkthrough of every area in Hollow Knight covering every boss charm and secret in order' (VERIFIED). Walked to Ask, A. Read the page: waiting line 'Looking up strategy notes on ...', Ask button greyed, a 'Stop generation' icon (20x20 at x 322, y 372) beside the Strategy chip. Walked Down to it (1 press), A once, before any answer text.",
+  "seen": {
+    "bubble": "One AI bubble, text 'Request cancelled.' (box x52 y245 w267 h32).",
+    "copy_icon": "No .bonsai-reply-copy-corner element on the page (count 0). The bubble has no button children.",
+    "read_aloud": "No Read aloud control anywhere (count of aria-label containing Read aloud = 0).",
+    "all_buttons_on_page": "Attach screenshot to Ask, Inference mode: Strategy, Voice input, Clear",
+    "screenshot": "C:/Users/still/Documents/BonsAI/screenshots/DeckCapture_20260928_231951_auto.png (taken mid-scroll: the Request cancelled bubble is half hidden behind the suggestion strip, no corner icon on its visible part). The question text came back into the question box after Stop; emptied with the script's --clear afterwards.",
+    "earlier_count": "The 'N earlier' pill read 101 while the turn was arriving and 99 after Stop (the cancelled turn is drawn as the last one)."
+  },
+  "verdict": "PASS. The 'Request cancelled.' bubble has no corner Copy icon and no Read aloud.",
+  "newFinding": null,
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

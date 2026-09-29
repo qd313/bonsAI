@@ -1,0 +1,16 @@
+{
+  "row": "SCR-10 - panel frame rate while an answer arrives, with a game",
+  "deckTime": "2026-09-28 23:29-23:38 EDT",
+  "setup": "Deep Rock Galactic: Survivor running (title screen), panel open over it, no plugin reload after launch. Mode Speed (was Strategy), AI character off (was on) - both put back afterwards.",
+  "pressed": "See seen.what_stopped_it",
+  "seen": {
+    "what_stopped_it": "After the popup test (T75), the gamepad ring in Quick Access stopped following the D-pad. Steam's ring (gpfocus) stayed on the question box or on one stop while the page's own focus (activeElement) moved on. Down and Right did nothing from the question box; Down did nothing from the question row of a Speed answer that had a reasoning fold and a 'Glyphid Dreadnought - From bonsAI's own note' block. Route tried: UP to the chip, DOWN to the box, RIGHT to the mode chip (page focus moved to it, ring did not), Down to Ask (page focus moved, ring did not); close and reopen by the QAM chord x3; Steam menu (GUIDE) then B then reopen; B x4 then reopen from the Decky list (that once gave 'agree' true, but the next RIGHT desynced again); RB then LB; B to the tab bar then Down; a switch to a second chat (ring stopped on 'Request cancelled.').",
+    "keyboard_slip": "Once I pressed A while Steam's ring was on the question box but the page's focus was on the mode chip; the tool report said gpfocus INPUT and I acted on activeElement. Steam's on-screen keyboard opened (screenshot DeckCapture_20260928_233216_auto.png). B closed it and the panel stayed open. No text was typed. This is the never-press-A-on-the-box rule broken by my mistake.",
+    "after_game_exit": "With the game gone the same route worked in sync at once (Down reached Ask from the tab bar, UP/RIGHT reached the mode chip, agree true every step).",
+    "measured": "Only idle: a page frame counter (1 s slices) with the game on its title screen and the panel open, no answer arriving: 46, 48 and 52 frames a second on the last three slices before the run stopped. No answer could be started, so no answer-phase median exists. (The counter kept running after the game exited, so its whole-run median of 90 is not a with-game number and is not used.) Steam's overlay was on in the corner: game 44 to 45 FPS on the title screen with the panel open."
+  },
+  "verdict": "BLOCKED - could not press Ask with a game running after the popup test; no answer-phase number recorded. Target of 30 not tested.",
+  "newFinding": "After the popup answer the ring stops following the D-pad while a game is running: Steam's ring and the page's focus disagree and Down/Right/Up stall. It cleared once the game was closed. Worth its own look; not investigated further.",
+  "build": "c71f1d8b",
+  "screen": "Deck's own screen (Quick Access window 854x454, dpr 1.5)"
+}

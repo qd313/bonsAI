@@ -85,20 +85,34 @@ export function computeSessionContextRows(
   liveTurn: SessionContextTurn | null | undefined,
   archivedTurns: AskThreadCollapsedTurn[] | undefined
 ): SessionContextTurn[] {
-  const archivedRows: SessionContextTurn[] = (archivedTurns ?? [])
-    .filter((t) => t.transparency && chipsFromSnapshot(t.transparency).length > 0)
-    .map((t) => ({
+  const archivedWithChips = (archivedTurns ?? []).filter(
+    (t) => t.transparency && chipsFromSnapshot(t.transparency).length > 0
+  );
+  /*
+   * The words the person saw, not the ones the model was sent: a branch pick is saved as
+   * "[Strategy follow-up] I'm at: ..." with the friendly "I'm at: ..." beside it, and the header,
+   * the waiting line and the "This answer" tab already show the friendly one.
+   */
+  const archivedRows: SessionContextTurn[] = archivedWithChips.map((t) => {
+    const shown = (t.questionDisplay || t.question).trim();
+    return {
       id: t.id,
-      label: t.question.trim().slice(0, 48) || t.id,
-      question: t.question.trim(),
+      label: shown.slice(0, 48) || t.id,
+      question: shown,
       snapshot: t.transparency ?? null,
-    }));
+    };
+  });
 
   const newestArchivedRow = archivedRows[archivedRows.length - 1];
+  /* The live copy carries the friendly words on the live path and the raw ones after a chat is
+     reopened from disk, so either counts as the same turn. */
+  const newestArchivedRaw = archivedWithChips[archivedWithChips.length - 1]?.question.trim();
   const liveIsNewestArchived =
     Boolean(liveTurn) &&
     Boolean(newestArchivedRow) &&
-    (liveTurn!.id === newestArchivedRow!.id || liveTurn!.question === newestArchivedRow!.question);
+    (liveTurn!.id === newestArchivedRow!.id ||
+      liveTurn!.question === newestArchivedRow!.question ||
+      liveTurn!.question === newestArchivedRaw);
 
   return [
     ...archivedRows,

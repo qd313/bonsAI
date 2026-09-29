@@ -126,6 +126,54 @@ describe("computeSessionContextRows -- live/archived de-dup", () => {
     expect(rows).toHaveLength(2);
   });
 
+  /*
+   * Roadmap "Picking a branch menu choice shows the model's own internal tag instead of plain words",
+   * the part still owed after 2e13421d: a branch pick is saved as "[Strategy follow-up] I'm at: ..."
+   * with the friendly "I'm at: ..." beside it. The tab listed the raw tag for the archived turn and,
+   * because the live copy carries the friendly words, a second clean row for the same turn.
+   */
+  it("names a branch pick by its friendly words, and counts it once beside its live copy", () => {
+    const pick: AskThreadCollapsedTurn = {
+      ...ARCHIVED_TURN,
+      question: "[Strategy follow-up] I'm at: Just starting the campaign",
+      questionDisplay: "I'm at: Just starting the campaign",
+    };
+    const archivedOnly = computeSessionContextRows(null, [pick]);
+    expect(archivedOnly).toHaveLength(1);
+    expect(archivedOnly[0]!.label).toBe("I'm at: Just starting the campaign");
+    expect(archivedOnly[0]!.question).not.toContain("[Strategy follow-up]");
+
+    const withLive = computeSessionContextRows(
+      {
+        id: "live",
+        label: "I'm at: Just starting the campaign",
+        question: "I'm at: Just starting the campaign",
+        snapshot: CHIP_SNAPSHOT,
+      },
+      [pick]
+    );
+    expect(withLive).toHaveLength(1);
+    expect(withLive[0]!.label).not.toContain("[Strategy follow-up]");
+  });
+
+  it("still counts a live copy that carries the raw question once", () => {
+    const pick: AskThreadCollapsedTurn = {
+      ...ARCHIVED_TURN,
+      question: "[Strategy follow-up] I'm at: Just starting the campaign",
+      questionDisplay: "I'm at: Just starting the campaign",
+    };
+    const rows = computeSessionContextRows(
+      {
+        id: "live",
+        label: "x",
+        question: "[Strategy follow-up] I'm at: Just starting the campaign",
+        snapshot: CHIP_SNAPSHOT,
+      },
+      [pick]
+    );
+    expect(rows).toHaveLength(1);
+  });
+
   it("is empty with nothing on either side", () => {
     expect(computeSessionContextRows(null, [])).toHaveLength(0);
   });

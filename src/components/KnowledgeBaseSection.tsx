@@ -73,6 +73,8 @@ import { Button, ConfirmModal, Focusable, ModalRoot, PanelSection, PanelSectionR
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
+import { elementHasGamepadFocus } from "../utils/uiDocument";
+import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
@@ -331,6 +333,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const removeBtnRef = useRef<HTMLButtonElement | null>(null);
   const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
   const nomicBtnRef = useRef<HTMLButtonElement | null>(null);
+  /** Steam's nav node for the Download/Update row: the one approved way to move the ring into it. */
+  const actionRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
   const toggleHostRefLocal = useRef<HTMLDivElement | null>(null);
   const toggleHost = toggleHostRef ?? toggleHostRefLocal;
 
@@ -362,6 +366,25 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     nomicBtnRef.current?.focus();
     return Boolean(nomicBtnRef.current);
   }, []);
+
+  /**
+   * The meaning-search Pull button vanishes once the model lands, with the ring on it when the player
+   * has not moved, and nothing held the ring afterwards (roadmap-details.md, Flow L10 findings). The
+   * ring goes to the button below it: Steam's own transfer into the action row first, then that
+   * button's own focus if the transfer did not land it.
+   */
+  const nomicHostRef = useHandRingOnGone(() => {
+    try {
+      actionRowNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    // Steam may stamp its ring on the wrapper around the button rather than the button itself.
+    const primary = primaryBtnRefLocal.current;
+    if (!elementHasGamepadFocus(primary?.closest<HTMLElement>(".bonsai-settings-focus-btn-host") ?? primary)) {
+      focusPrimaryBtn();
+    }
+  });
 
   /**
    * Down from the toggle: while a download runs the primary button is disabled and
@@ -862,7 +885,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                 )}
               </span>
               {showNomicPullBtn ? (
-              <div className="bonsai-settings-focus-btn-host" style={{ marginTop: 6, maxWidth: 220 }}>
+              <div ref={nomicHostRef} className="bonsai-settings-focus-btn-host" style={{ marginTop: 6, maxWidth: 220 }}>
                 <Focusable
                   onOKButton={pullNomicEmbed}
                   style={{ width: "100%", display: "flex", alignItems: "stretch" }}
@@ -921,6 +944,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           flow-children="horizontal"
           className="bonsai-settings-bleed"
           style={{ display: "flex", flexDirection: "row", alignItems: "stretch", gap: 8, width: "100%" }}
+          {...({ navRef: actionRowNavRef } as Record<string, unknown>)}
         >
           {/* Pattern C: pair is one horizontal row — Up/Down both exit vertically; Left/Right stay in-row. */}
           <div

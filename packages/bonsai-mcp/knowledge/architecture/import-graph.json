@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 597,
-  "edgeCount": 1656,
+  "fileCount": 599,
+  "edgeCount": 1662,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -253,6 +253,14 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.pullHint.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.removeBox.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -289,14 +297,17 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useHandRingOnGone.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
-        "src/utils/settingsPanelScroll.ts"
+        "src/utils/settingsPanelScroll.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+        "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
@@ -3334,6 +3345,14 @@
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
+    "src/hooks/useHandRingOnGone.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx"
+      ]
+    },
     "src/hooks/useInputTransparencyRefresh.ts": {
       "imports": [
         "src/utils/deckyCall.ts",
@@ -4425,6 +4444,7 @@
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
+        "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
@@ -4471,6 +4491,7 @@
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
@@ -6468,6 +6489,7 @@
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
+        "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
@@ -6489,6 +6511,7 @@
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useHandRingOnGone.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",

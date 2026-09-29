@@ -74,6 +74,7 @@
     "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
     "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
     "src/components/OllamaWhereAiRunsSection.test.tsx",
+    "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
     "src/components/PermissionDenyAction.test.tsx",
     "src/components/PermissionsTab.internetDownloads.test.tsx",
     "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",

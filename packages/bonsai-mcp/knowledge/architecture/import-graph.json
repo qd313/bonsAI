@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 605,
-  "edgeCount": 1685,
+  "fileCount": 606,
+  "edgeCount": 1689,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1148,6 +1148,15 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
@@ -1168,7 +1177,8 @@
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.test.tsx"
+        "src/components/OllamaWhereAiRunsSection.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx"
       ]
     },
     "src/components/OllamaWhereAiRunsSection.types.ts": {
@@ -1893,7 +1903,6 @@
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
-        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
@@ -2490,6 +2499,7 @@
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/useSettingsLoadedFlag.ts"
       ]
@@ -3456,9 +3466,9 @@
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/deckEssentialsTags.ts",
-        "src/data/modelPolicy.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelCatalogRefresh.ts"
       ],
@@ -3706,7 +3716,9 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
         "src/hooks/usePullModelTier2Wording.test.tsx"
@@ -4507,6 +4519,7 @@
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",

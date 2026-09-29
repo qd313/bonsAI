@@ -35,7 +35,7 @@ import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
 import { TIER1_ESSENTIALS_TAG, TIER2_MULTIMODAL_TAG } from "../data/deckEssentialsTags";
-import { disclosureSummaryForSourceClass } from "../data/modelPolicy";
+import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
 import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
@@ -137,7 +137,6 @@ export function useLocalOllamaSetupFlow({
       const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
       const isTier2 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL;
       const isUpdateInstalled = profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
-      const tier2LicenseNote = disclosureSummaryForSourceClass("open_weight");
       const title = isTier1
         ? "Install Tier 1 essentials?"
         : isUpdateInstalled
@@ -187,7 +186,7 @@ export function useLocalOllamaSetupFlow({
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
                 bonsAI will switch Model policy to <strong>Tier 2 (open-weight)</strong> so this model is eligible
-                for Ask. {tier2LicenseNote}
+                for Ask. {TIER2_PULL_NOTE}
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
               {LOCAL_SETUP_NETWORK_AND_POWER_HINT}

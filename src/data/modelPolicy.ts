@@ -70,30 +70,3 @@ export const MODEL_POLICY_PERMISSIONS_INTRO =
 /** Short Settings helper: what changes vs staying on Tier 1. */
 export const MODEL_POLICY_SETTINGS_INTRO =
   "Tier 1 (default) limits fallbacks to FOSS-friendly tags. Tier 2 adds open-weight names; Tier 3 can include non-FOSS and unclassified tags when unlocked. Only changes which tags the plugin tries—your host still decides what is installed.";
-
-export function disclosureSummaryForSourceClass(sourceClass: ModelSourceClass): string {
-  switch (sourceClass) {
-    case "foss":
-      return (
-        "This reply used a model family bonsAI treats as open-source–aligned for routing (not legal advice). " +
-        "Training code and license may still differ from your personal definition of FOSS."
-      );
-    case "open_weight":
-      return (
-        "This reply used an “open model” (open-weight): weights are typically published for local use, but the training stack, " +
-        "evaluation assets, or license terms can differ from Tier 1 open-source expectations (including use or redistribution limits)."
-      );
-    case "non_foss":
-      return (
-        "This reply used a model family bonsAI classifies as outside FOSS/open-weight defaults for routing. " +
-        "Read the upstream license before relying on it for sensitive or commercial use."
-      );
-    case "unknown":
-      return (
-        "This Ollama tag is not in bonsAI’s curated list. It is only tried when Tier 3 and the explicit unlock are enabled; " +
-        "treat license and trust as unknown until you verify upstream terms."
-      );
-    default:
-      return "";
-  }
-}

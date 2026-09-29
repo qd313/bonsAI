@@ -1,0 +1,16 @@
+{
+  "row": "P76-REMOVE-MODEL-SAFE-FIRST (Deck block 3)",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT",
+  "deckTime": "2026-09-29 00:53-00:56 EDT",
+  "screen": "built-in panel; the AI models screen opens in Steam's main window (854x534)",
+  "setup": "Ollama tab, Browse models. Installed before: nomic-embed-text:latest (274 MB), gemma4:e2b-it-qat (4.3 GB). Read with deck_readPage on target 'Steam Big Picture Mode'.",
+  "pressed_and_seen": [
+    "Opening the screen: ring on 'Advanced >' (656,128,71,22), page focus agreed.",
+    "Walked Down one press at a time with deck_walkTo (only D-pad): Advanced, Refresh model catalog, Filters, Use gemma4 for Ask (star), Select qwen3.5:4b, Select qwen2.5vl:3b, then nomic-embed-text:latest row status button (133,362,24,24). No A on any model row.",
+    "RIGHT once: ring on 'Remove from Deck' (697,362,24,24) of the nomic row; ring and document.activeElement the same element.",
+    "A: box 'Remove nomic-embed-text:latest from the Deck?' (about 0.3 GB, runs ollama rm). Buttons Not now / Remove model / Cancel. Ring BEFORE any press in the box: 'Not now' (123,296,194,40); ring and page focus agreed.",
+    "A on 'Not now': box closed, ring landed on 'Done' (123,402,290,40); no box left open."
+  ],
+  "ollama_list_after": "nomic-embed-text:latest 274 MB, gemma4:e2b-it-qat 4.3 GB - same two models as before",
+  "verdict": "PASS. The removal box opens with the ring on 'Not now' (the safe choice), and A there removes nothing. After 'Not now' the ring sits on 'Done'."
+}

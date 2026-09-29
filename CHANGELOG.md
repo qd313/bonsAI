@@ -19,18 +19,18 @@ All notable changes to this project are documented in this file.
   library boxes and the Tier 1 and Tier 2 install boxes give the ring back to their own button instead of the tab bar. The
   "Enable Tier 2 before pulling?" box no longer talks about a reply. Unit-tested; owes its Deck checks.
 - **An opened spoiler cover stays open while you type a question**, Down and Up now land on the same covers, and a press that
-  scrolls no longer leaves the ring on a cover or word that scrolled off screen. Unit-tested; owes its Deck checks.
+  scrolls no longer leaves the ring on a cover or word that scrolled off screen. Unit-tested; passed on the Deck.
 - **Removing the note-search model in the plugin shows its hint at once**, not after up to 40 seconds.
 - **A question about a well-known game the library does not have no longer gets the chat's own game's notes.** A game not on
   the short list behaves as before.
 - **The follow-up choice reader accepts more of the shapes a model drifts to.**
 - **A model download running when the plugin reloads now starts again on load.**
 - **Down no longer bounces between a spoiler cover and its section.** The walk remembers the last cover or word the ring was on
-  in a section and does not offer it again until the ring leaves. One extra Down stop stays by design. Owes its Deck check.
-- **"Remove <model> from the Deck?" opens on "Not now".** Owes its Deck check.
-- **Cancel on the AI models screen puts the saved licence back** to what it was when the screen opened. Owes its Deck check.
+  in a section and does not offer it again until the ring leaves. One extra Down stop stays by design. Passed on the Deck; one small follow-up is filed (after a scroll the ring can sit with its top third under the tab header).
+- **"Remove <model> from the Deck?" opens on "Not now".** Passed on the Deck.
+- **Cancel on the AI models screen puts the saved licence back** to what it was when the screen opened. Passed on the Deck.
 - **The library's status line follows a download that starts after the tab was rebuilt**, instead of reading "Not installed"
-  for about a minute. Owes its Deck check.
+  for about a minute. Passed on the Deck; the heading line still says "Not installed" until the download lands.
 
 ### Plan 75 (2026-09-28)
 

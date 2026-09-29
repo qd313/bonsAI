@@ -71,6 +71,10 @@ starts work outside this.
 ## Bugs
 
 
+- ★ `[focus]` **After a Down press that scrolls past a spoiler cover, the ring sits on the section's box with its top third under the tab header** — **OPEN, found 2026-09-29 (plan 76, Deck block 3).**
+  The box is only 67% on screen and its cover is the hidden part; with a game running it also sat partly under the dock's action row.
+  Small; the cover-walk fix works around it, so nothing loops. It is why the free-play sweep failed (**QA-FREE-PLAY-01**).
+  Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
@@ -84,6 +88,7 @@ starts work outside this.
   **2026-09-28 (plan 76 lane 3, `3576846c`):** the milder form seen that night (each cover took one extra Down) has its cause
   found and fixed: a "this cover was already offered" flag was reset on every redraw. Checked by row **P76-WALK-COVERS**.
   Kept here, not moved to Verify: the original never-moves form was never reproduced, so it is not fully explained.
+  **2026-09-29 (plan 76, block 3):** the walk through the covers now passes (row P76-WALK-COVERS, Done); no never-moves form seen.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
   more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
   same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
@@ -98,7 +103,11 @@ starts work outside this.
   be a stop going Down only.
   **2026-09-29 (plan 76, Deck block 2b, build `ab56e2a2`):** row **REPLY-STOPS-MIRROR-01** FAILED. Down and Up do not visit the same
   stops: the walk loops on the first cover. Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`.
-  **Fixed again (`8151dd54`);** re-run owed, see the cover entry under Verify.
+  **Fixed again (`8151dd54`), and re-run on the Deck 2026-09-29 (plan 76, block 3, build `4af8e7a1`):** every stop mirrors except one known
+  by-design stop: a section's box that Down visits after a scroll and Up skips. A section holding only a cover now takes the ring on the
+  cover itself, and A opens it both ways (that part is fixed and proven). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`.
+  **Left open as a call for the maintainer:** is that one by-design stop acceptable? Making Up stop on the box too would need extra Up rules
+  (lane 3). That box is also the 67%-visible stop in the new bug at the top of Bugs.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
   **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
@@ -250,6 +259,7 @@ starts work outside this.
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
   **2026-09-28 (plan 76):** the Fallout 4 entry below has a new sighting of the same family, with a likely trigger.
   **2026-09-29 (plan 76, Deck block 2c):** the Fallout 4 entry below reproduced it on purpose, twice; same family.
+  **2026-09-29 (plan 76, block 3):** the Fallout 4 entry below now has the measurement: the split follows whether the panel's window has focus.
 - ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **OPEN, found
   2026-09-26 (plan 70, flow L7), same family as the entry above.** Down and Right leave the ring in the box;
   only Up works, and closing and reopening the panel does not clear it while the game runs.
@@ -270,6 +280,11 @@ starts work outside this.
   exiting the game did. **Lead:** both reopens used the Deck tool's own "open the plugin" call, which presses Down once to place the ring;
   a later reopen with plain Quick Access button presses kept ring and page together. The last Deck block tests the two routes side by
   side. Evidence `docs/test-evidence/plan76-P76-TRAP-REPRO.json`, `docs/test-evidence/plan76-P76-TRAP-CONTROL.json`.
+  **2026-09-29 (plan 76, Deck block 3, build `4af8e7a1`), measured, six reopens with a game running:** every reopen after which the panel's
+  page did not have the window's attention (`document.hasFocus()` false) split later; every one where it did never split. The reopen route did
+  not decide it (a plain Quick Access chord split once, the test tool's open call split twice). It read false when the panel opened with no
+  ring of its own and something then placed one (the plugin's own open-time claim, or a Down press). **So the lead above, that the test tool
+  alone causes it, is ruled out.** A fix on the plugin's side (lane 7) is being built. Evidence `docs/test-evidence/plan76-P76-TRAP-SPLIT.json`.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
@@ -390,6 +405,8 @@ replace it with a specific issue when one exists.
   and 30–33 with it kept (the maintainer's call), dipping into the 20s late in long answers; the game itself
   went from 14–17 to 23–31. Rows **GAME-LIGHT-01**, **STREAM-PIECES-01** partial. Next: a Deck processor
   profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).
+  **2026-09-29 (plan 76, block 3):** with Deep Rock Galactic: Survivor on its title screen, the panel's median while an answer arrived was
+  84.5 frames a second (thinking 90, idle 87.5). Title screen only; a mission running was not tried. Evidence `docs/test-evidence/plan76-SCR-10-try2.json`.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
@@ -520,20 +537,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
   (plan 70, flow L7). Deck check owed: row **P76-CHOICES-DRIFT** (the flow L7 troubleshooting questions with a game running,
   reading the log). [Detail](roadmap-details.md#flow-l7-findings).
-- ★ `[focus]` **Walking Down past a closed spoiler cover looped forever; covers cost an extra Down or a stop on their outer box** —
-  **VERIFY, fixed again 2026-09-29 (plan 76 lane 3, second round, `8151dd54`).** Failed on the Deck (block 2b): from the question, Down
-  bounced between the first cover and its section's box and never reached section 2 or Helpful. Now the walk remembers the last cover or
-  word the ring was on in a section and never offers it, or anything before it, again until the ring leaves the section. One extra Down
-  stop stays by design: a section's box after a scroll, which Up does not visit. Evidence `docs/test-evidence/plan76-P76-WALK-COVERS.json`,
-  `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`. Deck re-run owed: rows **P76-WALK-COVERS** and **REPLY-STOPS-MIRROR-01**.
-- ★ `[focus]` **"Remove nomic-embed-text from the Deck?" opened on "Remove model"** — **VERIFY, fixed 2026-09-29 (plan 76 lane 2, round 3,
-  `9284a790`).** "Remove <model> from the Deck?" now opens on "Not now". Deck check owed: row **P76-REMOVE-MODEL-SAFE-FIRST**.
-- ★ `[ui]` **After reinstalling the library, its status read "Not installed" for about a minute** — **VERIFY, fixed 2026-09-29
-  (`a875b7c3`).** The status line now follows a download that starts after the tab was rebuilt. Known leftover: a short window of "Installed"
-  plus a finishing row can still show for up to 1.5 s. Deck check owed: row **P76-KB-STATUS-REINSTALL**.
-- ★★ `[ollama]` **After Cancel on the AI models screen, the saved licence setting and the screen disagreed** — **VERIFY, fixed 2026-09-29
-  (`8e2e682f`).** Cancel puts the saved licence back to what it was when the screen opened (only if something was saved during that visit).
-  Deck check owed: row **P76-LICENCE-CANCEL**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -583,7 +586,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   frames a second while an answer streamed; moving its text on a steady beat instead of every frame, and
   holding its glow still while text arrives, raised that to 56–58 with the scramble off, 44–50 with it on
   — the maintainer's own floor was 45. Evidence `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
-  Owed: the maintainer's own eye on the look, and a run with a game. Rows **SCR-09**, **SCR-10** in
+  Owed: the maintainer's own eye on the look, and a run with a game in a mission (title screen passed 2026-09-29: 84.5). Rows **SCR-09**, **SCR-10** in
   [testing.md](testing.md).
 
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
@@ -883,6 +886,13 @@ The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
 
+**Closed 2026-09-29 (plan 76, docs sweep 8, Deck block 3, build `4af8e7a1`):**
+
+- ★ `[focus]` **Walking Down past a closed spoiler cover looped forever; covers cost an extra Down or a stop on their outer box** — **DONE 2026-09-29, passed by the session's ruling (row P76-WALK-COVERS re-run).** Helpful reached in 9 stops, no stop twice, no dead press, A opened both covers from both directions; one clause not met (a section box 67% on screen), filed as a new bug. The lone-cover-section part now takes the ring on the cover and A opens it (row REPLY-STOPS-MIRROR-01). Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **"Remove nomic-embed-text from the Deck?" opened on "Remove model"** — **DONE 2026-09-29, passed first time on the Deck (row P76-REMOVE-MODEL-SAFE-FIRST).** Opens on "Not now"; A removed nothing. Evidence `docs/test-evidence/plan76-P76-REMOVE-MODEL-SAFE-FIRST.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ui]` **After reinstalling the library, its status read "Not installed" for about a minute** — **DONE 2026-09-29, passed by the session's ruling (row P76-KB-STATUS-REINSTALL).** "Downloading…" with Cancel showed at once; "Installed" with no Cancel row came 0.55 s after the end, both runs. The heading line read "Not installed" during the 1.6 s download, which is true until it lands. Evidence `docs/test-evidence/plan76-P76-KB-STATUS-REINSTALL.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[ollama]` **After Cancel on the AI models screen, the saved licence setting and the screen disagreed** — **DONE 2026-09-29, passed first time on the Deck (row P76-LICENCE-CANCEL).** The pick was written at once and Cancel put the old licence back; the reopened screen matched; nothing downloaded. Evidence `docs/test-evidence/plan76-P76-LICENCE-CANCEL.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+
 **Closed 2026-09-29 (plan 76, docs sweep 7, Deck block 2c, build `ab56e2a2`):**
 
 - ★ `[focus]` **After choosing an accent level, nothing held the ring and the first LB did not switch tab** — **DONE 2026-09-29, passed first time on the Deck (row P76-ACCENT-RING).** Ring on the accent control after a pick and after B on the menu; the first LB switched tab. Evidence `docs/test-evidence/plan76-P76-ACCENT-RING.json`. [Full entry](archive/roadmap-bugs-fixed.md)
@@ -904,35 +914,9 @@ during the twelfth bookkeeping pass, again to keep this document under its size 
 - ★ `[ollama]` **A plugin reload stops a model download in progress** — **DONE 2026-09-29, passed on the Deck (row P76-PULL-RESUME).** After a reload the download resumed from 345 MB within 8 s; the note file was gone after it landed; a cancelled download did not come back. Off the 0.6.0 known issues. Evidence `docs/test-evidence/plan76-P76-PULL-RESUME.json`. [Full entry](archive/roadmap-bugs-fixed.md)
 - ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **DONE 2026-09-29, passed on the Deck (row P76-OTHER-GAME-NOTES).** The log named Valheim as unknown and attached no notes; the follow-up used Hollow Knight's and attached 3. Evidence `docs/test-evidence/plan76-P76-OTHER-GAME-NOTES.json`. [Full entry](archive/roadmap-bugs-fixed.md)
 
-**Closed 2026-09-28 (plan 76, docs sweep 4, Deck block 2a):**
 
-- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **DONE 2026-09-28,
-  passed on the Deck (row P76-NEWCHAT-NO-PERM-ROW).** The "New chat" spot showed no permission row or slow-answer line; the chat kept
-  its reply. Evidence `docs/test-evidence/plan76-P76-NEWCHAT-NO-PERM-ROW.json`. [Full entry](archive/roadmap-bugs-fixed.md)
-- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** — **DONE
-  2026-09-28, passed on the Deck (row P76-HELPFUL-AFTER-SWITCH).** After RB and LB the chat kept "What went wrong?" and its five chips,
-  the answer was drawn once, Show details listed the same 15 lines, and another chat's newest answer was live; same after reopen.
-  Off the 0.6.0 known issues. **For the maintainer's eye:** the rated thumbs carry the disabled state but are not visibly dimmer
-  (opacity 1); a look, not a fail. Evidence `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`. [Full entry](archive/roadmap-bugs-fixed.md)
-- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **DONE 2026-09-28.** (a) "Request cancelled." has no Copy or Read aloud:
-  passed on the Deck (row P76-CANCELLED-NO-COPY, `docs/test-evidence/plan76-P76-CANCELLED-NO-COPY.json`). (b) The "nothing to sum
-  up" pop-up wording rests on its unit test (the pop-up only appears in a race). [Full entry](archive/roadmap-bugs-fixed.md)
-- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **DONE 2026-09-28.** The odd shapes rest on their unit
-  tests; the normal covered answer passed on the Deck (row P76-SPOILER-REGRESSION): no hidden word in 34 live changes sampled every
-  200 ms. Evidence `docs/test-evidence/plan76-P76-SPOILER-REGRESSION.json`. [Full entry](archive/roadmap-bugs-fixed.md)
-- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **DONE 2026-09-28.** The odd shape rests on
-  its unit tests; on the Deck the wait chip showed, the answer drew 2 covers and 4 stops, and a 12-press Down walk passed (row
-  P76-SPOILER-REGRESSION, same evidence). [Full entry](archive/roadmap-bugs-fixed.md)
-- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **DONE 2026-09-28, passed on the Deck (row
-  T75-FEATURE-F1-REAL-POPUP).** Over Deep Rock Galactic: Survivor, menu closed early, the popup showed the answer's start across
-  two lines and matched it. Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. [Full entry](archive/roadmap-completed.md)
-- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **DONE 2026-09-28, by the session's
-  ruling (row T75-FEATURE-F1-REAL-POPUP).** The Deck sample's cut did not land after a comma; the unit test reproduces the earlier
-  line. [Full entry](archive/roadmap-bugs-fixed.md)
-
-
-Plan 76 sweeps 1 to 3 and the plan 75 (Sonnet 5.5 trial) block were moved out the same way on 2026-09-29, during docs
-sweep 6, to keep this document under its size limit: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+Plan 76 sweeps 1 to 4 and the plan 75 (Sonnet 5.5 trial) block were moved out the same way on 2026-09-29, during docs
+sweeps 6 and 8, to keep this document under its size limit: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 **Closed 2026-09-26 (docs clean-up):**
 

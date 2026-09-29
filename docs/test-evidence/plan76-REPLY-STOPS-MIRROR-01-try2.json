@@ -1,0 +1,20 @@
+{
+  "row": "REPLY-STOPS-MIRROR-01 (re-run, Deck block 3)",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT",
+  "deckTime": "2026-09-29 00:50-00:56 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "setup": "Same answer as P76-WALK-COVERS-try2 (Strategy, covers on, no game): two paragraph sections, section 3 a lone cover, two-choice menu, Helpful row. One scratch chat (the open one). Nothing revealed during the walks. Ring started on the question row.",
+  "pressed": "deck_sweep DOWN with return trip, budget 50, stall limit 4, run twice (second one saved as a check: checks/plan76-REPLY-STOPS-MIRROR-01-b3.json). Then by hand: Down onto the lone cover and A; Up onto the lone cover and A.",
+  "down_stops_in_order": ["Show reasoning (52,234)", "cover 1 (71,204)", "section 1 box (63,36,245,176) 67% visible", "section 2 box (63,125,245,165)", "cover 2 (71,218,237,55)", "notice 'The chat summed itself up...'", "A. Starting out in Dirtmouth", "B. Trying to reach the Soul Sanctum", "Mark reply helpful", "Show details", "suggestion chip", "question box", "ask"],
+  "up_stops_in_order": ["question box", "suggestion chip", "Show details", "Mark reply helpful", "B", "A", "notice", "cover 2 (71,230,237,55)", "section 2 box (63,125,245,165)", "cover 1 (71,149,237,55)", "Show reasoning", "question row", "Retry icon", "55 earlier", "top of chat", "Main tab", "bonsAI header"],
+  "numbers": {
+    "downPresses": 19, "downStops": 13, "upPresses": 21, "upStops": 17,
+    "downStopsThatUpMisses": 1,
+    "upStopsThatDownMisses": 0,
+    "loneCoverDown": "ring lands on the cover itself (71,218,237,55), not the outer box; A opens it",
+    "loneCoverUp": "ring lands on the cover itself (71,230,237,55); A opens it",
+    "stopsFocusedButNotVisible": "3 (question row 78% behind Retry icon, seen at the start and at the end of the Up leg = known false alarm; section 1 outer box 67% clipped under the header)"
+  },
+  "verdict": "PASS with the one known extra Down stop recorded. Every stop Up visits is one Down visits, with the same rects. The only difference is section 1's outer box, which Down visits after a scroll and Up does not (lane 3: by design). The old fail (Down landing on the outer box of a lone-cover section, A doing nothing) is gone: A opens the lone cover in both directions. Side note: the extra Down stop is only 67% visible (see P76-WALK-COVERS-try2).",
+  "evidenceRuns": ["runs/plan76-b3-WALK-COVERS-sweep.json", "checks/plan76-REPLY-STOPS-MIRROR-01-b3.json"]
+}

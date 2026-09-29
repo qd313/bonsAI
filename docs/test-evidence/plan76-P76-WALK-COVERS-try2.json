@@ -1,0 +1,32 @@
+{
+  "row": "P76-WALK-COVERS (re-run, Deck block 3)",
+  "build": "4af8e7a1 (git rev-parse --short HEAD), deployed 2026-09-29 00:44 EDT, deck_checkReady buildMatches true (118 files)",
+  "deckTime": "2026-09-29 00:44-00:56 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "model-trial row, first try of this build. Result recorded plainly below.",
+  "setup": "Asked the Soul Sanctum question by script into the open chat 'what is a good way to practice parrying in action games' (no new chat; 8 chats before and after). Question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Strategy mode. Answer had two covers (both closed), a two-choice menu (A. Starting out in Dirtmouth / B. Trying to reach the Soul Sanctum), Helpful / Not really. Section layout (panel coordinates): section 1 box 245x176 holding cover 1 (237x55); section 2 text box 245x165; section 3 box 245x71 holding cover 2 (237x55, lone cover). The chat had also summed itself up, so a notice row sits before the menu.",
+  "pressed_and_seen_down": [
+    "Start: ring on the question row body (144,189,188,29), scrollTop 0, 78% visible behind the Retry icon (known false alarm).",
+    "D1 'Show reasoning' line (52,234,290,15) scroll 0, visible.",
+    "D2 cover 1 (71,204,237,55) scroll 69, visible. Ring and page focus agreed (same element).",
+    "D3 ring stayed on cover 1, panel scrolled 69 -> 149 (cover rect y 204 -> 124). Moved the panel, not the ring.",
+    "D4 section 1 outer box (63,36,245,176) scroll 229. Only 67% visible: the top 52 px of the box, where its cover sits, is under the tab header (clipped).",
+    "D5 section 2 text box (63,125,245,165) scroll 317, visible.",
+    "D6 ring stayed on section 2 box, panel scrolled 317 -> 397 (box y 125 -> 45, about 74% visible). Moved the panel, not the ring.",
+    "D7 cover 2 (71,218,237,55) scroll 397, visible. Landed on the cover itself, not on an outer box.",
+    "Then notice row, A. Starting out in Dirtmouth, B. Trying to reach the Soul Sanctum, Mark reply helpful (Helpful), Show details, suggestion chip, question box, ask.",
+    "Counting every Down press (with the two scroll-only presses): Helpful is reached on press 11 from the question row; 9 distinct stops. deck_sweep DOWN ran twice with the same result (19 presses, 13 stops each time). One deck_runSequence of 14 Downs also gave the same stops (its D5 read moved:false because that was a scroll-only press)."
+  ],
+  "pressed_and_seen_up": "deck_sweep UP (21 presses, 17 stops), twice: ask, question box, chip, Show details, Helpful, B, A, notice, cover 2, section 2 box, cover 1, Show reasoning, question row, Retry icon, '55 earlier', top of the chat, Main tab, bonsAI header. Up never stops on section 1's outer box; Down does (D4). Lane 3 says one section box after a scroll is by design.",
+  "A_on_covers": "A on cover 1 (ring and page focus on the same element, read before the press): opened ('tap to hide'); A again closed it. A on cover 2 reached by Down: opened, closed. A on cover 2 reached by Up: opened, closed. Both covers closed again at the end.",
+  "numbers": {
+    "downsToHelpful": "9 stops, 11 presses including 2 scroll-only presses",
+    "stopVisitedTwiceGoingDown": 0,
+    "pressesThatMovedNeitherRingNorPanel": 0,
+    "stopsNotFullyVisible": ["question row 78% (known Retry icon overlap)", "section 1 outer box 67% (top clipped by the header) - counted a miss", "section 2 box about 74% during the scroll-only press D6 only (its landing at D5 was 100%)"],
+    "stopsDownVisitsUpDoesNot": ["section 1 outer box"]
+  },
+  "evidenceRuns": ["runs/plan76-b3-WALK-COVERS-down.json", "runs/plan76-b3-WALK-COVERS-sweep.json"],
+  "verdict": "FAIL on one clause, everything else passes. The loop is gone: Down goes past the closed covers and reaches Helpful in 9 stops (limit about 12), no stop is visited twice, no press did nothing, A opens both covers from both directions. But the stop on section 1's outer box is only 67% visible (its top, where the cover sits, is hidden under the header), so 'every stop visible' is not met. Recorded extra Down stop: that same box (Up does not visit it), which matches what lane 3 said.",
+  "newFinding": "Down from cover 1 needs two extra presses that only scroll (D3 and D6), and it then lands on a section box that is partly under the header."
+}

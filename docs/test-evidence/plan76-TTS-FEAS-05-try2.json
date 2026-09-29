@@ -1,0 +1,25 @@
+{
+  "row": "TTS-FEAS-05 (Deck block 3, machine half) - reading an answer aloud beside a running game",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT",
+  "deckTime": "with game: 01:16:41-01:17:58 EDT; without game: 01:18:52-01:19:12 EDT",
+  "screen": "built-in panel (854x534 window with the game; 854x454 without)",
+  "setup": "The finished build-order answer (about 2,150 letters) from row SCR-10. Route A reopen (chord only): ring on 'Main tab', hasFocus true. Walked Down to 'Mark reply helpful', Right twice to 'Read aloud' (ring and page focus the same element, read before A). Voice replies setting untouched. A page-side rAF counter (as in SCR-10) and an SSH loop every 1.2 s (top, pgrep -x pw-play, pactl sink-inputs) ran during the reading.",
+  "with_game": {
+    "pressAtDeck": "about 01:16:41.0 (readPage right after A read 01:16:41.39 UTC-clock)",
+    "streamAppeared": "first sample with a second sound stream at 01:16:40.8-ish (samples 1.15 s apart: none at 01:16:39.7, stream at 01:16:40.8) - within about 1 s of the press; the button turned to 'Stop' at once",
+    "stream": "the player pw-play, one new process per sentence (about 15 different process ids in 66 s); the game's own stream 'DRG Survivor.exe' stayed too (2 sound streams)",
+    "readingLength": "still going at the last SSH sample (01:17:47) after 66 s and until I pressed Stop at about 01:17:58 (77 s in); the answer was not finished (about 2,150 letters)",
+    "stopped": "A on 'Stop': the pw-play process and the second stream were gone within 2 s",
+    "gameCpu": "'Unity Main Thre' 96.7% average over 4 samples before and 96.7% average over 55 samples during (max 113.8%): no change",
+    "otherProcessesAbove20pct": "wireplumber, steamwebhelper, kswapd0 (occasionally); the speech player itself never showed in the top five",
+    "panelFrameRate": "with the reading running: 60.0 and 66.4 for the two slices right after A (5 s), 81.4 for the one before; then 86.4-90 for every slice for the next 60 s (median 89.5)"
+  },
+  "without_game": {
+    "streamAppeared": "between 01:18:51.7 and 01:18:52.8; press at about 01:18:52.7: within about 1 s",
+    "panelFrameRate": "60, 60, 60 for the three slices after A (7.5 s), then 89.5-90; the reading went on for 20 s sampled, stopped by A on 'Stop'",
+    "sinkInputs": "1 (the reader only) instead of 2"
+  },
+  "gameStutter": "not judged - by eye, the maintainer's call. The numbers show no change in the game's CPU and no fall in the panel's frame rate beyond a 5-7 s dip to 60 right after the press, with or without the game.",
+  "verdict": "NUMBERS RECORDED (no threshold). Reading starts within about 1 s, runs beside the game without moving the game's CPU, and stops within 2 s of Stop.",
+  "notDone": "the game's own frame rate (Steam overlay), the natural-voice half, a listen by ear."
+}

@@ -41,7 +41,33 @@ out of [roadmap.md](../roadmap.md) on 2026-09-27 during plan 70's final bookkeep
 line apart from link paths adjusted for this folder, to keep that document under its size limit. The
 roadmap keeps one pointer line to them._
 
-_Plan 76's docs sweeps 3, 2 and 1 and the plan 75 block below were moved out of [roadmap.md](../roadmap.md) on 2026-09-29, during docs sweep 6, copied line for line apart from link paths adjusted for this folder, to keep that document under its size limit._
+_Plan 76's docs sweeps 4, 3, 2 and 1 and the plan 75 block below were moved out of [roadmap.md](../roadmap.md) on 2026-09-29, during docs sweep 6, copied line for line apart from link paths adjusted for this folder, to keep that document under its size limit._
+
+**Closed 2026-09-28 (plan 76, docs sweep 4, Deck block 2a):**
+
+- ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **DONE 2026-09-28,
+  passed on the Deck (row P76-NEWCHAT-NO-PERM-ROW).** The "New chat" spot showed no permission row or slow-answer line; the chat kept
+  its reply. Evidence `docs/test-evidence/plan76-P76-NEWCHAT-NO-PERM-ROW.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[reply]` **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon** — **DONE
+  2026-09-28, passed on the Deck (row P76-HELPFUL-AFTER-SWITCH).** After RB and LB the chat kept "What went wrong?" and its five chips,
+  the answer was drawn once, Show details listed the same 15 lines, and another chat's newest answer was live; same after reopen.
+  Off the 0.6.0 known issues. **For the maintainer's eye:** the rated thumbs carry the disabled state but are not visibly dimmer
+  (opacity 1); a look, not a fail. Evidence `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ui]` **Two small leftovers from plan 74, now fixed** — **DONE 2026-09-28.** (a) "Request cancelled." has no Copy or Read aloud:
+  passed on the Deck (row P76-CANCELLED-NO-COPY, `docs/test-evidence/plan76-P76-CANCELLED-NO-COPY.json`). (b) The "nothing to sum
+  up" pop-up wording rests on its unit test (the pop-up only appears in a race). [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **Copy and Read aloud can pick up hidden blocks written oddly** — **DONE 2026-09-28.** The odd shapes rest on their unit
+  tests; the normal covered answer passed on the Deck (row P76-SPOILER-REGRESSION): no hidden word in 34 live changes sampled every
+  200 ms. Evidence `docs/test-evidence/plan76-P76-SPOILER-REGRESSION.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **A `~~~` block with a blank line inside may be drawn half as plain text** — **DONE 2026-09-28.** The odd shape rests on
+  its unit tests; on the Deck the wait chip showed, the answer drew 2 covers and 4 stops, and a 12-press Down walk passed (row
+  P76-SPOILER-REGRESSION, same evidence). [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **DONE 2026-09-28, passed on the Deck (row
+  T75-FEATURE-F1-REAL-POPUP).** Over Deep Rock Galactic: Survivor, menu closed early, the popup showed the answer's start across
+  two lines and matched it. Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. [Full entry](archive/roadmap-completed.md)
+- ★ `[ui]` **The reply-ready popup can end its second line in a comma just before the "…"** — **DONE 2026-09-28, by the session's
+  ruling (row T75-FEATURE-F1-REAL-POPUP).** The Deck sample's cut did not land after a comma; the unit test reproduces the earlier
+  line. [Full entry](archive/roadmap-bugs-fixed.md)
 
 **Closed 2026-09-28 (plan 76, docs sweep 3):**
 

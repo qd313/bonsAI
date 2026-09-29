@@ -1,0 +1,23 @@
+{
+  "row": "P76-LICENCE-CANCEL (Deck block 3)",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT",
+  "deckTime": "2026-09-29 00:57-01:03 EDT",
+  "screen": "built-in panel; AI models screen in Steam's main window (854x534)",
+  "setup": "model_policy_tier read open_weight before (settings backup taken at start). Screen opened from Browse models with 'Filters, 2 on: Also try open-weight models, Essentials only'.",
+  "pressed_and_seen": [
+    "gemma3:1b is not listed while 'Essentials only' is on, so I first turned 'Essentials only' off in Filters (A on that row, ring and page agreed), then Close filters. The list then showed gemma3:1b.",
+    "Walked Down to 'Select gemma3:1b to pull' (ring and page agreed), A: queue 1, 0.8 GB (the row became 'Deselect gemma3:1b').",
+    "Back up to Filters, A, ring on 'Open source only (recommended)', A: it became the checked row, 'Filters, 1 on: Open source only'; queue kept.",
+    "READ THE FILE NOW (before Cancel): model_policy_tier already reads open_source_only. So the filter change writes the file at once; Cancel is what has to undo it.",
+    "Walked Down to 'Pull selected (1) 0.8 GB', A: box 'Enable Tier 2 before pulling?' with Not now / Enable Tier 2 and pull / Cancel. Ring on 'Not now' (page agreed). A: box closed, ring back on 'Pull selected'.",
+    "RIGHT: ring on Cancel (page agreed). A on Cancel."
+  ],
+  "read_after_cancel": {
+    "model_policy_tier": "open_weight (read 2 s after Cancel)",
+    "ring_after_cancel": "'Browse and pull Ollama models' on the Ollama tab (QuickAccess); ring and page agreed",
+    "reopened_screen_filter_button": "'Filters, 2 on: Also try open-weight models, Essentials only' - the same as when I first opened it (so the Essentials-only change I made was also undone)",
+    "queue_after_reopen": "empty; footer shows Done; nothing ticked",
+    "ollama_list": "unchanged (2 models); no download started"
+  },
+  "verdict": "PASS. Cancel puts the saved licence back to open_weight (it had already been written as open_source_only while the box was open), the reopened screen shows the same filters as before, and nothing downloaded."
+}

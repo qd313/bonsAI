@@ -94,6 +94,11 @@ after the answer finished, and the view stayed at the top with 155 to 704 px of 
 Saved walk `checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence
 `docs/test-evidence/plan70-L4-QA-FREE-PLAY-01.json` (+ screenshots).
 
+**FAILED (Deck) 2026-09-29 (plan 76, block 3, build `4af8e7a1`), no game running:** on three replies (finished, arriving, and one with a notes line)
+every stop was visible or one of the two known corner-icon alarms, except one: after a Down press that scrolls past a spoiler cover, the ring sits
+on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
+position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that

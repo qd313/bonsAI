@@ -1,0 +1,29 @@
+{
+  "row": "P76-KB-STATUS-REINSTALL (Deck block 3)",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT",
+  "deckTime": "run 1: 00:57-00:59 EDT; run 2: 01:00 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "setup": "Library installed at /home/deck/.bonsai/rag (internal storage), version 2026.09.26, 3.0 MB (corpus.db 2,998,272 bytes). Internet downloads: run 1 off; run 2 turned off again on the Permissions tab first (it was left on by run 1's 'Turn on and download'). A page-side recorder (read only: it copies the section's text whenever it changes) logged the Knowledge base section.",
+  "pressed": "Ollama tab: walked Down to 'Update knowledge base', RIGHT to 'Remove' (ring and page agreed), A -> box 'Remove knowledge base?' opened on 'Not now', RIGHT to 'Remove', A. Removal wrote rag_corpus_path '', rag_corpus_version '' and use_local_knowledge_base false and deleted the folder. Then 'Download knowledge base' (A) -> 'Choose download location' opened on 'Not now', DOWN to 'Internal storage (~726 GB free)', A -> 'Turn on internet downloads?' opened on 'Not now', RIGHT to 'Turn on and download', A. Every A was preceded by a read where Steam's ring and the page's focus were the same element.",
+  "seen_run1": [
+    "Section before: 'Not installed - download to enable grounded strategy help.' + button 'Download knowledge base'.",
+    "The recorder's page was hidden behind the boxes, so its first sample after the last box closed was: 'Not installed' line + buttons 'Downloading...' and 'Cancel' (about 1.7 s before 'Installed').",
+    "Then 'Installed - version 2026.09.26 | /home/deck/.bonsai/rag' with 'Update knowledge base' and 'Remove' only (Cancel gone). Files re-created by 00:58:51; settings path/version back, use_local_knowledge_base true."
+  ],
+  "seen_run2_with_full_text_100ms": [
+    "05:00:10.600Z (01:00:10.6 EDT) 'Not installed - download to enable...' + 'Download knowledge base'",
+    "05:00:24.433Z  'Not installed - download to enable grounded strategy help.' + 'Downloading...' + 'Cancel'  (the box had just closed; the back end logged 'Downloading corpus.db.zlib' at 01:00:24.765)",
+    "05:00:24.556Z  same + '100% (2 / 2 MB)' progress line",
+    "05:00:26.000Z  'Installed - version 2026.09.26 | /home/deck/.bonsai/rag' + 'Update knowledge base' + 'Remove'; Cancel and Downloading gone. The back end logged 'Knowledge base installed' at 01:00:25.451, so Installed showed 0.55 s after the end."
+  ],
+  "numbers": {
+    "downloadingAndCancelAppearedAfterBoxClosed": "at once (first sample; 0 s)",
+    "installedAfterEnd": "0.55 s (run 2)",
+    "cancelRowGoneWithInstalled": true,
+    "downloadDuration": "about 1.7 s (2 MB)",
+    "notInstalledLineDuringDownload": "the status line still read 'Not installed - download to enable grounded strategy help.' for about 1.6 s, alongside the 'Downloading...' + 'Cancel' row, in both runs",
+    "internetDownloadsPutBack": "off, confirmed in settings.json; whole settings file diffs identical to the start-of-block backup"
+  },
+  "verdict": "UNCLEAR. What the fix was for works: 'Downloading...' with a Cancel row shows at once, and 'Installed' with the Cancel row gone shows 0.55 s after the end (limit about 2 s). The one clause I cannot call: 'never Not installed during the download'. The grey/yellow line above the button still said 'Not installed' for the whole 1.6 s download, next to 'Downloading...'. In the code that line follows 'installed' only, so it may be by design; the owner decides. The library is back in the same place.",
+  "caveat": "The 2 MB download is so fast that only one or two page updates fall inside it; a slow download was not tested."
+}

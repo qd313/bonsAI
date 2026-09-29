@@ -1,0 +1,17 @@
+{
+  "row": "SCR-10 (Deck block 3, game running) - panel frame rate while an answer arrives",
+  "build": "4af8e7a1, deployed 2026-09-29 00:44 EDT; plugin not reloaded after the game launched",
+  "deckTime": "2026-09-29 01:11-01:16 EDT (question sent about 01:12, reply finished about 01:14)",
+  "screen": "built-in panel; Quick Access window 854x534 with the game running (854x454 without), dpr 1.5",
+  "setup": "Deep Rock Galactic: Survivor running on its title screen (process 'Unity Main Thre' at about 97% of one core all the time). Route used: the chord-only reopen (route A of the trap row) - at this reopen hasFocus() read true and the ring was on 'Main tab', so ring and page focus agreed (no split). Strategy mode, scramble as found (on, settle, green), AI character on (as found), thinking effort medium (as found). One question, sent by the script: 'What is a good build order for a new player in Deep Rock Galactic Survivor?' (not asked before, so not from the answer cache); Ask pressed only after ring and page focus read the same element.",
+  "method": "A read-only page-side counter copied requestAnimationFrame timestamps in the Quick Access page and, every 2.5 s, logged frames per second over the last 2.2 s (the first 0.3 s of each slice dropped) with the text length of the panel, the number of 'Show reasoning' labels, and whether the ask button was ready / the 'Stop generation' button showed. Phase: idle before Ask; thinking = Stop showing, no reasoning label yet, text length barely moving; answer arriving = text length growing about 110 letters per slice after the reasoning label appeared.",
+  "numbers": {
+    "idleBeforeAsk": {"slices": 8, "median": 87.5, "min": 82.7, "max": 89.5},
+    "thinking": {"slices": 27, "seconds": 65, "median": 90.0, "min": 83.6, "max": 90.0},
+    "answerArriving": {"slices": 15, "seconds": 37, "median": 84.5, "min": 80.5, "max": 90.0, "lettersArrived": "about 470 to 2,140 (2,143 in the panel)"},
+    "idleAfterReply": "about 90 (87.7-90) for the 48 s that followed"
+  },
+  "gameSide": "Game process CPU on the Deck stayed at 96.7% average before and during the later read-aloud test (row TTS-FEAS-05); its own frame rate was not measured (Steam overlay not touched).",
+  "verdict": "Median panel frame rate while the answer arrived: 84.5 (limit at least 30) with the game on its title screen. Recorded either way; it is above the limit by a wide margin. Not measured: a game in a mission, scramble off, the game's own frame rate.",
+  "caveat": "One answer, one game state (title screen). Earlier notes recorded 30 to 36 with a game after the frame-rate work; this run is much higher (a title screen is light, and the reply had a 'thinking' phase of 65 s before the words came)."
+}

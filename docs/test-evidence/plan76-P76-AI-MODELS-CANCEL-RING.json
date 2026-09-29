@@ -1,0 +1,12 @@
+{
+  "row": "P76-AI-MODELS-CANCEL-RING",
+  "build": "b775545d",
+  "deckTime": "2026-09-28 23:53-23:57 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 2 trial) = run A; run B repeated it from the Browse models button",
+  "setup": "Same as P76-TIER2-MODEL-SAFE-FIRST: ticked gemma3:1b under 'Also try open-weight models', switched filter to 'Open source only' (queue kept), Pull selected.",
+  "run_A_first": "Screen opened from 'Manage AI models...' at the bottom of the Ollama tab. Pull selected -> box 'Enable Tier 2 before pulling?' -> Not now (ring back on Pull selected) -> RIGHT to Cancel (ring on Cancel) -> A. Ring after: 'Manage AI models' (rect 64,265,268,44), gpfocus and activeElement agree. Not the tab rail, but not 'Browse models...' either, because I had opened the screen from the other button.",
+  "run_B_from_Browse": "Screen opened from 'Browse models...'. Same presses. Ring after Cancel: 'Browse and pull Ollama models' (label of the Browse models... button, rect 64,206,268,36), gpfocus and activeElement agree.",
+  "done_ending": "Screen opened from 'Browse models...' with an empty queue (Done only shows when nothing is queued; with a queue the button reads 'Pull selected'). DOWN x5 to Done, A. Ring after: 'Browse and pull Ollama models' (rect 64,204,268,36), agree. Nothing downloaded. Done also wrote model_policy_tier open_weight back to the file.",
+  "verdict": "PASS. Cancel and Done both return the ring to the button that opened the screen (Browse models... from Browse); never the tab rail. Caveat: 'Done' after the Tier 2 box could not be done with a queue, because the footer button becomes Pull selected."
+}

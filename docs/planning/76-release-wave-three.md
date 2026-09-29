@@ -202,6 +202,7 @@ New questions that come up during the session go here, with the choice taken mea
   wording failed on a 1.5 s waiting line (lane 4 again). The Context-line flash reproduced 4 of 4 (lane 6 started). With the game
   running, the ring stopped following the D-pad after the popup answer: the rare trap, now with a likely trigger; two game rows
   (SCR-10, TTS-FEAS-05) were blocked by it.
+- **Deck block 2b (build `ab56e2a2`, the Deck's own screen, night of 2026-09-28/29):** 10 of 12 rows passed. Lane 2 passed first time on every row it could run; lane 5 passed both; lane 3's cover-open and glossary rows passed first time. But walking Down past a closed first cover now loops (P76-WALK-COVERS and REPLY-STOPS-MIRROR-01 failed; a regression from lane 3's first round, fixed in its second round now). Three new small findings went to lane 2's round 3: the note-search removal box opens on "Remove model", the licence setting and the AI models screen disagree after Cancel, and the library's status reads oddly for about a minute after a reinstall. About 6.6 GB of half-downloaded model files remain on the Deck (a note for the maintainer).
 
 ## Deck block 1, part A — measurements for lane 3
 

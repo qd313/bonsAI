@@ -1,0 +1,17 @@
+{
+  "row": "P76-WALK-GLOSSARY (game)",
+  "build": "tip ab56e2a2 (redeployed 23:51; no reload after the game was launched)",
+  "deckTime": "2026-09-29 00:07-00:12 EDT",
+  "screen": "built-in panel. Page window 854x534, dpr 1.5 while the game runs (it was 854x454 with no game: the Quick Access window is 80 px taller and the transcript pane starts at y 128 instead of 88, because of Steam's status bar). Screenshot: C:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260929_000810_auto.png (game running with performance overlay 16 FPS, panel on top).",
+  "attempt": "first try (lane 3 trial)",
+  "setup": "Deep Rock Galactic: Survivor launched from Recent Games with deck_launchGame (RunningApps had it at 166 ms), no plugin reload afterwards, panel reopened with deck_openPlugin (it was already open). Chat 'wheatley fight' (switched to it with RB on the chat row before launching). Newest turn: question 'how do i kill the big armoured bug boss', answer 'Kite between waves and focus on hitting the weak-point armor plates as they open up. Save your overclock and nuke abilities...' with two underlined words, Kite and overclock (class bonsai-drg-glossary-term, focusable). Context line read 'active game Deep Rock Galactic: Survivor'.",
+  "focus_reads": "Before every press and after it I read the ring (gpfocus) and document.activeElement: on every one of the stops below they were the same element. No disagreement anywhere, no press was needed to re-place the ring.",
+  "walk_down": [
+    "Main tab -> chat row (box 48,128,300,48; top = pane top 128) -> '99 earlier' (52,186,290,22) -> Retry icon (102,226,20,20) -> question row (106,229,225,14; known 67% behind the Retry icon) -> 'Show reasoning' (52,260,290,15) -> answer section (63,253,245,72, scrollTop 39; known 89% behind the Copy icon) -> 'Kite' (71,253,22,15, scrollTop 39) -> 'overclock' (150,283,53,15, scrollTop 39) -> 'Mark reply helpful' (52,212,89,32, scrollTop 207) -> 'Show details' (52,256,267,15, scrollTop 207)."
+  ],
+  "pass_test": "Every ring box top is at or below the transcript pane top (128 with the game up; 88 is the no-game figure): lowest top 128 (chat row), all others 186 to 283. No stop hidden or above the band. 'overclock' is the last underlined word; the next Down went to the next section (the Helpful row), scrollTop 39 -> 207. The two partly hidden stops are the two known false alarms (question row behind the Retry icon, last answer section behind the Copy icon).",
+  "not_testable": "'Reading the tall section still scrolls about 80 px a press': this answer's section is 72 px tall, not a tall section, so the 80 px scroll step could not be seen. The largest scroll jump was 168 px from 'overclock' to 'Mark reply helpful'.",
+  "up_note": "Walking Up from Show details: Mark reply helpful -> overclock -> Kite -> Show reasoning; Up does not stop on the answer section box that Down uses (same skip as in P76-WALK-COVERS).",
+  "saved_check": "C:\\Users\\still\\Documents\\BonsAI\\checks\\plan76-P76-WALK-GLOSSARY.json (10 Down presses from the Main tab; needs the same chat and a game running to replay).",
+  "verdict": "PASS on the ring and page focus agreeing and the ring never sitting on a word the panel had scrolled away. The 80 px tall-section scroll part was not testable here."
+}

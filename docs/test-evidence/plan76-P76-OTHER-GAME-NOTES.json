@@ -1,0 +1,16 @@
+{
+  "row": "P76-OTHER-GAME-NOTES",
+  "build": "tip ab56e2a2 (redeployed 23:51)",
+  "deckTime": "2026-09-29 00:04-00:07 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 5)",
+  "setup": "Nothing running (Context: no active game detected). Knowledge library installed and on. Chat used: 'what is a good way to practice parrying in action games' (current chat; no new chat made). Its own game is Hollow Knight (chat file subject game_key 'title:hollow knight'; its index entry has no origin app, so the game comes from the subject). Valheim is not in the library (corpus-manifest.json has Hollow Knight, Hades, Deep Rock, Half-Life; no Valheim). Strategy mode.",
+  "pressed": "Question 1 by the script (VERIFIED): 'what are three good habits for surviving the early nights in Valheim'; walked to Ask (ring and page focus agreed on 'ask'), A. Show details opened on the new answer. Question 2 by the script: 'what about the fourth one'; walked to Ask, A.",
+  "seen": {
+    "log_question_1": "00:04:46 'kb: question names a game the library does not know (valheim) -- not using the chat's own game Hollow Knight' then 'kb: question chose nothing -- notes and tips not searched (domain=none)'; 'attached 0 chars'. Answer done in 39.2 s.",
+    "show_details_question_1": "This answer tab: 'KB: no game running', 'Knowledge base coverage: No game is running, so there is nothing to look up.' No notes block on the answer.",
+    "log_question_2": "00:05:59 'kb: no game running or named -- using the chat's own game Hollow Knight' then 'kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight - Starting out in Hollow Knight; Hollow Knight - Watcher Knights; Hollow Knight - False Knight] dropped_for_room=0'. Answer done in 43.4 s."
+  },
+  "verdict": "PASS. The Valheim question attached no library notes and said why; the follow-up went back to the chat's own game and attached three Hollow Knight notes.",
+  "notes": "Show details on the Valheim answer says 'No game is running, so there is nothing to look up', not that Valheim is unknown to the library. The wording is generic but not wrong. The Show details Session tab chip ladder took 5 Down presses (chips 1 to 6) before Down reached the question box; ring visible-percent on the ladder read 67% (covered by the question box) at chip 4."
+}

@@ -41,6 +41,57 @@ out of [roadmap.md](../roadmap.md) on 2026-09-27 during plan 70's final bookkeep
 line apart from link paths adjusted for this folder, to keep that document under its size limit. The
 roadmap keeps one pointer line to them._
 
+_Plan 76's docs sweeps 3, 2 and 1 and the plan 75 block below were moved out of [roadmap.md](../roadmap.md) on 2026-09-29, during docs sweep 6, copied line for line apart from link paths adjusted for this folder, to keep that document under its size limit._
+
+**Closed 2026-09-28 (plan 76, docs sweep 3):**
+
+- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **DONE 2026-09-28 (plan 76 lane 5, `22f31ee4`).** The maintainer
+  tool now falls back to the plain page when the render call is refused. It is a PC tool, so no Deck check applies; one real fetch
+  of the Pal Sphere page came back clean through the fallback (evidence: the message of commit `22f31ee4`). [Full entry](roadmap-bugs-fixed.md)
+
+**Closed 2026-09-28 (plan 76, docs sweep 2):**
+
+- ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** — **DONE 2026-09-28,
+  passed on the Deck by the session's ruling (row PULL-TRY-ORDER-01).** The picture-model order took the new download last, with
+  nothing lost or doubled, while the panel was closed. The answering-model list could not be tried because this Deck has one
+  answering model; it goes through the same step. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
+- ★ `[ui]` **Hidden for 0.6.0: the beta chips, "Open Steam Input config", the quick-launch chip and its setup commands, Find LAN and
+  its chips, and the UI scale section** — **DONE 2026-09-28, passed on the Deck (row PLAN72-F-HIDDEN).** With the Developer tab
+  off, Settings has no UI scale controls and the shortcut-setup commands say "That command isn't available in this version." A
+  6-minute chip watch showed none of the ten hidden chips. Find LAN's half rests on its unit test, since this Deck runs the AI
+  itself. Evidence `docs/test-evidence/plan76-PLAN72-F-HIDDEN.json`.
+
+**Closed 2026-09-28 (plan 76, docs sweep 1):**
+
+- ★ `[reply]` **Copy joined two paragraphs into one** — **DONE 2026-09-28 (plan 74 lane 2, `ad3825dd`).** Plan 74's results say Copy needs no Deck check. Original sighting `docs/test-evidence/plan72-Z-FREEPLAY.json`. [Full entry](roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
+- ★ `[ask]` **The Steam settings card: two checks never run** — **DONE 2026-09-28, both passed on the Deck 2026-09-26 (plan 70, flow 2b.2).** Rows **SETTINGS-CARD-06** and **SETTINGS-CARD-07**; evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made (the longest setting name fits on two lines); that is not a fail. [Full entry](roadmap-completed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
+- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **DONE 2026-09-28.** One line added to `docs/design-tokens.md` (docs only, so no Deck check applies; the colour itself passed on the Deck under plan 74, `13ad6566`). [Full entry](roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
+
+**Closed 2026-09-28 (plan 75, the Sonnet 5.5 trial):**
+
+- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **DONE 2026-09-28 (plan 75, `a877a321`,
+  `2cd68796`), passed on the Deck.** The picker lists only models that can answer, and an older saved order holding the
+  note-search model is cleaned on Done. Evidence `docs/test-evidence/t75-land-L1-PICKER-ANSWER-MODELS.json`,
+  `docs/test-evidence/t75-land-L2-OLD-ORDER-CLEANED.json`. [Full entry](roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
+- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **DONE 2026-09-28
+  (plan 75, `8ec3426a`, `54643d2f`), by unit test.** Nothing a person can do today reaches the two-caller case (the mic is the
+  only caller), so it rests on the unit tests in `tests/test_voice_whisper_daemon.py`; the mic's own check passed on the Deck,
+  `docs/test-evidence/t75-land-L3-MIC-STARTS-AND-STOPS.json`. [Full entry](roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
+
+**Plan 74, release wave two (2026-09-28): 20 items closed** — fixes from the second release wave, proven in two
+Deck passes (three by unit test or on the PC). One line each, with its evidence, in
+[archive/roadmap-done-v0.5.0.md](roadmap-done-v0.5.0.md); the full entries in
+[archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
+
+**Release clean-up, first pass (2026-09-28): 8 items closed, 3 retired** — entries the code and the Deck had already
+settled. One line each, with its evidence, in [archive/roadmap-done-v0.5.0.md](roadmap-done-v0.5.0.md); the full
+entries in [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md) and [archive/roadmap-completed.md](roadmap-completed.md).
+
+**Plan 72 (2026-09-27): 27 items closed** — the release bug session's Deck blocks, in two docs passes. One line each, with its
+evidence, in [archive/roadmap-done-v0.5.0.md](roadmap-done-v0.5.0.md); the full entries in
+[archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md) and [archive/roadmap-completed.md](roadmap-completed.md).
+
+
 **Closed 2026-09-28 (plan 74, release wave two):**
 
 - ★ `[reply]` **With thinking off, the waiting spinner can keep spinning through the whole answer** — **DONE 2026-09-28 (plan 74, `2b8eac0f`), passed on the Deck.** Row **P74-THINK-OFF-SPINNER**. Evidence `docs/test-evidence/plan74-P74-THINK-OFF-SPINNER.json`.

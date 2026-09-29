@@ -1,0 +1,15 @@
+{
+  "row": "P76-REMOVE-KB-SAFE-FIRST",
+  "build": "b775545d",
+  "deckTime": "2026-09-28 23:39 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 2 trial)",
+  "setup": "Library installed at /home/deck/.bonsai/rag (corpus.db, corpus-manifest.json, ATTRIBUTIONS.md), version 2026.09.26, Installed line showing. No game running.",
+  "pressed": "Ollama tab: DOWN x7 to Update knowledge base, RIGHT to Remove, A. Read ring. A. Read ring and folder. A on Remove again, B. Read ring and folder.",
+  "seen": {
+    "afterRemoveA": "Box 'Remove knowledge base?' with buttons Not now, Remove, Cancel. Ring (gpfocus) and activeElement agree on 'Not now' (rect x123 y295 w194 h40, 100% visible).",
+    "afterNotNowA": "Ring and activeElement both on 'Remove' (rect 238,309,94,44). Folder still has 3 files; Installed line and path still shown, version 2026.09.26.",
+    "afterB": "Ring and activeElement both on 'Remove' (rect 238,289,94,44). Folder still 3 files; Installed line and path shown."
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,18 @@
+{
+  "row": "P76-NOMIC-REMOVE-HINT",
+  "build": "tip ab56e2a2 (redeployed 23:51, checkReady buildMatches true)",
+  "deckTime": "2026-09-28 23:52-23:54 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "setup": "Library installed and on (use_local_knowledge_base true, version 2026.09.26, /home/deck/.bonsai/rag). Models: nomic-embed-text:latest and gemma4:e2b-it-qat.",
+  "pressed": "Browse models... A; DOWN x6 one at a time to the nomic-embed-text row's star slot (label 'nomic-embed-text:latest cannot answer questions...'); RIGHT once: gpfocus and activeElement both on 'Remove from Deck' at rect 697,362,24,24 in the row text '-- | nomic-embed-text:latest | 0.3 GB | Other | X'; A -> box 'Remove nomic-embed-text:latest from the Deck?' (ring on 'Remove model', not on Cancel); A. Done (ring was on Done, rect 123,400,290,40), A. Then DOWN x6 to 'Pull nomic-embed-text . about 270 MB' (rect 64,330,220,44, visible), A. Waited until the model was back. DOWN.",
+  "seen": {
+    "afterRemoval": "ollama list: gemma4:e2b-it-qat only, at 23:53:00 (Deck clock).",
+    "hint": "The Ollama tab is not drawn while the AI models screen is open, so I could not watch it appear. The moment the panel came back (about 9.6 s after I pressed Remove model, 0.3 s after I pressed Done) the Knowledge base section already read 'Install nomic-embed-text in Ollama for Keyword + meaning search.' with a button 'Pull nomic-embed-text . about 270 MB'. So: present when first drawn, no reload or tab change needed; the 5 s figure cannot be checked to the second.",
+    "pull": "Button turned to 'Pulling... (Ollama -> Where AI runs)'. Model back in ollama list at 23:53:36 (about 30 s).",
+    "ringAfterLanding": "gpfocus and activeElement agree on 'Update knowledge base' (rect 64,284,166,44, inside the visible band). Hint and pull button gone; Installed line unchanged.",
+    "down": "One DOWN moved the ring to the next control (rect 177,346,42,28, the Thinking 'Off' chip), gpfocus and activeElement agree, visible.",
+    "tryOrderFile": "text_model_routing_order [] and vision_model_routing_order [gemma4:e2b-it-qat] before and after; nomic-embed-text never listed. pull_in_flight.json gone after landing."
+  },
+  "verdict": "PASS for the ring half and the try-order half. Hint half: PASS with a caveat (present the instant the panel was visible again, at most 9.6 s after removal; exact 5 s timing not measurable because the screen hides the tab).",
+  "newFinding": "The confirm box 'Remove nomic-embed-text:latest from the Deck?' opens with the ring on the destructive 'Remove model' button (Cancel is not first). The wording of the other confirm boxes in this block opens on the safe choice."
+}

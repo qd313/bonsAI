@@ -1,0 +1,18 @@
+{
+  "row": "P76-PULL-RESUME",
+  "build": "tip ab56e2a2 (redeployed 23:51)",
+  "deckTime": "2026-09-29 00:00-00:04 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 5)",
+  "setup": "No game. Model qwen2.5vl:3b (3.2 GB, not installed). Picked from Browse models... (tick, Pull selected). Licence view Tier 2, so no Tier 2 box.",
+  "part_1_reload_mid_download": {
+    "start": "Pull started 00:00:12. pull_in_flight.json appeared at once: {profile custom, tags [qwen2.5vl:3b], started_at 1790654412, restarts 0}.",
+    "beforeReload": "00:00:18 the log showed 203 MB of 3.2 GB (6%).",
+    "reload": "deck_reloadPlugin; old plugin unloaded 00:00:22, new plugin log started 00:00:26.",
+    "after": "First pull line of the new plugin at 00:00:30.5 with 345 MB of 3.2 GB: it carried on from the partial point (not from 0), 8 s after the unload, 4 s after the new log began. Note file now read restarts 1. The download ran to the end at about 40 MB/s; model in ollama list at 00:01:52; pull_in_flight.json gone afterwards (ls of the settings folder shows no pull file).",
+    "panel": "deck_openPlugin opened the panel on the first try after this reload."
+  },
+  "part_2_cancelled_does_not_return": "Removed the model with the plugin (AI models screen, one press at a time, row text checked: 'qwen2.5vl:3b ... X', confirm box 'Remove qwen2.5vl:3b from the Deck?', ring on 'Remove model'; ollama list back to nomic-embed-text and gemma4:e2b-it-qat). Started the pull again (00:02:47, note file present, restarts 0), pressed Cancel on the Ollama tab ('Cancel local Ollama setup', ring and page focus agreed) at 00:02:56: note file gone, no ollama pull running. deck_reloadPlugin at 00:03:00: over the next 20 s no pull line in the new log (count 0), no note file, no pull process. It did not come back.",
+  "verdict": "PASS",
+  "leftBehind": "Ollama keeps the half-downloaded blob of the cancelled qwen2.5vl pull, and there is still a 3.39 GB partial blob for qwen3.5:4b from an accidental pull earlier in this block (see P76-TIER2-MODEL-SAFE-FIRST) in /home/deck/.ollama/models/blobs. ollama list is unaffected."
+}

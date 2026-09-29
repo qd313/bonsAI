@@ -1,0 +1,35 @@
+{
+  "row": "REPLY-STOPS-MIRROR-01",
+  "build": "tip ab56e2a2 (redeployed 23:51)",
+  "deckTime": "2026-09-29 00:05-00:08 EDT (2026-09-28 EDT date rollover)",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 3 trial)",
+  "setup": "Main tab, Strategy, spoiler masking on, no game. Answer: two covers (section 1 = cover plus a paragraph, section 3 = a short section that is only a cover), text section 2 in the middle, two-choice menu, Helpful row. Both covers hidden. Ring started on the Retry icon of the question row. Rig run saved: C:\\Users\\still\\Documents\\BonsAI\\runs\\plan76-REPLY-STOPS-MIRROR-01.json (deck_sweep DOWN, stallLimit 4, budget 44, returnTrip).",
+  "down_leg": {
+    "stops": [
+      "Retry icon (140,201,20,20)",
+      "question row (144,189,188,29) - 78% behind the Retry icon, known false alarm",
+      "Show reasoning line (52,234,290,15)",
+      "cover 1 (71,134,237,55, scrollTop 140)",
+      "section 1 outer box (63,88,245,191, scrollTop 177)",
+      "cover 1 again"
+    ],
+    "endedBy": "cycle after 5 presses (cover 1 <-> section 1 outer box), escaped false"
+  },
+  "up_leg": {
+    "stops": [
+      "Show reasoning line (52,204,290,15)",
+      "question row (78% covered by the Retry icon)",
+      "Retry icon",
+      "'48 earlier' (52,146,290,22)",
+      "chat row header (48,88,300,48)",
+      "Main tab (48,64,300,20)",
+      "plugin header button (64,20,40,28)"
+    ],
+    "note": "Up started from cover 1 and never stopped on the section 1 outer box that Down uses. Section 2, the lone-cover section, cover 2, the menu and Helpful were never reached going Down, so no mirror comparison of them was possible."
+  },
+  "lone_cover_check": "Not done: the lone-cover section (445,71 box) lies beyond the point where Down gets stuck. I could not put the ring below section 1 with the D-pad, and I did not ask further questions to look for another shape because the first section already fails the walk.",
+  "stopsFocusedButNotVisible": "2, both the question row at 78% behind the Retry icon (the known false alarm; the text is clear of the icon).",
+  "verdict": "FAIL. Down and Up through the reply do not visit the same stops: Down bounces between cover 1 and its section box and never leaves section 1, Up skips that box. Same defect as P76-WALK-COVERS.",
+  "newFinding": "See P76-WALK-COVERS."
+}

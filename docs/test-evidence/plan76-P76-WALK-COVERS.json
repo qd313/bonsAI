@@ -1,0 +1,17 @@
+{
+  "row": "P76-WALK-COVERS",
+  "build": "tip ab56e2a2 (redeployed 23:51)",
+  "deckTime": "2026-09-28 23:56-00:05 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 3 trial)",
+  "setup": "Same answer as P76-COVER-STAYS-OPEN: Soul Sanctum answer in the chat 'what is a good way to practice parrying in action games', two covers (both hidden at the start), two-choice menu, Helpful / Not really row. Question box holds 'What upgrades matter most for the Nail in Hollow Knight' (left from the previous row, never sent).",
+  "pressed_and_seen_down": [
+    "Started on the Retry icon of the question row. Each press read with a small page probe (ring element, page focus, ring box, scroll):",
+    "D1 question row body (rect 144,189,188,29; the known Retry-icon overlap), D2 'Show reasoning' line (52,234,290,15), D3 cover 1 (71,204,237,55, scrollTop 0->69), D4 cover 1 again: ring did not change, panel scrolled 69 -> 149, D5 the outer box of section 1 (63,88,245,191, scrollTop 177), D6 cover 1 again (71,134,237,55, scrollTop 140), D7 the outer box of section 1 again (scrollTop 177), D8 cover 1 again (scrollTop 140).",
+    "Down never left section 1 in 8 presses. Section 1 (cover plus a paragraph, 191 px tall) and its own cover took turns forever. Section 2 ('The key here...'), cover 2, the menu and Helpful were never reached. A first sweep run (runs/plan76-P76-WALK-COVERS-down.json, 8 DOWN) gave the same loop: cover, outer box, cover, outer box..., cycle escaped false."
+  ],
+  "pressed_and_seen_up": "Up from cover 1 went cover 1 -> 'Show reasoning' -> question row (78% visible behind the Retry icon, known false alarm) -> Retry icon -> '48 earlier'. Up therefore never visits the outer box of section 1 that Down visits: Down and Up do not use the same stops.",
+  "A_on_cover": "A on cover 1 (ring and page focus agreed on it): opened ('tap to hide'); A again closed it.",
+  "verdict": "FAIL. Down through the reply gets stuck bouncing between the first cover and its section box; Helpful cannot be reached with Down. A opens a landed cover (that part works).",
+  "newFinding": "Down in a section made of a cover plus text alternates between the cover and the outer section box and never advances (8 presses, panel scrolls 80 px on one of them). Up does not visit the outer box."
+}

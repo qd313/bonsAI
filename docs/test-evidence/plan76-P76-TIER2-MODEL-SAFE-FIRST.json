@@ -1,0 +1,20 @@
+{
+  "row": "P76-TIER2-MODEL-SAFE-FIRST",
+  "build": "b775545d",
+  "deckTime": "2026-09-28 23:42-23:56 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 2 trial)",
+  "setup": "Saved licence policy was 'Also try open-weight models' (model_policy_tier open_weight), which never shows the Tier 2 box. Saved value noted, later restored by the plugin's own Done button (file read back: open_weight).",
+  "pressed_and_seen": [
+    "Browse models... A. DOWN x3 to 'Select qwen3.5:4b to pull', A. That model is labelled FOSS: no Tier 2 box; 'Pull selected' at once started a real 3.4 GB download (my mistake: wrong model for this row). Cancelled it with the plugin's own Cancel button (Right from 'Install model bundles'); pull_in_flight.json went away; ollama list unchanged (2 models).",
+    "With the licence filter on 'Open source only' the table shows only FOSS rows: no open-weight row can be ticked, so the single-model box 'Enable Tier 2 for this model?' could not be reached by any press I tried.",
+    "Route that did work: filter on 'Also try open-weight models' (Essentials only turned off), tick gemma3:1b (no box, 0.8 GB, footer 'Pull selected (1) . 0.8 GB'), switch filter to 'Open source only' (queue kept: 'Queue 1 . 0.8 GB'), walk to 'Pull selected', A."
+  ],
+  "seen": {
+    "box": "Different box: 'Enable Tier 2 before pulling?' with buttons Not now / Enable Tier 2 and pull / Cancel. Text: 'Your queue includes open-weight model(s): gemma3:1b. Tier 1 limits Ask routing to FOSS-friendly tags only. Enable Tier 2 (open-weight) before pulling so these models can be used. Open-weight models publish their weights for local use, but their training code, data or licence can differ from Tier 1's open-source rules, including limits on use or sharing.' The words 'this reply' do not appear.",
+    "ring": "gpfocus and activeElement agree on 'Not now' (rect 123,311,194,60, 100% visible).",
+    "afterA": "Box closed, ring back on 'Pull selected (1) . 0.8 GB' (rect 123,402,290,40); nothing queued or downloaded (no pull_in_flight.json, ollama list still nomic-embed-text and gemma4:e2b-it-qat). Same result on the second run."
+  },
+  "verdict": "PASS for the box that could be reached ('Enable Tier 2 before pulling?'): ring starts on Not now, A queues nothing, no 'this reply'. UNCLEAR whether the single-model title 'Enable Tier 2 for this model?' behaves the same: it was not reachable (open-weight rows are hidden while the filter is Open source only, and no box appears while it is Tier 2).",
+  "newFinding": "Setting mismatch: choosing 'Open source only' inside the AI models screen wrote model_policy_tier open_source_only to the file at once. After Cancel the file kept open_source_only while the re-opened screen showed 'Also try open-weight models' checked. Done wrote open_weight back."
+}

@@ -1,0 +1,19 @@
+{
+  "row": "P76-INSTALL-OPTIONS-RING",
+  "build": "first try: whatever dist stood on the Deck at 23:38 (deployed from a dist built before commit 870a1bf7, tip then b775545d). Second try: redeployed at 23:51 from tip ab56e2a2 (checkReady buildMatches true).",
+  "deckTime": "2026-09-28 23:47-23:56 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "setup": "AI runs on this Deck, Ollama tab, no game. Nothing was confirmed on any box: ollama list stayed at nomic-embed-text and gemma4:e2b-it-qat.",
+  "first_try_old_build": {
+    "pressed": "Install options... A (opens an inline list: Install Tier 1 essentials, Install Tier 2 one-model multimodal), DOWN, A on Tier 1, B; DOWN x2, A on Tier 2, B.",
+    "seen": "Both boxes opened with the ring on 'Not now' (gpfocus and activeElement agree). After B on each, ring on 'Install options...' (aria label 'Install model bundles', 300-wide row, rect 64,y,268,36, agree). Tier 1 box: no mention of a reply. Tier 2 box: contained the sentence 'This reply used an “open model” (open-weight): weights are typically published for local use...'.",
+    "verdict": "FAIL on the wording half (the words 'This reply' were in the Tier 2 box); ring half PASS. Cause: the build on the Deck was older than commit 870a1bf7 'The Tier 2 multimodal install box no longer talks about a reply' (landed 23:44, after my deploy at 23:38)."
+  },
+  "second_try_tip_build": {
+    "pressed": "Same presses after redeploy.",
+    "seen": "Tier 1 box: ring on 'Not now'; after B ring on 'Install options...' (rect 64,275,268,36, agree). Tier 2 box: ring on 'Not now'; text now reads '...bonsAI will switch Model policy to Tier 2 (open-weight) so this model is eligible for Ask. Open-weight models publish their weights for local use, but their training code, data or licence can differ from Tier 1's open-source rules, including limits on use or sharing.' No 'this reply'. After B ring on 'Install options...' (rect 64,235,268,36, agree). Nothing downloaded.",
+    "verdict": "PASS"
+  },
+  "verdict": "PASS on the tip build (ring returns to Install options... both times; nothing downloads; Tier 2 box has no 'this reply'). The first try, on a stale deploy, failed the wording check.",
+  "newFinding": "None new. Process note: deck_deploy shipped a dist that was older than the tip; the local dist was rebuilt by someone at 23:49."
+}

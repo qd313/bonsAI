@@ -71,6 +71,19 @@ starts work outside this.
 ## Bugs
 
 
+- ★ `[focus]` **REGRESSION, traps the player: walking Down past a closed first spoiler cover loops forever** — **OPEN, found 2026-09-29
+  (plan 76, Deck block 2b, build `ab56e2a2`).** Coming from the question, Down bounced between the first cover and its section's outer
+  box for 8 presses and never reached section 2, the menu or Helpful; only while that cover is closed. Up skipped the outer box. A on a
+  landed cover opens it. Came in with `3576846c` and `b2a60359`; lane 3 is fixing it in a second round now. Evidence
+  `docs/test-evidence/plan76-P76-WALK-COVERS.json`, `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`. Checked by rows
+  **P76-WALK-COVERS** and **REPLY-STOPS-MIRROR-01**.
+- ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **OPEN again, 2026-09-29.**
+  Fixed 2026-09-28 (plan 76 lane 3, `b2a60359`) but sent back from Verify: the Deck walk failed (see the entry above). Found
+  2026-09-28 (plan 74, Deck pass 3), measured in `docs/test-evidence/plan76-P76-M-COVER-SCROLL.json`. Row **P76-WALK-COVERS**.
+- ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
+  does nothing** — **OPEN again, 2026-09-29.** Fixed 2026-09-28 (plan 76 lane 3, `3576846c`) but sent back from Verify with the
+  regression above: the Deck walk failed, though A on a landed cover does open it. Found 2026-09-28 (plan 74, Deck pass 3),
+  `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`. Rows **P76-WALK-COVERS** and **REPLY-STOPS-MIRROR-01**.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
@@ -96,6 +109,8 @@ starts work outside this.
   **2026-09-28 (plan 76 lane 3, `3576846c`):** fixes the last known stop, a section that holds only a cover. Row
   **REPLY-STOPS-MIRROR-01** is still owed. One exception is by design: a section the ring was moved onto by a scroll can
   be a stop going Down only.
+  **2026-09-29 (plan 76, Deck block 2b, build `ab56e2a2`):** row **REPLY-STOPS-MIRROR-01** FAILED. Down and Up do not visit the same
+  stops: the walk loops on the first cover (regression entry at the top of Bugs). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`.
 - ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
   **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
@@ -131,7 +146,7 @@ starts work outside this.
   **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `docs/test-evidence/plan76-S6.json`.
 - ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **OPEN, small note, found 2026-09-28
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
-  Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** checks
+  Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
   that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
 - ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
   2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
@@ -158,6 +173,8 @@ starts work outside this.
   not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
 - ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
   buttons** — **OPEN, a known edge of `e5d1ceb9` (plan 76 lane 4), not seen on the Deck.**
+- ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
+  **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
@@ -169,6 +186,12 @@ starts work outside this.
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
   **PARTIAL, found 2026-09-28 (plan 76 lane 2), in the code only.** Fixed (`6ef8cedf`) for the library's Update and "Pull
   nomic-embed-text" buttons. Still open for "Update AI & models" and the Tier 1 and Tier 2 install buttons (about six lines).
+- ★ `[focus]` **"Remove nomic-embed-text from the Deck?" opens on "Remove model"** — **OPEN, found 2026-09-29 (plan 76, Deck block 2b).**
+  The other confirm boxes open on the safe choice; this one starts on the destructive button. Lane 2 is fixing it in round 3.
+  Evidence `docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json`.
+- ★ `[ui]` **After reinstalling the library, its status reads "Not installed" for about a minute, then shows a leftover "100%
+  Downloading… Cancel" row** — **OPEN, found 2026-09-29 (plan 76, Deck block 2b).** Lane 2 round 3. Evidence
+  `docs/test-evidence/plan76-P76-KB-BOX-RING-RETURN.json`.
 - ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
   May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
   351 characters).
@@ -210,6 +233,10 @@ starts work outside this.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
+- ★★ `[ollama]` **After Cancel on the AI models screen, the saved licence setting and the screen disagree** — **OPEN, found
+  2026-09-29 (plan 76, Deck block 2b).** Picking "Open source only" writes at once; Cancel keeps it, but the reopened screen shows
+  the Tier 2 filter. Lane 2 round 3. Evidence `docs/test-evidence/plan76-P76-AI-MODELS-CANCEL-RING.json`,
+  `docs/test-evidence/plan76-P76-TIER2-MODEL-SAFE-FIRST.json`.
 - ★★ `[ollama]` **After the release: the model tiers' licence labels** — **OPEN, found 2026-09-28 (the licence check);
   the maintainer's call: labels only, after the release.** From memory, to confirm on each model's page: Qwen 2.5's 3B
   and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
@@ -500,55 +527,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
-- ★ `[ollama]` **A plugin reload stops a model download in progress** — **VERIFY, fixed 2026-09-28 (plan 76 lane 5,
-  `61473aff`).** A download running when the plugin reloads now starts again by itself on load. Found on the Deck 2026-09-23
-  (flow H), `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`. Deck check owed: row **P76-PULL-RESUME**. This is a known
-  issue in the 0.6.0 release notes (plan 72 § 8); that line comes off only once this Deck row passes.
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
   partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
   shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
   (plan 70, flow L7). Deck check owed: row **P76-CHOICES-DRIFT** (the flow L7 troubleshooting questions with a game running,
   reading the log). [Detail](roadmap-details.md#flow-l7-findings).
-- ★ `[ui]` **The note-search hint can take up to 40 seconds to appear after a model is removed in the plugin** — **VERIFY,
-  fixed 2026-09-28 (plan 76 lane 5, `0f899e4e`).** Removing a model now clears the plugin's 30-second "is it there" memory at
-  once when the removed model is the note-search one. This was the last leftover of "Small leftovers from plan 74"; the other
-  two are in the Verify entry "Two small leftovers from plan 74, now fixed". Deck check owed: row **P76-NOMIC-REMOVE-HINT**.
-- ★ `[focus]` **A scroll-only Down press left the ring on a cover partly off the top of the screen** — **VERIFY, fixed
-  2026-09-28 (plan 76 lane 3, `b2a60359`).** A press that scrolls no longer leaves the ring on a cover the scroll carried off
-  screen. Was found 2026-09-28 (plan 74, Deck pass 3) and measured in plan 76,
-  `docs/test-evidence/plan76-P76-M-COVER-SCROLL.json`. Deck check owed: row **P76-WALK-COVERS**.
-- ★ `[focus]` **Walking Down through a long answer, the ring sticks on a highlighted word** — **VERIFY, fixed 2026-09-28
-  (plan 76 lane 3, `b2a60359`).** A press that scrolls no longer leaves the ring on a word the scroll carried off screen. Was
-  found 2026-09-28 (plan 75) and measured in plan 76, `docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json`. Deck check owed:
-  row **P76-WALK-GLOSSARY** (needs a game running).
-- ★ `[focus]` **Walking Down onto a section that holds only a spoiler cover lands on the section's outer box, and A there
-  does nothing** — **VERIFY, fixed 2026-09-28 (plan 76 lane 3, `3576846c`).** Down and Up now land on the same covers, and A on
-  a section opens the cover inside it. Was found 2026-09-28 (plan 74, Deck pass 3),
-  `docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`. Deck check owed: rows **P76-WALK-COVERS** and **REPLY-STOPS-MIRROR-01**.
-- ★ `[reply]` **An opened spoiler cover closed again by itself** — **VERIFY, fixed 2026-09-28 (plan 76 lane 3, `00049cc0`).**
-  Cause found: the answer was redrawn from scratch on every keystroke in the question box, which drew its covers hidden again.
-  An opened cover now stays open while a question is typed. Was found 2026-09-28 (plan 74),
-  `docs/test-evidence/plan74-P74-COVER-UP-r2.json`. Deck check owed: row **P76-COVER-STAYS-OPEN**.
-- ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply that does not exist** — **VERIFY, fixed 2026-09-28
-  (plan 76 lane 2, `420c9d9f`).** The wording no longer mentions a reply. Was found 2026-09-28 (plan 74),
-  `docs/test-evidence/plan74-P74-SAFE-FIRST-TIER2.json`. Deck check owed: row **P76-TIER2-MODEL-SAFE-FIRST** (read the wording).
-  The Tier 2 one-model install box is fixed too (`870a1bf7`). Deck check owed: row **P76-TIER2-INSTALL-WORDING**.
-- ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **VERIFY, fixed 2026-09-28 (plan 76 lane 2,
-  `3f495973`).** When the Pull button goes, the ring is handed on to the next button. Sighting 2026-09-27 (plan 70, flow L10).
-  Deck check owed: row **P76-NOMIC-REMOVE-HINT**. [Detail](roadmap-details.md#flow-l10-findings).
-- ★ `[focus]` **Two more boxes may start on their action button, found in the code** — **VERIFY, fixed 2026-09-28 (plan 76
-  lane 2, `15df0bd1`, `aa3454ba`).** The per-model "Enable Tier 2 for this model?" box now opens on "Not now", and the Tier 1 and
-  Tier 2 install buttons get the ring back after their box closes. Never seen on the Deck; found in plan 74 lane 3's report.
-  Deck check owed: rows **P76-TIER2-MODEL-SAFE-FIRST** and **P76-INSTALL-OPTIONS-RING**.
-- ★ `[focus]` **Cancel on the AI models screen, with a model queued, sends the ring to the tab rail** — **VERIFY, fixed
-  2026-09-28 (plan 76 lane 2, `8c76e16d`).** Cancel now puts the ring back on "Browse models…". Was found 2026-09-28 (plan 75),
-  `docs/test-evidence/t75-3-Q2-SAFE-FIRST-TIER2.json`. Deck check owed: row **P76-AI-MODELS-CANCEL-RING**.
-- ★ `[focus]` **After B closes the library's location box, or after Remove, the ring goes to the tab bar** — **VERIFY, fixed
-  2026-09-28 (plan 76 lane 2, `d02de439`).** The ring now goes back to the library's own button. Was found 2026-09-28 (plan 74),
-  `docs/test-evidence/plan74-P74-SAFE-FIRST-PICKER.json`. Deck check owed: row **P76-KB-BOX-RING-RETURN**.
-- ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove", not "Cancel"** — **VERIFY, fixed 2026-09-28 (plan 76
-  lane 2, `5d9fc717`).** The box now opens on "Not now", with "Remove" as the middle button. Was found 2026-09-28 (plan 74), seen
-  again on all five plan 75 runs. Deck check owed: row **P76-REMOVE-KB-SAFE-FIRST**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -791,11 +774,6 @@ ones from this month are D81 to D88.
 
 ### Deck check owed
 
-- ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **VERIFY, fixed 2026-09-28 (plan 76
-  lane 5, `7bfcc2a3`, `ebd09465`).** A question that names a well-known game the library does not have no longer gets the chat's
-  own game's notes attached. **Limit:** this works from a short list of well-known titles (everyday words left out); a game not on
-  the list behaves as before. A bare follow-up still uses the chat's own game. Found 2026-09-28 (plan 74, Deck pass 1),
-  `docs/test-evidence/plan74-P74-KB-LOG-LINE.json`. Deck check owed: row **P76-OTHER-GAME-NOTES**.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
   boss up front keeps the answer in plain text. **DRG-01b passed on the Deck 2026-09-23:** the boss tactics
@@ -920,6 +898,20 @@ The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
 
+**Closed 2026-09-29 (plan 76, docs sweep 6, Deck block 2b, build `ab56e2a2`; lanes 2 and 3 are a model trial):**
+
+- ★ `[focus]` **"Remove knowledge base?" opens with the ring on "Remove"** — **DONE 2026-09-29, passed first time on the Deck (row P76-REMOVE-KB-SAFE-FIRST).** Opens on "Not now"; ring back on "Remove" after A or B. Evidence `docs/test-evidence/plan76-P76-REMOVE-KB-SAFE-FIRST.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **After B on the library's location box, or after Remove, the ring goes to the tab bar** — **DONE 2026-09-29, passed first time on the Deck (row P76-KB-BOX-RING-RETURN).** Ring on "Download knowledge base"; library reinstalled to the same place. Evidence `docs/test-evidence/plan76-P76-KB-BOX-RING-RETURN.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **Cancel on the AI models screen, with a model queued, sends the ring to the tab rail** — **DONE 2026-09-29, passed first time on the Deck (row P76-AI-MODELS-CANCEL-RING).** Cancel and Done put the ring on the button that opened the screen. Evidence `docs/test-evidence/plan76-P76-AI-MODELS-CANCEL-RING.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **Two more boxes may start on their action button** — **DONE 2026-09-29 (rows P76-INSTALL-OPTIONS-RING, P76-TIER2-MODEL-SAFE-FIRST).** Install boxes: the ring returns to "Install options…" both times (passed on the tip build; the first try was on an older build). The per-model "Enable Tier 2 for this model?" box could not be reached, so **still owed** for that box; lane 2 is checking whether it is dead code. Evidence `docs/test-evidence/plan76-P76-INSTALL-OPTIONS-RING.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ui]` **The "Enable Tier 2 before pulling?" box talks about a reply** — **DONE 2026-09-29, passed first time on the Deck (row P76-TIER2-MODEL-SAFE-FIRST; the install box's wording via P76-INSTALL-OPTIONS-RING, P76-TIER2-INSTALL-WORDING).** Opens on "Not now", queues nothing, no mention of a reply. Per-model box: **still owed**, not reachable. Evidence `docs/test-evidence/plan76-P76-TIER2-MODEL-SAFE-FIRST.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **Nothing holds the ring when the Pull button disappears** — **DONE 2026-09-29, passed first time on the Deck (row P76-NOMIC-REMOVE-HINT).** When the model landed the ring was on "Update knowledge base" and Down moved it. Evidence `docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ui]` **The note-search hint can take up to 40 seconds to appear after a model is removed** — **DONE 2026-09-29, by the session's ruling on the timing (row P76-NOMIC-REMOVE-HINT).** The hint was already showing when the tab was drawn again (about 9.6 s after removal; the 5 s could not be timed). Evidence `docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[reply]` **An opened spoiler cover closed again by itself** — **DONE 2026-09-29, passed first time on the Deck (row P76-COVER-STAYS-OPEN).** Still open 13 s after typing; A closed it. Evidence `docs/test-evidence/plan76-P76-COVER-STAYS-OPEN.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[focus]` **Walking Down through a long answer, the ring sticks on a highlighted word** — **DONE 2026-09-29, passed first time on the Deck with a game up (row P76-WALK-GLOSSARY).** Ring and page focus matched on every press; the next Down moved on. The "80 px a press" half is **still owed**: that section was only 72 px tall. Evidence `docs/test-evidence/plan76-P76-WALK-GLOSSARY.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★ `[ollama]` **A plugin reload stops a model download in progress** — **DONE 2026-09-29, passed on the Deck (row P76-PULL-RESUME).** After a reload the download resumed from 345 MB within 8 s; the note file was gone after it landed; a cancelled download did not come back. Off the 0.6.0 known issues. Evidence `docs/test-evidence/plan76-P76-PULL-RESUME.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+- ★★ `[KB]` **A question about a different game uses the chat's own game's notes** — **DONE 2026-09-29, passed on the Deck (row P76-OTHER-GAME-NOTES).** The log named Valheim as unknown and attached no notes; the follow-up used Hollow Knight's and attached 3. Evidence `docs/test-evidence/plan76-P76-OTHER-GAME-NOTES.json`. [Full entry](archive/roadmap-bugs-fixed.md)
+
 **Closed 2026-09-28 (plan 76, docs sweep 4, Deck block 2a):**
 
 - ★ `[chat]` **After the Steam ban lookup replies, the "New chat" spot shows that command's permission row** — **DONE 2026-09-28,
@@ -947,53 +939,8 @@ during the twelfth bookkeeping pass, again to keep this document under its size 
   line. [Full entry](archive/roadmap-bugs-fixed.md)
 
 
-**Closed 2026-09-28 (plan 76, docs sweep 3):**
-
-- ★ `[KB]` **The wiki reader cannot read Palworld's own wiki** — **DONE 2026-09-28 (plan 76 lane 5, `22f31ee4`).** The maintainer
-  tool now falls back to the plain page when the render call is refused. It is a PC tool, so no Deck check applies; one real fetch
-  of the Pal Sphere page came back clean through the fallback (evidence: the message of commit `22f31ee4`). [Full entry](archive/roadmap-bugs-fixed.md)
-
-**Closed 2026-09-28 (plan 76, docs sweep 2):**
-
-- ★ `[ollama]` **A model pulled from the first-tick download picker never joins the saved try order** — **DONE 2026-09-28,
-  passed on the Deck by the session's ruling (row PULL-TRY-ORDER-01).** The picture-model order took the new download last, with
-  nothing lost or doubled, while the panel was closed. The answering-model list could not be tried because this Deck has one
-  answering model; it goes through the same step. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
-- ★ `[ui]` **Hidden for 0.6.0: the beta chips, "Open Steam Input config", the quick-launch chip and its setup commands, Find LAN and
-  its chips, and the UI scale section** — **DONE 2026-09-28, passed on the Deck (row PLAN72-F-HIDDEN).** With the Developer tab
-  off, Settings has no UI scale controls and the shortcut-setup commands say "That command isn't available in this version." A
-  6-minute chip watch showed none of the ten hidden chips. Find LAN's half rests on its unit test, since this Deck runs the AI
-  itself. Evidence `docs/test-evidence/plan76-PLAN72-F-HIDDEN.json`.
-
-**Closed 2026-09-28 (plan 76, docs sweep 1):**
-
-- ★ `[reply]` **Copy joined two paragraphs into one** — **DONE 2026-09-28 (plan 74 lane 2, `ad3825dd`).** Plan 74's results say Copy needs no Deck check. Original sighting `docs/test-evidence/plan72-Z-FREEPLAY.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
-- ★ `[ask]` **The Steam settings card: two checks never run** — **DONE 2026-09-28, both passed on the Deck 2026-09-26 (plan 70, flow 2b.2).** Rows **SETTINGS-CARD-06** and **SETTINGS-CARD-07**; evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made (the longest setting name fits on two lines); that is not a fail. [Full entry](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
-- ★ `[docs]` **The design notes should say the decode chip's typing mark uses the toned accent colour** — **DONE 2026-09-28.** One line added to `docs/design-tokens.md` (docs only, so no Deck check applies; the colour itself passed on the Deck under plan 74, `13ad6566`). [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-76-docs-sweep-1).
-
-**Closed 2026-09-28 (plan 75, the Sonnet 5.5 trial):**
-
-- ★ `[ollama]` **The try-order picker lists the note-search model as a choice** — **DONE 2026-09-28 (plan 75, `a877a321`,
-  `2cd68796`), passed on the Deck.** The picker lists only models that can answer, and an older saved order holding the
-  note-search model is cleaned on Done. Evidence `docs/test-evidence/t75-land-L1-PICKER-ANSWER-MODELS.json`,
-  `docs/test-evidence/t75-land-L2-OLD-ORDER-CLEANED.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
-- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **DONE 2026-09-28
-  (plan 75, `8ec3426a`, `54643d2f`), by unit test.** Nothing a person can do today reaches the two-caller case (the mic is the
-  only caller), so it rests on the unit tests in `tests/test_voice_whisper_daemon.py`; the mic's own check passed on the Deck,
-  `docs/test-evidence/t75-land-L3-MIC-STARTS-AND-STOPS.json`. [Full entry](archive/roadmap-bugs-fixed.md#moved-from-the-roadmap-2026-09-28-plan-75-the-sonnet-55-trial).
-
-**Plan 74, release wave two (2026-09-28): 20 items closed** — fixes from the second release wave, proven in two
-Deck passes (three by unit test or on the PC). One line each, with its evidence, in
-[archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full entries in
-[archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
-
-**Release clean-up, first pass (2026-09-28): 8 items closed, 3 retired** — entries the code and the Deck had already
-settled. One line each, with its evidence, in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full
-entries in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md) and [archive/roadmap-completed.md](archive/roadmap-completed.md).
-
-**Plan 72 (2026-09-27): 27 items closed** — the release bug session's Deck blocks, in two docs passes. One line each, with its
-evidence, in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the full entries in
-[archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md) and [archive/roadmap-completed.md](archive/roadmap-completed.md).
+Plan 76 sweeps 1 to 3 and the plan 75 (Sonnet 5.5 trial) block were moved out the same way on 2026-09-29, during docs
+sweep 6, to keep this document under its size limit: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 **Closed 2026-09-26 (docs clean-up):**
 

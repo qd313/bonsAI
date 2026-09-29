@@ -1,0 +1,14 @@
+{
+  "row": "P76-COVER-STAYS-OPEN",
+  "build": "tip ab56e2a2 (redeployed 23:51)",
+  "deckTime": "2026-09-28 23:54-23:56 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 3 trial)",
+  "setup": "No Soul Sanctum answer with covers was on screen, so I asked 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (script, then walk to Ask, ring and page focus both on Ask, A) in the current chat 'what is a good way to practice parrying in action games' (no new chat; chat count stays 8). Answer finished 23:55:13: two covers ('Spoiler - tap to show') and a two-choice menu, Strategy mode.",
+  "pressed": "Walked UP from Ask to the lower cover (gpfocus and activeElement both on it, rect 71,204,237,55, 100% visible). A: cover opened (ring now on 'Spoiler - tap to hide' rect 81,213,216,15). Typed 'What upgrades matter most for the Nail in Hollow Knight' with the script (VERIFIED, 23:55:31). Read the cover at +2 s and at +13 s (23:55:44). Then A on it.",
+  "seen": {
+    "afterTyping": "Still open at +2 s and +13 s: the page still had the words 'tap to hide', ring (gpfocus = activeElement) still on the open cover, one other cover still closed.",
+    "afterA": "Cover hidden again: both covers read 'Spoiler - tap to show'; no 'tap to hide' text on the page."
+  },
+  "verdict": "PASS (first try)"
+}

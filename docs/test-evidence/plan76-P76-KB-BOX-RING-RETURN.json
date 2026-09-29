@@ -1,0 +1,17 @@
+{
+  "row": "P76-KB-BOX-RING-RETURN",
+  "build": "b775545d",
+  "deckTime": "2026-09-28 23:40-23:42 EDT",
+  "screen": "built-in panel, Quick Access window 854x454, dpr 1.5",
+  "attempt": "first try (lane 2 trial)",
+  "setup": "Library installed at /home/deck/.bonsai/rag (internal storage), version 2026.09.26, files corpus.db 2998272, corpus-manifest.json 29838, ATTRIBUTIONS.md 26743. use_local_knowledge_base true.",
+  "pressed": "A on Remove, RIGHT to middle 'Remove' (ring read on 'Remove'), A. Read ring. A on Download knowledge base -> location box; read; B; read ring. Then A on Download, DOWN to 'Internal storage', A; a 'Turn on internet downloads?' box came up; RIGHT to 'Turn on and download', A.",
+  "seen": {
+    "afterRemove": "Ring and activeElement agree on 'Download knowledge base' (rect 64,264,268,44, visible). Folder /home/deck/.bonsai/rag gone. Settings: use_local_knowledge_base false, rag_corpus_path and version emptied (plugin's own doing).",
+    "locationBox": "Box 'Choose download location' with Not now / Internal storage (~728 GB free) / SD card (~1141 GB free). Ring opened on 'Not now'.",
+    "afterB": "Ring and activeElement agree on 'Download knowledge base' (rect 64,243,268,44).",
+    "reinstall": "Because Internet downloads was off in Permissions, a 'Turn on internet downloads?' box came first (Not now / Turn on and download / Cancel; ring opened on 'Not now'). Chose Turn on and download. Within about 25 s the library was back at /home/deck/.bonsai/rag with the same three files and sizes, version 2026.09.26, use_local_knowledge_base true again. Ring after the download finished: on the 'Ollama tab' header (rect 48,64,300,20), gpfocus and activeElement agree (not on Download, which is now a different button; the row does not state this)."
+  },
+  "sideEffect": "capabilities.internet_downloads changed false -> true by the plugin's own box. To be put back to false at the end via the Perms tab.",
+  "verdict": "PASS"
+}

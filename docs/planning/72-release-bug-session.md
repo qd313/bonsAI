@@ -630,10 +630,10 @@ before the release.
   view.
 - With a game running, the panel updates about 30 times a second while an answer arrives, and can dip lower
   late in very long answers.
-- If the plugin reloads during a model download, the download stops. Asking for it again picks up where it
-  left off.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
 - bonsAI's highlight ring looks slightly different from Steam's own on some controls.
+
+_2026-09-29: the line about a plugin reload stopping a model download came off this list. It was fixed and proven on the Deck in plan 76 (row P76-PULL-RESUME)._
 
 _2026-09-28: the line about the newest answer's "Was this helpful?" buttons after a chat switch came off this list. It was fixed and proven on the Deck in plan 76._

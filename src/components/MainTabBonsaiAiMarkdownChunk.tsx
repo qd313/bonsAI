@@ -52,7 +52,7 @@
  */
 import type { Components } from "react-markdown";
 import type { ReactNode } from "react";
-import { Fragment, cloneElement, isValidElement, memo, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, cloneElement, isValidElement, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Focusable } from "@decky/ui";
 
@@ -614,8 +614,23 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
   const masking = props.spoilerMaskingEnabled !== false;
   const defaultEx = props.spoilerDefaultExpanded === true;
   const drgGlossaryEnabled = isDrgSurvivorAppId(props.appId);
-  const onDrgGlossaryExplainFurther = props.onDrgGlossaryExplainFurther;
   const scrambleSlotRef = props.scrambleSlotRef;
+  /*
+   * The "explain further" callback is read through a ref, so a new function identity never rebuilds
+   * the rules below. Those rules ARE the component types react draws every paragraph, list item and
+   * spoiler cover with: a new set makes React throw the drawn answer away and draw it fresh, and a
+   * fresh cover is hidden again. The caller's callback follows the Ask function, which is rebuilt on
+   * every keystroke in the question box, so an opened cover used to close itself about two seconds
+   * after a question was typed (docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json). Only whether a
+   * callback exists can change what is drawn, so only that is a dependency.
+   */
+  const explainFurtherRef = useRef(props.onDrgGlossaryExplainFurther);
+  explainFurtherRef.current = props.onDrgGlossaryExplainFurther;
+  const hasExplainFurther = props.onDrgGlossaryExplainFurther !== undefined;
+  const onDrgGlossaryExplainFurther = useCallback(
+    (term: DrgGlossaryTerm) => explainFurtherRef.current?.(term),
+    []
+  );
   const components = useMemo(
     () =>
       buildMdComponents({
@@ -623,14 +638,12 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
         spoilerDefaultExpanded: defaultEx,
         depth: 0,
         drgGlossaryEnabled,
-        onDrgGlossaryExplainFurther,
+        onDrgGlossaryExplainFurther: hasExplainFurther ? onDrgGlossaryExplainFurther : undefined,
         scrambleSlotRef,
       }),
-    // `onDrgGlossaryExplainFurther` should be a stable callback from the caller (useCallback keyed
-    // on onAskOllama) — see the memoisation note above this component. A fresh function identity
-    // per render would defeat that memo for every DRG Survivor reply, not just correctness here.
-    // The same holds for `scrambleSlotRef`, which the scramble keeps stable for its whole life.
-    [masking, defaultEx, drgGlossaryEnabled, onDrgGlossaryExplainFurther, scrambleSlotRef]
+    // `scrambleSlotRef` is kept stable by the scramble for its whole life; the callback is stable
+    // by construction above.
+    [masking, defaultEx, drgGlossaryEnabled, hasExplainFurther, onDrgGlossaryExplainFurther, scrambleSlotRef]
   );
 
   return (

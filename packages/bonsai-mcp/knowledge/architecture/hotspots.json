@@ -151,13 +151,13 @@
       "role": "Load/save/merge settings.json"
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 653,
+      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+      "lines": 658,
       "role": ""
     },
     {
-      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
-      "lines": 645,
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 653,
       "role": ""
     },
     {

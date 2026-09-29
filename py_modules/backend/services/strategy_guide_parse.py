@@ -37,7 +37,10 @@ Branch picker, through `extract_strategy_guide_branches()`:
     `_parse_strategy_json_blob()`, which tolerates a wrong language tag and
     trailing commas, and calls `_repair_truncated_json()` to close off braces
     and quotes a model cut off mid-write.
- 5. `_normalize_branch_payload()` then checks the result actually has a real
+ 5. `_normalize_branch_payload()` also reads the plainly-equivalent shapes a model
+    writes when it drifts from the example: options as plain strings or an id-to-label
+    object, "text"/"title"/"name" in place of "label", the question under "prompt".
+    It then checks the result actually has a real
     question and at least two real options, throwing the whole block away
     rather than showing something broken -- including a question or option
     that is still just the worked example's placeholder dots
@@ -70,6 +73,7 @@ Gotchas:
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 from typing import Any
@@ -159,7 +163,8 @@ def _parse_strategy_json_blob(json_blob: str) -> dict[str, Any] | None:
         blob = inner or blob
     for candidate in (blob, _repair_truncated_json(blob)):
         try:
-            data = json.loads(candidate)
+            # strict=False lets a raw newline sit inside a string, which models do write.
+            data = json.loads(candidate, strict=False)
         except json.JSONDecodeError:
             # Trailing commas: remove ,\s*} and ,\s*]
             relaxed = re.sub(r",\s*}", "}", candidate)
@@ -167,9 +172,18 @@ def _parse_strategy_json_blob(json_blob: str) -> dict[str, Any] | None:
             if relaxed == candidate:
                 continue
             try:
-                data = json.loads(relaxed)
+                data = json.loads(relaxed, strict=False)
             except json.JSONDecodeError:
                 continue
+        if isinstance(data, dict):
+            return data
+    # A single-quoted, Python-looking object (`{'question': ...}`) is read as a plain literal:
+    # nothing in it can run, and only a dict is accepted.
+    if blob.startswith("{"):
+        try:
+            data = ast.literal_eval(blob)
+        except (ValueError, SyntaxError, MemoryError, RecursionError):
+            return None
         if isinstance(data, dict):
             return data
     return None
@@ -231,22 +245,52 @@ def _is_ellipsis_placeholder(text: str) -> bool:
     return bool(_STANDALONE_ELLIPSIS.search(stripped))
 
 
+# Other names a model gives the same things when it drifts from the prompt's example. Only names
+# that plainly mean the same thing are here; anything else is still refused.
+_QUESTION_KEYS = ("question", "prompt")
+_OPTION_LABEL_KEYS = ("label", "text", "title", "name", "option", "choice")
+_OPTION_ID_KEYS = ("id", "key", "value")
+
+
+def _first_text(d: dict[str, Any], keys: tuple[str, ...]) -> str:
+    for key in keys:
+        val = d.get(key)
+        if isinstance(val, (str, int)) and not isinstance(val, bool) and str(val).strip():
+            return str(val).strip()
+    return ""
+
+
+def _option_entries(opts: Any) -> list[tuple[str, str]]:
+    """(id, label) pairs from the options as written: a list of objects, a list of plain
+    strings, or an object mapping ids to labels. An id is "" when the model gave none."""
+    entries: list[tuple[str, str]] = []
+    if isinstance(opts, dict):
+        for key, val in list(opts.items())[:_MAX_OPTIONS]:
+            if isinstance(val, str) and val.strip():
+                entries.append((str(key).strip(), val.strip()))
+        return entries
+    if not isinstance(opts, list):
+        return entries
+    for o in opts[:_MAX_OPTIONS]:
+        if isinstance(o, str):
+            entries.append(("", o.strip()))
+        elif isinstance(o, dict):
+            entries.append((_first_text(o, _OPTION_ID_KEYS), _first_text(o, _OPTION_LABEL_KEYS)))
+    return entries
+
+
 def _normalize_branch_payload(data: dict[str, Any] | None) -> dict[str, Any] | None:
     if data is None:
         return None
-    q = data.get("question")
-    opts = data.get("options")
-    if not isinstance(q, str) or not q.strip():
+    q = _first_text(data, _QUESTION_KEYS)
+    if not q:
         return None
-    if not isinstance(opts, list):
+    entries = _option_entries(data.get("options"))
+    if not entries:
         return None
 
     normalized: list[dict[str, str]] = []
-    for i, o in enumerate(opts[:_MAX_OPTIONS]):
-        if not isinstance(o, dict):
-            continue
-        oid = str(o.get("id", "") or "").strip()
-        lab = str(o.get("label", "") or "").strip()
+    for i, (oid, lab) in enumerate(entries):
         if not lab:
             continue
         if not oid:

@@ -191,13 +191,13 @@
       "role": ""
     },
     {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 591,
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "lines": 594,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/response_verify.py",
-      "lines": 590,
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 591,
       "role": ""
     }
   ]

@@ -324,6 +324,13 @@ Not started.
   of the answer is lost (helper L `aeacbe7220232855d`); and helper J's spoiler fix failed on the Deck — the real cause
   needs your call (questions, item 3). The ring after a reopen: absent 6 of 6 with no plugin reload (the normal path),
   present 6 of 6 after one — left for after the release.
+- **Third rounds landed (tip `7d84ee3b`), every check green:** helper C round 2 (the "Run AI on this Deck" switch
+  now saves before its notice closes the panel; the https probe was most likely the switch's own automatic check, and
+  a test now proves the Test press sends nothing), helper L (a choice menu cut by the length limit no longer takes the
+  rest of the answer with it), helper K (after "spoilers are okay" the answer stays uncovered once it finishes — the
+  chat's reload had forgotten the consent; a Spy block with a broken tag no longer shows raw, even while streaming).
+  Helper J round 2: no commit; the spoiler call is yours (questions, item 3).
+- **Deck driver 3** (`a1e6c9e9c55acd5e6`) runs block 4: the last re-checks of those fixes.
 - **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
   (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 

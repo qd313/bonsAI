@@ -277,6 +277,14 @@ Not started.
   Hollow Knight's choices) never happened in 30 tries before or after, so this run cannot prove the fix. It did no
   harm: ordinary game questions kept their menu (14 of 15). The Deck check is the real test.
 - **Helper D round two** started: three screens still say "FOSS" for the default model, wording only.
+- **The long play test for the D-pad trap fix PASSED** (block 1a): 24 reopens over a game, the panel's window had the
+  focus every time, no split in 72 presses, 6 of 6 walks reached Ask. The trap entry moved to Done, and the release
+  notes' two D-pad lines became one short line (D120 #8). New and small: in 12 of the 24 reopens Steam's ring was not
+  drawn for the first second; the first press brought it back every time. **Helper I** (`a38f2e52ccc62cc2d`) read the
+  code and changed nothing: the trap fix is not involved; the likely cause is Steam not redrawing its ring after the
+  test's own plugin reload over the game. Two Deck reads in block 3 decide whether it is real.
+- **Helper D round two landed** (`de74af02`): the install buttons say what they install ("Install Gemma 4 (all-in-one
+  model)"), and "FOSS" is gone from the setup boxes.
 - **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
   (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 

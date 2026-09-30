@@ -31,15 +31,34 @@ _SPY_LIES_TAG_RE = re.compile(
     re.escape(SPY_LIES_TAG_OPEN) + r"(.*?)" + re.escape(SPY_LIES_TAG_CLOSE),
     re.IGNORECASE | re.DOTALL,
 )
+_SPY_LIES_OPEN_RE = re.compile(re.escape(SPY_LIES_TAG_OPEN), re.IGNORECASE)
+# The closing tag with its ">" missing, which only counts at the very end of the reply (measured on
+# the Deck 2026-09-30: the model wrote "</bonsai-spy-lies" and stopped). Mid-text it is not a closer.
+_SPY_LIES_BRACKETLESS_CLOSE_RE = re.compile(
+    re.escape(SPY_LIES_TAG_CLOSE[:-1]) + r"\s*\Z", re.IGNORECASE
+)
+
+
+def _drop_partial_closer(block: str) -> str:
+    """Cut a closing tag that stops part-way through its name ("</bonsai-spy-l") off the end."""
+    at = block.rfind("</")
+    if at < 0:
+        return block
+    tail = block[at:].strip().lower()
+    if SPY_LIES_TAG_CLOSE.startswith(tail):
+        return block[:at]
+    return block
 
 
 def parse_spy_lies_tag(text: str) -> tuple[str, list[str]]:
-    """Strip a closed confession tag out of ``text``; return the clean text and the lies.
+    """Strip the confession tag out of ``text``; return the clean text and the lies.
 
-    Mirrors ``parse_bonsai_spoiler_risk_tag`` in spoiler_risk_service.py: an unclosed or
-    missing tag is left exactly alone (nothing stripped, an empty lies list) rather than
-    guessed at, the same way that function ignores an incomplete
-    ``<bonsai-spoiler-risk>`` tag while it is still streaming in.
+    Mirrors ``parse_bonsai_spoiler_risk_tag`` in spoiler_risk_service.py for a closed tag. This
+    reads a finished reply, so it also forgives the ways a small model ends the block badly
+    (plan 77, SPY-REVEAL-01): a closing tag missing its ">" at the very end, a closing tag cut
+    off part-way through its name, or no closing tag at all. In every one of those the block runs
+    from the opening tag to the end of the reply, and none of it is left showing as raw markup.
+    A reply with no opening tag is left exactly alone (nothing stripped, an empty lies list).
 
     A closed tag with no lines inside it (the model confessed to nothing) still counts as a
     tag: the text is stripped and an empty list comes back, so the caller can tell "the Spy
@@ -47,8 +66,14 @@ def parse_spy_lies_tag(text: str) -> tuple[str, list[str]]:
     """
     raw = text or ""
     match = _SPY_LIES_TAG_RE.search(raw)
-    if not match:
-        return raw, []
-    lies = [line.strip() for line in match.group(1).splitlines() if line.strip()]
-    clean = (raw[: match.start()] + raw[match.end() :]).strip()
-    return clean, lies
+    if match:
+        block, before, after = match.group(1), raw[: match.start()], raw[match.end() :]
+    else:
+        opener = _SPY_LIES_OPEN_RE.search(raw)
+        if not opener:
+            return raw, []
+        block, before, after = raw[opener.end() :], raw[: opener.start()], ""
+        closer = _SPY_LIES_BRACKETLESS_CLOSE_RE.search(block)
+        block = block[: closer.start()] if closer else _drop_partial_closer(block)
+    lies = [line.strip() for line in block.splitlines() if line.strip()]
+    return (before + after).strip(), lies

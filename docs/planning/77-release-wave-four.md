@@ -243,6 +243,11 @@ New ones go here, with the choice taken in the meantime.
    "labels only". **Meanwhile:** they stay where they are in the tiers and the try order; only the licence text on
    screen and in the README is corrected. **Your call:** keep them in the default tier with the honest label, or
    move them and pick other defaults (after the release).
+2. **Should a Strategy answer ever pick up the game from earlier in the chat?** Helper H's fix covers questions about
+   the Deck itself (the overlay, Quick Access, desktop mode and the like): those no longer get another game's choice
+   menu. It did not add a wider rule ("no game running and none named: never use an earlier game"), because a bare
+   follow-up like "how do I beat the second boss" relies on the chat's game on purpose. **Meanwhile:** the narrow fix
+   only. **Your call, after the release:** whether the wider rule is wanted.
 
 ## Results
 
@@ -256,6 +261,13 @@ Not started.
   limit: A `aaa5ecf700267ab19`, B `a50546f4a20aff52b`, C `a52b27d2db8f3c4f6`, D `a74640dc38e8c5acd`,
   E `a43dca60f5a93a5bd`, F `afc0c2789beb97720`, G `a7c09606b12abec40`, H `a41e60ce70cd50608`,
   checks list `a9a172a6800e9156a`, Deck driver `a9fe30acdd9673598`.
+- **Bookkeeping:** the watch list, the Show details call and D120 written (`9ffe9354`).
+- **Landed:** helper G (the ban-lookup row, Helpful on a stopped answer; tip `03baaa45`), helper F (the Ollama-tab
+  ring note; `7c8ac206`), helper B (reply size limits, the `~~~` safety net; `044069cd`). Every check green at each.
+  Helper G found the popup timing is probably not a bug: the code sets 8 s and an earlier video measured 8 s drawn;
+  last night's reading counted the text left in the page while it faded. A video check decides it.
+- **Helper H finished** (the Strategy prompt for questions about the Deck itself). Its answer-quality run is going on
+  this PC's own copy of the Deck's model, so it does not compete with the Deck.
 
 ## For the helpers: who owns which files
 

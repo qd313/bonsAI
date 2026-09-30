@@ -170,9 +170,13 @@ describe("Down with the ring on a cover", () => {
 
     expect(a.down()).toBe(true);
 
-    expect(a.pane.scrollTop).toBe(220);
-    expect(a.top(cover1)).toBe(69); // 19 px above the band, as the Deck measured
     expect(document.activeElement).toBe(a.stops[0]);
+    // The scroll cut the cover 19 px above the band (the Deck measured it), so the box now holds the
+    // ring; it is brought back wholly under the tab header, top edge 8 px below it, cover and all.
+    // Until 2026-09-29 the box was left at 67% visible (plan76-P76-WALK-COVERS-try2.json).
+    expect(a.top(a.stops[0]!)).toBe(PANE_TOP + 8);
+    expect(a.bottom(a.stops[0]!)).toBeLessThanOrEqual(290);
+    expect(a.top(cover1)).toBeGreaterThanOrEqual(PANE_TOP);
   });
 
   /*
@@ -206,8 +210,11 @@ describe("Down with the ring on a cover", () => {
     hide.focus();
 
     expect(a.down()).toBe(true);
-    expect(a.top(hide)).toBe(69); // carried up with the scroll, 19 px above the band
     expect(document.activeElement).toBe(a.stops[0]);
+    // The scroll carried the line 19 px above the band; the box that now holds the ring is brought
+    // back under the header, and the line with it.
+    expect(a.top(a.stops[0]!)).toBe(PANE_TOP + 8);
+    expect(a.top(hide)).toBeGreaterThanOrEqual(PANE_TOP);
   });
 
   it("does not put the ring back on the cover it left, and walks on to the next section", () => {
@@ -215,10 +222,16 @@ describe("Down with the ring on a cover", () => {
     const cover1 = a.cover(a.stops[0]!, [289, 344]);
     cover1.focus();
 
-    a.down(); // hop to section 1
-    expect(a.down()).toBe(true); // section 2's top is now at y 267, on screen
+    a.down(); // hop to section 1, brought wholly under the header: section 2 is now below the dock
+    expect(document.activeElement).toBe(a.stops[0]);
+    let presses = 0;
+    while (document.activeElement === a.stops[0] && presses < 6) {
+      expect(a.down()).toBe(true); // scrolls the panel until section 2 is on screen, then lands on it
+      presses += 1;
+      expect(document.activeElement).not.toBe(cover1);
+    }
     expect(document.activeElement).toBe(a.stops[1]);
-    expect(document.activeElement).not.toBe(cover1);
+    expect(presses).toBeLessThanOrEqual(2);
   });
 
   it("lands on a cover in the next section rather than on the section around it", () => {

@@ -12,10 +12,14 @@
  *     Pressing Down, in order:
  *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
  *       2. a glossary-term chip on screen and ahead of the ring    -> land on the chip
+ *          (both are lifted clear of the dock if it covers them)
  *       3. the next section, but only if it is already on screen
  *       4. otherwise, scroll the panel and try again on the next press; if that scroll carries
  *          the stop the ring is on off the screen (a cover, an opened cover's "tap to hide"
- *          line, an underlined word), the ring moves to the section that holds it
+ *          line, an underlined word), the ring moves to the section that holds it, and when that
+ *          stop sat in the section's first screenful the panel is set so the section's top sits
+ *          just under the tab header (`revealSectionInBand`): a landing is never left half hidden
+ *          (Deck, 2026-09-29: the box sat 67% visible, its cover under the header)
  *
  *     Pressing Up is the mirror, and lands on the same stops in reverse:
  *       1. a glossary-term chip on screen and before the ring      -> land on the chip
@@ -101,6 +105,9 @@ import {
   orderedAnswerStops,
 } from "./answerStopRegistry";
 
+/** A pixel or two of an edge is rounding, not a cut. */
+const CUT_TOLERANCE_PX = 1;
+
 /** The section a walk Down is in and the last small stop in it the ring has been on; see `walkAnchor`. */
 let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
 
@@ -142,6 +149,45 @@ export function revealBelowDock(el: HTMLElement, scroll: HTMLElement): boolean {
   if (step < 1) return false;
   const before = scroll.scrollTop;
   scroll.scrollTop = Math.min(panelScrollMax(scroll), before + step);
+  return scroll.scrollTop !== before;
+}
+
+/** Room left above a section the walk brings out from under the tab header. */
+const SECTION_TOP_PAD_PX = 8;
+
+/** Height of the readable band: from the tab header's bottom edge to the dock's top. */
+function bandHeightOf(scroll: HTMLElement): number {
+  return readableBottomOf(scroll) - scroll.getBoundingClientRect().top;
+}
+
+/**
+ * Feature: a section the ring lands on is readable from its top, not half under the tab header.
+ * Input: the landed section and its scroll container. Output: true when the panel moved.
+ *
+ * The walk's contract is that every stop the ring lands on is wholly visible, or, when it is taller
+ * than the readable band, has its top edge visible (docs/test-evidence/plan76-P76-WALK-COVERS-try2.json:
+ * the ring sat on a box 67% on screen, its top third, where its cover is, under the tab header).
+ * `revealBelowDock` only ever scrolls the other way, for the dock. Here: a top cut off by the header
+ * is brought to just under it (section a screen tall or not); else a bottom cut off by the dock, on a
+ * section that fits, is lifted clear of it, never past the section's own top. Nothing moves when the
+ * section already meets the contract. One pass at the moment of landing, like `revealBelowDock`.
+ */
+export function revealSectionInBand(section: HTMLElement, scroll: HTMLElement): boolean {
+  const rect = section.getBoundingClientRect();
+  const paneTop = scroll.getBoundingClientRect().top;
+  const limit = readableBottomOf(scroll);
+  const band = limit - paneTop;
+  const height = rect.bottom - rect.top;
+  let delta = 0;
+  if (rect.top < paneTop - CUT_TOLERANCE_PX) {
+    const pad = Math.min(SECTION_TOP_PAD_PX, Math.max(0, band - height));
+    delta = rect.top - (paneTop + pad);
+  } else if (height <= band && rect.bottom > limit + CUT_TOLERANCE_PX) {
+    delta = rect.bottom - limit;
+  }
+  if (delta === 0) return false;
+  const before = scroll.scrollTop;
+  scroll.scrollTop = Math.max(0, Math.min(panelScrollMax(scroll), before + delta));
   return scroll.scrollTop !== before;
 }
 
@@ -451,9 +497,6 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
  * the ring is moved up to the section the stop is not offered to it again. See there.
  */
 
-/** A pixel or two of an edge is rounding, not a cut. */
-const CUT_TOLERANCE_PX = 1;
-
 /**
  * Where a walk Down is, for choosing the next cover or word: the ring itself, except when the ring is
  * on a section that holds small stops it has already been on. Then it is the LAST of them, so the
@@ -504,7 +547,21 @@ function keepRingOnScreen(
     direction === "down"
       ? rect.top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
       : rect.bottom > readableBottomOf(scroll) + CUT_TOLERANCE_PX;
-  if (cut) focusAnswerStop(section);
+  if (cut && focusAnswerStop(section) && direction === "down") {
+    /*
+     * The ring is now on a box whose top, where the cover or word sits, the scroll has just carried
+     * under the tab header (the Deck, docs/test-evidence/plan76-P76-WALK-COVERS-try2.json: 67% of the
+     * box showing). Bring the box's top back into the band, when the stop the ring left sits in the
+     * first screenful of the box (a cover at the head of a section). That un-cuts the small stop, which
+     * is fine: `walkAnchor` remembers it, so it is not offered again. Steam's own glide, if it comes,
+     * finds the box already on screen and has nothing to do. A word deep in a long section is left
+     * alone: the box's top is a long way up and reading it by scrolling is the design.
+     */
+    const sectionTop = section.getBoundingClientRect().top;
+    if (rect.bottom - sectionTop + SECTION_TOP_PAD_PX <= bandHeightOf(scroll)) {
+      revealSectionInBand(section, scroll);
+    }
+  }
 }
 
 /**
@@ -582,6 +639,8 @@ export function handleAnswerBubbleMoveDown(
   const fence = findNextSpoilerFenceInView(bubble, inView, anchor);
   if (fence && focusSpoilerFence(fence)) {
     walk = null;
+    /* A cover half behind the dock is not a landing a person can read; lift it clear, as for a section. */
+    revealBelowDock(fence, scroll);
     return true;
   }
 
@@ -605,6 +664,7 @@ export function handleAnswerBubbleMoveDown(
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) {
     walk = null;
+    revealBelowDock(termChip, scroll);
     return true;
   }
 

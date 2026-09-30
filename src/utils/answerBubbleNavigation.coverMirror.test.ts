@@ -99,11 +99,17 @@ describe("Down and Up visit the same stops", () => {
 
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(cover);
-    // Down from the cover scrolls the tall section: the next section is 210 px below the band.
+    // Down from the cover scrolls the tall section (the next section is 210 px below the band), which
+    // cuts the cover off at the top. The ring goes to the section and the panel is set so its top, cover
+    // and all, sits at the header's edge: the section starts at 100, the pane at 88.
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(80);
+    expect(document.activeElement).toBe(a.stops[0]);
+    expect(a.pane.scrollTop).toBe(100 - 88);
+    // Reading the tall section then goes on by scrolling, 80 px a press.
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(160);
+    expect(a.pane.scrollTop).toBe(100 - 88 + 80);
+    expect(a.down()).toBe(true);
+    expect(a.pane.scrollTop).toBe(100 - 88 + 160);
   });
 });
 
@@ -124,7 +130,10 @@ describe("Down from a cover the ring is already on", () => {
 
     expect(a.down()).toBe(true);
 
-    expect(a.pane.scrollTop).toBe(80); // the panel moved, so the press did something
+    // The press did something a person can see: the scroll cut the cover off, so the ring moved to
+    // the section around it and the panel was set to that section's top.
+    expect(document.activeElement).toBe(a.stops[0]);
+    expect(a.pane.scrollTop).toBe(100 - 88);
   });
 
   it("walks on to the next cover instead of landing on the same one", () => {

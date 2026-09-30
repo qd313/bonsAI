@@ -11,7 +11,7 @@ import { describe, expect, it } from "vitest";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 
 import { PullModelsModal } from "./PullModelsModal";
-import { pullModelLicencePillText } from "../data/pullModelCatalog";
+import { pullModelLicencePillText } from "../data/pullModelLicencePill";
 import { setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 function renderModal() {

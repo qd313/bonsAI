@@ -14,7 +14,8 @@
  * Does not: Decide what the pill says; `pullModelLicencePillText()` in the catalog file does.
  */
 import React from "react";
-import { pullModelLicencePillText, type PullModelEntry } from "../data/pullModelCatalog";
+import type { PullModelEntry } from "../data/pullModelCatalog";
+import { pullModelLicencePillText } from "../data/pullModelLicencePill";
 
 export const PullModelLicenceSlot: React.FC<{ entry: PullModelEntry }> = ({ entry }) => {
   const pillText = pullModelLicencePillText(entry);

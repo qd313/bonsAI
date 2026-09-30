@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 105,
-  "edgeCount": 279,
+  "fileCount": 107,
+  "edgeCount": 281,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -12,6 +12,7 @@
     "py_modules/backend/services/async_background_job.py",
     "py_modules/backend/services/async_task_lifecycle.py",
     "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/branch_menu_example_guard.py",
     "py_modules/backend/services/capabilities.py",
     "py_modules/backend/services/compat_topic_router.py",
     "py_modules/backend/services/desktop_note_service.py",
@@ -303,6 +304,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/branch_menu_example_guard.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/chat_memory_step.py",
       "count": 1
     },
@@ -388,6 +393,10 @@
     },
     {
       "path": "py_modules/backend/services/ollama_preload_service.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/ollama_stream_failures.py",
       "count": 1
     },
     {
@@ -527,7 +536,7 @@
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ask_topic_instructions.py",
-        "py_modules/backend/services/ollama_chat_stream.py",
+        "py_modules/backend/services/ollama_stream_failures.py",
         "py_modules/backend/services/rag_corpus_status.py",
         "py_modules/backend/services/vac_check_commands.py"
       ]
@@ -671,6 +680,12 @@
         "main.py",
         "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_service.py"
+      ]
+    },
+    "py_modules/backend/services/branch_menu_example_guard.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/response_verify.py"
       ]
     },
     "py_modules/backend/services/capabilities.py": {
@@ -1078,9 +1093,9 @@
     },
     "py_modules/backend/services/ollama_chat_stream.py": {
       "imports": [
-        "py_modules/backend/constants.py",
         "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
+        "py_modules/backend/services/ollama_stream_failures.py",
         "py_modules/backend/services/ollama_window_fit.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/token_accounting_service.py"
@@ -1222,6 +1237,14 @@
         "py_modules/backend/services/ollama_service.py"
       ]
     },
+    "py_modules/backend/services/ollama_stream_failures.py": {
+      "imports": [
+        "py_modules/backend/constants.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_chat_stream.py"
+      ]
+    },
     "py_modules/backend/services/ollama_window_fit.py": {
       "imports": [
         "py_modules/backend/services/token_accounting_service.py"
@@ -1338,6 +1361,7 @@
     "py_modules/backend/services/response_verify.py": {
       "imports": [
         "py_modules/backend/ollama_reply_limits.py",
+        "py_modules/backend/services/branch_menu_example_guard.py",
         "py_modules/backend/services/strategy_spoiler_policy.py"
       ],
       "importedBy": [

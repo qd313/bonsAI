@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 634,
-  "edgeCount": 1761,
+  "fileCount": 636,
+  "edgeCount": 1766,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1352,7 +1352,8 @@
     },
     "src/components/PullModelLicenceSlot.tsx": {
       "imports": [
-        "src/data/pullModelCatalog.ts"
+        "src/data/pullModelCatalog.ts",
+        "src/data/pullModelLicencePill.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -1395,7 +1396,7 @@
     "src/components/PullModelsModal.licencePill.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
-        "src/data/pullModelCatalog.ts",
+        "src/data/pullModelLicencePill.ts",
         "src/test-harness/fakeDeckyRpc.ts"
       ],
       "importedBy": []
@@ -2092,11 +2093,11 @@
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PullModelLicenceSlot.tsx",
-        "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/data/pullModelCatalog.test.ts",
+        "src/data/pullModelLicencePill.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/usePullModelCatalog.ts",
@@ -2118,6 +2119,15 @@
         "src/utils/pullModelFilters.ts",
         "src/utils/pullModelRecommendations.test.ts",
         "src/utils/pullModelRecommendations.ts"
+      ]
+    },
+    "src/data/pullModelLicencePill.ts": {
+      "imports": [
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelLicenceSlot.tsx",
+        "src/components/PullModelsModal.licencePill.test.tsx"
       ]
     },
     "src/data/replyLanguage.test.ts": {
@@ -4978,6 +4988,15 @@
         "src/utils/activeOllamaRoutingTag.test.ts"
       ]
     },
+    "src/utils/answerBubbleBandGeometry.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/spoilerFenceRegistry.ts"
+      ],
+      "importedBy": [
+        "src/utils/answerBubbleNavigation.ts"
+      ]
+    },
     "src/utils/answerBubbleElRegistry.test.ts": {
       "imports": [
         "src/utils/answerBubbleElRegistry.ts",
@@ -5064,6 +5083,7 @@
     },
     "src/utils/answerBubbleNavigation.ts": {
       "imports": [
+        "src/utils/answerBubbleBandGeometry.ts",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/chatPanelScroll.ts",
@@ -5572,6 +5592,7 @@
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
+        "src/utils/answerBubbleBandGeometry.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -6646,6 +6667,7 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/test-harness/deckAnswerWalk.ts",
+        "src/utils/answerBubbleBandGeometry.ts",
         "src/utils/answerBubbleNavigation.coverMirror.test.ts",
         "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",

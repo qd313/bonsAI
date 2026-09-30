@@ -56,11 +56,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 1068,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1050,
       "role": ""
@@ -101,6 +96,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 846,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 838,
       "role": ""
@@ -122,7 +122,7 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 768,
+      "lines": 776,
       "role": ""
     },
     {
@@ -161,11 +161,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/response_verify.py",
-      "lines": 654,
-      "role": ""
-    },
-    {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 653,
       "role": ""
@@ -199,6 +194,11 @@
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 600,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 591,
+      "role": "Prompt build, Ollama HTTP, streaming"
     }
   ]
 }

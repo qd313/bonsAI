@@ -30,7 +30,9 @@ How it works: `_stream_ollama_chat_once()` runs in this order.
   4. Between chunks it checks whether the person pressed Stop, and whether the reply has grown
      past the safety limits (`ollama_reply_limits.py`); either one closes the connection early.
   5. When the stream ends it returns the text and the numbers Ollama reported, or one small
-     failure dict for a cut-off, an HTTP error, a timeout or a stop.
+     failure dict for a cut-off, an HTTP error, a timeout or a stop. The wording of the
+     stopped, HTTP, unreachable, timed-out and unexpected-error replies lives in
+     ollama_stream_failures.py.
 """
 
 import json
@@ -41,7 +43,6 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, Optional
 
-from backend.constants import OLLAMA_TAB_WHERE_AI_RUNS
 from backend.ollama_reply_limits import (
     MAX_STREAM_ANSWER_CHARS,
     MAX_STREAM_LINE_BYTES,
@@ -51,6 +52,13 @@ from backend.ollama_reply_limits import (
 )
 
 from backend.services.bonsai_stream_tags import extract_bonsai_status
+from backend.services.ollama_stream_failures import (
+    cancelled_reply,
+    http_error_reply,
+    request_failed_reply,
+    timed_out_reply,
+    url_error_reply,
+)
 from backend.services.strategy_guide_parse import hide_incomplete_strategy_branch_fence
 from backend.services.token_accounting_service import known_window_tokens, resolve_window_tokens
 from backend.services.ollama_window_fit import (
@@ -334,11 +342,7 @@ def _stream_ollama_chat_once(
                         except Exception:
                             pass
                         logger.info("ask_ollama: cancelled mid-request model=%s", model_name)
-                        return {
-                            "success": False,
-                            "response": "Request stopped (connection closed).",
-                            "cancelled": True,
-                        }
+                        return cancelled_reply()
                     while True:
                         nl = pending.find(b"\n")
                         if nl < 0:
@@ -351,11 +355,7 @@ def _stream_ollama_chat_once(
                             jo = json.loads(line.decode("utf-8", "replace"))
                         except json.JSONDecodeError:
                             if _should_cancel():
-                                return {
-                                    "success": False,
-                                    "response": "Request stopped (connection closed).",
-                                    "cancelled": True,
-                                }
+                                return cancelled_reply()
                             logger.warning(
                                 "ask_ollama: NDJSON decode skip model=%s line=%s",
                                 model_name,
@@ -377,11 +377,7 @@ def _stream_ollama_chat_once(
                     except Exception as exc:
                         if _should_cancel():
                             logger.info("ask_ollama: read interrupted by cancel model=%s (%s)", model_name, exc)
-                            return {
-                                "success": False,
-                                "response": "Request stopped (connection closed).",
-                                "cancelled": True,
-                            }
+                            return cancelled_reply()
                         raise
                     if not chunk:
                         break
@@ -459,11 +455,7 @@ def _stream_ollama_chat_once(
                     except Exception:
                         logger.exception("ask_ollama: on_delta terminal hook failed model=%s", model_name)
                 if _should_cancel():
-                    return {
-                        "success": False,
-                        "response": "Request stopped (connection closed).",
-                        "cancelled": True,
-                    }
+                    return cancelled_reply()
                 return {
                     "success": True,
                     "assistant_raw": assistant_raw,
@@ -492,52 +484,14 @@ def _stream_ollama_chat_once(
             model_name,
             len(body),
         )
-        return {
-            "success": False,
-            "response": (
-                f"Ollama returned HTTP {e.code} for model '{model_name}'. "
-                "Check the host Ollama log; the full error body is not copied into the chat UI."
-            ),
-            "status": e.code,
-            "body": body,
-            "thinking_unsupported": _is_thinking_unsupported_error(e.code, body),
-        }
+        return http_error_reply(e.code, body, model_name, _is_thinking_unsupported_error(e.code, body))
     except urllib.error.URLError as e:
-        if isinstance(e.reason, (TimeoutError, socket.timeout)):
-            return {
-                "success": False,
-                "response": (
-                    f"Ollama did not respond within {request_timeout_seconds} seconds. "
-                    "Check that Ollama is running and your PC IP is correct."
-                ),
-            }
-        return {
-            "success": False,
-            "response": (
-                f"Could not reach Ollama at the configured host for model '{model_name}'. "
-                "Verify PC IP, firewall, and that Ollama is listening."
-            ),
-        }
+        return url_error_reply(e.reason, model_name, request_timeout_seconds)
     except (TimeoutError, socket.timeout):
-        return {
-            "success": False,
-            "timed_out": True,
-            "response": (
-                f"Ollama did not finish within {request_timeout_seconds} seconds for model '{model_name}'. "
-                "On Steam Deck this usually means inference is on CPU — configure Ollama to use the GPU, "
-                f"or pull a smaller model in {OLLAMA_TAB_WHERE_AI_RUNS} (e.g. qwen2.5:1.5b for Speed mode)."
-            ),
-        }
+        return timed_out_reply(model_name, request_timeout_seconds)
     except Exception as e:
         if cancel_requested and cancel_requested():
             logger.info("ask_ollama: treating error as cancel model=%s err=%s", model_name, e)
-            return {
-                "success": False,
-                "response": "Request stopped (connection closed).",
-                "cancelled": True,
-            }
+            return cancelled_reply()
         logger.exception("ask_ollama: unexpected error model=%s", model_name)
-        return {
-            "success": False,
-            "response": f"Ollama request failed for model '{model_name}'. Check the Deck plugin log.",
-        }
+        return request_failed_reply(model_name)

@@ -285,6 +285,17 @@ Not started.
   test's own plugin reload over the game. Two Deck reads in block 3 decide whether it is real.
 - **Helper D round two landed** (`de74af02`): the install buttons say what they install ("Install Gemma 4 (all-in-one
   model)"), and "FOSS" is gone from the setup boxes.
+- **Deck block 2 (build `bce7d0fd`):** passed — the Strategy choices being understood with a game running (8 of 8), the
+  reply size limits, the `~~~` safety net, the ban-lookup row after a switch, no Helpful on a stopped answer after a
+  switch, the speech model, Strategy about the Deck itself, the Ollama-tab boxes' return (box half), and the popup
+  (7.87 s drawn, so the "10 seconds" was never a bug). The walk: every landing on screen and Up and Down visit the
+  same stops, but Down takes an extra scroll-only press between sections, and Up into a section taller than the
+  screen shows neither edge — both back to helper E (round 2). The model list still shows "FOSS" on the two Qwen 3B
+  models — helper D (round 3). New and unexplained: with a game running, a Hollow Knight spoiler question came back
+  with no covers (seen once) — helper J (`a5fa30de7c62d2814`) is reading why. Two checks could not run and move to
+  block 3 (the https address, the library's go-ahead). **For the maintainer:** the first driver asked about 14 test
+  questions in your chat 1 (no spare chat existed yet); nothing was deleted.
+- **Deck driver 2** (`adabb010ecd883584`) took over for block 1b, the chores and the blocked checks.
 - **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
   (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 

@@ -2580,3 +2580,118 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   **2026-09-29 (plan 77, helper G):** not changed. The code sets 8 seconds, and plan 38's video test measured 8.0 seconds drawn; the page keeps the text about 1.5 to 2 seconds longer while it fades and is removed, which is what the 150 ms page reading counted. Owed: a video check, row **P77-POPUP-VIDEO** (record the real popup over a game and count the frames drawn; pass is about 8 seconds). Stays in Bugs until then.
 
   **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** Closed, not a bug: measured 7.87 s drawn, frame by frame over a game; the earlier 10 s counted the text lingering in the page while it faded. The recording is kept only on the maintainer's PC (`recordings/DeckRecord_20260930_000015_game.mkv`) (row P77-POPUP-VIDEO). Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+
+## Moved from the roadmap 2026-09-30 (plan 77, Deck blocks 1b and 3)
+
+### Soft reply-length cap and thinking budget (closed 2026-09-30)
+
+- ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. **01, 02 and
+  03 all pass**, confirmed on the Deck 2026-09-17: a long reply read with no seam, and stopping partway kept
+  the partial text with a clear notice. **SOFT-PREDICT-05 passed 2026-09-18** with Thinking Off. Left:
+  **SOFT-PREDICT-04**, **tried 2026-09-18, blocked** — the test question came back as a short spoiler-careful
+  refusal, so no reply reached the length wall. **Tried again 2026-09-23, still unclear:** the finished text
+  was clean, no half-drawn menu block and no stray JSON, but the reply stopped on its own at 1,117 tokens
+  against a 2,112-token limit, so it never had to continue and the row's own join point never happened.
+  [Detail](roadmap-details.md#soft-reply-length-cap-and-thinking-budget).
+  **SOFT-PREDICT-04 blocked again 2026-09-28 (plan 76):** cap 1,600 tokens, the reply stopped by itself at 403. Evidence
+  `docs/test-evidence/plan76-SOFT-PREDICT-04.json`.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** SOFT-PREDICT-04 passed on a test build with the limit at 300: the wall was hit, two soft continues, clean text at every read (no half-drawn fence, stray JSON or "Continuing" in the finished or saved text). EXPERT-CAP-01 passed both halves (Expert 1200 against Speed 800; the continue half: three requests, two soft continues). A text-loss bug found in the same run is filed in Bugs (rows SOFT-PREDICT-04, EXPERT-CAP-01). Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`, `docs/test-evidence/plan77-EXPERT-CAP-01.json`, `docs/test-evidence/plan77-EXPERT-CAP-01-continue.json`.
+
+### KB transparency matches what the model got (closed 2026-09-30)
+
+- ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, passed 2026-09-22,** once the
+  answer-lines lane added the missing log line. Row **KB-TRANSPARENCY-01**. **All attached names confirmed
+  on the Deck 2026-09-23**, both with nothing running and with Half-Life 2 running. **Still owed:** a case
+  where a note is dropped for space — not yet reproduced despite trying. [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
+  **Blocked 2026-09-28 (plan 76), dropped-for-space half still owed:** 14 probe runs over 7 games in Strategy and Expert, none cut.
+  Evidence `docs/test-evidence/plan76-KB-TRANSPARENCY-01.json`.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** The dropped-for-space half passed: with the note room cut to 1,500 bytes the log said 2 more were dropped, one note attached, and Show details listed exactly that one (row KB-TRANSPARENCY-01). Evidence `docs/test-evidence/plan77-KB-TRANSPARENCY-01.json`.
+
+### Deleting a chat whose file is already missing leaves its row in the list (closed 2026-09-30)
+
+- ★★ `[chat]` **Deleting a chat whose file is already missing leaves its row in the list** —
+  **VERIFY, fixed 2026-09-27 (plan 72, `b7339ea4`).**
+ 
+  **Blocked 2026-09-28 (plan 76):** the Deck already holds eight chats, so no test chat could be made without deleting one of the
+  maintainer's. Evidence `docs/test-evidence/plan76-CHAT-DELETE-MISSING-01.json`.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** With a chat's file removed over SSH, Delete took its row out of the list and the index, the other seven chats were byte-identical, no error, and the ring landed on the chat row (row CHAT-DELETE-MISSING-01). Evidence `docs/test-evidence/plan77-CHAT-DELETE-MISSING-01.json`.
+
+### Three screens still say "FOSS" or "FOSS-friendly" for the default model, and the Tier 2 button "one-model multimodal" installs Gemma 4, now Tier 1 (closed 2026-09-30)
+
+- ★ `[ollama]` **Three screens still say "FOSS" or "FOSS-friendly" for the default model, and the Tier 2 button "one-model multimodal" installs Gemma 4, now Tier 1** — **VERIFY, fixed 2026-09-29 (plan 77 helper D, `de74af02`). Was OPEN.**
+  Wording only. The button now reads "Install Gemma 4 (all-in-one model)" with a box titled "Install Gemma 4?"; the Tier 1 box, the update box, the first-run notice, the "Enable Tier 2 before pulling?" box and the Settings tier intro now say "open-source licence (Apache 2.0 or MIT)" or "small model" instead of "FOSS". Still using the word, left on purpose: the Advanced toggle "Allow non-FOSS and unclassified Ollama tags (Tier 3)" and the "FOSS" badge in the model list.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** The second button reads "Install Gemma 4 (all-in-one model)"; the Tier 1 box says "one small model"; no "FOSS" or "one-model multimodal"; the ring opens on "Not now". The Gemma 4 box is titled "Turn on internet downloads?" while downloads are off (row P77-INSTALL-WORDING). Evidence `docs/test-evidence/plan77-P77-INSTALL-WORDING.json`.
+
+### The model tiers' licence labels (closed 2026-09-30)
+
+- ★★ `[ollama]` **The model tiers' licence labels** — **VERIFY, fixed 2026-09-29 (plan 77 helper D, `483797f2`, `cae49d5a`). Was OPEN, found 2026-09-28 (the licence check);
+  the maintainer's call: labels only.** From memory, to confirm on each model's page: Qwen 2.5's 3B
+  and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
+  sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
+  Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  Checked against each model's page 2026-09-29. Moved out of "open source only": Qwen 2.5 72B, Qwen 2.5 coder 3B, Qwen 2.5 VL 72B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna, orca-mini; gpt-oss moved up (Apache 2.0). README and troubleshooting now say Gemma 4 is Tier 1. The default picture model qwen2.5vl:3b and qwen2.5:3b stay in Tier 1 with a "Qwen Research (3B size)" label; the maintainer's call is open (plan 77 questions, item 1).
+  **2026-09-29 (plan 77 block 2, row P77-LICENCE-FILTER):** the filter half PASSED (qwen2.5-coder:3b absent from "Open source only"; qwen3, qwen3.5, gemma4 and granite present). The label half FAILED: qwen2.5vl:3b and qwen2.5:3b show a "FOSS" pill and "Qwen Research" appears nowhere on screen. Being fixed (plan 77 helper D, round 3). Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+  **2026-09-30 (plan 77 helper D round 3, landed in `004d9720`):** label fix landed, re-check owed (block 3). The model list's licence pill says "FOSS" only for an Apache or MIT licence; qwen2.5vl:3b and qwen2.5:3b now show an amber "Qwen Research" pill. Row **P77-LICENCE-FILTER** still owed.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** The amber "Qwen Research" pill shows on qwen2.5vl:3b and qwen2.5:3b, both lines readable, no clipping, columns do not shift; the other 14 rows show the green "FOSS" pill (row P77-LICENCE-FILTER). Evidence `docs/test-evidence/plan77-P77-LICENCE-FILTER.json`.
+
+### The speech model is downloaded from a changing address and not checked (closed 2026-09-30)
+
+- ★ `[voice]` **The speech model is downloaded from a changing address and not checked** — **VERIFY, fixed 2026-09-29 (plan 77 helper C, `2f87bc98`, `29b085e6`, `2b32e1cd`). Was OPEN, found
+  2026-09-28 (security review, finding 8).** Pin the address, check the file's
+  checksum, cap its size; also refuse a knowledge-library file list with no checksums.
+  [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  The speech model download is pinned to one commit with a checksum and a size cap; a knowledge-library file list with a blank or missing checksum is refused.
+  **2026-09-29 (plan 77 block 2):** **P77-SPEECH-PINNED PASSED** (engine and tiny.en read ready; no checksum lines in the log; the download-check half rests on unit tests). **P77-LIBRARY-CHECKSUMS still owed:** the box opened on "Not now"; the go-ahead half was not run; block 3. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** P77-SPEECH-PINNED passed 2026-09-29 (engine and tiny.en ready, no checksum lines; the download-check half rests on unit tests). P77-LIBRARY-CHECKSUMS passed: the library reported already up to date, no checksum error, and a Hades question still attached 3 notes. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`, `docs/test-evidence/plan77-P77-LIBRARY-CHECKSUMS.json`.
+
+### After a Down press that scrolls past a spoiler cover, the ring sits on the section's box with its top third under the tab header (closed 2026-09-30)
+
+- ★ `[focus]` **After a Down press that scrolls past a spoiler cover, the ring sits on the section's box with its top third under the tab header** — **VERIFY, fixed 2026-09-29 (plan 77 helper E, `5578656c`). Was OPEN, found 2026-09-29 (plan 76, Deck block 3).**
+  The box is only 67% on screen and its cover is the hidden part; with a game running it also sat partly under the dock's action row.
+  Small; the cover-walk fix works around it, so nothing loops. It is why the free-play sweep failed (**QA-FREE-PLAY-01**).
+  Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
+  Known limits the helper left on purpose: a cover deep inside a section taller than the screen may not be offered going Up; glossary words get no box stop. Every landing going Down is now fully on screen.
+  **2026-09-29 (plan 77 block 2, build `bce7d0fd`, rows P76-WALK-COVERS re-run and REPLY-STOPS-MIRROR-01, both still owed):** every landing inside the band, the Up and Down stops are the same (box before its cover going Up), no loop, and A opens covers both ways. The rig marked both FAIL on the runbook's wording because Down takes one extra press that only scrolls between sections that fit the screen (3 extra presses on the Soul Sanctum answer, the box 8 to 20 px under the header during that press). The session's ruling: the stops mirror; the extra presses are a follow-up, being fixed (helper E, round 2). QA-FREE-PLAY-01 with no game PASSED; the game half FAILED (see the new Bugs lines). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`, `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+
+  **Closed 2026-09-30, passed by the session's ruling (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** Every landing inside the band; the only overhang is 1 px (rounding). The rig's own words for QA-FREE-PLAY-01 read PASS with the known false alarms (rows P76-WALK-COVERS, QA-FREE-PLAY-01). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`, `docs/test-evidence/plan77-QA-FREE-PLAY-01-game.json`.
+
+### Walking down a reply and walking back up visit different stops (closed 2026-09-30)
+
+- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed 2026-09-29 (plan 77 helper E, `5578656c`). Was PARTIAL, sighted three
+  more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
+  same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
+  later slips. [Detail](roadmap-details.md#flow-2b-bugs).
+  **2026-09-28 (plan 74):** with a hidden spoiler on screen, 17 of 18 stops now mirror; the one mismatch is the top spoiler
+  cover, the same fault as the spoiler-cover entry below (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01.json`).
+  **2026-09-28 (plan 74, Deck pass 3, after `cb88c012`):** the first cover now mirrors. One stop of 13 still differs: on a
+  section that holds only a cover, Down lands on the section's outer box (245×71) while Up lands on the cover inside it
+  (237×55). Seen on two answers (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`, FAIL). Still owed: row **REPLY-STOPS-MIRROR-01**.
+  **2026-09-28 (plan 76 lane 3, `3576846c`):** fixes the last known stop, a section that holds only a cover. Row
+  **REPLY-STOPS-MIRROR-01** is still owed. One exception is by design: a section the ring was moved onto by a scroll can
+  be a stop going Down only.
+  **2026-09-29 (plan 76, Deck block 2b, build `ab56e2a2`):** row **REPLY-STOPS-MIRROR-01** FAILED. Down and Up do not visit the same
+  stops: the walk loops on the first cover. Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`.
+  **Fixed again (`8151dd54`), and re-run on the Deck 2026-09-29 (plan 76, block 3, build `4af8e7a1`):** every stop mirrors except one known
+  by-design stop: a section's box that Down visits after a scroll and Up skips. A section holding only a cover now takes the ring on the
+  cover itself, and A opens it both ways (that part is fixed and proven). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`.
+  **The maintainer's call 2026-09-29:** Up stops on the section's box too; being built in plan 77 (helper E). That box is also the 67%-visible stop in the new bug at the top of Bugs.
+  Per D120, Up now stops on the section's box too (the maintainer's call 2026-09-29).
+  **2026-09-29 (plan 77 block 2, build `bce7d0fd`, rows P76-WALK-COVERS re-run and REPLY-STOPS-MIRROR-01, both still owed):** every landing inside the band, the Up and Down stops are the same (box before its cover going Up), no loop, and A opens covers both ways. The rig marked both FAIL on the runbook's wording because Down takes one extra press that only scrolls between sections that fit the screen (3 extra presses on the Soul Sanctum answer, the box 8 to 20 px under the header during that press). The session's ruling: the stops mirror; the extra presses are a follow-up, being fixed (helper E, round 2). QA-FREE-PLAY-01 with no game PASSED; the game half FAILED (see the new Bugs lines). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`, `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+
+  **Closed 2026-09-30, passed by the session's ruling (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** The Up list is the Down list reversed, except one scroll-only press, which is not a stop; the box comes before its cover going Up (row REPLY-STOPS-MIRROR-01). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`.
+
+### Walking Up into a section taller than the screen shows neither its top nor its bottom (closed 2026-09-30)
+
+- ★ `[focus]` **Walking Up into a section taller than the screen shows neither its top nor its bottom** — **VERIFY, fixed 2026-09-30 (plan 77 helper E round 2, `fb3cfb2d`, `05b59434`). Was OPEN, found 2026-09-29 (plan 77, Deck block 2).**
+  With a game running, a 348 px section in a 206 px band was landed at y66 to 414: top 58 px under the header and bottom 84 px under the dock. Being fixed (plan 77, helper E round 2). Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+  Going Up into a section taller than the screen now lands with its bottom edge just above the dock.
+
+  **Closed 2026-09-30, passed by the session's ruling (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** With a game running, 32 stops, 0 cycles; the tall section is entered going Up with its bottom at the dock (1 px past, rounding) (row QA-FREE-PLAY-01, game half). Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01-game.json`.

@@ -1,0 +1,15 @@
+{
+  "row": "KB-TRANSPARENCY-01 (dropped-for-space half)",
+  "build_commit": "bce7d0fd plus the temporary edit knowledge_base_service.py strategy note room 6_144 -> 1_500 bytes",
+  "deck_time": "Deck local 2026-09-30 00:24-00:27",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Strategy mode, Thinking Off, KB on (version 2026.09.26), no game, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca.",
+  "seen": {
+    "hollow_knight_question": "give me a complete guide to every boss area in Hollow Knight with three detailed paragraphs of tips for each area",
+    "log": "kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=1 [Hollow Knight - Starting out in Hollow Knight] dropped_for_room=2 more",
+    "show_details": "Opened Show details on that answer: chip 'Starting out in Hollow Knight'; Local knowledge base section lists one note only: 'Hollow Knight - Starting out in Hollow Knight' (hollowknight.wiki, CC-BY-SA-3.0, as of 2026-09-05). No other note named.",
+    "half_life_2_run": "For contrast, the Half-Life 2 question attached 3 notes (Sandtraps, Strider, Ravenholm) with dropped_for_room=0 at the same 1,500-byte limit, because those three cards are short."
+  },
+  "expected": "log says dropped_for_room=N more (N at least 1) and Show details lists exactly the notes attached, none of the dropped ones",
+  "verdict": "PASS (N=2, one note attached and shown)"
+}

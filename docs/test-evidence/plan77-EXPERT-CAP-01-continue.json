@@ -1,0 +1,15 @@
+{
+  "row": "EXPERT-CAP-01 continue half",
+  "build_commit": "bce7d0fd plus the temporary low-limit edit (ollama_ask_budgets.py expert 300 and strategy 300; knowledge_base_service.py strategy note room 1,500). Files were backed up on the Deck at /home/deck/p77-*.orig and are put back at the end of the SOFT-PREDICT-04 / KB run.",
+  "deck_time": "Deck local 2026-09-30 00:23-00:24",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Plugin reloaded after the edit (opening failed once, worked on the second try). Thinking Off, Expert mode, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca, no game, Ali G character on.",
+  "pressed": "Question by send script (VERIFIED): 'give me a very long detailed explanation of every performance setting on the Steam Deck and what each one does with examples'; walked to ask; A.",
+  "seen": {
+    "requests": "3 POSTs, each num_predict=300 think=False, each ended done_reason=length eval_count=300",
+    "soft_continue": "soft continue scheduled continue_index=1 and 2 (mode=expert); OK soft_continues=2 done_reason=length; 3,470 letters, 46.2 s",
+    "join": "Read the finished panel text: 0 'Continuing' cues, 0 fence or JSON marks in the reply. The reply stops mid-sentence after the second continue (the limit of two continues), as designed."
+  },
+  "expected": "done_reason=length and a soft continue",
+  "verdict": "PASS"
+}

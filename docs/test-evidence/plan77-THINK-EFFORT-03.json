@@ -1,0 +1,21 @@
+{
+  "row": "THINK-EFFORT leftover (item 6)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "2026-09-30T04:20Z (Deck local 00:20:03)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Model qwen2.5:1.5b (does not think) made the answering model with the star row 'Use qwen2.5:1.5b for Ask' on the AI models screen. Old answering choice: text_model_routing_order [] (default, gemma4:e2b-it-qat answers). Thinking changed Off -> Brief (ask_think_effort 'low'). Scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca, mode Expert, no game.",
+  "pressed": "Question by send script (VERIFIED): 'what does vertical sync do and should I turn it on for handheld play'; walked to ask; A.",
+  "seen": {
+    "log_lines": [
+      "POST model=qwen2.5:1.5b payload_bytes=5119 num_predict=1456 think=True",
+      "WARNING ask_ollama: HTTPError code=400 model=qwen2.5:1.5b body_len=54",
+      "INFO ask_ollama: model does not support thinking - retrying without it model=qwen2.5:1.5b",
+      "POST model=qwen2.5:1.5b payload_bytes=5120 num_predict=1200 think=False",
+      "stream done done_reason=stop eval_count=121; OK response_len=574; run_game_ai_request completed in 7.7s"
+    ],
+    "rejection_body_text": "{\"error\":\"\\\"qwen2.5:1.5b\\\" does not support thinking\"}  (the plugin log only records body_len=54; the text was read by sending the same request straight to Ollama with curl: HTTP 400)",
+    "answer_came": "yes, 574 letters, after one silent retry with thinking off",
+    "toast": "not checked by eye (no screenshot taken during the answer)"
+  },
+  "verdict": "PASS for the retry and the answer. Toast half NOT CHECKED."
+}

@@ -1,0 +1,16 @@
+{
+  "row": "P77-HTTPS-REFUSED",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 01:09-01:13",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Old values noted: 'Run AI on this Deck' ON (ollama_local_on_deck true); PC address field read '192.168.1.' (no address key appears in settings.json). Turned 'Run AI on this Deck' off on the screen. Set the address field with page JavaScript (React native value setter + input event) to https://127.0.0.1:11434; did not press A on the field.",
+  "seen": {
+    "message": "Red text (colour rgb(255,99,71), 12 px) under the field: 'bonsAI can only talk to Ollama over http for now. Use an http:// address.' Also a line 'Install nomic-embed-text on https://127.0.0.1:11434 for Keyword + meaning search - Ask runs there...'.",
+    "test_connection": "Walked to 'Test connection to Ollama' (the ring skipped the field) and pressed A. The plugin log then got a Python traceback: ollama_connection_test.py run_ollama_connection_test -> ollama_health_probe.py probe_ollama_health -> urllib urlopen ... http_open ... socket.gaierror / URLError [Errno -2] Name or service not known. So the test did TRY to send a request (it looked up a host name), it did not stop before sending. It is not a request to 127.0.0.1:11434; the failing lookup shows the address was not parsed as a normal host. The panel showed the same red message afterwards.",
+    "address_saved": "No address key appeared in settings.json at any time (settings diff clean apart from the toggle below); the field showed the typed value until I typed the old value '192.168.1.' back with the same JavaScript.",
+    "restore": "Field set back to '192.168.1.' the same way. 'Run AI on this Deck' turned back on: a beta-notice box 'bonsAI - Local runtime (beta)' opened over the screen and closed Quick Access; A on 'Got it'. The panel then showed ON (toggle true, 'Ollama runs on this Deck at 127.0.0.1:11434') but settings.json still read ollama_local_on_deck false after 20 s. I set it to true with sed and reloaded at once (allowed by the rule). Diff against the block 0 backup afterwards: identical (rc 0).",
+    "normal_question": "After the reload: 'what does fsr do on the steam deck' (VERIFIED) in the scratch chat: POST to http://127.0.0.1:11434 model gemma4:e2b-it-qat, OK, response_len 602, done_reason=stop."
+  },
+  "expected": "red message shows under the field; Test connection: nothing is sent (log shows no request); address not saved",
+  "verdict": "FAIL on 'nothing is sent': Test connection with the https address still ran the connection probe and logged a name-lookup traceback. The message half PASSES; address not saved PASSES. Extra finding: turning 'Run AI on this Deck' back on showed ON in the panel without writing the setting to the file (needed a manual file edit)."
+}

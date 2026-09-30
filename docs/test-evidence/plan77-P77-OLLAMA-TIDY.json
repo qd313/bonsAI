@@ -1,0 +1,14 @@
+{
+  "row": "P77-OLLAMA-TIDY",
+  "build_commit": "bce7d0fd",
+  "deck_time": "2026-09-30T04:17Z",
+  "setup": "Read only. Nothing restarted.",
+  "seen": {
+    "ps_line": "1830 (parent 1662) deck 01:50:39 /home/deck/.local/bin/ollama serve",
+    "unit": "bonsai-ollama-autostart.service is a system-level unit (not in systemctl --user); restarting it needs sudo. Session instruction: do not kill Ollama, mark COULD NOT RUN.",
+    "model_store_size": "4.3G (~/.ollama/models)",
+    "free_space": "/home 735G free of 1.9T (61% used)",
+    "ollama_list": ["nomic-embed-text:latest 274 MB", "gemma4:e2b-it-qat 4.3 GB"]
+  },
+  "verdict": "COULD NOT RUN (Ollama is started by a system unit that needs sudo; not restarted, sizes recorded before only)"
+}

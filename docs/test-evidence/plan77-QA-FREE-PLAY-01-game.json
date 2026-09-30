@@ -1,0 +1,9 @@
+{
+  "row": "QA-FREE-PLAY-01 (game half)",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 01:15-01:20",
+  "screen": "Deck's own screen, page window 854x454; header bottom 84, dock top 290 with the game running",
+  "setup": "DRG Survivor running, Strategy mode, answer to 'explain every class in deep rock survivor in detail'. Sweep recorded in runs/plan77-b3-game-freeplay.json.",
+  "seen": "32 stops, 53 presses, 0 cycles, 6 not fully visible. These are the known false alarms (question row behind Retry, last section behind Copy) plus the tall 363 px section: going Down it is entered with its top at y 88 (inside the band, 67% visible, bottom covered by the dock); going Up it is entered with its bottom at 291, 1 px past the dock top 290 (top at -72). Every other landing inside the band.",
+  "verdict": "PASS with the known false alarms; no cycles. The 1 px overshoot going Up is a note."
+}

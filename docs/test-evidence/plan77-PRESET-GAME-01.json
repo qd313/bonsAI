@@ -1,0 +1,17 @@
+{
+  "row": "PRESET-GAME-01 and KB-ROUTER-01 leftovers (item 24, with Brotato running)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:44-00:47",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Brotato running (launched from Recent Games, plugin reloaded after). Strategy mode, scratch chat.",
+  "preset_game_01": {
+    "pressed": "Up from the question box to the chip 'How do I get started in Brotato?' (read the label first; never A on the question box), then A on the chip.",
+    "seen": "The ask field then read exactly 'How do I get started in Brotato?' (the chip text). Nothing was added after it (no ' - Brotato' tail).",
+    "verdict": "PASS"
+  },
+  "kb_router_01_leftovers": {
+    "question": "the slow-motion aiming barely lasts, how do I get more of it (VERIFIED). Brotato is the only covered game I could have running from the Recent Games row for this pass, and its notes do not mention slow-motion aiming, so this proves the routing, not the wording.",
+    "seen": "log: kb: question chose domain=strategy route=app_id:1942280 method=hybrid attached=3 [Elite and Horde waves; Early regular enemies; Starting out in Brotato] dropped_for_room=0. It chose strategy cards, not a tip. The panel text after the reply had no Proton or log-permission hint (searched for Proton, log file, Steam log, permission).",
+    "verdict": "PASS for both leftovers as described (strategy cards, no permission hint)"
+  }
+}

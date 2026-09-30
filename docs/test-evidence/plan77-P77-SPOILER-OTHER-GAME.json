@@ -1,0 +1,15 @@
+{
+  "row": "P77-SPOILER-OTHER-GAME",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 01:17-01:34",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Deep Rock Galactic: Survivor (appid 2321470) running, launched from Recent Games. Strategy mode, spoiler masking on, scratch chat. Each question sent with the send-question script (VERIFIED) and asked with A on the Ask button.",
+  "seen": {
+    "Q1 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'": "0 covers. Plain answer describes the boss's moves; follow-up choices are about DRG. kb line attached 3 DRG notes (Glyphid Dreadnought, Dreadnought Twins, Hollow Bough). No spoiler or profile log lines.",
+    "Q2 'Hollow Knight Soul Sanctum boss tips'": "0 covers, same DRG notes attached, plain text.",
+    "Q3 'how do I get past the Soul Sanctum fight in Hollow Knight'": "0 covers. (One more identical-topic run was logged at 01:28 because Ask was pressed once more after a context break; it also showed 0 covers.)",
+    "control 'how do I dodge enemy projectiles'": "0 covers, plain answer (done_reason=stop, 543 visible chars, 93 s), DRG notes attached."
+  },
+  "expected": "each Hollow Knight boss answer has at least one hidden cover; the dodge question is plain",
+  "verdict": "FAIL on the first half (0 covers on all three Hollow Knight questions); PASS on the control question. Note: no spoiler-profile log line appeared for the Hollow Knight questions, so the other game's spoiler profile does not seem to be picked up while a different game runs."
+}

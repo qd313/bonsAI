@@ -1,0 +1,21 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01",
+  "build_commit": "bce7d0fd (normal build, temporary edit already put back)",
+  "deck_time": "Deck local 2026-09-30 00:28-00:31",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Strategy mode, Thinking Off, spoiler masking ON (strategy_spoiler_masking_enabled true), strategy_spoiler_auto_reveal_after_consent false (as found, not changed), KB on, no game, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca.",
+  "runs": [
+    {
+      "question": "spoilers are okay, how do I beat the boss in the Soul Sanctum in Hollow Knight?",
+      "log": "kb attached 3 notes (Starting out, Soul Master, Soul, Focus and spells); num_predict=1600; done_reason=stop; response 914 letters.",
+      "seen_live": "The answer named Soul Master and drew one spoiler box. It showed as a COVER on the live turn: element bonsai-spoiler-reveal-target, text 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide).' The saved turn text has 1 bonsai-spoiler fence. I read it about 20 s after the reply finished, so I cannot say whether it was plain while streaming."
+    },
+    {
+      "question": "spoilers are okay, what is the best strategy for fighting Soul Master in Hollow Knight?",
+      "seen_live": "Sampled every 250 ms for 23.6 s (94 reads): 0 covers at any read; the saved turn text has 0 spoiler fences, so nothing was there to hold a cover. Proves nothing about consent."
+    }
+  ],
+  "not_done": "The second half (fold the turn, expand it from history, check the fence is still plain) was NOT run.",
+  "expected": "Strategy ask with 'spoilers are okay' -> all fences plain on live turn; collapse -> expand -> still plain",
+  "verdict": "FAIL for the live-turn half: with 'spoilers are okay' in the question and masking on, one spoiler box was drawn as a tap-to-show cover. (The code treats a consent turn as unwrap-everything, so the owner may want to look at why it was masked. Possible link: strategy_spoiler_auto_reveal_after_consent is false.) The fold and expand half: NOT RUN."
+}

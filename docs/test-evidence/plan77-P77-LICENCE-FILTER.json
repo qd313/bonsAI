@@ -1,0 +1,16 @@
+{
+  "row": "P77-LICENCE-FILTER (label)",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 01:05-01:08",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Ollama tab > Manage AI models. Found: Licence 'Also try open-weight models' and 'Essentials only' on (Filters . 2 on). Nothing ticked, nothing pulled. Filters changed with the box's own controls and put back at the end (checked: the two filters read Also try open-weight models + Essentials only again; settings.json model_policy_tier still open_weight).",
+  "seen": {
+    "as_found_essentials_list": "3 rows: gemma4:e2b-it-qat (green FOSS pill), qwen3.5:4b (green FOSS), qwen2.5vl:3b (amber 'Qwen Research').",
+    "open_source_only_essentials_off": "Licence 'Open source only' + Essentials off: 16 answering/pull rows; pills read from the page: qwen2.5vl:3b and qwen2.5:3b show an amber 'Qwen Research' pill (text colour rgb(253,230,138), 42 x 21 px, two lines of 8 px text at 8.8 px line height); the other 14 rows (gemma4 rows, qwen3.5, qwen3, qwen2.5:1.5b, qwen2.5:7b, granite, llava and so on) show a green 'FOSS' pill (rgb(187,247,208), 35 x 22 px).",
+    "clipping": "For every pill scrollHeight equals clientHeight (Qwen Research 20/20, FOSS 21/21), so nothing is clipped; both lines of 'Qwen Research' are readable in the screenshots.",
+    "columns": "The pill's left edge sits at x 278 or 279 on every row (only the width changes), so the columns do not shift.",
+    "screenshots": ["screenshots/DeckCapture_20260930_010624_game.png (as found, three rows)", "screenshots/DeckCapture_20260930_010656_game.png (Open source only, list scrolled to qwen2.5:1.5b, qwen2.5:3b Qwen Research, qwen2.5:7b, llava:7b)"]
+  },
+  "expected": "qwen2.5vl:3b amber 'Qwen Research' pill with both lines readable; with Essentials off qwen2.5:3b the same; qwen3.5 / qwen2.5:7b / gemma4 green FOSS; columns do not shift",
+  "verdict": "PASS"
+}

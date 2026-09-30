@@ -1,0 +1,16 @@
+{
+  "row": "SUMUP-12 (doubled hidden-block markers)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:54-00:56",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca. Backed up first to /home/deck/p77-93f61878-578f-4dae-8a43-ef5bc45e25ca-sumup.json.orig (the earlier F4 backup, ...json.orig, is the pre-null copy). Wrote the 'both doubled' shape from commit 6843f8e1's test onto the end of the newest assistant turn (turn 37): 'Here is the fight.', opening marker twice (```bonsai-spoiler on two lines), the text 'The boss is your father, zzhidden7731, wearing purple robes.', closing marker twice (``` on two lines), 'Good luck.'. zzhidden7731 is a unique word to search for.",
+  "pressed": "Shoulder buttons away and back to reload the chat from the file; the screen showed one closed cover between 'Here is the fight.' and 'Good luck.' (no fence marks, hidden word not on screen). Then a follow-up 'thanks, can you sum up what to remember about that fight' (VERIFIED) and A on ask.",
+  "seen": {
+    "log_memory_line": "ask_ollama: budget room=16384 ... memory=2507 ... carried=38 turns ... hidden notes removed=3 (the run before said removed=2, so the doubled block counted as one hidden block). The word zzhidden7731 appears 0 times in the whole plugin log for this session.",
+    "new_answer": "40 turns after; the new answer (903 letters, done_reason=stop) does not contain it.",
+    "chat_file": "Word appears once in the whole file, only inside the turn I wrote it into (turn 37, the saved answer itself, as it must). Not in the new answer turn, not in 'subject' (Heat and the Pact of Punishment for Hades), not in a summary (the chat has no summary field yet: summary is None).",
+    "note": "The chat had no automatic summary at this point, so 'not in its summary' is true only because there is none."
+  },
+  "expected": "the hidden text appears nowhere: not in the log's memory line, not in the chat file (outside the saved answer itself), not in the new answer or its summary",
+  "verdict": "PASS (with the note that no summary existed to check)"
+}

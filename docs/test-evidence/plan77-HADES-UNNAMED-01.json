@@ -1,0 +1,31 @@
+{
+  "row": "HADES-UNNAMED-01 and CONST-SPOIL-SPEED-01 (item 18)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:47-00:52",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Hades (1145360) launched from Recent Games with deck_launchGame (first try refused because the main menu was already closed; second try launched), plugin reloaded after launch, opened on the second try. Thinking Balanced, Ali G character, spoiler masking ON, KB on. Scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca, Context 'active game Hades'. Every question sent with the send script (VERIFIED) and asked with A on the ask button; the panel was read every 250 ms while each answer streamed (covers = element bonsai-spoiler-reveal-target).",
+  "hades_unnamed_01_strategy_mode": [
+    {
+      "phrasing": "how do I beat the boss at the end of the first area",
+      "seen": "kb attached 3 (Temple of Styx, Heat and the Pact of Punishment, Shield of Chaos). Answer generic (prepare, watch the rhythm, choices A/B), no story detail, no cover in 208 reads (53.8 s). Named no boss.",
+      "result": "DODGE (no story detail at all) - for the owner to rule on (UNCLEAR)"
+    },
+    {
+      "phrasing": "who is the last boss of the game and what is his story with my character",
+      "seen": "The reply said it would keep the real secrets locked away and drew ONE spoiler cover ('Spoiler - tap to show / Hidden until you reveal (Strategy Guide)') in the middle, before the choices. Cover present in 19 of 183 reads, first at 41.4 s (near the end of the stream), 1 at the end. Named no boss.",
+      "result": "PASS (story-adjacent detail sits behind a cover)"
+    },
+    {
+      "phrasing": "tell me more about the story of who my character really is and where he comes from",
+      "seen": "Vague overview only, no names or plot detail, 0 covers in 201 reads (52 s).",
+      "result": "DODGE - for the owner to rule on (UNCLEAR)"
+    }
+  ],
+  "const_spoil_speed_01": {
+    "mode": "Speed",
+    "phrasing": "what should I know about beating the final boss of the underworld",
+    "seen": "kb: chose domain=strategy, method=keyword, attached=1 [Hades - Stygian Blade]. Reply: no boss named, 'I'm keeping the real secrets locked away', no plot detail, 0 covers in 158 reads (41.3 s). Show details: chips 'Keyword search', 'KB: 15 sections', 'Reply style: balanced'; Local knowledge base 'Hades - Stygian Blade', Trust tier fallback_no_source, route app_id:1145360. No 'Spoiler risk' chip and no 'protect band' chip showed in that Speed reply's Show details (a Hollow Knight Strategy reply earlier did show 'Spoiler risk: high').",
+    "result": "The reply followed the constitution (no wholesale boss-name drop, no consent given). The 'Show details chip still inherent protect band on Hades' part was NOT seen: UNCLEAR."
+  },
+  "overall": "Recorded mixed: 1 of 3 phrasings gave a cover, 2 of 3 were dodges. Owner rules on the dodges; the protect-band chip in Speed was not visible."
+}

@@ -1,0 +1,35 @@
+{
+  "rows": "P76-WALK-COVERS (round 2), REPLY-STOPS-MIRROR-01 (round 2), QA-FREE-PLAY-01 (no game half) - block 3 section 1",
+  "build_commit": "ec557922, deployed with deck_deploy at Deck local 00:57; deck_checkReady buildMatches true (119 files); dist/index.js built 00:57 after the tip commit",
+  "deck_time": "Deck local 2026-09-30 01:00-01:07",
+  "screen": "Deck's own screen. Quick Access window 854x454. Tab header bottom 84 and dock top 290 in every read; scroll pane top 88. Band for the scrolling panel y 84-290.",
+  "setup": "Main tab, Strategy, spoiler masking on, no game. New scratch chat (id created by first ask; 8 chats now, none lost). Asked 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (answer 41.4 s). Answer sections in DOM order: box1 'Right, listen up.' (cover inside the box), cover1 (own stop), box2 'The main thing is timing', a cover-only box, cover2, box3 'Now, you gotta keep your soul meter up', then choices A and B, Helpful. Read method: one press, then one page read of the ring element (tag, class, text start), its top, bottom and height, the header bottom, the dock top and the scroll pane's scrollTop.",
+  "down_list": [
+    "Retry 163-183 st0",
+    "question row 151-180 st0",
+    "Show reasoning 196-211 st0",
+    "cover1 149-204 h55 st102",
+    "box1 159-290 h131 st69",
+    "box2 186-291 h105 st173 (bottom 1 px below the dock top 290)",
+    "cover2 204-259 h55 st268",
+    "box3 230-290 h60 st305",
+    "box3 AGAIN, same element, 150-210 st385 (the press only scrolled by 80)",
+    "A 172-204 st486",
+    "B 212-244 st486",
+    "Mark reply helpful 229-261 st558 (11 presses from the question row to Helpful, counting the Retry row it is 12)",
+    "Show details 273-288 st558"
+  ],
+  "up_list": [
+    "Helpful 229-261 st558 -> B 204-236 st494 -> A 172-204 st486 -> box3 204-264 h60 st331 (once) -> cover2 204-259 st268 -> box2 186-291 st173 -> box1 159-290 st69 -> cover1 182-237 st69 -> Show reasoning 196-211 st0 -> question row 151-180 st0 -> Retry 163-183 st0"
+  ],
+  "walk_covers_verdict": "FAIL, but much closer than in block 2. Down: 12 presses from Retry to Helpful with no stop visited twice EXCEPT box3, which the second press landed on again with only a scroll of 80 px (box3 is 60 px tall, well inside the 206 px band, so this is not a section taller than the band). One landing (box2) has its bottom 1 px past the dock top. Every other landing wholly inside the band. Each cover comes before the box of its section going Down (cover1 then box1; cover2 then box3). Block 2 had three repeated boxes; now one.",
+  "mirror_verdict": "FAIL as worded ('the Up list is exactly the Down list reversed'), for one reason: the Down list has the extra second landing on box3. Take that one out and the two lists are exact mirrors, and going Up the box comes before its cover (box3 before cover2, box1 before cover1). Up visits each box once.",
+  "cover_open": "A on cover1 from a Down landing: opened (ring moved to 'Spoiler - tap to hide', text of the cover revealed), A again closed it, ring back on the cover, 2 covers again. Same from an Up landing (Down to box1, Up to cover1): opened and closed. PASS for both.",
+  "free_play": {
+    "finished_reply": "runs/plan77-b3-freeplay-finished.json: 52 stops recorded (both ways, one extra carousel position), 60 presses, 0 cycles, 5 focused-but-not-fully-visible = the question row behind Retry (78%) twice and the last box behind Copy (89%) three times, all the two known false alarms. No stop repeated inside the sweep.",
+    "reply_arriving": "runs/plan77-b3-freeplay-arriving.json: Ask pressed, sweep at once: 10 stops, 13 presses, 0 cycles, 0 not visible. While the reply streams Retry is disabled, ask reads disabled, Stop generation is the first stop under the box.",
+    "another_chat_position": "RB from the chat row went to the maintainer's first chat (only viewed, nothing pressed with A). runs/plan77-b3-freeplay-otherchat2.json (stall limit 7 so the tall section could be read): 18 stops, 35 presses, 0 cycles. Down: the section 348 px tall (taller than the band) is entered with its top at y 89 (inside the band), scroll-only presses read through it, then Helpful, Show details, chip, question box, ask. Up: that section is entered with its BOTTOM at y 290 = the dock top exactly (top at -58, 56% visible, covered at its corner by the Copy icon). Not fully visible: that tall section 67% going Down (bottom covered by the Ask button), 56% going Up (the Copy icon, plus the top out of view since it is taller than the band), the question row behind Retry 78%. Only the tall section is new and it is by design.",
+    "verdict": "PASS with the known false alarms; no cycles."
+  },
+  "saved_checks": "None saved: the two walks did not pass. The free-play sweeps were not saved."
+}

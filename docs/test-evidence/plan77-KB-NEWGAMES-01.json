@@ -1,0 +1,17 @@
+{
+  "row": "KB-NEWGAMES-01, spoiler-box half (Brotato part; Palworld and Skyrim not run)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:42-00:45",
+  "screen": "Deck's own screen, page window 854x454",
+  "recent_games_row": "Deep Rock Galactic: Survivor, Sifu, Stardew Valley, GTA San Andreas DE, Cyberpunk 2077, Call of Juarez Gunslinger, Fallout 4, Left 4 Dead 2, Palworld (tile has no readable app id), Brotato, Half-Life 2, Black Mesa, Hades, Persona 3 Reload, Hollow Knight, Team Fortress 2, God of War, Portal 2, Ship of Harkinian, Baldur's Gate 3. No Doom 64 or other emulated shortcut title.",
+  "setup": "Brotato launched with deck_launchGame from the Recent Games row (first two tries only walked right from the end of the shelf and refused; I pressed Left 22 times to go back to the start, third try launched, run file runs/plan77-C-brotato-launch3.json). Plugin reloaded after launch, opened on the second try. Thinking is back to Balanced (medium), Strategy mode, spoiler masking ON ('Hide spoilers until I tap'), scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca, Context showed 'active game Brotato'.",
+  "question": "what should I buy in the shop before wave 20 and how do I beat the wave 20 boss (VERIFIED)",
+  "seen": {
+    "log": "kb: question chose domain=strategy route=app_id:1942280 attached=3 [Brotato - The wave 20 bosses in Brotato; Brotato - The shop and rerolling in Brotato; Brotato - Elite and Horde waves in Brotato] dropped_for_room=0; num_predict=2112 think=True; done_reason=stop; 50.3 s",
+    "covers": "120 reads of the panel every 250 ms over 30 s and once at the end: 0 spoiler covers (bonsai-spoiler-reveal-target) and no 'tap to show' text. The reply named the two wave-20 boss shapes in plain text.",
+    "notes_row": "'The wave 20 bosses in Brotato (+1 more)' from brotato.wiki.spellsandguns.com"
+  },
+  "not_run": "Palworld: its tile on the Recent Games shelf carries no app id the launcher can match (the launcher wants the id in the tile's own image; the library id is 4049860804), so deck_launchGame could not pick it. Skyrim name-only question not run.",
+  "expected": "each game's own notes attach; Brotato's never open behind a spoiler box",
+  "verdict": "PASS for the Brotato part (notes attached, no cover). Palworld and Skyrim parts: COULD NOT RUN."
+}

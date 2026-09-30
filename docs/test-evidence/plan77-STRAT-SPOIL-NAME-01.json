@@ -1,0 +1,8 @@
+{
+  "row": "STRAT-SPOIL-NAME-01",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:41",
+  "setup": "Read the Recent Games row (deck_launchGame walk, run file runs/plan77-C-palworld-launch.json): Deep Rock Galactic: Survivor, Sifu, Stardew Valley, GTA San Andreas DE, Cyberpunk 2077, Call of Juarez Gunslinger, Fallout 4, Left 4 Dead 2, Palworld, Brotato, Half-Life 2, Black Mesa, Hades, Persona 3 Reload, Hollow Knight, Team Fortress 2, God of War, Portal 2, Ship of Harkinian, Baldur's Gate 3.",
+  "seen": "No Doom 64, Super Mario 64, Mario Kart 64 or Pikmin 2 on the row. Ship of Harkinian (Zelda OoT port) is a non-Steam shortcut on the row, but it is not one of the listed shortcut titles.",
+  "verdict": "COULD NOT RUN (not on Recent Games; the games there are listed above)"
+}

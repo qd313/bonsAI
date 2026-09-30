@@ -1,0 +1,25 @@
+{
+  "row": "P77-FREE-SLOT",
+  "build_commit": "bce7d0fd",
+  "deck_time": "2026-09-30T04:09Z to 04:16Z",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Backup of chat_slots taken first: scratchpad deck/p77-chat-slots-backup.tgz (249,308 bytes). Eight chats listed from index.json.",
+  "chats_before": [
+    {"id":"351b2838-3a5e-4863-9a9b-72b5438f3cb3","title":"what is a good way to practice parrying in action games","updated_at":1790741082},
+    {"id":"d2aa6252-0814-4f46-92fe-dd158d073fe2","title":"wheatley fight","updated_at":1790652429},
+    {"id":"d052dacc-d35e-4a28-b89b-8ae811884178","title":"how should i spend my first hour in a new open world game","updated_at":1790205334},
+    {"id":"92a45014-ea93-496a-80da-15896b199b46","title":"what is the safest way to approach a group of enemies at once","updated_at":1790202509},
+    {"id":"a8fb9f67-e21f-4993-9d6e-fb177d53c43f","title":"is it better to explore everything or rush the main objective","updated_at":1790202441},
+    {"id":"66df6be3-d76e-4750-a0c1-9e2db2fc45ce","title":"how do i unlock the next area after finishing the tutorial","updated_at":1790202370},
+    {"id":"4baaccbc-6a59-419c-b2d1-5504c7ab037d","title":"how do i beat the boss at the end of the first area","updated_at":1789838926},
+    {"id":"3b7c08f1-61e2-459d-92bf-3eefbbaf1482","title":"Hades","updated_at":1789749133}
+  ],
+  "chat_to_delete": {"id":"3b7c08f1-61e2-459d-92bf-3eefbbaf1482","title":"Hades","reason":"oldest updated_at (1789749133)"},
+  "pressed": "Plugin already had Quick Access closed; deck_openPlugin opened it (ring on Main tab). LB on the tab bar switched tabs (went to About), so RB back, Down to the chat row (ring on chat row 'parrying'). LB once reached the 'New chat +' slot (not activated). RB x8 reached 'Hades'. Right: the ring stayed on the chat row and its 'x' became the active stop (class bonsai-chat-slot-delete--active-stop). A: a confirm box opened, 'Delete chat slot? Delete \"Hades\" and its transcript? This cannot be undone.' with two buttons Delete and Cancel. Ring on: 'Delete' (first button, Primary). A pressed on Delete.",
+  "seen": {
+    "confirm_box_ring_on": "Delete",
+    "index_after": "7 chats, the same 7 ids as before, updated_at and turn_count unchanged for each",
+    "files_after": "7 chat json files plus index.json; 3b7c08f1-...json gone"
+  },
+  "verdict": "PASS"
+}

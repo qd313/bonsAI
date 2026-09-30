@@ -1,0 +1,15 @@
+{
+  "row": "P77-INSTALL-WORDING",
+  "build_commit": "ec557922 (deployed with deck_deploy at 00:57 Deck local; deck_checkReady buildMatches true, 119 files)",
+  "deck_time": "Deck local 2026-09-30 01:07",
+  "screen": "Deck's own screen, page window 854x454",
+  "pressed": "Ollama tab, Down x5 to 'Install model bundles' (Install options), A: the two buttons appear inline: 'Install Tier 1 essentials' and 'Install Gemma 4 (all-in-one model)'. Down to Tier 1, A (box), read, B. Down x2 to the Gemma 4 button, A (box), read, B. The install buttons in the boxes ('Turn on and download') were never pressed.",
+  "seen": {
+    "second_button_label": "Install Gemma 4 (all-in-one model)",
+    "tier1_box": "Title 'Turn on internet downloads?' (internet downloads permission is off). Body: 'Pulls qwen2.5vl:3b - one small model for chat, screenshots, OCR, and Strategy mode. Rough download: about 3-4 GiB (one small multimodal model - chat, screenshots, Strategy).' plus the Ollama-connect lines and the 'Internet downloads are off in Permissions' sentence. Buttons: Not now, Turn on and download, Cancel. Ring on open: 'Not now'. Contains 'one small model'; contains no 'FOSS'; no 'one-model multimodal'.",
+    "gemma_box": "Title 'Turn on internet downloads?'. Body: 'Pulls gemma4:e2b-it-qat (falls back to gemma4:e2b if needed). Rough download: about 4-5 GiB (one Gemma 4 edge multimodal model). Gemma 4 is open source (Apache 2.0). bonsAI will also switch Model policy to Tier 2 (open-weight) ...' Ring on open: 'Not now'. No 'FOSS', no 'one-model multimodal'.",
+    "ring_after_B": "After B on either box the ring sat on 'Install model bundles' (the parent button), not on the install button that was pressed."
+  },
+  "expected": "second button reads 'Install Gemma 4 (all-in-one model)'; no FOSS, no 'one-model multimodal'; Tier 1 says 'one small model'; ring on Not now when each box opens",
+  "verdict": "PASS"
+}

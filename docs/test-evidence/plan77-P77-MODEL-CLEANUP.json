@@ -1,0 +1,16 @@
+{
+  "row": "P77-MODEL-CLEANUP (B4)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "2026-09-30T04:28Z (Deck local 00:28)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Before removal text_model_routing_order was [\"qwen2.5:1.5b\"] (set by the star row in THINK-EFFORT-03; the picker showed gemma4:e2b-it-qat then qwen2.5:1.5b). I removed qwen while it was in the saved order, before resetting anything, so the stale-entry check is real.",
+  "pressed": "Ollama tab > Manage AI models (A); Down x6 to the star row 'qwen2.5:1.5b is used for Ask'; Right to 'Remove from Deck' (y 301, same row); A. Confirm box: 'Remove qwen2.5:1.5b from the Deck? This will free about 1.0 GB by running ollama rm qwen2.5:1.5b...' Ring opened on 'Not now' (buttons: Not now, Remove model, Cancel). Right to 'Remove model'; A. B closed the AI models box.",
+  "seen": {
+    "confirm_box_ring_on_open": "Not now",
+    "ollama_list_after": "nomic-embed-text:latest, gemma4:e2b-it-qat only",
+    "text_model_routing_order_after": "[] (the plugin took qwen2.5:1.5b out by itself)",
+    "model_store": "4.3G, /home 734G free"
+  },
+  "put_back": "text_model_routing_order is [] which is what it was before B2, so 'Reset to defaults' was not needed.",
+  "verdict": "PASS"
+}

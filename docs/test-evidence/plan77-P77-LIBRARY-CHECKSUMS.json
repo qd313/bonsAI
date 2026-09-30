@@ -1,0 +1,15 @@
+{
+  "row": "P77-LIBRARY-CHECKSUMS (go-ahead half)",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 01:07-01:12",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "internet_downloads was false (Permissions). Settings changed: internet_downloads false -> true, then back to false through the Permissions tab toggle (checked in settings.json).",
+  "pressed": "Ollama tab > 'Update knowledge base' (A). A box opened titled 'Turn on internet downloads?' (hosts huggingface.co, github.com); ring on 'Not now'. Right to 'Turn on and download', A. (The permission was switched on through the box itself, not on the Permissions tab first; same effect.)",
+  "seen": {
+    "log": "update_rag_corpus: checked; installed=2026.09.26 newest=2026.09.26 outcome=up_to_date (01:07:37). Nothing was downloaded.",
+    "checksum": "The word 'checksum' appears 0 times in the plugin log since the deploy and 0 times on the panel text or in the loader's journal for the last 15 minutes.",
+    "afterwards": "Asked 'how do i beat megaera in hades' in the scratch chat (VERIFIED). log: kb: question chose domain=strategy route=text:hades method=hybrid attached=3 [Hades - Megaera; Hades - Theseus and Asterius; Hades - Weapon choice] dropped_for_room=0. Show details chip row read 'Megaera ... From bonsAI's own note'."
+  },
+  "expected": "installs or reports up to date, no checksum error on screen or in log; a Hades question still attaches notes",
+  "verdict": "PASS (reported already up to date)"
+}

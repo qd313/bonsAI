@@ -1,0 +1,16 @@
+{
+  "row": "CHAT-DELETE-MISSING-01",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:57-00:58",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Scratch chat id 93f61878-578f-4dae-8a43-ef5bc45e25ca, eight rows in index.json (the scratch chat plus the seven maintainer chats). Its file removed over SSH (rm chat_slots/93f61878-....json), index.json left alone (still eight slots, first one the scratch chat).",
+  "pressed": "Closed the panel and Quick Access with B, reopened with deck_openPlugin (worked first go here). The scratch chat's row was still listed first ('what is a quick way to keep my battery from draining while I play'). Ring to the chat row, Right to its 'x' (delete--active-stop), A. Confirm box: 'Delete chat slot? Delete \"what is a quick way to keep my battery from draining while I play\" and its transcript? This cannot be undone.' with buttons Delete and Cancel; the ring opened on 'Delete'. A on Delete.",
+  "seen": {
+    "index_after": "7 slots, the seven maintainer chats only, in the same order as before",
+    "files_after": "7 chat json files plus index.json; the 7 files are byte-identical (md5) to the start-of-block backup (p77-chat-slots-backup.tgz)",
+    "row_after": "Row list back to 'New chat +' plus 7 chat dots; dots string 10000000; no error toast; log has no traceback",
+    "ring_after": "on the chat row 'New chat +' (rect 48,88 300x48, 100% visible)"
+  },
+  "expected": "row gone from the chat row and index.json; other chats unchanged; no error; ring lands on a visible control",
+  "verdict": "PASS"
+}

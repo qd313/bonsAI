@@ -1,0 +1,24 @@
+{
+  "row": "SOFT-PREDICT-04",
+  "build_commit": "bce7d0fd plus the temporary low-limit edit (strategy 300, expert 300; note room 1,500). Put back afterwards, see the put-back step below.",
+  "deck_time": "Deck local 2026-09-30 00:24-00:27",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Thinking Off, Strategy mode, no game, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca, Reply style Balanced (not changed), Ali G character on.",
+  "runs": [
+    {
+      "question": "give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter",
+      "log": "num_predict=300 think=False. Piece 1 done_reason=length eval 300; soft continue 1; piece 2 done_reason=length; soft continue 2; piece 3 done_reason=stop eval 248. OK soft_continues=2 response_len=2133, 39.2 s.",
+      "warning": "ask_ollama: strategy branch fence present but did NOT parse; the fence bonsai-strategy-branches was opened right at the wall of piece 1 and cut off inside its JSON; the next piece's 1,018 letters were not added to the visible text (visible stayed 2133).",
+      "finished_text": "0 'Continuing', 0 fence marks, 0 JSON marks; the saved chat file's last turn: 2,133 letters, none of those markers. No choice menu shown."
+    },
+    {
+      "question": "give me a complete guide to every boss area in Hollow Knight with three detailed paragraphs of tips for each area",
+      "log": "num_predict=300; three pieces all done_reason=length (eval 300 each); soft continues 2; OK response_len=2097, 41.6 s.",
+      "warning": "same 'fence present but did NOT parse' warning, fence cut at the wall.",
+      "stream_sampling": "The page text was read every 200 ms for 44.6 s (217 reads, while the answer streamed). No half-drawn fence, no JSON, no fence name at any read. A 'Continuing...' line showed at the join for about 1 second (15.8 s to 16.8 s) and was gone from the finished text; saved chat text 2,097 letters with no markers."
+    }
+  ],
+  "expected": "done_reason=length at least once and a clean join, with no half-drawn fence, stray JSON or Continuing in the finished or saved text",
+  "verdict": "PASS. The wall was hit (length x2 in the first run, x3 in the second), two soft continues, clean text at every read.",
+  "notes_for_owner": "The fence that was cut at the wall never closed, so no choice menu appeared and the last piece added nothing visible. With the real 1,600 limit that may never happen; with the artificial low limit it happened both times. Not called a fail because the row asks only about half-drawn fences and stray text."
+}

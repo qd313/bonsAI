@@ -1,0 +1,10 @@
+{
+  "row": "F4-EMPTY (Route B)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:53-00:58",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca (38 turns by then, not one short answer). Backed up to /home/deck/p77-93f61878-578f-4dae-8a43-ef5bc45e25ca.json.orig, then a Python script over SSH set every turn's transparency to null (19 turns had one). Left/Right shoulder away to another chat and back, twice.",
+  "seen": "With every transparency null, the newest reply's footer shows only 'Was this helpful? / Helpful / Not really' and NO 'Show details' row at all (panel text searched for 'Show details', 'Hide details', 'Session', 'Sum up this chat', 'What the AI remembers': none found). Walking Down from the chat row to the ask button visited: earlier-turns row, Retry, the reply, Mark reply helpful, a suggestion chip, the question box, ask. Nothing to press A on for the Session tab.",
+  "expected": "Show details opens with no rows and no chips; Down from the Session tab leaves it and is not swallowed",
+  "verdict": "UNCLEAR. The runbook route (Show details, A, tabs row, Session) cannot be followed because a null transparency removes Show details entirely. The proposed edit shape may be wrong: it needs a transparency object that is present but has no rows and no chips. Not improvised further."
+}

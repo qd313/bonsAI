@@ -1,0 +1,15 @@
+{
+  "row": "SPY-REVEAL-01, Heavy half",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:37-00:40",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Settings changed and put back after the row: ai_character_enabled false -> true, ai_character_preset_id alig_ali_g -> tf2_spy (character picker: Right/Down to Spy in the third column, A, then OK), accent already 'heavy' (shown as Strong), not changed. Thinking Off. Strategy mode, no game, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca.",
+  "question": "in hollow knight how do I beat hornet the first time on my deck (VERIFIED by the send script)",
+  "seen": {
+    "reply": "1,022 letters, done_reason=stop, 23.5 s. The reply body shows raw markup as plain text: '<bonsai-spy-lies> first lie, I'm not sure about the best way to fight Hornet second lie, I'm not sure about the best way to fight Hornet </bonsai-spy-lies' (the closing tag has no '>', and the two 'lies' are placeholder words).",
+    "show_details_first_read": "Right after opening Show details: tabs 'This answer' and 'Session 13', 'Chip 1 of 7', chips Keyword+meaning, KB 14 sections, Reply style balanced; no Spy chip and the word Spy did not appear in the details text.",
+    "spy_chip_later": "Some 30 s later, walking Down with the D-pad from the first chip, the chip ladder read 'Chip 6 of 7' and showed a chip 'Spy' (next to Spoiler risk: high, Routed gemma4, Developer details). Its body: heading 'The Spy was lying', one bullet 'The Spy was on and did not confess'. The ring sat on the chip ladder box (rect 52,109 290x139, 100% visible). Screenshot: screenshots/DeckCapture_20260930_003941_auto.png"
+  },
+  "expected": "The Spy was lying chip reachable by D-pad, body readable, names the lies",
+  "verdict": "UNCLEAR. The Spy chip was reachable by D-pad and its body is readable, but the body gives the two generic lines above and does not name any specific lie (the model's own lies were placeholders). Two things to look at: the raw <bonsai-spy-lies> markup showing in the reply, and the Spy chip not being in the first read of Show details (it showed up later)."
+}

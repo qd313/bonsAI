@@ -1,0 +1,16 @@
+{
+  "row": "PULL-TRY-ORDER-01 (answering-model half)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "2026-09-30T04:14Z to 04:18Z (Deck local 00:14-00:18)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Before: text_model_routing_order [], vision_model_routing_order [gemma4:e2b-it-qat], model_allow_high_vram_fallbacks false, internet_downloads false. ollama list: nomic-embed-text, gemma4:e2b-it-qat. Opened 'Set text model try order' (one model listed) and pressed Done: file stayed []. The picker with one model cannot save a non-empty order.",
+  "model_pulled": "qwen2.5:1.5b (986 MB, FOSS, Chat, non-thinking). Smallest answering (text) model in the screen's catalog under 2.5 GB that is not a thinking model; the Essentials-only view had none under 3.2 GB so I turned 'Essentials only' off in Filters (it came back on by itself when the pull started; nothing to restore).",
+  "pressed": "Ollama tab > Manage AI models (A) > Filters > Essentials only off > Close filters > Down to the tick row 'Select qwen2.5:1.5b to pull' (A) > Down to 'Pull selected (1) 1.0 GB' (A). Never touched a star row or Remove. A consent box opened: 'Turn on internet downloads?' (ring on 'Not now'); Right, A on 'Turn on and download' (internet_downloads changed false to true; to be put back to false). A again on Pull selected. Then B twice: the AI models box closed and the bonsAI panel closed back to the Decky list before the download finished (screenshot DeckCapture_20260930_001718_auto.png). Third B closed Quick Access.",
+  "seen": {
+    "ollama_pull_process": "ollama pull qwen2.5:1.5b started at 00:16, 15 MB/s",
+    "ollama_list_after": "qwen2.5:1.5b 986 MB (4 s old at 04:18:19Z), nomic-embed-text, gemma4:e2b-it-qat",
+    "text_model_routing_order_after": "[] (unchanged)"
+  },
+  "expected": "saved order still starts with the earlier entries and ends with the new tag as LAST entry",
+  "verdict": "UNCLEAR. The pull itself worked from a tick row with the panel closed. The saved try order was [] before and after, so there was no saved order for the new tag to join. A real saved order needs two models installed, which is only possible now. See MODEL-CLEANUP for the order checked after removal."
+}

@@ -1,0 +1,16 @@
+{
+  "row": "REPLY-VERB-01",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:33-00:37",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Settings changed and put back: ai_character_enabled true -> false (Settings tab toggle 'AI voice & personality'; back to true after the SPY row), reply_verbosity balanced -> caveman -> detailed -> balanced (Reply style slider on the Ollama tab; ends back at balanced, checked in settings.json). Thinking Off (from B1). Strategy mode, no game, scratch chat 93f61878-578f-4dae-8a43-ef5bc45e25ca.",
+  "question_each_time": "how do I get better at dodging attacks in action games (identical wording; no cache hit, each took 20-24 s)",
+  "seen": {
+    "caveman": "num_predict=1600; 278 tokens; 846 letters; Show details tag row reads 'Reply style: caveman'; plainly short sentences, 4 short paragraphs then choices A/B.",
+    "detailed": "351 tokens; 1,193 letters; 4 body paragraphs then the choice menu (A. fast-paced action game / B. slower game), so the reply still ends with the branches block.",
+    "balanced": "408 tokens; 1,379 letters (longer than Detailed this time; one sample each, so the spread between runs is bigger than the gap between Balanced and Detailed)."
+  },
+  "not_checked": "Balanced -> no REPLY VERBOSITY block in the prompt (needs the prompt itself, not visible from the screen). Also earlier turns of the chat (Ali G voice, 'Listen up, mate') were carried into every reply, so the persona wording stayed even with the character switch off.",
+  "expected": "Input handling shows Reply style: caveman and the reply is terse; Detailed -> paragraphs; Strategy + Detailed still ends with the branches",
+  "verdict": "PASS on caveman (846 letters vs 1,193 detailed and 1,379 balanced) and detailed/branches. One sub-check not run (Balanced has no verbosity block). Owner decides if that leaves it open."
+}

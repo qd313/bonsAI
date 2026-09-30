@@ -1,0 +1,17 @@
+{
+  "row": "EXPERT-CAP-01 (wiring half)",
+  "build_commit": "bce7d0fd",
+  "deck_time": "Deck local 2026-09-30 00:12-00:14 (04:12-04:14 UTC)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Scratch chat created by the first ask: id 93f61878-578f-4dae-8a43-ef5bc45e25ca (7 maintainer chats untouched). Thinking (ask_think_effort) changed from 'medium' (Balanced) to 'off' through the Ollama tab button. Ali G character was on (unchanged). No game.",
+  "pressed": "Speed: mode menu on the input row (Right from question box to 'Inference mode', A, A on 'speed'); question by send script (VERIFIED read-back full text) then walked to ask and A. Expert: same menu, Down twice to 'expert', A; new question by send script; ask A.",
+  "seen": {
+    "speed_question": "what is a quick way to keep my battery from draining while I play",
+    "speed_log": "POST ... num_predict=800 think=False; stream done done_reason=stop eval_count=275",
+    "expert_question": "explain how frame limiting helps smooth gameplay on a handheld",
+    "expert_log": "POST ... num_predict=1200 think=False; stream done done_reason=stop eval_count=271"
+  },
+  "expected": "Expert 1200, Speed 800",
+  "verdict": "PASS (wiring half only; continue half is B5)",
+  "note_walk": "One walkTo on a tall answer chunk reported 'stalled' at 33% visible (y -152) but the next Down press moved on; not a real stall."
+}

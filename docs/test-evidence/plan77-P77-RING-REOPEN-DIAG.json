@@ -1,0 +1,12 @@
+{
+  "row": "P77-RING-REOPEN-DIAG",
+  "build_commit": "ec557922",
+  "deck_time": "Deck local 2026-09-30 about 01:13-01:17",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "DRG Survivor running. Part A: no plugin reload after launch. Part B: after a plugin reload with the game still running. Opened and closed with GUIDE+A.",
+  "seen": {
+    "part_A": "First chord open: ring on the tab bar. Then 6 close/reopens: focus ring ABSENT 6/6 at about 1 s. document.hasFocus() true; activeElement was Decky's own tab strip / the plugin tab bar (div[role=tab] main, rect [130,136,68,34]). One Down press put the ring on the chat row every time.",
+    "part_B": "After reload: 6/6 reopens had the ring PRESENT on the Main tab bar (rect 48,64,300,20) and hasFocus true."
+  },
+  "verdict": "Diagnostic only. Ring behaviour on reopen differs before vs after a plugin reload while a game runs: absent 6/6 without reload, present 6/6 after reload. hasFocus was true in both, so focus loss is not the cause in part A."
+}

@@ -66,6 +66,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 1027,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 1007,
       "role": ""
@@ -83,11 +88,6 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 969,
-      "role": ""
-    },
-    {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 956,
       "role": ""
     },
     {

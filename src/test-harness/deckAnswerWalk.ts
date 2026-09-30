@@ -218,6 +218,17 @@ export const DEEP_COVER: AnswerShape = {
   start: 100,
 };
 
+/**
+ * Three boxes with no covers, each 135-146 px tall and so shorter than the band, laid out the way the
+ * Deck's Soul Sanctum answer was (plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json): once one is fully read
+ * the next starts below the dock. Down should land on the next box in one press.
+ */
+export const THREE_BOXES: AnswerShape = {
+  sections: [[236, 382], [390, 525], [533, 668]],
+  covers: [],
+  start: 130,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 

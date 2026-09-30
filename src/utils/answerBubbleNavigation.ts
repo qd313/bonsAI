@@ -16,7 +16,11 @@
  *       3. the ring is on the LAST hidden cover of its section and text runs on below it
  *          -> land on the section's box (`boxAfterLastCover`), once per walk
  *       4. the next section, but only if it is already on screen (a section that is only its
- *          cover lands on the cover instead: the box stands in for it)
+ *          cover lands on the cover instead: the box stands in for it). When the ring's section
+ *          is already fully read (its bottom is inside the band) and the next one starts below the
+ *          dock, the panel is first set so the next one's top sits under the header
+ *          (`hopToSectionBelow`), so the press lands instead of only scrolling. A section still
+ *          running past the dock keeps its scroll-only presses: that is reading it.
  *       5. otherwise, scroll the panel and try again on the next press; if that scroll carries
  *          the stop the ring is on off the screen (a cover, an opened cover's "tap to hide"
  *          line, an underlined word), the ring moves to the section that holds it, and when that
@@ -33,6 +37,8 @@
  *          has a box stop, brought under the tab header (`stepUpIntoSection`; the cover follows on
  *          the next press), else the cover (`focusCoverGoingUp`), which is also how the walk
  *          enters an answer from below
+ *          When the ring's section has been read from its top and the one above is wholly above the
+ *          header, the panel is first set so that one's bottom sits at the dock (`hopToSectionAbove`).
  *       4. otherwise, scroll the panel up, with the same ring-follows-the-section step as Down
  *
  *     The stops, in one line: every section, and inside a section every hidden cover and every
@@ -260,6 +266,54 @@ function revealSectionInBand(section: HTMLElement, scroll: HTMLElement, maxMoveP
   return scroll.scrollTop !== before;
 }
 
+/**
+ * Down: the ring's section is already fully read (its bottom edge is inside the band) and the next one
+ * starts below the dock, no more than a screen away. Scroll so the next section's top sits just under
+ * the header, so the press that follows can land on it. Before this the press only scrolled 80 px and
+ * left the ring on the read section, top under the header, one press later than Up would have been
+ * (docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json). A section still running past the
+ * dock is not "read": its scroll-only presses are the reading design. Only moves the panel, and only
+ * towards a later stop, so it cannot bounce.
+ */
+function hopToSectionBelow(current: HTMLElement, next: HTMLElement, scroll: HTMLElement): boolean {
+  const limit = readableBottomOf(scroll);
+  const paneTop = scroll.getBoundingClientRect().top;
+  if (current.getBoundingClientRect().bottom > limit + 4) return false;
+  const rect = next.getBoundingClientRect();
+  if (rect.top < limit || rect.top - limit > bandHeightOf(scroll)) return false;
+  const pad = Math.min(SECTION_TOP_PAD_PX, Math.max(0, bandHeightOf(scroll) - (rect.bottom - rect.top)));
+  const before = scroll.scrollTop;
+  scroll.scrollTop = Math.min(panelScrollMax(scroll), before + rect.top - (paneTop + pad));
+  return scroll.scrollTop !== before;
+}
+
+/**
+ * Up: the ring's section has been read from its top (its top edge is inside the band) and the one above
+ * is wholly above the header, no more than a screen away. Scroll so that section's bottom edge sits at
+ * the dock (a taller one is then read from its end, a shorter one is wholly in view). The mirror of
+ * `hopToSectionBelow`; only moves the panel, towards an earlier stop.
+ */
+function hopToSectionAbove(current: HTMLElement, prev: HTMLElement, scroll: HTMLElement): boolean {
+  const limit = readableBottomOf(scroll);
+  const paneTop = scroll.getBoundingClientRect().top;
+  if (current.getBoundingClientRect().top < paneTop - CUT_TOLERANCE_PX) return false;
+  const rect = prev.getBoundingClientRect();
+  if (rect.bottom > paneTop || paneTop - rect.bottom > bandHeightOf(scroll)) return false;
+  const before = scroll.scrollTop;
+  scroll.scrollTop = Math.max(0, before - (limit - rect.bottom));
+  return scroll.scrollTop !== before;
+}
+
+/**
+ * Settle a section the ring just landed on going Up, or came into the answer on from below: lifted
+ * clear of the dock and, when its top is under the header, brought under it if that is no more than
+ * a screen's scroll.
+ */
+function settleUpLanding(section: HTMLElement, scroll: HTMLElement): void {
+  revealBelowDock(section, scroll);
+  revealSectionInBand(section, scroll, bandHeightOf(scroll));
+}
+
 /** Walk turn slots. Must query the UI document, not SharedJSContext's shell — see uiDocument.ts. */
 function findAnswerBubbleByKey(answerKey: string): HTMLElement | null {
   const registered = getRegisteredAnswerBubble(answerKey);
@@ -390,7 +444,7 @@ function stepUpIntoSection(section: HTMLElement, scroll: HTMLElement): boolean {
   if (!lastHiddenCoverIn(section)) return false;
   if (!hasBoxStop(section)) return focusCoverGoingUp(section, scroll);
   if (!focusAnswerStop(section)) return false;
-  revealSectionInBand(section, scroll, bandHeightOf(scroll));
+  settleUpLanding(section, scroll);
   return true;
 }
 
@@ -505,7 +559,7 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
     /* Coming into the answer from below — Up out of the Show details line — lands here, and it is
        the one entry point that skipped the dock check (measured 2026-09-06). */
     const scroll = findScrollablePanel(el);
-    if (scroll) revealBelowDock(last, scroll);
+    if (scroll) settleUpLanding(last, scroll);
     return true;
   }
   return focusPanelEl(el);
@@ -837,6 +891,16 @@ export function handleAnswerBubbleMoveDown(
     const stops = orderedAnswerStops(answerKey, bubble);
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
+    /* A fully read section with the next one below the dock: bring the next under the header (`hopToSectionBelow`). */
+    if (next && at >= 0 && !inView(next) && hopToSectionBelow(stops[at]!, next, scroll)) {
+      /* A cover at the head of that section still comes before its box, as it does whenever the box is on screen first. */
+      const head = findNextSpoilerFenceInView(bubble, inView, anchor);
+      if (head && next.contains(head) && focusSpoilerFence(head)) {
+        walk = null;
+        revealBelowDock(head, scroll);
+        return true;
+      }
+    }
     /*
      * A section that is only its cover has no box stop, in either direction. When its box is on screen
      * but its cover, a few px lower, is not yet, land on the cover, not on the box that stands in for it.
@@ -850,8 +914,10 @@ export function handleAnswerBubbleMoveDown(
     if (next && inView(next) && focusAnswerStop(next)) {
       walk = null;
       boxLandedIn = next;
-      /* Landing on it is not enough — if it runs under the dock, bring it out. */
+      /* Landing on it is not enough — if it runs under the dock, bring it out (down to the last pixel:
+         a sliver left behind the dock is what makes Steam's own glide shove the section off the screen). */
       revealBelowDock(next, scroll);
+      revealSectionInBand(next, scroll);
       return true;
     }
   }
@@ -929,6 +995,12 @@ export function handleAnswerBubbleMoveUp(
       return true;
     }
     const prev = at > 0 ? stops[at - 1] : undefined;
+    /*
+     * The stop the ring is on has been read from its top (its top edge is in the band) and the section
+     * above sits wholly above the header: bring that section's bottom to the dock, so the press lands
+     * on it instead of only scrolling. The mirror of the same step going Down.
+     */
+    if (prev && !elementIsWithinViewportOf(prev, scroll)) hopToSectionAbove(stops[at]!, prev, scroll);
     /* A hidden cover in that section takes the ring first (plan 74 lane 3; `stepUpIntoSection`). */
     if (prev && elementIsWithinViewportOf(prev, scroll) && stepUpIntoSection(prev, scroll)) {
       forgetWalk();
@@ -937,8 +1009,7 @@ export function handleAnswerBubbleMoveUp(
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
       forgetWalk();
       /* Same as the Down path: landing on it is not enough if it runs under the dock, or under the header. */
-      revealBelowDock(prev, scroll);
-      revealSectionInBand(prev, scroll, bandHeightOf(scroll));
+      settleUpLanding(prev, scroll);
       return true;
     }
   }

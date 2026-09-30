@@ -85,8 +85,13 @@ describe.each(RULES)("Down through the Soul Sanctum answer (Steam scroll rule: %
     expect(up.yielded).toBe(true);
     expect(up.idle).toEqual([]);
     expect(new Set(up.landings).size).toBe(up.landings.length);
-    // Down went cover 1, (maybe section 1's box after a scroll), section 2, the last section. Up goes
-    // the last section, section 2, cover 1: the same stops, and Up never uses section 1's box.
-    expect(up.landings.filter((name) => name !== "section3" && name !== "cover3")).toEqual(["section2", "cover1"]);
+    // Down went cover 1, section 1's box, section 2, then the last section's cover and box. Up goes
+    // the same stops back: the last section's box and cover, section 2, section 1's box, cover 1
+    // (plan 77: Up stops on the box Down stops on).
+    expect(up.landings.filter((name) => name !== "section3" && name !== "cover3")).toEqual([
+      "section2",
+      "section1",
+      "cover1",
+    ]);
   });
 });

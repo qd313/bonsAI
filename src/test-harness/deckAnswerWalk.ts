@@ -204,6 +204,20 @@ export const THREE_COVERS: AnswerShape = {
   start: 100,
 };
 
+/** Two covers in the first section, one after the other, then a paragraph and a lone cover. */
+export const TWO_COVERS_IN_ONE_SECTION: AnswerShape = {
+  sections: [[265, 470], [478, 620], [628, 699]],
+  covers: [[0, [273, 328]], [0, [336, 391]], [2, [636, 691]]],
+  start: 69,
+};
+
+/** A cover deep inside a section taller than the band, between two short sections. */
+export const DEEP_COVER: AnswerShape = {
+  sections: [[265, 320], [328, 700], [708, 770]],
+  covers: [[1, [520, 575]]],
+  start: 100,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 
@@ -236,17 +250,20 @@ export function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up
   if (bottom - top > band) {
     return dir === "up" ? top < a.dockTop && bottom > PANE_TOP : top >= PANE_TOP - 1 && top < a.dockTop;
   }
-  return top >= PANE_TOP - 1 && bottom <= a.dockTop + 1;
+  // The bottom edge gets revealBelowDock's own 4 px of slack: a sliver that small is not "behind the dock".
+  return top >= PANE_TOP - 1 && bottom <= a.dockTop + 4;
 }
 
 /**
  * Press until the answer yields. `presses` names the ring after every press, `stops` folds the repeats
  * of a press that only scrolled, and `problems` lists what broke the rules: a dead press (nothing moved),
  * a landing that is not fully visible (a press that only scrolls is not a landing: the ring keeps the
- * stop it landed on, which slides as the panel moves), and any stop holding the ring for three presses
- * running (a loop).
+ * stop it landed on, which slides as the panel moves), and a press that leaves the ring in place while
+ * the panel goes the wrong way. A stop taking the ring back after leaving it shows up in `stops`.
+ * `checkVisible` false skips the visibility rule, for a shape (a cover deep in a tall section) where the
+ * ring is meant to sit on a box whose top is far above the screen.
  */
-export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40) {
+export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, checkVisible = true) {
   const presses: string[] = [a.label(document.activeElement)];
   const problems: string[] = [];
   let yielded = false;
@@ -261,15 +278,14 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40) {
     const named = a.label(ring);
     presses.push(named);
     if (ring === before && a.pane.scrollTop === scrollBefore) problems.push(`press ${i}: dead (${named})`);
-    if (ring !== before && !fullyVisible(a, ring, dir)) {
+    // A press that leaves the ring where it is must at least carry the panel the way the press points
+    // (reading a long section by scrolling); a panel that slides back and forth is a loop in the making.
+    const moved = a.pane.scrollTop - scrollBefore;
+    if (ring === before && (dir === "down" ? moved < 0 : moved > 0)) problems.push(`press ${i}: scrolled the wrong way (${named})`);
+    if (checkVisible && ring !== before && !fullyVisible(a, ring, dir)) {
       problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${PANE_TOP}..${a.dockTop})`);
     }
   }
   const stops = presses.filter((name, i) => i === 0 || name !== presses[i - 1]);
-  let run = 1;
-  for (let i = 1; i < presses.length; i += 1) {
-    run = presses[i] === presses[i - 1] ? run + 1 : 1;
-    if (run > 2) problems.push(`${presses[i]} held the ring for ${run} presses running`);
-  }
   return { presses, stops, problems, yielded };
 }

@@ -13,8 +13,11 @@
  *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
  *       2. a glossary-term chip on screen and ahead of the ring    -> land on the chip
  *          (both are lifted clear of the dock if it covers them)
- *       3. the next section, but only if it is already on screen
- *       4. otherwise, scroll the panel and try again on the next press; if that scroll carries
+ *       3. the ring is on the LAST hidden cover of its section and text runs on below it
+ *          -> land on the section's box (`boxAfterLastCover`), once per walk
+ *       4. the next section, but only if it is already on screen (a section that is only its
+ *          cover lands on the cover instead: the box stands in for it)
+ *       5. otherwise, scroll the panel and try again on the next press; if that scroll carries
  *          the stop the ring is on off the screen (a cover, an opened cover's "tap to hide"
  *          line, an underlined word), the ring moves to the section that holds it, and when that
  *          stop sat in the section's first screenful the panel is set so the section's top sits
@@ -23,26 +26,40 @@
  *
  *     Pressing Up is the mirror, and lands on the same stops in reverse:
  *       1. a glossary-term chip on screen and before the ring      -> land on the chip
- *       2. the section above -- or, when that section holds a hidden cover, the cover
- *          (`focusCoverGoingUp`), which is also how the walk enters an answer from below
- *       3. otherwise, scroll the panel up, with the same ring-follows-the-section step as Down
+ *       2. a hidden cover in the ring's own section, wholly on screen and before the ring
+ *          (`coverToLandOnGoingUp`); one cut off at the top is scrolled into view first when
+ *          that is no more than a screen's scroll
+ *       3. the section above -- or, when that section holds a hidden cover: the section's box if it
+ *          has a box stop, brought under the tab header (`stepUpIntoSection`; the cover follows on
+ *          the next press), else the cover (`focusCoverGoingUp`), which is also how the walk
+ *          enters an answer from below
+ *       4. otherwise, scroll the panel up, with the same ring-follows-the-section step as Down
  *
  *     The stops, in one line: every section, and inside a section every hidden cover and every
- *     underlined word, once each. A cover is what the ring lands on, in both directions, whenever
- *     it is on screen when its section is reached, so the section's own box is only a stop when
- *     the cover is not yet visible (the box of a tall section, read by scrolling). A on a section
- *     that holds a hidden cover on screen opens it (`openHiddenCoverIn`), so a cover can be opened
- *     from wherever the ring lands. Which cover is "ahead" is worked out from where the ring is on
- *     every press, never remembered across walks: an earlier flag set on landing made a walk Down
- *     skip every cover a walk Up had parked on (Deck, 2026-09-28).
+ *     underlined word, once each. A section that holds a hidden cover and has text below the last
+ *     one (`hasBoxStop`, worked out from the page's own boxes, not from what is on screen) has its
+ *     box as a stop too: Down goes cover, then the box, then on; Up goes the box, then the cover,
+ *     then on. So a walk Down and a walk Up visit the same stops (the maintainer's call,
+ *     2026-09-29; before it Down stopped on that box only when a scroll happened to cut the cover
+ *     off, and Up never did). A section that is only its cover, or ends with it, has no box stop in
+ *     either direction. A on a section that holds a hidden cover on screen opens it
+ *     (`openHiddenCoverIn`), so a cover can be opened from wherever the ring lands. Which cover is
+ *     "ahead" is worked out from where the ring is on every press, never remembered across walks:
+ *     an earlier flag set on landing made a walk Down skip every cover a walk Up had parked on
+ *     (Deck, 2026-09-28).
  *
- *     The one memory a walk Down does keep is inside a section: the last cover or word the ring was
- *     on there (`walkAnchor`). When a scroll moves the ring from that stop up to its section, the
- *     stop and everything before it are never offered again until the ring leaves the section,
- *     whatever Steam then does to the panel. That is what stops a cover and its section trading the
- *     ring for ever (Deck, 2026-09-29). It also means a section whose text runs on past the screen
- *     shows Down one stop more than Up: cover, then the section's box once a scroll has moved the
- *     ring up to it, then the next section; Up goes next section, cover.
+ *     The memory a walk Down does keep is inside a section: the last cover or word the ring was on
+ *     there (`walkAnchor`), which is what stops a cover and its section trading the ring for ever
+ *     (Deck, 2026-09-29): the stop and everything before it are never offered again until the ring
+ *     leaves the section, whatever Steam then does to the panel. And the one section whose box it
+ *     has landed on (`boxLandedIn`), so a cover deep inside a tall section does not send the ring
+ *     back to a box it entered on. Going Up needs no such memory: every step Up takes in a section
+ *     moves the ring to an EARLIER stop of it (the box, then its covers last to first).
+ *
+ *     Known limits, on purpose: a cover deep inside a section taller than the screen is entered on
+ *     the box first going Down and may not be offered going Up (a cover cut off at the bottom of
+ *     the screen is never offered, or the ring would trade with the box for ever); and words are
+ *     not given a box stop.
  *
  * Used for: the answer bubble's own Up/Down handlers, and the wider chat
  * screen's movement between turns.
@@ -112,6 +129,20 @@ const CUT_TOLERANCE_PX = 1;
 let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
 
 /**
+ * The section whose box a walk Down has already landed on, so `boxAfterLastCover` does not offer it
+ * a second time: a tall section whose cover is deep inside it is entered on its box first, and the
+ * cover then would send the ring back to that box. Only Down reads it. Every walk Up, and every entry
+ * into the answer, clears it (`forgetWalk`), so walking Down again after a walk Up offers the box
+ * again; a stale value can only hide a box stop, never cause a loop.
+ */
+let boxLandedIn: HTMLElement | null = null;
+
+function forgetWalk(): void {
+  walk = null;
+  boxLandedIn = null;
+}
+
+/**
  * True when `el` overlaps the READABLE band of its scroll container.
  *
  * Readable, not the container's full height: the Main tab's dock is sticky inside the container and
@@ -160,6 +191,42 @@ function bandHeightOf(scroll: HTMLElement): number {
   return readableBottomOf(scroll) - scroll.getBoundingClientRect().top;
 }
 
+/** Less than this below a cover's bottom edge is the section's own padding, not text after it (the Deck's lone cover: 55 px in a 71 px box). */
+const TEXT_AFTER_COVER_MIN_PX = 24;
+
+/** The last hidden cover inside `section`, wherever it is on screen, or null. */
+function lastHiddenCoverIn(section: HTMLElement): HTMLElement | null {
+  return findLastSpoilerFenceIn(section, () => true);
+}
+
+/** True when `section` is no more than `cover` and its padding: nothing else to stop on in it. */
+function isCoverOnly(section: HTMLElement, cover: HTMLElement): boolean {
+  const box = section.getBoundingClientRect();
+  const c = cover.getBoundingClientRect();
+  return box.bottom - box.top - (c.bottom - c.top) <= TEXT_AFTER_COVER_MIN_PX;
+}
+
+/**
+ * True when `section` has a box stop of its own next to its covers: it holds a hidden cover and text
+ * runs on below the last one (the Deck's Soul Sanctum section 1: a 55 px cover, then a paragraph). A
+ * section that is only its cover, or ends with it, has none: its box adds nothing to stop on, and A
+ * on it opens the cover anyway. Worked out from the page's own boxes, never from what is on screen,
+ * so Down and Up agree on it whatever the panel is doing (`boxAfterLastCover`, `stepUpIntoSection`).
+ */
+function hasBoxStop(section: HTMLElement): boolean {
+  const cover = lastHiddenCoverIn(section);
+  return Boolean(cover) && section.getBoundingClientRect().bottom - cover!.getBoundingClientRect().bottom > TEXT_AFTER_COVER_MIN_PX;
+}
+
+/** True when `el` sits wholly inside the readable band: below the tab header, above the dock. */
+function elementIsWhollyInBandOf(el: HTMLElement, scroll: HTMLElement): boolean {
+  const elRect = el.getBoundingClientRect();
+  return (
+    elRect.top >= scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX &&
+    elRect.bottom <= readableBottomOf(scroll) + CUT_TOLERANCE_PX
+  );
+}
+
 /**
  * Feature: a section the ring lands on is readable from its top, not half under the tab header.
  * Input: the landed section and its scroll container. Output: true when the panel moved.
@@ -171,8 +238,10 @@ function bandHeightOf(scroll: HTMLElement): number {
  * is brought to just under it (section a screen tall or not); else a bottom cut off by the dock, on a
  * section that fits, is lifted clear of it, never past the section's own top. Nothing moves when the
  * section already meets the contract. One pass at the moment of landing, like `revealBelowDock`.
+ * `maxMovePx` refuses a scroll longer than that, for a walk Up into a section it is reading from its
+ * end: everything between would go past unread.
  */
-export function revealSectionInBand(section: HTMLElement, scroll: HTMLElement): boolean {
+function revealSectionInBand(section: HTMLElement, scroll: HTMLElement, maxMovePx = Infinity): boolean {
   const rect = section.getBoundingClientRect();
   const paneTop = scroll.getBoundingClientRect().top;
   const limit = readableBottomOf(scroll);
@@ -185,7 +254,7 @@ export function revealSectionInBand(section: HTMLElement, scroll: HTMLElement): 
   } else if (height <= band && rect.bottom > limit + CUT_TOLERANCE_PX) {
     delta = rect.bottom - limit;
   }
-  if (delta === 0) return false;
+  if (delta === 0 || Math.abs(delta) > maxMovePx) return false;
   const before = scroll.scrollTop;
   scroll.scrollTop = Math.max(0, Math.min(panelScrollMax(scroll), before + delta));
   return scroll.scrollTop !== before;
@@ -253,7 +322,7 @@ function focusPanelEl(el: HTMLElement): boolean {
  * fence anywhere in the bubble still wins over the first section, exactly as before.
  */
 export function focusFirstAnswerChunk(answerKey: string): boolean {
-  walk = null;
+  forgetWalk();
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -302,6 +371,61 @@ function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): bo
   const paneTop = scroll.getBoundingClientRect().top;
   const above = findLastSpoilerFenceIn(section, (el) => el.getBoundingClientRect().bottom <= paneTop);
   return Boolean(above) && showCoverFromAbove(section, above!, scroll) && focusSpoilerFence(above);
+}
+
+/**
+ * Going Up into `section` from the one below: the stops it offers, mirroring what a walk Down does
+ * there (plan 77 helper E; the maintainer's call of 2026-09-29, docs/test-evidence/
+ * plan76-REPLY-STOPS-MIRROR-01-try2.json). Down goes cover, then the section's box (`boxAfterLastCover`),
+ * so Up goes the box, then the cover:
+ *
+ * - a section with a box stop (`hasBoxStop`) -> the box, brought into the band from its top when that
+ *   takes no more than a screen's scroll; the next Up (`coverToLandOnGoingUp`) then lands on the
+ *   cover, scrolling it into view first if it still is not;
+ * - a section that is only its cover, or ends with it -> the cover (`focusCoverGoingUp`).
+ *
+ * False when the section holds no hidden cover, so the caller lands on the box as for any section.
+ */
+function stepUpIntoSection(section: HTMLElement, scroll: HTMLElement): boolean {
+  if (!lastHiddenCoverIn(section)) return false;
+  if (!hasBoxStop(section)) return focusCoverGoingUp(section, scroll);
+  if (!focusAnswerStop(section)) return false;
+  revealSectionInBand(section, scroll, bandHeightOf(scroll));
+  return true;
+}
+
+/**
+ * Up, with the ring on a section's box or on something inside it: the hidden cover of that same
+ * section the ring should land on next, or null. This is the other half of `stepUpIntoSection`: Down
+ * went cover, then the box, then on; Up goes the box, then the cover, then on.
+ *
+ * - the last hidden cover that is wholly on screen and before the ring (the ring on the box itself
+ *   has every cover of its section before it);
+ * - else a cover before the ring that is cut off at the top or above the screen, scrolled into view
+ *   when that is no more than a screen's scroll (`showCoverFromAbove`).
+ *
+ * A cover the ring is on is never before it, and every step here moves the ring to an EARLIER stop of
+ * the section, so a walk Up cannot bounce between the box and a cover.
+ */
+function coverToLandOnGoingUp(section: HTMLElement, scroll: HTMLElement): HTMLElement | null {
+  const ring = uiGamepadFocusElement();
+  if (!ring || !section.contains(ring)) return null;
+  const before = (el: HTMLElement) =>
+    el !== ring && (ring === section || Boolean(ring.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING));
+  /*
+   * Wholly on screen only. A cover cut off at the bottom is not offered: the Up scroll that follows
+   * carries it further down, `keepRingOnScreen` moves the ring back to the box, and offering it again
+   * would trade the ring between the two for ever (found in the harness, 2026-09-29). One that is
+   * wholly on screen can only be left again by a scroll that carries it out for good.
+   */
+  const inBand = findLastSpoilerFenceIn(section, (el) => before(el) && elementIsWhollyInBandOf(el, scroll));
+  if (inBand) return inBand;
+  const paneTop = scroll.getBoundingClientRect().top;
+  const cut = findLastSpoilerFenceIn(
+    section,
+    (el) => before(el) && el.getBoundingClientRect().top < paneTop - CUT_TOLERANCE_PX
+  );
+  return cut && showCoverFromAbove(section, cut, scroll) ? cut : null;
 }
 
 /** Room left above a cover (or its section) that Up scrolls onto the screen; revealBelowKeeping's. */
@@ -365,7 +489,7 @@ export function handleUpFromSpoilerCover(
  * `focusFirstAnswerChunk`'s comment for why the transfer is needed.
  */
 export function focusLastAnswerChunk(answerKey: string): boolean {
-  walk = null;
+  forgetWalk();
   const el =
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
@@ -402,7 +526,7 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
  * ring was just destroyed, so "the bubble around the ring" can only name the old, detached one.
  */
 export function focusAnswerChunkAtIndex(answerKey: string, index: number): boolean {
-  walk = null;
+  forgetWalk();
   if (index < 0) return false;
   const el = findAnswerBubbleByKey(answerKey);
   if (!el) return false;
@@ -529,6 +653,23 @@ function walkAnchor(bubble: HTMLElement, answerKey: string | undefined): HTMLEle
   return ring === section && walk.passed ? walk.passed : ring;
 }
 
+/**
+ * Down, with the ring on a hidden cover: the section whose box is the next stop, or null. That is the
+ * case when the cover is the last one in its section, text runs on below it (`hasBoxStop`), and the
+ * walk has not already been on that box (`boxLandedIn`). Never for a word, a revealed cover's hide
+ * line or the box itself.
+ */
+function boxAfterLastCover(bubble: HTMLElement, answerKey: string): HTMLElement | null {
+  const ring = uiGamepadFocusElement();
+  if (!ring) return null;
+  const stops = orderedAnswerStops(answerKey, bubble);
+  const section = stops[focusedAnswerStopIndex(stops)];
+  if (!section || section === ring || !section.contains(ring) || boxLandedIn === section) return null;
+  if (findLastSpoilerFenceIn(section, (el) => el === ring) !== ring) return null;
+  if (lastHiddenCoverIn(section) !== ring || !hasBoxStop(section)) return null;
+  return section;
+}
+
 function keepRingOnScreen(
   bubble: HTMLElement,
   answerKey: string | undefined,
@@ -548,6 +689,7 @@ function keepRingOnScreen(
       ? rect.top < scroll.getBoundingClientRect().top - CUT_TOLERANCE_PX
       : rect.bottom > readableBottomOf(scroll) + CUT_TOLERANCE_PX;
   if (cut && focusAnswerStop(section) && direction === "down") {
+    boxLandedIn = section;
     /*
      * The ring is now on a box whose top, where the cover or word sits, the scroll has just carried
      * under the tab header (the Deck, docs/test-evidence/plan76-P76-WALK-COVERS-try2.json: 67% of the
@@ -669,6 +811,17 @@ export function handleAnswerBubbleMoveDown(
   }
 
   /*
+   * The ring is on the last hidden cover of its section and text runs on below it: the section's box
+   * is the next stop (`boxAfterLastCover`), the mirror of Up landing on the box before the cover.
+   */
+  const box = answerKey ? boxAfterLastCover(bubble, answerKey) : null;
+  if (box && focusAnswerStop(box)) {
+    boxLandedIn = box;
+    revealSectionInBand(box, scroll);
+    return true; // the walk keeps its memory: the cover the ring just left is not offered again
+  }
+
+  /*
    * Then step section by section, before scrolling.
    *
    * Only a stop that is already on screen is eligible, which is the same rule the fence diversion
@@ -684,8 +837,19 @@ export function handleAnswerBubbleMoveDown(
     const stops = orderedAnswerStops(answerKey, bubble);
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
+    /*
+     * A section that is only its cover has no box stop, in either direction. When its box is on screen
+     * but its cover, a few px lower, is not yet, land on the cover, not on the box that stands in for it.
+     */
+    const onlyCover = next ? lastHiddenCoverIn(next) : null;
+    if (next && onlyCover && inView(next) && isCoverOnly(next, onlyCover) && focusSpoilerFence(onlyCover)) {
+      walk = null;
+      revealBelowDock(onlyCover, scroll);
+      return true;
+    }
     if (next && inView(next) && focusAnswerStop(next)) {
       walk = null;
+      boxLandedIn = next;
       /* Landing on it is not enough — if it runs under the dock, bring it out. */
       revealBelowDock(next, scroll);
       return true;
@@ -742,7 +906,7 @@ export function handleAnswerBubbleMoveUp(
     "up",
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) {
-    walk = null;
+    forgetWalk();
     return true;
   }
 
@@ -758,16 +922,23 @@ export function handleAnswerBubbleMoveUp(
   if (answerKey) {
     const stops = orderedAnswerStops(answerKey, bubble);
     const at = focusedAnswerStopIndex(stops);
+    /* A cover on this very section, wholly on screen and before the ring, comes first (see `coverToLandOnGoingUp`). */
+    const before = at >= 0 ? coverToLandOnGoingUp(stops[at]!, scroll) : null;
+    if (before && focusSpoilerFence(before)) {
+      forgetWalk();
+      return true;
+    }
     const prev = at > 0 ? stops[at - 1] : undefined;
-    /* A hidden cover in that section takes the ring first (plan 74 lane 3; focusCoverGoingUp). */
-    if (prev && elementIsWithinViewportOf(prev, scroll) && focusCoverGoingUp(prev, scroll)) {
-      walk = null;
+    /* A hidden cover in that section takes the ring first (plan 74 lane 3; `stepUpIntoSection`). */
+    if (prev && elementIsWithinViewportOf(prev, scroll) && stepUpIntoSection(prev, scroll)) {
+      forgetWalk();
       return true;
     }
     if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
-      walk = null;
-      /* Same as the Down path: landing on it is not enough if it runs under the dock. */
+      forgetWalk();
+      /* Same as the Down path: landing on it is not enough if it runs under the dock, or under the header. */
       revealBelowDock(prev, scroll);
+      revealSectionInBand(prev, scroll, bandHeightOf(scroll));
       return true;
     }
   }

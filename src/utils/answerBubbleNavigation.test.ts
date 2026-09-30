@@ -221,7 +221,7 @@ describe("walking answer sections with the D-pad", () => {
       { top: 100, bottom: 200 },
     ]);
     const fence = document.createElement("div");
-    stubRect(fence, 0, 50);
+    stubRect(fence, 0, 90); // fills the section: no text after it, so no box stop of its own (plan 77)
     stops[0]!.appendChild(fence);
     registerSpoilerFence("s1", fence);
     bubble.focus();

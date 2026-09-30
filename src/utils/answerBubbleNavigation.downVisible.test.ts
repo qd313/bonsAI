@@ -13,8 +13,8 @@
  * walked with the dock at the Deck's 290 and at 262.
  *
  * Rule checked on every landing: the stop is fully inside the readable band, or, when it is taller than
- * the band, its top edge is inside it. Also: no dead press, no stop holding the ring three presses
- * running, no stop visited twice, and the walk reaches the end of the answer.
+ * the band, its top edge is inside it. Also: no dead press, no press that leaves the ring in place while the
+ * panel goes the wrong way, no stop visited twice, and the walk reaches the end of the answer.
  *
  * Does not: prove the ring moves on the device; see answerBubbleNavigation.ringFollowsScroll.test.ts.
  */

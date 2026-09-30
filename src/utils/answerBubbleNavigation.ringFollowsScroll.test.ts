@@ -162,7 +162,7 @@ describe("Up through a tall section with the ring on an underlined word", () => 
 describe("Down with the ring on a cover", () => {
   const SECTIONS: Box[] = [[250, 441], [487, 637], [637, 855]];
 
-  it("moves the ring to the cover's section when a press only scrolls and cuts the cover's top", () => {
+  it("moves the ring to the cover's section box, wholly on screen, when text runs on below the cover", () => {
     const a = deckAnswer(SECTIONS, 140);
     const cover1 = a.cover(a.stops[0]!, [289, 344]);
     cover1.focus();
@@ -170,13 +170,28 @@ describe("Down with the ring on a cover", () => {
 
     expect(a.down()).toBe(true);
 
+    // The section's box is the stop after its last cover (plan 77), so the ring goes to it at once
+    // instead of after a scroll that cuts the cover off. Until 2026-09-29 that scroll left the box at
+    // 67% visible, its top third under the tab header (plan76-P76-WALK-COVERS-try2.json).
     expect(document.activeElement).toBe(a.stops[0]);
-    // The scroll cut the cover 19 px above the band (the Deck measured it), so the box now holds the
-    // ring; it is brought back wholly under the tab header, top edge 8 px below it, cover and all.
-    // Until 2026-09-29 the box was left at 67% visible (plan76-P76-WALK-COVERS-try2.json).
-    expect(a.top(a.stops[0]!)).toBe(PANE_TOP + 8);
+    expect(a.top(a.stops[0]!)).toBeGreaterThanOrEqual(PANE_TOP);
     expect(a.bottom(a.stops[0]!)).toBeLessThanOrEqual(290);
     expect(a.top(cover1)).toBeGreaterThanOrEqual(PANE_TOP);
+  });
+
+  it("brings a box that starts under the tab header back into the band when the ring moves to it", () => {
+    // A cover with a word-sized stop after it can still be cut by a scroll: here the first of two covers
+    // in one section, the second below the screen. The scroll cuts the first, the ring moves to the box,
+    // and the box is set wholly under the header, cover and all.
+    const a = deckAnswer([[250, 441], [487, 637]], 140);
+    const first = a.cover(a.stops[0]!, [289, 344]);
+    a.cover(a.stops[0]!, [640, 695]);
+    first.focus();
+
+    expect(a.down()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[0]);
+    expect(a.top(a.stops[0]!)).toBeGreaterThanOrEqual(PANE_TOP);
+    expect(a.top(first)).toBeGreaterThanOrEqual(PANE_TOP);
   });
 
   /*

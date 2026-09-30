@@ -56,13 +56,17 @@ function answer(): { bubble: HTMLElement; stops: HTMLElement[] } {
   return { bubble, stops };
 }
 
-/** A still-hidden cover inside `section`, the shape MainTabBonsaiAiMarkdownChunk.tsx draws. */
-function coverIn(section: HTMLElement, id: string): HTMLElement {
+/**
+ * A still-hidden cover inside `section`, the shape MainTabBonsaiAiMarkdownChunk.tsx draws. By default
+ * it fills the section (a section that is only its cover, which has no box stop of its own); with
+ * `textAfter` a paragraph runs on below it, and the section's box is a stop of its own (plan 77).
+ */
+function coverIn(section: HTMLElement, id: string, textAfter = false): HTMLElement {
   const cover = document.createElement("div");
   cover.className = "bonsai-spoiler-reveal-target Panel Focusable";
   cover.setAttribute("tabindex", "0");
   const box = section.getBoundingClientRect();
-  stubRect(cover, box.top + 10, box.top + 40);
+  stubRect(cover, box.top + 10, box.top + (textAfter ? 40 : 70));
   section.appendChild(cover);
   registerSpoilerFence(id, cover);
   return cover;
@@ -101,6 +105,32 @@ describe("Up onto a spoiler cover", () => {
 
     expect(handleAnswerBubbleMoveUp(bubble, ref, 3, KEY)).toBe(true);
     expect(document.activeElement).toBe(stops[1]);
+  });
+
+  it("Up into a section with text after its cover lands on the section's box first, then the cover", () => {
+    const { bubble, stops } = answer();
+    const cover = coverIn(stops[0]!, "c0", true);
+    stops[1]!.focus();
+
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 3, KEY)).toBe(true);
+    expect(document.activeElement).toBe(stops[0]);
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 3, KEY)).toBe(true);
+    expect(document.activeElement).toBe(cover);
+  });
+
+  it("Up from the second of two covers in one section lands on the first before leaving", () => {
+    const { bubble, stops } = answer();
+    const first = coverIn(stops[1]!, "c1a", true);
+    const second = document.createElement("div");
+    second.className = "bonsai-spoiler-reveal-target Panel Focusable";
+    second.setAttribute("tabindex", "0");
+    stubRect(second, 140, 155);
+    stops[1]!.appendChild(second);
+    registerSpoilerFence("c1b", second);
+    second.focus();
+
+    expect(handleUpFromSpoilerCover(bubble, 3, KEY)).toBe(true);
+    expect(document.activeElement).toBe(first);
   });
 
   it("Up from a cover steps to the section above its own, not back to the top", () => {
@@ -198,25 +228,33 @@ describe("Up onto a cover that is still above the screen", () => {
     }
 
     expect(presses).toBe(4); // three scroll presses inside it, then the hand-over, as on the Deck
+    // The hand-over lands on the first section's box (plan 77: Down stops there, so Up does), and the
+    // next Up on the cover, both wholly on screen.
+    expect(document.activeElement).toBe(stops[0]);
+    expect(onScreen(stops[0]!)).toBe(true);
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
     expect(document.activeElement).toBe(cover);
     expect(onScreen(cover)).toBe(true);
   });
 
-  it("one Up with only the bottom of the first section showing lands on its cover and shows it", () => {
+  it("one Up with only the bottom of the first section showing lands on its box and shows it, the next on its cover", () => {
     const { pane, bubble, stops, cover, onScreen } = scrollingAnswer([[0, 131], [131, 458]]);
     pane.scrollTop = 120; // 11 px of the first section showing; its cover is above the screen
     stops[1]!.focus();
 
     expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
-    expect(document.activeElement).toBe(cover);
+    expect(document.activeElement).toBe(stops[0]);
+    expect(onScreen(stops[0]!)).toBe(true); // the whole short section, cover and text under it too
     expect(onScreen(cover)).toBe(true);
-    expect(onScreen(stops[0]!)).toBe(true); // the whole short section, text under the cover too
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+    expect(document.activeElement).toBe(cover);
   });
 
   it("Up from that cover then leaves the answer, as Up from the first section always did", () => {
     const { pane, bubble, stops, cover } = scrollingAnswer([[0, 131], [131, 458]]);
     pane.scrollTop = 120;
     stops[1]!.focus();
+    handleAnswerBubbleMoveUp(bubble, ref, 2, KEY);
     handleAnswerBubbleMoveUp(bubble, ref, 2, KEY);
     expect(document.activeElement).toBe(cover);
 
@@ -229,8 +267,10 @@ describe("Up onto a cover that is still above the screen", () => {
     stops[1]!.focus();
 
     expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
-    expect(document.activeElement).toBe(cover);
+    expect(document.activeElement).toBe(stops[0]);
     expect(onScreen(stops[0]!)).toBe(true);
+    expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
+    expect(document.activeElement).toBe(cover);
   });
 
   it("a cover more than a screen above stays for later presses, so no text is scrolled past unread", () => {

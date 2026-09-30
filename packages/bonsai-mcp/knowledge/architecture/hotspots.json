@@ -86,6 +86,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 956,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
       "lines": 946,
       "role": ""
@@ -113,11 +118,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 802,
-      "role": ""
-    },
-    {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 785,
       "role": ""
     },
     {

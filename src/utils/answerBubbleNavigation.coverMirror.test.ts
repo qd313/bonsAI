@@ -99,17 +99,16 @@ describe("Down and Up visit the same stops", () => {
 
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(cover);
-    // Down from the cover scrolls the tall section (the next section is 210 px below the band), which
-    // cuts the cover off at the top. The ring goes to the section and the panel is set so its top, cover
-    // and all, sits at the header's edge: the section starts at 100, the pane at 88.
+    // Text runs on below the cover, so the section's box is the next stop (plan 77): the ring goes to
+    // it at once, with the panel where it was. Reading the tall section then goes on by scrolling,
+    // 80 px a press, with the ring on the box (the next section is 210 px below the band).
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(a.stops[0]);
-    expect(a.pane.scrollTop).toBe(100 - 88);
-    // Reading the tall section then goes on by scrolling, 80 px a press.
+    expect(a.pane.scrollTop).toBe(0);
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(100 - 88 + 80);
+    expect(a.pane.scrollTop).toBe(80);
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(100 - 88 + 160);
+    expect(a.pane.scrollTop).toBe(160);
   });
 });
 
@@ -130,10 +129,9 @@ describe("Down from a cover the ring is already on", () => {
 
     expect(a.down()).toBe(true);
 
-    // The press did something a person can see: the scroll cut the cover off, so the ring moved to
-    // the section around it and the panel was set to that section's top.
+    // The press did something a person can see: text runs on below the cover, so the ring moved to
+    // the section's box.
     expect(document.activeElement).toBe(a.stops[0]);
-    expect(a.pane.scrollTop).toBe(100 - 88);
   });
 
   it("walks on to the next cover instead of landing on the same one", () => {
@@ -166,5 +164,101 @@ describe("A on a section that holds a hidden cover", () => {
     expect(openHiddenCoverIn(a.stops[0]!)).toBe(false);
     expect(openHiddenCoverIn(a.stops[1]!)).toBe(false);
     expect(opened).toBe(0);
+  });
+});
+
+/*
+ * Plan 77: a section with text after its cover has a box stop of its own, and Down and Up agree on it
+ * whatever the panel is doing: Down goes cover, box, next section; Up goes next section, box, cover.
+ * (Until then Down stopped on the box only when a scroll happened to cut the cover off, and Up never
+ * did: docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json.) Everything is on screen at once
+ * here, so the panel plays no part.
+ */
+describe("A section with text after its cover has a box stop, both ways", () => {
+  function coverThenText() {
+    const a = deckAnswer([[100, 190], [190, 250]]);
+    const cover = a.cover(a.stops[0]!, [105, 150]); // 40 px of text below it
+    return { ...a, cover };
+  }
+
+  it("Down goes cover, the section's box, then the next section", () => {
+    const a = coverThenText();
+    a.cover.focus();
+
+    expect(a.down()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[0]);
+    expect(a.down()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[1]);
+  });
+
+  it("Up goes next section, the box, then the cover, then leaves", () => {
+    const a = coverThenText();
+    a.stops[1]!.focus();
+
+    expect(a.up()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[0]);
+    expect(a.up()).toBe(true);
+    expect(document.activeElement).toBe(a.cover);
+    expect(a.up()).toBe(false);
+  });
+
+  it("walking Down again after a walk Up offers the box again", () => {
+    const a = coverThenText();
+    a.stops[1]!.focus();
+    a.up();
+    a.up();
+    expect(document.activeElement).toBe(a.cover);
+
+    expect(a.down()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[0]);
+  });
+
+  it("a section that ends with its cover, or is only its cover, has no box stop", () => {
+    const a = deckAnswer([[100, 170], [170, 230]]);
+    const first = a.cover(a.stops[0]!, [130, 165]); // 5 px below it: the section's own padding
+    first.focus();
+
+    expect(a.down()).toBe(true);
+    expect(document.activeElement).toBe(a.stops[1]);
+    expect(a.up()).toBe(true);
+    expect(document.activeElement).toBe(first);
+  });
+
+  it("a cover deep in a tall section does not trade the ring with the section's box for ever", () => {
+    // A section taller than the band whose cover is deep inside it: Down enters on the box, lands on the
+    // cover once it scrolls into view, and the scroll past it hands the ring back to the box (the cover
+    // slides off the top). The box stop after the cover is NOT offered on top of that, and the cover is
+    // not offered again: the walk goes on to the next section.
+    const a = deckAnswer([[20, 100], [100, 700], [700, 760]]);
+    const cover = a.cover(a.stops[1]!, [500, 555]);
+    a.stops[0]!.focus();
+
+    const landings: Element[] = [];
+    for (let i = 0; i < 20 && document.activeElement !== a.stops[2]; i += 1) {
+      expect(a.down()).toBe(true);
+      const ring = document.activeElement as Element;
+      if (landings[landings.length - 1] !== ring) landings.push(ring);
+    }
+
+    expect(document.activeElement).toBe(a.stops[2]);
+    expect(landings.filter((el) => el === cover)).toHaveLength(1);
+    // The box, the cover, and the box once more after a scroll took the cover away: never a third time.
+    expect(landings.filter((el) => el === a.stops[1]).length).toBeLessThanOrEqual(2);
+  });
+});
+
+describe("Down into a section that is only a cover", () => {
+  it("lands on the cover, lifted clear of the dock, when only the box is on screen", () => {
+    // The next section's box starts 1 px above the dock (y 289 against 290) but the cover inside it, 8 px
+    // lower, is not on screen yet. The box stands in for the cover (A on it opens the cover), so the walk
+    // takes the cover itself, the stop Up lands on.
+    const a = deckAnswer([[100, 200], [289, 360]]);
+    const cover = a.cover(a.stops[1]!, [297, 352]);
+    a.stops[0]!.focus();
+
+    expect(a.down()).toBe(true);
+
+    expect(document.activeElement).toBe(cover);
+    expect(a.bottom(cover)).toBeLessThanOrEqual(290 + 4);
   });
 });

@@ -6,6 +6,9 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **"Run AI on this Deck" is saved the moment you flip it**, even though its beta notice closes Quick Access. Before, the change could be lost. Owes its Deck check.
+- **A reply whose choice menu is cut by the length limit keeps the rest of the answer**, on screen and in the saved chat, instead of losing it. Owes its Deck check.
+- **With an https Ollama address, the note-search hint no longer names the address.**
 - **The model list's licence pill says "FOSS" only for an Apache or MIT licence**; qwen2.5vl:3b and qwen2.5:3b now show an amber "Qwen Research" pill. Owes its Deck check.
 - **Walking down a reply takes one press per section, not an extra one that only scrolls**, and going up into a section taller than the screen lands with its bottom edge just above the dock. Owes its Deck checks.
 - **A spoiler question about a story game keeps its covers while another game runs.** Before, a Hollow Knight boss question asked over Deep Rock Galactic: Survivor came back uncovered. Owes its Deck check.

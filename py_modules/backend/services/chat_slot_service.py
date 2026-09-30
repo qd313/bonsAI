@@ -295,6 +295,14 @@ def _normalize_subject(raw: Any) -> dict[str, Any] | None:
 
 
 def _normalize_turn(raw: Any) -> dict[str, Any] | None:
+    """Clean one saved chat turn read from disk or sent by the screen, or drop it.
+
+    Returns ``None`` for anything that is not a dict, has a role other than user or assistant, or
+    has no text. Otherwise returns a fresh dict holding only the known fields, each capped to its
+    length limit, with a new id and creation time filled in when the input has none. The marks
+    that only some turns carry (thinking, chat summary, how a turn ended) are added only when
+    present, so an older turn reads back exactly as it was saved.
+    """
     if not isinstance(raw, dict):
         return None
     role = str(raw.get("role", "") or "").strip().lower()

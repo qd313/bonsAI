@@ -85,7 +85,6 @@ starts work outside this.
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
   Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
   that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
-- ★ `[ollama]` **Three screens still say "FOSS" or "FOSS-friendly" for the default model, and the Tier 2 button "one-model multimodal" installs Gemma 4, now Tier 1** — **OPEN, found 2026-09-29 (plan 77 helper D).** Wording only, left after the licence labels were put right.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
@@ -405,6 +404,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Found 2026-09-28 (0.6.0 security review, finding 6). Every read of the Ollama address's replies is now capped (whole reply 16 MiB, error
   body 64 KiB, one streamed line 1 MiB, one streamed answer 8,000,000 characters); past a cap bonsAI stops reading, closes the connection,
   logs one line and shows a plain error. Deck check owed: row **P77-OLLAMA-SIZE-LIMITS**. [Review](audit/security-review-0.6.0.md).
+- ★ `[ollama]` **Three screens still say "FOSS" or "FOSS-friendly" for the default model, and the Tier 2 button "one-model multimodal" installs Gemma 4, now Tier 1** — **VERIFY, fixed 2026-09-29 (plan 77 helper D, `de74af02`). Was OPEN.**
+  Wording only. The button now reads "Install Gemma 4 (all-in-one model)" with a box titled "Install Gemma 4?"; the Tier 1 box, the update box, the first-run notice, the "Enable Tier 2 before pulling?" box and the Settings tier intro now say "open-source licence (Apache 2.0 or MIT)" or "small model" instead of "FOSS". Still using the word, left on purpose: the Advanced toggle "Allow non-FOSS and unclassified Ollama tags (Tier 3)" and the "FOSS" badge in the model list. Deck check owed: row **P77-INSTALL-WORDING**.
 - ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **VERIFY, fixed 2026-09-29 (plan 77 helper A, `0d805d37`). Was OPEN, found 2026-09-28
   by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
   aloud still hide it.

@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **The Tier 2 install button now says "Install Gemma 4 (all-in-one model)"**, and the tier boxes and Settings intro say "open-source licence (Apache 2.0 or MIT)" or "small model" instead of "FOSS". The Advanced toggle and the model list's badge keep the word. Owes its Deck check.
 - **The rare D-pad trap when reopening Quick Access over a game now has a proven fix.** 24 of 24 reopens over a running game were clean in a 40-minute play session.
 - **Model licence labels are put right.** Qwen 2.5 72B and coder 3B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna and orca-mini no longer sit under "open source only"; gpt-oss moves up. The README now says Gemma 4 is Tier 1. Owes its Deck check.
 - **An https Ollama address is refused with a clear message** instead of being quietly sent as plain http. Owes its Deck check.

@@ -44,6 +44,29 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
 
         shutil.rmtree(self.tmp, ignore_errors=True)
 
+    async def _ask_in_background(self, result: dict, payload: dict) -> dict:
+        """Run one background Ask whose model call returns ``result`` and wait for it to finish.
+
+        Returns the acknowledgement ``start_background_game_ai`` gave back, so a test can look at the
+        request id. The opening blurb and the settings load are stubbed the same way for every test
+        that goes through here, so what differs between tests is only the result and the payload.
+        """
+
+        async def fast_execute(*_args, **_kwargs):
+            return result
+
+        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
+            with patch.object(Plugin, "load_settings", return_value={}):
+                with patch.object(
+                    Plugin,
+                    "_compose_opening_thinking_blurb",
+                    return_value=("Thinking…", None),
+                ):
+                    ack = await self.plugin.start_background_game_ai(payload)
+                    if self.plugin._background_task is not None:
+                        await self.plugin._background_task
+        return ack
+
     async def test_user_turn_recorded_before_task_launch(self) -> None:
         slot = create_slot(self.tmp, label="test-slot")
         sid = slot["id"]
@@ -91,25 +114,14 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         slot = create_slot(self.tmp, label="route-me")
         sid = slot["id"]
 
-        async def fast_execute(*_args, **_kwargs):
-            return {"success": True, "response": "routed answer", "elapsed_seconds": 0.01}
-
-        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
-            with patch.object(Plugin, "load_settings", return_value={}):
-                with patch.object(
-                    Plugin,
-                    "_compose_opening_thinking_blurb",
-                    return_value=("Thinking…", None),
-                ):
-                    ack = await self.plugin.start_background_game_ai(
-                        {
-                            "question": "xyzzy slot routing test?",
-                            "PcIp": "127.0.0.1:11434",
-                            "chat_slot_id": sid,
-                        }
-                    )
-                    if self.plugin._background_task is not None:
-                        await self.plugin._background_task
+        ack = await self._ask_in_background(
+            {"success": True, "response": "routed answer", "elapsed_seconds": 0.01},
+            {
+                "question": "xyzzy slot routing test?",
+                "PcIp": "127.0.0.1:11434",
+                "chat_slot_id": sid,
+            },
+        )
 
         loaded = load_slot(self.tmp, sid)
         self.assertIsNotNone(loaded)
@@ -134,30 +146,19 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
             "overflow_skips": [],
         }
 
-        async def fast_execute(*_args, **_kwargs):
-            return {
+        await self._ask_in_background(
+            {
                 "success": True,
                 "response": "routed answer",
                 "elapsed_seconds": 0.01,
                 "transparency": snapshot,
-            }
-
-        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
-            with patch.object(Plugin, "load_settings", return_value={}):
-                with patch.object(
-                    Plugin,
-                    "_compose_opening_thinking_blurb",
-                    return_value=("Thinking…", None),
-                ):
-                    await self.plugin.start_background_game_ai(
-                        {
-                            "question": "does this persist transparency?",
-                            "PcIp": "127.0.0.1:11434",
-                            "chat_slot_id": sid,
-                        }
-                    )
-                    if self.plugin._background_task is not None:
-                        await self.plugin._background_task
+            },
+            {
+                "question": "does this persist transparency?",
+                "PcIp": "127.0.0.1:11434",
+                "chat_slot_id": sid,
+            },
+        )
 
         loaded = load_slot(self.tmp, sid)
         assert loaded is not None
@@ -176,27 +177,16 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         slot = create_slot(self.tmp, label="app-id-route")
         sid = slot["id"]
 
-        async def fast_execute(*_args, **_kwargs):
-            return {"success": True, "response": "routed answer", "elapsed_seconds": 0.01}
-
-        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
-            with patch.object(Plugin, "load_settings", return_value={}):
-                with patch.object(
-                    Plugin,
-                    "_compose_opening_thinking_blurb",
-                    return_value=("Thinking…", None),
-                ):
-                    await self.plugin.start_background_game_ai(
-                        {
-                            "question": "what is kiting?",
-                            "PcIp": "127.0.0.1:11434",
-                            "appId": "548430",
-                            "appName": "Deep Rock Galactic: Survivor",
-                            "chat_slot_id": sid,
-                        }
-                    )
-                    if self.plugin._background_task is not None:
-                        await self.plugin._background_task
+        await self._ask_in_background(
+            {"success": True, "response": "routed answer", "elapsed_seconds": 0.01},
+            {
+                "question": "what is kiting?",
+                "PcIp": "127.0.0.1:11434",
+                "appId": "548430",
+                "appName": "Deep Rock Galactic: Survivor",
+                "chat_slot_id": sid,
+            },
+        )
 
         loaded = load_slot(self.tmp, sid)
         assert loaded is not None
@@ -208,30 +198,19 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         slot = create_slot(self.tmp, label="consent-route")
         sid = slot["id"]
 
-        async def fast_execute(*_args, **_kwargs):
-            return {
+        await self._ask_in_background(
+            {
                 "success": True,
                 "response": "routed answer",
                 "elapsed_seconds": 0.01,
                 "strategy_spoiler_consent_effective": True,
-            }
-
-        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
-            with patch.object(Plugin, "load_settings", return_value={}):
-                with patch.object(
-                    Plugin,
-                    "_compose_opening_thinking_blurb",
-                    return_value=("Thinking…", None),
-                ):
-                    await self.plugin.start_background_game_ai(
-                        {
-                            "question": "spoilers are okay, how do I beat the boss?",
-                            "PcIp": "127.0.0.1:11434",
-                            "chat_slot_id": sid,
-                        }
-                    )
-                    if self.plugin._background_task is not None:
-                        await self.plugin._background_task
+            },
+            {
+                "question": "spoilers are okay, how do I beat the boss?",
+                "PcIp": "127.0.0.1:11434",
+                "chat_slot_id": sid,
+            },
+        )
 
         loaded = load_slot(self.tmp, sid)
         assert loaded is not None
@@ -245,26 +224,15 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         slot = create_slot(self.tmp, label="caption-route")
         sid = slot["id"]
 
-        async def fast_execute(*_args, **_kwargs):
-            return {"success": True, "response": "routed answer", "elapsed_seconds": 0.01}
-
-        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
-            with patch.object(Plugin, "load_settings", return_value={}):
-                with patch.object(
-                    Plugin,
-                    "_compose_opening_thinking_blurb",
-                    return_value=("Thinking…", None),
-                ):
-                    await self.plugin.start_background_game_ai(
-                        {
-                            "question": "[Strategy follow-up] I'm at: the twins",
-                            "display_question": "I'm at: the twins",
-                            "PcIp": "127.0.0.1:11434",
-                            "chat_slot_id": sid,
-                        }
-                    )
-                    if self.plugin._background_task is not None:
-                        await self.plugin._background_task
+        await self._ask_in_background(
+            {"success": True, "response": "routed answer", "elapsed_seconds": 0.01},
+            {
+                "question": "[Strategy follow-up] I'm at: the twins",
+                "display_question": "I'm at: the twins",
+                "PcIp": "127.0.0.1:11434",
+                "chat_slot_id": sid,
+            },
+        )
 
         loaded = load_slot(self.tmp, sid)
         assert loaded is not None

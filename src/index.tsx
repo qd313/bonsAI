@@ -383,6 +383,7 @@ const Content: React.FC = () => {
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
     buildChangedSettingsPayload,
+    persistChangedSettingsNow,
     syncSettingsFromDisk,
     settingsSnapshot,
   } = usePluginSettings();
@@ -720,6 +721,7 @@ const Content: React.FC = () => {
   } = useDisclaimerAndLocalRuntimeGates(settingsLoaded, ollamaLocalOnDeck, {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose,
+    saveSettingsNow: () => void persistChangedSettingsNow(),
   });
 
   useDeckyPreviewTestHookRegistration({

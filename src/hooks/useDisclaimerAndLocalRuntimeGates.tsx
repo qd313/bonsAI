@@ -115,7 +115,14 @@ export type DisclaimerGateApi = {
 export function useDisclaimerAndLocalRuntimeGates(
   settingsLoaded: boolean,
   ollamaLocalOnDeck: boolean,
-  modalHooks?: DeckyModalSurvivalHooks
+  modalHooks?: DeckyModalSurvivalHooks & {
+    /**
+     * Writes the settings that changed to disk right now. The local-runtime notice closes Quick
+     * Access as it opens, which throws away the automatic save still waiting on its 400 ms timer,
+     * so the switch that opened the notice would never be saved (Deck 2026-09-30).
+     */
+    saveSettingsNow?: () => void;
+  }
 ): DisclaimerGateApi {
   const [disclaimerAckVersion, setDisclaimerAckVersion] = useState(0);
   const ollamaLocalOnDeckPrevRef = useRef<boolean | null>(null);
@@ -179,6 +186,7 @@ export function useDisclaimerAndLocalRuntimeGates(
     if (localRuntimeBetaPromptIssuedRef.current) return;
 
     localRuntimeBetaPromptIssuedRef.current = true;
+    modalHooksRef.current?.saveSettingsNow?.();
     modalHooksRef.current?.onBeforeDeckyModal();
     const handle = showModal(
       <ConfirmModal

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 631,
-  "edgeCount": 1754,
+  "fileCount": 632,
+  "edgeCount": 1756,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3469,6 +3469,13 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx": {
+      "imports": [
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx": {
       "imports": [
         "src/data/deckEssentialsTags.ts"
@@ -3476,6 +3483,7 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
@@ -4766,6 +4774,7 @@
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",

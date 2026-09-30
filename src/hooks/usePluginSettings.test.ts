@@ -309,4 +309,38 @@ describe("usePluginSettings", () => {
     expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
     expect(result.current.ragCorpusPath).toBe("/run/media/deck/sd/.bonsai/rag");
   });
+
+  it("persistChangedSettingsNow saves a change at once, so closing the panel before the debounce does not lose it", async () => {
+    // Deck 2026-09-30: 'Run AI on this Deck' turned on -> a notice box opened and closed Quick
+    // Access within the 400 ms wait, the panel unmounted, and the change never reached disk.
+    const { result, unmount } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const before = saves().length;
+
+    act(() => {
+      result.current.setOllamaLocalOnDeck(true);
+    });
+    await act(async () => {
+      await result.current.persistChangedSettingsNow();
+    });
+    unmount();
+
+    const sent = saves().slice(before);
+    expect(sent).toHaveLength(1);
+    expect(sent[0].args[0]).toEqual({ ollama_local_on_deck: true });
+
+    await new Promise((r) => setTimeout(r, 450));
+    expect(saves().slice(before)).toHaveLength(1);
+  });
+
+  it("persistChangedSettingsNow sends nothing when nothing changed", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    const before = getRpcCallLog().filter((c) => c.method === "save_settings").length;
+    await act(async () => {
+      await result.current.persistChangedSettingsNow();
+    });
+    expect(getRpcCallLog().filter((c) => c.method === "save_settings").length).toBe(before);
+  });
 });

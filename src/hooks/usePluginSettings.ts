@@ -347,6 +347,32 @@ export function usePluginSettings() {
     }
   }, [hydrateFromSettings, pauseDebouncedSettingsSave]);
 
+  /**
+   * Saves what changed on screen since the last confirmed disk state, right now, instead of
+   * waiting for the 400 ms automatic save. For a moment when the panel is about to close under the
+   * change (a notice box that closes Quick Access): a close cancels the waiting timer, and a
+   * session restore treats the on-screen value as already saved, so nothing would ever write it.
+   * Same changed-fields-only rule as the automatic save, so a field this screen does not know
+   * changed is left alone. Does nothing when nothing changed.
+   */
+  const persistChangedSettingsNow = useCallback(async () => {
+    await pauseDebouncedSettingsSave();
+    const patch = diffBonsaiSettingsPayload(
+      toBonsaiSettingsPayload(settingsBaselineRef.current),
+      toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current)
+    );
+    if (Object.keys(patch).length === 0) return;
+    settingsSaveInFlightRef.current += 1;
+    try {
+      const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch]);
+      settingsBaselineRef.current = snapshotFromBonsaiSettings(normalizeSettings(saved));
+    } catch (err) {
+      console.error("save_settings failed (persist now)", err);
+    } finally {
+      settingsSaveInFlightRef.current -= 1;
+    }
+  }, [pauseDebouncedSettingsSave]);
+
   const syncSettingsFromDisk = useCallback(async () => {
     await pauseDebouncedSettingsSave();
     const saved = await callDeckyWithTimeout<[], BonsaiSettings>("load_settings", []);
@@ -437,6 +463,7 @@ export function usePluginSettings() {
     pauseDebouncedSettingsSave,
     buildChangedSettingsPayload,
     flushSettingsSnapshotNow,
+    persistChangedSettingsNow,
     syncSettingsFromDisk,
     /**
      * The same object already spread onto this return value above, handed back once more under

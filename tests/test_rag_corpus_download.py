@@ -263,7 +263,9 @@ class RagCorpusDownloadVerificationTests(unittest.TestCase):
         db_bytes = _minimal_sqlite_bytes()
         compressed, compressed_sha, db_sha = _make_zlib_chunk(db_bytes)
         manifest = _base_manifest("corpus.db.zlib", compressed_sha, db_sha, len(compressed))
-        manifest["chunks"].append({"filename": "corpus.db.zlib.part2", "sha256": "", "bytes": 0})
+        manifest["chunks"].append(
+            {"filename": "corpus.db.zlib.part2", "sha256": compressed_sha, "bytes": len(compressed)}
+        )
 
         def _fake_open(req, timeout=None):
             return _FakeHTTPResponse(compressed if "zlib" in req.full_url else b"x")
@@ -289,7 +291,7 @@ class RagCorpusDownloadVerificationTests(unittest.TestCase):
         self.assertIn("Unsupported chunk layout", str(ctx.exception))
 
     def test_chunk_filename_with_path_separator_rejected(self):
-        manifest = _base_manifest("../evil.zlib", "", "", 0)
+        manifest = _base_manifest("../evil.zlib", "a" * 64, "b" * 64, 0)
 
         def _fake_open(req, timeout=None):
             raise AssertionError("must not reach the network for an invalid filename")
@@ -369,6 +371,81 @@ class RagCorpusDownloadSchemaVersionGateTests(unittest.TestCase):
                 root = install_corpus_from_manifest(
                     manifest,
                     str(install_dir),
+                    cancel_event=threading.Event(),
+                    log=lambda *_a, **_k: None,
+                )
+            self.assertTrue((Path(root) / "corpus.db").is_file())
+
+
+class RagCorpusDownloadNeedsChecksumsTests(unittest.TestCase):
+    """A file list with no checksums is refused before anything is downloaded (0.6.0 review, 8)."""
+
+    def _refused(self, manifest):
+        def _fake_open(req, timeout=None):
+            raise AssertionError("the network was reached before the list was refused")
+
+        with tempfile.TemporaryDirectory() as home_tmp:
+            fake_home = Path(home_tmp)
+            with mock.patch("pathlib.Path.home", return_value=fake_home), mock.patch(
+                f"{MODULE_PATH}.urllib.request.urlopen", side_effect=_fake_open
+            ):
+                with self.assertRaises(RuntimeError) as ctx:
+                    install_corpus_from_manifest(
+                        manifest,
+                        str(fake_home / ".bonsai" / "rag"),
+                        cancel_event=threading.Event(),
+                        log=lambda *_a, **_k: None,
+                    )
+        return str(ctx.exception)
+
+    def _manifest(self):
+        compressed, compressed_sha, db_sha = _make_zlib_chunk(_minimal_sqlite_bytes())
+        return _base_manifest("corpus.db.zlib", compressed_sha, db_sha, len(compressed)), compressed
+
+    def test_a_chunk_with_no_checksum_is_refused(self):
+        for bad in ("", None, "   "):
+            with self.subTest(sha=repr(bad)):
+                manifest, _ = self._manifest()
+                if bad is None:
+                    del manifest["chunks"][0]["sha256"]
+                else:
+                    manifest["chunks"][0]["sha256"] = bad
+                self.assertIn("checksum", self._refused(manifest).lower())
+
+    def test_a_list_with_no_whole_file_checksum_is_refused(self):
+        for bad in ("", None):
+            with self.subTest(sha=repr(bad)):
+                manifest, _ = self._manifest()
+                if bad is None:
+                    del manifest["db_sha256"]
+                else:
+                    manifest["db_sha256"] = bad
+                self.assertIn("checksum", self._refused(manifest).lower())
+
+    def test_the_shape_the_published_library_uses_still_installs(self):
+        """Same keys as the live corpus-manifest.json (checked 2026-09-29): chunk sha256 and
+        db_sha256 both present, plus the extra compressed_* and embedding_* fields."""
+        manifest, compressed = self._manifest()
+        manifest.update(
+            {
+                "compressed_sha256": manifest["chunks"][0]["sha256"],
+                "compressed_bytes": len(compressed),
+                "compressed_filename": "corpus.db.zlib",
+                "db_filename": "corpus.db",
+                "schema_version": CORPUS_SCHEMA_VERSION,
+                "embedding_model": "nomic-embed-text",
+            }
+        )
+        manifest["chunks"][0]["compression"] = "zlib"
+        with tempfile.TemporaryDirectory() as home_tmp:
+            fake_home = Path(home_tmp)
+            with mock.patch("pathlib.Path.home", return_value=fake_home), mock.patch(
+                f"{MODULE_PATH}.urllib.request.urlopen",
+                side_effect=lambda req, timeout=None: _FakeHTTPResponse(compressed),
+            ):
+                root = install_corpus_from_manifest(
+                    manifest,
+                    str(fake_home / ".bonsai" / "rag"),
                     cancel_event=threading.Event(),
                     log=lambda *_a, **_k: None,
                 )

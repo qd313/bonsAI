@@ -205,6 +205,27 @@ def _refuse_future_schema(manifest: dict[str, Any]) -> None:
         )
 
 
+def _require_checksums(manifest: dict[str, Any], chunks: list[Any]) -> None:
+    """Refuse a file list that leaves out its checksums, before any byte is downloaded.
+
+    The download is only trusted because each file and the finished library are checked against
+    the checksums in this list (0.6.0 security review, finding 8). A list with none, or with a
+    blank one, would pass those checks by skipping them, so it is refused instead. The published
+    library's list always has both, so it is not affected.
+    """
+    for chunk in chunks:
+        if isinstance(chunk, dict) and not str(chunk.get("sha256") or "").strip():
+            raise RuntimeError(
+                "This knowledge base's file list has no checksum for one of its files, "
+                "so it was not downloaded."
+            )
+    if not str(manifest.get("db_sha256") or "").strip():
+        raise RuntimeError(
+            "This knowledge base's file list has no checksum for the finished library, "
+            "so it was not downloaded."
+        )
+
+
 def install_corpus_from_manifest(
     manifest: dict[str, Any],
     install_dir: str,
@@ -224,6 +245,8 @@ def install_corpus_from_manifest(
     chunks = manifest.get("chunks")
     if not isinstance(chunks, list) or not chunks:
         raise RuntimeError("Manifest has no chunks.")
+
+    _require_checksums(manifest, chunks)
 
     uncompressed = int(manifest.get("uncompressed_bytes") or 0)
     compressed_total = sum(int(c.get("bytes") or 0) for c in chunks if isinstance(c, dict))

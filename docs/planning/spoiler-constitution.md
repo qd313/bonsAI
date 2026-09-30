@@ -81,7 +81,7 @@ mid-stream check reuses the same three rules above, so both gaps below apply whi
 still streaming, not only once it is done.
 
 **Gap 1, wider than it looks.** Rule 2 only ever checks the Steam ID: `unwrapAskedEntitySpoilerFences.ts`
-calls `titleProfileIsLowNarrative(appId)` with no game name, so the name-only side of the no-story
+called `titleProfileIsLowNarrative(appId)` with no game name (removed in plan 77; the turn's profile now also reads the question), so the name-only side of the no-story
 list is never reachable on screen. That is every name-only game in the table above, not only State
 of Emergency — the N64 emulator shortcuts added 2026-09-05 are in the same spot. The prompt is told
 to relax for these games; the screen keeps the box shut if the model fences anyway. Threading the

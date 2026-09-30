@@ -268,6 +268,7 @@
     "src/utils/stripSoftContinueCue.test.ts",
     "src/utils/tabBodyViewport.test.ts",
     "src/utils/thinkingSummaryText.test.ts",
+    "src/utils/tildeCodeReadAloud.test.ts",
     "src/utils/toastAnswerPreview.test.ts",
     "src/utils/uiDocument.test.ts",
     "src/utils/unifiedInputPersistenceMode.test.ts",

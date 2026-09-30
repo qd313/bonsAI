@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 623,
-  "edgeCount": 1735,
+  "fileCount": 624,
+  "edgeCount": 1737,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5012,7 +5012,8 @@
         "src/utils/answerCopyText.test.ts",
         "src/utils/gluedSpoilerOpener.test.tsx",
         "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts",
-        "src/utils/spoilerFenceOddShapes.test.ts"
+        "src/utils/spoilerFenceOddShapes.test.ts",
+        "src/utils/tildeCodeReadAloud.test.ts"
       ]
     },
     "src/utils/answerReadableText.test.ts": {
@@ -5035,6 +5036,7 @@
         "src/utils/gluedSpoilerOpener.test.tsx",
         "src/utils/oneLineSpoilerCopyAndReadAloud.test.ts",
         "src/utils/spoilerFenceOddShapes.test.ts",
+        "src/utils/tildeCodeReadAloud.test.ts",
         "src/utils/toastAnswerPreview.ts"
       ]
     },
@@ -6707,6 +6709,13 @@
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/thinkingSummaryText.test.ts"
       ]
+    },
+    "src/utils/tildeCodeReadAloud.test.ts": {
+      "imports": [
+        "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts"
+      ],
+      "importedBy": []
     },
     "src/utils/toastAnswerPreview.test.ts": {
       "imports": [

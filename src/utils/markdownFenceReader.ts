@@ -4,7 +4,8 @@
  *   with the screen about where a hidden (spoiler) block starts and stops all read it the same way.
  *   Two readers live here: a whole-text reader built on the markdown reader the panel draws
  *   answers with, and a line-by-line scanner for text that is still arriving or being cut up.
- * Used for: answerCopyText and answerReadableText (Copy and Read aloud replace hidden blocks),
+ * Used for: answerCopyText and answerReadableText (Copy and Read aloud replace hidden blocks; Read
+ *   aloud also says one phrase for each fenced code block, ``` or ~~~),
  *   toastAnswerPreview (the reply-ready notification drops every fenced block),
  *   splitResponseIntoChunks (never cut a block in the middle) and streamMarkdownPrepare (a
  *   half-written block waits behind a chip).
@@ -112,6 +113,43 @@ export function replaceSpoilerFences(text: string, hiddenText: string | null): s
   return out.replace(LEFTOVER_SPOILER_FENCE_RE, (_full, body: string) =>
     hiddenText ?? String(body).replace(/\n$/, "")
   );
+}
+
+/** Where a fenced code block (``` or ~~~, not an indented one) sits in the text. */
+function collectFencedCodeSpans(node: MdNode, text: string, out: Array<{ from: number; to: number }>): void {
+  for (const child of node.children ?? []) {
+    const from = child.position?.start.offset;
+    const to = child.position?.end.offset;
+    if (child.type === "code" && from != null && to != null && /^(```|~~~)/.test(text.slice(from, from + 3))) {
+      out.push({ from, to });
+      continue;
+    }
+    collectFencedCodeSpans(child, text, out);
+  }
+}
+
+/**
+ * Replace every fenced code block the panel draws (three or more backticks or tildes, a blank line
+ * inside, an unclosed one running to the end) with `replacement`. Read aloud uses it to say there is
+ * code on screen. Found with the panel's own markdown reader, like replaceSpoilerFences; run it
+ * after the hidden blocks are gone. An indented code block is not a fenced one and is left alone.
+ */
+export function replaceFencedCodeBlocks(text: string, replacement: string): string {
+  if (!mayHoldFence(text)) return text;
+  const spans: Array<{ from: number; to: number }> = [];
+  try {
+    collectFencedCodeSpans(parseLikeThePanel(text), text, spans);
+  } catch {
+    return text;
+  }
+  let result = "";
+  let at = 0;
+  for (const span of spans) {
+    if (span.from < at) continue;
+    result += text.slice(at, span.from) + replacement;
+    at = span.to;
+  }
+  return result + text.slice(at);
 }
 
 /** True when the text holds a fence marker: three backticks anywhere, or a line starting with

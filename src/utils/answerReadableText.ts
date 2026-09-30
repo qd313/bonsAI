@@ -10,7 +10,7 @@
  *   touch the Strategy branch-menu control; that is stripped along with the other internal tags.
  */
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
-import { replaceSpoilerFences } from "./markdownFenceReader";
+import { replaceFencedCodeBlocks, replaceSpoilerFences } from "./markdownFenceReader";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
 
@@ -134,6 +134,9 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
   // fences, a blank line inside, a closer glued onto a sentence. Masking off reads the words.
   text = replaceSpoilerFences(text, spoilerMaskingEnabled ? SPOILER_HIDDEN_SPOKEN_PHRASE : null);
 
+  // Code blocks the same way, so a ~~~ block or a longer fence says the phrase too; the older
+  // backtick pairing stays as a safety net for anything the reader leaves behind.
+  text = replaceFencedCodeBlocks(text, CODE_SPOKEN_PHRASE);
   text = text.replace(CODE_FENCE_RE, CODE_SPOKEN_PHRASE);
   text = replaceMarkdownTables(text, TABLE_SPOKEN_PHRASE);
 

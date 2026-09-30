@@ -99,6 +99,8 @@ every stop was visible or one of the two known corner-icon alarms, except one: a
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 
+**2026-09-29 (plan 77, block 2, build `bce7d0fd`):** with no game running: PASS on a finished reply, one still arriving and another chat (only the two known false alarms; checks/P77-FREE-PLAY.json). With a game running: FAILED on the runbook line, since a 348 px section in a 206 px band cannot sit above the dock (top under the header on the Up landing); no cover could be tested, the game half is not done. The row stays open. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`, `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that

@@ -1,0 +1,27 @@
+{
+  "row": "P76-CHOICES-DRIFT (run under plan 77, block 1a addendum) - 8 troubleshooting questions in Strategy mode with Deep Rock Galactic: Survivor running",
+  "build": "Deck build = code of 7a7d59fe (deck_checkReady buildMatches true before this run; no deploy). Checkout tip when written: 0d805d37.",
+  "deckTime": "2026-09-29 23:15 to 23:30 EDT",
+  "screen": "Built-in Deck screen, Quick Access window 854x534 with the game running",
+  "setup": "Game running (Deep Rock Galactic: Survivor, 2321470), plugin open on Main, Strategy mode (the mode label read 'Strategy' before every ask). Each question put in with the send-question script (VERIFIED, full text read back), then Ask pressed with A on the Ask button (ring read as 'ask' before each press). Panel stayed open for the answer. Answers waited for by reading the page until the newest answer showed 'Was this helpful?' and then read the plugin log (~/homebrew/logs/bonsAI/2026-09-29 22.35.09.log; the loader journal is empty for this plugin).",
+  "method": "Per question: grep the plugin log for the phrase 'did NOT parse' (count over the whole log) and for the line 'strategy fences branch_marker=... branch_parsed=... branch_options=...'; read the choice buttons (text A. / B. ...) under the newest answer.",
+  "questions": [
+    {"n": 1, "text": "the text on the screen looks blurry on my deck", "answerTime": "90.8 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Starting the game and learning the basics", "B. Trying to beat a specific boss or elite"], "verdict": "PASS"},
+    {"n": 2, "text": "the game stutters when lots of enemies are on screen", "answerTime": "120.8 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Early cave exploration and basic survival", "B. Late game boss encounters and high-density swarms"], "verdict": "PASS"},
+    {"n": 3, "text": "my controller buttons do nothing in the menu", "answerTime": "97.8 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. I suspect the issue is with my Steam controller settings.", "B. I think the problem is in the game's internal settings."], "verdict": "PASS"},
+    {"n": 4, "text": "the sound crackles during fights", "answerTime": "99.6 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Check the audio settings in the game first", "B. Check the performance/Render Scale settings first"], "verdict": "PASS"},
+    {"n": 5, "text": "the game crashed when I opened the shop", "answerTime": "88.8 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Fixing the game crashing issue", "B. Getting better at mining and resource management"], "verdict": "PASS"},
+    {"n": 6, "text": "how do I change the resolution for this game on the deck", "answerTime": "82.0 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Setting up my first run", "B. Trying to beat a specific boss"], "verdict": "PASS on the parse line; note the menu is about the game, not about changing the resolution"},
+    {"n": 7, "text": "fps drops after twenty minutes", "answerTime": "103.5 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. Early stages and initial cave exploration", "B. Mid-game progression and boss encounters"], "verdict": "PASS on the parse line; menu is about the game's stages, not the fps problem"},
+    {"n": 8, "text": "the screen goes black when I alt tab back", "answerTime": "96.4 s", "branch_marker": true, "branch_parsed": true, "branch_options": 2, "didNotParseWarning": false, "choiceMenu": ["A. I'm still having trouble with the screen going black when I Alt-Tab back", "B. I'm still having trouble with the game performance, like stuttering or heat issues"], "verdict": "PASS"}
+  ],
+  "totals": {
+    "questions": 8,
+    "didNotParseLines": "0 in the whole plugin log for the run (log holds 14 'strategy fences' lines: the 6 answers of block 1a plus these 8, all branch_marker=True branch_parsed=True)",
+    "everyAnswerShowedAChoiceMenuOfTwo": true,
+    "checklistFences": "none in any of the 14 answers (checklist_marker=False)"
+  },
+  "verdict": "PASS. No 'strategy branch fence present but did NOT parse' warning anywhere in the run; all 8 answers parsed their branch fence and showed a two-option menu. No UNCLEAR question.",
+  "notes_for_owner": "Menus for questions 6 and 7 (a Deck-settings question and a performance question) are about the game (first run / boss, early / mid game) rather than about the question. That is a quality observation, not what this row tests; question 4 and 8 menus follow the question. The answer cache was not involved (all worded differently, all 80-120 s from Ollama).",
+  "toolEvidence": ["plugin log: ~/homebrew/logs/bonsAI/2026-09-29 22.35.09.log"]
+}

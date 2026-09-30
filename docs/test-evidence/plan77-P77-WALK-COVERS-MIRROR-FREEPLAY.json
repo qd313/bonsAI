@@ -1,0 +1,37 @@
+{
+  "rows": "P76-WALK-COVERS (re-run), REPLY-STOPS-MIRROR-01, QA-FREE-PLAY-01 (plan 77 block 2 section 1)",
+  "build": "deployed by deck_deploy at 23:30 EDT from checkout tip bce7d0fd; deck_checkReady buildMatches true (119 files)",
+  "deckTime": "2026-09-29 23:31 to 23:45 EDT",
+  "screen": "Built-in Deck screen. No game running: Quick Access window 854x454. Tab header (.bonsai-tab-bar) bottom = 84, dock (.bonsai-main-tab-dock) top = 290 in every read, so the visible band for the scrolling panel is y 84 to 290 (206 px). Scroll pane top edge = 88.",
+  "setup": "Main tab, Strategy (ask_mode strategy), spoiler masking on (strategy_spoiler_masking_enabled true, auto reveal false), no game. Settings untouched. The chat used is the maintainer's normal chat position 1 (I have no separate scratch chat); it grew by 4 answers (Hollow Knight questions). Asks: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (answer 63.8 s), 'Any tips for the Soul Sanctum boss fight in Hollow Knight?', 'Explain the Soul Sanctum boss fight in Hollow Knight step by step' (the last two for tilde safety net and the streaming sweep).",
+  "answerUsed": "Answer 1: sections in DOM order: box1 'Right, listen up.' holding cover 1; box2 'The main thing you gotta watch...'; cover 2; box3 'Now, use your Soul and Focus wisely'; then chat-summed-itself note, choices A and B, Helpful. Two covers, each followed by text. No cover-only section came up in three answers (answer 2 had one cover inside box1).",
+  "readMethod": "One deck_pressButton per press, then a page read of the gpfocus element: tag, class, text start, rect (y, bottom, height), tab header bottom, dock top, scroll pane scrollTop.",
+  "walkCovers_downList": [
+    "Retry (button) y201-221, st 0", "question row body y189-218, st 0 (start of the walk, ring here)",
+    "D1 'Show reasoning' fold y234-249 st0 inside band",
+    "D2 cover 1 (spoiler-reveal-target) y149-204 h55 st140 inside band",
+    "D3 box1 'Right, listen up. Spoiler' y144-291 h146 st121: bottom 291 is 1 px below the dock top 290",
+    "D4 box1 AGAIN, same element (press did not move the ring), y64-211 st201: top 64 is 20 px above the header bottom 84 (repeat + partly under the header)",
+    "D5 box2 'The main thing' y155-290 h135 st257 inside band (bottom equals dock top)",
+    "D6 box2 AGAIN, same element (same DOM path), y75-210 st337: top 9 px above the header bottom (repeat + partly under the header)",
+    "D7 cover 2 y218-273 st337 inside band",
+    "D8 box3 'Now, use your Soul' y155-290 st463 inside band",
+    "D9 box3 AGAIN, same element, y76-211 st542: top 8 px above the header bottom (repeat + partly under the header)",
+    "D10 chat-summed-itself note y234-266 st542", "D11 choice A y172-204 st681", "D12 choice B y212-244 st681", "D13 Mark reply helpful y213-245 st770"
+  ],
+  "walkCovers_verdict": "FAIL on the runbook's own words: 'no stop repeats' is broken 3 times (box1, box2, box3 each land twice, the second press only scrolls the panel by 80 px), and the second landing of each of those three boxes has its top edge 8 to 20 px above the header's bottom, so it is not wholly inside the band (the boxes are 135-146 px tall, band is 206 px, so they are not 'taller than the band'). D3's bottom is 1 px past the dock top. Cover then that section's box order is right (cover 1 then box1; cover 2 then box3). Every other landing is wholly inside the band. Known false alarms (question row behind Retry, last section behind Copy) did not come into it here.",
+  "mirror_upList": [
+    "Helpful y213-245 st770 -> B y204-236 st689 -> A y172-204 st681 -> summary note y204-236 st572 -> box3 y155-290 st463 (once) -> cover 2 y204-259 st351 -> box2 y155-290 st257 (once) -> box1 y144-291 st121 (once, bottom 1 px past the dock) -> cover 1 y167-223 st121 -> 'Show reasoning' fold y204-219 st30 -> question row y189-218 st0"
+  ],
+  "mirror_verdict": "FAIL as worded ('the Up list is exactly the Down list reversed'): Up visits each box once and puts the box before its cover (box3 before cover 2, box1 before cover 1) as the runbook wants, and every Up landing is inside the band except box1's bottom being 1 px past the dock. But the Down list has three extra landings (the second visit of box1, box2, box3), so the two lists are not each other's mirror. Without those three repeats the lists would be exact mirrors.",
+  "coverOpen": "A pressed on cover 1 from a Down landing: text revealed (Soul Master named), ring moved to 'Spoiler - tap to hide' (bonsai-spoiler-collapse-target); A again closed it, ring back on the cover. A pressed on cover 1 from an Up landing (Down to box1 then Up): same, opened then closed. PASS for both.",
+  "tildeSafetyNet": "Text outside .bonsai-spoiler* elements of answer 1 (1146 characters): no 'Soul Master', 'Soul Tyrant' or 'Soul Warrior'. Answer 2: 1 cover, same three names absent outside it. PASS for both answers (P77-TILDE-SAFETY-NET regression).",
+  "freePlay": {
+    "finishedReply_sweep": "runs/p77-freeplay-finished.json: 17 stops, 21 presses, 0 cycles, 2 focused-but-not-visible, both the known false alarms (question row behind Retry 78 percent, last section behind Copy 89 percent). Answer used had one cover (visited as cover then box, no repeats in this sweep).",
+    "whileReplyArriving_sweep": "runs/p77-freeplay-arriving.json: Ask pressed, sweep run at once while the reply streamed: 10 stops, 13 presses, 0 cycles, 0 not visible. During streaming Retry is disabled, the Ask button reads disabled, and a 'Stop generation' button is the first stop below the box. The streaming answer itself offered no stops.",
+    "afterRBToAnotherChat": "RB from the chat row moved to the second chat ('wheatley fight'; the plugin showed its newest turn 'how do i kill the big armoured bug boss'); runs/p77-freeplay-otherchat.json: 28 stops recorded, 31 presses, 0 cycles, 3 not visible = the same two known false alarms (question row behind Retry twice, last section behind Copy). LB brought me back. Ring lands and the chat swap both worked; one press retried because the serial port was busy.",
+    "saved": "checks/P77-FREE-PLAY.json (saveCheck sweep). Note: my LB press before it did not take (ring was on the header), so this saved sweep ran on the second chat ('wheatley fight'), not the Soul Sanctum chat. P77-WALK-COVERS and P77-MIRROR were NOT saved because those walks failed.",
+    "verdict": "PASS (only the known false alarms)"
+  },
+  "toolEvidence": ["runs/p77-freeplay-finished.json", "runs/p77-freeplay-arriving.json", "runs/p77-freeplay-otherchat.json", "checks/P77-FREE-PLAY.json"]
+}

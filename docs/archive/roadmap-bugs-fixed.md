@@ -2513,3 +2513,70 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   (`plan76-P76-TRAP-SPLIT.json`).
 
   **Closed 2026-09-29, passed on the Deck (plan 77, row P77-TRAP-LONG).** Deep Rock Galactic: Survivor running, 24 reopens of Quick Access over about 40 minutes in four kinds (plain; after an answer finished over the game; after pressing into the game; the rig's own open). The panel's window had the focus 24 of 24, 0 splits in 72 presses, Down never stuck, 6 of 6 walks reached Ask fully visible. Evidence `docs/test-evidence/plan77-P77-TRAP-LONG.json` and `checks/P77-TRAP-LONG-ASKWALK.json`.
+
+## Moved from the roadmap 2026-09-30 (plan 77, Deck block 2)
+
+### A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows (closed 2026-09-29)
+
+- ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
+  partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
+  shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
+  (plan 70, flow L7). Deck check owed: row **P76-CHOICES-DRIFT** (the flow L7 troubleshooting questions with a game running,
+  reading the log). [Detail](roadmap-details.md#flow-l7-findings).
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** 8 troubleshooting questions with Deep Rock Galactic: Survivor running: every choice fence understood, no "did NOT parse" warning in the log (row P76-CHOICES-DRIFT). Evidence `docs/test-evidence/plan77-P76-CHOICES-DRIFT.json`.
+
+### The back end's name-covering safety net only knows three-backtick blocks (closed 2026-09-29)
+
+- ★ `[reply]` **The back end's name-covering safety net only knows three-backtick blocks** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `a7b0865e`).**
+  Found 2026-09-28 by reading the code (plan 76 lane 1). It now reads `~~~` and longer fences the way the panel does, and holds back a
+  half-typed `~~~bon` while streaming. Unit-tested; the model is told to use backticks, so it cannot be triggered on demand. Deck check owed:
+  row **P77-TILDE-SAFETY-NET** (the regression check).
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** No boss name outside a cover in two Soul Sanctum answers (row P77-TILDE-SAFETY-NET). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
+
+### Back in a chat after leaving it, its own ban-lookup reply row is gone (closed 2026-09-29)
+
+- ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **VERIFY, fixed 2026-09-29 (plan 77, `c70e54cb`, landed in tip `03baaa45`).**
+  Found 2026-09-28 (plan 74), confirmed as a separate effect by plan 76 lane 4. Deck check owed: row **P77-BANROW-SWITCH**.
+  Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** The row stayed through switches across 7 chats and a Quick Access reopen. The "New chat" spot was not reached (RB stops at the eighth chat); that half was proven in plan 76 (row P77-BANROW-SWITCH). Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+### After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful buttons (closed 2026-09-29)
+
+- ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
+  buttons** — **VERIFY, fixed 2026-09-29 (plan 77, `4447ffbc`).** The back end now marks a stopped or failed answer turn in the saved
+  chat; a turn saved before the mark counts as finished. A known edge of `e5d1ceb9` (plan 76 lane 4). Deck check owed: row **P77-HELPFUL-STOPPED**.
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** Passed by the session's ruling: after a switch away and back, the stopped half-answer had no Helpful or Not really; the corner Retry icon stays, as on every answer, by design. Right after Stop (before any switch) the Helpful buttons still show (row P77-HELPFUL-STOPPED). Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+### Replies from the Ollama address have no size limit (closed 2026-09-29)
+
+- ★ `[ollama]` **Replies from the Ollama address have no size limit** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `96f7d896`, tip `044069cd`).**
+  Found 2026-09-28 (0.6.0 security review, finding 6). Every read of the Ollama address's replies is now capped (whole reply 16 MiB, error
+  body 64 KiB, one streamed line 1 MiB, one streamed answer 8,000,000 characters); past a cap bonsAI stops reading, closes the connection,
+  logs one line and shows a plain error. Deck check owed: row **P77-OLLAMA-SIZE-LIMITS**. [Review](audit/security-review-0.6.0.md).
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** A long answer arrived whole (1,740 characters), Hades notes still attached, the models list matches `ollama list`, no "far larger" line in the log (row P77-OLLAMA-SIZE-LIMITS). Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+### A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices (closed 2026-09-29)
+
+- ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
+  **VERIFY, fixed 2026-09-29 (plan 77 helper H, `2fcee678`). Was OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
+  **Cause found 2026-09-28 (plan 76 lane 4):** not a leftover in the code. The Strategy prompt makes a choice menu mandatory on
+  every first Strategy turn, and with no game running or named the model took the game from the chat's earlier question. The fix
+  is prompt wording in the back end (a carve-out for questions about the Deck itself, like the one for model-policy questions),
+  which needs an answer-quality run, so not this week.
+  Fixed narrowly: a Strategy first turn about the Deck itself with no game running is told not to build a game menu or take a game from earlier in the chat. The answer test on the PC's copy of the Deck's model never saw the borrowing in 30 tries before or after, so it could not prove the fix; ordinary game questions kept their menu (14 of 15 after). Deck check owed: row **P77-STRATEGY-DECK-ITSELF**.
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** After Hollow Knight questions, the overlay and Quick Access answers named no Hollow Knight place or boss; the overlay menu was about the Deck and the other had none (row P77-STRATEGY-DECK-ITSELF). Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+### The reply-ready popup stays up about 10 seconds, not the 8 planned (closed 2026-09-30)
+
+- ★ `[ui]` **The reply-ready popup stays up about 10 seconds, not the 8 planned** — **OPEN, found 2026-09-28 (plan 76, build `c71f1d8b`).**
+  Measured 10.08 seconds over Deep Rock Galactic: Survivor (150 ms polling, so at most 0.15 s off). Small. Evidence
+  `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`.
+  **2026-09-29 (plan 77, helper G):** not changed. The code sets 8 seconds, and plan 38's video test measured 8.0 seconds drawn; the page keeps the text about 1.5 to 2 seconds longer while it fades and is removed, which is what the 150 ms page reading counted. Owed: a video check, row **P77-POPUP-VIDEO** (record the real popup over a game and count the frames drawn; pass is about 8 seconds). Stays in Bugs until then.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 2, build `bce7d0fd`).** Closed, not a bug: measured 7.87 s drawn, frame by frame over a game; the earlier 10 s counted the text lingering in the page while it faded. The recording is kept only on the maintainer's PC (`recordings/DeckRecord_20260930_000015_game.mkv`) (row P77-POPUP-VIDEO). Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.

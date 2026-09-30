@@ -1,0 +1,24 @@
+{
+  "rows": "P77-POPUP-VIDEO, QA-FREE-PLAY-01 game half (plan 77 block 2 section 5)",
+  "build": "deployed 23:30 EDT from checkout tip bce7d0fd (buildMatches true)",
+  "deckTime": "2026-09-30 00:00 to 00:08 EDT; built-in screen; Quick Access window 854x534 with the game running",
+  "setup": "Deep Rock Galactic: Survivor launched from Recent Games (4 presses), plugin reloaded after launch, game brought to the front with A on the Current Game tile then A on Resume (the reload leaves Steam home in front, as in block 1a), title screen at 45 fps. Plugin opened with deck_openPlugin (first try worked this time).",
+  "P77-POPUP-VIDEO": {
+    "verdict": "PASS",
+    "how": "Question 'how do I dodge enemy projectiles in deep rock survivor' put in with the send-question script (VERIFIED), walked to Ask, A, Quick Access closed with the chord at once, then deck_record 110 s of the game screen (recordings/DeckRecord_20260930_000015_game.mkv, 1280x800, gamescope capture). The reply finished 110.6 s after the Ask press (plugin log, 'run_game_ai_request: completed in 110.6s').",
+    "measure": "ffmpeg cropped the bottom right corner (x 855 to 1275, y 725 to 795, where the popup sits) and read the mean brightness of every frame (5216 frames, scratch file popup_yavg.txt). Baseline 33.1; the popup frames read 44.1. First frame with the popup 105.116 s, last frame with any of it 112.981 s (fading out at 112.98 to 113.1 s).",
+    "seconds_drawn": 7.87,
+    "target": "7.5 to 8.7 s, about 8 s: inside",
+    "seen": "One screenshot of the same popup earlier (block 1b test) showed it as a dark rounded box bottom right with the first words of the reply, game at 45 fps behind it."
+  },
+  "QA-FREE-PLAY-01_gameHalf": {
+    "verdict": "FAIL on the runbook line ('every landing wholly above the dock's top'), and no cover to test with",
+    "answerUsed": "Two tries at getting an answer with a cover while the game ran ('How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please' and the Deep Rock question): 0 covers in both (with a game running, the answer is not masked). So the test ran on an answer with ONE long section and no cover. The 'answer with a cover, the dock lifted by the game' setup was not achieved.",
+    "geometry": "With the game: header bottom 124, dock top 330, so the band is y 124 to 330 (206 px). The answer's single section box is 348 px tall.",
+    "downWalk": "Down from the header: Main tab, chat row, '87 earlier', Retry, question row (y229-258), 'Show reasoning' fold (y274-289, inside band), then the section box lands three times: y128-476 (top 4 px under the header edge... inside the band, but the bottom 476 is 146 px under the dock top 330), then y49-397 (top 75 px above the header edge, bottom 67 px under the dock), then y-31 to 317 (top 155 px above the header edge). Scroll top 177, 257, 337. Each press moved the panel 80 px and left the ring on the same box.",
+    "upWalk": "runs/p77-freeplay-game.json (deck_sweep, 20 presses): the box is reached once going Up with rect y66-414, 33 percent visible, covered by the question input box (bonsai-unified-input-text-box), which is not one of the two known false alarms; the question row 78 percent behind Retry is the other flagged stop (known false alarm). Every other stop visible.",
+    "reading": "Because the box (348) is taller than the band (206) it can never sit wholly above the dock. Its first landing has the top inside the band; the 2nd and 3rd landings have the top above the header. The Up landing has the top under the header and 6 of 9 points covered by the input box. Owner to say whether a tall box is meant to be paged like this; by the runbook's own line it fails."
+  },
+  "endState": "Quick Access closed, game exited with deck_exitGame (confirm in 437 ms), ps shows no DRG Survivor.exe, settings.json identical to the block 0 backup (diff empty).",
+  "toolEvidence": ["recordings/DeckRecord_20260930_000015_game.mkv", "runs/p77-freeplay-game.json", "runs/plan77-b2-launch.json", "runs/plan77-b2-exit.json"]
+}

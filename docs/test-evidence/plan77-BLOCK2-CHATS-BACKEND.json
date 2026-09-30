@@ -1,0 +1,62 @@
+{
+  "rows": "P77-BANROW-SWITCH, P77-HELPFUL-STOPPED, P77-OLLAMA-SIZE-LIMITS, P77-TILDE-SAFETY-NET (see the walk-covers file), P77-LICENCE-FILTER, P77-OLLAMA-NOBOX-NOTE (box half), P77-HTTPS-REFUSED, P77-SPEECH-PINNED, P77-LIBRARY-CHECKSUMS, P77-STRATEGY-DECK-ITSELF (plan 77 block 2 sections 2 to 4)",
+  "build": "deployed 23:30 EDT from checkout tip bce7d0fd (deck_deploy, then deck_checkReady buildMatches true, 119 files). The plugin log after the deploy is '2026-09-29 23.31.12.log'.",
+  "deckTime": "2026-09-29 23:45 to 00:05 EDT (built-in Deck screen, Quick Access window 854x454, no game)",
+  "settingsChanged": [
+    {"key": "capabilities.steam_web_api (Permissions > Steam ban lookup)", "old": true, "new": false, "how": "A on the toggle in the plugin's own Permissions tab", "restored": "yes, back to true by the same toggle, confirmed in settings.json"},
+    {"key": "model_policy_tier (AI models > Filters > Licence)", "old": "open_weight ('Also try open-weight models')", "new": "foss ('Open source only') for the observation", "restored": "yes, back to open_weight, confirmed in settings.json"},
+    {"key": "AI models > Filters > Show > Essentials only", "old": "on", "new": "off for the observation", "restored": "yes, on again (Filters read 'Also try open-weight models, Essentials only')"}
+  ],
+  "P77-BANROW-SWITCH": {
+    "verdict": "PASS on all four looks I could make; the 'New chat spot' look could not be made",
+    "steps": "Permissions read: Steam ban lookup was ON (aria-checked true). Turned OFF (old value true) in the Permissions tab. In the main chat sent 'bonsai:vac-check' (send-question script VERIFIED), A on Ask. The reply is the local answer 'Steam Web API is off for bonsAI. Enable Permissions > Steam ban lookup...' and one .bonsai-chat-vac-deny-row reads 'Enable Steam ban lookup in Permissions to use bonsai:vac-check. Open Permissions' with an 'Open Permissions' button.",
+    "switch": "RB to the next chat: 0 deny rows. RB again through 7 other chats (chats 2 to 8, incl. 'wheatley fight' and 'HADES'): 0 deny rows in every one. Back with LB seven times to chat 1: 1 deny row again with the same text. Closed Quick Access with the chord and reopened: still 1 deny row in chat 1.",
+    "newChatSpot": "RB stops at the eighth chat ('HADES'); it never reached a separate 'New chat' spot, so that spot was not looked at. I did not press the '+' (it would start a chat).",
+    "restored": "Steam ban lookup back ON."
+  },
+  "P77-HELPFUL-STOPPED": {
+    "verdict": "UNCLEAR",
+    "steps": "First try (long guide question) finished in 35 s before I could reach Stop. Second, a longer question: 'write a very long detailed guide about every kind of weapon and upgrade in hollow knight style metroidvania games with many examples for each'. About 45 s in, walked to 'Stop generation' (Down from the input) and pressed A with 787 characters already shown.",
+    "freshlyStopped": "Right after Stop the answer shows the note 'Stopped - partial answer kept.', plus 'Was this helpful?', 'Helpful' / 'Not really' (Mark reply helpful, Mark reply not helpful), Copy reply text, Read aloud, and the question row's Retry same prompt. So on a freshly stopped answer the live Helpful / Not really buttons DO show (the runbook expected none).",
+    "afterSwitch": "RB to chat 2 then LB back: the stopped answer now has no 'Was this helpful?', no Helpful and no Not really, and the 'Stopped' note is gone; it still has 'Retry same prompt' (the corner button on the question row), Copy reply text, Read aloud. Control: chat 2, a normally finished answer, right after RB shows Retry same prompt, Copy, Mark reply helpful, Mark reply not helpful, Read aloud and 'Was this helpful?'.",
+    "why": "Helpful / Not really are gone after the switch (that half passes). The Retry button is still there on the stopped half-answer, and it is also on every finished answer in the control chat. I cannot tell whether the runbook's 'no Retry' means this corner button, so I did not call it a pass. Owner to decide."
+  },
+  "P77-OLLAMA-SIZE-LIMITS": {
+    "verdict": "PASS (a, b, c)",
+    "a": "Strategy, 'explain the whole story of hollow knight in detail, every area in order': answer whole (1740 characters, ends with its two-option menu), stream done_reason=stop, eval_count 1069 of num_predict 2112, 53.2 s. Plugin log: 0 lines with 'far larger than any real'.",
+    "b": "'how do I beat megaera in Hades': log 'kb: question chose domain=strategy route=text:hades method=hybrid attached=3 [Hades - Megaera; Hades - Theseus and Asterius; Hades - Weapon choice]'; the answer's Show details row reads 'Megaera - From bonsAI's own note'. 0 'far larger' lines.",
+    "c": "Ollama tab > Manage AI models opens the 'AI models' box: 'Installed 2 . 4.3 GB', gemma4:e2b-it-qat under Deck essentials and nomic-embed-text:latest under 'Other installed (not in curated catalog)'; ollama list shows exactly those two. Nothing pulled or deleted (only D-pad, B)."
+  },
+  "P77-LICENCE-FILTER": {
+    "verdict": "PARTLY PASS, ONE EXPECTED LABEL NOT SEEN",
+    "howRead": "The box is a Steam popup, so I read it from the Steam page (Steam Big Picture Mode target) plus screenshots. One press at a time; A only on the Filters row and on filter options, never on a model row. Essentials only had to be switched off to see the whole list (noted and restored).",
+    "openSourceOnly": "List has 24 catalog rows: gemma4:e2b-it-qat, qwen3.5:4b, qwen2.5vl:3b, gemma4:latest, qwen3:1.7b, qwen3:4b, qwen2.5:1.5b, qwen2.5:3b, qwen2.5:7b, llava:7b, gemma4:12b-it-qat, qwen3.5:9b, granite4.2:8b, gemma4:e4b-it-qat, qwen2.5:14b, llava-phi3, nomic-embed-text (installed). qwen2.5-coder:3b ABSENT (pass). qwen3, qwen3.5, gemma4, granite present (pass).",
+    "qwen2.5vl": "qwen2.5vl:3b is present, but its pill reads 'FOSS' (green), not 'Qwen Research (3B size)'. The words 'Research' and 'licence' do not appear anywhere on the screen text or in titles/aria-labels. qwen2.5:3b also reads 'FOSS' and is listed under Open source only. The source's catalog has license 'Qwen Research (3B size)' for both (src/data/pullModelCatalog.ts lines 127, 249, 429), so the screen does not show it. Expected label NOT seen.",
+    "alsoTryOpenWeight": "qwen2.5-coder:3b appears (pass), under 'Specialist', 1.9 GB, Nov '24, Coding. It has no licence pill. The list grew to 24 rows (gemma3, llama3.2, lfm2.5, deepseek-r1, llama3.2-vision added).",
+    "restored": "Licence back on 'Also try open-weight models', Essentials only back on, settings.json model_policy_tier open_weight."
+  },
+  "P77-OLLAMA-NOBOX-NOTE_boxHalf": {
+    "verdict": "PASS (Update, Tier 1, Tier 2)",
+    "steps": "Internet downloads is off. 'Update AI & models' (A): box 'Turn on internet downloads?' opens, ring on 'Not now'; B: ring back on 'Update AI & models'. Install options... (label 'Install model bundles') opens two buttons 'Install Tier 1 essentials' and 'Install Gemma 4 (all-in-one model)'. A on Tier 1: box 'Turn on internet downloads?' ('Pulls qwen2.5vl:3b - one small model for chat, screenshots, OCR, and Strategy mode'), ring on 'Not now', B, ring back on 'Install options...'. Same for Gemma 4: box 'Turn on internet downloads?' ('Pulls gemma4:e2b-it-qat...'), ring on 'Not now', B, ring back on 'Install options...'. Never pressed the box's go-ahead button; no pull process, ollama list unchanged, internet_downloads still false.",
+    "notes": "Tier 1 box text contains 'one small model' and no 'FOSS' (matches the block 3 wording check). Because downloads are off, the Gemma 4 box is titled 'Turn on internet downloads?', not 'Install Gemma 4?'. The block 3 runbook expects that title: it will not show while internet downloads stays off."
+  },
+  "P77-HTTPS-REFUSED": {
+    "verdict": "COULD NOT RUN",
+    "why": "settings.json has ollama_local_on_deck but no key for the PC address at all (grep of the file for ip, host, url, address found only named_ollama_hosts, an empty list; the backend default is 127.0.0.1:11434 and the address the Ollama tab shows is not stored there). The only way to enter https://127.0.0.1:11434 would be to type it into the Ollama tab's address field, which opens Steam's on-screen keyboard (the rule that cost an evening). So I did not change anything."
+  },
+  "P77-SPEECH-PINNED": {
+    "verdict": "PASS",
+    "seen": "Settings tab, Voice input: 'STT model tiny.en', 'Engine: whisper-cli ready', 'Model: tiny.en ready', 'Voice engine is ready for on-device transcription', with a 'Reinstall voice engine' button I did not press. Plugin log since the deploy (2026-09-29 23.31.12.log): 0 lines with 'checksum', 0 with 'did not download completely'. No download started."
+  },
+  "P77-LIBRARY-CHECKSUMS": {
+    "verdict": "COULD NOT RUN (go-ahead half); box half done",
+    "seen": "Ollama tab > 'Update knowledge base' (A) opens 'Turn on internet downloads? bonsAI will connect to https://huggingface.co to download the knowledge library... Not now / Turn on and download / Cancel'. Ring on 'Not now' (as expected). I pressed B.",
+    "why": "The go-ahead button 'Turn on and download' switches the Internet downloads permission on and downloads a file from Hugging Face. I do not have the user's own yes for a download or for turning that permission on, so I did not press it. Log has no 'checksum' line since the deploy (0)."
+  },
+  "P77-STRATEGY-DECK-ITSELF": {
+    "verdict": "PASS",
+    "run1": "'how do i beat the false knight in hollow knight': menu A. Starting out in Dirtmouth / B. Fighting the False Knight in the Forgotten Crossroads (expected).",
+    "run2": "same chat, 'how do i turn on the performance overlay on my steam deck': the answer names no Hollow Knight place or boss (checked Forgotten Crossroads, False Knight, Greenpath, City of Tears, Hollow Knight, Dirtmouth: none). Menu: A. System settings and overlays / B. Game performance and settings (about the Deck question).",
+    "run3": "reworded 'what is the best way to beat the false knight boss in hollow knight' (menu A. Tips for the False Knight / B. Tips for the boss), then 'what does the quick access button do': answer names no Hollow Knight word; no choice menu shown at all."
+  }
+}

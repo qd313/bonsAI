@@ -37,6 +37,7 @@ Gotchas:
 
 from __future__ import annotations
 
+import re
 from typing import Literal
 
 SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown"]
@@ -189,3 +190,37 @@ def resolve_title_spoiler_profile(app_id: str = "", app_name: str = "") -> Spoil
 
 def title_profile_is_low_narrative(app_id: str = "", app_name: str = "") -> bool:
     return resolve_title_spoiler_profile(app_id, app_name) == "low_narrative"
+
+
+def question_names_protected_title(question: str) -> bool:
+    """True when the question text itself names a story game from the protect table.
+
+    Whole-word match on the same names the title fallback uses, so "hades" fires on "beat
+    hades" and not on "shades of blue". Plan 77 helper J.
+    """
+    text = _normalize_title(question)
+    if not text:
+        return False
+    return any(
+        re.search(rf"(?<![a-z0-9]){re.escape(known)}(?![a-z0-9])", text)
+        for known in _PROTECT_PROGRESSION_TITLES
+    )
+
+
+def resolve_turn_title_spoiler_profile(
+    app_id: str = "", app_name: str = "", question: str = ""
+) -> SpoilerTitleProfile:
+    """The profile one turn is judged by: the game's own, unless a no-story game is running
+    and the question itself names a story game.
+
+    Plan 77 helper J (seen on the Deck 2026-09-30): with Deep Rock Galactic: Survivor running,
+    a Hollow Knight boss question came back with no covers, because the running game's
+    "no story" profile decided the whole turn. The running game still picks which notes are
+    attached; it must not decide what a *different* game's spoiler is worth. Only ever moves
+    toward more caution -- a story game running with a no-story game named stays protected,
+    and an unknown game is already conservative.
+    """
+    profile = resolve_title_spoiler_profile(app_id, app_name)
+    if profile == "low_narrative" and question_names_protected_title(question):
+        return "protect_progression"
+    return profile

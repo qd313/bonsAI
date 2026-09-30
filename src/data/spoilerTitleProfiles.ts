@@ -158,3 +158,47 @@ export function resolveTitleSpoilerProfile(
 export function titleProfileIsLowNarrative(appId?: string | null, appName?: string): boolean {
   return resolveTitleSpoilerProfile(appId, appName) === "low_narrative";
 }
+
+/**
+ * True when the question text itself names a story game from the protect table. Whole-word match
+ * on the same names the title fallback uses ("hades" fires on "beat hades", not on "shades").
+ * Mirror of `question_names_protected_title` in spoiler_title_profiles.py (plan 77 helper J).
+ */
+export function questionNamesProtectedTitle(question?: string | null): boolean {
+  const text = normalizeTitle(question || "");
+  if (!text) return false;
+  const isWordChar = (ch: string | undefined) => ch !== undefined && /[a-z0-9]/.test(ch);
+  return PROTECT_PROGRESSION_TITLES.some((known) => {
+    let at = text.indexOf(known);
+    while (at !== -1) {
+      if (!isWordChar(text[at - 1]) && !isWordChar(text[at + known.length])) return true;
+      at = text.indexOf(known, at + 1);
+    }
+    return false;
+  });
+}
+
+/**
+ * The profile one turn is judged by: the game's own, unless a no-story game is running and the
+ * question itself names a story game (plan 77 helper J). Only ever moves toward more caution.
+ */
+export function resolveTurnTitleSpoilerProfile(
+  appId?: string | null,
+  appName?: string,
+  question?: string | null
+): SpoilerTitleProfile {
+  const profile = resolveTitleSpoilerProfile(appId, appName);
+  if (profile === "low_narrative" && questionNamesProtectedTitle(question)) {
+    return "protect_progression";
+  }
+  return profile;
+}
+
+/** Whether this turn's own profile is "no story", the question's named game taken into account. */
+export function turnProfileIsLowNarrative(
+  appId?: string | null,
+  appName?: string,
+  question?: string | null
+): boolean {
+  return resolveTurnTitleSpoilerProfile(appId, appName, question) === "low_narrative";
+}

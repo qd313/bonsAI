@@ -256,4 +256,39 @@ describe("a cover naming a protected boss the person never typed", () => {
     );
     expect(out).not.toContain("```bonsai-spoiler");
   });
+
+  it("keeps covers shut when a no-story game runs but the question names a story game", () => {
+    // Plan 77 helper J: Deep Rock Galactic Survivor running, a Hollow Knight question. The
+    // running game's "no story" pass must not open Hollow Knight's covers.
+    const raw = [
+      "```bonsai-spoiler",
+      "The Soul Master falls after his second teleport.",
+      "```",
+    ].join("\n");
+    const question =
+      "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please";
+    const opts = { question, appId: "2321470", appName: "Deep Rock Galactic: Survivor" };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).toContain("```bonsai-spoiler");
+    expect(shouldUnwrapSpoilerFence(raw, opts)).toBe(false);
+  });
+
+  it("still opens every cover on a question about the running no-story game", () => {
+    const raw = ["```bonsai-spoiler", "Dodge the charge.", "```"].join("\n");
+    const opts = {
+      question: "how do I dodge enemy projectiles in deep rock survivor",
+      appId: "2321470",
+      appName: "Deep Rock Galactic: Survivor",
+    };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).not.toContain("```bonsai-spoiler");
+  });
+
+  it("explicit consent still opens the cover of a story game named while a no-story game runs", () => {
+    const raw = ["```bonsai-spoiler", "The Soul Master falls.", "```"].join("\n");
+    const opts = {
+      question: "Hollow Knight soul sanctum boss, spoilers are okay",
+      appId: "2321470",
+      spoilerConsentEffective: true,
+    };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).not.toContain("```bonsai-spoiler");
+  });
 });

@@ -16,7 +16,9 @@ import { describe, expect, it } from "vitest";
 import {
   LOW_NARRATIVE_APP_IDS,
   PROTECT_PROGRESSION_APP_IDS,
+  questionNamesProtectedTitle,
   resolveTitleSpoilerProfile,
+  resolveTurnTitleSpoilerProfile,
 } from "./spoilerTitleProfiles";
 
 // Read rather than import: keeps the fixture outside src/ (it is shared with the Python
@@ -26,6 +28,8 @@ const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf-8")) as {
   low_narrative_app_ids: string[];
   protect_progression_app_ids: string[];
   cases: { name: string; app_id: string; app_name: string; expected: string }[];
+  question_cases: { name: string; question: string; expected: boolean }[];
+  turn_cases: { name: string; app_id: string; app_name: string; question: string; expected: string }[];
 };
 
 describe("spoiler title profiles contract", () => {
@@ -47,4 +51,15 @@ describe("spoiler title profiles contract", () => {
   it.each(contract.cases)("resolves: $name", ({ app_id, app_name, expected }) => {
     expect(resolveTitleSpoilerProfile(app_id, app_name)).toBe(expected);
   });
+
+  it.each(contract.question_cases)("question names a story game: $name", ({ question, expected }) => {
+    expect(questionNamesProtectedTitle(question)).toBe(expected);
+  });
+
+  it.each(contract.turn_cases)(
+    "turn profile: $name",
+    ({ app_id, app_name, question, expected }) => {
+      expect(resolveTurnTitleSpoilerProfile(app_id, app_name, question)).toBe(expected);
+    }
+  );
 });

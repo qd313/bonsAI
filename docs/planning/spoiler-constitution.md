@@ -60,6 +60,15 @@ annoys a player, but fencing too little can never be taken back.
   answer never claims a game is running. For story games this changes nothing. For a no-story game
   named only in the question, it means more fencing than intended. Plan 54 gap 3.
 
+**A different story game named while a no-story game runs (2026-09-30, plan 77 helper J).** The running game 
+still picks which notes are attached, but it no longer decides what a spoiler is worth when the 
+question itself names a story game from the protected list. Deep Rock Galactic: Survivor running plus 
+"how do I beat the boss in the Soul Sanctum in Hollow Knight" is now judged as a protected-story 
+question, in the prompt and on screen (`resolve_turn_title_spoiler_profile` / 
+`resolveTurnTitleSpoilerProfile`, pinned by `question_cases` and `turn_cases` in 
+`tests/contracts/spoiler-title-profiles.json`). It only ever moves toward more caution. "Quick tips 
+please" is not consent.
+
 **Display unwrap** (`unwrapAskedEntitySpoilerFences`):
 
 1. `spoilerConsentEffective` → all fences.

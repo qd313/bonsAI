@@ -378,6 +378,56 @@ class StrategyTitleProfileWiringTests(unittest.TestCase):
         )
 
 
+class RunningGameVersusNamedGameSpoilerProfileTests(unittest.TestCase):
+    """Plan 77 helper J: a no-story game is running, the question names a different story game.
+
+    The running game still decides which notes are attached (a question naming Portal 2 while
+    Hades is open is still an Ask about Hades), but it must not decide how much a spoiler is
+    worth: Hollow Knight's boss is Hollow Knight's spoiler even while Deep Rock Galactic
+    Survivor runs. Seen on the Deck 2026-09-30 -- the answer came back with no covers.
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "use_local_knowledge_base": False,
+        }
+
+    def test_story_game_named_while_a_no_story_game_runs_gets_the_protect_profile(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "General advice."}
+
+        _run(
+            plugin,
+            question="How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please",
+            ask_mode="strategy",
+            app_id="2321470",
+            app_name="Deep Rock Galactic: Survivor",
+        )
+
+        self.assertEqual(
+            plugin.ask_ollama_kwargs.get("strategy_title_profile"), "protect_progression"
+        )
+
+    def test_a_question_about_the_running_no_story_game_keeps_its_profile(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "General advice."}
+
+        _run(
+            plugin,
+            question="how do I dodge enemy projectiles",
+            ask_mode="strategy",
+            app_id="2321470",
+            app_name="Deep Rock Galactic: Survivor",
+        )
+
+        self.assertEqual(
+            plugin.ask_ollama_kwargs.get("strategy_title_profile"), "low_narrative"
+        )
+
+
 class AnswerCheckerLoggingTests(unittest.TestCase):
     """The rule-based answer checker (response_verify.py) had never been called from anywhere.
 

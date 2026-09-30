@@ -17,7 +17,9 @@ from pathlib import Path
 from backend.services.spoiler_title_profiles import (
     LOW_NARRATIVE_APP_IDS,
     PROTECT_PROGRESSION_APP_IDS,
+    question_names_protected_title,
     resolve_title_spoiler_profile,
+    resolve_turn_title_spoiler_profile,
 )
 
 CONTRACT_PATH = Path(__file__).resolve().parent / "contracts" / "spoiler-title-profiles.json"
@@ -48,6 +50,24 @@ class SpoilerTitleProfilesContractTests(unittest.TestCase):
             with self.subTest(case=case["name"]):
                 self.assertEqual(
                     resolve_title_spoiler_profile(case["app_id"], case["app_name"]),
+                    case["expected"],
+                )
+
+    def test_question_cases(self):
+        """Whether a question itself names a story game -- the same cases the TS half reads."""
+        for case in CONTRACT["question_cases"]:
+            with self.subTest(case=case["name"]):
+                self.assertEqual(
+                    question_names_protected_title(case["question"]), case["expected"]
+                )
+
+    def test_a_named_story_game_overrides_a_running_no_story_profile(self):
+        for case in CONTRACT["turn_cases"]:
+            with self.subTest(case=case["name"]):
+                self.assertEqual(
+                    resolve_turn_title_spoiler_profile(
+                        case["app_id"], case["app_name"], case["question"]
+                    ),
                     case["expected"],
                 )
 

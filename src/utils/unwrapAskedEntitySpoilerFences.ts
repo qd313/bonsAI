@@ -6,7 +6,7 @@
  * Does not: Change backend spoiler policy — prompt and sanitizer remain authoritative.
  */
 
-import { titleProfileIsLowNarrative } from "../data/spoilerTitleProfiles";
+import { turnProfileIsLowNarrative } from "../data/spoilerTitleProfiles";
 import type { KbAttachedNote } from "./inputTransparency";
 
 const SPOILER_FENCE_RE = /```bonsai-spoiler\s*\n([\s\S]*?)```/gi;
@@ -124,7 +124,7 @@ export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerO
   const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   if (consent) return true;
-  if (titleProfileIsLowNarrative(appId, appName)) return true;
+  if (turnProfileIsLowNarrative(appId, appName, opts.question)) return true;
   const entity = askedEntityFor(opts);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
@@ -145,7 +145,7 @@ export function unwrapAskedEntitySpoilerFences(
   const appId = String(opts.appId || "").trim();
   const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
-  const lowNarrativeTitle = titleProfileIsLowNarrative(appId, appName);
+  const lowNarrativeTitle = turnProfileIsLowNarrative(appId, appName, opts.question);
   const entity = askedEntityFor(opts);
   if (!text) return text;
   if (!consent && !lowNarrativeTitle && !entity) return text;

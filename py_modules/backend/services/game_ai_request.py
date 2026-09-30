@@ -162,7 +162,7 @@ from backend.services.kb_attached_notes import (
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.services.spoiler_risk_service import build_spoiler_risk_signals
-from backend.services.spoiler_title_profiles import resolve_title_spoiler_profile
+from backend.services.spoiler_title_profiles import resolve_turn_title_spoiler_profile
 from backend.services.transparency_service import (
     build_capability_denied_snapshot,
     build_error_route_snapshot,
@@ -807,8 +807,10 @@ async def run_game_ai_request(
         # the reply must not start claiming a game is running when none is. Computed once and
         # reused for the prompt below (plan 54 gap 3) so the chip and the prompt can never
         # disagree about which game this is.
-        strategy_title_profile = resolve_title_spoiler_profile(
-            app_id, app_name or text_resolved_title
+        # Plan 77 helper J: a story game the question names outranks a running no-story game's
+        # profile -- see resolve_turn_title_spoiler_profile.
+        strategy_title_profile = resolve_turn_title_spoiler_profile(
+            app_id, app_name or text_resolved_title, question_for_retrieval
         )
         # D112 #7: this turn's protected names, decided once, here, before the model is called --
         # the attached notes are marked with them before they are published live, so the "From

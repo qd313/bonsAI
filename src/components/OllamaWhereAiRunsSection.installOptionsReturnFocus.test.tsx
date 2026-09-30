@@ -66,8 +66,8 @@ afterEach(() => {
   resetModalReturnFocusRegistry();
 });
 
-describe("Install Tier 1 essentials / Install Tier 2 one-model multimodal and their box", () => {
-  it.each(["Install Tier 1 essentials", "Install Tier 2 one-model multimodal"])(
+describe("Install Tier 1 essentials / Install Gemma 4 (all-in-one model) and their box", () => {
+  it.each(["Install Tier 1 essentials", "Install Gemma 4 (all-in-one model)"])(
     "%s says it opened the box, and the restore reaches Install options",
     async (label) => {
       drawOnDeck();

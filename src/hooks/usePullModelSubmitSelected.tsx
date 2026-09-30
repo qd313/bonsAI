@@ -158,8 +158,8 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
               <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
                 <div style={{ marginBottom: 8 }}>
                   Your queue includes open-weight model(s):{" "}
-                  <span style={{ color: "#9ce7ff" }}>{tagList}</span>. Tier 1 limits Ask routing to FOSS-friendly
-                  tags only.
+                  <span style={{ color: "#9ce7ff" }}>{tagList}</span>. Tier 1 only lets Ask use models with an
+                  open-source licence (Apache 2.0 or MIT).
                 </div>
                 <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
                   Enable <strong>Tier 2 (open-weight)</strong> before pulling so these models can be used. {TIER2_PULL_NOTE}

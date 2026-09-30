@@ -1,7 +1,7 @@
 /**
  * Title: The Tier 2 multimodal install box does not talk about a reply
  *
- * Purpose: Pin plan 76 lane 2 follow-up, bug 3. The "Install Tier 2 one-model multimodal" box ended
+ * Purpose: Pin plan 76 lane 2 follow-up, bug 3. The "Install Gemma 4 (all-in-one model)" box ended
  * with the Ask-answer footnote ("This reply used an 'open model'..."), though no reply is involved in
  * an install. It now uses the same plain sentence as the two "Enable Tier 2" pull boxes.
  */
@@ -30,7 +30,7 @@ beforeEach(() => {
   markSettingsLoaded();
 });
 
-describe("Install Tier 2 one-model multimodal box", () => {
+describe("Install Gemma 4 (all-in-one model) box", () => {
   it("ends with the plain Tier 2 sentence, not the reply footnote", async () => {
     render(
       <OllamaWhereAiRunsSection
@@ -52,7 +52,7 @@ describe("Install Tier 2 one-model multimodal box", () => {
       fireEvent.click((await screen.findByText("Install options…")).closest("button")!);
     });
     await act(async () => {
-      fireEvent.click((await screen.findByText("Install Tier 2 one-model multimodal")).closest("button")!);
+      fireEvent.click((await screen.findByText("Install Gemma 4 (all-in-one model)")).closest("button")!);
     });
 
     expect(hoisted.body).not.toBeNull();

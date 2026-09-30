@@ -205,7 +205,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Default Tier 1 pull:** `qwen2.5vl:3b` — one small multimodal model for chat, screenshots, OCR, and Strategy mode. (Qwen's own card gives this 3B size the Qwen Research licence, not Apache 2.0 — see [Model licences and the tiers](#model-licences-and-the-tiers); it stays in Tier 1 for now so the default keeps working.) In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
 
-**Optional Tier 2 one-model multimodal:** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button keeps its "Tier 2" name and still switches the policy. Use **Install Tier 2 one-model multimodal** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
+**Optional Gemma 4 install (all-in-one model):** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button also switches Model policy to Tier 2. Use **Install Gemma 4 (all-in-one model)** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
 
 **Browse models** defaults to **Essentials only** (two preset rows). Turn the filter off to see more models; stretch/specialist rows are for power users.
 
@@ -254,7 +254,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 
 **Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library. Use **`gemma4:e2b-it-qat`**, **`gemma4:e2b`**, or **`gemma4:latest`** (= E4B on Ollama).
 
-**Fix:** Pull via **Install Tier 2 one-model multimodal** or an exact catalog tag. Gemma 4 tags work under Tier 1; Gemma 3 and older need **Tier 2** model policy.
+**Fix:** Pull via **Install Gemma 4 (all-in-one model)** or an exact catalog tag. Gemma 4 tags work under Tier 1; Gemma 3 and older need **Tier 2** model policy.
 
 **Checks:**
 

@@ -101,7 +101,7 @@ describe("Ollama setup buttons open the download notice", () => {
     const f = flow(applyPolicy);
     act(() => f.openLocalSetupConfirm("tier2_multimodal", "ollama-local-setup"));
     await settle();
-    expect(hoisted.calls[0].opts).toMatchObject({ always: true, actionLabel: "Install Tier 2 multimodal" });
+    expect(hoisted.calls[0].opts).toMatchObject({ always: true, actionLabel: "Install Gemma 4" });
     expect(applyPolicy).not.toHaveBeenCalled();
     expect(setupCalls()).toHaveLength(0);
   });

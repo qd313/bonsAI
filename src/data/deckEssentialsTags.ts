@@ -3,9 +3,9 @@
  *
  * Purpose: When the AI runs on the Deck itself instead of a PC, the Ollama
  * tab offers two one-tap downloads instead of asking the user to pick a
- * model by hand: "Install Tier 1 essentials" (one small open-source model
- * that can chat, read screenshots, and do OCR) and an optional Tier 2 pull
- * (a second model, not fully open-source, that trades a bigger download for
+ * model by hand: "Install Tier 1 essentials" (one small model
+ * that can chat, read screenshots, and do OCR) and an optional second pull
+ * (Gemma 4, Apache 2.0 but installed through the button that turns on Tier 2, that trades a bigger download for
  * a stronger all-in-one model). This file names exactly which Ollama tag
  * each button downloads.
  *

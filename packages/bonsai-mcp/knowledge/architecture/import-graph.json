@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 626,
-  "edgeCount": 1739,
+  "fileCount": 627,
+  "edgeCount": 1746,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1969,6 +1969,7 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2057,6 +2058,7 @@
         "src/components/PullModelsModal.types.ts",
         "src/data/pullModelCatalog.test.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
@@ -3218,6 +3220,18 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/setupAndPullBoxWording.test.tsx": {
+      "imports": [
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useAskBarInitialRingClaim.test.ts": {
       "imports": [
         "src/hooks/useAskBarInitialRingClaim.ts",
@@ -3442,6 +3456,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
@@ -3561,6 +3576,7 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx"
       ]
     },
@@ -3779,6 +3795,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/usePullModelDownloadNotice.test.tsx",
         "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
         "src/hooks/usePullModelTier2Wording.test.tsx"
@@ -4639,6 +4656,7 @@
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/voice/useVoiceAskInput.test.ts",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
@@ -4724,6 +4742,7 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",

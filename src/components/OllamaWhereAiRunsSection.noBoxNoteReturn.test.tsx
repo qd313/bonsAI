@@ -62,7 +62,7 @@ async function press(label: string, viaMenu: boolean) {
 const CASES: Array<[string, boolean]> = [
   ["Update AI & models", false],
   ["Install Tier 1 essentials", true],
-  ["Install Tier 2 one-model multimodal", true],
+  ["Install Gemma 4 (all-in-one model)", true],
 ];
 
 beforeEach(() => {

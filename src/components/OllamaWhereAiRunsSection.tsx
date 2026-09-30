@@ -688,9 +688,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                         onMoveDown: () => focusConnectionTestBtn(),
                       } as unknown as Record<string, unknown>)}
                       style={{ width: "100%", minHeight: 34, fontSize: 11, fontWeight: 600 }}
-                      aria-label="Install Tier 2 one-model multimodal"
+                      aria-label="Install Gemma 4 (all-in-one model)"
                     >
-                      Install Tier 2 one-model multimodal
+                      Install Gemma 4 (all-in-one model)
                     </Button>
                   </Focusable>
                 ) : null}

@@ -39,15 +39,15 @@ export type DeckyModalSurvivalHooks = {
 };
 
 /** Full local-runtime banner text (one-time when Ollama on Deck is enabled). */
-function localRuntimeBetaNoticeDescription(): string {
+export function localRuntimeBetaNoticeDescription(): string {
   return (
     "You are using Ollama on this device (local runtime).\n\n" +
     "If you have another PC on your LAN that can host Ollama, that path is typically much faster than on-device inference.\n\n" +
     "Heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior from memory pressure — " +
     "use at your own risk. This path is beta: screenshots and attachments use vision-capable models where available; Expert and heavier models can add delay.\n\n" +
     "Speed (Fast) is the default for quick answers. Use Strategy when you need branching choices. Expert is heavier and slower.\n\n" +
-    `Default Tier-1 pull: ${TIER1_ESSENTIALS_TAG} (one FOSS model for chat and screenshots). ` +
-    "On the Ollama tab, under Where AI runs, use Install Tier 1 essentials or optional Tier 2 one-model multimodal.\n\n" +
+    `Default pull: ${TIER1_ESSENTIALS_TAG} (one small model for chat and screenshots). ` +
+    "On the Ollama tab, under Where AI runs, use Install Tier 1 essentials, or Install Gemma 4 for a bigger all-in-one model.\n\n" +
     "You can turn off Run AI on this Deck on the Ollama tab if you prefer a LAN host."
   );
 }

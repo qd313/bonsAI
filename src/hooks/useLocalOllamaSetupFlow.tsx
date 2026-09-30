@@ -144,12 +144,12 @@ export function useLocalOllamaSetupFlow({
         ? "Install Tier 1 essentials?"
         : isUpdateInstalled
           ? "Update Ollama and models?"
-          : "Install Tier 2 one-model multimodal?";
+          : "Install Gemma 4?";
       const actionLabel = isTier1
         ? "Install Tier 1 essentials"
         : isUpdateInstalled
           ? "Start update"
-          : "Install Tier 2 multimodal";
+          : "Install Gemma 4";
       const body = (
         <div
           className="bonsai-prose"
@@ -158,7 +158,7 @@ export function useLocalOllamaSetupFlow({
           {isTier1 ? (
             <>
               <div style={{ marginBottom: 8 }}>
-                Pulls <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span> — one FOSS model for
+                Pulls <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span> — one small model for
                 chat, screenshots, OCR, and Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
@@ -177,8 +177,8 @@ export function useLocalOllamaSetupFlow({
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
               {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
               <div style={{ marginTop: 8 }}>
-                If nothing is installed yet, the update finishes after the binary refresh — use Tier 1 essentials or
-                Tier 2 multimodal to pull a model first.
+                If nothing is installed yet, the update finishes after the binary refresh — use Install Tier 1 essentials or
+                Install Gemma 4 to pull a model first.
               </div>
             </>
           ) : (
@@ -188,8 +188,9 @@ export function useLocalOllamaSetupFlow({
                 needed). {LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB}
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                bonsAI will switch Model policy to <strong>Tier 2 (open-weight)</strong> so this model is eligible
-                for Ask. {TIER2_PULL_NOTE}
+                Gemma 4 is open source (Apache 2.0). bonsAI will also switch Model policy to{" "}
+                <strong>Tier 2 (open-weight)</strong>, so Ask can use open-weight models you install later, such as
+                Gemma 3 or Llama. {TIER2_PULL_NOTE}
               </div>
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
               {LOCAL_SETUP_NETWORK_AND_POWER_HINT}

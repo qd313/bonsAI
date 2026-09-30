@@ -205,6 +205,14 @@ class ClearWhileAnsweringKeepsTheChatWholeTests(unittest.IsolatedAsyncioTestCase
             self._turns(), [("user", "how do I parry?"), ("assistant", "Request cancelled.")]
         )
 
+    async def test_the_saved_stopped_answer_is_marked_stopped(self) -> None:
+        await self._ask_then_clear_mid_answer("Hold L1 and tap")
+        from backend.services.chat_slot_service import load_slot
+
+        loaded = load_slot(self.tmp, self.slot_id)
+        assert loaded is not None
+        self.assertEqual(loaded["turns"][-1].get("outcome"), "stopped")
+
 
 if __name__ == "__main__":
     unittest.main()

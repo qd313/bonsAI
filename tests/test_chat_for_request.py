@@ -165,6 +165,25 @@ class ChatForRequestTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIsNone(self.plugin._background_state.get("chat_summary"))
 
+    async def test_a_stopped_or_failed_answer_is_saved_marked_and_a_finished_one_is_not(self):
+        """Only a finished answer may get live Helpful buttons after a chat switch, so the saved
+        turn has to say when it was not one."""
+        cases = (
+            ("stopped", {"success": False, "cancelled": True, "response": "half an ans", "elapsed_seconds": 0.01}),
+            ("failed", {"success": False, "response": "Could not reach Ollama.", "elapsed_seconds": 0.01}),
+            (None, {"success": True, "response": "A whole answer.", "elapsed_seconds": 0.01}),
+        )
+        for expected, result in cases:
+            with self.subTest(expected=expected):
+                slot = create_slot(self.tmp, label=f"outcome {expected}")
+                sid = slot["id"]
+                await self._run_background_ask(result, chat_slot_id=sid)
+                turn = self._last_assistant_turn(sid)
+                if expected is None:
+                    self.assertNotIn("outcome", turn)
+                else:
+                    self.assertEqual(turn.get("outcome"), expected)
+
 
 if __name__ == "__main__":
     unittest.main()

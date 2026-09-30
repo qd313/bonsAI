@@ -274,6 +274,25 @@ describe("useChatSlots", () => {
       expect(restore).not.toHaveBeenCalled();
     });
 
+    it("hands back nothing when the newest answer was stopped or is a saved error", async () => {
+      for (const outcome of ["stopped", "failed"]) {
+        const restore = vi.fn();
+        const { result } = open(restore);
+        vi.mocked(chatSlotsApi.getChatSlot).mockResolvedValueOnce(
+          slotWith([
+            { id: "u1", role: "user", text: "first?" },
+            { id: "a1", role: "assistant", text: "first answer" },
+            { id: "u2", role: "user", text: "second?" },
+            { id: "a2", role: "assistant", text: "half of an ans", outcome },
+          ]) as never,
+        );
+        await act(async () => {
+          await result.current.selectSlot("slot-b");
+        });
+        expect(restore).not.toHaveBeenCalled();
+      }
+    });
+
     it("does not hand back a chat the user has already left", async () => {
       const activeSlotIdRef = { current: null as string | null };
       let release: (value: unknown) => void = () => {};

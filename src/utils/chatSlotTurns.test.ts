@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lastExchangeFromSavedTurn, turnsToCollapsedTurns } from "./chatSlotTurns";
+import { lastExchangeFromSavedTurn, newestSavedAnswerIsFinished, turnsToCollapsedTurns } from "./chatSlotTurns";
 
 describe("turnsToCollapsedTurns", () => {
   it("preserves trailing unpaired user turn as pendingQuestion", () => {
@@ -289,5 +289,34 @@ describe("lastExchangeFromSavedTurn", () => {
     expect(lastExchangeFromSavedTurn(blank)).toBeNull();
     expect(lastExchangeFromSavedTurn(stopped)).toBeNull();
     expect(lastExchangeFromSavedTurn(undefined)).toBeNull();
+  });
+});
+
+/*
+ * Roadmap: "After a chat switch, a stopped partial answer or a saved error as the newest turn also
+ * gets live Helpful buttons". The back end marks such a turn; only a finished answer is restored.
+ */
+describe("newestSavedAnswerIsFinished", () => {
+  const q = { id: "u", role: "user" as const, text: "q" };
+  it("is true for a finished answer, an older turn with no mark, or a chat with no answer yet", () => {
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "done" }])).toBe(true);
+    expect(newestSavedAnswerIsFinished([q])).toBe(true);
+    expect(newestSavedAnswerIsFinished([])).toBe(true);
+  });
+
+  it("is false when the newest answer was stopped or failed", () => {
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "half", outcome: "stopped" }])).toBe(false);
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "Error", outcome: "failed" }])).toBe(false);
+  });
+
+  it("only looks at the newest answer, not an older stopped one", () => {
+    expect(
+      newestSavedAnswerIsFinished([
+        q,
+        { id: "a1", role: "assistant", text: "half", outcome: "stopped" },
+        q,
+        { id: "a2", role: "assistant", text: "whole" },
+      ]),
+    ).toBe(true);
   });
 });

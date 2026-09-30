@@ -33,7 +33,7 @@ import {
   type ChatSlot,
   type ChatSlotSummary,
 } from "../utils/chatSlotsApi";
-import { lastExchangeFromSavedTurn, turnsToCollapsedTurns } from "../utils/chatSlotTurns";
+import { lastExchangeFromSavedTurn, newestSavedAnswerIsFinished, turnsToCollapsedTurns } from "../utils/chatSlotTurns";
 import {
   questionsIn,
   turnsAfterSummary,
@@ -281,9 +281,11 @@ export function useChatSlots({
            * The reply row (Helpful / Not really / chips) is drawn from the last exchange, which a
            * chat opened from disk does not have: hand it the newest answered turn. Not while the
            * chat ends on a question still owed an answer, and not if the person moved on during
-           * the load (the same guard the ghost-reply fix above relies on).
+           * the load (the same guard the ghost-reply fix above relies on). And only for a finished
+           * answer: a stopped partial answer or a saved error is not something to rate or retry
+           * (the back end marks those turns; see newestSavedAnswerIsFinished).
            */
-          if (!pendingQuestion && activeSlotIdRef.current === slotId) {
+          if (!pendingQuestion && activeSlotIdRef.current === slotId && newestSavedAnswerIsFinished(slot.turns)) {
             const exchange = lastExchangeFromSavedTurn(collapsed[collapsed.length - 1]);
             if (exchange) restoreLastExchange?.(exchange);
           }

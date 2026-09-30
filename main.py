@@ -1585,6 +1585,9 @@ class Plugin:
                 asked_entity=result.get("strategy_spoiler_asked_entity") or "",
                 reasoning=None if cancelled_rq else chat_turn_recorder.reasoning_payload_for_chat_slot(result),
                 chat_summary="" if cancelled_rq else str(result.get("chat_summary") or ""),
+                # Marked when it is not a finished answer, so a chat reopened later does not offer
+                # Helpful / Retry on half an answer or an error message.
+                outcome="stopped" if cancelled_rq else ("" if success else "failed"),
             )
         await self._maybe_app_log(
             "ask.background",
@@ -1941,6 +1944,7 @@ class Plugin:
                             # from `pending_background_state` survives the cancel).
                             app_id=str(self._background_state.get("app_id") or ""),
                             app_name="",
+                            outcome="stopped",
                         )
         await self._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}

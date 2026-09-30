@@ -132,6 +132,7 @@ async def record_assistant_turn(
     asked_entity: str = "",
     reasoning: Optional[dict] = None,
     chat_summary: str = "",
+    outcome: str = "",
 ) -> None:
     sid = str(slot_id or "").strip()
     body = str(response_text or "").strip()
@@ -151,6 +152,7 @@ async def record_assistant_turn(
             asked_entity=asked_entity,
             reasoning=reasoning,
             chat_summary=chat_summary,
+            outcome=outcome,
             logger=logger,
         )
 
@@ -175,6 +177,7 @@ def take_answer_a_clear_will_stop(plugin) -> Optional[dict]:
         "slot_id": slot_id,
         "response_text": plugin._cancelled_response_text(rid, "Request cancelled."),
         "app_id": str(state.get("app_id") or ""),
+        "outcome": "stopped",
     }
 
 

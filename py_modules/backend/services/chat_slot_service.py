@@ -352,6 +352,13 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     chat_summary = raw.get("chat_summary")
     if role == "assistant" and chat_summary in ("written", "failed"):
         turn["chat_summary"] = chat_summary
+    # How an answer that was not a finished one ended: "stopped" (the text is what had arrived) or
+    # "failed" (the text is the error message). Lets a chat reopened later tell such a turn from a
+    # real answer, so it does not get live Helpful buttons. Absent on a finished answer, on a user
+    # turn and on every older turn -- the same "absent, not empty" rule as the marks above.
+    outcome = raw.get("outcome")
+    if role == "assistant" and outcome in ("stopped", "failed"):
+        turn["outcome"] = outcome
     return turn
 
 
@@ -631,6 +638,7 @@ def append_turn(
     display_text: str = "",
     reasoning: dict[str, Any] | None = None,
     chat_summary: str = "",
+    outcome: str = "",
     label: str | None = None,
     logger: Any = None,
 ) -> dict[str, Any] | None:
@@ -651,6 +659,7 @@ def append_turn(
             "display_text": display_text,
             "reasoning": reasoning,
             "chat_summary": chat_summary,
+            "outcome": outcome,
             "created_at": int(time.time()),
         }
     )

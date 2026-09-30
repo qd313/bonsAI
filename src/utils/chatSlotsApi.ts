@@ -56,6 +56,12 @@ export type ChatSlotTurn = {
    * "absent, not empty" rule the backend's `chat_slot_service.py` follows for `reasoning`.
    */
   chat_summary?: "written" | "failed";
+  /**
+   * How an assistant turn ended when it was not a finished answer: "stopped" (the person stopped it,
+   * the text is what had arrived) or "failed" (the text is the error message). Absent on a finished
+   * answer and on every turn saved before this field existed. Written by `chat_slot_service.py`.
+   */
+  outcome?: "stopped" | "failed";
 };
 
 /**

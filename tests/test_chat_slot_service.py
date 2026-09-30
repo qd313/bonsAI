@@ -726,6 +726,37 @@ class ChatSlotServiceTests(unittest.TestCase):
             assert saved is not None
             self.assertNotIn("chat_summary", saved["turns"][-1])
 
+    def test_outcome_round_trips_on_an_assistant_turn(self):
+        """A stopped or failed answer is saved marked, so a reopened chat does not treat it as a
+        finished one (roadmap: stopped partial / saved error gets live Helpful after a switch)."""
+        slot = create_slot(self.settings_dir, label="outcome mark")
+        sid = slot["id"]
+        for mark in ("stopped", "failed"):
+            saved = append_turn(
+                self.settings_dir, sid, role="assistant", text=f"half {mark}", outcome=mark
+            )
+            assert saved is not None
+            self.assertEqual(saved["turns"][-1]["outcome"], mark)
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual([t["outcome"] for t in reloaded["turns"]], ["stopped", "failed"])
+
+    def test_outcome_is_absent_for_a_finished_answer_a_user_turn_and_any_other_value(self):
+        slot = create_slot(self.settings_dir, label="no outcome")
+        sid = slot["id"]
+        saved = append_turn(self.settings_dir, sid, role="assistant", text="finished")
+        assert saved is not None
+        self.assertNotIn("outcome", saved["turns"][-1])
+        saved = append_turn(self.settings_dir, sid, role="user", text="q", outcome="stopped")
+        assert saved is not None
+        self.assertNotIn("outcome", saved["turns"][-1])
+        for bogus in ("", "done", "Stopped"):
+            saved = append_turn(
+                self.settings_dir, sid, role="assistant", text=f"a {bogus}", outcome=bogus
+            )
+            assert saved is not None
+            self.assertNotIn("outcome", saved["turns"][-1])
+
 
 if __name__ == "__main__":
     unittest.main()

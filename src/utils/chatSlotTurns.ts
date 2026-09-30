@@ -132,6 +132,19 @@ export function turnsToCollapsedTurns(
 }
 
 /**
+ * Whether the newest saved answer is a finished one. A stopped partial answer and a saved error are
+ * kept as turns too, marked by the back end (`outcome`), and neither is something to rate or retry
+ * as if it were an answer. A turn saved before the mark existed has none, so it counts as finished.
+ */
+export function newestSavedAnswerIsFinished(turns: ChatSlotTurn[]): boolean {
+  for (let i = turns.length - 1; i >= 0; i--) {
+    const turn = turns[i]!;
+    if (turn.role === "assistant") return !turn.outcome;
+  }
+  return true;
+}
+
+/**
  * A saved question and answer, read back as the "last exchange" the reply row is drawn from.
  *
  * A chat opened from disk has no exchange of its own -- the live one is only set when an answer

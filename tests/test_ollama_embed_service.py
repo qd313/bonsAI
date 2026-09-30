@@ -128,7 +128,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-            def read(self):
+            def read(self, n=-1):
                 return json.dumps(payload).encode("utf-8")
 
         with mock.patch("urllib.request.urlopen", return_value=FakeResp()):
@@ -148,7 +148,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-            def read(self):
+            def read(self, n=-1):
                 return json.dumps(payload).encode("utf-8")
 
         def fake_urlopen(req, timeout=None):
@@ -182,7 +182,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-            def read(self):
+            def read(self, n=-1):
                 return json.dumps({"embeddings": []}).encode("utf-8")
 
         with mock.patch("urllib.request.urlopen", return_value=FakeResp()):

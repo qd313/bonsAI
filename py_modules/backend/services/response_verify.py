@@ -14,6 +14,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, NamedTuple, Optional, Sequence
 
+from backend.ollama_reply_limits import read_json_capped
 from backend.services.strategy_spoiler_policy import (
     boss_like_card_names,
     fence_opener_is_spoiler,
@@ -131,7 +132,7 @@ def run_verifier_second_pass(
     timeout = max(10, min(int(request_timeout_seconds or 30), 120))
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            data = json.loads(resp.read().decode("utf-8", "replace"))
+            data = read_json_capped(resp, what="second-pass check reply", logger=logger, errors="replace")
     except urllib.error.HTTPError as exc:
         if logger:
             logger.info(

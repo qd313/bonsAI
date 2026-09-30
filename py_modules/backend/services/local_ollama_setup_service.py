@@ -70,8 +70,6 @@ compensate for the Deck being a locked-down, non-desktop Linux system underneath
 from __future__ import annotations
 
 import asyncio
-import ipaddress
-import json
 import os
 import re
 import shutil
@@ -88,6 +86,7 @@ from backend.ollama_routing import (
     TIER2_MULTIMODAL_PULL_TAGS,
     setup_recommended_pull_tags,
 )
+from backend.ollama_reply_limits import read_json_capped
 from backend.ollama_urls import normalize_ollama_base
 
 OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
@@ -437,7 +436,7 @@ def list_installed_ollama_tags(base_http: str, timeout_seconds: float = 5.0) -> 
     try:
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            data = read_json_capped(resp, what="/api/tags reply")
         models = data.get("models") if isinstance(data, dict) else None
         if not isinstance(models, list):
             return []
@@ -469,7 +468,7 @@ def list_installed_ollama_tag_sizes(base_http: str, timeout_seconds: float = 5.0
     try:
         req = urllib.request.Request(url, method="GET")
         with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            data = read_json_capped(resp, what="/api/tags reply")
         models = data.get("models") if isinstance(data, dict) else None
         if not isinstance(models, list):
             return {}

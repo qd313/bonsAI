@@ -17,6 +17,7 @@ import urllib.request
 from typing import Any
 
 from backend.ollama_connectivity import ollama_http_base_from_pc_ip_field
+from backend.ollama_reply_limits import read_error_body, read_json_capped
 from backend.ollama_urls import build_ollama_embed_url
 from backend.services.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
 from backend.services.local_ollama_setup_service import list_installed_ollama_tags
@@ -175,13 +176,9 @@ def embed_texts(
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout_s) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            data = read_json_capped(resp, what="/api/embed reply")
     except urllib.error.HTTPError as exc:
-        detail = ""
-        try:
-            detail = exc.read().decode("utf-8", errors="replace")[:200]
-        except Exception:
-            pass
+        detail = read_error_body(exc)[:200]
         raise OllamaEmbedError(f"HTTP {exc.code}: {detail or exc.reason}") from exc
     except Exception as exc:
         raise OllamaEmbedError(str(exc)) from exc

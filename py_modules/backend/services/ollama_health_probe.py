@@ -16,10 +16,11 @@ Does not: Decide what the Connection panel does with an unreachable host, or for
 for display -- it hands back plain data and lets the caller decide.
 """
 
-import json
 import time
 import urllib.request
 from typing import Any, Optional
+
+from backend.ollama_reply_limits import read_json_capped
 
 
 def vram_weight_share_pct(size_bytes: Any, size_vram_bytes: Any) -> Optional[float]:
@@ -78,13 +79,13 @@ def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
     ver_timeout = max(0.25, deadline - time.time())
     ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
     ver_resp = urllib.request.urlopen(ver_req, timeout=ver_timeout)
-    ver_data = json.loads(ver_resp.read().decode("utf-8"))
+    ver_data = read_json_capped(ver_resp, what="/api/version reply")
     version_local = ver_data.get("version", "unknown")
 
     tags_timeout = max(0.25, deadline - time.time())
     tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
     tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
-    tags_data = json.loads(tags_resp.read().decode("utf-8"))
+    tags_data = read_json_capped(tags_resp, what="/api/tags reply")
     models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
 
     ps_snapshots: list[dict[str, Any]] = []
@@ -92,7 +93,7 @@ def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
     try:
         ps_req = urllib.request.Request(f"{base}/api/ps", method="GET")
         ps_resp = urllib.request.urlopen(ps_req, timeout=ps_timeout)
-        ps_snapshots = _loaded_model_snapshots(json.loads(ps_resp.read().decode("utf-8")))
+        ps_snapshots = _loaded_model_snapshots(read_json_capped(ps_resp, what="/api/ps reply"))
     except Exception:
         ps_snapshots = []
 

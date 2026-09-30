@@ -29,6 +29,13 @@ import urllib.request
 from typing import Any, Callable, Optional
 
 from backend.constants import OLLAMA_TAB_WHERE_AI_RUNS
+from backend.ollama_reply_limits import (
+    MAX_STREAM_ANSWER_CHARS,
+    MAX_STREAM_LINE_BYTES,
+    close_quietly,
+    note_reply_too_large,
+    read_error_body,
+)
 
 from backend.services.bonsai_stream_tags import extract_bonsai_status
 from backend.services.strategy_guide_parse import hide_incomplete_strategy_branch_fence
@@ -225,6 +232,12 @@ def _stream_ollama_chat_once(
                 stream_err_txt: Optional[str] = None
                 done_flag = False
                 done_meta: dict = {}
+                # Security review 0.6.0, finding 6: a fake Ollama must not be able to fill the
+                # Deck's memory. These count what has been streamed (answer text and thinking
+                # text together) and remember which limit, if any, was hit. See
+                # ollama_reply_limits.py for the numbers.
+                streamed_chars = 0
+                cut_off: Optional[tuple[str, int, str]] = None
                 # 0.0 so the first delta always parses: it is what flips the snapshot's ``streaming``
                 # flag, which is the frontend's only cue to switch to the fast poll.
                 last_delta_parse = 0.0
@@ -251,6 +264,7 @@ def _stream_ollama_chat_once(
 
                 def _apply_stream_obj(jo: dict) -> None:
                     nonlocal stream_err_txt, done_flag, last_delta_parse, local_first_thinking_ts, local_frozen_seconds
+                    nonlocal streamed_chars, cut_off
                     err_any = jo.get("error")
                     if err_any is not None:
                         if isinstance(err_any, dict):
@@ -264,6 +278,12 @@ def _stream_ollama_chat_once(
                     mt = msg_blk.get("thinking")
                     got_content = isinstance(mc, str) and bool(mc)
                     got_thinking = isinstance(mt, str) and bool(mt)
+                    if got_content:
+                        streamed_chars += len(mc)
+                    if got_thinking:
+                        streamed_chars += len(mt)
+                    if streamed_chars > MAX_STREAM_ANSWER_CHARS and cut_off is None:
+                        cut_off = ("the streamed answer", MAX_STREAM_ANSWER_CHARS, "characters")
                     if got_thinking:
                         thinking_deltas.append(mt)
                         if local_first_thinking_ts is None:
@@ -331,9 +351,13 @@ def _stream_ollama_chat_once(
                             continue
                         if isinstance(jo, dict):
                             _apply_stream_obj(jo)
-                        if done_flag:
+                        if done_flag or cut_off is not None:
                             break
-                    if done_flag:
+                    if not done_flag and cut_off is None and len(pending) > MAX_STREAM_LINE_BYTES:
+                        # Everything complete has been taken off ``pending`` above, so what is left is
+                        # one line that has not ended yet, and it is already past any real line.
+                        cut_off = ("one streamed line", MAX_STREAM_LINE_BYTES, "bytes")
+                    if done_flag or cut_off is not None:
                         break
                     try:
                         chunk = resp.read1(OLLAMA_CHAT_READ_CHUNK)
@@ -349,6 +373,12 @@ def _stream_ollama_chat_once(
                     if not chunk:
                         break
                     pending += chunk
+                if cut_off is not None:
+                    close_quietly(resp)
+                    return {
+                        "success": False,
+                        "response": note_reply_too_large(*cut_off, logger=logger),
+                    }
                 if pending.strip():
                     try:
                         jo_tail = json.loads(pending.strip().decode("utf-8", "replace"))
@@ -442,7 +472,7 @@ def _stream_ollama_chat_once(
                     except Exception:
                         logger.exception("ask_ollama: on_http_response_done hook failed model=%s", model_name)
     except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
+        body = read_error_body(e)
         logger.warning(
             "ask_ollama: HTTPError code=%s model=%s body_len=%d",
             e.code,

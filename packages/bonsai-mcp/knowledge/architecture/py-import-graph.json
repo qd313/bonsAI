@@ -1,11 +1,12 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 104,
-  "edgeCount": 271,
+  "fileCount": 105,
+  "edgeCount": 279,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
     "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_reply_limits.py",
     "py_modules/backend/services/__init__.py",
     "py_modules/backend/services/ask_command_text.py",
     "py_modules/backend/services/async_background_job.py",
@@ -23,7 +24,6 @@
     "py_modules/backend/services/model_policy.py",
     "py_modules/backend/services/network_service.py",
     "py_modules/backend/services/ollama_ask_budgets.py",
-    "py_modules/backend/services/ollama_health_probe.py",
     "py_modules/backend/services/ollama_pull_resume_service.py",
     "py_modules/backend/services/prompt_budget_service.py",
     "py_modules/backend/services/proton_troubleshooting_logs.py",
@@ -34,7 +34,6 @@
     "py_modules/backend/services/strategy_checklist_session_service.py",
     "py_modules/backend/services/strategy_guide_parse.py",
     "py_modules/backend/services/tdp_service.py",
-    "py_modules/backend/services/token_accounting_service.py",
     "py_modules/backend/tdp_intent.py",
     "py_modules/backend/tls_ca_fallback.py"
   ],
@@ -53,6 +52,10 @@
     },
     {
       "path": "py_modules/backend/constants.py",
+      "count": 8
+    },
+    {
+      "path": "py_modules/backend/ollama_reply_limits.py",
       "count": 8
     },
     {
@@ -540,6 +543,19 @@
         "py_modules/backend/services/ollama_stop_service.py"
       ]
     },
+    "py_modules/backend/ollama_reply_limits.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/local_ollama_setup_service.py",
+        "py_modules/backend/services/ollama_chat_stream.py",
+        "py_modules/backend/services/ollama_embed_service.py",
+        "py_modules/backend/services/ollama_health_probe.py",
+        "py_modules/backend/services/ollama_preload_service.py",
+        "py_modules/backend/services/ollama_stop_service.py",
+        "py_modules/backend/services/response_verify.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ]
+    },
     "py_modules/backend/ollama_routing.py": {
       "imports": [
         "py_modules/backend/constants.py"
@@ -954,6 +970,7 @@
     "py_modules/backend/services/local_ollama_setup_service.py": {
       "imports": [
         "py_modules/backend/ollama_connectivity.py",
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ollama_catalog_service.py"
@@ -1062,6 +1079,7 @@
     "py_modules/backend/services/ollama_chat_stream.py": {
       "imports": [
         "py_modules/backend/constants.py",
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/ollama_window_fit.py",
         "py_modules/backend/services/strategy_guide_parse.py",
@@ -1085,6 +1103,7 @@
     "py_modules/backend/services/ollama_embed_service.py": {
       "imports": [
         "py_modules/backend/ollama_connectivity.py",
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/local_ollama_setup_service.py"
@@ -1096,7 +1115,9 @@
       ]
     },
     "py_modules/backend/services/ollama_health_probe.py": {
-      "imports": [],
+      "imports": [
+        "py_modules/backend/ollama_reply_limits.py"
+      ],
       "importedBy": [
         "py_modules/backend/services/ollama_service.py"
       ]
@@ -1134,6 +1155,7 @@
     },
     "py_modules/backend/services/ollama_preload_service.py": {
       "imports": [
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
@@ -1192,6 +1214,7 @@
     "py_modules/backend/services/ollama_stop_service.py": {
       "imports": [
         "py_modules/backend/ollama_connectivity.py",
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/services/local_ollama_setup_service.py"
       ],
       "importedBy": [
@@ -1314,6 +1337,7 @@
     },
     "py_modules/backend/services/response_verify.py": {
       "imports": [
+        "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/services/strategy_spoiler_policy.py"
       ],
       "importedBy": [
@@ -1446,7 +1470,9 @@
       ]
     },
     "py_modules/backend/services/token_accounting_service.py": {
-      "imports": [],
+      "imports": [
+        "py_modules/backend/ollama_reply_limits.py"
+      ],
       "importedBy": [
         "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/chat_memory_step.py",

@@ -40,6 +40,7 @@ from backend.ollama_connectivity import (
     is_loopback_ollama_base,
     ollama_http_base_from_pc_ip_field,
 )
+from backend.ollama_reply_limits import read_error_body
 
 
 def _ollama_http_base_from_pc_ip_field(pc_ip: str) -> str:
@@ -162,10 +163,7 @@ def request_ollama_stop_model_via_api(
             return True
         except urllib.error.HTTPError as he:
             last_err = he
-            try:
-                snippet = he.read().decode("utf-8", errors="replace")[:420]
-            except Exception:
-                snippet = ""
+            snippet = read_error_body(he)[:420]
             logger.warning(
                 "request_ollama_stop_model_via_api: HTTP %s model=%s body=%r snippet=%s",
                 he.code,

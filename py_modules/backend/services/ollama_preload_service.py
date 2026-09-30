@@ -22,6 +22,7 @@ import re
 import urllib.request
 from typing import Any, Optional
 
+from backend.ollama_reply_limits import read_capped, read_json_capped
 from backend.ollama_routing import resolve_routing_order
 from backend.services.token_accounting_service import choose_window_tokens
 
@@ -134,7 +135,7 @@ def preload_ask_model_sync(
     try:
         tags_req = urllib.request.Request(f"{base_http.rstrip('/')}/api/tags", method="GET")
         with urllib.request.urlopen(tags_req, timeout=min(5.0, timeout_seconds)) as resp:
-            tags_data = json.loads(resp.read().decode("utf-8"))
+            tags_data = read_json_capped(resp, what="/api/tags reply", logger=logger)
         models_list = tags_data.get("models") if isinstance(tags_data, dict) else None
         # Ask's own resolver, so the warm-up and the Ask agree on which model comes first. It
         # covers the case a saved order cannot: an empty order (never set, which is the state on
@@ -169,7 +170,7 @@ def preload_ask_model_sync(
             method="POST",
         )
         with urllib.request.urlopen(gen_req, timeout=timeout_seconds) as resp:
-            resp.read()
+            read_capped(resp, what="/api/generate reply", logger=logger)
         logger.info("preload_ask_model: warmed %s", model)
     except Exception as exc:
         logger.info("preload_ask_model: skipped (%s)", exc)

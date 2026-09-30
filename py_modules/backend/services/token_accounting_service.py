@@ -38,10 +38,11 @@ How it works:
 
 from __future__ import annotations
 
-import json
 import math
 import statistics
 import urllib.request
+
+from backend.ollama_reply_limits import read_json_capped
 from typing import Any, Optional
 
 # What the Deck loads with when nothing asks for anything different. Measured on the Deck
@@ -126,7 +127,7 @@ def _read_loaded_windows(base_http: str, timeout_seconds: float = 4.0) -> dict[s
     try:
         req = urllib.request.Request(base + "/api/ps", method="GET")
         with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            data = read_json_capped(resp, what="/api/ps reply")
     except Exception:
         return {}
     models = data.get("models") if isinstance(data, dict) else None
@@ -238,7 +239,7 @@ def _read_model_limits(base_http: str, timeout_seconds: float = 4.0) -> dict[str
     try:
         req = urllib.request.Request(base + "/api/tags", method="GET")
         with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            data = read_json_capped(resp, what="/api/tags reply")
     except Exception:
         return {}
     models = data.get("models") if isinstance(data, dict) else None

@@ -75,20 +75,6 @@ starts work outside this.
   The box is only 67% on screen and its cover is the hidden part; with a game running it also sat partly under the dock's action row.
   Small; the cover-walk fix works around it, so nothing loops. It is why the free-play sweep failed (**QA-FREE-PLAY-01**).
   Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
-- ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
-  2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
-  Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
-  button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
-  underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
-  chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
-  (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
-  keyboard on the question box — worth trying on this hidden-block case too.
-  **2026-09-28 (plan 76):** reproduced in a milder form. Each cover took one extra Down (the first did nothing, and the cover then
-  sat 67% behind the tab bar), 2 of 2 runs; Up had none. Handed to lane 3. Evidence `docs/test-evidence/plan76-S1.json`.
-  **2026-09-28 (plan 76 lane 3, `3576846c`):** the milder form seen that night (each cover took one extra Down) has its cause
-  found and fixed: a "this cover was already offered" flag was reset on every redraw. Checked by row **P76-WALK-COVERS**.
-  Kept here, not moved to Verify: the original never-moves form was never reproduced, so it is not fully explained.
-  **2026-09-29 (plan 76, block 3):** the walk through the covers now passes (row P76-WALK-COVERS, Done); no never-moves form seen.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
   more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
   same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
@@ -106,27 +92,7 @@ starts work outside this.
   **Fixed again (`8151dd54`), and re-run on the Deck 2026-09-29 (plan 76, block 3, build `4af8e7a1`):** every stop mirrors except one known
   by-design stop: a section's box that Down visits after a scroll and Up skips. A section holding only a cover now takes the ring on the
   cover itself, and A opens it both ways (that part is fixed and proven). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`.
-  **Left open as a call for the maintainer:** is that one by-design stop acceptable? Making Up stop on the box too would need extra Up rules
-  (lane 3). That box is also the 67%-visible stop in the new bug at the top of Bugs.
-- ★ `[focus]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
-  only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
-  **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
-- ★ `[focus]` **Three more one-off focus sightings from free play, 2026-09-26.**
-  [Detail](roadmap-details.md#flow-2b-bugs).
-  **2026-09-28 (plan 76):** the accent-level one reproduced: after choosing an accent level nothing held the ring, and the first LB
-  landed on "Show Developer tab" and did not switch tabs (`docs/test-evidence/plan76-S3C.json`); going to a fix this session. The
-  folded-turn one did not reproduce (`docs/test-evidence/plan76-S3A.json`).
-  **2026-09-29 (`1785aaaf`):** the accent-level one is fixed and proven on the Deck (row P76-ACCENT-RING, evidence
-  `docs/test-evidence/plan76-P76-ACCENT-RING.json`). The other two stay open.
-- ★ `[reply]` `[focus]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
-  only lets Up leave one chip at a time (and once Down stuck on it, flow L7); two confidently wrong answers.
-  [Detail](roadmap-details.md#l3-and-2d-findings).
-  **2026-09-28 (plan 76), the chip ladder one measured:** the ladder steps one chip per press both ways, 7 Ups for 7 chips, no dead
-  press. Whether one chip per press is wrong is the maintainer's call. Evidence `docs/test-evidence/plan76-S4.json`.
-- ★ `[focus]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
-  found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
-  Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
-  **2026-09-28 (plan 76, build `39c17312`):** not reproduced. With one turn drawn under "87 earlier", Down visited Retry, the question, the answer parts, the branch buttons, Helpful, Hide details and the tabs in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  **The maintainer's call 2026-09-29:** Up stops on the section's box too; being built in plan 77 (helper E). That box is also the 67%-visible stop in the new bug at the top of Bugs.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -135,23 +101,10 @@ starts work outside this.
   the same night, and the question-row entry has now been opened and closed twice on it. Until the check reads
   text rather than boxes, measure the text before filing. Evidence
   `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
-- ★ `[layout]` **A thin strip of the answer shows through below the game-context line at the bottom of the
-  Main panel** — **OPEN, found on the Deck 2026-09-23.** Visible in
-  `docs/test-evidence/plan64-BYEYE-01-chat-row.png`, between the dock and Steam's own bottom bar.
-  **Sighting, 2026-09-23:** seen again under the "Context: no active game detected" line. Evidence
-  `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
-  **Not reproduced 2026-09-27 (plan 72):** not seen with text behind the dock, `docs/test-evidence/plan72-A8-BOTTOM-STRIP-READING.json`.
-  **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `docs/test-evidence/plan76-S6.json`.
 - ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **OPEN, small note, found 2026-09-28
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
   Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
   that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
-- ★ `[focus]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
-  2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
-  **2026-09-28 (plan 76):** not reproduced, 6 tries by two routes. Evidence `docs/test-evidence/plan76-S8.json`.
-- ★ `[layout]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
-  (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-  **2026-09-28 (plan 76):** not reproduced; the block ended 13 px above the dock. Evidence `docs/test-evidence/plan76-S7.json`.
 - ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
   **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
   **Cause found 2026-09-28 (plan 76 lane 4):** not a leftover in the code. The Strategy prompt makes a choice menu mandatory on
@@ -184,10 +137,6 @@ starts work outside this.
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
   **PARTIAL, found 2026-09-28 (plan 76 lane 2), in the code only.** Fixed (`6ef8cedf`) for the library's Update and "Pull
   nomic-embed-text" buttons. Still open for "Update AI & models" and the Tier 1 and Tier 2 install buttons (about six lines).
-- ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
-  May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
-  351 characters).
-  **2026-09-28 (plan 76, build `c71f1d8b`):** it also folds shut after a chat switch (RB then LB), `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`.
 - ★ `[ui]` **The reply-ready popup stays up about 10 seconds, not the 8 planned** — **OPEN, found 2026-09-28 (plan 76, build `c71f1d8b`).**
   Measured 10.08 seconds over Deep Rock Galactic: Survivor (150 ms polling, so at most 0.15 s off). Small. Evidence
   `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`.
@@ -201,66 +150,33 @@ starts work outside this.
   the highlight lands on the top bar, which then opens. Needs a Deck walk with the focus recorder before any
   fix.
   **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
-- ★★ `[focus]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
-  (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
-  finished answer. [Detail](roadmap-details.md#flow-l10-findings).
-  **Not reproduced 2026-09-27 (plan 72):** the ring was never lost, `docs/test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`.
-  **2026-09-28 (plan 76):** not reproduced again, 2 tries. Evidence `docs/test-evidence/plan76-S9.json`.
+  **2026-09-29 (plan 77):** the D-pad half did not reproduce. Only the touch half is left; it is on the maintainer's checks page (plan 77).
 - ★★ `[reply]` **With nothing running, the decode effect slows long answers** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** About 37 frames a second on a 2,900-letter answer, against about 50 on shorter
   ones; not yet known whether it was always so. [Detail](roadmap-details.md#flow-l10-findings).
-- ★★ `[chat]` `[focus]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its
-  question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
-  [Detail](roadmap-details.md#flow-l7-findings).
-  **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-ii.json`.
-  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
-  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
-- ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
-  2026-09-18, seen three times, stays open — the maintainer's call.** Switch away from a chat that is
-  still writing and nothing says so; the code looks right on paper. Two clean measured sessions since
-  (2026-09-23 and 2026-09-26, 3 more tries) did not reproduce it, which is not enough to close a bug seen
-  three times before. **New, unclear, the maintainer's call:** the other chat's own Ask button read
-  greyed while the first was still writing, not "ready" as the row expects — which reading is actually
-  right is open.
-  [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
-- ★★ `[ollama]` **After the release: the model tiers' licence labels** — **OPEN, found 2026-09-28 (the licence check);
-  the maintainer's call: labels only, after the release.** From memory, to confirm on each model's page: Qwen 2.5's 3B
+- ★★ `[ollama]` **The model tiers' licence labels** — **OPEN, found 2026-09-28 (the licence check);
+  the maintainer's call: labels only.** From memory, to confirm on each model's page: Qwen 2.5's 3B
   and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
   sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
   Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
-- ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
-  D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
-  tap landed outside the screen instead of on Done; the queued models then started downloading and the
-  D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
-  on the device. Needs a reproduction with an empty download queue.
-  [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★ `[ollama]` **Replies from the Ollama address have no size limit** — **OPEN, found 2026-09-28 (0.6.0
-  security review, finding 6), after the release.** A fake Ollama the user pointed bonsAI at can fill the
+  security review, finding 6).** A fake Ollama the user pointed bonsAI at can fill the
   Deck's memory. Twelve places, including how answers stream in. [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **OPEN, found 2026-09-28
-  (security review, finding 7), after the release; needs the maintainer's call first:** support https, or
-  refuse it and say so. [Review](audit/security-review-0.6.0.md).
+  (security review, finding 7).** The maintainer's call, 2026-09-29: refuse it and say so. [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★ `[voice]` **The speech model is downloaded from a changing address and not checked** — **OPEN, found
-  2026-09-28 (security review, finding 8), after the release.** Pin the address, check the file's
+  2026-09-28 (security review, finding 8).** Pin the address, check the file's
   checksum, cap its size; also refuse a knowledge-library file list with no checksums.
   [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
   from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
   another desk test on real chats.
-- ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
-  out of reach** — **OPEN, found 2026-09-05, stays open — the maintainer's call.** Usually only a full
-  loader restart clears it; closing and reopening Quick Access cleared one flow-R occurrence too, this
-  time from a chip filling the question box. Still sighted 2026-09-26; a careful reading the same night
-  did not reproduce the chip route (0 of 6). [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
-  **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
-  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
-  **2026-09-28 (plan 76):** the Fallout 4 entry (now in Verify) has a new sighting of the same family, with a likely trigger.
-  **2026-09-29 (plan 76, Deck block 2c):** the Fallout 4 entry (now in Verify) reproduced it on purpose, twice; same family.
-  **2026-09-29 (plan 76, block 3):** the Fallout 4 entry (now in Verify) now has the measurement: the split follows whether the panel's window has focus.
-  **2026-09-29 (plan 76, Deck block 4):** the Fallout 4 entry, now in Verify › Bugs as fixed, may be this same family (not proven). Its fix passed 6 of 6 reopens with a game running; see row **P76-TRAP-FIX**. Whether this entry stays open is the maintainer's call.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
@@ -543,7 +459,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 - ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **VERIFY, fixed 2026-09-29 (plan 76, `7a7d59fe`), fixed, watch it.** Found
-  2026-09-26 (plan 70, flow L7), same family as the "Down stops half way" entry in Bugs. Down and Right left the ring in the box;
+  2026-09-26 (plan 70, flow L7), same family as the "Down stops half way" entry, now on the watch list in Shelved. Down and Right left the ring in the box;
   only Up worked, and closing and reopening the panel did not clear it while the game ran.
   **The cause:** when Quick Access is on screen but its window has lost the focus, each D-pad press moved the page's own focus while Steam's
   ring stayed put. The fix asks that window for the focus back, on a reopen and before each of Steam's own moves.
@@ -727,8 +643,6 @@ ones from this month are D81 to D88.
   purpose by the maintainer's decision D62 #2 (2026-09-05) to save about a second per Speed question. D62 sketched a fallback
   (run the meaning search only when the word hits are thin); it would need a threshold picked and measured. Kept as an entry.
   `knowledge_base_service.py` line ~1121. [Detail](roadmap-details.md#speed-mode-tip-gap).
-- ★ `[KB]` **With a game running, the meaning search once read about a second (1,070 ms, 2026-09-23)** — **OPEN, one
-  sighting.** [Detail](roadmap-details.md#kb-transparency-matches-what-the-model-got).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** The right, specific answer comes back, but two generic early-game
   notes are named underneath it instead of the real one, which does exist and now attaches too, but still
@@ -843,14 +757,28 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 
 - ★ `[platform]` **In-IDE preview never gets past its loading screen** — shelved 2026-09-11 (D93), not a gate
   for anything. Unshelves when the preview loads the plugin on the maintainer's machine.
+- ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second (1,070 ms, 2026-09-23)** — moved to the watch list 2026-09-29; one sighting (1,070 ms, 2026-09-23), not seen again. Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **Down does not move the ring off an unrevealed spoiler block** — moved to the watch list 2026-09-29; one sighting 2026-09-04, never reproduced; the milder form is fixed. Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **Down from the chat row once skipped the whole answer, after returning from Settings** — moved to the watch list 2026-09-29; seen once, not reproduced in six tries. Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **In carousel style, Down can land on a chip slid mostly off screen** — moved to the watch list 2026-09-29; one sighting, four tries did not reproduce it. Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — moved to the watch list 2026-09-29; the accent one is fixed; the other two were one-off and did not reproduce. Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — moved to the watch list 2026-09-29; seen once in plan 70, not reproduced in plan 76. Unshelves on a new sighting.
+- ★ `[layout]` `[watching]` **A thin strip of the answer shows through below the game-context line at the bottom of the Main panel** — moved to the watch list 2026-09-29; seen twice in 2026-09, not reproduced since. Unshelves on a new sighting.
+- ★ `[layout]` `[watching]` **The "What went wrong?" block once ended 14 pixels under the dock** — moved to the watch list 2026-09-29; seen once, not reproduced. Unshelves on a new sighting.
+- ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — moved to the watch list 2026-09-29; the chip ladder steps one chip per press both ways, and the two wrong answers were not reproduced. Unshelves on a new sighting.
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — shelved 2026-09-12: too much UI change, and not
   ready for it yet. Unshelves on the maintainer's word; the mockup is kept.
+- ★★ `[chat]` `[watching]` **A chat that is still writing does not look busy from another chat** — moved to the watch list 2026-09-29; seen three times, then not reproduced in two clean sessions. Unshelves on a new sighting.
+- ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** — moved to the watch list 2026-09-29; seen once, not seen again in plan 72; named in the release notes. Unshelves on a new sighting.
+- ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — moved to the watch list 2026-09-29; seen once in plan 70, not reproduced in three tries. Unshelves on a new sighting.
+- ★★ `[ollama]` `[focus]` `[watching]` **A tap outside the AI models screen started the queued downloads and left the D-pad stuck in the Ollama tab** — moved to the watch list 2026-09-29; a touch report that the rig cannot reproduce. Unshelves on a new sighting.
 - ★★★ `[KB]` **KB download Cancel, the Deck check** — shelved 2026-09-19 (D113). The download finishes in
   about a second, too fast to press Cancel in. Unshelves when a throttle or a slower test copy exists.
 - ★★★ `[voice]` **Voices for the bundled characters** — shelved 2026-09-08 (D74). Unshelves after the
   character sweep, a legal check and the open licence call.
 - ★★★ `[voice]` **Trained voices for the bundled characters** — shelved with the clip route 2026-09-08 (D74).
   Same legal gate, plus the plugin hosting voice files for the first time.
+- ★★★ `[focus]` `[watching]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** — moved to the watch list 2026-09-29; most likely the same family as the D-pad trap fix in Verify (row P76-TRAP-FIX); plan 77's long play test decides it. Unshelves on a new sighting.
 - ★★★★ `[voice]` **A voice for a custom character** — shelved with the bundled voices 2026-09-08 (D74). Same
   legal gate.
 - ★★★★★ `[platform]` **Global quick-launch macro** — shelved 2026-09-19 (D113), the maintainer said drop it.
@@ -878,6 +806,10 @@ review, again to keep this document under its size limit.
 The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
 pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
 during the twelfth bookkeeping pass, again to keep this document under its size limit.
+
+**Closed 2026-09-29 (plan 77, docs sweep):**
+
+- ★ `[ui]` **Show details closes itself after moving to another tab and back** — **DONE 2026-09-29: closed, working by design — the maintainer's call 2026-09-29.** No code, no Deck row. [Full detail](archive/roadmap-bugs-fixed.md#show-details-closes-itself-after-moving-to-another-tab-and-back-closed-2026-09-29)
 
 **Closed 2026-09-29 (plan 76, docs sweep 8, Deck block 3, build `4af8e7a1`):**
 

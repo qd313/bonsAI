@@ -2480,3 +2480,14 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
 - "Remove <model> from the Deck?" opened on "Remove model" (`9284a790`). Passed first time, row P76-REMOVE-MODEL-SAFE-FIRST: it opens on "Not now"; A removed nothing; after "Not now" the ring sits on "Done". Evidence `docs/test-evidence/plan76-P76-REMOVE-MODEL-SAFE-FIRST.json`.
 - After reinstalling the library, its status read "Not installed" for about a minute (`a875b7c3`). Row P76-KB-STATUS-REINSTALL, passed by the session's ruling (the evidence file itself reads unclear on one clause): "Downloading…" with a Cancel row showed at once; "Installed" with the Cancel row gone came 0.55 s after the end, in both of two runs, with no leftover row. The heading line read "Not installed — download to enable…" during the 1.6 s download, which is the true state until it lands. The 2 MB download is so fast that a slow download was not tested. Evidence `docs/test-evidence/plan76-P76-KB-STATUS-REINSTALL.json`.
 - After Cancel on the AI models screen, the saved licence setting and the screen disagreed (`8e2e682f`). Passed first time, row P76-LICENCE-CANCEL: the pick wrote `open_source_only` at once, Cancel put `open_weight` back, the reopened screen matched, nothing downloaded. Evidence `docs/test-evidence/plan76-P76-LICENCE-CANCEL.json`.
+
+## Moved from the roadmap 2026-09-29 (plan 77)
+
+### Show details closes itself after moving to another tab and back (closed 2026-09-29)
+
+- ★ `[ui]` **Show details closes itself after moving to another tab and back** — **OPEN, seen 2 of 2 on 2026-09-28 (plan 76).**
+  May be by design; the maintainer's call. Evidence `docs/test-evidence/plan76-S3A.json` (the open section shrank from 688 to
+  351 characters).
+  **2026-09-28 (plan 76, build `c71f1d8b`):** it also folds shut after a chat switch (RB then LB), `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`.
+
+  **Closed 2026-09-29, working by design — the maintainer's call (plan 77).** No code change, no Deck row.

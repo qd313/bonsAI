@@ -216,7 +216,7 @@ in the same commit. The session spot-checks each bookkeeper commit against the e
 
 ## The maintainer's calls, 2026-09-29
 
-To be written up as D120 in the locked decisions file.
+Written up as D120 in the locked decisions file ([D120](../audit/maintainer-decisions-locked.md)); D120 was free.
 
 1. **Pulled in from after the release:** the three security fixes and the licence labels. The two clean-ups stay after
    the release.
@@ -234,7 +234,15 @@ To be written up as D120 in the locked decisions file.
 
 ### Questions that come up during the session
 
-None yet. New ones go here, with the choice taken in the meantime.
+New ones go here, with the choice taken in the meantime.
+
+1. **Two of the default models are not open source by their makers' own pages.** The default picture model and the
+   second text model in the default tier (both Qwen 2.5 at the 3B size) carry Qwen's "Research" licence, which is
+   not an open-source licence. Ollama's own page for the picture model shows Apache 2.0 instead, so the sources
+   disagree. Moving them out of the open-source group would change what the default tier picks, which is more than
+   "labels only". **Meanwhile:** they stay where they are in the tiers and the try order; only the licence text on
+   screen and in the README is corrected. **Your call:** keep them in the default tier with the honest label, or
+   move them and pick other defaults (after the release).
 
 ## Results
 

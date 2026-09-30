@@ -1963,3 +1963,23 @@ demote is marked drawn and planned only; the controller rig entry gains the two 
   measure what it costs. Landed as `4c7edeb6`: the decode effect now plays while a game runs; the slower
   update pace and the still small animations stay. Measured the same morning: it costs about 5 to 9 frames a
   second in the panel with a game running.
+
+### D120 — LOCKED 2026-09-29 (raised 2026-09-29) — Plan 77, the last bug session before Friday: the eight calls
+
+Made by the maintainer on 2026-09-29, before [plan 77](../planning/77-release-wave-four.md) started. The plan's
+own section, "The maintainer's calls, 2026-09-29", has the same list.
+
+1. **Pulled in from after the release:** the three security fixes (the size limit on Ollama replies, the https
+   address, the speech model) and the licence labels. The two clean-ups behind the scenes stay after the release.
+2. **Helpers:** Sonnet 5.5 high for the D-pad, spoiler, security and judgment work; medium for mechanical fixes,
+   the Deck driver and the bookkeeper. Up to ten helpers at once for bug and feature work (was seven).
+3. **One-off sightings** that were not seen again when tried on purpose move to a watch list in Shelved, tagged
+   `[watching]`. Each one comes back on a new sighting.
+4. **The Deck, while the maintainer is away:** everything allowed last night, plus: delete the oldest of the
+   eight chats; restart Ollama to clear the partial downloads; pull a second small answering model and remove it
+   afterwards; a throwaway test build with a low reply limit.
+5. **An https Ollama address:** refuse it and say so.
+6. **Walking up a reply:** Up stops on the section's box too, so both directions visit the same stops.
+7. **Show details folding after a tab or chat switch:** fine, by design.
+8. **The D-pad trap's release-notes lines:** decided by the long play test. Clean, and they shrink to one short
+   line. A trap, and they stay.

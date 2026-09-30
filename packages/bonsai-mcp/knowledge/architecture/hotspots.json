@@ -61,13 +61,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "lines": 1050,
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 1053,
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 1027,
+      "path": "py_modules/backend/services/local_ollama_setup_service.py",
+      "lines": 1050,
       "role": ""
     },
     {

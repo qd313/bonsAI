@@ -39,6 +39,9 @@
  *          enters an answer from below
  *          When the ring's section has been read from its top and the one above is wholly above the
  *          header, the panel is first set so that one's bottom sits at the dock (`hopToSectionAbove`).
+ *          A section taller than the screen is entered from its end: its bottom edge is brought
+ *          just above the dock (`revealTallFromItsEnd`), also when the ring comes into the answer
+ *          from below.
  *       4. otherwise, scroll the panel up, with the same ring-follows-the-section step as Down
  *
  *     The stops, in one line: every section, and inside a section every hidden cover and every
@@ -305,11 +308,34 @@ function hopToSectionAbove(current: HTMLElement, prev: HTMLElement, scroll: HTML
 }
 
 /**
- * Settle a section the ring just landed on going Up, or came into the answer on from below: lifted
- * clear of the dock and, when its top is under the header, brought under it if that is no more than
- * a screen's scroll.
+ * A section taller than the band, entered going Up from below: show its BOTTOM edge just above the
+ * dock, so it is read from its end, upward. Landing on it left it wherever the panel was, which on the
+ * Deck was top 58 px under the header and bottom 84 px under the dock, so neither edge showed
+ * (docs/test-evidence/plan77-BLOCK2-GAME.json). `revealBelowDock` cannot help, it never scrolls past the
+ * section's own top; this does, because for a tall section the top is not what the walk reads first.
+ * Nothing moves for a section that fits the band, or whose bottom edge is already above the dock.
+ */
+function revealTallFromItsEnd(section: HTMLElement, scroll: HTMLElement): boolean {
+  const rect = section.getBoundingClientRect();
+  if (rect.bottom - rect.top <= bandHeightOf(scroll)) return false;
+  const hidden = rect.bottom - readableBottomOf(scroll);
+  if (hidden <= 4) return false;
+  const before = scroll.scrollTop;
+  scroll.scrollTop = Math.min(panelScrollMax(scroll), before + hidden);
+  return scroll.scrollTop !== before;
+}
+
+/**
+ * Settle a section the ring just landed on going Up, or came into the answer on from below: a tall one
+ * shows its bottom edge (`revealTallFromItsEnd`); one that fits is lifted clear of the dock and, when
+ * its top is under the header, brought under it if that is no more than a screen's scroll.
  */
 function settleUpLanding(section: HTMLElement, scroll: HTMLElement): void {
+  const rect = section.getBoundingClientRect();
+  if (rect.bottom - rect.top > bandHeightOf(scroll)) {
+    revealTallFromItsEnd(section, scroll);
+    return;
+  }
   revealBelowDock(section, scroll);
   revealSectionInBand(section, scroll, bandHeightOf(scroll));
 }

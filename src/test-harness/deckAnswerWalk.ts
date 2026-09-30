@@ -126,6 +126,9 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     const height = r.bottom - r.top;
     const small = height < 100;
     const inside = r.top >= PANE_TOP && r.bottom <= dockTopY;
+    // A stop taller than the band got no glide on the Deck (plan77-BLOCK2-GAME.json: a 348 px box in a
+    // 206 px band stayed exactly where the walk left it), so none is modelled for one.
+    if (height > dockTopY - PANE_TOP) return;
     let target: number | null = null;
     if (steamScroll === "center" && small) target = PANE_TOP + (dockTopY - PANE_TOP - height) / 2;
     else if (!inside) target = steamScroll === "padded" && small ? PANE_TOP + 116 : PANE_TOP;
@@ -229,6 +232,20 @@ export const THREE_BOXES: AnswerShape = {
   start: 130,
 };
 
+/** One box 348 px tall in a 206 px band (dock at y 294), the game-running answer of plan77-BLOCK2-GAME.json. */
+export const TALL_348: AnswerShape = {
+  sections: [[300, 648]],
+  covers: [],
+  start: 100,
+};
+
+/** The same tall box with a short section above it and one below, so the walk enters and leaves it. */
+export const TALL_348_BETWEEN: AnswerShape = {
+  sections: [[236, 292], [300, 648], [656, 712]],
+  covers: [],
+  start: 100,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 
@@ -250,16 +267,16 @@ export type ShapedAnswer = ReturnType<typeof shapedAnswer>;
 
 /**
  * True when `el` is fully inside the readable band (below the tab header, above the dock), or, being
- * taller than it, starts inside it. Going Up a section taller than the band is entered from its end
- * and read upward by scrolling (a scroll of more than a screen to show its top would pass its text
- * unread), so there it only has to be on screen.
+ * taller than it, shows the edge the walk enters it by: its top going Down, its bottom going Up (a
+ * section taller than the band is read from its end when entered from below, so the reading is not
+ * skipped past).
  */
 export function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
   const top = a.top(el);
   const bottom = a.bottom(el);
   const band = a.dockTop - PANE_TOP;
   if (bottom - top > band) {
-    return dir === "up" ? top < a.dockTop && bottom > PANE_TOP : top >= PANE_TOP - 1 && top < a.dockTop;
+    return dir === "up" ? bottom <= a.dockTop + 4 && bottom > PANE_TOP : top >= PANE_TOP - 1 && top < a.dockTop;
   }
   // The bottom edge gets revealBelowDock's own 4 px of slack: a sliver that small is not "behind the dock".
   return top >= PANE_TOP - 1 && bottom <= a.dockTop + 4;

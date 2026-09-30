@@ -242,6 +242,13 @@ Not started.
 
 ## Log
 
+- **Start (2026-09-29, tip `7fa69d40`):** eight helpers started in their own copies of the repo (A to H), plus the
+  checks-list helper and the Deck driver: ten at once. The Deck driver runs setup and then the long play test for
+  the D-pad trap fix. A 20-minute timed check is set as a backup restart. Helper IDs, for resuming after a usage
+  limit: A `aaa5ecf700267ab19`, B `a50546f4a20aff52b`, C `a52b27d2db8f3c4f6`, D `a74640dc38e8c5acd`,
+  E `a43dca60f5a93a5bd`, F `afc0c2789beb97720`, G `a7c09606b12abec40`, H `a41e60ce70cd50608`,
+  checks list `a9a172a6800e9156a`, Deck driver `a9fe30acdd9673598`.
+
 ## For the helpers: who owns which files
 
 A starting point for the briefs. Each brief names the tip it starts from and its exact files. A helper that needs a file

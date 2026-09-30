@@ -18,6 +18,19 @@ retry and formatting logic built on top of them.
 Does not: Decide whether to retry, stitch a soft continue back together, or format the final
 reply -- that is the entry point in ollama_service.py. This file makes exactly one request
 and returns.
+
+How it works: `_stream_ollama_chat_once()` runs in this order.
+  1. It works out how much room the model has (the window), shortens the visible half of the
+     reply budget if the prompt would not fit, and builds the request body.
+  2. It opens the connection and reads the reply in small chunks, cutting each chunk into
+     complete lines. Each line is one small JSON piece of the answer or of the model's thinking.
+  3. Every piece is added to a running buffer. At most every tenth of a second the answer so
+     far is handed to the live-typing hook, and the seconds spent thinking are frozen at the
+     first answer piece.
+  4. Between chunks it checks whether the person pressed Stop, and whether the reply has grown
+     past the safety limits (`ollama_reply_limits.py`); either one closes the connection early.
+  5. When the stream ends it returns the text and the numbers Ollama reported, or one small
+     failure dict for a cut-off, an HTTP error, a timeout or a stop.
 """
 
 import json

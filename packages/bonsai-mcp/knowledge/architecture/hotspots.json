@@ -62,7 +62,7 @@
     },
     {
       "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 1053,
+      "lines": 1068,
       "role": ""
     },
     {
@@ -161,13 +161,13 @@
       "role": ""
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 653,
+      "path": "py_modules/backend/services/response_verify.py",
+      "lines": 654,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/response_verify.py",
-      "lines": 637,
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 653,
       "role": ""
     },
     {

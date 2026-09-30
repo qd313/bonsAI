@@ -4,6 +4,23 @@ Purpose: Rule-based post-check for hallucination-prone patterns in Ollama replie
 Used for: Optional verify pass after chat completes when game context is missing or JSON promised.
 Solves: Invented AppID warnings and lightweight secondary model verify without mutating text.
 Does not: Block or rewrite replies automatically — returns warnings for transparency/UI only.
+The one exception is the spoiler cover and the follow-up-menu check below, which do change the
+text on purpose.
+
+How it works: The file holds three separate jobs, each a set of plain functions.
+  1. Checking a finished reply. `verify_ollama_response()` looks for made-up game ids and an
+     unkept JSON promise; `run_verifier_second_pass()` optionally asks a second model a yes/no
+     question; `maybe_append_verifier_notice()` adds a short note when either one complained.
+  2. Dropping a copied example menu. `drop_branch_menu_copying_the_worked_example()` throws
+     away a follow-up menu that still carries the wording of the prompt's own example.
+  3. Covering spoilers as the reply is typed. `build_live_spoiler_cover()` is called once per
+     turn and hands back two functions. One is `cover_named_spoilers()`, which cuts the reply
+     into fenced and unfenced pieces, splits the unfenced text into sentences and wraps each
+     sentence that names a protected thing in a spoiler fence. The other is
+     `cover_thinking_text()`, which does the same for the model's thinking, but swaps the
+     sentence for a short placeholder because thinking is shown as plain text. While a reply is
+     still arriving, a last sentence that might be growing into a protected name is held back
+     instead of shown.
 """
 
 from __future__ import annotations

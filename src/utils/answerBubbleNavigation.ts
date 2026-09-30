@@ -81,6 +81,21 @@
  * Does not: Move between the buttons below a reply — Copy, Retry, the
  * thumbs row — see buildReplyActionsElement and replyStopRegistry for that.
  *
+ * How it works: One press goes through `handleAnswerBubbleMoveDown()` or
+ * `handleAnswerBubbleMoveUp()`, which do the same four things in this order.
+ *   1. Find the answer bubble and the panel that scrolls it (`resolveAnswerBubbleEl()`). With
+ *      no bubble or no scrolling panel, return false and leave the press to Steam.
+ *   2. Try each stop in the order of the drawing above. A stop that qualifies takes the ring
+ *      and the panel is nudged so the stop can be read; the press is then used up.
+ *   3. If no stop qualifies and the bubble still runs past the edge, scroll the panel one step
+ *      (`panelStepDown()` / `panelStepUp()`), then let `keepRingOnScreen()` move the ring to
+ *      its section when the scroll pushed a small stop off the screen.
+ *   4. If the bubble has nothing further in that direction, return false so Steam moves the
+ *      ring to whatever lies outside the answer.
+ * The two small memories a walk Down keeps (`walkAnchor()` and the box it last landed on) are
+ * module variables and are cleared by `forgetWalk()` whenever the ring enters the answer or
+ * a walk Up starts.
+ *
  * Gotchas:
  * - Several functions here go out of their way not to move focus with a
  *   plain call. A plain focus() only moves the browser's own idea of what is

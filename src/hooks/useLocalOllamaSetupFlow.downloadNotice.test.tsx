@@ -69,7 +69,7 @@ beforeEach(() => {
 describe("Ollama setup buttons open the download notice", () => {
   it("Update AI & models: one box, the notice, naming both sites; declined starts nothing", async () => {
     const f = flow();
-    act(() => f.openLocalSetupConfirm("update_installed"));
+    act(() => f.openLocalSetupConfirm("update_installed", "ollama-local-setup"));
     await settle();
     expect(hoisted.modals).toBe(0); // no older box of its own
     expect(hoisted.calls).toHaveLength(1);
@@ -87,7 +87,7 @@ describe("Ollama setup buttons open the download notice", () => {
 
   it("Tier 1: names both sites with the old box's size", async () => {
     const f = flow();
-    act(() => f.openLocalSetupConfirm("tier1_essentials"));
+    act(() => f.openLocalSetupConfirm("tier1_essentials", "ollama-local-setup"));
     await settle();
     expect(hoisted.calls[0].notices).toEqual([
       { site: "https://ollama.com", what: "Ollama, if it is not installed yet", size: null },
@@ -99,7 +99,7 @@ describe("Ollama setup buttons open the download notice", () => {
   it("Tier 2: declined box does not switch the model policy either", async () => {
     const applyPolicy = vi.fn();
     const f = flow(applyPolicy);
-    act(() => f.openLocalSetupConfirm("tier2_multimodal"));
+    act(() => f.openLocalSetupConfirm("tier2_multimodal", "ollama-local-setup"));
     await settle();
     expect(hoisted.calls[0].opts).toMatchObject({ always: true, actionLabel: "Install Tier 2 multimodal" });
     expect(applyPolicy).not.toHaveBeenCalled();
@@ -109,7 +109,7 @@ describe("Ollama setup buttons open the download notice", () => {
   it("accepted box starts the setup", async () => {
     hoisted.answer = true;
     const f = flow();
-    act(() => f.openLocalSetupConfirm("update_installed"));
+    act(() => f.openLocalSetupConfirm("update_installed", "ollama-local-setup"));
     await settle();
     expect(setupCalls()).toHaveLength(1);
   });

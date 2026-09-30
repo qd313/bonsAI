@@ -408,8 +408,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   // the ring goes back to "Install options..", which stays (plan 76 lane 2).
   const openInstallBox = (profile: Parameters<typeof openLocalSetupConfirm>[0]) => {
     setLocalInstallMenuOpen(false);
-    rememberModalReturnFocus("ollama-install-options");
-    openLocalSetupConfirm(profile);
+    openLocalSetupConfirm(profile, "ollama-install-options");
   };
 
   const { handleToggleAutostart } = useOllamaLocalAutostart({
@@ -534,8 +533,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   className="bonsai-settings-focus-btn"
                   disabled={localSetupBusy}
                   onClick={() => {
-                    rememberModalReturnFocus("ollama-local-setup");
-                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED);
+                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup");
                   }}
                   {...({
                     onMoveUp: () => focusAutostartToggle(),

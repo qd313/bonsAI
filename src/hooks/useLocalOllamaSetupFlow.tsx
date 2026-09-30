@@ -48,6 +48,8 @@ import {
   LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
   LOCAL_SETUP_TIER2_DOWNLOAD_SIZE,
 } from "../components/OllamaWhereAiRunsSection.constants";
+import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
+import type { ModalReturnFocusId } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
 import {
   OLLAMA_PROGRAM_NOTICE,
@@ -131,7 +133,8 @@ export function useLocalOllamaSetupFlow({
       profile:
         | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS
         | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL
-        | typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED
+        | typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
+      returnId: ModalReturnFocusId
     ) => {
       if (localSetupBusy) return;
       const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
@@ -234,7 +237,11 @@ export function useLocalOllamaSetupFlow({
       };
       // This box is the download notice itself (plan72-F-DL): the sites and sizes, the permission
       // question while downloads are off, and the ring on "Not now" -- never on "Start update".
-      void confirmDownload(localSetupDownloadNotices(profile), { always: true, title, body, actionLabel }).then(
+      // The note "the ring returns to returnId" is left armed only if a box really opened (kids lock
+      // or a seen site answer at once, and the note is taken back).
+      void rememberReturnWhileBoxOpens(returnId, () =>
+        confirmDownload(localSetupDownloadNotices(profile), { always: true, title, body, actionLabel })
+      ).then(
         (go) => {
           if (!go) return;
           setupAutoTestRanRef.current = false;

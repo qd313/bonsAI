@@ -1,0 +1,66 @@
+{
+  "row": "P77-TRAP-LONG - D-pad trap fix over a long play session with a game running (plan 77 block 1a)",
+  "build": "Deck build content-hash equals the checkout's deploy sources (deck_checkReady buildMatches true, 118 files) = code of 7a7d59fe. Checkout tip when written: 0d805d37 (docs only after 7a7d59fe). No deploy done.",
+  "deckTime": "2026-09-29 22:35 to 23:14 EDT (UTC 02:35 to 03:14 on 09-30). Reopen reads below are UTC time-of-day.",
+  "screen": "Built-in Deck screen. Quick Access page window 854x534 with the game running (854x454 read while the panel was hidden before the game was in front; 1x1 hidden before launch).",
+  "setup": {
+    "keepAwake": "deck_holdAwake ttlMinutes 480, expiresAt 2026-09-30T10:33:24.183Z",
+    "settings": "Backed up over SSH (p77-settings-backup-block0.json in scratch). Nothing changed.",
+    "game": "Deep Rock Galactic: Survivor (2321470). First launch try failed at step 'open main menu' (screen was dimmed, ring on nothing; one GUIDE press wasted; L3 click woke it). Second try launched from Recent Games in 6 presses, in RunningApps after 153 ms. Plugin reloaded after launch. The game was NOT in front after the launch and reload (Steam home showed 'Current Game'); one A on the Resume button brought it to the front (title screen). ps on the Deck showed DRG Survivor.exe running for the whole session.",
+    "gameFrontAndAlive": "Game overlay counter 44-45 fps with panel closed. The K3 presses moved the game from its title screen to its Save Games screen (no A was ever pressed on it, so no save could be picked or deleted). It stayed on that screen for the rest of the run.",
+    "readMethod": "Same as plan76 P76-TRAP-FIX part2: after each reopen wait about 1 s (page-side 1000-1400 ms), read on the Quick Access page hasFocus, the ring (element with class gpfocus, which is what Steam's own focus marker sets) and document.activeElement; then DOWN, RIGHT, UP each followed by a 500-900 ms settled read of the same three things. Split = ring and page focus on different elements after a press, or a press that moves one but not the other.",
+    "questionsK2": ["how do I survive the first cave in deep rock survivor", "what weapon upgrades help most early on", "tips for handling swarms near the end of a stage", "which class is easiest for a new player", "how should I spend gold between runs", "what does overclocking a weapon do"],
+    "answerTimesFromPluginLog": {"q1": "221.8 s", "q2": "88.0 s", "q3": "102.9 s", "q4": "86.7 s", "q5": "100.6 s", "q6": "75.0 s"}
+  },
+  "reopens": [
+    {"id": 1, "kind": "K1 plain", "utc": "02:40 (chord reopen; read time not kept)", "hasFocusAfter1s": true, "before": "ring none; page focus on an unlabelled element (130,136 68x34)", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false, "note": "ring-less start; the first DOWN placed the ring on the chat row"},
+    {"id": 2, "kind": "K2 after answer over game (q1)", "utc": "02:41:47", "hasFocusAfter1s": true, "before": "ring=page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 3, "kind": "K3 game had focus (LEFT RIGHT DOWN UP B 2 s apart, wait 30 s)", "utc": "02:42:58", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false, "note": "ring none but page focus on Main tab before first press"},
+    {"id": 4, "kind": "K4 rig's own open (deck_openPlugin)", "utc": "about 02:44 (clock read not kept)", "hasFocusAfter1s": true, "before": "ring=page=chat row (the rig's own acquire-focus DOWN placed it, so this is not a chord-only open)", "afterDown": "ring=page='60 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 18, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36 (inside 854x534, visible 100 percent by the rig's read)", "backUpPresses": 18}},
+    {"id": 5, "kind": "K1", "utc": "02:45:13", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 6, "kind": "K2 (q2)", "utc": "02:48:21", "hasFocusAfter1s": true, "before": "ring none; page unlabelled element", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 7, "kind": "K3", "utc": "02:49:23", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 8, "kind": "K4", "utc": "02:50:02", "hasFocusAfter1s": true, "before": "ring=page=chat row (rig's own DOWN)", "afterDown": "ring=page='61 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 15, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36, visible 100 percent", "backUpPresses": 16, "savedCheck": "P77-TRAP-LONG-ASKWALK (checks/P77-TRAP-LONG-ASKWALK.json): 16 of 16 steps passed from Main tab, last step expect .bonsai-ask-primary matched and visible; 4 known partly-hidden stops on the answer (retry icon 67 percent, answer body behind the dock 67/33 percent, copy icon 22 percent)"}},
+    {"id": 9, "kind": "K1", "utc": "02:53:05", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 10, "kind": "K2 (q3)", "utc": "02:55:52", "hasFocusAfter1s": true, "before": "ring none; page unlabelled element", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 11, "kind": "K3", "utc": "02:56:45", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 12, "kind": "K4", "utc": "02:57:20", "hasFocusAfter1s": true, "before": "ring=page=chat row (rig's own DOWN)", "afterDown": "ring=page='62 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 19, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36, visible 100 percent", "backUpPresses": 18}},
+    {"id": 13, "kind": "K1", "utc": "02:58:43", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 14, "kind": "K2 (q4)", "utc": "03:01:26", "hasFocusAfter1s": true, "before": "ring none; page unlabelled element", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 15, "kind": "K3", "utc": "03:02:23", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 16, "kind": "K4", "utc": "03:03:01", "hasFocusAfter1s": true, "before": "ring=page=chat row (rig's own DOWN)", "afterDown": "ring=page='63 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 16, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36, visible 100 percent", "backUpPresses": 16}},
+    {"id": 17, "kind": "K1", "utc": "03:04:14", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 18, "kind": "K2 (q5)", "utc": "03:07:04", "hasFocusAfter1s": true, "before": "ring none; page unlabelled element", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 19, "kind": "K3", "utc": "03:07:53", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 20, "kind": "K4", "utc": "03:08:29", "hasFocusAfter1s": true, "before": "ring=page=chat row (rig's own DOWN)", "afterDown": "ring=page='64 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 19, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36, visible 100 percent", "backUpPresses": 19}},
+    {"id": 21, "kind": "K1", "utc": "03:09:45", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 22, "kind": "K2 (q6)", "utc": "03:12:17", "hasFocusAfter1s": true, "before": "ring none; page unlabelled element", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 23, "kind": "K3", "utc": "03:13:07", "hasFocusAfter1s": true, "before": "ring none; page=Main tab", "afterDown": "ring=page=chat row", "afterRight": "same", "afterUp": "ring=page=Main tab", "split": false},
+    {"id": 24, "kind": "K4", "utc": "03:13:44", "hasFocusAfter1s": true, "before": "ring=page=chat row (rig's own DOWN)", "afterDown": "ring=page='65 earlier'", "afterRight": "same", "afterUp": "ring=page=chat row", "split": false, "askWalk": {"presses": 12, "reachedAsk": true, "ringEqualsPage": true, "askBox": "x49 y440 w299 h36, visible 100 percent", "backUp": "not walked back before the next row"}}
+  ],
+  "note_on_ids": "Reopens are numbered in run order, K1 K2 K3 K4 x 6 = 24. The clock time of id 1 and id 4 was not kept; their content was.",
+  "totals": {
+    "reopens": 24,
+    "hasFocusTrueAfter1s": "24 of 24",
+    "splitsAfterPresses": 0,
+    "presses": "72 D-pad presses in the three-press reads; Down and Up moved ring and page together every time; Right had no target at the chat row or the 'N earlier' row and moved neither, as in plan 76",
+    "stuckDown": 0,
+    "askWalks": "6 of 6 reached Ask, ring=page on Ask, Ask box 299x36 at y440 to 476 (the panel is 534 tall), rig read visible 100 percent"
+  },
+  "surprises_not_splits": [
+    "Ring-less start: in 12 of the 24 reopens (all 6 K1, all 6 K3, and all 6 K2 except id 2) the ring (gpfocus) was absent on the Quick Access page 1 s after the reopen while document.activeElement was already on a page element (Main tab, or in 6 K2 cases an unlabelled element at 130,136). In K2 id 2 the ring was on Main tab. In every case hasFocus was true and the first DOWN put ring and page focus together on the chat row. By the letter of the runbook (split = disagreement AFTER a press) none is a split. The owner may count 'ring absent while page focus is on an element' as a split-before-first-press; it happened in the same 12 reopens whatever the kind. Counting rule needs the owner's call.",
+    "K4 by deck_openPlugin is not chord-only: it reads no ring, presses its own DOWN (acquire-focus) and reports ring on chat row. So K4 reopens start with the ring on the chat row, not on Main tab.",
+    "First walk to Ask in K2 id 2 stalled at 12 presses on the answer's first chunk (dead presses at the answer, ring on a chunk 22 percent visible) and needed a second walkTo with a larger stall limit; later walks used stallLimit 8 and did not stall.",
+    "The launch left the game hidden behind Steam's home screen after the plugin reload; the runbook's 'confirm the game is in front' needed one A on the Resume button (a thumb's route). Not counted as part of the run.",
+    "Reply-ready popup: a screenshot at about 71 s after the Ask in q6 (23:11:49) shows the popup bottom right over the game (game at 45 fps). Screenshots at about 79 s, 106 s and 122 s in q5 showed no popup (the popup is short-lived and the reply for q5 finished at about 100 s). The game stayed in front with the panel closed in every screenshot; overlay 44-45 fps throughout, 66 fps on the Steam home screen before the game came forward."
+  ],
+  "verdict": "PASS on the runbook's own line: 24 of 24 reopens with no split after any press, all 6 Ask walks reached Ask with ring and page focus agreeing and Ask fully inside the panel. Caveat for the owner: the ring was absent (page focus present) 1 s after 12 of the 24 reopens, which the runbook does not count as a split but which is a difference from last night's 6 of 6 (ring on Main tab).",
+  "screenshots": [
+    "screenshots/DeckCapture_20260929_223707_game.png (Resume page)",
+    "screenshots/DeckCapture_20260929_223720_game.png (game in front, title screen)",
+    "screenshots/DeckCapture_20260929_224217_game.png (game after K3 presses, Save Games screen)",
+    "screenshots/DeckCapture_20260929_231149_game.png (reply popup over the game)"
+  ],
+  "toolEvidence": ["runs/plan77-trap-long-launch.json", "runs/plan77-trap-long-launch-try2.json", "checks/P77-TRAP-LONG-ASKWALK.json"],
+  "scratchNotes": "C:\\Users\\still\\AppData\\Local\\Temp\\claude\\C--Users-still-Documents-BonsAI\\14d7e521-d8b2-4228-bcb8-9392efcdef18\\scratchpad\\deck\\p77-trap-long-notes.md"
+}

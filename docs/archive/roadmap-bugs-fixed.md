@@ -2491,3 +2491,25 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   **2026-09-28 (plan 76, build `c71f1d8b`):** it also folds shut after a chat switch (RB then LB), `docs/test-evidence/plan76-P76-HELPFUL-AFTER-SWITCH.json`.
 
   **Closed 2026-09-29, working by design — the maintainer's call (plan 77).** No code change, no Deck row.
+
+### Over Fallout 4, the question box goes dead with no chip pressed (closed 2026-09-29)
+
+- ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **VERIFY, fixed 2026-09-29 (plan 76, `7a7d59fe`), fixed, watch it.** Found
+  2026-09-26 (plan 70, flow L7), same family as the "Down stops half way" entry, now on the watch list in Shelved. Down and Right left the ring in the box;
+  only Up worked, and closing and reopening the panel did not clear it while the game ran.
+  **The cause:** when Quick Access is on screen but its window has lost the focus, each D-pad press moved the page's own focus while Steam's
+  ring stayed put. The fix asks that window for the focus back, on a reopen and before each of Steam's own moves.
+  **Deck 2026-09-29 (build with `7a7d59fe`), game running:** 6 of 6 reopens came up focused with no split (the night before, 3 of 6 went bad);
+  with Quick Access closed the fix never pulled focus from the game; no change without a game. Row **P76-TRAP-FIX**, evidence
+  `docs/test-evidence/plan76-P76-TRAP-FIX.json`. Passed once. **Still owed:** a longer play session with a game running.
+  [Detail](roadmap-details.md#flow-l7-findings).
+  **History, kept:** not reproduced 2026-09-27 (plan 72), `docs/test-evidence/plan72-A7-GAME-i.json`; not seen in plan 72's seven Deck blocks.
+  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); "watched, not chased". Whether those release-notes
+  lines now stay is the maintainer's call (plan 76 Results, item 0).
+  **Earlier sightings, kept:** 2026-09-28 (`c71f1d8b`) a new sighting with a likely trigger, after a real answer finished and the panel was
+  reopened over Deep Rock Galactic: Survivor (evidence `plan76-SCR-10.json`, `plan76-TTS-FEAS-05.json`); 2026-09-29 block 2c reproduced it on
+  purpose twice (`plan76-P76-TRAP-REPRO.json`, `plan76-P76-TRAP-CONTROL.json`); block 3 measured six reopens: every reopen where the page's
+  `document.hasFocus()` read false split later, every one reading true never did, so the test tool's own open call was ruled out as the cause
+  (`plan76-P76-TRAP-SPLIT.json`).
+
+  **Closed 2026-09-29, passed on the Deck (plan 77, row P77-TRAP-LONG).** Deep Rock Galactic: Survivor running, 24 reopens of Quick Access over about 40 minutes in four kinds (plain; after an answer finished over the game; after pressing into the game; the rig's own open). The panel's window had the focus 24 of 24, 0 splits in 72 presses, Down never stuck, 6 of 6 walks reached Ask fully visible. Evidence `docs/test-evidence/plan77-P77-TRAP-LONG.json` and `checks/P77-TRAP-LONG-ASKWALK.json`.

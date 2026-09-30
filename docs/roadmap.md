@@ -79,6 +79,8 @@ starts work outside this.
   the same night, and the question-row entry has now been opened and closed twice on it. Until the check reads
   text rather than boxes, measure the text before filing. Evidence
   `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
+- ★ `[focus]` **After reopening Quick Access over a game, the highlight ring is sometimes not drawn for the first second** — **OPEN, found 2026-09-29 (plan 77, row P77-TRAP-LONG).**
+  In 12 of 24 reopens the ring was absent 1 second after the reopen while the page's own focus was already on an element; the first D-pad press brought ring and focus back together every time. Last night's 6 reopens all had the ring on the Main tab. Small; a press of A in that first second may do nothing. Evidence `docs/test-evidence/plan77-P77-TRAP-LONG.json`.
 - ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **OPEN, small note, found 2026-09-28
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
   Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
@@ -471,23 +473,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
-- ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **VERIFY, fixed 2026-09-29 (plan 76, `7a7d59fe`), fixed, watch it.** Found
-  2026-09-26 (plan 70, flow L7), same family as the "Down stops half way" entry, now on the watch list in Shelved. Down and Right left the ring in the box;
-  only Up worked, and closing and reopening the panel did not clear it while the game ran.
-  **The cause:** when Quick Access is on screen but its window has lost the focus, each D-pad press moved the page's own focus while Steam's
-  ring stayed put. The fix asks that window for the focus back, on a reopen and before each of Steam's own moves.
-  **Deck 2026-09-29 (build with `7a7d59fe`), game running:** 6 of 6 reopens came up focused with no split (the night before, 3 of 6 went bad);
-  with Quick Access closed the fix never pulled focus from the game; no change without a game. Row **P76-TRAP-FIX**, evidence
-  `docs/test-evidence/plan76-P76-TRAP-FIX.json`. Passed once. **Still owed:** a longer play session with a game running.
-  [Detail](roadmap-details.md#flow-l7-findings).
-  **History, kept:** not reproduced 2026-09-27 (plan 72), `docs/test-evidence/plan72-A7-GAME-i.json`; not seen in plan 72's seven Deck blocks.
-  **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); "watched, not chased". Whether those release-notes
-  lines now stay is the maintainer's call (plan 76 Results, item 0).
-  **Earlier sightings, kept:** 2026-09-28 (`c71f1d8b`) a new sighting with a likely trigger, after a real answer finished and the panel was
-  reopened over Deep Rock Galactic: Survivor (evidence `plan76-SCR-10.json`, `plan76-TTS-FEAS-05.json`); 2026-09-29 block 2c reproduced it on
-  purpose twice (`plan76-P76-TRAP-REPRO.json`, `plan76-P76-TRAP-CONTROL.json`); block 3 measured six reopens: every reopen where the page's
-  `document.hasFocus()` read false split later, every one reading true never did, so the test tool's own open call was ruled out as the cause
-  (`plan76-P76-TRAP-SPLIT.json`).
 ### Features that need verification
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
@@ -791,7 +776,7 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
   character sweep, a legal check and the open licence call.
 - ★★★ `[voice]` **Trained voices for the bundled characters** — shelved with the clip route 2026-09-08 (D74).
   Same legal gate, plus the plugin hosting voice files for the first time.
-- ★★★ `[focus]` `[watching]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** — moved to the watch list 2026-09-29; most likely the same family as the D-pad trap fix in Verify (row P76-TRAP-FIX); plan 77's long play test decides it. Unshelves on a new sighting.
+- ★★★ `[focus]` `[watching]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** — moved to the watch list 2026-09-29; most likely the same family as the D-pad trap fix in Verify (row P76-TRAP-FIX); plan 77's long play test decides it. 2026-09-29: plan 77's long play test was clean (24 of 24); still watched. Unshelves on a new sighting.
 - ★★★★ `[voice]` **A voice for a custom character** — shelved with the bundled voices 2026-09-08 (D74). Same
   legal gate.
 - ★★★★★ `[platform]` **Global quick-launch macro** — shelved 2026-09-19 (D113), the maintainer said drop it.
@@ -822,6 +807,7 @@ during the twelfth bookkeeping pass, again to keep this document under its size 
 
 **Closed 2026-09-29 (plan 77, docs sweep):**
 
+- ★★★ `[focus]` **Over Fallout 4, the question box goes dead with no chip pressed** — **DONE 2026-09-29, passed on the Deck (row P77-TRAP-LONG; fix `7a7d59fe`).** A 40-minute play session over Deep Rock Galactic: Survivor: 24 reopens of Quick Access, the panel's window had the focus 24 of 24, 0 splits in 72 presses, Down never stuck, 6 of 6 walks reached Ask fully visible. Evidence `docs/test-evidence/plan77-P77-TRAP-LONG.json` and `checks/P77-TRAP-LONG-ASKWALK.json`. [Full detail](archive/roadmap-bugs-fixed.md#over-fallout-4-the-question-box-goes-dead-with-no-chip-pressed-closed-2026-09-29)
 - ★ `[ui]` **Show details closes itself after moving to another tab and back** — **DONE 2026-09-29: closed, working by design — the maintainer's call 2026-09-29.** No code, no Deck row. [Full detail](archive/roadmap-bugs-fixed.md#show-details-closes-itself-after-moving-to-another-tab-and-back-closed-2026-09-29)
 
 **Closed 2026-09-29 (plan 76, docs sweep 8, Deck block 3, build `4af8e7a1`):**

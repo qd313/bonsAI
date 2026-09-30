@@ -161,4 +161,5 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   **2026-09-29 (plan 76, Deck block 2c):** the Fallout 4 entry (now in Verify) reproduced it on purpose, twice; same family.
   **2026-09-29 (plan 76, block 3):** the Fallout 4 entry (now in Verify) now has the measurement: the split follows whether the panel's window has focus.
   **2026-09-29 (plan 76, Deck block 4):** the Fallout 4 entry, now in Verify › Bugs as fixed, may be this same family (not proven). Its fix passed 6 of 6 reopens with a game running; see row **P76-TRAP-FIX**. Whether this entry stays open is the maintainer's call.
+  **2026-09-29 (plan 77):** the long play test was clean (24 of 24 reopens); still watched.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.

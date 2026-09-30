@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **The rare D-pad trap when reopening Quick Access over a game now has a proven fix.** 24 of 24 reopens over a running game were clean in a 40-minute play session.
 - **Model licence labels are put right.** Qwen 2.5 72B and coder 3B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna and orca-mini no longer sit under "open source only"; gpt-oss moves up. The README now says Gemma 4 is Tier 1. Owes its Deck check.
 - **An https Ollama address is refused with a clear message** instead of being quietly sent as plain http. Owes its Deck check.
 - **The speech model download is pinned to one exact file and checked**, and a knowledge-library file list with no checksums is refused. Owes its Deck check.

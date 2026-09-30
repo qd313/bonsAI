@@ -620,10 +620,8 @@ In plain words, ready to paste under "Known issues" (plan 71, Stage D). The main
 on 2026-09-27. Each line matches an open roadmap entry; take a line out if its bug is fixed and proven
 before the release.
 
-- Rarely, pressing Down stops part way down the panel and the Ask button can't be reached. Closing and
-  reopening the Quick Access menu sometimes clears it; restarting the Deck always does.
-- Rarely, with a game running, the question box stops responding to Down and Right (Up still works).
-  Restarting the Deck clears it.
+- Rarely, the D-pad may stop moving in the panel. Closing and reopening the Quick Access menu should clear it;
+  restarting the Deck always does.
 - Rarely, a chat opened with the right shoulder button while a game runs is missing the buttons under its
   newest answer, and Down stops on the question. Closing and reopening the Quick Access menu fixes it.
 - After "Sum up this chat", a long summary can run past the bottom of the panel. Press Down to bring it into
@@ -633,6 +631,10 @@ before the release.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
 - bonsAI's highlight ring looks slightly different from Steam's own on some controls.
+
+_2026-09-29 (plan 77): the two D-pad-stuck lines became one short line. The fix for its known cause passed 6 of 6
+reopens over a game in plan 76 and 24 of 24 in plan 77's long play test (row P77-TRAP-LONG); the maintainer's call
+(D120) was to shrink them if the long test stayed clean._
 
 _2026-09-29: the line about a plugin reload stopping a model download came off this list. It was fixed and proven on the Deck in plan 76 (row P76-PULL-RESUME)._
 

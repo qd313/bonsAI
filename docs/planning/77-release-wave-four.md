@@ -296,6 +296,12 @@ Not started.
   block 3 (the https address, the library's go-ahead). **For the maintainer:** the first driver asked about 14 test
   questions in your chat 1 (no spare chat existed yet); nothing was deleted.
 - **Deck driver 2** (`adabb010ecd883584`) took over for block 1b, the chores and the blocked checks.
+- **Second rounds landed (tip `332be619`), every check green:** helper D round 3 (the model list's pill says "Qwen
+  Research" on the two Qwen 3B models, "FOSS" only for Apache or MIT); helper E round 2 (Down and Up reach the next
+  section in one press once the one they leave is read; Up into a tall section shows its bottom edge); helper J (a
+  real spoiler gap: with a no-story game like Deep Rock running, a question naming a story game like Hollow Knight
+  was judged by the running game's rules and lost its covers; now the named story game's rules win, only ever adding
+  caution). Block 3 on the Deck re-runs the walks and checks all three.
 - **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
   (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 

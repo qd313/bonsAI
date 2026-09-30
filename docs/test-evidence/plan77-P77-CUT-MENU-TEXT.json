@@ -1,0 +1,25 @@
+{
+  "row": "P77-CUT-MENU-TEXT",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 06:04-06:09",
+  "screen": "Deck's own screen (panel page window 854x454)",
+  "setup": "Installed copy of ollama_ask_budgets.py: strategy 1600 -> 300 (original saved to /home/deck/p77b4-ollama_ask_budgets.py.orig), plugin reloaded. Thinking set Off (old value medium, shown as Balanced). Ask mode Strategy, scratch chat 6f3cc055 (created 2026-09-30 by the session). Answer text read every 250 ms by a read-only poller on the Deck (scratchpad/deck/poll4.py), 122 and 126 distinct snapshots.",
+  "pressed": [
+    "question sent with deck_send_ask.py (VERIFIED), walked to the ask button, A"
+  ],
+  "run_a_half_life_2": {
+    "question": "give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter",
+    "log": "num_predict=300 think=False; three pieces, each done_reason=length (eval 300 each); soft continue scheduled twice (continue_index 1 and 2); final soft_continues=2, response_len=3440; strategy fences branch_marker=False branch_parsed=False; no 'dropped a choice fence' line",
+    "screen_reads": "122 snapshots over 48.9 s: no 'bonsai-strategy-branches' text, no '{\"' JSON, no raw '<bonsai' tag at any read",
+    "text_check": "saved chat last turn is 3486 chars. Removing the two bonsai-spoiler fenced sentences from the saved text and the two 'Spoiler - tap to show' cover blocks from the screen text, the letters+digits count is 2512 on both, and the difflib compare of the two shows zero differences. So no piece's text is missing on screen or in the saved chat."
+  },
+  "run_b_hollow_knight": {
+    "question": "give me a full guide to every boss area in hollow knight with detailed tips for each area",
+    "log": "three pieces all done_reason=length, soft_continues=2, response_len=3395, branch_marker=False, no dropped-fence line",
+    "screen_reads": "126 snapshots over 53.9 s: no branches marker or JSON at any read; spoiler cover count reached 3",
+    "text_check": "saved 3464 chars; letters+digits 2453 on screen and in saved chat after removing fences/covers: equal"
+  },
+  "fence_at_the_wall": "NOT exercised. With a 300-token limit the model never got as far as the choice-fence block in either question (branch_marker=False both times), so no fence was cut at the wall. The only fences seen were the spoiler fences the model wrote in mid-text.",
+  "restore": "file copied back, grep -c \"strategy\": 1600 = 1, plugin reloaded, Thinking put back to Balanced (settings ask_think_effort=medium again).",
+  "verdict": "UNCLEAR: no leak and no lost text in two long cut answers, but the exact failing case (a choice fence cut by the length wall) did not occur, in either question."
+}

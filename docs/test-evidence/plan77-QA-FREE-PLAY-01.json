@@ -1,0 +1,18 @@
+{
+  "row": "QA-FREE-PLAY-01",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 06:23-06:24",
+  "screen": "Deck's own screen (panel page window 854x454)",
+  "setup": "Main tab, newest answer in the scratch chat (how do I beat the Mantis Lords in Hollow Knight, details closed).",
+  "pressed": [
+    "deck_sweep Down then back Up, budget 60, 38 presses, legs ended by stall"
+  ],
+  "seen": {
+    "stops": "35 recorded, 19 different controls, 5 unnamed, 0 cycles",
+    "not_fully_visible": "4 stops, all the two known false alarms: the question row (78% visible, covered by the Retry icon) at stops 3 and 29, and the last answer section (89% visible, covered by the Copy icon) at stops 8 and 24. Line boxes were not re-measured; the covering elements are exactly the Retry and Copy corner buttons. Every other stop 100% visible, including the Ask button, the question box and the reply buttons.",
+    "run_file": "runs/plan77_b4_QA-FREE-PLAY-01.json",
+    "saved_check": "checks/plan77-b4-QA-FREE-PLAY-01.json"
+  },
+  "other_notes": "Earlier, outside the sweep: one walk stalled twice on the long answer stop (partly hidden, 22% visible, behind the tab bar, scrolled) and moved on with the next Down. In the chip ladder the first Down was 67% covered by the Ask bar corner icon. Neither is one of the two known false alarms.",
+  "verdict": "PASS"
+}

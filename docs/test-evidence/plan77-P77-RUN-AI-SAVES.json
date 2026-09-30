@@ -1,0 +1,23 @@
+{
+  "row": "P77-RUN-AI-SAVES",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 05:59-06:00",
+  "screen": "Deck's own screen (screenshot 1280x800; panel page window 854x454)",
+  "setup": "Runbook says to set a 'notice seen' key in settings.json. There is no such key in settings.json: the local-runtime beta notice is remembered in the plugin page's localStorage key bonsai:local-runtime-beta-dismissed-v1 (old value '1'). Removed that key via page JS (equivalent of 'unseen') and reloaded the plugin. settings.json ollama_local_on_deck was true before.",
+  "pressed": [
+    "Ollama tab: Run AI on this Deck A (off)",
+    "A again (on)",
+    "beta notice appeared",
+    "A on Got it"
+  ],
+  "seen": {
+    "after_off_5s": "ollama_local_on_deck=false in settings.json (05:59:31)",
+    "notice": "bonsAI - Local runtime (beta) dialog shown with a Got it button (screenshot DeckCapture_20260930_015933_auto.png)",
+    "file_read_before_pressing_got_it": "ollama_local_on_deck=true at 05:59:40",
+    "file_read_about_3s_after_got_it": "ollama_local_on_deck=true at 05:59:45",
+    "localStorage_after_got_it": "1 (put back by the plugin itself)"
+  },
+  "notice_key_restored": "yes, value 1 again after Got it; plugin reloaded afterwards; settings.json identical to block0 backup",
+  "verdict": "PASS",
+  "remarks": "Runbook wording (a settings.json notice key) does not match the app: the key lives in the page's localStorage."
+}

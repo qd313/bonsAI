@@ -1,0 +1,23 @@
+{
+  "row": "P77-SPY-TAG and SPY-REVEAL-01",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 06:14-06:22",
+  "screen": "Deck's own screen (panel page window 854x454)",
+  "setup": "Old AI character settings: ai_character_enabled=true, preset alig_ali_g, accent heavy (shown as Strong), random false, custom text empty. Changed only the preset to tf2_spy (through the AI voice & personality picker, Spy, OK). Accent was already Heavy. Strategy mode.",
+  "pressed": [
+    "picker: walked to Spy, A, walked to OK, A",
+    "question 'how do I beat Hornet in Hollow Knight' sent with the script, Ask",
+    "Show details, walked the chip ladder (Down presses inside the ladder) to chip 7 of 8",
+    "two more Spy questions (False Knight, Mantis Lords) for timing"
+  ],
+  "seen": {
+    "streaming": "50 snapshots at 250 ms over 51 s: no '<bonsai-spy-lies' or '</bonsai-spy-lies' or any '<bonsai' text in any read",
+    "saved_chats": "all three Spy answers saved with no spy tag text",
+    "spy_chip_list": "Chip 7 of 8, label 'Spy', title 'The Spy was lying', bullets: 'The Spy was on' / 'I suggested you should use Vengeful Spirit more often' / 'I implied that downward slashes are the primary defense'. The other two runs also listed 'The Spy was on' as the first bullet (False Knight: whistling weakness, gains soul when blocking; Mantis: not read), so that first line looks like a placeholder.",
+    "timing": "Answer of the Mantis Lords question finished at 02:21:06.8 Deck local (06:21:06.8Z, log 'completed'). Show details was opened by about 06:21:12 and the ladder read at 06:21:14: 'Chip 1 of 8', the same 8 chips as the answer where the Spy chip was chip 7. So the Spy chip is there at the first look, no more than about 7 s after the finish (limited by my key-press round trip; not measured finer). In the Hornet run the ladder read 33 s after finish also said 8 chips.",
+    "screenshot": "screenshots/DeckCapture_20260930_021823_auto.png shows chip 7 of 8 and the open Spy note"
+  },
+  "side_effect": "MISTAKE by the driver: in the False Knight run a 4-Up key sequence overshot Show details and the final A landed on 'Mark reply helpful'. That wrote one line rating 'up' (request_id 4, question_len 47) to ~/homebrew/settings/bonsAI/bonsai_feedback.jsonl. Not removed (rule: nothing in the settings folder is deleted).",
+  "restore": "preset put back to alig_ali_g through the same picker; settings.json diffed against the block 0 backup: identical (also after the final reload).",
+  "verdict": "PASS (both rows)"
+}

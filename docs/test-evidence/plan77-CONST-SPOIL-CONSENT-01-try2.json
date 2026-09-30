@@ -1,0 +1,26 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 06:10-06:14",
+  "screen": "Deck's own screen (panel page window 854x454)",
+  "setup": "Strategy mode, spoiler masking on (strategy_spoiler_masking_enabled=true, auto reveal false), scratch chat 6f3cc055, thinking Balanced.",
+  "pressed": [
+    "question sent by deck_send_ask.py, Ask",
+    "answer read every 250 ms by a read-only poller (52 snapshots)",
+    "page read right after the finish (06:12:00Z) and again 32 s later (06:12:32Z)",
+    "later expanded the collapsed history row of that turn (13 earlier pill, then A on the row header)"
+  ],
+  "seen": {
+    "question_1": "spoilers are okay, how should I beat the boss in the Soul Sanctum in Hollow Knight?  (reworded to avoid the answer cache; the Deck answered in 44.7 s, done_reason=stop)",
+    "covers_while_streaming": "0 of 52 snapshots showed a 'Spoiler - tap to show' cover",
+    "covers_right_after_finish": 0,
+    "covers_30_s_later": 0,
+    "saved_chat_turn": "assistant turn 1148 chars, spoiler_consent=true, NO ```bonsai-spoiler fence in the saved text",
+    "question_2": "spoilers are okay, what happens after I beat the Soul Master in Hollow Knight and what does he drop?  (asked because question 1 had no fence): 974 chars on screen, 737 saved, spoiler_consent=true, again no bonsai-spoiler fence in the saved text; 0 covers at the finish read. The log showed 'strategy branch fence present but did NOT parse' for this answer (the choices block was hidden on screen anyway).",
+    "history_expand": "row for question 1 expanded from collapsed history: 1311 chars, 0 covers",
+    "control_for_comparison": "the earlier no-consent Hollow Knight answers in the same chat do show 'Spoiler - tap to show' covers (max 3), so the cover code is live",
+    "setting_start_spoiler_boxes_open": "No control with that wording exists on the Settings tab (only 'Hide spoilers until I tap' under Story spoilers). The key strategy_spoiler_auto_reveal_after_consent exists in settings.json (false) but has no screen control, so that step was not run. Settings unchanged."
+  },
+  "verdict": "UNCLEAR",
+  "why": "No cover was seen at any read (streaming, finish, +30 s, from history). But the pass rule also needs a spoiler fence in the saved chat text, and neither consent answer had one, so there was nothing to cover. Whether the fix strips fences after consent or the model just did not write any cannot be told from this."
+}

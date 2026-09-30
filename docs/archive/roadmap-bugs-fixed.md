@@ -2695,3 +2695,33 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   Going Up into a section taller than the screen now lands with its bottom edge just above the dock.
 
   **Closed 2026-09-30, passed by the session's ruling (plan 77, Deck blocks 1b and 3, builds `bce7d0fd` and `ec557922`).** With a game running, 32 stops, 0 cycles; the tall section is entered going Up with its bottom at the dock (1 px past, rounding) (row QA-FREE-PLAY-01, game half). Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01-game.json`.
+
+## Moved from the roadmap 2026-09-30 (plan 77, Deck block 4)
+
+### "Run AI on this Deck" can show ON without being saved (closed 2026-09-30)
+
+- ★ `[ui]` **"Run AI on this Deck" can show ON without being saved** — **VERIFY, fixed 2026-09-30 (plan 77 helper C round 2, `6614e889`). Was OPEN, found 2026-09-30 (plan 77).**
+  After its beta notice, the switch showed ON but the settings file kept it off. Being looked at (helper C round 2). Evidence `docs/test-evidence/plan77-P77-HTTPS-REFUSED.json`.
+  Cause: the switch waited 400 ms to save, and its beta notice closed Quick Access first, throwing the save away; the change is now saved at once, before the notice opens. The helper's finding: any setting changed less than 400 ms before a panel close is lost the same way; only this switch is covered, and a general fix is after the release. The check: turn the switch off and on with the notice showing, press "Got it"; the settings file reads true within seconds.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 4, build `7d84ee3b`).** With the beta notice reset, the switch went off then on: the settings file read false, then true, and still true about 3 s after "Got it", with no hand edit (row P77-RUN-AI-SAVES; the notice's memory lives in the page's local storage, not the settings file). Evidence `docs/test-evidence/plan77-P77-RUN-AI-SAVES.json`.
+
+### An Ollama address typed as https is quietly sent as plain http (closed 2026-09-30)
+
+- ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **VERIFY, fixed 2026-09-29 (plan 77 helper C, `2f87bc98`, `29b085e6`, `2b32e1cd`). Was OPEN, found 2026-09-28
+  (security review, finding 7).** The maintainer's call, 2026-09-29: refuse it and say so. [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  An https address is refused with "bonsAI can only talk to Ollama over http for now. Use an http:// address." in the field, Test connection, Ask and the chat summary.
+  **2026-09-29 (plan 77 block 2, row P77-HTTPS-REFUSED):** could not run: the PC address is not in the settings file and typing it opens Steam's keyboard. Still owed; retried in block 3. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+  **2026-09-30 (plan 77 block 3, build `ec557922`, row P77-HTTPS-REFUSED):** the message and "address not saved" PASSED; Test connection still ran a probe (a name-lookup error in the log), so the row FAILED on "nothing is sent". Back to fixing (helper C round 2). Evidence `docs/test-evidence/plan77-P77-HTTPS-REFUSED.json`.
+  **2026-09-30 (plan 77 helper C round 2, landed in `6614e889`):** the helper could not reproduce the probe from the press. The back end refuses https before any probe and the screen sends nothing; the traceback most likely came from the automatic check that runs when "Run AI on this Deck" is switched off, which probed the field's old text "192.168." (not a valid address). A regression test now proves the press sends nothing. Also fixed: with an https address the meaning-search hint no longer names it. **Re-check owed** with a cleaner sequence (turn the switch off, wait 15 s, note the last log line, then set https and press Test: pass is no new probe line).
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 4, build `7d84ee3b`).** Second try: the message shows under the field; Test connection sent nothing (the log was unchanged for 12 s); the meaning-search hint does not name https; a normal answer came back after restoring (row P77-HTTPS-REFUSED). Evidence `docs/test-evidence/plan77-P77-HTTPS-REFUSED-try2.json`.
+
+### A Spy block with a broken closing tag shows as raw text (closed 2026-09-30)
+
+- ★ `[reply]` **A Spy block with a broken closing tag shows as raw text** — **VERIFY, fixed 2026-09-30 (plan 77 helper K, tip `7d84ee3b`). Was OPEN, found 2026-09-30 (plan 77).**
+  A closing tag missing its ">" left the whole block drawn as plain text in the reply, and the Spy chip appeared in Show details only about 30 seconds later. Being looked at (helper K). Evidence `docs/test-evidence/plan77-SPY-REVEAL-01.json`.
+  The back end now reads the block to the end of the reply when the closing tag is broken, cut off or missing; the screen also hides the block while the answer streams (and in copy, read aloud and the popup). **Not fixed:** the Spy chip appears in Show details only once the finished answer's details arrive (about 30 s once); and the Spy prompt's placeholder wording makes the model write placeholder lies, a wording tweak for later.
+
+  **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 4, build `7d84ee3b`).** No tag text in 50 reads while streaming or in any saved answer; the Spy chip was there at the first look (within about 7 s of the finish) and listed three lies. The chip's first line was the same in all three runs ("The Spy was on"), the prompt's placeholder wording, a tweak for later (rows P77-SPY-TAG and SPY-REVEAL-01, Heavy half). Evidence `docs/test-evidence/plan77-P77-SPY-TAG.json`.

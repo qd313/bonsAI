@@ -1,0 +1,22 @@
+{
+  "row": "P77-HTTPS-REFUSED",
+  "build_commit": "7d84ee3b",
+  "deck_time_utc": "2026-09-30 06:00-06:02",
+  "screen": "Deck's own screen (panel page window 854x454)",
+  "setup": "Run AI on this Deck was on; turned off with A, waited 16 s. Old PC address field value: '192.168.1.'. Plugin log file '2026-09-30 01.59.58.log' had 36 lines, last line a urllib URLError traceback (from the unreachable auto test), noted at 06:00:50/06:01:42.",
+  "pressed": [
+    "A on Run AI on this Deck (off)",
+    "page JS: React native value setter + input event set PC address to https://127.0.0.1:11434",
+    "walked Down to the address field then Right to the Test connection button",
+    "A on Test connection to Ollama",
+    "wait 12 s"
+  ],
+  "seen": {
+    "part1_red_message": "'bonsAI can only talk to Ollama over http for now. Use an http:// address.' colour rgb(255,99,71) shown under the PC address field; the old red 'Unreachable' line went away",
+    "part2_log": "log still 36 lines at 06:01:54 (12 s after the press); last line unchanged; no new test_ollama_connection / probe / traceback line. (The 6 matching lines counted in the file are all older, from before the noted point.)",
+    "meaning_search_hint": "'Use an http:// Ollama address on the Ollama tab, then install nomic-embed-text there for Keyword + meaning search.' No https:// text anywhere on the tab (regex https: found nothing)",
+    "test_connection_button": "pressing it showed no result line and started nothing"
+  },
+  "restore": "field set back to '192.168.1.' the same way; switch turned on (settings.json ollama_local_on_deck=true); plugin reloaded; settings.json diff against block0 backup: identical. One normal question ('what is a good way to warm up before a long gaming session') answered normally in 40.1 s (log: done_reason=stop, 859 tokens, response_len=1053).",
+  "verdict": "PASS"
+}

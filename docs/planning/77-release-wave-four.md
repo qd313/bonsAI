@@ -323,6 +323,14 @@ roadmap: proven fixes are in Done, and anything still owed is in Verify with the
   - The parental-lock half of the Ollama-tab fix needs Steam's Family View PIN.
   - Clearing the 6.6 GB of partial downloads needs Ollama restarted, and it was started by hand.
 
+**The end-of-session clean-up.** The project's wider quick check (`scripts/verify.py --quick`) had gone red during
+the night, on five things the per-landing checks never ran: missing "how it works" notes at the top of three files,
+two files past their growth limits, four more files over 400 lines, and the testing document past its size limit.
+Helper M moved self-contained helpers into new files, with no change to what the code does, and the paperwork helper
+moved 51 fully passed rows to the archive. The quick check now passes. A final smoke test on the Deck with the final
+build (`2f72d658`) passed: an answer with its covers, the D-pad walk, the Ollama tab, the licence tags, and no bonsAI
+errors in the log.
+
 ### Calls and chores for you
 
 1. **Spoilers with another game running** (questions item 3): say "(a)" to let the named story game pick the notes, or

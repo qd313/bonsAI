@@ -1,0 +1,33 @@
+{
+ "row": "P77-FINAL-SMOKE (plan 77 final smoke test, steps 1-5)",
+ "build_commit": "2f72d658 (deck_deploy at Deck 02:49 local; deck_checkReady buildMatches true, 121 files)",
+ "deck_time": "Deck local 2026-09-30 02:49-02:58 (UTC 06:49-06:58)",
+ "screen": "Deck's own screen. Quick Access window 854x454 (innerWidth x innerHeight). Tab header bottom 84, scroll pane top 88, dock top 290. Band 88-290. Physical screen 1280x800.",
+ "setup": "No game running. Main tab, Strategy, scratch chat 6f3cc055 (created 2026-09-30, 34 turns before, 8 chats unchanged). Question sent with scripts/deck_send_ask.py (VERIFIED), Ask pressed with the pad. Settings not changed.",
+ "step1_deploy": "PASS. First openPlugin failed once as expected, second opened.",
+ "step2_ask": "PASS. Question 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' not cached: reasoning 22 s, backend log 42.4 s, 889 tokens out. Cover text 'is in good hands now' shown while streaming, finished with 'Was this helpful?', two 'Spoiler - tap to show' covers, choices A and B, no raw markup characters in the text.",
+ "step3_down_list (one press, then read; ring top-bottom-height, scrollTop)": [
+  "Retry icon (start)",
+  "question row body 189-218 h29 st0",
+  "Show reasoning 234-249 st0",
+  "cover1 204-259 h55 st85",
+  "box1 88-310 h221 st177 (taller than band 202; entered from above, top edge on band top 88)",
+  "box1 AGAIN 9-230 st257 (scroll-only, 80 px; section taller than band, allowed)",
+  "cover2 221-276 st274",
+  "box2 201-291 h90 st357 (element bottom 291 vs dock top 290; text line boxes end at 290 = known Copy-icon false alarm)",
+  "box2 AGAIN 121-211 st437 (scroll-only 80 px; section is only 90 px tall, NOT taller than band)",
+  "A 172-204 st556",
+  "B 212-244 st556",
+  "Mark reply helpful 230-262 st628"
+ ],
+ "step3_up_list": [
+  "Helpful -> B 204-236 st564 -> A 172-204 st556 -> box2 201-291 st357 (once) -> cover2 204-259 st291 -> box1 69-290 h221 st197 (entered from below, bottom edge on dock top 290) -> cover1 149-204 st140 -> Show reasoning 204-219 st30 -> question row body 189-218 st0"
+ ],
+ "step3_verdict": "FAIL on one point, otherwise pass. Every landing is inside the band (tall box1 judged by its entry edge; box2 bottom line boxes at 290). Up list is the Down list reversed except for the two repeated landings. No dead press. One stop is repeated back to back: box2 (90 px tall, shorter than the band) took a second Down press that only scrolled 80 px. Same as the block 3 round 2 finding (box3 there). box1 repeat is the allowed tall-section case. Owner decides whether the box2 repeat is acceptable.",
+ "step4_ollama": "PASS. Ollama tab drew (Where AI runs, Local Ollama setup with Update AI & models, Browse models, 'Install options...' button 268 wide at y461-497 in page coordinates, Test connection 'Connected - Ollama v0.34.1 - 2 models', knowledge base, reply style, tuning, Models & routing). Saved PC addresses area not shown (Run AI on this Deck is on, so expected). Manage AI models opened the AI models screen (Browse & pull table, filters 'Also try open-weight models, Essentials only'). Pills: gemma4:e2b-it-qat FOSS green (text rgb 187,247,208), qwen3.5:4b FOSS green, qwen2.5vl:3b 'Qwen Research' amber (text rgb 253,230,138). Nothing ticked. Left with B; ring back on 'Manage AI models'. Screenshot: screenshots/DeckCapture_20260930_025430_auto.png",
+ "step5_log": "PASS for bonsAI. bonsAI log 2026-09-30 02.49.49.log has only INFO lines (plugin loaded, one ask, completed in 42.4s), no traceback, no error. The journal shows one Python traceback at 02:50:54 (OSError No such device) but it belongs to the Battery Tracker plugin, and a 'Socket error ( closed )' line from MagicPods at 02:49:56. Neither is bonsAI.",
+ "settings_diff": "settings.json read over SSH after the run is identical to the block0 backup (no keys differ; file mtime 02:22:33, before the deploy).",
+ "side_notes": "deck_runSequence with runName wrote runs/p77-final-smoke-down.json in the repo (untracked run evidence, not committed). Chip row text briefly showed scrambled characters in the page labels (likely the scramble effect); not investigated.",
+ "end_state": "Main tab, plugin closed (QAM toggled shut), no game running, keep-awake lock held until 10:49Z.",
+ "verdict": "Steps 1, 2, 4, 5 PASS. Step 3 FAIL on the single repeated box2 stop, everything else in step 3 matches."
+}

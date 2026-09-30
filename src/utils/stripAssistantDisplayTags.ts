@@ -7,6 +7,8 @@
  * is the safety net for when that removal is missed, most often on a reply that continues across
  * more than one turn: it strips both kinds of tag from whatever text is about to be displayed,
  * including a tag that is still only half-written because the reply was cut off mid-stream.
+ * It also hides the Spy character's closing confession block (`<bonsai-spy-lies>`), which the back
+ * end reads and removes from a finished reply, so it never shows as raw text while it streams in.
  *
  * Used for: `buildAnswerBubbleElement` and transcript rendering, as a last check before text
  * reaches the screen.
@@ -29,6 +31,18 @@
 const BONSAI_STATUS_RE = /<bonsai-status>\s*[\s\S]*?<\/bonsai-status>/gi;
 const BONSAI_STATUS_OPEN = "<bonsai-status>";
 const BONSAI_STRATEGY_BRACKET_RE = /\[bonsai-strategy-branches\]\s*\([^)]*\)/gi;
+/*
+ * The Spy's closing confession block (plan 77, SPY-REVEAL-01). Closed, or with its closing tag
+ * missing the ">" at the very end of the text. A block with no closer yet (still arriving, or the
+ * model never wrote one) is cut from its opener to the end by `stripSpyLiesOpen` below.
+ */
+const SPY_LIES_CLOSED_RE = /<bonsai-spy-lies>[\s\S]*?(?:<\/bonsai-spy-lies>|<\/bonsai-spy-lies\s*$)/gi;
+const SPY_LIES_OPEN = "<bonsai-spy-lies>";
+
+function stripSpyLiesOpen(text: string): string {
+  const openIdx = text.toLowerCase().indexOf(SPY_LIES_OPEN);
+  return openIdx >= 0 ? text.slice(0, openIdx).trimEnd() : text;
+}
 
 /** Hide full/partial/broken `<bonsai-status>` openers (including `<bons you're…`). */
 function stripIncompleteBonsaiStatusOpen(text: string): string {
@@ -64,7 +78,7 @@ function stripIncompleteBonsaiStatusOpen(text: string): string {
 }
 
 export function stripAssistantDisplayTags(text: string): string {
-  let out = (text || "").replace(BONSAI_STATUS_RE, "");
+  let out = stripSpyLiesOpen((text || "").replace(SPY_LIES_CLOSED_RE, "")).replace(BONSAI_STATUS_RE, "");
   out = stripIncompleteBonsaiStatusOpen(out);
   out = out.replace(BONSAI_STRATEGY_BRACKET_RE, "");
   return out.replace(/\n{3,}/g, "\n\n").trim();

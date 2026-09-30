@@ -26,4 +26,34 @@ describe("stripAssistantDisplayTags", () => {
     const raw = 'Tips here.\n\n[bonsai-strategy-branches] ({"question":"Where?","options":[]})';
     expect(stripAssistantDisplayTags(raw)).toBe("Tips here.");
   });
+
+  // Plan 77 (SPY-REVEAL-01): the Spy's closing confession block is read by the back end once the
+  // reply is done; while it is still arriving (and on any reply the back end missed) it must not
+  // show as raw markup.
+  describe("the Spy's confession block", () => {
+    it("removes a closed block", () => {
+      const raw = "Drop TDP to 8.\n\n<bonsai-spy-lies>\nSaid 8 W helps\n</bonsai-spy-lies>";
+      expect(stripAssistantDisplayTags(raw)).toBe("Drop TDP to 8.");
+    });
+
+    it("removes a block whose closing tag is missing its bracket", () => {
+      const raw = "Drop TDP to 8.\n<bonsai-spy-lies> first lie\nsecond lie\n</bonsai-spy-lies";
+      expect(stripAssistantDisplayTags(raw)).toBe("Drop TDP to 8.");
+    });
+
+    it("hides a block that is still arriving, closer not written yet", () => {
+      expect(stripAssistantDisplayTags("Drop TDP to 8.\n<bonsai-spy-lies>\nSaid 8 W")).toBe(
+        "Drop TDP to 8."
+      );
+    });
+
+    it("hides an opening tag that is only half written", () => {
+      expect(stripAssistantDisplayTags("Drop TDP to 8.\n<bonsai-spy-l")).toBe("Drop TDP to 8.");
+    });
+
+    it("keeps text that follows a closed block", () => {
+      const raw = "Before.\n<bonsai-spy-lies>\nA lie\n</bonsai-spy-lies>\nAfter.";
+      expect(stripAssistantDisplayTags(raw)).toBe("Before.\n\nAfter.");
+    });
+  });
 });

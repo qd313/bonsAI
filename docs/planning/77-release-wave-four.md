@@ -248,6 +248,16 @@ New ones go here, with the choice taken in the meantime.
    menu. It did not add a wider rule ("no game running and none named: never use an earlier game"), because a bare
    follow-up like "how do I beat the second boss" relies on the chat's game on purpose. **Meanwhile:** the narrow fix
    only. **Your call, after the release:** whether the wider rule is wanted.
+3. **A spoiler question about a story game, asked while a different game runs, gets no covers. Fixing it means an
+   exception to your locked rule that the running game always picks the notes.** With Deep Rock running, a Hollow
+   Knight boss question gets Deep Rock's notes, and the covers come from the notes (they name the bosses to hide), so
+   none appear. Seen on the Deck 3 of 3 on 2026-09-30. Options: (a) **recommended by helper J:** when a no-story game
+   runs and the question names a game on the protected story list, use the named game's notes for that turn — the
+   same notes, covers and choices as with no game running; a small change, only the short protected list can trigger
+   it; (b) keep the rule and hide the named game's boss names without attaching its notes — bigger, and the answer
+   still has no Hollow Knight notes; (c) accept it for 0.6.0 as a known issue. **Meanwhile:** (c) — the prompt change
+   already landed stays (it only adds caution), and a proposed known-issue line is added to the release notes. Say
+   "(a)" and the next session builds it, with the same Deck check.
 
 ## Results
 
@@ -302,6 +312,18 @@ Not started.
   real spoiler gap: with a no-story game like Deep Rock running, a question naming a story game like Hollow Knight
   was judged by the running game's rules and lost its covers; now the named story game's rules win, only ever adding
   caution). Block 3 on the Deck re-runs the walks and checks all three.
+- **Deck blocks 1b and 3 (driver 2):** passed — the long reply that must continue past the limit, the Expert limit,
+  a note cut for room, deleting a chat whose file is missing, the install wording, the "Qwen Research" pill, the
+  library's checksum check, the free-play sweep with and without a game, and the walk (every landing on screen, Up and
+  Down the same stops, Up into a tall section shows its bottom; one extra scroll-only press remains on a short last
+  section). The chores: one chat slot freed (the oldest chat, its title in the evidence), a second small model pulled
+  and removed; Ollama could not be restarted (it was started by hand, not as a service), so the 6.6 GB stays.
+  Failed or new: the https Test connection still probes (helper C round 2); the "Run AI on this Deck" switch can show
+  ON without saving (helper C round 2); a "spoilers are okay" answer drew a cover while arriving (helper K `ac6f0b11477976ee2`);
+  a Spy block with a broken closing tag shows raw (helper K); when the length limit cuts a choice menu, the next part
+  of the answer is lost (helper L `aeacbe7220232855d`); and helper J's spoiler fix failed on the Deck — the real cause
+  needs your call (questions, item 3). The ring after a reopen: absent 6 of 6 with no plugin reload (the normal path),
+  present 6 of 6 after one — left for after the release.
 - **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
   (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 

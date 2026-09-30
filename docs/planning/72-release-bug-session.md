@@ -631,6 +631,9 @@ before the release.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
 - bonsAI's highlight ring looks slightly different from Steam's own on some controls.
+- While one game is running, asking about a different story game (for example a Hollow Knight boss while Deep Rock
+  Galactic: Survivor runs) may not hide its spoilers. Ask with no game running for spoiler-safe answers about other
+  games. _(Proposed by plan 77, 2026-09-30, pending the maintainer's call — plan 77 questions, item 3.)_
 
 _2026-09-29 (plan 77): the two D-pad-stuck lines became one short line. The fix for its known cause passed 6 of 6
 reopens over a game in plan 76 and 24 of 24 in plan 77's long play test (row P77-TRAP-LONG); the maintainer's call

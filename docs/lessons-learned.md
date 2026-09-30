@@ -371,6 +371,20 @@ page's focus, not Steam's ring, and A acted on the ring). Every reopen reading t
 panel's own window for focus back fixed 6 of 6. Before blaming Steam or a test tool for a ring that stops following the D-pad, read
 `hasFocus()` on the panel's document.
 
+**A spoiler fix is not believed until the Deck shows a cover.** Plan 77's first fix for "no covers on a Hollow Knight
+question while Deep Rock runs" passed eleven tests, landed, and changed nothing on the Deck: the covers come from the
+attached notes (they name the bosses to hide), and the running game picks the notes. The tests checked the profile,
+not the answer. For any spoiler change, the Deck check asks the real question and counts covers on screen.
+
+**Write "stop" into a walk row.** Plan 77's runbook said "no stop repeats" and the rig failed a correct walk: a press
+that only scrolls a section the ring is reading is not a stop, and a section taller than the screen can never be
+"wholly visible". Say in the row: a landing is a stop; a scroll-only press inside a section being read is expected;
+a stop taller than the band is judged by the edge it is entered from.
+
+**A Deck driver runs out of memory after about a thousand steps.** Plan 77's first driver finished its blocks near
+900,000 tokens. Give each later block to a fresh driver with a short handover note (build, keep-awake time, settings
+backup path, what the earlier driver learned), not to the same one.
+
 ---
 
 ## 4. Briefing helpers

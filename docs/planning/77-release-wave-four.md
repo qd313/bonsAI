@@ -1,6 +1,6 @@
 # Plan 77 — release wave four: the last bug session before Friday, then an unattended Deck pass
 
-**Status: planned 2026-09-29, not started.** The maintainer's calls for it are in [Decisions](#the-maintainers-calls-2026-09-29).
+**Status: finished 2026-09-30.** Results, the code summary and a short guide are [below](#results). The maintainer's calls for it are in [Decisions](#the-maintainers-calls-2026-09-29).
 
 Asked for by the maintainer: "Let's get ready to do a massive bug fix session as a follow-up from last night …
 once we have the bugs fixed, do an automated QA pass with the controller rig … I hope it doesn't require me to
@@ -261,7 +261,147 @@ New ones go here, with the choice taken in the meantime.
 
 ## Results
 
-Not started.
+**Finished 2026-09-30, about 03:30.** 26 code changes landed on the working branch, fixing about 20 bugs, and all checks
+passed at every landing. Eight helpers started, and four more joined as the Deck found things. Four Deck drivers' worth
+of blocks ran through the night with nobody at the Deck, and more than 30 Deck checks passed. Every result is on the
+roadmap: proven fixes are in Done, and anything still owed is in Verify with the reason.
+
+**What a player will notice:**
+- **The rare "D-pad stops working over a game" trap is fixed and proven.** After last night's fix, 24 reopens over a
+  running game had no trap at all. The two release-notes lines about it are now one short line.
+- **Spoilers are safer:**
+  - A hidden block written in an odd way is now always a proper cover.
+  - Read aloud no longer reads code out.
+  - The back end's name-hiding safety net catches every kind of hidden block.
+  - After "spoilers are okay", the answer no longer gets a cover back once it finishes.
+  - A question naming a story game while a no-story game runs is now judged by the story game's rules (only half the
+    fix — see "Still open" below).
+- **Walking an answer with the D-pad is cleaner:**
+  - Every place the ring lands is fully on screen.
+  - Walking Down and walking Up visit exactly the same stops, as you asked.
+  - One press reaches the next section.
+  - Walking Up into a tall section shows its end.
+- **Safer connections:**
+  - A fake Ollama can no longer fill the Deck's memory.
+  - An https address is refused with a clear message instead of quietly sent unencrypted.
+  - The speech model and the library download are checked before they are used.
+- **Honest labels:**
+  - Every model sits under its real licence, and the "open source only" filter means it.
+  - The two Qwen 3B defaults show "Qwen Research".
+  - The install buttons say what they install ("Install Gemma 4").
+- **Smaller fixes:**
+  - The ban-lookup row stays with its chat.
+  - A stopped answer no longer offers Helpful after a chat switch.
+  - "Run AI on this Deck" now saves when you turn it on.
+  - A choice menu cut by the length limit no longer takes the rest of the answer with it.
+  - A Spy block with a broken tag never shows raw.
+  - The Ollama tab's buttons no longer pull the ring back later.
+- **Closed as not bugs:**
+  - The reply-ready popup is on screen 7.9 seconds, not 10. Last night's reading counted the text left in the page
+    while it faded.
+  - Show details folding after a switch is by design (your call).
+
+**Also proven on the Deck that were owed from before:**
+- The long reply that must continue past the length limit.
+- The Expert limit.
+- A note cut for room.
+- Deleting a chat whose file is missing.
+- The Strategy choices being understood with a game running.
+- The free-play sweep, with and without a game.
+
+**Still open, and why:**
+- **Spoilers when asking about another game while one is running (your call, questions item 3).** The covers come
+  from the notes, and your locked rule makes the running game pick the notes. A proposed known-issue line is in the
+  release notes.
+- **Two fixes proven by their tests only.** The Deck model never produced the exact case:
+  - a choice menu cut exactly at the length limit;
+  - a spoiler inside a "spoilers are okay" answer.
+- **The ring after reopening over a game.** It is not drawn until the first press, on the normal path (6 of 6 with
+  no plugin reload). The first press always brings it back. Left for after the release.
+- **Rarely, Down still takes one scroll-only press** before a short last section.
+- **Not runnable by the rig:**
+  - The parental-lock half of the Ollama-tab fix needs Steam's Family View PIN.
+  - Clearing the 6.6 GB of partial downloads needs Ollama restarted, and it was started by hand.
+
+### Calls and chores for you
+
+1. **Spoilers with another game running** (questions item 3): say "(a)" to let the named story game pick the notes, or
+   keep the proposed known-issue line.
+2. **The two Qwen 3B defaults** (questions item 1): keep them in the default tier with the honest "Qwen Research"
+   label, or move them after the release and pick other defaults.
+3. **The Strategy menu borrowing an earlier game** (questions item 2): whether the wider rule is wanted, after the
+   release.
+4. **Your first chat** has about 14 test questions from the first Deck driver (before a spare chat existed). Nothing
+   was deleted. The oldest of your eight chats was deleted with your OK; its title is in the evidence file
+   `plan77-P77-FREE-SLOT.json`. One stray press marked a test reply "helpful".
+5. **The 6.6 GB of partial model downloads** are still on the Deck. Restarting Ollama there usually clears them.
+6. **Hand checks** added to your checks page: the Ollama-tab buttons with the parental lock on.
+7. **Pushing:** nothing was pushed; everything is on the working branch, as usual.
+
+## Code summary (what changed, for the maintainer)
+
+- **Ollama replies** (helper B): a new `py_modules/backend/ollama_reply_limits.py` gives every read from the Ollama
+  address a size cap (16 MiB a reply, 64 KiB an error, 1 MiB a streamed line, 8 million characters an answer).
+  It is used by the health probe, model list, embeddings, warm-up, unload, token counts, second-pass check and the
+  chat stream. `response_verify.py` reads `~~~` and longer fences like the panel.
+- **Addresses and downloads** (helper C): `ollama_urls.normalize_ollama_base` raises `OllamaAddressRefused` for
+  https. The Ask entry points, the chat summary, the connection test and the screen's field
+  (`src/utils/ollamaAddress.ts`) refuse it with one message. `voice_model_download_service.py` pins both speech
+  models to one commit, with SHA-256 and size checks that match the Deck's files. The library download refuses a
+  file list without checksums. Round 2: `usePluginSettings.persistChangedSettingsNow` saves "Run AI on this Deck"
+  before its notice closes the panel.
+- **Licences** (helper D): `model_policy.py` classifies by size as well as family (`_SIZE_LIMITED_LICENCE`,
+  `_LIMITED_LICENCE_FAMILIES`). The two Qwen 3B defaults are held in `KEPT_IN_TIER_1_PENDING_CALL`. The pull
+  catalog's pill shows "FOSS" only for Apache or MIT. The README, troubleshooting and install-box wording were
+  brought in line.
+- **Answer walk** (helper E, two rounds): `src/utils/answerBubbleNavigation.ts` gains the box stop after a section's
+  last cover in both directions (`hasBoxStop`, `boxAfterLastCover`, `stepUpIntoSection`, `coverToLandOnGoingUp`),
+  `revealSectionInBand` for landings, the one-press hop to the next section once the current one is read, and the
+  bottom-edge landing for tall sections going Up. `src/test-harness/deckAnswerWalk.ts` models Steam's own scroll with
+  several glide rules and the game's taller dock.
+- **Spoilers on screen** (helper A): `expandOneLineSpoilerFences.ts` splits a glued opening mark onto its own line,
+  so every path draws a cover. `markdownFenceReader.replaceFencedCodeBlocks` lets Read aloud replace any fenced code.
+- **Chats and rows** (helpers G, K): saved assistant turns carry `outcome` ("stopped" / "failed") and the spoiler
+  consent flag. The ban-lookup row reads the active chat's newest saved answer after a switch. The Spy block reader
+  (back end and `stripAssistantDisplayTags.ts`) tolerates a broken or missing closer.
+- **Strategy and spoilers** (helpers H, J, L):
+  - `ask_topic_instructions.py` adds one paragraph for Strategy first turns about the Deck itself.
+  - `spoiler_title_profiles.resolve_turn_title_spoiler_profile` judges a turn as a named story game when a no-story
+    game runs.
+  - `ollama_service.py` drops a choice fence the length limit cut open, instead of losing the continuation.
+- **Ollama tab** (helper F): the three setup buttons arm their return note through `rememberReturnWhileBoxOpens`.
+
+**Surprises, and how they were handled:**
+- **Helper J's first spoiler fix passed every test but did nothing on the Deck.** The covers come from the notes,
+  not from the profile. The second look found the real cause, and it needs your call. Lesson: a spoiler fix needs a
+  Deck check before it is believed.
+- **The build failed three times on a locked file.** The build's version file was locked by something else for a
+  moment each time. Rerunning the build fixed it; the code was never at fault.
+- **Two of the Deck's "fails" were really the checks list's wording.** It counted a press that only scrolls as a
+  repeated stop, and asked that a section taller than the screen fit on it. The session ruled on them and wrote
+  the rules more carefully for the next block.
+- **The first Deck driver used up its memory after about 1,000 steps.** A fresh driver took over each later block,
+  starting from a short handover note.
+
+**What would have made it easier:**
+- A spare, empty chat slot on the Deck from the start. Without one, the first driver asked its questions in your
+  first chat.
+- Ollama on the Deck running as a service, so it can be restarted without killing it.
+
+## How this session ran (a short developer guide)
+
+- **Helpers:** each got its own copy of the repo from `scripts/worktree.py create`, and a shared rules file in the
+  scratch folder (tip check, no install, five checks, stage by name, report format) plus its own bugs and files. The
+  session read every change before landing it.
+- **Landing:** a scratch script cherry-picked a helper's commits onto the working branch, took the working branch's
+  side of any clash in the generated architecture files, regenerated them, and ran all five checks. One real clash
+  (two helpers in the same file) was resolved by hand.
+- **The Deck:** it ran from written blocks: setup, the long play test, owed checks, then one check per fix after a
+  deploy. The session read every fail against its evidence file before sending a helper back.
+- **Paperwork:** one bookkeeper helper did every roadmap, testing and changelog change, from result lists the
+  session wrote, naming the evidence file for each status. The session spot-checked its commits.
+- **The answer test for a prompt change** runs on this PC's own copy of the Deck's model
+  (`scripts/eval_kb_answers.py --corpus <shared build/knowledge-base>`), so it never competes with the Deck.
 
 ## Log
 

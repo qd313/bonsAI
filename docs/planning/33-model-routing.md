@@ -147,7 +147,7 @@ Yes, for cause-known work, and every failure so far was operational rather than 
 What to keep doing:
 
 - Lane briefs that carry the ancestry check, the file ownership, one fix per commit, and the four gates.
-- Seven lanes at most for bug or feature work (the maintainer raised it from five on 2026-09-28; refactors stay
+- Ten lanes at most for bug or feature work (the maintainer raised it to seven on 2026-09-28 and to ten on 2026-09-29; refactors stay
   at three). *Superseded 2026-09-26:* this used to say Sonnet 5 high is the right lane model. Two
   blind trials (§ 4b) ranked Opus 5.5 medium above it on quality and below it on cost, so lanes run on Opus
   5.5 medium now, low for mechanical fixes. What still holds: no model passes a focus fix without a measurement.

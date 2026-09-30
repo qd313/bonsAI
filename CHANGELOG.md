@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **After "spoilers are okay", the answer stays uncovered** when it finishes and when you reopen it, instead of a cover coming back a moment later. Owes its Deck check.
+- **A Spy block with a broken or missing closing tag is hidden from the screen, copy, read aloud and the popup**, including while the answer streams, and the Spy chip lists the model's lines. Owes its Deck check.
 - **"Run AI on this Deck" is saved the moment you flip it**, even though its beta notice closes Quick Access. Before, the change could be lost. Owes its Deck check.
 - **A reply whose choice menu is cut by the length limit keeps the rest of the answer**, on screen and in the saved chat, instead of losing it. Owes its Deck check.
 - **With an https Ollama address, the note-search hint no longer names the address.**

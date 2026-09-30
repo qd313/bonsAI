@@ -90,8 +90,6 @@ starts work outside this.
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
   Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
   that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
-- ★ `[reply]` **A Spy block with a broken closing tag shows as raw text** — **OPEN, found 2026-09-30 (plan 77).**
-  A closing tag missing its ">" left the whole block drawn as plain text in the reply, and the Spy chip appeared in Show details only about 30 seconds later. Being looked at (helper K). Evidence `docs/test-evidence/plan77-SPY-REVEAL-01.json`.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
@@ -392,6 +390,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
   aloud still hide it.
   It is now a real hidden block, while streaming too. It cannot be put on the Deck's screen without the model (no injection hook on the device). Deck check owed: row **P77-GLUED-SPOILER (unit-test proof only)**.
+- ★ `[reply]` **A Spy block with a broken closing tag shows as raw text** — **VERIFY, fixed 2026-09-30 (plan 77 helper K, tip `7d84ee3b`). Was OPEN, found 2026-09-30 (plan 77).**
+  A closing tag missing its ">" left the whole block drawn as plain text in the reply, and the Spy chip appeared in Show details only about 30 seconds later. Being looked at (helper K). Evidence `docs/test-evidence/plan77-SPY-REVEAL-01.json`.
+  The back end now reads the block to the end of the reply when the closing tag is broken, cut off or missing; the screen also hides the block while the answer streams (and in copy, read aloud and the popup). **Not fixed:** the Spy chip appears in Show details only once the finished answer's details arrive (about 30 s once); and the Spy prompt's placeholder wording makes the model write placeholder lies, a wording tweak for later. Deck check owed: row **P77-SPY-TAG**.
 - ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **VERIFY, fixed 2026-09-29 (plan 77 helper A, `0d805d37`). Was OPEN, found 2026-09-28 by reading the code (plan 76 lane 1),
   not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
   Read aloud now says "There is code on screen." It cannot be put on the Deck's screen without the model. Deck check owed: row **P77-TILDE-READALOUD (unit-test proof only)**.

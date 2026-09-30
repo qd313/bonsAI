@@ -122,8 +122,6 @@ starts work outside this.
   aloud still hide it.
 - ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **OPEN, found 2026-09-28 by reading the code (plan 76 lane 1),
   not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
-- ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
-  buttons** — **OPEN, a known edge of `e5d1ceb9` (plan 76 lane 4), not seen on the Deck.**
 - ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
   **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
@@ -132,14 +130,10 @@ starts work outside this.
 - ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28
   (plan 75).** Seen twice: once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`); once it never
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
-- ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **OPEN, found 2026-09-28 (plan 74),
-  confirmed as a separate effect by plan 76 lane 4.** Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
-- ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
-  **PARTIAL, found 2026-09-28 (plan 76 lane 2), in the code only.** Fixed (`6ef8cedf`) for the library's Update and "Pull
-  nomic-embed-text" buttons. Still open for "Update AI & models" and the Tier 1 and Tier 2 install buttons (about six lines).
 - ★ `[ui]` **The reply-ready popup stays up about 10 seconds, not the 8 planned** — **OPEN, found 2026-09-28 (plan 76, build `c71f1d8b`).**
   Measured 10.08 seconds over Deep Rock Galactic: Survivor (150 ms polling, so at most 0.15 s off). Small. Evidence
   `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`.
+  **2026-09-29 (plan 77, helper G):** not changed. The code sets 8 seconds, and plan 38's video test measured 8.0 seconds drawn; the page keeps the text about 1.5 to 2 seconds longer while it fades and is removed, which is what the 150 ms page reading counted. Owed: a video check, row **P77-POPUP-VIDEO** (record the real popup over a game and count the frames drawn; pass is about 8 seconds). Stays in Bugs until then.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -424,11 +418,20 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
+- ★ `[chat]` **Back in a chat after leaving it, its own ban-lookup reply row is gone** — **VERIFY, fixed 2026-09-29 (plan 77, `c70e54cb`, landed in tip `03baaa45`).**
+  Found 2026-09-28 (plan 74), confirmed as a separate effect by plan 76 lane 4. Deck check owed: row **P77-BANROW-SWITCH**.
+  Second note in `docs/test-evidence/plan74-P74-LOCAL-CMD-CHAT.json`.
+- ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
+  **VERIFY, fixed for all buttons 2026-09-29 (plan 77, `11033561`, tip `7c8ac206`).** Earlier fixed (`6ef8cedf`) for the library's Update and
+  "Pull nomic-embed-text" buttons; now also "Update AI & models" and the Tier 1 and Tier 2 install buttons. Deck check owed: row **P77-OLLAMA-NOBOX-NOTE**.
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
   partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
   shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
   (plan 70, flow L7). Deck check owed: row **P76-CHOICES-DRIFT** (the flow L7 troubleshooting questions with a game running,
   reading the log). [Detail](roadmap-details.md#flow-l7-findings).
+- ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
+  buttons** — **VERIFY, fixed 2026-09-29 (plan 77, `4447ffbc`).** The back end now marks a stopped or failed answer turn in the saved
+  chat; a turn saved before the mark counts as finished. A known edge of `e5d1ceb9` (plan 76 lane 4). Deck check owed: row **P77-HELPFUL-STOPPED**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a

@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 77 (2026-09-29)
+
+- **A chat's own "Open Permissions" row after a ban lookup stays when you leave the chat and come back.** Owes its Deck check.
+- **A half-written answer you stopped, or one that failed, no longer gets live Helpful, Not really and Retry buttons after you switch chats.** A finished answer keeps them. Owes its Deck check.
+- **A press the kids lock refuses on "Update AI & models" or the Tier 1 and Tier 2 install buttons no longer leaves the ring jumping back to them later.** Owes its Deck check.
+
 ### Plan 76 (2026-09-28)
 
 - **Copy and Read aloud now leave hidden spoiler blocks out** the same way the screen does, even when a block is written oddly.

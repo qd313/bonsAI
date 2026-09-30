@@ -20,7 +20,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
-from backend.ollama_urls import normalize_ollama_base
+from backend.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
 from backend.services.local_ollama_setup_service import (
     is_loopback_ollama_host,
     local_ollama_cli_home_ready,
@@ -137,6 +137,8 @@ async def run_ollama_connection_test(
 
     if not raw:
         return outcome({"reachable": False, "error": NO_IP_ERROR})
+    if is_https_ollama_address(raw):
+        return outcome({"reachable": False, "error": HTTPS_NOT_SUPPORTED_MESSAGE})
 
     host, _port, base = tools.normalize(raw)
     loopback = tools.is_loopback(host)

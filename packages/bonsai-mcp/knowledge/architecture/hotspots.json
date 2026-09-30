@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2284,
+      "lines": 2299,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -56,13 +56,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "lines": 1050,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1071,
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1047,
+      "path": "py_modules/backend/services/local_ollama_setup_service.py",
+      "lines": 1050,
       "role": ""
     },
     {

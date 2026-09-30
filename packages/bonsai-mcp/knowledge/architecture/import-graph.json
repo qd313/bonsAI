@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 619,
-  "edgeCount": 1722,
+  "fileCount": 622,
+  "edgeCount": 1728,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1167,6 +1167,15 @@
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/utils/ollamaAddress.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -1224,12 +1233,14 @@
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/hooks/useSettingsLoadedFlag.ts",
         "src/utils/deckyCall.ts",
+        "src/utils/ollamaAddress.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
         "src/utils/settingsPanelScroll.ts"
       ],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
@@ -2558,6 +2569,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
@@ -4608,6 +4620,7 @@
         "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
@@ -6121,6 +6134,20 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
+    },
+    "src/utils/ollamaAddress.test.ts": {
+      "imports": [
+        "src/utils/ollamaAddress.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/ollamaAddress.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/utils/ollamaAddress.test.ts"
+      ]
     },
     "src/utils/ollamaTabLocalSurvival.ts": {
       "imports": [

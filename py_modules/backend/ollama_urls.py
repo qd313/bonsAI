@@ -13,7 +13,9 @@ Solves: without one shared way to read the address, "example.com" with no
 port, "example.com:9999", and "http://example.com:9999" could each be
 understood a little differently depending on which piece of code read them.
 Does not: check whether the address actually reaches something running
-Ollama -- it only builds the address, it never tries it. See
+Ollama -- it only builds the address, it never tries it. It also never turns
+an https:// address into a plain http one behind the person's back: it refuses
+it with a plain message instead (see OllamaAddressRefused). See
 ollama_connectivity for whether an address is this same machine.
 """
 
@@ -23,9 +25,32 @@ from urllib.parse import urlparse
 from backend.constants import DEFAULT_OLLAMA_HOST, DEFAULT_OLLAMA_PORT
 
 
+HTTPS_NOT_SUPPORTED_MESSAGE = (
+    "bonsAI can only talk to Ollama over http for now. Use an http:// address."
+)
+"""What a person is told when they type an https:// Ollama address. The screen shows the same
+words (src/utils/ollamaAddress.ts), so the field and the back end never disagree."""
+
+
+class OllamaAddressRefused(ValueError):
+    """The typed address is one bonsAI will not use. ``str()`` is the plain message to show."""
+
+
+def is_https_ollama_address(raw: str) -> bool:
+    """True when the typed address starts with https:// (any case, leading spaces ignored)."""
+    return (raw or "").strip().lower().startswith("https://")
+
+
 def normalize_ollama_base(raw: str) -> Tuple[str, int, str]:
-    """Normalize user-provided host input into host/port/base-url tuple values."""
+    """Normalize user-provided host input into host/port/base-url tuple values.
+
+    Raises OllamaAddressRefused for an https:// address: the plugin only speaks plain http to
+    Ollama, and quietly sending an "https" address as http would send the questions unencrypted
+    to a server the person believed was secured.
+    """
     candidate = (raw or "").strip()
+    if is_https_ollama_address(candidate):
+        raise OllamaAddressRefused(HTTPS_NOT_SUPPORTED_MESSAGE)
     if not candidate:
         return DEFAULT_OLLAMA_HOST, DEFAULT_OLLAMA_PORT, f"http://{DEFAULT_OLLAMA_HOST}:{DEFAULT_OLLAMA_PORT}"
 

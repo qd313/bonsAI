@@ -18,7 +18,7 @@ from typing import Any
 
 from backend.ollama_connectivity import ollama_http_base_from_pc_ip_field
 from backend.ollama_reply_limits import read_error_body, read_json_capped
-from backend.ollama_urls import build_ollama_embed_url
+from backend.ollama_urls import OllamaAddressRefused, build_ollama_embed_url
 from backend.services.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
 from backend.services.local_ollama_setup_service import list_installed_ollama_tags
 
@@ -127,7 +127,10 @@ def nomic_embed_available(
     timeout_seconds: float = 3.0,
 ) -> bool:
     """Return True when ``model`` is installed on the Ask Ollama host (no pull)."""
-    base = ollama_http_base_from_pc_ip_field(pc_ip)
+    try:
+        base = ollama_http_base_from_pc_ip_field(pc_ip)
+    except OllamaAddressRefused:
+        return False
     key = (base, str(model or ""))
     now = time.monotonic()
     with _AVAILABILITY_LOCK:
@@ -163,7 +166,10 @@ def embed_texts(
     inputs = [str(t or "") for t in texts]
     if not inputs:
         return []
-    url = build_ollama_embed_url(base_http or ollama_http_base_from_pc_ip_field(pc_ip))
+    try:
+        url = build_ollama_embed_url(base_http or ollama_http_base_from_pc_ip_field(pc_ip))
+    except OllamaAddressRefused as exc:
+        raise OllamaEmbedError(str(exc)) from exc
     payload: dict[str, Any] = {"model": model, "input": inputs[0] if len(inputs) == 1 else inputs}
     if keep_alive:
         payload["keep_alive"] = keep_alive

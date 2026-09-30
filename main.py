@@ -221,7 +221,12 @@ from backend.services.voice_read_aloud_service import VoiceReadAloudService
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
 from backend.constants import DEFAULT_OLLAMA_PCIP
-from backend.ollama_urls import build_ollama_chat_url, normalize_ollama_base
+from backend.ollama_urls import (
+    HTTPS_NOT_SUPPORTED_MESSAGE,
+    build_ollama_chat_url,
+    is_https_ollama_address,
+    normalize_ollama_base,
+)
 
 logger = decky.logger
 
@@ -1461,6 +1466,9 @@ class Plugin:
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
+        if is_https_ollama_address(pc_ip):
+            logger.info("ask_game_ai: rejected (https Ollama address)")
+            return Plugin._reject_ask_request(HTTPS_NOT_SUPPORTED_MESSAGE, app_id=app_id)
         return await self._execute_game_ai_request(
             parsed_question,
             pc_ip,
@@ -1632,6 +1640,13 @@ class Plugin:
                 "accepted": False,
                 "status": "invalid",
                 **Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id),
+            }
+        if not has_local_command and is_https_ollama_address(pc_ip):
+            logger.info("start_background_game_ai: rejected (https Ollama address)")
+            return {
+                "accepted": False,
+                "status": "invalid",
+                **Plugin._reject_ask_request(HTTPS_NOT_SUPPORTED_MESSAGE, app_id=app_id),
             }
 
         pre_settings: Optional[dict] = None

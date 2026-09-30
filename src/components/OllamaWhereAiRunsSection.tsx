@@ -106,6 +106,7 @@ import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
 import { useDeveloperTabShown } from "../features/plugin-shell/developerTabSignal";
 import { useLocalOllamaSetupFlow } from "../hooks/useLocalOllamaSetupFlow";
 import { useSettingsLoadedFlag } from "../hooks/useSettingsLoadedFlag";
+import { isHttpsOllamaAddress, OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "../utils/ollamaAddress";
 import type {
   MdnsOllamaHost,
   LocalOllamaSetupStatus,
@@ -321,6 +322,15 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     const quiet = opts?.quiet === true;
     const target = ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim();
     if (!target) return;
+    if (isHttpsOllamaAddress(target)) {
+      // Refused, not tried: bonsAI only speaks plain http to Ollama, and an https address must
+      // never be sent as http behind the person's back. The back end refuses it the same way.
+      ++probeSeqRef.current;
+      const refused = { reachable: false, error: OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE };
+      setConnectionStatus(refused);
+      onLastConnectionStatus?.(refused);
+      return;
+    }
     const loopbackLikelyProbe =
       ollamaLocalOnDeck ||
       /^\s*127\.0\.0\.1\s*(:\s*\d+)?\s*$/i.test(target) ||
@@ -795,7 +805,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         {!ollamaLocalOnDeck ? (
           <PanelSectionRow>
             <Button
-              disabled={!ollamaIp.trim() || namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS}
+              disabled={
+                !ollamaIp.trim() ||
+                isHttpsOllamaAddress(ollamaIp) ||
+                namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS
+              }
               onClick={() => {
                 const host = ollamaIp.trim();
                 if (!host) return;
@@ -871,6 +885,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       maxWidth: "100%",
                     }}
                   />
+                  {isHttpsOllamaAddress(ollamaIp) ? (
+                    <div className="bonsai-prose" style={{ fontSize: 11, color: "tomato", marginTop: 4 }}>
+                      {OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}
+                    </div>
+                  ) : null}
                 </div>
               ) : (
                 <div
@@ -1018,7 +1037,12 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             </div>
           </PanelSectionRow>
         ) : null}
-        {connectionStatus && (
+        {connectionStatus &&
+        !(
+          connectionStatus.error === OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE &&
+          !ollamaLocalOnDeck &&
+          isHttpsOllamaAddress(ollamaIp)
+        ) && (
           <PanelSectionRow>
             {connectionStatus.reachable ? (
               <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#81c784" }}>

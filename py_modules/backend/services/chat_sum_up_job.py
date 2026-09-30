@@ -26,7 +26,7 @@ from typing import Any, Optional
 
 import decky
 
-from backend.ollama_urls import normalize_ollama_base
+from backend.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
 from backend.services import chat_turn_recorder
 from backend.services.background_request_state import pending_background_state
 from backend.services.chat_slot_service import load_slot as chat_load_slot
@@ -99,6 +99,9 @@ async def sum_up_chat_slot(plugin: Any, slot_id: str = "", pc_ip: str = "") -> d
     sid = str(slot_id or "").strip()
     if not sid:
         return {"accepted": False, "status": "invalid"}
+    if is_https_ollama_address(str(pc_ip or "")):
+        # Never sent as plain http behind the person's back (0.6.0 review, finding 7).
+        return {"accepted": False, "status": "invalid", "error": HTTPS_NOT_SUPPORTED_MESSAGE}
 
     settings_dir = plugin._chat_slots_settings_dir()
 

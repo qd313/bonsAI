@@ -59,7 +59,7 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
     return out
 
 
-# --- Essentials routing: one FOSS multimodal default, short tails for legacy + Tier 2 open-weight.
+# --- Essentials routing: one small multimodal default, short tails for legacy + Tier 2 open-weight.
 # Ask mode (speed/strategy/expert) differs by prompt and token budget only — not separate tag lists.
 _TEXT_FOSS_ESSENTIALS = [
     "qwen2.5vl:3b",
@@ -125,7 +125,10 @@ _VISION_HIGH_VRAM_DEEP: list[str] = [
     "qwen2.5vl",
 ]
 
-# Deck essentials — one Tier-1 FOSS multimodal pull. Keep in sync with README and deckEssentialsTags.ts.
+# Deck essentials — one Tier-1 multimodal pull. Keep in sync with README and deckEssentialsTags.ts.
+# Licence note (2026-09-29): Qwen's own card puts the 3B size under the Qwen Research licence, so it is
+# not called "FOSS" in wording; it stays in Tier 1 until the maintainer decides (see
+# model_policy.KEPT_IN_TIER_1_PENDING_CALL).
 TIER1_ESSENTIALS_PULL_TAGS = ("qwen2.5vl:3b",)
 
 # Tier-2 one-model multimodal preset (registry may fall back to gemma4:e2b in setup service).
@@ -482,5 +485,5 @@ def no_installed_routing_models_message(installed: list[str], requires_vision: b
         f"No {kind}model in bonsAI's routing list is installed on this Ollama host. "
         f"{installed_clause}"
         f"Open {OLLAMA_TAB_WHERE_AI_RUNS} and run Install Tier 1 essentials, or pull {essential} "
-        "(one FOSS multimodal model for chat and screenshots). Tier 2 optional: gemma4:e2b-it-qat."
+        "(one small multimodal model for chat and screenshots). Optional: gemma4:e2b-it-qat."
     )

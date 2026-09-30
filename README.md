@@ -161,18 +161,23 @@ plugin data. To start fresh, use **Settings → Advanced → Clear all data**
 bonsAI does not run on the Steam Frame headset. To use it alongside one, run bonsAI on a Steam Deck
 on the same network and point it at the PC that streams your Frame games.
 
-## Model policy
+## Model policy tiers
 
 The model policy on the **Ollama** tab decides which of your installed models bonsAI will try.
 
 | Tier | What it allows |
 |---|---|
-| **Tier 1** | Open source only. The default, and the recommended one |
-| **Tier 2** | Also tries open-weight models, such as the Gemma family |
+| **Tier 1** | Open source only (Apache 2.0 or MIT licences), such as Qwen 3, Gemma 4, Granite and gpt-oss. The default, and the recommended one |
+| **Tier 2** | Also tries open-weight models, whose weights are public but whose licence is the maker's own, such as Llama, Gemma 3 and older, and the Qwen sizes under Qwen's own licence |
 | **Tier 3** | Any installed model, only after you explicitly unlock it |
 
-Each reply can say which model wrote it. Licensing detail is in
-[troubleshooting](docs/troubleshooting.md).
+The default picture model, Qwen 2.5 VL 3B, is a known exception. Qwen's own model card gives the
+3B size the Qwen Research licence (Ollama's page for it lists Apache 2.0). It stays in Tier 1 for
+now so the default keeps working. If the licence matters to you, read the model's own page.
+These labels were checked against each model's page on 2026-09-29. They are a guide, not legal advice.
+
+Each reply can say which model wrote it. The list of models and their licences is in
+[troubleshooting](docs/troubleshooting.md#model-licences-and-the-tiers).
 
 ## Building it yourself
 

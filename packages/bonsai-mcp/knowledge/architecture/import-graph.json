@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 618,
-  "edgeCount": 1721,
+  "fileCount": 619,
+  "edgeCount": 1722,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1152,9 +1152,16 @@
         "src/components/OllamaThinkingEffortRow.test.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.constants.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.constants.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.constants.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx"

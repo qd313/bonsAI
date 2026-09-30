@@ -203,13 +203,40 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 ### Deck essentials models (Tier 1 / Tier 2)
 
-**Default Tier 1 pull:** `qwen2.5vl:3b` — one FOSS multimodal model for chat, screenshots, OCR, and Strategy mode. In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
+**Default Tier 1 pull:** `qwen2.5vl:3b` — one small multimodal model for chat, screenshots, OCR, and Strategy mode. (Qwen's own card gives this 3B size the Qwen Research licence, not Apache 2.0 — see [Model licences and the tiers](#model-licences-and-the-tiers); it stays in Tier 1 for now so the default keeps working.) In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
 
-**Optional Tier 2 one-model multimodal:** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Use **Install Tier 2 one-model multimodal** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
+**Optional Tier 2 one-model multimodal:** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button keeps its "Tier 2" name and still switches the policy. Use **Install Tier 2 one-model multimodal** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
 
 **Browse models** defaults to **Essentials only** (two preset rows). Turn the filter off to see more models; stretch/specialist rows are for power users.
 
 **Clear all data:** **Settings → Advanced → Clear all data** wipes settings (including permissions), voice STT assets, feedback log, runtime cache, all `bonsai:*` browser keys, `~/.bonsai/cache`, and **`~/.bonsai/proton_experiment_journal.json`**. When **Ollama on this Deck** was enabled **or** a local Ollama home (`~/.ollama`) / user-prefix install exists, it also removes local model blobs and the user-prefix Ollama binary under `~/.local`. LAN-hosted Ollama on another PC is not touched.
+
+### Model licences and the tiers
+
+Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/library/<name>`) and its maker's model card on Hugging Face. bonsAI sorts models by family name and, where the licence depends on size, by the size in the tag. This is a guide, not legal advice.
+
+| Model | Licence | Tier |
+|---|---|---|
+| Qwen 3, Qwen 3.5, Qwen 3-VL, Qwen 2.5 (0.5b, 1.5b, 7b, 14b, 32b), Qwen 2.5 coder (all but 3b), Qwen 2.5 VL 7b and 32b, Qwen 2 (all but 72b) | Apache 2.0 | 1 |
+| Qwen 2.5 VL 3b (the default), Qwen 2.5 3b | Qwen Research on Qwen's cards (Ollama's qwen2.5vl page lists Apache 2.0) | 1, kept on purpose for now |
+| Qwen 2.5 72b, Qwen 2.5 VL 72b, Qwen 2.5 coder 3b, Qwen 2 72b | Qwen's own licences | 2 |
+| Qwen 1.5 (`qwen`) | Tongyi Qianwen licences | 2 |
+| Gemma 4 | Apache 2.0 | 1 |
+| Gemma, Gemma 2, Gemma 3 | Gemma Terms of Use | 2 |
+| Granite | Apache 2.0 | 1 |
+| gpt-oss | Apache 2.0 | 1 |
+| Phi, Phi 3, TinyLlama, OpenChat | MIT or Apache 2.0 | 1 |
+| llava 7b, 34b | Apache 2.0 (Mistral or Yi based) | 1 |
+| llava 13b, llava-llama3 | Llama 2 / Llama 3 licence | 2 |
+| llava-phi3 | No licence stated on Ollama or the maker's card; its base, Phi 3, is MIT | 1, unconfirmed |
+| Vicuna, orca-mini | Llama 1 / Llama 2 licence, or CC BY-NC-SA | 2 |
+| Llama 2, 3, 3.2 (and vision) | Meta's Llama licences | 2 |
+| Mistral, Mixtral, Yi, InternVL, InternLM | Apache 2.0 for the versions checked, but these families have other licences at other sizes | 2 (kept cautious) |
+| DeepSeek R1 | MIT (DeepSeek Coder has its own DeepSeek licence) | 2 (kept cautious) |
+| LFM (Liquid) | LFM Open License v1.0 | 2 |
+| Nous Hermes, Dolphin | Follow the base model: Apache 2.0 or a Llama licence | 2 |
+| SOLAR | CC BY-NC 4.0 (non-commercial) | 2 |
+| Moondream, MiniCPM | Apache 2.0 / MiniCPM licence | 3 (not in the family table) |
 
 ### Model try-order pickers (text + vision)
 
@@ -227,13 +254,13 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library. Use **`gemma4:e2b-it-qat`**, **`gemma4:e2b`**, or **`gemma4:latest`** (= E4B on Ollama).
 
-**Fix:** Pull via **Install Tier 2 one-model multimodal** or an exact catalog tag. Enable **Tier 2** model policy so routing can use open-weight tags.
+**Fix:** Pull via **Install Tier 2 one-model multimodal** or an exact catalog tag. Gemma 4 tags work under Tier 1; Gemma 3 and older need **Tier 2** model policy.
 
 **Checks:**
 
 1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
 2. Confirm `qwen2.5vl:3b` (Tier 1) or your Tier 2 Gemma tag is listed.
-3. Tier 1 policy only allows FOSS tags — use Tier 2 for Gemma.
+3. Tier 1 policy only allows open-source (Apache 2.0 or MIT) tags. Gemma 4 counts; Gemma 3 and older need Tier 2.
 
 ---
 

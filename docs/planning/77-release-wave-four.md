@@ -268,6 +268,17 @@ Not started.
   last night's reading counted the text left in the page while it faded. A video check decides it.
 - **Helper H finished** (the Strategy prompt for questions about the Deck itself). Its answer-quality run is going on
   this PC's own copy of the Deck's model, so it does not compete with the Deck.
+- **All eight helpers landed (tip `5578656c`), every check green at each landing.** D (licence labels), C (https
+  refused, speech model pinned, library list needs checksums; one clash with B's change in the same file, resolved
+  by hand), H (Strategy about the Deck itself), A (glued hidden block, Read aloud and `~~~` code), E (the D-pad walk:
+  every landing on screen, Up stops on the box too). Two one-off test timeouts under load, both green on the next
+  full run.
+- **Helper H's answer test** (the PC's copy of the Deck's model, 2026-09-29): the old bug (a Deck question picking up
+  Hollow Knight's choices) never happened in 30 tries before or after, so this run cannot prove the fix. It did no
+  harm: ordinary game questions kept their menu (14 of 15). The Deck check is the real test.
+- **Helper D round two** started: three screens still say "FOSS" for the default model, wording only.
+- **Deck:** block 2 sent — deploy, then one check per fix; the parental-lock half of the Ollama-tab fix cannot run
+  (Steam's Family View needs a PIN, and the no-box path would start a real download), so it rests on its unit tests.
 
 ## For the helpers: who owns which files
 

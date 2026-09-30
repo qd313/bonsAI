@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **A reply from the Ollama address can no longer grow without limit.** Past a size cap, bonsAI stops reading, closes the connection and shows a plain error. Normal long answers are unaffected. Owes its Deck check.
+- **The safety net that hides a spoiler's name now understands `~~~` hidden blocks too**, and holds back a half-typed one while an answer arrives. Unit-tested; owes a Deck regression check.
 - **A chat's own "Open Permissions" row after a ban lookup stays when you leave the chat and come back.** Owes its Deck check.
 - **A half-written answer you stopped, or one that failed, no longer gets live Helpful, Not really and Retry buttons after you switch chats.** A finished answer keeps them. Owes its Deck check.
 - **A press the kids lock refuses on "Update AI & models" or the Tier 1 and Tier 2 install buttons no longer leaves the ring jumping back to them later.** Owes its Deck check.

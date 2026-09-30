@@ -114,9 +114,6 @@ starts work outside this.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-- ★ `[reply]` **The back end's name-covering safety net only knows three-backtick blocks** — **OPEN, found 2026-09-28 by reading
-  the code (plan 76 lane 1), not seen on the Deck.** `py_modules/backend/services/response_verify.py` matches backtick fences only,
-  so a `~~~` hidden block the model writes off-script is never checked by it. Low risk: the model is told to use backticks.
 - ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **OPEN, found 2026-09-28
   by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
   aloud still hide it.
@@ -155,10 +152,6 @@ starts work outside this.
   and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
   sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
   Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
-  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
-- ★ `[ollama]` **Replies from the Ollama address have no size limit** — **OPEN, found 2026-09-28 (0.6.0
-  security review, finding 6).** A fake Ollama the user pointed bonsAI at can fill the
-  Deck's memory. Twelve places, including how answers stream in. [Review](audit/security-review-0.6.0.md).
   **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **OPEN, found 2026-09-28
   (security review, finding 7).** The maintainer's call, 2026-09-29: refuse it and say so. [Review](audit/security-review-0.6.0.md).
@@ -424,6 +417,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
   **VERIFY, fixed for all buttons 2026-09-29 (plan 77, `11033561`, tip `7c8ac206`).** Earlier fixed (`6ef8cedf`) for the library's Update and
   "Pull nomic-embed-text" buttons; now also "Update AI & models" and the Tier 1 and Tier 2 install buttons. Deck check owed: row **P77-OLLAMA-NOBOX-NOTE**.
+- ★ `[ollama]` **Replies from the Ollama address have no size limit** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `96f7d896`, tip `044069cd`).**
+  Found 2026-09-28 (0.6.0 security review, finding 6). Every read of the Ollama address's replies is now capped (whole reply 16 MiB, error
+  body 64 KiB, one streamed line 1 MiB, one streamed answer 8,000,000 characters); past a cap bonsAI stops reading, closes the connection,
+  logs one line and shows a plain error. Deck check owed: row **P77-OLLAMA-SIZE-LIMITS**. [Review](audit/security-review-0.6.0.md).
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
   partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
   shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
@@ -432,6 +429,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
   buttons** — **VERIFY, fixed 2026-09-29 (plan 77, `4447ffbc`).** The back end now marks a stopped or failed answer turn in the saved
   chat; a turn saved before the mark counts as finished. A known edge of `e5d1ceb9` (plan 76 lane 4). Deck check owed: row **P77-HELPFUL-STOPPED**.
+- ★ `[reply]` **The back end's name-covering safety net only knows three-backtick blocks** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `a7b0865e`).**
+  Found 2026-09-28 by reading the code (plan 76 lane 1). It now reads `~~~` and longer fences the way the panel does, and holds back a
+  half-typed `~~~bon` while streaming. Unit-tested; the model is told to use backticks, so it cannot be triggered on demand. Deck check owed:
+  row **P77-TILDE-SAFETY-NET** (the regression check).
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a

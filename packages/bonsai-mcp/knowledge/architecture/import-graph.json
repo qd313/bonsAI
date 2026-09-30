@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 630,
-  "edgeCount": 1751,
+  "fileCount": 631,
+  "edgeCount": 1754,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -238,6 +238,13 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.httpsHost.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -317,12 +324,14 @@
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/kbDownloadMarker.ts",
+        "src/utils/ollamaAddress.ts",
         "src/utils/rememberReturnWhileBoxOpens.ts",
         "src/utils/settingsPanelScroll.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
+        "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
@@ -4636,6 +4645,7 @@
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
+        "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
@@ -6223,6 +6233,7 @@
     "src/utils/ollamaAddress.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/utils/ollamaAddress.test.ts"

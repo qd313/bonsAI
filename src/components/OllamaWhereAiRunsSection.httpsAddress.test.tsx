@@ -70,4 +70,19 @@ describe("OllamaWhereAiRunsSection https address", () => {
     await waitFor(() => expect(persist).toHaveBeenCalledWith("192.168.1.50:11434"));
     expect(probes().length).toBeGreaterThan(0);
   });
+
+  it("turning 'Run AI on this Deck' off probes only the old plain address, then the https press sends nothing more", async () => {
+    // Round 2 (Deck 2026-09-30): the toggle's automatic check goes to whatever the field held
+    // before, and logs a lookup failure for it. That is not the https press.
+    const view = render(element("192.168.1."));
+    await waitFor(() => expect(probes().length).toBeGreaterThan(0));
+    const seen = probes().length;
+    view.rerender(element("https://127.0.0.1:11434"));
+    fireEvent.click(screen.getByLabelText("Test connection to Ollama"));
+    await waitFor(() => expect(screen.getByText(OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE)).toBeTruthy());
+    expect(probes()).toHaveLength(seen);
+    for (const call of probes()) {
+      expect(String((call as { args?: unknown[] }).args?.[0] ?? "")).not.toMatch(/^https:/i);
+    }
+  });
 });

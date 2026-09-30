@@ -9,6 +9,7 @@
     "src/components/DeveloperTab.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",
     "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
+    "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",

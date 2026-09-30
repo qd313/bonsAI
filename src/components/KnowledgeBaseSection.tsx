@@ -68,6 +68,7 @@
  *   showing before falling through to the action row — otherwise the
  *   D-pad would skip straight over that button to Download/Update.
  */
+import { isHttpsOllamaAddress } from "../utils/ollamaAddress";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable, ModalRoot, PanelSection, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
@@ -892,6 +893,11 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                 {showNomicPullBtn ? (
                   <>
                     Install <strong>nomic-embed-text</strong> in Ollama for Keyword + meaning search.
+                  </>
+                ) : isHttpsOllamaAddress(ollamaIp) ? (
+                  <>
+                    Use an http:// Ollama address on the Ollama tab, then install{" "}
+                    <strong>nomic-embed-text</strong> there for Keyword + meaning search.
                   </>
                 ) : (
                   <>

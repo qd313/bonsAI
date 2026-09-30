@@ -17,8 +17,6 @@ from typing import Any, Callable, NamedTuple, Optional, Sequence
 from backend.ollama_reply_limits import read_json_capped
 from backend.services.strategy_spoiler_policy import (
     boss_like_card_names,
-    fence_opener_is_spoiler,
-    fence_segment_is_closed,
     move_midline_fence_openers_to_line_start,
     partial_fence_tail_match,
     protected_spoiler_names,
@@ -265,42 +263,88 @@ def _unit_mentions_protected_name(unit: str, names: Sequence[str]) -> bool:
     return any(_protected_name_pattern(n).search(low) for n in names)
 
 
-# A fence marker is only ever recognised at the very start of a line -- matches how every real
-# fence in this codebase is written (an opening ```bonsai-spoiler or ```bonsai-strategy-branches
-# line, a closing ``` on its own line) and keeps this from ever matching three backticks that
-# happen to sit mid-sentence.
-_FENCE_OPEN_RE = re.compile(r"(?:(?<=\n)|^)```[^\n]*\n")
-_FENCE_CLOSE_RE = re.compile(r"\n```(?=\n|$)")
-# A line that starts with ``` and has not reached its newline yet -- see cover_named_spoilers.
-_UNFINISHED_FENCE_LINE_RE = re.compile(r"(?:(?<=\n)|^)```[^\n]*$")
+# Fences are read the way the panel reads them (src/utils/markdownFenceReader.ts, ``stepFence``):
+# a line starting with three or more backticks OR tildes opens one; only a line holding nothing
+# but the same mark, at least as long as the opener, closes it (quote marks and indent in front
+# of a closer are ignored); every other line, another kind of marker included, is the block's own
+# text. A block with no closer runs to the end of the reply. Until 2026-09-29 this knew only
+# three-backtick blocks, so a ``~~~`` hidden block was never seen as a block. An opener is only
+# recognised at the very start of a line (up to three spaces of indent, as the markdown standard
+# has it) and only once its line has ended -- a line still being typed is held back separately.
+_FENCE_OPENER_LINE_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})([^\n]*)$")
+# A line that starts with ``` or ~~~ and has not reached its newline yet -- see cover_named_spoilers.
+_UNFINISHED_FENCE_LINE_RE = re.compile(r"(?:(?<=\n)|^)(?:```|~~~)[^\n]*$")
+# A tilde opener still being typed: one or two tildes alone on the line so far, or a whole
+# ``~~~`` with whatever follows. Not "~30 FPS": a line that merely starts with a tilde is prose.
+_PARTIAL_TILDE_TAIL_RE = re.compile(r"(?:(?<=\n)|^)(?:~{1,2}|~{3,}[^\n]*)$")
+
+
+def _fence_opener(line: str) -> "tuple[str, int, str] | None":
+    """(mark, length, info text) when ``line`` opens a fence, else None."""
+    m = _FENCE_OPENER_LINE_RE.match(line)
+    if not m:
+        return None
+    run = m.group(1)
+    return run[0], len(run), m.group(2).strip()
+
+
+def _fence_closes(line: str, mark: str, length: int) -> bool:
+    """True when ``line`` closes a fence opened with ``length`` of ``mark``."""
+    t = line.lstrip(" \t\r\n>").rstrip()
+    return len(t) >= length and t.strip(mark) == ""
+
+
+def _fence_chunk_is_closed(fence_chunk: str) -> bool:
+    """True when a ("fence", chunk) piece reached its own closer -- i.e. it is not still being
+    written."""
+    lines = fence_chunk.split("\n")
+    opener = _fence_opener(lines[0])
+    if opener is None or len(lines) < 2:
+        return False
+    return _fence_closes(lines[-1], opener[0], opener[1])
+
+
+def _fence_opener_is_spoiler(fence_chunk: str) -> bool:
+    """True when a fence chunk's own opener line reads ``bonsai-spoiler`` -- the same test the
+    screen's own live parser uses, so this only ever holds back a spoiler fence's body, never an
+    ordinary code sample or the ```bonsai-strategy-branches``` menu."""
+    opener = _fence_opener(fence_chunk.split("\n", 1)[0])
+    return opener is not None and opener[2].lower().startswith("bonsai-spoiler")
 
 
 def _split_fenced_segments(text: str) -> list[tuple[str, str]]:
     """Split ``text`` into ("text", chunk) / ("fence", chunk) pieces that concatenate back to
     ``text`` exactly.
 
-    A fence -- closed, or (mid-stream) still open with no closing ``` yet -- is opaque from
-    here on: the sentence-covering below never looks inside one, so a sentence already covered,
-    a doubled ```bonsai-spoiler``` block, and the ```bonsai-strategy-branches``` menu are all
-    left completely alone, wherever they already are in the reply.
+    A fence -- closed, or (mid-stream) still open with no closer yet -- is opaque from here on:
+    the sentence-covering below never looks inside one, so a sentence already covered, a doubled
+    ```bonsai-spoiler``` block, a ``~~~`` block and the ```bonsai-strategy-branches``` menu are all
+    left completely alone, wherever they already are in the reply. A closed fence's chunk ends at
+    its closing marker, so the line break after it starts the next text piece.
     """
     segments: list[tuple[str, str]] = []
-    pos = 0
     n = len(text)
+    pos = 0
+    seg_start = 0
+    open_fence: "tuple[str, int] | None" = None
     while pos < n:
-        m = _FENCE_OPEN_RE.search(text, pos)
-        if not m:
-            segments.append(("text", text[pos:]))
-            break
-        if m.start() > pos:
-            segments.append(("text", text[pos : m.start()]))
-        close = _FENCE_CLOSE_RE.search(text, m.end())
-        if close:
-            segments.append(("fence", text[m.start() : close.end()]))
-            pos = close.end()
-        else:
-            segments.append(("fence", text[m.start() :]))
-            pos = n
+        nl = text.find("\n", pos)
+        end = n if nl < 0 else nl
+        line = text[pos:end]
+        if open_fence is None:
+            opener = _fence_opener(line) if nl >= 0 else None
+            if opener is not None:
+                if pos > seg_start:
+                    segments.append(("text", text[seg_start:pos]))
+                seg_start = pos
+                open_fence = (opener[0], opener[1])
+        elif _fence_closes(line, open_fence[0], open_fence[1]):
+            segments.append(("fence", text[seg_start:end]))
+            seg_start = end
+            open_fence = None
+        pos = end + 1
+    if seg_start < n:
+        segments.append(("fence" if open_fence is not None else "text", text[seg_start:]))
     return segments
 
 
@@ -436,15 +480,17 @@ def cover_named_spoilers(
     if hold_back_incomplete_trailing:
         last_kind, last_chunk = segments[-1]
         if last_kind == "fence":
-            if not fence_segment_is_closed(last_chunk) and fence_opener_is_spoiler(last_chunk):
+            if not _fence_chunk_is_closed(last_chunk) and _fence_opener_is_spoiler(last_chunk):
                 drop_open_spoiler_fence = True
         else:
             # A one-line block ("```bonsai-spoiler text ```") whose closing backticks are still
             # arriving is neither a fence yet (no newline after it) nor a half-typed opener (it
             # already holds a backtick past the opener), so it used to be wrapped in a second
             # fence. Every ``` starts its own line by now, so hold back any unfinished one.
-            partial = partial_fence_tail_match(last_chunk) or _UNFINISHED_FENCE_LINE_RE.search(
-                last_chunk
+            partial = (
+                partial_fence_tail_match(last_chunk)
+                or _PARTIAL_TILDE_TAIL_RE.search(last_chunk)
+                or _UNFINISHED_FENCE_LINE_RE.search(last_chunk)
             )
             if partial:
                 hold_back_len = len(last_chunk) - partial.start()

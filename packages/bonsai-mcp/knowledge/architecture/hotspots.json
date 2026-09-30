@@ -166,6 +166,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/response_verify.py",
+      "lines": 637,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/intent_pack_service.py",
       "lines": 630,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 594,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/response_verify.py",
-      "lines": 591,
       "role": ""
     }
   ]

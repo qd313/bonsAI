@@ -356,6 +356,81 @@ class OneLineHiddenBlockWhileStreamingTests(unittest.TestCase):
                 self.assertEqual(cover_named_spoilers(raw, self.NAMES), finished)
 
 
+class TildeAndLongFenceTests(unittest.TestCase):
+    """The back end's cover check must read fences the way the panel does (src/utils/
+    markdownFenceReader.ts): three or more backticks OR tildes open one, and only a line of the
+    same mark, at least as long, closes it. It used to know three-backtick blocks only, so a
+    hidden block written with tildes was never seen as a block and its words were covered again
+    (or, worse, a name after a longer fence's inner ``` was thought to be outside a block)."""
+
+    NAMES = ["Soul Master"]
+    T = "~" * 3
+    B = "`" * 3
+
+    def test_a_tilde_hidden_block_is_left_alone_like_a_backtick_one(self):
+        text = f"{self.T}bonsai-spoiler\nSoul Master returns as Soul Tyrant.\n{self.T}\nGeneral advice follows."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_a_name_after_a_closed_tilde_block_is_still_covered(self):
+        text = f"{self.T}bonsai-spoiler\nSecret.\n{self.T}\nSoul Master is next."
+        out = cover_named_spoilers(text, self.NAMES)
+        self.assertTrue(out.startswith(f"{self.T}bonsai-spoiler\nSecret.\n{self.T}"))
+        self.assertIn(f"{self.B}bonsai-spoiler", out)
+        self.assertIn("Soul Master is next.", out)
+
+    def test_a_backtick_line_does_not_close_a_tilde_block(self):
+        text = f"{self.T}bonsai-spoiler\nFirst part.\n{self.B}\nSoul Master is in here.\n{self.T}\nDone."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_a_tilde_line_does_not_close_a_backtick_block(self):
+        text = f"{self.B}bonsai-spoiler\nFirst part.\n{self.T}\nSoul Master is in here.\n{self.B}\nDone."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_a_shorter_mark_does_not_close_a_longer_fence(self):
+        four = "`" * 4
+        text = f"{four}bonsai-spoiler\nSoul Master is in here.\n{self.B}\nStill Soul Master.\n{four}\nDone."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_a_longer_mark_closes_a_fence(self):
+        text = f"{self.T}bonsai-spoiler\nSecret.\n{'~' * 5}\nSoul Master is next."
+        out = cover_named_spoilers(text, self.NAMES)
+        self.assertIn(f"{self.B}bonsai-spoiler", out)
+
+    def test_a_tilde_block_with_no_closer_runs_to_the_end_and_stays_alone(self):
+        text = f"Intro.\n{self.T}bonsai-spoiler\nSoul Master returns."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_a_still_open_tilde_hidden_block_is_held_back_while_streaming(self):
+        raw = f"Intro.\n{self.T}bonsai-spoiler\nThe Soul Master fight is all about timing."
+        out = cover_named_spoilers(raw, self.NAMES, hold_back_incomplete_trailing=True)
+        self.assertNotIn("Soul Master", out)
+        self.assertNotIn("timing", out)
+
+    def test_a_half_typed_tilde_opener_never_shows_raw_while_streaming(self):
+        raw = "He comes back through the roof.\n\n~~~bon"
+        out = cover_named_spoilers(raw, self.NAMES, hold_back_incomplete_trailing=True)
+        self.assertNotIn("~~~bon", out)
+        self.assertIn("He comes back through the roof.", out)
+
+    def test_streaming_a_tilde_block_letter_by_letter_never_shows_the_name_before_it_closes(self):
+        raw = f"Intro line.\n\n{self.T}bonsai-spoiler\nThe Soul Master fight is all about timing.\n{self.T}\nOutro."
+        closed_at = raw.index(f"timing.\n{self.T}") + len("timing.\n") + len(self.T)
+        for i in range(1, len(raw) + 1):
+            out = cover_named_spoilers(raw[:i], self.NAMES, hold_back_incomplete_trailing=True)
+            if i < closed_at:
+                self.assertNotIn("Soul Master", out, f"after {i} letters: {out!r}")
+            self.assertNotIn(f"{self.B}bonsai-spoiler", out, f"a second cover after {i} letters: {out!r}")
+        self.assertEqual(cover_named_spoilers(raw, self.NAMES), raw)
+
+    def test_a_tilde_code_block_is_opaque_too(self):
+        text = f"{self.T}python\nprint('Soul Master')\n{self.T}\nPlain."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+    def test_backtick_behaviour_is_unchanged(self):
+        text = f"{self.B}bonsai-spoiler\nSoul Master returns.\n{self.B}\nGeneral advice follows."
+        self.assertEqual(cover_named_spoilers(text, self.NAMES), text)
+
+
 class CoverThinkingTextTests(unittest.TestCase):
     """D112 #7 leak fix: THINKING-SPOILER-01, measured live on the Deck 2026-09-26. The live
     thinking line and the saved reasoning shown in the fold afterwards both named a protected

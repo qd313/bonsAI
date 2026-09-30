@@ -37,7 +37,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1235,
+      "lines": 1221,
       "role": ""
     },
     {
@@ -56,11 +56,6 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1071,
-      "role": ""
-    },
-    {
       "path": "src/utils/answerBubbleNavigation.ts",
       "lines": 1068,
       "role": ""
@@ -68,6 +63,11 @@
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1050,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1037,
       "role": ""
     },
     {

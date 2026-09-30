@@ -101,10 +101,10 @@ import {
   formatSizeGb,
   isDeckDailyPullModel,
   isEmbeddingOnlyTag,
-  pullModelLicencePillText,
   type PullModelEntry,
   type PullModelModeFilterId,
 } from "../data/pullModelCatalog";
+import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
@@ -627,7 +627,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
     const pinned = pinnedAskTag === entry.tag;
     const isNew = installed && isRecentPullModelTag(pullRecord, entry.tag, Date.now());
-    const pillText = pullModelLicencePillText(entry);
 
     return (
       <div key={entry.tag} className={rowClass} role="row">
@@ -676,20 +675,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
               </span>
               {isNew ? <span className="bonsai-pullmodels-new-badge">New</span> : null}
             </span>
-            <span
-              className="bonsai-pullmodels-foss-slot"
-              aria-hidden={pillText === null}
-            >
-              {pillText !== null ? (
-                <span
-                  className={`bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline${
-                    pillText === "FOSS" ? "" : " bonsai-pullmodels-chip--licence-name"
-                  }`}
-                >
-                  {pillText}
-                </span>
-              ) : null}
-            </span>
+            <PullModelLicenceSlot entry={entry} />
           </span>
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">{formatSizeGb(sizeGb)}</div>

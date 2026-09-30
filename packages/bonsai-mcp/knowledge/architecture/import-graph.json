@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 632,
-  "edgeCount": 1756,
+  "fileCount": 634,
+  "edgeCount": 1761,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1117,6 +1117,15 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/OllamaSavedHostsRows.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/utils/ollamaAddress.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
+      ]
+    },
     "src/components/OllamaTab.modalReturnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
@@ -1233,6 +1242,7 @@
     },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
+        "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
@@ -1340,6 +1350,14 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx"
       ]
     },
+    "src/components/PullModelLicenceSlot.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
     "src/components/PullModelsModal.customTagCancel.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx"
@@ -1401,6 +1419,7 @@
     "src/components/PullModelsModal.tsx": {
       "imports": [
         "src/components/BonsaiModalScope.tsx",
+        "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
@@ -1828,6 +1847,7 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.tsx",
+        "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
@@ -2071,6 +2091,7 @@
       "importedBy": [
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
+        "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
@@ -6243,6 +6264,7 @@
       "imports": [],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/utils/ollamaAddress.test.ts"

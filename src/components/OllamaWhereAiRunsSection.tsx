@@ -101,6 +101,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
 import { useDeveloperTabShown } from "../features/plugin-shell/developerTabSignal";
@@ -783,49 +784,14 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             </Focusable>
           </PanelSectionRow>
         ) : null}
-        {!ollamaLocalOnDeck && namedOllamaHosts.length > 0 ? (
-          <PanelSectionRow>
-            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Saved Ollama hosts (LAN)</div>
-            <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {namedOllamaHosts.map((entry) => (
-                <Button
-                  key={`${entry.label}-${entry.host}`}
-                  onClick={() => {
-                    onOllamaIpChange(entry.host);
-                    onPersistOllamaIp(entry.host);
-                  }}
-                  style={{ minHeight: 32, fontSize: 11 }}
-                >
-                  {entry.label}
-                </Button>
-              ))}
-            </Focusable>
-          </PanelSectionRow>
-        ) : null}
         {!ollamaLocalOnDeck ? (
-          <PanelSectionRow>
-            <Button
-              disabled={
-                !ollamaIp.trim() ||
-                isHttpsOllamaAddress(ollamaIp) ||
-                namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS
-              }
-              onClick={() => {
-                const host = ollamaIp.trim();
-                if (!host) return;
-                const label = host.length > 24 ? `${host.slice(0, 21)}…` : host;
-                setNamedOllamaHosts((prev) => {
-                  const next = prev.filter((h) => h.host !== host);
-                  next.push({ label, host });
-                  return next.slice(-MAX_NAMED_OLLAMA_HOSTS);
-                });
-                toaster.toast({ title: "Host saved", body: label, duration: 2500 });
-              }}
-              style={{ width: "100%", minHeight: 34 }}
-            >
-              Save current PC address as quick host
-            </Button>
-          </PanelSectionRow>
+          <OllamaSavedHostsRows
+            namedOllamaHosts={namedOllamaHosts}
+            setNamedOllamaHosts={setNamedOllamaHosts}
+            ollamaIp={ollamaIp}
+            onOllamaIpChange={onOllamaIpChange}
+            onPersistOllamaIp={onPersistOllamaIp}
+          />
         ) : null}
         <PanelSectionRow>
           <div

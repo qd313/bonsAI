@@ -330,6 +330,11 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
         # round-trips the same way for a turn with nothing named and one saved before this field
         # existed; the two are indistinguishable and that is fine, both re-fence by default.
         "asked_entity": str(raw.get("asked_entity", "") or "").strip()[:MAX_ASKED_ENTITY_LEN],
+        # Whether the person said spoilers were okay for this answer (plan 77, CONST-SPOIL-CONSENT-01).
+        # Only ever True on an assistant turn the back end answered with consent in force; a chat
+        # reloaded the moment a reply lands reads it back so the answer does not re-cover itself.
+        # False for every turn saved before this field existed, which re-fences by default.
+        "spoiler_consent": raw.get("spoiler_consent") is True,
         # What the user saw as their question, when it differs from ``text`` (the composed prompt
         # actually sent to the model — e.g. a branch pick sends "[Strategy follow-up] I'm at: …"
         # while the header shows "I'm at: …"). Display only: anything that reasons about the turn
@@ -635,6 +640,7 @@ def append_turn(
     app_id: str = "",
     app_name: str = "",
     asked_entity: str = "",
+    spoiler_consent: bool = False,
     display_text: str = "",
     reasoning: dict[str, Any] | None = None,
     chat_summary: str = "",
@@ -656,6 +662,7 @@ def append_turn(
             "app_id": app_id,
             "app_name": app_name,
             "asked_entity": asked_entity,
+            "spoiler_consent": spoiler_consent,
             "display_text": display_text,
             "reasoning": reasoning,
             "chat_summary": chat_summary,

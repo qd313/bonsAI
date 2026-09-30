@@ -126,7 +126,10 @@ export type AskThreadCollapsedTurn = {
    * is a fact about the question, not a live decision, so a reopened chat needs it too.
    */
   askedEntity?: string;
-  /** True when the user consented to spoilers for this turn (unwrap all fences in history). */
+  /**
+   * True when the user consented to spoilers for this turn (unwrap all fences in history). Saved
+   * with the answer since plan 77, so a chat reloaded when the reply lands keeps it.
+   */
   spoilerConsentEffective?: boolean;
   /**
    * What the model thought before it wrote this answer, when it thought at all. Missing on every

@@ -202,6 +202,41 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         assert loaded is not None
         self.assertEqual([t["app_id"] for t in loaded["turns"]], ["548430", "548430"])
 
+    async def test_assistant_turn_persists_spoiler_consent_from_result(self) -> None:
+        """Plan 77 (CONST-SPOIL-CONSENT-01): the consent flag the Ask resolved reaches the saved
+        assistant turn, so the reload that follows the reply does not re-cover the boxes."""
+        slot = create_slot(self.tmp, label="consent-route")
+        sid = slot["id"]
+
+        async def fast_execute(*_args, **_kwargs):
+            return {
+                "success": True,
+                "response": "routed answer",
+                "elapsed_seconds": 0.01,
+                "strategy_spoiler_consent_effective": True,
+            }
+
+        with patch.object(Plugin, "_execute_game_ai_request", side_effect=fast_execute):
+            with patch.object(Plugin, "load_settings", return_value={}):
+                with patch.object(
+                    Plugin,
+                    "_compose_opening_thinking_blurb",
+                    return_value=("Thinking…", None),
+                ):
+                    await self.plugin.start_background_game_ai(
+                        {
+                            "question": "spoilers are okay, how do I beat the boss?",
+                            "PcIp": "127.0.0.1:11434",
+                            "chat_slot_id": sid,
+                        }
+                    )
+                    if self.plugin._background_task is not None:
+                        await self.plugin._background_task
+
+        loaded = load_slot(self.tmp, sid)
+        assert loaded is not None
+        self.assertEqual([t["spoiler_consent"] for t in loaded["turns"]], [False, True])
+
     async def test_display_question_reaches_the_saved_user_turn(self) -> None:
         """End to end through the RPC: the payload's ``display_question`` (the caption the user
         saw) lands on the persisted user turn as ``display_text``, while ``text`` keeps the

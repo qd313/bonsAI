@@ -1591,6 +1591,7 @@ class Plugin:
                 app_id=app_id,
                 app_name=app_name,
                 asked_entity=result.get("strategy_spoiler_asked_entity") or "",
+                spoiler_consent=result.get("strategy_spoiler_consent_effective") is True,
                 reasoning=None if cancelled_rq else chat_turn_recorder.reasoning_payload_for_chat_slot(result),
                 chat_summary="" if cancelled_rq else str(result.get("chat_summary") or ""),
                 # Marked when it is not a finished answer, so a chat reopened later does not offer

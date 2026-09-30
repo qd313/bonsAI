@@ -44,6 +44,12 @@ export type ChatSlotTurn = {
    */
   asked_entity?: string;
   /**
+   * True when the person said spoilers were okay for this answer (plan 77, CONST-SPOIL-CONSENT-01).
+   * Only ever set on an assistant turn; absent on a turn saved before this field existed, which
+   * reads as "no consent" and re-fences by default.
+   */
+  spoiler_consent?: boolean;
+  /**
    * What the user saw as their question when it differs from `text` (the composed prompt).
    * Display only — reasoning about the turn keeps reading `text`. "" or absent: same as `text`.
    */

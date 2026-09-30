@@ -569,6 +569,40 @@ class ChatSlotServiceTests(unittest.TestCase):
         assert reloaded is not None
         self.assertEqual([t["asked_entity"] for t in reloaded["turns"]], ["", ""])
 
+    def test_assistant_turn_persists_spoiler_consent(self):
+        """Plan 77 (CONST-SPOIL-CONSENT-01): a turn answered with spoiler consent keeps that fact
+        on disk, so the chat reloaded right after the reply lands still draws its spoiler boxes
+        plain. An unmarked turn, and one saved before the field existed, stay False (re-fenced).
+        """
+        slot = create_slot(self.settings_dir, first_question="spoilers are okay, soul master")
+        sid = slot["id"]
+        append_turn(self.settings_dir, sid, role="user", text="spoilers are okay, soul master")
+        append_turn(
+            self.settings_dir, sid, role="assistant", text="Plain answer.", spoiler_consent=True
+        )
+        append_turn(self.settings_dir, sid, role="user", text="and the next one")
+        append_turn(self.settings_dir, sid, role="assistant", text="Second answer.")
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(
+            [t["spoiler_consent"] for t in reloaded["turns"]], [False, True, False, False]
+        )
+
+    def test_turns_saved_before_the_spoiler_consent_field_existed_load_as_not_consented(self):
+        slot = create_slot(self.settings_dir, label="old chat")
+        sid = slot["id"]
+        legacy = {
+            **slot,
+            "turns": [
+                {"id": "u1", "role": "user", "text": "q"},
+                {"id": "a1", "role": "assistant", "text": "a"},
+            ],
+        }
+        save_slot(self.settings_dir, legacy)
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual([t["spoiler_consent"] for t in reloaded["turns"]], [False, False])
+
     # --- Plan 68 step 2: the chat's own summary and remembered subject ---
 
     def test_old_file_with_neither_summary_nor_subject_loads_as_none(self):

@@ -107,9 +107,11 @@ export function turnsToCollapsedTurns(
         // thing once the question has been run, so it is only ever recorded on the assistant
         // turn. "" for a turn saved before this field existed, or one that named nothing.
         askedEntity: (turn.asked_entity || "").trim() || undefined,
-        // Still hardcoded, and deliberately: spoiler consent is a live session decision, not
-        // something the backend persists per turn. A restored turn re-fences by default.
-        spoilerConsentEffective: false,
+        // Read back from the saved turn (plan 77, CONST-SPOIL-CONSENT-01). It used to be a
+        // hardcoded false, so the reload that follows every finished reply drew the turn again
+        // with its spoiler boxes covered even though the person had said spoilers were okay. A
+        // turn saved before the field existed reads false and re-fences by default.
+        spoilerConsentEffective: turn.spoiler_consent === true,
         // What the model thought before this answer, when it was kept. Left off entirely for a
         // turn saved before thinking existed, or one answered with thinking off — the reopened
         // turn then draws exactly as it did before, with no fold row.
@@ -168,7 +170,7 @@ export function lastExchangeFromSavedTurn(
     originalQuestion: turn.question,
     appName: turn.appName || undefined,
     askedEntity: turn.askedEntity || undefined,
-    spoilerConsentEffective: false,
+    spoilerConsentEffective: turn.spoilerConsentEffective === true,
     reasoning: turn.reasoning,
   };
 }

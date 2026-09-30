@@ -193,6 +193,19 @@ describe("turnsToCollapsedTurns", () => {
     expect(collapsed[0]?.askedEntity).toBeUndefined();
   });
 
+  // Plan 77 (CONST-SPOIL-CONSENT-01): the reload that follows a finished reply must not re-cover a
+  // turn the person said spoilers were okay for.
+  it("carries a saved spoiler consent onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "spoilers are okay, how do I beat the boss" },
+      { id: "a1", role: "assistant", text: "answer", spoiler_consent: true },
+      { id: "u2", role: "user", text: "and another" },
+      { id: "a2", role: "assistant", text: "answer two" },
+    ]);
+    expect(collapsed[0]?.spoilerConsentEffective).toBe(true);
+    expect(collapsed[1]?.spoilerConsentEffective).toBe(false);
+  });
+
   // Plan 57: a reopened chat keeps the model's own thinking, so the fold row above the answer is
   // still there and still opens to the same text with the same seconds.
   it("carries the saved thinking onto the reopened turn", () => {

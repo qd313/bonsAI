@@ -6,6 +6,9 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **The model list's licence pill says "FOSS" only for an Apache or MIT licence**; qwen2.5vl:3b and qwen2.5:3b now show an amber "Qwen Research" pill. Owes its Deck check.
+- **Walking down a reply takes one press per section, not an extra one that only scrolls**, and going up into a section taller than the screen lands with its bottom edge just above the dock. Owes its Deck checks.
+- **A spoiler question about a story game keeps its covers while another game runs.** Before, a Hollow Knight boss question asked over Deep Rock Galactic: Survivor came back uncovered. Owes its Deck check.
 - **The Tier 2 install button now says "Install Gemma 4 (all-in-one model)"**, and the tier boxes and Settings intro say "open-source licence (Apache 2.0 or MIT)" or "small model" instead of "FOSS". The Advanced toggle and the model list's badge keep the word. Owes its Deck check.
 - **The rare D-pad trap when reopening Quick Access over a game now has a proven fix.** 24 of 24 reopens over a running game were clean in a 40-minute play session.
 - **Model licence labels are put right.** Qwen 2.5 72B and coder 3B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna and orca-mini no longer sit under "open source only"; gpt-oss moves up. The README now says Gemma 4 is Tier 1. Owes its Deck check.

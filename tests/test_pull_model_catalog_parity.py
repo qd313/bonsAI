@@ -33,7 +33,7 @@ CATALOG_POLICY_PARITY: dict[str, str] = {
     "lfm2.5:8b": "open_weight",
     "deepseek-r1:1.5b": "open_weight",
     "llava-phi3": "foss",
-    "qwen2.5-coder:3b": "foss",
+    "qwen2.5-coder:3b": "open_weight",
 }
 
 

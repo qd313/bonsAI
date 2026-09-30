@@ -4,8 +4,9 @@ Purpose: The Model policy setting lets you choose how open-source an AI model ha
 before the plugin will use it: only fully open-source models, open-source plus models
 whose weights are published under looser terms, or (once you flip an extra unlock) almost
 anything installed. This file is what sorts a model's name into one of those groups by
-matching it against known name families -- the Qwen family reads as fully open-source, the
-Llama and Gemma families as the looser "open weight" kind, and so on -- and then narrows
+matching it against known name families -- the Qwen 3 and Gemma 4 families read as fully
+open-source, the Llama and older Gemma families as the looser "open weight" kind, and so on --
+and then narrows
 the list of models the plugin is willing to try down to whatever your chosen setting
 allows.
 Used for: The moment an Ask actually needs to pick which installed model to answer with,
@@ -13,6 +14,9 @@ and keeping the Model policy setting itself internally consistent (the strictest
 option cannot be on while a looser tier is chosen, and vice versa).
 Solves: One shared, named list of which model families count as which kind of open, so
 that decision is not made slightly differently in Settings and at Ask time.
+Licence facts (read from each model's Ollama page and its maker's model card on 2026-09-29): a
+few Qwen sizes, one LLaVA size and the old Vicuna / orca-mini models are NOT under an
+open-source licence even though their family mostly is, so those are listed by name below.
 Does not: Give legal advice about any model's licence, or actually stop a model from
 running anywhere else -- this only decides which models the plugin itself will offer to
 use.
@@ -27,6 +31,32 @@ ModelSourceClass = Literal["foss", "open_weight", "non_foss", "unknown"]
 DEFAULT_MODEL_POLICY_TIER: Final[str] = "open_source_only"
 _VALID_TIERS: frozenset[str] = frozenset(("open_source_only", "open_weight", "non_foss"))
 
+# Sizes whose licence is NOT the family's open-source one (family base -> tag sizes). Sources,
+# all read 2026-09-29: Qwen2.5 3B/72B = Qwen Research / Qwen licence (ollama.com/library/qwen2.5
+# and the Qwen/Qwen2.5-3B-Instruct, -72B-Instruct, Qwen2.5-Coder-3B-Instruct and
+# Qwen2.5-VL-3B/72B-Instruct cards); Qwen2 72B = Tongyi Qianwen licence (ollama.com/library/qwen2);
+# LLaVA 13b = Llama 2 community licence (ollama.com/library/llava:13b). llava:7b/34b ship Apache 2.0.
+_SIZE_LIMITED_LICENCE: Final[dict[str, tuple[str, ...]]] = {
+    "qwen2.5": ("3b", "72b"),
+    "qwen2.5-coder": ("3b",),
+    "qwen2.5vl": ("3b", "72b"),
+    "qwen2": ("72b",),
+    "llava": ("13b",),
+}
+
+# Whole families (any tag) that are not open-source: the first Qwen generation (Tongyi Qianwen
+# licences on every size, ollama.com/library/qwen) and llava-llama3 (a Llama 3 fine-tune).
+_LIMITED_LICENCE_FAMILIES: Final[frozenset[str]] = frozenset(("qwen", "llava-llama3"))
+
+# Decision pending with the maintainer (2026-09-29, plan 77 helper D): these two sizes are under
+# the Qwen Research licence on Qwen's own cards (Ollama's qwen2.5vl page ships Apache 2.0 text),
+# yet they are the Tier 1 default picture model and the second Tier 1 text fallback. The call was
+# "labels only, never change what gets picked", so they stay in Tier 1 for now. Emptying this set
+# moves both to Tier 2 -- and empties Tier 1's essentials, so it is a call, not a clean-up.
+KEPT_IN_TIER_1_PENDING_CALL: Final[frozenset[tuple[str, str]]] = frozenset(
+    (("qwen2.5vl", "3b"), ("qwen2.5", "3b"))
+)
+
 def _normalize_base_model(name: str) -> str:
     """First path segment of Ollama model id (before `:`), after optional `repo/` prefix."""
     raw = (name or "").strip().lower()
@@ -37,6 +67,26 @@ def _normalize_base_model(name: str) -> str:
     if ":" in raw:
         raw = raw.split(":", 1)[0]
     return raw.strip()
+
+
+def _split_tag(name: str) -> tuple[str, str]:
+    """(family base, tag) of an Ollama id, both lower-case; tag is '' when none is given."""
+    raw = (name or "").strip().lower()
+    if "/" in raw:
+        raw = raw.split("/")[-1]
+    base, _, tag = raw.partition(":")
+    return base.strip(), tag.strip()
+
+
+def _has_limited_licence(name: str) -> bool:
+    """True for a model whose own licence is not open-source although its family mostly is."""
+    base, tag = _split_tag(name)
+    if base in _LIMITED_LICENCE_FAMILIES:
+        return True
+    for size in _SIZE_LIMITED_LICENCE.get(base, ()):
+        if tag == size or tag.startswith(size + "-"):
+            return (base, size) not in KEPT_IN_TIER_1_PENDING_CALL
+    return False
 
 
 def _starts_family(base: str, family: str) -> bool:
@@ -68,6 +118,9 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
     if not base:
         return "unknown"
 
+    if _has_limited_licence(name):
+        return "open_weight"
+
     # Tier 1 — Apache/MIT/BSD-style families commonly used as FOSS-friendly defaults
     foss_prefixes = (
         "qwen",
@@ -79,14 +132,14 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "phi",
         "phi3",
         "tinyllama",
-        "orca-mini",
-        "vicuna",
         "openchat",
         # Gemma 4 moved to Apache 2.0 in April 2026 (docs/planning/41-deck-model-survey.md);
         # only this generation -- gemma, gemma2 and gemma3 stay open-weight below.
         "gemma4",
         # Granite 4.2 ships under Apache 2.0 (data/model_bakeoff/roster.json).
         "granite",
+        # gpt-oss is Apache 2.0 at both sizes (ollama.com/library/gpt-oss, openai/gpt-oss-20b card).
+        "gpt-oss",
     )
     if _family_match(base, foss_prefixes):
         return "foss"
@@ -110,6 +163,11 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "solar",
         "nous-hermes",
         "dolphin",
+        # Vicuna is fine-tuned from Llama 1 / Llama 2 (Llama licences, ollama.com/library/vicuna
+        # and the lmsys cards); orca-mini is CC BY-NC-SA (original) or Llama 2 (v3), see
+        # huggingface.co/pankajmathur.
+        "vicuna",
+        "orca-mini",
         # Liquid's LFM models: weights published under the LFM Open License, not an
         # OSI-approved licence (data/model_bakeoff/roster.json).
         "lfm",
@@ -120,7 +178,6 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
 
     # Explicit non-FOSS / commercial API mirrors in Ollama (extend as needed)
     non_foss_prefixes = (
-        "gpt-oss",
         "claude",
         "command-r-plus",
     )
@@ -167,8 +224,8 @@ def empty_filter_user_message(tier: str, non_foss_unlocked: bool, requires_visio
     )
     if tier == "open_source_only":
         return base + (
-            "Tier 1 allows only open-source–aligned families in the plugin table (e.g. many Qwen/Llava tags). "
-            "Tier 2 adds common “open model” (open-weight) releases such as Llama and Gemma."
+            "Tier 1 allows only open-source–licensed families in the plugin table (e.g. Qwen 3, Gemma 4, Granite, gpt-oss). "
+            "Tier 2 adds “open model” (open-weight) releases with their own licence, such as Llama, Gemma 3 and older, and the Qwen sizes under Qwen’s own licence."
         )
     if tier == "open_weight":
         return base + (

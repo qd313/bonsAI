@@ -428,6 +428,7 @@
     "tests/test_transparency_service.py",
     "tests/test_update_rag_corpus_reports.py",
     "tests/test_verify_decky_plugin_zip.py",
+    "tests/test_voice_model_download_pinned.py",
     "tests/test_voice_read_aloud_rpc.py",
     "tests/test_voice_read_aloud_service.py",
     "tests/test_voice_session_status.py",

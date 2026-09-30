@@ -109,6 +109,22 @@ export function isEmbeddingOnlyTag(tag: string): boolean {
   return /embed/i.test(tag);
 }
 
+/**
+ * What the small licence pill on a model row says, or null when the row shows no pill.
+ *
+ * The pill sits on every open-source-class row. It says "FOSS" only when the row's own licence
+ * label is Apache or MIT (or there is no label to contradict). A row kept in the open-source
+ * class for another reason -- today the two Qwen 3B sizes, whose card says Qwen Research -- shows
+ * the licence's name instead, so the screen never calls it FOSS. The size note in brackets is
+ * left off; the pill is narrow.
+ */
+export function pullModelLicencePillText(entry: Pick<PullModelEntry, "license" | "licenseClass">): string | null {
+  if (entry.licenseClass !== "foss") return null;
+  const label = (entry.license ?? "").trim();
+  if (!label || /^(Apache|MIT)\b/i.test(label)) return "FOSS";
+  return label.replace(/\s*\(.*\)\s*$/, "").trim() || "FOSS";
+}
+
 export function isDeckDailyPullModel(entry: PullModelEntry): boolean {
   return entry.group !== "stretch";
 }

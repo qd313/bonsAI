@@ -101,6 +101,7 @@ import {
   formatSizeGb,
   isDeckDailyPullModel,
   isEmbeddingOnlyTag,
+  pullModelLicencePillText,
   type PullModelEntry,
   type PullModelModeFilterId,
 } from "../data/pullModelCatalog";
@@ -626,6 +627,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
     const pinned = pinnedAskTag === entry.tag;
     const isNew = installed && isRecentPullModelTag(pullRecord, entry.tag, Date.now());
+    const pillText = pullModelLicencePillText(entry);
 
     return (
       <div key={entry.tag} className={rowClass} role="row">
@@ -676,11 +678,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
             </span>
             <span
               className="bonsai-pullmodels-foss-slot"
-              aria-hidden={entry.licenseClass !== "foss"}
+              aria-hidden={pillText === null}
             >
-              {entry.licenseClass === "foss" ? (
-                <span className="bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline">
-                  FOSS
+              {pillText !== null ? (
+                <span
+                  className={`bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline${
+                    pillText === "FOSS" ? "" : " bonsai-pullmodels-chip--licence-name"
+                  }`}
+                >
+                  {pillText}
                 </span>
               ) : null}
             </span>

@@ -37,7 +37,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1229,
+      "lines": 1235,
       "role": ""
     },
     {
@@ -126,13 +126,13 @@
       "role": ""
     },
     {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 744,
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 757,
       "role": ""
     },
     {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 743,
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 744,
       "role": ""
     },
     {

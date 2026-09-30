@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 627,
-  "edgeCount": 1746,
+  "fileCount": 628,
+  "edgeCount": 1749,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1365,6 +1365,14 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.licencePill.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/data/pullModelCatalog.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.otherInstalledSize.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -1412,6 +1420,7 @@
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.formSubmit.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
@@ -2053,6 +2062,7 @@
       "importedBy": [
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
+        "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
@@ -4648,6 +4658,7 @@
         "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",

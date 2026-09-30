@@ -621,6 +621,20 @@ export function buildPullModelsStylesheet(): string {
           flex-shrink: 0;
           margin-right: 1px;
         }
+        /* A row kept in the open-source class whose own licence is not Apache or MIT (the Qwen 3B
+           sizes): the pill names the licence, in amber, on two lines so it fits the 48px slot. */
+        .bonsai-scope .bonsai-pullmodels-chip--licence-name {
+          border-color: rgba(251, 191, 36, 0.55) !important;
+          color: #fde68a !important;
+          white-space: normal;
+          text-align: center;
+          font-size: 8px !important;
+          line-height: 1.1 !important;
+          padding: 1px 2px !important;
+          min-height: 0 !important;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
         .bonsai-scope .bonsai-pullmodels-blurb {
           font-size: 8px;
           color: #8fa8c4;

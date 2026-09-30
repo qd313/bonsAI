@@ -6,6 +6,12 @@ All notable changes to this project are documented in this file.
 
 ### Plan 77 (2026-09-29)
 
+- **Model licence labels are put right.** Qwen 2.5 72B and coder 3B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna and orca-mini no longer sit under "open source only"; gpt-oss moves up. The README now says Gemma 4 is Tier 1. Owes its Deck check.
+- **An https Ollama address is refused with a clear message** instead of being quietly sent as plain http. Owes its Deck check.
+- **The speech model download is pinned to one exact file and checked**, and a knowledge-library file list with no checksums is refused. Owes its Deck check.
+- **A Strategy question about the Deck itself no longer borrows a game from earlier in the chat for its choice menu.** The test could not show the old problem either way. Owes its Deck check.
+- **A hidden block whose opening mark is glued onto a sentence is now a real hidden block**, and Read aloud says "There is code on screen." for a `~~~` block. Unit-tested only.
+- **Walking down a reply, every stop is fully on screen, and Up now stops on a section's box too**, so both directions visit the same stops. Owes its Deck checks.
 - **A reply from the Ollama address can no longer grow without limit.** Past a size cap, bonsAI stops reading, closes the connection and shows a plain error. Normal long answers are unaffected. Owes its Deck check.
 - **The safety net that hides a spoiler's name now understands `~~~` hidden blocks too**, and holds back a half-typed one while an answer arrives. Unit-tested; owes a Deck regression check.
 - **A chat's own "Open Permissions" row after a ban lookup stays when you leave the chat and come back.** Owes its Deck check.

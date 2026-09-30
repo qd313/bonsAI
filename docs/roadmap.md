@@ -71,28 +71,6 @@ starts work outside this.
 ## Bugs
 
 
-- ★ `[focus]` **After a Down press that scrolls past a spoiler cover, the ring sits on the section's box with its top third under the tab header** — **OPEN, found 2026-09-29 (plan 76, Deck block 3).**
-  The box is only 67% on screen and its cover is the hidden part; with a game running it also sat partly under the dock's action row.
-  Small; the cover-walk fix works around it, so nothing loops. It is why the free-play sweep failed (**QA-FREE-PLAY-01**).
-  Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
-- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **PARTIAL, sighted three
-  more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
-  same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
-  later slips. [Detail](roadmap-details.md#flow-2b-bugs).
-  **2026-09-28 (plan 74):** with a hidden spoiler on screen, 17 of 18 stops now mirror; the one mismatch is the top spoiler
-  cover, the same fault as the spoiler-cover entry below (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01.json`).
-  **2026-09-28 (plan 74, Deck pass 3, after `cb88c012`):** the first cover now mirrors. One stop of 13 still differs: on a
-  section that holds only a cover, Down lands on the section's outer box (245×71) while Up lands on the cover inside it
-  (237×55). Seen on two answers (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`, FAIL). Still owed: row **REPLY-STOPS-MIRROR-01**.
-  **2026-09-28 (plan 76 lane 3, `3576846c`):** fixes the last known stop, a section that holds only a cover. Row
-  **REPLY-STOPS-MIRROR-01** is still owed. One exception is by design: a section the ring was moved onto by a scroll can
-  be a stop going Down only.
-  **2026-09-29 (plan 76, Deck block 2b, build `ab56e2a2`):** row **REPLY-STOPS-MIRROR-01** FAILED. Down and Up do not visit the same
-  stops: the walk loops on the first cover. Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`.
-  **Fixed again (`8151dd54`), and re-run on the Deck 2026-09-29 (plan 76, block 3, build `4af8e7a1`):** every stop mirrors except one known
-  by-design stop: a section's box that Down visits after a scroll and Up skips. A section holding only a cover now takes the ring on the
-  cover itself, and A opens it both ways (that part is fixed and proven). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`.
-  **The maintainer's call 2026-09-29:** Up stops on the section's box too; being built in plan 77 (helper E). That box is also the 67%-visible stop in the new bug at the top of Bugs.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -105,20 +83,10 @@ starts work outside this.
   (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
   Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
   that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
-- ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
-  **OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
-  **Cause found 2026-09-28 (plan 76 lane 4):** not a leftover in the code. The Strategy prompt makes a choice menu mandatory on
-  every first Strategy turn, and with no game running or named the model took the game from the chat's earlier question. The fix
-  is prompt wording in the back end (a carve-out for questions about the Deck itself, like the one for model-policy questions),
-  which needs an answer-quality run, so not this week.
+- ★ `[ollama]` **Three screens still say "FOSS" or "FOSS-friendly" for the default model, and the Tier 2 button "one-model multimodal" installs Gemma 4, now Tier 1** — **OPEN, found 2026-09-29 (plan 77 helper D).** Wording only, left after the licence labels were put right.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-- ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **OPEN, found 2026-09-28
-  by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
-  aloud still hide it.
-- ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **OPEN, found 2026-09-28 by reading the code (plan 76 lane 1),
-  not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
 - ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
   **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
@@ -147,20 +115,6 @@ starts work outside this.
   ones; not yet known whether it was always so. [Detail](roadmap-details.md#flow-l10-findings).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
-- ★★ `[ollama]` **The model tiers' licence labels** — **OPEN, found 2026-09-28 (the licence check);
-  the maintainer's call: labels only.** From memory, to confirm on each model's page: Qwen 2.5's 3B
-  and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
-  sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
-  Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
-  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
-- ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **OPEN, found 2026-09-28
-  (security review, finding 7).** The maintainer's call, 2026-09-29: refuse it and say so. [Review](audit/security-review-0.6.0.md).
-  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
-- ★ `[voice]` **The speech model is downloaded from a changing address and not checked** — **OPEN, found
-  2026-09-28 (security review, finding 8).** Pin the address, check the file's
-  checksum, cap its size; also refuse a knowledge-library file list with no checksums.
-  [Review](audit/security-review-0.6.0.md).
-  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
 - ★★ `[ask]` **The chat summary reads oddly in places** — **OPEN, found 2026-09-25 (plan 68).** Examples
   from the Deck pass: "Game: Parrying practice", "Player is stuck on: None apparent in this log". Needs
   another desk test on real chats.
@@ -417,10 +371,49 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
   **VERIFY, fixed for all buttons 2026-09-29 (plan 77, `11033561`, tip `7c8ac206`).** Earlier fixed (`6ef8cedf`) for the library's Update and
   "Pull nomic-embed-text" buttons; now also "Update AI & models" and the Tier 1 and Tier 2 install buttons. Deck check owed: row **P77-OLLAMA-NOBOX-NOTE**.
+- ★ `[focus]` **After a Down press that scrolls past a spoiler cover, the ring sits on the section's box with its top third under the tab header** — **VERIFY, fixed 2026-09-29 (plan 77 helper E, `5578656c`). Was OPEN, found 2026-09-29 (plan 76, Deck block 3).**
+  The box is only 67% on screen and its cover is the hidden part; with a game running it also sat partly under the dock's action row.
+  Small; the cover-walk fix works around it, so nothing loops. It is why the free-play sweep failed (**QA-FREE-PLAY-01**).
+  Evidence `docs/test-evidence/plan76-P76-WALK-COVERS-try2.json`, `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
+  Known limits the helper left on purpose: a cover deep inside a section taller than the screen may not be offered going Up; glossary words get no box stop. Every landing going Down is now fully on screen. Deck check owed: row **P76-WALK-COVERS (re-run), REPLY-STOPS-MIRROR-01 and QA-FREE-PLAY-01**.
+- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed 2026-09-29 (plan 77 helper E, `5578656c`). Was PARTIAL, sighted three
+  more times.** The Up fixes landed (`8294e75b`, `29c0b075`, `9feef4e1`), and a Deck walk on 2026-09-27 found the
+  same stops both ways (`docs/test-evidence/plan72-F-UP.json`). **Still owed:** row **REPLY-STOPS-MIRROR-01**, and plan 72 saw three
+  later slips. [Detail](roadmap-details.md#flow-2b-bugs).
+  **2026-09-28 (plan 74):** with a hidden spoiler on screen, 17 of 18 stops now mirror; the one mismatch is the top spoiler
+  cover, the same fault as the spoiler-cover entry below (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01.json`).
+  **2026-09-28 (plan 74, Deck pass 3, after `cb88c012`):** the first cover now mirrors. One stop of 13 still differs: on a
+  section that holds only a cover, Down lands on the section's outer box (245×71) while Up lands on the cover inside it
+  (237×55). Seen on two answers (`docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json`, FAIL). Still owed: row **REPLY-STOPS-MIRROR-01**.
+  **2026-09-28 (plan 76 lane 3, `3576846c`):** fixes the last known stop, a section that holds only a cover. Row
+  **REPLY-STOPS-MIRROR-01** is still owed. One exception is by design: a section the ring was moved onto by a scroll can
+  be a stop going Down only.
+  **2026-09-29 (plan 76, Deck block 2b, build `ab56e2a2`):** row **REPLY-STOPS-MIRROR-01** FAILED. Down and Up do not visit the same
+  stops: the walk loops on the first cover. Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01.json`.
+  **Fixed again (`8151dd54`), and re-run on the Deck 2026-09-29 (plan 76, block 3, build `4af8e7a1`):** every stop mirrors except one known
+  by-design stop: a section's box that Down visits after a scroll and Up skips. A section holding only a cover now takes the ring on the
+  cover itself, and A opens it both ways (that part is fixed and proven). Evidence `docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json`.
+  **The maintainer's call 2026-09-29:** Up stops on the section's box too; being built in plan 77 (helper E). That box is also the 67%-visible stop in the new bug at the top of Bugs.
+  Per D120, Up now stops on the section's box too (the maintainer's call 2026-09-29). Deck check owed: row **REPLY-STOPS-MIRROR-01 and QA-FREE-PLAY-01**.
+- ★ `[ollama]` **An Ollama address typed as https is quietly sent as plain http** — **VERIFY, fixed 2026-09-29 (plan 77 helper C, `2f87bc98`, `29b085e6`, `2b32e1cd`). Was OPEN, found 2026-09-28
+  (security review, finding 7).** The maintainer's call, 2026-09-29: refuse it and say so. [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  An https address is refused with "bonsAI can only talk to Ollama over http for now. Use an http:// address." in the field, Test connection, Ask and the chat summary. Deck check owed: row **P77-HTTPS-REFUSED**.
 - ★ `[ollama]` **Replies from the Ollama address have no size limit** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `96f7d896`, tip `044069cd`).**
   Found 2026-09-28 (0.6.0 security review, finding 6). Every read of the Ollama address's replies is now capped (whole reply 16 MiB, error
   body 64 KiB, one streamed line 1 MiB, one streamed answer 8,000,000 characters); past a cap bonsAI stops reading, closes the connection,
   logs one line and shows a plain error. Deck check owed: row **P77-OLLAMA-SIZE-LIMITS**. [Review](audit/security-review-0.6.0.md).
+- ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **VERIFY, fixed 2026-09-29 (plan 77 helper A, `0d805d37`). Was OPEN, found 2026-09-28
+  by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
+  aloud still hide it.
+  It is now a real hidden block, while streaming too. It cannot be put on the Deck's screen without the model (no injection hook on the device). Deck check owed: row **P77-GLUED-SPOILER (unit-test proof only)**.
+- ★ `[reply]` **A Strategy answer about the Deck overlay ended with the previous question's Hollow Knight choices** —
+  **VERIFY, fixed 2026-09-29 (plan 77 helper H, `2fcee678`). Was OPEN, seen once 2026-09-27 (plan 72).** Noted in the plan 72 record, § 7.
+  **Cause found 2026-09-28 (plan 76 lane 4):** not a leftover in the code. The Strategy prompt makes a choice menu mandatory on
+  every first Strategy turn, and with no game running or named the model took the game from the chat's earlier question. The fix
+  is prompt wording in the back end (a carve-out for questions about the Deck itself, like the one for model-policy questions),
+  which needs an answer-quality run, so not this week.
+  Fixed narrowly: a Strategy first turn about the Deck itself with no game running is told not to build a game menu or take a game from earlier in the chat. The answer test on the PC's copy of the Deck's model never saw the borrowing in 30 tries before or after, so it could not prove the fix; ordinary game questions kept their menu (14 of 15 after). Deck check owed: row **P77-STRATEGY-DECK-ITSELF**.
 - ★ `[reply]` **A Strategy answer's follow-up choices are sometimes not understood, so no choice menu shows** — **VERIFY,
   partly fixed 2026-09-28 (plan 76 lane 5, `61ff1d3b`).** Caveat: the real refused shape was never saved, so the fix covers the
   shapes models are known to drift to. If the warning still appears, its log snippet shows the real shape. Sightings 2026-09-26
@@ -429,10 +422,19 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **After a chat switch, a stopped partial answer or a saved error as the newest turn also gets live Helpful
   buttons** — **VERIFY, fixed 2026-09-29 (plan 77, `4447ffbc`).** The back end now marks a stopped or failed answer turn in the saved
   chat; a turn saved before the mark counts as finished. A known edge of `e5d1ceb9` (plan 76 lane 4). Deck check owed: row **P77-HELPFUL-STOPPED**.
+- ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **VERIFY, fixed 2026-09-29 (plan 77 helper A, `0d805d37`). Was OPEN, found 2026-09-28 by reading the code (plan 76 lane 1),
+  not seen on the Deck.** It should say there is code on screen, as it does for a backtick code block. Not a spoiler leak.
+  Read aloud now says "There is code on screen." It cannot be put on the Deck's screen without the model. Deck check owed: row **P77-TILDE-READALOUD (unit-test proof only)**.
 - ★ `[reply]` **The back end's name-covering safety net only knows three-backtick blocks** — **VERIFY, fixed 2026-09-29 (plan 77 helper B, `a7b0865e`).**
   Found 2026-09-28 by reading the code (plan 76 lane 1). It now reads `~~~` and longer fences the way the panel does, and holds back a
   half-typed `~~~bon` while streaming. Unit-tested; the model is told to use backticks, so it cannot be triggered on demand. Deck check owed:
   row **P77-TILDE-SAFETY-NET** (the regression check).
+- ★ `[voice]` **The speech model is downloaded from a changing address and not checked** — **VERIFY, fixed 2026-09-29 (plan 77 helper C, `2f87bc98`, `29b085e6`, `2b32e1cd`). Was OPEN, found
+  2026-09-28 (security review, finding 8).** Pin the address, check the file's
+  checksum, cap its size; also refuse a knowledge-library file list with no checksums.
+  [Review](audit/security-review-0.6.0.md).
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  The speech model download is pinned to one commit with a checksum and a size cap; a knowledge-library file list with a blank or missing checksum is refused. Deck check owed: row **P77-SPEECH-PINNED and P77-LIBRARY-CHECKSUMS**.
 - ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
   **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
@@ -453,6 +455,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   maintainer**, from `docs/test-evidence/plan64-BYEYE-01-preset-chip.png`. This line is the chip's only
   highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
   stay clearly visible, not just calmer.
+- ★★ `[ollama]` **The model tiers' licence labels** — **VERIFY, fixed 2026-09-29 (plan 77 helper D, `483797f2`, `cae49d5a`). Was OPEN, found 2026-09-28 (the licence check);
+  the maintainer's call: labels only.** From memory, to confirm on each model's page: Qwen 2.5's 3B
+  and 72B sizes (including the default picture model qwen2.5vl:3b) and qwen2.5-coder:3b carry Qwen's own licences, yet
+  sit in "open source only"; so do vicuna, orca-mini and the non-Mistral llava; the docs call Gemma Tier 2, the code puts
+  Gemma 4 in Tier 1; gpt-oss is Apache but sits last. Fix the labels and the README and troubleshooting wording.
+  **2026-09-29:** Pulled into plan 77 by the maintainer, 2026-09-29; being fixed.
+  Checked against each model's page 2026-09-29. Moved out of "open source only": Qwen 2.5 72B, Qwen 2.5 coder 3B, Qwen 2.5 VL 72B, Qwen 2 72B, the first Qwen generation, llava 13B, llava-llama3, vicuna, orca-mini; gpt-oss moved up (Apache 2.0). README and troubleshooting now say Gemma 4 is Tier 1. The default picture model qwen2.5vl:3b and qwen2.5:3b stay in Tier 1 with a "Qwen Research (3B size)" label; the maintainer's call is open (plan 77 questions, item 1). Deck check owed: row **P77-LICENCE-FILTER**.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed
   2026-08-27 and 2026-09-03; the orphan-chat half is a measured follow-up, not a regression. Only the
   mid-generation half is still owed: clearing while a reply is still being written. Row **CLEAR-CACHE-01**.

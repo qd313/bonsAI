@@ -42,7 +42,7 @@ export type UnwrapSpoilerOpts = {
   appId?: string | null;
   /**
    * The game's display name, for a title reachable only by name — an emulator shortcut with no
-   * Steam AppID (plan 54 gap 1). Passed straight through to `titleProfileIsLowNarrative`, which
+   * Steam AppID (plan 54 gap 1). Passed straight through to `turnProfileIsLowNarrative`, which
    * already checks the AppID first and only falls back to the name.
    */
   appName?: string | null;

@@ -271,7 +271,7 @@ export type ShapedAnswer = ReturnType<typeof shapedAnswer>;
  * section taller than the band is read from its end when entered from below, so the reading is not
  * skipped past).
  */
-export function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
+function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
   const top = a.top(el);
   const bottom = a.bottom(el);
   const band = a.dockTop - PANE_TOP;

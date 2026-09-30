@@ -155,10 +155,6 @@ export function resolveTitleSpoilerProfile(
   return "unknown";
 }
 
-export function titleProfileIsLowNarrative(appId?: string | null, appName?: string): boolean {
-  return resolveTitleSpoilerProfile(appId, appName) === "low_narrative";
-}
-
 /**
  * True when the question text itself names a story game from the protect table. Whole-word match
  * on the same names the title fallback uses ("hades" fires on "beat hades", not on "shades").

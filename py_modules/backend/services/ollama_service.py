@@ -158,6 +158,7 @@ from backend.services.ollama_ask_budgets import (
 from backend.services.strategy_guide_parse import (
     extract_strategy_guide_branches,
     extract_strategy_checklist,
+    drop_unclosed_strategy_fence,
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
 )
@@ -286,6 +287,13 @@ def post_ollama_chat(
 
     while True:
         raw_prefix = "".join(stitched_raw_parts)
+        # A choice fence cut open by the length wall is never finished by the next piece: the model
+        # continues from the visible text, which has no fence in it. Whether this piece turns out to
+        # be prose (drop the dead fence, keep the prose) or the rest of the JSON (keep the fence
+        # whole) is only known once it is in, so it streams behind the fence, which stays hidden.
+        prefix_before_open_fence = drop_unclosed_strategy_fence(raw_prefix)
+        if prefix_before_open_fence != raw_prefix and prefix_before_open_fence:
+            prefix_before_open_fence += "\n\n"
         result = _stream_ollama_chat_once(
             url,
             model_name,
@@ -362,7 +370,21 @@ def post_ollama_chat(
             )
             break
 
-        stitched_raw_parts.append(part_raw)
+        if prefix_before_open_fence != raw_prefix and "```" not in part_raw:
+            # The wall cut a choice fence open and this piece is plain prose, not the rest of the
+            # JSON. Drop the dead fence so it cannot swallow this piece (the hide helpers cut from
+            # the fence to the end of the text). A piece that carries a closing ``` is the fence
+            # being finished, so it stays whole and the final parse owns it.
+            logger.info(
+                "ask_ollama: dropped a choice fence cut off by the length wall "
+                "continue_index=%d mode=%s dropped_chars=%d",
+                continue_count,
+                mode,
+                len(raw_prefix) - len(prefix_before_open_fence),
+            )
+            stitched_raw_parts = [prefix_before_open_fence + part_raw]
+        else:
+            stitched_raw_parts.append(part_raw)
         thinking_now, stitched_visible = _visible_from_raw("".join(stitched_raw_parts))
         if thinking_now:
             last_thinking = thinking_now

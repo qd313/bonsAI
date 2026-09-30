@@ -115,6 +115,38 @@ def hide_incomplete_strategy_branch_fence(text: str) -> str:
     return raw
 
 
+def drop_unclosed_strategy_fence(raw: str) -> str:
+    """
+    Cut a choice fence that was still open when the reply hit its length wall.
+
+    A soft continue asks the model to carry on from the *visible* text, and the visible text has
+    the fence hidden -- so the model never sees, and never finishes, the half-written JSON. The
+    next piece is plain prose. Left in the stitched raw text, the open fence would sit in front of
+    that prose, and both hide helpers cut "from the fence to the end", so the whole continuation
+    vanished with it (Deck 2026-09-30, SOFT-PREDICT-04: 1,018 letters lost, no choice menu).
+
+    Dropping the dead fence before the next piece is asked for keeps the prose in front of it and
+    lets the continuation stand on its own. A fence that has a closing marker is left alone: the
+    final parse owns it. Returns the text unchanged when no open fence is present.
+    """
+    text = raw or ""
+    m = _FENCE_OPEN_RE.search(text)
+    if m and "```" not in text[m.end() :]:
+        return text[: m.start()].rstrip()
+    idx = text.find(_CHECKLIST_FENCE_OPEN)
+    if idx >= 0 and "```" not in text[idx + len(_CHECKLIST_FENCE_OPEN) :]:
+        return text[:idx].rstrip()
+    for jm in reversed(list(_JSON_FENCE_OPEN_RE.finditer(text))):
+        open_line_start = text.rfind("\n", 0, jm.start()) + 1
+        if "bonsai-strategy" in text[open_line_start : jm.end()].lower():
+            continue
+        tail = text[jm.end() :]
+        peek = tail.lstrip()[:80].lower()
+        if ('"question"' in peek or '"options"' in peek) and "```" not in tail:
+            return text[: jm.start()].rstrip()
+    return text
+
+
 def hide_incomplete_strategy_checklist_fence(text: str) -> str:
     """
     Drop a checklist fence the parser refused, so raw JSON never reaches the answer bubble.

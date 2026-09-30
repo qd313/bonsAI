@@ -2,6 +2,7 @@ import unittest
 
 from backend.services.strategy_guide_parse import (
     STRATEGY_FOLLOWUP_PREFIX,
+    drop_unclosed_strategy_fence,
     extract_strategy_guide_branches,
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
@@ -165,6 +166,21 @@ class StrategyGuideParseTests(unittest.TestCase):
         hidden = hide_incomplete_strategy_branch_fence(raw)
         self.assertEqual(hidden, "Intro prose.")
         self.assertNotIn('"options"', hidden)
+
+    def test_drop_unclosed_fence_cuts_only_a_fence_the_wall_left_open(self):
+        open_branch = 'Kill them first.\n\n```bonsai-strategy-branches\n{"question":"Wh'
+        self.assertEqual(drop_unclosed_strategy_fence(open_branch), "Kill them first.")
+        open_checklist = 'Step one.\n\n```bonsai-strategy-checklist\n{"title":"T","ite'
+        self.assertEqual(drop_unclosed_strategy_fence(open_checklist), "Step one.")
+        open_json = 'Intro.\n\n```json\n{"question":"Q?","options":[{"id":"a"'
+        self.assertEqual(drop_unclosed_strategy_fence(open_json), "Intro.")
+        closed = (
+            "Intro.\n\n```bonsai-strategy-branches\n"
+            '{"question":"Q?","options":[{"id":"a","label":"A"},{"id":"b","label":"B"}]}\n```\n'
+        )
+        self.assertEqual(drop_unclosed_strategy_fence(closed), closed)
+        self.assertEqual(drop_unclosed_strategy_fence("plain text"), "plain text")
+        self.assertEqual(drop_unclosed_strategy_fence(""), "")
 
 
 # Strategy checklist tests

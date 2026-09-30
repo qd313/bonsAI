@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "lines": 626,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
       "lines": 609,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 600,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
-      "lines": 594,
       "role": ""
     }
   ]

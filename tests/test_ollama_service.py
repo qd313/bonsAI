@@ -273,6 +273,59 @@ class OllamaServiceTests(unittest.TestCase):
         )
 
     @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_strategy_fence_cut_by_the_wall_does_not_swallow_the_continuation(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """Plan 77 SOFT-PREDICT-04: a branch fence opened right at the length wall and cut inside
+        its JSON used to take the whole continuation with it (the hide-from-the-fence helper cuts
+        to the end of the stitched raw text). The continuation's prose must survive, no half fence
+        or raw JSON may show, and the model is asked to continue from the clean prose."""
+        first_text = 'Kill the exploders first.\n\n```bonsai-strategy-branches\n{"question":"Which next?","opti'
+        first = self._ndjson_response(
+            [
+                json.dumps({"message": {"role": "assistant", "content": first_text}}),
+                '{"message":{"role":"assistant","content":""},"done":true,"done_reason":"length"}',
+            ]
+        )
+        second = self._ndjson_response(
+            [
+                '{"message":{"role":"assistant","content":"Then back off and kite the swarm."}}',
+                '{"message":{"role":"assistant","content":""},"done":true,"done_reason":"stop"}',
+            ]
+        )
+        mock_urlopen.side_effect = [first, second]
+        deltas_seen: list[tuple[str, bool]] = []
+
+        out = post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "vision:test",
+            [{"role": "user", "content": "how do i deal with exploders"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            MagicMock(),
+            "strategy",
+            "5m",
+            cancel_requested=lambda: False,
+            on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append((text, done)),
+        )
+
+        self.assertTrue(out.get("success"))
+        self.assertEqual(out.get("soft_continue_count"), 1)
+        response = out.get("response") or ""
+        self.assertIn("Kill the exploders first.", response)
+        self.assertIn("Then back off and kite the swarm.", response)
+        for leaked in ("bonsai-strategy-branches", "```", '{"question"', "opti"):
+            self.assertNotIn(leaked, response)
+        self.assertNotIn("bonsai-strategy-branches", "".join(t for t, _ in deltas_seen))
+        second_body = json.loads(mock_urlopen.call_args_list[1][0][0].data.decode("utf-8"))
+        self.assertEqual(second_body["messages"][-2]["content"], "Kill the exploders first.")
+        self.assertEqual(deltas_seen[-1][1], True)
+        self.assertIn("Then back off", deltas_seen[-1][0])
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_cancel_mid_continue_clears_cue(
         self, mock_urlopen: MagicMock
     ) -> None:

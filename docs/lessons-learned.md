@@ -455,6 +455,12 @@ every test and the review, then looped on the Deck between a cover and its secti
 the cover back on screen. Brief every walking fix to model that scroll (`src/test-harness/deckAnswerWalk.ts` now does, three ways) and to test a
 bounded walk with no stop visited twice.
 
+**The five gates are not the whole check: land with `python scripts/verify.py --quick` too.** Plan 77 landed 26 changes,
+every one green on the five gates, and only at the end found `verify.py --quick` red on five things the gates never
+run: missing "how it works" headers, two files past their growth limits, four more files over 400 lines, and
+testing.md past its size ceiling. A clean-up round was needed before anyone could push. Put the quick check in the
+landing script, and in every helper's gate list.
+
 ---
 
 ## 5. Design and screen work

@@ -416,6 +416,7 @@
     "tests/test_steam_vac_service.py",
     "tests/test_strategy_checklist_session_service.py",
     "tests/test_strategy_checklist_store_lock.py",
+    "tests/test_strategy_deck_itself_carveout.py",
     "tests/test_strategy_guide_parse.py",
     "tests/test_strategy_guide_parse_drift.py",
     "tests/test_strategy_spoiler_policy.py",

@@ -233,6 +233,21 @@ def _user_asks_model_policy_tiers_explainer(question: str) -> bool:
     return False
 
 
+def _user_asks_about_deck_itself(question: str) -> bool:
+    """True when the question is about the Steam Deck, SteamOS, the overlay, Quick Access or bonsAI
+    itself rather than about a game. Matches only Deck-specific words on purpose: a bare "deck"
+    would catch card-game questions, "controls" or "settings" alone would catch game questions
+    where the chat's earlier game is the right context, and "Steam Deck" alone would catch nearly
+    every game question, since the player is always on one ("how do I beat X on my Steam Deck")."""
+    s = (question or "").lower()
+    return bool(
+        re.search(
+            r"\b(steamos|steam\s+os|quick\s+access|qam|decky|bonsai|desktop\s+mode|overlay)\b",
+            s,
+        )
+    )
+
+
 def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
     """General compatibility / Proton / stability prompts (shipped main-tab presets, prompt-testing group)."""
     s = (question or "").lower()
@@ -330,6 +345,19 @@ MODEL_POLICY_TIERS_LINE = (
     "State that classifications are **heuristic for UX/routing**, not legal advice. Mention **Permissions (or Settings) → Model policy** where the user changes tier, and that replies can show a short **Model source disclosure** after an Ask. "
     "Do **not** pivot to Steam Performance/TDP unless they ask. "
     "If **Strategy Guide mode** is active but this message is **only** about model policy (not gameplay), **do not** output ```bonsai-strategy-branches```—answer with a normal explanation.\n"
+)
+
+# Strategy first turns carry a mandatory game choice menu. With no game running, a question about
+# the Deck itself made the model take the game from the chat's earlier question (seen 2026-09-27,
+# plan 72; cause found in plan 76). This wins over the mandatory wording, like the model-policy
+# line above it does.
+DECK_ITSELF_NO_GAME_MENU_LINE = (
+    "\n\nDECK ITSELF (Strategy first turn): This message looks like a question about the Steam Deck itself "
+    "(SteamOS, the overlay, Quick Access, controls, settings, or bonsAI), not about a game, and no game is running. "
+    "For this message the branch picker above is **not** required: answer normally and do NOT output "
+    "```bonsai-strategy-branches```. Never build a choice menu about a game, and never take a game or its places "
+    "from earlier in this chat. If the message actually asks about one specific game, ignore this note and follow "
+    "the rules above.\n"
 )
 
 DECK_TROUBLESHOOT_GAME_SETTINGS_LINE = (

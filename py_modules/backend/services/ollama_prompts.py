@@ -117,12 +117,14 @@ from backend.services.ask_topic_instructions import (
     append_deck_tdp_sysfs_grounding,
     _user_asks_model_policy_tiers_explainer,
     _user_asks_deck_troubleshooting_or_compat_line,
+    _user_asks_about_deck_itself,
     question_matches_troubleshooting_log_context,
     OLLAMA_BONSAI_SETUP_LINE,
     HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC,
     HARDWARE_APPENDIX_SKIPPED_FOR_TROUBLESHOOT,
     MODEL_POLICY_TIERS_LINE,
     DECK_TROUBLESHOOT_GAME_SETTINGS_LINE,
+    DECK_ITSELF_NO_GAME_MENU_LINE,
 )
 from backend.services.reply_style_blocks import (
     user_asks_for_detail_depth,
@@ -672,6 +674,17 @@ def build_system_prompt(
         middle += OLLAMA_BONSAI_SETUP_LINE
     if model_policy_q:
         middle += MODEL_POLICY_TIERS_LINE
+    if (
+        not followup
+        and not app_name.strip()
+        and not app_id
+        # "performance overlay" holds the word "performance" but is a question about the overlay,
+        # not a tuning ask, so it must not count as a power topic here.
+        and not user_wants_power_or_performance_topic(question.lower().replace("performance overlay", ""))
+        and not model_policy_q
+        and _user_asks_about_deck_itself(question)
+    ):
+        middle += DECK_ITSELF_NO_GAME_MENU_LINE
     if ask_mode == "speed":
         middle += (
             "\n\nACCURACY (Speed mode): Prefer verifiable, conservative claims. "

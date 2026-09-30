@@ -50,6 +50,7 @@
     "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
     "src/components/MainTabChatTranscript.turnTitle.test.tsx",
     "src/components/MainTabChatTranscript.upWalk.test.tsx",
+    "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
     "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
     "src/components/MainTabPresetAnimatedChips.test.tsx",
     "src/components/MainTabPresetRow.askRestart.test.tsx",

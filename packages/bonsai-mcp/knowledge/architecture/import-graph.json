@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 616,
-  "edgeCount": 1710,
+  "fileCount": 617,
+  "edgeCount": 1714,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -740,7 +740,8 @@
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
-        "src/components/MainTabChatTranscript.upWalk.test.tsx"
+        "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx"
       ]
     },
     "src/components/MainTabChatTranscript.turnTitle.test.tsx": {
@@ -758,6 +759,15 @@
         "src/types/bonsaiUi.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts"
       ],
       "importedBy": []
     },
@@ -4641,6 +4651,7 @@
         "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
@@ -4801,6 +4812,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/MainTabUnifiedAskBar.types.ts",
         "src/components/SessionContextStrip.test.tsx",
@@ -5795,6 +5807,7 @@
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",

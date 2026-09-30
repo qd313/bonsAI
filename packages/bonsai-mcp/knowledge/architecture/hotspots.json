@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2280,
+      "lines": 2284,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1717,
+      "lines": 1729,
       "role": ""
     },
     {
@@ -117,7 +117,7 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 752,
+      "lines": 761,
       "role": ""
     },
     {

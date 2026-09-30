@@ -1054,6 +1054,18 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     ? askThreadCollapsed.slice(earlierCount)
     : askThreadCollapsed;
 
+  /*
+   * The text the ban-lookup permission row is judged on. The live reply while there is one; after a
+   * chat switch the live text is blank and the same reply is drawn as the chat's newest saved turn,
+   * so read that instead (plan 74 P74-LOCAL-CMD-CHAT: the row was gone on coming back to its chat).
+   * Not while a saved question is still waiting for its answer (the newest saved answer is then not
+   * the newest turn), and it is the active chat's own turns, so the row never follows a reply into
+   * another chat.
+   */
+  const vacDenyReplyText =
+    ollamaResponse ||
+    (askThreadDisplayQuestion.trim() ? "" : askThreadCollapsed[askThreadCollapsed.length - 1]?.answer ?? "");
+
   return (
     <>
 {(showEmptySlotPreview || (askThreadCollapsed.length === 0 && !showLiveTurn)) && (
@@ -1646,7 +1658,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
 ) : null}
 {/* Not on the [+] create-position screen: these lines describe the reply of the chat that is
     still active behind it (plan 74 P74-LOCAL-CMD-CHAT), and that screen claims to be a new chat. */}
-{!showEmptySlotPreview && !isAsking && onNavigateToPermissions && isVacCheckCapabilityDenyResponse(ollamaResponse) ? (
+{!showEmptySlotPreview && !isAsking && onNavigateToPermissions && isVacCheckCapabilityDenyResponse(vacDenyReplyText) ? (
   <PanelSectionRow>
     {/*
      * Same reasoning as the troubleshooting hint's wrapper just above: this row sits outside the

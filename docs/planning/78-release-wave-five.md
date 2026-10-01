@@ -426,6 +426,25 @@ New ones go here, with the choice taken in the meantime.
    and bonsAI cannot draw the ring from its side; the first D-pad press brings it. **Meanwhile:** closed as not a bonsAI
    bug. **Your call:** whether the release notes should carry a line such as "Over a running game, the highlight
    appears after the first D-pad press."
+11. **Five more things the rig could not show on 1 October.** Each has unit tests that pass; on the Deck the case
+   never came up. A choice menu cut off by the length limit never showing as raw text (eight questions over two
+   sessions produced no cut-off menu). Spoiler covers on Palworld and Skyrim questions (the right notes were attached
+   on all four, and the AI wrote no hidden block). "Spoilers are okay" on a live answer (the saved-chat half passed;
+   live, the AI wrote no hidden block to open, third session running). A quick double press on "Set text model try
+   order" opening one popup (the rig's presses are about half a second apart). Frame rate inside a mission (Deep
+   Rock launched, but its window never came to the front for the rig). **Meanwhile:** they stay owed. **Your call:**
+   accept each on its tests, or check by hand; the double press and the mission are quick with a finger.
+12. **While an answer arrives, the start of a sentence can show for about a second before its cover closes over it.**
+   Seen on the Deck with spoiler covers on. In every read no protected name was readable in that second, so the
+   session ruled it a pass for the fix being checked. **Your call:** fine as it is, or a bug for after the release
+   (hold a sentence back until it is known whether it will be covered).
+13. **The AI's instructions name the hidden block in the odd shape it then copied.** The spoiler bug found on
+   1 October came from the AI writing its hidden-block marks as the label between two sets of backticks on one line.
+   The plugin now reads that shape correctly (`09bf7fd7`). The likely cause is that six lines of the instructions
+   write the label that way when they talk about it (`ollama_prompts.py` and `strategy_spoiler_policy.py`).
+   **Meanwhile:** the instructions are unchanged. **Recommended:** reword them after the release, with a
+   before-and-after count of covers on the Deck, because any change to the instructions can change how often the AI
+   hides things.
 
 ## At the end
 
@@ -551,6 +570,8 @@ The full results, the code summary and the report replace this section when the 
 - **1 October, about 11:17 to 11:34 am (third Deck block, part c, build `24cbbd6b`):** the lost-try-order fix passed on the Deck: three of three unrelated switch changes left both try orders as they were, the "edit order" popup showed the fresh order, and after a model was removed the order was cleaned to the one installed model. Not proven: the quick double press that used to open two popups (the rig's two presses are about 0.46 s apart); it rests on its unit tests. Side fact: the Deck's saved text try order is now `['gemma4:e2b-it-qat']` where it was empty before the session; it is the model the Deck was already using. Landed at 11:34: the fix for walking Down skipping a long section's text when its cover is deep inside it (`b3cbb6e8`) and the fix for the whole extra press on a section only a few pixels too tall (`9feef02e`); twenty bugs fixed in all. Both owe their Deck rows (P78-DOWN-DEEP-COVER, P78-SHORT-LAST-STEP) in the next block. Evidence `docs/test-evidence/plan78-P78-TRY-ORDER-KEPT.json`.
 - **1 October, about 11:25 to 11:45 am (third Deck block, part c, check 2, build `24cbbd6b`, no game running):** one pass, four unclear. Passed: Read aloud on a block fenced with three tildes says "There is code on screen." Unclear: the glued hidden-block mark and the consent check's history half (the test chat's newest turn was a Deep Rock Galactic turn, a low-story game, so hidden blocks show plain and the control had no cover); the consent check's live half (the AI wrote no hidden block, third session running); Palworld and Skyrim notes (right notes attached, but no hidden block written; the Skyrim plain-text answer about Alduin is ruled not a leak); the cut choice menu (four questions, the case never happened, second session running). The first two run again in Deck block 3d on a Hollow Knight turn. For the maintainer's "accept, or check by hand" list, with nothing on the plan's lists to hold it: the cut choice menu is proven by its unit tests only so far. Evidence `docs/test-evidence/plan78-P77-TILDE-READALOUD.json`, `plan78-P77-GLUED-SPOILER.json`, `plan78-CONST-SPOIL-CONSENT-01.json`, `plan78-KB-NEWGAMES-01.json`, `plan78-P77-CUT-MENU-TEXT.json`.
 - **1 October, about 11:50 am to 12:15 pm (third Deck block, part d, build `9feef02e`):** passed: Down no longer skips a long section's text when its cover is deep inside it; the short last step leaves the section's edge within 1 px (by the session's ruling; the morning's exact case did not come back); the free-play sweep with no game and with Hades; a hidden block glued to a sentence became one cover on a Hollow Knight turn; the consent check's history half; the Speed-mode spoiler chip on Hades (by the session's ruling). Could not run: SCR-10, the game frame-rate rows and SCR-03 in a mission (Deep Rock Galactic: Survivor's window never came to the front), and the jump check with a game. The consent check's live half stays unclear. One new bug, open, three stars: a hidden block whose marks are both written as one line of backticks around the label showed as plain text; row P78-BARE-SPOILER-MARK; helper N started about 12:20.
+
+- **1 October, about 12:20 to 12:30 (the bare hidden-block mark):** a helper fixed the spoiler bug the Deck found at 12:05, and it landed with every check green (`09bf7fd7`): twenty-one bugs fixed in all. The line of backticks, the label and backticks again is now read as a mark on the screen, in Copy, in Read aloud, in the live coverer and in the chat's memory and summary. The helper read every place that reads these marks; two on the back end had the same gap and are fixed in the same commit. Not changed: six lines of the AI's instructions that write the label in that shape (question 13). It owes its Deck row, P78-BARE-SPOILER-MARK, in the last block.
 
 ## For the helpers: who owns which files
 

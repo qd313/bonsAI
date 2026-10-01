@@ -43,6 +43,11 @@ How it works:
     so its own text stays byte-for-byte the same between rewrites while only
     the word-for-word tail changes -- see ``apply_chat_memory_to_prompt``'s
     doc comment for why that placement matters.
+ 7. When the new question stands on its own (``question_stands_alone``: long enough, no
+    "it"/"again"/"you said", not opening with "and"/"what about"), the earlier ANSWERS are left
+    out and only the person's earlier questions are carried (plan 78). A small model copies an
+    answer it is shown -- 49 words of a Doom answer came back in an answer about another game.
+    A follow-up still gets the answers it follows.
 """
 
 from __future__ import annotations
@@ -100,6 +105,17 @@ MEMORY_HEADER = (
 )
 MEMORY_TRUNCATED_NOTE = "(Earlier turns of this chat are not included here.)"
 
+# Plan 78 (borrowed wording): when the new question stands on its own, the earlier ANSWERS are not
+# carried at all -- only what the person asked. Measured on the PC's copy of the Deck's model, a
+# label telling the model not to copy did nothing (a 49-word stretch of a Doom answer came back
+# word for word in an answer about a different game); the only thing that stops the copying is
+# not handing it the answer. The questions stay, so the AI still knows what has been talked about.
+MEMORY_QUESTIONS_ONLY_HEADER = (
+    "What this chat has already covered, oldest first: the person's earlier questions only. The "
+    "new question stands on its own, possibly about a different game or subject. Treat these as "
+    "background and answer the new question fresh."
+)
+
 # Plan 68: the heading a chat's own summary of its older turns sits under, ahead of the
 # word-for-word part. Its own line, not folded into MEMORY_HEADER, so the two stay separately
 # testable and the summary can be dropped in without changing the header's own wording.
@@ -122,6 +138,9 @@ class ChatMemory:
     turns_left_out: int
     hidden_notes_removed: int
     tokens: int
+    # Plan 78: True when only the earlier questions were carried because the new question stands on
+    # its own. Shown in the ask log so a device check can read it.
+    answers_left_out: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -159,6 +178,56 @@ def _shorten(text: str, limit: int) -> str:
     return cut + "…"
 
 
+# A question that needs the turns before it points back at them: "again", "the second one", "you
+# said", or it opens with "and", "but", "what about", or -- when it is short -- it leans on a
+# pronoun. Anything else, once it is longer than a few words, names its own game or subject and can
+# be answered without the earlier answers; a long question with a "he" in it has usually named
+# who he is in the same breath, and the earlier QUESTIONS (which stay) say the rest. Leans towards
+# "needs the turns": wrongly keeping the answers costs a little borrowed wording, wrongly dropping
+# them costs the person a follow-up that no longer makes sense.
+_POINTS_BACK = re.compile(
+    r"\b(?:that one|the same|same thing|again|another|instead|previous|last time|"
+    r"you (?:said|mentioned|told|suggested|recommended|gave)|"
+    r"your (?:answer|reply|last|previous|advice|suggestion)|"
+    r"the (?:first|second|third|fourth|last|other|next|previous) "
+    r"(?:one|option|point|step|tip|suggestion|answer|choice|method|way|boss|phase))\b",
+    re.IGNORECASE,
+)
+_LEANS_ON_PRONOUN = re.compile(
+    r"\b(?:it|its|it's|they|them|their|theirs|he|him|his|she|her|hers|those|these|that|"
+    r"this(?!\s+game))\b",
+    re.IGNORECASE,
+)
+_CONTINUATION_OPENER = re.compile(
+    r"^\W*(?:and|but|so|then|also|ok|okay|what about|how about|what if)\b", re.IGNORECASE
+)
+_SHORT_QUESTION_WORDS = 4
+_PRONOUN_COUNTS_UP_TO_WORDS = 9
+
+
+def question_stands_alone(question: str) -> bool:
+    """True when ``question`` can be answered without what was said before it.
+
+    Used to decide whether earlier answers are carried at all (see
+    ``MEMORY_QUESTIONS_ONLY_HEADER``). Only plain English text is judged: a question with any
+    letter outside ASCII might be in a language the pronoun list does not cover, and keeps the
+    memory exactly as it was before.
+    """
+    text = " ".join(str(question or "").split())
+    if not text:
+        return False
+    if any(ch.isalpha() and ord(ch) > 127 for ch in text):
+        return False
+    words = len(text.split())
+    if words <= _SHORT_QUESTION_WORDS:
+        return False
+    if _CONTINUATION_OPENER.search(text) or _POINTS_BACK.search(text):
+        return False
+    if words <= _PRONOUN_COUNTS_UP_TO_WORDS and _LEANS_ON_PRONOUN.search(text):
+        return False
+    return True
+
+
 def turns_not_yet_summarized(turns: Optional[list], summary: Optional[dict]) -> list:
     """The turns a chat's own summary (plan 68) does not already speak for.
 
@@ -180,7 +249,7 @@ def turns_not_yet_summarized(turns: Optional[list], summary: Optional[dict]) -> 
 
 
 def build_memory_lines(
-    turns: Optional[list], allowance_tokens: int, model_name: str = ""
+    turns: Optional[list], allowance_tokens: int, model_name: str = "", with_answers: bool = True
 ) -> tuple[list[str], int, int, int, int, int]:
     """The "You asked: …" / "The answer was: …" lines a memory or a summary request is built
     from, oldest first, kept from the newest turn backwards until ``allowance_tokens`` runs out.
@@ -215,7 +284,7 @@ def build_memory_lines(
             body = _shorten(shown, MAX_REMEMBERED_QUESTION_CHARS)
             line: Optional[str] = f"- You asked: {body}"
         elif role == "assistant":
-            if text.strip() == CANCELLED_ANSWER_TEXT:
+            if not with_answers or text.strip() == CANCELLED_ANSWER_TEXT:
                 scanned += 1
                 continue
             cleaned, removed = strip_fenced_blocks(text)
@@ -252,8 +321,13 @@ def build_chat_memory(
     allowance_tokens: int,
     model_name: str = "",
     summary: Optional[dict] = None,
+    with_answers: bool = True,
 ) -> ChatMemory:
     """Build the memory block for a chat, fitting whatever allowance the budget gave it.
+
+    ``with_answers=False`` (plan 78) carries only what the person asked, under
+    ``MEMORY_QUESTIONS_ONLY_HEADER``; ``plan_and_build_chat_memory`` sets it when the new question
+    stands on its own.
 
     When ``summary`` is given (plan 68), only the turns after its own coverage are walked, and its
     text is placed first in the block, right after the header -- see the module doc comment.
@@ -275,7 +349,8 @@ def build_chat_memory(
     # tokens, and next to a cliff the safe direction is to use slightly less than allowed. The
     # summary, when there is one, is reserved the same way -- it is never trimmed to fit, only
     # included whole or left out entirely.
-    header_cost = estimate_tokens_from_chars(len(MEMORY_HEADER) + 1, model_name)
+    header = MEMORY_HEADER if with_answers else MEMORY_QUESTIONS_ONLY_HEADER
+    header_cost = estimate_tokens_from_chars(len(header) + 1, model_name)
     note_cost = estimate_tokens_from_chars(len(MEMORY_TRUNCATED_NOTE) + 1, model_name)
     summary_cost = 0
     if summary_text:
@@ -287,12 +362,12 @@ def build_chat_memory(
         return ChatMemory("", 0, len(rows), 0, 0)
 
     lines, carried, left_out, hidden_removed, lines_used, _scanned = build_memory_lines(
-        rows, allowance - reserved, model_name
+        rows, allowance - reserved, model_name, with_answers=with_answers
     )
     if not lines and not summary_text:
         return ChatMemory("", 0, len(rows), 0, 0)
 
-    parts = [MEMORY_HEADER]
+    parts = [header]
     if summary_text:
         parts.append(MEMORY_SUMMARY_HEADER)
         parts.append(summary_text)
@@ -308,6 +383,7 @@ def build_chat_memory(
         turns_left_out=left_out,
         hidden_notes_removed=hidden_removed,
         tokens=used,
+        answers_left_out=not with_answers,
     )
 
 
@@ -368,7 +444,12 @@ def plan_and_build_chat_memory(
         cards_wanted=0,
         memory_wanted=memory_wanted,
     )
-    return plan, build_chat_memory(rows, plan.memory_tokens, model_name, summary=summary)
+    # A question that names its own game or subject does not get the earlier answers to read: a small
+    # model copies them (plan 78). Its earlier questions still go with it.
+    with_answers = not question_stands_alone(question)
+    return plan, build_chat_memory(
+        rows, plan.memory_tokens, model_name, summary=summary, with_answers=with_answers
+    )
 
 
 def apply_chat_memory_to_prompt(
@@ -418,7 +499,8 @@ def apply_chat_memory_to_prompt(
         system_content = system_content + "\n\n" + memory.text
     logger.info(
         "ask_ollama: budget room=%d rules+cards=%d (attached %d chars) memory=%d thinking=%d answer=%d "
-        "(~%.1fs to the first word) carried=%d turns, left behind=%d, hidden notes removed=%d%s",
+        "(~%.1fs to the first word) carried=%d turns, left behind=%d, hidden notes removed=%d, "
+        "earlier answers left out=%s%s",
         budget_plan.room_tokens,
         budget_plan.rules_tokens,
         attached_chars,
@@ -429,6 +511,7 @@ def apply_chat_memory_to_prompt(
         memory.turns_carried,
         memory.turns_left_out,
         memory.hidden_notes_removed,
+        memory.answers_left_out,
         ("; left out: " + ", ".join(budget_plan.left_out)) if budget_plan.left_out else "",
     )
     return system_content

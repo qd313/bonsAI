@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 655,
-  "edgeCount": 1836,
+  "fileCount": 656,
+  "edgeCount": 1844,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2261,7 +2261,8 @@
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiPluginShell.test.ts",
-        "src/hooks/usePullModelOpenBookkeeping.ts"
+        "src/hooks/usePullModelOpenBookkeeping.ts",
+        "src/index.helpChip.test.tsx"
       ]
     },
     "src/data/strategyGuideFollowup.test.ts": {
@@ -2581,6 +2582,7 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
+        "src/index.helpChip.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -2878,6 +2880,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/index.helpChip.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -4400,6 +4403,19 @@
         "src/utils/i18n.ts"
       ]
     },
+    "src/index.helpChip.test.tsx": {
+      "imports": [
+        "src/data/storageKeys.ts",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
+        "src/features/plugin-shell/usePluginHelpModal.tsx",
+        "src/index.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/clearBonsaiBrowserStorage.ts"
+      ],
+      "importedBy": []
+    },
     "src/index.test.tsx": {
       "imports": [
         "src/index.tsx",
@@ -4476,6 +4492,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/index.helpChip.test.tsx",
         "src/index.test.tsx"
       ]
     },
@@ -4896,6 +4913,7 @@
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useReplyFeedbackChips.test.ts",
+        "src/index.helpChip.test.tsx",
         "src/index.test.tsx",
         "src/test-harness/fakeDeckyRpc.test.ts",
         "src/test-harness/setup.ts",
@@ -4979,6 +4997,7 @@
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
+        "src/index.helpChip.test.tsx",
         "src/test-harness/setup.ts",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.revealChips.test.tsx",
@@ -5609,6 +5628,7 @@
         "src/hooks/useSuggestedPromptChips.ts",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
+        "src/index.helpChip.test.tsx",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts",
         "src/types/askOrchestration.ts",
@@ -5900,6 +5920,7 @@
       "imports": [],
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/index.helpChip.test.tsx",
         "src/utils/clearBonsaiBrowserStorage.test.ts"
       ]
     },

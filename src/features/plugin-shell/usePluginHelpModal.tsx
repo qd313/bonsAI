@@ -23,7 +23,7 @@ import { showModal } from "@decky/ui";
 
 import { PluginHelpModal } from "../../components/PluginHelpModal";
 import { markPluginHelpDismissedPersist, pluginHelpDismissedFromStorage } from "./pluginStorage";
-import { peekBonsaiSessionPendingRestore } from "../../utils/bonsaiSessionSurvival";
+import { patchPendingSessionSurvival, peekBonsaiSessionPendingRestore } from "../../utils/bonsaiSessionSurvival";
 
 /**
  * Survives Decky remounting `Content` while `showModal` is open — the same lifecycle problem
@@ -88,6 +88,12 @@ export function usePluginHelpModal({
 
   const openPluginHelpModal = useCallback(() => {
     captureSessionBeforeModal();
+    /*
+     * The note just taken was built from on-screen state, which still says "not seen yet". The
+     * fresh panel Decky builds when the popup closes trusts that note over the storage flag, so
+     * without this the help chip came back after Cancel / "Got it" and kept the whole chip row.
+     */
+    patchPendingSessionSurvival({ pluginHelpDismissed: true });
     markPluginHelpDismissedPersist();
     moduleDismissed = true;
     setPluginHelpDismissed(true);

@@ -132,9 +132,12 @@ export function patchPendingSessionSettingsSnapshot(
   }
 }
 
-/** Patch top-level session fields (e.g. post-modal return tab) before Decky remount restore. */
+/**
+ * Patch top-level session fields before Decky remount restore: the post-modal return tab, and the
+ * help-chip "already seen" flag (the help popup marks it seen right after the note is taken).
+ */
 export function patchPendingSessionSurvival(
-  patch: Partial<Pick<BonsaiSessionSurvivalSnapshot, "currentTab">>
+  patch: Partial<Pick<BonsaiSessionSurvivalSnapshot, "currentTab" | "pluginHelpDismissed">>
 ): void {
   const pending = survival.peekPending();
   if (!pending) return;

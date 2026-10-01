@@ -187,6 +187,7 @@
     "src/hooks/useSuggestedPromptChips.test.ts",
     "src/hooks/useThinkingNoticeGate.test.tsx",
     "src/hooks/useTitleOverflow.test.ts",
+    "src/index.helpChip.test.tsx",
     "src/index.test.tsx",
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/presetChipFocusRing.test.ts",

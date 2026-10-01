@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 647,
-  "edgeCount": 1801,
+  "edgeCount": 1802,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1881,6 +1881,7 @@
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -3341,6 +3342,7 @@
     },
     "src/features/voice/useVoiceAskWithReadAloud.test.tsx": {
       "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useReadAloud.ts",

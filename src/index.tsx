@@ -799,7 +799,7 @@ const Content: React.FC = () => {
     clearAskCameFromMicRef,
     voiceReplyMode,
     strategySpoilerMaskingEnabled,
-    lastRequestId,
+    settingsLoaded,
     onAskOllama,
   });
 

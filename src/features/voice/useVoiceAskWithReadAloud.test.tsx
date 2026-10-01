@@ -26,6 +26,7 @@ import {
 import { getRpcCallLog, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { idleBackgroundStatusFixture } from "../../test-harness/rpcFixtures";
 import type { BackgroundRequestStatus } from "../../types/backgroundAsk";
+import type { VoiceReplyMode } from "../../data/bonsaiSettingsSchema";
 
 const SPOKEN = "how do i beat the boss";
 
@@ -47,17 +48,17 @@ function scriptStatusPolls(requestId: number, finishAfter: number): void {
 
 /**
  * The Ask screen's own wiring, reduced: Ask starts the poll loop; the poll hands every status to a
- * function that, on a finished answer, puts the request number into state (what the real Ask hook
- * does with `setLastRequestId`); the voice hook wraps Ask.
+ * function (here a no-op); the voice hook wraps Ask.
  */
-function useHarness(options: { backgroundWatcher: boolean }) {
+function useHarness(options: {
+  backgroundWatcher: boolean;
+  settingsLoaded?: boolean;
+  voiceReplyMode?: VoiceReplyMode;
+}) {
   const [unifiedInput, setUnifiedInput] = useState("");
-  const [lastRequestId, setLastRequestId] = useState<number | null>(null);
   const clearAskCameFromMicRef = useRef<() => void>(() => {});
   const applyStatus = useCallback((status: BackgroundRequestStatus) => {
-    if (status.status === "completed" || status.status === "failed") {
-      setLastRequestId(typeof status.request_id === "number" ? status.request_id : null);
-    }
+    void status;
   }, []);
   const poll = useBackgroundGameAi(applyStatus, () => {});
   const onAskOllama = useCallback(async () => {
@@ -75,9 +76,9 @@ function useHarness(options: { backgroundWatcher: boolean }) {
     isAsking: false,
     uiT: (key: string) => key,
     clearAskCameFromMicRef,
-    voiceReplyMode: "voice_only",
+    settingsLoaded: options.settingsLoaded ?? true,
+    voiceReplyMode: options.voiceReplyMode ?? "voice_only",
     strategySpoilerMaskingEnabled: true,
-    lastRequestId,
     onAskOllama: onAskOllama as never,
   });
   return { voice, setUnifiedInput, unifiedInput };
@@ -177,5 +178,41 @@ describe("a finished answer reads itself aloud on 'When I asked by voice'", () =
     });
 
     expect(readAloudStarts()).toBe(1);
+  });
+
+  it("keeps the saved read-aloud setting while the saved settings are still loading", async () => {
+    // An earlier open of the panel left the real setting in the module's copy.
+    setReadAloudCompletionContext("voice_only", true);
+    scriptStatusPolls(12, 1);
+    // A fresh open: the screen still holds the starting values (Voice replies Off) because the
+    // saved settings have not arrived. The background watcher sees the answer finish right now.
+    const { result } = renderHook(() =>
+      useHarness({ backgroundWatcher: true, settingsLoaded: false, voiceReplyMode: "off" }),
+    );
+    await speakAQuestion(result);
+    await act(async () => {
+      void result.current.voice.onAskOllamaWithReadAloud();
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+
+    expect(readAloudStarts()).toBe(1);
+  });
+
+  it("applies the saved setting once it has loaded, including a saved Off", async () => {
+    setReadAloudCompletionContext("voice_only", true);
+    scriptStatusPolls(13, 1);
+    const { result, rerender } = renderHook(
+      (p: { loaded: boolean }) =>
+        useHarness({ backgroundWatcher: true, settingsLoaded: p.loaded, voiceReplyMode: "off" }),
+      { initialProps: { loaded: false } },
+    );
+    rerender({ loaded: true });
+    await speakAQuestion(result);
+    await act(async () => {
+      void result.current.voice.onAskOllamaWithReadAloud();
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+
+    expect(readAloudStarts()).toBe(0);
   });
 });

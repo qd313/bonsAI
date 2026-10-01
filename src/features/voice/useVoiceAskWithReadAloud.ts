@@ -35,8 +35,8 @@ export type UseVoiceAskWithReadAloudArgs = {
   clearAskCameFromMicRef: React.MutableRefObject<() => void>;
   voiceReplyMode: VoiceReplyMode;
   strategySpoilerMaskingEnabled: boolean;
-  /** No longer read: the note is written when Ask is pressed. Kept so index.tsx need not change. */
-  lastRequestId?: AskOrchestration["lastRequestId"];
+  /** False until this open's saved settings have loaded; until then the two settings above are only starting values. */
+  settingsLoaded: boolean;
   onAskOllama: AskOrchestration["onAskOllama"];
 };
 
@@ -68,6 +68,7 @@ export function useVoiceAskWithReadAloud({
   clearAskCameFromMicRef,
   voiceReplyMode,
   strategySpoilerMaskingEnabled,
+  settingsLoaded,
   onAskOllama,
 }: UseVoiceAskWithReadAloudArgs): VoiceAskWithReadAloud {
   const {
@@ -94,8 +95,12 @@ export function useVoiceAskWithReadAloud({
      module-level loop for when the Main tab is not mounted) in sync with the live setting — see
      useReadAloud.ts, which mirrors bonsaiReplySurface.ts's pattern for exactly this reason. */
   useEffect(() => {
+    /* A fresh open starts from the default settings (Voice replies Off) until the saved ones load.
+       Copying those into the mirror would wipe the real setting an earlier open left there, and an
+       answer the background watcher sees finish in that gap would go unread, never retried. */
+    if (!settingsLoaded) return;
     setReadAloudCompletionContext(voiceReplyMode, strategySpoilerMaskingEnabled);
-  }, [voiceReplyMode, strategySpoilerMaskingEnabled]);
+  }, [settingsLoaded, voiceReplyMode, strategySpoilerMaskingEnabled]);
 
   /*
    * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and handed straight to

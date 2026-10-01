@@ -321,7 +321,7 @@ roadmap: proven fixes are in Done, and anything still owed is in Verify with the
 - **Rarely, Down still takes one scroll-only press** before a short last section.
 - **Not runnable by the rig:**
   - The parental-lock half of the Ollama-tab fix needs Steam's Family View PIN.
-  - Clearing the 6.6 GB of partial downloads needs Ollama restarted, and it was started by hand.
+  - Clearing the 6.6 GB of partial downloads needs Ollama restarted. A system unit (`bonsai-ollama-autostart.service`) runs it, and restarting it needs sudo, so the restart is the maintainer's.
 
 **The end-of-session clean-up.** The project's wider quick check (`scripts/verify.py --quick`) had gone red during
 the night, on five things the per-landing checks never ran: missing "how it works" notes at the top of three files,
@@ -465,7 +465,7 @@ errors in the log.
   library's checksum check, the free-play sweep with and without a game, and the walk (every landing on screen, Up and
   Down the same stops, Up into a tall section shows its bottom; one extra scroll-only press remains on a short last
   section). The chores: one chat slot freed (the oldest chat, its title in the evidence), a second small model pulled
-  and removed; Ollama could not be restarted (it was started by hand, not as a service), so the 6.6 GB stays.
+  and removed; Ollama could not be restarted (a system unit runs it, and restarting it needs sudo), so the 6.6 GB stays.
   Failed or new: the https Test connection still probes (helper C round 2); the "Run AI on this Deck" switch can show
   ON without saving (helper C round 2); a "spoilers are okay" answer drew a cover while arriving (helper K `ac6f0b11477976ee2`);
   a Spy block with a broken closing tag shows raw (helper K); when the length limit cuts a choice menu, the next part

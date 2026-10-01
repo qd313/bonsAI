@@ -83,21 +83,17 @@ starts work outside this.
   In 12 of 24 reopens the ring was absent 1 second after the reopen while the page's own focus was already on an element; the first D-pad press brought ring and focus back together every time. Last night's 6 reopens all had the ring on the Main tab. Small; a press of A in that first second may do nothing. Evidence `docs/test-evidence/plan77-P77-TRAP-LONG.json`.
   **2026-09-30 (plan 77 block 3, row P77-RING-REOPEN-DIAG):** with the game launched and NO plugin reload (the normal way a player gets there) the ring was absent on 6 of 6 reopens; after a plugin reload it was present 6 of 6; the page had the focus both times. So it is the normal path, not a test artefact. Not chased further before the release. Evidence `docs/test-evidence/plan77-P77-RING-REOPEN-DIAG.json`.
 - ★ `[focus]` **Down takes an extra press that only scrolls before reaching a section below the dock** — **PARTIAL, two of three extra presses fixed 2026-09-30 (plan 77 helper E round 2, `fb3cfb2d`, `05b59434`). Was OPEN, found 2026-09-29 (plan 77, Deck block 2).**
-  On a Soul Sanctum answer with no game running, 3 extra Down presses (one per section) only scrolled the panel by 80 px and left the ring on the same box, whose top then sat 8 to 20 px under the header. Being fixed (plan 77, helper E round 2). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
+  On a Soul Sanctum answer with no game running, 3 extra Down presses (one per section) only scrolled the panel by 80 px and left the ring on the same box, whose top then sat 8 to 20 px under the header. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
   Down (and Up, mirrored) now lands on the next section in one press when the one it leaves is fully read.
   **2026-09-30 (plan 77 block 3, build `ec557922`):** two of the three extra presses are gone; one remains, on a short last section (60 px) before the non-answer rows. Down landed on it twice, the second press only scrolling by 80 px. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`.
   **2026-09-30 (final smoke, build `2f72d658`):** seen again on a 90 px second section; every landing was inside the band and Up
   mirrored Down otherwise. After the release. Evidence `docs/test-evidence/plan77-P77-FINAL-SMOKE.json`.
-- ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **OPEN, small note, found 2026-09-28
-  (plan 76).** The Deck helper removed the model over SSH with `ollama rm`, so the plugin never knew. The plugin's own "Remove from
-  Deck" already cleans the saved orders (`tests/test_delete_model_cleans_routing_orders.py`); row **P76-NOMIC-REMOVE-HINT** (passed 2026-09-29) checked
-  that path. Evidence `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`.
 - ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
   The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
   the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
   **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
-  **2026-09-30 (plan 77 block 3, row P77-OLLAMA-TIDY):** could not run. Ollama on the Deck is started by hand, not as a service, so restarting it means killing it; left for the maintainer. Evidence `docs/test-evidence/plan77-P77-OLLAMA-TIDY.json`.
+  **2026-09-30 (plan 77 block 3, row P77-OLLAMA-TIDY):** could not run. A system-level unit (`bonsai-ollama-autostart.service`) runs Ollama on the Deck, and restarting it needs sudo, so it was not restarted. The restart is the maintainer's to do, because it needs their password. Evidence `docs/test-evidence/plan77-P77-OLLAMA-TIDY.json`.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
@@ -107,11 +103,10 @@ starts work outside this.
   **Sighting 2026-09-29 (plan 77, block 1a):** after a reload the game was behind Steam's home page; one A on Resume brought it back.
 - ★ `[ui]` **A setting changed less than half a second before the panel closes can be lost** — **OPEN, found 2026-09-30 by plan 77 helper C, in the code only.**
   Settings save after a 400 ms wait, so a panel close inside that time throws the change away. Only the "Run AI on this Deck" switch is covered now (it saves at once). A general fix is after the release. Evidence `docs/test-evidence/plan77-P77-RUN-AI-SAVES.json` (the switch's own check).
-- ★★ `[reply]` **A story game named while a no-story game runs lost its spoiler covers** — **PARTIAL, OPEN. The landed change (helper J, `332be619`) does its part. Was OPEN, seen once 2026-09-29 (plan 77, Deck block 2); needs a check.**
-  "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please" with Deep Rock Galactic: Survivor running came back with 0 covers, where with no game running it gets covers. Being looked at (plan 77). Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+- ★★ `[reply]` **A story game named while a no-story game runs lost its spoiler covers** — **PARTIAL, OPEN. The landed change (helper J, `332be619`) does its part; the rest is owed (plan 78 helper A). Was OPEN, seen once 2026-09-29 (plan 77, Deck block 2).**
+  "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please" with Deep Rock Galactic: Survivor running came back with 0 covers, where with no game running it gets covers. Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
   Cause: the running game's spoiler rules decided the whole turn; Deep Rock Galactic: Survivor is a no-story game, so a Hollow Knight boss answer was told to use no covers and the screen opened any it drew. Now, when a no-story game runs and the question names a story game from the protected list, the turn is judged as that story game (it only adds caution; "spoilers are okay" still opens everything). Limit: the game's name must appear whole in the question.
-  **2026-09-30 (plan 77 block 3, build `ec557922`, row P77-SPOILER-OTHER-GAME):** FAILED on the Deck: three Hollow Knight questions with Deep Rock Galactic: Survivor running each came back with 0 covers; the control question stayed plain. No spoiler-profile log line appeared, so the other game's profile does not seem to be picked up. Back to fixing (helper J round 2). Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`.
-  **2026-09-30 (plan 77 helper J round 2):** the landed change judges the turn as the story game, but that is not enough: the covers come from the notes, and the locked rule D19 makes the running game pick the notes, so a Hollow Knight question with Deep Rock running gets Deep Rock notes and no boss names to hide. Row P77-SPOILER-OTHER-GAME stays FAILED. **Needs the maintainer's call (plan 77 questions, item 3):** an exception to D19 for a no-story game running and a protected story game named. A proposed known-issue line is in plan 72 § 8.
+  **2026-09-30 (the maintainer's call, D121 item 1):** option (a) chosen. When a no-story game runs and the question names a game on the protected story list, the named game picks the notes for that one question; a bare follow-up that names no game goes back to the running game's notes. The fix is owed (plan 78 helper A); row **P77-SPOILER-OTHER-GAME** (FAILED on the Deck 2026-09-30) is the check. Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`. Older notes: [roadmap-details.md](roadmap-details.md#a-story-game-named-while-a-no-story-game-runs-lost-its-spoiler-covers).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -136,7 +131,7 @@ starts work outside this.
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
   **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
   **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
-  `docs/test-evidence/plan72-F6-SUMUP.json`. A fix is being built.
+  `docs/test-evidence/plan72-F6-SUMUP.json`.
   **2026-09-27 (plan 72, `01127c79`, `5dbb9bff`):** two more tries FAILED the same way, `docs/test-evidence/plan72-F7-SUMUP.json`,
   `plan72-F8-SUMUP.json`: Steam keeps the ring on the greyed "Sum up again". **The maintainer's call: leave it as is for 0.6.0** —
   the card shows itself and one Down reaches it; named in the release notes (plan 72 § 8). After the release: finish the
@@ -383,6 +378,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **VERIFY, fixed for all buttons 2026-09-29 (plan 77, `11033561`, tip `7c8ac206`).** Earlier fixed (`6ef8cedf`) for the library's Update and
   "Pull nomic-embed-text" buttons; now also "Update AI & models" and the Tier 1 and Tier 2 install buttons. Deck check owed: row **P77-OLLAMA-NOBOX-NOTE**.
   **2026-09-29 (plan 77 block 2, row P77-OLLAMA-NOBOX-NOTE):** the box half PASSED: the Update, Tier 1 and Tier 2 boxes open on "Not now" and B returns the ring. The parental-lock half **still owed**: it needs Steam Family View with a PIN, so it is on the maintainer's checks page; the no-box half rests on unit tests. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+- ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **VERIFY, fixed 2026-09-30 (plan 78 helper E, `c1b4cdc8`). Was OPEN, found 2026-09-28 (plan 76).**
+  After you remove a model in a terminal (`ollama rm`), opening the AI models list now drops it from the saved try order; nothing changes when Ollama is off or cannot be reached.
+  Limits: it covers the Deck's own Ollama only (with the AI on a PC, the order is left alone); removing the very last model outside the plugin leaves the order alone, because an empty list cannot be told apart from an Ollama that did not answer.
+  The plugin's own "Remove from Deck" already cleaned the saved orders (row **P76-NOMIC-REMOVE-HINT**, passed 2026-09-29). Unit tests: `tests/test_models_look_prunes_saved_try_orders.py` (8 tests).
+  Deck check owed: row **P78-ORDER-PRUNE**. Evidence for the finding `docs/test-evidence/plan76-PULL-TRY-ORDER-01.json`; no Deck run of the fix yet.
 - ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **VERIFY, fixed 2026-09-29 (plan 77 helper A, `0d805d37`). Was OPEN, found 2026-09-28
   by reading the code (plan 76 lane 1), not seen on the Deck.** For example "The```bonsai-spoiler …" on one line. Copy and Read
   aloud still hide it.
@@ -406,7 +406,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
   stay clearly visible, not just calmer.
 - ★★ `[reply]` **When the length limit cuts a choice menu, the next part of the answer is lost** — **VERIFY, fixed 2026-09-30 (plan 77 helper L, `4d750ae1`). Was OPEN, found 2026-09-30 (plan 77).**
-  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Being looked at (helper L). Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
   A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
   **2026-09-30 (plan 77 block 4, build `7d84ee3b`, row P77-CUT-MENU-TEXT), UNCLEAR:** at a 300-token limit both long questions were cut twice and continued; no fence text or JSON in 248 reads; the screen and the saved chat agree letter for letter. But the model never reached its choice menu before the wall, so the exact case was not produced. Unit tests are the proof so far. Evidence `docs/test-evidence/plan77-P77-CUT-MENU-TEXT.json`.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed

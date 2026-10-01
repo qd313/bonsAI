@@ -416,6 +416,13 @@ To be filled in.
 - **The model:** a chat cannot change its own model, so this session runs on Fable until the maintainer picks Opus
   high in the model menu. The session keeps its own part small meanwhile.
 
+- **First sweep (2026-09-30, late evening):** the try-order fix landed (`c1b4cdc8`, every check green, including the wider
+  quick check). The long-answers fix is ready (`9913dfa3` on its helper's branch) and is held until the Deck's "before" frame
+  rate has been measured on a build without it. The chip pace preview page was published for the maintainer
+  (https://claude.ai/artifact/FtzUKajYgiLJJqPbFJPyk3) and their pick of a pace is awaited. Two helpers briefly swapped
+  uncommitted work through a shared `git stash`; nothing was lost, and the rule "never git stash" is now in every helper's
+  standing instructions (`f4159cf0`).
+
 ## For the helpers: who owns which files
 
 A starting point for the briefs. Each brief names the tip it starts from and its exact files, the base check, one fix

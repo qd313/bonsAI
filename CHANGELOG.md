@@ -4,6 +4,10 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 78 (2026-09-30)
+
+- **A model you remove outside the plugin (with `ollama rm`) now leaves the saved try order** the next time the AI models list opens. Nothing changes when Ollama is off or cannot be reached, or when the AI runs on a PC. Owes its Deck check.
+
 ### Plan 77 (2026-09-29)
 
 - **After "spoilers are okay", the answer stays uncovered** when it finishes and when you reopen it, instead of a cover coming back a moment later. Owes its Deck check.

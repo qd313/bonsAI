@@ -2760,3 +2760,11 @@ Old behaviour, visible now that the "No tip for this" line is gone.
 with an Ollama processor tip whose wording is garbled on screen; the Remove confirm box closed the Quick
 Access panel; the model sometimes refuses long questions, especially ones with the word "manual". The
 "Enable local knowledge base" chip and the follow-up-choices sighting (flow L7) are still open.
+
+## A story game named while a no-story game runs lost its spoiler covers
+
+Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 1, plan 78). Nothing was removed; the one change is that the call the second note says was awaited is now marked as answered.
+
+**2026-09-30 (plan 77 block 3, build `ec557922`, row P77-SPOILER-OTHER-GAME):** FAILED on the Deck: three Hollow Knight questions with Deep Rock Galactic: Survivor running each came back with 0 covers; the control question stayed plain. No spoiler-profile log line appeared, so the other game's profile does not seem to be picked up. Back to fixing (helper J round 2). Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`.
+
+**2026-09-30 (plan 77 helper J round 2):** the landed change judges the turn as the story game, but that is not enough: the covers come from the notes, and the locked rule D19 makes the running game pick the notes, so a Hollow Knight question with Deep Rock running gets Deep Rock notes and no boss names to hide. Row P77-SPOILER-OTHER-GAME stays FAILED. **The maintainer answered on 2026-09-30 (D121 item 1, option (a)):** an exception to D19 for a no-story game running and a protected story game named. A proposed known-issue line is in plan 72 § 8.

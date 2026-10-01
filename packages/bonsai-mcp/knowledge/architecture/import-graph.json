@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 650,
-  "edgeCount": 1811,
+  "fileCount": 652,
+  "edgeCount": 1826,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1893,6 +1893,8 @@
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
+        "src/hooks/usePullModelOpenBookkeeping.test.tsx",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useStrategyChecklistSession.ts",
@@ -2125,6 +2127,7 @@
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelDownloadNotice.test.tsx",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2503,6 +2506,7 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts",
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": []
@@ -3855,6 +3859,7 @@
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/hooks/usePluginSettings.test.ts",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
@@ -3927,25 +3932,51 @@
         "src/components/PullModelsModal.tsx"
       ]
     },
+    "src/hooks/usePullModelOpenBookkeeping.test.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/usePullModelOpenBookkeeping.ts": {
       "imports": [
         "src/components/PullModelsModal.types.ts",
         "src/data/storageKeys.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelNewBadge.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelOpenBookkeeping.test.tsx"
       ]
+    },
+    "src/hooks/usePullModelPinForAsk.test.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/hooks/usePluginSettings.ts",
+        "src/hooks/usePullModelPinForAsk.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
     },
     "src/hooks/usePullModelPinForAsk.tsx": {
       "imports": [
         "src/components/PullModelsModal.types.ts",
         "src/data/pullModelCatalog.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelPinForAsk.test.tsx"
       ]
     },
     "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx": {
@@ -4857,6 +4888,8 @@
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/usePluginSettings.test.ts",
+        "src/hooks/usePullModelOpenBookkeeping.test.tsx",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useReplyFeedbackChips.test.ts",
@@ -4967,11 +5000,14 @@
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
+        "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
+        "src/hooks/usePullModelOpenBookkeeping.test.tsx",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/hooks/useReadAloud.test.ts",
         "src/index.test.tsx",
         "src/test-harness/fakeDeckyRpc.ts"
@@ -5545,6 +5581,10 @@
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/usePluginSettings.ts",
+        "src/hooks/usePullModelOpenBookkeeping.test.tsx",
+        "src/hooks/usePullModelOpenBookkeeping.ts",
+        "src/hooks/usePullModelPinForAsk.test.tsx",
+        "src/hooks/usePullModelPinForAsk.tsx",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",

@@ -22,6 +22,7 @@
 import { useCallback, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
 import type { PullModelEntry } from "../data/pullModelCatalog";
+import { patchPendingSessionSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import type { PullModelsRoutingOrderSettings } from "../components/PullModelsModal.types";
 
@@ -71,6 +72,17 @@ export function usePullModelPinForAsk(a: UsePullModelPinForAskArgs): PullModelPi
           [patch],
           DECKY_RPC_TIMEOUT_MS
         );
+        /*
+         * This save goes straight to disk, so the plugin's own screen never hears of it. The note
+         * taken before this screen opened still holds the OLD order, and Decky rebuilds the plugin
+         * from that note when this screen closes, so the new order would not show (and the "edit
+         * order" popup would start from the old list) until some later save. The other popups
+         * patch the note after their save (useRoutingOrderModal.ts); this one was missed.
+         */
+        patchPendingSessionSettingsSnapshot({
+          textModelRoutingOrder: patch.text_model_routing_order,
+          ...(patch.vision_model_routing_order ? { visionModelRoutingOrder: patch.vision_model_routing_order } : {}),
+        });
         setPinnedAskTag(tag);
         toaster.toast({ title: "Now used for Ask", body: tag, duration: 3000 });
       } catch (e) {

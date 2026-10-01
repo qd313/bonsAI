@@ -20,6 +20,7 @@
  */
 import { useEffect, type Dispatch, type SetStateAction } from "react";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
+import { patchPendingSessionSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { computeUpdatedPullRecord, type PullModelPullRecord } from "../utils/pullModelNewBadge";
 import type { PullModelsRoutingOrderSettings } from "../components/PullModelsModal.types";
@@ -48,7 +49,22 @@ export function usePullModelOpenBookkeeping(a: UsePullModelOpenBookkeepingArgs):
         );
         const order = Array.isArray(settings.text_model_routing_order) ? settings.text_model_routing_order : [];
         const head = typeof order[0] === "string" ? order[0].trim() : "";
-        if (!cancelled) setPinnedAskTag(head || null);
+        if (cancelled) return;
+        setPinnedAskTag(head || null);
+        /*
+         * The back end changes the try orders on its own (a finished download joins them, a model
+         * removed outside the plugin is dropped). The note taken before this screen opened would
+         * bring the older orders back when Decky rebuilds the plugin on close, so what disk holds
+         * now goes into that note. Nothing here saves; an order the person has not changed stays
+         * whatever disk says.
+         */
+        const visionOrder = Array.isArray(settings.vision_model_routing_order)
+          ? settings.vision_model_routing_order
+          : [];
+        patchPendingSessionSettingsSnapshot({
+          textModelRoutingOrder: order,
+          visionModelRoutingOrder: visionOrder,
+        });
       } catch {
         /* best-effort */
       }

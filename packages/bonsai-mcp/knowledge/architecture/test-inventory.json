@@ -170,6 +170,8 @@
     "src/hooks/usePluginSettings.test.ts",
     "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
     "src/hooks/usePullModelDownloadNotice.test.tsx",
+    "src/hooks/usePullModelOpenBookkeeping.test.tsx",
+    "src/hooks/usePullModelPinForAsk.test.tsx",
     "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
     "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
     "src/hooks/usePullModelTier2Wording.test.tsx",

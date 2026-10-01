@@ -17,7 +17,7 @@
  * happens on the computer running the AI when a question is asked, using
  * whatever order was saved here.
  */
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { toaster } from "@decky/api";
 import { showModal } from "@decky/ui";
 import React from "react";
@@ -34,6 +34,23 @@ import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall
 const CONNECTION_TEST_TIMEOUT_SECONDS = 10;
 const LOOPBACK_PROBE_EXTRA_MS = 42000;
 const REMOTE_PROBE_EXTRA_MS = 3000;
+/** The popup's fresh read of the saved order gives up after this long and uses the screen's copy. */
+const FRESH_ORDER_READ_MS = 1500;
+
+/**
+ * The saved order as disk holds it now, or null when it cannot be read in time. The screen's own
+ * copy goes stale when the models screen's "Use for Ask" or the back end changes the order, and a
+ * popup that starts from a stale list saves it back over the newer one.
+ */
+async function readSavedOrderFresh(kind: ModelRoutingOrderKind): Promise<string[] | null> {
+  try {
+    const saved = await callDeckyWithTimeout<[], BonsaiSettings>("load_settings", [], FRESH_ORDER_READ_MS);
+    const order = kind === "vision" ? saved.vision_model_routing_order : saved.text_model_routing_order;
+    return Array.isArray(order) ? order : null;
+  } catch {
+    return null;
+  }
+}
 
 export type UseRoutingOrderModalArgs = {
   ollamaLocalOnDeck: boolean;
@@ -69,7 +86,9 @@ export type UseRoutingOrderModalArgs = {
  * the OLD order over the one that was just saved.
  */
 export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
-  return useCallback(
+  /** True from the press until the popup is up, so a second press cannot open a second popup. */
+  const openingRef = useRef(false);
+  const openPicker = useCallback(
     async (kind: ModelRoutingOrderKind) => {
       const target = a.ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : a.ollamaIp.trim();
       if (!target) {
@@ -90,6 +109,9 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
       const rpcDeadlineMs =
         CONNECTION_TEST_TIMEOUT_SECONDS * 1000 +
         (loopbackLikelyProbe ? LOOPBACK_PROBE_EXTRA_MS : REMOTE_PROBE_EXTRA_MS);
+
+      // Started now so it runs alongside the connection test below and adds no waiting of its own.
+      const freshOrder = readSavedOrderFresh(kind);
 
       let installed: string[] = [];
       try {
@@ -122,7 +144,8 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
       }
 
       a.captureSessionBeforeModal();
-      const savedOrder = kind === "vision" ? a.visionModelRoutingOrder : a.textModelRoutingOrder;
+      const savedOrder =
+        (await freshOrder) ?? (kind === "vision" ? a.visionModelRoutingOrder : a.textModelRoutingOrder);
       const handle = showModal(
         React.createElement(ModelRoutingOrderModal, {
           kind,
@@ -184,5 +207,17 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
       a.buildSettingsPayload,
       a.hydrateFromSettings,
     ],
+  );
+  return useCallback(
+    async (kind: ModelRoutingOrderKind) => {
+      if (openingRef.current) return;
+      openingRef.current = true;
+      try {
+        await openPicker(kind);
+      } finally {
+        openingRef.current = false;
+      }
+    },
+    [openPicker],
   );
 }

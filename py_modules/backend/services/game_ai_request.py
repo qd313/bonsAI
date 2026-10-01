@@ -106,13 +106,7 @@ from backend.services import chat_turn_recorder
 from backend.services import kb_followup_memory
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_other_game_named import other_game_besides
-from backend.services.kb_not_in_notes_notice import (
-    append_no_close_match_notice,
-    append_not_in_notes_notice,
-    should_show_no_close_match_notice_for_turn,
-    should_show_not_in_notes_notice,
-    tip_sheet_turn_came_back_empty,
-)
+from backend.services.kb_notes_footers import append_kb_notes_footers
 from backend.services.ollama_prompts import (
     build_reply_followup_context_block,
     extract_strategy_asked_entity,
@@ -989,39 +983,11 @@ async def run_game_ai_request(
 
         # Attribution notes: footers saying the reply did not get help from the notes.
         # Appended after the safety notice above so a reply that trips more than one shows the
-        # safety warning first. (A tip-sheet line, "No tip for this", was retired by the
-        # maintainer on 2026-09-27.)
-        #
-        # "Not in my notes" stays off a turn this specific: an Expert or Strategy ask about a
-        # game whose notes are covered, where this particular question read as troubleshooting
-        # and got routed to the tip sheet instead (kb_domain == "compat"), and nothing there
-        # matched either. The line would be true but misleading -- the search never looked in
-        # the notes this turn. Nor on a turn whose note or tip was found but cut for room
-        # (kb_notes, plan 74 lane 5): the notes did not come up empty there.
+        # safety warning first. Which footer fires, and why, is decided in kb_notes_footers.py
+        # (moved out of this file, plan 78, growth-limit fix).
         if ollama_result.get("success"):
-            tip_sheet_came_back_empty = tip_sheet_turn_came_back_empty(
-                kb_attached=bool(kb_transparency.get("kb_attached")),
-                kb_domain=str(kb_transparency.get("kb_domain") or ""),
-                kb_unavailable_reason=str(kb_transparency.get("kb_unavailable_reason") or ""),
-                kb_notes=str(kb_transparency.get("kb_notes") or ""),
-            )
-            show_not_in_notes = should_show_not_in_notes_notice(
-                ask_mode=ask_mode,
-                kb_attached=bool(kb_transparency.get("kb_attached")),
-                kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
-                kb_notes=str(kb_transparency.get("kb_notes") or ""),
-            ) and not tip_sheet_came_back_empty
-            # The second line (D88). It fires on the case the first cannot reach: a note DID
-            # come back, and it was a stretch. No tie-break is needed or written -- "Not in my
-            # notes" requires nothing to have attached and this requires something to have, so
-            # the two are mutually exclusive by construction.
-            #
-            # Plan 70 helper B, bug 1: `kb_attached_notes` (built above by
-            # `_parse_kb_attached_notes`) carries each note's own card text alongside its title,
-            # so a question that describes a note instead of naming it still counts as a real
-            # match -- see should_show_no_close_match_notice_for_turn's own doc for the rest of
-            # this (moved out of this file, plan 70, growth-limit fix).
-            show_no_close_match = should_show_no_close_match_notice_for_turn(
+            response_text = append_kb_notes_footers(
+                response_text,
                 ask_mode=ask_mode,
                 kb_transparency=kb_transparency,
                 kb_coverage_transparency=kb_coverage_transparency,
@@ -1029,8 +995,6 @@ async def run_game_ai_request(
                 question_for_kb_search=question_for_kb_search,
                 kb_attached_notes=kb_attached_notes,
             )
-            response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
-            response_text = append_no_close_match_notice(response_text, show_no_close_match)
 
             # D112 #7, the spoiler safety net. Run last, after the honesty footers above, so a
             # footer line is covered the same way ordinary prose is on the rare turn one happens

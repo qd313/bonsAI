@@ -152,6 +152,7 @@
     "src/features/stream-scramble/streamScrambleMath.test.ts",
     "src/features/unified-input/useUnifiedInputSurface.test.ts",
     "src/features/voice/useVoiceAskInput.test.ts",
+    "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
     "src/hooks/setupAndPullBoxWording.test.tsx",
     "src/hooks/useAskBarInitialRingClaim.test.ts",
     "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",

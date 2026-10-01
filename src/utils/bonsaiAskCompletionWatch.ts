@@ -31,7 +31,7 @@ import {
   BACKGROUND_STREAM_POLL_MS,
 } from "../hooks/useBackgroundGameAi";
 import { handleAskPollErrorForToast, handleAskTerminalForToast } from "./bonsaiReplyReadyToast";
-import { handleAskTerminalForReadAloud } from "../hooks/useReadAloud";
+import { handleAskPendingForReadAloud, handleAskTerminalForReadAloud } from "../hooks/useReadAloud";
 
 let watchSeq = 0;
 let pollTimer: number | null = null;
@@ -69,6 +69,7 @@ async function pollOnce(seq: number): Promise<void> {
     }
 
     if (status.status === "pending") {
+      handleAskPendingForReadAloud(status);
       const delayMs = status.streaming ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
       pollTimer = window.setTimeout(() => {
         void pollOnce(seq);

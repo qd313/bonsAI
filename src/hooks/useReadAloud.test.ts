@@ -3,7 +3,9 @@ import { toaster } from "@decky/api";
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  handleAskPendingForReadAloud,
   handleAskTerminalForReadAloud,
+  noteAskPressed,
   questionCameFromMic,
   rememberAskCameFromMic,
   resetReadAloudCompletionState,
@@ -380,5 +382,29 @@ describe("handleAskTerminalForReadAloud", () => {
     await Promise.resolve();
     const calls = getRpcCallLog().filter((c) => c.method === "start_voice_read_aloud");
     expect(calls.length).toBe(1);
+  });
+
+  it("reads a spoken question noted at the Ask press even when no pending poll was seen first", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("voice_only", true);
+    noteAskPressed(true);
+    handleAskTerminalForReadAloud(completedStatus({ request_id: 60 }));
+    await Promise.resolve();
+    expect(getRpcCallLog().some((c) => c.method === "start_voice_read_aloud")).toBe(true);
+  });
+
+  it("a press is tied to the request of the first pending poll, so a later request does not inherit it", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("voice_only", true);
+    noteAskPressed(true);
+    handleAskPendingForReadAloud({ ...completedStatus({ request_id: 61 }), status: "pending" });
+    handleAskTerminalForReadAloud(completedStatus({ request_id: 61 }));
+    await Promise.resolve();
+    const before = getRpcCallLog().filter((c) => c.method === "start_voice_read_aloud").length;
+    expect(before).toBe(1);
+    // A request that did not come from the Ask bar (a retry, a branch pick) counts as typed.
+    handleAskTerminalForReadAloud(completedStatus({ request_id: 62 }));
+    await Promise.resolve();
+    expect(getRpcCallLog().filter((c) => c.method === "start_voice_read_aloud").length).toBe(1);
   });
 });

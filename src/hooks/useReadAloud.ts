@@ -259,6 +259,35 @@ export function rememberAskCameFromMic(requestId: number, cameFromMic: boolean):
   askCameFromMicByRequestId.set(requestId, cameFromMic);
 }
 
+/**
+ * The newest Ask press that has not yet been tied to a request number: `true` when it came from the
+ * mic, `false` when typed, `null` when there is none waiting. The backend's start call has not told
+ * the screen its request number by the time the finished answer is handled, and the screen only
+ * learns it from the finished status itself, so a note written after that moment (an effect that
+ * runs once the screen redraws) is read too late. This one is written the instant Ask is pressed
+ * and tied to a request number from the first status that carries one (the pending polls do), or at
+ * the latest from the finished status itself, before the decision reads it.
+ */
+let unclaimedAskPress: boolean | null = null;
+
+/** Called the instant Ask is pressed, by the one wrapper every Ask-bar press goes through. */
+export function noteAskPressed(cameFromMic: boolean): void {
+  unclaimedAskPress = cameFromMic;
+}
+
+function claimAskPressForRequest(requestId: number | null | undefined): void {
+  if (typeof requestId !== "number" || unclaimedAskPress === null) return;
+  if (!askCameFromMicByRequestId.has(requestId)) {
+    askCameFromMicByRequestId.set(requestId, unclaimedAskPress);
+  }
+  unclaimedAskPress = null;
+}
+
+/** Called for each status poll that still says "pending": ties the waiting Ask press to its request. */
+export function handleAskPendingForReadAloud(status: BackgroundRequestStatus): void {
+  claimAskPressForRequest(status.request_id);
+}
+
 function takeAskCameFromMic(requestId: number | null): boolean {
   if (requestId == null) return false;
   const value = askCameFromMicByRequestId.get(requestId) ?? false;
@@ -318,6 +347,10 @@ export function handleAskTerminalForReadAloud(status: BackgroundRequestStatus): 
     readAloudHandledRequestIds.add(requestId);
   }
 
+  claimAskPressForRequest(requestId);
+  /* Whatever press was still waiting belongs to this finished request or to nothing: drop it so it
+     cannot be claimed by a later request that did not come from the Ask bar (a retry, a branch pick). */
+  unclaimedAskPress = null;
   const cameFromMic = takeAskCameFromMic(requestId);
   const readableText = buildAnswerReadableText({
     body: status.response || "",
@@ -361,4 +394,5 @@ export function resetReadAloudCompletionState(): void {
   currentSpoilerMaskingEnabled = true;
   askCameFromMicByRequestId.clear();
   readAloudHandledRequestIds.clear();
+  unclaimedAskPress = null;
 }

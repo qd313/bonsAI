@@ -13,11 +13,11 @@
  * as one feature's state plus its effects.
  *
  * Does not: Decide whether a finished reply is read aloud — `useReadAloud.ts` does that, from
- * the `rememberAskCameFromMic` call this hook makes on every request id.
+ * the `noteAskPressed` call this hook makes the moment Ask is pressed.
  */
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 
-import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "../../hooks/useReadAloud";
+import { noteAskPressed, questionCameFromMic, setReadAloudCompletionContext } from "../../hooks/useReadAloud";
 import { useVoiceAskInput } from "./useVoiceAskInput";
 import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
 import type { useReplyLanguage } from "../../hooks/useReplyLanguage";
@@ -35,7 +35,8 @@ export type UseVoiceAskWithReadAloudArgs = {
   clearAskCameFromMicRef: React.MutableRefObject<() => void>;
   voiceReplyMode: VoiceReplyMode;
   strategySpoilerMaskingEnabled: boolean;
-  lastRequestId: AskOrchestration["lastRequestId"];
+  /** No longer read: the note is written when Ask is pressed. Kept so index.tsx need not change. */
+  lastRequestId?: AskOrchestration["lastRequestId"];
   onAskOllama: AskOrchestration["onAskOllama"];
 };
 
@@ -51,7 +52,7 @@ export type VoiceAskWithReadAloud = {
 
 /*
  * In: the voice input hook's own args, plus the read-aloud setting, the shared ref other code
- * writes `clearAskCameFromMic` into, the live request id, and `onAskOllama` to wrap.
+ * writes `clearAskCameFromMic` into, and `onAskOllama` to wrap.
  * Out: what the mic button and the Ask bar need, plus the wrapped Ask function in place of the
  * plain one.
  * What can go wrong: `onAskOllamaWithReadAloud` must be the function every Ask entry point calls
@@ -67,7 +68,6 @@ export function useVoiceAskWithReadAloud({
   clearAskCameFromMicRef,
   voiceReplyMode,
   strategySpoilerMaskingEnabled,
-  lastRequestId,
   onAskOllama,
 }: UseVoiceAskWithReadAloudArgs): VoiceAskWithReadAloud {
   const {
@@ -98,31 +98,27 @@ export function useVoiceAskWithReadAloud({
   }, [voiceReplyMode, strategySpoilerMaskingEnabled]);
 
   /*
-   * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and paired with the
-   * request_id as soon as the backend hands one back — `lastRequestId` is set from every poll
-   * response, including the first, so this lands well before the request can complete. Only one
-   * Ask is ever in flight, so a single pending slot (rather than something keyed up front, before
-   * the id exists) is enough.
+   * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and handed straight to
+   * `noteAskPressed`, which ties it to the request number from the first status that carries one.
+   * It used to be written by an effect on `lastRequestId`, but that number is only learned from the
+   * finished status, and the finished answer is handled in the same breath as it is painted, before
+   * any effect has run: the question counted as typed and a spoken one was never read aloud
+   * (plan 78, helper G finding 4). A retry or a branch pick does not come through here, so it
+   * counts as typed: silent, the safe side.
    *
    * The flag alone over-counts: it stays set after dictation until a settings-driven reset, a
    * session clear, or reusing an old question, so typing over the dictated text or picking a
    * suggestion chip before pressing Ask leaves it on for words never spoken. `questionCameFromMic`
    * also checks that the text actually being asked still matches what the mic last wrote.
    */
-  const pendingAskCameFromMicRef = useRef(false);
   const onAskOllamaWithReadAloud = useCallback(
     (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
       const asked = overrideQuestion ?? unifiedInput;
-      pendingAskCameFromMicRef.current = questionCameFromMic(askCameFromMic, asked, lastVoiceText);
+      noteAskPressed(questionCameFromMic(askCameFromMic, asked, lastVoiceText));
       return onAskOllama(overrideQuestion, opts);
     },
     [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText],
   );
-  useEffect(() => {
-    if (lastRequestId != null) {
-      rememberAskCameFromMic(lastRequestId, pendingAskCameFromMicRef.current);
-    }
-  }, [lastRequestId]);
 
   return {
     voiceRecording,

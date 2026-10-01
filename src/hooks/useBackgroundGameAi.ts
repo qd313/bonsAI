@@ -24,7 +24,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
-import { handleAskTerminalForReadAloud } from "./useReadAloud";
+import { handleAskPendingForReadAloud, handleAskTerminalForReadAloud } from "./useReadAloud";
 
 /** Poll interval while backend ``status`` stays ``pending`` (matches Steam Deck cadence vs RPC load). */
 export const BACKGROUND_STATUS_POLL_MS = 1200;
@@ -96,6 +96,8 @@ export function useBackgroundGameAi(
           }
 
           if (status.status === "pending") {
+            /* Ties the waiting Ask press (spoken or typed) to this request number, early. */
+            handleAskPendingForReadAloud(status);
             /*
              * Only while tokens are actually arriving. Keying this on the *setting* instead meant a
              * 150ms poll for the whole pending window — including prep phases (KB search, Proton

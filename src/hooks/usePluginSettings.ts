@@ -97,6 +97,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
+import { getUiDocument } from "../utils/uiDocument";
 import {
   acknowledgePluginDataClearHandled,
   getPluginDataClearedGeneration,
@@ -246,6 +247,9 @@ export function usePluginSettings() {
   const pluginDataClearSeenAtMountRef = useRef(getPluginDataClearedGeneration());
 
   settingsSnapshotForDebouncedSaveRef.current = settings;
+  /** Read by the panel-close save below, which must not run while the first load has not succeeded. */
+  const settingsPersistEnabledRef = useRef(false);
+  settingsPersistEnabledRef.current = settingsPersistEnabled;
 
   /**
    * One generic setter that every per-field `setSomething` below delegates to. Supports a plain
@@ -372,6 +376,36 @@ export function usePluginSettings() {
       settingsSaveInFlightRef.current -= 1;
     }
   }, [pauseDebouncedSettingsSave]);
+
+  /*
+   * Plan 78 (entry C): a setting changed less than 400 ms before Quick Access closes was lost,
+   * because closing cancels the waiting timer above. So whatever is waiting is saved at once when
+   * the panel's page is hidden or when this screen unmounts (Decky removes it for a popup).
+   *
+   * Which signal fires on the Deck: the panel's own page (`getUiDocument`, not SharedJSContext's)
+   * is shown and hidden by Quick Access, and `useAskBarInitialRingClaim` already trusts its
+   * `visibilitychange` for the same open/close. An unmount is the proven path for a popup (see
+   * bonsaiSessionSurvival.ts). Both are wired because neither alone is measured for every close.
+   *
+   * It reuses `persistChangedSettingsNow`: changed fields only (never a whole copy), nothing sent
+   * when nothing changed, and a second trigger (hide, then unmount) waits for the first save to
+   * land and then finds nothing left to send. The call goes out through Decky from SharedJSContext,
+   * which outlives the panel's page, so the page going away does not cancel it.
+   */
+  useEffect(() => {
+    const doc = getUiDocument();
+    const saveWhatIsWaiting = () => {
+      if (settingsPersistEnabledRef.current) void persistChangedSettingsNow();
+    };
+    const onVisibilityChange = () => {
+      if (doc.visibilityState !== "visible") saveWhatIsWaiting();
+    };
+    doc.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      doc.removeEventListener("visibilitychange", onVisibilityChange);
+      saveWhatIsWaiting();
+    };
+  }, [persistChangedSettingsNow]);
 
   const syncSettingsFromDisk = useCallback(async () => {
     await pauseDebouncedSettingsSave();

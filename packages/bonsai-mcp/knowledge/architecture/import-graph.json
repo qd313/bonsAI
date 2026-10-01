@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 636,
-  "edgeCount": 1766,
+  "edgeCount": 1767,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3733,7 +3733,8 @@
         "src/features/plugin-shell/settingsLoadedSignal.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts",
-        "src/utils/settingsPayload.ts"
+        "src/utils/settingsPayload.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/features/plugin-shell/useDeveloperToolActions.ts",
@@ -6912,6 +6913,7 @@
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
+        "src/hooks/usePluginSettings.ts",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/preview/replyLayoutReport.test.ts",
         "src/preview/replyLayoutReport.ts",

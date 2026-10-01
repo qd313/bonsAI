@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { call } from "@decky/api";
 import { usePluginSettings } from "./usePluginSettings";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
@@ -342,5 +342,139 @@ describe("usePluginSettings", () => {
       await result.current.persistChangedSettingsNow();
     });
     expect(getRpcCallLog().filter((c) => c.method === "save_settings").length).toBe(before);
+  });
+
+  /*
+   * Plan 78, entry C. A setting changed less than 400 ms before Quick Access closes used to be
+   * lost: closing cancels the waiting timer. Whatever is waiting now saves when the panel's page is
+   * hidden or the screen unmounts, and only the keys that changed.
+   */
+  describe("a change waiting for its 400 ms save when the panel closes", () => {
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const hidePanelPage = () => {
+      Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" });
+      document.dispatchEvent(new Event("visibilitychange"));
+    };
+    const showPanelPage = () => {
+      Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "visible" });
+      document.dispatchEvent(new Event("visibilitychange"));
+    };
+    let disk: Record<string, unknown>;
+
+    beforeEach(() => {
+      disk = defaultSettingsFixture() as unknown as Record<string, unknown>;
+      setRpcHandler("load_settings", () => disk);
+      setRpcHandler("save_settings", (...args: unknown[]) => {
+        disk = { ...disk, ...((args[0] as Record<string, unknown>) ?? {}) };
+        return disk;
+      });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+      showPanelPage();
+    });
+
+    it("saves the changed key when the page is hidden 100 ms after the change", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      expect(saves().length).toBe(before); // the 400 ms wait is still running
+      await act(async () => {
+        hidePanelPage();
+        await vi.advanceTimersByTimeAsync(0);
+      });
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(sent[0].args[0]).toEqual({ show_onscreen_debug_hud: true });
+      expect(disk.show_onscreen_debug_hud).toBe(true);
+
+      // The cancelled wait must not save a second time.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(600);
+      });
+      expect(saves().slice(before)).toHaveLength(1);
+    });
+
+    it("never writes a stale whole copy: a key the back end changed on its own is left alone", async () => {
+      disk = { ...disk, rag_corpus_path: "/home/deck/.bonsai/rag" };
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      // A download finishes behind the screen's back and the back end saves the new place.
+      disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+        hidePanelPage();
+        await vi.advanceTimersByTimeAsync(0);
+      });
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(Object.keys(sent[0].args[0] as object)).toEqual(["show_onscreen_debug_hud"]);
+      expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+    });
+
+    it("saves the changed key when the screen unmounts 100 ms after the change", async () => {
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      unmount();
+      await vi.advanceTimersByTimeAsync(600);
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(sent[0].args[0]).toEqual({ show_onscreen_debug_hud: true });
+    });
+
+    it("hiding then unmounting saves once, and hiding with nothing waiting saves nothing", async () => {
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      await act(async () => {
+        hidePanelPage();
+      });
+      expect(saves().length).toBe(before);
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        hidePanelPage();
+      });
+      unmount();
+      await new Promise((r) => setTimeout(r, 50));
+      expect(saves().slice(before)).toHaveLength(1);
+    });
+
+    it("saves nothing on close when the first read of the settings failed", async () => {
+      setRpcHandler("load_settings", async () => {
+        throw new Error("disk read failed");
+      });
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        hidePanelPage();
+      });
+      unmount();
+      await new Promise((r) => setTimeout(r, 50));
+      expect(saves()).toHaveLength(0);
+    });
   });
 });

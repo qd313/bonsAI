@@ -91,13 +91,13 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 853,
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 860,
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 846,
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
       "role": ""
     },
     {

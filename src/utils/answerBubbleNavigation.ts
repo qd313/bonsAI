@@ -87,7 +87,8 @@
  *      no bubble or no scrolling panel, return false and leave the press to Steam.
  *   2. Try each stop in the order of the drawing above. A stop that qualifies takes the ring
  *      and the panel is nudged so the stop can be read; the press is then used up.
- *   3. If no stop qualifies and the bubble still runs past the edge, scroll the panel one step
+ *   3. If no stop qualifies and the answer's text (not the bubble's 9 px frame: `answerTextEdge()`)
+ *      still runs past the edge, scroll the panel one step
  *      (`panelStepDown()` / `panelStepUp()`), then let `keepRingOnScreen()` move the ring to
  *      its section when the scroll pushed a small stop off the screen.
  *   4. If the bubble has nothing further in that direction, return false so Steam moves the
@@ -169,6 +170,19 @@ let boxLandedIn: HTMLElement | null = null;
 function forgetWalk(): void {
   walk = null;
   boxLandedIn = null;
+}
+
+/**
+ * The edge of the answer's text a press must still read past: its last section going Down, its first going
+ * Up, not the bubble around them. The bubble's own frame (8 px of padding and a 1 px border) runs 9 px past
+ * both, so asked of the bubble, a last section whose bottom sat on the dock still had empty frame under it:
+ * the next Down only scrolled the panel 80 px, ring left in place, and the press after it left the answer
+ * (Deck: plan77-P77-WALK-COVERS-MIRROR-R2.json, plan77-P77-FINAL-SMOKE.json). The registered stops, not a
+ * page search, as everywhere else in the walk.
+ */
+function answerTextEdge(bubble: HTMLElement, answerKey: string | undefined, dir: "down" | "up"): HTMLElement {
+  const stops = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
+  return (dir === "down" ? stops[stops.length - 1] : stops[0]) ?? bubble;
 }
 
 /** Walk turn slots. Must query the UI document, not SharedJSContext's shell — see uiDocument.ts. */
@@ -742,11 +756,11 @@ export function handleAnswerBubbleMoveDown(
   }
 
   /*
-   * Only scroll while THIS bubble still extends below the viewport.
-   * Previously we scrolled TabContentsScroll until max (past branches/thumbs to Save chat),
-   * so D-pad Down never yielded to live-turn focus peers (MICRO-04).
+   * Only scroll while THIS answer's text still extends below the viewport (its text, not the bubble's
+   * frame: `answerTextEdge`). Previously we scrolled TabContentsScroll until max (past branches/thumbs to
+   * Save chat), so D-pad Down never yielded to live-turn focus peers (MICRO-04).
    */
-  if (!chunkHasContentBelowViewport(bubble, scroll)) {
+  if (!chunkHasContentBelowViewport(answerTextEdge(bubble, answerKey, "down"), scroll)) {
     return false;
   }
 
@@ -833,8 +847,8 @@ export function handleAnswerBubbleMoveUp(
     }
   }
 
-  /* Mirror down: only scroll while bubble content remains above the viewport. */
-  if (!chunkHasContentAboveViewport(bubble, scroll)) {
+  /* Mirror down: only scroll while the answer's text remains above the viewport. */
+  if (!chunkHasContentAboveViewport(answerTextEdge(bubble, answerKey, "up"), scroll)) {
     return false;
   }
 

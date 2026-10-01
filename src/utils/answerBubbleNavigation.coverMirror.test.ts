@@ -100,15 +100,17 @@ describe("Down and Up visit the same stops", () => {
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(cover);
     // Text runs on below the cover, so the section's box is the next stop (plan 77): the ring goes to
-    // it at once, with the panel where it was. Reading the tall section then goes on by scrolling,
-    // 80 px a press, with the ring on the box (the next section is 210 px below the band).
+    // it at once. The plugin's own lift off the dock then puts the tall box's top on the header (12 px,
+    // as the Deck's final smoke run measured: plan77-P77-FINAL-SMOKE.json, box 1 at y 88). Reading the
+    // tall section then goes on by scrolling, 80 px a press, with the ring on the box (the next section
+    // is 210 px below the band).
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(a.stops[0]);
-    expect(a.pane.scrollTop).toBe(0);
+    expect(a.pane.scrollTop).toBe(12);
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(80);
+    expect(a.pane.scrollTop).toBe(92);
     expect(a.down()).toBe(true);
-    expect(a.pane.scrollTop).toBe(160);
+    expect(a.pane.scrollTop).toBe(172);
   });
 });
 

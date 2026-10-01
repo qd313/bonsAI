@@ -3,8 +3,10 @@
  * Purpose: Test helper for the answer-walk tests (plan 76 lane 3). Builds an answer bubble with its
  *          sections, hidden covers, underlined game words and a revealed cover's hide line inside a
  *          pane shaped like the Deck's own screen: the pane runs from y 88 to y 366, the dock starts
- *          at y 290 (so the readable band is 202 px), and every box follows the pane's scrollTop.
- * Used for: answerBubbleNavigation.ringFollowsScroll.test.ts and answerBubbleNavigation.coverMirror.test.ts.
+ *          at y 290 (so the readable band is 202 px), and every box follows the pane's scrollTop. The
+ *          bubble has the Deck's own 9 px frame around its sections (`BUBBLE_FRAME_PX`), and after every
+ *          landing the plugin's own lift off the dock runs (useDockClearanceOnFocus), as on the Deck.
+ * Used for: the answerBubbleNavigation.*.test.ts walk tests.
  * Does not: know Steam's real scroll rule. On the device Steam glides the panel a moment AFTER a stop
  *           takes focus, and the Deck showed several landings (a cover moved 69 px down, then 37 px
  *           back up; a section's box pulled to the top of the pane). `steamScroll` models that
@@ -25,6 +27,7 @@ import { registerAnswerBubbleEl } from "../utils/answerBubbleElRegistry";
 import { registerSpoilerFence, resetSpoilerFenceRegistry } from "../utils/spoilerFenceRegistry";
 import { registerDrgGlossaryTermChip, resetDrgGlossaryTermRegistry } from "../utils/drgGlossaryTermRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
+import { liftAboveDock } from "../hooks/useDockClearanceOnFocus";
 
 const KEY = "turn-1";
 const ref = { current: 0 };
@@ -32,9 +35,23 @@ export const PANE_TOP = 88;
 const DOCK_TOP = 290;
 const PANE_BOTTOM = 366;
 
-/** The pane's readable band ends at the dock; a game running lifts the dock's action row, so a test can move it. */
+/**
+ * The bubble's own frame on the Deck: the inner padding (8 px, answerBubble.ts) and the 1 px border, above
+ * the first section and below the last. The harness used to end the bubble exactly where its last section
+ * ended, so the press the Deck spent scrolling that frame into view never happened here
+ * (plan77-P77-WALK-COVERS-MIRROR-R2.json, plan77-P77-FINAL-SMOKE.json).
+ */
+const BUBBLE_FRAME_PX = 9;
+
+/**
+ * The pane's readable band ends at the dock; a game running lifts the dock's action row, so a test can move it.
+ * `dockLift` (on unless set false) runs the plugin's own lift off the dock (useDockClearanceOnFocus) after every
+ * landing, as the Deck does; it is what put a tall box's top on the header in the final smoke run (box 1 at
+ * y 88, scrollTop 177).
+ */
 export interface DeckAnswerOptions {
   dockTop?: number;
+  dockLift?: boolean;
 }
 
 export type Box = [top: number, bottom: number];
@@ -63,20 +80,35 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
 
   const place = (el: HTMLElement, [top, bottom]: Box) => {
     el.getBoundingClientRect = () => rect(top - pane.scrollTop, bottom - pane.scrollTop);
+    // jsdom has none. Inside the bubble the Deck's own scrollIntoView left the panel where it was
+    // (useDockClearanceOnFocus.ts, 2026-09-06), so the lift's hand-written step is what moves it.
+    el.scrollIntoView = () => {};
   };
+  /* The Deck's shape: bubble > inner (the padding) > the section stack > the sections. */
+  const frame = BUBBLE_FRAME_PX;
+  const first = sections[0]![0];
+  const last = sections[sections.length - 1]![1];
   const bubble = document.createElement("div");
   bubble.className = "bonsai-chat-ai-bubble Panel Focusable";
   bubble.setAttribute("tabindex", "0");
-  place(bubble, [sections[0]![0], sections[sections.length - 1]![1]]);
+  place(bubble, [first - frame, last + frame]);
   pane.appendChild(bubble);
   registerAnswerBubbleEl(KEY, bubble);
+  const inner = document.createElement("div");
+  inner.className = "bonsai-chat-ai-bubble-inner";
+  place(inner, [first - (frame - 1), last + (frame - 1)]);
+  bubble.appendChild(inner);
+  const stack = document.createElement("div");
+  stack.className = "bonsai-ai-response-stack bonsai-ai-response-stack--in-bubble";
+  place(stack, [first, last]);
+  inner.appendChild(stack);
 
   const stops = sections.map((box, i) => {
     const stop = document.createElement("div");
     stop.className = "bonsai-answer-stop Panel Focusable";
     stop.setAttribute("tabindex", "0"); // Decky stamps this on the nodes Steam navigates
     place(stop, box);
-    bubble.appendChild(stop);
+    stack.appendChild(stop);
     registerAnswerStop(KEY, i, stop);
     return stop;
   });
@@ -118,10 +150,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
   pane.addEventListener("focusin", (event) => {
     landed = event.target as HTMLElement;
   });
-  const settle = () => {
-    const el = landed;
-    landed = null;
-    if (!steamScroll || !el || el === bubble || !bubble.contains(el)) return;
+  const glide = (el: HTMLElement) => {
     const r = el.getBoundingClientRect();
     const height = r.bottom - r.top;
     const small = height < 100;
@@ -133,6 +162,14 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     if (steamScroll === "center" && small) target = PANE_TOP + (dockTopY - PANE_TOP - height) / 2;
     else if (!inside) target = steamScroll === "padded" && small ? PANE_TOP + 116 : PANE_TOP;
     if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
+  };
+  const settle = () => {
+    const el = landed;
+    landed = null;
+    if (!el || el === bubble || !bubble.contains(el)) return;
+    if (steamScroll) glide(el);
+    // The plugin's own lift, whose last pass (900 ms) comes after Steam's glide (150 ms).
+    if (options.dockLift ?? true) liftAboveDock(el);
   };
 
   const top = (el: HTMLElement) => el.getBoundingClientRect().top;
@@ -246,14 +283,44 @@ export const TALL_348_BETWEEN: AnswerShape = {
   start: 100,
 };
 
+/**
+ * The final smoke run's answer (plan77-P77-FINAL-SMOKE.json, `step3_down_list`), in page coordinates
+ * worked out from each landing's y and scrollTop: a 222 px box (the Deck read 221) with its cover 24 px
+ * down, a section that is only its cover (a 55 px cover with 8 px above and below, as the Deck's lone cover
+ * measured), and a 90 px last box. Down from the cover-only section landed on the last box at y 201 to 291
+ * (scrollTop 357) and the next press only scrolled it to 121 to 211 (scrollTop 437).
+ */
+export const FINAL_SMOKE: AnswerShape = {
+  sections: [[265, 487], [487, 558], [558, 648]],
+  covers: [[0, [289, 344]], [1, [495, 550]]],
+  start: 0,
+};
+
+/**
+ * Block 3 round 2's answer (plan77-P77-WALK-COVERS-MIRROR-R2.json, `down_list`): a 131 px box holding
+ * cover 1, a 105 px box, a cover-only section and a 60 px last box. Down from cover 2 (y 204 to 259,
+ * scrollTop 268) landed on the last box at 230 to 290 (scrollTop 305), and the next press only scrolled it
+ * to 150 to 210 (scrollTop 385).
+ */
+export const ROUND_TWO: AnswerShape = {
+  sections: [[228, 359], [359, 464], [464, 535], [535, 595]],
+  covers: [[0, [251, 306]], [2, [472, 527]]],
+  start: 0,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 
 /** A dock at the Deck's 290, and the higher one a running game leaves (its action row lifts it). */
 export const WALK_DOCKS = [290, 262];
 
-export function shapedAnswer(shape: AnswerShape, rule: SteamScrollRule | undefined, dockTop: number) {
-  const a = deckAnswer(shape.sections, shape.start, rule, { dockTop });
+export function shapedAnswer(
+  shape: AnswerShape,
+  rule: SteamScrollRule | undefined,
+  dockTop: number,
+  options: Omit<DeckAnswerOptions, "dockTop"> = {}
+) {
+  const a = deckAnswer(shape.sections, shape.start, rule, { ...options, dockTop });
   const covers = shape.covers.map(([section, box]) => a.cover(a.stops[section]!, box));
   const label = (el: Element | null): string => {
     const c = covers.indexOf(el as HTMLElement);
@@ -282,18 +349,26 @@ function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boo
   return top >= PANE_TOP - 1 && bottom <= a.dockTop + 4;
 }
 
+/** The section holding the ring (or the ring itself, when it is a section), or null outside the answer. */
+function sectionOf(a: ShapedAnswer, el: Element): HTMLDivElement | null {
+  return a.stops.find((stop) => stop.contains(el)) ?? null;
+}
+
 /**
  * Press until the answer yields. `presses` names the ring after every press, `stops` folds the repeats
  * of a press that only scrolled, and `problems` lists what broke the rules: a dead press (nothing moved),
  * a landing that is not fully visible (a press that only scrolls is not a landing: the ring keeps the
  * stop it landed on, which slides as the panel moves), and a press that leaves the ring in place while
  * the panel goes the wrong way. A stop taking the ring back after leaving it shows up in `stops`.
+ * `scrollOnly` lists every press that only scrolled while the ring's section fits the band: the Deck's
+ * repeated stop (reading by scrolling is for a section taller than the band).
  * `checkVisible` false skips the visibility rule, for a shape (a cover deep in a tall section) where the
  * ring is meant to sit on a box whose top is far above the screen.
  */
 export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, checkVisible = true) {
   const presses: string[] = [a.label(document.activeElement)];
   const problems: string[] = [];
+  const scrollOnly: string[] = [];
   let yielded = false;
   for (let i = 1; i <= limit; i += 1) {
     const before = document.activeElement;
@@ -310,10 +385,15 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, chec
     // (reading a long section by scrolling); a panel that slides back and forth is a loop in the making.
     const moved = a.pane.scrollTop - scrollBefore;
     if (ring === before && (dir === "down" ? moved < 0 : moved > 0)) problems.push(`press ${i}: scrolled the wrong way (${named})`);
+    const section = sectionOf(a, ring);
+    const height = section ? a.bottom(section) - a.top(section) : 0;
+    if (ring === before && moved !== 0 && section && height <= a.dockTop - PANE_TOP) {
+      scrollOnly.push(`press ${i}: only scrolled ${Math.abs(moved)} px on ${named}, whose section fits the band (${height} px)`);
+    }
     if (checkVisible && ring !== before && !fullyVisible(a, ring, dir)) {
       problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${PANE_TOP}..${a.dockTop})`);
     }
   }
   const stops = presses.filter((name, i) => i === 0 || name !== presses[i - 1]);
-  return { presses, stops, problems, yielded };
+  return { presses, stops, problems, scrollOnly, yielded };
 }

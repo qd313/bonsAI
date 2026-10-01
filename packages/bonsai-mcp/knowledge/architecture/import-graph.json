@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 636,
-  "edgeCount": 1767,
+  "fileCount": 637,
+  "edgeCount": 1769,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3534,7 +3534,8 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/hooks/useDockClearanceOnFocus.test.ts",
-        "src/hooks/useStreamScrollPin.ts"
+        "src/hooks/useStreamScrollPin.ts",
+        "src/test-harness/deckAnswerWalk.ts"
       ]
     },
     "src/hooks/useEarlierTurnsPill.ts": {
@@ -4655,6 +4656,7 @@
     },
     "src/test-harness/deckAnswerWalk.ts": {
       "imports": [
+        "src/hooks/useDockClearanceOnFocus.ts",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.ts",
@@ -4665,6 +4667,7 @@
       "importedBy": [
         "src/utils/answerBubbleNavigation.coverMirror.test.ts",
         "src/utils/answerBubbleNavigation.downVisible.test.ts",
+        "src/utils/answerBubbleNavigation.lastSection.test.ts",
         "src/utils/answerBubbleNavigation.mirrorWalk.test.ts",
         "src/utils/answerBubbleNavigation.readingWalk.test.ts",
         "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
@@ -5041,6 +5044,12 @@
       "importedBy": []
     },
     "src/utils/answerBubbleNavigation.downVisible.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerBubbleNavigation.lastSection.test.ts": {
       "imports": [
         "src/test-harness/deckAnswerWalk.ts"
       ],

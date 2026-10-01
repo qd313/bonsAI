@@ -431,7 +431,66 @@ New ones go here, with the choice taken in the meantime.
 
 ## Results
 
-To be filled in.
+### Where things stand at midnight (2026-10-01, about 00:00)
+
+**The fixing is done. The Deck part has not started,** because the Deck does not answer on the network. The
+maintainer plugged the controller rig in about 23:20 and this PC sees the board, but the Deck itself gives no reply
+to a ping and the connection times out. Nothing has been pressed. The session looks again every 20 minutes and starts
+the first Deck block by itself when the Deck answers.
+
+**Twelve bugs are fixed on the working branch,** from nine helpers, every one with all checks green at landing,
+including the wider quick check. None has been on the Deck, so each sits in Verify with the check it owes.
+
+| What a player would notice | Check it owes |
+|---|---|
+| With a no-story game running, a question naming a story game gets that game's notes and spoiler covers | Deck, with a game running |
+| Down from the last part of an answer goes straight on, with no press that only scrolls | Deck |
+| The game's own chip keeps coming back; chips turn over about twice as fast with one chip showing | Deck, and your own look at the pace |
+| A setting changed just before the panel closes is kept | Deck |
+| A model removed outside bonsAI leaves the saved try order | Deck |
+| The summary card no longer names a non-game as the game, or shows lines that say nothing | Deck |
+| A Strategy checklist that arrives while the panel is closed is there when it reopens; refine chips keep the mode | Deck, with a game running |
+| A branch answer is listed once while the next answer writes | Deck |
+| An old game's checklist is not drawn after quitting or switching games | Its tests only |
+| A spoken question's answer reads itself aloud ("When I asked by voice") | Your microphone check on Thursday |
+| An answer that finishes just as the panel opens is still read aloud | Its tests only |
+| A question about a different game no longer reuses the last answer's wording; a boss answer no longer pops a power suggestion | Deck |
+
+**Two fixes wait for the Deck before they can land:**
+- **The ring after reopening over a game.** It needs one measurement on the Deck first; the helper starts after it.
+- **Long answers slowing down.** The fix is written (every finished piece of an arriving answer was being redrawn on
+  every update; in its test the 100th update of a very long answer went from 24 pieces redrawn to 1). It is held
+  until a "before" frame rate is taken on a build without it, and lands only if the "after" number is clearly better.
+
+**Sent back before landing, twice.** The session's own read of a change caught two fixes that passed every test and
+would have made things worse: the summary guard threw away real lines such as "Stuck on: not sure how to beat the
+Soul Master", and the borrowed-wording fix hid the earlier answers on ordinary follow-ups such as "what else can I
+try". Both came back right on their second round.
+
+**Found along the way, and what happened to each:**
+- A read-through of the step that runs after an answer found four real problems. All four are fixed above (the
+  checklist after a reopen, the branch answer listed twice, the old game's checklist, the spoken question staying
+  silent).
+- Walking Up can land on a tall section with only a sliver showing. On the roadmap, not fixed.
+- A power question's answer often has no number in it. On the roadmap, not fixed: it comes from the power
+  instructions, not from the chat's memory.
+- The four chip styles still differ in small ways. On the roadmap for after the release.
+- Two helpers briefly swapped unfinished work through a shared git command. Nothing was lost; the rule against it is
+  now in every helper's standing instructions.
+
+**For you, when you look:**
+1. **The Deck.** Awake, in game mode, on Wi-Fi, at 192.168.86.52 (or tell a session its new address).
+2. **Your pick of chip pace** from the preview page: https://claude.ai/artifact/FtzUKajYgiLJJqPbFJPyk3
+3. **The eight questions** in [Questions that come up during the session](#questions-that-come-up-during-the-session).
+   The one worth reading first is 5: a choice button pressed under a Hollow Knight answer, with Deep Rock still
+   running, goes back to Deep Rock's rules and could name a boss with no cover.
+4. **Your hand checks,** all still open: [Your list for Thursday](#your-list-for-thursday). The microphone check now
+   has three steps (ask by voice and it reads itself; type and it stays silent; ask by voice, close the panel, and it
+   still reads).
+5. **This chat's model.** It ran on Fable all evening, because a chat cannot change its own model. Pick Opus, high,
+   in the model menu.
+
+The full results, the code summary and the report replace this section when the Deck part has run.
 
 ## Log
 

@@ -83,9 +83,8 @@ import {
   mergeContextualSeeds,
   nextFrozenHistoryEntry,
   seedsKeyFrom,
-  visibleWindowTexts,
 } from "../features/preset-carousel/carouselState";
-import { pickCarouselChipWithSessionRag } from "../features/preset-carousel/composePresetSeedsWithSessionRag";
+import { pickCarouselAppend } from "../features/preset-carousel/carouselNextChip";
 import {
   effectivePresetVisibleSlots,
   presetHoldMs,
@@ -148,6 +147,9 @@ function MainTabPresetSidewaysCarousel(
     buildInitialCarouselState(normalizeThreeSeeds(seeds, samplerOptions)),
   );
 
+  const carouselRef = useRef({ history, focusIndex });
+  carouselRef.current = { history, focusIndex };
+  const gameRoundRef = useRef<readonly string[]>([]);
   const autoPausedUntilRef = useRef(0);
   const viewportRef = useRef<HTMLDivElement | null>(null);
 
@@ -261,18 +263,16 @@ function MainTabPresetSidewaysCarousel(
         return;
       }
 
-      setCarousel((prev) => {
-        const texts = new Set(prev.history.map((s) => s.text));
-        // Rotation has to be able to draw corpus chips, not only static presets: the session-RAG
-        // mix is applied when the carousel is seeded, so replenishing from the static pool alone
-        // carried every corpus chip out of the window within about four ticks, permanently.
-        const nextPreset = pickCarouselChipWithSessionRag({
-          historyTexts: texts,
-          visibleTexts: visibleWindowTexts(prev.history, prev.focusIndex, visibleSlots),
-          staticFallback: () => getRandomPresetExcluding(texts, samplerOptions),
-        });
-        return advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
-      });
+      // The same next-chip rule as the other three styles (nextChipRule.ts), read off the state the
+      // last render drew; moving along chips already dealt needs no pick.
+      const { history: shown, focusIndex: at } = carouselRef.current;
+      const append = pickCarouselAppend(shown, at, visibleSlots, gameRoundRef.current, (exclude) =>
+        getRandomPresetExcluding(new Set(exclude), samplerOptions),
+      );
+      if (append) gameRoundRef.current = append.gameRound;
+      setCarousel((prev) =>
+        advanceCarouselFocus(prev.history, prev.focusIndex, append?.next ?? prev.history[prev.focusIndex]!),
+      );
 
       timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
     };

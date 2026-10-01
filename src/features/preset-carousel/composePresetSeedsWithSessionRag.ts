@@ -23,12 +23,8 @@
  */
 import { TEMP_PRESET_CAROUSEL_FROZEN, frozenTestChipsActive } from "../../data/presets";
 import type { PresetPrompt } from "../../data/presets";
-import {
-  composeSessionPresets,
-  pickNextCarouselChip,
-  type PickNextCarouselChipArgs,
-  type SessionRagChipCandidate,
-} from "./sessionRagComposer";
+import { chooseNextChip, type NextChipArgs, type NextChipPick } from "./nextChipRule";
+import { composeSessionPresets, type SessionRagChipCandidate } from "./sessionRagComposer";
 
 export type ComposePresetSeedsWithSessionRagArgs = {
   staticSeeds: PresetPrompt[];
@@ -76,21 +72,32 @@ export function setSessionRagCarouselCandidates(
   sessionRagRotationProbability = options?.ragProbability;
 }
 
-export type PickCarouselChipArgs = Omit<PickNextCarouselChipArgs, "ragCandidates"> & {
+/** The candidates published for the running game; empty when there is no game or no notes for it. */
+export function getSessionRagCarouselCandidates(): readonly SessionRagChipCandidate[] {
+  return sessionRagCandidates;
+}
+
+export type PickNextChipArgs = Omit<NextChipArgs, "ragCandidates" | "againChance"> & {
   /** Defaults to the published list; passed explicitly only by tests. */
-  ragCandidates?: SessionRagChipCandidate[];
+  ragCandidates?: readonly SessionRagChipCandidate[];
+  againChance?: number;
 };
 
-/** Pick the next rotation chip, standing down entirely while a frozen QA batch is in force. */
-export function pickCarouselChipWithSessionRag(args: PickCarouselChipArgs): PresetPrompt {
+/**
+ * Pick the chip a spot shows next, by the one rule every chip style shares (see nextChipRule),
+ * standing down entirely while a frozen QA batch is in force.
+ */
+export function pickNextChipWithSessionRag(args: PickNextChipArgs): NextChipPick {
   // Same gate as the compose path: a frozen batch means the tester chose these exact chips, and
-  // rotating a RAG chip in would end the run without saying so.
+  // rotating a game chip in would end the run without saying so.
   if (TEMP_PRESET_CAROUSEL_FROZEN || frozenTestChipsActive()) {
-    return args.staticFallback();
+    const next = args.drawGeneral(new Set([...args.staying, ...args.avoid]));
+    return { next, queue: args.queue, gameRound: args.gameRound };
   }
-  return pickNextCarouselChip({
+  return chooseNextChip({
     ...args,
     ragCandidates: args.ragCandidates ?? sessionRagCandidates,
-    ragProbability: args.ragProbability ?? sessionRagRotationProbability,
+    // The Developer-tab override ("force session chips") is a probability of 1: every chip is the game's.
+    againChance: args.againChance ?? sessionRagRotationProbability,
   });
 }

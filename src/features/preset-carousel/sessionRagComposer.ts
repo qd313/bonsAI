@@ -4,8 +4,8 @@
  * Purpose: Given the row of static preset chips and a list of chips pulled
  * from the running game's own knowledge base, decides which of the row's
  * slots actually show a knowledge-base chip instead of the static one —
- * both when the row is first built, and each time the carousel rotates in
- * a new chip afterward. A chip actually about this game is always tried
+ * when the row is first built. (Which chip comes next afterwards is
+ * nextChipRule's job, shared by all four chip styles.) A chip actually about this game is always tried
  * before a chip about Steam Deck compatibility in general, and if any
  * knowledge-base chip is available at all, this guarantees at least one is
  * visible on screen rather than leaving it possible for none to ever show.
@@ -44,11 +44,11 @@ export type ComposeSessionPresetsArgs = {
 };
 
 /** A chip drawn from the corpus for the running game, as opposed to a shared Deck tip. */
-function isGameCandidate(candidate: SessionRagChipCandidate): boolean {
+export function isGameCandidate(candidate: SessionRagChipCandidate): boolean {
   return (candidate.domain || "").toLowerCase() === "strategy";
 }
 
-function toPresetPrompt(candidate: SessionRagChipCandidate): PresetPrompt {
+export function toPresetPrompt(candidate: SessionRagChipCandidate): PresetPrompt {
   return {
     text: candidate.text,
     category: candidate.category,
@@ -65,27 +65,6 @@ function toPresetPrompt(candidate: SessionRagChipCandidate): PresetPrompt {
  */
 function orderCandidates(candidates: SessionRagChipCandidate[]): SessionRagChipCandidate[] {
   return [...candidates.filter(isGameCandidate), ...candidates.filter((c) => !isGameCandidate(c))];
-}
-
-/**
- * Random pick among the eligible candidates that share the top priority band.
- *
- * `available` is already `orderCandidates`-ordered, so its head run of game candidates (or, once
- * those are exhausted, its head run of compat ones) is the band `available[0]` belongs to — that is
- * the slice this picks within. This is what stops rotation defaulting to `available[0]` every time:
- * ranks 1-3 came back every minute while ranks 4-6 waited for 1-3 to be shown and fall out of
- * history, which happened rarely because 1-3 kept winning first (filed 2026-08-29, "Chip rotation
- * favours the top of the candidate list"). The game-before-compat preference itself is untouched —
- * a compat candidate is never picked while a game one is still eligible.
- */
-function pickFromAvailable(
-  available: readonly SessionRagChipCandidate[],
-  random: () => number,
-): SessionRagChipCandidate {
-  const topBandIsGame = isGameCandidate(available[0]!);
-  const band = available.filter((c) => isGameCandidate(c) === topBandIsGame);
-  const index = Math.min(band.length - 1, Math.floor(random() * band.length));
-  return band[index]!;
 }
 
 /**
@@ -161,61 +140,20 @@ export function composeSessionPresets({
     }
   }
 
+  // The same guarantee, for the game's own chips: a shared Deck tip satisfies the check above, but
+  // the chip worth showing is the game's. If neither chip on screen is the game's and one sits later
+  // in the opening list, swap it into the last visible slot, so the row opens showing one and the
+  // chip it replaces still gets its turn (the next-chip rule deals the opening list in order).
+  const gameTexts = new Set(ragPool.filter(isGameCandidate).map((c) => c.text));
+  const visibleCount = Math.min(out.length, PRESET_VISIBLE_SLOTS);
+  if (gameTexts.size > 0 && !out.slice(0, visibleCount).some((p) => gameTexts.has(p.text))) {
+    const later = out.findIndex((p, i) => i >= visibleCount && gameTexts.has(p.text));
+    if (later >= 0) {
+      const swapped = out[visibleCount - 1]!;
+      out[visibleCount - 1] = out[later]!;
+      out[later] = swapped;
+    }
+  }
+
   return out;
-}
-
-export type PickNextCarouselChipArgs = {
-  /** Every text in carousel history. A chip already here is never picked again. */
-  historyTexts: ReadonlySet<string>;
-  /** The text(s) on screen right now — see carouselState.visibleWindowTexts. */
-  visibleTexts: ReadonlySet<string>;
-  ragCandidates: SessionRagChipCandidate[];
-  /** What to show when no RAG chip is chosen; the caller binds this to getRandomPresetExcluding. */
-  staticFallback: () => PresetPrompt;
-  ragProbability?: number;
-  /** Injectable RNG for tests (returns [0, 1)). */
-  random?: () => number;
-};
-
-/**
- * The chip the auto-advance tick should append next.
- *
- * `composeSessionPresets` above runs **once**, when the carousel is seeded. Rotation then
- * replenished itself straight from the static preset pool, so every corpus chip was carried out of
- * the window within about four ticks and none could ever come back — measured on device
- * 2026-08-29 as "present to 21s, gone from 24s, never again", with the backend supplying eight
- * candidates the whole time. The guarantee was real but applied at one instant; this is the same
- * guarantee applied to the tick.
- *
- * The two text sets are not interchangeable. Dedupe reads `historyTexts` so a chip is not repeated
- * while it is still remembered; the guarantee reads `visibleTexts`, because a corpus chip sitting
- * in history off screen is exactly the state the user complains about.
- *
- * Which eligible candidate wins — the guarantee pick and the roll pick alike — is a random draw
- * within the top-priority band (see `pickFromAvailable`), not always the first entry.
- */
-export function pickNextCarouselChip({
-  historyTexts,
-  visibleTexts,
-  ragCandidates,
-  staticFallback,
-  ragProbability = SESSION_RAG_CHIP_PROBABILITY,
-  random = Math.random,
-}: PickNextCarouselChipArgs): PresetPrompt {
-  if (ragCandidates.length === 0) {
-    return staticFallback();
-  }
-  const available = orderCandidates(ragCandidates).filter((c) => !historyTexts.has(c.text));
-  if (available.length === 0) {
-    return staticFallback();
-  }
-  // The guarantee, at rotation time: nothing on screen is from the corpus, so the next chip is —
-  // whichever eligible candidate the random pick lands on, not always the top-ranked one.
-  const corpusOnScreen = ragCandidates.some((c) => visibleTexts.has(c.text));
-  if (!corpusOnScreen) {
-    return toPresetPrompt(pickFromAvailable(available, random));
-  }
-  return random() < ragProbability
-    ? toPresetPrompt(pickFromAvailable(available, random))
-    : staticFallback();
 }

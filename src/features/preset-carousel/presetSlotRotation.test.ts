@@ -64,4 +64,38 @@ describe("preset slot rotation", () => {
     }
     expect(introduced).toEqual(["q3", "q4", "q1", "q2", "q3", "q4"]);
   });
+
+  /* Plan 78 F: fade, plain and decode used to refill from the fixed pool only, so the game's own
+     chips were dealt once at open and never again. They now take the one next-chip rule. */
+  const game = [
+    { text: "G1", category: "strategy", domain: "strategy" },
+    { text: "G2", category: "strategy", domain: "strategy" },
+  ];
+
+  it("with one chip, a general chip is followed by the game's own, from the candidates", () => {
+    const { first, rotation } = startSlotRotation([p("a")], 1);
+    const step = nextSlotPreset(first[0]!, new Set(["a"]), rotation, undefined, { ragCandidates: game, random: () => 0.9 });
+    expect(["G1", "G2"]).toContain(step.next.text);
+    expect(step.next.ragTip).toBe(true);
+    expect(step.rotation.gameRound).toEqual([step.next.text]);
+  });
+
+  it("with two chips, the chip that stays decides what comes in beside it", () => {
+    const seeds = [p("a"), { ...p("G1"), ragTip: true }, p("c")];
+    const { first, rotation } = startSlotRotation(seeds, 2);
+    // Slot 0 (general "a") leaves while the game's chip stays: the newcomer is general (roll 0.9).
+    const a = nextSlotPreset(first[0]!, new Set(["a", "G1"]), rotation, undefined, { ragCandidates: game, random: () => 0.9 });
+    expect(a.next.text).toBe("c");
+    // Slot 1 (the game's chip) leaves while a general one stays: the newcomer is the game's.
+    const b = nextSlotPreset(first[1]!, new Set(["a", "G1"]), rotation, undefined, { ragCandidates: game, random: () => 0.9 });
+    expect(b.next.ragTip).toBe(true);
+    expect(b.next.text).toBe("G2");
+  });
+
+  it("a pinned QA batch still wins over the game's chips and walks in order", () => {
+    setFrozenTestChips(["q1", "q2", "q3", "q4"]);
+    const { first, rotation } = startSlotRotation([p("q1"), p("q2"), p("q3")], 1);
+    const step = nextSlotPreset(first[0]!, new Set(["q1"]), rotation, undefined, { ragCandidates: game, random: () => 0 });
+    expect(step.next.text).toBe("q2");
+  });
 });

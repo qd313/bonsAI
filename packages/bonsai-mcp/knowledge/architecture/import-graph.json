@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 638,
-  "edgeCount": 1770,
+  "fileCount": 643,
+  "edgeCount": 1786,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -788,6 +788,13 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabPresetAnimatedChips.simulation.test.tsx": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/test-harness/chipRowSimulation.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetAnimatedChips.test.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -803,8 +810,8 @@
     "src/components/MainTabPresetAnimatedChips.tsx": {
       "imports": [
         "src/data/presets.ts",
+        "src/features/preset-carousel/carouselNextChip.ts",
         "src/features/preset-carousel/carouselState.ts",
-        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
@@ -817,7 +824,8 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
-        "src/components/MainTabPresetRow.tsx"
+        "src/components/MainTabPresetRow.tsx",
+        "src/test-harness/chipRowSimulation.tsx"
       ]
     },
     "src/components/MainTabPresetRow.askRestart.test.tsx": {
@@ -2052,6 +2060,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
+        "src/components/MainTabPresetAnimatedChips.simulation.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
@@ -2060,9 +2069,12 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/data/presets.test.ts",
+        "src/features/preset-carousel/carouselNextChip.ts",
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/nextChipRule.test.ts",
+        "src/features/preset-carousel/nextChipRule.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
@@ -2077,6 +2089,7 @@
         "src/hooks/useSuggestedPromptChips.test.ts",
         "src/hooks/useSuggestedPromptChips.ts",
         "src/index.tsx",
+        "src/test-harness/chipRowSimulation.tsx",
         "src/types/askOrchestration.ts",
         "src/utils/bonsaiSessionSurvival.ts"
       ]
@@ -2916,6 +2929,16 @@
         "src/index.tsx"
       ]
     },
+    "src/features/preset-carousel/carouselNextChip.ts": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/sessionRagComposer.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx"
+      ]
+    },
     "src/features/preset-carousel/carouselState.test.ts": {
       "imports": [
         "src/data/presets.ts",
@@ -2939,12 +2962,33 @@
     "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts": {
       "imports": [
         "src/data/presets.ts",
+        "src/features/preset-carousel/nextChipRule.ts",
         "src/features/preset-carousel/sessionRagComposer.ts"
       ],
       "importedBy": [
-        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/preset-carousel/carouselNextChip.ts",
+        "src/features/preset-carousel/presetSlotRotation.ts",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
-        "src/hooks/useSuggestedPromptChips.ts"
+        "src/hooks/useSuggestedPromptChips.ts",
+        "src/test-harness/chipRowSimulation.tsx"
+      ]
+    },
+    "src/features/preset-carousel/nextChipRule.test.ts": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/features/preset-carousel/nextChipRule.ts",
+        "src/features/preset-carousel/sessionRagComposer.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/preset-carousel/nextChipRule.ts": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/features/preset-carousel/sessionRagComposer.ts"
+      ],
+      "importedBy": [
+        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/nextChipRule.test.ts"
       ]
     },
     "src/features/preset-carousel/presetChipButton.tsx": {
@@ -3072,7 +3116,8 @@
     },
     "src/features/preset-carousel/presetSlotRotation.ts": {
       "imports": [
-        "src/data/presets.ts"
+        "src/data/presets.ts",
+        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts"
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -3095,9 +3140,13 @@
         "src/features/preset-carousel/presetRowLayout.ts"
       ],
       "importedBy": [
+        "src/features/preset-carousel/carouselNextChip.ts",
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/nextChipRule.test.ts",
+        "src/features/preset-carousel/nextChipRule.ts",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
         "src/hooks/useSuggestedPromptChips.ts",
+        "src/test-harness/chipRowSimulation.tsx",
         "src/utils/sessionRagChipCandidates.ts"
       ]
     },
@@ -4652,6 +4701,17 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaTab.tsx"
+      ]
+    },
+    "src/test-harness/chipRowSimulation.tsx": {
+      "imports": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/data/presets.ts",
+        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/sessionRagComposer.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.simulation.test.tsx"
       ]
     },
     "src/test-harness/deckAnswerWalk.ts": {

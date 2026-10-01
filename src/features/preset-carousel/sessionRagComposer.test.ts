@@ -1,14 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   composePresetSeedsWithSessionRag,
-  pickCarouselChipWithSessionRag,
-  setSessionRagCarouselCandidates,
 } from "./composePresetSeedsWithSessionRag";
 import { setFrozenTestChips } from "../../data/presets";
 import type { PresetPrompt } from "../../data/presets";
 import {
   composeSessionPresets,
-  pickNextCarouselChip,
   SESSION_RAG_CHIP_PROBABILITY,
   type SessionRagChipCandidate,
 } from "./sessionRagComposer";
@@ -220,237 +217,18 @@ describe("frozen test chips suppress RAG mixing", () => {
   });
 });
 
-describe("pickNextCarouselChip — the rotation half of the guarantee", () => {
-  afterEach(() => setFrozenTestChips([]));
-
-  const candidates = [rag("How do I beat Glyphid Dreadnought?"), rag("How do I use Red Sugar?")];
-  const fallback = () => staticSeed("static-chip");
-
-  it("forces a corpus chip when none is on screen, whatever the roll", () => {
-    // The bug this closes, measured on device 2026-08-29: the seeded corpus chip was carried out
-    // of the three-slot window within about four ticks and rotation could only ever replace it
-    // with another static preset, so it never came back for the rest of the session.
-    // Which of the two (both eligible, same band) is picked is now a random draw — see the
-    // "favours the top of the candidate list" tests below — so this only pins the guarantee
-    // itself: some corpus chip, not the static fallback.
-    const picked = pickNextCarouselChip({
-      historyTexts: new Set(["a", "b", "c"]),
-      visibleTexts: new Set(["a", "b", "c"]),
+describe("the game's chip is on screen when the row opens", () => {
+  it("swaps a game chip from the third seed into the last visible slot when only shared tips show", () => {
+    // Seeds arrive in threes and the row shows two: a game chip left in the third seed, or none at
+    // all among the first two, is the Phase 4 finding again. The chip it replaces keeps its turn.
+    const candidates = [rag("How do I beat the Hive Knight?"), rag("Any known Proton issues for this game?", "troubleshooting")];
+    // random: seed 0 and 1 lose their roll (static), seed 2 wins and takes the game chip.
+    const rolls = [0.9, 0.9, 0];
+    const out = composeSessionPresets({
+      staticSeeds: [staticSeed("a"), staticSeed("b"), staticSeed("c")],
       ragCandidates: candidates,
-      staticFallback: fallback,
-      random: () => 0.99,
+      random: () => rolls.shift() ?? 0.9,
     });
-    expect(candidates.map((c) => c.text)).toContain(picked.text);
-    expect(picked.ragTip).toBe(true);
-  });
-
-  it("rolls normally once a corpus chip is already on screen", () => {
-    const onScreen = new Set(["a", "How do I beat Glyphid Dreadnought?", "c"]);
-    const lost = pickNextCarouselChip({
-      historyTexts: onScreen,
-      visibleTexts: onScreen,
-      ragCandidates: candidates,
-      staticFallback: fallback,
-      random: () => 0.99,
-    });
-    expect(lost.text).toBe("static-chip");
-
-    const won = pickNextCarouselChip({
-      historyTexts: onScreen,
-      visibleTexts: onScreen,
-      ragCandidates: candidates,
-      staticFallback: fallback,
-      random: () => 0,
-    });
-    expect(won.text).toBe("How do I use Red Sugar?");
-  });
-
-  it("reads the guarantee off the visible window, not all of history", () => {
-    // A corpus chip still in history but scrolled off screen is precisely the reported state, so
-    // scoring the guarantee against history would leave the bug in place.
-    const picked = pickNextCarouselChip({
-      historyTexts: new Set(["How do I beat Glyphid Dreadnought?", "a", "b", "c"]),
-      visibleTexts: new Set(["a", "b", "c"]),
-      ragCandidates: candidates,
-      staticFallback: fallback,
-      random: () => 0.99,
-    });
-    expect(picked.text).toBe("How do I use Red Sugar?");
-  });
-
-  it("never repeats a chip still in history, and falls back when all are spent", () => {
-    const all = new Set(candidates.map((c) => c.text));
-    expect(
-      pickNextCarouselChip({
-        historyTexts: all,
-        visibleTexts: new Set(["a", "b", "c"]),
-        ragCandidates: candidates,
-        staticFallback: fallback,
-        random: () => 0,
-      }).text,
-    ).toBe("static-chip");
-  });
-
-  it("stays static when there are no candidates at all", () => {
-    expect(
-      pickNextCarouselChip({
-        historyTexts: new Set(),
-        visibleTexts: new Set(),
-        ragCandidates: [],
-        staticFallback: fallback,
-        random: () => 0,
-      }).text,
-    ).toBe("static-chip");
-  });
-
-  it("prefers a game chip over a shared Deck tip when forcing", () => {
-    const picked = pickNextCarouselChip({
-      historyTexts: new Set(),
-      visibleTexts: new Set(),
-      ragCandidates: [rag("Any known Proton issues?", "troubleshooting"), rag("How do I beat X?")],
-      staticFallback: fallback,
-      random: () => 0.99,
-    });
-    expect(picked.text).toBe("How do I beat X?");
-  });
-
-  it("stands down completely while a frozen QA batch is pinned", () => {
-    // A pinned batch is a deterministic run; rotating a corpus chip in would end it silently.
-    setFrozenTestChips(["pinned one", "pinned two", "pinned three"]);
-    setSessionRagCarouselCandidates(candidates);
-    expect(
-      pickCarouselChipWithSessionRag({
-        historyTexts: new Set(["a", "b", "c"]),
-        visibleTexts: new Set(["a", "b", "c"]),
-        staticFallback: fallback,
-      }).text,
-    ).toBe("static-chip");
-    setSessionRagCarouselCandidates([]);
-  });
-
-  it("draws from the published candidate list when none is passed", () => {
-    setSessionRagCarouselCandidates(candidates);
-    const picked = pickCarouselChipWithSessionRag({
-      historyTexts: new Set(["a", "b", "c"]),
-      visibleTexts: new Set(["a", "b", "c"]),
-      staticFallback: fallback,
-      random: () => 0.99,
-    });
-    expect(candidates.map((c) => c.text)).toContain(picked.text);
-    setSessionRagCarouselCandidates([]);
-  });
-
-  describe("favours the top of the candidate list (the bug, 2026-08-29)", () => {
-    const ranked = [
-      rag("rank 1"),
-      rag("rank 2"),
-      rag("rank 3"),
-      rag("rank 4"),
-      rag("rank 5"),
-      rag("rank 6"),
-    ];
-    const rankedTexts = new Set(ranked.map((c) => c.text));
-
-    it("can pick ranks 4 to 6, not just the top three of the list", () => {
-      // Before the fix this always returned "rank 1" (available[0]) no matter what `random`
-      // returned, so ranks 4-6 could only ever surface once ranks 1-3 had already been shown and
-      // fallen out of history — which is why they "rarely appear" on device.
-      const pickAt = (r: number) =>
-        pickNextCarouselChip({
-          historyTexts: new Set(),
-          visibleTexts: new Set(),
-          ragCandidates: ranked,
-          staticFallback: fallback,
-          random: () => r,
-        }).text;
-
-      expect(pickAt(0.51)).toBe("rank 4");
-      expect(pickAt(0.68)).toBe("rank 5");
-      expect(pickAt(0.85)).toBe("rank 6");
-    });
-
-    it("still forces a corpus chip, never the static fallback, whichever candidate the roll lands on", () => {
-      for (const r of [0, 0.2, 0.4, 0.6, 0.8, 0.999]) {
-        const picked = pickNextCarouselChip({
-          historyTexts: new Set(),
-          visibleTexts: new Set(), // nothing on screen is corpus -> the guarantee must still fire
-          ragCandidates: ranked,
-          staticFallback: fallback,
-          random: () => r,
-        });
-        expect(rankedTexts.has(picked.text)).toBe(true);
-        expect(picked.ragTip).toBe(true);
-      }
-    });
-
-    it("the roll (corpus already on screen) can also land past the top three", () => {
-      const onScreen = new Set(["rank 1"]);
-      const rolls = [0, 0.85]; // first call wins the roll, second call picks within the band
-      const picked = pickNextCarouselChip({
-        historyTexts: onScreen,
-        visibleTexts: onScreen,
-        ragCandidates: ranked,
-        staticFallback: fallback,
-        random: () => rolls.shift() ?? 0,
-      });
-      // "rank 1" is already on screen (excluded from `available`), leaving ranks 2-6; a high
-      // roll lands on the last of those five: "rank 6".
-      expect(picked.text).toBe("rank 6");
-    });
-
-    it("never lets the random draw cross into the compat band while a game candidate is unseen", () => {
-      const mixed = [
-        rag("game rank 1"),
-        rag("game rank 2"),
-        rag("game rank 3"),
-        rag("compat rank 1", "troubleshooting"),
-        rag("compat rank 2", "troubleshooting"),
-      ];
-      for (const r of [0, 0.2, 0.4, 0.6, 0.8, 0.999]) {
-        const picked = pickNextCarouselChip({
-          historyTexts: new Set(),
-          visibleTexts: new Set(),
-          ragCandidates: mixed,
-          staticFallback: fallback,
-          random: () => r,
-        });
-        expect(picked.text.startsWith("game rank")).toBe(true);
-      }
-    });
-  });
-});
-
-describe("the Developer force-chips override reaches rotation too", () => {
-  const candidates = [rag("How do I beat Glyphid Dreadnought?"), rag("How do I use Red Sugar?")];
-  const fallback = () => staticSeed("static-chip");
-  const onScreen = new Set(["How do I beat Glyphid Dreadnought?", "b", "c"]);
-
-  afterEach(() => setSessionRagCarouselCandidates([]));
-
-  it("takes a corpus chip on every tick when the override is published", () => {
-    // Without this the override forced only the three seeded slots and rotation went straight back
-    // to rolling 0.3 -- so "force session RAG chips" forced half the carousel, and the half it left
-    // alone is the one a QA row watching over time is reading.
-    setSessionRagCarouselCandidates(candidates, { ragProbability: 1 });
-    expect(
-      pickCarouselChipWithSessionRag({
-        historyTexts: onScreen,
-        visibleTexts: onScreen,
-        staticFallback: fallback,
-        random: () => 0.99,
-      }).text,
-    ).toBe("How do I use Red Sugar?");
-  });
-
-  it("goes back to the normal roll when the override is not published", () => {
-    setSessionRagCarouselCandidates(candidates);
-    expect(
-      pickCarouselChipWithSessionRag({
-        historyTexts: onScreen,
-        visibleTexts: onScreen,
-        staticFallback: fallback,
-        random: () => 0.99,
-      }).text,
-    ).toBe("static-chip");
+    expect(out.map((p) => p.text)).toEqual(["a", "How do I beat the Hive Knight?", "b"]);
   });
 });

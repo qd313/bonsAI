@@ -221,7 +221,6 @@ right toggle — see PERM-JUMP-01 below for the timing. History (the 2026-09-03 
 [testing-manual-history-2026.md § SMOKE-C](archive/testing-manual-history-2026.md#smoke-c).
 
 - [x] Turn a capability **off** → blocked action → **Open Permissions** (or troubleshooting hint button) → lands on matching toggle → **Back to …** returns → no crash. **PASS (Deck) 2026-09-26 (plan 70, flow 2d.2), reworded:** with Steam ban lookup off, `bonsai:vac-check` was denied at once with no model call (confirmed by Ollama's own last-use times, unchanged); "Open Permissions" landed on the right switch both times it was tried (from the deny row and from the troubleshooting hint); the page has no plain "Back to …" button that returns from the Permissions tab — the working return is walking up to "Back to Main" and pressing A, which comes back to Main cleanly with the ring on "Open Permissions" and the panel never closing. A bare B press only moves the ring to the tab bar; it does not return by itself. Evidence `docs/test-evidence/plan70-SMOKE-C.json`.
-- [ ] Re-enable before Tier 1
 
 ### PERM-JUMP-01 — Permission jump D-pad (P0)
 
@@ -240,7 +239,7 @@ History (the 2026-09-03 block and the two earlier FAIL runs this fix replaced):
 | `microphone_access` | Ask bar mic / Settings → Voice install | Voice input (microphone) |
 | `steam_web_api` | `bonsai:vac-check` reply banner | Steam ban lookup |
 
-- [ ] D-pad: deny **Open Permissions** → Permissions toggle → **Back** without losing modal tab-restore behavior elsewhere
+All checks in this block passed on the Deck and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
 
 ### ONBUTTONDOWN-AUDIT-01 — onButtonDown whitelist + direction handlers (P1)
 
@@ -252,7 +251,6 @@ Wave 4 G — confirm D-pad directions do not trigger A-only actions; direction h
 - [ ] Session context strip open: D-pad **Down** through turn rows does **not** change active row; **A** selects row
 - [ ] Expanded turn **Show details** link: D-pad past without **A** does not change session highlight
 - [ ] Collapsed turn header: **Down** enters answer bubble (section walk)
-- [ ] Settings → UI scale manual profile bridge: **Left/Right** steps profile when focused on slider thumb
 
 **This row decides an open question, so record what happens rather than just pass/fail.** Wave 4 G
 removed `onMoveLeft`/`onMoveRight` from `buildDeckThumbNavHandlers` and the UI-scale bridge, leaving
@@ -262,12 +260,6 @@ object. Both cannot be right: the old string predicates provably never matched a
 work, and "redundant twins" was the one thing they could not have been. Watch for two distinct
 failures:
 
-- [ ] **Nothing happens** on Left/Right → `onButtonDown` is not reaching the thumb; restore the
-      `onMove*` handlers and drop the direction branch of `onButtonDown` (not both — they double-step)
-- [ ] **Two steps per press**, or the profile steps *and* focus jumps off the slider → `onButtonDown`
-      fires but does not consume the direction the way `onMoveLeft` did; the bridge needs to swallow it
-- [ ] All four `DeckFocusSlider` users, not just UI scale — **Ollama keep-alive**, **Reply verbosity**,
-      **Connection timeout** share `buildDeckThumbNavHandlers` and changed with it
 
 **Fixed at the desk 2026-09-04** for all four sliders — the three `DeckFocusSlider` consumers
 (**Ollama keep-alive**, **Reply verbosity**, **Connection timeout**) and the **Settings → UI scale
@@ -278,12 +270,13 @@ manual profile bridge** (the last bullet in the row above). It was the second ou
 `onButtonDown` to double-step. Deck check owed: re-run the slider half of this row and confirm Left
 stays on the slider on all four.
 
-**PASS (Deck) 2026-09-26 (plan 70, flow 2b.6), closed.** All four sliders (Reply style, Keep models
+**PASS (Deck) 2026-09-26 (plan 70, flow 2b.6), slider half closed.** All four sliders (Reply style, Keep models
 loaded, Connection timeout, UI size manual) — Left and Right each changed the value by one step and
 the ring never left the slider for Steam's own Quick Access rail. Note: the two-handle Connection
 timeout slider only steps a handle after A picks it first (by design, written at the top of its own
 code); without A, Left holds still and Right just moves the ring to the other handle. Every setting
 read back unchanged afterward. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+The four boxes above that are still empty (the collapsed hint, the session strip, the Show details link, the collapsed turn header) were not part of that run and are still owed.
 
 ### DOC-SWEEP-01 — global document realm fixes (P1)
 
@@ -336,7 +329,6 @@ suggestions → **decode**.
       whatever is on screen mid-churn). **PASS (Deck) 2026-09-26:** with the ring on the chip, it
       churned to a new question and the ring stayed; A pressed mid-churn filled the Ask field with the
       whole finished prompt, no symbols.
-- [ ] After hold, chip clears and samples a new prompt
 - [x] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret). **PASS
       (Deck) 2026-09-26 (plan 70, flow L5):** 13 chip label changes watched across two answers and a
       wait, each swapping from one whole label to the next with no scrambled letters and no caret at any
@@ -408,12 +400,10 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
 
 ### Open regression IDs (bugs / recent ships)
 
-- [ ] **STRATEGY-PLACEHOLDER-01** Strategy mode, empty Ask — focus field; italic placeholder does not shift when fake caret appears
-- [ ] **ASK-CARET-CHAR-01** AI character on — focus empty Ask field; native caret aligns with placeholder/text (not left of `?` badge); D-pad Up from paperclip → avatar, Right → field; character-off path unchanged
 - [ ] **STRAT-SPOIL-DRG-01** DRG Survivor boss names not false-positive spoilers — ship gate is the three **required** rows below; acceptance is *no spoiler fence rendered for the entity named in the question* (display-level, not a claim about model behavior). Plan 54 landed 2026-09-15; the three new sub-rows below cover it. All rows in this block run in plan 55's Deck pass.
   (DRG-01, DRG-01d, DRG-01-STREAM-01, HADES-NAMED-01, STRAT-SPOIL-FIRST-01 and STRAT-SPOIL-TEXT-01 passed and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).)
-  - [x] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)* — **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent five times out of six tries, so the reply was never seen. Evidence `docs/test-evidence/plan61-DRG-01b.json`. **DRG-01c not tried on purpose** 2026-09-18 — it would mean removing the library from the Deck, which was out of scope tonight. Still owed, not failed. **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence `docs/test-evidence/plan61-DRG-01b-retry.json`. **DRG-01b PASS (Deck) 2026-09-23:** with the game running, the knowledge base off, masking on and no consent phrase, the boss tactics came back plain, no cover, no notes block, and no knowledge-base search logged. Moved to Done. DRG-01c (corpus absent) is still not tried. Evidence `docs/test-evidence/plan64-DRG-01b.json`.
-  - [x] **HADES-UNNAMED-STREAM-01** — companion check for the fix above, so nothing was over-relaxed. Hades `1145360`, a question that does **not** name a boss, streaming on → the mid-stream mask chip **still appears** for story-adjacent detail (Hades shares the `roguelike` genre with DRG Survivor, so this is the case the R4 fix must not touch) — **Not claimed 2026-09-15**: the fast poll never saw the mid-stream chip. A recording exists (`recordings/DeckRecord_20260915_205114_game.mkv`, untracked) for the maintainer to play back. **Tried again 2026-09-18 with Hades running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01.json`. **FAIL (Deck) 2026-09-18, later the same night:** sent cleanly with no focus trap this time. The reply streamed all the way through as plain, readable text — no mid-stream mask chip, no "Spoiler hidden until complete…" chip, no tap-to-reveal block, at any point. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, screenshot `screenshots/DeckCapture_20260918_115623_auto.png`.
+  - [ ] **DRG-01c** As DRG-01 with the corpus **absent** → still plain text. **Not tried** (2026-09-18 on purpose: it means removing the library from the Deck). DRG-01b (knowledge base off) passed (Deck) 2026-09-23 and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md); evidence `docs/test-evidence/plan64-DRG-01b.json`.
+  - [ ] **HADES-UNNAMED-STREAM-01** (**FAIL (Deck) 2026-09-18, open**) — companion check for the fix above, so nothing was over-relaxed. Hades `1145360`, a question that does **not** name a boss, streaming on → the mid-stream mask chip **still appears** for story-adjacent detail (Hades shares the `roguelike` genre with DRG Survivor, so this is the case the R4 fix must not touch) — **Not claimed 2026-09-15**: the fast poll never saw the mid-stream chip. A recording exists (`recordings/DeckRecord_20260915_205114_game.mkv`, untracked) for the maintainer to play back. **Tried again 2026-09-18 with Hades running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01.json`. **FAIL (Deck) 2026-09-18, later the same night:** sent cleanly with no focus trap this time. The reply streamed all the way through as plain, readable text — no mid-stream mask chip, no "Spoiler hidden until complete…" chip, no tap-to-reveal block, at any point. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, screenshot `screenshots/DeckCapture_20260918_115623_auto.png`.
   - [ ] *(recommended)* **HADES-UNNAMED-01** Hades, a question that does **not** name a boss → story-adjacent detail **still fenced**. This is the genre over-relax guard: Hades shares the `roguelike` genre with DRG Survivor — **Mixed on the Deck 2026-09-15, three runs, all recorded honestly.** *"what happens when i finally reach the surface in hades"* got **no fence** and a mild story spoiler in plain text — **FAIL as written** (`docs/test-evidence/plan55-HADES-UNNAMED-01.json`). *"how does the story of hades end"* and *"who is waiting at the end of the game in hades"* both got a masked fence — **PASS** (`docs/test-evidence/plan55-HADES-UNNAMED-01-run2.json`, `docs/test-evidence/plan55-HADES-UNNAMED-STREAM-01.json`). **Re-run FAIL (Deck) 2026-09-17:** *"what happens when you reach the surface"* in Hades came back as plain, unmasked text again, no spoiler block. Still mixed, not closed. Evidence `docs/test-evidence/plan57-QA-HADES-UNNAMED-01.json`. **A fourth try, planned 2026-09-18 with Hades running on a new phrasing, was blocked** before it could be asked — the same Ask-box freeze as the roadmap's three-star focus entry. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-01-try4.json`. **The fourth try ran later the same night, sent cleanly with no focus trap — FAIL (Deck) 2026-09-18:** *"how do i beat the boss at the end of the first area"*, no boss named, in Hades. The reply gave general fight advice in plain text with no spoiler box anywhere and no boss named either. Three of the four phrasings tried since 15 September have now come back open; only the two "how does the story end" / "who is waiting at the end" phrasings passed. Evidence `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Tried again 2026-09-26 (plan 70, flow L1), UNCLEAR:** three new phrasings, no game running, none showed a protected word (Persephone, mother, Demeter) at any of the 250 ms reads. One answer put its story part behind a cover; the other two gave no story detail at all, so there was nothing to cover — a dodge, not proof the fence works. The owner decides whether a dodge counts as covered. Evidence `docs/test-evidence/plan70-HADES-UNNAMED-01.json`.
     **2026-09-30 (plan 77, mixed, still owed):** of three phrasings, 1 drew a cover; 2 of 3 were dodges with no story detail at all (the owner rules on those). Evidence `docs/test-evidence/plan77-HADES-UNNAMED-01.json`.
   - [ ] **STRAT-SPOIL-NAME-01** game known only by name. Setup: Doom 64 (or another emulated no-story title from
@@ -437,7 +427,7 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy
     follow-up]` turn → plain text — **DRG-01f PASS (Deck) 2026-09-26 (plan 70, flow L5), with Deep Rock
     Galactic: Survivor running:** picking "A. Just starting the campaign" under a boss-tactics answer, the
-    follow-up turn answered in plain text, no spoiler cover. Side finding, being fixed (helper K): while the
+    follow-up turn answered in plain text, no spoiler cover. Side finding, since fixed and passed on the Deck 2026-09-29 (row KB-FOLLOWUP-QUOTE-02, `docs/test-evidence/plan76-KB-FOLLOWUP-QUOTE-02-try2.json`): while the
     model warmed up, the waiting line showed the raw "[Strategy follow-up]" tag instead of the friendly
     wording. DRG-01e (streaming off) still owed. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
@@ -496,49 +486,6 @@ everything below assumes it passes. Plan:
   dismissed on this device). History: **FAIL 2026-08-31** (one chip, filed by the maintainer on sight); rebuilt at the desk
   2026-09-01 as two across (D43, the drawing's three chips would have left ~12 characters each). Also check: the help chip, when
   showing, is the entire row and no suggestion chip is beside it; once dismissed, the two chips take the row.
-- [ ] **PRESET-ONE-LINE-03** (the D-pad reaches every chip and leaves cleanly, in every mode) From the Ask field press **Up**: the
-  ring must land on a chip (`gpfocus`, not just `activeElement`, per FOCUS-CHIP-RING-01) and **A must fill the Ask field** with that
-  chip's text. **Right/Left** step between the two chips; **Down** returns to the Ask field; **Up** leaves toward the transcript.
-  Repeat for fade / static / decode — before 2026-09-01 only carousel mode registered a nav handover and the other modes fell back
-  to a plain `focus()`, which is the mechanism behind the 2026-08-28 fake-ring bug. In **carousel** mode additionally: after a few
-  auto-advances press **Left** at the left chip — an earlier chip slides back into view and the blue current-chip marker and the
-  white ring sit on the same chip; **Right** walks forward again; Left at the very first chip in history holds still, no trap.
-  **Carousel mode PASS on device 2026-09-01, driven by the bridge:** `docs/test-evidence/PRESET-ONE-LINE-03-carousel-dpad-fixed-2.json` (11/11:
-  Up from the text field lands on a chip, Left at the oldest chip holds for three presses, Right walks all five history chips with
-  the window sliding, Down reaches the text field, Up returns to the last chip, Up again lands on **Session context**) and
-  `docs/test-evidence/PRESET-ONE-LINE-03-carousel-fresh-mount.json` (13/14 on a freshly opened panel: Down from the strip enters the row,
-  everything above repeats). **The first run failed 6/9** (`docs/test-evidence/PRESET-ONE-LINE-03-carousel-dpad.json`): Steam treated the row as a
-  column — Left left the plugin for the Quick Access rail and Down/Up stepped between chips — because the `flow-children`
-  container hint alone does nothing; every chip now carries explicit handlers (`presetRowNav.ts`). **Two misses fixed at the desk
-  afterwards and re-run 2026-09-02, 14/14** (`docs/test-evidence/PRESET-ONE-LINE-03-carousel-fresh-mount-2.json`): on a fresh panel, entering the
-  row had put the ring on the older visible chip rather than the marked one (the redirect ran inside Steam's own focus event; now
-  deferred a tick), and Down from a chip had put the caret in the text field while Steam bounced the ring to the next chip (a plain
-  `focus()` across containers; the field now registers a Steam nav node, `unified-input`). Both now land where they should, Right at
-  the newest chip holds, and Up from the text field returns to the marked chip. One Left press in that run (second-oldest to oldest
-  chip) did not move; the same transition passed in two probes at the rig's cadence (`…-oldest-chip-probe-a/b.json`), so it is a
-  one-off — if it recurs, a press in the tail of the 550 ms slide is the first suspect. Fade / static / decode share the same handler code and were not driven on device. The rig also reports the
-  ring "partially visible" for one settle after a slide — the 550 ms transition is still running when it measures; the next step
-  always reads 100 %.
-
-  **Fade / static / decode driven on device 2026-09-26 (plan 70, flow 2b.9), mixed.** **Decode — PASS:**
-  chip Right/Left held still (one chip), Down reached the box, Up returned to the chip, Up again reached
-  the notes block; every stop visible, and the chip changed its question while holding the ring without
-  losing it. **Two chips, decode — PASS (7 of 7):** Left/Right stepped between both chips and Down/Up
-  worked the same way. **Fade — FAILED and static — FAILED, same shape:** when the single chip swaps to
-  a new question while it holds the ring, the ring is lost — nothing on the panel is focused afterward,
-  confirmed twice each with a bare screenshot showing no ring anywhere. Once in fade, Up from the box also
-  skipped the chip entirely and landed on the avatar. Evidence
-  `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots), saved walk
-  `checks/plan70-PRESET-ONE-LINE-03-decode.json`.
-
-  **Fade and static fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Both styles now keep one button
-  per slot, like decode, and only its words change; a chip holding the ring in fade style also waits to
-  fade out until the ring has moved on. Sighting from the same pass: in fade style, walking Up from the
-  question box can skip a chip that is mid-fade. **PASS (Deck) 2026-09-26 (plan 70, flow L4.1), closed:**
-  fade held the ring for the full 22 seconds with its question unchanged; static held the ring through
-  the full 22 seconds including the moment its words changed at 9.1 seconds, still on it 25 seconds
-  later. Evidence `docs/test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots). **Re-measured,
-  the carousel off-screen ring did not reproduce in 3 tries** — kept as a sighting below, not a bug.
 - [ ] **PRESET-ONE-LINE-04** (the scrolling is calm and cheap) With the knowledge base on and a covered game running (Half-Life 2 has
   the longest label, 59 characters): both labels crawl slowly with a fade at the edges, the **Tip** badge stays pinned at the left
   while the text scrolls, and a chip does not rotate away before its label has scrolled through once. Judge the speed by eye — "slow
@@ -611,7 +558,7 @@ Rows 01–07 and 10–11 passed on the Deck (07 is retired, replaced by TAB-STRI
 
 Also re-run because their landing spot changed: **DOC-SWEEP-01** (Settings Up → the bar now),
 **CHAT-SLOTS-V3-01** (the walk starts at the bar), **TAB-SWITCH-01** (the flicker fix must hold with
-the header hidden — `docs/test-evidence/TAB-BAR-W1a-*.json` show ten clean switches).
+the header hidden — `docs/test-evidence/TAB-BAR-W1a-*.json` show ten clean switches). **TAB-SWITCH-01 PASSED, measured (Deck) 2026-09-04:** 1,453 samples, the tab bar's `scrollLeft` never left 0 (recorded in [archive/31-deck-verification-round.md](archive/31-deck-verification-round.md), "Tab switch, About, and the archive pill — 2026-09-04"); nothing is owed on it.
 
 ### TAB-STRIP-2A — The open tab strip redesign (plan 59)
 

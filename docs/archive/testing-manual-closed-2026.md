@@ -541,3 +541,84 @@ _Moved word for word from [testing-manual.md](../testing-manual.md), ticked, wit
   **PASS (Deck) 2026-09-30 (plan 77), both halves:** Expert 1200 against Speed 800, and three requests with two soft continues at a limit of 300. Evidence `docs/test-evidence/plan77-EXPERT-CAP-01.json`, `docs/test-evidence/plan77-EXPERT-CAP-01-continue.json`.
 - [x] **REPLY-VERB-01** Reply style: set **Caveman** → Ask → Input handling shows `Reply style: caveman` and reply is terse; **Balanced** → no `REPLY VERBOSITY` block vs baseline; **Detailed** → paragraphs; with **AI characters** on + Caveman, character voice (not caveman grammar); Strategy + Detailed still ends with `bonsai-strategy-branches`. **Tried 2026-09-26 (plan 70), UNCLEAR:** labels correct in all three modes, Balanced added nothing, Strategy + Detailed kept its branch menu, but the maintainer's AI character was on the whole time, which drops the Caveman instruction by design and left Detailed and Balanced almost the same length — needs a re-run with characters off. Evidence `docs/test-evidence/plan70-REPLY-VERB-01.json`.
   **PASS (Deck) 2026-09-30 (plan 77), one sub-check not run:** Caveman 846 letters against Detailed 1,193 and Balanced 1,379; Detailed Strategy still ended with its branches. Not run: that Balanced adds no reply-verbosity block. Evidence `docs/test-evidence/plan77-REPLY-VERB-01.json`.
+
+## Plan 78, docs sweep 2 (2026-09-30)
+
+_Moved word for word from [testing-manual.md](../testing-manual.md), ticked, with the result added._
+
+### SMOKE-C — Permission gate (P0)
+
+- [x] Re-enable before Tier 1 **Done (Deck) 2026-09-26 (plan 70, flow 2d.2):** Steam ban lookup was switched back on and the settings file read true. Evidence `docs/test-evidence/plan70-SMOKE-C.json`.
+
+### PERM-JUMP-01 — Permission jump D-pad (P0)
+
+- [x] D-pad: deny **Open Permissions** → Permissions toggle → **Back** without losing modal tab-restore behavior elsewhere **PASS (Deck) 2026-09-23:** the ring reached the Read game & screenshot context switch and stayed there (`docs/test-evidence/plan64-PERM-JUMP-01-try2.json`). **PASS (Deck) 2026-09-26:** "Back to Main" returned cleanly with the panel never closing (`docs/test-evidence/plan70-SMOKE-C.json`).
+
+### ONBUTTONDOWN-AUDIT-01 — onButtonDown whitelist + direction handlers (P1)
+
+- [x] Settings → UI scale manual profile bridge: **Left/Right** steps profile when focused on slider thumb **PASS (Deck) 2026-09-26 (plan 70, flow 2b.6):** Left stepped the manual size and the ring stayed on the slider; the setting read back unchanged. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+- [x] **Nothing happens** on Left/Right → `onButtonDown` is not reaching the thumb; restore the
+      `onMove*` handlers and drop the direction branch of `onButtonDown` (not both — they double-step)
+  **Did not happen (Deck) 2026-09-26:** on all four sliders Left and Right stepped and the ring stayed. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+- [x] **Two steps per press**, or the profile steps *and* focus jumps off the slider → `onButtonDown`
+      fires but does not consume the direction the way `onMoveLeft` did; the bridge needs to swallow it
+  **Did not happen (Deck) 2026-09-26:** each press changed the value by one step. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+- [x] All four `DeckFocusSlider` users, not just UI scale — **Ollama keep-alive**, **Reply verbosity**,
+      **Connection timeout** share `buildDeckThumbNavHandlers` and changed with it
+  **PASS (Deck) 2026-09-26:** all four sliders (Reply style, Keep models loaded, Connection timeout, UI size manual). Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
+
+### PRESET-STREAM-ANIM-01 — decode preset chip animation (P1)
+
+- [x] After hold, chip clears and samples a new prompt **Closed 2026-09-30 on the row's own line in testing-manual.md, "Judged good by the maintainer 2026-09-14", which says the empty boxes were never walked one by one; no separate Deck run of this step.**
+
+### CHAT-SLOTS-V3 — Named chat slots redesign (P0), row PRESET-ONE-LINE-03
+
+- [x] **PRESET-ONE-LINE-03** (the D-pad reaches every chip and leaves cleanly, in every mode) From the Ask field press **Up**: the
+  ring must land on a chip (`gpfocus`, not just `activeElement`, per FOCUS-CHIP-RING-01) and **A must fill the Ask field** with that
+  chip's text. **Right/Left** step between the two chips; **Down** returns to the Ask field; **Up** leaves toward the transcript.
+  Repeat for fade / static / decode — before 2026-09-01 only carousel mode registered a nav handover and the other modes fell back
+  to a plain `focus()`, which is the mechanism behind the 2026-08-28 fake-ring bug. In **carousel** mode additionally: after a few
+  auto-advances press **Left** at the left chip — an earlier chip slides back into view and the blue current-chip marker and the
+  white ring sit on the same chip; **Right** walks forward again; Left at the very first chip in history holds still, no trap.
+  **Carousel mode PASS on device 2026-09-01, driven by the bridge:** `docs/test-evidence/PRESET-ONE-LINE-03-carousel-dpad-fixed-2.json` (11/11:
+  Up from the text field lands on a chip, Left at the oldest chip holds for three presses, Right walks all five history chips with
+  the window sliding, Down reaches the text field, Up returns to the last chip, Up again lands on **Session context**) and
+  `docs/test-evidence/PRESET-ONE-LINE-03-carousel-fresh-mount.json` (13/14 on a freshly opened panel: Down from the strip enters the row,
+  everything above repeats). **The first run failed 6/9** (`docs/test-evidence/PRESET-ONE-LINE-03-carousel-dpad.json`): Steam treated the row as a
+  column — Left left the plugin for the Quick Access rail and Down/Up stepped between chips — because the `flow-children`
+  container hint alone does nothing; every chip now carries explicit handlers (`presetRowNav.ts`). **Two misses fixed at the desk
+  afterwards and re-run 2026-09-02, 14/14** (`docs/test-evidence/PRESET-ONE-LINE-03-carousel-fresh-mount-2.json`): on a fresh panel, entering the
+  row had put the ring on the older visible chip rather than the marked one (the redirect ran inside Steam's own focus event; now
+  deferred a tick), and Down from a chip had put the caret in the text field while Steam bounced the ring to the next chip (a plain
+  `focus()` across containers; the field now registers a Steam nav node, `unified-input`). Both now land where they should, Right at
+  the newest chip holds, and Up from the text field returns to the marked chip. One Left press in that run (second-oldest to oldest
+  chip) did not move; the same transition passed in two probes at the rig's cadence (`…-oldest-chip-probe-a/b.json`), so it is a
+  one-off — if it recurs, a press in the tail of the 550 ms slide is the first suspect. Fade / static / decode share the same handler code and were not driven on device. The rig also reports the
+  ring "partially visible" for one settle after a slide — the 550 ms transition is still running when it measures; the next step
+  always reads 100 %.
+
+  **Fade / static / decode driven on device 2026-09-26 (plan 70, flow 2b.9), mixed.** **Decode — PASS:**
+  chip Right/Left held still (one chip), Down reached the box, Up returned to the chip, Up again reached
+  the notes block; every stop visible, and the chip changed its question while holding the ring without
+  losing it. **Two chips, decode — PASS (7 of 7):** Left/Right stepped between both chips and Down/Up
+  worked the same way. **Fade — FAILED and static — FAILED, same shape:** when the single chip swaps to
+  a new question while it holds the ring, the ring is lost — nothing on the panel is focused afterward,
+  confirmed twice each with a bare screenshot showing no ring anywhere. Once in fade, Up from the box also
+  skipped the chip entirely and landed on the avatar. Evidence
+  `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots), saved walk
+  `checks/plan70-PRESET-ONE-LINE-03-decode.json`.
+
+  **Fade and static fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Both styles now keep one button
+  per slot, like decode, and only its words change; a chip holding the ring in fade style also waits to
+  fade out until the ring has moved on. Sighting from the same pass: in fade style, walking Up from the
+  question box can skip a chip that is mid-fade. **PASS (Deck) 2026-09-26 (plan 70, flow L4.1), closed:**
+  fade held the ring for the full 22 seconds with its question unchanged; static held the ring through
+  the full 22 seconds including the moment its words changed at 9.1 seconds, still on it 25 seconds
+  later. Evidence `docs/test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots). **Re-measured,
+  the carousel off-screen ring did not reproduce in 3 tries** — kept as a sighting below, not a bug.
+
+### Open regression IDs (bugs / recent ships)
+
+- [x] **STRATEGY-PLACEHOLDER-01** Strategy mode, empty Ask — focus field; italic placeholder does not shift when fake caret appears **PASS (Deck) 2026-09-26 (plan 70, flow 2b.4):** the hint's box and first letter sat at the same position focused, unfocused and focused again, 0 px shift. Evidence `docs/test-evidence/plan70-STRATEGY-PLACEHOLDER-01.json`.
+- [x] **ASK-CARET-CHAR-01** AI character on — focus empty Ask field; native caret aligns with placeholder/text (not left of `?` badge); D-pad Up from paperclip → avatar, Right → field; character-off path unchanged **PASS (Deck) 2026-09-26 (plan 70, flow 2e):** with the character on, the cursor sat 0.5 px before the hint's first letter, right of the avatar badge, and Up from the paperclip reached the avatar; with it off, the same gap held. Evidence `docs/test-evidence/plan70-ASK-CARET-CHAR-01.json`.
+- [x] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)* — **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent five times out of six tries, so the reply was never seen. Evidence `docs/test-evidence/plan61-DRG-01b.json`. **DRG-01c not tried on purpose** 2026-09-18 — it would mean removing the library from the Deck, which was out of scope tonight. Still owed, not failed. **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence `docs/test-evidence/plan61-DRG-01b-retry.json`. **DRG-01b PASS (Deck) 2026-09-23:** with the game running, the knowledge base off, masking on and no consent phrase, the boss tactics came back plain, no cover, no notes block, and no knowledge-base search logged. Moved to Done. DRG-01c (corpus absent) is still not tried. Evidence `docs/test-evidence/plan64-DRG-01b.json`. (Split 2026-09-30: DRG-01b passed 2026-09-23 and is closed here; DRG-01c stays open in testing-manual.md.)

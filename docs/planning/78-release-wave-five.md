@@ -437,6 +437,13 @@ To be filled in.
   uncommitted work through a shared `git stash`; nothing was lost, and the rule "never git stash" is now in every helper's
   standing instructions (`f4159cf0`).
 
+- **Second sweep (2026-09-30, night):** the fix for a setting lost on a quick close landed (`0b9454fa`, every check
+  green). The summary-wording fix was sent back before landing: its guard against empty lines also threw away real
+  ones, such as "Stuck on: not sure how to beat the Soul Master". Its Game-line half was fine: a non-game named on the
+  Game line went from 27 of 45 test summaries to none. The list of owed Deck checks is done: 66 checks, 27 the rig can
+  run, 5 it can never run, 3 blocked and 31 the maintainer's. The read-through of the step after an answer found four
+  real problems, now on the roadmap, and two more helpers started on them (L and M).
+
 ## For the helpers: who owns which files
 
 A starting point for the briefs. Each brief names the tip it starts from and its exact files, the base check, one fix

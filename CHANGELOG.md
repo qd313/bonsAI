@@ -7,6 +7,7 @@ All notable changes to this project are documented in this file.
 ### Plan 78 (2026-09-30)
 
 - **A model you remove outside the plugin (with `ollama rm`) now leaves the saved try order** the next time the AI models list opens. Nothing changes when Ollama is off or cannot be reached, or when the AI runs on a PC. Owes its Deck check.
+- **A setting changed with the D-pad is still there after you close Quick Access straight away.** Before, a change made less than half a second before the panel closed could be lost. Whatever is waiting to be saved is now saved the moment the panel is hidden or the settings screen is taken down, and only the settings that changed are written. Owes its Deck check.
 
 ### Plan 77 (2026-09-29)
 

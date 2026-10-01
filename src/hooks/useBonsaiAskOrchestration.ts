@@ -1030,8 +1030,8 @@ export function useBonsaiAskOrchestration(
       const archBelongsToActiveSlot = (arch?.slotId ?? null) === (a.activeSlotIdRef?.current ?? null);
       if (arch && archBelongsToActiveSlot && arch.question.trim() && arch.answer.trim()) {
         /*
-         * Replace the tail rather than always appending, or the previous turn shows up twice for
-         * the whole length of this generation.
+         * Do not append when the tail already holds this turn, or the previous turn shows up twice
+         * for the whole length of this generation.
          *
          * Two writers reach this list and neither knows about the other. When the previous reply
          * landed, `onSlotTurnsChanged` fired `reloadActiveSlotTranscript`, which rebuilt the whole
@@ -1042,40 +1042,44 @@ export function useBonsaiAskOrchestration(
          * so it self-corrects — but only after a generation that runs one to three minutes on this
          * hardware, which is exactly the window a QA pass is looking at.
          *
-         * The flush is NOT redundant, which is why this replaces instead of skipping: the reloaded
-         * copy comes from disk via `turnsToCollapsedTurns`, which reads the consent flag the back end
-         * saved with the answer (plan 77; a turn saved before that reads false). The
-         * AppID it used to blank as well is now carried through from Python
-         * ([chatSlotTurns.ts](../utils/chatSlotTurns.ts)), so a reloaded row no longer loses the
-         * game its answer was about — but this flush still holds the fresher consent flag that the
-         * display-time spoiler unwrap reads (STRAT-SPOIL-DRG-01).
-         * Keeping the reloaded row's `id` matters too — it is the slot's own turn id, so it survives
-         * the next reload, where a minted one would be replaced by it anyway.
+         * A row the reload already put there is left exactly as it is (plan 78, finding 2). It
+         * used to be swapped for this flush's own copy, which is thinner: no thinking row, no
+         * summary mark, and after a branch pick no game, named boss or spoiler consent either. The
+         * reloaded row reads all of that off disk, including the consent flag (plan 77) and the
+         * AppID, so there is nothing left for this copy to add. Swapping it also re-listed the
+         * answer twice after a branch pick or a tapped glossary word: the screen's copy is titled
+         * with the short caption ("I'm at: ..."), the saved row keeps the long prompt as its
+         * question, and a question-text comparison said "different turn".
          *
-         * Matching on question+answer rather than id is deliberate: the two writers mint ids
-         * independently, so ids cannot match by construction. The one case this gets wrong is a
-         * question and answer that are both byte-identical to the immediately preceding turn with
-         * no saved chat active to reload from — a repeat of the same question answered verbatim the
-         * same way. That loses one history row; the alternative loses nothing and shows a duplicate
-         * on every follow-up Ask.
+         * "The same answer" is therefore the answer text, plus either the question matching in
+         * either of its two spellings or the row carrying a slot's own turn id (a row this flush
+         * minted itself has a `turn-` id, so a verbatim repeat after one of those is still a new
+         * turn when no saved chat is active to reload from). This flush only adds its copy when the
+         * reload has not landed yet.
          */
         setAskThreadCollapsed((prev) => {
           const last = prev[prev.length - 1];
-          const alreadyReloaded =
+          const archQuestion = arch.question.trim();
+          const loadedRowHoldsTheAnswer =
             !!last &&
-            last.question.trim() === arch.question.trim() &&
-            last.answer.trim() === arch.answer.trim();
-          const row = {
-            id: alreadyReloaded ? last.id : `turn-${Date.now()}-${prev.length}`,
-            question: arch.question,
-            answer: arch.answer,
-            transparency: arch.transparency ?? null,
-            appId: arch.appId,
-            appName: arch.appName,
-            askedEntity: arch.askedEntity,
-            spoilerConsentEffective: arch.spoilerConsentEffective === true,
-          };
-          return alreadyReloaded ? [...prev.slice(0, -1), row] : [...prev, row];
+            last.answer.trim() === arch.answer.trim() &&
+            (!last.id.startsWith("turn-") ||
+              last.question.trim() === archQuestion ||
+              last.questionDisplay?.trim() === archQuestion);
+          if (loadedRowHoldsTheAnswer) return prev;
+          return [
+            ...prev,
+            {
+              id: `turn-${Date.now()}-${prev.length}`,
+              question: arch.question,
+              answer: arch.answer,
+              transparency: arch.transparency ?? null,
+              appId: arch.appId,
+              appName: arch.appName,
+              askedEntity: arch.askedEntity,
+              spoilerConsentEffective: arch.spoilerConsentEffective === true,
+            },
+          ];
         });
         lastFlushedExchangeQuestionRef.current = arch.question.trim();
       }

@@ -1459,7 +1459,7 @@ describe("useBonsaiAskOrchestration", () => {
      * 2026-08-27, one row under the slot id and one under a minted `turn-<ts>-<i>` id.
      */
     describe("when the saved-chat reload already put the previous turn in the list", () => {
-      it("replaces that row instead of appending a second copy of it", async () => {
+      it("leaves that row as the saved chat gave it instead of appending a second copy", async () => {
         setRpcHandler("start_background_game_ai", () => ({
           accepted: true,
           status: "completed",
@@ -1475,8 +1475,7 @@ describe("useBonsaiAskOrchestration", () => {
           await result.current.onAskOllama("first question");
         });
 
-        // Stand in for reloadActiveSlotTranscript: the slot's own turn id, and the metadata the
-        // disk round-trip drops.
+        // Stand in for reloadActiveSlotTranscript: the slot's own turn id and what it read off disk.
         await act(async () => {
           result.current.setAskThreadCollapsed([
             {
@@ -1496,11 +1495,11 @@ describe("useBonsaiAskOrchestration", () => {
 
         expect(result.current.askThreadCollapsed).toHaveLength(1);
         expect(result.current.askThreadCollapsed[0]).toMatchObject({
-          // The slot's id survives, because the next reload would restore it anyway.
           id: "slot-turn-1",
           question: "first question",
-          // ...but the AppID the disk copy lost comes back, which the spoiler unwrap reads.
-          appId: "2321470",
+          // The row is the saved chat's own (plan 78): the screen's thinner copy does not
+          // overwrite it, so the game on it is whatever the saved chat says.
+          appId: "",
         });
       });
 

@@ -157,7 +157,7 @@
     "src/hooks/useAskBarInitialRingClaim.test.ts",
     "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",
     "src/hooks/useBackgroundGameAi.test.ts",
-    "src/hooks/useBonsaiAskOrchestration.reopen.test.ts",
+    "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
     "src/hooks/useBonsaiAskOrchestration.test.ts",
     "src/hooks/useBonsaiPluginShell.test.ts",
     "src/hooks/useChatSlots.test.ts",

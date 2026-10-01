@@ -107,6 +107,19 @@ export function hasBoxStop(section: HTMLElement): boolean {
   return Boolean(cover) && section.getBoundingClientRect().bottom - cover!.getBoundingClientRect().bottom > TEXT_AFTER_COVER_MIN_PX;
 }
 
+/**
+ * True when `cover` sits at the head of `section`: its bottom is within the section's first screenful (the
+ * section's top just under the header, `SECTION_TOP_PAD_PX` above it, and the whole cover still above the
+ * dock), so landing on the cover first leaves no text of the section unread above the header. Every cover
+ * the Deck walked in plan 77 and 78 is one (24 px down, its bottom at most 79 px). A deeper one is reached by
+ * reading the section: on the Deck a cover 383 px into a 446 px section took the ring straight from the line
+ * above, and the section's opening was never on screen (plan78-P78-TALL-SECTION-LOOP-BEFORE.json).
+ */
+export function isCoverAtHead(section: HTMLElement, cover: HTMLElement, scroll: HTMLElement): boolean {
+  const reach = cover.getBoundingClientRect().bottom - section.getBoundingClientRect().top;
+  return reach + SECTION_TOP_PAD_PX <= bandHeightOf(scroll);
+}
+
 /** True when `el` sits wholly inside the readable band: below the tab header, above the dock. */
 export function elementIsWhollyInBandOf(el: HTMLElement, scroll: HTMLElement): boolean {
   const elRect = el.getBoundingClientRect();

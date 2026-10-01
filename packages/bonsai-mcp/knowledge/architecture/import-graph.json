@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 652,
-  "edgeCount": 1826,
+  "fileCount": 653,
+  "edgeCount": 1827,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4823,6 +4823,7 @@
       "importedBy": [
         "src/utils/answerBubbleNavigation.coverMargin.test.ts",
         "src/utils/answerBubbleNavigation.coverMirror.test.ts",
+        "src/utils/answerBubbleNavigation.deepCoverEntry.test.ts",
         "src/utils/answerBubbleNavigation.downVisible.test.ts",
         "src/utils/answerBubbleNavigation.firstSection.test.ts",
         "src/utils/answerBubbleNavigation.lastSection.test.ts",
@@ -5216,6 +5217,12 @@
         "src/utils/answerStopRegistry.ts",
         "src/utils/spoilerFenceRegistry.ts",
         "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerBubbleNavigation.deepCoverEntry.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
       ],
       "importedBy": []
     },

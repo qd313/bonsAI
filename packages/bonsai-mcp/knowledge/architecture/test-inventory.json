@@ -203,6 +203,7 @@
     "src/utils/answerBubbleNavigation.coverMargin.test.ts",
     "src/utils/answerBubbleNavigation.coverMirror.test.ts",
     "src/utils/answerBubbleNavigation.coverUp.test.ts",
+    "src/utils/answerBubbleNavigation.deepCoverEntry.test.ts",
     "src/utils/answerBubbleNavigation.downVisible.test.ts",
     "src/utils/answerBubbleNavigation.firstSection.test.ts",
     "src/utils/answerBubbleNavigation.lastSection.test.ts",

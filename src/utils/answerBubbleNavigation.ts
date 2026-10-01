@@ -130,7 +130,7 @@ import { elementHasFocus, getUiDocument, uiGamepadFocusElement } from "./uiDocum
 
 import {
   CUT_TOLERANCE_PX, SECTION_TOP_PAD_PX, bandHeightOf, elementIsWhollyInBandOf, elementIsWithinViewportOf,
-  hasBoxStop, hopToSectionAbove, hopToSectionBelow, isCoverOnly, lastHiddenCoverIn, panelStepDown,
+  hasBoxStop, hopToSectionAbove, hopToSectionBelow, isCoverAtHead, isCoverOnly, lastHiddenCoverIn, panelStepDown,
   panelStepUp, revealBelowDock, revealSectionInBand, settleUpLanding,
 } from "./answerBubbleBandGeometry";
 
@@ -288,13 +288,23 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
    * (docs/test-evidence/round35-spoiler-block-down-and-up.json), Down from the question went
    * straight to a hidden spoiler block and never stopped on either paragraph before it. A spoiler
    * further down is still reached in its own turn, by the ordinary per-press walk in
-   * handleAnswerBubbleMoveDown below.
+   * handleAnswerBubbleMoveDown below. And only when it is at the head of that section (`isCoverAtHead`):
+   * a cover 383 px into a 446 px section took the ring straight from the line above, its opening never on
+   * screen (docs/test-evidence/plan78-P78-TALL-SECTION-LOOP-BEFORE.json). The section is entered instead
+   * and read down to it.
    */
+  const scroll = findScrollablePanel(el);
   const spoiler = el.querySelector<HTMLElement>(".bonsai-spoiler-reveal-target");
-  if (spoiler && (!stops.length || stops[0]!.contains(spoiler)) && focusPanelEl(spoiler)) {
+  const first = stops[0];
+  if (
+    spoiler &&
+    (!first || (first.contains(spoiler) && (!scroll || isCoverAtHead(first, spoiler, scroll)))) &&
+    focusPanelEl(spoiler)
+  ) {
     return true;
   }
-  if (stops.length && focusAnswerStop(stops[0]!)) {
+  if (first && focusAnswerStop(first)) {
+    boxLandedIn = first; // as Down's own landing on a section: a cover deep in it does not send the ring back here
     /*
      * Placed the way Down's own landing places a section: its bottom just above the dock (one taller
      * than the band keeps its top edge). Left where it was, mostly behind the dock, the section was
@@ -302,10 +312,9 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
      * 180 px first section landed at y 24 to 204, its top 64 px above the panel
      * (docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json). Coming in from below already does this.
      */
-    const scroll = findScrollablePanel(el);
     if (scroll) {
-      revealBelowDock(stops[0]!, scroll);
-      revealSectionInBand(stops[0]!, scroll);
+      revealBelowDock(first, scroll);
+      revealSectionInBand(first, scroll);
     }
     return true;
   }
@@ -768,7 +777,7 @@ export function handleAnswerBubbleMoveDown(
     if (next && at >= 0 && !inView(next) && hopToSectionBelow(readPartOf(stops[at]!, "down"), next, scroll)) {
       /* A cover at the head of that section still comes before its box, as it does whenever the box is on screen first. */
       const head = findNextSpoilerFenceInView(bubble, inView, anchor);
-      if (head && next.contains(head) && focusSpoilerFence(head)) {
+      if (head && next.contains(head) && isCoverAtHead(next, head, scroll) && focusSpoilerFence(head)) {
         walk = null;
         revealBelowDock(head, scroll);
         return true;

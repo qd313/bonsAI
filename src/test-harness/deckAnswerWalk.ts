@@ -337,10 +337,37 @@ export const MANTIS_LORDS: AnswerShape = {
   start: 0,
 };
 
+/**
+ * Plan 78's Deck answer with a cover deep in a tall section (plan78-P78-TALL-SECTION-LOOP-BEFORE.json): one
+ * 446 px section starting at content y 206 (page 294), its 55 px cover 383 px down, then the summary note
+ * outside the answer. Down from the reasoning line (263-278, panel at 0) landed on the cover at 229 to 284,
+ * scrollTop 448, the section's opening never on screen; Up from below was cover, then the section read upward.
+ */
+export const TALL_446: AnswerShape = {
+  sections: [[294, 740]],
+  covers: [[0, [677, 732]]],
+  start: 0,
+};
+
+/**
+ * The second such answer (plan78-QA-FREE-PLAY-01-NOGAME-try2.json, answer B): a 416 px section with its
+ * cover 353 px down, then a section that is only a cover. Down from the reasoning line landed on cover 1 at
+ * 229 to 284, scrollTop 418, then cover 2.
+ */
+export const TALL_416: AnswerShape = {
+  sections: [[294, 710], [710, 781]],
+  covers: [[0, [647, 702]], [1, [718, 773]]],
+  start: 0,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 
-/** A dock at the Deck's 290, and the higher one a running game leaves (its action row lifts it). */
+/**
+ * A dock at the Deck's 290, and a higher one at 262. A running game was once measured to lift it; on
+ * 2026-10-01 it sat at 290 with Deep Rock running too (plan78-QA-FREE-PLAY-01-GAME-try3.json), so 262 is
+ * kept as the harder case: a narrower band.
+ */
 export const WALK_DOCKS = [290, 262];
 
 export function shapedAnswer(
@@ -390,12 +417,15 @@ function sectionOf(a: ShapedAnswer, el: Element): HTMLDivElement | null {
  * stop it landed on, which slides as the panel moves), a press that leaves the ring in place while the
  * panel goes the wrong way, and a press that only scrolled while the ring's section fits the band: the
  * Deck's repeated stop (reading by scrolling is for a section taller than the band), also listed on its own
- * in `scrollOnly`. A stop taking the ring back after leaving it shows up in `stops`.
+ * in `scrollOnly`. A stop taking the ring back after leaving it shows up in `stops`. `landings` is `stops`
+ * without the hand-offs from a cover or word back to the section holding it, which are that section's
+ * reading going on.
  * `checkVisible` false skips the visibility rule, for a shape (a cover deep in a tall section) where the
  * ring is meant to sit on a box whose top is far above the screen.
  */
 export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, checkVisible = true) {
   const presses: string[] = [a.label(document.activeElement)];
+  const landings: string[] = [presses[0]!];
   const problems: string[] = [];
   const scrollOnly: string[] = [];
   let yielded = false;
@@ -421,10 +451,19 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, chec
       scrollOnly.push(press);
       problems.push(press);
     }
-    if (checkVisible && ring !== before && !fullyVisible(a, ring, dir)) {
+    // The ring handed from a cover or word to the section holding it, because a scroll carried that stop off
+    // the screen, is the section's reading going on, not a landing: the section stays where the scroll left
+    // it (the Deck's Up walk, plan78-P78-TALL-SECTION-LOOP-BEFORE.json: cover, then the section at -72 to
+    // 374). It must still be on screen.
+    const handedToItsSection = before instanceof HTMLElement && ring !== before && ring.contains(before);
+    if (checkVisible && handedToItsSection && !(a.bottom(ring) > PANE_TOP && a.top(ring) < a.dockTop)) {
+      problems.push(`press ${i}: ${named} off screen after the hand-off (${a.top(ring)}..${a.bottom(ring)})`);
+    }
+    if (ring !== before && !handedToItsSection) landings.push(named);
+    if (checkVisible && ring !== before && !handedToItsSection && !fullyVisible(a, ring, dir)) {
       problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${PANE_TOP}..${a.dockTop})`);
     }
   }
   const stops = presses.filter((name, i) => i === 0 || name !== presses[i - 1]);
-  return { presses, stops, problems, scrollOnly, yielded };
+  return { presses, stops, landings, problems, scrollOnly, yielded };
 }

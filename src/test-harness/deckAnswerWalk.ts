@@ -358,10 +358,10 @@ function sectionOf(a: ShapedAnswer, el: Element): HTMLDivElement | null {
  * Press until the answer yields. `presses` names the ring after every press, `stops` folds the repeats
  * of a press that only scrolled, and `problems` lists what broke the rules: a dead press (nothing moved),
  * a landing that is not fully visible (a press that only scrolls is not a landing: the ring keeps the
- * stop it landed on, which slides as the panel moves), and a press that leaves the ring in place while
- * the panel goes the wrong way. A stop taking the ring back after leaving it shows up in `stops`.
- * `scrollOnly` lists every press that only scrolled while the ring's section fits the band: the Deck's
- * repeated stop (reading by scrolling is for a section taller than the band).
+ * stop it landed on, which slides as the panel moves), a press that leaves the ring in place while the
+ * panel goes the wrong way, and a press that only scrolled while the ring's section fits the band: the
+ * Deck's repeated stop (reading by scrolling is for a section taller than the band), also listed on its own
+ * in `scrollOnly`. A stop taking the ring back after leaving it shows up in `stops`.
  * `checkVisible` false skips the visibility rule, for a shape (a cover deep in a tall section) where the
  * ring is meant to sit on a box whose top is far above the screen.
  */
@@ -388,7 +388,9 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, chec
     const section = sectionOf(a, ring);
     const height = section ? a.bottom(section) - a.top(section) : 0;
     if (ring === before && moved !== 0 && section && height <= a.dockTop - PANE_TOP) {
-      scrollOnly.push(`press ${i}: only scrolled ${Math.abs(moved)} px on ${named}, whose section fits the band (${height} px)`);
+      const press = `press ${i}: only scrolled ${Math.abs(moved)} px on ${named}, whose section fits the band (${height} px)`;
+      scrollOnly.push(press);
+      problems.push(press);
     }
     if (checkVisible && ring !== before && !fullyVisible(a, ring, dir)) {
       problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${PANE_TOP}..${a.dockTop})`);

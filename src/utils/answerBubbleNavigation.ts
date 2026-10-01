@@ -20,7 +20,8 @@
  *          is already fully read (its bottom is inside the band) and the next one starts below the
  *          dock, the panel is first set so the next one's top sits under the header
  *          (`hopToSectionBelow`), so the press lands instead of only scrolling. A section still
- *          running past the dock keeps its scroll-only presses: that is reading it.
+ *          running past the dock keeps its scroll-only presses: that is reading it. A hidden cover
+ *          with only its own margin after it counts as its section there (`readPartOf`).
  *       5. otherwise, scroll the panel and try again on the next press; if that scroll carries
  *          the stop the ring is on off the screen (a cover, an opened cover's "tap to hide"
  *          line, an underlined word), the ring moves to the section that holds it, and when that
@@ -178,11 +179,33 @@ function forgetWalk(): void {
  * both, so asked of the bubble, a last section whose bottom sat on the dock still had empty frame under it:
  * the next Down only scrolled the panel 80 px, ring left in place, and the press after it left the answer
  * (Deck: plan77-P77-WALK-COVERS-MIRROR-R2.json, plan77-P77-FINAL-SMOKE.json). The registered stops, not a
- * page search, as everywhere else in the walk.
+ * page search, as everywhere else in the walk. With the ring on a cover at that edge that has only its
+ * margin past it, the cover (`readPartOf`).
  */
 function answerTextEdge(bubble: HTMLElement, answerKey: string | undefined, dir: "down" | "up"): HTMLElement {
   const stops = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
-  return (dir === "down" ? stops[stops.length - 1] : stops[0]) ?? bubble;
+  const edge = dir === "down" ? stops[stops.length - 1] : stops[0];
+  return edge ? readPartOf(edge, dir) : bubble;
+}
+
+/** A cover's own margin inside its section: less than this between them is no text (`hasBoxStop`'s rule). */
+const COVER_MARGIN_MAX_PX = 24;
+
+/**
+ * The part of `section` a press checks has been read before it moves past it (a hop to the next section,
+ * `hopToSectionBelow` / `hopToSectionAbove`, or leaving the answer, `answerTextEdge`): the section, or, with
+ * the ring on a hidden cover that has nothing after it (Down) or before it (Up) but its own margin, that
+ * cover. The margin is 8 px on the Deck (a 55 px cover in a 71 px section), and a landing lifts the cover
+ * clear of the dock, not its margin, so asking about the section left 8 px of empty margin "unread" under
+ * the dock and the next press only scrolled the panel 80 px, ring left on the cover.
+ */
+function readPartOf(section: HTMLElement, dir: "down" | "up"): HTMLElement {
+  const ring = uiGamepadFocusElement();
+  if (!ring || ring === section || !section.contains(ring)) return section;
+  if (findLastSpoilerFenceIn(section, (el) => el === ring) !== ring) return section;
+  const r = ring.getBoundingClientRect();
+  const s = section.getBoundingClientRect();
+  return (dir === "down" ? s.bottom - r.bottom : r.top - s.top) <= COVER_MARGIN_MAX_PX ? ring : section;
 }
 
 /** Walk turn slots. Must query the UI document, not SharedJSContext's shell — see uiDocument.ts. */
@@ -725,7 +748,7 @@ export function handleAnswerBubbleMoveDown(
     const at = focusedAnswerStopIndex(stops);
     const next = at >= 0 ? stops[at + 1] : stops.find(inView);
     /* A fully read section with the next one below the dock: bring the next under the header (`hopToSectionBelow`). */
-    if (next && at >= 0 && !inView(next) && hopToSectionBelow(stops[at]!, next, scroll)) {
+    if (next && at >= 0 && !inView(next) && hopToSectionBelow(readPartOf(stops[at]!, "down"), next, scroll)) {
       /* A cover at the head of that section still comes before its box, as it does whenever the box is on screen first. */
       const head = findNextSpoilerFenceInView(bubble, inView, anchor);
       if (head && next.contains(head) && focusSpoilerFence(head)) {
@@ -833,7 +856,7 @@ export function handleAnswerBubbleMoveUp(
      * above sits wholly above the header: bring that section's bottom to the dock, so the press lands
      * on it instead of only scrolling. The mirror of the same step going Down.
      */
-    if (prev && !elementIsWithinViewportOf(prev, scroll)) hopToSectionAbove(stops[at]!, prev, scroll);
+    if (prev && !elementIsWithinViewportOf(prev, scroll)) hopToSectionAbove(readPartOf(stops[at]!, "up"), prev, scroll);
     /* A hidden cover in that section takes the ring first (plan 74 lane 3; `stepUpIntoSection`). */
     if (prev && elementIsWithinViewportOf(prev, scroll) && stepUpIntoSection(prev, scroll)) {
       forgetWalk();

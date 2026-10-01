@@ -1,0 +1,11 @@
+{
+  "row": "P78-REOPEN-CHECKLIST",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 about 05:27 EDT",
+  "screen": "not read (panel never opened)",
+  "setup": "none done; stopped after Block 0",
+  "pressed": "nothing",
+  "seen": "Block 0 found the rig's presses do not reach the Deck (no second USB gamepad on the Deck, no focus readable). See plan78-BLOCK0-SETUP.json.",
+  "expected": "see runbook",
+  "verdict": "COULD NOT RUN: the controller board's lead to the Deck is not seen by the Deck, so no press can land."
+}

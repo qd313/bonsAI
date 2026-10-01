@@ -1,0 +1,37 @@
+{
+  "row": "P78-DECODE-LONG-BEFORE",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 07:55-08:03 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page window 854x454 css px at devicePixelRatio 1.5 (no game running), Steam main window 853x534 css px; the capture is 1280x800. No monitor.",
+  "setup": {
+    "game": "none running (ps showed only a kernel thread; RunningApps empty)",
+    "chat": "test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14, 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', read open before every question. 36 turns before the first question; each question adds 2 (question + answer); 48 after the last one.",
+    "mode": "Strategy",
+    "as_found": {"ask_think_effort": "medium", "stream_scramble_enabled": true, "stream_scramble_style": "settle", "preset_chip_animation": "decode", "ai_character_enabled": true, "ai_character_preset_id": "alig_ali_g", "ai_character_accent_intensity": "heavy"},
+    "note_on_AI_character": "The AI character (Ali G, heavy) was ON, as found. plan70 measured with characters OFF. The runbook did not name it so it was left alone. It makes every answer short: the 'very detailed' asks gave 2,079 to 3,308 letters, the 'three short sentences' asks 300 to 450.",
+    "scramble_off_route": "settings file edit over SSH (sed on the one key), plugin reloaded straight away, read back false. Put back to true at the end of the run, plugin reloaded, read back: stream_scramble_enabled true, ask_think_effort medium."
+  },
+  "method": "As plan70-FPS-pieces.json: a page-side counter in the Quick Access page copies requestAnimationFrame timestamps and every 2.5 s logs frames a second over the last 2.2 s (first 0.3 s of the slice dropped). At each slice end it also logs whether the live answer preview ([data-bonsai-stream-preview]) is present, its letters, the Stop button, and the letters of the last answer bubble. 'arriving' = preview present at both ends of the slice and its letters grew; 'edge' = preview at one end only; 'tail' = preview present at the start only. The counter was started in the page before each question; A pressed on Ask only after reading focus on the Ask button and the open chat's name. A repeated-question cache hit was avoided: all six questions are worded differently.",
+  "pressed": "Per answer: send-question script (VERIFIED each time), walk Down to Ask, read focus, A. Plugin opened with deck_openPlugin.",
+  "seen": {
+    "idle_and_thinking_slices_all_runs": "84.5 to 89.5 frames a second (no difference between scramble on and off)",
+    "scramble_ON_style_settle": {
+      "answer_1_short": {"question": "in three short sentences, what is the best first upgrade in deep rock galactic survivor", "letters": 302, "turns_before": 36, "slices": "answer arrived inside about 5 s: one edge slice at 77.7 fps (6 letters at the end), then the preview was gone; no 'arriving' slice", "arriving_slices": 0},
+      "answer_2_long": {"question": "give me a very detailed step by step guide to deep rock galactic survivor from the first mission onward, with a section for each weapon class and its upgrades", "letters": 3123, "turns_before": 38, "arriving_slices_end_letters_fps": [[351, 77.3], [622, 72.7], [873, 75.9], [1128, 74.5], [1415, 73.6], [1682, 75.5], [1952, 75.5], [2200, 70.0], [2497, 70.5], [2760, 71.4], [3052, 70.5], [3123, 82.7]], "edge_slices_fps": [85.0, 89.5]},
+      "answer_3_long": {"question": "write me a full beginner to expert walkthrough of deep rock galactic survivor, mission by mission, covering every weapon type and how to upgrade each one", "letters": 2079, "turns_before": 40, "arriving_slices_end_letters_fps": [[526, 77.7], [779, 77.3], [1092, 77.7], [1384, 75.5], [1678, 73.6], [1945, 74.1], [2079, 81.8]], "edge_slices_fps": [79.1, 86.8]},
+      "medians": {"arriving_under_800_letters": 77.3, "arriving_800_to_2000": 75.5, "arriving_over_2000": 71.0, "lowest_single_slice_past_2000": 70.0, "slices_counted": "4 / 9 / 6"}
+    },
+    "scramble_OFF": {
+      "answer_4_short": {"question": "in three short sentences, what should i spend my first coins on in deep rock galactic survivor", "letters": 454, "turns_before": 42, "arriving_slices_end_letters_fps": [[375, 87.3]], "edge_slices_fps": [88.2, 85.0]},
+      "answer_5_long": {"question": "explain in great detail how to progress through deep rock galactic survivor, covering each class, each weapon and the best upgrade order for all of them", "letters": 2596, "turns_before": 44, "arriving_slices_end_letters_fps": [[522, 88.6], [801, 89.1], [1026, 87.7], [1266, 87.3], [1491, 87.7], [1782, 88.2], [2036, 88.2], [2292, 86.8], [2549, 89.1], [2596, 89.5]], "edge_slices_fps": [88.6, 87.3]},
+      "answer_6_long": {"question": "please write a long complete tutorial for deep rock galactic survivor: early game, mid game and late game, with every weapon class and what to upgrade first","letters": 3308, "turns_before": 46, "arriving_slices_end_letters_fps": [[501, 88.2], [783, 87.7], [1018, 86.8], [1302, 87.7], [1596, 87.7], [1856, 87.7], [2114, 87.7], [2380, 86.4], [2635, 85.0], [2901, 86.4], [3161, 83.2], [3308, 86.8]], "edge_slices_fps": [89.1, 84.5]},
+      "medians": {"arriving_under_800_letters": 88.2, "arriving_800_to_2000": 87.7, "arriving_over_2000": 86.8, "lowest_single_slice_past_2000": 83.2, "slices_counted": "3 / 9 / 10 (answer 4's single 375-letter slice and answers 5 and 6 only)"}
+    },
+    "gaps": "The decode chip style is the as-found chip animation; the answer-text effect measured here is the stream scramble (settle, green), which is what the runbook flips. The 'short' asks were far under 700 letters (302 and 454) because the Ali G character shortens everything; per the runbook one more wording was asked for the long ones, not for the short one. Answer 3 (2,079 letters) only just passed 2,000, so its 'over 2,000' part is one slice. One bubble letter count on the finished answer is 'letters on screen' in the answer bubble, not counting the question, the status line or buttons."
+  },
+  "expected": "A measurement, no pass or fail: frame rate of arriving slices by answer length, scramble on and off, for the 'before' build.",
+  "verdict": [
+    "UNCLEAR: measurement only, the runbook gives no pass or fail. Scramble ON lost about 13 frames a second against scramble OFF, and the loss grows with length: 77 under 800 letters, 75 from 800 to 2,000, 71 past 2,000 (lowest 70.0). Scramble OFF stayed 86.8 to 88.2 (lowest 83.2)."
+  ],
+  "side_effect": "stream_scramble_enabled was flipped to false and back to true by a settings-file edit, with a plugin reload after each. Six questions went into the test chat (36 to 48 turns). The deck_openPlugin after the first reload failed once with a serial-port error on this PC ('could not open port' on COM7) and worked on the second try."
+}

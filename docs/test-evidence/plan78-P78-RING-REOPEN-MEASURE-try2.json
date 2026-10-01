@@ -1,0 +1,37 @@
+{
+  "row": "P78-RING-REOPEN-MEASURE",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 08:04-08:12 EDT (Deck clock)",
+  "screen": "Deck's own screen (capture 1280x800; Steam main window 853x534 css px, devicePixelRatio 1.5). Quick Access page window: Part A 854x534 for every reopen, Part B 854x454 for every reopen (this is itself one of the differences, see below).",
+  "setup": "Deep Rock Galactic: Survivor launched with deck_launchGame from Recent Games (Home, Sifu, Stardew Valley, DRG tile after 2 Right presses, Play). The plugin had been reloaded BEFORE the launch (end of check 1) and was NOT reloaded after it for Part A. The panel was opened with deck_openPlugin (a fresh open, so the first D-pad press places the ring). Context line read 'active game Deep Rock Galactic: Survivor' in both parts. A page-side listener on visibilitychange in the Quick Access page took a snapshot 200, 500, 1000 and 2000 ms after each reopen (read only). Close and reopen were the GUIDE+A chord (deck_pressChord), 20 s apart. After each reopen's reads: DOWN once, read after about 0.5 s, UP once. Part B: plugin reloaded with the game still running, deck_openPlugin (failed once as expected, worked the second time), then the same 6 reopens.",
+  "pressed": "Part A and Part B, each: 6 x (chord close, 20 s wait, chord reopen, reads, DOWN, read, UP) = 12 reopens in all, plus deck_readFocus once per part.",
+  "seen": {
+    "table_ring_drawn_at_1s_hasFocus_activeElement_gpfocusCount": {
+      "A1": "ring NO; hasFocus true; activeElement = a Quick Access rail tab (role=tab, rect 130,136 68x34); 0 elements with a gpfocus class; deck_readFocus: ok false, 'gpfocus marker not found in any target' (this call was done on A6)",
+      "A2": "ring NO; hasFocus true; activeElement = div.bonsai-tab-bar (rect 48,104,300x20) with classes 'bonsai-tab-bar bonsai-tab-bar--open Panel' only (no Focusable, no gpfocus, no gpfocuswithin); 0 gpfocus elements",
+      "A3": "same as A2",
+      "A4": "same as A2",
+      "A5": "same as A2",
+      "A6": "same as A2; deck_readFocus also: no gpfocus, no gpfocuswithin in any of the 5 CDP targets",
+      "B1": "ring YES; hasFocus true; activeElement = div.bonsai-tab-bar (48,64,300x20) classes '... Panel Focusable gpfocus gpfocuswithin'; 6 gpfocus-class elements (5 gpfocuswithin ancestors + the tab bar itself with gpfocus); deck_readFocus: gpfocus = 'Main tab', agree true, visible 100 percent",
+      "B2 to B6": "same as B1 at all four reads (200, 500, 1000, 2000 ms); 6 gpfocus-class elements; activeElement = tab bar with gpfocus and gpfocuswithin"
+    },
+    "after_DOWN_once_at_0.5s": "Part A and Part B identical every time: ring placed on the chat title row (div.bonsai-chat-slot-row-focus, 48,128 300x48 in A and the same row in B), 8 gpfocus-class elements, hasFocus true. UP then went back to the tab bar in both parts. Counts: 12 of 12 reopens behaved as in the table above.",
+    "hasFocus_and_visibility": "document.hasFocus() was true and visibilityState 'visible' at every read in both parts (24 of 24 reopen reads per part). So the page had focus in both; focus is not the difference.",
+    "ring_style": "getComputedStyle on the gpfocus element reports outline none 0px and box-shadow none in B (the ring is not drawn by outline on that element), so 'drawn' in this record means Steam's gpfocus marker class is present; not checked by eye or screenshot.",
+    "differences_A_vs_B_at_1s": [
+      "1. gpfocus classes: A has none at all; B has the tab bar with 'gpfocus gpfocuswithin' and 5 ancestors with 'gpfocuswithin'.",
+      "2. The 'Focusable' class: the tab bar and its parent panels in A carry only 'Panel' (no 'Focusable'); in B the same elements read 'Panel Focusable'. So Steam's gamepad navigation has not marked the panel's own nodes as focusable in A.",
+      "3. DOM focus is held in both (A: tab bar or a rail tab; B: tab bar), so activeElement is the same element in A2 to A6 and B; only the class marking differs.",
+      "4. Quick Access window size: A 854x534, B 854x454. In A the page also starts with a status strip ('65%  8:06 AM') above the plugin, content starting at y 40/104; in B the content starts at y 0/64 with no strip.",
+      "5. In A the roots '#QuickAccess-Menu' and the 'BasicUI' ancestor carry an extra class _2m0zlP8eZ_9SlQsO52oxql; in B reopens they do not (a read taken right after the reload and before the first close, in B, still had it on #QuickAccess-Menu, so it goes away at the first close and reopen after a reload).",
+      "6. A1 differs from A2 to A6: on the first reopen the activeElement was a Quick Access rail tab; from the second it was the plugin's tab bar.",
+      "7. Everything else that was dumped is the same: body has only style=overflow: hidden, html has no class or attribute, ancestors up to the body are the same chain of 13 elements."
+    ]
+  },
+  "expected": "A measurement, no pass or fail: what state the panel is in at reopen with no ring (before a plugin reload) compared with after a reload.",
+  "verdict": [
+    "UNCLEAR: measurement only. Reproduced last night's result: ring absent on 6 of 6 reopens without a reload, present on 6 of 6 after a reload; the page had focus in both. What differs is Steam's own marking (no gpfocus and no Focusable class on the panel's nodes in A) and the Quick Access window (854x534 with a status strip in A, 854x454 without in B)."
+  ],
+  "side_effect": "Plugin reloaded once between the two parts (as the runbook says). 12 chord close-and-reopens and 12 DOWN/UP pairs; the DOWN presses only moved the ring to the chat title row and back to the tab bar, nothing was activated. deck_launchGame wrote runs/p78-launch-drg.json inside the repo (an untracked tool output file). The game is left running and the plugin reloaded, as the runbook says."
+}

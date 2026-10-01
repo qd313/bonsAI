@@ -1,0 +1,30 @@
+{
+  "row": "BLOCK0-SETUP (leftovers, second start)",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 07:53-08:04 EDT (Deck clock)",
+  "screen": "Deck's own screen. Steam main window 853x534 css px, devicePixelRatio 1.5 (1280x800 physical); gamescope screenshot 1280x800 (a screenshot at 09:15 shows the Deck's own panel). Quick Access page window: 854x454 with no game running; 854x534 with the game running before the first plugin reload, and 854x454 with the game running after a reload (see plan78-P78-RING-REOPEN-MEASURE-try2.json). The lsusb dock devices were not a monitor; no monitor was seen.",
+  "setup": {
+    "build": "deck_checkReady with buildMatches: true, awake: true, noForeignCdpTunnel: true all passed (123 files match). No deploy done.",
+    "keep_awake": "deck_holdAwake ttl 480 at 07:53 Deck time, expiresAt 2026-10-01T19:53:57Z (15:53 EDT); replaced the 05:23 hold. Still held at the end of this block.",
+    "bridge": "deck_status: bridgePortOpen true on COM7; lsusb on the Deck now lists 'Espressif Systems ESP32S3_DEV' (303a:1001) plus the dock's hubs, Ethernet and storage devices.",
+    "settings_as_found_read_again_at_07:53": "ask_mode strategy, ask_think_effort medium, stream_scramble_enabled true (style settle, green), preset_chip_animation decode, preset_single_chip true, strategy_spoiler_masking_enabled true, use_local_knowledge_base true, ai_character_enabled true (Ali G, heavy). Nothing differed from the 05:25 reading.",
+    "backups": "~/p78-settings.bak.json and ~/p78-chat-slots.bak left in place.",
+    "test_chat": "6f3cc055-d603-4e3e-9adf-15d71df4ec14, 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', 36 turns at the start of this block, 64 at the end of check 4 (14 questions asked, each adds a question turn and an answer turn: 6 in check 1, 6 in check 3 including the choice-button follow-up, 2 in check 4)."
+  },
+  "pressed": "deck_openPlugin (first try worked, no failure after the 05:2x deploy since that was long ago); a Down press to prove presses reach the Deck; 3 x RB then 3 x LB to read the Permissions tab and come back; GUIDE+A chord to close and reopen.",
+  "seen": {
+    "presses_reach_the_deck": "yes. Plugin opened (QAM chord, 4 rail presses, A on the Decky entry, A on bonsAI). First Down placed the ring (nothing owned it) on 'Retry same prompt' of the first turn; the second Down moved it to the question text (rect y 201 to y 189). Presses by deck_pressButton came back 'wire-sent', the focus reads show they landed.",
+    "parental_lock": "Permissions tab read after 3 RB presses: no 'Parental controls active' text (regular expression on the page text). The tab shows 'High-impact actions stay off until you enable them here...' and the permission toggles.",
+    "recent_games_row": "Sifu (2138710), Stardew Valley (413150), Deep Rock Galactic: Survivor (2321470), Hades per the 05:25 screenshot (not reached). deck_launchGame found the Deep Rock tile after 2 Right presses from the row start.",
+    "ollama": "reachable (deck_status ollamaReachable true); models as the first driver recorded.",
+    "chat_files": "chat_slots has 8 chats; 6f3cc055 present (196 KB at 07:53)."
+  },
+  "expected": "Presses move focus; Permissions tab shows no parental banner; Recent Games row listed; screen read.",
+  "verdict": [
+    "PASS: presses reach the Deck and move focus.",
+    "PASS: the Permissions tab shows no parental-controls banner.",
+    "PASS: screen is the Deck's own (1280x800 capture, window sizes recorded); no monitor.",
+    "PASS: build 57586da0 matches; keep-awake held to 15:53 EDT."
+  ],
+  "side_effect": "A Down press placed the ring in the chat turn list before the Permissions walk; nothing was activated. The plugin was left open on the Main tab at the end of the block."
+}

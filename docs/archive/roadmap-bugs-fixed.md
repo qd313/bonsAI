@@ -2725,3 +2725,22 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   The back end now reads the block to the end of the reply when the closing tag is broken, cut off or missing; the screen also hides the block while the answer streams (and in copy, read aloud and the popup). **Not fixed:** the Spy chip appears in Show details only once the finished answer's details arrive (about 30 s once); and the Spy prompt's placeholder wording makes the model write placeholder lies, a wording tweak for later.
 
   **Closed 2026-09-30, passed on the Deck (plan 77, Deck block 4, build `7d84ee3b`).** No tag text in 50 reads while streaming or in any saved answer; the Spy chip was there at the first look (within about 7 s of the finish) and listed three lies. The chip's first line was the same in all three runs ("The Spy was on"), the prompt's placeholder wording, a tweak for later (rows P77-SPY-TAG and SPY-REVEAL-01, Heavy half). Evidence `docs/test-evidence/plan77-P77-SPY-TAG.json`.
+
+## Moved from the roadmap 2026-10-01 (plan 78, Deck block 1)
+
+### A story game named while a no-story game runs lost its spoiler covers (closed 2026-10-01)
+
+- ★★ `[reply]` **A story game named while a no-story game runs lost its spoiler covers** — **VERIFY, fixed 2026-09-30 (plan 78 helper A, `0f106b0d`, `27bab7dc`). Was PARTIAL, seen once 2026-09-29 (plan 77, Deck block 2).**
+  With a no-story game running, a question that names a protected story game in full is now handled as if nothing were running: that game's notes, covers, choice menu and credit line (the maintainer's call, D121 item 1). Before, Hollow Knight boss questions with Deep Rock Galactic: Survivor running came back with no covers on the Deck, three of three.
+  Limits: only that one question (a bare follow-up or a choice button under the answer names no game and goes back to the running game's notes and rules; a call for the maintainer, plan 78 questions item 5); only when the running game is a no-story game.
+  Unit tests: `tests/test_game_ai_request_story_game_named.py` (11), 4 in `tests/test_spoiler_title_profiles.py`. Deck check owed: a re-run of row **P77-SPOILER-OTHER-GAME**. No Deck run of the fix yet. Older notes and the cause: [roadmap-details.md](../roadmap-details.md#a-story-game-named-while-a-no-story-game-runs-lost-its-spoiler-covers).
+
+  **Closed 2026-10-01, passed on the Deck (plan 78, Deck block 1, build `57586da0`, row P77-SPOILER-OTHER-GAME), with the session's ruling on the driver's open point.** With Deep Rock Galactic: Survivor running, three differently worded Hollow Knight questions came back with 2, 1 and 1 covers, Hollow Knight notes and the log line "named story game picks the notes this turn" each time; no boss name was readable outside a cover; a Deep Rock question next got Deep Rock notes, 0 covers and no such line; a Hollow Knight question with "spoilers are okay" had 0 covers; a choice button pressed under a Hollow Knight answer also came back with a cover and the same log lines (one try). The driver's open point (how the boss fights is readable outside the covers) is by design: covers hide names and story, not tactics. Evidence `docs/test-evidence/plan78-P77-SPOILER-OTHER-GAME-try2.json`.
+
+### About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck (closed 2026-10-01)
+
+- ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
+  **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
+  **2026-09-30 (plan 77 block 3, row P77-OLLAMA-TIDY):** could not run. A system-level unit (`bonsai-ollama-autostart.service`) runs Ollama on the Deck, and restarting it needs sudo, so it was not restarted. The restart is the maintainer's to do, because it needs their password. Evidence `docs/test-evidence/plan77-P77-OLLAMA-TIDY.json`.
+
+  **Closed 2026-10-01, no code (plan 78, Deck block 0):** after the Deck was switched on, Ollama had restarted and the models folder was 4.3 GB, so the half-downloaded files are gone. Evidence `docs/test-evidence/plan78-BLOCK0-SETUP.json`.

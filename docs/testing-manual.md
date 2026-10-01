@@ -99,6 +99,8 @@ every stop was visible or one of the two known corner-icon alarms, except one: a
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 
+**2026-10-01 (plan 78, Deck block 1, build `57586da0`): the half with a game running PASSED, by the session's ruling.** No stop was visited twice (15 stops going down, 14 going up) and no press was dead; the two known false alarms were cleared by the text lines. The tall answer section shows 67 percent in both directions and is judged by the edge it is entered from. The half with no game running is owed in the second Deck block. Saved walk `checks/plan78-QA-FREE-PLAY-01-GAME.json`. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try2.json`. It stays a standing row.
+
 **2026-09-30 (plan 77, block 4, build `7d84ee3b`): PASS (Deck):** 35 stops, 0 cycles, only the two known false alarms (question row behind Retry, last section behind Copy). Saved walk `checks/plan77-b4-QA-FREE-PLAY-01.json`. Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`. Two one-off sightings from the same session are on the watch list.
 
 **2026-09-30 (plan 77, block 3, build `ec557922`, session's ruling): PASSED, both halves.** No game: 52 stops, 0 cycles, only the known false alarms. Game: 32 stops, 0 cycles, the known false alarms plus one section taller than the screen (entered going Up with its bottom at the dock). Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`, `docs/test-evidence/plan77-QA-FREE-PLAY-01-game.json`. It stays a standing row.

@@ -406,7 +406,7 @@ New ones go here, with the choice taken in the meantime.
    question that names the game, as you chose. A choice button or a refine chip under that answer sends text that
    names no game, so it goes back to Deep Rock's notes and Deep Rock's no-spoiler-covers rules. That follow-up answer
    could name a boss with no cover. **Meanwhile:** left as you chose; tonight's Deck pass presses one such button and
-   reports what comes back. **Recommended:** a button pressed under an answer keeps that answer's game. It is a small
+   reports what comes back. **2026-10-01, on the Deck:** a choice button pressed under a Hollow Knight answer kept Hollow Knight's notes and came back with a cover (one try, evidence `docs/test-evidence/plan78-P77-SPOILER-OTHER-GAME-try2.json`), so the gap may be narrower than feared; the call stands. **Recommended:** a button pressed under an answer keeps that answer's game. It is a small
    widening of your call, so it waits for your yes; Thursday night has room for it.
 6. **Four small D-pad boxes from an old check** (the collapsed hint, the session strip, the Show details link, the
    collapsed turn header) were listed as closed, but the evidence only covers the four sliders. **Meanwhile:** they
@@ -535,6 +535,7 @@ The full results, the code summary and the report replace this section when the 
   lead to the Deck is not connected. No check has run. One good thing from the restart: the 6.6 GB of
   half-downloaded model files is gone (the models folder is 4.3 GB). Evidence
   `docs/test-evidence/plan78-BLOCK0-SETUP.json`.
+- **1 October, 8 am to 9:30 am (first Deck block, build `57586da0`):** the controller board was connected about 8 am and the Deck block ran. Passed: the spoiler fix (Hollow Knight questions with Deep Rock running came back with 2, 1 and 1 covers), the chips (9.5 a minute with one chip, 11.2 with two, the game's own chips 54 in 100), and the walk-through sweep with a game running. Unclear: the checklist after a reopen. The check's route was wrong, because a checklist only comes on the turn after a choice button; the route is corrected. Measured, no pass or fail: the frame rate of long answers (77 for short and 71 for very long with the scramble effect on; 88 and 87 with it off), and the missing ring after a reopen (6 of 6; the helper who read the code found no cause in the plugin and asked for two more reads on the Deck). The long-answers fix has landed (`1fe0787a`) and waits for its after number. The second Deck block started about 9:30 am on build `1fe0787a`.
 
 ## For the helpers: who owns which files
 

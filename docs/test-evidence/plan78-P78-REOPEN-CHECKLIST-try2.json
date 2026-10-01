@@ -1,0 +1,21 @@
+{
+  "row": "P78-REOPEN-CHECKLIST",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 08:23-08:27 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page window 854x454 css px (dpr 1.5).",
+  "setup": "Deep Rock Galactic: Survivor running, plugin reloaded after the launch, Strategy mode, test chat 6f3cc055 open (read before each question). Question 1 sent with the send script (VERIFIED), walked to Ask, read focus on 'ask', A pressed, then the GUIDE+A chord to close the panel at once. Waited for the reply-ready popup (appeared after about 64 s with text beginning 'Right, listen up, mate! You wanna get the whole shebang on these first few...'). Reopened with the chord.",
+  "pressed": "Try 1: A on Ask then chord (close) then chord (reopen). Try 2 (second wording, as the runbook says, because the saved turn had no checklist): 'what should my checklist be for upgrading weapons in this game', same steps, popup text 'Right, listen up, you wanna know how to upgrade those weapons? Hold up, it...'. One extra Down press and a second walk to Ask: the first Down-walk stalled for 3 presses inside one tall answer section (the scroll position moved 597 to 735 to 884 while focus stayed on the section, which the walk rule says is expected) and the walk tool reported it as a stall.",
+  "seen": {
+    "try_1": {"question": "give me a checklist of what to do in my first three runs of this game", "answer_letters": 1191, "answer_form": "a numbered prose list in the answer text (Mine, Pick Your Weapon, Upgrade Smart), then a branch picker 'Where are you at in Deep Rock Galactic: Survivor? A. Starting out in the first mission, B. Trying to beat the final boss'", "checklist_panel_under_answer_after_reopen": "no (0 elements bonsai-strategy-checklist-panel on the page)", "saved_turn_has_checklist": "no: the saved assistant turn has no checklist data", "log": "[2026-10-01 08:24:13,429][INFO]: ask_ollama: strategy fences branch_marker=True branch_parsed=True branch_options=2 checklist_marker=False checklist_parsed=False"},
+    "try_2": {"question": "what should my checklist be for upgrading weapons in this game", "checklist_panel_under_answer_after_reopen": "no (0 panels on the page)", "log": "[2026-10-01 08:26:10,028][INFO]: ask_ollama: strategy fences branch_marker=True branch_parsed=True branch_options=2 checklist_marker=False checklist_parsed=False", "answer_had": "a branch picker (A. I'm picking one weapon but don't know which one. B. I'm still confused about which weapon to pick.)"},
+    "why_the_runbook_route_cannot_work": "Reading py_modules/backend/services/ollama_prompts.py: the prompt asks for the 'bonsai-strategy-checklist' block only on a FOLLOW-UP turn (after a branch button was chosen). A first question gets the branch picker and no checklist, so neither first question can ever produce one. The runbook's route (ask, close, reopen, look for a checklist) therefore cannot show a checklist. Per the standing rules I did not improvise a different route.",
+    "refine_chip": "No 'Too long' or other refine chip was on screen under either answer (searched the buttons for long, short, simpl, detail, refine: none), so the refine step was not reached.",
+    "follow_up_log_line": "not reached, so no 'ask_mode: strategy' line was read for a follow-up. For reference only: the saved follow-up in check 3 (choice button pressed) did go out in strategy mode (its log lines are in plan78-P77-SPOILER-OTHER-GAME-try2.json)."
+  },
+  "expected": "The checklist is drawn under the answer after the reopen, and the follow-up's log line says ask_mode: strategy.",
+  "verdict": [
+    "UNCLEAR: no checklist exists to survive the reopen. Both first-question tries had checklist_marker=False. The checklist is only requested on a follow-up turn after a choice button, so the runbook's route cannot produce one.",
+    "UNCLEAR: the 'Too long' follow-up half was not reached (no such chip on screen)."
+  ],
+  "side_effect": "Two questions went into the test chat (now 64 turns). The panel was closed and reopened twice with the chord. Nothing else changed."
+}

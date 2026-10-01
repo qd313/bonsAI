@@ -1,0 +1,36 @@
+{
+  "row": "QA-FREE-PLAY-01 (game half)",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 09:11-09:15 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page window 854x454 css px (dpr 1.5) with the game running after the plugin reload; Steam main window 853x534.",
+  "setup": "Deep Rock Galactic: Survivor running, plugin reloaded after the launch (and again for the chip watches), settings back as found (decode, one chip). Main tab, test chat 6f3cc055, newest answer on screen: 'what should my checklist be for upgrading weapons in this game' (about 1,100 letters, with notes line and a branch picker). Walk: one press at a time from the bonsAI header button down to Ask and back up. The first pass was deck_sweep (reads focus after every press); the second was deck_runSequence with 19 Down presses (a record for every press); a third pass pressed Down 6 times 1.8 s apart with the pane's scrollTop and the focused control logged every 200 ms, to tell a scroll-only press from a dead one.",
+  "pressed": "Directions only (DOWN and UP), never A. About 37 + 19 + 6 + 10 presses.",
+  "seen": {
+    "down_leg_stops_and_visible_percent": [
+      "bonsAI header button 100", "Main tab 100", "chat title row (unnamed, 48,88 300x48) 100", "'31 earlier' 100", "Retry same prompt 100",
+      "question row 78 (known false alarm; see below)", "Show reasoning 100",
+      "answer section 1 (unnamed, 245x252, rect y 88 to 340 at scrollTop 177) 67 (entered from the top edge; the lower third sits behind the question box)",
+      "Overclocks 100", "Mark reply helpful 100", "Show details 100", "notes line 100", "Tip chip 100", "question box 100", "Ask 100"
+    ],
+    "up_leg_stops_and_visible_percent": [
+      "question box 100", "chip ('What do the model policy tiers mean?' this time) 100", "notes line 100", "Show details 100", "Mark reply helpful 100", "Overclocks 100",
+      "answer section 1 (rect y 38 to 290 at scrollTop 227) 67 (entered from the bottom edge; the top 50 px are above the pane edge)",
+      "Show reasoning 100", "question row 78 (same false alarm)", "Retry 100", "'31 earlier' 100", "chat title row 100", "Main tab 100", "bonsAI header button 100"
+    ],
+    "no_stop_twice": "yes: 15 distinct stops on the way down, 14 on the way up, no control landed on twice in one direction. The two unnamed stops are different controls (the chat title row, and the answer section).",
+    "no_dead_press": "yes. In the third pass every press that did not move the ring scrolled the pane: Show reasoning to the answer section (scrollTop 36 to 177), then 177 to 257 with the ring still on the section (scroll only), then Overclocks at 257, then 257 to 337 and 337 to 417 with the ring on Overclocks (scroll only), then Mark reply helpful at 521. The only presses that did nothing were the 2 Downs on Ask at the bottom and 4 Ups on the header at the top, which is the end of the list.",
+    "the_two_known_false_alarms": {
+      "question_row_behind_Retry_icon": "text line boxes x 161.3 to 331.3; Retry icon x 137.7 to 157.7. No line box overlaps the icon (there is 3.6 px between them). The element box (78 percent) overlaps the icon only by design.",
+      "last_answer_section_behind_Copy_icon": "copy icon x 291.8 to 311.8, y 100.9 to 120.9; the section's 12 line boxes end at y 100.9 (last line x 70.7 to 137.8, y 101.3 to 115.9). No line box overlaps the icon."
+    },
+    "tall_section_67_percent": "The answer section is 252 px tall and at the visible area's edge it is 67 percent visible in both directions (3 of 9 probe points). In the down leg its lower third is covered by the question box; in the up leg its top is clipped by the pane edge. Per the walk rule a tall section is judged by the edge it is entered from: top edge visible going down, bottom edge visible going up. This is the same 67 percent figure as the small bug filed from the 2026-09-29 run; it was not worse here.",
+    "w2_r7_numbers": "every stop above, with the percent next to it. Lowest: 67 (tall section, both directions), then 78 (question row, both directions). Everything else 100.",
+    "saved_walk": "checks/plan78-QA-FREE-PLAY-01-GAME.json (deck_saveCheck of the sweep). Tool run files: runs/plan78-QA-FREE-PLAY-01-GAME-sweep.json and runs/plan78-QA-FREE-PLAY-01-GAME-down.json (untracked)."
+  },
+  "expected": "No stop twice, no dead press, every stop visible (the two known false alarms judged by line boxes; a tall section by its entry edge).",
+  "verdict": [
+    "PASS: no stop twice, no dead press, every stop visible by the walk rule (question row and last-section alarms cleared by line boxes; the tall answer section judged by its entry edge, 67 percent in both directions).",
+    "UNCLEAR: the 67 percent tall-section figure is below 100 and is the same shape as the small bug already filed; the owner decides whether it counts for W2-R7."
+  ],
+  "side_effect": "None on the Deck's data. The walk ended with the ring on the bonsAI header; the saved walk replayed the sweep once more (more presses, directions only)."
+}

@@ -19,6 +19,7 @@ All notable changes to this project are documented in this file.
 - **A Strategy checklist is only drawn for the game that is still running.** Quit or switch games while an answer writes and the old game's checklist is no longer drawn under it; it is still saved under its own game. Unit tests only; this cannot be made to happen reliably on the Deck.
 - **A boss answer no longer produces a power suggestion.** The small AI sometimes copied the shape of a power block onto the end of a boss answer, and the plugin trusted it. A block now also needs power talk around it. Owes its Deck check.
 - **A question about a different game is no longer handed the last answer's wording to copy.** The earlier answers are left out only when the new question names a game different from the previous turn's; every follow-up still sees them. Owes its Deck check.
+- **Long answers are redrawn less while they arrive.** With the writing effect on, the finished pieces of an answer are no longer redrawn on every update (in a test, the 100th update of a 2,900-letter answer redrew 1 piece instead of 24). Measured on the Deck before the change: 71 frames a second past 2,000 letters with the effect on, 87 with it off. Owes its Deck check (row P78-DECODE-LONG).
 
 ### Plan 77 (2026-09-29)
 

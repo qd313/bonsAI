@@ -1,0 +1,20 @@
+{
+  "row": "P78-CHIP-PACE",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 08:36-08:45 and 08:54-09:01 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page window 854x454 css px (dpr 1.5) with Deep Rock Galactic: Survivor running.",
+  "setup": "Same setup, watcher and settings route as plan78-P78-TIP-CHIP-try2.json (one file edit and plugin reload per change; as found decode and one chip, put back at the end). Style fade for all three parts; one chip for a and f, two chips for b. Ring on the question box during a and b.",
+  "pressed": "L3 once a minute. For f: walked to the chip, held 42.5 s, one Down back to the question box.",
+  "seen": {
+    "a_fade_one_chip": {"watched_s": 428, "chips_shown": 68, "chips_per_minute": 9.53, "chips_in_each_full_minute": [11, 9, 10, 9, 9, 10, 9], "gap_between_chips_s_min_max": [2.5, 8.25], "longest_any_chip_stayed_s": 8.25},
+    "b_fade_two_chips": {"watched_s": 430, "changes_after_the_two_start_chips": 80, "changes_per_minute_across_both": 11.16, "changes_in_each_full_minute": [13, 11, 11, 11, 11, 12, 11], "smallest_gap_between_two_changes_s": 2.49, "changes_closer_than_2_3_s": 0, "longest_a_slot_went_between_changes_s": 15.11, "resolution": "100 ms reads, so the 2.49 s figure is good to 0.1 s"},
+    "f_ring_hold_fade_one_chip": {"held_s": 42.5, "chip": "Any known Proton issues for this game? (a general chip)", "changes": 0, "opacity_min_to_max": [1.0, 1.0], "ring_stayed_on_chip": true}
+  },
+  "expected": "a: 8 to 10.5 chips a minute; b: 9 to 14 a minute across both and no two changes within 2.3 s; f: the chip under the ring does not change in 40 s.",
+  "verdict": [
+    "PASS: a, fade one chip: 9.53 chips a minute (8 to 10.5). The first minute counted 11 because it holds the chip already on screen at the start.",
+    "PASS: b, fade two chips: 11.16 changes a minute across both (9 to 14) and the closest two changes were 2.49 s apart (none under 2.3 s). The margin to 2.3 s is 0.19 s.",
+    "PASS: f, ring hold: the chip under the ring did not change in 42.5 s and stayed fully visible."
+  ],
+  "side_effect": "Same settings changes as the TIP-CHIP file, all put back. About 20 minutes of the game's time on the Deck was spent with the panel open."
+}

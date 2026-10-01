@@ -1,0 +1,71 @@
+{
+  "row": "P77-SPOILER-OTHER-GAME",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 08:13-08:23 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page window 854x454 css px (dpr 1.5) after the plugin reload with the game running.",
+  "setup": "Deep Rock Galactic: Survivor running (appid 2321470); plugin reloaded after the launch (end of check 2); Context line on the panel read 'Context: active game Deep Rock Galactic: Survivor' before and after every question. Strategy mode. strategy_spoiler_masking_enabled true (as found, nothing changed). use_local_knowledge_base true. Test chat 6f3cc055 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' read open before every question. Each question sent with the send script (VERIFIED, field value read back in the page), Ask reached by walking and read focus on 'ask' before every A. A page-side logger read the answer every 250 ms while it arrived (answer preview letters, covers present, Stop button) and a final read 5 s after the Stop button went away.",
+  "pressed": "Per question: send script, walk Down to Ask, read focus, A. After Q1, Q2 and Q3: walked Up to 'Show details' (read focus on it), A, read, A again to fold it. After Q3 only: walked Up to the first choice button, read focus on 'A. Starting out in Hollow Knight', A.",
+  "seen": {
+    "Q1 how do I beat the boss in the Soul Sanctum in Hollow Knight": {
+      "covers_on_finished_answer": 2,
+      "covers_while_arriving": "0 covers in the live preview at every 250 ms read (54 reads with the preview present); the 2 covers appeared when the answer was settled (0, then 1, then 2 seen in the page over time)",
+      "boss_name_readable_outside_covers": "none. Outside the covers: 'this fella is slippery, he teleports like a cheap magician', 'soul orbs', 'dive slam', 'hit him from below when he's conjuring those orbs', 'deflates and gasps'. No 'Soul Master' or any other boss name.",
+      "show_details": "opened (focus read on 'Show details', then A). Panel lists: Local knowledge base, Retrieval Keyword + meaning, Trust tier wiki_no_patch, 'text:hollow knight', KB: 14 sections. Sources are hidden behind 'open the notes', so the note names below come from the saved turn.",
+      "notes_named": ["Hollow Knight: Starting out in Hollow Knight", "Hollow Knight: Soul Master", "Hollow Knight: Soul, Focus and spells"],
+      "log_lines": [
+        "[2026-10-01 08:13:33,408][INFO]: spoiler: named story game picks the notes this turn (running no-story game 'Deep Rock Galactic: Survivor' appid=2321470, question names 'hollow knight') -- notes, covers and menu follow the named game",
+        "[2026-10-01 08:13:33,530][INFO]: kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Soul Master; Hollow Knight — Soul, Focus and spells] dropped_for_room=0"
+      ],
+      "checklist_under_answer": "no",
+      "choice_buttons": "yes: 'Where are you at in Hollow Knight?' A. Starting out in Dirtmouth, B. Fighting the boss in the Soul Sanctum"
+    },
+    "Q2 Hollow Knight Soul Sanctum boss tips please": {
+      "covers_on_finished_answer": 1,
+      "boss_name_readable_outside_covers": "none. Outside: 'this fella', soul orbs, 'Vengeful Spirit or the Desolate Dive' (spell names), soul meter, hot springs.",
+      "show_details": "opened and folded; same panel: text:hollow knight, KB: 14 sections.",
+      "notes_named": ["Hollow Knight: Soul, Focus and spells", "Hollow Knight: Starting out in Hollow Knight", "Hollow Knight: Soul Master"],
+      "log_lines": [
+        "[2026-10-01 08:15:44,612][INFO]: spoiler: named story game picks the notes this turn (running no-story game 'Deep Rock Galactic: Survivor' appid=2321470, question names 'hollow knight') -- notes, covers and menu follow the named game",
+        "[2026-10-01 08:15:44,721][INFO]: kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight — Soul, Focus and spells; Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Soul Master] dropped_for_room=0"
+      ],
+      "checklist_under_answer": "no",
+      "choice_buttons": "yes: 'What part of the Soul Sanctum are you currently focused on?' A. Exploring the outer areas of the City of Tears, B. Trying to defeat the boss"
+    },
+    "Q3 how do I get past the Soul Sanctum fight in Hollow Knight": {
+      "covers_on_finished_answer": 1,
+      "boss_name_readable_outside_covers": "none ('this fella', soul orbs, dive slam).",
+      "show_details": "opened and folded; text:hollow knight, KB: 14 sections.",
+      "notes_named": ["Hollow Knight: Starting out in Hollow Knight", "Hollow Knight: Soul Master", "Hollow Knight: False Knight"],
+      "log_lines": [
+        "[2026-10-01 08:17:19,974][INFO]: spoiler: named story game picks the notes this turn (running no-story game 'Deep Rock Galactic: Survivor' appid=2321470, question names 'hollow knight') -- notes, covers and menu follow the named game",
+        "[2026-10-01 08:17:20,057][INFO]: kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Soul Master; Hollow Knight — False Knight] dropped_for_room=0"
+      ],
+      "checklist_under_answer": "no",
+      "choice_buttons": "yes: 'Where are you at in Hollow Knight?' A. Starting out in Hollow Knight, B. Fighting the boss in the Soul Sanctum"
+    },
+    "Q4 how do I dodge enemy projectiles in this game (Deep Rock question)": {
+      "covers_on_finished_answer": 0,
+      "notes_named": ["Deep Rock Galactic: Survivor: Mactera", "Deep Rock Galactic: Survivor: Exploder", "Deep Rock Galactic: Survivor: Hollow Bough"],
+      "log_lines": ["[2026-10-01 08:20:14,650][INFO]: kb: question chose domain=strategy route=app_id:2321470 method=hybrid attached=3 [Deep Rock Galactic: Survivor — Mactera; Deep Rock Galactic: Survivor — Exploder; Deep Rock Galactic: Survivor — Hollow Bough] dropped_for_room=0", "no 'named story game' line for this turn"],
+      "show_details": "not opened for this one (notes read from the saved turn and the log).",
+      "checklist_under_answer": "no",
+      "oddity": "The answer text itself says 'When they start throwing those soul orbs, you gotta be ready to dodge'. That is Hollow Knight wording carried over from the earlier turns of this chat, in a Deep Rock answer. The notes were Deep Rock ones."
+    },
+    "Q5 how do I beat the Soul Master in Hollow Knight, spoilers are okay": {
+      "covers_on_finished_answer": 0,
+      "log_lines": ["[2026-10-01 08:21:25,217][INFO]: spoiler: named story game picks the notes this turn (running no-story game ...'hollow knight') ...", "[2026-10-01 08:21:25,311][INFO]: kb: question chose ... text:hollow knight ... [Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Soul Master; Hollow Knight — False Knight]"],
+      "checklist_under_answer": "no",
+      "choice_buttons": "yes (a branch picker was drawn)"
+    },
+    "step_6_choice_button": "On Q3's answer (done right after Q3, before Q4, because the picker only exists on the newest turn; the runbook order put it after Q5). Walked Up to the first button, read focus: 'A. Starting out in Hollow Knight'. Pressed A. It sent a follow-up at once ('I'm at: Starting out in Hollow Knight', earlier question quoted). Answer: 1 cover, 1014 letters, no picker, no checklist, no boss name outside the cover. Saved turn notes: Starting out in Hollow Knight, Soul Master, False Knight. Log: the 'named story game' line and the 'kb: question chose route=text:hollow knight' line both appeared again at 08:18:48.",
+    "chat_turns": "36 before this block of checks' first question in check 1; this check's six exchanges took the chat from 48 to 60 turns."
+  },
+  "expected": "Q1 to Q3: at least 1 cover each, Show details names Hollow Knight notes, 'named story game' log line each time; Q4: Deep Rock notes, 0 covers, no such line; Q5: 0 covers; no boss name readable outside a cover on Q1 to Q3.",
+  "verdict": [
+    "PASS: Q1 to Q3 each had covers (2, 1, 1), Hollow Knight notes, and the 'named story game' line each time; no boss name readable outside a cover.",
+    "PASS: Q4 got Deep Rock notes, 0 covers and no 'named story game' line.",
+    "PASS: Q5 had 0 covers.",
+    "UNCLEAR: the plain-reading of 'boss name outside a cover' is met, but the uncovered text still describes how this boss fights (teleports, soul orbs, hit from below, dive slam, deflates and gasps) in all three; the runbook only asks about the name. Left for the owner."
+  ],
+  "side_effect": "Step 6 was done after Q3 rather than after Q5, for the reason above. Six exchanges (Q1 to Q5 plus the choice follow-up) went into the test chat, which is now 60 turns."
+}

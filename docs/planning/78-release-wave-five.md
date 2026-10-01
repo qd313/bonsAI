@@ -528,6 +528,13 @@ The full results, the code summary and the report replace this section when the 
   Deck check has run. The night's report went to the maintainer, opening with Thursday's list, and the checks page
   was brought up to date: Thursday's list in order at the top, then the eight calls. The session keeps trying the
   Deck every 20 minutes and starts the first Deck block by itself when it answers.
+- **5:20 to 5:35 am, 1 October:** the maintainer switched the Deck on (it had been off). The first Deck block
+  started: the new build went on (`57586da0`, the build on the Deck matches), the settings and chats were backed
+  up, and the Deck was set to stay awake. Then it stopped: the rig's button presses never reach the Deck. The
+  controller board answers on this PC, but the Deck sees no USB device besides its own controller, so the board's
+  lead to the Deck is not connected. No check has run. One good thing from the restart: the 6.6 GB of
+  half-downloaded model files is gone (the models folder is 4.3 GB). Evidence
+  `docs/test-evidence/plan78-BLOCK0-SETUP.json`.
 
 ## For the helpers: who owns which files
 

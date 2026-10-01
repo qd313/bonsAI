@@ -1,0 +1,29 @@
+{
+  "row": "BLOCK0-SETUP",
+  "build_commit": "57586da0",
+  "deck_time_local": "2026-10-01 05:23-05:27 EDT (Deck clock)",
+  "screen": "Not readable: the Quick Access page could not be opened. The gamescope screenshot is 1280x800, which matches the Deck's own screen; no monitor seen.",
+  "setup": {
+    "keep_awake": "deck_holdAwake ttl 480, expiresAt 2026-10-01T17:23:02.823Z (13:23 EDT), verified in systemd-inhibit",
+    "automationStatus": "armed, no live tunnel (8 registered, all alive:false)",
+    "backups_on_deck": ["/home/deck/p78-settings.bak.json", "/home/deck/p78-chat-slots.bak (directory)"],
+    "settings_copy_pc": "C:/Users/still/AppData/Local/Temp/claude/C--Users-still-Documents-BonsAI/f4893554-79dd-4677-bac4-576d97c52626/scratchpad/deck/p78-settings-block0.json",
+    "settings_found": {"ask_mode": "strategy", "ask_think_effort": "medium", "stream_scramble_enabled": true, "stream_scramble_style": "settle", "preset_chip_animation": "decode", "preset_single_chip": true, "strategy_spoiler_masking_enabled": true, "use_local_knowledge_base": true},
+    "ollama": "ps: /home/deck/.local/bin/ollama serve (pid 1415, started 05:19, just after boot). /api/ps: {\"models\":[]} (nothing loaded). ollama is not on PATH over ssh. Models listed: nomic-embed-text:latest 274 MB, gemma4:e2b-it-qat 4.3 GB (via ~/.local/bin/ollama list).",
+    "du_ollama_models": "4.3G /home/deck/.ollama/models (so the roughly 6.6 GB of half-downloaded files from last night are gone)",
+    "disk_free": "/home: 1.9T size, 1.1T used, 734G free (61 percent)",
+    "test_chat": "6f3cc055-d603-4e3e-9adf-15d71df4ec14, title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', 36 turns, present. (93f61878 is not there.) Chat index has 8 chats; no new chat made.",
+    "parental_lock": "not checked (panel never opened)",
+    "recent_games": "Home screenshot shows SIFU, Stardew Valley, Deep Rock Galactic Survivor, Hades ... on the first row; not verified through the launcher",
+    "deploy": "deck_deploy ok (dist, main.py, plugin.json, package.json, assets, py_modules, bin), loader ready. deck_checkReady buildMatches: true (123 files match)."
+  },
+  "pressed": "deck_openPlugin twice (each sent one Guide+A chord, no pane appeared); one manual deck_pressChord GUIDE+A; one deck_pressButton DOWN with verify (refused: no focus readable); one DOWN without verify (bridge acked). No press changed the screen: it stayed on the Steam home page (Steam Big Picture Mode) in every screenshot.",
+  "seen": "Bridge board side: COM7 opens, firmware acks every press (dirs:2 for DOWN). Deck side: lsusb shows only the Deck's own 'Valve Software Steam Controller' (28de:1205) and root hubs; no second USB gamepad or ESP32 device. /proc/bus/input/devices lists only the Deck's own controller and Steam's virtual 'Microsoft X-Box 360 pad 0'. Steam reports no gpfocus in any CDP target. Quick Access page reports no pane. RunningApps empty.",
+  "expected": "Plugin panel opens (after at most one failed attempt after deploy) and presses move focus.",
+  "verdict": [
+    "PASS: deploy and build match (123 files, buildMatches true).",
+    "PASS: backups made, test chat found, Ollama and disk state recorded.",
+    "COULD NOT RUN: opening the plugin panel and every later check. The rig's presses are acknowledged by the board but the Deck never sees them: no extra USB gamepad appears on the Deck. The board's lead to the Deck looks unplugged or not enumerated. Needs a person to check the cable."
+  ],
+  "side_effect": "Three Guide+A chords and two Down presses were sent; none reached Steam as far as the screenshots show. Deck left on the Steam home page. The plugin was redeployed (build 57586da0) and the Decky loader restarted by that."
+}

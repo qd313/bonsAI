@@ -1,0 +1,33 @@
+{
+  "row": "QA-FREE-PLAY-01 (with a game half) incl. the glossary-word jump check",
+  "build_commit": "b417c271",
+  "deck_time_local": "2026-10-01 about 11:07-11:20 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel scroll area top y=88; dock top y=290.17 with the game running too (the brief said about 262 with a game; I measured 290 both ways).",
+  "setup": "Deep Rock Galactic: Survivor launched from the Recent Games row with deck_launchGame (Home tile was already first; game process confirmed over SSH), plugin reloaded, waited 12 s, deck_openPlugin worked first try. Context line read 'active game Deep Rock Galactic: Survivor'. Strategy mode, spoiler masking true, test chat 6f3cc055 (open chat header read before the question). Question sent with the send-question script (VERIFIED) and Ask pressed after reading focus on 'ask': 'In one long paragraph, explain what an overclock is in Deep Rock Galactic: Survivor, then describe in detail how to choose overclocks for each weapon'.",
+  "answer_shape": "two sections, both taller than the 202 px visible space: section 1 content-top 206 height 345, section 2 content-top 551 height 360. Underlined glossary words (class bonsai-drg-glossary-term): 'overclocks' at content 221 (15 px under section 1's top), 'overclock' 311, 'overclock' 386, 'kite' 416, 'overclocks' 551 (first line of section 2), 'overclocks' 596, 'overclocks' 761. Then choice buttons A/B, Helpful, Show details, a source row, a Tip chip.",
+  "pressed": "Walk Down from the question row one press at a time with focus, top, bottom and scrollTop read after each (fold, section 1, the seven words, choice A); the rest of the Down walk (B, Helpful, Show details, source row, Tip, box, Ask) and the whole Up walk in rig batches (runs/p78-qa-free-play-game-up-drg.json and ...-game-down-drg-tail.json).",
+  "seen": {
+    "down_one_press_at_a_time": [
+      "question row -> 1 DOWN fold 262.8-277.5 st 0",
+      "2 DOWN section 1 top 88.2 bottom 433.2 st 206 (its top on the header: opening text visible)",
+      "3 DOWN word 'overclocks' (221) top 203.8 st 105.3 (scrollTop 206 -> 105: a move of 101 up to centre the word)",
+      "4 DOWN word 'overclock' (311) top 189.2 st 210 (+105)",
+      "5 DOWN word 'overclock' (386) top 264.2 st 210 (+0, the word was already on screen)",
+      "6 DOWN word 'kite' (416) top 188.8 st 315.3 (+105)",
+      "7 DOWN word 'kite' again, scroll only top 108.8 st 395.3 (+80)",
+      "8 DOWN word 'overclocks' (551, first line of section 2) top 243.8 st 395.3 (+0)",
+      "9 DOWN word 'overclocks' (596) top 188.8 st 495.3 (+100)",
+      "10 DOWN word 'overclocks' (761) top 223.8 st 625.3 (+130)",
+      "11 DOWN word 'overclocks' (761) again, scroll only top 143.8 st 705.3 (+80)",
+      "12 DOWN choice 'A. Early game, learning the ropes' top 171.8 bottom 203.8 st 907.3 (+202: leaves the section, lands on a new stop; every word of both sections was passed on the way)"
+    ],
+    "largest_scrollTop_step_between_presses_inside_the_sections": "130 px (word to word); scroll-only presses moved exactly 80 px. No jump of several hundred px that skips the middle of a section.",
+    "words_are_stops_going_down": "yes: each underlined word is its own D-pad stop on the way down.",
+    "up_walk_batch": "Up from the box: Tip chip, source row, Show details, Helpful, choice B, choice A, section 2 (landing, then 2 scroll-only presses), section 1 (landing, then 2 scroll-only presses), fold, question row corner, '65 earlier', top. The glossary words are NOT stops on the way up (section 2 has three words and took one landing plus two 80 px scroll presses). So the Up list is not the Down list reversed on this answer. No stop three times. Presses that left the element unchanged were scroll presses (scrollTop moved), except Down at Ask and Up at the top.",
+    "visible_check": "All focused stops visible apart from the known false alarms (89% behind the Retry icon, 56% behind the Copy icon) and the tall-section lines: entering section 2 from below, its landing was 56% visible (rig), then the scroll presses 33%-67%, consistent with the earlier finding that a tall section entered from below keeps its bottom ~84 px under the dock."
+  },
+  "expected": "Pass: scrollTop moves about 80 px a press until the next stop; a jump of several hundred px that skips the section's middle is a FAIL.",
+  "verdict_jump_check": "PASS - underlined words were present near the top of two sections taller than the visible space (section 1 word 15 px under its top; section 2 word on its first line); walking Down onto them and on, scrollTop moved 80 px on scroll-only presses and at most 130 px between word stops; no jump of several hundred px.",
+  "verdict_ordinary_sweep": "PASS for the Down walk (every stop reached, none three times, no dead press). UNCLEAR for the Up walk: the glossary words are skipped, so going up and going down do not use the same stops, and the tall sections entered from below sit partly behind the dock (see seen.visible_check). Owner to say whether skipping the words going Up is wanted.",
+  "side_effect": "none (the game was launched by the rig and closed afterwards; see handover)."
+}

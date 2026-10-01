@@ -1,0 +1,41 @@
+{
+  "row": "P78-FIRST-SECTION-LANDING",
+  "build_commit": "b417c271",
+  "deck_time_local": "2026-10-01 about 10:58-11:12 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel scroll area top y=88.0; dock top y=290.17 (measured with getBoundingClientRect). Visible space = 202 px.",
+  "setup": "No game running, Strategy mode, test chat 6f3cc055 (open chat name read before the question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Question sent with the send-question script (VERIFIED), Ask pressed with A after reading focus on 'ask': 'In two short paragraphs and then one single closing sentence, how do I get ready for the Mantis Lords fight in Hollow Knight'. First try was usable: two paragraphs with NO spoiler cover, section 1 content-top 192 height 180, section 2 content-top 372 height 210 (210 is 8 px taller than the 202 visible space), then a 'Where are you at in Hollow Knight?' pair of choice buttons A/B, Helpful, Show details, a source row, a chip. The answer text was a different shape from what the question asked (two paragraphs, the single closing sentence was the choice question).",
+  "pressed": "Before the counted walks I walked Up from the question box to the question row (one batch of 7 plus 4 single presses; it also showed the Up order). Counted walks, one press at a time with a focus read after each: Down x8 from the question row to Helpful, then Up x8 from Helpful to the question row.",
+  "seen": {
+    "down_walk_top_bottom_scrollTop": [
+      "question row 189.0-231.9 st 0",
+      "1 DOWN reasoning fold 249-263 st 0",
+      "2 DOWN SECTION 1 (the press from the reasoning line) top 110.5 bottom 290.54 st 169.3",
+      "3 DOWN SECTION 2 top 88.5 bottom 298.5 st 371.3",
+      "4 DOWN SECTION 2 again (scroll only, it is 210 tall) top 8.5 bottom 218.5 st 451.3",
+      "5 DOWN choice 'A. Starting out in Hollow Knight' 171.9-203.9 st 560.7",
+      "6 DOWN choice 'B. Fighting the Mantis Lords boss' 211.9-243.9 st 560.7",
+      "7 DOWN Helpful 172.1-204.1 st 690.0"
+    ],
+    "up_walk_top_bottom_scrollTop": [
+      "1 UP choice B 203.9-235.9 st 568.7",
+      "2 UP choice A 171.9-203.9 st 560.7",
+      "3 UP SECTION 2 top 80.5 bottom 290.5 st 379.3 (entered from below: bottom on the dock edge, top 7.5 above the header)",
+      "4 UP SECTION 2 again (scroll only) top 160.5 bottom 370.5 st 299.3",
+      "5 UP SECTION 1 top 110.5 bottom 290.5 st 169.3",
+      "6 UP reasoning fold 203.9-218.5 st 44.7",
+      "7 UP question row 189.0-231.9 st 0"
+    ],
+    "first_section_landing": "top 110.5 (panel top 88: 22.5 px below it, so inside) and bottom 290.54 (dock top 290.17: 0.37 px over, which rounds to 291 vs 290 in whole pixels). Section is 180 tall, shorter than the visible space.",
+    "down_stops_in_order": "fold, section 1, section 2, section 2 (scroll), A, B, Helpful",
+    "up_stops_in_order": "B, A, section 2, section 2 (scroll), section 1, fold, question row",
+    "up_is_down_reversed": "yes for the stops (same elements, reverse order; the question row and fold are the ends). Section 2 sits at different scroll positions on the way up (80.5 / 160.5) than on the way down (88.5 / 8.5) because each direction enters the tall section from its own edge.",
+    "every_press_a_new_stop": "yes; the only repeated element is section 2 (210 tall, taller than 202) and each of its two presses changed scrollTop by 80 (371.3 -> 451.3 down, 379.3 -> 299.3 up). No press left both ring and scrollTop unchanged.",
+    "section_2_notes": "Entering section 2 from above its top sits on the header (88.5) with 8.5 px of its bottom under the dock, fine. The second Down press scrolls 80 px and leaves it at 8.5-218.5, with 72 px of free panel under it and 80 px of its first lines above the panel top. Going up, the second press does the mirror: 160.5-370.5, 80 px of its last lines under the dock. For an 8 px overhang that is a large step; not a runbook condition, noted.",
+    "dead_press_in_approach_walk": "During the pre-walk (Up from the question box) one Up press on section 2 did not change the focused element; scrollTop changed 379 -> 299 (a scroll press), so it was not dead."
+  },
+  "expected": "The press from the reasoning line lands the first section with its top at or below the panel top (y 88) and its bottom at or above the dock top (y 290), unless that section is taller than the visible space; every press lands on a new stop; the Up list is the Down list reversed.",
+  "verdict_first_section_landing": "PASS - section 1 landed at top 110.5 / bottom 290.54 (0.37 px past the dock edge by sub-pixel, 291 vs 290 in whole pixels; the old build put it at 24-204 with the panel at 88). Owner may judge the 0.37 px.",
+  "verdict_every_press_new_stop": "PASS - 7 Down presses and 7 Up presses each landed a new element or, on the one section taller than the visible space, scrolled it by 80 px.",
+  "verdict_up_is_down_reversed": "PASS - same stops reversed; positions of the tall section differ by entry edge as designed.",
+  "side_effect": "none"
+}

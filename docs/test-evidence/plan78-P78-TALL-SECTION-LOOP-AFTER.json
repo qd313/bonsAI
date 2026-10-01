@@ -1,0 +1,33 @@
+{
+  "row": "P78-TALL-SECTION-LOOP-AFTER",
+  "build_commit": "b417c271",
+  "deck_time_local": "2026-10-01 about 10:56-11:05 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel scroll area top y=88; dock top y=290; visible space 202 px.",
+  "setup": "Deployed b417c271 (deck_deploy, deck_checkReady buildMatches true, 123 files). deck_openPlugin failed 3 times (two 'could not reach CEF debugger' reads right after the deploy, then the QAM chord was sent but no pane appeared once) and opened on the 4th call. SAME answer as part 1: still the newest turn of the test chat, same geometry (section content-top 206 height 446, cover content-top 589 height 55). No game running. Strategy, spoiler masking true. To reach the question row after the open: ring was unowned, first DOWN placed it on the Retry icon (229-249), UP went to the '62 earlier' pill (146-168), DOWN, DOWN reached the question row (189-246, scrollTop 0).",
+  "pressed": "From the question row: Down x4 to Helpful (list B), then Up x7 to the question row (list C). One press at a time, focus read after each.",
+  "seen": {
+    "B_down_question_row_to_helpful": [
+      "1 DOWN: reasoning fold 263-278 st 0",
+      "2 DOWN: COVER 229-284 st 448 (scrollTop jumped 0 -> 448: still lands deep inside the tall section before its opening text was on screen, same as the old build)",
+      "3 DOWN: summary note 172-204 st 591",
+      "4 DOWN: Helpful 243-275 st 591"
+    ],
+    "C_up_helpful_to_question_row": [
+      "1 UP: summary note 204-235 st 559",
+      "2 UP: COVER 229-284 st 448",
+      "3 UP: section -72..374 st 367",
+      "4 UP: section 8..454 st 287",
+      "5 UP: section 88..534 st 207",
+      "6 UP: reasoning fold 204-219 st 59",
+      "7 UP: question row 189-246 st 0"
+    ],
+    "cover_landings_in_up_walk": 1,
+    "scrollTop_values_on_up": "559, 448, 367, 287, 207, 59, 0 (only ever falls)",
+    "press_that_changed_nothing": "none",
+    "difference_from_part_1": "none: every landing, top, bottom and scrollTop in both walks is identical to the c8d6b094 walks"
+  },
+  "expected": "The Up walk reaches the question row; the cover is landed on at most twice; scrollTop never rises on an Up press; no press leaves both the ring and the scrollTop unchanged.",
+  "verdict": "PASS - all four conditions hold on b417c271 (question row reached in 7 Up presses, cover landed once, scrollTop only fell, no dead press). Weak as a proof of the fix: the same walk was also clean on c8d6b094, so this answer could not show a before/after difference.",
+  "verdict_down_side_note": "UNCLEAR - going Down, the press from the reasoning line still lands on the cover at scrollTop 448 with the section's opening text never on screen. Not a runbook pass condition for this part; the expected fix is checked in part 3.",
+  "side_effect": "none"
+}

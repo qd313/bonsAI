@@ -2811,3 +2811,9 @@ Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5,
   and 30–33 with it kept (the maintainer's call), dipping into the 20s late in long answers; the game itself
   went from 14–17 to 23–31. Rows **GAME-LIGHT-01**, **STREAM-PIECES-01** partial. Next: a Deck processor
   profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).
+
+## A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode
+
+Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 9, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.

@@ -1,0 +1,50 @@
+{
+  "row": "P78-TALL-SECTION-LOOP-BEFORE",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 about 10:50-11:05 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454 (innerWidth x innerHeight). Panel scroll area top y=88, bottom y=454 (clientHeight 366). Dock top y=290 (measured, no game). Visible space between header and dock = 202 px.",
+  "setup": "No game running (RunningApps empty). Strategy mode, spoiler masking true, test chat 6f3cc055 (header 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Question 1 of the runbook sent with the send-question script (VERIFIED), Ask pressed with A after reading focus on the 'ask' button. First try had the needed shape, so question 2 was not used.",
+  "answer_shape": {
+    "section": "one answer section, content-relative top 206, height 446 px (taller than the 202 visible space)",
+    "cover": "one spoiler cover inside it, content-relative top 589, height 55; its top is 383 px below the section top = 86% of the section height (more than half)",
+    "other": "no other cover; the answer ends with a chip 'What are the best FSR settings...' below it"
+  },
+  "pressed": "Approach: from the question box, Up x10 to the question row (list A). Official walk: Down x4 from the question row to Helpful (list B). Then Up x7 from Helpful to the question row (list C, the decisive one). One press at a time, focus read after each.",
+  "seen": {
+    "A_approach_up_from_box": [
+      "1 UP: chip 'I'm stuck' top 291 bot 321 scrollTop 604",
+      "2 UP: 'Show details' 274-288 st 604",
+      "3 UP: Helpful 230-262 st 604",
+      "4 UP: summary note ('The chat summed itself up before') 204-235 st 559",
+      "5 UP: COVER 229-284 st 448",
+      "6 UP: section -72..374 st 367",
+      "7 UP: section 8..454 st 287",
+      "8 UP: section 88..534 st 207",
+      "9 UP: reasoning fold 204-219 st 59",
+      "10 UP: question row 189-246 st 0"
+    ],
+    "B_down_question_row_to_helpful": [
+      "1 DOWN: reasoning fold 263-278 st 0",
+      "2 DOWN: COVER 229-284 st 448  (jumped scrollTop 0 -> 448; the section's own opening text (content top 206, so y 294 at st 0, under the dock) was never on screen)",
+      "3 DOWN: summary note 172-204 st 591",
+      "4 DOWN: Helpful 243-275 st 591"
+    ],
+    "C_up_helpful_to_question_row": [
+      "1 UP: summary note 204-235 st 559",
+      "2 UP: COVER 229-284 st 448",
+      "3 UP: section -72..374 st 367",
+      "4 UP: section 8..454 st 287",
+      "5 UP: section 88..534 st 207",
+      "6 UP: reasoning fold 204-219 st 59",
+      "7 UP: question row 189-246 st 0"
+    ],
+    "cover_landings": "1 in walk A, 1 in walk B, 1 in walk C. Never a second time in any walk.",
+    "scrollTop_rise_on_up": "none. In lists A and C scrollTop only fell: 604, 604, 604, 559, 448, 367, 287, 207, 59, 0 (A) and 559, 448, 367, 287, 207, 59, 0 (C).",
+    "press_that_changed_nothing": "none",
+    "tall_section_up_entry": "entered from below the cover: first landing top -72 bottom 374 (bottom past the dock at 290), then 80 px a press until its top reached the header at 88, then the reasoning fold."
+  },
+  "expected": "Loop reproduced if the ring lands on the same cover a third time in one Up walk, or scrollTop rises on an Up press.",
+  "verdict": "UNCLEAR - loop NOT reproduced on this answer on build c8d6b094 (section 446 px tall, cover 383 px below its top; cover landed once per Up walk, scrollTop never rose, twice over). Not reproduced is not proof the fault cannot happen; the shape matched the runbook's description.",
+  "side_effect_known_smaller_fault": "YES. Going DOWN, Down from the reasoning line landed on the cover deep inside the tall section (scrollTop jumped 0 -> 448) before the section's opening text had been on screen. The Down walk then skipped the section as a stop altogether (reasoning fold -> cover -> summary note -> Helpful).",
+  "side_effect": "none. Ring left on the question row of the newest turn, scrollTop 0. One earlier slip by me: I issued two press calls in one message, they arrived in order and did no harm."
+}

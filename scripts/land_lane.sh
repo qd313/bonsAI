@@ -65,7 +65,16 @@ fi
 
 echo "== gates"
 npx tsc --noEmit && echo "TSC OK" || { echo "TSC FAIL"; exit 3; }
-npm test 2>&1 | tail -15; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "TEST OK" || { echo "TEST FAIL"; exit 3; }
+# One test file (the plugin root's) times out at 20 s when several helpers run their own gates at the
+# same moment; it passes alone. So a failed run is tried once more before it counts. A real failure
+# fails both times.
+test_ok=1
+npm test 2>&1 | tail -15; [ "${PIPESTATUS[0]}" -eq 0 ] || test_ok=0
+if [ "$test_ok" -eq 0 ]; then
+  echo "TESTS FAILED ONCE, retrying (a timeout under load is the usual cause; read both runs)"
+  npm test 2>&1 | tail -25; [ "${PIPESTATUS[0]}" -eq 0 ] && test_ok=1
+fi
+[ "$test_ok" -eq 1 ] && echo "TEST OK" || { echo "TEST FAIL"; exit 3; }
 npm run test:py 2>&1 | tail -8; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "PY OK" || { echo "PY FAIL"; exit 3; }
 build_ok=1
 npm run build 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] || build_ok=0

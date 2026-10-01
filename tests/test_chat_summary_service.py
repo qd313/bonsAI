@@ -67,6 +67,29 @@ def _chat(n: int) -> list[dict]:
     return turns
 
 
+_STUB_LIBRARY = {
+    "half-life 2": "Half-Life 2",
+    "black mesa": "Black Mesa",
+    "hollow knight": "Hollow Knight",
+    "hades": "Hades",
+    "deep rock galactic": "Deep Rock Galactic",
+}
+
+
+async def _stub_library_lookup(_plugin):
+    """Stands in for the notes library's own title match (no corpus is built in the unit tests)."""
+    from backend.services.kb_other_game_named import normalize_alias
+
+    def _lookup(text: str) -> str:
+        norm = normalize_alias(text)
+        for alias, title in _STUB_LIBRARY.items():
+            if normalize_alias(alias) in norm:
+                return title
+        return ""
+
+    return _lookup
+
+
 class _SlowResponse:
     """A response whose first read blocks past the (patched, short) deadline before finishing --
     a stand-in for a model that is still generating when the overall time limit runs out."""
@@ -262,6 +285,7 @@ class WriteChatSummaryTests(unittest.TestCase):
             previous=previous,
         )
 
+    @patch("backend.services.chat_summary_service._library_title_lookup", _stub_library_lookup)
     @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
     def test_a_written_summary_keeps_the_real_captured_text(self, mock_urlopen):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "english")
@@ -272,7 +296,14 @@ class WriteChatSummaryTests(unittest.TestCase):
         outcome = self._run(plan, turns)
 
         self.assertEqual(outcome.status, "written")
-        self.assertEqual(outcome.summary["text"], fixture["text"].strip())
+        # Every line the model wrote is kept as written, except the Game line: it is rebuilt from
+        # the names the library knows, so "Survival Games" (not a game) drops off the end.
+        written = fixture["text"].strip().splitlines()
+        self.assertTrue(written[0].startswith("Game: Half-Life 2, Black Mesa, Hollow Knight"))
+        self.assertEqual(
+            outcome.summary["text"].splitlines(),
+            ["Games: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic"] + written[1:],
+        )
         self.assertEqual(outcome.summary["model"], "gemma4:e2b-it-qat")
         self.assertEqual(outcome.summary["covers_through_turn_id"], turns[-1]["id"])
         self.assertEqual(outcome.summary["turns_covered"], len(turns))
@@ -373,6 +404,53 @@ class WriteChatSummaryTests(unittest.TestCase):
         outcome = self._run(plan, turns)
 
         self.assertEqual(outcome.status, "written")
+
+    # --- plan 78 helper H: the finished summary reads like a note a person would write ---------
+
+    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    def test_a_game_line_naming_a_non_game_and_an_empty_stuck_line_do_not_reach_the_card(
+        self, mock_urlopen
+    ):
+        """The two lines seen on the Deck (plan 68 pass, roadmap 'reads oddly'): the model wrote
+        "Game: Parrying practice" and "Player is stuck on: None apparent in this log." for a chat
+        whose game the chat already knows. The saved text is what the player reads on the card."""
+        reply = (
+            "Game: Parrying practice\n"
+            "Player asked how to practice parrying and how to beat the first boss.\n"
+            "Player is stuck on: None apparent in this log.\n"
+            "Player asked for: short answers."
+        )
+        turns = [
+            {"id": "q0", "role": "user", "text": "how do i practice parrying", "app_name": "Hades"},
+            {"id": "a0", "role": "assistant", "text": "Drill one slow attack.", "app_name": "Hades"},
+            {"id": "q1", "role": "user", "text": "how do i beat the first boss", "app_name": "Hades"},
+            {"id": "a1", "role": "assistant", "text": "Dash through the fire.", "app_name": "Hades"},
+        ]
+        plan = self._plan_for(turns)
+        mock_urlopen.return_value = _ok_response_for(reply)
+
+        outcome = asyncio.run(
+            write_chat_summary(
+                self.plugin,
+                chat={"turns": turns, "origin_app_name": "Hades"},
+                plan=plan,
+                model_name="gemma4:e2b-it-qat",
+                url="http://127.0.0.1:11434/api/chat",
+                keep_alive="5m",
+                window_tokens=16384,
+                reply_language="english",
+                request_id=1,
+            )
+        )
+
+        self.assertEqual(outcome.status, "written")
+        text = outcome.summary["text"]
+        self.assertNotIn("Parrying practice", text.splitlines()[0])
+        self.assertEqual(text.splitlines()[0], "Game: Hades")
+        self.assertNotIn("None apparent", text)
+        self.assertNotIn("stuck on", text.lower())
+        self.assertIn("Player asked how to practice parrying", text)
+        self.assertIn("Player asked for: short answers.", text)
 
 
 if __name__ == "__main__":

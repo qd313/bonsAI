@@ -59,6 +59,7 @@ from backend.services.chat_memory_service import (
     turns_not_yet_summarized,
 )
 from backend.services.chat_slot_service import MAX_SUMMARY_TEXT_LEN
+from backend.services.chat_summary_tidy import known_games_of_chat, tidy_summary_text
 from backend.services.ollama_chat_stream import _stream_ollama_chat_once
 from backend.services.ollama_stop_service import close_ollama_chat_response
 from backend.services.ollama_window_fit import ollama_base_from_chat_url
@@ -264,6 +265,43 @@ def _clean_summary_text(raw: str) -> str:
     return text.strip()[:MAX_SUMMARY_TEXT_LEN]
 
 
+async def _library_title_lookup(plugin: Any):
+    """A function that names the game the notes library knows in a piece of text (its titles and
+    nicknames), or None when the settings or the library cannot be read -- the guard then still
+    checks names against the chat's own games. Never raises."""
+    loader = getattr(plugin, "load_settings", None)
+    if loader is None:
+        return None
+    try:
+        settings = await loader()
+    except Exception:  # noqa: BLE001 -- a settings hiccup must never cost the summary
+        return None
+    if not isinstance(settings, dict):
+        return None
+
+    def _lookup(text: str) -> str:
+        from backend.services.knowledge_base_game_match import resolve_title_from_question
+
+        return resolve_title_from_question(settings, text)
+
+    return _lookup
+
+
+async def _tidy_written_text(plugin: Any, cleaned: str, *, chat: dict, plan: SummaryPlan,
+                             reply_language: str) -> str:
+    """The model's reply with its odd lines taken out (``chat_summary_tidy``). English only: the
+    empty-answer phrases and the Game label the guard knows are English wording, so a summary
+    written in another language is saved exactly as the model wrote it."""
+    if str(reply_language or "english").strip().lower() not in ("", "english"):
+        return cleaned
+    lookup = await _library_title_lookup(plugin)
+    return tidy_summary_text(
+        cleaned,
+        known_games=known_games_of_chat(chat, plan.covered_turns),
+        library_title=lookup,
+    )[:MAX_SUMMARY_TEXT_LEN]
+
+
 async def write_chat_summary(
     plugin: Any,
     *,
@@ -382,6 +420,10 @@ async def write_chat_summary(
         return SummaryOutcome(status="stopped", summary=None, seconds=elapsed, error="")
 
     cleaned = _clean_summary_text(result.get("visible_raw")) if result.get("success") else ""
+    if cleaned:
+        cleaned = await _tidy_written_text(
+            plugin, cleaned, chat=chat, plan=plan, reply_language=reply_language
+        )
     if not result.get("success") or not cleaned:
         if result.get("success"):
             error = "Model returned an empty summary."

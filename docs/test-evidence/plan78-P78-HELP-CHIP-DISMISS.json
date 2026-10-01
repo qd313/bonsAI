@@ -1,0 +1,19 @@
+{
+  "row": "P78-HELP-CHIP-DISMISS",
+  "build_commit": "f0a4f2c4 (dist deployed 12:50 Deck time; deck_checkReady buildMatches true, 124 files)",
+  "deck_time_local": "2026-10-01 12:50-12:53 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454; no game running",
+  "setup": "No game. Main tab, test chat open, one-chip setting on. Key bonsai:plugin-help-dismissed read: '1'. Removed it through the page connection (read back null).",
+  "pressed": "Quick Access closed and opened with the chord (no plugin reload). Then, as the runbook allows, one plugin reload (deck_status showed no game; 0 game processes) and reopen (first open try failed once, second worked). No steps 1 to 6 were reached because the help chip never showed.",
+  "seen": {
+    "key_before_removal": "1",
+    "key_after_removal": "null",
+    "after_close_and_reopen": "key still null; chip row: ONE ordinary suggestion chip 283 px wide; text 'How to use bonsAI' not on the page; no 'quick start' button found. Help chip did not show.",
+    "after_one_plugin_reload": "key read '1' again (the plugin put it back on its own, I did not write it); chip row: one ordinary suggestion chip ('What are the best FSR settings?', 283 px wide); help chip did not show.",
+    "why_it_cannot_be_shown_this_way": "From reading the source: after a remount the plugin restores a saved 'help dismissed' value (restorePluginHelpDismissed in useSessionRestoreAfterRemount), so removing the browser key does not bring the chip back. The only reset I found is in the session reset actions (Clear all data path), which is not allowed here."
+  },
+  "expected": "Help chip shows after the key is removed and the panel reopened; A on it opens Quick start; B or Got it removes it and a suggestion chip is in the row.",
+  "verdict": [
+    "UNCLEAR: I could not get the help chip to show again after removing the key (closing and reopening, then one plugin reload), so steps 1 to 6 were not run. The key is back at '1' and the chip row shows an ordinary suggestion chip, i.e. the end state is what the maintainer had. This build's fix is therefore not proven or disproven by this check."
+  ]
+}

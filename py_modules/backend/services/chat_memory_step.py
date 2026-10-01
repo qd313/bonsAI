@@ -12,7 +12,7 @@ them in the right order and hands back what the caller needs.
 """
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import decky
 
@@ -21,6 +21,28 @@ from backend.services.chat_summary_service import decide_and_write_chat_summary
 from backend.services.token_accounting_service import choose_window_tokens, known_window_tokens
 
 logger = decky.logger
+
+
+async def _library_title_lookup(plugin: Any) -> Optional[Callable[[str], str]]:
+    """A function that names the game the notes library knows in a piece of text (its titles and
+    nicknames), or None when the settings or the library cannot be read -- the memory then keeps
+    every earlier answer. Never raises."""
+    loader = getattr(plugin, "load_settings", None)
+    if loader is None:
+        return None
+    try:
+        settings = await loader()
+    except Exception:  # noqa: BLE001 -- a settings hiccup must never cost the question
+        return None
+    if not isinstance(settings, dict):
+        return None
+
+    def _lookup(text: str) -> str:
+        from backend.services.knowledge_base_game_match import resolve_title_from_question
+
+        return resolve_title_from_question(settings, text)
+
+    return _lookup
 
 
 async def add_chat_memory_to_prompt(
@@ -51,7 +73,9 @@ async def add_chat_memory_to_prompt(
     2. ``decide_and_write_chat_summary`` above: sums the chat up first when it has outgrown that
        room, and saves the summary only once the call has returned.
     3. ``apply_chat_memory_to_prompt``: the summary, then the newest turns word for word, at the
-       END of what the AI is told (see that function's own doc comment for why the end).
+       END of what the AI is told (see that function's own doc comment for why the end). Given the
+       library's title lookup, so a question naming a different game from the previous turn's is
+       not handed the earlier answers to copy (plan 78).
 
     Returns ``(system_content, chat_summary_mark, stopped)``. ``stopped`` True means a Stop landed
     mid-summary; the prompt comes back unchanged and the caller must make no answer call.
@@ -88,6 +112,7 @@ async def add_chat_memory_to_prompt(
         room_tokens=window_tokens,
         model_name=model_name,
         summary=previous_summary,
+        library_title=await _library_title_lookup(plugin),
         attached_chars=attached_chars,
         logger=logger,
     )

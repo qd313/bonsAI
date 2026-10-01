@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 109,
-  "edgeCount": 286,
+  "edgeCount": 289,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -49,7 +49,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "count": 11
+      "count": 12
     },
     {
       "path": "py_modules/backend/constants.py",
@@ -120,6 +120,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_game_match.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "count": 4
     },
@@ -164,7 +168,7 @@
       "count": 3
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_game_match.py",
+      "path": "py_modules/backend/services/kb_other_game_named.py",
       "count": 3
     },
     {
@@ -237,10 +241,6 @@
     },
     {
       "path": "py_modules/backend/services/kb_not_in_notes_notice.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/kb_other_game_named.py",
       "count": 2
     },
     {
@@ -711,6 +711,8 @@
     },
     "py_modules/backend/services/chat_memory_service.py": {
       "imports": [
+        "py_modules/backend/services/kb_other_game_named.py",
+        "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
         "py_modules/backend/services/prompt_budget_service.py",
         "py_modules/backend/services/token_accounting_service.py"
@@ -724,6 +726,7 @@
       "imports": [
         "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/chat_summary_service.py",
+        "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
@@ -930,6 +933,7 @@
         "py_modules/backend/services/knowledge_base_schema.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/chat_summary_tidy.py",
         "py_modules/backend/services/game_ai_request.py"
       ]
@@ -964,6 +968,7 @@
         "py_modules/backend/services/knowledge_base_schema.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_step.py",
         "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_service.py"
@@ -972,6 +977,7 @@
     "py_modules/backend/services/knowledge_base_schema.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/chat_summary_tidy.py",
         "py_modules/backend/services/kb_other_game_named.py",
         "py_modules/backend/services/knowledge_base_cards.py",

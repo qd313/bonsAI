@@ -43,19 +43,23 @@ How it works:
     so its own text stays byte-for-byte the same between rewrites while only
     the word-for-word tail changes -- see ``apply_chat_memory_to_prompt``'s
     doc comment for why that placement matters.
- 7. When the new question stands on its own (``question_stands_alone``: long enough, no
-    "it"/"again"/"you said", not opening with "and"/"what about"), the earlier ANSWERS are left
-    out and only the person's earlier questions are carried (plan 78). A small model copies an
-    answer it is shown -- 49 words of a Doom answer came back in an answer about another game.
-    A follow-up still gets the answers it follows.
+ 7. When the new question NAMES A GAME other than the one the previous turn was about (plan
+    78, ``subject_changed``), the earlier ANSWERS are left out and only the person's earlier
+    questions are carried. A small model copies an answer it is shown: 49 words of a Doom answer
+    came back in an answer about another game. The default is the other way round -- every
+    follow-up, however it is worded, keeps its answers, because only a game name that differs
+    from the previous turn's counts as a sign the subject changed. If no game can be told on
+    either side, or the library cannot be read, the answers are kept.
 """
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
+from backend.services.kb_other_game_named import other_game_named_in
+from backend.services.knowledge_base_schema import normalize_alias
 from backend.services.ollama_ask_budgets import resolve_ask_token_budgets
 from backend.services.prompt_budget_service import BudgetPlan, plan_prompt_budget
 from backend.services.token_accounting_service import estimate_tokens_from_chars
@@ -105,15 +109,16 @@ MEMORY_HEADER = (
 )
 MEMORY_TRUNCATED_NOTE = "(Earlier turns of this chat are not included here.)"
 
-# Plan 78 (borrowed wording): when the new question stands on its own, the earlier ANSWERS are not
-# carried at all -- only what the person asked. Measured on the PC's copy of the Deck's model, a
-# label telling the model not to copy did nothing (a 49-word stretch of a Doom answer came back
-# word for word in an answer about a different game); the only thing that stops the copying is
-# not handing it the answer. The questions stay, so the AI still knows what has been talked about.
+# Plan 78 (borrowed wording): when the new question names a different game from the previous
+# turn's, the earlier ANSWERS are not carried at all -- only what the person asked. Measured on the
+# PC's copy of the Deck's model, a label telling the model not to copy did nothing (a 49-word
+# stretch of a Doom answer came back word for word in an answer about a different game); the only
+# thing that stops the copying is not handing it the answer. The questions stay, so the AI still
+# knows what has been talked about.
 MEMORY_QUESTIONS_ONLY_HEADER = (
     "What this chat has already covered, oldest first: the person's earlier questions only. The "
-    "new question stands on its own, possibly about a different game or subject. Treat these as "
-    "background and answer the new question fresh."
+    "new question is about a different game than the last one, so treat these as background and "
+    "answer the new question fresh."
 )
 
 # Plan 68: the heading a chat's own summary of its older turns sits under, ahead of the
@@ -178,54 +183,58 @@ def _shorten(text: str, limit: int) -> str:
     return cut + "…"
 
 
-# A question that needs the turns before it points back at them: "again", "the second one", "you
-# said", or it opens with "and", "but", "what about", or -- when it is short -- it leans on a
-# pronoun. Anything else, once it is longer than a few words, names its own game or subject and can
-# be answered without the earlier answers; a long question with a "he" in it has usually named
-# who he is in the same breath, and the earlier QUESTIONS (which stay) say the rest. Leans towards
-# "needs the turns": wrongly keeping the answers costs a little borrowed wording, wrongly dropping
-# them costs the person a follow-up that no longer makes sense.
-_POINTS_BACK = re.compile(
-    r"\b(?:that one|the same|same thing|again|another|instead|previous|last time|"
-    r"you (?:said|mentioned|told|suggested|recommended|gave)|"
-    r"your (?:answer|reply|last|previous|advice|suggestion)|"
-    r"the (?:first|second|third|fourth|last|other|next|previous) "
-    r"(?:one|option|point|step|tip|suggestion|answer|choice|method|way|boss|phase))\b",
-    re.IGNORECASE,
-)
-_LEANS_ON_PRONOUN = re.compile(
-    r"\b(?:it|its|it's|they|them|their|theirs|he|him|his|she|her|hers|those|these|that|"
-    r"this(?!\s+game))\b",
-    re.IGNORECASE,
-)
-_CONTINUATION_OPENER = re.compile(
-    r"^\W*(?:and|but|so|then|also|ok|okay|what about|how about|what if)\b", re.IGNORECASE
-)
-_SHORT_QUESTION_WORDS = 4
-_PRONOUN_COUNTS_UP_TO_WORDS = 9
+# Names the game a piece of text is about -- the notes library's own title lookup (its titles and
+# nicknames), or "" when it names none. Handed in by the caller, which owns the settings.
+GameNamedIn = Callable[[str], str]
 
 
-def question_stands_alone(question: str) -> bool:
-    """True when ``question`` can be answered without what was said before it.
+def _game_named(text: str, library_title: Optional[GameNamedIn]) -> str:
+    """The game ``text`` names: the library's title for it, else a well-known game from the short
+    list the library-miss check uses, else "". Never raises -- a library that cannot be read is a
+    text that names nothing, which keeps the answers."""
+    if library_title is not None:
+        try:
+            title = str(library_title(text) or "").strip()
+        except Exception:  # noqa: BLE001 -- a library hiccup must never cost the question
+            title = ""
+        if title:
+            return title
+    return other_game_named_in(text)
 
-    Used to decide whether earlier answers are carried at all (see
-    ``MEMORY_QUESTIONS_ONLY_HEADER``). Only plain English text is judged: a question with any
-    letter outside ASCII might be in a language the pronoun list does not cover, and keeps the
-    memory exactly as it was before.
+
+def _same_game(a: str, b: str) -> bool:
+    """Either way round, so "Deep Rock Galactic" and "Deep Rock Galactic: Survivor" are one."""
+    na, nb = normalize_alias(a), normalize_alias(b)
+    return bool(na and nb and (na in nb or nb in na))
+
+
+def subject_changed(
+    question: str, rows: Optional[list], library_title: Optional[GameNamedIn] = None
+) -> bool:
+    """True only when ``question`` names a game that is not the one the previous turn was about.
+
+    The previous turn's game is the game that was running when it was asked (its ``app_name``) or
+    the game its own question named. A question naming no game, or a previous turn about no game
+    that can be told, is NOT a sign the subject changed: the answers are kept. So are "what else
+    can I try", "summarize the plan" and every other follow-up, however it is worded.
     """
-    text = " ".join(str(question or "").split())
-    if not text:
+    new_game = _game_named(question, library_title)
+    if not new_game:
         return False
-    if any(ch.isalpha() and ord(ch) > 127 for ch in text):
+    prior = [t for t in (rows or []) if isinstance(t, dict)]
+    last_user = next(
+        (t for t in reversed(prior) if str(t.get("role") or "").strip().lower() == "user"), None
+    )
+    if last_user is None:
         return False
-    words = len(text.split())
-    if words <= _SHORT_QUESTION_WORDS:
+    previous = [
+        str(last_user.get("app_name") or "").strip(),
+        _game_named(str(last_user.get("display_text") or last_user.get("text") or ""), library_title),
+    ]
+    previous = [g for g in previous if g]
+    if not previous:
         return False
-    if _CONTINUATION_OPENER.search(text) or _POINTS_BACK.search(text):
-        return False
-    if words <= _PRONOUN_COUNTS_UP_TO_WORDS and _LEANS_ON_PRONOUN.search(text):
-        return False
-    return True
+    return not any(_same_game(new_game, g) for g in previous)
 
 
 def turns_not_yet_summarized(turns: Optional[list], summary: Optional[dict]) -> list:
@@ -397,6 +406,7 @@ def plan_and_build_chat_memory(
     room_tokens: int,
     model_name: str = "",
     summary: Optional[dict] = None,
+    library_title: Optional[GameNamedIn] = None,
 ) -> tuple[BudgetPlan, ChatMemory]:
     """Work out how much of the chat may be carried, then carry that much.
 
@@ -444,9 +454,9 @@ def plan_and_build_chat_memory(
         cards_wanted=0,
         memory_wanted=memory_wanted,
     )
-    # A question that names its own game or subject does not get the earlier answers to read: a small
-    # model copies them (plan 78). Its earlier questions still go with it.
-    with_answers = not question_stands_alone(question)
+    # A question that names a different game from the previous turn's does not get the earlier
+    # answers to read: a small model copies them (plan 78). Its earlier questions still go with it.
+    with_answers = not subject_changed(question, rows, library_title)
     return plan, build_chat_memory(
         rows, plan.memory_tokens, model_name, summary=summary, with_answers=with_answers
     )
@@ -464,6 +474,7 @@ def apply_chat_memory_to_prompt(
     logger: Any,
     model_name: str = "",
     summary: Optional[dict] = None,
+    library_title: Optional[GameNamedIn] = None,
 ) -> str:
     """Plan the chat-memory budget, build the memory block, append it, and log the outcome.
 
@@ -494,6 +505,7 @@ def apply_chat_memory_to_prompt(
         room_tokens=room_tokens,
         model_name=model_name,
         summary=summary,
+        library_title=library_title,
     )
     if memory.text:
         system_content = system_content + "\n\n" + memory.text

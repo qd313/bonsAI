@@ -388,6 +388,20 @@ New ones go here, with the choice taken in the meantime.
 1. **Spoilers across games: the follow-up question.** After "how do I beat the boss in Hollow Knight" with Deep Rock
    running, a bare follow-up ("and the next one?") names no game. **Meanwhile:** the exception covers only a question
    that names the game, as you chose. The follow-up goes back to the running game's notes.
+2. **Five owed checks that the rig can never run.** Each has failed to produce its case two or more times, and
+   nothing the rig can do will change that: Down leaving an empty Session tab (the plugin never saves a chat in that
+   state); the chip ladder inside the open notes block (the block has no ladder, by design); the notes block and "no
+   close match" never showing together (covered by a later check that passed); an unnamed Hades story question
+   keeping its cover (14 tries: 4 covered, 3 plain, 4 where the AI dodged the question); and the same guard with
+   Hades running. **Meanwhile:** they are not run tonight and stay owed. **Your call:** accept each on its unit tests
+   and close it, or put it on your own list. The Hades one is the only one where the tries disagree with each other;
+   it deserves a look rather than a wave-through.
+3. **One check needs the knowledge library moved aside on the Deck** (boss tactics staying plain when the library is
+   absent). That is outside what you allowed tonight. **Meanwhile:** skipped. Say yes and a later session runs it
+   (aside, never deleted, and put back).
+4. **The try-order fix does not cover a PC.** With the AI running on a PC, a model removed there stays in the saved
+   order. Covering it means one small change in a file tonight's helper did not own. **Meanwhile:** not built.
+   **Your call:** build it after the release, or leave it.
 
 ## At the end
 

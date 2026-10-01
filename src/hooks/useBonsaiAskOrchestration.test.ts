@@ -1584,6 +1584,8 @@ describe("useBonsaiAskOrchestration", () => {
           ...idleBackgroundStatusFixture(),
           question: "how do i deal with the exploders",
           request_id: requestId,
+          // The game the question was asked in, which is the running one (Dota 2 in the harness).
+          app_id: "570",
         };
         if (polls < 2) return { ...base, status: "pending" };
         return {

@@ -783,12 +783,25 @@ export function useBonsaiAskOrchestration(
              * switched to since. The `lastExchange` write above sources it the same way.
              */
             if (checklistPayload && requestAskMode === "strategy") {
+              /*
+               * Only the game this answer was for may have its checklist drawn (plan 78,
+               * finding 3). A game quit or switched while the answer wrote leaves the on-screen
+               * list (and the ticks on it) belonging to another game or to none: merging into it
+               * showed the old game's list under the answer, and its plain "1", "2", "3" item ids
+               * carried ticks across. The list is still saved, under the game it was for, from
+               * nothing but the answer's own items and that game's name.
+               */
               const appId = status.app_id ?? "";
-              const merged = mergeStrategyChecklistState(strategyChecklistRef.current, checklistPayload, {
-                appId,
-                appName: Router.MainRunningApp?.display_name ?? "",
-              });
-              setStrategyChecklist(merged);
+              const stillRunning = appId === (Router.MainRunningApp?.appid?.toString() ?? "");
+              const merged = mergeStrategyChecklistState(
+                stillRunning ? strategyChecklistRef.current : null,
+                checklistPayload,
+                {
+                  appId,
+                  appName: stillRunning ? Router.MainRunningApp?.display_name ?? "" : status.app_name ?? "",
+                },
+              );
+              if (stillRunning) setStrategyChecklist(merged);
               scheduleStrategyChecklistSessionSave(merged);
             }
 

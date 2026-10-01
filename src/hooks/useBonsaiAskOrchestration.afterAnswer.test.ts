@@ -8,11 +8,14 @@
  * send a follow-up with. The older checklist tests always press Ask in the same open, which is why
  * they never saw a reopen forget the mode.
  *
+ * Finding 3: a Strategy answer that lands after the game it was for has been quit or replaced.
+ *
  * Finding 2: the next question puts "the answer that just finished" into the history. The saved
  * chat has usually already loaded that same answer, under a different question text.
  */
 import { renderHook, act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { Router } from "@decky/ui";
 import {
   useBonsaiAskOrchestration,
   type UseBonsaiAskOrchestrationArgs,
@@ -250,5 +253,67 @@ describe("the next question after an answer (plan 78, finding 2)", () => {
 
     expect(hook.result.current.askThreadCollapsed).toHaveLength(1);
     expect(hook.result.current.askThreadCollapsed[0].answer).toBe("Hit the left arm first.");
+  });
+});
+
+describe("a checklist whose game is no longer running (plan 78, finding 3)", () => {
+  const originalMainRunningApp = Router.MainRunningApp;
+
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+  });
+  afterEach(() => {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = originalMainRunningApp;
+  });
+
+  function runningNow(app: { appid: number; display_name: string } | undefined) {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      app as unknown as typeof Router.MainRunningApp;
+  }
+
+  async function savedChecklistCalls() {
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 400));
+    });
+    return getRpcCallLog().filter((c) => c.method === "save_strategy_checklist_session");
+  }
+
+  it("does not draw the old game's checklist when another game is running by the time the answer lands", async () => {
+    runningNow({ appid: 1942280, display_name: "Brotato" });
+    // The answer is for Dota 2 (570), which has since been closed.
+    setRpcHandler("get_background_game_ai_status", () => finishedStrategyStatus());
+
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await settle();
+
+    expect(result.current.lastExchange?.answer).toContain("Keep your distance");
+    expect(result.current.strategyChecklist).toBeNull();
+  });
+
+  it("does not draw it when no game is running any more either", async () => {
+    runningNow(undefined);
+    setRpcHandler("get_background_game_ai_status", () => finishedStrategyStatus());
+
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await settle();
+
+    expect(result.current.strategyChecklist).toBeNull();
+  });
+
+  it("still saves the checklist under the game it was for, with no ticks from another game", async () => {
+    runningNow({ appid: 1942280, display_name: "Brotato" });
+    setRpcHandler("get_background_game_ai_status", () => finishedStrategyStatus());
+
+    renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await settle();
+    const saves = await savedChecklistCalls();
+
+    expect(saves).toHaveLength(1);
+    expect(saves[0].args[0]).toMatchObject({
+      title: "Dealing with Exploders",
+      app_id: "570",
+      app_name: "Dota 2",
+      checked_ids: [],
+    });
   });
 });

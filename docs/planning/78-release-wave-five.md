@@ -1,7 +1,9 @@
 # Plan 78 — release wave five: a wider bug session, then an unattended Deck pass
 
-**Status: started 2026-09-30 (Wednesday), about 21:50. The maintainer said "Go". The log at the end says where
-things stand.**
+**Status: the session's own part FINISHED 2026-10-01 (Thursday), about 13:00. Twenty-two bugs fixed, the Deck part
+run, nothing known blocking the release. Read [Results](#results) first. Still open: the maintainer's hand checks
+([Your list for Thursday](#your-list-for-thursday)), the chip pace pick and thirteen questions; Thursday night is
+kept free for whatever the hand checks find.**
 
 Asked for by the maintainer: "Plan another bug fix wave … a massive bug fix session as a follow-up from last night …
 once we have the bugs fixed, do an automated QA pass with the controller rig … I hope it doesn't require me to
@@ -333,7 +335,8 @@ of its commits against the evidence.
 
 ## Your list for Thursday
 
-All of this is yours, and none of it has been done yet. About two hours at the Deck in all. Do the first three first:
+All of this is yours, and none of it has been done yet. The Deck is ready for it: the newest build (`f0a4f2c4`) is
+on it and its settings are as you had them. About two hours at the Deck in all. Do the first three first:
 if one fails, tell any session "check N failed" and what you saw, and Thursday night fixes it.
 
 **First, the three from the release checklist** ([plan 73](73-maintainer-checks-before-0.6.0.md) has the exact steps):
@@ -355,14 +358,16 @@ if one fails, tell any session "check N failed" and what you saw, and Thursday n
 8. Put the Deck to sleep with the panel open, wake it, press Down.
 
 **Last, the first install** (about 45 minutes, most of it downloads). Ask a session to build the release zip and move
-bonsAI's folders aside first. This comes after the last fixes, so after Thursday night's round if there is one.
+bonsAI's folders aside first. This comes after the last fixes, so after Thursday night's round if there is one. While
+you are there: after you open the quick start and close it, the wide help chip should give the row back to the
+suggestion chips (fixed on 1 October; the rig could not show it on a Deck that had already seen the quick start).
 
 **Calls that need no Deck** (answer in any chat, whenever): the two Qwen defaults; whether a Strategy answer may pick
 up an earlier game; how screenshots get shrunk; the dots under the chat name; a big model your licence setting
 blocks; how the quick check handles front-end changes.
 
-**Two chores:** restart Ollama on the Deck to clear the 6.6 GB (a system service runs it, so the restart needs your
-password; the report will give the one command); start Doom 64 once if you have it (it unblocks one spoiler check).
+**One chore:** start Doom 64 once if you have it (it unblocks one spoiler check). The 6.6 GB of half-downloaded
+models is gone: the Deck's restart on 1 October cleared it.
 
 ## For your attention
 
@@ -458,67 +463,98 @@ New ones go here, with the choice taken in the meantime.
 
 ## Results
 
-### Where things stand at midnight (2026-10-01, about 00:00)
+### Where things stand (2026-10-01, early afternoon: the session's end)
 
-**The fixing is done. The Deck part has not started,** because the Deck does not answer on the network. The
-maintainer plugged the controller rig in about 23:20 and this PC sees the board, but the Deck itself gives no reply
-to a ping and the connection times out. Nothing has been pressed. The session looks again every 20 minutes and starts
-the first Deck block by itself when the Deck answers.
+**Twenty-two bugs are fixed on the working branch,** every one with all checks green at landing, including the
+wider quick check. **The Deck part ran on 1 October from 8 am to about 1 pm,** nine blocks, after the Deck had been
+unreachable all night. Most fixes are proven on the Deck. **Nothing known is blocking the release.** Nothing is
+pushed; the newest code commit is `f0a4f2c4`.
 
-**Twelve bugs are fixed on the working branch,** from nine helpers, every one with all checks green at landing,
-including the wider quick check. None has been on the Deck, so each sits in Verify with the check it owes.
-
-| What a player would notice | Check it owes |
+| What a player would notice | On the Deck |
 |---|---|
-| With a no-story game running, a question naming a story game gets that game's notes and spoiler covers | Deck, with a game running |
-| Down from the last part of an answer goes straight on, with no press that only scrolls | Deck |
-| The game's own chip keeps coming back; chips turn over about twice as fast with one chip showing | Deck, and your own look at the pace |
-| A setting changed just before the panel closes is kept | Deck |
-| A model removed outside bonsAI leaves the saved try order | Deck |
-| The summary card no longer names a non-game as the game, or shows lines that say nothing | Deck |
-| A Strategy checklist that arrives while the panel is closed is there when it reopens; refine chips keep the mode | Deck, with a game running |
-| A branch answer is listed once while the next answer writes | Deck |
+| With a no-story game running, a question naming a story game gets that game's notes and spoiler covers | Passed (covers 2, 1 and 1) |
+| A hidden block is covered even when the AI writes its marks as the label between backticks on one line | Passed, all five parts |
+| Down from the last part of an answer goes straight on, with no press that only scrolls | Passed (10 presses, 10 stops) |
+| Down from the line above an answer shows the whole first section | Passed |
+| Walking Down into a long section reads its text before landing on a spoiler cover deep inside it | Passed (193 words seen before the cover) |
+| A press that only scrolls stops at the end of the section | Passed on three presses; the morning's exact case did not come back |
+| A guard against the D-pad looping inside a long section | The loop never happened on the Deck with or without it; kept |
+| The game's own chip keeps coming back; chips turn over faster | Passed (9.5 a minute with one chip, 11.2 with two; the game's own chips 54 in 100); the pace still wants the maintainer's look |
+| After the quick start is opened and closed, the help chip gives the row back to the suggestion chips | Its tests only (they run the real panel): the rig could not make the help chip show again on the Deck; it is part of the maintainer's first-install check |
+| A setting changed just before the panel closes is kept | Passed (5 of 5) |
+| A chosen answering model is no longer lost when another setting changes (two fixes) | Passed (3 of 3); the quick double press rests on its tests |
+| A model removed outside bonsAI leaves the saved try order | Passed |
+| The summary card no longer names a non-game as the game, or shows lines that say nothing | Partly: the Game line passed; the rest rests on its tests |
+| A branch answer is listed once while the next answer writes | Passed |
+| A question about a different game no longer reuses the last answer's wording (two fixes) | Passed |
+| A boss answer no longer pops a power suggestion | Its tests only |
+| Long answers slow down less | Kept (about 76 to 80 frames a second past 2,000 letters with the scramble effect on, where it was 71) |
+| A Strategy checklist that arrives while the panel is closed is there when it reopens | Its tests only (the AI wrote no checklist in four tries) |
 | An old game's checklist is not drawn after quitting or switching games | Its tests only |
-| A spoken question's answer reads itself aloud ("When I asked by voice") | Your microphone check on Thursday |
+| A spoken question's answer reads itself aloud | The maintainer's microphone check |
 | An answer that finishes just as the panel opens is still read aloud | Its tests only |
-| A question about a different game no longer reuses the last answer's wording; a boss answer no longer pops a power suggestion | Deck |
 
-**Two fixes wait for the Deck before they can land:**
-- **The ring after reopening over a game.** It needs one measurement on the Deck first; the helper starts after it.
-- **Long answers slowing down.** The fix is written (every finished piece of an arriving answer was being redrawn on
-  every update; in its test the 100th update of a very long answer went from 24 pieces redrawn to 1). It is held
-  until a "before" frame rate is taken on a build without it, and lands only if the "after" number is clearly better.
+**Older owed checks the rig also closed:** Read aloud on a code block marked with tildes; a hidden block glued to a
+sentence; "spoilers are okay" from a saved chat; the Spoiler risk chip in Speed mode with Hades running; pinned test
+chips; the Thinking chip's estimate wording; the attachment row; the About tab's order; the Clear cache opener;
+Japanese replies in Speed mode.
 
-**Sent back before landing, twice.** The session's own read of a change caught two fixes that passed every test and
-would have made things worse: the summary guard threw away real lines such as "Stuck on: not sure how to beat the
-Soul Master", and the borrowed-wording fix hid the earlier answers on ordinary follow-ups such as "what else can I
-try". Both came back right on their second round.
+**Could not be shown:** frame rate inside a mission (the game's window never came to the front for the rig); two
+chips side by side, reduced motion and the slow-start lines (lost to the freeze below); and four checks where the AI
+never wrote what the check needs (question 11). The missing ring after reopening over a game is Steam's own
+behaviour and is closed (question 10).
 
-**Found along the way, and what happened to each:**
-- A read-through of the step that runs after an answer found four real problems. All four are fixed above (the
-  checklist after a reopen, the branch answer listed twice, the old game's checklist, the spoken question staying
-  silent).
-- Walking Up can land on a tall section with only a sliver showing. On the roadmap, not fixed.
-- A power question's answer often has no number in it. On the roadmap, not fixed: it comes from the power
-  instructions, not from the chat's memory.
-- The four chip styles still differ in small ways. On the roadmap for after the release.
-- Two helpers briefly swapped unfinished work through a shared git command. Nothing was lost; the rule against it is
-  now in every helper's standing instructions.
-- The Deck's saved text try order is now `['gemma4:e2b-it-qat']` where it was empty before the session. It is the model the Deck was already using; the empty value may itself have come from the lost-try-order bug.
+**Found, not fixed (all on the roadmap):** underlined game words skipped going Up; one summary line that says
+nothing; power answers with no number; the start of a sentence showing for about a second before its cover
+(question 12); the AI's instructions naming the hidden block in the odd shape (question 13); six small things seen
+once each, on the watch list; the chip styles' small differences, held until after the release.
 
-**For you, when you look:**
-1. **The Deck.** Awake, in game mode, on Wi-Fi, at 192.168.86.52 (or tell a session its new address).
-2. **Your pick of chip pace** from the preview page: https://claude.ai/artifact/FtzUKajYgiLJJqPbFJPyk3
-3. **The eight questions** in [Questions that come up during the session](#questions-that-come-up-during-the-session).
-   The one worth reading first is 5: a choice button pressed under a Hollow Knight answer, with Deep Rock still
-   running, goes back to Deep Rock's rules and could name a boss with no cover.
-4. **Your hand checks,** all still open: [Your list for Thursday](#your-list-for-thursday). The microphone check now
-   has three steps (ask by voice and it reads itself; type and it stays silent; ask by voice, close the panel, and it
-   still reads).
-5. **This chat's model.** It ran on Fable all evening, because a chat cannot change its own model. Pick Opus, high,
-   in the model menu.
+### What went wrong, and how it was handled
 
-The full results, the code summary and the report replace this section when the Deck part has run.
+- **The session froze Steam on the Deck once.** At 12:29 the Deck driver reloaded the plugin while Black Mesa was
+  running with about 550 MB of memory free; Quick Access never came back and the maintainer restarted the Deck. The
+  driver's standing rule said to reload after launching a game. It now says: never during a game's start, with a
+  game running only as a last resort, and never under 2,000 MB free (`c2082c71`). After the restart one setting was
+  not as found (the one-chip switch); it was put back.
+- **The Deck was unreachable all night** (it was off), then the controller board's lead was not connected.
+- **Two fixes passed every test and would have made things worse;** the session's own read of each change caught
+  both before landing (the summary guard, the borrowed-wording rule). Both came back right on a second round.
+- **The extra Down press took a stronger helper** (a 9-pixel frame the test setup did not have). The same test setup
+  then found three more walking faults before or alongside the Deck.
+- **The Deck found three bugs no test would have:** the lost answering model, the hidden block shown as plain text,
+  and the help chip that never went away. All three were fixed the same day.
+- **Several Deck checks had the wrong route** the first time; the routes are corrected in the testing documents.
+- **Two helpers briefly swapped unfinished work** through a shared git command; nothing was lost, and "never git
+  stash" is in every helper's standing instructions.
+- **The session ran on Fable throughout:** a chat cannot change its own model.
+
+### The code summary
+
+| Fix | Where | How it works |
+|---|---|---|
+| Spoilers across games | `spoiler_title_profiles.py`, `game_ai_request.py`, `kb_notes_footers.py` | When a no-story game runs and the question names a game on the protected story list, the running game is set aside for that one question, so the named game's notes and covers apply |
+| The bare hidden-block mark | `expandOneLineSpoilerFences.ts`, new `spoiler_empty_label_marks.py` | The label between two sets of backticks is read as a mark: it opens a hidden block when outside one and closes it when inside one; the same rule on the screen (panel, Copy, Read aloud, toast) and on the back end (live coverer, chat memory and summary) |
+| The Down walk (five fixes) | `answerBubbleNavigation.ts`, `answerBubbleBandGeometry.ts`, `useDockClearanceOnFocus.ts`, test setup `deckAnswerWalk.ts` | The answer's text edge is measured without the box's 9 px frame; the first section is placed like any other landing; a cover goes first only when it is at the head of its section; a scroll press stops at the section's end; the lift step leaves answer sections alone |
+| Chips | `nextChipRule.ts`, `presetPace.ts`, `changeSpacing.ts`, `carouselNextChip.ts` | With one chip the game's own chip is offered at least every second turn; the pace is set per letter with one set of fade times; two chips never change within 2.5 s of each other |
+| The help chip | `usePluginHelpModal.tsx`, `bonsaiSessionSurvival.ts` | The session note taken before the quick start opens is marked "seen" straight away, so the fresh panel built when the popup closes no longer brings the help chip back |
+| Settings kept (three fixes) | `usePluginSettings.ts`, `usePullModelPinForAsk.tsx`, `usePullModelOpenBookkeeping.ts`, `useRoutingOrderModal.ts` | Pending changes are saved when the page hides; a save's answer adopts the disk's newer values for keys the player did not touch; "Use for Ask" also updates the session note; the "edit order" popup reads the saved order fresh and opens once |
+| Removed model in the try order | `ollama_routing.py`, `ollama_local_setup_rpc.py` | Opening the models screen drops models that are no longer installed from both saved orders, and logs it |
+| Summary wording | new `chat_summary_tidy.py` | A non-game is not named on the Game line; lines that say nothing are dropped unless the whole answer would be empty |
+| After an answer (three fixes) | `background_request_state.py`, `main.py`, `useBonsaiAskOrchestration.ts`, `useStrategyChecklistSession.ts` | The answer's mode travels with its status, so a checklist that arrives while the panel is closed is kept, a branch answer is listed once, and an old game's checklist is not drawn |
+| Read aloud (two fixes) | `useReadAloud.ts`, `index.tsx` | A spoken question is remembered as spoken at the press; the setting is not treated as loaded until it is |
+| Borrowed wording (three fixes) | `chat_memory_service.py`, `tdp_intent.py` | Earlier answers are left out only when the question names a different game, or a different game is running; boss talk no longer reads as a power question |
+| Long answers | `StreamMarkdownPieces.tsx` | One callback is kept stable, so finished pieces of an arriving answer are not redrawn on every update |
+
+**What surprised us.** The test setup for the Down walk became worth more than the fix it was built for: it found
+three faults the Deck later confirmed or could not even produce. The AI's own writing decides whether several checks
+can run at all (no checklist, no hidden block, no cut-off menu in a dozen tries), so those rest on tests. A hidden
+block's marks were copied by the small model from the wording of its own instructions. The rig cannot press twice in
+under about half a second, cannot bring some games' windows to the front, and can freeze Steam by reloading the
+plugin under a running game.
+
+**For the maintainer, when you look:** the checks page and the report hold your list for today, the pace pick and
+the thirteen questions above; the microphone check has three steps; the first-install check should also look at the
+help chip after the quick start is closed.
 
 ## Log
 
@@ -573,6 +609,8 @@ The full results, the code summary and the report replace this section when the 
 
 - **1 October, about 12:20 to 12:30 (the bare hidden-block mark):** a helper fixed the spoiler bug the Deck found at 12:05, and it landed with every check green (`09bf7fd7`): twenty-one bugs fixed in all. The line of backticks, the label and backticks again is now read as a mark on the screen, in Copy, in Read aloud, in the live coverer and in the chat's memory and summary. The helper read every place that reads these marks; two on the back end had the same gap and are fixed in the same commit. Not changed: six lines of the AI's instructions that write the label in that shape (question 13). It owes its Deck row, P78-BARE-SPOILER-MARK, in the last block.
 - **1 October, about 12:40 to 12:51 (Deck block 3f, build `09bf7fd7`, no game running, and the help-chip fix):** the bare hidden-block mark passed on the Deck, all five parts (one closed cover, the text between two pairs readable, Copy holds the "Spoiler hidden" line, opening the cover shows only the hidden sentence); the one-chip switch is back on after the freeze, and the help chip's stored flag read "1" at every read, plugin reloads included. The help-chip fix landed (`f0a4f2c4`): twenty-two bugs fixed in all. The help chip's Deck check, and the release of the Deck to the maintainer, follow.
+
+- **1 October, about 12:52 to 13:00 (the last Deck step, build `f0a4f2c4`):** the newest build went on the Deck. The help chip's check came back unclear: on a Deck that has already seen the quick start, the rig could not make the help chip show again, so the fix rests on its tests and on the maintainer's first-install check. The Deck was left as found (only the saved text try order differs, on purpose), with no game running, and the keep-awake was released. The session's results replace the Results section above. Evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
 
 ## For the helpers: who owns which files
 

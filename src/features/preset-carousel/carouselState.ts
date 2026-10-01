@@ -10,8 +10,6 @@
 import { getFrozenTestChips, nextFrozenPresetAfter, type PresetPrompt } from "../../data/presets";
 import { PRESET_VISIBLE_SLOTS } from "./presetRowLayout";
 
-/** Auto-advance interval for carousel mode (ms). */
-export const CAROUSEL_STEP_MS = 5800;
 /** CSS slide transition duration on the track (ms). */
 export const CAROUSEL_SLIDE_MS = 550;
 /** Max presets kept in scrollable history (limits how far Left can walk back). */

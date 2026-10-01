@@ -16,9 +16,20 @@
  * `composeDecodeParts` are plain functions of their four arguments.
  */
 import type { PresetPrompt } from "../../data/presets";
+import { presetHoldMs, presetTurnMs } from "./presetRowLayout";
 
 /** Milliseconds between locked characters in decode mode (must feel close to live answer streaming). */
 export const PRESET_DECODE_CHAR_MS = 42;
+
+/**
+ * How long a settled decode chip stays before the next reveal begins. The reveal itself takes part
+ * of the turn that fade styles spend fading in, so the hold is the rest: a decode chip turns over at
+ * the same pace as a fading one, but never holds less than the common hold (a long label still gets
+ * its full scroll).
+ */
+export function decodeHoldMs(text: string, chipCount: number): number {
+  return Math.max(presetHoldMs(text, chipCount), presetTurnMs(text, chipCount) - text.length * PRESET_DECODE_CHAR_MS);
+}
 /**
  * How often the still-churning glyphs reshuffle, ms. Throttled well below frame rate on purpose:
  * the reveal loop runs one shared `requestAnimationFrame` per tick across the slots, but only

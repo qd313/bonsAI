@@ -126,7 +126,8 @@ export function chooseNextChip(args: NextChipArgs): NextChipPick {
   };
   const notAvoided = fresh.filter((c) => !args.avoid.has(c.text));
   // Prefer a chip that has not had its turn this round and is not still in the history; ease those
-  // two conditions one at a time (a short list of game chips has to come round again).
+  // two conditions one at a time (a short list of game chips has to come round again, which starts
+  // a new round).
   const unshown = (list: readonly SessionRagChipCandidate[]) => list.filter((c) => !args.gameRound.includes(c.text));
   const picked =
     pick(unshown(notAvoided), args.gameRound) ??

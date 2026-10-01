@@ -21,15 +21,18 @@ import {
 } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "../data/presets";
 import { composeDecodeParts } from "../features/preset-carousel/presetChipDecodeText";
-import { CAROUSEL_STEP_MS, CAROUSEL_HISTORY_MAX } from "../features/preset-carousel/carouselState";
+import { CAROUSEL_HISTORY_MAX } from "../features/preset-carousel/carouselState";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,
+  presetTurnMs,
 } from "../features/preset-carousel/presetRowLayout";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { resetFakeDeckyRpc } from "../test-harness/fakeDeckyRpc";
 
 const seed = (text: string): PresetPrompt => ({ text, category: "general" });
+/** One turn of a short chip with the default two showing: how long the carousel waits per step. */
+const CAROUSEL_STEP_MS = presetTurnMs("q1", PRESET_VISIBLE_SLOTS);
 
 function renderChips(props: Partial<React.ComponentProps<typeof MainTabPresetAnimatedChips>> = {}) {
   return render(

@@ -25,12 +25,14 @@ import type { AskModeId } from "../../data/askMode";
 import type { PresetPrompt } from "../../data/presets";
 import { PresetChipLeadingBadges, PresetChipText } from "./presetChipButton";
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
-import { effectivePresetVisibleSlots, PRESET_CHIP_HEIGHT_PX, presetHoldMs } from "./presetRowLayout";
+import { effectivePresetVisibleSlots, PRESET_CHIP_HEIGHT_PX, presetTurnMs } from "./presetRowLayout";
+import { makeChangeSpacer } from "./changeSpacing";
 import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSlotRotation";
 import { seedsKeyFrom } from "./carouselState";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 import {
   composeDecodeParts,
+  decodeHoldMs,
   type DecodeSlotAnim,
   type DecodeTextParts,
   makeDecodeChurn,
@@ -234,6 +236,7 @@ export function MainTabPresetDecodeSlots(
 
     let cancelled = false;
     const mayStartNextCycle = (): boolean => !cancelled;
+    const spacer = makeChangeSpacer(); // two spots never change at the same moment
 
     const visibleTexts = () => new Set(slotsRef.current.map((s) => s.text));
     const pickNext = (current: PresetPrompt): PresetPrompt => {
@@ -276,7 +279,7 @@ export function MainTabPresetDecodeSlots(
             }
             runReduced(slotIndex, pickNext(prompt), 0);
           };
-          pushTimeout(next, presetHoldMs(prompt.text));
+          pushTimeout(next, spacer.delay(slotIndex, Date.now(), presetTurnMs(prompt.text, slotCount)));
         }, firstDelay);
       };
       first.forEach((prompt, i) => runReduced(i, prompt, slotStaggerMs(i)));
@@ -323,7 +326,7 @@ export function MainTabPresetDecodeSlots(
 
       if (revealedCount >= text.length) {
         anim.resolved = true;
-        anim.holdEndAt = now + presetHoldMs(text);
+        anim.holdEndAt = spacer.reserve(slotIndex, now + decodeHoldMs(text, slotCount));
         paintDecodeLabel(labelRefs.current[slotIndex], { locked: text, caret: "", tail: "" });
         // Hands the label to React: the churn span gives way to the ordinary label, which is where
         // Steam's Marquee measures the settled text and starts its crawl.

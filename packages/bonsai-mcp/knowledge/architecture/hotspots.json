@@ -106,13 +106,13 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
+      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 836,
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 833,
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 836,
       "role": ""
     },
     {
@@ -186,13 +186,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 601,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 606,
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 600,
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 601,
       "role": ""
     },
     {

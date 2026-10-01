@@ -354,13 +354,16 @@ export function getRandomPresets(count: number, options?: PresetSamplerOptions):
   return sliced;
 }
 
-/** Milliseconds to keep a preset fully visible after fade-in; scales with text length (clamped). */
-export function holdMsForPresetText(text: string): number {
-  const msPerChar = 300;
-  const minMs = 8000;
-  const maxMs = 32000;
-  const raw = text.length * msPerChar;
-  return Math.min(maxMs, Math.max(minMs, raw));
+/**
+ * Milliseconds to keep a preset fully visible after fade-in; scales with text length (clamped).
+ * The numbers come from the caller (presetPace.ts: one set for one chip showing, one for two), so
+ * the pace is changed in one place.
+ */
+export function holdMsForPresetText(
+  text: string,
+  pace: { msPerChar: number; minHoldMs: number; maxHoldMs: number },
+): number {
+  return Math.min(pace.maxHoldMs, Math.max(pace.minHoldMs, text.length * pace.msPerChar));
 }
 
 /**

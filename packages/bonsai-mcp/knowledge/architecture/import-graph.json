@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 643,
-  "edgeCount": 1786,
+  "fileCount": 646,
+  "edgeCount": 1794,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -812,10 +812,12 @@
         "src/data/presets.ts",
         "src/features/preset-carousel/carouselNextChip.ts",
         "src/features/preset-carousel/carouselState.ts",
+        "src/features/preset-carousel/changeSpacing.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
+        "src/features/preset-carousel/presetPace.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
@@ -2959,6 +2961,22 @@
         "src/features/preset-carousel/presetDecodeSlots.tsx"
       ]
     },
+    "src/features/preset-carousel/changeSpacing.test.ts": {
+      "imports": [
+        "src/features/preset-carousel/changeSpacing.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/preset-carousel/changeSpacing.ts": {
+      "imports": [
+        "src/features/preset-carousel/presetPace.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/preset-carousel/changeSpacing.test.ts",
+        "src/features/preset-carousel/presetDecodeSlots.tsx"
+      ]
+    },
     "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts": {
       "imports": [
         "src/data/presets.ts",
@@ -3006,7 +3024,8 @@
     },
     "src/features/preset-carousel/presetChipDecodeText.ts": {
       "imports": [
-        "src/data/presets.ts"
+        "src/data/presets.ts",
+        "src/features/preset-carousel/presetRowLayout.ts"
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.test.tsx",
@@ -3032,6 +3051,7 @@
         "src/data/askMode.ts",
         "src/data/presets.ts",
         "src/features/preset-carousel/carouselState.ts",
+        "src/features/preset-carousel/changeSpacing.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
@@ -3042,6 +3062,15 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx"
+      ]
+    },
+    "src/features/preset-carousel/presetPace.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/preset-carousel/changeSpacing.ts",
+        "src/features/preset-carousel/presetRowLayout.test.ts",
+        "src/features/preset-carousel/presetRowLayout.ts"
       ]
     },
     "src/features/preset-carousel/presetRowFocusNav.tsx": {
@@ -3069,13 +3098,15 @@
     },
     "src/features/preset-carousel/presetRowLayout.test.ts": {
       "imports": [
+        "src/features/preset-carousel/presetPace.ts",
         "src/features/preset-carousel/presetRowLayout.ts"
       ],
       "importedBy": []
     },
     "src/features/preset-carousel/presetRowLayout.ts": {
       "imports": [
-        "src/data/presets.ts"
+        "src/data/presets.ts",
+        "src/features/preset-carousel/presetPace.ts"
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.test.tsx",
@@ -3086,6 +3117,7 @@
         "src/features/preset-carousel/carouselState.test.ts",
         "src/features/preset-carousel/carouselState.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
+        "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.test.ts",

@@ -80,11 +80,11 @@ describe("presets", () => {
     expect(sawOtherContextual).toBe(true);
   });
 
-  it("holdMsForPresetText clamps by length", () => {
-    expect(holdMsForPresetText("a")).toBe(8000);
-    expect(holdMsForPresetText("x".repeat(200))).toBe(32000);
-    expect(holdMsForPresetText("How do I fix stuttering?")).toBeGreaterThan(4000);
-    expect(holdMsForPresetText("How do I fix stuttering?")).toBeLessThan(32000);
+  it("holdMsForPresetText clamps by length, at the pace it is given", () => {
+    const pace = { msPerChar: 100, minHoldMs: 4000, maxHoldMs: 9000 };
+    expect(holdMsForPresetText("a", pace)).toBe(4000);
+    expect(holdMsForPresetText("x".repeat(200), pace)).toBe(9000);
+    expect(holdMsForPresetText("x".repeat(60), pace)).toBe(6000);
   });
 
   it("getRandomPresetExcluding avoids listed texts when possible", () => {

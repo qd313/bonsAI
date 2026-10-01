@@ -139,6 +139,7 @@
     "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
     "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
     "src/features/preset-carousel/carouselState.test.ts",
+    "src/features/preset-carousel/changeSpacing.test.ts",
     "src/features/preset-carousel/nextChipRule.test.ts",
     "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
     "src/features/preset-carousel/presetRowLayout.test.ts",

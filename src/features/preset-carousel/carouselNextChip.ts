@@ -36,7 +36,7 @@ export function pickCarouselAppend(
   const gameTexts = new Set(candidates.filter(isGameCandidate).map((c) => c.text));
   const isGame = (p: PresetPrompt) => p.ragTip === true || gameTexts.has(p.text);
   const shown = history.slice(0, focusIndex + 1).filter(isGame).map((p) => p.text);
-  const round = [...new Set([...gameRound, ...shown])];
+  const round = [...gameRound.filter((t) => !shown.includes(t)), ...shown];
   const single = visibleSlots <= 1;
   const pick = pickNextChipWithSessionRag({
     current: single ? focused : (history[focusIndex - 1] ?? null),

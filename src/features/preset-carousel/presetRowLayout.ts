@@ -1,7 +1,8 @@
 /**
  * Title: Preset row layout
  * Purpose: The numbers that shape the suggestion row — how many chips sit across it, their height
- *          and gap, and the scrolling-label settings — plus the hold floor a scrolling label needs.
+ *          and gap, and the scrolling-label settings — plus the hold and turn lengths of a chip at the
+ *          pace for one chip or two (presetPace.ts), with the floor a scrolling label needs.
  * Used for: MainTabPresetAnimatedChips, carouselState (window size), sessionRagComposer (which slot
  *           the corpus guarantee converts), section-4 styles.
  * Solves: One place for "two across" (D43, 2026-09-01) so the composer, the carousel window and the
@@ -11,6 +12,7 @@
  *           by Steam's Marquee on the live element.
  */
 import { holdMsForPresetText } from "../../data/presets";
+import { presetPace } from "./presetPace";
 
 /**
  * Chips side by side in the row. The drawing (major-redesign.md § 2.3) has three; the maintainer
@@ -64,14 +66,22 @@ const PRESET_MARQUEE_END_PAUSE_MS = 1500;
  * longer hold and nothing else.
  */
 const PRESET_LABEL_PX_PER_CHAR = 6.45;
-/** Two across on a 300 px column, minus the gap and the chip padding: ~132 px of label. */
-const PRESET_LABEL_ROOM_PX =
-  (300 - PRESET_CHIP_GAP_PX * (PRESET_VISIBLE_SLOTS - 1)) / PRESET_VISIBLE_SLOTS -
-  2 * PRESET_CHIP_SIDE_PADDING_PX;
+/** The chip column's width. Widths come from CSS; this only sizes a hold floor. */
+const PRESET_COLUMN_PX = 300;
+
+/**
+ * The room for one chip's label: the column (less the gap between chips) shared by the chips
+ * showing, minus the chip padding. One chip has ~284 px, two ~131 px. This used to assume two
+ * even when one wide chip was showing, which held a one-chip label longer than it needed.
+ */
+function labelRoomPx(chipCount: number): number {
+  const n = Math.max(1, chipCount);
+  return (PRESET_COLUMN_PX - PRESET_CHIP_GAP_PX * (n - 1)) / n - 2 * PRESET_CHIP_SIDE_PADDING_PX;
+}
 
 /** How long a scrolling label needs to be read through once: delay, one crawl, a pause. */
-function marqueeHoldFloorMs(text: string): number {
-  const overflowPx = Math.max(0, text.length * PRESET_LABEL_PX_PER_CHAR - PRESET_LABEL_ROOM_PX);
+function marqueeHoldFloorMs(text: string, chipCount: number): number {
+  const overflowPx = Math.max(0, text.length * PRESET_LABEL_PX_PER_CHAR - labelRoomPx(chipCount));
   if (overflowPx === 0) return 0;
   return (
     PRESET_MARQUEE_DELAY_S * 1000 +
@@ -80,7 +90,20 @@ function marqueeHoldFloorMs(text: string): number {
   );
 }
 
-/** Hold time for a chip: the length-scaled hold, but never shorter than one full scroll. */
-export function presetHoldMs(text: string): number {
-  return Math.max(holdMsForPresetText(text), marqueeHoldFloorMs(text));
+/**
+ * Hold time for a chip: the length-scaled hold at this chip count's pace (presetPace.ts), but never
+ * shorter than one full scroll of a label too long for its chip.
+ */
+export function presetHoldMs(text: string, chipCount: number): number {
+  return Math.max(holdMsForPresetText(text, presetPace(chipCount)), marqueeHoldFloorMs(text, chipCount));
+}
+
+/**
+ * One whole turn of a chip: fade in, hold, fade out. Every chip style changes its chip once per
+ * turn (the plain, decode and sliding styles have no fade of their own but take the same time), so
+ * the four styles run at the same pace.
+ */
+export function presetTurnMs(text: string, chipCount: number): number {
+  const pace = presetPace(chipCount);
+  return pace.fadeInMs + presetHoldMs(text, chipCount) + pace.fadeOutMs;
 }

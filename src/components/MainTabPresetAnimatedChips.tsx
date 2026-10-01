@@ -78,7 +78,6 @@ import {
   CAROUSEL_HISTORY_MAX,
   CAROUSEL_MANUAL_PAUSE_MS,
   CAROUSEL_SLIDE_MS,
-  CAROUSEL_STEP_MS,
   carouselWindowStart,
   mergeContextualSeeds,
   nextFrozenHistoryEntry,
@@ -88,7 +87,10 @@ import { pickCarouselAppend } from "../features/preset-carousel/carouselNextChip
 import {
   effectivePresetVisibleSlots,
   presetHoldMs,
+  presetTurnMs,
 } from "../features/preset-carousel/presetRowLayout";
+import { presetPace } from "../features/preset-carousel/presetPace";
+import { makeChangeSpacer } from "../features/preset-carousel/changeSpacing";
 import {
   nextSlotPreset,
   startSlotRotation,
@@ -102,8 +104,6 @@ import { composeDecodeText, PRESET_DECODE_CARET_CHAR } from "../features/preset-
 import {
   type MainTabPresetAnimatedChipsProps,
   normalizeThreeSeeds,
-  PRESET_CAROUSEL_FADE_IN_MS,
-  PRESET_CAROUSEL_FADE_OUT_MS,
   prefersReducedMotion,
   type SlotFade,
   slotStaggerMs,
@@ -250,16 +250,20 @@ function MainTabPresetSidewaysCarousel(
     let cancelled = false;
     let timeoutId = 0;
 
+    // Each chip stays one turn at the pace for this many chips (the rule the other styles use), and
+    // with two chips showing a new one slides in every half turn.
+    const stepAfter = (chip = carouselRef.current.history[carouselRef.current.focusIndex]) =>
+      presetTurnMs(chip?.text ?? "", visibleSlots) / visibleSlots;
     const tick = () => {
       if (cancelled) return;
       if (performance.now() < autoPausedUntilRef.current) {
-        timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+        timeoutId = window.setTimeout(tick, stepAfter());
         return;
       }
       /* Never auto-advance while the user is browsing the carousel: focusIndex follows DOM
          focus, so moving it under the user would desync the white Steam ring from the blue chip. */
       if (elementHasFocus(viewportRef.current) || nav.rowHeld()) {
-        timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+        timeoutId = window.setTimeout(tick, stepAfter());
         return;
       }
 
@@ -274,10 +278,10 @@ function MainTabPresetSidewaysCarousel(
         advanceCarouselFocus(prev.history, prev.focusIndex, append?.next ?? prev.history[prev.focusIndex]!),
       );
 
-      timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+      timeoutId = window.setTimeout(tick, stepAfter(append?.next ?? shown[at + 1]));
     };
 
-    timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+    timeoutId = window.setTimeout(tick, stepAfter());
     return () => {
       cancelled = true;
       window.clearTimeout(timeoutId);
@@ -414,6 +418,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   const seedsKey = seedsKeyFrom(seeds);
   const reducedMotion = prefersReducedMotion();
   const slotCount = effectivePresetVisibleSlots(presetSingleChip);
+  const pace = presetPace(slotCount);
   const { rowHeld, ...nav } = usePresetRowNav(slotCount, onCarouselExitDown, { holdStill: props.holdStill });
 
   const [slots, setSlots] = useState<PresetPrompt[]>(() =>
@@ -421,7 +426,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   );
   const [slotFade, setSlotFade] = useState<SlotFade[]>(() =>
     Array.from({ length: slotCount }, () =>
-      staticMode ? { opacity: 1, transitionMs: 0 } : { opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_IN_MS },
+      staticMode ? { opacity: 1, transitionMs: 0 } : { opacity: 0, transitionMs: pace.fadeInMs },
     ),
   );
   const slotsRef = useRef(slots);
@@ -449,6 +454,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
       timeouts.push(id);
     };
 
+    const spacer = makeChangeSpacer(); // two spots never change at the same moment
     const visibleTexts = () => new Set(slotsRef.current.map((s) => s.text));
     const pickNext = (current: PresetPrompt): PresetPrompt => {
       const step = nextSlotPreset(current, visibleTexts(), rotation, samplerOptions);
@@ -467,7 +473,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
 
     if (staticMode) {
       setSlotFade(Array.from({ length: slotCount }, () => ({ opacity: 1, transitionMs: 0 })));
-      const loopStatic = (slotIndex: number, prompt: PresetPrompt, wait = presetHoldMs(prompt.text)) => {
+      const loopStatic = (slotIndex: number, prompt: PresetPrompt, wait = spacer.delay(slotIndex, Date.now(), presetTurnMs(prompt.text, slotCount))) => {
         pushTimeout(() => {
           if (!mayStartNextCycle()) return;
           // Held (rowHeld): keep this question and look again shortly.
@@ -485,16 +491,16 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     }
 
     setSlotFade(
-      Array.from({ length: slotCount }, () => ({ opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_IN_MS })),
+      Array.from({ length: slotCount }, () => ({ opacity: 0, transitionMs: pace.fadeInMs })),
     );
 
     const runSlot = (slotIndex: number) => {
       const loop = (prompt: PresetPrompt, firstDelay: number) => {
         showInSlot(slotIndex, prompt);
-        setFadeFor(slotIndex, { opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_OUT_MS });
+        setFadeFor(slotIndex, { opacity: 0, transitionMs: pace.fadeOutMs });
 
         pushTimeout(() => {
-          setFadeFor(slotIndex, { opacity: 1, transitionMs: PRESET_CAROUSEL_FADE_IN_MS });
+          setFadeFor(slotIndex, { opacity: 1, transitionMs: pace.fadeInMs });
 
           pushTimeout(() => {
             /*
@@ -508,15 +514,15 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
                 pushTimeout(fadeOut, PRESET_RING_HOLD_RECHECK_MS);
                 return;
               }
-              setFadeFor(slotIndex, { opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_OUT_MS });
+              setFadeFor(slotIndex, { opacity: 0, transitionMs: pace.fadeOutMs });
 
               pushTimeout(() => {
                 if (!mayStartNextCycle()) return;
                 loop(pickNext(prompt), 0);
-              }, PRESET_CAROUSEL_FADE_OUT_MS);
+              }, pace.fadeOutMs);
             };
-            pushTimeout(fadeOut, presetHoldMs(prompt.text));
-          }, PRESET_CAROUSEL_FADE_IN_MS);
+            pushTimeout(fadeOut, spacer.delayBefore(slotIndex, Date.now(), presetHoldMs(prompt.text, slotCount), pace.fadeOutMs));
+          }, pace.fadeInMs);
         }, firstDelay);
       };
       loop(first[slotIndex]!, slotStaggerMs(slotIndex));
@@ -545,7 +551,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
             data-bonsai-preset-visible={presetInteractive ? "true" : "false"}
             style={{
               opacity: slotOpacity,
-              transition: `opacity ${slotFade[i]?.transitionMs ?? PRESET_CAROUSEL_FADE_IN_MS}ms ease-in-out`,
+              transition: `opacity ${slotFade[i]?.transitionMs ?? pace.fadeInMs}ms ease-in-out`,
             }}
           >
             {/* No key of its own: one button per slot, only its words change -- decode mode's

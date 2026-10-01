@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 648,
-  "edgeCount": 1807,
+  "edgeCount": 1809,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1659,6 +1659,7 @@
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/StreamMarkdownPieces.tsx",
+        "src/data/drgGlossaryTerms.ts",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/liveScrambleMemo.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
@@ -1669,6 +1670,7 @@
     "src/components/StreamMarkdownPieces.tsx": {
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/data/drgGlossaryTerms.ts",
         "src/utils/lighterWhileGameRuns.ts",
         "src/utils/streamMarkdownPieces.ts"
       ],
@@ -1979,6 +1981,8 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/components/StreamMarkdownPieces.test.tsx",
+        "src/components/StreamMarkdownPieces.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/drgGlossaryAsk.test.ts",
         "src/utils/drgGlossaryAsk.ts",

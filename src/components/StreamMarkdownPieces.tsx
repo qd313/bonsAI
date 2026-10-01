@@ -11,6 +11,8 @@
  * Does not: Change the page: the pieces' blocks land in the same parent, in the same order, as the
  * one renderer's did, so the stylesheet and the D-pad stops see the same shape.
  */
+import { useCallback, useRef } from "react";
+import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import {
   MainTabBonsaiAiMarkdownChunk,
   type MainTabBonsaiAiMarkdownChunkProps,
@@ -19,7 +21,23 @@ import { SPLIT_LIVE_ANSWER_INTO_PIECES, splitStreamMarkdownPieces } from "../uti
 import { readDeckSwitch } from "../utils/lighterWhileGameRuns";
 
 export function StreamMarkdownPieces(props: MainTabBonsaiAiMarkdownChunkProps) {
-  const { source, scrambleSlotRef, ...rest } = props;
+  const { source, scrambleSlotRef, onDrgGlossaryExplainFurther, ...rest } = props;
+  /*
+   * The "explain further" function is a new one on every beat (the plugin root builds its Ask
+   * arguments afresh each render and the function follows them), and each piece's memoised renderer
+   * compares its props: a new function made EVERY settled piece parse and draw again on every beat,
+   * so an update cost as much as the whole answer, and twice that with the scramble on (it renders
+   * twice a beat). The pieces get one function that never changes and that calls the newest one at
+   * tap time. This component renders on every beat, so the newest is never more than a beat old.
+   * Whether a function exists at all still reaches the pieces, since that decides what is drawn.
+   */
+  const newestExplainFurther = useRef(onDrgGlossaryExplainFurther);
+  newestExplainFurther.current = onDrgGlossaryExplainFurther;
+  const explainFurtherForPieces = useCallback(
+    (term: DrgGlossaryTerm) => newestExplainFurther.current?.(term),
+    []
+  );
+  const stableExplainFurther = onDrgGlossaryExplainFurther ? explainFurtherForPieces : undefined;
   // The Deck's A/B switch (lighterWhileGameRuns.ts): `{ pieces: false }` draws the answer whole.
   if (!SPLIT_LIVE_ANSWER_INTO_PIECES || readDeckSwitch()?.pieces === false) {
     return <MainTabBonsaiAiMarkdownChunk {...props} />;
@@ -33,6 +51,7 @@ export function StreamMarkdownPieces(props: MainTabBonsaiAiMarkdownChunkProps) {
         <MainTabBonsaiAiMarkdownChunk
           key={i}
           {...rest}
+          onDrgGlossaryExplainFurther={stableExplainFurther}
           source={piece}
           scrambleSlotRef={i === last ? scrambleSlotRef : undefined}
         />

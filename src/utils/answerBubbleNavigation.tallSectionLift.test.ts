@@ -104,8 +104,9 @@ describe("Down through a tall section with the ring on an underlined game word",
       scrolls.push(a.pane.scrollTop);
     }
 
-    // Before: [412, 757, 757], the lift taking the panel 265 px on when the ring moved to the section.
-    expect(scrolls).toEqual([412, 492, 572, 652, 732, 732]);
+    // Before: [412, 757, 757], the lift taking the panel 265 px on when the ring moved to the section. The
+    // last press stops with the section's bottom on the dock (19 px), then the next section is landed.
+    expect(scrolls).toEqual([412, 492, 572, 652, 671, 865]);
     expect(document.activeElement).toBe(a.stops[1]);
   });
 });

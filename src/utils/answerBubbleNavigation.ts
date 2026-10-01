@@ -173,6 +173,12 @@ function forgetWalk(): void {
   boxLandedIn = null;
 }
 
+/** The section of this answer the ring is in (on it, or on a cover or word inside it), if any. */
+function ringSection(bubble: HTMLElement, answerKey: string | undefined): HTMLElement | undefined {
+  const stops = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
+  return stops[focusedAnswerStopIndex(stops)];
+}
+
 /**
  * The edge of the answer's text a press must still read past: its last section going Down, its first going
  * Up, not the bubble around them. The bubble's own frame (8 px of padding and a 1 px border) runs 9 px past
@@ -572,8 +578,7 @@ export function resolveAnswerBubbleEl(
  */
 function walkAnchor(bubble: HTMLElement, answerKey: string | undefined): HTMLElement | null {
   const ring = uiGamepadFocusElement();
-  const stops = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
-  const section = stops[focusedAnswerStopIndex(stops)];
+  const section = ringSection(bubble, answerKey);
   if (!ring || !section) {
     walk = null;
     return ring;
@@ -595,8 +600,7 @@ function walkAnchor(bubble: HTMLElement, answerKey: string | undefined): HTMLEle
 function boxAfterLastCover(bubble: HTMLElement, answerKey: string): HTMLElement | null {
   const ring = uiGamepadFocusElement();
   if (!ring) return null;
-  const stops = orderedAnswerStops(answerKey, bubble);
-  const section = stops[focusedAnswerStopIndex(stops)];
+  const section = ringSection(bubble, answerKey);
   if (!section || section === ring || !section.contains(ring) || boxLandedIn === section) return null;
   if (findLastSpoilerFenceIn(section, (el) => el === ring) !== ring) return null;
   if (lastHiddenCoverIn(section) !== ring || !hasBoxStop(section)) return null;
@@ -612,8 +616,7 @@ function keepRingOnScreen(
   if (!answerKey) return;
   const ring = uiGamepadFocusElement();
   if (!ring || !bubble.contains(ring)) return;
-  const stops = orderedAnswerStops(answerKey, bubble);
-  const section = stops[focusedAnswerStopIndex(stops)];
+  const section = ringSection(bubble, answerKey);
   /* On the section itself (or on nothing inside one): reading it by scrolling is the design. */
   if (!section || section === ring) return;
   const rect = ring.getBoundingClientRect();
@@ -814,7 +817,7 @@ export function handleAnswerBubbleMoveDown(
   }
 
   const max = panelScrollMax(scroll);
-  if ((max > 0 && panelStepDown(bubble)) || tryGeometryPanelScroll(bubble, "down")) {
+  if ((max > 0 && panelStepDown(bubble, ringSection(bubble, answerKey))) || tryGeometryPanelScroll(bubble, "down")) {
     keepRingOnScreen(bubble, answerKey, scroll, "down");
     return true;
   }
@@ -902,7 +905,7 @@ export function handleAnswerBubbleMoveUp(
   }
 
   const scrolled =
-    scroll.scrollTop <= 0 ? tryGeometryPanelScroll(bubble, "up") : panelStepUp(bubble);
+    scroll.scrollTop <= 0 ? tryGeometryPanelScroll(bubble, "up") : panelStepUp(bubble, ringSection(bubble, answerKey));
   if (scrolled) keepRingOnScreen(bubble, answerKey, scroll, "up");
   return scrolled;
 }

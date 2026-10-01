@@ -49,8 +49,10 @@ describe("Down through a tall section with the ring on an underlined word", () =
     }
 
     // Reading a tall section by scrolling is untouched: 80 px a press, then onto the last section,
-    // the same six presses the Deck took (five scroll-only presses, then the move on).
-    expect(scrolls).toEqual([412, 492, 572, 652, 732, 732]);
+    // the same six presses the Deck took (five scroll-only presses, then the move on). Since plan 78
+    // round five the last of them stops with the section's bottom on the dock (19 px, not 80), and the
+    // move on brings the next section under the header.
+    expect(scrolls).toEqual([412, 492, 572, 652, 671, 865]);
     expect(presses).toBe(6);
     expect(document.activeElement).toBe(a.stops[1]);
   });
@@ -182,8 +184,9 @@ describe("Down with the ring on a cover", () => {
   it("brings a box that starts under the tab header back into the band when the ring moves to it", () => {
     // A cover with a word-sized stop after it can still be cut by a scroll: here the first of two covers
     // in one section, the second below the screen. The scroll cuts the first, the ring moves to the box,
-    // and the box is set wholly under the header, cover and all.
-    const a = deckAnswer([[250, 441], [487, 637]], 140);
+    // and the box is set under the header, cover and all. The section runs 80 px past the dock, so the
+    // press is a whole one (a press stops at a section's end when that is nearer, plan 78 round five).
+    const a = deckAnswer([[250, 510], [517, 667]], 140);
     const first = a.cover(a.stops[0]!, [289, 344]);
     a.cover(a.stops[0]!, [640, 695]);
     first.focus();
@@ -220,15 +223,16 @@ describe("Down with the ring on a cover", () => {
   });
 
   it("does the same for a revealed cover's hide line", () => {
-    const a = deckAnswer(SECTIONS, 140);
+    // As above, a section running a whole press past the dock, so the press cuts the line.
+    const a = deckAnswer([[250, 510], [517, 667]], 140);
     const hide = a.hideLine(a.stops[0]!, [289, 304]);
     hide.focus();
 
     expect(a.down()).toBe(true);
     expect(document.activeElement).toBe(a.stops[0]);
     // The scroll carried the line 19 px above the band; the box that now holds the ring is brought
-    // back under the header, and the line with it.
-    expect(a.top(a.stops[0]!)).toBe(PANE_TOP + 8);
+    // back under the header (taller than the band, so right under it), and the line with it.
+    expect(a.top(a.stops[0]!)).toBe(PANE_TOP);
     expect(a.top(hide)).toBeGreaterThanOrEqual(PANE_TOP);
   });
 

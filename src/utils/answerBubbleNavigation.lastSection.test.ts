@@ -79,12 +79,13 @@ describe("the Deck's own repeated press, replayed in its own numbers", () => {
     a.down();
     expect(at()).toBe("section1 88-310 st177"); // the Deck: box1 88-310 st177
     a.down();
-    expect(at()).toBe("section1 8-230 st257"); // the Deck: box1 again 9-230 st257 (a 222 px box, read by scrolling)
+    // The Deck: box1 again 9-230 st257, a whole 80 px press to show the last 20 px of a 222 px box. Since
+    // plan 78 round five the press stops with the box's bottom on the dock (answerBubbleNavigation.lastStep.test.ts).
+    expect(at()).toBe("section1 68-290 st197");
     a.down();
-    expect(a.label(document.activeElement)).toBe("cover2"); // the Deck: cover2 (Steam put it 17 px lower)
+    expect(a.label(document.activeElement)).toBe("cover2"); // the Deck: cover2
     a.down();
-    expect(a.label(document.activeElement)).toBe("section3");
-    expect(a.bottom(a.stops[2]!)).toBe(290); // the Deck: box2 201-291
+    expect(a.label(document.activeElement)).toBe("section3"); // the Deck: box2 201-291
     expect(a.down()).toBe(false); // the Deck: box2 again, 121-211, one press later than this
   });
 });

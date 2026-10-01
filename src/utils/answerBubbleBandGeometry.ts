@@ -233,11 +233,33 @@ export function settleUpLanding(section: HTMLElement, scroll: HTMLElement): void
   revealSectionInBand(section, scroll, bandHeightOf(scroll));
 }
 
-/** Scroll QAM panel down; true only when scrollTop increases. */
-export function panelStepDown(bubbleEl: HTMLElement): boolean {
+/** How far one press that only scrolls moves the panel (scrollTabContentsByStep's own step). */
+const PRESS_STEP_PX = 80;
+
+/**
+ * How far the next scroll press should go when `section` (the one the ring is reading) ends, going Down, or
+ * starts, going Up, less than a whole press away: just that far, so the press stops with the section's
+ * bottom on the dock or its top on the header. 0 otherwise. On the Deck a 210 px section, 8 px taller than
+ * the band, took a whole 80 px press to show its last 8 px, ending 72 px above the dock
+ * (plan78-QA-FREE-PLAY-01-NOGAME-try2.json, answer A). Within 4 px is already read, as everywhere here.
+ */
+function stepToSectionEdge(section: HTMLElement | undefined, scroll: HTMLElement, dir: "down" | "up"): number {
+  if (!section) return 0;
+  const rect = section.getBoundingClientRect();
+  const rest = dir === "down" ? rect.bottom - readableBottomOf(scroll) : scroll.getBoundingClientRect().top - rect.top;
+  return rest > 4 && rest < PRESS_STEP_PX ? rest : 0;
+}
+
+/** Scroll QAM panel down; true only when scrollTop increases. `section`: see `stepToSectionEdge`. */
+export function panelStepDown(bubbleEl: HTMLElement, section?: HTMLElement): boolean {
   const scroll = findScrollablePanel(bubbleEl);
   if (!scroll) return false;
   const before = scroll.scrollTop;
+  const edge = stepToSectionEdge(section, scroll, "down");
+  if (edge && panelScrollMax(scroll) > 0) {
+    scroll.scrollTop = Math.min(panelScrollMax(scroll), before + edge);
+    return scroll.scrollTop > before;
+  }
   if (scrollTabContentsByStep(bubbleEl, "down")) {
     return scroll.scrollTop > before;
   }
@@ -251,8 +273,8 @@ export function panelStepDown(bubbleEl: HTMLElement): boolean {
   return scroll.scrollTop > before;
 }
 
-/** Scroll QAM panel up; true only when scrollTop decreases. */
-export function panelStepUp(bubbleEl: HTMLElement): boolean {
+/** Scroll QAM panel up; true only when scrollTop decreases. `section`: see `stepToSectionEdge`. */
+export function panelStepUp(bubbleEl: HTMLElement, section?: HTMLElement): boolean {
   const scroll = findScrollablePanel(bubbleEl);
   if (!scroll) return false;
   const before = scroll.scrollTop;
@@ -262,6 +284,11 @@ export function panelStepUp(bubbleEl: HTMLElement): boolean {
       return tryGeometryPanelScroll(bubbleEl, "up");
     }
     return false;
+  }
+  const edge = stepToSectionEdge(section, scroll, "up");
+  if (edge) {
+    scroll.scrollTop = Math.max(0, before - edge);
+    return scroll.scrollTop < before;
   }
   if (scrollTabContentsByStep(bubbleEl, "up")) {
     return scroll.scrollTop < before;

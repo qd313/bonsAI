@@ -402,6 +402,15 @@ New ones go here, with the choice taken in the meantime.
 4. **The try-order fix does not cover a PC.** With the AI running on a PC, a model removed there stays in the saved
    order. Covering it means one small change in a file tonight's helper did not own. **Meanwhile:** not built.
    **Your call:** build it after the release, or leave it.
+5. **A button pressed under a Hollow Knight answer, with Deep Rock still running.** The spoiler fix covers a
+   question that names the game, as you chose. A choice button or a refine chip under that answer sends text that
+   names no game, so it goes back to Deep Rock's notes and Deep Rock's no-spoiler-covers rules. That follow-up answer
+   could name a boss with no cover. **Meanwhile:** left as you chose; tonight's Deck pass presses one such button and
+   reports what comes back. **Recommended:** a button pressed under an answer keeps that answer's game. It is a small
+   widening of your call, so it waits for your yes; Thursday night has room for it.
+6. **Four small D-pad boxes from an old check** (the collapsed hint, the session strip, the Show details link, the
+   collapsed turn header) were listed as closed, but the evidence only covers the four sliders. **Meanwhile:** they
+   stay open, and tonight's Deck pass tries them if there is time.
 
 ## At the end
 

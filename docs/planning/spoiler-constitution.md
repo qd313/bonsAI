@@ -69,6 +69,20 @@ question, in the prompt and on screen (`resolve_turn_title_spoiler_profile` /
 `tests/contracts/spoiler-title-profiles.json`). It only ever moves toward more caution. "Quick tips 
 please" is not consent.
 
+**The named story game now also picks the notes for that one turn (2026-09-30, plan 78 helper A, the
+maintainer's call D121 item 1).** Judging the turn by the named game's profile was not enough: on the Deck
+the covers still did not appear (0 of 3), because the covers come from the attached notes, which name the
+bosses to hide, and the running game's notes name none of the other game's. So when a no-story game is
+running and the question names, in full, a game on the protected story list, the running game is set aside
+for that turn and the turn is handled exactly as the same question with nothing running: the named game's
+notes, covers, choice menu and credit line (`set_aside_running_game_for_named_story_game`, called from
+`game_ai_request.py`; tests in `tests/test_game_ai_request_story_game_named.py` read what reaches the
+answer). Limits, all part of the call: only that turn; only when the running game is a no-story game; a
+question about the running game is unchanged; "spoilers are okay" still opens everything. **Not covered:**
+a bare follow-up or a choice-menu button on that answer names no game, so it goes back to the running
+game's notes and its no-story rules; whether a button pressed under an answer should keep that answer's
+game is an open call (plan 78, questions).
+
 **Display unwrap** (`unwrapAskedEntitySpoilerFences`):
 
 1. `spoilerConsentEffective` → all fences.

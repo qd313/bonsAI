@@ -74,6 +74,13 @@ def new_background_state() -> dict[str, Any]:
         # keeps saying so without every one of their call sites having to name it. The button's
         # own accept path is the only place that ever passes "sum_up" -- see chat_sum_up_job.py.
         "kind": "ask",
+        # The mode the question was asked in ("speed" / "strategy" / "expert"), set when the Ask
+        # is admitted and carried unchanged onto the finished state. The screen reads it to know
+        # what the answer is -- a Strategy answer gets its checklist, and a refine chip sends its
+        # follow-up in the same mode -- even when the panel was shut and reopened in between, when
+        # nothing on the screen remembers which mode it pressed Ask in. "" when no mode applies
+        # (a keyword command answered without asking the model).
+        "ask_mode": "",
     }
 
 
@@ -88,6 +95,7 @@ def pending_background_state(
     chat_slot_id: Optional[str] = None,
     app_name: str = "",
     kind: str = "ask",
+    ask_mode: str = "",
 ) -> dict[str, Any]:
     """State published when an Ask -- or, since plan 68 step 4, the *Sum up this chat* button
     running as a job of its own -- is admitted and a background task is about to run."""
@@ -104,6 +112,7 @@ def pending_background_state(
             "started_at": started_at,
             "chat_slot_id": chat_slot_id,
             "kind": kind,
+            "ask_mode": ask_mode,
         }
     )
     return state

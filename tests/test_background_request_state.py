@@ -16,7 +16,7 @@ from backend.services.background_request_state import (
     pending_background_state,
 )
 
-# The 26 keys the status poller and the frontend expect on every background state.
+# The keys the status poller and the frontend expect on every background state.
 EXPECTED_KEYS = {
     "status",
     "request_id",
@@ -51,6 +51,8 @@ EXPECTED_KEYS = {
     # Plan 68 step 4: "ask" for an ordinary question, "sum_up" for the Session tab's own
     # *Sum up this chat* button running as a job of its own through the same slot.
     "kind",
+    # Plan 78: the mode the question was asked in, so a reopened panel knows what the answer is.
+    "ask_mode",
 }
 
 

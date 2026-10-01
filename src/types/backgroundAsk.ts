@@ -81,6 +81,13 @@ export type BackgroundRequestStatus = {
   completed_at: number | null;
   strategy_guide_branches?: StrategyGuideBranchesPayload | null;
   strategy_checklist?: StrategyChecklistPayload | null;
+  /**
+   * The mode the question was asked in ("speed" / "strategy" / "expert"), set by the back end when
+   * the Ask is admitted and still there on the finished status. A panel that was closed and opened
+   * again while the answer wrote has nothing else to learn it from. Absent on a build before this
+   * existed, and "" on a keyword command that never asked the model.
+   */
+  ask_mode?: string | null;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
   /** True when this Ask had explicit spoiler consent (toggle and/or backend phrase match). */
   strategy_spoiler_consent_effective?: boolean;

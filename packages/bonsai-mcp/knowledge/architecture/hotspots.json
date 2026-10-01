@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2300,
+      "lines": 2301,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -17,7 +17,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1528,
+      "lines": 1544,
       "role": ""
     },
     {

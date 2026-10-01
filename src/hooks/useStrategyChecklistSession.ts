@@ -19,7 +19,7 @@
  * back end when a box is checked — see the shared checklist helpers for
  * both.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
 
 import type { AskModeId } from "../data/bonsaiSettingsSchema";
@@ -30,11 +30,27 @@ import {
 } from "../utils/strategyChecklistPersistence";
 import { peekBonsaiSessionPendingRestore } from "../utils/bonsaiSessionSurvival";
 
+/**
+ * Owns the checklist state, its disk load and the running-game poll for the Ask hook. Returns the
+ * state and its setter (every write through it is counted, see `writesRef`), the ref that mirrors
+ * the state, the disk loader and the running game's AppID.
+ */
 export function useStrategyChecklistSession(askMode: AskModeId) {
   const survivalPeek = peekBonsaiSessionPendingRestore();
-  const [strategyChecklist, setStrategyChecklist] = useState<StrategyChecklistState | null>(
+  const [strategyChecklist, setStrategyChecklistRaw] = useState<StrategyChecklistState | null>(
     () => survivalPeek?.strategyChecklist ?? null,
   );
+  /*
+   * Counts every write made by anything but the disk load below. A disk load that was already in
+   * flight when one of those writes landed is older than it and must not overwrite it: on a fresh
+   * panel open the load starts first and can finish AFTER the checklist of an answer that finished
+   * while the panel was shut has been painted, which wiped that checklist (plan 78, finding 1).
+   */
+  const writesRef = useRef(0);
+  const setStrategyChecklist = useCallback((next: SetStateAction<StrategyChecklistState | null>) => {
+    writesRef.current += 1;
+    setStrategyChecklistRaw(next);
+  }, []);
   const strategyChecklistRef = useRef<StrategyChecklistState | null>(strategyChecklist);
   useEffect(() => {
     strategyChecklistRef.current = strategyChecklist;
@@ -44,12 +60,15 @@ export function useStrategyChecklistSession(askMode: AskModeId) {
 
   const hydrateStrategyChecklistFromDisk = useCallback(async (appId: string) => {
     runningAppIdRef.current = appId;
+    const writesAtStart = writesRef.current;
     try {
       const loaded = await loadStrategyChecklistSession(appId);
-      if (runningAppIdRef.current !== appId) return;
-      setStrategyChecklist(loaded);
+      if (runningAppIdRef.current !== appId || writesRef.current !== writesAtStart) return;
+      setStrategyChecklistRaw(loaded);
     } catch {
-      if (runningAppIdRef.current === appId) setStrategyChecklist(null);
+      if (runningAppIdRef.current === appId && writesRef.current === writesAtStart) {
+        setStrategyChecklistRaw(null);
+      }
     }
   }, []);
 

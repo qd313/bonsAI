@@ -1791,6 +1791,7 @@ class Plugin:
                 started_at=time.time(),
                 chat_slot_id=chat_slot_id or None,
                 app_name=app_name,
+                ask_mode=ask_mode,
             )
             # Plan 70 helper K: the same friendly caption the saved turn header already shows
             # (e.g. a branch pick's "I'm at: …", not the "[Strategy follow-up] I'm at: …" it

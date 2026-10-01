@@ -91,6 +91,7 @@ import type { AskAttachment } from "../types/bonsaiUi";
 import type { BonsaiAskOrchestration } from "../types/askOrchestration";
 import type { UseBonsaiAskOrchestrationArgs } from "../types/askOrchestrationArgs";
 import { type AskModeId } from "../data/bonsaiSettingsSchema";
+import { ASK_MODE_IDS } from "../data/askMode";
 import { buildResponseText } from "../utils/appliedTuningText";
 import { detectPromptCategory } from "../data/presets";
 import { STRATEGY_FOLLOWUP_PREFIX } from "../data/strategyGuideFollowup";
@@ -260,11 +261,17 @@ export function useBonsaiAskOrchestration(
   > | null>(() => survivalPeek?.shortcutSetupVariant ?? null);
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingReplyFollowUpRef = useRef<ReplyFollowUpPending | null>(null);
+  /*
+   * What THIS open of the panel pressed Ask with. Both stay null until Ask is pressed here: on a
+   * fresh open (Quick Access closed and reopened) nothing in this hook knows what the question on
+   * screen was asked with, and a made-up "Speed, no screenshots" there is worse than "unknown" --
+   * it dropped the Strategy checklist and sent refine chips out in the wrong mode (plan 78).
+   */
   const lastAskContextRef = useRef<{
-    attachments: AskAttachmentSnapshot[];
-    askMode: AskModeId;
+    attachments: AskAttachmentSnapshot[] | null;
+    askMode: AskModeId | null;
     rawQuestion: string;
-  }>({ attachments: [], askMode: "speed", rawQuestion: "" });
+  }>({ attachments: null, askMode: null, rawQuestion: "" });
 
   // --- Ask thread archive refs ---
   // The shape moved to PendingArchiveTurn in ../types/backgroundAsk.ts, so it can be shared
@@ -711,6 +718,15 @@ export function useBonsaiAskOrchestration(
               promptsReseededForRequestRef.current = reseedRid;
               void reseedSuggestedPrompts("contextual", category, true);
             }
+            /*
+             * The mode the question was asked in: the finished status says so (the back end knows),
+             * which is the only source left after the panel was closed and reopened mid-answer.
+             * This open's own Ask is the fallback for a back end that does not say. Neither known
+             * leaves it unset, never Speed -- the chip then follows the panel's own mode.
+             */
+            const statusMode = ASK_MODE_IDS.find((m) => m === status.ask_mode);
+            const requestAskMode: AskModeId | undefined =
+              statusMode ?? lastAskContextRef.current.askMode ?? undefined;
             const displayQ = (pendingThreadQuestionDisplayRef.current?.trim() || q).trim();
             pendingThreadQuestionDisplayRef.current = null;
             // Skipped for a foreign slot: otherwise the slot on screen grows a feedback/retry
@@ -725,9 +741,9 @@ export function useBonsaiAskOrchestration(
                   disc && typeof disc === "object" && typeof (disc as ModelPolicyDisclosurePayload).model === "string"
                     ? (disc as ModelPolicyDisclosurePayload).model
                     : null,
-                attachments: lastAskContextRef.current.attachments,
+                attachments: lastAskContextRef.current.attachments ?? undefined,
                 spoilerConsentEffective: status.strategy_spoiler_consent_effective ?? false,
-                askMode: lastAskContextRef.current.askMode,
+                askMode: requestAskMode,
                 appName: status.app_name ?? "",
                 askedEntity: status.strategy_spoiler_asked_entity ?? "",
                 reasoning: finishedReasoning,
@@ -761,12 +777,12 @@ export function useBonsaiAskOrchestration(
              * `dbg_fe_log` — the panel read Strategy, the backend logged `checklist_parsed=True`,
              * and this line saw `askMode: "speed"`.
              *
-             * `lastAskContextRef` is written at submit from `askModeForRequest`, so it is both fresh
-             * (a ref) and the right question to ask — the checklist belongs to the reply, so what
-             * matters is the mode that produced it, not what the panel switched to since. The
-             * `lastExchange` write directly above already sources it exactly this way.
+             * `requestAskMode` (above) comes from the finished status, with `lastAskContextRef`
+             * (written at submit from `askModeForRequest`) as the fallback — the checklist belongs
+             * to the reply, so what matters is the mode that produced it, not what the panel
+             * switched to since. The `lastExchange` write above sources it the same way.
              */
-            if (checklistPayload && lastAskContextRef.current.askMode === "strategy") {
+            if (checklistPayload && requestAskMode === "strategy") {
               const appId = status.app_id ?? "";
               const merged = mergeStrategyChecklistState(strategyChecklistRef.current, checklistPayload, {
                 appId,

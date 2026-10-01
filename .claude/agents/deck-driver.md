@@ -33,10 +33,15 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
 2. **Every Deck command has exactly this shape:** `ssh deck@192.168.86.52 '<command>'`. Nothing goes
    between `ssh` and the address: no options, no `-o`, no `-t`. Any other shape stops at a permission
    prompt nobody is there to answer.
-3. **Evidence files:** list `docs/test-evidence/` first. Name each file `plan64-<ROW-ID>.json`, or with a
-   suffix such as `-try2` if that name exists. **Never overwrite a file.** Screenshots go beside it with the
-   same stem. Every file holds: the row, the build commit, the Deck time, the setup, what was pressed, what
-   was seen (numbers, not adjectives), and the verdict.
+3. **Evidence files:** list `docs/test-evidence/` first. Name each file `plan<NN>-<ROW-ID>.json`, with the
+   plan number your task gives, or with a suffix such as `-try2` if that name exists. **Never overwrite a
+   file. One file per check**, not one per block. Screenshots go beside it with the same stem. Every file
+   uses these field names, so the next reader does not have to guess: `row`, `build_commit`,
+   `deck_time_local`, `screen`, `setup`, `pressed`, `seen` (numbers, not adjectives), `expected`,
+   `verdict`. **The verdict starts with one of four words: PASS, FAIL, UNCLEAR, COULD NOT RUN.** A check
+   with two halves gives each half its own verdict line starting with one of those words. If you made a
+   mistake during the check (a stray press, a question in the wrong chat), say so in a `side_effect`
+   field, in plain words, with what it changed on the Deck.
 4. **Scratch files** (scripts, raw dumps) go in the scratch folder named in your task, never the repo root.
 5. **Visible, not just focused.** A control can hold focus while hidden behind the dock or off the panel's
    edge. Check the element's box against the visible area. Two known false alarms: the question row
@@ -55,13 +60,23 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
    one, otherwise stop and report.
 8. **Opening the plugin fails once after every deploy or reload.** Check whether it is already open before
    opening it. A first failure is expected; a second one is worth reporting.
-9. **The AI models screen:** walk it one press at a time and read focus after each. "Remove from Deck" is one
-   press away from a model row. Never press A on a model row unless the runbook says so.
+9. **Read what has the highlight before every A.** A is never the last press of a multi-press sequence:
+   send the moves, read focus, and only then press A, as its own step, when focus is on the control the
+   runbook names. On 2026-09-30 a four-press sequence ending in A landed one stop off and marked a test
+   answer "helpful". **The AI models screen** is the strict case: walk it one press at a time and read
+   focus after each. "Remove from Deck" is one press away from a model row. Never press A on a model row
+   unless the runbook says so.
 10. **Counting or repeating:** a repeated question comes back from the answer cache word for word, in
     about a second, having tested nothing. Any check that counts must use differently worded questions,
-    or clear the cache first if the runbook says how.
-11. **New chats:** starting a new chat throws away the oldest of the eight saved chats. The session backed
-    them up, but start a new chat only when the runbook says to.
+    or clear the cache first if the runbook says how. **A check that depends on what the AI happens to
+    write** (a menu cut at the length limit, a boss named in the answer) gets two differently worded
+    tries. If neither produces the case, the verdict is UNCLEAR with what the AI wrote instead; do not
+    spend a third try.
+11. **Chats:** test questions go only in the test chat your task names. Read the open chat's name before
+    every question; if it is not the test chat, switch to it first. If the task names no test chat, or it
+    is not there, stop and report: never ask a test question in one of the maintainer's own chats (about
+    14 landed in one on 2026-09-29). Starting a new chat throws away the oldest of the eight saved chats,
+    so start one only when the runbook says to.
 12. **"Blocked" needs one real try first.** Before writing that something cannot be done, try it once, and
     say exactly what stopped it.
 13. **Keep the Deck awake:** take the rig's keep-awake lock at the start with `ttlMinutes: 480` and read the
@@ -69,12 +84,21 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     minutes); if it ever comes back shorter, renew before it runs out. The dimmed screensaver can still
     come on while the lock holds and freezes panel animations: a left-stick click wakes the screen and
     moves nothing.
-14. **Games:** the rig can only launch games shown on the Recent Games row. After launching a game, reload
-    the plugin so it learns the game is running. After exiting, confirm over SSH that the game's process
-    is really gone. Steam's own list has read empty while a game was still running.
+14. **Games:** the rig can only launch games shown on the Recent Games row. The launch tool only walks
+    right along that row, so go to the row's start first (press Left until focus stops moving); from the
+    far end it refuses. After launching a game, reload the plugin so it learns the game is running. After
+    exiting, confirm over SSH that the game's process is really gone. Steam's own list has read empty
+    while a game was still running.
 15. **Stop and report at once** if the Deck stops answering, the rig's stop switch is on, you see signs
     another chat is pressing buttons (focus moving on its own, the panel changing without your press), or
     anything asks for a password.
+16. **One block, then hand over.** A driver's memory runs out after about a thousand steps, and a trimmed
+    memory has already caused a question to be asked twice. Run the block your task names (about fifteen
+    checks) and stop. If your memory is trimmed mid-block, re-read your task, the handover note and the
+    last evidence file you wrote before you press anything, and never repeat a press from memory. End
+    every block with a handover note in the scratch folder: the build on the Deck, when the keep-awake
+    runs out, where the settings backup is, the test chat's name, every setting you changed and whether
+    it is back, and anything the next driver should know about the Deck's quirks tonight.
 
 ## Tools
 

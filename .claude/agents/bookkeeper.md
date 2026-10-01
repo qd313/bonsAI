@@ -35,12 +35,28 @@ Ground rules, all of them non-negotiable:
    - **Code changes from a known plan.** The brief names the cause, the files and the change. Stay inside
      those files. If the cause is not where the plan says it is, **stop and report**; do not improvise a
      different fix. That decision is the owner's, not yours.
+   Four rules for every docs sweep, each from a slip found on 2026-09-30:
+   - **A row's status agrees with its newest dated note.** After the sweep, re-read every testing row and
+     roadmap entry you touched: a status that says "no run yet" beside a note that says it failed on the
+     Deck is wrong. Fix the status to match the newest note.
+   - **No in-progress wording.** "Being fixed", "being looked at", "a fix is being built" go stale the
+     moment the session ends. Write what is known and what is owed. When you add a result to an entry
+     that still carries such words, take them out.
+   - **Copy facts from the evidence file's own words.** If the brief's result list and the evidence file
+     disagree about what was seen, stop and report the difference; do not pick one. (A brief once said a
+     service "was started by hand" where the evidence said a system unit runs it, and the wrong one
+     reached the roadmap.)
+   - **Five lines an entry.** When your dated note takes a roadmap entry past the house limit, move its
+     older dated notes to `docs/roadmap-details.md` under the entry's heading in the same sweep, and
+     link them. Nothing is deleted.
 4. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** The pre-commit hook
    regenerates and stages it.
 5. **Gates.** When you changed code or tests, run all five before any commit: `npx tsc --noEmit`,
    `npm test`, `npm run test:py`, `npm run build`, `node scripts/check-focus-patterns.mjs`. For a
-   docs-only change, check that every file or row you linked to actually exists. If a gate is red before
-   you changed anything, stop and report.
+   docs-only change, check that every file or row you linked to actually exists. **Every sweep, code or
+   docs, ends with `python scripts/verify.py --quick`**: it is the only check that sees a document past
+   its size limit, and on 2026-09-30 the testing document crossed its limit unnoticed for a whole night.
+   If a gate is red before you changed anything, stop and report.
 6. **Commit only when the brief says to.** Stage files by name, never `git add -A`. Commit messages say
    what changed and why in plain language, describing what a person using the plugin would notice before
    any term of art. End every commit message with a `Co-Authored-By:` line naming the model you are actually running on, for example `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.

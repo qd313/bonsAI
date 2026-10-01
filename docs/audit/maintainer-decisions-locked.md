@@ -1983,3 +1983,33 @@ own section, "The maintainer's calls, 2026-09-29", has the same list.
 7. **Show details folding after a tab or chat switch:** fine, by design.
 8. **The D-pad trap's release-notes lines:** decided by the long play test. Clean, and they shrink to one short
    line. A trap, and they stay.
+
+### D121 — LOCKED 2026-09-30 (raised 2026-09-30) — Plan 78, a wider bug session and an unattended Deck pass: the eleven calls
+
+Made by the maintainer on 2026-09-30, before and at the start of [plan 78](../planning/78-release-wave-five.md).
+The plan's own section, "Your calls for this session", has the same list.
+
+1. **Spoilers when asking about another game while one runs: option (a).** When a no-story game is running and
+   the question names a game on the short protected list, the named game picks the notes for that one question.
+   An exception to the rule that the running game always picks the notes; a bare follow-up that names no game
+   goes back to the running game's notes.
+2. **How wide:** the small bugs with a known cause, plus answer quality (the chat summary's odd wording, answers
+   borrowing each other's wording, long answers slowing down while they decode). No library changes.
+3. **The maintainer's hand checks:** all on Thursday 1 October; Thursday night is kept for what they find.
+4. **The Deck, while the maintainer is away:** as plan 77, and the oldest chat may be deleted if there is no
+   spare chat slot, its file copied aside first.
+5. **Start:** the fix helpers start on "Go", before the controller rig is plugged in; the Deck part starts when
+   the rig answers.
+6. **Who runs it:** Opus high runs the session; Sonnet helpers do the work; a fix that has failed on the Deck
+   twice moves up one tier (the extra Down press goes to an Opus extra-high helper).
+7. **The maintainer's saved chats** may be copied to this PC to test the summary wording on; never quoted, and
+   the copies are removed at the end.
+8. **Reminder** of the hand checks: the top of the morning report, a phone notification, and a timed reminder
+   on Thursday at 2:30 pm Eastern.
+9. **The game's own chip, one chip showing:** it comes round at least every second turn.
+10. **The chips:** one rule for which chip comes next and one for how long it stays, in all four chip styles;
+    a faster pace, most of all with one chip showing; no penalty for choosing one chip; a game's own chips a
+    little more likely than a general tip. The four styles keep their own drawing code until after the release.
+11. **Standing instructions:** the rules learned from plan 77's night are written into the helpers' own
+    instruction files, a written runbook (`docs/agents/bug-wave-runbook.md`) and a checked-in landing script
+    (`scripts/land_lane.sh`).

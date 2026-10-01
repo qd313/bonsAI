@@ -1,6 +1,7 @@
 # Plan 78 — release wave five: a wider bug session, then an unattended Deck pass
 
-**Status: draft, written 2026-09-30 (Wednesday). Nothing has started. It starts when the maintainer says "Go".**
+**Status: started 2026-09-30 (Wednesday), about 21:50. The maintainer said "Go". The log at the end says where
+things stand.**
 
 Asked for by the maintainer: "Plan another bug fix wave … a massive bug fix session as a follow-up from last night …
 once we have the bugs fixed, do an automated QA pass with the controller rig … I hope it doesn't require me to
@@ -22,7 +23,7 @@ the working branch and nothing is pushed, so every fix must be safe to ship this
 
 ## Your calls for this session (2026-09-30)
 
-To be written up as D121 in the locked decisions file when the session starts.
+Written up as D121 in the locked decisions file ([D121](../audit/maintainer-decisions-locked.md)).
 
 1. **Spoilers when asking about another game while one runs: option (a).** When a no-story game is running and the
    question names a game on the short protected list, the named game picks the notes for that one question. This is an
@@ -40,6 +41,14 @@ To be written up as D121 in the locked decisions file when the session starts.
 8. **Reminder:** the morning report opens with your list, a phone notification goes out when the Deck is free, and a
    timed reminder is set for Thursday 1 October at 2:30 pm Eastern.
 9. **The game's own chip:** with your "one chip" setting on, the game's own chip comes round every second turn.
+10. **At Go, the chips get more than the bug fix** (your words: two chips a minute "is useless to show off the
+    features"; "each of the preset fading animations" should "operate more similarly, more predictably"; no penalty
+    for choosing one chip; game chips "a slightly higher chance" than a general tip). What that becomes is in
+    [The chips](#the-chips-what-changes-tonight).
+11. **Write last night's rules into the standing instructions, and harden the setup that proved itself.** Done at
+    Go: the Deck driver's, the bookkeeper's and the fix helpers' instruction files, a written runbook
+    ([docs/agents/bug-wave-runbook.md](../agents/bug-wave-runbook.md)) and the landing script
+    (`scripts/land_lane.sh`), which now also runs the wider quick check.
 
 ## Where things stand
 
@@ -92,6 +101,45 @@ Last night (plan 77) fixed about 20 bugs and passed more than 30 Deck checks. Th
 - **E must never empty the try order by mistake.** It only removes a model when the list of installed models was
   read successfully. A PC that is switched off must not wipe the order.
 
+### The chips: what changes tonight
+
+Helper F's job grew at Go. Three changes, built in this order, each its own commit:
+
+1. **One rule for which chip comes next, in all four chip styles.** Today the sliding style has its own rule and the
+   other three (fading, plain, decoding) share a different one that never deals the game's chips again after the
+   panel opens. Tonight all four use one rule:
+   - With one chip showing: after a general tip, the next chip is the game's own. After a game chip, the next is the
+     game's again about one time in five. So at least every second chip is the game's, and a little over half of all
+     chips are (about 55 in 100).
+   - With two chips showing: one of the two is always the game's own, and the other is the game's about one time in
+     five.
+   - Nothing is dropped for having one chip. The chips dealt when the panel opens all get their turn, in order.
+   - A game chip does not come back while others of the game's chips have not had a turn.
+2. **One rule for how long a chip stays, and a faster pace.** Today a chip stays 8 to 32 seconds plus 3 seconds of
+   fading, whatever the chip count: about 15 seconds a turn for a typical label.
+   - One chip: about 7 seconds a turn for a typical label, so 8 or 9 chips a minute where there were 2 to 4. The
+     fade-in stays at 1 second, since it is what draws the eye; the time standing still is cut the most.
+   - Two chips: about 10 seconds a turn in each spot, about 11 chips a minute across the two, and the two spots never
+     change at the same moment.
+   - A label too long for its chip still gets one full scroll before it leaves. Today that wait is worked out for the
+     narrow two-chip width even when one wide chip is showing, which holds a one-chip label longer than it needs.
+   - The row still holds still while the highlight ring is on a chip.
+   - The sliding style gives up its fixed 5.8-second step and uses the same rule.
+   - The numbers sit in one place, so a change of pace after your look is a one-line change.
+3. **A preview you can watch.** A page showing the chip row at its true size, running at tonight's pace beside the
+   old one and one faster, with one chip and with two. It reaches your phone as a link. Say which pace you want and
+   the number changes; tonight's build uses the middle one meanwhile.
+
+**What "more similar" does not mean tonight:** the four styles keep their own drawing code. Folding them into one
+shared engine is a reshaping of code, which the release plan does not allow this week. It goes on the roadmap for
+after the release.
+
+**The Deck check:** with a game running, the default style watched for seven minutes with one chip and seven with
+two, and three minutes for each other style: chips a minute, the share that are the game's own, no two general tips
+back to back with one chip, one of two always the game's with two, and no chip changing under the highlight ring.
+
+**Your look, Thursday:** the pace with one chip and with two is added to your list.
+
 ### Not this session, and why
 
 - **Yours to check by hand:** the ghost tab bar after touching the screen; the chip colour, underline and look. On
@@ -118,8 +166,9 @@ lands, writes the Deck checks, reads every failure, and decides anything unclear
 | Helper C | A setting lost on a quick close | Sonnet 5.5 high | At Go |
 | Helper D | The extra Down press | **Opus extra-high**, with last night's measurements in its brief. This fix failed on the Deck twice on Sonnet high, and the house rule moves it up one tier | At Go |
 | Helper E | A removed model in the try order | Sonnet 5.5 high | At Go |
-| Helper F | The game's own chip | Sonnet 5.5 high | At Go |
-| Helper G | Read-through of the after-answer step | Sonnet 5.5 high, read-only | At Go |
+| Helper F | The chips: which comes next, how long each stays | Sonnet 5.5 high; Opus reads it closely before landing, since it is on the main screen | At Go |
+| Helper K | The moving preview of the chip pace | Sonnet 5.5 high | At Go |
+| Helper G | Read-through of the after-answer step | Sonnet 5.5 high, read-only | When the first slot frees (the preview took its place at the start) |
 | Helper H | The chat summary's wording | Sonnet 5.5 high | At Go |
 | Helper I | Answers borrowing wording | Sonnet 5.5 high | At Go |
 | Helper J | Long answers slow down | Sonnet 5.5 high | At Go (reads the code and last week's numbers; the Deck number comes tonight) |
@@ -242,7 +291,7 @@ its title in the log, and delete it. Deploy the newest build and confirm the Dec
 | C. Setting on a quick close | A setting changed and the panel closed within a third of a second: the settings file holds the new value, five times out of five |
 | D. Extra Down press | On answers with a short last section, every Down press moves the ring; Up visits the same stops |
 | E. Try order | A model removed over the network is gone from the saved order after the next look at the models list; with Ollama switched off the order is untouched |
-| F. The game's own chip | With a game running, watched for seven minutes in each chip style. With one chip: every second chip is the game's own. With two chips: one of the two is always the game's own |
+| F. The chips | With a game running, the default style watched for seven minutes with one chip and seven with two, three minutes for each other style. One chip: 8 or 9 chips a minute, never two general tips back to back, a little over half the game's own. Two chips: one of the two always the game's own. No chip changes under the highlight ring |
 | H. Summary wording | "Sum up" on three test chats: no "Game:" line naming something that is not a game, no "None apparent" lines |
 | I. Borrowed wording | The same pairs of questions as on 27 September: the second answer does not reuse the first one's sentences |
 | J. Long answers | The frame rate on a very long answer, measured the same way as the "before" number |
@@ -300,8 +349,8 @@ if one fails, tell any session "check N failed" and what you saw, and Thursday n
 4. Session tab: press Clear, then Cancel.
 5. With a finger: tap the tab bar; touch a chip with the tab strip open and a game running (the ghost tab bar); drag
    an answer while it arrives; tap a highlighted word in a Deep Rock answer.
-6. With your eyes: the chips (colour, underline, raised look); the lit tab in five colours; the tree icon; the rated
-   thumbs; the scramble's look; reduced motion.
+6. With your eyes: the chips (colour, underline, raised look, and tonight's new pace with one chip and with two); the
+   lit tab in five colours; the tree icon; the rated thumbs; the scramble's look; reduced motion.
 7. With your ears: an answer read aloud, and whether a game stutters while it is read.
 8. Put the Deck to sleep with the panel open, wake it, press Down.
 
@@ -394,10 +443,26 @@ reports. Helpers never edit the roadmap, the testing documents or the changelog.
   `sessionRagComposer.ts`, `presetDecodeSlots.tsx`. Read while planning, to be confirmed by the helper:
   `nextSlotPreset` (fade, static and decode styles) refills from the static pool only, while only the carousel tick
   calls `pickCarouselChipWithSessionRag`; and `composeSessionPresets` forces its guaranteed chip into slot
-  `PRESET_VISIBLE_SLOTS - 1`, which is off screen when the one-chip setting is on. The maintainer's call: with one
-  chip, every second chip is the game's own; with two, one of the two always is. Never the same chip twice running
-  unless the game has only one. A pinned test batch still wins. The Ask hook-order record must be updated if a hook
-  is added. Check **P78-TIP-CHIP**.
+  `PRESET_VISIBLE_SLOTS - 1`, which is off screen when the one-chip setting is on. The rules to build are in
+  [The chips](#the-chips-what-changes-tonight): one next-chip rule for all four styles (after a general chip the
+  next is the game's; after a game chip, the game's again with chance 0.2; two chips: the guarantee reads the chip
+  that stays), one stay-time rule that takes the chip count (`presetHoldMs` and `holdMsForPresetText` in
+  `src/data/presets.ts`, `PRESET_LABEL_ROOM_PX` worked out for the real count, the carousel's `CAROUSEL_STEP_MS`
+  replaced by it), fade lengths in `presetChipShared.ts`. Starting numbers: one chip, 120 ms a letter, 4 to 9 s,
+  fade 1 s in and 1 s out; two chips, 200 ms a letter, 6 to 14 s, fade 1 s in and 1.5 s out. All of them named
+  constants in one file. Three commits, in the order of that section; no shared-engine rewrite; watch the 400-line
+  limits (`MainTabPresetAnimatedChips.tsx` is at 599 with a recorded size, `presetDecodeSlots.tsx` at 392). Never
+  the same chip twice running unless the game has only one. A pinned test batch still wins and still walks in
+  order. The row holds while the ring is on a chip (`MainTabPresetAnimatedChips.keepsRing.test.tsx` must still
+  pass). Reduced motion is unchanged. Tests use fake timers and count chips over a simulated seven minutes, at
+  one chip and two, in each style: that is the level the Deck check looks at. The Ask hook-order record must be
+  updated if a hook is added. Check **P78-TIP-CHIP** and **P78-CHIP-PACE**.
+- **K (the chip pace preview; agent `feature-lane` brief, no repo commits):** one self-contained HTML file in its
+  scratch folder, no build step: the chip row at true size (the 300 px column, the chip styles copied from
+  `src/styles/` section 4 and `presetChipButton.tsx`, real labels from `src/data/presets.ts` and a few real game
+  chips), three paces side by side (today's, tonight's, one faster), a switch for one chip or two and for the four
+  styles' arrival (fade first; the others if time allows), and a counter of chips a minute. The session publishes
+  it and sends the link.
 
 **Every brief also carries** (from "What changes from last night"): the sentence that says what a pass looks like on
 the Deck and one test at that level; for wording fixes, a search for every place the words appear. **The Deck

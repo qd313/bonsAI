@@ -1,0 +1,20 @@
+{
+  "row": "P78-BRANCH-ONCE",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 09:44-09:52 EDT (Deck clock, approximate)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. No game running. No monitor.",
+  "setup": "Strategy mode, no game, test chat 6f3cc055 (name read open before each question). Page-side sampler in the Quick Access page read every 500 ms: number of turn rows in the page, number of history-row headers that read 'I'm at: Breaking through toward Greenpath' (the branch answer's row), number of rows whose text holds the branch answer's first 50 letters, and whether a live answer preview was present. The history list ('N earlier') was opened first (A on the pill after reading focus) so the older rows are in the page.",
+  "pressed": "1. 'where should I go first in Hollow Knight after the Forgotten Crossroads' (send script VERIFIED, walk to Ask, read focus, A). The answer showed 2 choice buttons: 'A. Breaking through toward Greenpath' and 'B. Checking out Crystal Peak or Fungal Wastes'. 2. Walked to choice A (read focus), A. Branch answer arrived (reasoning 16 s). 3. Opened the history list. 4. 'and what should I buy from the shop first' (send script VERIFIED, walk to Ask, read focus, A), sampler running. 5. After it finished, walked to the branch row, read focus, A to open it.",
+  "seen": {
+    "branch_answer": "I'm at: Breaking through toward Greenpath; reply began 'Right, listen up, you're at the Greenpath stretch now, eh?'; the older answer moved to the history list ('41 earlier' after the branch, '42 earlier' after the next question).",
+    "reads_while_the_next_answer_was_writing": "94 reads at 500 ms from just before the question went in to the end of the answer (about 47 s). At every one of them the branch row's header count was 0 or 1, never 2: 85 reads with the history list open showed exactly 1 branch row (42 turn rows, then 43 once the new question was added); at the last 9 reads the page had folded the history away (1 turn row, 0 branch rows, the list collapsed by the page when the answer finished). Maximum branch-row count over all reads: 1. Maximum rows holding the branch reply's text: 1 (before the new question was added; 0 after, because history rows are drawn collapsed and show only the question line).",
+    "older_branch_row_opened": "Opened the row 'I'm at: Breaking through toward Greenpath' from the history list (walked down 41 rows, read focus, A). It showed 'Show reasoning · 16 s' above its answer: its thinking row is there.",
+    "other": "The second answer ('and what should I buy from the shop first') also ended in 2 choice buttons (A. The Mothwing Cloak, B. The Map Quill from Dirtmouth). The history list folding itself when the answer ended was not part of the check."
+  },
+  "expected": "The branch answer is listed once at every read.",
+  "verdict": [
+    "PASS: the branch answer was listed once at every one of the 94 reads while the next answer was written (never twice).",
+    "PASS (look at the older row): the older branch row opens and has its thinking line."
+  ],
+  "side_effect": "Three questions went into the test chat (the first, the choice-button branch answer, and the shop question). Also one question earlier in check 3's attempt (see that file)."
+}

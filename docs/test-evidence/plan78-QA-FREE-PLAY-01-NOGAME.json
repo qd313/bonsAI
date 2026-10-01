@@ -1,0 +1,26 @@
+{
+  "row": "QA-FREE-PLAY-01 (no game half)",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 09:58-10:01 EDT (Deck clock, approximate)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5; panel scroll area y=88 to y=454. No game running. No monitor.",
+  "setup": "Strategy mode, no game, test chat. The runbook says 'on the long answer from check 1'; that answer is now in the history list (only the newest turn is drawn open), so a fresh Strategy answer of the same kind was asked: 'walk me through handling the Soul Sanctum boss in Hollow Knight, with a few separate steps'. It has 5 sections (90, 71, 171, 71, 72 px tall), 2 spoiler covers, 2 choice buttons (A. Starting out in Dirtmouth, B. Facing the boss in the Soul Sanctum), and the 'chat summed itself up' note. About 1,250 letters. No section is taller than the visible space (366 px), so no press only scrolls.",
+  "pressed": "deck_sweep from the Ask button: UP one press at a time to the top of the panel (22 presses, ended by a stall at the bonsAI header button), then DOWN back to Ask (23 presses). Directions only. Run file: runs/plan78-QA-FREE-PLAY-01-NOGAME-sweep.json. The walk was saved as a check: checks/plan78-QA-FREE-PLAY-01-NOGAME.json.",
+  "seen": {
+    "up_leg_stops": "18 stops: question box, chip, Show details, Helpful, choice B, choice A, summed-up note, last section (72 px), cover 2, section (171 px), cover 1, section (90 px), reasoning, question row, Retry icon, '48 earlier' pill, chat slot row, Main tab strip, bonsAI header button (19 listed with the start).",
+    "down_leg_stops": "19 stops back, the same list reversed.",
+    "visible_percent_at_every_stop": "100 at every stop except 4 reads at 89 (2 distinct controls, each read twice): the question row (covered at its corner by the Retry icon) and the last section (covered at its corner by the Copy icon). These are the two known false alarms.",
+    "known_false_alarms_judged_by_text_line_boxes": {
+      "question_row_vs_Retry_icon": "the title's line boxes (x 157-331) do not overlap the Retry icon (x 133-153): text clear.",
+      "last_section_vs_Copy_icon": "the last text line's box runs x 71-299, y -28 to -13 (page coordinates at the time) and the Copy icon box is x 292-312, y -16 to 4: they overlap by 7 px across and 3 px down. The last word of the last line ends 7 px inside the icon's left edge, only in the bottom 3 px of that line. Not 'words stay clear' by line box; probably clear by glyph height. Depends on how long the last line is."
+    },
+    "duplicate_stops": "none: no stop twice in a leg",
+    "dead_presses": "none: every press that was not the final end-of-list press moved the ring; the 4 closing presses of each leg are the stall that ends a sweep. 3 presses needed a retry because the serial port was busy (no effect on the Deck).",
+    "scroll_positions": "scrollTop at the stops on the way down: 0, 0, 0, 166 (box 90 px), 166 (cover 1), 321 (box 171 px), 416 (cover 2), 465 (last section), 606 (note), 606 (choice A), 724 (choice B), 756 (Helpful), 756 (Show details), 756 (chip), 756 (box), 756 (Ask)."
+  },
+  "expected": "No stop twice, no dead press, every stop visible (the two known false alarms judged by the text's own line boxes).",
+  "verdict": [
+    "PASS: no stop twice, no dead press, 100% visible at every stop except the two known false alarms.",
+    "UNCLEAR (last section vs Copy icon): by line box the last line of this answer overlaps the Copy icon by 7 x 3 px. The owner decides whether that counts as 'clear'; the earlier rule says compare line boxes."
+  ],
+  "side_effect": "One more question went into the test chat. The Quick Access page was left on the Main tab with the newest answer drawn."
+}

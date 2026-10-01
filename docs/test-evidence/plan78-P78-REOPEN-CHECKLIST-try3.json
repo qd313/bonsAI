@@ -1,0 +1,21 @@
+{
+  "row": "P78-REOPEN-CHECKLIST",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 10:02-10:10 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5 (Context line names the game). Steam Home was in front of the running game after the plugin reload (screenshot at 10:04: the Home screen with the Deep Rock Galactic tile), not the game itself.",
+  "setup": "Deep Rock Galactic: Survivor launched by the rig from Recent Games (it was the first tile), plugin reloaded, panel opened (Context: active game Deep Rock Galactic: Survivor). Strategy mode, test chat 6f3cc055, name seen open before each question. The settings file was unchanged.",
+  "pressed": "Try 1: 'what should I focus on in my next few runs of this game' (send script VERIFIED, walk to Ask, read focus, A). Answer showed choice buttons A and B. Walked to choice A 'A. Just starting out and learning the ropes' (read focus), A, then the close chord at once. Waited for the answer (log: stream done at 10:05:21). Reopened with the chord. Try 2: 'help me plan my upgrades in this game' (same way), choice A 'A. Focusing on a specific weapon to carry the run' (read focus), A, close chord at once, waited (log 10:08:18), reopened with the chord. Then on that newest answer: walked to 'Not really' (read focus on 'Mark reply not helpful' via Helpful then Right), A (the reason chips appeared), walked to 'Spoiled it' then Right to 'Too long' (read focus), A (it filled the question box with 'Give a shorter answer - key points only, minimal preamble. Original question: [Strategy follow-up] ...'), walked to Ask (read focus), A.",
+  "seen": {
+    "try_1": "plugin log for the follow-up: 'strategy fences branch_marker=False branch_parsed=False branch_options=0 checklist_marker=False checklist_parsed=False'. After the reopen no checklist was drawn under the answer (page search for any element with 'checklist' in its class: none). The saved turn in the chat file (turn 102, assistant) holds no checklist (the word is not in the turn).",
+    "try_2": "log: 'checklist_marker=False checklist_parsed=False' again (branch_marker=False). After the reopen no checklist drawn. The saved turns (the last four in the chat file) hold no checklist.",
+    "follow_up_after_too_long": "log lines for the follow-up ask at 10:09:28: 'kb: question chose domain=strategy route=app_id:2321470 ... attached=3 [Deep Rock Galactic: Survivor - Upgrades and overclocks; ... Nitra; ... Mining and the run timer]' and 'ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)'. The log has no key literally named 'ask_mode'; 'mode=strategy' is the wording of this build's line. The answer came back with a branch menu (2 options).",
+    "reopen_state": "After each reopen: panel open on the Main tab, window height 454, the newest turn drawn, 6 elements with a class containing 'gpfocus' (the ring was drawn); no checklist.",
+    "other": "Before the first question, a suggestion chip above the question box read 'Tips for Hollow Bough in this game?' while Deep Rock Galactic was the running game ('Hollow Bough' is a Hollow Knight note). Not part of the pass rule; seen once, not investigated."
+  },
+  "expected": "The saved turn holds a checklist AND it is drawn under the answer after the reopen; the follow-up's log line says ask_mode: strategy.",
+  "verdict": [
+    "UNCLEAR (checklist survives the reopen): the AI wrote no checklist on either try (the runbook's two tries: 'what should I focus on in my next few runs of this game' and 'help me plan my upgrades in this game', each with its first choice button). The saved turns hold none, so the reopen part proves nothing.",
+    "PASS (follow-up mode): the follow-up from the 'Too long' chip, sent from the Ask button, ran in strategy mode: 'ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)'."
+  ],
+  "side_effect": "Five questions went into the test chat (two first questions, two choice-button follow-ups, one 'Too long' follow-up) and the 'Not really' button was pressed on the newest answer, so that answer is marked 'not helpful' with the reason chips shown (no reason chip was pressed; 'Too long' filled the question box and the follow-up was sent from Ask). The game is still running."
+}

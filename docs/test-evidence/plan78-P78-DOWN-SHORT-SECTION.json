@@ -1,0 +1,58 @@
+{
+  "row": "P78-DOWN-SHORT-SECTION",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 09:35-09:41 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5; panel scroll area runs from y=88 to y=454 (366 high). No game running. No monitor.",
+  "setup": "Strategy mode, no game, test chat 6f3cc055 (name read open before each question). The chat holds a 'The chat summed itself up before this answer' note, so walk 1's answer has one extra stop (the note) that the runbook's expected shape does not list. Method: a page-side logger (deck/ringrec style, 100 ms poll, logs a state once it has held 350 ms) recorded the ring's element, top, bottom and the panel scrollTop after every press; deck_runSequence sent the presses (one press at a time, ring read after each).",
+  "pressed": "Walk 1: question 'what is the best way to beat the boss in the Soul Sanctum in Hollow Knight' (send script VERIFIED, walk to Ask, read focus, A). Walked Up to its question row, then Down x10 to Helpful, Up x10 to the question row, Down x10 again with the logger. Walk 2: 'in two short paragraphs and then one single closing sentence, how should I prepare for the Mantis Lords in Hollow Knight' (same way). Down x10 from the top to Helpful x2 more, Up x8 back to the Retry icon. The walk 2 Down list was saved as a check (checks/plan78-P78-DOWN-SHORT-SECTION.json).",
+  "seen": {
+    "cause_read": "Walk 1 answer: answer box (bonsai-chat-ai-bubble) bottom 8 minus last section bottom -1 = 9 px (rounded values). Walk 2 answer: 8.67 px (unrounded). Matches 9 px (8 px padding + 1 px border) within rounding.",
+    "walk_1_answer": "Soul Sanctum answer: 4 sections (box 1 holding cover 1 + paragraph 131 px, box 2 105 px, cover 2 55 px inside a 71 px section, last box 75 px), 2 covers, 2 choice buttons (A, B), the 'chat summed itself up' note between the last section and the choices. Sections: none taller than the visible space (366 px).",
+    "walk_1_down_list_press_by_press": [
+      "start: question row (189-218)",
+      "1 reasoning line (234-249, scrollTop 0)",
+      "2 cover 1 (204-260, scrollTop 69)",
+      "3 box 1 (159-290, 131 px, scrollTop 107)",
+      "4 box 2 (186-291, 105 px, scrollTop 211)",
+      "5 cover 2 (204-259, scrollTop 306)",
+      "6 last box (216-291, 75 px, scrollTop 357)",
+      "7 summed-up note (172-204, scrollTop 499)",
+      "8 choice A (250-282, scrollTop 499)",
+      "9 choice B (172-204, scrollTop 617)",
+      "10 Helpful (229-261, scrollTop 649)"
+    ],
+    "walk_1_up_list_press_by_press": [
+      "start Helpful (229-261, 649)",
+      "1 choice B (172-204, 617)", "2 choice A (204-236, 545)", "3 summed-up note (172-204, 499)", "4 last box (210-285, 75 px, 363)", "5 cover 2 (204-259, 306)", "6 box 2 (186-291, 211)", "7 box 1 (159-290, 107)", "8 cover 1 (167-222, 107)", "9 reasoning (204-219, 30)", "10 question row (189-218, 0)"
+    ],
+    "walk_1_summary": "10 Down presses = 10 different stops, 10 Up presses = 10 different stops, Up list is the Down list reversed, each box once, no dead press, no repeated landing. The last section (75 px) was landed on once; the next Down went to the summed-up note, then to choice A. No 80 px 'same box again' press happened because no section was taller than the visible space.",
+    "walk_2_answer": "Mantis Lords answer: 2 sections, 180 px and 195 px tall (both taller than 100 px), 0 covers, 3 choice buttons (A, B, C). It did NOT end in a short paragraph (the AI ignored the 'one closing sentence' ask), so the short-last-section case was not produced.",
+    "walk_2_down_list_press_by_press": [
+      "start: bonsAI header button (20-48)",
+      "1 Main tab strip (64-84)", "2 chat slot row (88-136)", "3 '38 earlier' pill (146-168)",
+      "4 Retry icon of the newest question (215-235, scrollTop 0)",
+      "5 question row (189-232)",
+      "6 reasoning line (249-263, 0)",
+      "7 section 1 (24-204, 180 px, scrollTop 256) 67% visible by the rig's read",
+      "8 section 2 (95-290, 195 px, 365)",
+      "9 choice A (172-204, 563)", "10 choice B (212-260, 563)", "11 choice C (156-204, 675)", "12 Helpful (172-204, 765)"
+    ],
+    "walk_2_up_list_press_by_press": [
+      "start Helpful", "1 choice C (156-204, 675)", "2 choice B (204-252, 571)", "3 choice A (172-204, 563)", "4 section 2 (95-290, 365)", "5 section 1 (97-277, scrollTop 183) 100% visible", "6 reasoning (204-219, 45)", "7 question row (189-232, 0)", "8 Retry icon (215-235, 0)"
+    ],
+    "walk_2_summary": "Every press landed on a new stop, both ways; the Up list is the Down list reversed; the last section (195 px) was landed on once and the next Down went to choice A. Sections 180 and 195 px are shorter than the visible space, so no press only scrolled.",
+    "extra_observations": [
+      "Going Up from the reasoning line, walk 1 reached the question row text and walk 2 reached the question row text and then the Retry icon one press further: the Retry icon is its own stop above the question row in both walks (not a wasted press, a different control).",
+      "SECTION 1 ENTERED FROM ABOVE IN WALK 2: pressing Down from the reasoning line put the ring on section 1 with its top at y=24 and bottom at y=204 (180 px) at scrollTop 256, while the panel's scroll area starts at y=88. The rig read it as 67% visible (6 of 9 points), covered by a 'div.Panel.Focusable' (the part above the panel top). Entered from below (Up walk) the same section sat at y=97-277, 100% visible. 180 px is shorter than the 366 px visible space, so by the runbook's own rule the whole section should be in view. Repeated on the saved check run (67% again). Possible new bug: a short section lands with its top 64 px above the panel's top when entered from above.",
+      "Known false alarms seen and ignored: question row 89% (Retry icon) and last section 89% (Copy icon), judged by the rig as partly covered."
+    ]
+  },
+  "expected": "No press leaves the ring where it was, except a press inside a section taller than the visible space; the last section is landed on once and the next Down goes to the choices or Helpful; the Up list is the Down list reversed (each box once). Cause read: box bottom minus last section bottom is 9 px.",
+  "verdict": [
+    "PASS (walk 1, Soul Sanctum): 10 of 10 presses landed on a new stop both ways, last section once, Up reversed Down; cause read 9 px.",
+    "PASS (walk 2, Mantis Lords, no wasted press): 12 Down presses and 8 Up presses all landed on new stops; Up reversed Down; cause read 8.67 px.",
+    "UNCLEAR (short-last-section case): neither answer ended in a section under 100 px (walk 1 last section 75 px, which is under 100 px, but it follows the runbook's own 'no wasted press' result and shows no sign of the old extra press; walk 2 ended in 195 px). Walk 1's 75 px last section was landed on once and the next Down went on, so the case is in fact covered by walk 1; the owner may count it as PASS.",
+    "UNCLEAR (new observation, not part of the pass rule): section 1 of walk 2 lands 67% visible when entered from above."
+  ],
+  "side_effect": "Two questions went into the test chat (turn label 36 earlier before, 38 after). Nothing else changed. A debug logger (window.__ring) was left installed in the Quick Access page until the next reload."
+}

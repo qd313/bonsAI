@@ -1,0 +1,43 @@
+{
+  "row": "P78-RING-REOPEN-READ2",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 10:10-10:15 EDT (Deck clock)",
+  "screen": "Deck's own screen, 1280x800 capture. Quick Access page window width 854 css px; height 534 when the status strip is in the page, 454 when it is not.",
+  "setup": "Deep Rock Galactic: Survivor running (launched by the rig at 10:02, showing its 'PRESS ANY KEY TO CONTINUE' title screen, never given a key). The plugin was reloaded once after the launch (for check 8); the runbook's reload for the 'Home in front' half is part of this check. No other reload. Each read below is one page read taken right after the open chord returned: the chord call takes about a second on this rig, then the read takes about 0.1 s, so 'at 1 second' is within about 1 s either way (not clocked exactly). Each close-then-open gap was a 10 s wait.",
+  "pressed": "Game in front: the plugin was open; closed with the chord; GUIDE button; walked Up to the game's entry (read focus: 'Deep Rock Galactic: Survivor'); A; screenshot showed the game's title screen full screen. Then 4 times: open chord, read at once, (screenshot on the first and fourth), close chord, wait 10 s. Home in front: reload plugin; waited about 12 s; checkReady; the screen was the Steam screensaver, one left-stick click (L3) woke it to Steam's Home with the Deep Rock Galactic tile; open chord opened Quick Settings (Steam's own first tab); deck_openPlugin put the panel on bonsAI (the runbook expects Quick Access to open on bonsAI; after a reload it opens on Steam's Quick Settings and the plugin has to be opened once); then 4 close-wait-open reopens. Part 2: game back in front the same way, reopen, read, snippet, DOWN, read focus. Part 3: as written below.",
+  "seen": {
+    "part_1_table": [
+      {"n": 1, "screen_behind": "game (title screen), screenshot 10:11:12", "gpfocus_elements": 0, "element_with_gpfocus_itself": "none", "window_height": 534, "status_strip_at_top_of_page": "yes (clock '10:11 AM' at y=0, 96x40)", "tab_bar_Focusable": false, "hasFocus": true},
+      {"n": 2, "screen_behind": "game", "gpfocus_elements": 0, "element_with_gpfocus_itself": "none", "window_height": 534, "status_strip_at_top_of_page": "yes", "tab_bar_Focusable": false, "hasFocus": true},
+      {"n": 3, "screen_behind": "game", "gpfocus_elements": 0, "element_with_gpfocus_itself": "none", "window_height": 534, "status_strip_at_top_of_page": "yes", "tab_bar_Focusable": false, "hasFocus": true},
+      {"n": 4, "screen_behind": "game, screenshot 10:12:08", "gpfocus_elements": 0, "element_with_gpfocus_itself": "none", "window_height": 534, "status_strip_at_top_of_page": "yes (clock '10:12 AM')", "tab_bar_Focusable": false, "hasFocus": true},
+      {"n": 5, "screen_behind": "Steam Home (blurred; screenshot 10:12:55 shows the Quick Settings pane over a blurred Home, and 10:14:10 shows the bonsAI panel over a blurred Home)", "gpfocus_elements": 6, "element_with_gpfocus_itself": "div.bonsai-tab-bar (aria-label 'Main tab', x48 y64 300x20)", "window_height": 454, "status_strip_at_top_of_page": "no (no clock element in the page)", "tab_bar_Focusable": true, "hasFocus": true},
+      {"n": 6, "screen_behind": "Home", "gpfocus_elements": 6, "element_with_gpfocus_itself": "div.bonsai-tab-bar", "window_height": 454, "status_strip_at_top_of_page": "no", "tab_bar_Focusable": true, "hasFocus": true},
+      {"n": 7, "screen_behind": "Home", "gpfocus_elements": 6, "element_with_gpfocus_itself": "div.bonsai-tab-bar", "window_height": 454, "status_strip_at_top_of_page": "no", "tab_bar_Focusable": true, "hasFocus": true},
+      {"n": 8, "screen_behind": "Home", "gpfocus_elements": 6, "element_with_gpfocus_itself": "div.bonsai-tab-bar", "window_height": 454, "status_strip_at_top_of_page": "no", "tab_bar_Focusable": true, "hasFocus": true}
+    ],
+    "part_1_summary": "Game in front: 4 of 4 reopens had no ring (0 gpfocus elements), the page was 534 high with Steam's battery and clock strip in it, and the bonsai tab bar did not carry Focusable. Home in front: 4 of 4 reopens had the ring on the tab bar (6 gpfocus elements: the tab bar with gpfocus itself plus 5 ancestors), the page was 454 high with no status strip, and the tab bar carried Focusable. document.hasFocus() was true in every one of the 8 reads.",
+    "part_1_note_on_Home_state": "The first 'Home in front' look at the screen right after the reload showed Steam's screensaver (a fake Windows blue screen with error boxes) over everything, although the keep-awake lock was held; one left-stick click removed it and showed Steam Home. The first open chord after that reload opened Steam's own Quick Settings tab, not bonsAI.",
+    "part_2": {
+      "state_at_reopen": "game in front, reopen: 0 gpfocus elements, height 534, status strip present, tab bar not Focusable (the broken state came on the first try)",
+      "snippet_result": {
+        "tab_bar_found": true,
+        "react_fiber_key": "__reactFiber$ktznu9p",
+        "steps_up_to_the_fiber_with_navRef_TakeFocus": 3,
+        "TakeFocus_true_returned": "true (a plain boolean, not a promise)",
+        "after_0_5_s": {"gpfocus_elements": 0, "element_with_gpfocus_itself": "none", "tab_bar_Focusable": false, "tab_bar_class": "bonsai-tab-bar bonsai-tab-bar--open Panel"}
+      },
+      "then_DOWN_once": "the ring appeared on the chat slot row ('bonsai-chat-slot-row-focus', x48 y128 300x48): the first D-pad press placed the ring, as before (read focus afterwards: that element, 100% visible)."
+    },
+    "part_3": "With the game in front I walked from the panel to Steam's own Quick Settings tab on the left rail (read focus: 'Quick Settings', id quickaccess_tab_4, with the ring on it), closed with the chord, waited 10 s, reopened with the chord, read at once: 0 gpfocus elements anywhere in the page, height 534; the screenshot at 10:15:19 shows Steam's Quick Settings pane (brightness, audio, Rearrange controller order) over the game with no highlight drawn on the rail or the pane. So no ring either on Steam's own tab in the same state. Then deck_openPlugin returned the panel to bonsAI (ring on the bonsAI header button).",
+    "other": "While walking the panel with the game in front the QAM page is 534 tall and the panel's first stop sat 36-40 px lower than on Home (e.g. chat slot row at y=128 vs 88)."
+  },
+  "expected": "A measurement, no pass or fail: the 8-row table of part 1, every value from part 2, part 3's answer.",
+  "verdict": [
+    "UNCLEAR: measurement only, no pass or fail asked.",
+    "PART 1 (which screen decides it): the screen behind decided it in this run. Game in front: 0 of 4 had a ring, page 534 high with the status strip, tab bar not Focusable. Home in front (after a reload): 4 of 4 had the ring, page 454 high, no strip, tab bar Focusable. This morning's 'reopened over a game with no reload: no ring; after a reload: ring' fits the same two states.",
+    "PART 2: TakeFocus(true) returned true but drew no ring: 0 gpfocus elements 0.5 s later and the tab bar still not Focusable. Steam's own focus transfer did not repair the broken state from the page. One DOWN press then placed the ring on the chat row.",
+    "PART 3: no ring on Steam's own Quick Settings tab either, in the game-in-front state (0 gpfocus elements)."
+  ],
+  "side_effect": "One left-stick click (L3) was sent with Steam Home or the screensaver on screen to wake it (no effect on the game, which stayed at its title screen). The game is still running. The settings file was not touched. A reload of the plugin happened once during this check (as the runbook says)."
+}

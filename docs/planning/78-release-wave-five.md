@@ -418,6 +418,14 @@ New ones go here, with the choice taken in the meantime.
 8. **A retry of a spoken question is not read aloud.** With Voice replies on "When I asked by voice", tonight's fix
    makes a spoken question's answer read itself. A retry of that question counts as typed and stays silent.
    **Meanwhile:** left silent, the quiet side. **Your call:** whether a retry should be read too.
+9. **The Strategy checklist after a reopen cannot be shown on the Deck by the rig.** In four tries over two blocks the
+   AI never wrote a checklist. **Meanwhile:** the fix rests on its unit tests, and the follow-up's mode did pass on the
+   Deck. **Your call:** accept it on its tests, or try it by hand (Strategy mode with a game running, press a choice
+   button, close the panel at once, reopen: if the answer came with a checklist, it should be there).
+10. **No highlight ring after reopening over a running game is Steam's own behaviour.** Steam's own tabs do the same,
+   and bonsAI cannot draw the ring from its side; the first D-pad press brings it. **Meanwhile:** closed as not a bonsAI
+   bug. **Your call:** whether the release notes should carry a line such as "Over a running game, the highlight
+   appears after the first D-pad press."
 
 ## At the end
 
@@ -536,6 +544,7 @@ The full results, the code summary and the report replace this section when the 
   half-downloaded model files is gone (the models folder is 4.3 GB). Evidence
   `docs/test-evidence/plan78-BLOCK0-SETUP.json`.
 - **1 October, 8 am to 9:30 am (first Deck block, build `57586da0`):** the controller board was connected about 8 am and the Deck block ran. Passed: the spoiler fix (Hollow Knight questions with Deep Rock running came back with 2, 1 and 1 covers), the chips (9.5 a minute with one chip, 11.2 with two, the game's own chips 54 in 100), and the walk-through sweep with a game running. Unclear: the checklist after a reopen. The check's route was wrong, because a checklist only comes on the turn after a choice button; the route is corrected. Measured, no pass or fail: the frame rate of long answers (77 for short and 71 for very long with the scramble effect on; 88 and 87 with it off), and the missing ring after a reopen (6 of 6; the helper who read the code found no cause in the plugin and asked for two more reads on the Deck). The long-answers fix has landed (`1fe0787a`) and waits for its after number. The second Deck block started about 9:30 am on build `1fe0787a`.
+- **1 October, 9:35 am to 10:25 am (second Deck block, build `1fe0787a`):** passed: the extra Down press is gone (10 presses landed on 10 different stops, and the walk-through sweep with no game running passed too), a setting changed just before closing is saved (5 of 5), the branch answer is listed once, the summary no longer names a non-game on its Game line (only part of that check could run: the Sum up button was greyed out), and the borrowed-wording fix passed (the follow-up's answer about the Hades fight was generic, a known open item). The long-answers fix stays: with the scramble effect on, about 76 to 80 frames a second past 2,000 letters, where it was 71. The missing ring after a reopen is Steam's own behaviour (its own tabs do the same over a running game), so that bug is closed. Not proven: the checklist after a reopen (the AI never wrote one in four tries; questions 9 and 10 are new) and the model download check (the driver did not start a 1 GB download without a plainer yes). The borrowed-wording fix's third round landed (`c8d6b094`): fourteen bugs fixed in all. A new landing fault was found (Down from the reasoning line can land the first section with its top above the panel) and went back to the Down-press helper. The third Deck block started about 10:35 am on build `c8d6b094`.
 
 ## For the helpers: who owns which files
 

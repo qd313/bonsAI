@@ -1,0 +1,57 @@
+{
+  "row": "P78-SUMUP-WORDING",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 09:36-10:16 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. No game running for the first card; the second card was written at 09:58 EDT, also with no game running.",
+  "setup": "Only ONE test chat exists on the Deck: 6f3cc055 (the 93f61878 test chat is gone; the other chats on the Deck are the maintainer's: 351b2838 'what is a good way to practice parrying...', d2aa6252 'wheatley fight', and five short ones). So the check could only run on 6f3cc055, as the runbook allows. Its origin game is empty (it was not opened in a game). It names Hollow Knight, Hades, Deep Rock Galactic: Survivor and Half-Life 2 in different questions.",
+  "pressed": "Opened Show details on the newest answer (read focus, A), RIGHT to the Session tab, walked to 'Sum up again' (read focus). The button was greyed (class bonsai-sumup-btn--off) with the line 'This chat is already summed up. Ask more, then you can sum up again.' I pressed A on it once (a real try): nothing happened. I then asked one more question ('how do I clean my steam deck screen safely') and looked again: still greyed. After about ten more questions (block checks 4 and 5) it was still greyed. In the code (chat_can_sum_up -> plan_summary) the button is only live when the chat no longer fits in the AI's memory allowance; the chat wrote its own summary on its own at 09:36 and again at 09:58 (the card says 'The chat summed itself up before this answer'), so a manual press was not possible. The cards below are those automatic ones, read from the Session tab and the chat file.",
+  "seen": {
+    "card_1_written_09_36_EDT_32_turns": [
+      "Games: Deep Rock Galactic: Survivor, Hollow Knight, Hades, Half-Life 2",
+      "Player asked for tips on Soul Sanctum boss fights in Hollow Knight.",
+      "Player asked for tips on beating Megaera in Hades.",
+      "Player asked what FSR does on the Steam Deck.",
+      "Player asked for explanations of every class in Deep Rock Galactic.",
+      "Player asked how to dodge enemy projectiles.",
+      "Player asked how to warm up before a long gaming session.",
+      "Player asked for a complete walkthrough of every chapter of half life 2.",
+      "Player asked for a full guide to every boss area in hollow knight.",
+      "Player asked for a guide on beating Hornet in Hollow Knight.",
+      "Player asked for a guide on beating the False Knight in Hollow Knight.",
+      "Player asked for a guide on beating the Mantis Lords in Hollow Knight.",
+      "Player asked for the best first upgrade in Deep Rock Galactic Survivor.",
+      "Player asked for a detailed step-by-step guide for Deep Rock Galactic Survivor.",
+      "Player asked for a beginner to expert walkthrough of Deep Rock Galactic Survivor.",
+      "Player asked what to spend first in Deep Rock Galactic Survivor.",
+      "Player asked for an explanation of how to progress through Deep Rock Galactic Survivor.",
+      "Player asked how to get past the Soul Sanctum fight in Hollow Knight.",
+      "Player asked about dodging enemy projectiles.",
+      "Player asked about Soul Master boss fight timing.",
+      "Player asked for a checklist for first three runs of Deep Rock Galactic: Survivor.",
+      "Player asked about weapon upgrade checklists."
+    ],
+    "card_1_footer": "Plus the newest 7 turns, word for word - 15 hidden notes left out",
+    "card_2_written_09_58_EDT_80_turns": [
+      "Games: Deep Rock Galactic: Survivor, Hollow Knight, Hades, Half-Life 2",
+      "Done: Provided extensive guides for DRG: Survivor (step-by-step, class/weapon explanations, upgrades) and various Hollow Knight boss fights (Soul Sanctum, Mantis Lords, Hornet, False Knight). Also gave advice on dodging projectiles and screen cleaning on Steam Deck.",
+      "Stuck on: No specific current sticking point mentioned, but previous requests covered many guides.",
+      "Asked for: Detailed walkthroughs for DRG: Survivor, boss fight tips for Hollow Knight, FSR on Steam Deck, and explanations of DRG classes."
+    ],
+    "card_2_subject": "game_key appid:2321470, subject 'Nitra' (the chat's subject changed from 'Mantis Lords' with the Deep Rock Galactic launch)",
+    "checks_against_the_rule": {
+      "game_line_names_a_non_game": "no: every name on the 'Games:' line of both cards is a game",
+      "chat_with_no_game_has_no_game_line": "not testable as worded: the chat names four games in its questions, and both cards carry a 'Games:' line (plural) listing them; the chat has no opening game of its own",
+      "chat_opened_in_a_game_shows_that_game_first": "COULD NOT RUN: there is no test chat that was opened in a game (and I may not press Sum up on the maintainer's chats). Deep Rock Galactic: Survivor happens to be first in the list, but this chat was not opened in it.",
+      "no_line_that_says_nothing": "card 1: none. Card 2: 'Stuck on: No specific current sticking point mentioned, but previous requests covered many guides.' is a line whose main content is 'nothing mentioned' (the same kind as 'None apparent'), padded with a clause that is not an answer to 'stuck on'."
+    }
+  },
+  "expected": "No 'Game:' line naming something that is not a game; a chat with no game has no Game line; a chat opened in a game shows that game first; no line whose whole content says nothing.",
+  "verdict": [
+    "PASS: no 'Games:' line names something that is not a game (cards 1 and 2).",
+    "COULD NOT RUN: 'a chat opened in a game shows that game first': no such test chat exists.",
+    "UNCLEAR: 'a chat with no game has no Game line': this test chat has no opening game but names four in its questions and has a 'Games:' line; the owner decides whether that line is right.",
+    "UNCLEAR (leaning FAIL): card 2's 'Stuck on: No specific current sticking point mentioned, ...' is a nothing line.",
+    "COULD NOT RUN: pressing 'Sum up this chat' myself: the button was greyed out ('This chat is already summed up') on every look; one real press did nothing."
+  ],
+  "side_effect": "One question went into the test chat to try to unblock the button ('how do I clean my steam deck screen safely'); its answer drew Hollow Knight source notes ('Hollow Knight - Boss note (spoiler)') for a Steam Deck screen question, because the chat's subject was Hollow Knight (possible new bug: unrelated question pulls the chat's game notes)."
+}

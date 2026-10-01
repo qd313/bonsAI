@@ -1,0 +1,33 @@
+{
+  "row": "P78-SETTING-QUICK-CLOSE",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 09:41-09:44 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. No game running. No monitor.",
+  "setup": {
+    "before_copy": "deck/p78-quickclose-before.json (identical to the start-of-block copy)",
+    "setting_used": "Settings tab, 'Show one chip instead of two' (key preset_single_chip). The runbook's first choice, 'Show on-screen debug HUD', is not on the Settings tab (no 'HUD' text on the tab), so the one-chip setting was used as the runbook says. Found true.",
+    "popup_control": "Settings tab, AI voice & personality, 'Accent intensity' menu (key ai_character_accent_intensity). Found 'heavy' (shown as 'Strong')."
+  },
+  "pressed": "Five times: reopen the panel, walk Down to the toggle one press at a time (read focus: 'Show one chip instead of two', visible 100%), press A, then press the Quick Access chord (GUIDE hold, A tap). Then once through a popup: walk to 'Accent intensity: Strong', read focus, A (menu opened, ring on 'Light', read), A on 'Light' (menu closed, screen rebuilt, ring on 'Accent intensity: Light', read), then the close chord at once.",
+  "seen": {
+    "timing_deviation": "The A press and the close chord were sent as two tool calls in one batch, back to back. The rig's chord tool is a separate call from the single-button press, and a sequence cannot hold a chord, so the gap could not be held to 300 ms and was not measured (the bridge acks the A press with a clock value but gives none for the chord). Each A-then-chord pair went out in the same message. The result still shows the settings write beat the close each time.",
+    "five_toggles": [
+      {"n": 1, "file_value_3s_after": "false (was true)", "flipped": true},
+      {"n": 2, "file_value_3s_after": "true", "flipped": true},
+      {"n": 3, "file_value_3s_after": "false", "flipped": true},
+      {"n": 4, "file_value_3s_after": "true", "flipped": true},
+      {"n": 5, "file_value_3s_after": "false", "flipped": true}
+    ],
+    "diff_after_5": "only preset_single_chip (false vs true) differs from the copy (plus the file's trailing newline).",
+    "popup_trial": "ai_character_accent_intensity went heavy -> subtle in the file by 3 s after the close chord. Diff against the copy then showed exactly two keys: ai_character_accent_intensity (subtle vs heavy) and preset_single_chip (false vs true).",
+    "put_back": "Accent set back to 'Strong' by its own menu (read focus on the 'Strong' item first, then A); file read heavy. Toggle set back to on (read focus first, then A); file read true. Final file diff against deck/p78-quickclose-before.json: identical.",
+    "other": "One deck_openPlugin after the 3rd trial failed with a COM7 serial-port error on this PC (bridge busy) and worked on the next call; nothing was pressed by the failed call."
+  },
+  "expected": "The file holds the new value 5 of 5; a diff against the copy shows only the keys changed; the popup change also lands.",
+  "verdict": [
+    "PASS: 5 of 5 toggles were in the file 3 s after A + close chord; the diff showed only the changed key.",
+    "PASS: the popup change (accent intensity, closed popup then closed Quick Access at once) was in the file; the diff showed only the two keys changed.",
+    "UNCLEAR (timing): the gap between A and the close chord was not held to 300 ms and was not measured; it was probably about one tool-call round trip. A faster gap could behave differently."
+  ],
+  "side_effect": "Settings were changed and put back as listed; final file identical to the copy. The chip row switched to two chips and back during the check. The plugin was never reloaded."
+}

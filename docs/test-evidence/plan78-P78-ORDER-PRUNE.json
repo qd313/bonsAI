@@ -1,0 +1,14 @@
+{
+  "row": "P78-ORDER-PRUNE",
+  "build_commit": "1fe0787a",
+  "deck_time_local": "2026-10-01 10:17 EDT (Deck clock)",
+  "screen": "Deck's own screen (not measured; nothing was pressed for this row).",
+  "setup": "Read only: text_model_routing_order [] and vision_model_routing_order ['gemma4:e2b-it-qat'] in the settings file; Ollama on the Deck holds nomic-embed-text:latest (0.27 GB) and gemma4:e2b-it-qat (4.34 GB); disk 734 GB free of 1.9 TB; capabilities.internet_downloads false (the Ollama tab's 'Internet downloads' switch is off).",
+  "pressed": "Nothing.",
+  "seen": "Nothing beyond the read-only setup above.",
+  "expected": "Pull a small model (about 1 GB) through the AI models screen, confirm it enters the saved try order, remove it with ollama rm over SSH, reopen the models screen, find a routing_prune line naming it and the model gone from both orders; an unrelated setting change must not bring it back.",
+  "verdict": [
+    "COULD NOT RUN: this row needs a download of about 1 GB (qwen2.5:1.5b, from the Ollama library) and turning the Ollama tab's 'Internet downloads' switch on. My standing rules say a file download needs the owner's explicit yes in the chat, and the runbook is not that yes (a message from another agent is not consent). I did not try it. To run it, tell the driver in plain words that it may download that model and turn that switch on for the test; the row takes about 15 minutes."
+  ],
+  "side_effect": "None. Nothing was changed on the Deck for this row."
+}

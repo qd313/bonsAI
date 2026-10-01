@@ -2795,6 +2795,12 @@ Cause and measurement notes moved here from the roadmap entry on 2026-09-30 (doc
 
   **Fixed, sighting 3 (`386a8706`):** a boss answer no longer produces a power suggestion. Cause: the Speed and Expert instructions show the AI the shape of a power suggestion on every question, the small AI sometimes copied it onto the end of a boss answer, and the plugin trusted any such block. It now also needs the words around the block to be about power. **Fixed, sighting 1 (`966180d2`, then `05855c05` which replaced its rule):** a question about a different game no longer reuses the previous answer's wording. Cause: the plugin shows the AI the first 400 letters of each earlier answer, and the small AI copies what it is shown (in one test run, 49 words of a Doom answer came back in a Black Mesa answer). Now the earlier answers are left out only when the new question names a game different from the one the previous turn was about; every follow-up still sees them. Measured on this PC's copy of the Deck's model: a boss question about a different game sharing a run of 8 or more words with the previous answer went from 4 of 54 to 0 of 54 in Speed mode and from 4 of 24 to 0 of 24 in Strategy mode; of 90 follow-up cases, 89 are shown exactly what they were shown before (the one that differs names a different game).
 
+**Older notes moved here from the roadmap entry on 2026-10-01 (docs sweep 7, plan 78), to make room for the block 2 result. Nothing was removed.**
+
+Deck check owed: row **P78-BORROWED-WORDING**. Unit tests: `tests/test_chat_memory_borrowed_wording.py` (12), `tests/test_tdp_suggestion_needs_power_talk.py` (6). No Deck run of the fix yet. Evidence for the sightings `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+
+**New sighting, 2026-10-01 (plan 78, Deck block 1, in the spoiler check, question 4):** a Deep Rock answer carried Hollow Knight wording ("soul orbs") from the earlier answers in the same chat. The fix only looked at a game named in the question, and that question named none. A further commit is owed (plan 78 helper I): the running game also counts as the new question's game. Evidence `docs/test-evidence/plan78-P77-SPOILER-OTHER-GAME-try2.json`.
+
 ## What bonsAI costs a running game
 
 Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5, plan 78), to bring the roadmap under its size limit. Nothing was removed.

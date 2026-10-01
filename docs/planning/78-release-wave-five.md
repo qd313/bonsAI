@@ -405,7 +405,16 @@ To be filled in.
 
 ## Log
 
-To be filled in after every landing and every Deck block.
+- **Start (2026-09-30, about 22:00, tip `c87ccb9a`):** the maintainer said Go. Before the helpers started, last
+  night's rules went into the helpers' standing instructions, the setup was written down as a runbook, and the
+  landing script was checked in (`ef6baaae`). Ten helpers then started, each in its own copy of the repo: A
+  (spoilers across games), C (a setting lost on a quick close), D (the extra Down press, on Opus extra-high), E
+  (a removed model in the try order), F (the chips: which comes next and how long each stays), H (the summary's
+  wording), I (answers borrowing wording), J (long answers slowing down), K (the moving preview of the chip pace)
+  and the checks list. Waiting for a free slot: G (the read-through) and the bookkeeper's first sweep. Waiting for
+  the Deck: B (the ring after reopening) and every Deck block. A timed check wakes the session every 20 minutes.
+- **The model:** a chat cannot change its own model, so this session runs on Fable until the maintainer picks Opus
+  high in the model menu. The session keeps its own part small meanwhile.
 
 ## For the helpers: who owns which files
 

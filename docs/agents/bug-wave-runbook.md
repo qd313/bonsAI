@@ -27,8 +27,10 @@ moves up one tier with the measurement in hand.
    maintainer's calls first; write them into the plan.
 2. `git status` and the tail of the decisions file, before picking a plan or decision number. Other sessions add
    both.
-3. Note the tip hash. Make each helper a copy: `python scripts/worktree.py create <name> --base <tip>`. The
-   copy's packages folder is a link to the shared one, so no helper installs anything. Never remove a copy with
+3. Note the tip hash. Make each helper a copy: `python scripts/worktree.py create <name> --base experimental`
+   (`--base` takes a branch name, not a commit; the copy's branch is `refactor/<name>`). Confirm each copy
+   starts at the tip you noted. The copy's packages folder is a link to the shared one, so no helper installs
+   anything. Never remove a copy with
    `git worktree remove`; it follows the link and empties the shared folder.
 4. Write one short rules file all helpers read, and one brief each. Every brief carries:
    - the tip hash and the check that the copy is based on it;

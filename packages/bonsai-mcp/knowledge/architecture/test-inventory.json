@@ -334,6 +334,7 @@
     "tests/test_game_ai_request_followup_memory.py",
     "tests/test_game_ai_request_kb_attached_notes.py",
     "tests/test_game_ai_request_spoiler_cover.py",
+    "tests/test_game_ai_request_story_game_named.py",
     "tests/test_growth_limit.py",
     "tests/test_input_sanitizer_service.py",
     "tests/test_intent_pack_service.py",

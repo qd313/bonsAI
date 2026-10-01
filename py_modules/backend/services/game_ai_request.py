@@ -156,7 +156,10 @@ from backend.services.kb_attached_notes import (
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.services.spoiler_risk_service import build_spoiler_risk_signals
-from backend.services.spoiler_title_profiles import resolve_turn_title_spoiler_profile
+from backend.services.spoiler_title_profiles import (
+    resolve_turn_title_spoiler_profile,
+    set_aside_running_game_for_named_story_game,
+)
 from backend.services.transparency_service import (
     build_capability_denied_snapshot,
     build_error_route_snapshot,
@@ -373,6 +376,22 @@ async def run_game_ai_request(
         # anything a person reads back as "the question" -- see question_for_display's own
         # parameter doc above for why.
         effective_display_question = question_for_display.strip() or question_for_retrieval
+
+        # Plan 78 helper A, the maintainer's call D121 item 1 (an exception to D19's "the running
+        # game picks the notes"): a no-story game is running and the question names, in full, a
+        # game on the short protected story list. For this one turn the named game picks the
+        # notes, so the turn is treated exactly as the same question with nothing running: the
+        # running game's id and name are set aside here, and the D19 title lookup just below then
+        # resolves the named game. Same notes, same spoiler covers, same choice menu, same credit
+        # line. The covers come from the attached notes (they name the bosses to hide), which is
+        # why judging the turn by the named game's profile alone (plan 77, helper J) changed
+        # nothing on the Deck. Only this turn: a bare follow-up names no game, so it goes back to
+        # the running game, and the follow-up memory (keyed by game) does not carry the subject.
+        # The rule, and the one log line the Deck check reads, live in spoiler_title_profiles.py.
+        app_id, app_name, named_story_game = set_aside_running_game_for_named_story_game(
+            app_id, app_name, question_for_retrieval, logger
+        )
+        app_context = "active" if app_id else "none"
 
         if reply_followup:
             followup_block = build_reply_followup_context_block(
@@ -803,8 +822,11 @@ async def run_game_ai_request(
         # disagree about which game this is.
         # Plan 77 helper J: a story game the question names outranks a running no-story game's
         # profile -- see resolve_turn_title_spoiler_profile.
+        # Plan 78 helper A: when the named story game picked the notes (see named_story_game
+        # above) it is the game this turn is about even if the library has no title for it, so it
+        # is judged as itself -- "unknown" there would be a weaker fence than a story game gets.
         strategy_title_profile = resolve_turn_title_spoiler_profile(
-            app_id, app_name or text_resolved_title, question_for_retrieval
+            app_id, app_name or text_resolved_title or named_story_game, question_for_retrieval
         )
         # D112 #7: this turn's protected names, decided once, here, before the model is called --
         # the attached notes are marked with them before they are published live, so the "From

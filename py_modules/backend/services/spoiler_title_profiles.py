@@ -38,7 +38,7 @@ Gotchas:
 from __future__ import annotations
 
 import re
-from typing import Literal
+from typing import Any, Literal
 
 SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown"]
 
@@ -192,19 +192,52 @@ def title_profile_is_low_narrative(app_id: str = "", app_name: str = "") -> bool
     return resolve_title_spoiler_profile(app_id, app_name) == "low_narrative"
 
 
-def question_names_protected_title(question: str) -> bool:
-    """True when the question text itself names a story game from the protect table.
+def protected_title_named_in_question(question: str) -> str:
+    """The story game from the protect table that the question names, or "" when it names none.
 
     Whole-word match on the same names the title fallback uses, so "hades" fires on "beat
-    hades" and not on "shades of blue". Plan 77 helper J.
+    hades" and not on "shades of blue". Several can match ("gta v" inside "grand theft auto
+    v"): the longest wins, so the name that comes back is the fullest one the player typed.
+    Plan 77 helper J; returns the name rather than a yes/no since plan 78 helper A, so a log
+    line can say which game was named.
     """
     text = _normalize_title(question)
     if not text:
-        return False
-    return any(
-        re.search(rf"(?<![a-z0-9]){re.escape(known)}(?![a-z0-9])", text)
+        return ""
+    named = [
+        known
         for known in _PROTECT_PROGRESSION_TITLES
-    )
+        if re.search(rf"(?<![a-z0-9]){re.escape(known)}(?![a-z0-9])", text)
+    ]
+    return max(named, key=len) if named else ""
+
+
+def question_names_protected_title(question: str) -> bool:
+    """True when the question text itself names a story game from the protect table."""
+    return bool(protected_title_named_in_question(question))
+
+
+def story_game_named_over_running_no_story_game(
+    app_id: str = "", app_name: str = "", question: str = ""
+) -> str:
+    """The story game this turn's notes should come from, or "" when the running game keeps them.
+
+    Plan 78 helper A, the maintainer's call D121 item 1 (an exception to D19's "the running game
+    picks the notes"): when the game running is a no-story game (the Deep Rock Galactic kind)
+    AND the question names, in full, a game from the short protected story list, the named game
+    picks the notes for that one turn. Judging the turn by the named game's spoiler profile was
+    not enough (plan 77, helper J, first try): the spoiler covers come from the attached notes,
+    which name the bosses to hide, and the running game's notes name none of Hollow Knight's.
+
+    Returns the protected name as the table spells it (``"hollow knight"``), which is also
+    the line the back end logs. ``""`` -- nothing changes -- when nothing is running, when the
+    running game is a story game or unknown (they keep the notes), or when the question names
+    no protected story game. Only for that one turn: a later bare follow-up names no game, so it
+    returns "" and goes back to the running game.
+    """
+    if resolve_title_spoiler_profile(app_id, app_name) != "low_narrative":
+        return ""
+    return protected_title_named_in_question(question)
 
 
 def resolve_turn_title_spoiler_profile(
@@ -224,3 +257,28 @@ def resolve_turn_title_spoiler_profile(
     if profile == "low_narrative" and question_names_protected_title(question):
         return "protect_progression"
     return profile
+
+
+def set_aside_running_game_for_named_story_game(
+    app_id: str, app_name: str, question: str, log: Any
+) -> tuple[str, str, str]:
+    """``(app_id, app_name, named_story_game)`` for one turn: the running game's own id and name,
+    or blanks plus the named game when the exception in
+    ``story_game_named_over_running_no_story_game`` fires.
+
+    Blank id and name make the rest of the ask treat the turn exactly as the same question with
+    nothing running (D19): the title the question names is looked up in the library, its notes
+    are attached, its covers and choice menu apply, and the follow-up memory keys the turn by
+    that title, not the running game. Writes the one log line the Deck check reads when it fires.
+    """
+    named = story_game_named_over_running_no_story_game(app_id, app_name, question)
+    if not named:
+        return app_id, app_name, ""
+    log.info(
+        "spoiler: named story game picks the notes this turn (running no-story game %r appid=%s, "
+        "question names %r) -- notes, covers and menu follow the named game",
+        app_name,
+        app_id,
+        named,
+    )
+    return "", "", named

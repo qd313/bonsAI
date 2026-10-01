@@ -5,7 +5,9 @@ from pathlib import Path
 from backend.services.spoiler_title_profiles import (
     LOW_NARRATIVE_APP_IDS,
     PROTECT_PROGRESSION_APP_IDS,
+    protected_title_named_in_question,
     resolve_title_spoiler_profile,
+    story_game_named_over_running_no_story_game,
     title_profile_is_low_narrative,
 )
 
@@ -78,6 +80,51 @@ class SpoilerTitleProfilesTests(unittest.TestCase):
             "its src/data/spoilerTitleProfiles.ts mirror, and "
             "tests/contracts/spoiler-title-profiles.json: " + ", ".join(missing),
         )
+
+
+class StoryGameNamedOverRunningNoStoryGameTests(unittest.TestCase):
+    """Plan 78 helper A (D121 item 1): who picks the notes for this one turn."""
+
+    def test_the_longest_protected_name_is_the_one_reported(self):
+        self.assertEqual(
+            protected_title_named_in_question("how do I beat grand theft auto v on foot"),
+            "grand theft auto v",
+        )
+        self.assertEqual(protected_title_named_in_question("which shades of blue suit me"), "")
+
+    def test_a_no_story_game_running_and_a_story_game_named_gives_the_named_game(self):
+        self.assertEqual(
+            story_game_named_over_running_no_story_game(
+                "2321470", "Deep Rock Galactic: Survivor", "boss in the Soul Sanctum in Hollow Knight"
+            ),
+            "hollow knight",
+        )
+        # The running game can be known by its name alone (a non-Steam shortcut has no AppID).
+        self.assertEqual(
+            story_game_named_over_running_no_story_game("", "DOOM Eternal", "how do I beat hades"),
+            "hades",
+        )
+
+    def test_the_running_games_own_question_keeps_the_running_game(self):
+        self.assertEqual(
+            story_game_named_over_running_no_story_game(
+                "2321470", "Deep Rock Galactic: Survivor", "how do I dodge projectiles"
+            ),
+            "",
+        )
+
+    def test_only_a_no_story_game_running_can_lose_the_notes(self):
+        question = "boss in the Soul Sanctum in Hollow Knight"
+        # A story game running keeps its own notes.
+        self.assertEqual(
+            story_game_named_over_running_no_story_game("1145360", "Hades", question), ""
+        )
+        # An unknown game running is not a no-story game either.
+        self.assertEqual(
+            story_game_named_over_running_no_story_game("413150", "Stardew Valley", question), ""
+        )
+        # Nothing running: the usual title lookup already handles it.
+        self.assertEqual(story_game_named_over_running_no_story_game("", "", question), "")
 
 
 if __name__ == "__main__":

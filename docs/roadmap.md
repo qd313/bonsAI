@@ -94,6 +94,8 @@ starts work outside this.
   Evidence for the original sighting: `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[reply]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note.**
   The words shown held no protected name; the name itself arrived after the words were hidden. Not known whether it was always so; one 250 ms read in the same answer also showed the live text 66 letters shorter and then back. Evidence `docs/test-evidence/plan78-P78-BORROWED-RUNNING-GAME.json`.
+- ★ `[reply]` **After the release: the AI's own instructions write the hidden-block label in the odd shape** — **OPEN, from plan 78 (helper N).** Six places in the instructions show the label between two sets of backticks (`ollama_prompts.py` line 483; `strategy_spoiler_policy.py` lines 138, 149, 160, 164, 271), the likely reason a small model copies it.
+  Rewording them waits for the maintainer's call (plan 78, question 13) and a before-and-after count of covers.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
@@ -125,15 +127,10 @@ starts work outside this.
   `plan72-F8-SUMUP.json`: Steam keeps the ring on the greyed "Sum up again". **The maintainer's call: leave it as is for 0.6.0** —
   the card shows itself and one Down reaches it; named in the release notes (plan 72 § 8). After the release: finish the
   hand-off or take the tries out of the code (they do no harm).
-- ★★★ `[reply]` **A hidden block whose opening and closing marks are both written as one line of backticks around the label is shown as plain text** — **OPEN, found on the Deck 2026-10-01 (plan 78, Deck block 3d, row CONST-SPOIL-SPEED-01).**
-  In the Hades Speed answer the AI wrote the line ```` ```bonsai-spoiler``` ```` (three backticks, the label, three backticks, nothing between) as both the opening and the closing mark. The page showed the words "bonsai-spoiler" twice, drew no cover, and the sentence between them was readable.
-  That sentence was general advice, so nothing leaked this time; the same shape around a boss name would show it.
-  Cause known: the repair for odd shapes handles a one-line block, an opener with text after it and an opener glued to a sentence, but not a mark with nothing after the label (`src/utils/expandOneLineSpoilerFences.ts`). No fix has landed. Deck check owed: row **P78-BARE-SPOILER-MARK**. Evidence `docs/test-evidence/plan78-CONST-SPOIL-SPEED-01.json`.
 - ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **PARTIAL,
   found 2026-09-25 (plan 68).** The chat memory now copes with the doubling (`6843f8e1`), but why it happens
   has not been found. Deck check owed.
   [Detail](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-unknown).
-  **2026-09-27 (plan 72, `8753cb7f`, `74e8fc7b`, `d2e5e98e`):** three related paths fixed and unit-tested: a one-line hidden block no longer gets wrapped twice while streaming, no longer opens onto "undefined" or shows openly, and Copy and Read aloud no longer give it away. The original cause is still unproven, most likely the model; no Deck check yet.
   **2026-09-30 (plan 77 block 3, row SUMUP-12):** the Deck check of the guards PASSED: a saved answer with its markers doubled loaded as one closed cover, and the hidden word appeared nowhere in the log's memory line, the new answer or the rest of the chat file (no summary existed to check). The original cause is still unproven, so this stays PARTIAL. Evidence `docs/test-evidence/plan77-SUMUP-12.json`.
 
 ---
@@ -416,6 +413,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
+- ★★★ `[reply]` **A hidden block whose opening and closing marks are both written as one line of backticks around the label was shown as plain text** — **VERIFY, fixed 2026-10-01 (plan 78 helper N, `09bf7fd7`). Was OPEN, found on the Deck 2026-10-01 (block 3d, row CONST-SPOIL-SPEED-01).**
+  In the Hades Speed answer the AI saved the label between two sets of three backticks, alone on its line, and used that line as both the opening and the closing mark (the page draws it as inline code). It showed no cover and the sentence between the marks was readable. The repair for odd shapes had no rule for it; on the back end the shape was read as two empty blocks, so the sentence also escaped the live coverer and went into the chat's memory and summary.
+  Fix: such a mark opens a hidden block when outside one and closes it when inside one. The same rule runs on the screen (`src/utils/expandOneLineSpoilerFences.ts`) and on the back end (`py_modules/backend/services/spoiler_empty_label_marks.py`, used by the live coverer and the chat-memory strip).
+  Tests: `src/utils/emptyLabelSpoilerMark.test.tsx` (14 tests, 12 fail with the fix out) and `tests/test_empty_label_spoiler_mark.py` (12 tests, 8 failed before the back-end change). Deck check owed: row **P78-BARE-SPOILER-MARK**, in the last Deck block of 2026-10-01. Evidence for the finding `docs/test-evidence/plan78-CONST-SPOIL-SPEED-01.json`.
+
 ### Features that need verification
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60

@@ -317,6 +317,10 @@ the dock too (573-604, dock 600). Deck check owed once a fix lands.
 
 ## Some saved answers have a hidden block's markers written twice, cause unknown
 
+Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 13, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-27 (plan 72, `8753cb7f`, `74e8fc7b`, `d2e5e98e`):** three related paths fixed and unit-tested: a one-line hidden block no longer gets wrapped twice while streaming, no longer opens onto "undefined" or shows openly, and Copy and Read aloud no longer give it away. The original cause is still unproven, most likely the model; no Deck check yet.
+
 Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
 written twice and its closing marker written twice. The screen still drew one closed block correctly, but
 the code that strips such a block out before the AI reads the chat stopped at the second opening marker, so

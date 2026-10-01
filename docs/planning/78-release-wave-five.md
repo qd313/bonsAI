@@ -411,6 +411,13 @@ New ones go here, with the choice taken in the meantime.
 6. **Four small D-pad boxes from an old check** (the collapsed hint, the session strip, the Show details link, the
    collapsed turn header) were listed as closed, but the evidence only covers the four sliders. **Meanwhile:** they
    stay open, and tonight's Deck pass tries them if there is time.
+7. **How many of its own chips a game offers.** The library offers six per game. At tonight's faster pace with one
+   chip showing, the same game chip comes back after about 66 seconds on average, and sometimes after 24. With ten
+   it would be about 108 seconds. The extra four would come from less prominent bosses and items. **Meanwhile:** six,
+   unchanged. **Recommended:** ten. It is one number plus a few tests that expect six.
+8. **A retry of a spoken question is not read aloud.** With Voice replies on "When I asked by voice", tonight's fix
+   makes a spoken question's answer read itself. A retry of that question counts as typed and stays silent.
+   **Meanwhile:** left silent, the quiet side. **Your call:** whether a retry should be read too.
 
 ## At the end
 

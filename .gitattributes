@@ -1,2 +1,4 @@
 # Keep generated MCP architecture snapshots LF-stable across Windows/Linux CI.
 packages/bonsai-mcp/knowledge/architecture/*.json text eol=lf
+# The landing script is run by Git Bash on Windows, which cannot run a script with CRLF line endings.
+scripts/land_lane.sh text eol=lf

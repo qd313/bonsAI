@@ -43,7 +43,10 @@ Ground rules, all of them non-negotiable:
    message with a `Co-Authored-By:` line naming the model you are actually running on, for example `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
 9. **Never touch the Deck** — no `deck_*` tools, no SSH, no deploy. Another session is using the device
    right now and a stray press would corrupt its readings. Never `git push`. Never `git rebase -i`.
-   Never `git add -A`; stage files by name.
+   Never `git add -A`; stage files by name. **Never `git stash`:** the stash list is one list shared by
+   every copy of the repo, and on 2026-09-30 two helpers stashing at the same moment swapped each other's
+   uncommitted work. To see a test fail without your fix, save it with `git diff -- <files> >
+   .scratch/my-fix.patch`, reverse it with `git apply -R`, run the test, and `git apply` it back.
 10. **Report at the end**, one paragraph plus a short list: the commit hashes; the tests you added by
     name; what a person will now see that they did not before; the exact device check you expect to
     pass; and anything you found and did not fix. If you hit something that looks like a bug outside

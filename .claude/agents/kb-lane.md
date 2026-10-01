@@ -54,7 +54,7 @@ Ground rules, all of them non-negotiable:
 11. Run all five gates before every commit. Commit messages say what changed and why, in plain language,
     describing what a person using the plugin would notice before any term of art. End every commit
     message with a `Co-Authored-By:` line naming the model you are actually running on, for example `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
-12. Never `git push`. Never `git rebase -i`. Never `git add -A`; stage files by name. Never switch
+12. Never `git push`. Never `git rebase -i`. Never `git add -A`; stage files by name. Never `git stash` (the stash list is shared by every copy of the repo; two helpers swapped each other's work that way on 2026-09-30; use `git diff > .scratch/my-fix.patch` and `git apply -R` instead). Never switch
     branches in your worktree.
 13. **Report at the end**, one short paragraph plus a list: the commit hashes; the tests you added by
     name; what a person will now see that they did not before; any table your brief asks for; and

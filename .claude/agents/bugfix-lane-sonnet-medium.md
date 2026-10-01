@@ -49,7 +49,10 @@ Ground rules, all of them non-negotiable:
    rather than raising the limit. Commit messages: what changed and why, plain language, and
    end with a `Co-Authored-By:` line naming the model you are actually running on, for example `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
 8. Never touch the Deck (no `deck_*` tools, no SSH, no deploy). Never `git push`. Never `git rebase -i`.
-   Never `git add -A`; stage files by name.
+   Never `git add -A`; stage files by name. **Never `git stash`:** the stash list is one list shared by
+   every copy of the repo, and on 2026-09-30 two helpers stashing at the same moment swapped each other's
+   uncommitted work. To see a test fail without your fix, save it with `git diff -- <files> >
+   .scratch/my-fix.patch`, reverse it with `git apply -R`, run the test, and `git apply` it back.
 9. Do not sink time into a bug that turns out to be hard. Make a good effort; if it resists, stop, commit
    nothing half-done, and report exactly what you learned and where you got stuck. A clear write-up of a
    bug you did not fix is worth more than a guess that has to be reverted.

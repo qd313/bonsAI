@@ -31,6 +31,8 @@ How it works:
    plain-language explanation shown to the person, naming what is installed and what to pull instead.
 5. Whenever a model is pulled or removed, `merge_pulled_tag()` and
    `remove_tag_from_routing_orders()` keep the order saved in Settings in sync with reality.
+   A model removed outside the plugin (`ollama rm`) is caught the next time the models list is
+   read: `prune_routing_orders_to_installed()` names the saved entries that are no longer there.
 
 Gotchas:
 - `select_ollama_models()` reads like the main entry point from its name, but it is the older,
@@ -435,6 +437,43 @@ def remove_tag_from_routing_orders(settings: dict[str, Any], tag: str) -> dict[s
         if isinstance(cur, list):
             out[key] = [x for x in cur if str(x).strip() != t]
     return out
+
+
+def _tag_in_installed(tag: str, installed: set[str]) -> bool:
+    """Ollama lists `llama3` as `llama3:latest`; a saved order may carry either spelling."""
+    if tag in installed:
+        return True
+    if ":" not in tag:
+        return f"{tag}:latest" in installed
+    return tag.endswith(":latest") and tag[: -len(":latest")] in installed
+
+
+def prune_routing_orders_to_installed(
+    settings: dict[str, Any],
+    installed: list[str],
+    keep: frozenset[str] | set[str] = frozenset(),
+) -> tuple[dict[str, list[str]], list[str]]:
+    """Which saved try-order entries name a model that is no longer installed.
+
+    Returns ``(patch, pruned)``: the order keys that change with their new lists, and the removed
+    tags. ``installed`` must come from a read that SUCCEEDED. An empty list proves nothing (an
+    unreachable Ollama reads the same as an empty store), so it prunes nothing. ``keep`` holds tags
+    that are on their way in (a download in progress) and are never removed.
+    """
+    names = {str(t).strip() for t in installed if str(t).strip()}
+    if not names:
+        return {}, []
+    patch: dict[str, list[str]] = {}
+    pruned: list[str] = []
+    for key in ("text_model_routing_order", "vision_model_routing_order"):
+        cur = settings.get(key)
+        if not isinstance(cur, list):
+            continue
+        kept = [x for x in cur if str(x).strip() in keep or _tag_in_installed(str(x).strip(), names)]
+        if len(kept) != len(cur):
+            patch[key] = kept
+            pruned.extend(str(x).strip() for x in cur if x not in kept and str(x).strip() not in pruned)
+    return patch, pruned
 
 
 def build_host_fallback_tail(user_chain: list[str], installed: list[str]) -> list[str]:

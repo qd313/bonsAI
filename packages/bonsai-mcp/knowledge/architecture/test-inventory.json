@@ -362,6 +362,7 @@
     "tests/test_model_policy_docs.py",
     "tests/test_model_routing_order.py",
     "tests/test_model_selection.py",
+    "tests/test_models_look_prunes_saved_try_orders.py",
     "tests/test_no_unreachable_code.py",
     "tests/test_ollama_abort_transport.py",
     "tests/test_ollama_ask_budgets.py",

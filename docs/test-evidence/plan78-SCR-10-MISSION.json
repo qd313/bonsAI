@@ -1,0 +1,20 @@
+{
+  "row": "SCR-10-MISSION (SCR-10, GAME-LIGHT-01, STREAM-PIECES-01, SCR-03; R12 probe)",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 about 12:12-12:14 EDT",
+  "screen": "Deck's own screen, 1280x800 capture.",
+  "setup": "Deep Rock Galactic: Survivor launched from the Recent Games row with deck_launchGame (appid 2321470 in RunningApps after 88 ms), plugin reloaded, waited for the debugger. No panel open. The game process (DRG Survivor.exe) was running at 100 percent CPU one minute after the launch.",
+  "pressed": "Probe as written: screenshot, wait about 60 s, screenshot, then one A, then a screenshot. The panel was not open so no B was needed. No other press.",
+  "seen": {
+    "screenshot_1 (plan78-SCR-10-MISSION-probe1-blueprint.png, 12:12:28)": "Steam's own controller blueprint picture (a Steam Deck drawing with labelled buttons), fps counter 80. Not the game.",
+    "screenshot_2 (plan78-SCR-10-MISSION-probe2-home.png, 12:13:57)": "Steam Home ('Deep Rock Galactic: Survivor' tile, What's new, Friends), fps counter 0. The game's own window never came to the front, although the game process was running (100 percent CPU, 1 min 8 s) and RunningApps held it.",
+    "screenshot_3 (plan78-SCR-10-MISSION-probe3-after-A.png, 12:14:04)": "After one A: Steam's game page for Deep Rock Galactic: Survivor with a 'Resume' button (the A opened the tile on Steam Home). The game screen was never reached.",
+    "exit": "deck_exitGame (Guide, Right, 7 Down, Confirm): the game left RunningApps after 128 ms. Over SSH: 0 processes matching DRG, Deep Rock or SteamLaunch."
+  },
+  "expected": "Probe: the first screenshot shows the game's title ('Press any key'); after one A the game's screen changes. If the presses do not change the game's screen, stop: COULD NOT RUN.",
+  "verdict": [
+    "COULD NOT RUN - SCR-10 (frame rate in a mission): the game's window never came to the front of the screen, so the rig's presses reached Steam Home and the game's page, not the game. Resume on the game page was one press away; I did not take it because the runbook does not describe it.",
+    "COULD NOT RUN - GAME-LIGHT-01, STREAM-PIECES-01, SCR-03: depend on the same live game screen."
+  ],
+  "side_effect": "One A landed on Steam Home's Deep Rock Galactic tile and opened its game page (no harm; the game was then exited with deck_exitGame). Tools also wrote run files under the checkout's runs/ and screenshots/ folders (untracked; deck_launchGame, deck_exitGame, deck_captureScreenshot do this by themselves)."
+}

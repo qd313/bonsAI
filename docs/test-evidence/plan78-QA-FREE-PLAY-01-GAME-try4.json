@@ -1,0 +1,23 @@
+{
+  "row": "QA-FREE-PLAY-01-GAME-try4",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 about 12:10-12:15 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x534 (game running). Panel scroll area top y=128; dock top y=330.07; visible space 202 px.",
+  "setup": "Hades running (Context: active game Hades), Strategy mode (set back from Speed through the mode menu, read back 'Strategy'), test chat 6f3cc055. Question sent with the send-question script (VERIFIED): 'In one long paragraph, explain how the Mirror of Night works in Hades, then describe in detail which upgrades to buy first'; Ask by A after reading focus 'ask'. The answer came as SIX short sections (90, 75, 90, 105, 60 and 87 px; none taller than the 202 px visible space) then two branch choices, Helpful, Show details, a notes row.",
+  "pressed": "deck_sweep: Up from the question box to the top of the pane, then Down back to Ask (45 presses). It sends only direction presses and reads, at every stop, the ring's rect, scrollTop and a visibility verdict.",
+  "seen": {
+    "up_leg": "19 stops: question box, chip, notes row, Show details, Helpful, choice B, choice A, six sections (scrollTop 496, 436, 349, 245, 166, 79), 'Show reasoning', the first section's turn corner, Retry icon, '83 earlier', slot row, tab bar, header button.",
+    "down_leg": "20 stops, the same order back to the box and Ask.",
+    "stops_not_fully_visible": "4 readings, all the two known false alarms: the last section behind the Copy icon (89 percent, covered by bonsai-reply-copy-corner, at both legs) and the first section's turn behind the Retry icon (89 percent, covered by bonsai-turn-retry-corner, at both legs). Every other stop 100 percent visible.",
+    "stop_three_times": "none (cycles 0)",
+    "dead_press": "none: every press moved the ring; the leg ends were the stall at the end of the pane",
+    "jump_check": "not run: no section in this answer is taller than the visible space, and there was no underlined game word in any section (searched the answer's elements for text-decoration underline and term/gloss classes: none)."
+  },
+  "expected": "Down through the answer and back Up, one press at a time; every focused stop also visible; no stop three times; no dead press. Jump check: scrollTop moves about 80 px a press through a tall section from an underlined word.",
+  "verdict": [
+    "PASS - sweep with a game: every stop visible apart from the two known false alarms, no stop three times, no dead press, 19 stops up and 20 down.",
+    "COULD NOT RUN - the jump check (no underlined word and no section taller than the visible space in this answer; one wording tried, the runbook gives one question).",
+    "COULD NOT RUN - Up skipping underlined words (none were drawn)."
+  ],
+  "side_effect": "A question was added to the test chat. The sweep tool also reads the section text cells as unlabelled stops (8 unlabeled stops): those are the section boxes themselves."
+}

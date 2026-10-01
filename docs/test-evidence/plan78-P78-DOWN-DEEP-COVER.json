@@ -1,0 +1,41 @@
+{
+  "row": "P78-DOWN-DEEP-COVER",
+  "build_commit": "9feef02e (dist built at 9feef02e; checkout tip a05b99e9 is documents-only). deck_deploy then deck_checkReady buildMatches true, 123 files.",
+  "deck_time_local": "2026-10-01 about 11:48-11:52 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel scroll area top y=88.0; dock top y=290.17; visible space 202 px.",
+  "setup": "No game running (no process under steamapps/common; Context line 'no active game detected'). Strategy mode, strategy_spoiler_masking_enabled true, test chat 6f3cc055 (header read before each question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Question 1 sent with the send-question script (VERIFIED) then Ask pressed with A after reading focus on 'ask'. First try gave the shape: ONE section 461 px tall (content top 206) with a cover whose top is at section-offset 398 px (more than half of 461 = 230). Ring was reached on the question row by walking Up to the '76 earlier' pill, then Down to the Retry icon, then Down to the question row (189-246, scrollTop 0). The counted list starts at the question row.",
+  "pressed": "Down x7 from the question row to Helpful, then 2 extra Down (Show details, a chip) and 2 Up back to Helpful (setup for the Up list, not counted). Up list from Helpful: 8 presses to the question row. One press at a time, my own read (ring element, top, bottom, scrollTop, words inside 88..290.2) after each press.",
+  "seen": {
+    "down_list_question_row_to_helpful": [
+      "0 question row 189.0-246.2 st 0",
+      "1 DOWN reasoning line 262.8-277.5 st 0",
+      "2 DOWN SECTION 88.2-549.4 st 206 (visible words 'Listen'..'he's', 91 of 193 words; ever seen 91) -> lands on the SECTION, top 88.2 (at/below panel top 88)",
+      "3 DOWN SECTION 8.2-469.4 st 286 ('constantly'..'you', ever seen 128)",
+      "4 DOWN SECTION -71.8-389.4 st 366 ('across,'..'roof', ever seen 173)",
+      "5 DOWN SECTION -151.8-309.4 st 446 ('draw,'..'Guide).', ever seen 193 of 193)",
+      "6 DOWN COVER 235.5-290.8 st 456.7 (all 193 words seen before this landing; cover bottom 0.6 px below the dock top 290.2)",
+      "7 DOWN Helpful 229.6-261.6 st 581.3 (no summary note on this answer, so the cover's next stop is Helpful)"
+    ],
+    "extra_presses_not_counted": "8 DOWN Show details 273.6-288.3 st 581.3; 9 DOWN chip 'How do I use strategy mode?' 290.8-320.8 st 581.3 (in the dock); 1 UP Show details; 2 UP Helpful",
+    "up_list_helpful_to_question_row": [
+      "1 UP COVER 229.5-284.8 st 462.7",
+      "2 UP SECTION -87.2-374.1 st 381.3",
+      "3 UP SECTION -7.2-454.1 st 301.3",
+      "4 UP SECTION 72.8-534.1 st 221.3",
+      "5 UP SECTION 88.2-549.4 st 206",
+      "6 UP reasoning line 204.2-218.8 st 58.7",
+      "7 UP question row 189.0-246.2 st 0"
+    ],
+    "cover_landings_in_up_walk": 1,
+    "cover_landings_in_down_walk": 1,
+    "scrollTop_on_down": "0, 0, 206, 286, 366, 446, 456.7, 581.3 (never falls)",
+    "scrollTop_on_up": "462.7, 381.3, 301.3, 221.3, 206, 58.7, 0 (never rises; started at 581.3)",
+    "press_that_changed_nothing": "none",
+    "part_head_cover_first_section": "Asked 'what is the best way to fight the boss of the Soul Sanctum in Hollow Knight' (VERIFIED, Ask by A after reading focus). The answer's first section (131 px) begins with a cover (cover at section top +8). First presses from the question row: 1 DOWN reasoning line 234.3-248.9 st 0; 2 DOWN COVER 148.9-204.2 st 124.7; 3 DOWN its box (SECTION 158.9-290.2 st 106.7, all 37 words in view). The cover came first, then its box. (Before them: pill -> Retry icon 200.6-220.6 -> question row 189-217.6, setup.)"
+  },
+  "expected": "Down from the line above the tall section lands on the SECTION with its top at or below y 88, not the cover; every word of the section seen before the cover is landed on; the cover then landed on and the next Down leaves it; Up reverses; cover landed on at most twice; scrollTop never rises on Up and never falls on Down; no dead press. A cover at the head of its section still comes first.",
+  "verdict_main_walk": "PASS - Down lands on the section at top 88.2 (st 206), four section stops at st 206/286/366/446 (matches the helper's prediction for a 446 px section), all 193 words were inside the visible space before the cover (everSeen 193 at the cover landing), cover landed on once each way, the next Down leaves it for Helpful, Up visits the same stops in reverse, scrollTop monotonic both ways, no dead press.",
+  "verdict_head_cover": "PASS - with a cover at the head of the first section, the Down order is reasoning line, then the COVER, then its box.",
+  "note": "Up-walk section offsets differ by about 14 px from the helper's prediction (e.g. -87.2 against -72) because a section entered from below stops with its bottom at the dock edge; the pass rules do not depend on it. The cover's bottom edge was 0.6 px below the dock top on the Down landing (290.8 against 290.2): not visible-box relevant, noted only.",
+  "side_effect": "Two questions were added to the test chat (76 and 77 earlier turns now). No other change."
+}

@@ -1,0 +1,45 @@
+{
+  "row": "QA-FREE-PLAY-01-NOGAME-try3",
+  "build_commit": "9feef02e (deck_checkReady buildMatches true, 123 files)",
+  "deck_time_local": "2026-10-01 about 11:53-11:57 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel scroll area top y=88; dock top y=290.17; visible space 202 px.",
+  "setup": "No game running, Strategy mode, test chat 6f3cc055 (name read before the question). Question sent with the send-question script (VERIFIED): 'in two short paragraphs and then one single closing sentence, what should I do first in the Forgotten Crossroads in Hollow Knight'. Ask pressed by A after reading focus on 'ask'. Newest answer: ONE section 321 px tall (content top 192, 119 px over the visible space), then a summary note, a 'Where are you at in Hollow Knight?' pair of choice buttons, Helpful, Show details, a notes row, a chip row, the question box. 144 words in the section.",
+  "pressed": "After the answer finished the ring was on the question box (never pressed A there). Up walk from the box to the question row, then Down walk back to the box. One press at a time; after each press I read the ring element, its top and bottom, scrollTop and (for the section) the first and last words inside the visible space.",
+  "seen": {
+    "up_walk": [
+      "1 UP chip 'How do I balance FPS and bat' 290.8-320.8 (in the dock) st 694",
+      "2 UP notes row 'Starting out in Hollow Knight' 243.4-290.4 st 694",
+      "3 UP 'Show details' 212.7-227.4 st 694",
+      "4 UP Helpful 204.1-236.1 st 658.7",
+      "5 UP choice B 203.9-251.9 st 553.3",
+      "6 UP choice A 203.9-251.9 st 497.3",
+      "7 UP summary note 204.2-235.9 st 419.3",
+      "8 UP SECTION -30.8-290.2 st 310.7 (entered from below, bottom on the dock edge; words 'finally'..'now?' in view)",
+      "9 UP SECTION 49.2-370.2 st 230.7 (scroll only, 80 px)",
+      "10 UP SECTION 88.5-409.5 st 191.3 (scroll only, 39.4 px; top 88.5 is within 1 px of the panel top 88; all 144 words seen)",
+      "11 UP reasoning line 203.9-218.5 st 44.7",
+      "12 UP question row 189.0-231.9 st 0"
+    ],
+    "down_walk": [
+      "1 DOWN reasoning line 248.5-263.2 st 0",
+      "2 DOWN SECTION 88.5-409.5 st 191.3 (words 'Right'..'and')",
+      "3 DOWN SECTION 9.2-330.2 st 270.7 (scroll only, 79.4 px)",
+      "4 DOWN SECTION -30.8-290.2 st 310.7 (scroll only, 40 px; bottom 290.2 vs dock top 290.17; all 144 words seen)",
+      "5 DOWN summary note 172.2-203.9 st 451.3",
+      "6 DOWN choice A 155.9-203.9 st 545.3",
+      "7 DOWN choice B 211.9-259.9 st 545.3",
+      "8 DOWN Helpful 172.1-204.1 st 690.7",
+      "9 DOWN 'Show details' 216.1-230.7 st 690.7",
+      "10 DOWN notes row 243.4-290.4 st 694",
+      "11 DOWN chip 'What are the best FSR settin' 290.8-320.8 (dock) st 694",
+      "12 DOWN question box 323.5-367.5 (dock) st 694"
+    ],
+    "stops_visited_three_times": "none: the only stop landed on more than once in a walk is the tall section (3 consecutive presses, each a scroll step, expected)",
+    "dead_presses": "none: every press changed the ring or scrollTop",
+    "visible": "every non-section stop lay inside 88..290.2 or in the dock; the notes row bottom is 290.4 (0.2 px past the dock top, text inside); the section's visible edge on entry matched the entry edge both ways",
+    "known_false_alarms": "the question row behind the Retry icon and the last section behind the Copy icon were not flagged; the Retry icon is its own stop above the question row (not walked here)",
+    "rig_note": "one Up press (Helpful to choice B) returned 'retried: true' from the press tool; it still moved exactly one stop"
+  },
+  "expected": "Down through everything and back Up, one press at a time; every focused stop also visible; no stop three times; no dead press.",
+  "verdict": "PASS - 12 stops each way, every stop visible, nothing landed on three times (the tall section takes 3 scroll presses, expected), no dead press."
+}

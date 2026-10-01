@@ -1,0 +1,21 @@
+{
+  "row": "P78-SHORT-LAST-STEP",
+  "build_commit": "9feef02e (deck_checkReady buildMatches true, 123 files)",
+  "deck_time_local": "2026-10-01 about 11:53-11:57 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454. Panel top y=88; dock top y=290.17; visible space 202 px.",
+  "setup": "No game, Strategy mode, test chat 6f3cc055. Two answers. Answer 1 ('...what should I do first in the Forgotten Crossroads in Hollow Knight'): one section 321 px tall (119 over the visible space). Answer 2 (the runbook's second wording, '...how do I get ready for the Mantis Lords in Hollow Knight'): one section 351 px tall (149 over). The Mantis answer did not give the 180/210 px sections of this morning.",
+  "pressed": "Answer 1: Up and Down walks (see plan78-QA-FREE-PLAY-01-NOGAME-try3.json). Answer 2: Down from the tab bar to the choice A button, one press at a time with a read after each.",
+  "seen": {
+    "presses_that_moved_scrollTop_by_less_than_80": [
+      "Answer 1, UP: st 230.7 -> 191.3 (39.4 px): section top 88.5, within 1 px of the panel top 88 (the panel top measured at 88.0)",
+      "Answer 1, DOWN: st 270.7 -> 310.7 (40.0 px): section bottom 290.2, dock top 290.17, within 1 px",
+      "Answer 2, DOWN: st 270.7 -> 340.7 (70.0 px): section bottom 290.2, dock top 290.17, within 1 px (all 161 words seen; section 351 px, top at 191.3 st on entry from above: 88.5)"
+    ],
+    "full_80_px_presses": "the earlier presses in each section moved exactly 79.4 or 80 px",
+    "section_heights": "answer 1: 321 px; answer 2: 351 px; neither is between 4 and 80 px over the 202 px visible space (they are 119 and 149 over), so the case of this morning (a 210 px section needing a whole press for its last 8 px) did not occur"
+  },
+  "expected": "After a press that only scrolls and moves less than 80 px, going Down the section's bottom is within 1 px of the dock top; going Up its top is within 1 px of the panel top.",
+  "verdict_measured_presses": "PASS - all three qualifying presses (39.4, 40.0, 70.0 px) ended with the section edge within 1 px of the dock top (Down) or the panel top (Up, measured against the scroll area's top, 88).",
+  "verdict_target_case": "UNCLEAR - no section 4 to 80 px taller than the visible space came back on two wordings (heights 321 and 351 px), so the exact 'last 8 px' shape of this morning was not reproduced; the short last step itself was seen working on the 119 and 149 px over cases.",
+  "side_effect": "Two questions were added to the test chat (it holds 79 earlier turns now)."
+}

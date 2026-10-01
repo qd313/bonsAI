@@ -1,0 +1,18 @@
+{
+  "row": "P77-GLUED-SPOILER-try2",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 about 11:58-12:03 EDT",
+  "screen": "Deck's own screen; Quick Access page 854x454.",
+  "setup": "Test chat 6f3cc055. Backed up to ~/p78-testchat-3d.bak.json on the Deck before any edit. Masking on (true), Strategy, no game (Context: no active game detected). Newest assistant turn (turn 159, id 9f6da5b4...) is the Mantis Lords answer to 'in two short paragraphs ... how do I get ready for the Mantis Lords in Hollow Knight': asked with nothing running, app_id and app_name empty, asked_entity 'Mantis Lords', so the guard sees a story game from the question. I edited only that turn's 'text' with a scratch script, reloaded the plugin, opened the plugin and read the page twice (the second read matched the first).",
+  "pressed": "No presses for the reads. Plugin reload and deck_openPlugin only.",
+  "seen": {
+    "control": "'Here is the fight.' then ONE closed cover ('Spoiler - tap to show / Hidden until you reveal') then 'Good luck.'; 0 occurrences of zzctl7731 on the page; no backticks; no 'bonsai-spoiler' text. The control holds, so the check is not vacuous on this turn.",
+    "glued": "Text 'Here is the fight.The```bonsai-spoiler\\nzzglue7731 hides here.\\n```\\nGood luck.' read as: 'Here is the fight.The' then ONE closed cover, then 'Good luck.'. Page has no 'bonsai-spoiler', no backtick, no 'zzglue7731'; 1 cover element. Same on both reads."
+  },
+  "expected": "Control: one closed cover and not the word. Glued: page text has no 'bonsai-spoiler' and no backticks, not 'zzglue7731', and one closed cover.",
+  "verdict": [
+    "PASS - control: one closed cover, word absent.",
+    "PASS - glued: the fence glued to the word 'The' is still pulled into one closed cover; no fence marks, no backticks, the made-up word hidden. Covers history only; the 'while streaming' half stays unit-test proof."
+  ],
+  "side_effect": "The test chat file's newest-turn text was changed over SSH for this check and later put back; after the restore every one of the 160 backed-up turns equals the live file (cmp by script), and the made-up words are gone (grep for the three words prints 0). Plain 'grep -c zz' on the file prints 1 because the file is a single line and holds ordinary words such as 'Grizzbolt' and 'puzzle'; it is not the made-up words."
+}

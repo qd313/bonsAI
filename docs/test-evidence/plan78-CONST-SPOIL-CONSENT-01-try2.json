@@ -1,0 +1,21 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01-try2",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 about 11:58-12:04 EDT",
+  "screen": "Deck's own screen; Quick Access page 854x454.",
+  "setup": "History half only (the live half was done in block 3c: plan78-CONST-SPOIL-CONSENT-01.json). Same turn and backup as plan78-P77-GLUED-SPOILER-try2.json: the newest assistant turn (Mantis question, no game, asked_entity Mantis Lords). strategy_spoiler_auto_reveal_after_consent false (as found). Each state: edit with the scratch script, reload the plugin, open the plugin, read twice.",
+  "pressed": "Edit, reload, open, read twice for each state. Then the extra question: 'what is a good charm early in Hollow Knight' sent with the send-question script (VERIFIED), ring walked to Ask (read focus: 'ask'), A. Then Up to the '80 earlier' row (read focus), A to expand the list, 79 Down presses by the rig to the edited turn's header (it overshot to the newest turn's Retry icon, then one Up put it on the header, read focus: the edited turn's title), A to expand it, read twice.",
+  "seen": {
+    "consent_false": "text 'Here is the fight.\\n```bonsai-spoiler\\nzzconsent7731: the boss is the Soul Master.\\n```\\nGood luck.' with spoiler_consent false: 1 cover, 'zzconsent7731' absent from the page (both reads).",
+    "consent_true": "same text with spoiler_consent true: 0 covers, the page reads 'Here is the fight. zzconsent7731: the boss is the Soul Master. Good luck.' as plain text (both reads).",
+    "older_turn_expanded": "after the extra question (80 earlier turns then) and expanding the turn from the earlier list, its text still reads 'Here is the fight. zzconsent7731: the boss is the Soul Master. Good luck.' with 0 spoiler covers on the page and no fence text (both reads)."
+  },
+  "expected": "One cover with consent false (control); word readable plain with consent true; still plain after the turn is older and expanded.",
+  "verdict": [
+    "PASS - control: one cover with the word hidden when spoiler_consent is false.",
+    "PASS - consent true: word readable plain, no cover.",
+    "PASS - after the turn became an older one and was expanded from the earlier list: still plain, 0 covers.",
+    "UNCLEAR (not run here) - the live half stays as in plan78-CONST-SPOIL-CONSENT-01.json (the AI wrote no fence on two tries)."
+  ],
+  "side_effect": "One question ('what is a good charm early in Hollow Knight') was added to the test chat as turn 161 and its answer as 162, as the runbook asked. The edited turn's text and spoiler_consent were put back from the backup with the same script (the extra turns stay, so the file was not copied back whole); afterwards the first 160 turns equal the backup exactly and the made-up words are gone. The 79-press walk also visited every older turn's header (stops only, no A on them)."
+}

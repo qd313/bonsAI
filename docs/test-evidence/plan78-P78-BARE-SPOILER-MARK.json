@@ -1,0 +1,25 @@
+{
+  "row": "P78-BARE-SPOILER-MARK",
+  "build_commit": "09bf7fd7 (dist deployed 12:39 Deck time; deck_checkReady buildMatches true, 124 files)",
+  "deck_time_local": "2026-10-01 12:41-12:47 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454; no game running",
+  "setup": "No game. Strategy mode. Spoiler masking true (settings unchanged). Test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14 (open chat title read before the question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Backup ~/p78-testchat-3f.bak.json made BEFORE the question (168 turns). Asked 'what is a good first charm in Hollow Knight' with the send script (VERIFIED), walked Right/Down to Ask (read focus: the ask button), A; the answer (turn 170, 556 letters, asked as a story game, spoiler_consent false) finished. Then edited only that turn's 'text' over SSH (script mk3f.py in the scratch folder), reloaded the PLUGIN each time (LB/RB away and back did NOT reload the chat from disk: the page still showed the old text), reopened and read the page twice.",
+  "pressed": "Texts set one at a time: control, A, B (MARK = three backticks + bonsai-spoiler + three backticks on one line). For C: walked Up/Right to the answer's Copy button (focus read: aria-label 'Copy reply text', corner icon right of the last answer line 'Good luck'), then A. For D: Left, Up to the cover (focus read: bonsai-spoiler-reveal-target), then A.",
+  "seen": {
+    "control": "1 closed cover; zzctl7731 not in the page text (innerText or textContent); no 'bonsai-spoiler', no backtick. Two reads identical.",
+    "A": "exactly 1 closed cover (55 px tall); text around: 'Here is the fight.' / cover / 'Good luck, zzafter7731.'; zzbare7731 not in innerText or textContent; zzafter7731 readable; no 'bonsai-spoiler' and no backtick in the page text. Two reads identical.",
+    "B": "2 closed covers (55 px each); zzb1x7731 and zzb2x7731 not in the page text; zzmid7731 readable between them; no 'bonsai-spoiler', no backtick. Two reads identical.",
+    "C": "Read with navigator.clipboard.readText after pressing A on Copy: 'Here is the fight.\\n\\n[Spoiler hidden — reveal it on screen to copy]\\n\\nGood luck, zzafter7731.' zzbare7731 absent; zzafter7731 present. (My own copy hook on execCommand/writeText logged nothing, so the plugin copies another way; the clipboard read itself worked.)",
+    "D": "After A on the cover it showed 'Spoiler — tap to hide', then 'zzbare7731 is the last boss.' as its own paragraph, then 'Good luck, zzafter7731.' outside it. No 'bonsai-spoiler', no backtick in the page text; 0 closed covers left.",
+    "restore": "backup copied back; cmp says identical to the backup; chat back to 168 turns; after a plugin reload still identical. grep -o counts in the chat file: zzctl7731 0, zzbare7731 0, zzafter7731 0, zzb1x7731 0, zzmid7731 0, zzb2x7731 0."
+  },
+  "expected": "Control: one closed cover, zzctl7731 hidden. A: one closed cover, zzbare7731 hidden, zzafter7731 readable, no bonsai-spoiler or backtick in the page. B: two covers, both words hidden, zzmid7731 readable. C: copy holds no zzbare7731, shows the hidden-spoiler placeholder, has zzafter7731. D: the cover opens with only zzbare7731 is the last boss.",
+  "verdict": [
+    "PASS (control): one closed cover, zzctl7731 not readable.",
+    "PASS (A, the Deck's shape): one closed cover, zzbare7731 hidden, zzafter7731 readable, no 'bonsai-spoiler' and no backtick on the page.",
+    "PASS (B, two pairs): two closed covers, both hidden words unreadable, zzmid7731 readable.",
+    "PASS (C, Copy): copied text has the placeholder in place of zzbare7731 and keeps zzafter7731. The placeholder wording is '[Spoiler hidden — reveal it on screen to copy]'.",
+    "PASS (D, tap the cover): opens to show only 'zzbare7731 is the last boss.'"
+  ],
+  "side_effect": "My question 'what is a good first charm in Hollow Knight' went into the test chat as turns 169 and 170, and the restore from the backup removed them again (chat back to 168 turns, byte-identical to the backup). The plugin was reloaded 3 times for this check and once more after the restore, with no game running each time. Later in the block the smoke question (end list) added two turns again, so the test chat now has 170 turns."
+}

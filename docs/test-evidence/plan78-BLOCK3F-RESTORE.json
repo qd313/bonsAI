@@ -1,0 +1,21 @@
+{
+  "row": "BLOCK3F-RESTORE",
+  "build_commit": "09bf7fd7 (dist deployed 12:39 Deck time; deck_checkReady buildMatches true, 124 files)",
+  "deck_time_local": "2026-10-01 12:40-12:47 EDT",
+  "screen": "Deck's own screen; Quick Access page window 854x454; no game running",
+  "setup": "No game (0 processes under steamapps/common). Settings file as found: preset_single_chip false, text_model_routing_order ['gemma4:e2b-it-qat'] (left on purpose).",
+  "pressed": "Opened the plugin (first try failed, second worked). RB twice to Settings tab. Walked Down 5 presses to 'Show one chip instead of two' (focus read: the switch itself, 100 percent visible). A as its own step. Chord closed Quick Access, waited 4 s. Reopened, LB twice back to Main.",
+  "seen": {
+    "switch_in_file_after_4s": "preset_single_chip true",
+    "settings_diff_vs_p78-settings-block3c-start.json": "only text_model_routing_order differs (['gemma4:e2b-it-qat'] vs [])",
+    "help_flag_before_anything": "bonsai:plugin-help-dismissed = '1' (read right after first open, before I touched the chip switch); chip row then showed two ordinary chips (130 px wide each), no help chip",
+    "help_flag_after_switch": "'1' again; Main tab showed ONE ordinary suggestion chip (283 px wide); the words 'How to use bonsAI' are not in the page text",
+    "help_flag_at_end_of_block": "'1' (read after two more plugin reloads); still one ordinary chip, no help chip",
+    "flag_written_by_me": "no, it already read 1 each time, so I never set it"
+  },
+  "expected": "Switch reads true in the file; only text_model_routing_order differs from the block 3c start copy; flag '1' and ordinary chips with no help chip (or, if the flag was not 1, set it and look again).",
+  "verdict": [
+    "PASS: the one-chip switch is back on (file true after 4 s; no other key differs except the one left on purpose).",
+    "PASS: the help chip flag reads '1' and the chip row shows ordinary suggestion chips, not the wide help chip."
+  ]
+}

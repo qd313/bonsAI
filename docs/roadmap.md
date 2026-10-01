@@ -104,10 +104,6 @@ starts work outside this.
   (plan 75).** Seen twice: once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`); once it never
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
   **Sighting 2026-09-29 (plan 77, block 1a):** after a reload the game was behind Steam's home page; one A on Resume brought it back.
-- ★★ `[chips]` **After the quick start is opened and closed, the help chip stays and the suggestion chips never take the row** — **OPEN, found on the Deck 2026-10-01 (plan 78, build `9feef02e`); rank to be confirmed.**
-  Opening the quick start set the stored flag at once, but after Cancel, and again after "Got it", the wide help chip was still shown. Possible cause, not yet confirmed (the session's reading of `usePluginHelpModal.tsx` and `useSessionRestoreAfterRemount.ts`): the session snapshot is taken before the dismissal is recorded, and the restore after the popup closes puts the old value back.
-  Also seen, cause unknown and possibly the rig's own doing: after a plugin reload the stored flag read empty. Evidence `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`. QA row **P78-HELP-CHIP-DISMISS**, owed.
-  A helper (helper P) started on it at about 12:40 on 2026-10-01.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -418,10 +414,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
-- ★★★ `[reply]` **A hidden block whose opening and closing marks are both written as one line of backticks around the label was shown as plain text** — **VERIFY, fixed 2026-10-01 (plan 78 helper N, `09bf7fd7`). Was OPEN, found on the Deck 2026-10-01 (block 3d, row CONST-SPOIL-SPEED-01).**
-  In the Hades Speed answer the AI saved the label between two sets of three backticks, alone on its line, and used that line as both the opening and the closing mark (the page draws it as inline code). It showed no cover and the sentence between the marks was readable. The repair for odd shapes had no rule for it; on the back end the shape was read as two empty blocks, so the sentence also escaped the live coverer and went into the chat's memory and summary.
-  Fix: such a mark opens a hidden block when outside one and closes it when inside one. The same rule runs on the screen (`src/utils/expandOneLineSpoilerFences.ts`) and on the back end (`py_modules/backend/services/spoiler_empty_label_marks.py`, used by the live coverer and the chat-memory strip).
-  Tests: `src/utils/emptyLabelSpoilerMark.test.tsx` (14 tests, 12 fail with the fix out) and `tests/test_empty_label_spoiler_mark.py` (12 tests, 8 failed before the back-end change). Deck check owed: row **P78-BARE-SPOILER-MARK**, in the last Deck block of 2026-10-01. Evidence for the finding `docs/test-evidence/plan78-CONST-SPOIL-SPEED-01.json`.
+- ★★ `[chips]` **After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row** — **VERIFY, fixed 2026-10-01 (plan 78 helper P, `f0a4f2c4`). Was OPEN, found on the Deck 2026-10-01 (build `9feef02e`).**
+  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
+  The other half (the stored flag reading empty after a reload): nothing in the plugin removes the key except "Clear all plugin data", so that was the rig's or Decky's own reload, not a plugin bug; in block 3f the flag read "1" at every read, plugin reloads included (`docs/test-evidence/plan78-BLOCK3F-RESTORE.json`). Deck check owed: row **P78-HELP-CHIP-DISMISS**. Finding: `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`.
 
 ### Features that need verification
 
@@ -764,6 +759,10 @@ ninth docs sweep, again to keep this document under its size limit.
 Plan 78's Deck block 3b closes (the 2026-10-01 late morning, builds `c8d6b094` and `b417c271`) were moved out the same way on 2026-10-01, during plan 78's eleventh docs sweep, again to keep this document under its size limit.
 
 Plan 78's Deck block 3c closes (the 2026-10-01 midday, build `24cbbd6b`) were moved out the same way on 2026-10-01, during plan 78's fourteenth docs sweep, again to keep this document under its size limit.
+
+**Closed 2026-10-01 (plan 78, Deck block 3f, build `09bf7fd7`):**
+
+- ★★★ `[reply]` **A hidden block whose opening and closing marks are both one line of backticks around the label was shown as plain text** — **DONE 2026-10-01, passed on the Deck, all five parts (row P78-BARE-SPOILER-MARK; fix `09bf7fd7`).** The control showed one closed cover. The Deck's own shape gave one closed cover with the hidden word unreadable, the word after it readable, and no "bonsai-spoiler" or backtick on the page (two reads). Two pairs gave two covers with the text between them readable. Copy gave the outer text with "[Spoiler hidden — reveal it on screen to copy]" in place of the hidden sentence. Opening the cover showed only the hidden sentence. Evidence `docs/test-evidence/plan78-P78-BARE-SPOILER-MARK.json`.
 
 **Closed 2026-10-01 (plan 78, Deck block 3d, build `9feef02e`):**
 

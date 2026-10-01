@@ -6,7 +6,9 @@ game". This file spots the first kind -- a plain question about the current
 power cap -- so the plugin can answer it directly from the Deck's own numbers
 instead of waiting on the AI model to reply. It also reads a proposed new power
 cap and clock speed back out of the model's own reply, and can remove that
-proposal from the words a person actually sees.
+proposal from the words a person actually sees. A proposal is only read when the
+words around it are about power too: a boss answer that carries a copy of the
+prompt's example block gives no suggestion (plan 78).
 Used for: deciding, before a question reaches the model, whether it is a
 "what is it right now" question the plugin can answer itself; reading a
 proposed new power cap out of the model's reply and keeping it inside the
@@ -76,6 +78,30 @@ def is_current_tdp_read_intent(question: str) -> bool:
     return "what's" in t and "tdp" in t
 
 
+# The prompt for Speed and Expert teaches the model the power block's shape on every question, and
+# a small model sometimes copies it onto the end of an answer that has nothing to do with power
+# (a Hollow Knight boss answer, seen 2026-09-27). A block only counts when the words around it
+# are about power too. Words that mean something else in a game ("power", "heat") are left out.
+_POWER_WORDS_RE = re.compile(
+    r"\b(?:tdp|watts?|wattage|battery|batteries|gpu|mhz|fps|frame\s*rate|frame\s*limit|thermal|"
+    r"power\s*(?:limit|cap|draw|saving|saver|profile|usage|consumption|budget)|"
+    r"clock\s*speeds?|temperatures?|fan|fans|overheat\w*|throttl\w*)\b|\d\s*w\b",
+    re.IGNORECASE,
+)
+
+# A line or two of lead-in ("Sure thing.", "Here you go:") says nothing either way, so a block
+# after a short lead-in is trusted as before. Real advice is longer than this.
+_LEAD_IN_CHARS = 120
+
+
+def _is_about_power(prose: str) -> bool:
+    """False only when ``prose`` is real advice (longer than a lead-in) that never mentions power."""
+    stripped = " ".join(str(prose or "").split())
+    if len(stripped) <= _LEAD_IN_CHARS:
+        return True
+    return bool(_POWER_WORDS_RE.search(stripped))
+
+
 def parse_tdp_recommendation(
     text: str,
     tdp_min: int,
@@ -94,6 +120,10 @@ def parse_tdp_recommendation(
             rec = json.loads(fenced.group(1))
         except json.JSONDecodeError:
             rec = None
+        if isinstance(rec, dict) and "tdp_watts" in rec:
+            around = text[: fenced.start()] + " " + text[fenced.end() :]
+            if not _is_about_power(around):
+                return None
 
     if rec is None:
         natural = re.search(r"(?:tdp|TDP)\s*(?:to|of|at|:)?\s*(\d+)\s*(?:w|W|watts?)", text)

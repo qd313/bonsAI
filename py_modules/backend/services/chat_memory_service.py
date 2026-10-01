@@ -43,13 +43,14 @@ How it works:
     so its own text stays byte-for-byte the same between rewrites while only
     the word-for-word tail changes -- see ``apply_chat_memory_to_prompt``'s
     doc comment for why that placement matters.
- 7. When the new question NAMES A GAME other than the one the previous turn was about (plan
-    78, ``subject_changed``), the earlier ANSWERS are left out and only the person's earlier
-    questions are carried. A small model copies an answer it is shown: 49 words of a Doom answer
-    came back in an answer about another game. The default is the other way round -- every
-    follow-up, however it is worded, keeps its answers, because only a game name that differs
-    from the previous turn's counts as a sign the subject changed. If no game can be told on
-    either side, or the library cannot be read, the answers are kept.
+ 7. When the new turn is about a different game from the previous turn (plan 78,
+    ``subject_changed``), the earlier ANSWERS are left out and only the person's earlier
+    questions are carried. A turn's game is the game its question names, else the game that was
+    running for it. A small model copies an answer it is shown: 49 words of a Doom answer came
+    back in an answer about another game, and "soul orbs" from Hollow Knight answers came back
+    in a Deep Rock one. The default is the other way round -- every follow-up, however it is
+    worded, keeps its answers, because only two different games count as a sign the subject
+    changed. If no game can be told on either side, or the library cannot be read, they are kept.
 """
 
 from __future__ import annotations
@@ -208,17 +209,33 @@ def _same_game(a: str, b: str) -> bool:
     return bool(na and nb and (na in nb or nb in na))
 
 
-def subject_changed(
-    question: str, rows: Optional[list], library_title: Optional[GameNamedIn] = None
-) -> bool:
-    """True only when ``question`` names a game that is not the one the previous turn was about.
+def _turn_game(question: str, app_name: str, library_title: Optional[GameNamedIn]) -> str:
+    """The game one turn was about: the game its question names, and when it names none, the game
+    that was running when it was asked. "" when neither can be told.
 
-    The previous turn's game is the game that was running when it was asked (its ``app_name``) or
-    the game its own question named. A question naming no game, or a previous turn about no game
-    that can be told, is NOT a sign the subject changed: the answers are kept. So are "what else
-    can I try", "summarize the plan" and every other follow-up, however it is worded.
+    The saved turn keeps the running game's own name even when the spoiler exception set that game
+    aside for the turn (a no-story game running, a protected story game named -- that happens
+    inside the ask, after the turn is saved), so the named game is looked at FIRST: a Hollow Knight
+    question asked with Deep Rock running was about Hollow Knight, not Deep Rock.
     """
-    new_game = _game_named(question, library_title)
+    return _game_named(question, library_title) or str(app_name or "").strip()
+
+
+def subject_changed(
+    question: str,
+    rows: Optional[list],
+    library_title: Optional[GameNamedIn] = None,
+    running_game: str = "",
+) -> bool:
+    """True only when the new turn is about a game other than the one the previous turn was about.
+
+    The new turn's game is the game ``question`` names, else ``running_game`` (the game running for
+    this turn, from the new turn's own saved ``app_name``). The previous turn's is read the same
+    way from its own question and ``app_name``. If either side has no game that can be told, or
+    the two are the same game, the subject did not change and the answers are kept: that covers
+    "what else can I try", "summarize the plan" and every other follow-up, however it is worded.
+    """
+    new_game = _turn_game(question, running_game, library_title)
     if not new_game:
         return False
     prior = [t for t in (rows or []) if isinstance(t, dict)]
@@ -227,14 +244,14 @@ def subject_changed(
     )
     if last_user is None:
         return False
-    previous = [
-        str(last_user.get("app_name") or "").strip(),
-        _game_named(str(last_user.get("display_text") or last_user.get("text") or ""), library_title),
-    ]
-    previous = [g for g in previous if g]
+    previous = _turn_game(
+        str(last_user.get("display_text") or last_user.get("text") or ""),
+        str(last_user.get("app_name") or ""),
+        library_title,
+    )
     if not previous:
         return False
-    return not any(_same_game(new_game, g) for g in previous)
+    return not _same_game(new_game, previous)
 
 
 def turns_not_yet_summarized(turns: Optional[list], summary: Optional[dict]) -> list:
@@ -433,6 +450,12 @@ def plan_and_build_chat_memory(
     # Ask is accepted, before the answer starts. Left in, it would be read back to the model as
     # "You asked: ..." immediately before the very same question -- wasted room and a strange
     # thing to read. A chat always ends on an answer, so any trailing question is the live one.
+    # The newest trailing question is the live one; its own saved app name is the game running for it.
+    running_game = (
+        str(rows[-1].get("app_name") or "").strip()
+        if rows and str(rows[-1].get("role") or "").strip().lower() == "user"
+        else ""
+    )
     while rows and str(rows[-1].get("role") or "").strip().lower() == "user":
         rows.pop()
     wanted_chars = sum(
@@ -456,7 +479,7 @@ def plan_and_build_chat_memory(
     )
     # A question that names a different game from the previous turn's does not get the earlier
     # answers to read: a small model copies them (plan 78). Its earlier questions still go with it.
-    with_answers = not subject_changed(question, rows, library_title)
+    with_answers = not subject_changed(question, rows, library_title, running_game)
     return plan, build_chat_memory(
         rows, plan.memory_tokens, model_name, summary=summary, with_answers=with_answers
     )

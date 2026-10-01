@@ -313,6 +313,7 @@
     "tests/test_chat_can_sum_up.py",
     "tests/test_chat_for_request.py",
     "tests/test_chat_memory_borrowed_wording.py",
+    "tests/test_chat_memory_running_game.py",
     "tests/test_chat_memory_service.py",
     "tests/test_chat_slot_ownership.py",
     "tests/test_chat_slot_service.py",

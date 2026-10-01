@@ -1,33 +1,34 @@
 {
-  "row": "CONST-SPOIL-SPEED-01",
-  "build_commit": "9feef02e",
-  "deck_time_local": "2026-10-01 about 12:05-12:10 EDT",
-  "screen": "Deck's own screen; Quick Access page window 854x534 with a game running (854x454 with no game).",
-  "setup": "Hades launched from Recent Games with deck_launchGame (RunningApps: Hades 1145360), plugin reloaded, 10 s wait, deck_openPlugin (failed once, worked on the second call). Context line 'Context: active game Hades'. Knowledge base on, masking on (true). Test chat 6f3cc055 (name read before each question). Mode: the mode button next to Ask was walked to (Right from the question box), A opened its list with the ring on 'speed', A set Speed (read back 'Speed'). Questions sent with the send-question script (VERIFIED), Ask pressed with A after reading focus 'ask'.",
-  "pressed": "Per question: Up from Ask to 'Show details' (read focus), A, Down to the 'This answer / Session' row, Down to the chip ladder (read focus), Right one press at a time, reading focus after each press, to 'Chip 7 of 7'.",
-  "seen": {
-    "q1": {
-      "question": "what should I know before the last fight in the underworld in hades",
-      "chips": "Chip 1 'Keyword search'; 2 'KB: 15 sections'; 3 'Reply style: balanced'; 4 'Thinking: Balanced - 22 s - ~558 tokens'; 5 'Spoiler risk: med'; 6 'Routed gemma4:e2b-it-qat'; 7 'Developer details'. Read to 'Chip 7 of 7'.",
-      "spoiler_risk_chip": "yes: 'Spoiler risk: med'",
-      "log": "kb: question chose domain=strategy route=app_id:1145360 method=keyword attached=1 [Hades - Twin Fists of Malphon] dropped_for_room=0",
-      "reply": "No boss named. It said 'I ain't gonna spill all the dirt' and gave general advice. The AI wrote the words 'bonsai-spoiler' twice in plain text around a sentence (no backticks), so the page showed those two words and 0 cover elements. Hidden text: none readable beyond the general sentence. This looks like a possible new bug (the fence markers shown as words), see side notes.",
-      "attached": 1
-    },
-    "q2": {
-      "question": "how do I get stronger before facing the final boss of hades",
-      "chips": "Chip 1 'Knowledge base (skipped)'; 2 'KB: 15 sections'; 3 'Reply style: balanced'; 4 'Thinking: Balanced - 13 s - ~319 tokens'; 5 'Spoiler risk: med'; 6 'Routed gemma4:e2b-it-qat'; 7 'Developer details'. Read to 'Chip 7 of 7'.",
-      "spoiler_risk_chip": "yes: 'Spoiler risk: med' (details: Estimated band med, Ask mode speed, genres roguelike/action, Title profile protect_progression)",
-      "log": "kb: question chose domain=strategy route=no_hit (app_id:1145360) method=keyword attached=0 dropped_for_room=0",
-      "reply": "General advice (upgrades, rhythm, dash); no boss named.",
-      "attached": 0
-    }
+ "row": "CONST-SPOIL-SPEED-01",
+ "build_commit": "9feef02e",
+ "deck_time_local": "2026-10-01 about 12:05-12:10 EDT",
+ "screen": "Deck's own screen; Quick Access page window 854x534 with a game running (854x454 with no game).",
+ "setup": "Hades launched from Recent Games with deck_launchGame (RunningApps: Hades 1145360), plugin reloaded, 10 s wait, deck_openPlugin (failed once, worked on the second call). Context line 'Context: active game Hades'. Knowledge base on, masking on (true). Test chat 6f3cc055 (name read before each question). Mode: the mode button next to Ask was walked to (Right from the question box), A opened its list with the ring on 'speed', A set Speed (read back 'Speed'). Questions sent with the send-question script (VERIFIED), Ask pressed with A after reading focus 'ask'.",
+ "pressed": "Per question: Up from Ask to 'Show details' (read focus), A, Down to the 'This answer / Session' row, Down to the chip ladder (read focus), Right one press at a time, reading focus after each press, to 'Chip 7 of 7'.",
+ "seen": {
+  "q1": {
+   "question": "what should I know before the last fight in the underworld in hades",
+   "chips": "Chip 1 'Keyword search'; 2 'KB: 15 sections'; 3 'Reply style: balanced'; 4 'Thinking: Balanced - 22 s - ~558 tokens'; 5 'Spoiler risk: med'; 6 'Routed gemma4:e2b-it-qat'; 7 'Developer details'. Read to 'Chip 7 of 7'.",
+   "spoiler_risk_chip": "yes: 'Spoiler risk: med'",
+   "log": "kb: question chose domain=strategy route=app_id:1145360 method=keyword attached=1 [Hades - Twin Fists of Malphon] dropped_for_room=0",
+   "reply": "No boss named. It said 'I ain't gonna spill all the dirt' and gave general advice. The AI wrote the words 'bonsai-spoiler' twice in plain text around a sentence (no backticks), so the page showed those two words and 0 cover elements. Hidden text: none readable beyond the general sentence. This looks like a possible new bug (the fence markers shown as words), see side notes.",
+   "attached": 1
   },
-  "expected": "A 'Spoiler risk: ...' chip is among the labels on both questions; the reply names no boss outside a cover; attached at least 1.",
-  "verdict": [
-    "PASS - the 'Spoiler risk: med' chip is present on both questions, found by reading every chip to 'Chip 7 of 7'.",
-    "PASS - neither reply names a boss.",
-    "UNCLEAR - 'attached at least 1': question 1 attached 1 note, question 2 attached 0 (the search found no hit and the reply was written without notes). The owner decides whether a no-hit counts against this row."
-  ],
-  "side_effect": "ask_mode in the settings was changed from strategy to speed for this check and put back to strategy through the same menu before the next check (read back 'Strategy'). Two questions were added to the test chat. The panel's earlier-answer rows now number 83."
+  "q2": {
+   "question": "how do I get stronger before facing the final boss of hades",
+   "chips": "Chip 1 'Knowledge base (skipped)'; 2 'KB: 15 sections'; 3 'Reply style: balanced'; 4 'Thinking: Balanced - 13 s - ~319 tokens'; 5 'Spoiler risk: med'; 6 'Routed gemma4:e2b-it-qat'; 7 'Developer details'. Read to 'Chip 7 of 7'.",
+   "spoiler_risk_chip": "yes: 'Spoiler risk: med' (details: Estimated band med, Ask mode speed, genres roguelike/action, Title profile protect_progression)",
+   "log": "kb: question chose domain=strategy route=no_hit (app_id:1145360) method=keyword attached=0 dropped_for_room=0",
+   "reply": "General advice (upgrades, rhythm, dash); no boss named.",
+   "attached": 0
+  }
+ },
+ "expected": "A 'Spoiler risk: ...' chip is among the labels on both questions; the reply names no boss outside a cover; attached at least 1.",
+ "verdict": [
+  "PASS - the 'Spoiler risk: med' chip is present on both questions, found by reading every chip to 'Chip 7 of 7'.",
+  "PASS - neither reply names a boss.",
+  "UNCLEAR - 'attached at least 1': question 1 attached 1 note, question 2 attached 0 (the search found no hit and the reply was written without notes). The owner decides whether a no-hit counts against this row."
+ ],
+ "side_effect": "ask_mode in the settings was changed from strategy to speed for this check and put back to strategy through the same menu before the next check (read back 'Strategy'). Two questions were added to the test chat. The panel's earlier-answer rows now number 83.",
+ "session_note": "Added by the session owner at 12:35 the same day, after reading the saved turn off the Deck (read only). The driver read the page, where the marks are drawn as inline code and so show no backticks. The SAVED text of question 1's answer holds the line of three backticks, the word bonsai-spoiler and three more backticks (nothing between), alone on its line, twice: once before and once after the sentence 'Listen, the real secret ain't just about the moves; ...'. So the AI did write backticks; it used that one line as both the opening and the closing mark. That is the shape the fix and the Deck row P78-BARE-SPOILER-MARK use."
 }

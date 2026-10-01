@@ -2768,3 +2768,23 @@ Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 1,
 **2026-09-30 (plan 77 block 3, build `ec557922`, row P77-SPOILER-OTHER-GAME):** FAILED on the Deck: three Hollow Knight questions with Deep Rock Galactic: Survivor running each came back with 0 covers; the control question stayed plain. No spoiler-profile log line appeared, so the other game's profile does not seem to be picked up. Back to fixing (helper J round 2). Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`.
 
 **2026-09-30 (plan 77 helper J round 2):** the landed change judges the turn as the story game, but that is not enough: the covers come from the notes, and the locked rule D19 makes the running game pick the notes, so a Hollow Knight question with Deep Rock running gets Deep Rock notes and no boss names to hide. Row P77-SPOILER-OTHER-GAME stays FAILED. **The maintainer answered on 2026-09-30 (D121 item 1, option (a)):** an exception to D19 for a no-story game running and a protected story game named. A proposed known-issue line is in plan 72 § 8.
+
+**Entry text as it stood before the fix landed (moved here 2026-09-30, docs sweep 3, plan 78; nothing removed):**
+
+  "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please" with Deep Rock Galactic: Survivor running came back with 0 covers, where with no game running it gets covers. Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+  Cause: the running game's spoiler rules decided the whole turn; Deep Rock Galactic: Survivor is a no-story game, so a Hollow Knight boss answer was told to use no covers and the screen opened any it drew. Now, when a no-story game runs and the question names a story game from the protected list, the turn is judged as that story game (it only adds caution; "spoilers are okay" still opens everything). Limit: the game's name must appear whole in the question.
+  **2026-09-30 (the maintainer's call, D121 item 1):** option (a) chosen. When a no-story game runs and the question names a game on the protected story list, the named game picks the notes for that one question; a bare follow-up that names no game goes back to the running game's notes. The fix is owed (plan 78 helper A); row **P77-SPOILER-OTHER-GAME** (FAILED on the Deck 2026-09-30) is the check. Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`. Older notes: [roadmap-details.md](roadmap-details.md#a-story-game-named-while-a-no-story-game-runs-lost-its-spoiler-covers).
+
+## Down takes an extra press that only scrolls before reaching a section below the dock
+
+Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 3, plan 78). Nothing was removed.
+
+Entry heading as it stood: ★ `[focus]` **Down takes an extra press that only scrolls before reaching a section below the dock** — **PARTIAL, two of three extra presses fixed 2026-09-30 (plan 77 helper E round 2, `fb3cfb2d`, `05b59434`). Was OPEN, found 2026-09-29 (plan 77, Deck block 2).**
+
+  On a Soul Sanctum answer with no game running, 3 extra Down presses (one per section) only scrolled the panel by 80 px and left the ring on the same box, whose top then sat 8 to 20 px under the header. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
+  Down (and Up, mirrored) now lands on the next section in one press when the one it leaves is fully read.
+  **2026-09-30 (plan 77 block 3, build `ec557922`):** two of the three extra presses are gone; one remains, on a short last section (60 px) before the non-answer rows. Down landed on it twice, the second press only scrolling by 80 px. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`.
+  **2026-09-30 (final smoke, build `2f72d658`):** seen again on a 90 px second section; every landing was inside the band and Up
+  mirrored Down otherwise. After the release. Evidence `docs/test-evidence/plan77-P77-FINAL-SMOKE.json`.
+
+**2026-09-30 (plan 78 helper D, `84cc0029`, `60592390`):** cause found. The walk asked whether the whole answer box was read, and the box has a 9 px frame (8 px of padding and a 1 px border) under its last section, so a last section sitting on the dock still had frame hidden and the next press only scrolled. The test setup had no frame, which is why last night's tests passed. The second commit fixes the same wasted press on a spoiler cover that has only its own 8 px margin after it. Row P78-DOWN-SHORT-SECTION is the Deck check.

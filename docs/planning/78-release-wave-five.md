@@ -460,6 +460,8 @@ To be filled in.
   run, 5 it can never run, 3 blocked and 31 the maintainer's. The read-through of the step after an answer found four
   real problems, now on the roadmap, and two more helpers started on them (L and M).
 
+- **Third sweep (2026-09-30, night):** five more fixes landed, every check green at each: the spoiler fix for a story game named over a no-story game (`27bab7dc`), the Down press (`60592390`), the chips (`5e3e0f7e`), the summary wording (`318c0da3`) and the spoken question read aloud (`c3a1f16a`). The summary fix needed a second round before landing. The Down-press helper, on Opus extra-high, found the cause two Sonnet rounds had missed: a 9 px frame around the answer box that the test setup did not have. Seven fixes are now on the working branch and none has been on the Deck. Still out: borrowed wording (helper I), the checklist lost after the panel was closed (helper L), and the long-answers fix, held for the Deck's before number.
+
 ## For the helpers: who owns which files
 
 A starting point for the briefs. Each brief names the tip it starts from and its exact files, the base check, one fix
@@ -495,7 +497,7 @@ reports. Helpers never edit the roadmap, the testing documents or the changelog.
   `plan70-L6-PHASE4-CHIPS-01.json`, `plan70-L6-CHIP-ROTATION-01.json`. Also `presetSlotRotation.ts`,
   `sessionRagComposer.ts`, `presetDecodeSlots.tsx`. Read while planning, to be confirmed by the helper:
   `nextSlotPreset` (fade, static and decode styles) refills from the static pool only, while only the carousel tick
-  calls `pickCarouselChipWithSessionRag`; and `composeSessionPresets` forces its guaranteed chip into slot
+  calls the next-chip rule (nextChipRule.ts); and `composeSessionPresets` forces its guaranteed chip into slot
   `PRESET_VISIBLE_SLOTS - 1`, which is off screen when the one-chip setting is on. The rules to build are in
   [The chips](#the-chips-what-changes-tonight): one next-chip rule for all four styles (after a general chip the
   next is the game's; after a game chip, the game's again with chance 0.2; two chips: the guarantee reads the chip

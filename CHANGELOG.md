@@ -8,6 +8,11 @@ All notable changes to this project are documented in this file.
 
 - **A model you remove outside the plugin (with `ollama rm`) now leaves the saved try order** the next time the AI models list opens. Nothing changes when Ollama is off or cannot be reached, or when the AI runs on a PC. Owes its Deck check.
 - **A setting changed with the D-pad is still there after you close Quick Access straight away.** Before, a change made less than half a second before the panel closed could be lost. Whatever is waiting to be saved is now saved the moment the panel is hidden or the settings screen is taken down, and only the settings that changed are written. Owes its Deck check.
+- **A spoiler question about a story game keeps its covers while a game with no story runs.** With Deep Rock Galactic: Survivor running, a question that names Hollow Knight in full now gets Hollow Knight's notes, covers, choice menu and credit line, as if nothing were running. Only that one question: a follow-up or a choice button under the answer goes back to the running game's notes. Owes its Deck check.
+- **Walking down a reply no longer spends a press that only scrolls** when the last section sits on the dock or a spoiler cover ends its section; Up mirrors it. Owes its Deck check.
+- **The game's own suggestion chip comes back, and the chips turn over faster.** One rule now picks the next chip in all four chip styles (with one chip, the game's own about every second chip; with two chips, one of the two is always the game's own), and one rule sets how long a chip stays: about 7 seconds with one chip, about 10 with two, and the two spots never change together. Owes its Deck checks.
+- **The "What the AI remembers" card no longer shows a Game line naming something that is not a game, or lines that say nothing** (such as "Stuck on: None apparent in this log"). The Game line is rebuilt from names that can be checked, and a real line is never cut. English summaries only. Owes its Deck check.
+- **A spoken question's answer now reads itself aloud** with Voice replies on "When I asked by voice"; before, it could stay silent. A retry of a spoken question counts as typed and is not read. Owes its Deck check, with a real voice.
 
 ### Plan 77 (2026-09-29)
 

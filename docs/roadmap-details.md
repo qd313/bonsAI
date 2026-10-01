@@ -2788,3 +2788,20 @@ Entry heading as it stood: ★ `[focus]` **Down takes an extra press that only s
   mirrored Down otherwise. After the release. Evidence `docs/test-evidence/plan77-P77-FINAL-SMOKE.json`.
 
 **2026-09-30 (plan 78 helper D, `84cc0029`, `60592390`):** cause found. The walk asked whether the whole answer box was read, and the box has a 9 px frame (8 px of padding and a 1 px border) under its last section, so a last section sitting on the dock still had frame hidden and the next press only scrolled. The test setup had no frame, which is why last night's tests passed. The second commit fixes the same wasted press on a spoiler cover that has only its own 8 px margin after it. Row P78-DOWN-SHORT-SECTION is the Deck check.
+
+## Answer quality, known issue: answers borrow each other's wording
+
+Cause and measurement notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5, plan 78), to keep the entry short. Nothing was removed.
+
+  **Fixed, sighting 3 (`386a8706`):** a boss answer no longer produces a power suggestion. Cause: the Speed and Expert instructions show the AI the shape of a power suggestion on every question, the small AI sometimes copied it onto the end of a boss answer, and the plugin trusted any such block. It now also needs the words around the block to be about power. **Fixed, sighting 1 (`966180d2`, then `05855c05` which replaced its rule):** a question about a different game no longer reuses the previous answer's wording. Cause: the plugin shows the AI the first 400 letters of each earlier answer, and the small AI copies what it is shown (in one test run, 49 words of a Doom answer came back in a Black Mesa answer). Now the earlier answers are left out only when the new question names a game different from the one the previous turn was about; every follow-up still sees them. Measured on this PC's copy of the Deck's model: a boss question about a different game sharing a run of 8 or more words with the previous answer went from 4 of 54 to 0 of 54 in Speed mode and from 4 of 24 to 0 of 24 in Strategy mode; of 90 follow-up cases, 89 are shown exactly what they were shown before (the one that differs names a different game).
+
+## What bonsAI costs a running game
+
+Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
+  night. **Target set by the maintainer 2026-09-27:** at least 30 frames a second in the panel while an answer
+  arrives with a game running. **PARTIAL, measured 2026-09-27:** from about 12 to 36 with the decode effect off
+  and 30–33 with it kept (the maintainer's call), dipping into the 20s late in long answers; the game itself
+  went from 14–17 to 23–31. Rows **GAME-LIGHT-01**, **STREAM-PIECES-01** partial. Next: a Deck processor
+  profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).

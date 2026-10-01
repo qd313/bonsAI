@@ -86,9 +86,9 @@ starts work outside this.
   On the Deck a cover the walk placed at y 104 ended at y 204. No player-visible fault is known; this is a note so the next walk fix knows. Found while fixing the extra Down press (`84cc0029`).
 - ★ `[focus]` **Walking Up can land on a section taller than the screen with only a sliver of it showing at the top** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
   Only 1 to 8 px of the section shows at the top. It passes the "bottom edge showing" rule but looks poor. The fix would be where an Up landing on a tall section is settled. Found while fixing the extra Down press (`84cc0029`).
-- ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **OPEN, seen 2026-09-27 (plan 72).**
-  The Hades answer reused the Hollow Knight answer's wording; power answers came out near-identical with no number;
-  the log pulled a power suggestion out of a boss answer. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+- ★ `[reply]` **A power question's answer often has no number in it** — **OPEN, found 2026-09-27 (plan 72), narrowed 2026-09-30 (plan 78 helper I).**
+  It happens with no chat history at all: 5 of 18 test answers had a number, with or without earlier turns. So it comes from the instructions the AI gets for power questions, not from the chat's memory. Not fixed tonight.
+  Evidence for the original sighting: `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[platform]` **About 6.6 GB of half-downloaded model files from plan 76's cancelled test downloads remain on the Deck** —
   **OPEN, a note for the maintainer, 2026-09-29.** Ollama does not list them and the session did not delete them.
   **2026-09-30 (plan 77 block 3, row P77-OLLAMA-TIDY):** could not run. A system-level unit (`bonsai-ollama-autostart.service`) runs Ollama on the Deck, and restarting it needs sudo, so it was not restarted. The restart is the maintainer's to do, because it needs their password. Evidence `docs/test-evidence/plan77-P77-OLLAMA-TIDY.json`.
@@ -233,12 +233,7 @@ replace it with a specific issue when one exists.
   and 31 again afterwards. It goes both ways — the answer itself drops to about a third of its usual speed. Memory is the other
   half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
-  **A worse sighting 2026-09-26,** plus a screen freeze of up to 7.6 s during a later Deck check that same
-  night. **Target set by the maintainer 2026-09-27:** at least 30 frames a second in the panel while an answer
-  arrives with a game running. **PARTIAL, measured 2026-09-27:** from about 12 to 36 with the decode effect off
-  and 30–33 with it kept (the maintainer's call), dipping into the 20s late in long answers; the game itself
-  went from 14–17 to 23–31. Rows **GAME-LIGHT-01**, **STREAM-PIECES-01** partial. Next: a Deck processor
-  profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).
+  Older dated notes (2026-09-26 and 2026-09-27, the 30 frames a second target and the partial measurement): [roadmap-details.md](roadmap-details.md#what-bonsai-costs-a-running-game).
   **2026-09-29 (plan 76, block 3):** with Deep Rock Galactic: Survivor on its title screen, the panel's median while an answer arrived was
   84.5 frames a second (thinking 90, idle 87.5). Title screen only; a mission running was not tried. Evidence `docs/test-evidence/plan76-SCR-10-try2.json`.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
@@ -373,6 +368,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **Down takes an extra press that only scrolls before reaching a section below the dock** — **VERIFY, fixed 2026-09-30 (plan 78 helper D, `84cc0029`, `60592390`). Was PARTIAL, found 2026-09-29 (plan 77, Deck block 2).**
   Walking Down an answer no longer spends a press that only scrolls: a last section sitting on the dock, or a spoiler cover that ends its section, is left in one press, and Up mirrors it. Cause: the walk asked whether the whole answer box was read, and the box has a 9 px frame under its last section, so the next press only scrolled; last night's test setup had no frame, and now it does.
   Unit tests: `src/utils/answerBubbleNavigation.lastSection.test.ts`, `src/utils/answerBubbleNavigation.coverMargin.test.ts`. Deck check owed: row **P78-DOWN-SHORT-SECTION**, then the standing sweep **QA-FREE-PLAY-01**. No Deck run of the fix yet. Two smaller findings are the new Bugs entries above. Older notes: [roadmap-details.md](roadmap-details.md#down-takes-an-extra-press-that-only-scrolls-before-reaching-a-section-below-the-dock).
+- ★ `[reply]` **Answer quality, known issue: answers borrow each other's wording** — **VERIFY, two of three sightings fixed 2026-09-30 (plan 78 helper I, `386a8706`, `966180d2`, `05855c05`). Seen 2026-09-27 (plan 72).**
+  Fixed: sighting 3, a boss answer no longer produces a power suggestion (`386a8706`); sighting 1, a question about a different game no longer reuses the previous answer's wording (`966180d2`, then `05855c05`). Causes and measurements: [roadmap-details.md](roadmap-details.md#answer-quality-known-issue-answers-borrow-each-others-wording).
+  **Not fixed, sighting 2** (two power questions in a row get near-identical answers with no number in them): the near-identical part is left as it is on purpose (similar answers to similar questions); the missing number is its own bug, under Bugs.
+  Deck check owed: row **P78-BORROWED-WORDING**. Unit tests: `tests/test_chat_memory_borrowed_wording.py` (12), `tests/test_tdp_suggestion_needs_power_talk.py` (6). No Deck run of the fix yet. Evidence for the sightings `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[ollama]` **A model removed outside the plugin stays in the saved try order** — **VERIFY, fixed 2026-09-30 (plan 78 helper E, `c1b4cdc8`). Was OPEN, found 2026-09-28 (plan 76).**
   After you remove a model in a terminal (`ollama rm`), opening the AI models list now drops it from the saved try order; nothing changes when Ollama is off or cannot be reached.
   Limits: it covers the Deck's own Ollama only (with the AI on a PC, the order is left alone); removing the very last model outside the plugin leaves the order alone, because an empty list cannot be told apart from an Ollama that did not answer.

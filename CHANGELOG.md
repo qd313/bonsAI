@@ -17,6 +17,8 @@ All notable changes to this project are documented in this file.
 - **Reopening the panel keeps the answer's mode.** Close Quick Access while a Strategy answer writes and reopen it: the checklist now shows under the answer, and a refine chip sends its follow-up in Strategy mode, not Speed. A saved checklist still loading can no longer wipe a new one. After a reopen a refine chip still does not re-send the original screenshot. Owes its Deck check.
 - **After a branch pick, the next question lists that answer once, not twice.** The saved chat's row is left as it is, so it keeps its thinking row, its game, its named boss and its spoiler consent. For the short time before the saved chat has loaded the row, the screen's own copy is still shown. Owes its Deck check.
 - **A Strategy checklist is only drawn for the game that is still running.** Quit or switch games while an answer writes and the old game's checklist is no longer drawn under it; it is still saved under its own game. Unit tests only; this cannot be made to happen reliably on the Deck.
+- **A boss answer no longer produces a power suggestion.** The small AI sometimes copied the shape of a power block onto the end of a boss answer, and the plugin trusted it. A block now also needs power talk around it. Owes its Deck check.
+- **A question about a different game is no longer handed the last answer's wording to copy.** The earlier answers are left out only when the new question names a game different from the previous turn's; every follow-up still sees them. Owes its Deck check.
 
 ### Plan 77 (2026-09-29)
 

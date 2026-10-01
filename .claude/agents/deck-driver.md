@@ -86,9 +86,16 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     moves nothing.
 14. **Games:** the rig can only launch games shown on the Recent Games row. The launch tool only walks
     right along that row, so go to the row's start first (press Left until focus stops moving); from the
-    far end it refuses. After launching a game, reload the plugin so it learns the game is running. After
-    exiting, confirm over SSH that the game's process is really gone. Steam's own list has read empty
-    while a game was still running.
+    far end it refuses. After exiting, confirm over SSH that the game's process is really gone. Steam's
+    own list has read empty while a game was still running.
+    **Never reload the plugin while a game is starting, and treat a reload with a game running as a last
+    resort.** On 2026-10-01 a reload during a game's start left the game's window behind Steam Home twice
+    (Deep Rock Galactic: Survivor, Half-Life 2), and a reload with Black Mesa running and about 550 MB of
+    memory free left Steam's interface gone until the maintainer restarted the Deck by hand. So: wait
+    until the game's window is in front and has been up for 30 seconds. Then close and reopen Quick Access
+    and read the Context line. Only if it still does not name the game, and `free -m` shows more than
+    2,000 MB available, reload the plugin once. Under 2,000 MB, or if the reload leaves Quick Access gone
+    for more than 90 seconds: stop pressing, mark the check COULD NOT RUN, and report at once.
 15. **Stop and report at once** if the Deck stops answering, the rig's stop switch is on, you see signs
     another chat is pressing buttons (focus moving on its own, the panel changing without your press), or
     anything asks for a password.

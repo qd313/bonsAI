@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 109,
-  "edgeCount": 289,
+  "fileCount": 110,
+  "edgeCount": 291,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -30,6 +30,7 @@
     "py_modules/backend/services/proton_troubleshooting_logs.py",
     "py_modules/backend/services/reply_followup_blocks.py",
     "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/spoiler_empty_label_marks.py",
     "py_modules/backend/services/spoiler_title_profiles.py",
     "py_modules/backend/services/spy_confession_service.py",
     "py_modules/backend/services/strategy_checklist_session_service.py",
@@ -277,6 +278,10 @@
     },
     {
       "path": "py_modules/backend/services/shortcut_setup_commands.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/spoiler_empty_label_marks.py",
       "count": 2
     },
     {
@@ -715,6 +720,7 @@
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
         "py_modules/backend/services/prompt_budget_service.py",
+        "py_modules/backend/services/spoiler_empty_label_marks.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
@@ -1441,6 +1447,13 @@
         "py_modules/backend/services/ask_local_commands.py"
       ]
     },
+    "py_modules/backend/services/spoiler_empty_label_marks.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py"
+      ]
+    },
     "py_modules/backend/services/spoiler_risk_service.py": {
       "imports": [
         "py_modules/backend/services/ask_topic_instructions.py",
@@ -1512,6 +1525,7 @@
     },
     "py_modules/backend/services/strategy_spoiler_policy.py": {
       "imports": [
+        "py_modules/backend/services/spoiler_empty_label_marks.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
         "py_modules/backend/services/strategy_guide_parse.py"
       ],

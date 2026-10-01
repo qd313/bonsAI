@@ -27,6 +27,7 @@ strategy_entity_extraction.py and spoiler_title_profiles.py respectively.
 import re
 from typing import Any, Iterable, Optional, Sequence
 
+from backend.services.spoiler_empty_label_marks import repair_empty_label_marks
 from backend.services.spoiler_title_profiles import title_profile_is_low_narrative
 from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
@@ -476,6 +477,7 @@ def move_midline_fence_openers_to_line_start(text: str) -> str:
     """
     if "```" not in text:
         return text
+    text = repair_empty_label_marks(text)
     out: list[str] = []
     pos = 0
     for m in _ANY_FENCE_MARKER_RE.finditer(text):

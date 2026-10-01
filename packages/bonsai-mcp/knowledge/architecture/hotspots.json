@@ -176,13 +176,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "lines": 609,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "lines": 607,
+      "path": "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
+      "lines": 609,
       "role": ""
     },
     {

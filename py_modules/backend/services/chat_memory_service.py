@@ -63,6 +63,7 @@ from backend.services.kb_other_game_named import other_game_named_in
 from backend.services.knowledge_base_schema import normalize_alias
 from backend.services.ollama_ask_budgets import resolve_ask_token_budgets
 from backend.services.prompt_budget_service import BudgetPlan, plan_prompt_budget
+from backend.services.spoiler_empty_label_marks import repair_empty_label_marks
 from backend.services.token_accounting_service import estimate_tokens_from_chars
 
 # Every block the plugin fences off with three backticks and a bonsai- name. A spoiler is the one
@@ -162,6 +163,7 @@ def strip_fenced_blocks(text: str) -> tuple[str, int]:
     raw = str(text or "")
     if "```bonsai-" not in raw.lower():
         return raw, 0
+    raw = repair_empty_label_marks(raw)
     removed = 0
 
     def _replace(_match: "re.Match[str]") -> str:

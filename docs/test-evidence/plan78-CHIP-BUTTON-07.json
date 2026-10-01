@@ -1,0 +1,12 @@
+{
+  "row": "CHIP-BUTTON-07",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 12:24-12:35 EDT",
+  "screen": "Deck own screen, 854x454 with no game (last read before the launch)",
+  "setup": "preset_single_chip turned OFF on the Settings tab at about 12:24 (as found: on). Half-Life 2 launched from Recent Games at about 12:24:50 and the plugin reloaded during its start.",
+  "pressed": "deck_launchGame Half-Life 2 (ok), deck_reloadPlugin, waited, deck_exitGame (second try worked, process gone over SSH).",
+  "seen": "Half-Life 2 never came to the front: Steam Home stayed on screen for about 100 seconds while hl2_linux ran at 34 to 73 percent CPU (screenshots/DeckCapture_20261001_122542_auto.png and _122643_auto.png). Under the 60-second rule I took one screenshot, exited the game and confirmed over SSH its process was gone. The plugin reload during the game's start may have caused it. No chip reads were made. Reduce Motion half not started.",
+  "expected": "see runbook block R14",
+  "verdict": "COULD NOT RUN - Half-Life 2 never came to the front: Steam Home stayed on screen for about 100 seconds while hl2_linux ran at 34 to 73 percent CPU (screenshots/DeckCapture_20261001_122542_auto.png and _122643_auto.png). Under the 60-second rule I took one screenshot, exited the game and confirmed over SSH its process was gone. The plugin reload during the game's start may have caused it. No chip reads were made. Reduce Motion half not started.",
+  "side_effect": "preset_single_chip is still OFF (as found: on) because the session was stopped before it could be put back. Steam's Reduce Motion was never touched."
+}

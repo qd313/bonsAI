@@ -385,6 +385,8 @@ a stop taller than the band is judged by the edge it is entered from.
 900,000 tokens. Give each later block to a fresh driver with a short handover note (build, keep-awake time, settings
 backup path, what the earlier driver learned), not to the same one.
 
+**Never reload the plugin on the Deck while a game is starting or running.** Twice (Deep Rock Galactic: Survivor and Half-Life 2, plan 78 block 3d and 3e) a reload during a game's start was followed by the game's window never coming to the front. Once (Black Mesa, plan 78 block 3e) a reload with the game running left Steam's interface gone until the maintainer restarted the Deck. The rule: reload first, then launch; with a game up, close and reopen Quick Access instead.
+
 ---
 
 ## 4. Briefing helpers

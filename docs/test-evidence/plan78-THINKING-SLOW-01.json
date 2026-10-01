@@ -1,0 +1,12 @@
+{
+  "row": "THINKING-SLOW-01",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 12:28-12:36 EDT",
+  "screen": "not read (Quick Access page was never reachable after the reload)",
+  "setup": "Black Mesa launched from Recent Games at 12:28 (second attempt; the first stopped at the Steam-button press). The game window came to the front within 30 seconds (screenshot DeckCapture_20261001_122852_game.png). Plugin reloaded at about 12:29. The model was not unloaded and no question was asked.",
+  "pressed": "deck_launchGame, deck_reloadPlugin, deck_openPlugin twice (both failed; each sent one DOWN press that landed in the Black Mesa menu).",
+  "seen": "After the reload Steam's debug list showed only SharedJSContext and one empty target from 12:29 to 12:35 (6 minutes or more). The Quick Access page never came back. Free memory about 550 MB of 14.8 GB, bms.exe 143 to 359 percent CPU. The maintainer then reported Steam frozen and rebooted it by hand, and the coordinator stopped the run.",
+  "expected": "At least 3 different slow-start lines in order, one from each pool, no discouraging words.",
+  "verdict": "COULD NOT RUN - the Quick Access page did not come back after the plugin reload with Black Mesa running; the run was stopped by the coordinator at 12:36.",
+  "side_effect": "Black Mesa was left running. Two stray Down presses reached the Black Mesa main menu (it was on its title menu, nothing selected or started). preset_single_chip is still OFF (as found: on)."
+}

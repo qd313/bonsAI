@@ -304,6 +304,12 @@ Terse ships without them.
 
 ## The chat summary card appears behind the dock until Down is pressed
 
+Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
+  **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
+  `docs/test-evidence/plan72-F6-SUMUP.json`.
+
 Found 2026-09-25 during plan 68's Deck pass, rows SUMUP-02 and SUMUP-03. After the *Sum up this chat* button
 finishes, the card that shows what the AI kept sits just behind the dock at the bottom of the screen: its
 top measured 597 pixels down against the dock's own top at 600, only 3 pixels of daylight. Opened straight
@@ -2821,3 +2827,9 @@ Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5,
 Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 9, plan 78), to bring the roadmap under its size limit. Nothing was removed.
 
   **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.
+
+## A faded ghost of the tab bar is left drawn over the chip row after touching the screen
+
+Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.

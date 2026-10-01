@@ -1,0 +1,25 @@
+{
+  "row": "QA-FROZEN-CHIPS-01",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 12:16-12:20 EDT",
+  "screen": "Deck own screen, Quick Access page window 854x454 (no game)",
+  "setup": "Backed up settings (deck/p78-settings-block3e-start.json). Set dev_frozen_test_chips to Batch B (six strings) by SSH edit of settings.json, reloaded the plugin at once. One-chip setting on as found (preset_single_chip true), chip style decode as found. No game. Test chat 6f3cc055 (168 turns before and after).",
+  "pressed": "Opened plugin (first openPlugin failed once, second worked). Read-only 125 s watch with the ring on the question box. UP to the chip (read focus: BUTTON, chip, y 290-320, visible). RIGHT x6 on the chip. DOWN back to box. UP to chip again, read focus, then A on the chip. Then RB x4 to Developer tab, DOWN 12 presses one at a time (never A) to 'Clear frozen test chips', read focus, A.",
+  "seen": {
+    "developer_tab": "Frozen test chips (QA): '6 pinned.' listed",
+    "test_badge": "Test badge present on every chip read: every recorded label change in the 125 s watch (over 100 of them, mid-scramble ones too) had the badge; chip shows the badge element bonsai-preset-chip-test-badge",
+    "order_in_one_watch": "Each chip shown about 6.5 s, rotation went 1 end of the main story, 2 saves wont load, 3 proton prefix, 4 install a mod safely, 5 what should i do next, 6 anything nearby worth checking, then back to 1; the cycle repeated 3 full times (about 38 s per cycle), all six in order every time",
+    "right_at_edge": "6 of 6 RIGHT presses on the focused chip: focus did not move and the chip text did not change (one-chip mode, ring on chip holds the chip). The old 2026-08 note of Right pulling the next entry was in two-chip mode; it did not happen here.",
+    "A_on_chip": "Focus before A: the chip button (text 'my saves wont load after a mod update what should i delete'), rect x48 y290.8 w300 h30, 100 percent visible. After A: the Ask field held exactly 'my saves wont load after a mod update what should i delete'; reply bubbles 15 before and 15 after (and 3 s later); not busy; chat file turns 168 before and after (0 new turns).",
+    "clear": "A on 'Clear frozen test chips' (focus read first, visible 100 percent). Settings file afterwards: dev_frozen_test_chips = [] (read over SSH)."
+  },
+  "expected": "All six visited in order in one walk; Test badge on 6 of 6; A puts the text into the Ask field verbatim and sends nothing; clear leaves the list empty.",
+  "verdict": [
+    "PASS - six chips in order and Test badge on 6 of 6 (watched by reading rotation, not by Right presses)",
+    "PASS - A on a chip put the text into the Ask field verbatim and sent nothing (0 new turns)",
+    "UNCLEAR - 'a single D-pad walk' with Right: in one-chip mode Right on the chip does not advance (6 of 6 dead). Order was proven by the time rotation instead. Owner decides if Right was meant to advance.",
+    "PASS - chips cleared, list empty in the settings file",
+    "NOT RUN - fade and static styles (time)"
+  ],
+  "side_effect": "The Ask field now holds the chip text 'my saves wont load after a mod update what should i delete' (not sent). Settings file rewritten by a python json.dump (key order and spacing may differ from the plugin's own writes; values same)."
+}

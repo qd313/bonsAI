@@ -1,0 +1,22 @@
+{
+  "row": "PRESET-ONE-LINE-02 (help-chip half)",
+  "build_commit": "9feef02e",
+  "deck_time_local": "2026-10-01 12:20-12:26 EDT",
+  "screen": "Deck own screen, Quick Access page window 854x454 (no game)",
+  "setup": "Old value of browser storage key bonsai:plugin-help-dismissed read first: \"1\". Removed it through the page connection, reloaded the plugin (key read back null, so the chip was expected to show). preset_single_chip true as found (one chip mode). Test chat, no game.",
+  "pressed": "Opened plugin, LB x4 to Main tab, DOWN walk (12 presses, read focus) to the help chip 'How to use bonsAI - open quick start', A (focus read first). The A opens the Quick start popup; source says opening help is the dismissal (usePluginHelpModal.tsx openPluginHelpModal marks dismissed). B on the popup (Cancel). Then a second try: A on the chip again, A on 'Got it' (highlighted in screenshot). Then DOWN to the question box. Then plugin reload to see the stored state.",
+  "seen": {
+    "before_dismissal": "Exactly 1 chip element in the row: the help chip, x48 y290.8 width 300 height 30 (the whole row). 0 suggestion chips (no .bonsai-preset-chip-label in the page).",
+    "after_first_A": "storage key became \"1\" right away. Popup showed (screenshot screenshots/DeckCapture_20261001_122143_auto.png). After B (Cancel): the help chip was STILL shown, 300x30, key \"1\".",
+    "after_second_try": "After A, then A on 'Got it', and then a Down to the question box: help chip STILL shown, 300x30, key \"1\". The suggestion chip never took the row.",
+    "after_reload": "After a plugin reload the key read null (the dismissal did not survive) and the help chip showed again, 300x30. I then set the key back to \"1\" by page connection and reloaded again: it read null again after the reload and the help chip showed again.",
+    "after_dismissal_layout": "Not reached: one suggestion chip about 300 px wide was never on screen in this check."
+  },
+  "expected": "Help chip at least 290 px wide and no suggestion chip beside it; after dismissal one 300 px chip (one-chip setting on).",
+  "verdict": [
+    "PASS - before dismissal the help chip is the whole row: 300 px wide, no suggestion chip beside it",
+    "UNCLEAR - after dismissal: the help chip never went away in the session (3 tries: Cancel, Got it, move off), so the 300 px suggestion chip was not reached. Possible new bug: dismissing the help chip by opening the quick start does not remove it this session, and the stored flag does not survive a plugin reload (written \"1\" twice, null after each reload; one earlier \"1\" had survived the first reload of the block)."
+  ],
+  "storage_key_restore": "Old value was \"1\". Set back to \"1\" by page connection at the end of this check; read-back value in the handover note (a later reload may clear it again, see above).",
+  "side_effect": "The Quick start popup was opened twice and closed (B once, Got it once). The storage key was removed and re-set. Also the Ask field still holds the chip text from the QA-FROZEN-CHIPS-01 check (not sent)."
+}

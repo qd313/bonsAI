@@ -104,6 +104,10 @@ starts work outside this.
   (plan 75).** Seen twice: once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`); once it never
   showed a window and Steam's menu could not close it (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`).
   **Sighting 2026-09-29 (plan 77, block 1a):** after a reload the game was behind Steam's home page; one A on Resume brought it back.
+- ★★ `[chips]` **After the quick start is opened and closed, the help chip stays and the suggestion chips never take the row** — **OPEN, found on the Deck 2026-10-01 (plan 78, build `9feef02e`); rank to be confirmed.**
+  Opening the quick start set the stored flag at once, but after Cancel, and again after "Got it", the wide help chip was still shown. Possible cause, not yet confirmed (the session's reading of `usePluginHelpModal.tsx` and `useSessionRestoreAfterRemount.ts`): the session snapshot is taken before the dismissal is recorded, and the restore after the popup closes puts the old value back.
+  Also seen, cause unknown and possibly the rig's own doing: after a plugin reload the stored flag read empty. Evidence `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`. QA row **P78-HELP-CHIP-DISMISS**, owed.
+  A helper (helper P) started on it at about 12:40 on 2026-10-01.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **OPEN, back from Verify 2026-09-23: failed by hand, found by the maintainer (build `a224fb6`), after the
   Deck work ended.** After Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar
@@ -113,16 +117,17 @@ starts work outside this.
   project. Row **TAB-BAR-GHOST-01**. The session's guess: closing a Decky popup rebuilds the plugin, and
   the highlight lands on the top bar, which then opens. Needs a Deck walk with the focus recorder before any
   fix.
-  **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
   **2026-09-29 (plan 77):** the D-pad half did not reproduce. Only the touch half is left; it is on the maintainer's checks page (plan 77).
+  Older note: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
+- ★★ `[platform]` **Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted** — **OPEN, seen once, 2026-10-01 12:29 (plan 78, Deck block 3e).**
+  Black Mesa running, about 550 MB free of 14.8 GB, the rig's plugin reload, then no Quick Access page for six minutes or more; the maintainer restarted the Deck. Evidence `docs/test-evidence/plan78-THINKING-SLOW-01.json`.
+  A real player never reloads the plugin this way (it is a developer action), so this is first a rule for the Deck driver. Whether an ordinary Steam restart of the plugin under low memory can do the same is not known.
+  In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
-  [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
-  **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
-  **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
-  `docs/test-evidence/plan72-F6-SUMUP.json`.
+  [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed); two older notes moved there 2026-10-01.
   **2026-09-27 (plan 72, `01127c79`, `5dbb9bff`):** two more tries FAILED the same way, `docs/test-evidence/plan72-F7-SUMUP.json`,
   `plan72-F8-SUMUP.json`: Steam keeps the ring on the greyed "Sum up again". **The maintainer's call: leave it as is for 0.6.0** —
   the card shows itself and one Down reaches it; named in the release notes (plan 72 § 8). After the release: finish the
@@ -758,17 +763,13 @@ ninth docs sweep, again to keep this document under its size limit.
 
 Plan 78's Deck block 3b closes (the 2026-10-01 late morning, builds `c8d6b094` and `b417c271`) were moved out the same way on 2026-10-01, during plan 78's eleventh docs sweep, again to keep this document under its size limit.
 
+Plan 78's Deck block 3c closes (the 2026-10-01 midday, build `24cbbd6b`) were moved out the same way on 2026-10-01, during plan 78's fourteenth docs sweep, again to keep this document under its size limit.
+
 **Closed 2026-10-01 (plan 78, Deck block 3d, build `9feef02e`):**
 
 - ★★ `[focus]` **Walking Down, a long section's text is skipped when its spoiler cover is deep inside it** — **DONE 2026-10-01, passed on the Deck (row P78-DOWN-DEEP-COVER; fix `b3cbb6e8`).** On a Hollow Knight answer with one 461 px section (visible space 202 px) and its cover 398 px down inside it, Down from the reasoning line landed on the section with its top at y 88.2, not on the cover. Four section stops (scroll 206, 286, 366, 446); all 193 words were on screen before the cover was landed on; the cover was landed on once each way; the next Down left it for Helpful; Up visited the same stops in reverse; scroll never fell going Down or rose going Up; no dead press. A cover at the head of a section still came first. Evidence `docs/test-evidence/plan78-P78-DOWN-DEEP-COVER.json`. [Full detail](archive/roadmap-bugs-fixed.md#walking-down-a-long-sections-text-is-skipped-when-its-spoiler-cover-is-deep-inside-it-closed-2026-10-01)
 - ★ `[focus]` **A section only a few pixels taller than the screen takes a whole extra press** — **DONE 2026-10-01, passed on the Deck by the session's ruling (row P78-SHORT-LAST-STEP; fix `9feef02e`).** Three presses that moved less than 80 px (39, 40 and 70) each left the section's edge within 1 px of the dock's top going Down or the panel's top going Up, which is what the fix adds. The morning's exact case, a section only 4 to 80 px taller than the visible space, did not come back in the answers (sections of 321 and 351 px). Evidence `docs/test-evidence/plan78-P78-SHORT-LAST-STEP.json`. [Full detail](archive/roadmap-bugs-fixed.md#a-section-only-a-few-pixels-taller-than-the-screen-takes-a-whole-extra-press-closed-2026-10-01)
 - ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **DONE 2026-10-01, passed on the Deck from history, second try (row P77-GLUED-SPOILER; fix `0d805d37`).** On a Hollow Knight turn the control showed one closed cover; the mark glued onto a word also became one closed cover, with no marks, no backticks and the hidden word nowhere on the page (same on both reads). "While streaming" still rests on unit tests, as the row says. Evidence `docs/test-evidence/plan78-P77-GLUED-SPOILER-try2.json` (first try `docs/test-evidence/plan78-P77-GLUED-SPOILER.json`, unclear). [Full detail](archive/roadmap-bugs-fixed.md#a-hidden-blocks-opening-mark-glued-onto-a-sentence-is-drawn-as-visible-inline-code-closed-2026-10-01)
-
-**Closed 2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`):**
-
-- ★★ `[ui]` **An unrelated setting change can write an older try order back** — **DONE 2026-10-01, passed on the Deck except one step (row P78-TRY-ORDER-KEPT; fixes `713b9257`, `24cbbd6b`).** Three of three unrelated switch changes left both try orders exactly as they were (steps 5, 6, 8); the "edit order" popup opened with the fresh order (step 3); after the model was removed and the models screen reopened, the order was cleaned to the one installed model, with the `routing_prune` log line (step 7). Not proven on the Deck: the quick double press that used to open two popups, because the controller rig's two presses are about 0.46 s apart; that part rests on its unit tests. Evidence `docs/test-evidence/plan78-P78-TRY-ORDER-KEPT.json`. [Full detail](archive/roadmap-bugs-fixed.md#an-unrelated-setting-change-can-write-an-older-try-order-back-closed-2026-10-01)
-
-- ★ `[reply]` **Read aloud reads a `~~~` code block as words** — **DONE 2026-10-01, passed on the Deck (row P77-TILDE-READALOUD; fix `0d805d37`).** On a code block fenced with three tildes, Read aloud spoke "There is code on screen." and no spoken sentence held the block's contents. The spoken sentences were collected over three tries, because Read aloud starts its sentences within 20 to 40 ms of each other and the first catcher missed some. The route was a hand-edited turn in the test chat, restored afterwards. Evidence `docs/test-evidence/plan78-P77-TILDE-READALOUD.json`. [Full detail](archive/roadmap-bugs-fixed.md#read-aloud-reads-a--code-block-as-words-closed-2026-10-01)
 
 **Closed 2026-09-26 (docs clean-up):**
 

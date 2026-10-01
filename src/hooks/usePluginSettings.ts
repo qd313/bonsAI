@@ -206,6 +206,30 @@ function defaultSettingsSnapshot(): BonsaiSettingsSnapshotInput {
   return snapshotFromBonsaiSettings(normalizeSettings({}));
 }
 
+/**
+ * In: what the screen shows now (`live`), the last confirmed disk state before a save response
+ * (`oldBaseline`), and the disk state that response brought back (`fresh`).
+ * Out: the fields the person has NOT touched since `oldBaseline` (live still equals it) whose value
+ * on disk is now different (a popup saved it, or the back end changed it on its own), with the
+ * disk's value. A field the person did touch is never in the result, so it still counts as their
+ * change and is still sent.
+ * Why: without this the baseline moves to the disk's value while the screen keeps the old one, and
+ * the next unrelated save reads that gap as a change the person made and writes the old value back
+ * (Deck 2026-10-01: the saved try order went back to an older list).
+ */
+function untouchedFieldsWithNewerDiskValue(
+  live: BonsaiSettingsSnapshotInput,
+  oldBaseline: BonsaiSettingsSnapshotInput,
+  fresh: BonsaiSettingsSnapshotInput,
+): Partial<BonsaiSettingsSnapshotInput> {
+  const out: Record<string, unknown> = {};
+  for (const key of SETTINGS_FIELD_KEYS) {
+    const untouched = JSON.stringify(live[key]) === JSON.stringify(oldBaseline[key]);
+    if (untouched && JSON.stringify(fresh[key]) !== JSON.stringify(live[key])) out[key] = fresh[key];
+  }
+  return out as Partial<BonsaiSettingsSnapshotInput>;
+}
+
 /** One setter per field, named the way every tab already calls it (`setLatencyWarningSeconds`, …). */
 type SettingsFieldSetters = {
   [K in keyof BonsaiSettingsSnapshotInput as `set${Capitalize<string & K>}`]: Dispatch<
@@ -300,6 +324,34 @@ export function usePluginSettings() {
     publishDeveloperTabShown(settings.showDeveloperTab);
   }, [settings.showDeveloperTab]);
 
+  /**
+   * What a save's response does: the response is the whole file as it is now, so it becomes the
+   * last confirmed disk state, and every field the person has not touched since the last confirmed
+   * state takes the disk's value on screen too. The baseline and the screen then never disagree
+   * about a field the person did not change, which is what keeps the next save from sending it.
+   * A field the person changed meanwhile keeps their value and stays pending.
+   */
+  const confirmSavedSettings = useCallback((saved: BonsaiSettings) => {
+    const fresh = snapshotFromBonsaiSettings(normalizeSettings(saved));
+    const oldBaseline = settingsBaselineRef.current;
+    const adopted = untouchedFieldsWithNewerDiskValue(settingsSnapshotForDebouncedSaveRef.current, oldBaseline, fresh);
+    settingsBaselineRef.current = fresh;
+    const keys = Object.keys(adopted) as (keyof BonsaiSettingsSnapshotInput)[];
+    if (keys.length === 0) return;
+    settingsSnapshotForDebouncedSaveRef.current = { ...settingsSnapshotForDebouncedSaveRef.current, ...adopted };
+    setSettings((prev) => {
+      const next = { ...prev } as Record<string, unknown>;
+      let changed = false;
+      for (const key of keys) {
+        if (JSON.stringify(prev[key]) === JSON.stringify(oldBaseline[key])) {
+          next[key] = adopted[key];
+          changed = true;
+        }
+      }
+      return changed ? (next as BonsaiSettingsSnapshotInput) : prev;
+    });
+  }, []);
+
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);
     const snapshot = snapshotFromBonsaiSettings(normalized);
@@ -369,13 +421,13 @@ export function usePluginSettings() {
     settingsSaveInFlightRef.current += 1;
     try {
       const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch]);
-      settingsBaselineRef.current = snapshotFromBonsaiSettings(normalizeSettings(saved));
+      confirmSavedSettings(saved);
     } catch (err) {
       console.error("save_settings failed (persist now)", err);
     } finally {
       settingsSaveInFlightRef.current -= 1;
     }
-  }, [pauseDebouncedSettingsSave]);
+  }, [pauseDebouncedSettingsSave, confirmSavedSettings]);
 
   /*
    * Plan 78 (entry C): a setting changed less than 400 ms before Quick Access closes was lost,
@@ -477,7 +529,7 @@ export function usePluginSettings() {
       settingsSaveInFlightRef.current += 1;
       callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch])
         .then((saved) => {
-          settingsBaselineRef.current = snapshotFromBonsaiSettings(normalizeSettings(saved));
+          confirmSavedSettings(saved);
         })
         .catch((err) => {
           console.error("save_settings failed", err);
@@ -487,7 +539,7 @@ export function usePluginSettings() {
         });
     }, 400);
     return () => clearTimeout(timer);
-  }, [settings, settingsPersistEnabled]);
+  }, [settings, settingsPersistEnabled, confirmSavedSettings]);
 
   return {
     ...settings,

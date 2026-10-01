@@ -477,4 +477,102 @@ describe("usePluginSettings", () => {
       expect(saves()).toHaveLength(0);
     });
   });
+
+  /*
+   * Plan 78 round 2 (Deck 2026-10-01, P78-ORDER-PRUNE): the screen loaded with an empty try order,
+   * the models screen then saved its own order straight to disk, and the back end pruned it. One
+   * unrelated switch changed later wrote the screen's OLD empty order back over the newer one.
+   * Cause: a save's response refreshed the "last confirmed disk state" without telling the screen,
+   * so the next save saw the old on-screen value as a change the person had made.
+   */
+  describe("a key the person did not change is never sent, whoever changed it on disk", () => {
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const settle = () => act(async () => { await new Promise((r) => setTimeout(r, 450)); });
+    let disk: Record<string, unknown>;
+
+    beforeEach(() => {
+      disk = { ...defaultSettingsFixture(), text_model_routing_order: [] } as Record<string, unknown>;
+      setRpcHandler("load_settings", () => disk);
+      setRpcHandler("save_settings", (...args: unknown[]) => {
+        disk = { ...disk, ...((args[0] as Record<string, unknown>) ?? {}) };
+        return disk;
+      });
+    });
+
+    it("the Deck sequence: the models screen saves a new try order, then two unrelated changes", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      // The models screen's own save (a direct call, no hook state or baseline touched), then the
+      // back end prunes the order behind the screen's back.
+      await act(async () => {
+        await call("save_settings", { text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5:1.5b"] });
+      });
+      disk = { ...disk, text_model_routing_order: ["gemma4:e2b-it-qat"] };
+
+      // One unrelated change and its save: the response brings the new order into the baseline.
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await settle();
+      // The next unrelated change must not carry the order along.
+      act(() => result.current.setPresetSingleChip(false));
+      await settle();
+
+      const sent = saves().slice(before + 1);
+      expect(sent.length).toBeGreaterThan(0);
+      for (const c of sent) expect(Object.keys(c.args[0] as object)).not.toContain("text_model_routing_order");
+      expect(disk.text_model_routing_order).toEqual(["gemma4:e2b-it-qat"]);
+      // And the screen itself follows the disk for a key the person never touched.
+      expect(result.current.textModelRoutingOrder).toEqual(["gemma4:e2b-it-qat"]);
+    });
+
+    it("the same for a key only the back end changed (the knowledge base location)", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await settle();
+      act(() => result.current.setPresetSingleChip(false));
+      await settle();
+
+      for (const c of saves().slice(before)) expect(Object.keys(c.args[0] as object)).not.toContain("rag_corpus_path");
+      expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+      expect(result.current.ragCorpusPath).toBe("/run/media/deck/sd/.bonsai/rag");
+    });
+
+    it("a key the person did change still wins over a newer value on disk", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+      disk = { ...disk, text_model_routing_order: ["from-the-back-end"] };
+      act(() => {
+        result.current.setShowOnscreenDebugHud(true);
+        result.current.setTextModelRoutingOrder(["chosen-on-this-screen"]);
+      });
+      await settle();
+      expect(disk.text_model_routing_order).toEqual(["chosen-on-this-screen"]);
+      expect(result.current.textModelRoutingOrder).toEqual(["chosen-on-this-screen"]);
+    });
+
+    it("the quick-close save follows the same rule", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      disk = { ...disk, text_model_routing_order: ["pruned-by-back-end"] };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await result.current.persistChangedSettingsNow();
+      });
+      act(() => result.current.setPresetSingleChip(false));
+      await act(async () => {
+        await result.current.persistChangedSettingsNow();
+      });
+
+      for (const c of saves().slice(before)) expect(Object.keys(c.args[0] as object)).not.toContain("text_model_routing_order");
+      expect(disk.text_model_routing_order).toEqual(["pruned-by-back-end"]);
+    });
+  });
 });

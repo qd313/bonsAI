@@ -138,6 +138,10 @@ finished.
 - Nothing downloads without asking first, and the highlight ring starts on **Not now**.
 - The knowledge library downloads, and a question about a game uses it.
 - There is no Developer tab, no test chips, and nothing half-built showing.
+- The first time, the chip row is one wide help chip. Open the quick start from it and close it (try both
+  **Cancel** and **Got it** if you can): the help chip is gone and the suggestion chips are back, and they
+  stay after the panel is closed and reopened. (Added 2026-10-01: this was broken until plan 78's fix, and
+  the robot could not show the fix on a Deck that had already seen the quick start.)
 - The plugin's folder on the Deck holds a `NOTICE` file, a `data` folder and `dist/THIRD-PARTY-LICENSES.txt`,
   and nothing from the game notes.
 - Typing "mic" into the question box's setting search finds the Voice settings.

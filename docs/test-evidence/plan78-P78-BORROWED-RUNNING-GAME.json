@@ -1,0 +1,42 @@
+{
+  "row": "P78-BORROWED-RUNNING-GAME",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:27 to 10:36 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454 (read with the plugin open over the running game). Screen itself 1280x800.",
+  "setup": "Deployed c8d6b094 (buildMatches true). Launched Deep Rock Galactic: Survivor (appid 2321470) with deck_launchGame (4 presses, RunningApps showed it after 92 ms), reloaded the plugin, waited 14 s, deck_openPlugin worked on the FIRST try. Context line: 'active game Deep Rock Galactic: Survivor'. Strategy mode, spoiler masking true, knowledge base on, Ali G character. Test chat (header 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', id 6f3cc055...) read before every question. A page logger (setInterval 250 ms, read only) recorded the transcript text and the cover count from the Ask press to 5 s after the finish. Logs read from ~/homebrew/logs/bonsAI/2026-10-01 10.27.29.log.",
+  "pressed": "Question text put in with scripts/deck_send_ask.py each time (VERIFIED each time, whole text read back). Walked Down to the Ask button (focus read: BUTTON 'ask', visible), then A. After each question the ring sat on the question box; never pressed A there, only Down then A on 'ask'. Left the game with deck_exitGame (refused once because the Steam menu was on Home; the second call worked).",
+  "seen": {
+    "ask1": {
+      "question": "what is the best way to fight the boss of the Soul Sanctum in Hollow Knight",
+      "log": "spoiler: named story game picks the notes this turn (running no-story game 'Deep Rock Galactic: Survivor', question names 'hollow knight'); kb: question chose route=text:hollow knight attached=3 [Hollow Knight Starting out; Soul Master; False Knight]; ask_ollama ... earlier answers left out=True",
+      "finished": "1 cover ('Spoiler - tap to show'), answer 1,051 letters, took about 68 s.",
+      "live_text_leak": "The hidden block's own words were readable in the live text. Reads at 50151, 50378, 50669, 50875 and 51125 ms (5 reads, about 1 s) showed the start of the hidden block ('I ain't gonna give ya the whole script, but I can tell ya what the skinny...', saved text: 'I ain't gonna give ya the whole script, but I can tell ya what the skinny is on that Soul Master fella up in the Soul Sanctum.'). At 51411 the words were gone and there was no cover yet (0 covers, 1 read), at 51649 the cover appeared. No other boss or story name was readable outside a cover.",
+      "flicker": "One read (57630 ms, 250 ms) in the middle of the answer showed the text 66 letters shorter ('...You gotta look for the openings.' instead of '...The key move is hitting him when he's putting those orbs together'); the very next read had it back. No doubled or missing text at the end: the last arriving read and the finished text had the same words outside the cover."
+    },
+    "ask2": {
+      "question": "any more Hollow Knight tips for the Mantis Lords fight",
+      "log": "named story game picks the notes; kb chose route=text:hollow knight attached=3 [Mantis Lords; Starting out; False Knight]; earlier answers left out=False",
+      "finished": "0 covers: the AI wrote no spoiler block (saved text has no fence), 1,287 letters, about 75 s. The one cover seen at the start of the read was the previous answer's, which went away when the new turn started.",
+      "live_text_leak": "None possible (no hidden block). No other boss or story name outside the question's own Mantis Lords.",
+      "flicker": "None. The only drop in length was the old turn closing up."
+    },
+    "ask3": {
+      "question": "how do I dodge enemy projectiles in this game",
+      "log": "kb: question chose route=app_id:2321470 attached=3 [Deep Rock Galactic: Survivor Mactera; Exploder; Hollow Bough]; ask_ollama ... earlier answers left out=True",
+      "answer_search": "Searched the whole saved answer for soul, nail, mantis, sanctum, knight, vengeful, hallownest: 0 hits. It talks about Mactera and Exploder."
+    },
+    "ask4": {
+      "question": "what else can I try",
+      "log": "kb: question chose route=app_id:2321470 attached=2 [Classes; Praetorian]; ask_ollama ... earlier answers left out=False"
+    },
+    "game_exit": "deck_exitGame: first call refused (main menu opened on Home, not the game's entry; nothing else pressed); second call exited: appid left RunningApps in 201 ms; over SSH no Deep Rock / Survivor process remained."
+  },
+  "expected": "Borrowed wording: ask 3 log ends 'left out=True', answer 3 holds no Hollow Knight wording, ask 4 log ends 'left out=False', ask 3 got Deep Rock notes. Covers on this build: on answers 1 and 2 at no read while arriving is another boss name or the text of a hidden block readable; when finished each has at least 1 cover; nothing flickers, doubles or goes missing between arriving and finished text.",
+  "verdict": [
+    "PASS (borrowed wording): ask 3 left out=True, answer 3 has no Hollow Knight word, ask 3 used Deep Rock notes (route=app_id:2321470), ask 4 left out=False.",
+    "FAIL (covers, answer 1, nothing readable while arriving): the first words of the hidden block were readable in the live text for 5 reads (about 1 s) before the cover replaced them. Finished answer 1 has 1 cover.",
+    "UNCLEAR (covers, answer 2, at least 1 cover when finished): the AI wrote no spoiler block, so there was nothing to cover; no leak and no flicker on answer 2. The runbook allows two tries for a case that depends on what the AI writes; question 1 gave the case, question 2 did not, so I did not spend more.",
+    "UNCLEAR (no flicker): one 250 ms read on answer 1 showed 66 letters of live text missing and then back (could be the settle animation, could be a redraw); no flicker on answer 2; finished text matched the last arriving text."
+  ],
+  "side_effect": "Four questions went into the test chat (it summed itself up once on its own before ask 1, as warned). Game launched and exited. No settings changed in this check. A read-only logger was left running in the Quick Access page until the next plugin reload."
+}

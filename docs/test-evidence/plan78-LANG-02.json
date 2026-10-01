@@ -1,0 +1,21 @@
+{
+  "row": "LANG-02",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:43 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454, no game running.",
+  "setup": "None needed. About tab (reached with LB from Main). About page text: the beta disclaimer ('This plugin is in beta...') is plain text; then REPLY LANGUAGE, 'Language: Follow system'; then LINKS: GitHub, Built on Ollama!, Bugs & Feature Requests, Support my Steam Sale habit.",
+  "pressed": "Up to the tab strip ('About tab'), then Down one press at a time (one runSequence, focus and visibility read after every press), then Up one press at a time back to the tab strip.",
+  "seen": {
+    "down_landings_in_order": ["About tab (start)", "Follow system (the Language dropdown)", "GitHub", "Built on Ollama!", "Bugs & Feature Requests", "Support my Steam Sale habit", "6th Down: focus stayed on 'Support my Steam Sale habit' (the end of the page)"],
+    "up_landings_in_order": ["Bugs & Feature Requests", "Built on Ollama!", "GitHub", "Follow system", "About tab"],
+    "dead_presses": "1 (the Down at the very end, expected)",
+    "visibility": "every stop 100% visible (9 of 9 points)",
+    "disclaimer": "The beta disclaimer is plain text and was never a stop."
+  },
+  "expected": "Down visits, in order, the beta disclaimer (if it is a stop), the Language dropdown, the GitHub link, the 'Support my Steam Sale habit' block; no skip, no dead press, visible. If the disclaimer is plain text and never a stop, say so: UNCLEAR (stale wording), not FAIL.",
+  "verdict": [
+    "PASS: the Down order is Language dropdown, GitHub, Built on Ollama!, Bugs & Feature Requests, Support my Steam Sale habit with no skip, 5 of 5 Down presses moved focus, 5 of 5 Up presses moved back, every stop fully visible; the only dead press was the one past the end.",
+    "UNCLEAR (stale wording): the beta disclaimer is plain text and never a stop, and the row does not name the two links between GitHub and the Support block (Built on Ollama!, Bugs & Feature Requests)."
+  ],
+  "side_effect": "None."
+}

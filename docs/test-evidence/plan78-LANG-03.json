@@ -1,0 +1,20 @@
+{
+  "row": "LANG-03",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:43 to 10:47 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454, no game running.",
+  "setup": "reply_language read as 'follow_system'; changed with sed over SSH to 'japanese' (the edit was allowed), plugin reloaded at once (about 12 s wait). After the reload the About page read '言語: Japanese' and its headings were Japanese. Mode switched to Speed through the mode button on the Ask bar (focus read before each A: mode button, then 'speed'). Test chat header read before every question. Questions put in with the send script (VERIFIED each time).",
+  "pressed": "Speed: 'how do I make my battery last longer when playing on the handheld', A on 'ask' (focus read first). Back to Strategy through the mode button (focus read 'strategy' before A; trigger then read 'Strategy'). Strategy try 1: 'what should I do first in a new open world game'. Strategy try 2: 'how do I get better at boss fights in action games'. Afterwards: sed back to 'follow_system', plugin reloaded, About page read 'Language: Follow system'.",
+  "seen": {
+    "speed_reply": "Japanese. Letters 398, kana or kanji 395 (99.2%). Counted with unicodedata over the saved chat file's newest assistant turn.",
+    "strategy_try1": "The whole reply was English (947 letters, 0 kana or kanji); the menu was 'What kind of open world game are you thinking about? A. A story-driven game with a clear main quest / B. A sandbox game focused purely on exploration and freedom', English. Log: 'strategy fences branch_marker=True branch_parsed=True branch_options=2'.",
+    "strategy_try2": "The reply body was Japanese (542 letters, 483 kana or kanji, 89.1%) but the menu was English: 'What aspect of boss fights do you want to focus on? A. Improving pattern recognition and timing / B. Better resource management and decision making'. The raw reply in the ask trace (Desktop/bonsAI_logs/bonsai-ask-trace-2026-10-01.md) holds the fence name bonsai-strategy-branches and the JSON in English. Log: branch_marker=True branch_parsed=True branch_options=2. No raw fence or JSON on screen (page text searched).",
+    "end_state": "reply_language back to follow_system (file read back), About dropdown reads 'Follow system'; ask_mode back to strategy (file read back)."
+  },
+  "expected": "Speed reply at least 50% kana or kanji; the Strategy menu shows at least one Japanese choice label with no raw fence or JSON on screen, and the plugin log's raw reply holds the fence name. No menu on the first question: one more wording, then UNCLEAR for that half.",
+  "verdict": [
+    "PASS (Japanese reply, Speed): 99.2% of letters are kana or kanji.",
+    "UNCLEAR (Strategy menu): two differently worded tries each gave a menu, with no raw fence or JSON on screen and the fence name present in the raw reply, but the choice labels were English both times (try 1 also wrote the whole reply in English). No Japanese choice label was seen. This is what the AI wrote; the prompt's example fence is English, which may be why."
+  ],
+  "side_effect": "Settings changed and put back: reply_language follow_system -> japanese -> follow_system; ask_mode strategy -> speed -> strategy (through the plugin's own mode button). Three questions went into the test chat."
+}

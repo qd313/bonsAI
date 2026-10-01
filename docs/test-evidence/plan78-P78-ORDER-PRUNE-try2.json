@@ -1,0 +1,30 @@
+{
+  "row": "P78-ORDER-PRUNE",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:19 to 10:26 EDT (Deck clock)",
+  "screen": "Deck's own screen. Steam's page window 854x454 (Quick Access) and 854x534 (the AI models screen); the screen itself 1280x800 in the screenshots.",
+  "setup": "Deployed c8d6b094 with deck_deploy, buildMatches true (123 files). As found: text_model_routing_order [], vision_model_routing_order ['gemma4:e2b-it-qat'], capabilities.internet_downloads false, preset_single_chip true. ollama list: nomic-embed-text:latest, gemma4:e2b-it-qat. The Internet downloads switch is on the Permissions tab (not the Ollama tab as the runbook says). Maintainer's permission (D121 item 4, 'pull one small model and remove it') used for the switch and the pull. The AI models screen opens with the 'Essentials only' filter on, which hides qwen2.5:1.5b; I turned that filter off inside the Filters panel for the pull (it came back on by itself next time the screen opened; it is not in the settings file).",
+  "pressed": "Permissions tab, Down x4 to 'Internet downloads' (focus read), A (no notice box appeared; file showed internet_downloads true). Ollama tab, walked Down to 'Manage AI models' (12 presses, focus read after each), A. In the models screen: Down to Advanced, Refresh, Filters (A opens panel), Down through the filter rows, UP back to 'Essentials only' (focus read), A, then to 'Close filters', A. Walked Down to 'Select qwen2.5:1.5b to pull' (11 presses, each read), A (box ticked, 'Queue 1 - 0.9 GB'). Walked Down to 'Pull selected (1) - 0.9 GB' (15 presses, read), A. Pull finished in about 20 s. Reopened the models screen, walked to 'Use qwen2.5:1.5b for Ask' (read), A; walked Up to 'Use gemma4:e2b-it-qat for Ask' (read), A. B to close. Over SSH: ollama rm qwen2.5:1.5b. Reopened the models screen (A on 'Manage AI models', focus read first), B to close. Settings tab, Down x5 to 'Show one chip instead of two' (read), A (true to false), GUIDE+A chord to close Quick Access, waited 4 s, read the file, reopened with deck_openPlugin, walked back to the switch, A (false to true). Permissions tab, Down x4, A to turn Internet downloads back off. Never pressed A on any 'X' (remove) button in the models screen or on the question box.",
+  "seen": {
+    "after_pull_file": "text_model_routing_order [] (qwen2.5:1.5b NOT added by pulling); vision order unchanged. ollama list showed qwen2.5:1.5b, 986 MB.",
+    "after_use_qwen_for_ask": "text_model_routing_order ['qwen2.5:1.5b'] (choosing it REPLACED the empty list; gemma was not added).",
+    "after_use_gemma_for_ask": "text_model_routing_order ['gemma4:e2b-it-qat','qwen2.5:1.5b'] -> the small model stays IN the saved order when the other model is chosen again.",
+    "after_ollama_rm": "ollama list: nomic-embed-text:latest, gemma4:e2b-it-qat only. File still ['gemma4:e2b-it-qat','qwen2.5:1.5b'] until the screen was opened.",
+    "after_reopening_models_screen": "text_model_routing_order ['gemma4:e2b-it-qat']; vision unchanged. Screen header 'Installed 2 - 4.3 GB'. App log (Desktop/bonsAI_logs/bonsai-app-2026-10-01.log) at 2026-10-01T14:25:14Z: 'local_setup.routing_prune saved try order dropped models that are not installed pruned=qwen2.5:1.5b installed_count=2'. (It is in that file, not in the plugin's own log folder or the loader journal, which had 0 matches.)",
+    "after_unrelated_setting_change": "preset_single_chip false (waited 4 s with Quick Access closed). text_model_routing_order [] , vision ['gemma4:e2b-it-qat']. qwen2.5:1.5b did not come back in either order. ONE ODD THING: the text order went from ['gemma4:e2b-it-qat'] to [] (which is the value as found at the start). Something wrote the order back to the older, empty value when an unrelated switch was changed.",
+    "end_state": "preset_single_chip true (put back), internet_downloads false (put back), ollama list matches the start, text order [] (same as found), vision order same as found."
+  },
+  "expected": "After reopening the models screen the removed model is gone from both saved orders and the log has a routing_prune line naming it; after the unrelated setting change it has not come back. The 'Ollama stopped' half needs a password and is not run: it rests on its unit test.",
+  "verdict": [
+    "PASS: after reopening the models screen qwen2.5:1.5b was gone from both saved orders and the app log has a routing_prune line naming it (pruned=qwen2.5:1.5b installed_count=2). After the unrelated setting change it had not come back.",
+    "PASS: choosing the other model again did not take the small model out of the saved order (['gemma4:e2b-it-qat','qwen2.5:1.5b']).",
+    "NOT RUN: the 'Ollama stopped' half (needs a password); it rests on its unit test."
+  ],
+  "notes_for_owner": [
+    "Possible new bug (UNCLEAR what it means): changing an unrelated switch wrote the text try order back from ['gemma4:e2b-it-qat'] to [] . The Quick Access page probably holds a copy of the settings from when it opened and writes the whole thing back. It did not undo the prune of qwen here, so the check passes, but a model the player picked in the models screen could be lost the same way.",
+    "Step 'pull adds the model to the saved order' is NOT what happens: the pulled model only entered the order after its star was pressed.",
+    "In the Filters panel, Down from 'Also try open-weight models' skipped 'Any installed model' and went to 'Speed' (the 'Any installed model' button exists and is focusable in the page). Not investigated further; I did not press A there.",
+    "Runbook said the Internet downloads switch is on the Ollama tab; it is on the Permissions tab."
+  ],
+  "side_effect": "Pulled and removed qwen2.5:1.5b (986 MB) as allowed. Turned Internet downloads on and off. The 'Essentials only' filter was turned off in the models screen once (it resets itself). Settings changed and restored: internet_downloads false->true->false, preset_single_chip true->false->true. The text order changed [] -> ['qwen2.5:1.5b'] -> ['gemma4:e2b-it-qat','qwen2.5:1.5b'] -> ['gemma4:e2b-it-qat'] -> [] and ended at [], the value found at the start."
+}

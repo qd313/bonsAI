@@ -622,3 +622,28 @@ _Moved word for word from [testing-manual.md](../testing-manual.md), ticked, wit
 - [x] **STRATEGY-PLACEHOLDER-01** Strategy mode, empty Ask — focus field; italic placeholder does not shift when fake caret appears **PASS (Deck) 2026-09-26 (plan 70, flow 2b.4):** the hint's box and first letter sat at the same position focused, unfocused and focused again, 0 px shift. Evidence `docs/test-evidence/plan70-STRATEGY-PLACEHOLDER-01.json`.
 - [x] **ASK-CARET-CHAR-01** AI character on — focus empty Ask field; native caret aligns with placeholder/text (not left of `?` badge); D-pad Up from paperclip → avatar, Right → field; character-off path unchanged **PASS (Deck) 2026-09-26 (plan 70, flow 2e):** with the character on, the cursor sat 0.5 px before the hint's first letter, right of the avatar badge, and Up from the paperclip reached the avatar; with it off, the same gap held. Evidence `docs/test-evidence/plan70-ASK-CARET-CHAR-01.json`.
 - [x] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)* — **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked:** the same Ask-box freeze as the roadmap's three-star focus entry stopped the question from being sent five times out of six tries, so the reply was never seen. Evidence `docs/test-evidence/plan61-DRG-01b.json`. **DRG-01c not tried on purpose** 2026-09-18 — it would mean removing the library from the Deck, which was out of scope tonight. Still owed, not failed. **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence `docs/test-evidence/plan61-DRG-01b-retry.json`. **DRG-01b PASS (Deck) 2026-09-23:** with the game running, the knowledge base off, masking on and no consent phrase, the boss tactics came back plain, no cover, no notes block, and no knowledge-base search logged. Moved to Done. DRG-01c (corpus absent) is still not tried. Evidence `docs/test-evidence/plan64-DRG-01b.json`. (Split 2026-09-30: DRG-01b passed 2026-09-23 and is closed here; DRG-01c stays open in testing-manual.md.)
+
+## Plan 78, docs sweep 8 (2026-10-01)
+
+_Moved word for word from [testing-manual.md](../testing-manual.md), ticked, with the result added._
+
+- [x] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
+  built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
+  armoured bug boss** (Deep Rock Survivor; rows 01, 02, 05), **how does the story end** (Red Dead Redemption
+  2; row 06), **what does the pickaxe do** (row 04). **Deviation found while running:** the Deck's chip row
+  is in single-chip mode, one rotating slot cycling among the three pinned questions, not three chips shown
+  side by side, and landing the exact frozen wording at the moment of a press proved costly. Rows 01 and 04
+  swapped their questions for this reason — 01 ran with "what does the pickaxe do", 04 with "how do i kill
+  the big armoured bug boss" — both sent through the same pinned-chip mechanism, testing the same code path.
+  Six of seven rows closed, and the seventh (07) passed on its re-run once its fix landed (commit
+  `d2096ee`); 05 closed on 2026-10-01 (below). Evidence
+  `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
+  Rows 01, 02, 03, 04, 06 and 07 passed and are filed earlier in this file.
+  - [x] **REASONING-05** Show details on a thinking turn — the chip reads the level, the seconds and the
+    token estimate, and its body says the count is an estimate. **PARTIAL (Deck) 2026-09-17:** the chip read
+    "Thinking: Balanced · 16 s · ~465 tokens", the same seconds as the fold — but the whole details chip row
+    cannot be reached by the D-pad at all (Right from Hide details stalls, Down skips to Session context, Up
+    from Session context lands back on Hide details), so nobody using a controller can select this chip to
+    read its body; only a page read reached the text. Filed as its own Bugs entry, below. Stays owed for the
+    body-text half. **PASS (Deck) 2026-10-01 (plan 78, block 3a, build `c8d6b094`, no game running):** the chip reads "Thinking: Balanced · 18 s · ~471 tokens", the fold said 18 s, and the chip's body says the token count is an estimate ("The token count is an estimate - Ollama's own count does not separate thinking from the answer."). The chip was reached by the D-pad (Show details, notes row, tabs row, then Right along the chip ladder to chip 4 of 7); every stop was readable above the dock (the first ladder stop read 67 percent visible by the box measure, which is the known kind of false alarm: no word was under an icon by the text-line measure). Evidence `docs/test-evidence/plan78-REASONING-05.json`.

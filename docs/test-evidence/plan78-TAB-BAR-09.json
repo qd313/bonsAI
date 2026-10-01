@@ -1,0 +1,18 @@
+{
+  "row": "TAB-BAR-09",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:47 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454, no game running.",
+  "setup": "Settings tab (reached with LB x3 from About). It shows 'Clear cache...' and 'Clear all data...' side by side (one row, button boxes 130 wide at x 64, y 376).",
+  "pressed": "Walked Down from the first control to 'Clear cache...' one press at a time (14 presses, focus read after each; walkTo only sends directions). Focus read: BUTTON 'Clear cache...' (not 'Clear all data...'), visible 100%. A. The box 'Clear session cache?' opened with focus on its 'Clear' button (read: label 'Clear', box 123,308 290x40): NOT pressed. B. Read focus.",
+  "seen": {
+    "box": "'Clear session cache?' with buttons Clear and Cancel; focus on 'Clear' when it opened.",
+    "after_B": "Focus back on the BUTTON 'Clear cache...' (rect 64,376 130x38, visible 100%, 9 of 9 points). The box was gone. Not on nothing, not on a hidden tab button.",
+    "clear_all_data": "Never touched."
+  },
+  "expected": "After B the ring is on 'Clear cache...' or on the tab bar, visible; not on nothing, not on a hidden tab button.",
+  "verdict": [
+    "PASS: after B the ring came back to 'Clear cache...', fully visible."
+  ],
+  "side_effect": "None. Nothing was cleared."
+}

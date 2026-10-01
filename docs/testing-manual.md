@@ -296,7 +296,12 @@ Re-run 2026-09-03 after plan 30: Settings Up lands on the bar; full sweep every 
       keyboard's Enter, which the rig's own rules forbid pressing on the question box; by the D-pad
       route the field had already lost focus to the Ask button before the press. Evidence
       `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
-- [ ] Attachment row: **Right** from preview → remove button; **Left** back
+- [x] Attachment row: **Right** from preview → remove button; **Left** back. **PASS (Deck) 2026-10-01 (plan 78, block 3a,
+      build `c8d6b094`):** Right from the preview reached "Remove attachment" and Left came back to the
+      preview, both fully visible, 2 of 2 presses moved focus. The preview is reached with Left from the
+      question box (the attach icon) and then Down, not by Up or Down from the box or the Ask button, which
+      skip the bar. After the screenshot picker closes, no control holds the highlight until the next press.
+      Evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`.
 - [ ] Preset carousel: auto-advance pauses while a chip has D-pad focus. **Checked in decode style
       (Deck) 2026-09-26:** the chip kept sampling new prompts while it held the ring — the pause only
       applies to the carousel style this box was written for, checked separately under
@@ -394,7 +399,7 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 | **Context ladder / micro-actions** | CONTEXT-LADDER-01…03; MICRO-01…05 (open bugs) |
 | **D-pad scroll / tabs** | D-PAD-SCROLL-02 (choppy Strategy scroll bug); TAB-SWITCH-01 (LB/RB strip shuffle) |
 | **Data clear** | DATA-CLEAR-01 (permissions/settings wipe survives reopen) |
-| **Reply language** | LANG-01…03 (**LANG-01** Follow system on load — passed (Deck) 2026-09-26; LANG-02/03 still owed) |
+| **Reply language** | LANG-01…03 (**LANG-01** Follow system on load — passed (Deck) 2026-09-26; **LANG-02** About tab Down order — passed (Deck) 2026-10-01, `docs/test-evidence/plan78-LANG-02.json`; **LANG-03** Japanese reply — partial (Deck) 2026-10-01: the Speed reply passed, the Strategy choice labels stayed English, still owed, `docs/test-evidence/plan78-LANG-03.json`) |
 
 ### VAC / `bonsai:vac-check`
 
@@ -435,27 +440,6 @@ VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
     model warmed up, the waiting line showed the raw "[Strategy follow-up]" tag instead of the friendly
     wording. DRG-01e (streaming off) still owed. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed. **Observed as a tripwire during plan 70 flow 2a, 2026-09-26 (not run as its own check):** on two different asks, the first readable line quoted the question both times, as expected; a bare "Thinking" line was caught readable on its own for one 150 ms sample out of many. Too brief to call a regression, but on record. Evidence `docs/test-evidence/plan70-THINKING-OPENER-01.json`.
-- [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
-  built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
-  armoured bug boss** (Deep Rock Survivor; rows 01, 02, 05), **how does the story end** (Red Dead Redemption
-  2; row 06), **what does the pickaxe do** (row 04). **Deviation found while running:** the Deck's chip row
-  is in single-chip mode, one rotating slot cycling among the three pinned questions, not three chips shown
-  side by side, and landing the exact frozen wording at the moment of a press proved costly. Rows 01 and 04
-  swapped their questions for this reason — 01 ran with "what does the pickaxe do", 04 with "how do i kill
-  the big armoured bug boss" — both sent through the same pinned-chip mechanism, testing the same code path.
-  Six of seven rows closed, and the seventh (07) passed on its re-run once its fix landed (commit
-  `d2096ee`); only 05 stays owed, for its body-text half. Evidence
-  `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
-  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
-  Rows 01, 02, 03, 04, 06 and 07 passed and moved to
-  [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
-  - [ ] **REASONING-05** Show details on a thinking turn — the chip reads the level, the seconds and the
-    token estimate, and its body says the count is an estimate. **PARTIAL (Deck) 2026-09-17:** the chip read
-    "Thinking: Balanced · 16 s · ~465 tokens", the same seconds as the fold — but the whole details chip row
-    cannot be reached by the D-pad at all (Right from Hide details stalls, Down skips to Session context, Up
-    from Session context lands back on Hide details), so nobody using a controller can select this chip to
-    read its body; only a page read reached the text. Filed as its own Bugs entry, below. Stays owed for the
-    body-text half.
 - [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the roadmap's Shelved list until a throttle or a slower test copy exists.
 - [ ] **KB-NEWGAMES-01** Built 2026-09-26 (plan 70, helpers F and G), Deck check owed, flow R. Brotato, Palworld and Skyrim in the library. Launch Brotato, ask about the shop or the wave-20 bosses; launch Palworld, ask about catching a Pal or a Tower fight; ask about Skyrim by name (not installed on this Deck). Each game's own notes must attach, and Palworld's Tower-fight and Skyrim's story questions must open behind a spoiler box while Brotato's never do. **Notes half PASS (Deck) 2026-09-26 (plan 70, flow R):** nothing running, a question about each of Brotato, Palworld and Skyrim attached that game's own note, credited to its source page (`docs/test-evidence/plan70-R-R2.json`). **Still owed:** the spoiler-box half.
   **2026-09-30 (plan 77): Brotato half PASSED** (3 notes attached, no cover). **Palworld and Skyrim still owed:** Palworld's tile has no app id the launcher can match; the Skyrim question was not run. Evidence `docs/test-evidence/plan77-KB-NEWGAMES-01.json`.
@@ -557,7 +541,7 @@ Rows 01–07 and 10–11 passed on the Deck (07 is retired, replaced by TAB-STRI
 | Row | Scenario | Pass | Status |
 |---|---|---|---|
 | **TAB-BAR-08** | Touch | Tap on the thin bar opens the strip; a tab tap switches and closes it; a tap outside closes it | ⏳ needs a finger on the screen — the rig cannot tap |
-| **TAB-BAR-09** | Modal return | After the character picker closes on a non-Main tab, the ring lands on the opener or on the bar, never nowhere (re-runs PICKER-FOCUS-01's three openers) | ✅ 2026-09-02 for the character picker, the models hub and the chat-slot rename — all return to the opener (`docs/test-evidence/TAB-BAR-09-*.json`); ⏳ the desktop-note opener needs the *Save files to Desktop* permission on · ⏳ 2026-09-03: the Clear cache confirmation is a fourth opener and its return lands on the hidden Settings tab button (roadmap Bugs, filed 2026-09-03) |
+| **TAB-BAR-09** | Modal return | After the character picker closes on a non-Main tab, the ring lands on the opener or on the bar, never nowhere (re-runs PICKER-FOCUS-01's three openers) | ✅ 2026-09-02 for the character picker, the models hub and the chat-slot rename — all return to the opener (`docs/test-evidence/TAB-BAR-09-*.json`); ⏳ the desktop-note opener needs the *Save files to Desktop* permission on · ✅ 2026-10-01 for the Clear cache confirmation, a fourth opener (it had landed on the hidden Settings tab button on 2026-09-03): after B the ring came back to the "Clear cache..." button, fully visible (`docs/test-evidence/plan78-TAB-BAR-09.json`); the desktop-note opener is **still owed** (above) |
 | **TAB-BAR-GHOST-01** | Touch, ghost strip | With a game running full screen, open the panel, put the ring on the tab bar so the strip opens, then touch a suggestion chip with a finger; the strip must disappear completely — no faint icons, no dotted row — however long you wait | ❌ **regressed — failed by hand 2026-09-23** (build `a224fb6`, found by the maintainer after the Deck work ended): after Show details → Session, both tab bars stayed drawn at once — the small "MAIN" bar and the big icon bar under it. Touch scrolling did not close the big one; only the first D-pad move did. Recording `recordings/DeckRecord_20260923_235526_game.mkv` (11 seconds, every frame shows both bars) — this recording lives only on the maintainer's own computer; the recordings folder is not saved with the project. Back in Bugs on the roadmap as **TAB-BAR-GHOST-01**. The desk fix from 2026-09-15 (a plain timer that force-hides the strip) did not hold against this case. ⏳ still needs a finger on the screen to confirm any new fix — the rig cannot touch. On the maintainer's own checklist ([Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4)). **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person, so this stays open. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
 
 Also re-run because their landing spot changed: **DOC-SWEEP-01** (Settings Up → the bar now),

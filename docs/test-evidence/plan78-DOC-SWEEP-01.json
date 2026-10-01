@@ -1,0 +1,22 @@
+{
+  "row": "DOC-SWEEP-01",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:38 to 10:42 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454, no game running.",
+  "setup": "Screenshots folder on the Deck holds files (ls of userdata/*/760/remote/*/screenshots/ lists 20260224050852_1.jpg and more). Settings file: capabilities.steam_logs_read true (the Permissions tab's 'Read game & screenshot context'), media_library_access true. Question put in with the send script (VERIFIED): 'what is a good approach to learning a new action game'. It was NOT sent. The small jpg picked: 20260517025821_1.jpg, 53 KB.",
+  "pressed": "From the chip ladder the Up/Down presses move the ladder's own chip (Down was a dead press at the ladder's last chip: focus stayed on the ladder); went Up out of the ladder to 'Hide details' and A there to close details. Walked Down to the end (focus read: 'ask'), Up (focus read: the question box, never pressed A on it), Left (focus read: 'Attach screenshot to Ask'), A (menu opened, focus read: 'Close menu & take screenshot'; NOT pressed), Down (focus read: 'Attach recent screenshot'), A. The picker grid opened with no ring owned (read: nothing had gpfocus); Down (landed on 20260627-165925.png), Down (20260627-165712.png), Right (20260517025821_1.jpg, 53 KB, focus read), A. The bar showed the file name and '53 KB' and the attach icon got a badge '1'. The ring was again unowned. Down went to 'ask' (not pressed), Up went to the question box (the attachment bar was skipped both ways between box and Ask), Down went back to ask. Up to the box, Left to 'Attach screenshot to Ask', Down: 'Attached screenshot 20260517025821_1.jpg' (the preview). Right, read: 'Remove attachment' (box 303,357 36x34, visible 100%). Left, read: back on the preview (box 57,357 237x34). Right, read: Remove, A: the attachment bar was gone and the question text was still in the box (unsent).",
+  "seen": {
+    "right_from_preview": "Right moved focus from the preview to 'Remove attachment': visible 100% (readFocus).",
+    "left_from_remove": "Left moved focus back to 'Attached screenshot 20260517025821_1.jpg' (visible, y 357 to 391, above the Ask button at y 400).",
+    "presses_that_moved_focus": "2 of 2",
+    "route_to_preview": "Not by Up or Down from the question box or Ask (both skip the bar). The route that worked: the attach icon (Left of the question box), then Down.",
+    "picker_opens_with_no_ring": "After the picker opened, and after a screenshot was chosen, no element owned the highlight (no gpfocus anywhere) until the next D-pad press.",
+    "screenshots": "screenshots/DeckCapture_20261001_103952_auto.png (menu), DeckCapture_20261001_104001_game.png (picker), DeckCapture_20261001_104029_auto.png (attached)."
+  },
+  "expected": "Right from preview reaches remove, Left returns to the preview, both visible, 2 of 2 presses move focus. The blur moment on the very first Ask is not reachable by the allowed route: noted, not retried.",
+  "verdict": [
+    "PASS: Right from the preview landed on the remove button and Left returned to the preview, both visible, 2 of 2 presses moved focus.",
+    "NOT RUN (as the runbook says): the blur moment on the very first Ask."
+  ],
+  "side_effect": "A question text was left in the box (not sent). A recent screenshot was attached and then removed; nothing was sent. The runbook's route (Down to Ask, Up to 'Attach screenshot to Ask') does not exist: from Ask, Up lands on the question box and the attach icon is reached with Left from the box."
+}

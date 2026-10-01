@@ -1,0 +1,21 @@
+{
+  "row": "REASONING-05",
+  "build_commit": "c8d6b094",
+  "deck_time_local": "2026-10-01 10:36 to 10:39 EDT (Deck clock)",
+  "screen": "Deck's own screen; Quick Access page window 854x454 (Home, no game running).",
+  "setup": "No game running (RunningApps empty). Strategy mode, Thinking 'Balanced' (ask_think_effort medium, as found). Test chat (header 'How do I beat the boss in the Soul Sanctum in Hollow Knight?') read before the question. Question put in with the send script (VERIFIED): 'how should I plan my economy in an early game of a real time strategy title'. The answer folded as 'Show reasoning - 18 s'.",
+  "pressed": "Walked Down to the Ask button (focus read: 'ask'), A. After the answer: Up x3 to 'Show details' (focus read, divider 'Show details'), A. Down to the notes row ('Gold - From bonsAI's own note'), Down to the tabs row ('This answer / Session'), Down to the chip ladder ('Chip 1 of 7'), then Right one press at a time, reading each: Right to chip 2 (KB: 13 sections), chip 3 (Reply style: balanced), chip 4 (Thinking). Stopped there (the Thinking chip).",
+  "seen": {
+    "fold_seconds": 18,
+    "thinking_chip_label": "Thinking: Balanced - 18 s - ~471 tokens (chip 4 of 7)",
+    "thinking_chip_body": "Heading 'Reasoning', then 'The token count is an estimate - Ollama's own count does not separate thinking from the answer.'",
+    "chip_order_of_7_as_far_as_walked": "1 Keyword + meaning, 2 KB: 13 sections, 3 Reply style: balanced, 4 Thinking (then Spoiler risk, Routed gemma4:e2b-it-qat were next in the strip; chips 5 to 7 not walked)",
+    "visibility_per_stop": "Chip 1 (ladder first landing): the focused box is 290x300 at y 88 to 388 and the question dock icons start at y 372, so deck_runSequence reported 67% visible (3 of 9 points under the left corner icon). Looking at the text's own line boxes: the last line ('Re-rank: 20.99 ms') spans y 364 to 380 and starts at x 75, the left icon ends at x 74, the mode button starts at x 262 and the line is short, so no word is under an icon. Chips 2, 3, 4: ladder box bottom at 291, 295 and 296, and the body text of chip 4 ends at y 286; the question box top is at about y 291 (seen in the screenshot), so the last body line 'answer.' is fully readable but sits right on the question box's edge. Screenshot: screenshots/DeckCapture_20261001_103834_auto.png"
+  },
+  "expected": "A chip 'Thinking: Balanced - N s - ~T tokens' exists, N equals the fold's seconds, the body contains 'The token count is an estimate', every stop visible above the dock.",
+  "verdict": [
+    "PASS: the Thinking chip exists, N = 18 equals the fold's 18 s, and its body says 'The token count is an estimate'.",
+    "PASS: every stop was readable above the dock (the first ladder stop had 67% of its box visible by the element-box measure, which is the known kind of false alarm: no word was under an icon by the text-line measure)."
+  ],
+  "side_effect": "One question went into the test chat. 'Show details' left open on the newest answer. The answer talked about Deep Rock Galactic although no game was running (earlier chat turns were about it); not part of this check."
+}

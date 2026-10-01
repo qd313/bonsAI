@@ -44,7 +44,7 @@ All notable changes to this project are documented in this file.
 - **An https Ollama address is refused with a clear message** instead of being quietly sent as plain http. Owes its Deck check.
 - **The speech model download is pinned to one exact file and checked**, and a knowledge-library file list with no checksums is refused. Owes its Deck check.
 - **A Strategy question about the Deck itself no longer borrows a game from earlier in the chat for its choice menu.** The test could not show the old problem either way. Owes its Deck check.
-- **A hidden block whose opening mark is glued onto a sentence is now a real hidden block**, and Read aloud says "There is code on screen." for a `~~~` block. Unit-tested only.
+- **A hidden block whose opening mark is glued onto a sentence is now a real hidden block**, and Read aloud says "There is code on screen." for a `~~~` block. The `~~~` half passed on the Deck 2026-10-01 (no spoken sentence held the block's contents); the glued-mark half is unit-tested only, its Deck check did not produce its case on 2026-10-01.
 - **Walking down a reply, every stop is fully on screen, and Up now stops on a section's box too**, so both directions visit the same stops. Owes its Deck checks.
 - **A reply from the Ollama address can no longer grow without limit.** Past a size cap, bonsAI stops reading, closes the connection and shows a plain error. Normal long answers are unaffected. Owes its Deck check.
 - **The safety net that hides a spoiler's name now understands `~~~` hidden blocks too**, and holds back a half-typed one while an answer arrives. Unit-tested; owes a Deck regression check.

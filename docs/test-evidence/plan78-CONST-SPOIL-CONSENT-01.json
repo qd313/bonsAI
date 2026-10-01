@@ -1,0 +1,19 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01",
+  "build_commit": "24cbbd6b",
+  "deck_time_local": "2026-10-01 about 11:21 to 11:48 EDT",
+  "screen": "Deck's own screen, 1280x800; Quick Access page 854x454.",
+  "setup": "Nothing running, Strategy mode, masking on, strategy_spoiler_auto_reveal_after_consent false (as found), knowledge base on. Test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14 (header read before each question). No separate ~/p78-testchat-r7.bak.json was made: the history half was not run (see below) and the chat file was already backed up in ~/p78-testchat-r6.bak.json before any edit.",
+  "pressed": "History half: not run beyond the control that R6 already ran. Live half: for each of 2 questions, send script (VERIFIED), walkTo 'ask' (read), A, wait for the finished answer; a page sampler read the screen every 250 ms; the saved turn was read over SSH.",
+  "seen": {
+    "history_half": "The runbook's control (a closed cover with the word absent, spoiler_consent false) was tried in the R6 block with the same kind of file edit and showed NO cover: after the reload the word was readable plain. Reason from the code: the newest turn in the test chat is a Deep Rock Galactic: Survivor turn, a low-story title, and unwrapAskedEntitySpoilerFences.ts turns every fence of such a turn into plain text. Per the runbook a missing cover on the control means stop, so the consent steps (consent true, then older-turn expand) were not run: they would pass for the wrong reason.",
+    "live_q1": {"question": "spoilers are okay, how do I beat the Soul Master in the Soul Sanctum in Hollow Knight and what does he drop", "reads_250ms": 226, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "saved_spoiler_consent": true, "answer": "Tactics for the fight (teleports, soul orbs, dive slam, stagger window); the part about what he drops was not reached in the first 900 letters read."},
+    "live_q2": {"question": "spoilers are okay, walk me through the Soul Master fight in Hollow Knight phase by phase", "reads_250ms": 226, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "saved_spoiler_consent": true, "answer": "Hollow Knight notes attached (Soul Master, From the Hollow Knight wiki); no hidden block written."}
+  },
+  "expected": "History half: one cover with consent false; word readable plain with consent true; still plain after the turn is older and expanded. Live half: with a fence present in the saved turn and spoiler_consent true, 0 covers at every read; no fence in the saved turn on both tries: live half UNCLEAR (the AI wrote none).",
+  "verdict": [
+    "UNCLEAR history half: the control had no cover (low-story newest turn), so the consent steps were not run.",
+    "UNCLEAR live half: after 'spoilers are okay' both saved turns had spoiler_consent true, but the AI wrote no bonsai-spoiler fence either time (0 covers in 226 reads each, no fence in either saved turn). Two tries used."
+  ],
+  "side_effect": "Two questions were added to the test chat (turns 141 to 144 of the chat file)."
+}

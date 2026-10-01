@@ -1,0 +1,22 @@
+{
+  "row": "P77-TILDE-READALOUD",
+  "build_commit": "24cbbd6b",
+  "deck_time_local": "2026-10-01 about 11:26 to 11:30 EDT",
+  "screen": "Deck's own screen, 1280x800; Quick Access page 854x454.",
+  "setup": "Test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14, newest assistant turn (turn 131). Backup ~/p78-testchat-r6.bak.json. Watcher: a scratch Python script on the Deck that polls /proc for new processes and writes each 'espeak-ng ... -w <wav> -- <sentence>' command line. The first watcher versions polled all processes and missed some sentences; the final one only reads processes with a new, higher process id and caught the sentences. Read aloud sends the sentences to espeak-ng in parallel, 20 to 40 ms apart.",
+  "pressed": "Control: with the text 'Here is the fight. ... zzctl7731 is behind the door. ... Good luck.' in the newest turn, walked Down to 'Mark reply helpful' (read), Right x2 to 'Read aloud' (read each), A, the button became 'Stop', A to stop. Then wrote the tilde text 'Here is the command.\\n~~~\\nsudo rm -rf zztilde7731\\n~~~\\nDone.' into that turn, reloaded the plugin, reopened, walked to 'Read aloud' again (Down to 'Mark reply helpful', Right x2, each read), A, waited for the speech to end by itself. Repeated the A three times in all (the speech ends by itself after about 3 s; the button returns to 'Read aloud'). A was never pressed on the Helpful buttons or the question box.",
+  "seen": {
+    "control_captured_sentences": ["Here is the fight.", "zzctl7731 is behind the door."],
+    "tilde_try1_captured_sentences": ["Here is the command.", "Done."],
+    "tilde_try2": "watcher caught only speech-dispatcher processes; 3 wav files were written within 40 ms (the watcher was too slow). Sizes 63868, 74144 and 30084 bytes.",
+    "tilde_try3_captured_sentences": ["Here is the command.", "There is code on screen."],
+    "screen_text_for_tilde_turn": "Here is the command. / sudo rm -rf zztilde7731 / Done. (the tilde lines themselves are not shown)",
+    "any_captured_sentence_containing_zztilde7731_or_sudo": 0,
+    "sentences_per_read": "3 wav files per read of the tilde turn (Here is the command. / There is code on screen. / Done.), no fourth"
+  },
+  "expected": "Captured sentences include exactly 'There is code on screen.' and none contains zztilde7731 or sudo. The control must catch at least one sentence first.",
+  "verdict": [
+    "PASS: the control caught 2 sentences, so the watcher works. For the ~~~ block the captured sentences were 'Here is the command.', 'There is code on screen.' and 'Done.' (spread over tries 1 and 3, because the fast parallel start of the sentences beat my watcher once); 0 captured sentences contain zztilde7731 or sudo."
+  ],
+  "side_effect": "The test chat file was changed over SSH (turn 131 text), and put back from the backup after the check; cmp against ~/p78-testchat-r6.bak.json prints identical, also after a plugin reload. I used scp once to copy a watcher script to the Deck (not the plain ssh shape; it ran without a prompt). Two A presses on 'Read aloud' started speech through the Deck's speakers three times in total, briefly."
+}

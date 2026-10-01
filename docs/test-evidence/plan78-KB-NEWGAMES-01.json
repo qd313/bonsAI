@@ -1,0 +1,20 @@
+{
+  "row": "KB-NEWGAMES-01",
+  "build_commit": "24cbbd6b",
+  "deck_time_local": "2026-10-01 about 11:31 to 11:42 EDT",
+  "screen": "Deck's own screen, 1280x800; Quick Access page 854x454.",
+  "setup": "No game running (Context: no active game detected). Strategy mode. Knowledge base on, spoiler masking on. Test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14 (header 'How do I beat the boss in the Soul Sanctum in Hollow Knight?') read before every question. Questions sent with deck_send_ask.py (each printed VERIFIED with the whole text), then walked to Ask (read), A. A page sampler read the screen every 250 ms during each answer.",
+  "pressed": "For each of 4 questions: send script, walkTo 'ask' (read), A, wait until 'Was this helpful?' showed, read the finished answer and the saved turn over SSH.",
+  "seen": {
+    "palworld_q1": {"question": "how do I beat the first Tower boss in Palworld", "attached_kb_cards": ["Palworld — Towers and Faction Leaders in Palworld", "Palworld — Technology points and the tech tree in Palworld", "Palworld — The five kinds of boss fights in Palworld"], "reads_250ms": 165, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "answer": "Tactics about the 5 minute clock and ground hazards; no boss name, no story detail."},
+    "palworld_q2": {"question": "tell me about Zoe and Grizzbolt in the first Palworld tower", "attached_kb_cards": ["Palworld — Towers and Faction Leaders in Palworld", "Palworld — The five kinds of boss fights in Palworld", "Palworld — Starting out in Palworld"], "reads_250ms": 203, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "answer": "Said it does not have details on every Pal name; general tower tips; no spoiler detail."},
+    "skyrim_q1": {"question": "how do I beat Alduin in Skyrim and what is his story", "attached_kb_cards": ["The Elder Scrolls V: Skyrim Special Edition — Alduin", "... — Daedric artifacts in Skyrim", "... — Starting out in Skyrim"], "reads_250ms": 197, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "answer": "Plain text calls Alduin 'the World-Eater' and 'the main bad guy' of the main quest, lists his shouts. No cover."},
+    "skyrim_q2": {"question": "who is Alduin in Skyrim and how do I defeat him", "attached_kb_cards": ["... — Alduin", "... — Dragon Priests in Skyrim", "... — Dragon Priest Masks in Skyrim"], "reads_250ms": 209, "max_covers_seen": 0, "fence_text_seen": false, "saved_turn_has_bonsai-spoiler_fence": false, "answer": "Same shape: World-Eater, main bad guy, shouts. No cover."}
+  },
+  "expected": "Per game: attached notes name that game and at least one cover (bonsai-spoiler-reveal-target, 'tap to show') appears. No cover and no fence in the saved turn on both wordings: UNCLEAR for that game (the AI wrote none). Two tries per game, then stop.",
+  "verdict": [
+    "UNCLEAR Palworld: the attached notes were Palworld notes on both tries, but the AI wrote no hidden block either time (0 covers in 165 and 203 reads, no fence in the saved turns). Nothing the player sees was hidden, and nothing story-like was shown either.",
+    "UNCLEAR Skyrim: the attached notes were Skyrim notes (Alduin) on both tries, but the AI wrote no hidden block either time (0 covers in 197 and 209 reads, no fence in the saved turns). Both answers say in plain text that Alduin is 'the World-Eater' and 'the main bad guy' of the main quest; the owner may want to judge whether that is a spoiler."
+  ],
+  "side_effect": "Four questions were added to the test chat (as intended): turns 133 to 140 of the chat file. The chat file was restored from backup before these questions, so the earlier file edits are gone."
+}

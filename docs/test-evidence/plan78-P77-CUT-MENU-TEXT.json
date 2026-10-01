@@ -1,0 +1,21 @@
+{
+  "row": "P77-CUT-MENU-TEXT",
+  "build_commit": "24cbbd6b",
+  "deck_time_local": "2026-10-01 about 11:35 to 11:48 EDT",
+  "screen": "Deck's own screen, 1280x800; Quick Access page 854x454.",
+  "setup": "Installed copy of ollama_ask_budgets.py on the Deck edited: backed up to ~/p78-ollama_ask_budgets.py.orig, then 'strategy': 1600 changed to 300 (two questions) and to 340 (two more questions, one more edit), plugin reloaded after each edit. Thinking set to Off through the plugin's own control (old value Balanced). Strategy mode, no game, KB on. The old chat 93f61878 is no longer on the Deck, so the test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14 was used (header read before each question). The Deck's journal (plugin_loader) holds the ask_ollama lines.",
+  "pressed": "For each of 4 questions: send script (VERIFIED), walkTo 'ask' (read), A, wait until 'Was this helpful?' showed; the page was sampled every 250 ms for 'bonsai-strategy-branches', a '{\"' and 'Continuing'; the journal was searched for 'dropped a choice fence' and 'did NOT parse'.",
+  "seen": {
+    "cap_300_q1": "'give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter': 204 reads, no fence text, no brace, no 'Continuing' in the finished text. Answer finished short (about 1,165 letters). No 'dropped a choice fence' line.",
+    "cap_300_q2": "'give me a complete guide to every boss area in Hollow Knight with three detailed paragraphs of tips for each area': 201 reads, no fence text, no brace. The word 'Continuing' showed on screen during the answer (the soft-continue line), not in the finished text. Journal: done_reason=length three times (num_predict=300, soft_continues=2, response_len 3534). No 'dropped a choice fence' line, no 'did NOT parse' line.",
+    "cap_340_q3": "'write me a full chapter by chapter guide to the whole of half life 2, with three long paragraphs of tips under each chapter heading': 282 reads, no fence text, no brace, no 'Continuing'. Journal: one soft continue, done_reason=stop at the second part. No 'dropped a choice fence' line.",
+    "cap_340_q4": "'write a full guide to each boss area in hollow knight, three long paragraphs of advice under each area name': 210 reads, no fence text, no brace. Journal: done_reason=length 3 times (num_predict=340, soft_continues=2, response_len 3568). No 'dropped a choice fence' line.",
+    "restore": "cp of the .orig back; grep -c '\"strategy\": 1600' prints 1; cmp against the .orig prints identical; plugin reloaded; Thinking back to Balanced (read from settings: ask_think_effort medium)."
+  },
+  "expected": "At least one 'dropped a choice fence' log line (the case happened); at 100+ reads no 'bonsai-strategy-branches' and no '{\"' on screen; no 'Continuing' in the finished text; letters plus digits on screen equal the saved chat's. If neither of two tries logs the case, change the cap to 340 and ask two new wordings, then stop (UNCLEAR).",
+  "verdict": [
+    "UNCLEAR: in 4 questions (two at 300, two at 340) the case never happened: no 'dropped a choice fence' line and no 'did NOT parse' line in the journal, so no menu was cut at the length wall. The screen checks that could be made held on every read (0 of 897 reads showed the fence name or a brace; no 'Continuing' in any finished answer), but they prove nothing without the case. The on-screen-versus-saved text comparison was not run.",
+    "Note for the owner: this build's answers here ended with the soft-continue joining parts (done_reason=length, then more text), so a menu may not be cut the way last night's build cut it."
+  ],
+  "side_effect": "The installed plugin file was edited and put back (identical to the backup). Four questions were added to the test chat (turns 145 to 152 of the chat file). Thinking was set to Off and back to Balanced through the screen. The plugin was reloaded three times for this check; after one of them Steam's interface restarted for about 20 s and the plugin's page was unreachable until it came back (nothing was pressed meanwhile)."
+}

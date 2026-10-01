@@ -1,0 +1,15 @@
+{
+  "row": "P77-GLUED-SPOILER",
+  "build_commit": "24cbbd6b",
+  "deck_time_local": "2026-10-01 about 11:21 to 11:30 EDT",
+  "screen": "Deck's own screen, 1280x800; Quick Access page 854x454.",
+  "setup": "Test chat 6f3cc055-d603-4e3e-9adf-15d71df4ec14. Backed up to ~/p78-testchat-r6.bak.json on the Deck. Masking on (strategy_spoiler_masking_enabled true), Strategy mode, no game running (Context: no active game detected). Wrote the newest assistant turn's 'text' (turn 131 of 132) over SSH with a scratch script, then reloaded the plugin. First the runbook's CONTROL text: 'Here is the fight.\\n```bonsai-spoiler\\nzzctl7731 is behind the door.\\n```\\nGood luck.'",
+  "pressed": "No presses for this half. Plugin reload, then deck_openPlugin, then read the page.",
+  "seen": "The control did NOT show a cover. After the reload the screen showed 'Here is the fight. zzctl7731 is behind the door. Good luck.' as plain text (0 elements with a spoiler-reveal class; the word zzctl7731 readable; no fence marks). A first read straight after the reload still showed the old text; the second read after the page came back showed the new text. Why (from the code, not proven on the Deck): the newest turn in the test chat is a Deep Rock Galactic: Survivor turn (app_name set, question about overclocks). unwrapAskedEntitySpoilerFences.ts turns fences into plain text when turnProfileIsLowNarrative(appId, appName, question) is true, and that game is a low-story title. So the control is vacuous in this chat, as the runbook's own rule foresaw. I did not change the turn's app fields or question to force a cover (that would be a new route).",
+  "expected": "Control: one closed cover and not the word. Glued text: no 'bonsai-spoiler', no backticks, not 'zzglue7731', one closed cover.",
+  "verdict": [
+    "UNCLEAR: the control had no cover (the newest turn is a Deep Rock Galactic turn, a low-story title, so fences are shown plain). The glued text was not tried, as the runbook says to stop here.",
+    "Suggestion for the owner: the file edit also needs the turn's app_id/app_name (and its user question) set to a story game the guard protects, or the edit has to go in a chat whose newest turn is such a turn."
+  ],
+  "side_effect": "The test chat file was changed over SSH (turn 131 text) and put back from the backup; cmp against ~/p78-testchat-r6.bak.json prints identical after the restore and after a plugin reload. The in-page copy briefly showed the edited text until the restore and reload. I used scp once to copy a watcher script to the Deck (not the plain ssh shape; it ran without a prompt)."
+}

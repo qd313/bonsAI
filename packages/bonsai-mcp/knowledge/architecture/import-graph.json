@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 649,
-  "edgeCount": 1810,
+  "fileCount": 650,
+  "edgeCount": 1811,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4799,6 +4799,7 @@
         "src/utils/answerBubbleNavigation.readingWalk.test.ts",
         "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
         "src/utils/answerBubbleNavigation.tallEntry.test.ts",
+        "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
         "src/utils/answerBubbleNavigation.walkThrough.test.ts"
       ]
     },
@@ -5219,6 +5220,12 @@
       "importedBy": []
     },
     "src/utils/answerBubbleNavigation.tallEntry.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerBubbleNavigation.tallSectionLift.test.ts": {
       "imports": [
         "src/test-harness/deckAnswerWalk.ts"
       ],

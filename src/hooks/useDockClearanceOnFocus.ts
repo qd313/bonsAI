@@ -9,8 +9,9 @@
  *         and lifts the element clear.
  * Does not: Follow streaming text or deliver the end of an answer — see useStreamScrollPin, which
  *           owns the evidence for why scrollIntoView is tried FIRST (Steam's scroller erased direct
- *           writes while tokens streamed). The direct write is the fallback here, for the one place
- *           scrollIntoView is measured to be a no-op — see liftAboveDock.
+ *           writes while tokens streamed). The direct write is the fallback here, for when
+ *           scrollIntoView leaves the element covered — see liftAboveDock. Does not lift an answer's
+ *           own sections: the D-pad walk places those itself — see liftForFocus.
  */
 import { useEffect, type RefObject } from "react";
 import { findTabContentsScroll, panelScrollMax } from "../utils/chatPanelScroll";
@@ -78,17 +79,25 @@ export function liftAboveDock(el: HTMLElement): boolean {
   /*
    * Measure again, and finish the job by hand if scrollIntoView left the element covered.
    *
-   * Inside the answer bubble it always does. Scroll log on the Deck, 2026-09-06, Up out of the
+   * It once always did inside the answer bubble. Scroll log on the Deck, 2026-09-06, Up out of the
    * Show details line into a long answer's last section: scrollIntoView with a scroll-margin of
    * 0, 80, 164 or 300px all parked the pane at the same scrollTop, the section's bottom 77px
-   * behind the dock, and every later pass asked for that same place again. Two things eat the
-   * margin: the bubble and its text stack both clip their overflow, and Chromium honours
-   * scroll-margin only against the nearest clipping box rather than the pane; and Steam's pane
-   * carries scroll-padding-bottom: 80px, so "end" means 80px above the pane's bottom — still 77px
-   * inside a 157px dock. A plain scrollTop write is what the D-pad's own section steps use on a
-   * finished reply, and it holds (the erased-write evidence in useStreamScrollPin is from
-   * mid-stream commits). Capped at the element's own headroom, so a section taller than the
-   * readable band keeps its top on screen rather than jumping its start away.
+   * behind the dock, and every later pass asked for that same place again.
+   *
+   * That is no longer what the Deck does. Measured 2026-10-01 (docs/test-evidence/
+   * plan78-P78-DOWN-SHORT-SECTION.json): the request moves the pane, inside the answer and out,
+   * and overshoots. Steam's pane carries scroll-padding-bottom: 80px, so "end" lands 80px above the
+   * pane's bottom, and the scroll-margin set above (the covered strip plus the pad) lands it the
+   * dock's height higher again: the element's bottom ends 86px above the dock's top. A 180px answer
+   * section was left at y 24 to 204 with the dock at 290, its top 64px above the pane; the choices
+   * and Helpful under an answer land at 172 to 204 the same way, which is harmless for a control
+   * that short. Answer sections are no longer lifted at all (liftForFocus); the overshoot for
+   * everything else is a known issue, not corrected here.
+   *
+   * A plain scrollTop write is what the D-pad's own section steps use on a finished reply, and it
+   * holds (the erased-write evidence in useStreamScrollPin is from mid-stream commits). Capped at
+   * the element's own headroom, so a section taller than the readable band keeps its top on screen
+   * rather than jumping its start away.
    */
   const after = el.getBoundingClientRect();
   const stillHidden = after.bottom + CLEARANCE_PAD_PX - dockTop;
@@ -100,6 +109,28 @@ export function liftAboveDock(el: HTMLElement): boolean {
     }
   }
   return true;
+}
+
+/** The class every section of an answer carries (buildAnswerBubbleElement.tsx's STOP_CLASS), and nothing else. */
+const ANSWER_SECTION_CLASS = "bonsai-answer-stop";
+
+/**
+ * What the hook does for one element focus has landed on, on each of its passes: the lift, except for a
+ * section of an answer. The D-pad walk places every section it lands on itself (answerBubbleNavigation.ts:
+ * its bottom just above the dock, or a taller one's top on the header, or its end going Up), and when it
+ * moves the ring onto a section it is reading by scrolling, the section is meant to run past the dock.
+ * Lifting one of those undid the walk: on a section taller than the band whose top is above the screen,
+ * the lift asks for its end, and the panel jumped there. Going Up through such a section with a spoiler
+ * cover in its lower half, that sent the cover back on screen and the next Up landed on it again, for ever;
+ * going Down from an underlined word, it skipped the section's middle (plan 78 helper D, round four). Covers,
+ * underlined words, an opened cover's "tap to hide" line and everything outside the answer are lifted as
+ * before: some of those landings are placed by nothing else, and none is tall enough to lose its top.
+ * Read off the element's own class, not a page search: nothing here chooses where the ring goes.
+ * Exported so the answer-walk test setup (src/test-harness/deckAnswerWalk.ts) runs the Deck's decision.
+ */
+export function liftForFocus(el: HTMLElement): boolean {
+  if (el.classList.contains(ANSWER_SECTION_CLASS)) return false;
+  return liftAboveDock(el);
 }
 
 /**
@@ -132,10 +163,10 @@ export function useDockClearanceOnFocus(columnRef: RefObject<HTMLElement | null>
       clearPending();
       raf = requestAnimationFrame(() => {
         if (!el.isConnected) return;
-        liftAboveDock(el);
+        liftForFocus(el);
         settleTimers = SETTLE_PASS_DELAYS_MS.map((delayMs) =>
           window.setTimeout(() => {
-            if (el.isConnected) liftAboveDock(el);
+            if (el.isConnected) liftForFocus(el);
           }, delayMs)
         );
       });

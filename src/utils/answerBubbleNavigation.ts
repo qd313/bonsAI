@@ -741,6 +741,9 @@ export function handleAnswerBubbleMoveDown(
   const box = answerKey ? boxAfterLastCover(bubble, answerKey) : null;
   if (box && focusAnswerStop(box)) {
     boxLandedIn = box;
+    /* Placed as any landing: clear of the dock, a box taller than the band up to the header. The lift
+       used to do the second half and now leaves sections to the walk (useDockClearanceOnFocus.ts). */
+    revealBelowDock(box, scroll);
     revealSectionInBand(box, scroll);
     return true; // the walk keeps its memory: the cover the ring just left is not offered again
   }

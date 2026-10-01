@@ -27,7 +27,7 @@ import { registerAnswerBubbleEl } from "../utils/answerBubbleElRegistry";
 import { registerSpoilerFence, resetSpoilerFenceRegistry } from "../utils/spoilerFenceRegistry";
 import { registerDrgGlossaryTermChip, resetDrgGlossaryTermRegistry } from "../utils/drgGlossaryTermRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
-import { liftAboveDock } from "../hooks/useDockClearanceOnFocus";
+import { liftForFocus } from "../hooks/useDockClearanceOnFocus";
 
 const KEY = "turn-1";
 const ref = { current: 0 };
@@ -47,10 +47,11 @@ const BUBBLE_FRAME_PX = 9;
 
 /**
  * The pane's readable band ends at the dock; a game running lifts the dock's action row, so a test can move it.
- * `dockLift` (on unless set false) runs the plugin's own lift off the dock (useDockClearanceOnFocus) after every
- * landing, as the Deck does; it is what put a tall box's top on the header in the final smoke run (box 1 at
- * y 88, scrollTop 177). `liftScrollsToEnd` makes the lift's own scroll request move the panel, as measured
- * on 2026-10-01 (see `scrollIntoViewOf`).
+ * `dockLift` (on unless set false) runs the plugin's own lift off the dock (useDockClearanceOnFocus's
+ * `liftForFocus`, which leaves an answer's sections to the walk) after every landing, as the Deck does.
+ * The lift's own scroll request moves the panel as the Deck measured on 2026-10-01
+ * unless `liftScrollsToEnd` is false, which leaves it still, as the older measurement had it (see
+ * `scrollIntoViewOf`).
  */
 export interface DeckAnswerOptions {
   dockTop?: number;
@@ -84,15 +85,15 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
 
   /*
    * The pane's scrollIntoView, which jsdom lacks; only the plugin's lift off the dock calls it (block "end").
-   * By default it leaves the panel where it is, as the Deck measured inside the answer on 2026-09-06
-   * (useDockClearanceOnFocus.ts). With `liftScrollsToEnd`, it does what the Deck measured on 2026-10-01: the
-   * end lands Steam's 80 px of scroll padding above the pane's bottom, with the lift's own scroll-margin
-   * (the dock's strip plus 6) above that, 86 px above the dock. A 180 px first section was left at y 24 to
-   * 204 with the dock at 290 (plan78-P78-DOWN-SHORT-SECTION.json); a cover at 149 to 204, and the choices
-   * and Helpful below an answer at 172 to 204, show the same end.
+   * It does what the Deck measured on 2026-10-01: the end lands Steam's 80 px of scroll padding above the
+   * pane's bottom, with the lift's own scroll-margin (the dock's strip plus 6) above that, 86 px above the
+   * dock. A 180 px first section was left at y 24 to 204 with the dock at 290
+   * (plan78-P78-DOWN-SHORT-SECTION.json); a cover at 149 to 204, and the choices and Helpful below an answer
+   * at 172 to 204, show the same end. `liftScrollsToEnd: false` leaves the panel still instead, as the Deck
+   * measured inside the answer on 2026-09-06 (useDockClearanceOnFocus.ts); every walk passes under both.
    */
   const scrollIntoViewOf = (el: HTMLElement) => (arg?: boolean | ScrollIntoViewOptions) => {
-    if (!options.liftScrollsToEnd || typeof arg !== "object" || arg.block !== "end") return;
+    if (!(options.liftScrollsToEnd ?? true) || typeof arg !== "object" || arg.block !== "end") return;
     const target = PANE_BOTTOM - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
     pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().bottom - target);
   };
@@ -185,7 +186,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     if (!el || el === bubble || !bubble.contains(el)) return;
     if (steamScroll) glide(el);
     // The plugin's own lift, whose last pass (900 ms) comes after Steam's glide (150 ms).
-    if (options.dockLift ?? true) liftAboveDock(el);
+    if (options.dockLift ?? true) liftForFocus(el);
   };
 
   const top = (el: HTMLElement) => el.getBoundingClientRect().top;

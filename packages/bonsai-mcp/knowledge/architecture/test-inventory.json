@@ -208,6 +208,7 @@
     "src/utils/answerBubbleNavigation.readingWalk.test.ts",
     "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
     "src/utils/answerBubbleNavigation.tallEntry.test.ts",
+    "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",
     "src/utils/answerBubbleNavigation.walkThrough.test.ts",
     "src/utils/answerCopyText.test.ts",

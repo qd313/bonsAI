@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, renderHook } from "@testing-library/react";
 
-import { liftAboveDock, useDockClearanceOnFocus } from "./useDockClearanceOnFocus";
+import { liftAboveDock, liftForFocus, useDockClearanceOnFocus } from "./useDockClearanceOnFocus";
 
 /*
  * jsdom has no layout, so the three rects the lift reads are stubbed: a 0–616 scroll pane, a dock
@@ -93,10 +93,10 @@ describe("liftAboveDock", () => {
   });
 
   /*
-   * Inside the answer bubble scrollIntoView is a no-op: the bubble clips its overflow, which
-   * swallows the scroll-margin, and Steam's pane pads its scroll edge by 80px. Measured on the Deck
-   * 2026-09-06, Up from the Show details line: margins of 0 to 300px all parked the pane at the
-   * same place, the section 77px behind the dock. The lift must then move the pane itself.
+   * When scrollIntoView leaves the element covered, the lift moves the pane itself. Measured on the
+   * Deck 2026-09-06 inside the answer bubble, Up from the Show details line: margins of 0 to 300px
+   * all parked the pane at the same place, the section 77px behind the dock. (On 2026-10-01 the same
+   * request moved the pane and overshot instead; see the comment in liftAboveDock.)
    */
   it("scrolls the pane by hand when scrollIntoView leaves the element covered", () => {
     const t = makePane();
@@ -309,5 +309,83 @@ describe("useDockClearanceOnFocus", () => {
     });
     expect(t.scrollIntoView).not.toHaveBeenCalled();
     expect(callsAfterFirstFocus).toBeGreaterThan(0);
+  });
+});
+
+/*
+ * Plan 78 helper D, round four. The D-pad walk places every answer section it lands on itself, or is
+ * reading it by scrolling; the lift asking for a tall section's end jumped the panel, which looped Up
+ * through a section with a spoiler cover deep in it and skipped a section's middle going Down from an
+ * underlined word (answerBubbleNavigation.tallSectionLift.test.ts walks both). So a focused answer
+ * section is left alone, and everything else, the small stops inside a section included, is lifted as
+ * before.
+ */
+describe("liftForFocus", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    cleanup();
+    document.body.innerHTML = "";
+  });
+
+  /** An answer bubble's section behind the dock, holding a cover, an underlined word and a hide line. */
+  function answerBehindDock() {
+    const t = makePane();
+    const bubble = t.focusEl(380, 600);
+    bubble.className = "bonsai-chat-ai-bubble Panel Focusable";
+    const section = t.focusEl(390, 590, bubble);
+    section.className = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop";
+    const cover = t.focusEl(400, 455, section);
+    cover.className = "bonsai-spoiler-reveal-target Panel Focusable";
+    const word = t.focusEl(470, 485, section);
+    word.className = "bonsai-drg-glossary-term Panel Focusable";
+    const hideLine = t.focusEl(500, 515, section);
+    hideLine.className = "bonsai-spoiler-collapse-target Panel Focusable";
+    return { ...t, bubble, section, cover, word, hideLine };
+  }
+
+  it("leaves an answer's section alone, however far behind the dock it sits", () => {
+    const t = answerBehindDock();
+
+    expect(liftForFocus(t.section)).toBe(false);
+    expect(t.section.scrollIntoView).not.toHaveBeenCalled();
+    expect(t.section.style.scrollMarginBottom).toBe("");
+  });
+
+  it("still lifts a cover, an underlined word and a hide line inside that section, and the bubble itself", () => {
+    const t = answerBehindDock();
+
+    for (const el of [t.cover, t.word, t.hideLine, t.bubble]) {
+      expect(liftForFocus(el)).toBe(true);
+      expect(el.scrollIntoView).toHaveBeenCalledWith({ block: "end", behavior: "auto" });
+    }
+  });
+
+  it("still lifts a control outside the answer exactly as liftAboveDock does", () => {
+    const t = makePane();
+    const helpful = t.focusEl(400, 428);
+
+    expect(liftForFocus(helpful)).toBe(true);
+    expect(helpful.style.scrollMarginBottom).toBe("252px");
+  });
+
+  it("the hook's focus passes skip a section and lift a cover in it", () => {
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+    vi.useFakeTimers();
+    const t = answerBehindDock();
+    renderHook(() => useDockClearanceOnFocus({ current: t.scroll }));
+
+    act(() => {
+      t.section.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      vi.advanceTimersByTime(1000);
+    });
+    expect(t.section.scrollIntoView).not.toHaveBeenCalled();
+
+    act(() => {
+      t.cover.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    });
+    expect(t.cover.scrollIntoView).toHaveBeenCalled();
   });
 });

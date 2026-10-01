@@ -17,8 +17,10 @@ How it works:
  1. Markdown the model was told not to write (bold, bullets, numbers) is stripped, and a line
     that repeats an earlier one is dropped.
  2. A line whose answer is an empty phrase ("None.", "None apparent in this log.", "Not
-    specified", "n/a", "unknown", "no sticking point mentioned") is dropped. If a sentence of
-    real content follows the empty phrase, that sentence is kept as its own line.
+    specified", "n/a", "unknown", "no sticking point mentioned") is dropped, but only when the
+    WHOLE answer is the empty phrase plus filler: "not sure how to beat the boss" and "none of
+    the weapons work" say something and are kept as written. If a sentence of real content
+    follows an empty first sentence, that sentence is kept as its own line.
  3. Every line that is the Game line (``Game: ...``, ``Games are ...``, ``Game is ...``) is taken
     apart into names. A name is a game only if it is one the chat already knows (the game the
     chat was opened in, or one that was running when a question was asked), a game the notes
@@ -27,7 +29,7 @@ How it works:
     "General", "Antlion Guard") is thrown away.
  4. One Game line is written from what survives, first, with the chat's own games ahead of any
     the model added. A chat with no game and no game the model named gets no Game line at all.
- 5. The note is capped at ten lines, which is what the model was asked for.
+ 5. Nothing else is cut: no real line is dropped to reach a line count.
 """
 
 from __future__ import annotations
@@ -39,14 +41,14 @@ from typing import Callable, Optional
 from backend.services.kb_other_game_named import other_game_named_in
 from backend.services.knowledge_base_schema import normalize_alias
 
-MAX_SUMMARY_LINES = 10
 MAX_GAMES_SHOWN = 5
 
 # A bullet or number the model put in front of a line.
 _LEAD_RE = re.compile(r"^\s*(?:[-*•]\s+|\d{1,2}[.)]\s+)")
 _EMPHASIS_RE = re.compile(r"\*\*|__")
 # "Stuck on: ..." -- a short label (never a whole sentence) then the answer.
-_LABEL_RE = re.compile(r"^([A-Za-z][A-Za-z' /]{0,40}?):\s*(.*)$")
+# The colon must be followed by a space (or end the line): "bonsai:vac-check" is not a label.
+_LABEL_RE = re.compile(r"^([A-Za-z][A-Za-z' /]{0,40}?):(?:\s+(.*)|\s*)$")
 # "Game: x", "Games: x", "Game 1: x", "Game is x", "Games are x", "Games discussed include x",
 # "Game unknown". "Game crashes after..." is NOT a Game line (no colon, is, are, include).
 _GAME_LINE_RE = re.compile(
@@ -54,26 +56,50 @@ _GAME_LINE_RE = re.compile(
     r"\s*(?::|\bis\b|\bare\b|\binclude[sd]?\b|\bunknown\b)\s*(.*)$",
     re.IGNORECASE,
 )
-# The first clause of an answer that says nothing.
-_EMPTY_ANSWER_RE = re.compile(
+# How an answer that says nothing begins. It is empty only if NOTHING but filler follows (see
+# _FILLER_WORDS): "none apparent in this log" is empty, "none of the weapons work" is not.
+_EMPTY_HEAD_RE = re.compile(
     r"^(?:none|nothing|nobody|n/?a|na|unknown|unclear|unspecified|undefined|"
     r"not (?:specified|stated|mentioned|known|applicable|clear|available|given|identified|"
-    r"determined|sure|yet)|no (?:one|info|information|data|game|specific game))\b",
-    re.IGNORECASE,
+    r"determined|sure|yet|decided)|no (?:one|info|information|data|game|specific game))\b"
+)
+_FILLER_WORDS = frozenset(
+    "apparent explicitly specifically specified stated mentioned noted yet so far at this that "
+    "time the moment now right currently in log logs chat conversation text transcript here "
+    "found given provided available identified reported discussed requested asked applicable "
+    "clear known decided specific particular current anywhere all for again and or anything "
+    "is was are from".split()
 )
 # A whole short sentence that says nothing ("No specific current sticking point mentioned.").
+# Everything between "no" and the closing word must come from a short list of plain nouns and
+# adjectives, so "No weapon works against the boss yet." is never mistaken for one.
+_NOTHING_NOUNS = (
+    r"(?:specific|current|new|other|further|more|sticking|point|points|problem|problems|issue|"
+    r"issues|topic|topics|question|questions|help|request|requests|progress|location|game|"
+    r"games|goal|goals|info|information|details|recent|instruction|instructions)"
+)
+# "...asked about how to answer" -- the model's way of saying the player gave no answering rules.
+_ABOUT_ANSWERING = (
+    r"(?: (?:about|for|on|regarding) (?:how to answer|answering|answers|replying|how to reply))?"
+)
 _EMPTY_SENTENCE_RES = (
     re.compile(
-        r"^(?:there (?:is|are) )?no\b[^.]{0,80}\b(?:mentioned|stated|specified|apparent|"
-        r"identified|discussed|requested|noted|asked|needed|yet|so far)\b",
+        rf"^(?:there (?:is|are) )?no (?:{_NOTHING_NOUNS} ){{0,4}}{_NOTHING_NOUNS}"
+        rf"{_ABOUT_ANSWERING}"
+        r" (?:(?:were|was|are|is|have been|has been) )?"
+        r"(?:mentioned|stated|specified|apparent|identified|discussed|requested|noted|asked|"
+        r"given|provided)"
+        rf"{_ABOUT_ANSWERING}"
+        r"(?: (?:so far|yet|at this time|in (?:this|the) (?:log|chat|conversation|text|"
+        r"summary)))?\.?$",
         re.IGNORECASE,
     ),
     re.compile(
-        r"^no (?:other |new |further |more )?(?:specific )?(?:topics?|questions?|help|requests?|"
-        r"sticking points?|problems?)\b",
+        r"^player (?:is|was) (?:currently )?not stuck"
+        r"(?: on (?:anything|(?:a |any )?(?:specific )?(?:problem|point|issue|thing)s?))?"
+        r"(?: right now| at the moment)?\.?$",
         re.IGNORECASE,
     ),
-    re.compile(r"^player (?:is|was) (?:currently )?not stuck\b", re.IGNORECASE),
 )
 _EMPTY_SENTENCE_MAX_LEN = 90
 
@@ -140,12 +166,18 @@ def _split_first_sentence(text: str) -> tuple[str, str]:
 
 
 def _is_empty_answer(text: str) -> bool:
-    """True when ``text`` (the answer after a label) says nothing, however it is phrased."""
-    cleaned = text.strip().strip(" .!;:-–—*_\"'()").lower()
-    if not cleaned:
+    """True only when the WHOLE of ``text`` (the answer after a label) says nothing: an empty
+    phrase, optionally followed by filler and nothing else. "None apparent in this log" is empty;
+    "none of the weapons work", "not sure how to beat X" and "unknown how to open the gate" go on
+    to say something, so they are real and kept. When unsure, the answer is kept."""
+    tokens = re.findall(r"[a-z0-9'/]+", text.lower())
+    if not tokens:
         return True
-    first_clause = re.split(r"[,;(]|\bbut\b| - ", cleaned)[0].strip(" .")
-    return not first_clause or _EMPTY_ANSWER_RE.match(first_clause) is not None
+    cleaned = " ".join(tokens)
+    head = _EMPTY_HEAD_RE.match(cleaned)
+    if head is None:
+        return _is_empty_sentence(cleaned)
+    return all(word in _FILLER_WORDS for word in cleaned[head.end():].split())
 
 
 def _is_empty_sentence(line: str) -> bool:
@@ -167,7 +199,6 @@ def tidy_summary_text(
     *,
     known_games: Optional[list[str]] = None,
     library_title: Optional[LibraryTitleLookup] = None,
-    max_lines: int = MAX_SUMMARY_LINES,
 ) -> str:
     """The model's summary with its empty lines dropped and its Game line rebuilt from names
     that can be checked (see the module docstring). Returns "" when nothing real is left."""
@@ -213,11 +244,12 @@ def tidy_summary_text(
 
         label_match = _LABEL_RE.match(line)
         if label_match:
-            label, content = label_match.group(1), label_match.group(2)
-            content = _without_empty_head(content)
-            if not content or _is_empty_sentence(content):
+            label, content = label_match.group(1), label_match.group(2) or ""
+            kept_content = _without_empty_head(content)
+            if not kept_content or _is_empty_sentence(kept_content):
                 continue
-            line = f"{label}: {content}"
+            if kept_content != content.strip():
+                line = f"{label}: {kept_content}"  # an empty first sentence was cut off
         elif _is_empty_sentence(line):
             continue
         _keep(line)
@@ -226,4 +258,4 @@ def tidy_summary_text(
     lines = kept
     if shown:
         lines = [("Game: " if len(shown) == 1 else "Games: ") + ", ".join(shown)] + kept
-    return "\n".join(lines[: max(1, int(max_lines))])
+    return "\n".join(lines)

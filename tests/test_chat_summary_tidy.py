@@ -15,7 +15,6 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 install_fcntl_and_decky_stubs()
 
 from backend.services.chat_summary_tidy import (
-    MAX_SUMMARY_LINES,
     known_games_of_chat,
     tidy_summary_text,
 )
@@ -72,7 +71,12 @@ class EmptyLineTests(unittest.TestCase):
             "Player is stuck on: None apparent in this log.",
             "Stuck on: None apparent in this log",
             "Stuck: No specific current sticking point mentioned.",
-            "Finished: None explicitly stated, general tips provided for many.",
+            "Stuck on: None apparent in this log.",
+            "Settings: N/A",
+            "Stuck on: Unknown.",
+            "Stuck on: No sticking point mentioned.",
+            "Stuck on: Nothing mentioned so far.",
+            "Where the player is: Unknown at this time.",
             "Stuck on: Not specified.",
             "Stuck on: n/a",
             "Where the player is: Unknown",
@@ -94,16 +98,52 @@ class EmptyLineTests(unittest.TestCase):
         )
         self.assertEqual(tidy_summary_text(text), "Player asked about day limits.")
 
-    def test_a_real_answer_that_starts_with_the_word_no_or_none_is_kept(self):
+    def test_the_wordier_ways_of_saying_nothing_was_asked_are_dropped(self):
         text = (
-            "Player asked for: no spoilers please.\n"
-            "Stuck on: none of the dash timings land on the second boss.\n"
-            "Nothing helps: the shader cache keeps rebuilding after every update."
+            "Player asked about day limits.\n"
+            "No specific questions about how to answer were asked.\n"
+            "No specific instruction given for answering.\n"
+            "No other recent topics discussed.\n"
+            "No specific sticking points mentioned in this summary.\n"
+            "No new game topics discussed."
         )
-        # "none of the dash timings land" is a real sentence, not an empty answer.
-        out = tidy_summary_text(text).splitlines()
-        self.assertEqual(out[0], "Player asked for: no spoilers please.")
-        self.assertIn("Nothing helps: the shader cache keeps rebuilding after every update.", out)
+        self.assertEqual(tidy_summary_text(text), "Player asked about day limits.")
+
+    def test_a_line_with_a_colon_inside_a_word_is_left_exactly_as_written(self):
+        text = "Player asked about bonsai:vac-check command."
+        self.assertEqual(tidy_summary_text(text), text)
+
+    def test_a_real_answer_that_merely_starts_with_an_empty_word_is_kept_word_for_word(self):
+        """Round 2 (the session owner ran these through the guard): "Stuck on: not sure how to
+        beat X" is the most useful line a summary holds. An answer is empty only when the WHOLE
+        answer is an empty phrase; what follows the empty word decides, not how it starts."""
+        for real in (
+            "Player is stuck on: Nothing works against the Soul Master.",
+            "Stuck on: Not sure how to beat the Soul Master in the Soul Sanctum.",
+            "Stuck on: Unknown how to open the gate after the second boss.",
+            "Stuck on: None of the weapons seem to damage the boss.",
+            "Problem: Unclear which upgrade to buy first.",
+            "Stuck on: Nobody mentions where the third rune is.",
+            "Next step: Not yet decided, but the player wants a ranged build.",
+            "Stuck on: No idea where the key to the vault is.",
+            "Stuck on: none of the dash timings land on the second boss.",
+            "Player asked for: no spoilers please.",
+            "Stuck on: No weapon works against the boss yet.",
+            "Player is not stuck, but wants a ranged build.",
+            "Nothing helps: the shader cache keeps rebuilding after every update.",
+            "No potion works on the second boss so far.",
+        ):
+            with self.subTest(real=real):
+                self.assertEqual(
+                    tidy_summary_text(f"Player asked about bosses.\n{real}", known_games=["Hades"]),
+                    f"Game: Hades\nPlayer asked about bosses.\n{real}",
+                )
+
+    def test_an_empty_head_is_dropped_and_the_real_tail_is_kept(self):
+        self.assertEqual(
+            tidy_summary_text("Stuck on: None. The player wants a ranged build."),
+            "Stuck on: The player wants a ranged build.",
+        )
 
     def test_a_sentence_after_an_empty_phrase_is_kept_as_its_own_line(self):
         text = "Stuck on: Not specified. Player is asking about the Mantis Lords."
@@ -210,12 +250,11 @@ class ShapeTests(unittest.TestCase):
             ["Game: Hades", "Player asked about the first boss.", "Stuck on: the dash timing"],
         )
 
-    def test_the_note_is_capped_at_ten_lines_with_the_game_line_first(self):
+    def test_no_real_line_is_cut_to_reach_a_line_count(self):
         text = "\n".join(f"Player asked question number {i}." for i in range(30))
         out = tidy_summary_text(text, known_games=["Hades"]).splitlines()
-        self.assertEqual(len(out), MAX_SUMMARY_LINES)
         self.assertEqual(out[0], "Game: Hades")
-        self.assertEqual(out[1], "Player asked question number 0.")
+        self.assertEqual(out[1:], [f"Player asked question number {i}." for i in range(30)])
 
     def test_a_reply_that_is_only_empty_lines_comes_back_empty(self):
         self.assertEqual(tidy_summary_text("Stuck on: None.\nHelp requested:"), "")

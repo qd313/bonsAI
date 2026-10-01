@@ -34,6 +34,8 @@ const ref = { current: 0 };
 export const PANE_TOP = 88;
 const DOCK_TOP = 290;
 const PANE_BOTTOM = 366;
+/** Steam's own scroll padding at the bottom of the Quick Access pane (useDockClearanceOnFocus.ts). */
+const STEAM_SCROLL_PADDING_BOTTOM = 80;
 
 /**
  * The bubble's own frame on the Deck: the inner padding (8 px, answerBubble.ts) and the 1 px border, above
@@ -47,11 +49,13 @@ const BUBBLE_FRAME_PX = 9;
  * The pane's readable band ends at the dock; a game running lifts the dock's action row, so a test can move it.
  * `dockLift` (on unless set false) runs the plugin's own lift off the dock (useDockClearanceOnFocus) after every
  * landing, as the Deck does; it is what put a tall box's top on the header in the final smoke run (box 1 at
- * y 88, scrollTop 177).
+ * y 88, scrollTop 177). `liftScrollsToEnd` makes the lift's own scroll request move the panel, as measured
+ * on 2026-10-01 (see `scrollIntoViewOf`).
  */
 export interface DeckAnswerOptions {
   dockTop?: number;
   dockLift?: boolean;
+  liftScrollsToEnd?: boolean;
 }
 
 export type Box = [top: number, bottom: number];
@@ -78,11 +82,23 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
   pane.appendChild(dock);
   pane.scrollTop = scrollTop;
 
+  /*
+   * The pane's scrollIntoView, which jsdom lacks; only the plugin's lift off the dock calls it (block "end").
+   * By default it leaves the panel where it is, as the Deck measured inside the answer on 2026-09-06
+   * (useDockClearanceOnFocus.ts). With `liftScrollsToEnd`, it does what the Deck measured on 2026-10-01: the
+   * end lands Steam's 80 px of scroll padding above the pane's bottom, with the lift's own scroll-margin
+   * (the dock's strip plus 6) above that, 86 px above the dock. A 180 px first section was left at y 24 to
+   * 204 with the dock at 290 (plan78-P78-DOWN-SHORT-SECTION.json); a cover at 149 to 204, and the choices
+   * and Helpful below an answer at 172 to 204, show the same end.
+   */
+  const scrollIntoViewOf = (el: HTMLElement) => (arg?: boolean | ScrollIntoViewOptions) => {
+    if (!options.liftScrollsToEnd || typeof arg !== "object" || arg.block !== "end") return;
+    const target = PANE_BOTTOM - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
+    pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().bottom - target);
+  };
   const place = (el: HTMLElement, [top, bottom]: Box) => {
     el.getBoundingClientRect = () => rect(top - pane.scrollTop, bottom - pane.scrollTop);
-    // jsdom has none. Inside the bubble the Deck's own scrollIntoView left the panel where it was
-    // (useDockClearanceOnFocus.ts, 2026-09-06), so the lift's hand-written step is what moves it.
-    el.scrollIntoView = () => {};
+    el.scrollIntoView = scrollIntoViewOf(el);
   };
   /* The Deck's shape: bubble > inner (the padding) > the section stack > the sections. */
   const frame = BUBBLE_FRAME_PX;
@@ -308,6 +324,18 @@ export const ROUND_TWO: AnswerShape = {
   start: 0,
 };
 
+/**
+ * Walk 2 of plan 78's Deck run (plan78-P78-DOWN-SHORT-SECTION.json): the Mantis Lords answer, two sections
+ * of 180 and 195 px and no cover, worked out from the landings (section 1 at y 24 to 204 at scrollTop 256,
+ * section 2 at 95 to 290 at 365). The reasoning line sat at 249 to 263 with the panel at 0, so the ring
+ * comes into the answer from above with the panel at 0.
+ */
+export const MANTIS_LORDS: AnswerShape = {
+  sections: [[280, 460], [460, 655]],
+  covers: [],
+  start: 0,
+};
+
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];
 
@@ -338,7 +366,7 @@ export type ShapedAnswer = ReturnType<typeof shapedAnswer>;
  * section taller than the band is read from its end when entered from below, so the reading is not
  * skipped past).
  */
-function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
+export function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
   const top = a.top(el);
   const bottom = a.bottom(el);
   const band = a.dockTop - PANE_TOP;

@@ -202,6 +202,7 @@
     "src/utils/answerBubbleNavigation.coverMirror.test.ts",
     "src/utils/answerBubbleNavigation.coverUp.test.ts",
     "src/utils/answerBubbleNavigation.downVisible.test.ts",
+    "src/utils/answerBubbleNavigation.firstSection.test.ts",
     "src/utils/answerBubbleNavigation.lastSection.test.ts",
     "src/utils/answerBubbleNavigation.mirrorWalk.test.ts",
     "src/utils/answerBubbleNavigation.readingWalk.test.ts",

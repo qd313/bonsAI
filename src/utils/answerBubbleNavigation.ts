@@ -294,7 +294,21 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
   if (spoiler && (!stops.length || stops[0]!.contains(spoiler)) && focusPanelEl(spoiler)) {
     return true;
   }
-  if (stops.length && focusAnswerStop(stops[0]!)) return true;
+  if (stops.length && focusAnswerStop(stops[0]!)) {
+    /*
+     * Placed the way Down's own landing places a section: its bottom just above the dock (one taller
+     * than the band keeps its top edge). Left where it was, mostly behind the dock, the section was
+     * placed by the plugin's lift off the dock, whose scroll ends 86 px above the dock: on the Deck a
+     * 180 px first section landed at y 24 to 204, its top 64 px above the panel
+     * (docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json). Coming in from below already does this.
+     */
+    const scroll = findScrollablePanel(el);
+    if (scroll) {
+      revealBelowDock(stops[0]!, scroll);
+      revealSectionInBand(stops[0]!, scroll);
+    }
+    return true;
+  }
   return focusPanelEl(el);
 }
 

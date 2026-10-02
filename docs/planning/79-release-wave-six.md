@@ -431,6 +431,16 @@ New ones go here, with the choice taken in the meantime.
    unverified"). *Meanwhile:* the licence filter hides blocked models and one quiet line counts them; a big model
    that is skipped while "Allow high-VRAM models" is off gets a short "skipped" mark; the other two notes stay gone.
    **Your call:** bring any of them back.
+9. **The day lines under "N earlier" read "Today · 12".** The drawing had "Today · 12 questions". *Meanwhile:* the
+   shorter form, as the brief said. A chat with only two or three earlier questions also goes through a day line,
+   which is two extra presses for a small chat. **Your call:** the longer words, or skip the day lines for a few.
+10. **The chat's name is now a little narrower when the ring is elsewhere** (about 146 px, was 177), because it keeps
+   the width it has with the ring so it never moves. A long chat name is cut a little sooner. *Meanwhile:* kept.
+11. **Boxes that open on the button that does the thing.** Steam starts a confirm box on its first button. The Delete
+   chat box, "Clear cache", "Clear all data" and "Large model, continue?" now start on the choice that changes
+   nothing ("Keep chat", "Keep cache", "Keep my data", "Not now"), with the action as the middle button, the shape
+   the Remove knowledge base box already had. *Meanwhile:* done for those four; "Pull selected" and "Show thinking"
+   still start on the action, since that is what was just asked for.
 
 ## At the end
 
@@ -548,6 +558,19 @@ Nothing yet.
   get no place at all, so the try order could not be changed there; it went back for a second round with questions
   6 to 8. "Grouped by day" is being merged with Retry's second round, which changed the same lines. Deck block 2b
   (second rounds, the rings, the trap routes) started.
+- **2026-10-02, about 15:00 to 16:05:** Deck block 2b passed every second round: the first model clear of the AI
+  models box's header (26 px below it now), Up from the question never on Retry, Down from the chat row in a short
+  chat onto the question, the card's gap (8.7 px), and a ring at every stop on the Ollama, Settings and Developer
+  tabs. Three trap routes did not trap; the fourth, the new fix's own case, could not be set up (the newest turn was
+  a cancelled one) and moves to block 2c. It also showed the X was never the problem: **the question box draws no
+  ring at all, on any route**, so a helper gave it a white ring inside its edge. Landed, every check green: grouped
+  by day merged with the Retry fixes (tip `927666c5`), the paperwork sweep and the models fold with its second round
+  (`6c70c744`; on a PC the PC's models get their own rows, Reset asks first, a big skipped model says so), the
+  question box's ring (`26965c63`), and the chat row's second round (`c3dcf37e`: the name stays still, the Delete box
+  opens on "Keep chat"). The chat row's helper found the same "opens on the action" problem in three more boxes
+  (question 11). Started: the Show details line in the chip's place (way 2) and walking Up mirroring Down (bug 12
+  and the rows Up skipped). Deck block 2c (the trap route, ten chips, long chips, a button keeping its game) is on
+  the Deck.
 
 ## For the helpers: who owns which files
 

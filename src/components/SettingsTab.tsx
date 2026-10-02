@@ -24,7 +24,7 @@
  *     │                           SettingsTabUiScaleSection  │
  *     │ Screenshot quality     <- Save memory / Balanced /   │
  *     │                           Best detail                │
- *     │ Remember what I typed  <- All / Search / None        │
+ *     │ Remember what I typed  <- one on/off switch          │
  *     │ Story spoilers         <- hide-until-tap toggle       │
  *     │ Suggestion chips       <- one chip vs two toggle      │
  *     │ Voice input            <- its own file, see           │
@@ -97,26 +97,6 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
-const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
-  persist_all: "Remember everything",
-  persist_search_only: "Remember search only",
-  no_persist: "Don't remember",
-};
-const persistenceModeShortLabel: Record<UnifiedInputPersistenceMode, string> = {
-  persist_all: "All",
-  persist_search_only: "Search",
-  no_persist: "None",
-};
-const persistenceModeOptions: UnifiedInputPersistenceMode[] = [
-  "persist_all",
-  "persist_search_only",
-  "no_persist",
-];
-const persistenceModeDescription: Record<UnifiedInputPersistenceMode, string> = {
-  persist_all: "Restore all typed text when you reopen the plugin.",
-  persist_search_only: "Restore only text from Steam settings search.",
-  no_persist: "Never restore typed text on reopen.",
-};
 const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "When I asked by voice",
@@ -390,44 +370,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       </PanelSection>
       <PanelSection title="Remember what I typed">
         <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {persistenceModeDescription[unifiedInputPersistenceMode]}
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-            >
-              {persistenceModeOptions.map((mode) => {
-                const active = mode === unifiedInputPersistenceMode;
-                return (
-                  <Button
-                    key={mode}
-                    onClick={() => {
-                      setUnifiedInputPersistenceMode(mode);
-                    }}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#f0f4f8" : "#9fb0c0",
-                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                    }}
-                    aria-label={`${persistenceModeLabel[mode]}: ${persistenceModeDescription[mode]}`}
-                  >
-                    {persistenceModeShortLabel[mode]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
+          <ToggleField
+            label="Remember what I typed"
+            description="On puts back what you typed in the question box when you reopen the plugin. Off clears it each time."
+            checked={unifiedInputPersistenceMode === "persist_all"}
+            onChange={(checked) => setUnifiedInputPersistenceMode(checked ? "persist_all" : "no_persist")}
+          />
         </PanelSectionRow>
       </PanelSection>
       <PanelSection title="Story spoilers (Strategy mode)">

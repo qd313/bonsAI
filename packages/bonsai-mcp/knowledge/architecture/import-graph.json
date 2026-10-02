@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 676,
-  "edgeCount": 1914,
+  "fileCount": 677,
+  "edgeCount": 1915,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1648,6 +1648,7 @@
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
+        "src/components/SettingsTabRememberTypedSwitch.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx"
       ]
@@ -1684,6 +1685,12 @@
       ]
     },
     "src/components/SettingsTabPresetSingleChip.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTabRememberTypedSwitch.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx"
       ],

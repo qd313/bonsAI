@@ -109,6 +109,7 @@
     "src/components/SettingsTab.mdns.test.ts",
     "src/components/SettingsTab.modalReturnFocus.test.tsx",
     "src/components/SettingsTabPresetSingleChip.test.tsx",
+    "src/components/SettingsTabRememberTypedSwitch.test.tsx",
     "src/components/SettingsTabUiScaleHidden.test.tsx",
     "src/components/SettingsTabUiScaleSection.test.ts",
     "src/components/StreamMarkdownPieces.test.tsx",

@@ -21,7 +21,7 @@
  * reports back.
  */
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import { toaster } from "@decky/api";
+import { call, toaster } from "@decky/api";
 
 import { formatDeckyRpcError } from "../../utils/deckyCall";
 import { useVoiceTranscription } from "../../hooks/useVoiceTranscription";
@@ -144,6 +144,24 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       setVoiceRecording(false);
     }
   }, [a.microphoneAccess, voiceRecording, stopVoiceTranscription, invalidateVoice]);
+
+  /*
+   * The question box was emptied while the microphone was still listening (the X beside Ask, a
+   * session clear, a hand delete-all). The listening loop writes "text before + everything heard"
+   * into the box on every tick, so left running it puts the same words straight back and the clear
+   * looks like it did nothing (found on the real mic, 2026-10-02: speak, Ask, Stop, X). Emptying the
+   * box ends dictation. The stop goes straight to the back end rather than through
+   * `stopVoiceTranscription`, which would write the final transcript into the box all over again.
+   * `lastVoiceText` non-empty means the loop had written words, so a box that is simply still empty
+   * at the start of a recording does not trip this.
+   */
+  useEffect(() => {
+    if (!voiceRecording || lastVoiceText === "" || a.unifiedInput.trim() !== "") return;
+    invalidateVoice();
+    setVoiceRecording(false);
+    setLastVoiceText("");
+    void call("stop_voice_transcription").catch(() => undefined);
+  }, [voiceRecording, lastVoiceText, a.unifiedInput, invalidateVoice]);
 
   useEffect(() => {
     if (a.microphoneAccess) {

@@ -1,8 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { useVoiceAskInput } from "./useVoiceAskInput";
-import { setRpcHandler } from "../../test-harness/fakeDeckyRpc";
+import { getRpcCallLog, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { useVoiceTranscription } from "../../hooks/useVoiceTranscription";
 
 // Spies on the real hook (still calling through to it) so a test can reach into the exact
@@ -158,5 +159,74 @@ describe("useVoiceAskInput lastVoiceText", () => {
 
     expect(result.current.lastVoiceText).toBe("seed text more words");
     expect(fieldText).toBe("seed text more words");
+  });
+});
+
+describe("useVoiceAskInput when the box is emptied while the mic is still listening", () => {
+  const listening = () => {
+    setRpcHandler("start_voice_transcription", () => ({ accepted: true }));
+    setRpcHandler("get_voice_transcription_status", () => ({
+      status: "recording",
+      recording: true,
+      streaming: true,
+      partial_transcript: "",
+      finalized_transcript: "how do i beat the boss",
+    }));
+  };
+
+  it("stops the recording and never writes the words back", async () => {
+    listening();
+    const writes: string[] = [];
+    // The caller owns the box, as the real screen does: the loop's writes land in it.
+    const { result } = renderHook(() => {
+      const [box, setBox] = useState("");
+      const setUnifiedInput: Dispatch<SetStateAction<string>> = (v) => {
+        writes.push(String(v));
+        setBox(v);
+      };
+      return {
+        box,
+        setBox,
+        voice: useVoiceAskInput({ setUnifiedInput, unifiedInput: box, microphoneAccess: true, isAsking: false, uiT }),
+      };
+    });
+    await act(async () => {
+      result.current.voice.onMicInput();
+      await new Promise((r) => setTimeout(r, 50));
+    });
+    expect(result.current.box).toBe("how do i beat the boss");
+    expect(result.current.voice.voiceRecording).toBe(true);
+
+    // The X empties the box.
+    await act(async () => {
+      result.current.setBox("");
+    });
+    expect(result.current.voice.voiceRecording).toBe(false);
+    const writesBefore = writes.length;
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 400));
+    });
+    expect(writes.length).toBe(writesBefore);
+    expect(result.current.box).toBe("");
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_transcription")).toBe(true);
+  });
+
+  it("leaves a recording alone while the box is still empty because nothing has been heard yet", async () => {
+    setRpcHandler("start_voice_transcription", () => ({ accepted: true }));
+    setRpcHandler("get_voice_transcription_status", () => ({
+      status: "recording",
+      recording: true,
+      streaming: true,
+      partial_transcript: "",
+      finalized_transcript: "",
+    }));
+    const { result } = renderHook(() =>
+      useVoiceAskInput({ setUnifiedInput: () => {}, unifiedInput: "", microphoneAccess: true, isAsking: false, uiT }),
+    );
+    await act(async () => {
+      result.current.onMicInput();
+      await new Promise((r) => setTimeout(r, 300));
+    });
+    expect(result.current.voiceRecording).toBe(true);
   });
 });

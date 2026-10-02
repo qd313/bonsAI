@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 665,
-  "edgeCount": 1872,
+  "fileCount": 666,
+  "edgeCount": 1876,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3442,6 +3442,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/voice/voiceClearAfterStop.test.tsx": {
+      "imports": [
+        "src/index.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/setupAndPullBoxWording.test.tsx": {
       "imports": [
         "src/data/modelPolicy.ts",
@@ -4555,6 +4564,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/index.helpChip.test.tsx",
         "src/index.test.tsx"
       ]
@@ -4998,6 +5008,7 @@
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/voice/useVoiceAskInput.test.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
+        "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
@@ -5091,6 +5102,7 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
@@ -5124,6 +5136,7 @@
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
+        "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",

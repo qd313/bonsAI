@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 659,
-  "edgeCount": 1854,
+  "fileCount": 660,
+  "edgeCount": 1858,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -465,6 +465,7 @@
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
+        "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
         "src/components/MainTabChatTranscript.spoilerStaysOpen.test.tsx",
@@ -492,6 +493,15 @@
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
         "src/utils/spoilerFenceRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts"
       ],
       "importedBy": []
     },
@@ -745,6 +755,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
+        "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
@@ -4970,6 +4981,7 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
+        "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
@@ -5151,6 +5163,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
+        "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",

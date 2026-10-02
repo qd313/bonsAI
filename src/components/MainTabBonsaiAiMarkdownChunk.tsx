@@ -225,6 +225,16 @@ function linkifyDrgGlossaryNode(
   return node;
 }
 
+/**
+ * The words inside a hidden block, without the line break the reader adds at the end. A block with
+ * nothing in it (an answer cut off right after the opening mark, or a block closed at once) reaches
+ * the draw step with no children at all, and String() of that is the word "undefined", which an
+ * opened cover then showed on the Deck. Nothing arrived means no words.
+ */
+function fenceBodyText(children: ReactNode): string {
+  return children == null || typeof children === "boolean" ? "" : String(children).replace(/\n$/, "");
+}
+
 /*
  * In: whether spoiler hiding is on, whether a spoiler should start open,
  * how deep inside a nested spoiler this call is (a spoiler's own revealed
@@ -300,6 +310,14 @@ function buildMdComponents(args: MdArgs): Components {
         onlyClassName.split(/\s+/).includes("language-bonsai-spoiler") &&
         spoilerMaskingEnabled &&
         depth === 0;
+      /* An empty hidden block (the `code` rule below draws nothing for it, covers on or off) gets no
+         code box either, or an empty padded box is left on the page. */
+      const emptySpoilerBlock =
+        depth === 0 &&
+        typeof onlyClassName === "string" &&
+        onlyClassName.split(/\s+/).includes("language-bonsai-spoiler") &&
+        !fenceBodyText((only as { props: { children?: ReactNode } }).props.children).trim();
+      if (emptySpoilerBlock) return null;
       if (wrapsMaskedSpoiler) {
         return <>{children}</>;
       }
@@ -309,7 +327,8 @@ function buildMdComponents(args: MdArgs): Components {
       const isSpoiler =
         typeof className === "string" && className.split(/\s+/).includes("language-bonsai-spoiler");
       if (isSpoiler && depth === 0 && !spoilerMaskingEnabled) {
-        const raw = String(children).replace(/\n$/, "");
+        const raw = fenceBodyText(children);
+        if (!raw.trim()) return null;
         return (
           <ReactMarkdown
             components={buildMdComponents({
@@ -325,7 +344,8 @@ function buildMdComponents(args: MdArgs): Components {
         );
       }
       if (isSpoiler && depth === 0 && spoilerMaskingEnabled) {
-        const raw = String(children).replace(/\n$/, "");
+        const raw = fenceBodyText(children);
+        if (!raw.trim()) return null;
         return (
           <BonsaiSpoilerFence
             body={raw}

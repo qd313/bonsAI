@@ -2013,3 +2013,33 @@ The plan's own section, "Your calls for this session", has the same list.
 11. **Standing instructions:** the rules learned from plan 77's night are written into the helpers' own
     instruction files, a written runbook (`docs/agents/bug-wave-runbook.md`) and a checked-in landing script
     (`scripts/land_lane.sh`).
+
+### D122 — LOCKED 2026-10-02 (raised 2026-10-02) — Plan 79, the last session before 0.6.0: the ten calls
+
+Made by the maintainer on 2026-10-02, while [plan 79](../planning/79-release-wave-six.md) was planned. The plan's
+own section, "Your calls for this session", has the same list.
+
+1. **Fifteen helpers at once** for this session. The house limit was ten.
+2. **How wide: everything.** Every bug on the plan's list and all twelve features. The two behind-the-scenes
+   reshapes (the settings list written once, the build tidy-ups) go last, each behind its own gate, and are dropped
+   if not clean. This sets aside plan 71's rule of no new features and no reshaping after the last call; the
+   release waits for a clean Deck pass and the first-install check on the final build.
+3. **A drawing with no pick:** the three small ones (Delete icon, chip highlight, calmer rating choices) are built
+   with the session's recommended choice. The three big ones (opening "N earlier", the Show details line above the
+   question box, folding "Models & routing" into the AI models box) wait for the pick and stay as drawings if
+   none comes.
+4. **A trapped or frozen Deck while the maintainer is away:** the session may restart Steam on the Deck, and reboot
+   the Deck over the network if that does not bring Quick Access back, only after everything about the trap has
+   been recorded. Never a password: if either step asks for one, a phone notification, then wait.
+5. **The starter models, once "Install options…" is gone: both places.** A first "Install Ollama" on a Deck with
+   no models offers the starter models in the same box, asking first, with the ring on "Not now". Browse models
+   gets one "install the starter set" button.
+6. **A fresher title from summing up:** the Sum up button offers a title, and so does the summary a chat makes by
+   itself. The offer sits on the summary card. A title typed by hand is never second-guessed. Never renamed
+   without a yes.
+7. **Where it runs:** a new chat on Opus extra-high.
+8. **Hard bugs go to an Opus medium helper.** Everything else is Sonnet high, or Sonnet medium when mechanical.
+9. **Two add-ons from plan 78's open questions:** a button pressed under an answer keeps that answer's game (so
+   its spoiler covers stay), and a game offers ten of its own chips where it offered six.
+10. **The Deck otherwise:** as plan 78, call 4: the test chat only, and the oldest chat may be deleted if there is
+    no spare slot, its file copied aside first.

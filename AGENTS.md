@@ -331,7 +331,7 @@ Rules that go with it:
   there is one obvious way (wording, a number, moving or linking text); high when there is a real choice
   (timing, spoilers, saved chats, settings), even on a one-star bug. When unsure, high. Long jobs:
   medium if every step is the same checkable kind. Each helper run adds a row to plan 33 § 4b.
-- **Helper lanes:** at most ten for feature or bug work (the maintainer's call 2026-09-29, was seven),
+- **Helper lanes:** at most ten for feature or bug work (the maintainer's call 2026-09-29, was seven; fifteen for plan 79 only, D122),
   at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
   short report only** — they never edit the roadmap, the testing documents or the changelog. Do not

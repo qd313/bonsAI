@@ -86,6 +86,8 @@ import {
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
+import { KnowledgeBaseButtonLabel } from "./KnowledgeBaseButtonLabel";
+import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "./icons";
 import {
   clearModalReturnFocus,
   registerModalReturnFocusOwner,
@@ -1006,11 +1008,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                     downloadBusy ? focusCancelBtn() : installed ? focusRemoveBtn() : false,
                 })}
               >
-                {downloadBusy
-                  ? "Downloading…"
-                  : installed
-                    ? "Update knowledge base"
-                    : "Download knowledge base"}
+                <KnowledgeBaseButtonLabel icon={installed ? <RefreshArrowIcon size={16} /> : <DownloadArrowIcon size={16} />}>
+                  {downloadBusy ? "Downloading…" : installed ? "Update knowledge base" : "Download knowledge base"}
+                </KnowledgeBaseButtonLabel>
               </Button>
             </Focusable>
           </div>
@@ -1095,7 +1095,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                     onMoveDown: () => onMoveDownFromRemove?.() ?? false,
                   })}
                 >
-                  Remove
+                  <KnowledgeBaseButtonLabel icon={<TrashBinIcon size={16} />}>Remove</KnowledgeBaseButtonLabel>
                 </Button>
               </Focusable>
             </div>

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 656,
-  "edgeCount": 1844,
+  "fileCount": 658,
+  "edgeCount": 1849,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -231,6 +231,12 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
       ]
     },
+    "src/components/KnowledgeBaseButtonLabel.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx"
+      ]
+    },
     "src/components/KnowledgeBaseSection.downloadNotice.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -242,6 +248,14 @@
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/KnowledgeBaseSection.icons.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -317,6 +331,8 @@
     },
     "src/components/KnowledgeBaseSection.tsx": {
       "imports": [
+        "src/components/KnowledgeBaseButtonLabel.tsx",
+        "src/components/icons.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
@@ -332,6 +348,7 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
+        "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
@@ -1742,6 +1759,7 @@
         "src/components/bonsaiLogoPath.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -4868,6 +4886,7 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
         "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
+        "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
@@ -4928,6 +4947,7 @@
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
+        "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",

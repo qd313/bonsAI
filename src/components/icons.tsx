@@ -352,3 +352,21 @@ export const BonsaiSvgIcon: React.FC<{ size?: number }> = ({ size = 24 }) => {
     </svg>
   );
 };
+
+/** A downward arrow onto a tray line: the plain "download" mark for the knowledge-base button. */
+export const DownloadArrowIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 4v11M7.5 10.8 12 15.3l4.5-4.5M5 19.5h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);
+
+/** A small bin with a lid: the plain "remove" mark for the knowledge-base button. */
+export const TrashBinIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4.5 7h15M9.5 7V4.8h5V7M6.8 7l.8 12.2h8.8L17.2 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);

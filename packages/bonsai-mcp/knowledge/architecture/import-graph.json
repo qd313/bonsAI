@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 686,
-  "edgeCount": 1947,
+  "fileCount": 687,
+  "edgeCount": 1953,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -379,6 +379,16 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTab.chatRowDownRetry.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.dockClass.test.ts": {
       "imports": [
         "src/components/MainTab.tsx"
@@ -421,6 +431,7 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.gameLighter.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
@@ -2504,6 +2515,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipShared.ts",
+        "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/chatSlotsApi.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/navFocusRegistry.ts"
@@ -5238,6 +5250,7 @@
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
+        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
@@ -5433,6 +5446,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
@@ -6148,6 +6162,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/features/chat-slots/ChatSlotRow.tsx",
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/questionBubbleFit.test.tsx"
@@ -6579,6 +6594,7 @@
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
+        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
@@ -7501,6 +7517,7 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",

@@ -318,6 +318,7 @@ export function MainTab(props: MainTabProps) {
               onSaveChat={props.onOpenDesktopNoteSave}
               canSaveChat={props.canSaveDesktopNote}
               saveChatEnabled={props.desktopNoteSaveEnabled ?? true}
+              firstTurnId={props.askThreadCollapsed?.[0]?.id ?? "live"}
             />
           </PanelSectionRow>
         ) : null}

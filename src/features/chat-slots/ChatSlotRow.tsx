@@ -50,9 +50,11 @@ import { ConfirmModal, Focusable, showModal } from "@decky/ui";
 
 import { TrashBinSlotsIcon } from "../../components/icons";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
+import { takeOpenQuestionText } from "../../utils/buildTurnHeaderElement";
 import {
   isBumperLeftDeckEvent,
   isBumperRightDeckEvent,
+  isDownDeckButtonEvent,
   isOkDeckButtonEvent,
 } from "../../utils/focusNavigation";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
@@ -89,6 +91,12 @@ export type ChatSlotRowProps = {
   canSaveChat?: boolean;
   /** Saving is allowed; when not, the icon is dimmed and A opens the window's permission prompt. */
   saveChatEnabled?: boolean;
+  /**
+   * The id of the first turn drawn under this row (the transcript's first turn, or "live" when
+   * only the live turn is there). Down from the row goes to that question's text when it has a
+   * Retry, so the ring does not stop on Retry on the way in. Absent: Down is Steam's own move.
+   */
+  firstTurnId?: string | null;
 };
 
 type RowFocusStop = "save" | "title" | "delete";
@@ -163,6 +171,7 @@ export function ChatSlotRow({
   onSaveChat,
   canSaveChat = false,
   saveChatEnabled = true,
+  firstTurnId = null,
 }: ChatSlotRowProps) {
   /*
    * Summaries arrive most-recently-updated first (chat_slot_service sorts by updated_at, newest
@@ -363,10 +372,12 @@ export function ChatSlotRow({
             }
             return false;
           },
-          // Layout is slot row -> transcript -> presets -> ask bar (D-A). Returning false
-          // lets Steam's spatial navigation descend into whatever is directly below,
-          // which is the transcript when it has content and the preset row when it does not.
-          onMoveDown: () => false,
+          // Layout is slot row -> transcript -> presets -> ask bar (D-A). Steam's own move below
+          // enters the first turn's row on its first control, which is Retry (plan 79), so a first
+          // question that has a Retry is taken by its text instead. Anything else returns false and
+          // Steam's spatial navigation descends into what is directly below: the transcript when
+          // it has content and the preset row when it does not.
+          onMoveDown: () => (firstTurnId ? takeOpenQuestionText(firstTurnId) : false),
           // Up goes to the collapsing tab bar (plan 30 W4). Steam's own answer for "above the
           // row" is its hidden tab button — a stop nobody can see (runs/TAB-BAR-W1b-*.json) —
           // so the hop is explicit. False when the bar is not registered, and Steam decides.
@@ -378,6 +389,7 @@ export function ChatSlotRow({
         onButtonDown={(evt) => {
           if (handleBumperButtonDown(evt)) return true;
           if (isBumperLeftDeckEvent(evt) || isBumperRightDeckEvent(evt)) return true;
+          if (isDownDeckButtonEvent(evt)) return firstTurnId ? takeOpenQuestionText(firstTurnId) : false;
           if (!isOkDeckButtonEvent(evt)) return false;
           if (isCreatePosition) {
             void onCreateSlot();

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 658,
-  "edgeCount": 1849,
+  "fileCount": 659,
+  "edgeCount": 1854,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2335,6 +2335,16 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx"
       ]
     },
+    "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/styles/sections/savedChatSlotsRow.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/chatSlotsApi.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -2374,6 +2384,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -4684,6 +4695,7 @@
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/styles/sections/savedChatSlotDots.test.ts",
         "src/styles/sections/section-6.ts"
       ]
@@ -5003,6 +5015,7 @@
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -5889,6 +5902,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -6516,6 +6530,7 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
+        "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",

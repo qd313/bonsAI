@@ -329,6 +329,13 @@ export function buildSavedChatSlotsRowSection(): string {
         .bonsai-scope .bonsai-chat-slot-save--disabled {
           opacity: 0.45;
         }
+        /* Save and the x show only while the ring is on the row (plan 79). visibility, not display:
+           their absolute boxes stay put, so the name never shifts; and they are drawn spans inside the
+           row's one Focusable, so hiding them leaves the D-pad stops as they were. */
+        .bonsai-scope .bonsai-chat-slot-row:not(.bonsai-chat-slot-row--focused) .bonsai-chat-slot-save,
+        .bonsai-scope .bonsai-chat-slot-row:not(.bonsai-chat-slot-row--focused) .bonsai-chat-slot-delete {
+          visibility: hidden;
+        }
         .bonsai-scope .bonsai-chat-slot-delete--active-stop {
           color: #f16a5a;
           border-color: rgba(224, 74, 58, 0.8);

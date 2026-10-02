@@ -6,6 +6,31 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+/**
+ * Writes `text` (written with plain 
+ line endings) to `file` only when it
+ * really differs from what is there, ignoring line endings. When it does
+ * write, it keeps the line endings the file already has. Returns true when it
+ * wrote. This keeps `npm test` and `npm run build` from leaving the file
+ * showing as changed on a Windows checkout, where git turns it into CRLF.
+ */
+export function writeIfChanged(file, text) {
+  let existing = null;
+  try {
+    existing = fs.readFileSync(file, "utf8");
+  } catch {
+    existing = null;
+  }
+  if (existing !== null && existing.replace(/\r\n/g, "\n") === text) return false;
+  const crlf = existing !== null && existing.includes("\r\n");
+  fs.writeFileSync(file, crlf ? text.replace(/\n/g, "\r\n") : text, "utf8");
+  return true;
+}
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) main();
+
+function main() {
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifestPath = path.join(root, "plugin.json");
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
@@ -43,8 +68,8 @@ const body =
   " */\n" +
   `export const PLUGIN_VERSION = ${JSON.stringify(version)} as const;\n`;
 
-fs.writeFileSync(outPath, body, "utf8");
-console.log("sync-version-from-plugin:", version, "→", path.relative(root, outPath));
+const wrote = writeIfChanged(outPath, body);
+console.log("sync-version-from-plugin:", version, "→", path.relative(root, outPath), wrote ? "" : "(already up to date)");
 
 const packagePath = path.join(root, "package.json");
 const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
@@ -52,4 +77,5 @@ if (pkg.version !== version) {
   pkg.version = version;
   fs.writeFileSync(packagePath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
   console.log("sync-version-from-plugin: package.json →", version);
+}
 }

@@ -1,0 +1,108 @@
+{
+ "deck_time_local": "2026-10-02T02:20 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5)",
+ "setup": "Test chat open, newest visible turn is 'what is a good first upgrade in Hollow Knight'. Walked Up with deck_walkTo to the pill '84 earlier'. Pill box 52,146,290,22. A never pressed on Retry.",
+ "pressed": "Down x6 from the pill, Up x6 back to the pill, then Down x2 to the question bubble, Left, Right",
+ "seen": {
+  "down_from_pill": [
+   {
+    "press": 1,
+    "landed": "Retry same prompt (BUTTON.bonsai-turn-retry-corner)",
+    "box": [
+     82,
+     201,
+     20,
+     20
+    ],
+    "is_retry": true
+   },
+   {
+    "press": 2,
+    "landed": "question bubble body 'what is a good first upgrade in Hollow Knight'",
+    "box": [
+     86,
+     189,
+     245,
+     29
+    ],
+    "is_retry": false
+   },
+   {
+    "press": 3,
+    "landed": "Show reasoning - 18 s divider",
+    "box": [
+     52,
+     234,
+     290,
+     15
+    ],
+    "is_retry": false
+   },
+   {
+    "press": 4,
+    "landed": "answer chunk 1 'Right then, listen up...'",
+    "box": [
+     63,
+     200,
+     245,
+     90
+    ],
+    "is_retry": false
+   },
+   {
+    "press": 5,
+    "landed": "answer chunk 2 'It's the first step to getting your Nail...'",
+    "box": [
+     63,
+     200,
+     245,
+     90
+    ],
+    "is_retry": false
+   },
+   {
+    "press": 6,
+    "landed": "summary note 'The chat summed itself up before this answer'",
+    "box": [
+     52,
+     172,
+     267,
+     32
+    ],
+    "is_retry": false
+   }
+  ],
+  "up_back_to_pill": [
+   {
+    "press": 1,
+    "landed": "answer chunk 2"
+   },
+   {
+    "press": 2,
+    "landed": "answer chunk 1"
+   },
+   {
+    "press": 3,
+    "landed": "Show reasoning divider (52,204,290,15)"
+   },
+   {
+    "press": 4,
+    "landed": "question bubble body (86,189,245,29)"
+   },
+   {
+    "press": 5,
+    "landed": "Retry same prompt (82,201,20,20), is_retry true"
+   },
+   {
+    "press": 6,
+    "landed": "84 earlier pill (52,146,290,22)"
+   }
+  ],
+  "left_from_question_bubble": "Retry same prompt (82,201,20,20)",
+  "right_from_retry": "question bubble body (86,189,245,29)"
+ },
+ "expected": "Maintainer: Up and Down never land on Retry; only Left from the question bubble does.",
+ "verdict": "MEASURED: Down from the '84 earlier' pill lands on Retry first (press 1 of 6), and Up from the question bubble also lands on Retry on the way to the pill (press 5 of 6). Retry was hit once in each direction. Left from the bubble lands on Retry and Right returns to the bubble.",
+ "row": "P79-M8-EARLIER-RETRY",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

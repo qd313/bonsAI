@@ -1,0 +1,61 @@
+{
+ "deck_time_local": "2026-10-02T02:03 -0400",
+ "screen": "Deck built-in screen; Quick Access page window 854x454 at devicePixelRatio 1.5; gamescope screenshot 1280x800 (screenshot y = page y*1.5 + ~59). Boxes below are page px (x,y,w,h).",
+ "setup": "Test chat open (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). QAM closed and reopened first; ring started on the tab bar (48,64,300,20). The visible newest answer is to the question 'what is a good first upgrade in Hollow Knight' and carries the bronze note card 'Nail upgrades and Pale Ore / From the Hollow Knight wiki'. No new question was asked.",
+ "pressed": "walkTo Down to 'Show details' (12 presses), Down (ring on note card), Down (ring on chip), Down (ring on question box input)",
+ "seen": {
+  "ring_on_note_card": {
+   "focused": "DIV.bonsai-kb-notes-block 52,244,267,47",
+   "note_card_box": [
+    52,
+    244,
+    267,
+    47
+   ],
+   "card_bottom_y": 291,
+   "chip_row_focus_root_box": [
+    48,
+    291,
+    300,
+    30
+   ],
+   "chip_row_full_bleed_box": [
+    48,
+    291,
+    300,
+    35
+   ],
+   "gap_card_bottom_to_chip_row_top_px": 0,
+   "question_box_host": [
+    48,
+    323,
+    300,
+    74
+   ],
+   "gap_chip_row_bottom_to_question_box_top_px": "chip root bottom 321 -> 2 px ; full-bleed row bottom 326 -> -3 px (overlap of 3)",
+   "screenshot": "screenshots/DeckCapture_20261002_020250_game.png"
+  },
+  "ring_on_question_box": {
+   "focused": "INPUT 73,324,275,44 (inside host 48,323,300,74)",
+   "note_card_box": [
+    52,
+    244,
+    267,
+    47
+   ],
+   "chip_row": [
+    48,
+    291,
+    300,
+    30
+   ],
+   "gap_card_to_chips_px": 0,
+   "screenshot": "screenshots/DeckCapture_20261002_020301_game.png"
+  },
+  "extra": "Between the card and the question box, Down stopped once on a chip (BUTTON.bonsai-preset-glass 48,291,147,30; second chip 201,291,147,30). Chat scrolled as far down as it goes: the card is the answer's last stop."
+ },
+ "expected": "measurement only",
+ "verdict": "MEASURED: the note card's bottom edge (y=291) touches the chip row's top edge (y=291): gap 0 px, in both ring positions. The chip row to question box gap is 2 px (chip box) or -3 px (the 35 px tall row box overlaps the question host).",
+ "row": "P79-M10-CARD-CHIP-GAP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

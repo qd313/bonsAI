@@ -1,0 +1,37 @@
+{
+ "deck_time_local": "2026-10-02T02:26 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454; panel visible area y 88 to 454. Only direction presses and tab shoulder buttons were sent; A was never pressed.",
+ "setup": "Tabs in order: Main, Ollama, Settings, Permissions, Developer, About. Main covered by M3 and M7/M8, Ollama by P79-M2-OLLAMA-INVISIBLE. A focus-logger (class, box, visible percent, outline/shadow on the focused element and 3 parents) was installed in the page for the Settings walk; screenshots taken per press on Settings and a few on Permissions/About.",
+ "pressed": "Settings: Down x30 (15 stops, then end), Up back with a screenshot after each press. Permissions: Down 12, Up 7. Developer: sweep Down 18 presses then Up 19. About: sweep Down 7, Up 8, plus 3 Down and 6 Up for a screenshot.",
+ "seen": {
+  "Settings": {
+   "down_stops (text, ring)": [
+    "Adjust UI automatically toggle: row highlight (visible)",
+    "Apply UI scale button: white button fill (visible)",
+    "Screenshot quality 'Save memory': small ring visible (outline from the page)",
+    "Remember what I typed 'All/Search/None': NO RING seen in logger, row not highlighted (the Up screenshot at Remember = 'None' shows lighter fill only)",
+    "Hide spoilers toggle: row highlight",
+    "Show one chip toggle: row highlight (screenshot DeckCapture_20261002_022739)",
+    "STT model tiny.en: ring drawn as a wide grey frame around the full-width row (box 64,x,268,35 while the visible button is about 190 wide)",
+    "STT model base.en: same wide frame (screenshot ..022749)",
+    "Reinstall voice engine: grey ring visible (screenshot ..022744)",
+    "Voice replies Off: ring drawn by page",
+    "AI voice toggle: row highlight",
+    "Ali G character picker: no ring in logger (box 64,x,268,38); screenshot shows lighter fill",
+    "Accent intensity 'Strong': grey square ring visible (..022709)",
+    "Show Developer tab toggle: row highlight",
+    "Clear cache button: logger shows NO outline/shadow; screenshot ..022659 shows white/bright fill. Down x15 more stayed on Clear cache (end of tab)"
+   ],
+   "invisible_count": "Cannot be given as a clean number: toggles and the character picker have no outline but a highlighted row; 2 or 3 stops (Remember what I typed, Ali G picker, Clear cache) show no clear ring in the screenshots I took; I did not screenshot every press on the way Down.",
+   "observed_scroll_misses": "On the way Down the logger saw focus land partly off-screen before the page scrolled: Voice replies 'Off' button at y=472 (visible 0 percent), 'tiny.en' at y=546 and y=460 (0 percent), Show Developer tab toggle y=450 (18 to 28 percent), Reinstall voice engine y=443 (28 percent), Clear cache y=421 (88 percent), toggle at y=433 (94). Each settled to 100 percent visible within one or two more frames."
+  },
+  "Permissions": "5 stops, all toggles (Read game & screenshot context, Save files to Desktop, Steam ban lookup, Voice input, Internet downloads). Each showed a grey row highlight and outlined toggle in screenshots (022848, 022851, 023002). Down on the last stop does not move. Up from the first stop goes to the tab bar, then to the BONSAI back-arrow button at the top (64,20,40,28), then stops. 0 invisible presses seen.",
+  "Developer": "16 stops, all 100 percent visible by box: Install seed knowledge base (64,224,268,40), Hybrid retrieval, On-screen debug HUD, Warm the Ask model at boot, Jump to Steam Input (running game), A-Main button, Off-activity-log button, Auto-save chat, Verbose Ask logging, Force session RAG chips, Preset animation fade, Scramble animation, Settle, 300, Same as text, a text INPUT (64,350,268,40). Walk Down stopped at the text input; Up walked back to the tab bar then the back-arrow. I did not take a screenshot per press on this tab, so whether a ring is drawn on each button was not looked at.",
+  "About": "5 stops: Follow system dropdown (64,334,268,40), GitHub (64,323,268,41), Built on Ollama!, Bugs & Feature Requests, Support my Steam Sale habit; all fully visible. Screenshot at GitHub (..023214) shows its fill turned white, so it is clearly marked. Down from the last stop does not move; Up reaches the tab bar then the back arrow.",
+  "other_tabs_found": "none beyond the six. Developer tab was already switched on in settings (Show Developer tab = on)."
+ },
+ "expected": "Maintainer: highlight goes invisible on the Ollama tab, and has been seen on other tabs.",
+ "verdict": "MEASURED: on the other tabs no press left the focused control out of the visible area at rest. The Settings tab has stops without a clear ring (Remember what I typed, Ali G picker and, in the logger, Clear cache) and a wide frame for the STT model rows. Permissions and About look fine in the screenshots taken. Developer ring drawing was not looked at per press (UNCLEAR for ring drawing on that tab, positions measured only).",
+ "row": "P79-M2-OTHER-TABS",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

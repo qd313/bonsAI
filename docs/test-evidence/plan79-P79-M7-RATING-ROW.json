@@ -1,0 +1,199 @@
+{
+ "deck_time_local": "2026-10-02T02:12 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5)",
+ "setup": "Newest answer in the test chat (question 'what is a good first upgrade in Hollow Knight'). The 'What went wrong?' choices were already showing, so no A was pressed on 'Not really' (nothing was rated). QAM was closed and reopened at the start of block 1. Every landing was read with a focus read after each single press; A was never pressed.",
+ "pressed": "Up/Down/Left/Right one at a time, about 40 presses, each followed by a read of the focused element",
+ "control_boxes_page_px_x_y_w_h (one scroll state; y moves with scroll, sizes do not)": {
+  "Helpful": [
+   52,
+   113,
+   89,
+   32
+  ],
+  "Not really": [
+   149,
+   113,
+   104,
+   32
+  ],
+  "Read aloud (speaker)": [
+   289,
+   113,
+   30,
+   32
+  ],
+  "What went wrong? label row/choices row1 Bad info": [
+   52,
+   176,
+   65,
+   28
+  ],
+  "Wrong game or topic": [
+   123,
+   176,
+   138,
+   28
+  ],
+  "Spoiled it": [
+   52,
+   210,
+   71,
+   28
+  ],
+  "Too long": [
+   129,
+   210,
+   67,
+   28
+  ],
+  "Too short": [
+   202,
+   210,
+   72,
+   28
+  ],
+  "Show details": [
+   52,
+   250,
+   267,
+   15
+  ],
+  "summary note ('The chat summed itself up...')": [
+   52,
+   172,
+   267,
+   32
+  ]
+ },
+ "table (from, press, landed on)": [
+  [
+   "Bad info",
+   "Up",
+   "Read aloud (speaker)  <- maintainer's report reproduced; expected Helpful"
+  ],
+  [
+   "Bad info",
+   "Down",
+   "Spoiled it"
+  ],
+  [
+   "Bad info",
+   "Right",
+   "Wrong game or topic"
+  ],
+  [
+   "Wrong game or topic",
+   "Up",
+   "Read aloud (speaker)"
+  ],
+  [
+   "Wrong game or topic",
+   "Down",
+   "Spoiled it"
+  ],
+  [
+   "Spoiled it",
+   "Up",
+   "Bad info"
+  ],
+  [
+   "Spoiled it",
+   "Down",
+   "Show details"
+  ],
+  [
+   "Spoiled it",
+   "Right",
+   "Too long"
+  ],
+  [
+   "Too long",
+   "Up",
+   "Wrong game or topic"
+  ],
+  [
+   "Too long",
+   "Down",
+   "Show details"
+  ],
+  [
+   "Too long",
+   "Right",
+   "Too short"
+  ],
+  [
+   "Too short",
+   "Up",
+   "Wrong game or topic"
+  ],
+  [
+   "Too short",
+   "Down",
+   "Show details"
+  ],
+  [
+   "Show details",
+   "Up",
+   "Spoiled it (always, regardless of which choice came before)"
+  ],
+  [
+   "Show details",
+   "Down",
+   "note card 'Nail upgrades and Pale Ore'"
+  ],
+  [
+   "Read aloud (speaker)",
+   "Up",
+   "summary note 'The chat summed itself up before this answer'"
+  ],
+  [
+   "Read aloud (speaker)",
+   "Down",
+   "Bad info the first time; Wrong game or topic the second time (it returns to the choice last left, so the landing depends on history)"
+  ],
+  [
+   "Read aloud (speaker)",
+   "Left",
+   "Not really"
+  ],
+  [
+   "Read aloud (speaker)",
+   "Right",
+   "stays on Read aloud (no move)"
+  ],
+  [
+   "Not really",
+   "Up",
+   "summary note (skips Helpful row entirely)"
+  ],
+  [
+   "Not really",
+   "Down",
+   "Bad info"
+  ],
+  [
+   "Not really",
+   "Left",
+   "Helpful"
+  ],
+  [
+   "Not really",
+   "Right",
+   "Read aloud (speaker)"
+  ],
+  [
+   "Helpful",
+   "Up",
+   "summary note"
+  ],
+  [
+   "Helpful",
+   "Down",
+   "Bad info"
+  ]
+ ],
+ "expected": "Maintainer expects: Up from Bad info lands on Helpful; Down from the speaker lands on Wrong game or topic.",
+ "verdict": "MEASURED: Up from 'Bad info' lands on the speaker, not 'Helpful' (reproduced). Down from the speaker lands on 'Bad info' (first try) and on 'Wrong game or topic' (second try, after leaving from it), so it follows memory of the last choice. Helpful and Not really can be reached only by Left from the speaker/each other; Up from any choice goes to the speaker or the summary note, never to Helpful or Not really. Two press-reads (Too long Down, Too short Down) were made after a Right move whose landing I did not read separately.",
+ "row": "P79-M7-RATING-ROW",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

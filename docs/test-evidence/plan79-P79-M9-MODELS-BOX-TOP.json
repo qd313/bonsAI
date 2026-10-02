@@ -1,0 +1,87 @@
+{
+ "deck_time_local": "2026-10-02T02:13 -0400",
+ "screen": "Deck built-in screen. The AI models box is a modal in the 'Steam Big Picture Mode' page (854x534), not the Quick Access page. Screenshot 1280x800 (y = page y*1.5 + ~59). Boxes in page px (x,y,w,h).",
+ "setup": "QAM closed and reopened first. Ollama tab, walked Down 13 presses to 'Manage AI models' (focus read: BUTTON 'Manage AI models', 64,330,268,44), then A. Box opened with ring on 'Advanced >' (656,128,71,22). A was never pressed again. No model row or Remove button was activated.",
+ "pressed": "Down one at a time with a focus read after each, then Up one at a time with a focus read after each, then B",
+ "before_moving": {
+  "title_bar_AI_models": [
+   123,
+   90,
+   608,
+   28
+  ],
+  "first_model_row_gemma4": [
+   123,
+   268,
+   604,
+   35
+  ],
+  "sticky_column_header_PULL_MODEL_SIZE": "inside the list at its top, list box 123,217,604,175 at the time; header 26 px tall",
+  "list_scrollTop": 0,
+  "outer_scrollTop": 0
+ },
+ "down_presses": [
+  "1 Refresh model catalog (472,162,20,17)",
+  "2 Filters (123,185,527,26)",
+  "3 gemma4 select slot (133,273,24,24)",
+  "4 qwen3.5:4b slot (131,308,24,24)",
+  "5 qwen2.5vl:3b slot (131,343,24,24)",
+  "6 nomic-embed-text slot (133,362,24,24); list scrolled 41.3 px",
+  "7 Done (123,402,290,40); outer box scrolled 16 px, title bar moved to 123,74,608,28",
+  "8 no move (still Done)",
+  "9 no move (still Done)"
+ ],
+ "up_presses": [
+  "1 nomic slot (133,346)",
+  "2 qwen2.5vl slot (131,285)",
+  "3 qwen3.5 slot (131,251)",
+  "4 gemma4 slot (133,216)",
+  "5 Filters (123,169)",
+  "6 Refresh (472,146)",
+  "7 Advanced (656,120,71,22); outer scroll back to 8",
+  "8 no move (still Advanced)"
+ ],
+ "seen_at_end": {
+  "focused": "Advanced > button 656,120,71,22",
+  "title_bar": [
+   123,
+   82,
+   608,
+   28
+  ],
+  "title_bar_bottom_y": 110,
+  "first_model_row": [
+   123,
+   219,
+   604,
+   35
+  ],
+  "first_model_row_top_above_title_bar_bottom_px": 0,
+  "list_box": [
+   123,
+   209,
+   604,
+   175
+  ],
+  "list_scrollTop": 41.3,
+  "outer_scrollTop": 8,
+  "sticky_column_header_box": [
+   123,
+   209,
+   604,
+   26
+  ],
+  "first_row_pixels_behind_sticky_header": "16 of 35 (row 219..254, header bottom 235)",
+  "first_row_text": "gemma4:e2b-it-qat FOSS 4.0 GB ...",
+  "screenshots": [
+   "screenshots/DeckCapture_20261002_021034_game.png (just opened)",
+   "screenshots/DeckCapture_20261002_021155_game.png (focus on Done)",
+   "screenshots/DeckCapture_20261002_021245_game.png (after Up to top)"
+  ]
+ },
+ "after_B": "Box closed (no modal left on the page). Ring landed on 'Manage AI models' button (64,282,268,44) on the Ollama tab.",
+ "expected": "Maintainer: after Down to bottom and Up to top the first model sits partly behind the box's title bar.",
+ "verdict": "MEASURED: reproduced in spirit. Back at the top the first model row (gemma4) is still 41 px scrolled inside the list, so 16 of its 35 px (the top 46 percent) sit behind the list's sticky column-header row (PULL MODEL SIZE ...). The 'AI models' title bar itself (bottom edge y=110) does not overlap the row (row top y=219). The ring is on Advanced, which is outside the list, and the list does not scroll back to 0 when focus leaves it going Up. Focus never moves between Down press 7 and the end of the walk without a read.",
+ "row": "P79-M9-MODELS-BOX-TOP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

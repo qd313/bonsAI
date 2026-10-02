@@ -1,0 +1,48 @@
+{
+ "deck_time_local": "2026-10-02T02:01 -0400",
+ "screen": "Deck built-in screen. Quick Access page window 854x454 (devicePixelRatio 1.5); gamescope screenshot 1280x800; Big Picture page 854x534.",
+ "setup": {
+  "deck_checkReady": "awake pass, no foreign CDP tunnel pass, build matches pass (124 files)",
+  "keep_awake": {
+   "ttlMinutes": 480,
+   "expiresAt": "2026-10-02T14:00:05.907Z (10:00 local)"
+  },
+  "backup": {
+   "settings": "~/p79-settings.bak.json",
+   "chats": "~/p79-chat-slots.bak/ (copy of chat_slots)"
+  },
+  "key_settings": {
+   "ask_mode": "strategy",
+   "preset_single_chip": false,
+   "preset_chip_animation": "decode",
+   "strategy_spoiler_masking_enabled": true,
+   "use_local_knowledge_base": true,
+   "ai_character_enabled": true,
+   "remember_typed_key": "no key with 'remember' in its name exists in the file",
+   "settings_key_count": 52
+  },
+  "game_running": "none (no process under steamapps/common; RunningApps empty). Steam showed Home with focus on Black Mesa tile.",
+  "recent_games_row_partial": "Black Mesa, Sifu, Call of Juarez Gunslinger, then more (my read was cut off; not fully listed)",
+  "ollama": "user process 'ollama serve' (/home/deck/.local/bin/ollama), not the system service (systemctl ollama inactive); API reachable on localhost:11434; installed models: nomic-embed-text:latest (274 MB), gemma4:e2b-it-qat (4.3 GB); two llama-server runners loaded. ollama CLI not on PATH over ssh.",
+  "memory_mb": "total 14800, available 5348",
+  "test_chat": {
+   "id": "6f3cc055-d603-4e3e-9adf-15d71df4ec14",
+   "title": "How do I beat the boss in the Soul Sanctum in Hollow Knight?",
+   "turns": 170,
+   "open_in_panel": "yes, the panel's chat title row shows this title, active dot 3 of 9"
+  },
+  "other_chats": "8 slots: 351b2838 parrying (178 turns), 6f3cc055 test (170), d2aa6252 (200), 4baaccbc (4), 66df6be3 (4), 92a45014 (2), a8fb9f67 (2), d052dacc (2)"
+ },
+ "pressed": "openPlugin (first try failed as expected, second reported already open), DOWN with verify (Retry -> turn row body, steam-routed), UP x4, RB x3 to Permissions, LB x3 back to Main",
+ "seen": {
+  "first_openPlugin": "failed: QAM chord sent, no pane appeared (expected first failure)",
+  "second_openPlugin": "ok, panel already mounted, ring on Retry of first visible question 'what is a good first upgrade in Hollow Knight'",
+  "dpad_check": "DOWN steam-routed verified; focus moved Retry corner button -> turn-row-body (86,189,245,29). Espressif ESP32S3_DEV 303a:1001 listed by lsusb.",
+  "permissions_tab": "no 'Parental controls active' text",
+  "returned_to": "Main tab, ring on the tab bar (bonsai-tab-bar)"
+ },
+ "expected": "Setup matches runbook",
+ "verdict": "PASS: setup complete (build matches, awake held 480 min, D-pad reaches the Deck, no parental text, no game running, Ollama up, test chat found). Recent Games row only partly listed.",
+ "row": "P79-BLOCK0-SETUP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

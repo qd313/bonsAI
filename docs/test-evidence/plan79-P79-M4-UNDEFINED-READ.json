@@ -1,0 +1,55 @@
+{
+ "deck_time_local": "2026-10-02T02:05 -0400",
+ "screen": "not used (read-only over SSH)",
+ "setup": "Searched every file in ~/homebrew/settings/bonsAI/chat_slots for the phrase 'where he attacks, and when he' (python json load, read only). Did not open the chat in the panel.",
+ "pressed": "none",
+ "seen": {
+  "hits": [
+   {
+    "file": "351b2838-3a5e-4863-9a9b-72b5438f3cb3.json (label: what is a good way to practice parrying in action games)",
+    "turn_index": 177,
+    "of_turns": 178,
+    "turn_keys": [
+     "app_id",
+     "app_name",
+     "asked_entity",
+     "attachment_refs",
+     "created_at",
+     "display_text",
+     "id",
+     "outcome",
+     "request_id",
+     "role",
+     "spoiler_consent",
+     "text",
+     "transparency"
+    ],
+    "short_values": {
+     "outcome": "stopped",
+     "role": "assistant",
+     "spoiler_consent": false,
+     "display_text": "",
+     "asked_entity": "",
+     "app_id": "",
+     "app_name": "",
+     "request_id": null,
+     "transparency": null,
+     "attachment_refs": "[] (list, 0)"
+    },
+    "text_length": 529,
+    "last_400_chars_json": "t science, mate, but this fella is a real trickster. You gotta keep your eyes peeled, 'cause he's got a whole routine going on. We gotta learn the rhythm of his moves, yeah?\n\nNow, here's the skinny on how to handle him. You gotta study the patterns, don't just run around like a headless chicken. Watch how he moves, where he attacks, and when he's vulnerable. That's the key, see?\n\n```bonsai-spoiler"
+   },
+   {
+    "file": "same file",
+    "turn_index": 175,
+    "note": "an earlier Deep Rock Galactic: Survivor answer (821 chars, no fences) contains the same phrase in its text; not the stopped one",
+    "outcome_key": "absent (has reasoning and transparency keys)"
+   }
+  ]
+ },
+ "expected": "Measurement only: record the saved text tail and keys.",
+ "answer_to_question": "YES. The saved text of turn 177 ends with an opening spoiler mark (three backticks + 'bonsai-spoiler', the word is 'bonsai-spoiler') and NOTHING after it, no newline-body and no closing mark (the text contains exactly one triple-backtick, count_of_```=3 characters = 1 mark). The saved turn has outcome 'stopped'. The word 'undefined' is not in the saved text (it comes from the screen side when the cover has no body).",
+ "verdict": "MEASURED: turn 177 of 178 in chat 351b2838 (the parrying chat) ends with an unclosed opening ```bonsai-spoiler mark and no body; outcome='stopped'.",
+ "row": "P79-M4-UNDEFINED-READ",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

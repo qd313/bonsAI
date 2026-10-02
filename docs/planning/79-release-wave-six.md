@@ -453,6 +453,22 @@ Nothing yet.
   Deck checks is done (9 the rig can run as written, 9 more with a prepared setup); the bookkeeper's first pass moved
   the maintainer's passed Clear-mid-answer check to Done and fixed ten places where the documents disagreed
   (`478df823`); the two add-ons started (a button keeps its answer's game; ten game chips).
+- **2026-10-02, about 02:00 to 02:50, Deck blocks 0 and 1 (build `f0a4f2c4`, no game running):** setup passed (build
+  matches, presses reach the Deck, no parental lock, settings and chats backed up, keep-awake until 10:00). Seven of
+  the maintainer's bugs were reproduced and measured: the bronze note card touches the chip row (0 px gap); Up from
+  "Bad info" lands on the speaker, and Down from the speaker follows the last choice left; Retry is a stop on the
+  way Down from "84 earlier" and on the way Up from the question; in the AI models box the list stays scrolled 41 px
+  after down-and-up, leaving the first model half behind the list's column header (not the title bar); in Show
+  details the ring sits on the whole chip column at every press (never one chip), and that box changes size each
+  press and reaches behind the question box; on the Ollama tab 13 of 28 presses had a real, visible stop with no ring
+  drawn (seven plain dark buttons never show one); the saved cut-off answer ends with an opening spoiler mark and
+  nothing after it, so "undefined" comes from the screen side. **Not reproduced:** the trap after picking a setting
+  (two tries, a Quick Access setting and a Steam Settings page; Down moved normally every time), and the X after
+  Stop with a typed question (it cleared), so that bug is specific to a spoken question. Evidence
+  `docs/test-evidence/plan79-P79-*.json`. Started on the results: helper R (Show details, Opus medium) and helper Q
+  (the invisible ring, Opus medium); A and B got the readings. Deck block 1b started: the ring on the Settings and
+  Developer tabs, the Main tab's "before" walk, older owed checks with no game, and a second try at the trap through
+  Steam's on-screen keyboard, the way a person types.
 
 ## For the helpers: who owns which files
 

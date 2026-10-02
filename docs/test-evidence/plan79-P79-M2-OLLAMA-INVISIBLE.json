@@ -1,0 +1,171 @@
+{
+ "deck_time_local": "2026-10-02T02:19 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5); visible scroll area of the panel is y 88 to 454 in page px, screenshot 1280x800. document.hasFocus() true. Exactly one element carried gpfocus inside the panel at every press.",
+ "setup": "QAM closed and reopened, RB to the Ollama tab, walkTo 'Update AI & models' (3 presses; focus read: BUTTON 64,338,268,36). A was never pressed on it or anywhere on this tab.",
+ "pressed": "Down x13 to the end (the 13th did not move), Up back through the tab to the tab bar (about 16), one screenshot after each press, plus a focus read. Repeat check on Browse models with a 3 second wait before the screenshot.",
+ "seen": {
+  "first_down_from_Update_AI": {
+   "focused": "BUTTON 'Browse and pull Ollama models' 64,271,268,36",
+   "inside_visible_area": true,
+   "visible_percent": 100,
+   "ring_drawn_in_screenshot": "NO. Screenshot DeckCapture_20261002_021915_game.png and a repeat with a 3 s wait (DeckCapture_20261002_022434_game.png) show no white ring and no change on the button. The maintainer's report is reproduced."
+  },
+  "table_down (focused text, box, ring visible in screenshot)": [
+   [
+    "Browse models",
+    "64,271,268,36",
+    "NO RING",
+    "021915"
+   ],
+   [
+    "Install options (Install model bundles)",
+    "64,315,268,36",
+    "NO RING",
+    "021933"
+   ],
+   [
+    "Test connection to Ollama",
+    "197,270,135,38",
+    "NO RING",
+    "021939"
+   ],
+   [
+    "Use local knowledge base toggle (unnamed div)",
+    "290,261,38,22",
+    "row highlight grey bar + toggle outline, visible",
+    "021955"
+   ],
+   [
+    "Update knowledge base",
+    "64,330,166,44",
+    "grey square ring, visible",
+    "022002"
+   ],
+   [
+    "Reply style slider (unnamed div)",
+    "177,346,42,28",
+    "square ring around the slider knob, visible",
+    "022008"
+   ],
+   [
+    "Set thinking to Off",
+    "64,271,63,36",
+    "NO RING (Balanced shows a lighter border because it is the selected value)",
+    "022020"
+   ],
+   [
+    "Custom timeouts toggle",
+    "290,342,38,22",
+    "row highlight, visible",
+    "022024"
+   ],
+   [
+    "Unload delay slider",
+    "300,345,42,29",
+    "square ring on the knob, visible",
+    "022027"
+   ],
+   [
+    "Manage AI models",
+    "64,330,268,44",
+    "NO RING",
+    "022037"
+   ],
+   [
+    "Set text model try order",
+    "64,338,268,36",
+    "NO RING",
+    "022044"
+   ],
+   [
+    "Set vision model try order",
+    "64,354,268,36",
+    "NO RING; press 13 down did not move (end of tab)",
+    "022050"
+   ]
+  ],
+  "table_up": [
+   [
+    "Set text model try order",
+    "NO RING",
+    "022106"
+   ],
+   [
+    "Manage AI models",
+    "NO RING",
+    "022116"
+   ],
+   [
+    "Unload delay slider",
+    "visible",
+    "022134"
+   ],
+   [
+    "Custom timeouts toggle",
+    "visible",
+    "022145"
+   ],
+   [
+    "Set thinking to Off",
+    "NO RING",
+    "022158"
+   ],
+   [
+    "Reply style slider",
+    "visible",
+    "022218"
+   ],
+   [
+    "Update knowledge base",
+    "visible (white ring)",
+    "022236"
+   ],
+   [
+    "Use local knowledge base toggle",
+    "visible",
+    "022248"
+   ],
+   [
+    "Test connection",
+    "NO RING",
+    "022300"
+   ],
+   [
+    "Install options",
+    "NO RING",
+    "022311"
+   ],
+   [
+    "Browse models",
+    "NO RING",
+    "022321"
+   ],
+   [
+    "Update AI & models",
+    "white ring around the button, visible",
+    "022353"
+   ],
+   [
+    "Start the AI toggle",
+    "row highlight, visible",
+    "022402"
+   ],
+   [
+    "Run AI toggle",
+    "row highlight, visible",
+    "022409"
+   ],
+   [
+    "Ollama tab bar",
+    "(tab bar)",
+    "-"
+   ]
+  ],
+  "count_invisible_presses": "13 of 28 presses (7 down: Browse, Install options, Test connection, Thinking Off, Manage AI models, text order, vision order; 6 up: text order, Manage AI models, Thinking Off, Test connection, Install options, Browse). In every one of them the focused element was fully inside the visible area (100 percent) and not hidden by the dock; the ring was simply not drawn. Update AI & models and Update knowledge base did draw a white ring.",
+  "pattern": "Rings are drawn on toggles (row highlight), sliders and two buttons (Update AI & models, Update knowledge base). They are not drawn on the plain dark buttons Browse models, Install options, Test connection, the Thinking choices, Manage AI models, text order, vision order. Update AI & models and Browse models are the blue-tinted buttons; the first has a ring, the second not."
+ },
+ "expected": "Maintainer: after one Down from 'Update AI & models' nothing shows where the ring is.",
+ "verdict": "MEASURED: reproduced. One Down from 'Update AI & models' lands on 'Browse models' (box 64,271,268,36, fully visible) and no ring is drawn, with a 3 second wait as well. 13 of 28 presses on the Ollama tab had focus in a visible place with no visible ring.",
+ "row": "P79-M2-OLLAMA-INVISIBLE",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

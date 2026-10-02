@@ -1,0 +1,31 @@
+{
+ "deck_time_local": "2026-10-02T02:33 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5). Boxes in page px.",
+ "setup": "Test chat 6f3cc055 open (title row read: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Typed (script) test only; the rig cannot speak.",
+ "pressed": "send-question script (VERIFIED, whole sentence read back) -> walkTo Ask (focus read: BUTTON ask 49,400,263,36) -> A on Ask (own step) -> focus moved to the question input by itself (Ask clears the box; I did not press A on the box) -> Down once -> focus read: BUTTON 'Stop generation' 322,372,20,20 -> A on Stop -> walk to ask -> Right -> focus read: BUTTON 'Clear' 311,400,36,36 -> A on Clear. Second round with no answer running: script 'Quick check of the clear button' (VERIFIED) -> walk -> focus read 'Clear' 311,400,36,36 -> A.",
+ "seen": {
+  "after_Ask": "box text '' (emptied by Ask), buttons: attach 54,372; mode 262,372; 'Stop generation' 322,372,20,20 in place of the mic; ask greyed (Disabled) 49,400,299,36; no Clear button while running; answer area said 'Still chewing on it...'",
+  "after_Stop": "chat shows 'Request cancelled.'; question box text was put back: 'List every boss in Hollow Knight in order with a long tip for each'; mic button back at 322,371; Ask enabled 49,400,263,36; Clear (X) appears at 311,400,36,36 left of nothing (right of Ask).",
+  "X_after_Stop": {
+   "focus_before_A": "BUTTON Clear 311,400,36,36",
+   "box_before": "List every boss in Hollow Knight in order with a long tip for each",
+   "box_after": "(empty)",
+   "clear_button_after": "gone",
+   "ring_after": "nothing owns gpfocus (readFocus null), screenshot DeckCapture_20261002_023540_game.png shows no ring",
+   "did_X_clear": true
+  },
+  "X_no_stop": {
+   "focus_before_A": "BUTTON Clear 311,400,36,36",
+   "box_before": "Quick check of the clear button",
+   "box_after": "(empty)",
+   "ring_after": "none",
+   "did_X_clear": true
+  },
+  "chat_turn_count_now": "see side_effect"
+ },
+ "side_effect": "The Ask and Stop added one question turn 'List every boss in Hollow Knight in order with a long tip for each' and a reply 'Request cancelled.' (stopped) to the test chat 6f3cc055 (170 turns before). The test chat is the one named in the task. Nothing else changed.",
+ "expected": "Maintainer: after Stop on a spoken question, X does nothing and words stay.",
+ "verdict": "MEASURED: typed question: X cleared the box after Stop (2 of 2 tries, with and without Stop). The spoken case was not reproduced because the rig cannot speak, so the maintainer's failure (spoken question) is UNCLEAR from this test. After X the ring is gone (no element owns focus).",
+ "row": "P79-M5-X-AFTER-STOP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

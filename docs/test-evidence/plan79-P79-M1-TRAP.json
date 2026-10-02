@@ -1,0 +1,62 @@
+{
+ "deck_time_local": "2026-10-02T02:36 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5). Boxes in page px (x,y,w,h). document.hasFocus() was true at every read.",
+ "setup": "QAM closed and reopened before each try. Test chat 6f3cc055 (title read each time). The runbook's sequence was followed, with one difference: the 'Steam settings' card appears ABOVE the question box, so the way into it is Up from the Ask button (Up, Up), not Down.",
+ "try_A_QAM_setting": {
+  "typed": "brightness (script VERIFIED)",
+  "card": "Steam settings card shown, 5 rows: Brightness (Settings>Display), Enable Adaptive Brightness, Status LED Brightness, SDR content brightness (on HDR), * QAM > Brightness (QAM > Quick Settings). Card box 48,130,300,193 when scrolled to 0; it sits on top of the chat (the newest answer bubble, 52,186..234, 267 wide, is under the card). Question box host 48,323,300,74; Ask 49,400,263,36.",
+  "walk_up_into_card (rows 55,y,287,30)": "Ask -> input (73,324,275,44) -> '* QAM > Brightness' (55,286) -> SDR (55,254) -> Status LED (55,222) -> Enable Adaptive (55,190) (two presses unread) -> back Down to Status LED, SDR, QAM row.",
+  "A_on": "* QAM > Brightness (55,286,287,30), screenshot before A: row highlighted yellow-grey, no grey ring box.",
+  "after_A": "Quick Access switched to its own Quick Settings tab (Brightness/Audio/Other). I pressed nothing there. deck_openPlugin brought me back (4 rail presses + 1) and the ring was on the same card row (55,249,287,30). The green line 'Opened QAM: QAM > Quick Settings > Brightness' shows under Ask.",
+  "down_x10 reads": [
+   "1 INPUT (73,286,275,44)",
+   "2 ask (49,363,263,36)",
+   "3-10 ask again, no move (bottom of the panel); answer bubble 52,165,267,32; qbox 48,286,300,74; card 48,92,300,193; list scrollTop 65"
+  ],
+  "up_x5 reads": [
+   "1 INPUT (73,286)",
+   "2 QAM row (55,249)",
+   "3 SDR (55,217)",
+   "4 Status LED (55,185)",
+   "5 Enable Adaptive (55,153)"
+  ],
+  "gpfocus_elements_in_panel": "always exactly one (plus its own ask-row container 49,363,299,36 when on Ask). No tall box covering both the answer and the question box.",
+  "ring_on_Ask": "screenshot DeckCapture_20261002_023949_game.png: the ring around Ask shows as a thin white bar at its right edge only, rest not drawn (a ring partly hidden or clipped).",
+  "result": "NO TRAP in try A. Down moved from the card to the input to Ask and stopped at Ask (that is the real bottom). Up walked back through the card rows one by one."
+ },
+ "try_B_Steam_Settings_page": {
+  "typed": "sleep (VERIFIED)",
+  "card": "5 rows: Wake TV when device resumes from sleep, On battery power sleep after, When plugged in sleep after, Finish downloads with display off before sleeping, Reload wifi driver on sleep",
+  "A_on": "'On battery power, sleep after' (55,190,287,30), reached by walk to Ask then Up x2 (input, Reload wifi 55,286) then Up x4 reading each (Finish downloads 55,254; When plugged in 55,222; On battery 55,190).",
+  "after_A": "Steam Settings opened on the Power page (ring on Battery Percentage toggle). I pressed B ONCE and landed on Steam Home (ring on the Black Mesa tile). I did not press A there. deck_openPlugin then reopened Quick Access (1 press) with the panel on Main.",
+  "state_after_return": "The card was gone and the question box was empty (the pick clears it). Ask 49,400,299,36.",
+  "down_x10": [
+   "1 chat-slot row (48,88? no: see below)"
+  ],
+  "down_reads": [
+   "1 Main tab -> down: chat slot row (48,88,300,48)",
+   "wait: that is the first of the Down presses after reopening: 2 '85 earlier' pill (52,146,290,22)",
+   "3 question bubble 'List every boss...' header (151,182,191,42)",
+   "4 'Request cancelled.' chunk (63,239,245,15)",
+   "5 Show details (52,274,267,15)",
+   "6 suggestion chip (48,291,147,30)",
+   "7 INPUT (73,324,275,44)",
+   "8 ask (49,400,299,36)",
+   "9 ask no move",
+   "10 ask no move"
+  ],
+  "up_x5": [
+   "1 INPUT (73,323)",
+   "2 chip (48,291,147,30)",
+   "3 Show details (52,273)",
+   "4 'Request cancelled.' chunk (63,222)",
+   "5 question bubble header (151,182,191,42)"
+  ],
+  "result": "NO TRAP in try B."
+ },
+ "recovery_steps": "Not needed, so not run: no Quick Access close/reopen recovery, no Steam restart.",
+ "expected": "Maintainer: after the pick, Down cannot pass the answer and the ring is one big box.",
+ "verdict": "MEASURED: not reproduced in either try. After a Quick Access pick (try A) and after a Steam Settings pick (try B), Down moved normally from the answer region to the question box to Ask, Up moved back, one gpfocus element at a time, no tall ring box. Both tries were on a clean reopened panel with the built-in screen live. Side finding: the 'Steam settings' card is drawn on top of the chat and hides the newest answer while it shows.",
+ "row": "P79-M1-TRAP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

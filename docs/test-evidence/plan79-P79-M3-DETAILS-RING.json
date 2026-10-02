@@ -1,0 +1,246 @@
+{
+ "deck_time_local": "2026-10-02T02:18 -0400",
+ "screen": "Deck built-in screen. Quick Access page 854x454 dpr 1.5; screenshot 1280x800 (y = page y*1.5 + ~59). Boxes in page px (x,y,w,h). document.hasFocus() was true at every press.",
+ "setup": "QAM closed and reopened, LB to Main, walked Down to 'Show details' (12 presses, focus read confirmed), then A (its own step) to open it. Panel inside the test chat, newest answer. At the end A on 'Hide details' closed it again (focus read: 'Show details', no chip ladder or tabs row left in the page).",
+ "pressed": "Down x10 from 'Hide details' until focus left the block, Up x10 back to 'Hide details', plus Right and Left once on the 'This answer | Session' row",
+ "seen_down": [
+  {
+   "press": 1,
+   "focused": "bonsai-kb-notes-block (note card)",
+   "box": [
+    52,
+    204,
+    267,
+    47
+   ],
+   "gpfocus_elements_in_panel": [
+    "bonsai-kb-notes-block 52,204,267,47"
+   ],
+   "focus_matches_visible_control": true,
+   "screenshot": "DeckCapture_20261002_021437_game.png",
+   "ring": "on the card"
+  },
+  {
+   "press": 2,
+   "focused": "bonsai-details-tabs-row 'This answer | Session'",
+   "box": [
+    52,
+    176,
+    290,
+    28
+   ],
+   "ring": "on the whole two-tab row, which is the real control size",
+   "screenshot": "DeckCapture_20261002_021454_game.png"
+  },
+  {
+   "press": 3,
+   "focused": "bonsai-chip-ladder 'Chip 1 of 7'",
+   "box": [
+    52,
+    89,
+    290,
+    316
+   ],
+   "ring": "AROUND EVERYTHING: grey frame from the 'Chip 1 of 7' label down past the question box to the Ask button (screenshot ring spans y~195 to ~715). Not on the 'Keyword + meaning' chip (which is ~187x28).",
+   "screenshot": "DeckCapture_20261002_021508_game.png"
+  },
+  {
+   "press": 4,
+   "focused": "bonsai-chip-ladder 'Chip 2 of 7'",
+   "box": [
+    52,
+    121,
+    290,
+    169
+   ],
+   "ring": "big frame, now 169 tall (y~237 to ~720)",
+   "screenshot": "DeckCapture_20261002_021528_game.png"
+  },
+  {
+   "press": 5,
+   "focused": "bonsai-chip-ladder 'Chip 3 of 7'",
+   "box": [
+    52,
+    91,
+    290,
+    199
+   ],
+   "ring": "big frame (y~193 to ~677)",
+   "screenshot": "DeckCapture_20261002_021538_game.png"
+  },
+  {
+   "press": 6,
+   "focused": "bonsai-chip-ladder 'Chip 4 of 7'",
+   "box": [
+    52,
+    90,
+    290,
+    200
+   ],
+   "ring": "big frame",
+   "screenshot": "DeckCapture_20261002_021554_game.png"
+  },
+  {
+   "press": 7,
+   "focused": "bonsai-chip-ladder 'Chip 5 of 7'",
+   "box": [
+    52,
+    89,
+    290,
+    278
+   ],
+   "ring": "big frame",
+   "screenshot": "DeckCapture_20261002_021605_game.png"
+  },
+  {
+   "press": 8,
+   "focused": "bonsai-chip-ladder 'Chip 6 of 7'",
+   "box": [
+    52,
+    121,
+    290,
+    169
+   ],
+   "ring": "big frame (y~237 to ~720)",
+   "screenshot": "DeckCapture_20261002_021621_game.png"
+  },
+  {
+   "press": 9,
+   "focused": "bonsai-chip-ladder 'Chip 7 of 7'",
+   "box": [
+    52,
+    89,
+    290,
+    337
+   ],
+   "ring": "big frame",
+   "screenshot": "DeckCapture_20261002_021631_game.png"
+  },
+  {
+   "press": 10,
+   "focused": "BUTTON.bonsai-preset-glass 'Check Steam players for bans' (suggestion chip)",
+   "box": [
+    48,
+    291,
+    147,
+    30
+   ],
+   "gpfocus_elements_in_panel": [
+    "bonsai-preset-carousel-focus-root 48,291,300,30",
+    "BUTTON.bonsai-preset-glass 48,291,147,30"
+   ],
+   "ring": "on the suggestion chip",
+   "screenshot": "DeckCapture_20261002_021639_game.png"
+  }
+ ],
+ "seen_up": [
+  {
+   "press": 1,
+   "focused": "bonsai-chip-ladder 'Chip 7 of 7'",
+   "box": [
+    52,
+    89,
+    290,
+    337
+   ]
+  },
+  {
+   "press": 2,
+   "focused": "chip-ladder 'Chip 6 of 7'",
+   "box": [
+    52,
+    117,
+    290,
+    169
+   ]
+  },
+  {
+   "press": 3,
+   "focused": "chip-ladder 'Chip 5 of 7'",
+   "box": [
+    52,
+    97,
+    290,
+    278
+   ]
+  },
+  {
+   "press": 4,
+   "focused": "chip-ladder 'Chip 4 of 7'",
+   "box": [
+    52,
+    97,
+    290,
+    200
+   ]
+  },
+  {
+   "press": 5,
+   "focused": "chip-ladder 'Chip 3 of 7'",
+   "box": [
+    52,
+    97,
+    290,
+    199
+   ]
+  },
+  {
+   "press": 6,
+   "focused": "chip-ladder 'Chip 2 of 7'",
+   "box": [
+    52,
+    117,
+    290,
+    169
+   ]
+  },
+  {
+   "press": 7,
+   "focused": "chip-ladder 'Chip 1 of 7'",
+   "box": [
+    52,
+    97,
+    290,
+    316
+   ]
+  },
+  {
+   "press": 8,
+   "focused": "details tabs row",
+   "box": [
+    52,
+    176,
+    290,
+    28
+   ]
+  },
+  {
+   "press": 9,
+   "focused": "note card",
+   "box": [
+    52,
+    204,
+    267,
+    47
+   ]
+  },
+  {
+   "press": 10,
+   "focused": "'Hide details' divider",
+   "box": [
+    52,
+    204,
+    267,
+    15
+   ]
+  }
+ ],
+ "left_right_on_two_chip_row": "Right on the tabs row (This answer / Session): focus element stays the same row element (52,97,290,28) but the active tab switches to 'Session . 85' and the content below changes (turn slot grew from 937 to 4522 px tall). Left switches back to 'This answer'. The ring does not move to a single tab; both tabs sit under one focus box.",
+ "gpfocus_elements_at_every_ladder_press": "only two bonsai elements carry a focus class: bonsai-chat-turn-slot (gpfocuswithin, 52,-500..-532, 290 wide, 790 to 958 tall) and bonsai-chip-ladder (gpfocus). The individual chips never get gpfocus; the highlighted chip is drawn by the page, not by Steam.",
+ "focus_vs_chip_box": "fails: the focused element is the whole chip ladder container (290 wide, 169 to 337 tall) at every ladder press, never the 28 px chip; the difference is 140 to 310 px in height, far beyond 2 px.",
+ "ring_jumps": "The ladder's height and top change on every press (heights 316, 169, 199, 200, 278, 169, 337; tops 89, 121, 91, 90, 89, 121, 89), so the drawn frame jumps in size and place from press to press. The frame also reaches below the dock: a ladder bottom at y=405..426 sits behind the chip row, question box and Ask button (the maintainer's tall box).",
+ "expected": "Ring sits on the one chip and does not jump (maintainer).",
+ "verdict": "MEASURED: reproduced. The ring is on the whole chip ladder (a 290 px wide box, 169 to 337 px tall, that reaches down behind the question box to the Ask button) on 7 of 7 chip presses in both directions, never on one chip. Position and size change on every press. Tabs row and note card get a sensible box.",
+ "row": "P79-M3-DETAILS-RING",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

@@ -319,6 +319,10 @@ describe("walking answer sections with the D-pad", () => {
     moveDown(bubble);
     expect(document.activeElement).toBe(chip);
 
+    // The chip is its section's first word: Up lands on the section's box, the first stop Down makes
+    // in a section (plan 79 helper AC), and the press after that yields.
+    expect(moveUp(bubble)).toBe(true);
+    expect(document.activeElement).toBe(stops[0]);
     expect(moveUp(bubble)).toBe(false);
   });
 

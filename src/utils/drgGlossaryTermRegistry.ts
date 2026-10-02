@@ -76,13 +76,19 @@ function beforeInReadingOrder(a: DOMRect, b: DOMRect): boolean {
  *   is before that ring in reading order, which is exactly right.
  *
  * No ring at all behaves like the ancestor case: Down offers the first chip, Up nothing.
+ *
+ * `from`, when given, stands in for the ring: the walk Up keeps the last word it passed in a section,
+ * and once a scroll has moved the ring off that word onto its section, the words before that word
+ * are still the ones ahead (answerBubbleNavigation.ts, `upWalk`). `from` null means from past the end
+ * of everything: every chip counts, and the nearest to that end wins (Up into a section from below it).
  */
 export function findNextDrgGlossaryTermChipInView(
   bubble: HTMLElement,
   isInView: (el: HTMLElement) => boolean,
   direction: "down" | "up",
+  from?: HTMLElement | null,
 ): HTMLElement | null {
-  const ring = uiGamepadFocusElement();
+  const ring = from === undefined ? uiGamepadFocusElement() : from;
   const ringRect = ring ? ring.getBoundingClientRect() : null;
 
   let best: { el: HTMLElement; rect: DOMRect } | null = null;
@@ -93,7 +99,9 @@ export function findNextDrgGlossaryTermChipInView(
 
     const rect = el.getBoundingClientRect();
     const ringIsAncestor = !ring || ring.contains(el);
-    if (ringIsAncestor) {
+    if (from === null) {
+      /* from past the end: every chip is eligible */
+    } else if (ringIsAncestor) {
       if (direction === "up") continue;
     } else {
       const after = beforeInReadingOrder(ringRect!, rect);
@@ -132,6 +140,12 @@ export function focusDrgGlossaryTermChip(el: HTMLElement | null): boolean {
     }
   }
   return elementHasFocus(el);
+}
+
+/** True when `el` is a registered term chip (an underlined game word). */
+export function isDrgGlossaryTermChip(el: Element | null): boolean {
+  for (const chip of chips.values()) if (chip === el) return true;
+  return false;
 }
 
 /** Test-only reset. */

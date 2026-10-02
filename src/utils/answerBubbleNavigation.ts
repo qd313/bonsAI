@@ -11,8 +11,9 @@
  *
  *     Pressing Down, in order:
  *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
- *       2. a glossary-term chip on screen and ahead of the ring    -> land on the chip
- *          (both are lifted clear of the dock if it covers them)
+ *       2. a glossary-term chip on screen, ahead of the ring and in the ring's own section -> land on
+ *          the chip (both are lifted clear of the dock if it covers them); a word in the next section
+ *          waits for that section's box (step 4), as its first stop
  *       3. the ring is on the LAST hidden cover of its section and text runs on below it
  *          -> land on the section's box (`boxAfterLastCover`), once per walk
  *       4. the next section, but only if it is already on screen (a section that is only its
@@ -30,11 +31,13 @@
  *          (Deck, 2026-09-29: the box sat 67% visible, its cover under the header)
  *
  *     Pressing Up is the mirror, and lands on the same stops in reverse:
- *       1. a glossary-term chip on screen and before the ring      -> land on the chip
+ *       1. an underlined word of the ring's own section, on screen and before the ring -> land on it;
+ *          from the section's first word, its box (`wordStepUp`, answerBubbleWordsUp.ts)
  *       2. a hidden cover in the ring's own section, wholly on screen and before the ring
  *          (`coverToLandOnGoingUp`); one cut off at the top is scrolled into view first when
  *          that is no more than a screen's scroll
- *       3. the section above -- or, when that section holds a hidden cover: the section's box if it
+ *       3. the section above (its last word on screen, if it has one: `landGoingUpInto`) -- or, when
+ *          that section holds a hidden cover: the section's box if it
  *          has a box stop, brought under the tab header (`stepUpIntoSection`; the cover follows on
  *          the next press), else the cover (`focusCoverGoingUp`), which is also how the walk
  *          enters an answer from below
@@ -63,8 +66,10 @@
  *     (Deck, 2026-09-29): the stop and everything before it are never offered again until the ring
  *     leaves the section, whatever Steam then does to the panel. And the one section whose box it
  *     has landed on (`boxLandedIn`), so a cover deep inside a tall section does not send the ring
- *     back to a box it entered on. Going Up needs no such memory: every step Up takes in a section
- *     moves the ring to an EARLIER stop of it (the box, then its covers last to first).
+ *     back to a box it entered on. Going Up, every step among covers moves the ring to an EARLIER
+ *     stop of its section (the box, then its covers last to first), so covers need no memory; words
+ *     do, the last one passed (`upWalk` in answerBubbleWordsUp.ts), because Up reads a section's
+ *     words before its box and a scroll can move the ring onto the box in between.
  *
  *     Known limits, on purpose: a cover deep inside a section taller than the screen is entered on
  *     the box first going Down and may not be offered going Up (a cover cut off at the bottom of
@@ -96,7 +101,7 @@
  *      ring to whatever lies outside the answer.
  * The two small memories a walk Down keeps (`walkAnchor()` and the box it last landed on) are
  * module variables and are cleared by `forgetWalk()` whenever the ring enters the answer or
- * a walk Up starts.
+ * a walk Up starts; the walk Up's word memory is cleared on entry and by every Down press.
  *
  * Gotchas:
  * - Several functions here go out of their way not to move focus with a
@@ -132,7 +137,7 @@ import { refocusPanelWindowIfLost } from "./navFocusRegistry";
 import {
   CUT_TOLERANCE_PX, SECTION_TOP_PAD_PX, bandHeightOf, elementIsWithinViewportOf,
   hasBoxStop, hopToSectionAbove, hopToSectionBelow, isCoverAtHead, isCoverOnly, lastHiddenCoverIn, panelStepDown,
-  panelStepUp, revealBelowDock, revealSectionInBand, settleUpLanding,
+  panelStepUp, revealBelowDock, revealSectionInBand,
 } from "./answerBubbleBandGeometry";
 
 /** Still reached through this file by the reply-buttons code, the tests and the test walk. */
@@ -158,6 +163,7 @@ import {
 } from "./answerStopRegistry";
 
 import { coverToLandOnGoingUp, focusCoverGoingUp, stepUpIntoSection } from "./answerBubbleCoverUp";
+import { forgetUpWalk, landGoingUpInto, wordStepUp } from "./answerBubbleWordsUp";
 
 /** The section a walk Down is in and the last small stop in it the ring has been on; see `walkAnchor`. */
 let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
@@ -171,9 +177,15 @@ let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
  */
 let boxLandedIn: HTMLElement | null = null;
 
-function forgetWalk(): void {
+/** Down's memory only; a landing going Up keeps the Up walk's own (answerBubbleWordsUp.ts). */
+function forgetDownWalk(): void {
   walk = null;
   boxLandedIn = null;
+}
+
+function forgetWalk(): void {
+  forgetDownWalk();
+  forgetUpWalk();
 }
 
 /** The section of this answer the ring is in (on it, or on a cover or word inside it), if any. */
@@ -376,13 +388,12 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
   const stops = orderedAnswerStops(answerKey, el);
   const last = stops[stops.length - 1];
   if (last && focusCoverGoingUp(last, findScrollablePanel(el))) return true;
-  if (last && focusAnswerStop(last)) {
-    /* Coming into the answer from below — Up out of the Show details line — lands here, and it is
-       the one entry point that skipped the dock check (measured 2026-09-06). */
-    const scroll = findScrollablePanel(el);
-    if (scroll) settleUpLanding(last, scroll);
-    return true;
-  }
+  /* Coming into the answer from below — Up out of the Show details line — lands here, and it is
+     the one entry point that skipped the dock check (measured 2026-09-06). The section's last word
+     comes first when it has one on screen: a walk Down left the answer from it. */
+  const scroll = findScrollablePanel(el);
+  if (last && scroll && landGoingUpInto(el, last, scroll)) return true;
+  if (last && focusAnswerStop(last)) return true;
   return focusPanelEl(el);
 }
 
@@ -618,6 +629,7 @@ function moveDownInAnswer(
 
   const scroll = findScrollablePanel(bubble);
   if (!scroll) return false;
+  forgetUpWalk(); // a walk Down keeps its own memory (`walk`)
 
   /*
    * Park on a masked spoiler before scrolling past it.
@@ -661,10 +673,16 @@ function moveDownInAnswer(
    * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts. When
    * the ring was moved up to a section from a small stop in it (`keepRingOnScreen`), "the ring" for
    * this purpose is that stop (`walkAnchor`), so it and the ones before it are not offered again.
+   * Only words of the ring's own section: a word in the next section comes after that section's box,
+   * which Down skipped when the word was already on screen (plan 79 helper AC; the Deck,
+   * plan78-QA-FREE-PLAY-01-GAME-try3.json, went from the last word of section 1 to the first of 2).
    */
+  const own = ringSection(bubble, answerKey);
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
-    (el) => inView(el) && (!anchored || Boolean(anchor!.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    (el) =>
+      inView(el) && (!own || own.contains(el)) &&
+      (!anchored || Boolean(anchor!.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
     "down",
   );
   if (termChip && focusDrgGlossaryTermChip(termChip)) {
@@ -777,14 +795,15 @@ export function handleAnswerBubbleMoveUp(
    * heading out to the header stays one press, exactly like the stop-walk asymmetry below.
    * Fences are not diverted to here: going Up, a hidden cover takes the ring when its own section
    * would (the section step below), not from anywhere in view.
+   *
+   * With the ring in a section, only that section's own words count, before the ring or, with the ring
+   * moved onto the section by a scroll, before the last word passed (`upWalk`): Down reads a section's
+   * box, then its words, then the next section, so Up goes the next section, these words last to first,
+   * then the box (plan 79 helper AC; the Deck skipped every word going Up,
+   * plan78-QA-FREE-PLAY-01-GAME-try3.json). Words of the section above are reached through it.
    */
-  const termChip = findNextDrgGlossaryTermChipInView(
-    bubble,
-    (el) => elementIsWithinViewportOf(el, scroll),
-    "up",
-  );
-  if (termChip && focusDrgGlossaryTermChip(termChip)) {
-    forgetWalk();
+  if (wordStepUp(bubble, ringSection(bubble, answerKey), scroll)) {
+    forgetDownWalk();
     return true;
   }
 
@@ -818,10 +837,9 @@ export function handleAnswerBubbleMoveUp(
       forgetWalk();
       return true;
     }
-    if (prev && elementIsWithinViewportOf(prev, scroll) && focusAnswerStop(prev)) {
-      forgetWalk();
-      /* Same as the Down path: landing on it is not enough if it runs under the dock, or under the header. */
-      settleUpLanding(prev, scroll);
+    /* Placed as on the Down path (not under the dock, nor the header); its last word on screen first. */
+    if (prev && elementIsWithinViewportOf(prev, scroll) && landGoingUpInto(bubble, prev, scroll)) {
+      forgetDownWalk();
       return true;
     }
   }

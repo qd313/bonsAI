@@ -15,6 +15,7 @@ vi.mock("../utils/chatSlotsApi", () => ({
   })),
   deleteChatSlot: vi.fn(async () => true),
   renameChatSlot: vi.fn(async () => null),
+  keepChatTitle: vi.fn(async () => true),
 }));
 
 import * as chatSlotsApi from "../utils/chatSlotsApi";
@@ -479,6 +480,59 @@ describe("useChatSlots", () => {
       expect(open?.sumUp?.questionsAfterSummary).toBe(1);
       expect(open?.sumUp?.summingUp).toBe(false);
       expect(result.current.summaries.find((r) => r.id === "plain")?.sumUp).toBeUndefined();
+    });
+
+    describe("the title offer's two choices", () => {
+      const OFFERED = { ...SUMMARY, suggested_title: "Half-Life 2 weapons" };
+
+      async function openOfferedChat() {
+        const { result } = renderWithSlots();
+        vi.mocked(chatSlotsApi.getChatSlot).mockImplementation(async (id: string) => ({
+          ...row(id),
+          summary: OFFERED,
+          can_sum_up: true,
+          turns: [{ id: "q1", role: "user", text: "one" }, { id: "a1", role: "assistant", text: "one." }],
+        }));
+        await act(async () => {
+          await result.current.refreshSummaries();
+          await result.current.selectSlot("summed");
+        });
+        return result;
+      }
+
+      it("the open chat's row carries the stored suggestion", async () => {
+        const result = await openOfferedChat();
+        expect(result.current.summaries.find((r) => r.id === "summed")?.sumUp?.summary?.suggested_title).toBe(
+          "Half-Life 2 weapons",
+        );
+      });
+
+      it("Rename goes through the ordinary rename call, as a yes to the offer, then reloads the card", async () => {
+        const result = await openOfferedChat();
+        vi.mocked(chatSlotsApi.renameChatSlot).mockClear();
+        vi.mocked(chatSlotsApi.renameChatSlot).mockResolvedValue({ ...row("summed"), label: "Half-Life 2 weapons", turns: [] });
+        vi.mocked(chatSlotsApi.getChatSlot).mockClear();
+        vi.mocked(chatSlotsApi.listChatSlots).mockClear();
+        await act(async () => {
+          result.current.summaries.find((r) => r.id === "summed")?.sumUp?.renameToSuggestedTitle?.("Half-Life 2 weapons");
+        });
+        expect(chatSlotsApi.renameChatSlot).toHaveBeenCalledWith("summed", "Half-Life 2 weapons", { fromTitleOffer: true });
+        expect(chatSlotsApi.listChatSlots).toHaveBeenCalled(); // the chat list and the chat row
+        expect(chatSlotsApi.getChatSlot).toHaveBeenCalledWith("summed"); // the card, without the offer
+      });
+
+      it("Keep never renames; it only closes the offer and reloads the card", async () => {
+        const result = await openOfferedChat();
+        vi.mocked(chatSlotsApi.renameChatSlot).mockClear();
+        vi.mocked(chatSlotsApi.keepChatTitle).mockClear();
+        vi.mocked(chatSlotsApi.getChatSlot).mockClear();
+        await act(async () => {
+          result.current.summaries.find((r) => r.id === "summed")?.sumUp?.keepTitle?.();
+        });
+        expect(chatSlotsApi.keepChatTitle).toHaveBeenCalledWith("summed");
+        expect(chatSlotsApi.renameChatSlot).not.toHaveBeenCalled();
+        expect(chatSlotsApi.getChatSlot).toHaveBeenCalledWith("summed");
+      });
     });
 
     it("switching chats never lends the old chat's card to the new one", async () => {

@@ -86,6 +86,12 @@ export type ChatMemorySummary = {
   written_at: string;
   seconds: number;
   model: string;
+  /**
+   * Plan 79: a fresher title for the chat that the summary call suggested, waiting for a yes or a
+   * no on the summary card. Absent when there is no open offer (nothing suggested, already
+   * answered, or the person typed this chat's title by hand). Never applied by itself.
+   */
+  suggested_title?: string;
 };
 
 export type ChatSlotSummary = {
@@ -119,6 +125,8 @@ export type ChatSlot = {
    * chat still fits in what the AI is shown. Absent on a build before this existed.
    */
   can_sum_up?: boolean;
+  /** Plan 79: true once the person typed this chat's title; a typed title is never second-guessed. */
+  label_by_hand?: boolean;
   turns: ChatSlotTurn[];
 };
 
@@ -187,9 +195,30 @@ export async function sumUpChatSlot(slotId: string, pcIp = ""): Promise<SumUpSta
   };
 }
 
-export async function renameChatSlot(slotId: string, label: string): Promise<ChatSlot | null> {
-  const res = await callDeckyWithTimeout<[Record<string, string>], RenameSlotRpc>("rename_chat_slot", [
-    { slot_id: slotId, label },
+/**
+ * Rename a chat. By default this is the person typing a title (the rename box), which the back end
+ * remembers so the summary never offers another. `fromTitleOffer` is the same rename after a yes on
+ * the summary card's offer: the title is not marked as typed, and the open offer is closed.
+ */
+export async function renameChatSlot(
+  slotId: string,
+  label: string,
+  options: { fromTitleOffer?: boolean } = {},
+): Promise<ChatSlot | null> {
+  const res = await callDeckyWithTimeout<[Record<string, string | boolean>], RenameSlotRpc>("rename_chat_slot", [
+    { slot_id: slotId, label, ...(options.fromTitleOffer ? { from_title_offer: true } : {}) },
   ]);
   return res?.slot ?? null;
+}
+
+/**
+ * Keep, on the summary card's title offer: closes the offer WITHOUT renaming the chat (the title
+ * on disk is never touched) and remembers the suggestion so it is not offered again. Goes through
+ * the same `rename_chat_slot` call as a rename, with no label.
+ */
+export async function keepChatTitle(slotId: string): Promise<boolean> {
+  const res = await callDeckyWithTimeout<[Record<string, string | boolean>], RenameSlotRpc>("rename_chat_slot", [
+    { slot_id: slotId, keep_title_offer: true },
+  ]);
+  return res?.ok === true;
 }

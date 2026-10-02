@@ -27,6 +27,7 @@ import {
   createChatSlot,
   deleteChatSlot,
   getChatSlot,
+  keepChatTitle,
   listChatSlots,
   renameChatSlot,
   type ChatMemorySummary,
@@ -320,14 +321,30 @@ export function useChatSlots({
     return slot;
   }, [refreshSummaries, selectSlot]);
 
+  /*
+   * `fromTitleOffer`: a yes on the summary card's title offer (plan 79) -- the same rename, only
+   * not marked as typed by hand. The card is reloaded either way, so an open offer never outlives
+   * a rename of the open chat.
+   */
   const renameSlot = useCallback(
-    async (slotId: string, label: string) => {
-      const saved = await renameChatSlot(slotId, label);
+    async (slotId: string, label: string, options: { fromTitleOffer?: boolean } = {}) => {
+      const saved = await renameChatSlot(slotId, label, options);
       if (!saved) return false;
       await refreshSummaries();
+      await refreshSlotMemory(slotId);
       return true;
     },
-    [refreshSummaries],
+    [refreshSlotMemory, refreshSummaries],
+  );
+
+  /** Keep, on the title offer: closes the offer without renaming the chat. */
+  const keepSlotTitle = useCallback(
+    async (slotId: string) => {
+      if (!(await keepChatTitle(slotId))) return false;
+      await refreshSlotMemory(slotId);
+      return true;
+    },
+    [refreshSlotMemory],
   );
 
   const deleteSlot = useCallback(
@@ -385,10 +402,23 @@ export function useChatSlots({
               otherJobRunning: runningSlotId != null && runningSlotId !== activeSlotId,
               startSumUp: () => startSumUpJob(activeSlotId, ollamaPcIp),
               stopSumUp: stopSumUpJob,
+              renameToSuggestedTitle: (title: string) => void renameSlot(activeSlotId, title, { fromTitleOffer: true }),
+              keepTitle: () => void keepSlotTitle(activeSlotId),
             },
           },
     );
-  }, [activeSlotId, chatMemory, ollamaPcIp, runningSlotId, startSumUpJob, stopSumUpJob, sumUpSeconds, summaries]);
+  }, [
+    activeSlotId,
+    chatMemory,
+    keepSlotTitle,
+    ollamaPcIp,
+    renameSlot,
+    runningSlotId,
+    startSumUpJob,
+    stopSumUpJob,
+    sumUpSeconds,
+    summaries,
+  ]);
 
   return {
     summaries: rows,

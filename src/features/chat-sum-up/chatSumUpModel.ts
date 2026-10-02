@@ -43,6 +43,10 @@ export type ChatSumUpState = {
   startSumUp: () => void;
   /** Stop a summary the button started — the Ask bar's Stop calls this while one is running. */
   stopSumUp: () => void;
+  /** Yes, on the title offer: rename the open chat to the suggested title (the ordinary rename path). */
+  renameToSuggestedTitle?: (title: string) => void;
+  /** Keep, on the title offer: closes the offer WITHOUT renaming; the chat's title is not touched. */
+  keepTitle?: () => void;
 };
 
 /** A row of the chat list as the screen holds it: the open chat's row also carries `sumUp`. */
@@ -130,6 +134,18 @@ export function summaryCardFooter(summary: ChatMemorySummary, questionsKept: num
   }
   return parts.join(" · ");
 }
+
+/**
+ * The title offer's question line, or null when the summary holds no open offer. Quiet by design
+ * (plan 79, D122 item 6): one line on the summary card, the suggestion in quotes, the two choices
+ * beside it. The choice labels are `TITLE_OFFER_YES` and `TITLE_OFFER_KEEP`.
+ */
+export function titleOfferQuestion(summary: ChatMemorySummary | null | undefined): string | null {
+  const title = String(summary?.suggested_title ?? "").trim();
+  return title ? `Rename this chat to “${title}”?` : null;
+}
+export const TITLE_OFFER_YES = "Rename";
+export const TITLE_OFFER_KEEP = "Keep";
 
 export type SumUpButtonView = {
   label: string;

@@ -22,6 +22,8 @@
  *      | Down                   ^ Up
  *   What the AI remembers card        <- stop only when a summary exists; A does nothing
  *      | Down                   ^ Up
+ *   [ Rename ] [ Keep ]               <- only while the summary holds a title offer (plan 79); A runs
+ *      | Down                   ^ Up      it; Left/Right swap between the two (SessionTitleOffer.tsx)
  *   the turn rows, then the active row's chips (unchanged)
  *
  * The card is a stop because it is usually taller than the room left under the button (83 px on
@@ -35,7 +37,6 @@ import React, { useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
 import { ThinkingSpinnerIcon } from "../../components/icons";
-import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../utils/focusNavigation";
 import { elementHasGamepadFocus, uiGamepadFocusElement } from "../../utils/uiDocument";
 import { revealBelowKeepingAsItSettles, revealOnceWhenMounted } from "../../utils/chatPanelScroll";
 import { focusRowElement } from "../../utils/focusPerTurnRow";
@@ -50,8 +51,11 @@ import {
   summaryCardLines,
   summaryCardMeta,
   sumUpButtonView,
+  titleOfferQuestion,
   type ChatSumUpState,
 } from "./chatSumUpModel";
+import { focusTitleOffer, SessionTitleOffer } from "./SessionTitleOffer";
+import { directionHandlers } from "./sumUpDirectionHandlers";
 
 /*
  * At most one Session tab body is ever mounted (only the newest answer carries it), so one slot
@@ -72,9 +76,9 @@ function focusSummaryCard(): boolean {
   return summaryCardEl ? focusRowElement(summaryCardEl) : false;
 }
 
-/** The lowest stop of this section: the card when it shows, else the button. */
+/** The lowest stop of this section: the title offer when it shows, else the card, else the button. */
 export function focusLastSumUpStop(): boolean {
-  return focusSummaryCard() || focusSumUpButton();
+  return focusTitleOffer() || focusSummaryCard() || focusSumUpButton();
 }
 
 /**
@@ -113,24 +117,6 @@ function handRingToNewCard(): () => void {
   };
 }
 
-function directionHandlers(
-  el: () => HTMLElement | null,
-  onUp: () => boolean,
-  onDown: () => boolean,
-): Record<string, unknown> {
-  return {
-    onMoveUp: () => onUp(),
-    onMoveDown: () => onDown(),
-    onButtonDown: (evt: unknown) => {
-      const self = el();
-      if (self && !elementHasGamepadFocus(self)) return false;
-      if (isDeckDirectionUpEvent(evt)) return onUp();
-      if (isDeckDirectionDownEvent(evt)) return onDown();
-      return false;
-    },
-  };
-}
-
 /**
  * In: the open chat's summary state (or none yet), whether an answer is being written, and the two
  * ways out of this section -- Up to the tabs row, Down past it to the first turn row.
@@ -157,6 +143,8 @@ export function SessionSumUpSection(props: {
     state.startSumUp();
   };
   const downFromCard = () => onMoveDownPastSection();
+  const offerQuestion = summary && !view.busy ? titleOfferQuestion(summary) : null;
+  const downFromCardOrToOffer = () => (offerQuestion ? focusTitleOffer() : false) || downFromCard();
 
   /*
    * Job E (plan 72, the maintainer's call): when Sum up finishes while Steam's ring still sits on
@@ -229,7 +217,7 @@ export function SessionSumUpSection(props: {
       ) : null}
       {summary && !view.busy ? (
         <Focusable
-          className="bonsai-sumup-card"
+          className={`bonsai-sumup-card${offerQuestion ? " bonsai-sumup-card--offered" : ""}`}
           ref={(el: HTMLElement | null) => {
             summaryCardEl = el;
             /* Appears behind the dock otherwise, after Sum up or from the note (plan 72). */
@@ -244,7 +232,7 @@ export function SessionSumUpSection(props: {
            * plan72-Z-FREEPLAY.json finding 2). Scrolls only.
            */
           onFocus={() => summaryCardEl && revealBelowKeepingAsItSettles(summaryCardEl, () => summaryCardEl)}
-          {...(directionHandlers(() => summaryCardEl, focusSumUpButton, downFromCard) as Record<string, unknown>)}
+          {...(directionHandlers(() => summaryCardEl, focusSumUpButton, downFromCardOrToOffer) as Record<string, unknown>)}
         >
           <div className="bonsai-sumup-card-head">
             <span>What the AI remembers</span>
@@ -259,6 +247,15 @@ export function SessionSumUpSection(props: {
             {summaryCardFooter(summary, state?.questionsAfterSummary ?? 0)}
           </div>
         </Focusable>
+      ) : null}
+      {offerQuestion ? (
+        <SessionTitleOffer
+          question={offerQuestion}
+          onRename={() => summary?.suggested_title && state?.renameToSuggestedTitle?.(summary.suggested_title)}
+          onKeep={() => state?.keepTitle?.()}
+          onMoveUpToCard={focusSummaryCard}
+          onMoveDownPastOffer={downFromCard}
+        />
       ) : null}
     </>
   );

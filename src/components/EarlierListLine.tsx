@@ -12,7 +12,9 @@
  * that toggles. B is `onCancelButton` and only while open: the handler's mere presence eats B
  * (MainTabChatTranscript.tsx, the Show reasoning row), so a closed line must not carry one.
  */
+import { useRef } from "react";
 import { Focusable } from "@decky/ui";
+import { registerEarlierLineEl } from "../utils/chatTranscriptNavHelpers";
 
 export type EarlierListLineProps = {
   /** The words on the line: "12 earlier", or "Yesterday · 30". */
@@ -38,8 +40,16 @@ export function EarlierListLine(props: EarlierListLineProps) {
         },
       }
     : {};
+  /* The "N earlier" line says it is on screen, so Down from the chat slot row can land on it. */
+  const mounted = useRef<HTMLElement | null>(null);
+  const noteMounted = (el: HTMLElement | null) => {
+    if (kind !== "earlier") return;
+    registerEarlierLineEl(el, mounted.current);
+    mounted.current = el;
+  };
   return (
     <Focusable
+      ref={noteMounted}
       className={`bonsai-chat-earlier-pill-row${kind === "day" ? " bonsai-chat-earlier-day-row" : ""}`}
       aria-expanded={open}
       onActivate={onToggle}

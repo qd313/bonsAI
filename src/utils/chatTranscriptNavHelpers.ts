@@ -79,8 +79,41 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
   };
 }
 
-/** The "N earlier" pill's Steam nav node: the transcript is the only one that draws it. */
+/** The "N earlier" line's Steam nav node: the transcript is the only one that draws it. */
 export const earlierPillNav: NavRefHolder = { current: null };
+
+/**
+ * One nav node per day line (plan 79). A shared holder would be filled by whichever day line Steam
+ * mounted last, so the question's Up would climb to the wrong one; the holders are kept by day key so
+ * they stay the same object across renders, as the question text's own are (buildTurnHeaderElement).
+ */
+const dayLineNavByKey = new Map<string, NavRefHolder>();
+export function dayLineNav(dayKey: string): NavRefHolder {
+  let holder = dayLineNavByKey.get(dayKey);
+  if (!holder) {
+    holder = { current: null };
+    dayLineNavByKey.set(dayKey, holder);
+  }
+  return holder;
+}
+
+/** The "N earlier" line's element while it is on screen, so a press from outside can tell it is there. */
+let earlierLineEl: HTMLElement | null = null;
+export function registerEarlierLineEl(el: HTMLElement | null, prev?: HTMLElement | null): void {
+  if (el) earlierLineEl = el;
+  else if (prev && earlierLineEl === prev) earlierLineEl = null;
+}
+
+/**
+ * Hand the ring to the "N earlier" line, when it is drawn (Down from the chat slot row, plan 79).
+ * The line is the first stop under the slot row whenever it shows, opened or closed, so the press
+ * must land there and never on a question or day line below it. False when there is no line, which
+ * leaves the first question's text as the target (fewer than two earlier questions).
+ */
+export function takeEarlierLine(): boolean {
+  if (!earlierLineEl?.isConnected) return false;
+  return takeHolderFocus(earlierPillNav);
+}
 
 /**
  * The "N earlier" pill's moves: Left holds still (above) and Down goes to the question below it
@@ -89,9 +122,13 @@ export const earlierPillNav: NavRefHolder = { current: null };
  * (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json). The transfer goes onto the question text;
  * a next turn without Retry has no such stop, the call reports false and Down stays Steam's own.
  */
-export function earlierPillNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
-  /* The pill's own nav node, so the question's Up can hand the ring back to it (questionMoveUpOut). */
-  const left: Record<string, unknown> = { ...earlierPillLeftNavHandlers(), navRef: earlierPillNav };
+export function earlierPillNavHandlers(
+  nextTurnId: string | null | undefined,
+  nav: NavRefHolder = earlierPillNav
+): Record<string, unknown> {
+  /* The line's own nav node, so the question's Up can hand the ring back to it (questionMoveUpOut).
+     Day lines pass their own holder: each line needs one of its own. */
+  const left: Record<string, unknown> = { ...earlierPillLeftNavHandlers(), navRef: nav };
   if (!nextTurnId) return left;
   const down = () => takeOpenQuestionText(nextTurnId);
   return {

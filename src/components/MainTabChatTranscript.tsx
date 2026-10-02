@@ -1160,11 +1160,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               /* What is drawn right over this row, for the question text's Up (plan 79): a day
                  line, else the turn above, else the "N earlier" line, else the chat slot row. */
               onMoveUpOut: questionMoveUpOut(
-                renderIndex > 0
-                  ? headerRingProps(archivedTurnsToRender[renderIndex - 1]!.id).headerNavRef
-                  : hasEarlierLine
-                    ? earlierPillNav
-                    : null
+                earlier.navAbove(turn.id) ??
+                  (renderIndex > 0
+                    ? headerRingProps(archivedTurnsToRender[renderIndex - 1]!.id).headerNavRef
+                    : hasEarlierLine
+                      ? earlierPillNav
+                      : null)
               ),
               ...headerRingProps(turn.id),
               onActivate: () => onTurnActivate?.(turn.id),
@@ -1406,11 +1407,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               onActivate: () => onTurnActivate?.("live"),
               ...headerRingProps("live"),
               onMoveUpOut: questionMoveUpOut(
-                archivedTurnsToRender.length > 0
-                  ? headerRingProps(archivedTurnsToRender[archivedTurnsToRender.length - 1]!.id).headerNavRef
-                  : hasEarlierLine
-                    ? earlierPillNav
-                    : null
+                earlier.navAboveLive() ??
+                  (archivedTurnsToRender.length > 0
+                    ? headerRingProps(archivedTurnsToRender[archivedTurnsToRender.length - 1]!.id).headerNavRef
+                    : hasEarlierLine
+                      ? earlierPillNav
+                      : null)
               ),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,

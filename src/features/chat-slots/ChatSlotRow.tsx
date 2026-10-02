@@ -51,6 +51,7 @@ import { ConfirmModal, Focusable, showModal } from "@decky/ui";
 import { TrashBinSlotsIcon } from "../../components/icons";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
 import { takeOpenQuestionText } from "../../utils/buildTurnHeaderElement";
+import { takeEarlierLine } from "../../utils/chatTranscriptNavHelpers";
 import {
   isBumperLeftDeckEvent,
   isBumperRightDeckEvent,
@@ -374,10 +375,12 @@ export function ChatSlotRow({
           },
           // Layout is slot row -> transcript -> presets -> ask bar (D-A). Steam's own move below
           // enters the first turn's row on its first control, which is Retry (plan 79), so a first
-          // question that has a Retry is taken by its text instead. Anything else returns false and
+          // question that has a Retry is taken by its text instead. When the "N earlier" line is
+          // drawn it is the first stop below the row, opened or closed, so Down lands on it and
+          // never jumps past it (or a day line) into a question. Anything else returns false and
           // Steam's spatial navigation descends into what is directly below: the transcript when
           // it has content and the preset row when it does not.
-          onMoveDown: () => (firstTurnId ? takeOpenQuestionText(firstTurnId) : false),
+          onMoveDown: () => takeEarlierLine() || (firstTurnId ? takeOpenQuestionText(firstTurnId) : false),
           // Up goes to the collapsing tab bar (plan 30 W4). Steam's own answer for "above the
           // row" is its hidden tab button — a stop nobody can see (runs/TAB-BAR-W1b-*.json) —
           // so the hop is explicit. False when the bar is not registered, and Steam decides.
@@ -389,7 +392,9 @@ export function ChatSlotRow({
         onButtonDown={(evt) => {
           if (handleBumperButtonDown(evt)) return true;
           if (isBumperLeftDeckEvent(evt) || isBumperRightDeckEvent(evt)) return true;
-          if (isDownDeckButtonEvent(evt)) return firstTurnId ? takeOpenQuestionText(firstTurnId) : false;
+          if (isDownDeckButtonEvent(evt)) {
+            return takeEarlierLine() || (firstTurnId ? takeOpenQuestionText(firstTurnId) : false);
+          }
           if (!isOkDeckButtonEvent(evt)) return false;
           if (isCreatePosition) {
             void onCreateSlot();

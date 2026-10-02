@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 688,
-  "edgeCount": 1962,
+  "fileCount": 694,
+  "edgeCount": 1983,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -245,6 +245,14 @@
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
       ]
     },
+    "src/components/EarlierListLine.tsx": {
+      "imports": [
+        "src/utils/chatTranscriptNavHelpers.ts"
+      ],
+      "importedBy": [
+        "src/components/buildEarlierList.tsx"
+      ]
+    },
     "src/components/KnowledgeBaseButtonLabel.tsx": {
       "imports": [],
       "importedBy": [
@@ -383,6 +391,16 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTab.chatRowDownEarlier.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.chatRowDownRetry.test.tsx": {
       "imports": [
         "src/components/MainTab.tsx",
@@ -435,6 +453,7 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.chatRowDownEarlier.test.tsx",
         "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.gameLighter.test.ts",
@@ -546,6 +565,17 @@
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/backgroundAsk.ts",
         "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTabChatTranscript.earlierByDay.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": []
     },
@@ -759,6 +789,7 @@
         "src/components/PermissionDenyAction.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
+        "src/components/buildEarlierList.tsx",
         "src/components/icons.tsx",
         "src/data/askMode.ts",
         "src/data/drgGlossaryTerms.ts",
@@ -814,6 +845,7 @@
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
@@ -1875,6 +1907,18 @@
         "src/components/icons.tsx"
       ]
     },
+    "src/components/buildEarlierList.tsx": {
+      "imports": [
+        "src/components/EarlierListLine.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/earlierTurnsByDay.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/components/deck/DeckFocusSlider.test.ts": {
       "imports": [
         "src/components/deck/DeckFocusSlider.tsx"
@@ -2533,6 +2577,7 @@
         "src/features/preset-carousel/presetChipShared.ts",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/chatSlotsApi.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/navFocusRegistry.ts"
       ],
@@ -3922,8 +3967,7 @@
     },
     "src/hooks/useEarlierTurnsPill.ts": {
       "imports": [
-        "src/types/bonsaiUi.ts",
-        "src/utils/navFocusRegistry.ts"
+        "src/types/bonsaiUi.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx"
@@ -5274,6 +5318,7 @@
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
+        "src/components/MainTab.chatRowDownEarlier.test.tsx",
         "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
@@ -5282,6 +5327,7 @@
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
@@ -5470,11 +5516,13 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/components/MainTab.chatRowDownEarlier.test.tsx",
         "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
@@ -5498,6 +5546,7 @@
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
+        "src/components/buildEarlierList.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -5516,6 +5565,8 @@
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/chatSlotTurns.ts",
+        "src/utils/earlierTurnsByDay.test.ts",
+        "src/utils/earlierTurnsByDay.ts",
         "src/utils/lighterWhileGameRuns.ts",
         "src/utils/reasoningDisplay.ts",
         "src/utils/strategyChecklist.ts",
@@ -6272,7 +6323,10 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/EarlierListLine.tsx",
         "src/components/MainTabChatTranscript.tsx",
+        "src/components/buildEarlierList.tsx",
+        "src/features/chat-slots/ChatSlotRow.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/handRingOnWhenGone.test.ts",
         "src/utils/permHintRowNav.test.ts"
@@ -6489,6 +6543,22 @@
         "src/utils/buildReplyActionsElement.tsx"
       ]
     },
+    "src/utils/earlierTurnsByDay.test.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts",
+        "src/utils/earlierTurnsByDay.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/earlierTurnsByDay.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": [
+        "src/components/buildEarlierList.tsx",
+        "src/utils/earlierTurnsByDay.test.ts"
+      ]
+    },
     "src/utils/emptyLabelSpoilerMark.test.tsx": {
       "imports": [
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
@@ -6618,10 +6688,12 @@
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
+        "src/components/MainTab.chatRowDownEarlier.test.tsx",
         "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
@@ -6867,6 +6939,7 @@
       ],
       "importedBy": [
         "src/components/ContextChipLadder.ringWalk.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
@@ -6889,6 +6962,7 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
+        "src/components/buildEarlierList.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -6903,7 +6977,6 @@
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
-        "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/usePermHintNavTargets.ts",
@@ -7541,7 +7614,9 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/MainTab.chatRowDownEarlier.test.tsx",
         "src/components/MainTab.chatRowDownRetry.test.tsx",
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",

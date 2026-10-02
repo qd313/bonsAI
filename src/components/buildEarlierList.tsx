@@ -12,9 +12,10 @@
  * every row closed with nothing open.
  */
 import type { ReactElement } from "react";
+import type { NavRefHolder } from "../utils/navFocusRegistry";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import { dayLineText, layoutEarlierByDay, type EarlierDay } from "../utils/earlierTurnsByDay";
-import { earlierLineNavHandlers, earlierPillNavHandlers } from "../utils/chatTranscriptNavHelpers";
+import { dayLineNav, earlierLineNavHandlers, earlierPillNavHandlers } from "../utils/chatTranscriptNavHelpers";
 import { EarlierListLine } from "./EarlierListLine";
 
 export type BuildEarlierListArgs = {
@@ -40,10 +41,19 @@ export type EarlierList = {
   dayLinesBefore: (turnId: string) => ReactElement[] | null;
   /** Day lines with no row after them, drawn after the last row. */
   trailingDayLines: ReactElement[] | null;
+  /** The nav node of the day line drawn right over the row for `turnId`, if one is. */
+  navAbove: (turnId: string) => NavRefHolder | null;
+  /** The same for the live turn: the last day line drawn after the last row, if any. */
+  navAboveLive: () => NavRefHolder | null;
   /** Whether a day line is the next stop below the row for `nextTurn` (undefined: below the last row). */
   dayLineFollows: (nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
 };
 
+/**
+ * Work out the earlier list for one render: with the line closed only the turns after the earlier ones
+ * show; opened, the day lines show with the questions of the open days. Each line carries its own nav
+ * node, so a question's Up (questionMoveUpOut) can hand the ring to exactly the line over it.
+ */
 export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const { turns, earlierCount, showLiveTurn, earlierExpanded, setEarlierExpanded, openDays, toggleDay } = a;
   const hasLine = earlierCount >= 2;
@@ -72,7 +82,7 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
         open={openDays.has(day.key)}
         onToggle={() => (openDays.has(day.key) ? close() : toggleDay(day.key))}
         onClose={close}
-        nav={earlierPillNavHandlers(nextTurnId)}
+        nav={earlierPillNavHandlers(nextTurnId, dayLineNav(day.key))}
       />
     );
   };
@@ -100,6 +110,14 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     turnsToRender,
     dayLinesBefore: (turnId) => (layout ? run(layout.daysBefore.get(turnId) ?? [], turnId) : null),
     trailingDayLines: layout ? run(layout.trailingDays, afterEarlier) : null,
+    navAbove: (turnId) => {
+      const days = layout?.daysBefore.get(turnId);
+      return days?.length ? dayLineNav(days[days.length - 1]!.key) : null;
+    },
+    navAboveLive: () => {
+      const days = layout?.trailingDays;
+      return days?.length ? dayLineNav(days[days.length - 1]!.key) : null;
+    },
     dayLineFollows: (nextTurn) =>
       nextTurn ? (layout?.daysBefore.get(nextTurn.id)?.length ?? 0) > 0 : (layout?.trailingDays.length ?? 0) > 0,
   };

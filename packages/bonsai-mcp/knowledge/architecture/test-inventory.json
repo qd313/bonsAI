@@ -22,6 +22,7 @@
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",
     "src/components/KnowledgeBaseSection.update.test.tsx",
+    "src/components/MainTab.chatRowDownEarlier.test.tsx",
     "src/components/MainTab.chatRowDownRetry.test.tsx",
     "src/components/MainTab.dockClass.test.ts",
     "src/components/MainTab.gameLighter.test.ts",

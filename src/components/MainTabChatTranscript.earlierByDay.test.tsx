@@ -477,6 +477,77 @@ describe("the D-pad over the opened list (plan 79)", () => {
   });
 });
 
+describe("Up from the open question's text goes to whatever is drawn right over its row (plan 79)", () => {
+  beforeEach(() => {
+    resetUiDocument();
+    resetNavFocusRegistry();
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  function questionText(container: HTMLElement): HTMLElement {
+    return container.querySelector<HTMLElement>(".bonsai-chat-turn-row-body")!;
+  }
+
+  it("lands on the day line right over the question, not the 'N earlier' line and not Retry", () => {
+    const { container, stamp } = renderChat();
+    openEarlier(container, stamp);
+    focusOn(questionText(container));
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:Today · 3");
+    /* Each line has a node of its own: the next one up is not the line the first Up came from. */
+    activate(lineEl(container, "Yesterday · 3"));
+    stamp();
+    focusOn(questionText(container));
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:Today · 3");
+  });
+
+  it("lands on the day line over it whichever day is last, with the days in different states", () => {
+    const { container, stamp } = renderChat();
+    openEarlier(container, stamp);
+    activate(lineEl(container, "Mon 28 Sep · 5"));
+    activate(lineEl(container, "Yesterday · 3"));
+    activate(lineEl(container, "Today · 3"));
+    stamp();
+    /* Today is open now, so the question just under it is the closed row of today question 3. */
+    focusOn(questionText(container));
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("row:today question 3");
+    expect(isRetry(document.activeElement)).toBe(false);
+  });
+
+  it("lands on the 'N earlier' line when it is closed, and on the chat slot row when no line is drawn", () => {
+    const slotRow = { current: { TakeFocus: vi.fn(() => true) } };
+    registerNavFocus("chat-slot-row", slotRow);
+    const closed = renderChat();
+    focusOn(questionText(closed.container));
+    expect(press(closed.container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:11 earlier");
+    cleanup();
+    const short = renderChat({}, [TURNS[11]!], "n1");
+    focusOn(questionText(short.container));
+    expect(press(short.container, "Up")).toBe(true);
+    expect(slotRow.current.TakeFocus).toHaveBeenCalledTimes(1);
+  });
+
+  it("the live question's Up goes to the day line over it too", () => {
+    const { container, stamp } = renderChat(
+      { askThreadDisplayQuestion: "a live question", isAsking: true, onRetryLastResponse: () => {} },
+      TURNS.slice(0, 11),
+      "live",
+    );
+    openEarlier(container, stamp);
+    focusOn(questionText(container));
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:Today · 3");
+  });
+});
+
 /* ---- Steam's scroll-into-view, modelled on the Deck's Quick Access numbers ---- */
 const PANE_TOP = 88;
 const DOCK_TOP = 290;

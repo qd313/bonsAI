@@ -29,6 +29,13 @@ import {
 import { uiGamepadFocusElement } from "../utils/uiDocument";
 import { SETTINGS_CARD_TAB_BAR_GAP_PX, settingsCardRowsThatFit } from "./useSteamSettingsSearch";
 
+/** Does Steam's ring sit on `card` or on something still inside it? False with no card. */
+function ringSitsIn(card: HTMLElement | null): boolean {
+  if (!card?.isConnected) return false;
+  const ring = uiGamepadFocusElement();
+  return Boolean(ring?.isConnected && card.contains(ring));
+}
+
 export type AskBarSettingsCardRowsArgs = {
   filteredSettings: string[];
   unifiedInput: string;
@@ -58,7 +65,8 @@ export type AskBarSettingsCardRowsArgs = {
  *    to a plain DOM focus() on the last row's own ref for the frames before
  *    Decky populates the nav node.
  * 3. Typing while the ring sits in the card hands it straight back to the
- *    box, so the list can redraw under the new letter.
+ *    box, so the list can redraw under the new letter; so does the card, or
+ *    the row under the ring, going away for any reason.
  * 4. Measure the real gap between the box's own top edge and the tab bar's
  *    bottom edge, and re-derive how many rows of the card actually fit in
  *    it, every time the result count or the box's own height could have
@@ -116,15 +124,24 @@ export function useAskBarSettingsCardRows({
    * ring, falling back to `activeElement` only when there is no ring at all) is asked rather than a
    * plain `document.activeElement` check.
    */
+  /*
+   * The same hand-back covers the card, or the row under the ring, going away. Measured on the
+   * Deck 2026-10-02 (plan79-P79-M1-TRAP-try3.json, try F): with the ring on a row, the box emptied
+   * and the list closed, and the page held no focus and drew no ring at all until the next press.
+   * The old check here ran after React had already removed the card, so it asked where the ring
+   * was, found nothing (Steam's marker left with the removed row) and did nothing. So the question
+   * is asked while this render runs, when the card from the last paint is still in the page, and
+   * acted on after the paint: if the ring was in the card, the box gets it whenever the text
+   * changed, the card is gone, or the row it sat on is gone (fewer rows fit, or new matches).
+   */
+  const ringWasInCard = ringSitsIn(settingsCardHostRef.current);
   const unifiedInputForTypingRedirectRef = useRef(unifiedInput);
-  useEffect(() => {
-    if (unifiedInputForTypingRedirectRef.current === unifiedInput) return;
+  useLayoutEffect(() => {
+    const typed = unifiedInputForTypingRedirectRef.current !== unifiedInput;
     unifiedInputForTypingRedirectRef.current = unifiedInput;
-    const ring = uiGamepadFocusElement();
-    if (ring?.closest(".bonsai-settings-results-card")) {
-      focusUnifiedTextField();
-    }
-  }, [unifiedInput, focusUnifiedTextField]);
+    if (!ringWasInCard) return;
+    if (typed || !ringSitsIn(settingsCardHostRef.current)) focusUnifiedTextField();
+  });
 
   /*
    * How much room the settings-results card actually has, measured live rather than assumed.

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 681,
-  "edgeCount": 1935,
+  "fileCount": 682,
+  "edgeCount": 1938,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1018,6 +1018,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -1071,6 +1079,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx"
@@ -5242,6 +5251,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
@@ -6794,6 +6804,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",

@@ -174,7 +174,7 @@ Fill in as you go, or tell a session and it fills this in.
 
 | # | Check | Date | Pass or fail | What you saw |
 |---|---|---|---|---|
-| 1 | Clear while an answer is arriving | | | |
-| 2 | A question spoken into the real microphone | | | |
+| 1 | Clear while an answer is arriving | 2026-10-02 | Pass | The part of the answer that had arrived was kept. It ended inside a spoiler cover, and that cover opens to "undefined": a new bug, on the roadmap. Screenshot `screenshots/DeckCapture_20261002_003908_game.png`. |
+| 2 | A question spoken into the real microphone | 2026-10-02 | Partly | "Sort of works": the words arrive, but stretches are sometimes written twice. A new bug, on the roadmap. Stop stopped the answer, but the X on the Ask bar would not clear the question afterwards: a second new bug, on the roadmap. Not reported: where the ring landed after Stop. Screenshot `screenshots/DeckCapture_20261002_004142_game.png`. |
 | 3 | The parental lock, seen locked | | | |
 | 4 | A first install, the way a new player gets it | | | |

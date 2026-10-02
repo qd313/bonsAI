@@ -89,6 +89,10 @@ starts work outside this.
   Cause (the helper's read, 2026-10-01): with the ring on a section the word finder never counts words inside that section as before the ring going Up. A fix needs a change in the word finder, an Up-side memory of the last word passed (the mirror of Down's), and room in the navigation file, which is at 397 of its 400 lines. After the release.
 - ★ `[layout]` **The step that lifts a control clear of the dock moves it about 80 px too far** — **OPEN, measured 2026-10-01 (plan 78 helper D).**
   The choices and Helpful under an answer land at y 172 to 204 with the dock at 290. Harmless for anything under about 116 px tall; answer sections are exempt since `b417c271`. The cure is to take Steam's 80 px out of the lift's margin and re-measure every landing below an answer. For after the release. Evidence `docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json`.
+- ★ `[layout]` **The bronze note card sits right on top of the suggestion chip, with no gap** — **OPEN, found by the
+  maintainer 2026-10-02.** The card that names the note an answer used ("Nail upgrades and Pale Ore — From the
+  Hollow Knight wiki") touches the top of the chip row. Wanted: a little room between them.
+  Screenshot `screenshots/DeckCapture_20261002_004918_game.png`.
 - ★ `[reply]` **A power question's answer often has no number in it** — **OPEN, found 2026-09-27 (plan 72), narrowed 2026-09-30 (plan 78 helper I).**
   It happens with no chat history at all: 5 of 18 test answers had a number, with or without earlier turns. So it comes from the instructions the AI gets for power questions, not from the chat's memory. Not fixed tonight.
   Evidence for the original sighting: `docs/test-evidence/plan72-Z-FREEPLAY.json`.
@@ -117,10 +121,43 @@ starts work outside this.
   Older note: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
+- ★★ `[ask]` **After a spoken question and Stop, the X on the Ask bar does not clear the question** — **OPEN, found
+  by the maintainer 2026-10-02 on the real microphone.** Stop did stop the answer, but pressing the X beside Ask
+  then did nothing; the spoken words stayed in the question box.
+- ★★ `[focus]` **Up and Down between the rating choices and the speaker button go to the wrong place** — **OPEN, found
+  by the maintainer 2026-10-02.** Up from "Bad info" lands on the speaker button; it should land on "Helpful". Down from
+  the speaker lands wrong too; it should land on "Wrong game or topic" (the choice under it).
+  Screenshot of the layout `screenshots/DeckCapture_20261002_004918_game.png`.
+- ★★ `[focus]` **Down from "N earlier" stops on the question's Retry button before the question itself** — **OPEN,
+  found by the maintainer 2026-10-02.** Up and Down should never land on Retry. The only way onto it should be Left
+  while the ring is on the question bubble.
 - ★★ `[platform]` **Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted** — **OPEN, seen once, 2026-10-01 12:29 (plan 78, Deck block 3e).**
   Black Mesa running, about 550 MB free of 14.8 GB, the rig's plugin reload, then no Quick Access page for six minutes or more; the maintainer restarted the Deck. Evidence `docs/test-evidence/plan78-THINKING-SLOW-01.json`.
   A real player never reloads the plugin this way (it is a developer action), so this is first a rule for the Deck driver. Whether an ordinary Steam restart of the plugin under low memory can do the same is not known.
   In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
+- ★★ `[layout]` **In the AI models box, going all the way down and back up leaves the top model half hidden** —
+  **OPEN, found by the maintainer 2026-10-02.** After D-pad Down to the bottom of the list and then Up to the top,
+  the first model sits partly behind the box's title bar.
+- ★★ `[reply]` **A spoiler cover cut off by Clear shows the word "undefined" when opened** — **OPEN, found by the
+  maintainer 2026-10-02 during their Clear-while-answering check.** The kept part of the answer ended inside a spoiler
+  cover; opening the cover shows "undefined" instead of the words that had arrived (or nothing). The check itself
+  passed: the answer was kept. Screenshot `screenshots/DeckCapture_20261002_003908_game.png`.
+- ★★ `[voice]` **A spoken question sometimes comes out with its words doubled** — **OPEN, found by the maintainer
+  2026-10-02 on the real microphone.** Saying "testing one two three…" gave "Testing one, two. Testing 1 2 3 4
+  Testing One, two, three, four, five. 3 4 5 6 567 for 5-6-7-8. 5 6 7 8 9 10": stretches of it repeat.
+  Screenshot `screenshots/DeckCapture_20261002_004142_game.png`.
+- ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the
+  answer** — **OPEN, found by the maintainer 2026-10-02; only a Steam restart cleared it.** The answer is also drawn
+  behind the question box, and the ring shows as one big box around both. Screenshot
+  `screenshots/DeckCapture_20261002_004346_game.png`. Measure on the Deck first; may be kin to the old focus trap.
+- ★★★ `[focus]` **Moving through the Show details chips puts the ring on the whole block, not the chip, and it
+  jumps** — **OPEN, found by the maintainer 2026-10-02.** The ring is a wide box around the chips and the answer
+  area under them, and its place jumps from press to press. It should sit on the one chip. Screenshots
+  `screenshots/DeckCapture_20261002_005210_game.png`, `screenshots/DeckCapture_20261002_005227_game.png`.
+- ★★★ `[focus]` **The highlight goes invisible on some tabs, starting with Down from "Update AI & models"** —
+  **OPEN, found by the maintainer 2026-10-02; they say it keeps coming back.** On the Ollama tab, one Down from
+  "Update AI & models" and nothing on screen shows where the ring is. Seen on other tabs too. Measure on the Deck
+  first, and check the older fixed entries for the same cause before building a new fix.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed); two older notes moved there 2026-10-01.
@@ -148,6 +185,10 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](archive/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+- ★ `[ollama]` **Remove the "Install options…" button from the Ollama tab** — **OPEN, asked for by the maintainer
+  2026-10-02.** It repeats what Browse models already offers. One thing to keep: on a fresh Deck it is today the
+  only one-press way to get the starter models (Install Ollama installs the engine only). Before removing it, give
+  Browse models a one-press "install the starter set", or have a first Install Ollama offer the starter models.
 - ★ `[platform]` **Four small build-setup tidy-ups, deferred on purpose in 2026-08** — **OPEN, carried over
   2026-09-24 from plan 24 when it was archived.** Nothing a person would notice: name the package manager's
   version in `package.json` (the workflow repeats it by hand today), move `packages/bonsai-mcp` off npm so the
@@ -158,6 +199,11 @@ replace it with a specific issue when one exists.
   `selectedIndex` value that only the old fake on-screen marker ever read, and two other files still pass it
   through even though nothing acts on it any more. Nothing a person notices; removing it touches three files
   (`src/index.tsx`, `src/components/MainTab.tsx`, `src/features/plugin-shell/tabs/useMainTabPayload.tsx`).
+- ★ `[ui]` **Icons on the "Update knowledge base" and "Remove" buttons** — **OPEN, asked for by the maintainer
+  2026-10-02.** Both are text-only today, unlike the buttons around them.
+- ★ `[ui]` **"Remember what I typed" becomes one on/off switch** — **OPEN, asked for by the maintainer 2026-10-02.**
+  Today it is three buttons: All, Search, None. Wanted: one switch, on = All, off = None. A saved "Search" becomes
+  off (the maintainer's call, 2026-10-02).
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on
   a question bubble that has been cut short, nothing on screen says the rest is there. Chosen 2026-09-05 from four drawn options: the
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
@@ -169,6 +215,14 @@ replace it with a specific issue when one exists.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
   [Detail](roadmap-details.md#first-run-ghost-new-chat-label).
+- ★★ `[chat]` **Show a chat's Save and Delete buttons only while its tab has the ring, and try other Delete icons**
+  — **OPEN, asked for by the maintainer 2026-10-02.** The two buttons beside a chat's title show all the time
+  today. **Mockups first:** a few Delete icon choices drawn at true size; the maintainer picks.
+- ★★ `[chips]` **Long suggestion chips: pause at the end, centred text, a new highlight** — **OPEN, asked for by
+  the maintainer 2026-10-02.** A chip too long to fit should stop for a moment once it has scrolled to the end of
+  its words. The words should be centred. The underline that shows the highlighted chip should become something
+  else. **Mockups first, at a later time:** several highlight styles drawn true size; the maintainer picks.
+  Replaces the underline in the Verify entry "A preset chip has a bright blue underline".
 - ★★ `[chips]` **The four chip styles still differ in small ways, and share no drawing code** — **OPEN, held until after the release (plan 78 helper F; the maintainer's call, D121 item 10).**
   What still differs: what restarts them after an answer, how long each waits after the highlight leaves the row, how many recent chips each avoids, and how each first appears. Folding them into one shared engine is a reshaping of code, so it waits.
 - ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
@@ -205,6 +259,9 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
+- ★★ `[ui]` **Calmer rating choices under an answer** — **OPEN, asked for by the maintainer 2026-10-02.** Helpful,
+  Not really and the "What went wrong?" choices are loud on screen. Mute them. The wider rule from the maintainer:
+  wherever we can, don't overwhelm the person; look for other loud spots while doing this one.
 - ★★★ `[chat]` **Opening "N earlier" floods a long chat with rows** — **OPEN, reported by the maintainer
   2026-09-25; needs a drawing of the options first.** Every earlier question becomes its own row, 42 in one
   chat, filling the screen. [Detail](roadmap-details.md#opening-n-earlier-floods-a-long-chat-with-rows).
@@ -237,6 +294,9 @@ replace it with a specific issue when one exists.
   Older dated notes (2026-09-26 and 2026-09-27, the 30 frames a second target and the partial measurement): [roadmap-details.md](roadmap-details.md#what-bonsai-costs-a-running-game).
   **2026-09-29 (plan 76, block 3):** with Deep Rock Galactic: Survivor on its title screen, the panel's median while an answer arrived was
   84.5 frames a second (thinking 90, idle 87.5). Title screen only; a mission running was not tried. Evidence `docs/test-evidence/plan76-SCR-10-try2.json`.
+- ★★★ `[ollama]` **Fold the "Models & routing" section into the AI models box** — **OPEN, an idea from the
+  maintainer 2026-10-02.** Less clutter on the Ollama tab. **Mockups first, at a later time,** drawn true size, so
+  the maintainer can choose where each piece goes.
 - ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
   free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
   bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
@@ -375,6 +435,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
   question is waiting.
   The plan 72 try could not run: the answer finished in 33 seconds, `docs/test-evidence/plan72-F-CLEAR.json`. Suggested for the maintainer's hand checklist.
+  **2026-10-02, the maintainer's hand check (plan 73 check 1): PASSED.** After Clear mid-answer the chat kept the part of the answer that had arrived. One new bug seen in it, filed under Bugs: the kept part ended inside a spoiler cover, which opens to "undefined". Screenshot `screenshots/DeckCapture_20261002_003908_game.png`. Ready to move to Done.
 - ★★ `[chips]` **The game's own chip never came back, and the chips turned over too slowly** — **VERIFY, fixed 2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`). Was OPEN, failed on the Deck 2026-09-26 (plan 70, rows PHASE4-CHIPS-01 and CHIP-ROTATION-01).**
   Cause: three of the four chip styles dealt the game's chips only once, when the panel opened, and with one chip showing the promised game chip was put in a spot that is off screen. Now one rule decides which chip comes next in all four styles (one chip: after a general chip the next is the game's own, after a game chip the game's again one time in five; two chips: one of the two is always the game's own), and one rule decides how long a chip stays, with the chip count in it (one chip: about 7 seconds a turn where it was about 15; two chips: about 10 seconds in each spot; the two spots never change within 2.5 seconds of each other).
   The maintainer's calls: D121 items 9 and 10. Unit tests: the next-chip rule, the pace and the spacing, plus a seven-minute run of the real chip row in each style at one chip and at two. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01 (below). Still owed: the maintainer's own look at the pace (it is on their Thursday list) and their pick from the preview page.
@@ -619,6 +680,9 @@ ones from this month are D81 to D88.
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on. Wave three planned that run
   ([48](archive/48-kb-wave-three-session.md) § 7), but its report has no voice results, so it never ran.
+- ★ `[KB]` **Retire the Developer tab's "Install seed knowledge base" button** — **OPEN, an idea from the maintainer
+  2026-10-02.** It was a stand-in from before the library was published; its own text still says the public download
+  "is not live yet". Check first that no test or Deck walk still uses it.
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, one measurement owed.** The
   slice of questions the word search cannot answer at all was 3 rows when last counted, before 36 more blind rows landed.
   Re-count it on the next search run before calling this closed. No code needed — the search test already reports that

@@ -15,7 +15,8 @@ import {
   focusContextHint,
   focusSessionContextStrip,
 } from "./liveTurnFocusGraph";
-import { isDeckDirectionLeftEvent } from "./focusNavigation";
+import { isDeckDirectionLeftEvent, isDownDeckButtonEvent } from "./focusNavigation";
+import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
@@ -76,6 +77,36 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
     onMoveLeft: () => true,
     onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
   };
+}
+
+/**
+ * The "N earlier" pill's moves: Left holds still (above) and Down goes to the question below it
+ * (plan 79). `nextTurnId` is the turn drawn right under the pill. Left alone, Steam entered that
+ * turn's row on its first control, which is Retry, so Down stopped on Retry before the question
+ * (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json). The transfer goes onto the question text;
+ * a next turn without Retry has no such stop, the call reports false and Down stays Steam's own.
+ */
+export function earlierPillNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
+  const left = earlierPillLeftNavHandlers();
+  if (!nextTurnId) return left;
+  const down = () => takeOpenQuestionText(nextTurnId);
+  return {
+    ...left,
+    onMoveDown: down,
+    onButtonDown: (button: unknown) => {
+      if (isDownDeckButtonEvent(button)) return down();
+      return (left.onButtonDown as (b: unknown) => boolean)(button);
+    },
+  };
+}
+
+/**
+ * What Down does on a closed question whose next turn may carry Retry (plan 79): the same transfer
+ * onto that turn's question text, so the ring does not stop on Retry on the way in. Undefined when
+ * no turn follows, which leaves Down exactly Steam's.
+ */
+export function closedQuestionMoveDown(nextTurnId: string | null | undefined): (() => boolean) | undefined {
+  return nextTurnId ? () => takeOpenQuestionText(nextTurnId) : undefined;
 }
 
 /**

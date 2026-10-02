@@ -202,7 +202,7 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
   beforeEach(() => resetUiDocument());
   afterEach(() => cleanup());
 
-  it("Show reasoning goes Up onto the question's own text, and the text goes Up onto Retry", () => {
+  it("Show reasoning goes Up onto the question's own text, and the text does not go Up onto Retry", () => {
     const { container } = renderTurn();
     const fold = container.querySelector<HTMLElement>(".bonsai-chat-reasoning-fold");
     expect(fold).not.toBeNull();
@@ -212,8 +212,9 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(body).not.toBeNull();
     expect(document.activeElement).toBe(body);
 
-    expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement).toBe(byLabel(container, "Retry same prompt"));
+    /* Plan 79: Retry is reached by Left from the text only. Up claims nothing here and leaves the row. */
+    expect(press("onMoveUp")).toBe(false);
+    expect(document.activeElement).toBe(body);
 
     /* Down is unchanged: from the text it still goes to the Show reasoning line. */
     focusOn(body!);

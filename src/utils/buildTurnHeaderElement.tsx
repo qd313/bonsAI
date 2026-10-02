@@ -5,6 +5,10 @@
  * Solves: Consistent header focus behavior and expand/collapse activation on Deck.
  * Does not: Render answer body — see buildAnswerBubbleElement. Does not decide what Retry re-asks
  *   — the caller supplies the handler.
+ * Retry is a Left-only stop (plan 79): Up and Down never land on it. Left from the question text is
+ *   the one way onto it, and Right is the way back. Something above that wants to enter this row
+ *   goes to the question text through `takeOpenQuestionText`, never by letting Steam pick the row's
+ *   first control.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -79,6 +83,14 @@ export type BuildTurnHeaderElementArgs = {
    */
   headerNavRef?: { current: unknown };
   bodyRef?: (el: HTMLElement | null) => void;
+  /**
+   * What Down does on a CLOSED question, before Steam's own move (plan 79). A closed question has no
+   * answer under it, so Down used to be Steam's: it walked into the next turn's row and, when that
+   * row carried Retry, stopped on Retry before the question. The caller hands this only for a turn
+   * whose next turn may carry Retry; it returns whether the ring was placed (see
+   * `takeOpenQuestionText`). Ignored on an open question, where Down goes into the answer.
+   */
+  onMoveDownPast?: () => boolean;
 };
 
 /**
@@ -89,6 +101,18 @@ export type BuildTurnHeaderElementArgs = {
  * an old header's late unmount cannot wipe the new one's entry.
  */
 const questionTextByTurn = new Map<string, HTMLElement>();
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
+/** The question text's own Steam nav node, by turn: the target of a transfer from outside the row. */
+const questionTextNavByTurn = new Map<string, SteamNavHolder>();
+
+function questionTextNav(turnId: string): SteamNavHolder {
+  let holder = questionTextNavByTurn.get(turnId);
+  if (!holder) {
+    holder = { current: null };
+    questionTextNavByTurn.set(turnId, holder);
+  }
+  return holder;
+}
 
 /**
  * Put the ring on this turn's question text. Plain `focus()`: the Show reasoning line and the
@@ -104,6 +128,27 @@ export function focusOpenQuestionText(turnId: string): boolean {
     return false;
   }
   return elementHasFocus(el);
+}
+
+/**
+ * Hand the ring to this open question's text from outside its row (plan 79).
+ *
+ * Steam enters a row on its first control, and in a question with Retry that is Retry: Down from the
+ * "N earlier" pill, or from the closed question above, landed on Retry before the question itself
+ * (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json). So whoever sits above takes Steam's own
+ * transfer onto the text's nav node instead, the one move that carries the ring across containers
+ * (AGENTS.md, "The Steam Deck focus graph"). A turn without Retry registers no text stop, so this
+ * reports false there and the caller's press stays Steam's.
+ */
+export function takeOpenQuestionText(turnId: string): boolean {
+  const el = questionTextByTurn.get(turnId);
+  if (!el?.isConnected) return false;
+  try {
+    questionTextNavByTurn.get(turnId)?.current?.TakeFocus?.(true);
+  } catch {
+    /* the focus and the check below decide */
+  }
+  return focusOpenQuestionText(turnId);
 }
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
@@ -123,6 +168,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     onMoveUp,
     headerNavRef,
     bodyRef,
+    onMoveDownPast,
   } = args;
 
   const headerClass = [
@@ -172,10 +218,12 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
    * deliver, with the string-only predicate so one press can never fire both — the pairing rule
    * documented in focusNavigation.ts.
    */
+  /* A closed question has no answer to enter: it may hand the ring past itself instead (plan 79). */
+  const moveDown = () => focusAnswer() || (!expanded && onMoveDownPast ? onMoveDownPast() : false);
   const headerNavHandlers: Record<string, unknown> = {
-    onMoveDown: () => focusAnswer(),
+    onMoveDown: () => moveDown(),
     onButtonDown: (button: unknown) => {
-      if (isDownDeckButtonEvent(button)) return focusAnswer();
+      if (isDownDeckButtonEvent(button)) return moveDown();
       if (onMoveUp && isUpDeckButtonEvent(button)) return onMoveUp();
       return false;
     },
@@ -286,14 +334,14 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         aria-expanded={expanded}
         data-bonsai-turn-id={turnId}
         {...({
+          navRef: questionTextNav(turnId),
           /*
-           * Up from the question text reaches Retry before leaving the question, the reverse of
-           * Down, which the Deck measured going Retry -> text -> Show reasoning. Without this, Up
-           * left the row straight from the text and Retry was only reachable from below by Left
-           * (plan 72 A-4, plan72-A4-UP-FAMILY-a.json). Retry and the text are siblings in this
-           * row, so a plain focus is the right move; a greyed Retry declines and Up leaves as before.
+           * Left is the one way onto Retry (plan 79). The text used to send Up there too, so Up from
+           * the text stopped on Retry on the way to the line above; the maintainer's rule is that Up
+           * and Down never land on it, so the text claims no Up and it leaves the row as it did
+           * before plan 72 A-4. Retry and the text are siblings in this row, so a plain focus is the
+           * right move; a greyed Retry declines.
            */
-          onMoveUp: () => leftIntoRetry(),
           onMoveLeft: () => leftIntoRetry(),
           onButtonDown: (button: unknown) =>
             isDeckDirectionLeftEvent(button) ? leftIntoRetry() : false,

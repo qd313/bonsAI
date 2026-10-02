@@ -144,6 +144,8 @@ import {
   focusChatPermissionHintRow,
   focusDownFromReplyUtilityRowOrPermHint,
   earlierPillLeftNavHandlers,
+  earlierPillNavHandlers,
+  closedQuestionMoveDown,
   firstArchivedHeaderMoveUp,
   troubleshootHintRowNavHandlers,
   vacDenyRowMoveUp,
@@ -612,15 +614,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           seconds: reasoning.seconds,
           onToggle: () => setReasoningOpenFor((prev) => (prev === turnKey ? null : turnKey)),
           /*
-           * Up: the question's own text first -- the stop Down visits between Retry and this line
-           * (plan 72 A-4: Up went straight to Retry, skipping it, plan72-A4-UP-FAMILY-a.json) --
-           * then Retry, then the question's row when this turn has neither. All inside this turn's
-           * own column, so a plain focus is the right move here (AGENTS.md, "The Steam Deck focus
-           * graph"); the text's own Up then goes on to Retry.
+           * Up: the question's own text first -- the stop Down visits between the question and
+           * this line (plan 72 A-4: Up went straight past it, plan72-A4-UP-FAMILY-a.json) -- then
+           * the question's row when this turn has no text stop. Never Retry (plan 79): Left from the
+           * text is the one way onto it. All inside this turn's own column, so a plain focus is the
+           * right move here (AGENTS.md, "The Steam Deck focus graph").
            */
           onMoveUp: () => {
             if (focusOpenQuestionText(turnKey)) return true;
-            if (focusRegisteredReplyStop("retry")) return true;
             return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
           },
           /* Down: into the answer, the same call the question's own Down used to make. */
@@ -1096,7 +1097,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
             className="bonsai-chat-earlier-pill-row"
             onActivate={() => setEarlierExpanded(true)}
             onOKButton={() => setEarlierExpanded(true)}
-            {...earlierPillLeftNavHandlers()}
+            {...earlierPillNavHandlers(archivedTurnsToRender[0]?.id ?? (showLiveTurn ? "live" : null))}
           >
             <span className="bonsai-chat-earlier-pill">{earlierCount} earlier</span>
             <span className="bonsai-chat-earlier-rule" />
@@ -1145,6 +1146,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnHeaderElRefs.current[turn.id] = el;
               },
               onMoveUp: firstArchivedHeaderMoveUp(turnIndex),
+              onMoveDownPast: closedQuestionMoveDown(
+                archivedTurnsToRender[renderIndex + 1]?.id ?? (showLiveTurn ? "live" : null)
+              ),
               ...headerRingProps(turn.id),
               onActivate: () => onTurnActivate?.(turn.id),
               /*

@@ -163,7 +163,7 @@ import {
 } from "./answerStopRegistry";
 
 import { coverToLandOnGoingUp, stepUpIntoSection } from "./answerBubbleCoverUp";
-import { forgetUpWalk, landGoingUpInto, wordStepUp } from "./answerBubbleWordsUp";
+import { forgetUpWalk, landGoingUpInto, settleBoxGoingUp, wordStepUp } from "./answerBubbleWordsUp";
 
 /** The section a walk Down is in and the last small stop in it the ring has been on; see `walkAnchor`. */
 let walk: { section: HTMLElement; passed: HTMLElement | null } | null = null;
@@ -396,8 +396,9 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
      the one entry point that skipped the dock check (measured 2026-09-06). The section's last word
      comes first when it has one on screen: a walk Down left the answer from it. */
   if (last && scroll && landGoingUpInto(el, last, scroll)) return true;
-  if (last && focusAnswerStop(last)) return true;
-  return focusPanelEl(el);
+  if (!last || !focusAnswerStop(last)) return focusPanelEl(el);
+  if (scroll) settleBoxGoingUp(last, scroll);
+  return true;
 }
 
 /**

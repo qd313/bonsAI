@@ -25,6 +25,8 @@
  * section's first word and the section's top on screen, on the section's box. `landGoingUpInto()` places
  * a section entered from below as any Up landing, then lands on its last word on screen, else its box.
  * `forgetUpWalk()` clears the memory; the navigation file calls it on every entry and every Down press.
+ * `settleBoxGoingUp()` places a box Up lands on clear of the dock after the focus, and again once Steam's
+ * own glide is over.
  *
  * Gotcha: when Up comes into a tall section on its box because no word of it was on screen yet, its words
  * follow the box (box first, then words last to first), not the strict reverse of Down; `boxLanded` keeps
@@ -114,5 +116,28 @@ export function landGoingUpInto(bubble: HTMLElement, section: HTMLElement, scrol
   }
   if (!focusAnswerStop(section)) return false;
   upWalk = { section, from: null, boxLanded: true };
+  settleBoxGoingUp(section, scroll);
   return true;
+}
+
+/** When Steam's own glide has finished after a landing (the dock lift's passes, useDockClearanceOnFocus.ts). */
+const AFTER_GLIDE_MS = [150, 300, 900];
+
+/**
+ * Place a box the ring just landed on going Up clear of the dock and the question box: once now, after the
+ * focus, and again once Steam's own glide is over, for as long as the ring stays on it. Steam glides after
+ * the press, and the dock lift leaves answer sections to the walk, so nothing else puts a box back: on the
+ * Deck (plan79-P79-UP-MIRRORS-DOWN-NEWEST-CLOSED.json) Up into an older answer from its Read aloud row left
+ * its last section 0% visible behind the question box, and the section above it 67% behind the dock. Only a
+ * box that fits the band: a taller one is read by scrolling and runs past the dock on purpose.
+ */
+export function settleBoxGoingUp(section: HTMLElement, scroll: HTMLElement): void {
+  settleUpLanding(section, scroll);
+  const fits = () => section.getBoundingClientRect().bottom - section.getBoundingClientRect().top <= bandHeightOf(scroll);
+  if (!fits()) return;
+  for (const ms of AFTER_GLIDE_MS) {
+    setTimeout(() => {
+      if (section.isConnected && uiGamepadFocusElement() === section && fits()) settleUpLanding(section, scroll);
+    }, ms);
+  }
 }

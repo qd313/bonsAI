@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 709,
-  "edgeCount": 2043,
+  "fileCount": 710,
+  "edgeCount": 2044,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5357,6 +5357,7 @@
         "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.tallEntry.test.ts",
         "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
+        "src/utils/answerBubbleNavigation.upLandingClear.test.ts",
         "src/utils/answerBubbleNavigation.walkThrough.test.ts",
         "src/utils/answerBubbleNavigation.wordMirror.test.ts"
       ]
@@ -5919,6 +5920,12 @@
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/buildTurnHeaderElement.tsx"
       ]
+    },
+    "src/utils/answerBubbleNavigation.upLandingClear.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
     },
     "src/utils/answerBubbleNavigation.walkThrough.test.ts": {
       "imports": [

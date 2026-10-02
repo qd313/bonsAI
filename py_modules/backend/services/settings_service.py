@@ -197,9 +197,14 @@ def sanitize_unified_input_persistence_mode(
     valid_modes: set[str],
     default_mode: str,
 ) -> str:
-    """Validate persistence mode strings and fall back to the configured default."""
+    """Validate persistence mode strings and fall back to the configured default.
+
+    "Remember what I typed" is one on/off switch now: ``persist_all`` is on, ``no_persist`` is off.
+    ``persist_search_only`` is still a valid name so an older settings file loads and a downgrade
+    still reads it, but it loads as off, and the next save writes ``no_persist`` (plan 79).
+    """
     if isinstance(value, str) and value in valid_modes:
-        return value
+        return "no_persist" if value == "persist_search_only" else value
     return default_mode
 
 

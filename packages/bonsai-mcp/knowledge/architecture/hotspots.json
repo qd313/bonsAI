@@ -157,7 +157,7 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 660,
+      "lines": 665,
       "role": "Load/save/merge settings.json"
     },
     {
@@ -196,9 +196,9 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 591,
-      "role": "Prompt build, Ollama HTTP, streaming"
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 601,
+      "role": ""
     }
   ]
 }

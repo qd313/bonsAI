@@ -573,5 +573,41 @@
       "desktop_app_log_level": "verbose",
       "preset_chip_animation": "carousel"
     }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of Search loads as off",
+    "input": {
+      "unified_input_persistence_mode": "persist_search_only"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of All stays on",
+    "input": {
+      "unified_input_persistence_mode": "persist_all"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "persist_all"
+    }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of None stays off",
+    "input": {
+      "unified_input_persistence_mode": "no_persist"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
+  },
+  {
+    "name": "an unknown Remember-what-I-typed value is off",
+    "input": {
+      "unified_input_persistence_mode": "persist_everything"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
   }
 ]

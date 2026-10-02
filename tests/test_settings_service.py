@@ -719,5 +719,76 @@ class ClampedWholeNumberFieldKindTests(unittest.TestCase):
         self.assertEqual(self.coerce(float("-inf")), 400)
 
 
+class RememberWhatITypedSwitchTests(unittest.TestCase):
+    """"Remember what I typed" is one on/off switch: All is on, None is off, a saved Search is off."""
+
+    @staticmethod
+    def _sanitize(data):
+        return sanitize_settings(
+            data=data,
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="no_persist",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+
+    def test_all_three_saved_names_still_load(self):
+        for saved, shown in (
+            ("persist_all", "persist_all"),
+            ("no_persist", "no_persist"),
+            ("persist_search_only", "no_persist"),
+        ):
+            with self.subTest(saved=saved):
+                loaded = self._sanitize({"unified_input_persistence_mode": saved})
+                self.assertEqual(loaded["unified_input_persistence_mode"], shown)
+
+    def test_an_older_file_with_search_loads_as_off_and_the_next_save_writes_off(self):
+        logger = _Logger()
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            settings_path.write_text(
+                json.dumps({"unified_input_persistence_mode": "persist_search_only"}),
+                encoding="utf-8",
+            )
+            loaded = load_settings(str(settings_path), self._sanitize, logger)
+            self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
+            # Loading alone leaves the file as it was, so a downgrade before any save still sees it.
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertEqual(on_disk["unified_input_persistence_mode"], "persist_search_only")
+            save_settings(
+                path=str(settings_path),
+                settings_dir=tmp,
+                incoming={"latency_warning_seconds": 60},
+                current=loaded,
+                sanitize_func=self._sanitize,
+                logger=logger,
+            )
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertEqual(on_disk["unified_input_persistence_mode"], "no_persist")
+
+    def test_the_switch_value_survives_a_save_and_a_reload(self):
+        logger = _Logger()
+        for value in ("persist_all", "no_persist"):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as tmp:
+                settings_path = Path(tmp) / "settings.json"
+                baseline = load_settings(str(settings_path), self._sanitize, logger)
+                save_settings(
+                    path=str(settings_path),
+                    settings_dir=tmp,
+                    incoming={"unified_input_persistence_mode": value},
+                    current=baseline,
+                    sanitize_func=self._sanitize,
+                    logger=logger,
+                )
+                reloaded = load_settings(str(settings_path), self._sanitize, logger)
+                self.assertEqual(reloaded["unified_input_persistence_mode"], value)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -249,6 +249,17 @@ function enumOf<T extends string>(
   };
 }
 
+const readUnifiedInputPersistenceMode = enumOf<UnifiedInputPersistenceMode>(
+  ["persist_all", "persist_search_only", "no_persist"],
+  DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+);
+
+/** Mirrors Python's `sanitize_unified_input_persistence_mode`: a saved "Search" loads as off. */
+function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersistenceMode {
+  const mode = readUnifiedInputPersistenceMode(value);
+  return mode === "persist_search_only" ? "no_persist" : mode;
+}
+
 /** Trimmed and length-capped. A non-string is rejected outright, not stringified. */
 function boundedString(maxLength: number): (value: unknown) => string {
   return (value: unknown): string => (typeof value === "string" ? value.trim().slice(0, maxLength) : "");
@@ -462,10 +473,9 @@ const SIMPLE_FIELDS = {
   // Ask behavior.
   input_sanitizer_user_disabled: boolDefaultFalse,
   latency_timeouts_custom_enabled: boolDefaultFalse,
-  unified_input_persistence_mode: enumOf<UnifiedInputPersistenceMode>(
-    ["persist_all", "persist_search_only", "no_persist"],
-    DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
-  ),
+  // One on/off switch now: `persist_all` is on, everything else is off. The old "Search" name is
+  // still read from an older settings file, but it loads as off (the maintainer's call, plan 79).
+  unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode,
   // Off unless the person turns it on; an unrecognised value must not start reading answers
   // out loud on its own.
   voice_reply_mode: enumOf<VoiceReplyMode>(VOICE_REPLY_MODE_OPTIONS, DEFAULT_VOICE_REPLY_MODE, {

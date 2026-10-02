@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 706,
-  "edgeCount": 2031,
+  "fileCount": 708,
+  "edgeCount": 2040,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -570,6 +570,7 @@
     "src/components/MainTabChatTranscript.earlierByDay.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
         "src/utils/inputTransparency.ts",
@@ -3461,6 +3462,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
@@ -4120,6 +4122,7 @@
     },
     "src/hooks/useLiveTurnHeaderRingRestore.ts": {
       "imports": [
+        "src/utils/navFocusRegistry.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -5351,7 +5354,8 @@
         "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.tallEntry.test.ts",
         "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
-        "src/utils/answerBubbleNavigation.walkThrough.test.ts"
+        "src/utils/answerBubbleNavigation.walkThrough.test.ts",
+        "src/utils/answerBubbleNavigation.wordMirror.test.ts"
       ]
     },
     "src/test-harness/fakeDeckyRpc.test.ts": {
@@ -5737,7 +5741,8 @@
       ],
       "importedBy": [
         "src/utils/answerBubbleCoverUp.ts",
-        "src/utils/answerBubbleNavigation.ts"
+        "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerBubbleWordsUp.ts"
       ]
     },
     "src/utils/answerBubbleCoverUp.ts": {
@@ -5885,6 +5890,7 @@
         "src/utils/answerBubbleBandGeometry.ts",
         "src/utils/answerBubbleCoverUp.ts",
         "src/utils/answerBubbleElRegistry.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/chatPanelScroll.ts",
         "src/utils/drgGlossaryTermRegistry.ts",
@@ -5910,6 +5916,24 @@
         "src/test-harness/deckAnswerWalk.ts"
       ],
       "importedBy": []
+    },
+    "src/utils/answerBubbleNavigation.wordMirror.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerBubbleWordsUp.ts": {
+      "imports": [
+        "src/utils/answerBubbleBandGeometry.ts",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/drgGlossaryTermRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/utils/answerBubbleNavigation.ts"
+      ]
     },
     "src/utils/answerCopyText.test.ts": {
       "imports": [
@@ -5982,6 +6006,7 @@
         "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/answerStopRegistry.test.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -6415,6 +6440,7 @@
         "src/utils/answerBubbleBandGeometry.ts",
         "src/utils/answerBubbleCoverUp.ts",
         "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatPanelScroll.test.ts",
@@ -6695,6 +6721,7 @@
         "src/test-harness/deckAnswerWalk.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx"
       ]
@@ -7136,6 +7163,7 @@
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
+        "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/usePermHintNavTargets.ts",
@@ -7822,6 +7850,7 @@
         "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/answerStopRegistry.test.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerBubbleElement.tsx",

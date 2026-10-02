@@ -81,6 +81,9 @@ export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-car
   | "session-summary-card"
   /** The Show details line while it stands in the chip's place above the question box (DetailsSlot.tsx). */
   | "details-slot-line"
+  /** The newest question's row while it is closed (plan 79): the chips' Up lands here, the stop right
+   *  above them, registered by useLiveTurnHeaderRingRestore.ts. */
+  | "newest-closed-question"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
   | `tab-body:${string}`;
 

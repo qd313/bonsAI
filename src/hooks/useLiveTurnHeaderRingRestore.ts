@@ -22,8 +22,13 @@
  * The move: Steam's own transfer onto the target header's nav node first (`TakeFocus`), then a
  * plain focus() onto the stop inside that header — the same shape as `focusAnswerChunkAtIndex`,
  * which the Deck proved for the section restore (plan64-STREAM-WALK-REC-01-try4-run2.json).
+ *
+ * Also, since this hook holds every question row's nav node: while the newest question is closed
+ * (an older one open), its row is registered as "newest-closed-question", so the suggestion chips'
+ * Up can hand Steam's ring to it (plan 79; `syncNewestClosedRow`).
  */
 import { useLayoutEffect, useRef, type MutableRefObject } from "react";
+import { registerNavFocus, unregisterNavFocus } from "../utils/navFocusRegistry";
 import { focusRegisteredReplyStop, getReplyStop } from "../utils/replyStopRegistry";
 import { elementHasFocus, getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 
@@ -50,6 +55,14 @@ function focusHeaderStop(parts: HeaderParts | undefined, header: HTMLElement | n
   return elementHasFocus(target);
 }
 
+/** Keep "newest-closed-question" on `holder` (null: nothing), changing the registration only when it changes. */
+function syncNewestClosedRow(current: MutableRefObject<SteamNavHolder | null>, holder: SteamNavHolder | null): void {
+  if (current.current === holder) return;
+  if (current.current) unregisterNavFocus("newest-closed-question", current.current);
+  if (holder) registerNavFocus("newest-closed-question", holder);
+  current.current = holder;
+}
+
 /**
  * `headerEls` is the transcript's own header-element map (keyed by turn id, "live" for the live
  * turn). Returns the per-turn props to hand to buildTurnHeaderElement: its nav node holder and the
@@ -62,6 +75,15 @@ export function useLiveTurnHeaderRingRestore(
 ): (turnId: string) => { headerNavRef: SteamNavHolder; bodyRef: (el: HTMLElement | null) => void } {
   const partsRef = useRef<Record<string, HeaderParts>>({});
   const heldRef = useRef<{ stop: HeaderStop; el: HTMLElement } | null>(null);
+  const newestClosedRef = useRef<SteamNavHolder | null>(null);
+
+  /* Read on every commit, like the rest: whether the newest row is closed is on its own element. */
+  useLayoutEffect(() => {
+    const id = showLiveTurn ? undefined : newestArchivedId;
+    const closed = Boolean(id && headerEls.current[id]?.classList.contains("bonsai-chat-turn-row-header--collapsed"));
+    syncNewestClosedRow(newestClosedRef, closed && id ? partsRef.current[id]?.nav ?? null : null);
+  });
+  useLayoutEffect(() => () => syncNewestClosedRow(newestClosedRef, null), []);
 
   useLayoutEffect(() => {
     const held = heldRef.current;

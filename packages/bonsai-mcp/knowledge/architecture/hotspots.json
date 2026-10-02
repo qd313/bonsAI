@@ -101,6 +101,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 857,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 856,
       "role": ""
@@ -113,11 +118,6 @@
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 845,
-      "role": ""
-    },
-    {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 839,
       "role": ""
     },
     {
@@ -148,6 +148,11 @@
     {
       "path": "src/components/SettingsTab.tsx",
       "lines": 709,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 704,
       "role": ""
     },
     {

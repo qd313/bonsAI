@@ -25,6 +25,7 @@ import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
+import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
 
 type Dir = "Up" | "Down" | "Left" | "Right";
 type NavHandlers = Partial<Record<`onMove${Dir}` | "onActivate" | "onCancelButton", (e?: unknown) => unknown>>;
@@ -161,6 +162,8 @@ const STOP_SELECTOR = [
   ".bonsai-chat-turn-row-body",
   ".bonsai-answer-stop",
   ".bonsai-chat-reasoning-fold",
+  /* The Show details line under an answer: a Focusable line, not a button (D76). */
+  ".bonsai-chat-details-divider",
 ].join(", ");
 
 function stops(container: HTMLElement): HTMLElement[] {
@@ -721,6 +724,73 @@ describe("the walk with Steam's own scroll modelled (plan 79)", () => {
       const up = walk(container, "Up", after);
       expect(up).toEqual([...down].reverse());
       expect(seenVisible.every(Boolean)).toBe(true);
+    },
+  );
+});
+
+/*
+ * Plan 79 helper AC, bug 2 (helper Y, 2026-10-02; roadmap "With 'N earlier' opened, Up from the chip row
+ * jumps to the open turn at the top", plan79-ONBUTTONDOWN-AUDIT-01.json): with the newest question closed
+ * and an older one open, Up from the suggestion chip (and so from the question box, whose Up goes through
+ * the chip) landed on the open older question's Show details. The exit asked for the newest reply's bottom
+ * row, and Show details is found by name, not by turn, so it found the older one, skipping the day lines
+ * and the newest question that Down visits one by one. The chip's Up is `chipRowExitUp`, called here as
+ * Steam calls the chip's own onMoveUp; past that the walk is this file's Steam model.
+ */
+describe("Up from the chip with the newest question closed and an older one open (plan 79)", () => {
+  beforeEach(() => {
+    resetUiDocument();
+    resetNavFocusRegistry();
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  /** Yesterday's day opened and its second question open; Monday and Today closed; the newest closed. */
+  function olderOpen() {
+    const out = renderChat({}, TURNS, "y2");
+    openEarlier(out.container, out.stamp);
+    activate(lineEl(out.container, "Yesterday · 3"));
+    out.stamp();
+    return out;
+  }
+
+  it("the chip's Up lands on the newest question's row, not on the open older question's Show details", () => {
+    olderOpen();
+    let handled = false;
+    act(() => {
+      handled = chipRowExitUp();
+    });
+    expect(handled).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("row:what is a good first upgrade in Hollow Knight");
+  });
+
+  it.each(["top", "padded", "center"] as ScrollRule[])(
+    "under the %s rule, Up press by press from the chip visits the stops Down visits from the line, in reverse",
+    (rule) => {
+      const { container } = olderOpen();
+      const model = steamScroll(container, rule);
+      focusOn(lineEl(container, "11 earlier"));
+      model.after();
+      const down = walk(container, "Down", model.after);
+      if (process.env.WALK_DEBUG) console.log("DOWN", rule, down.join(" > "));
+      expect(down[down.length - 1]).toBe("row:what is a good first upgrade in Hollow Knight");
+      expect(down).toContain("line:Today · 3");
+      expect(new Set(down).size).toBe(down.length);
+
+      act(() => {
+        (document.activeElement as HTMLElement | null)?.blur();
+      });
+      act(() => {
+        chipRowExitUp();
+      });
+      model.after();
+      const up = walk(container, "Up", model.after);
+      expect(new Set(up).size).toBe(up.length);
+      expect(up).toEqual([...down].reverse());
     },
   );
 });

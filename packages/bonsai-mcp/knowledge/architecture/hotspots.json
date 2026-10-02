@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1761,
+      "lines": 1764,
       "role": ""
     },
     {
@@ -136,6 +136,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 727,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 714,
       "role": ""
@@ -168,11 +173,6 @@
     {
       "path": "src/components/PullModelsModal.tryOrder.test.tsx",
       "lines": 649,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 634,
       "role": ""
     },
     {

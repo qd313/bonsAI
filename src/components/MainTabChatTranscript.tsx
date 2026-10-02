@@ -1109,7 +1109,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     >
       <div className="bonsai-chat-transcript">
         {earlier.line}
-        {archivedTurnsToRender.map((turn, renderIndex) => {
+        {/*
+          * One flat list of keyed siblings: the day lines and the turn rows side by side. A day line
+          * used to sit inside the Fragment of whichever row came after it, so opening or closing a day
+          * moved the line into another Fragment, React remounted it, and the element holding Steam's
+          * ring was gone (plan79-P79-EARLIER-BY-DAY.json). Same parent, same key: it stays put.
+          */}
+        {[...archivedTurnsToRender.flatMap((turn, renderIndex) => {
           const turnIndex = askThreadCollapsed.indexOf(turn);
           /* Hoisted out of the reply-actions IIFE below: the strategy panels need it too. */
           const isNewestArchivedTurn = turnIndex === askThreadCollapsed.length - 1;
@@ -1128,9 +1134,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
             isNewestArchivedTurn && askStopped && !isStopNoticeResponse(turn.answer);
           /* The turn after this one, unless a day line sits between: Down then is Steam's own move. */
           const nextTurn = archivedTurnsToRender[renderIndex + 1];
-          return (
-          <React.Fragment key={turn.id}>
-          {earlier.dayLinesBefore(turn.id)}
+          return [
+          ...(earlier.dayLinesBefore(turn.id) ?? []),
           <Focusable
             key={turn.id}
             flow-children="vertical"
@@ -1382,11 +1387,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 */}
               </>
             ) : null}
-          </Focusable>
-          </React.Fragment>
-          );
-        })}
-        {earlier.trailingDayLines}
+          </Focusable>,
+          ];
+        }), ...(earlier.trailingDayLines ?? [])]}
         {showLiveTurn ? (
           <Focusable key="live" flow-children="vertical" className="bonsai-chat-turn-slot">
             {buildTurnHeaderElement({

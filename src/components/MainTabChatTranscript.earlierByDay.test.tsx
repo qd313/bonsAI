@@ -477,6 +477,99 @@ describe("the D-pad over the opened list (plan 79)", () => {
   });
 });
 
+describe("A or B on a line keeps Steam's ring on that same line (plan 79)", () => {
+  beforeEach(() => {
+    resetUiDocument();
+    resetNavFocusRegistry();
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  /* The Deck found the ring owned by nothing after A or B on a day line (plan79-P79-EARLIER-BY-DAY.json):
+     the line was a different element afterwards, so the one that held the ring was gone and the next
+     press only put it back. Here: the very element that held it still holds it, and Down moves. */
+  function stillTheSameLine(container: HTMLElement, line: HTMLElement, text: string): void {
+    expect(lineEl(container, text)).toBe(line);
+    expect(line.isConnected).toBe(true);
+    expect(document.activeElement).toBe(line);
+  }
+
+  const days = ["Mon 28 Sep · 5", "Yesterday · 3", "Today · 3"];
+
+  it.each(days)("A opens and A closes %s without the ring leaving it, and the next Down moves", (text) => {
+    const { container, stamp } = renderChat();
+    openEarlier(container, stamp);
+    const line = lineEl(container, text);
+    focusOn(line);
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, text);
+    expect(press(container, "Down")).toBe(true);
+    expect(document.activeElement).not.toBe(line);
+    focusOn(line);
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, text);
+    expect(press(container, "Down")).toBe(true);
+    expect(document.activeElement).not.toBe(line);
+  });
+
+  it.each(days)("B closes an open %s without the ring leaving it, and the next Up moves", (text) => {
+    const { container, stamp } = renderChat();
+    openEarlier(container, stamp);
+    activate(lineEl(container, text));
+    stamp();
+    const line = lineEl(container, text);
+    focusOn(line);
+    act(() => {
+      (line as NavEl).__nav?.onCancelButton?.({ preventDefault: () => {} });
+    });
+    stamp();
+    stillTheSameLine(container, line, text);
+    expect(press(container, "Up")).toBe(true);
+    expect(document.activeElement).not.toBe(line);
+  });
+
+  it("the 'N earlier' line keeps the ring through A to open it, A to close it, and B", () => {
+    const { container, stamp } = renderChat();
+    const line = lineEl(container, "11 earlier");
+    focusOn(line);
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, "11 earlier");
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, "11 earlier");
+    activate(line);
+    stamp();
+    act(() => {
+      (lineEl(container, "11 earlier") as NavEl).__nav?.onCancelButton?.({ preventDefault: () => {} });
+    });
+    stillTheSameLine(container, line, "11 earlier");
+  });
+
+  it("with a live question the day lines trail the rows, and they keep the ring too", () => {
+    const { container, stamp } = renderChat(
+      { askThreadDisplayQuestion: "a live question", isAsking: true },
+      TURNS.slice(0, 11),
+      "live",
+    );
+    openEarlier(container, stamp);
+    const line = lineEl(container, "Today · 3");
+    focusOn(line);
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, "Today · 3");
+    activate(line);
+    stamp();
+    stillTheSameLine(container, line, "Today · 3");
+  });
+});
+
 describe("Up from the open question's text goes to whatever is drawn right over its row (plan 79)", () => {
   beforeEach(() => {
     resetUiDocument();

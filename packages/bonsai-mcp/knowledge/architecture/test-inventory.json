@@ -182,6 +182,7 @@
     "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
     "src/hooks/useMainTabAskBarFocus.test.ts",
     "src/hooks/usePermissionJump.test.ts",
+    "src/hooks/usePluginSettings.readBack.test.ts",
     "src/hooks/usePluginSettings.test.ts",
     "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
     "src/hooks/usePullModelDownloadNotice.test.tsx",

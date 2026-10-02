@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 683,
-  "edgeCount": 1939,
+  "fileCount": 684,
+  "edgeCount": 1941,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4060,6 +4060,13 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/usePluginSettings.readBack.test.ts": {
+      "imports": [
+        "src/hooks/usePluginSettings.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/usePluginSettings.test.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -4086,6 +4093,7 @@
         "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/hooks/usePluginSettings.readBack.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/index.tsx",
@@ -5192,6 +5200,7 @@
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
+        "src/hooks/usePluginSettings.readBack.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePullModelOpenBookkeeping.test.tsx",
         "src/hooks/usePullModelPinForAsk.test.tsx",

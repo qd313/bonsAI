@@ -30,7 +30,9 @@
  * (streaming look, Copy icon, D-pad stops) lives in answerBubble.ts,
  * and the saved-chats row (its shape, title and ghosts in
  * savedChatSlotsRow.ts, its small dots in savedChatSlotDots.ts) lives
- * in those two, all called from here.
+ * in those two, all called from here. The rating choices under an answer
+ * (Helpful, Not really and the five reasons) are in replyRatingChoices.ts
+ * (plan 79), also called from here.
  *
  * How it works: roughly top to bottom of the file —
  * 1. The shared frosted-glass look (blurred, semi-transparent background)
@@ -59,6 +61,7 @@ import { buildQuestionBubbleSection } from "./questionBubble";
 import { buildAnswerBubbleSection } from "./answerBubble";
 import { buildSavedChatSlotsRowSection } from "./savedChatSlotsRow";
 import { buildSavedChatSlotDotsSection } from "./savedChatSlotDots";
+import { buildReplyRatingChoicesSection } from "./replyRatingChoices";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -324,22 +327,7 @@ ${buildAnswerBubbleSection()}
           gap: 8px !important;
           width: 100% !important;
         }
-        /* The "What went wrong?" reason chips run tighter than the other reply buttons, so the five
-           fit two rows in the 300-wide column (option E, the maintainer's pick, plan 72). */
-        .bonsai-scope .bonsai-chat-reply-actions-row--chips {
-          flex-wrap: wrap;
-          gap: ${uiScalePx(6)} !important;
-        }
-        .bonsai-scope .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn,
-        .bonsai-scope .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn.DialogButton {
-          min-height: ${uiScalePx(28)} !important;
-          padding: ${uiScalePx(4)} ${uiScalePx(8)} !important;
-        }
-        /* The two rows sit 6 apart as well: the reply block's own gap is 8, so the second row
-           pulls up by the difference (Deck re-check, plan 72: 7.996 between the rows). */
-        .bonsai-scope .bonsai-chat-reply-actions-row--chips + .bonsai-chat-reply-actions-row--chips {
-          margin-top: calc(${uiScalePx(6)} - 8px) !important;
-        }
+${buildReplyRatingChoicesSection()}
         .bonsai-scope .bonsai-chat-reply-actions-row--utility {
           flex-wrap: nowrap !important;
         }

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 668,
-  "edgeCount": 1887,
+  "fileCount": 670,
+  "edgeCount": 1890,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4661,7 +4661,8 @@
         "src/styles/buttonFocusRing.test.ts",
         "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts",
-        "src/styles/sections/presetChipLabel.test.ts"
+        "src/styles/sections/presetChipLabel.test.ts",
+        "src/styles/sections/replyRatingChoices.test.ts"
       ]
     },
     "src/styles/buttonFocusRing.test.ts": {
@@ -4764,6 +4765,20 @@
       "importedBy": [
         "src/styles/sections/section-6.ts",
         "src/utils/questionBubbleFit.test.tsx"
+      ]
+    },
+    "src/styles/sections/replyRatingChoices.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
+    "src/styles/sections/replyRatingChoices.ts": {
+      "imports": [
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/section-6.ts"
       ]
     },
     "src/styles/sections/savedChatSlotDots.test.ts": {
@@ -4879,6 +4894,7 @@
         "src/styles/sections/answerBubble.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/questionBubble.ts",
+        "src/styles/sections/replyRatingChoices.ts",
         "src/styles/sections/savedChatSlotDots.ts",
         "src/styles/sections/savedChatSlotsRow.ts",
         "src/styles/sections/uiScalePx.ts"
@@ -4924,6 +4940,7 @@
       "importedBy": [
         "src/styles/sections/answerBubble.ts",
         "src/styles/sections/questionBubble.ts",
+        "src/styles/sections/replyRatingChoices.ts",
         "src/styles/sections/savedChatSlotDots.test.ts",
         "src/styles/sections/savedChatSlotDots.ts",
         "src/styles/sections/savedChatSlotsRow.ts",

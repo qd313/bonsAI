@@ -289,8 +289,8 @@ export function buildKbNotesBlockElement(args: {
   const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
   return (
+    <React.Fragment key={`kb-notes-block-${turnKey}`}>
     <Focusable
-      key={`kb-notes-block-${turnKey}`}
       className="bonsai-kb-notes-block"
       ref={(el: HTMLElement | null) => registerKbNotesBlockEl(turnKey, el)}
       onOKButton={onToggle}
@@ -402,5 +402,8 @@ export function buildKbNotesBlockElement(args: {
         </div>
       ) : null}
     </Focusable>
+    {/* Room under the card: a real 8 px box, not a margin, so it survives at the end of the scroll area. */}
+    <div className="bonsai-kb-notes-block-gap" aria-hidden="true" style={{ height: 8, pointerEvents: "none" }} />
+    </React.Fragment>
   );
 }

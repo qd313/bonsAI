@@ -24,6 +24,7 @@ different job even though they also gate what build_system_prompt adds.
 import re
 from typing import Optional
 
+from backend.tdp_intent import is_current_tdp_read_intent
 from backend.constants import (
     DEFAULT_OLLAMA_BASE_URL,
     OLLAMA_TAB_WHERE_AI_RUNS,
@@ -49,20 +50,48 @@ def user_wants_power_or_performance_topic(question: str) -> bool:
     )
 
 
+# A question about the Deck's own battery or power draw. Narrower than user_wants_power_or_performance_topic
+# on purpose: plain "performance", "stutter" or "gpu" talk is not a request for watts and frame caps, and a
+# bare "battery" or "drain" is often a game item or mechanic ("the battery in this puzzle", "mana drain").
+_POWER_TUNING_ASK_RE = re.compile(
+    r"\b("
+    r"tdp|watts?|wattage|"
+    r"battery\s+(life|lives|drain\w*|saving|saver|usage|use|last\w*|percent\w*)|"
+    r"(save|saving|extend|preserve|conserve)\s+(my\s+|the\s+|some\s+)?battery|on\s+battery|"
+    r"power\s+drain|drain(s|ing)?\s+(my|the)\s+battery|"
+    r"power\s*(limit|cap|saving|saver|draw|usage|use|consumption|settings?|profile|budget)|"
+    r"(save|saving|reduce|lower|cut)\s+(some\s+)?power|"
+    r"(frame\s*rate|framerate|fps)\s*(cap|limit)|(cap|limit)\s+(the\s+)?(frame\s*rate|framerate|fps)"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
 def _user_asks_sweet_spot_tuning(question: str) -> bool:
-    """True when the user asks for an efficiency / performance sweet spot (QAM-oriented copy)."""
+    """True when the user asks for power / battery tuning or an efficiency sweet spot.
+
+    These all want the same answer: exact Quick Access values (TDP in watts, a frame cap, the
+    refresh rate). A reply that only lists general tips has nothing a person can set, which is
+    what plan 72 and plan 78 saw (5 of 18 power answers held a number). "What is my TDP right
+    now" and Ollama / network questions are different jobs and do not match."""
     s = (question or "").lower()
-    if "sweet spot" in s:
+    if not s.strip() or is_current_tdp_read_intent(s) or user_asks_ollama_bonsai_host_or_latency(s):
+        return False
+    if "sweet spot" in s or ("efficiency" in s and "spot" in s):
         return True
-    return "efficiency" in s and "spot" in s
+    return bool(_POWER_TUNING_ASK_RE.search(s))
 
 
 SWEET_SPOT_QAM_LINE = (
-    "\n\nDECK TUNING (efficiency / sweet spot): The user wants a practical balance for the running game. "
-    "Answer using the same levers as **Steam Quick Access (⋯) → Performance**: "
-    "**Framerate limit** (target Hz or off), **TDP limit** (watts), and **GPU clock** (automatic vs manual MHz). "
-    "Recommend concrete values for all three when possible. Put TDP and manual GPU clock into the required JSON when you change them; "
-    "state the framerate cap clearly in the prose (this plugin JSON has no FPS field).\n"
+    "\n\nDECK TUNING (power / battery / efficiency): The user wants numbers they can set, not general tips. "
+    "Answer with the same levers as **Steam Quick Access (⋯) → Performance** and give an exact value for each: "
+    "**Thermal power (TDP) limit** in watts (a whole number from 3 to 15; light or 2D games usually run well at 4 to 7 W, "
+    "demanding 3D games need 10 to 15 W), **Framerate limit** (30, 40 or 60 FPS) and, when it helps, **Refresh rate** (40 or 60 Hz). "
+    "Write them as short lines such as \"TDP limit: 6 W\" and \"Framerate limit: 40 FPS\". "
+    "Pick the values for the game named above, or for a typical game when none is named; do not ask the user for more details first. "
+    "These are the only Performance menu names, so do not invent others (there is no 'Performance Mode' or 'Balanced Mode'). "
+    "End the reply with the required JSON block holding the same TDP you named (and a manual GPU clock only if you change it), "
+    "because without it the value cannot be applied; the JSON has no FPS field, so state the framerate cap in the prose.\n"
 )
 
 GRAPHICS_RESOLUTION_SPEED = (

@@ -416,6 +416,7 @@
     "tests/test_ollama_stop_keeps_model_loaded.py",
     "tests/test_plugin_data_reset.py",
     "tests/test_plugin_zip_corpus_guard.py",
+    "tests/test_power_question_instructions.py",
     "tests/test_preload_ask_model_boot.py",
     "tests/test_probe_deck_kb_retrieval.py",
     "tests/test_prompt_budget_service.py",

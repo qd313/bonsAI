@@ -1056,7 +1056,7 @@ class OllamaServiceTests(unittest.TestCase):
             lookup_screenshot_vdf_metadata=lookup_vdf,
             ask_mode="speed",
         )
-        self.assertIn("DECK TUNING (efficiency / sweet spot)", prompt)
+        self.assertIn("DECK TUNING (power / battery / efficiency)", prompt)
         self.assertIn("Quick Access", prompt)
         self.assertIn("Framerate limit", prompt)
 

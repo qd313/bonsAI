@@ -520,6 +520,70 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-table-row--installed {
           border-left: 2px solid rgba(156, 231, 255, 0.45);
         }
+        /* The try-order column (PullModelsTryOrder.tsx): one more track before Del, wide enough for the
+           place number and two 22 px buttons. Only when the box was given a host. */
+        .bonsai-scope .bonsai-pullmodels-table--try .bonsai-pullmodels-table-row {
+          grid-template-columns:
+            28px
+            minmax(5.5rem, 1.4fr)
+            minmax(42px, 0.55fr)
+            minmax(46px, 0.62fr)
+            minmax(0, 1fr)
+            minmax(52px, 0.72fr)
+            78px
+            28px;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--try {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 3px;
+          overflow: visible;
+        }
+        .bonsai-scope .bonsai-pullmodels-place-num {
+          min-width: 14px;
+          text-align: center;
+          font-size: 11px;
+          font-weight: 700;
+          color: #fcd34d;
+        }
+        .bonsai-scope .bonsai-pullmodels-place-none {
+          min-width: 14px;
+          text-align: center;
+          color: #6b7c90;
+        }
+        .bonsai-scope .bonsai-pullmodels-place-btn {
+          min-width: 22px !important;
+          width: 22px !important;
+          min-height: 22px !important;
+          padding: 0 !important;
+          font-size: 10px !important;
+          scroll-margin-top: 32px;
+        }
+        .bonsai-scope .bonsai-pullmodels-place-btn[aria-disabled="true"] {
+          opacity: 0.4;
+        }
+        /* The switch row and its quiet lines, between the Filters row and the table. */
+        .bonsai-scope .bonsai-pullmodels-tryorder {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+        }
+        .bonsai-scope .bonsai-pullmodels-tryorder-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-tryorder-label {
+          font-size: 10px;
+          color: #8fa8c4;
+        }
+        .bonsai-scope .bonsai-pullmodels-tryorder-note {
+          font-size: 10px;
+          line-height: 1.35;
+          color: #9fb7d5;
+        }
         .bonsai-scope .bonsai-pullmodels-col {
           min-width: 0;
           max-width: 100%;

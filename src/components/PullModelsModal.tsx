@@ -15,9 +15,10 @@
  * dedicated screen with a table, filters, and its own fully wired D-pad
  * path through every row.
  *
- * Does not: Decide the order bonsAI tries installed models in when
- * answering — see ModelRoutingOrderModal for that. This screen only
- * installs and removes models, and can mark one as the current pick.
+ * Does not: Decide which model answers a given question. This screen installs
+ * and removes models, can mark one as the current pick, and — when the box
+ * hands it a host (tryOrderHost) — shows and changes each installed model's
+ * place in the try order (see PullModelsTryOrder.tsx and useTryOrderPlaces.ts).
  * The New-badge record math lives in utils/pullModelNewBadge.ts, the
  * shared request/prop types live in PullModelsModal.types.ts, and the
  * table/Filters-panel matching and row model live in
@@ -75,6 +76,10 @@
  * 8. The Filters row also carries "Type a name" and, while the starter model is not installed,
  *    "Install the starter set" (PullModelsStarterSetChip): it asks first with the size, then
  *    starts the setup run the old Tier 1 button started.
+ * 9. With a host given, a Text / Pictures switch sits under the Filters row and every installed row
+ *    gains a Try column (place number, up, down): usePullModelTryNav() draws them and the walking
+ *    rules here (leaveListUp, moveDownFromTopRow, rowNavHandlers) reach them. A change is saved at
+ *    once, like the star.
  *
  * Gotchas:
  * - The "New" badge is tracked entirely in the browser's own storage,
@@ -109,6 +114,7 @@ import {
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsStarterSetChip } from "./PullModelsStarterSetChip";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
+import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { useListHeaderClearance } from "./pullModelsListClearance";
@@ -275,6 +281,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
     selectedTags,
   });
 
+  // The Try column and switch (useTryOrderPlaces.ts); off, and drawing nothing, unless the box was given a host.
+  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal });
+
   const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
 
   /**
@@ -284,8 +293,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
    */
   const leaveListUp = useCallback((): boolean => {
     if (listRef.current) listRef.current.scrollTop = 0;
-    return focusFiltersButton();
-  }, [focusFiltersButton]);
+    return tryNav.focusSwitch() || focusFiltersButton();
+  }, [focusFiltersButton, tryNav.focusSwitch]);
 
   /*
    * Put the ring on one entry of a list of refs, clamping the index into range rather than failing
@@ -435,15 +444,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
         return false;
       },
       onMoveRight: () => {
-        if (cell === "select" && installed) return focusRowCell(rowIndex, "delete");
+        if (cell === "select" && installed) return tryNav.focusPlaceUp(rowIndex) || focusRowCell(rowIndex, "delete");
         return false;
       },
       onMoveLeft: () => {
-        if (cell === "delete") return focusRowCell(rowIndex, "select");
+        if (cell === "delete") return tryNav.focusPlaceDown(rowIndex) || focusRowCell(rowIndex, "select");
         return false;
       },
     }),
-    [flatRows.length, leaveListUp, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell]
+    [flatRows.length, leaveListUp, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav]
   );
 
   const recommendedEntries = useMemo(
@@ -530,8 +539,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
     fn();
   };
 
-  /** Down from any button on the top row: the Filters panel if it is open, else the first table row. */
-  const moveDownFromTopRow = (): boolean => (filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull());
+  /** Down past the try-order switch: the Filters panel if it is open, else the first table row. */
+  const moveDownPastSwitch = (): boolean => (filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull());
+  /** Down from any button on the top row: the try-order switch if the box shows one, else on as above. */
+  const moveDownFromTopRow = (): boolean => tryNav.focusSwitch() || moveDownPastSwitch();
+  const tryCell = (tag: string, rowIndex: number, installed: boolean) =>
+    tryNav.cell({
+      tag, rowIndex, installed, okButtonRuns,
+      nav: rowNavHandlers(rowIndex, "select", installed),
+      goSelect: () => focusRowCell(rowIndex, "select"),
+      goDelete: () => focusRowCell(rowIndex, "delete"),
+    });
 
   // Lifted into usePullModelTier2Confirm. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.
@@ -691,6 +709,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
           {formatGtaStars(entry.rating)}
         </div>
+        {tryCell(entry.tag, rowIndex, installed)}
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           {installed ? (
             <Button
@@ -786,6 +805,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--date" role="cell">—</div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes" role="cell">Other</div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">—</div>
+        {tryCell(tag, rowIndex, true)}
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           <Button
             ref={bindDeleteRef(rowIndex)}
@@ -1061,6 +1081,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
             ) : null}
           </div>
 
+          {tryNav.bar({ okButtonRuns, onMoveUp: focusFiltersButton, onMoveDown: moveDownPastSwitch })}
+
           <div ref={listRef} className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
             {filtersOpen ? (
               <div className="bonsai-pullmodels-filterpanel" role="group" aria-label="Filters">
@@ -1176,8 +1198,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 </Button>
               </div>
             ) : flatRows.length > 0 ? (
-              <div className="bonsai-pullmodels-table" role="table">
-                <PullModelsTableHeader headerRef={listHeaderRef} />
+              <div className={`bonsai-pullmodels-table${tryNav.enabled ? " bonsai-pullmodels-table--try" : ""}`} role="table">
+                <PullModelsTableHeader headerRef={listHeaderRef} withTry={tryNav.enabled} />
                 <div role="rowgroup">
                   {tableSections.map((section) => (
                     <div key={section.title}>

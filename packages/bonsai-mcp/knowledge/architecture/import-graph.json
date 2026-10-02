@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 695,
-  "edgeCount": 1985,
+  "fileCount": 700,
+  "edgeCount": 2010,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1240,6 +1240,7 @@
         "src/components/ModelRoutingAdvancedPanel.tsx",
         "src/components/PullModelsModal.tsx",
         "src/data/modelPolicy.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts"
       ],
       "importedBy": [
@@ -1561,7 +1562,8 @@
       "imports": [
         "src/components/PullModelsModal.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/pullModelsListLayout.ts"
       ],
       "importedBy": []
     },
@@ -1581,6 +1583,18 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.tryOrder.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/features/model-routing/useTryOrderPlaces.ts",
+        "src/styles/sections/gamepadAndPullModels.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/pullModelsListLayout.ts",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.tsx": {
       "imports": [
         "src/components/BonsaiModalScope.tsx",
@@ -1588,6 +1602,7 @@
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsStarterSetChip.tsx",
         "src/components/PullModelsTableHeader.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/components/pullModelsListClearance.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
@@ -1620,16 +1635,19 @@
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx"
       ]
     },
     "src/components/PullModelsModal.types.ts": {
       "imports": [
         "src/data/modelPolicy.ts",
-        "src/data/pullModelCatalog.ts"
+        "src/data/pullModelCatalog.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelEmbeddedFooterState.ts",
         "src/hooks/usePullModelOpenBookkeeping.ts",
@@ -1661,6 +1679,16 @@
     "src/components/PullModelsTableHeader.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/components/PullModelsTryOrder.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.types.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
+        "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -2100,6 +2128,8 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/model-routing/useTryOrderPlaces.test.tsx",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
@@ -2347,6 +2377,7 @@
         "src/data/pullModelCatalog.test.ts",
         "src/data/pullModelLicencePill.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
@@ -2807,6 +2838,33 @@
         "src/index.tsx"
       ]
     },
+    "src/features/model-routing/useTryOrderPlaces.test.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/model-routing/useTryOrderPlaces.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/modelRoutingOrder.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
+        "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsTryOrder.tsx",
+        "src/features/model-routing/useTryOrderPlaces.test.tsx",
+        "src/features/plugin-shell/useOllamaModelsHubModal.tsx"
+      ]
+    },
     "src/features/plugin-shell/PluginErrorBoundary.tsx": {
       "imports": [],
       "importedBy": [
@@ -3144,6 +3202,7 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/modelPolicy.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts"
       ],
@@ -4971,6 +5030,7 @@
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"
@@ -5284,12 +5344,14 @@
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
         "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx",
         "src/components/VoiceInputSettingsSection.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/voice/useVoiceAskInput.test.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
@@ -5383,6 +5445,7 @@
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
@@ -5418,6 +5481,13 @@
         "src/utils/revealOpenedDetails.test.tsx"
       ]
     },
+    "src/test-harness/pullModelsListLayout.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/PullModelsModal.listScroll.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx"
+      ]
+    },
     "src/test-harness/renderWithHarness.tsx": {
       "imports": [],
       "importedBy": []
@@ -5431,8 +5501,10 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
@@ -6035,6 +6107,8 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/model-routing/useTryOrderPlaces.test.tsx",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useChatSlotActivityState.ts",
@@ -6460,6 +6534,7 @@
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
@@ -6928,6 +7003,7 @@
       ],
       "importedBy": [
         "src/components/ModelRoutingOrderModal.tsx",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/utils/modelRoutingOrder.test.ts"
       ]
     },
@@ -7147,6 +7223,7 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsStarterSetChip.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",

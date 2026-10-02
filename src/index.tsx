@@ -828,6 +828,10 @@ const Content: React.FC = () => {
     finalizeShowModalAndRestoreActiveTab,
   });
 
+  const tryOrderHost = useMemo(
+    () => ({ ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder }),
+    [ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder],
+  );
   const { openOllamaModelsHub, onApplyTier2MultimodalPolicy } = useOllamaModelsHubModal({
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
@@ -836,6 +840,7 @@ const Content: React.FC = () => {
     setModelPolicyNonFossUnlocked,
     setModelAllowHighVramFallbacks,
     activeRoutingTag: activeOllamaRoutingTag(isAsking, modelPolicyDisclosure),
+    tryOrderHost,
     buildSettingsPayload,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,

@@ -208,3 +208,13 @@ describe("Done saves the licence + advanced draft", () => {
     expect(onClose).toHaveBeenCalled();
   });
 });
+
+describe("the try order in the box (plan 79)", () => {
+  it("hands the host choice to Browse, so the box can show each model's place; without it Browse gets none", () => {
+    const host = { ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20", textModelRoutingOrder: [], visionModelRoutingOrder: [] };
+    render(<OllamaModelsHubModal {...buildProps({ tryOrderHost: host })} />);
+    expect(hoisted.pullModelsProps?.tryOrderHost).toBe(host);
+    render(<OllamaModelsHubModal {...buildProps()} />);
+    expect(hoisted.pullModelsProps?.tryOrderHost).toBeUndefined();
+  });
+});

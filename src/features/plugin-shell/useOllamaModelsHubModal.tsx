@@ -28,6 +28,7 @@ import { callDeckyWithTimeout } from "../../utils/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
 import type { BonsaiSettings } from "../../data/bonsaiSettingsSchema";
 import type { ModelPolicyTierId } from "../../data/modelPolicy";
+import type { TryOrderHost } from "../model-routing/useTryOrderPlaces";
 
 type ModelPolicyPatch = {
   modelPolicyTier: ModelPolicyTierId;
@@ -44,6 +45,8 @@ export type UseOllamaModelsHubModalArgs = {
   setModelAllowHighVramFallbacks: (v: boolean) => void;
   /** Tag the router last chose, shown as the active model in the hub. */
   activeRoutingTag: string | null;
+  /** Which computer answers and the saved try orders: the box lists that computer's models with their places. */
+  tryOrderHost: TryOrderHost;
   buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => Partial<BonsaiSettings>;
   hydrateFromSettings: (settings: BonsaiSettings) => void;
   /** Held off so a debounced autosave cannot race the explicit write below. */
@@ -78,6 +81,7 @@ export function useOllamaModelsHubModal({
   setModelPolicyNonFossUnlocked,
   setModelAllowHighVramFallbacks,
   activeRoutingTag,
+  tryOrderHost,
   buildSettingsPayload,
   hydrateFromSettings,
   pauseDebouncedSettingsSave,
@@ -147,6 +151,7 @@ export function useOllamaModelsHubModal({
         <OllamaModelsHubModal
           initialSection={opts?.initialSection}
           activeRoutingTag={activeRoutingTag}
+          tryOrderHost={tryOrderHost}
           modelPolicyTier={modelPolicyTier}
           modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
           modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
@@ -166,6 +171,7 @@ export function useOllamaModelsHubModal({
     // callbacks from the shell hook, so this only makes the closure honest.
     [
       activeRoutingTag,
+      tryOrderHost,
       modelPolicyTier,
       modelPolicyNonFossUnlocked,
       modelAllowHighVramFallbacks,

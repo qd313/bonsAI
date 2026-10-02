@@ -3,8 +3,10 @@
  *
  * Purpose: The full-screen popup for everything about which AI models this
  * plugin can use: browsing and downloading models (with the model licence
- * choice folded in as one of the Browse screen's own filters), plus a set
- * of advanced routing switches reached from a small "Advanced" link. It
+ * choice folded in as one of the Browse screen's own filters, and each
+ * installed model's place in the try order, saved as soon as it is changed),
+ * plus a set of advanced routing switches reached from a small "Advanced"
+ * link. It
  * keeps a change to either as a draft until the person presses Done, at
  * which point every pending change is saved together.
  *
@@ -47,6 +49,7 @@ import {
 import { PullModelsModal, type PullModelsFooterState } from "./PullModelsModal";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { peekModalReturnFocus, rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 
 export type OllamaModelsHubSection = "policy" | "browse" | "advanced";
 
@@ -66,6 +69,8 @@ export type OllamaModelsHubModalProps = {
   onBeforeNestedDeckyModal?: () => void;
   onCompleteNestedDeckyModalClose?: (close: () => void) => void;
   onClose: () => void;
+  /** Which computer answers and the saved try orders: with it, Browse shows the Text / Pictures switch and each model's place. */
+  tryOrderHost?: TryOrderHost;
 };
 
 /**
@@ -97,6 +102,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     onBeforeNestedDeckyModal,
     onCompleteNestedDeckyModalClose,
     onClose,
+    tryOrderHost,
   } = props;
 
   // "policy" used to be its own section; it is now the Filters panel's Licence group, inside
@@ -294,6 +300,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
               initialFiltersOpen={false}
+              tryOrderHost={tryOrderHost}
             />
           ) : null}
           {section === "advanced" ? (

@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1343,
+      "lines": 1348,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1221,
+      "lines": 1243,
       "role": ""
     },
     {
@@ -127,7 +127,7 @@
     },
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 764,
+      "lines": 828,
       "role": ""
     },
     {

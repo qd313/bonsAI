@@ -16,6 +16,7 @@
  */
 import type { PullModelEntry, PullModelGroup } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
+import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 
 /** Minimal shape this modal needs from `load_settings` / `save_settings` — see bonsaiSettingsSchema.ts for the rest. */
 export type PullModelsRoutingOrderSettings = {
@@ -73,4 +74,7 @@ export type PullModelsModalProps = {
   /** Opens the Filters panel, ring inside it, the moment this screen mounts — used for the
    *  "Manage models → Policy" shortcut now that Policy is a filter, not its own section. */
   initialFiltersOpen?: boolean;
+  /** Which computer answers and the saved orders. Given: the box shows the try-order switch and each
+   *  installed row's place (PullModelsTryOrder.tsx). Left out: Browse models looks as it always did. */
+  tryOrderHost?: TryOrderHost;
 };

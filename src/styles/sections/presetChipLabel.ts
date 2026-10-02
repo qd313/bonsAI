@@ -55,9 +55,9 @@ export function buildPresetChipLabelCss(): string {
           align-items: center !important;
         }
         /*
-          The label is a row: badges pinned at the left, then the prompt text. The text either
-          scrolls (Steam's Marquee, which brings its own overflow handling and edge fade) or, when
-          the Marquee is unavailable or motion is reduced, is cut off with an ellipsis. The ellipsis
+          The label is a row: badges pinned before the prompt text, the whole centred. The text either
+          scrolls (the chip's own scroller, below) or, when
+          motion is reduced, is cut off with an ellipsis. The ellipsis
           fallback is display:block on purpose — on the old display:inline span \`overflow\` did not
           apply, the ellipsis could never fire, and a 59-character label simply ran 86px past the
           column edge (measured on device 2026-08-29).
@@ -70,14 +70,18 @@ export function buildPresetChipLabelCss(): string {
           min-width: 0 !important;
           overflow: hidden !important;
           white-space: nowrap !important;
-          text-align: left !important;
+          /* Centred (plan 79 I): the badges and the words sit together in the middle of the chip. */
+          justify-content: center !important;
+          text-align: center !important;
         }
         .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-test-badge,
         .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-tip-badge {
           flex: 0 0 auto !important;
         }
         .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-text {
-          flex: 1 1 auto !important;
+          /* Takes the room the words need, no more, so a short chip's words can be centred; words
+             longer than the chip shrink to it (min-width 0) and scroll from the left edge. */
+          flex: 0 1 auto !important;
           min-width: 0 !important;
           max-width: 100% !important;
         }

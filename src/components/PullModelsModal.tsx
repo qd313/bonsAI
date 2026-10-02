@@ -238,6 +238,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   // Lifted into usePullModelCatalogRefresh. It must stay at exactly this point in the hook
   // list: React matches hooks by the order they run, not by name.
@@ -270,6 +271,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
   });
 
   const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
+
+  /**
+   * Up out of the first row to the Filters button above the list. The list goes back to its top first:
+   * walking down leaves it scrolled, and a first model left half under the sticky column-header row
+   * was what the Deck showed on 2026-10-02 (plan79-P79-M9-MODELS-BOX-TOP.json).
+   */
+  const leaveListUp = useCallback((): boolean => {
+    if (listRef.current) listRef.current.scrollTop = 0;
+    return focusFiltersButton();
+  }, [focusFiltersButton]);
 
   /*
    * Put the ring on one entry of a list of refs, clamping the index into range rather than failing
@@ -397,10 +408,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
       onMoveUp: () => {
         if (cell === "delete") {
           if (focusPrevRowSelect(rowIndex)) return true;
-          return focusFiltersButton();
+          return leaveListUp();
         }
         if (focusPrevRowSelect(rowIndex)) return true;
-        return focusFiltersButton();
+        return leaveListUp();
       },
       onMoveDown: () => {
         if (focusNextRowSelect(rowIndex)) return true;
@@ -425,7 +436,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         return false;
       },
     }),
-    [flatRows.length, focusFiltersButton, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell]
+    [flatRows.length, leaveListUp, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell]
   );
 
   const recommendedEntries = useMemo(
@@ -1061,7 +1072,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
             ) : null}
           </div>
 
-          <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
+          <div ref={listRef} className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
             {filtersOpen ? (
               <div className="bonsai-pullmodels-filterpanel" role="group" aria-label="Filters">
                 {recommendedEntries.length > 0 ? (

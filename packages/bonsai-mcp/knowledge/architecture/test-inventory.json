@@ -101,6 +101,7 @@
     "src/components/PullModelsModal.formSubmit.test.tsx",
     "src/components/PullModelsModal.gamepadOK.test.tsx",
     "src/components/PullModelsModal.licencePill.test.tsx",
+    "src/components/PullModelsModal.listScroll.test.tsx",
     "src/components/PullModelsModal.otherInstalledSize.test.tsx",
     "src/components/PullModelsModal.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",

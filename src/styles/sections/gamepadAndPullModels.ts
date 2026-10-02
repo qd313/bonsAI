@@ -504,6 +504,13 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-table-row--data {
           background: var(--bonsai-pullmodels-row-bg);
         }
+        /* The sticky header row above covers the top 26 px of the list, but a browser's scroll-into-view
+           counts that strip as free space. Asking for 32 px of margin above each button keeps the whole
+           row (the button plus its 5 px of padding) clear of the header when the ring lands on it. */
+        .bonsai-scope .bonsai-pullmodels-table-row--data .bonsai-pullmodels-slot,
+        .bonsai-scope .bonsai-pullmodels-table-row--data .bonsai-pullmodels-delete-btn {
+          scroll-margin-top: 32px;
+        }
         .bonsai-scope .bonsai-pullmodels-table-row--data:nth-child(even) {
           background: rgba(12, 20, 30, 0.72);
         }

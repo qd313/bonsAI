@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 677,
-  "edgeCount": 1915,
+  "fileCount": 678,
+  "edgeCount": 1919,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1492,6 +1492,15 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.listScroll.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/styles/sections/gamepadAndPullModels.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.otherInstalledSize.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -1541,6 +1550,7 @@
         "src/components/PullModelsModal.formSubmit.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
+        "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
@@ -4802,6 +4812,7 @@
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+        "src/components/PullModelsModal.listScroll.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"
@@ -5105,6 +5116,7 @@
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
+        "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
@@ -5197,6 +5209,7 @@
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",

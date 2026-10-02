@@ -127,6 +127,7 @@ import {
   takeAnswerBubbleNavFocus,
 } from "./answerBubbleElRegistry";
 import { elementHasFocus, getUiDocument, uiGamepadFocusElement } from "./uiDocument";
+import { refocusPanelWindowIfLost } from "./navFocusRegistry";
 
 import {
   CUT_TOLERANCE_PX, SECTION_TOP_PAD_PX, bandHeightOf, elementIsWhollyInBandOf, elementIsWithinViewportOf,
@@ -680,6 +681,35 @@ export function openHiddenCoverIn(section: HTMLElement): boolean {
  * document and did nothing, silently, until that was found and fixed.
  */
 export function handleAnswerBubbleMoveDown(
+  bubbleEl: HTMLElement | null,
+  focusedChunkRef: { current: number },
+  chunkTotal: number,
+  answerKey?: string
+): boolean {
+  const bubble = resolveAnswerBubbleEl(answerKey, bubbleEl);
+  if (!bubble || uiGamepadFocusElement() !== bubble) {
+    return moveDownInAnswer(bubbleEl, focusedChunkRef, chunkTotal, answerKey);
+  }
+  /*
+   * Steam's ring is on the whole bubble, not on one of its sections (the ★★★ trap of 2026-10-02: one
+   * tall ring the width of the answer, Down dead until Steam restarted). The step below hops into a
+   * section with a plain focus(), and while the panel's page is without the browser's focus (Quick
+   * Access back from another of its tabs; plan 76, plan76-P76-TRAP-SPLIT.json) that hop moves the page's
+   * focus and leaves Steam's ring where it was. The press was still reported as used, so every Down did
+   * the same nothing. So: ask for the panel's focus first, which lets the hop take the ring; and if the
+   * hop still left the ring behind (the page's focus went in, the ring did not), decline the press, so
+   * the bubble's own Down goes on to the row under the answer by Steam's own transfer. A press that only
+   * scrolled the panel, the ring and the page's focus both still on the bubble, is a press that moved.
+   */
+  refocusPanelWindowIfLost();
+  if (!moveDownInAnswer(bubble, focusedChunkRef, chunkTotal, answerKey)) return false;
+  if (uiGamepadFocusElement() !== bubble) return true;
+  const sections = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
+  return !sections.some((section) => elementHasFocus(section));
+}
+
+/** One Down press inside the answer: the order in the drawing at the top of this file. */
+function moveDownInAnswer(
   bubbleEl: HTMLElement | null,
   _focusedChunkRef: { current: number },
   chunkTotal: number,

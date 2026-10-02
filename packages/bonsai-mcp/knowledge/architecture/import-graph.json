@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 685,
-  "edgeCount": 1941,
+  "fileCount": 686,
+  "edgeCount": 1945,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5143,6 +5143,7 @@
         "src/utils/answerBubbleNavigation.mirrorWalk.test.ts",
         "src/utils/answerBubbleNavigation.readingWalk.test.ts",
         "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
+        "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.tallEntry.test.ts",
         "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
         "src/utils/answerBubbleNavigation.walkThrough.test.ts"
@@ -5608,6 +5609,14 @@
       ],
       "importedBy": []
     },
+    "src/utils/answerBubbleNavigation.ringOnBubble.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/answerBubbleNavigation.tallEntry.test.ts": {
       "imports": [
         "src/test-harness/deckAnswerWalk.ts"
@@ -5639,6 +5648,7 @@
         "src/utils/answerStopRegistry.ts",
         "src/utils/chatPanelScroll.ts",
         "src/utils/drgGlossaryTermRegistry.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/spoilerFenceRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -5728,6 +5738,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/test-harness/deckAnswerWalk.ts",
         "src/utils/answerBubbleNavigation.coverUp.test.ts",
+        "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerStopRegistry.test.ts",
@@ -6853,6 +6864,8 @@
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/usePermHintNavTargets.ts",
         "src/index.tsx",
+        "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
+        "src/utils/answerBubbleNavigation.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/handRingOnWhenGone.test.ts",

@@ -441,6 +441,10 @@ New ones go here, with the choice taken in the meantime.
    nothing ("Keep chat", "Keep cache", "Keep my data", "Not now"), with the action as the middle button, the shape
    the Remove knowledge base box already had. *Meanwhile:* done for those four; "Pull selected" and "Show thinking"
    still start on the action, since that is what was just asked for.
+12. **How long a long chip stays after its words stop.** The words wait 1.5 s at the start, scroll to the end, and
+   then stand still. The 1.5 s at the end is a minimum: the chip then leaves on the row's own beat, which the Deck
+   measured at 3.2 to 10.2 s after the words stopped (Hades, two chips showing). *Meanwhile:* as built, so the end
+   is never cut short. **Your call:** have a long chip leave about 1.5 s after its words stop, or keep it.
 
 ## At the end
 

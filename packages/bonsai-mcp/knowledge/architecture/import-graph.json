@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 696,
-  "edgeCount": 1988,
+  "fileCount": 697,
+  "edgeCount": 1989,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2586,6 +2586,7 @@
     "src/features/chat-slots/ChatSlotRow.tsx": {
       "imports": [
         "src/components/icons.tsx",
+        "src/features/chat-slots/chatSlotRowIcons.tsx",
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
@@ -2604,6 +2605,12 @@
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx"
+      ]
+    },
+    "src/features/chat-slots/chatSlotRowIcons.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.tsx"
       ]
     },
     "src/features/chat-slots/useChatSlotBumpers.ts": {

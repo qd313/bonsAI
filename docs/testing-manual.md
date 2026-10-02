@@ -275,8 +275,7 @@ manual profile bridge** (the last bullet in the row above). It was the second ou
 `buildDeckThumbNavHandlers` (`DeckFocusSlider.tsx`) and the UI-scale bridge's own `bridgeSliderNav`
 (pulled out into an exported `buildUiScaleBridgeNav`, `SettingsTabUiScaleSection.tsx`) now step on
 `onMoveLeft`/`onMoveRight` and return `true` to claim the move, with no direction branch left in
-`onButtonDown` to double-step. Deck check owed: re-run the slider half of this row and confirm Left
-stays on the slider on all four.
+`onButtonDown` to double-step. The slider half was re-run and passed 2026-09-26 (below).
 
 **PASS (Deck) 2026-09-26 (plan 70, flow 2b.6), slider half closed.** All four sliders (Reply style, Keep models
 loaded, Connection timeout, UI size manual) — Left and Right each changed the value by one step and
@@ -285,6 +284,8 @@ timeout slider only steps a handle after A picks it first (by design, written at
 code); without A, Left holds still and Right just moves the ring to the other handle. Every setting
 read back unchanged afterward. Evidence `docs/test-evidence/plan70-ONBUTTONDOWN-AUDIT-01.json`.
 The four boxes above that are still empty (the collapsed hint, the session strip, the Show details link, the collapsed turn header) were not part of that run and are still owed.
+
+**Note 2026-10-02 on the first box (the collapsed "Context used" hint):** no screen can show it any more. Every place that draws the context chips passes `collapsedHint={false}` (`src/components/SessionContextStrip.tsx`, `src/utils/buildDetailsPanelElement.tsx`), so the collapsed hint is never drawn. The box is left open; whether to retire it is the maintainer's call.
 
 ### DOC-SWEEP-01 — global document realm fixes (P1)
 
@@ -579,8 +580,8 @@ line under a finished Strategy or troubleshooting reply that used a note or a sh
 where it came from, and opens to show the note's own words. Starts closed behind one switch. **Two
 pieces are short of the plan, a follow-up in progress in the same lane:** the block should appear
 before the model's first word rather than only once the reply finishes (row 06), and should sit inside
-the spoiler box on a fenced reply rather than being hidden entirely (row 02). **Four of the seven rows
-below have passed on the Deck (01, 03, 05, 06); the rest — 02, 04, 07 — are still to run, below.** Every row that walks the D-pad onto the block's own header must check
+the spoiler box on a fenced reply rather than being hidden entirely (row 02). **Five of the seven rows
+have passed on the Deck (01, 02, 03, 05, 06; row 02 passed 2026-09-26, `docs/test-evidence/plan70-NOTES-BLOCK-02.json`); the rest — 04, 07 — are still to run, below.** Every row that walks the D-pad onto the block's own header must check
 that the ring is actually visible on the header, its rectangle read against where the dock starts, not
 merely that the header has focus — the repo's own lesson from a control that passed a focus walk while
 sitting hidden behind the dock. Save each row's evidence to `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-0N.json`

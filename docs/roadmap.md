@@ -430,12 +430,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   The "What the AI remembers" card no longer shows a Game line naming something that is not a game, and no longer shows lines that say nothing ("Stuck on: None apparent in this log"). The Game line is rebuilt from names that can be checked (the chat's own game, a game the library knows, a well-known game); a line is dropped only when its whole answer says nothing, and a real line is never cut. English summaries only.
   Measured on this PC's copy of the Deck's model, 45 summaries: a non-game on the Game line in 24 before, 0 after; lines that say nothing, 25 lines before, 10 after (the rest carry a clause and are kept on purpose); real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py` (23), one in `tests/test_chat_summary_service.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
   **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `docs/test-evidence/plan78-P78-SUMUP-WORDING.json`.
-- ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** —
-  **VERIFY, fixed 2026-09-27 (plan 72, `1069c8f1`).** Clear resets the waiting state
-  first, so the step that runs when the answer stops then skips saving it, since that state no longer says a
-  question is waiting.
-  The plan 72 try could not run: the answer finished in 33 seconds, `docs/test-evidence/plan72-F-CLEAR.json`. Suggested for the maintainer's hand checklist.
-  **2026-10-02, the maintainer's hand check (plan 73 check 1): PASSED.** After Clear mid-answer the chat kept the part of the answer that had arrived. One new bug seen in it, filed under Bugs: the kept part ended inside a spoiler cover, which opens to "undefined". Screenshot `screenshots/DeckCapture_20261002_003908_game.png`. Ready to move to Done.
 - ★★ `[chips]` **The game's own chip never came back, and the chips turned over too slowly** — **VERIFY, fixed 2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`). Was OPEN, failed on the Deck 2026-09-26 (plan 70, rows PHASE4-CHIPS-01 and CHIP-ROTATION-01).**
   Cause: three of the four chip styles dealt the game's chips only once, when the panel opened, and with one chip showing the promised game chip was put in a spot that is off screen. Now one rule decides which chip comes next in all four styles (one chip: after a general chip the next is the game's own, after a game chip the game's again one time in five; two chips: one of the two is always the game's own), and one rule decides how long a chip stays, with the chip count in it (one chip: about 7 seconds a turn where it was about 15; two chips: about 10 seconds in each spot; the two spots never change within 2.5 seconds of each other).
   The maintainer's calls: D121 items 9 and 10. Unit tests: the next-chip rule, the pace and the spacing, plus a seven-minute run of the real chip row in each style at one chip and at two. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01 (below). Still owed: the maintainer's own look at the pace (it is on their Thursday list) and their pick from the preview page.
@@ -466,15 +460,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **Quit or switch games while a Strategy answer writes, and the old game's checklist is drawn under it** — **VERIFY, fixed 2026-09-30 (plan 78 helper L, `a92cabe4`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
   The checklist is now drawn only if the answer's game is still the running game. It is still saved under the game it was for, with no ticks borrowed from another game's list.
   Proven by unit tests only (in `src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts`); there is no Deck row, because it cannot be made to happen reliably. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md` (finding 3).
-- ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed
-  2026-08-27 and 2026-09-03; the orphan-chat half is a measured follow-up, not a regression. Only the
-  mid-generation half is still owed: clearing while a reply is still being written. Row **CLEAR-CACHE-01**.
-  **Tried twice on the Deck 2026-09-18, both too slow:** Clear landed on an already-finished reply both
-  times; Clear itself worked cleanly. Needs a reply over about 70 seconds to catch it mid-write, or the
-  maintainer's word to call this covered by its unit test instead. **Per the maintainer's answer 2026-09-21
-  (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
-  checklist** — five device tries is enough, and every reply finished before the controller could walk
-  there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 - ★★ `[chips]` **After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row** — **VERIFY, fixed 2026-10-01 (plan 78 helper P, `f0a4f2c4`). Was OPEN, found on the Deck 2026-10-01 (build `9feef02e`).**
   Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
   Deck row **P78-HELP-CHIP-DISMISS**; finding `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`. The flag reading empty after a reload was the rig's own reload; only "Clear all plugin data" removes it.
@@ -484,8 +469,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
   (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
-  instead of the old outline. Rows 02 to 06 and 08 passed by measurement; row 09 failed and is filed as its
-  own bug, below. Owed: the maintainer's own look at rows 01, 05 and 07, and at the help and agent chips.
+  instead of the old outline. Rows 02 to 06 and 08 passed by measurement. Row 09 failed on 2026-09-18, was fixed
+  in `895cf0a`, and its dot passed on the Deck 2026-09-26 (`docs/test-evidence/plan70-L6-CHIP-BUTTON-09.json`);
+  its scrolling-label half is still owed. Row 07 passed in the decode style 2026-09-26
+  (`docs/test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`); the fade and static styles are still owed. Also owed:
+  the maintainer's own look at rows 01 and 05, and at the help and agent chips.
   [Plan](archive/60-chip-button-restyle.md) · [Detail](roadmap-details.md#make-the-preset-chips-look-more-like-chips).
 
 - ★★ `[reply]` **Streamed answers arrive with the same scramble as the decode chips** — **VERIFY, built
@@ -824,6 +812,11 @@ ninth docs sweep, again to keep this document under its size limit.
 Plan 78's Deck block 3b closes (the 2026-10-01 late morning, builds `c8d6b094` and `b417c271`) were moved out the same way on 2026-10-01, during plan 78's eleventh docs sweep, again to keep this document under its size limit.
 
 Plan 78's Deck block 3c closes (the 2026-10-01 midday, build `24cbbd6b`) were moved out the same way on 2026-10-01, during plan 78's fourteenth docs sweep, again to keep this document under its size limit.
+
+**Closed 2026-10-02 (plan 73, the maintainer's hand check 1):**
+
+- ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** — **DONE 2026-10-02, passed on the Deck by the maintainer's own hand check (plan 73 check 1; fix `1069c8f1`, plan 72).** After Clear mid-answer the chat kept the part of the answer that had arrived. The earlier try could not run: the answer finished in 33 seconds (`docs/test-evidence/plan72-F-CLEAR.json`). The "undefined" cover seen in the same check is its own entry under Bugs. Evidence: results table, check 1, in `docs/planning/73-maintainer-checks-before-0.6.0.md`; screenshot `screenshots/DeckCapture_20261002_003908_game.png`.
+- ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **DONE 2026-10-02.** The main and reopen halves were confirmed on the Deck 2026-08-27 and 2026-09-03. The last half, clearing while a reply is still being written, passed as the same hand check (plan 73 check 1, results table in `docs/planning/73-maintainer-checks-before-0.6.0.md`). The saved chat staying behind after a clear is a measured follow-up, not a regression. Row **CLEAR-CACHE-01** in testing.md. Older notes: [roadmap-details.md](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 
 **Closed 2026-10-01 (plan 78, Deck block 3f, build `09bf7fd7`):**
 

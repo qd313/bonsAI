@@ -1,0 +1,24 @@
+{
+  "row": "P79-BLOCK3A-DEPLOY",
+  "build_commit": "6e297645 (checkout HEAD; npm run build done, working tree has only untracked evidence files)",
+  "deck_time_local": "2026-10-02 16:08 EDT",
+  "screen": "built-in 854x454 (page window size)",
+  "setup": "No game (RunningApps empty). npm run build, deck_deploy (loader ready, 126 files), deck_checkReady buildMatches true.",
+  "pressed": "none",
+  "seen": {
+    "buildMatches": true,
+    "files": 126,
+    "keep_awake_expiresAt": "2026-10-03T04:08:54Z (= 00:08 Deck time), ttl 480",
+    "settings_vs_backup": "keys that differ from ~/p79-settings.bak.json: none (compared key by key, no values printed)",
+    "text_model_routing_order": [
+      "gemma4:e2b-it-qat"
+    ],
+    "vision_model_routing_order": [
+      "gemma4:e2b-it-qat"
+    ],
+    "free_mb_available": 4939,
+    "open_plugin": "opened on the first try after the deploy"
+  },
+  "expected": "build matches, keep-awake taken, settings equal to the backup",
+  "verdict": "PASS - build matches, keep-awake held for 480 min, no settings differences"
+}

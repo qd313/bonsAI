@@ -2952,3 +2952,29 @@ entries sent their reference detail to the details file.
 **What is left is not worth taking.** Thirty-four entries still run past five lines, but most by only a line or
 two, and the ones that run long are long because the work is. Grinding those down would cost more in understanding
 than it saves in tokens. The bigger wins are now in the other four files, each with its own trim task at the top.
+
+## After picking a setting from the search list above the question box, Down cannot get past the answer
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 4, plan 79), when it went to Verify. Nothing was removed.
+
+- ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the
+  answer** — **OPEN, found by the maintainer 2026-10-02; only a Steam restart cleared it.** The answer is also drawn
+  behind the question box, and the ring shows as one big box around both. Screenshot
+  `screenshots/DeckCapture_20261002_004346_game.png`. Measure on the Deck first; may be kin to the old focus trap.
+  **Not reproduced on the Deck in seven tries by three routes (2026-10-02; `docs/test-evidence/plan79-P79-M1-TRAP.json`, `-try2`, `-try3`).**
+  **2026-10-02 (plan 79):** two fixes for kin of this fault landed; neither is proven to be the maintainer's own route. Down with Steam's ring on the whole answer no longer does nothing when the panel's page has lost the browser's focus (`affa7fa0`, test `src/utils/answerBubbleNavigation.ringOnBubble.test.ts`), and a closing settings list now hands the ring to the question box (`8c8fffb0`, in Verify). Deck check owed: row **P79-TRAP-DOWN-BUBBLE**, the same route five times. Not run yet.
+
+Original entries moved from Features on 2026-10-02 when their builds went to Verify, kept for their first wording:
+
+- ★★★ `[ollama]` **Fold the "Models & routing" section into the AI models box** — **OPEN, an idea from the
+  maintainer 2026-10-02.** Less clutter on the Ollama tab. **Mockups first, at a later time,** drawn true size, so
+  the maintainer can choose where each piece goes.
+- ★★★ `[layout]` `[focus]` `[chips]` **While reading an answer, the Show details line takes the suggestion
+  chip's place above the question box** — **NEW, filed by the maintainer 2026-09-23. Not started.** Today
+  the suggestion chip stays pinned above the question box no matter where in a reply the person has
+  scrolled. The idea: while scrolling through an answer, that answer's own Show details line shows there
+  instead of the chip; once the person scrolls past the answer and its Show details line, the chip comes
+  back. The maintainer's own proposed cure for the bug **"Show details' chip ladder hides under the
+  question box"**, below. **Needs a plan and animated mockups before anything is built**, since the swap
+  between the chip and the line happens as the person scrolls — drawn at the Deck's real size, from the
+  real screen, showing the swap in motion.

@@ -1,0 +1,47 @@
+{
+  "row": "P79-BUTTON-KEEPS-GAME",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 15:52-16:12",
+  "screen": "built-in 854x454 (window size read), Deep Rock Galactic: Survivor running at its title screen, Context line 'active game Deep Rock Galactic: Survivor', 2140 MB available when asking",
+  "setup": "Hades exited first (process gone, confirmed over SSH), DRG:S launched with deck_launchGame (5 presses). No reload. Chat 6f3cc055 (test chat), questions via send script, VERIFIED each time, A only on the Ask button after reading focus.",
+  "pressed": "Q1 'How do I beat the Soul Master in Hollow Knight?' (Ask A). Answer offered choice buttons A/B. Walked UP to 'A. Focusing on hitting him from below during orb creation' (focus read), A. Second try for the refine chip: Q2 'Which Hollow Knight charms help against the Soul Master?'. Last: 'What should I do first?' (Ask A).",
+  "seen": {
+    "q1_turn": {
+      "user_turn_app": "2321470 Deep Rock Galactic: Survivor",
+      "answer_asked_entity": "Soul Master",
+      "notes_attached": "Starting out in Hollow Knight, Soul Master, False Knight (all game Hollow Knight)",
+      "spoiler_title_profile": "protect_progression (Hollow Knight's)",
+      "spoiler_consent": false,
+      "covers_in_page": "none found (no element with spoiler/cover/mask/blur class in the answer)",
+      "choice_buttons_offered": [
+        "A. Focusing on hitting him from below during orb creation",
+        "B. Learning the dodges for the second round when he comes back through the roof"
+      ]
+    },
+    "choice_button_followup_turn": {
+      "user_text": "[Strategy follow-up] I'm at: Focusing on hitting him from below during orb creation. Earlier I asked: How do I beat the Soul Master...",
+      "turn_app": "2321470 Deep Rock Galactic: Survivor (the running game)",
+      "answer_asked_entity": "Soul Master",
+      "notes_attached": "Soul Master, Starting out in Hollow Knight, Soul, Focus and spells (all Hollow Knight)",
+      "spoiler_title_profile": "protect_progression (Hollow Knight's)",
+      "spoiler_consent": false,
+      "covers_in_page": "none found by class name; not judged by eye"
+    },
+    "refine_chip": "Refine chips (Bad info and the like) show only after Not really is pressed on an answer (read from the plugin code). The runbook does not say to press Not really, so I did not. Two answers (Q1, Q2) both showed only choice buttons and the ordinary suggestion chips under them.",
+    "q2_turn": "notes Hollow Knight again; choice buttons 'A. Starting out in Dirtmouth', 'B. Deep in the Soul Sanctum area'",
+    "typed_followup_no_game": {
+      "text": "What should I do first?",
+      "turn_app": "2321470 Deep Rock Galactic: Survivor",
+      "notes_attached": "Mining and the run timer, Hollow Bough, Upgrades and overclocks (all Deep Rock Galactic: Survivor)",
+      "spoiler_title_profile": "low_narrative (Deep Rock's)",
+      "chat_subject_after": "appid:2321470 / Mining and the run timer (it was title:hollow knight / Soul Master before)"
+    }
+  },
+  "expected": "Choice-button and refine-chip follow-ups both tied to Hollow Knight with its notes attached and come back with covers; a typed follow-up naming no game tied to Deep Rock.",
+  "verdict": [
+    "UNCLEAR (choice-button follow-up) - Hollow Knight's notes and Hollow Knight's spoiler profile were used, which is the fix working. But the turn's own game field still says Deep Rock, and I found no spoiler covers on the answer. Owner: is the field meant to change, and are covers meant to show for a 'protect progression' answer with no consent?",
+    "COULD NOT RUN (refine-chip follow-up) - no refine chip was on screen; they only appear after pressing Not really, which the runbook does not say to press.",
+    "PASS (typed follow-up naming no game) - tied to Deep Rock with Deep Rock's notes and profile."
+  ],
+  "side_effect": "The test chat is at its 200-entry cap, so the oldest entries were pushed out as I asked (3 questions plus the earlier TRAP-H one). Its label is unchanged. The chat's subject now reads Deep Rock (Mining and the run timer), no longer Hollow Knight. No ratings were pressed. One extra question (Q2) used as the second try."
+}

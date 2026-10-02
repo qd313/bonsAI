@@ -1691,3 +1691,22 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
   fine but quietly resets after a restart; that already happened once, to four settings together. Fix: write
   the list once and have the other six read it. Nothing is broken today. [Why](archive/55-bugfix-session-three.md).
   **Closed 2026-10-02:** done by `ba21f33a` (2026-09-21), read-back test `9c8d7157`. The hook names every setting once. Still owed: a whole-list read-back after a plugin restart on the Deck.
+
+## Closed 2026-10-02 (plan 79, Deck blocks 2b to 3a, builds `678aaa3d` and `6e297645`)
+
+- ★★ `[chat]` **A chat's Save and Delete buttons show only while its row has the ring, and Delete is a bin with two slots** — **VERIFY, built 2026-10-02 (`deea4f20`, `d2c1d93c`), asked for by the maintainer; the maintainer picked icon 2, the bin with slots.**
+  **Deck 2026-10-02 (build `d810328b`): four of five steps pass.** With the ring elsewhere there is no disk or bin; Left reaches the disk and A opens Save, B closes it; Right twice reaches Delete, a bin with a lid and two slots, A opens the Delete box, B closes it; moving away hides both. **FAIL: the chat's name moves 15.2 px right and shrinks 31.8 px when the ring comes onto the row (the pass line is under 1 px).** A second round has not landed yet; re-check owed.
+  Row **P79-CHAT-ROW-BUTTONS**. Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json`. The Delete box opening on Delete is its own bug under Bugs.
+  **Closed 2026-10-02, passed on the Deck (row P79-CHAT-ROW-BUTTONS; fixes `deea4f20`, `d2c1d93c`, `c3dcf37e`).** The chat's name box moved 0 px in x, y and width between the ring on a chip, on the row and on the "N earlier" line; disk and bin show only with the ring on the row; Left reaches Save, Right twice reaches Delete (a bin with a lid and two slots), A opens the Delete box on "Keep chat". Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS-try2.json`.
+
+- ★★★ `[chat]` **Opening "N earlier" floods a long chat with rows** — **OPEN, reported by the maintainer
+  2026-09-25; needs a drawing of the options first.** Every earlier question becomes its own row, 42 in one
+  chat, filling the screen. [Detail](roadmap-details.md#opening-n-earlier-floods-a-long-chat-with-rows).
+  **Closed 2026-10-02, passed on the Deck (row P79-EARLIER-BY-DAY; fixes `86f80087`, `6a13c469`, `927666c5`).** Opening "N earlier" shows one line per day: Wed 30 Sep 16, Yesterday 67, Today 16, which add up to the 99. Down and Up visit the same stops in opposite order, none twice, never Retry; Up from the newest question lands on the day line over it; Up from "N earlier" reaches the chat row in one press; B closes a day line, then "N earlier". Opening or closing a day line drops the ring for one press (filed under Bugs). Evidence `docs/test-evidence/plan79-P79-EARLIER-BY-DAY.json`.
+
+- ★ `[KB]` `[chips]` **A game offers ten of its own suggestion chips, not six** — **VERIFY, built 2026-10-02 (`c88f140c`), the maintainer's add-on (D122 item 9).**
+  A given game chip came back about every 66 seconds; now about every 108. Deck check owed: row **P79-GAME-CHIPS-TEN**: with a game running, ten different game chips before one repeats.
+  **Closed 2026-10-02, passed on the Deck (row P79-GAME-CHIPS-TEN; `c88f140c`).** Ten different Hades chips (bosses, a place, items, mechanics) before the first repeat at 100 s. The panel shows two chips at once, one of them general. Evidence `docs/test-evidence/plan79-P79-TEN-GAME-CHIPS.json`.
+
+- ★★ `[chips]` **The suggestion chip under the D-pad ring gets a soft blue fill instead of the bottom bar** — built as `27172839`, the maintainer's pick (drawing 1); part of the Verify entry "Long suggestion chips".
+  **Closed 2026-10-02, passed on the Deck on what was measured (row P79-CHIP-SOFT-FILL).** Ring on the chip: a pale blue layer (rgba 56,189,248,0.2) over the grey gradient, no bar under it; ring away: grey only. The computed edge is white at 10 percent, 0.67 px, the same on or off. Look: the maintainer's checks page. Evidence `docs/test-evidence/plan79-P79-CHIP-SOFT-FILL.json`.

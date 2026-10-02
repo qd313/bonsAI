@@ -1,0 +1,41 @@
+{
+  "row": "P79-TRAP-ROUTES-AFTER",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:24-15:36 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Test chat 6f3cc055 on Main. Before each try: Quick Access closed with the chord and reopened (box empty because of no_persist). The word 'brightness' sent with the send-question script (VERIFIED each time). 'The Brightness row' = the 'QAM > Brightness (QAM > Quick Settings)' row at the bottom of the Steam settings list (54.7,285.9,286.7x30). document.hasFocus() was true at every read. Down 6 / Up 3 were run with deck_runSequence (a focus read after every press).",
+  "pressed": "Try E: Down x2 to Ask-area, Up x2 to the list, B, then Down x6, Up x3. Try F: Up to the Brightness row, box text replaced over SSH, Down x6, Up x3. Try G: Up to the Brightness row, A, deck_openPlugin, B, Down x6, Up x3. Try H: see below. No answer or model row was pressed.",
+  "seen": {
+    "try_E": {
+      "list_walk": "Up from the box landed on the Brightness row (ring drawn, screenshot DeckCapture_20261002_152750_auto.png). B closed the list and put the ring back on the question box (72.7,323.2,274.7x44), box still 'brightness'.",
+      "down_6": "press 1: box -> ask button (49,400,263x36). Presses 2 to 6: ring stayed on ask (it is the last control on the panel, nothing is below it).",
+      "up_3": "ask -> box -> chip 'How do I balance FPS and battery?' -> chat row (48,88,300x48.3). Every Up moved.",
+      "hasFocus": true
+    },
+    "try_F": {
+      "up_to_row": "Brightness row (54.7,285.9,286.7x30) with the ring.",
+      "after_ssh_replace": "list hid itself and the ring moved by itself onto the question box (72.7,308.5,274.7x59, two lines of text). Screenshot DeckCapture_20261002_153032_auto.png.",
+      "down_6": "box -> ask on press 1, then ring stayed on ask for presses 2 to 6 (end of the panel).",
+      "up_3": "ask -> box -> chip 'Why is my game crashing?' -> chat row. Every Up moved.",
+      "hasFocus": true
+    },
+    "try_G": {
+      "a_on_row": "A on the row switched Quick Access to Quick Settings (screenshot DeckCapture_20261002_153216_auto.png).",
+      "openPlugin_back": "deck_openPlugin pressed 4 rail presses + 1, reopened bonsAI; the ring was back on the same row '* QAM > Brightness' (55,249,287x30, the list now laid out higher), hasFocus true, box still 'brightness'.",
+      "b_once": "B closed the list, ring on the question box.",
+      "down_6": "box -> ask on press 1, then ring stayed on ask for presses 2 to 6.",
+      "up_3": "ask -> box -> chip 'Any known issues running this on Deck?' -> chat row. Every Up moved.",
+      "hasFocus": true
+    },
+    "try_H": {
+      "result": "COULD NOT RUN as written. The newest turn in the test chat is the 'Request cancelled.' notice, not an answer. Walking Down from the chat row put the ring on that notice's text chunk (63,253,245x15) inside its bubble (52,245,267x32): a small ring on the text, not one tall ring over the whole bubble (screenshot DeckCapture_20261002_153433_auto.png). The only real answer in the chat sits behind the '96 earlier' pill, which I may not press A on. LEFT from the chunk did not reach Quick Access's side rail, and LEFT from the tab bar only switched the plugin to About (RIGHT put it back on Main). So neither the tall-ring state nor the switch to another Quick Access tab was reached. No trap was seen, and no trap test was done."
+    }
+  },
+  "expected": "NOT TRAPPED: Down moves the ring off where it was within 2 presses and the walk goes on with no press that leaves everything the same three times in a row",
+  "verdict_try_E": "PASS - not trapped. Down moved the ring off the box on press 1. It then stopped on Ask because Ask is the last control on the panel (5 presses in a row with nothing changing there; this is the bottom of the screen, and Up worked straight away). If the pass line is read literally ('no press that leaves everything the same three times in a row'), that end-of-panel stall is the one place it could be argued; the owner decides.",
+  "verdict_try_F": "PASS - not trapped, same pattern as E (box -> ask on press 1, end of the panel, Up back through all stops).",
+  "verdict_try_G": "PASS - not trapped, same pattern; the ring returned to the Brightness row after the Quick Settings round trip and hasFocus stayed true.",
+  "verdict_try_H": "COULD NOT RUN - no whole-answer ring could be set up in this chat (see seen.try_H).",
+  "verdict": "E PASS, F PASS, G PASS, H COULD NOT RUN",
+  "side_effect": "Try G: A on the Brightness row opened Quick Settings; nothing was changed there (no slider touched). Panel pressed LEFT on the tab bar once, which moved the plugin to the About tab; it was put back on Main with RIGHT. The test chat got no new turn in this row."
+}

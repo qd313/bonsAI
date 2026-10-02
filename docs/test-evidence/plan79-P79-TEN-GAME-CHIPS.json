@@ -1,0 +1,77 @@
+{
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 15:40-15:50",
+  "screen": "built-in 854x454 (window size read 854x454), Hades running in front, Quick Access panel over it",
+  "setup": "Hades launched with deck_launchGame (6 presses, ran 84 ms to appear; free memory 2682 MB available after start). Waited 45 s, then deck_openPlugin (QAM chord, 1 DOWN to place the ring); Context line read 'active game Hades'. Pinned test chips: dev_frozen_test_chips = [] in settings.json (read over SSH; Developer tab not opened, nothing cleared). Corpus: Hades has 15 note sections (1 area, 2 boss, 6 item, 6 mechanic) so the pass line stays ten.",
+  "row": "P79-TEN-GAME-CHIPS",
+  "pressed": "deck_launchGame; deck_openPlugin; no presses during the 200 s read (read page every 100 ms)",
+  "seen": {
+    "note": "The panel shows TWO chips side by side at once, not one. One is a game chip (has the small square 'Tip' badge), the other a general chip. Both rotate on their own and they swap sides.",
+    "game_chips_in_order_of_first_appearance_seconds": [
+      {
+        "t_s": 0,
+        "label": "How do I beat Theseus and Asterius?"
+      },
+      {
+        "t_s": 2.0,
+        "label": "What should I know about Mirror of Night?"
+      },
+      {
+        "t_s": 14.1,
+        "label": "Tips for Temple of Styx in this game?"
+      },
+      {
+        "t_s": 24.7,
+        "label": "How do I use Heart-Seeking Bow?"
+      },
+      {
+        "t_s": 34.4,
+        "label": "What should I know about Darkness, keys and gems?"
+      },
+      {
+        "t_s": 48.8,
+        "label": "What should I know about Weapon aspects?"
+      },
+      {
+        "t_s": 60.1,
+        "label": "How do I use Eternal Spear?"
+      },
+      {
+        "t_s": 68.7,
+        "label": "How do I use Shield of Chaos?"
+      },
+      {
+        "t_s": 77.2,
+        "label": "How do I use Stygian Blade?"
+      },
+      {
+        "t_s": 87.4,
+        "label": "How do I beat Megaera?"
+      }
+    ],
+    "distinct_game_chips_before_first_repeat": 10,
+    "first_repeat": "How do I beat Theseus and Asterius? again at 100.1 s (after Megaera at 87.4 s)",
+    "game_chips_total_seen_in_200s": "the same ten, second round started at 100 s and repeated in the same order with Stygian Blade, Temple of Styx, Heart-Seeking Bow, Shield of Chaos, Darkness..., Eternal Spear, Weapon aspects, Mirror of Night, Megaera",
+    "general_chips_in_between_not_counted": [
+      "How do I balance FPS and battery?",
+      "What should I do if Ask times out?",
+      "Why can't bonsAI reach my PC Ollama host?",
+      "What do the model policy tiers mean?",
+      "What is Caveman reply style?",
+      "What settings should I use?",
+      "Any Steam Input issues for this game?",
+      "Game won't launch, what should I check?",
+      "What are the best settings for 60fps?",
+      "How do I fix stuttering?",
+      "Diagnose a slow Ollama response",
+      "How do I set up voice input on the Deck?",
+      "Why is my Deck running hot?",
+      "Recommended controller layout?",
+      "Why is my game crashing?",
+      "Where do your game tips come from?"
+    ],
+    "raw": "scratchpad p79/deck/chips_raw.txt"
+  },
+  "expected": "Ten different chips about the game itself appear before any one of them repeats.",
+  "verdict": "PASS - ten different Hades chips (bosses Theseus and Asterius and Megaera, place Temple of Styx, items and mechanics) came up before the first repeat at 100 s. Note for owner: the plugin shows two chips at once, one of them general, not one at a time."
+}

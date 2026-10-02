@@ -1,0 +1,34 @@
+{
+  "row": "P79-BUTTON-KEEPS-GAME-try2",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:29-16:36 EDT",
+  "screen": "built-in, page 854x534 with the game running",
+  "setup": "Deep Rock Galactic: Survivor running (Context line 'active game Deep Rock Galactic: Survivor'). Test chat 6f3cc055 (title read). The chat is at its 200-turn cap, so the oldest turns fall out as new ones are added. Question sent with the script, VERIFIED: 'How do I beat the Soul Master in Hollow Knight?' (this exact question was also asked in the last block, so the answer may have come from the cache, but the answer took ~89 s so it was generated).",
+  "pressed": "Ask (focus read: ask), answer arrived with choice buttons A/B. Walked Down to 'Mark reply helpful' (focus read) then Right: focus read 'Mark reply not helpful' (text 'Not really'); A. The refine chips appeared (Bad info, Wrong game or topic, Spoiled it, Too long, Too short). Down, Left: focus read 'Bad info'; A. A refine chip does not send: it put 'The last answer may be wrong. Correct factual errors, drop unverified claims, and state what you're unsure about. Original question: How do I beat the Soul Master in Hollow Knight?' into the question box. I walked to Ask (focus read: ask) and pressed A to send it. Waited ~97 s for the answer. Then read the chat file over SSH.",
+  "seen": {
+    "first_turn_Soul_Master": {
+      "turn_app": "2321470 Deep Rock Galactic: Survivor",
+      "asked_entity": "Soul Master",
+      "notes_attached": "Hollow Knight: Starting out, Soul Master, False Knight",
+      "route": "ollama"
+    },
+    "refine_chip_followup_turn": {
+      "user_text": "The last answer may be wrong. Correct factual errors, drop unverified claims, and state what you're unsure about. Original question: How do I beat the Soul Master in Hollow Knight?",
+      "route": "reply_followup:bad_information",
+      "game_field_on_the_turn": "2321470 Deep Rock Galactic: Survivor (the running game)",
+      "asked_entity": "Soul Master",
+      "notes_attached": "Hollow Knight: Soul Master first, then Starting out in Hollow Knight, False Knight (the Soul Master card text: 'Top of the Soul Sanctum in the City of Tears...')",
+      "spoiler_profile": "protect_progression (Hollow Knight's profile, seen in the turn's own data)",
+      "spoiler_protected": true,
+      "spoiler_consent": false,
+      "covers_drawn_in_page": "none (page has 1 answer section and 0 'tap to show' covers on the newest answer)",
+      "chat_subject_after": "game_key title:hollow knight, subject Soul Master"
+    }
+  },
+  "expected": "the refine-chip follow-up used Hollow Knight's notes and Hollow Knight's spoiler profile (write which game the turn's own field names and whether covers were drawn; those two are for the maintainer to judge)",
+  "verdict": [
+    "PASS - the refine-chip follow-up used Hollow Knight's notes (all attached notes are Hollow Knight, Soul Master first) and Hollow Knight's spoiler profile (protect_progression)",
+    "For the maintainer to judge: the turn's own game field names Deep Rock Galactic: Survivor (the running game), and no covers were drawn on the follow-up answer"
+  ],
+  "side_effect": "Three real turns added to the test chat (the Soul Master question, 'Not really' pressed on it (a rating of not helpful), and the refine follow-up). Not-helpful rating is recorded on the Soul Master answer. Pressing the refine chip only fills the question box; the follow-up needed a separate A on Ask."
+}

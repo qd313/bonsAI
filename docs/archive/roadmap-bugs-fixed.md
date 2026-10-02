@@ -2893,3 +2893,55 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   `screenshots/DeckCapture_20261002_005210_game.png`, `screenshots/DeckCapture_20261002_005227_game.png`.
   **Measured 2026-10-02:** reproduced. A box 290 px wide and 169 to 337 px tall, on 7 of 7 chip presses. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING.json`.
   **Closed 2026-10-02, passed on the Deck by the session's ruling (row P79-M3-DETAILS-RING; fix `313377af`).** Seven chips each once both ways with the ring on the one chip (25 px); no tall frame. B on a chip closed the Show details section and put the ring on "Show details", the panel staying open; the session counted that as the pass. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING-AFTER.json`.
+
+## Closed 2026-10-02 (plan 79, Deck blocks 2b to 3a, builds `678aaa3d` and `6e297645`)
+
+- ★★★ `[focus]` **The highlight goes invisible on some tabs, starting with Down from "Update AI & models"** — **VERIFY, half passed: fixed 2026-10-02 (plan 79, `aa07e4d5`, `d810328b`, `25511e75`). Was OPEN, found by the maintainer 2026-10-02.**
+  Buttons that set their own fill hid Steam's ring; they now carry the plugin's ring class, and a guard test names every button still on the old way. **Ollama tab passed on the Deck (build `d810328b`):** 17 stops all fully visible, no dead press, a ring drawn on Manage AI models, both try-order buttons and all four Thinking choices (and on Browse models and Test connection too).
+  **Still owed:** the Settings tab (6 buttons) and the Developer tab, fixed in `25511e75` after that build. Row **P79-OLLAMA-WALK**. Evidence `docs/test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json` (before: `plan79-P79-M2-*.json`).
+  **Closed 2026-10-02, passed on the Deck (row P79-OLLAMA-WALK; fixes `aa07e4d5`, `d810328b`, `25511e75`).** The Ollama tab passed earlier (`plan79-P79-OLLAMA-WALK-AFTER.json`); the Settings and Developer tabs passed in `docs/test-evidence/plan79-P79-RING-WALK-TABS.json`: every stop draws a ring or a highlight, including Browse models and Test connection. Weak spots (a thin grey frame on the accent button and "Reinstall voice engine", a white fill and no ring on the Steam Web API key field) are filed as their own Bugs entry.
+
+- ★ `[focus]` **The question box showed no sign of the D-pad ring** — found by the Deck block 2b (no earlier entry). Before the fix the box looked the same with the ring on it, after walking onto it and after the X (`docs/test-evidence/plan79-P79-X-RING-SAME.json`, build `678aaa3d`).
+  **Closed 2026-10-02, passed on the Deck (row P79-QUESTION-BOX-RING; fix `26965c63`, build `6e297645`).** A white 2 px line (rgba 255,255,255,0.88, offset -2 px) on all four sides, gone after Up, drawn again when the answer lands the ring on the box. Evidence `docs/test-evidence/plan79-P79-QUESTION-BOX-RING.json`.
+
+- ★★ `[ask]` **After a spoken question and Stop, the X on the Ask bar does not clear the question** — **VERIFY, fixed 2026-10-02 (plan 79, `01ba0525`, `04161088`, `42615a6b`); failed its first Deck check. Was OPEN, found by the maintainer 2026-10-02 on the real microphone.**
+  Emptying the box now ends dictation, the X hands the ring to the question box, and Ask ends listening. **Deck 2026-10-02 (build `d810328b`, typed question): the box empties and stays empty (still empty 30 s later), but no ring is drawn on the question box after the X, though focus is on it. FAIL for the ring;** a second round has not landed yet. A spoken question stays the maintainer's check (the rig cannot speak).
+  Row **P79-X-AFTER-STOP**. Evidence `docs/test-evidence/plan79-P79-X-AFTER-STOP-AFTER.json`. Tests: `src/components/MainTabUnifiedAskBar.stopRing.test.tsx`, `src/features/voice/voiceClearAfterStop.test.tsx`.
+  **Closed 2026-10-02, passed on the Deck for a typed question, by the session's ruling (row P79-X-AFTER-STOP; fixes `01ba0525`, `04161088`, `42615a6b`, `26965c63`).** The box empties and stays empty (`plan79-P79-X-AFTER-STOP-AFTER.json`); the ring is drawn on the question box (`plan79-P79-QUESTION-BOX-RING.json`). Still owed, and the maintainer's: a spoken question with the real microphone.
+
+- ★ `[layout]` **The bronze note card sits right on top of the suggestion chip, with no gap** — **VERIFY, second round landed 2026-10-02 (plan 79, `678aaa3d`; first try `26d298e1`). Was OPEN, found by the maintainer 2026-10-02.**
+  The Deck measured the first try at 14.7 px between the card and the chip row (wanted 8), with the ring on the card, the chip and the question box: the turn slot added its own 6 px row gap to the spacer. The card and spacer now share one wrapper, so the room is exactly 8 px. The D-pad order card, chip, question box passed unchanged.
+  Row **P79-M10-CARD-CHIP-GAP**: gap FAIL on the first try, re-check owed on the second. Evidence `docs/test-evidence/plan79-P79-M10-CARD-CHIP-GAP-AFTER.json` (0 px before: `plan79-P79-M10-CARD-CHIP-GAP.json`). Test: `src/components/MainTabChatTranscript.kbNotesGap.test.tsx`.
+  **Closed 2026-10-02, passed on the Deck (row P79-M10-CARD-CHIP-GAP; fixes `26d298e1`, `678aaa3d`).** 8.7 px with the ring on the card, on the chip and on the question box; order card, chip, question box. Evidence `docs/test-evidence/plan79-P79-M10-CARD-CHIP-GAP-AFTER-try2.json`.
+
+- ★★ `[focus]` **Down from "N earlier" stops on the question's Retry button before the question itself** — **VERIFY, second round landed 2026-10-02 (plan 79, `2134dcfd`, `8fa304eb`; first try `f7b90c1c`). Was OPEN, found by the maintainer 2026-10-02.**
+  First try, Deck 2026-10-02 (build `d810328b`): none of 6 Down presses landed on Retry, and Left reached it with Right coming back, but **Up from the question text still landed on Retry (2 of 2 tries).** Second round: the question text now claims Up and hands the ring to whatever is drawn above the row, and Down from the chat row goes to the first question's text, not its Retry.
+  Row **P79-M8-EARLIER-RETRY**: Up half FAIL, re-check owed on the second round. Evidence `docs/test-evidence/plan79-P79-M8-EARLIER-RETRY-AFTER.json`. Tests: `src/components/MainTabChatTranscript.retryNotAStop.test.tsx`, `src/components/MainTab.chatRowDownRetry.test.tsx`.
+  **Closed 2026-10-02, passed on the Deck (row P79-M8-EARLIER-RETRY; fixes `f7b90c1c`, `2134dcfd`, `8fa304eb`).** None of 6 Down and 6 Up presses landed on Retry; Left reaches it and Right comes back; in a one-question chat Down from the chat row lands on the question text. Evidence `docs/test-evidence/plan79-P79-M8-EARLIER-RETRY-AFTER-try2.json`, `plan79-P79-SHORT-CHAT-DOWN.json`.
+
+- ★★ `[layout]` **In the AI models box, going all the way down and back up leaves the top model half hidden** — **VERIFY, second round landed 2026-10-02 (plan 79, `e25be22e`; first try `084900c4`). Was OPEN, found by the maintainer 2026-10-02.**
+  First try, Deck 2026-10-02 (build `d810328b`): on the way down every model row was whole below the list's column header, and B put the ring back on Manage AI models, but **Up onto the first model left the list scrolled 41 px, with 15 of its 35 px behind the header (FAIL).** Second round: when a model row takes the ring the plugin measures it against the header and scrolls the list itself.
+  Row **P79-M9-MODELS-BOX**: re-check owed on the second round. Evidence `docs/test-evidence/plan79-P79-M9-MODELS-BOX-AFTER.json`. Test: `src/components/PullModelsModal.listScroll.test.tsx`.
+  **Closed 2026-10-02, passed on the Deck (row P79-M9-MODELS-BOX; fixes `084900c4`, `e25be22e`).** First model 26.0 px below the column header on the way back up, nothing hidden; list at the top at Filters; B returns the ring to Manage AI models. Evidence `docs/test-evidence/plan79-P79-M9-MODELS-BOX-AFTER-try2.json`.
+
+- ★ `[chat]` **The "Delete chat slot?" box opens with the highlight on Delete, so an A pressed by habit deletes the chat** — **OPEN, seen 2026-10-02 (plan 79, Deck).**
+  Opened from the chat row's bin, the first focus read was on Delete, not Cancel. The session pressed B only, so nothing was deleted. No fix has landed yet.
+  Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json` (step 4).
+  **Closed 2026-10-02, passed on the Deck (row P79-CHAT-ROW-BUTTONS; fix `a24a84e3`).** The box opens with the ring on "Keep chat"; A there closes it and the chat is still there. Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS-try2.json`.
+
+- ★ `[chips]` **A preset chip has a bright blue underline that is too distracting** — **VERIFY, fixed in
+  `895cf0a`.** Measured on the Deck 2026-09-23: the line's strength reads 0.55, as intended, and is drawn
+  only while the ring is on the chip. Row **CHIP-UNDERLINE-BYEYE-01**. Owed: **a by-eye check by the
+  maintainer**, from `docs/test-evidence/plan64-BYEYE-01-preset-chip.png`. This line is the chip's only
+  highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
+  stay clearly visible, not just calmer.
+  **Closed 2026-10-02, replaced by the soft blue fill (`27172839`); no check was run on the underline.** The underline no longer exists. Row CHIP-UNDERLINE-BYEYE-01 is closed with it. The fill: row P79-CHIP-SOFT-FILL, `docs/test-evidence/plan79-P79-CHIP-SOFT-FILL.json`.
+
+- ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
+  Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
+  the ring on the chip. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer**, from
+  `docs/test-evidence/plan64-BYEYE-01-preset-chip.png` — a model cannot judge pixels.
+  **Closed 2026-10-02, closed with the underline entry (row CHIP-COLOR-BYEYE-01).** Its by-eye check was against a screenshot of the old bar highlight, which the soft fill replaced; the label colour under the new fill was not measured.
+
+- ★★ `[reply]` **A button pressed under an answer keeps that answer's game** — the maintainer's add-on (D122), built as `50391367`; no earlier roadmap entry. A question naming a protected story game, asked while a no-story game runs, uses the named game's notes and spoiler covers for that turn; a choice button or a refine chip pressed under that answer now does the same.
+  **Closed 2026-10-02, passed on the Deck (row P79-BUTTON-KEEPS-GAME).** Hollow Knight asked about with Deep Rock Galactic: Survivor running: the choice button (build `678aaa3d`) and the refine chip "Bad info" (build `6e297645`) both used Hollow Knight's notes and spoiler profile (protect_progression); a typed follow-up naming no game used Deep Rock's notes and profile. For the maintainer to judge: the turn's own game field still names Deep Rock, and no spoiler covers were drawn on either follow-up. Evidence `docs/test-evidence/plan79-P79-BUTTON-KEEPS-GAME.json`, `plan79-P79-BUTTON-KEEPS-GAME-try2.json`.

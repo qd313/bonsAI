@@ -183,6 +183,10 @@ Settings action buttons use a third, hybrid variant in
 `rgba(255,255,255,0.45)`. Its `Focusable` host has its own outline suppressed so the ring
 hugs the button rather than the wrapper.
 
+**The question box's ring** (since 2026-10-02, measured on the Deck the same day): `outline: 2px solid rgba(255,255,255,0.88); outline-offset: -2px;`, drawn **inside** the field's edge so the Ask row, the dock and the glass card cannot cut it off. It follows only Steam's `gpfocus` class on the input or textarea, never plain focus, so an open on-screen keyboard adds no second ring ([section-5.ts](../src/styles/sections/section-5.ts)).
+
+**The Show details line in the chip's slot** uses the inset ring above: `outline: 2px solid rgba(255,255,255,0.85); outline-offset: -2px;` with `box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55)`, because the chip row clips anything drawn outside its box. The line's label brightens to `#e8eef5` and its rule to `rgba(255,255,255,0.28)` while it has the ring; the swap with the chip is a 120 ms fade, instant with reduced motion ([detailsSlot.ts](../src/styles/sections/detailsSlot.ts)).
+
 Two standing prohibitions, both recorded as reverts in the source:
 
 - **Never source the ring from `--bonsai-ui-tab-focus-1/-2`.** Those are the *tab strip's*

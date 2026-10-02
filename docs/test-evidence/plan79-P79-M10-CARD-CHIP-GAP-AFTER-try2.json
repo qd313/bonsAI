@@ -1,0 +1,33 @@
+{
+  "row": "P79-M10-CARD-CHIP-GAP-AFTER-try2",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:08-15:10 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); screenshot y = page y * 1.5 + about 59",
+  "setup": "Test chat 6f3cc055, newest answer, details collapsed (note card 'Charms and notches / From the Hollow Knight wiki'). From the chat row, 7 Downs reached the card (question, reasoning, answer, helpful, Show details, card). A never pressed.",
+  "pressed": "Down (chip), Down (question box), Up, Up (back on the card). Page read after each.",
+  "seen": {
+    "ring_on_card": {
+      "focused": "DIV note card 52,235.1,266.8 x 47",
+      "card_bottom_y": 282.1,
+      "chip_row_top_y": 290.8,
+      "gap_px": 8.7,
+      "screenshot": "screenshots/DeckCapture_20261002_150921_auto.png (ring drawn around the card; its outer edge nearly touches the chip row, the 8.7 px is the boxes)"
+    },
+    "ring_on_chip": {
+      "focused": "BUTTON \"What's ahead (without spoilers)?\" 48,290.8,147 x 30",
+      "gap_px": 8.7,
+      "screenshot": "screenshots/DeckCapture_20261002_150906_auto.png"
+    },
+    "ring_on_question_box": {
+      "focused": "INPUT 72.7,323.4,274.7 x 44",
+      "card_bottom_y": 282.1,
+      "chip_row_top_y": 290.8,
+      "gap_px": 8.7
+    },
+    "dpad_order": "card -> chip -> question box on Down, back to the card in two Ups; no new stop"
+  },
+  "expected": "gap between card bottom and chip row top 6 to 10 px with the ring on the card and on the question box; D-pad card -> chip -> question box; no new stop",
+  "verdict_gap": "PASS - 8.7 px with the ring on the card, on the chip and on the question box (last time 14.7). (The row's own wording says 8 exactly; the measured value is 8.7, inside 6 to 10.)",
+  "verdict_order": "PASS - card -> chip -> question box, nothing new is a stop.",
+  "verdict": "PASS"
+}

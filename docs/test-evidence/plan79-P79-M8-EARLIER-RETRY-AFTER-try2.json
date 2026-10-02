@@ -1,0 +1,36 @@
+{
+  "row": "P79-M8-EARLIER-RETRY-AFTER-try2",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:05-15:07 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Test chat 6f3cc055, Main tab (reached with LB from the Ollama tab, ring landed on the chat row, then Down once to the pill '95 earlier' (52,146.3,290x22)). Retry button box (164.7,200.6,20x20) sits on the only visible question 'In one short sentence what is a Hollow Knight charm'. A never pressed.",
+  "pressed": "Down x6 from the pill with a read after each, Up x6 back with a read after each, then Down, Left, Right.",
+  "seen": {
+    "down_from_pill": [
+      "1 question text (168.7,189,162.7x28.6)",
+      "2 'Show reasoning 13 s' divider (52,234.3,290x14.7)",
+      "3 answer chunk 'Right then, listen up...' (62.7,170.3,245.5x120)",
+      "4 'Mark reply helpful' (52,175.8,80.8x28)",
+      "5 'Show details' (52,219.8,266.8x14.7)",
+      "6 notes block 'Charms and notches' (52,235.1,266.8x47)"
+    ],
+    "no_down_press_landed_on_retry": true,
+    "up_back": [
+      "1 Show details",
+      "2 Mark reply helpful",
+      "3 answer chunk",
+      "4 Show reasoning divider (52,204.3,290x14.7)",
+      "5 question text (168.7,189,162.7x28.6)",
+      "6 (the new test) pill '95 earlier' (52,146.3,290x22), the line drawn right above the question row"
+    ],
+    "no_up_press_landed_on_retry": true,
+    "down_from_pill_again": "question text",
+    "left_from_question": "Retry same prompt (164.7,200.6,20x20), screenshot DeckCapture_20261002_150650_auto.png shows the ring on it",
+    "right_from_retry": "question text (168.7,189,162.7x28.6)"
+  },
+  "expected": "no Up or Down press lands on Retry; Down from the pill lands on the question text; Up from the question text lands on what is drawn right above its row; Left lands on Retry, Right comes back",
+  "verdict_down": "PASS - Down from '95 earlier' lands on the question text, none of 6 Down presses landed on Retry.",
+  "verdict_up": "PASS - none of 6 Up presses landed on Retry; Up from the question text went straight to the '95 earlier' line drawn above it (last time it stopped on Retry).",
+  "verdict_left_right": "PASS - Left from the question lands on Retry, Right comes back to the question text.",
+  "verdict": "PASS - all three halves pass. Only one question is in view, so 'a closed question above' could not be tried; the line above was the pill."
+}

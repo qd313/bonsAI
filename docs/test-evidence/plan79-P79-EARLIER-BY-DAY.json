@@ -1,0 +1,39 @@
+{
+  "row": "P79-EARLIER-BY-DAY",
+  "build_commit": "6e297645 (deployed, buildMatches true)",
+  "deck_time_local": "2026-10-02 16:09-16:20 EDT",
+  "screen": "built-in 854x454",
+  "setup": "Test chat 6f3cc055 (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' read from the chat row). Plugin open on Main. No game.",
+  "pressed": "Chat row, Down (focus read: '99 earlier', box 52,146,290x22, 100% visible), A. Down x3 through the day lines. Up x2 to 'Wed 30 Sep · 16' (focus read), A. Down x18 one at a time (focus read after each by deck_runSequence), Down once more to the newest question, Up x21 back to the chat row, then Down x2 to the open day line, B, Up x2, B on the open 'N earlier' line.",
+  "seen": {
+    "part1_day_lines_oldest_first": [
+      "Wed 30 Sep · 16",
+      "Yesterday · 67",
+      "Today · 16"
+    ],
+    "day_line_total": "16+67+16 = 99 = the number on the 'N earlier' line",
+    "one_row_per_question": false,
+    "part2_down_order": [
+      "99 earlier",
+      "Wed 30 Sep · 16 (open)",
+      "16 questions of that day, oldest first (megaera, fsr, deep rock classes, Soul Sanctum x3, dodge projectiles, warm up, half life walkthrough, hollow knight full guide, spoilers x2, Hornet, False Knight, Mantis Lords, 'How do I beat the boss in the Soul Sanctum...')",
+      "Yesterday · 67",
+      "Today · 16",
+      "newest question 'What should I do first?'"
+    ],
+    "part2_up_order": "exact reverse: newest question -> Today -> Yesterday -> the 16 questions newest first -> Wed 30 Sep -> 99 earlier -> chat row (one press from 'N earlier'); no stop twice; Retry never a stop",
+    "up_from_newest_open_question": "landed on the 'Today · 16' line (the line drawn right over it)",
+    "up_from_N_earlier": "chat row in one press",
+    "visibility": "every stop 100% visible except the newest question 'What should I do first?' at 67% (box covered by the Retry corner button) - the known false alarm, not judged by box",
+    "fewest_questions_day": "Wed 30 Sep (16) and Today (16) tie; I opened Wed 30 Sep (the first of the two)",
+    "part3_B_closes": "B on the open day line: closed (aria-expanded false). B on the open 'N earlier' line: closed (aria-expanded false, only the newest question row left). Newest answer open: yes (header 'What should I do first?' with Retry, 1 answer section on screen)",
+    "ring_after_A_or_B_on_a_day_line": "After A on 'Wed 30 Sep' the ring was NOT owned by anything (readFocus: no gpfocus; screenshot screenshots/DeckCapture_20261002_161022_auto.png shows no ring). The next Down press only put the ring back on the same day line, it did not move. Same after B on the open day line (the next Up re-placed it on the day line). After A and B on 'N earlier' the ring stayed on it."
+  },
+  "expected": "a handful of day lines oldest at top; Down and Up visit the same stops in opposite order, none twice, never Retry; Up from newest lands on the line over it; Up from 'N earlier' reaches the chat row in one press; B closes day line then 'N earlier'; newest answer open after",
+  "verdict": [
+    "PASS part 1 - three day lines, oldest first, counts add up to 99",
+    "PASS part 2 - same stops both ways, none twice, Retry never a stop",
+    "PASS part 3 - both B presses close their lines; newest answer open",
+    "Side finding (not in the pass lines, for the owner): opening or closing a day line with A or B drops the ring, so the next press is spent putting it back (the ring does not move that press)."
+  ]
+}

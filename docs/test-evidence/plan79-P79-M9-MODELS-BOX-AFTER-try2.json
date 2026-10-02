@@ -1,0 +1,33 @@
+{
+  "row": "P79-M9-MODELS-BOX-AFTER-try2",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:03-15:07 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); the box is a modal in the 'Steam Big Picture Mode' page",
+  "setup": "Ollama tab, walked Down to 'Manage AI models' (64,330,268x44), A once (box opened, ring on Advanced). A never pressed again. No model row or Remove touched. A page read after every press.",
+  "pressed": "Down x6 (Refresh, Filters, gemma4 star, qwen3.5, qwen2.5vl, nomic), Down to Done, Up x7 (nomic, qwen2.5vl, qwen3.5, gemma4, Filters, Refresh, Advanced), B.",
+  "seen": {
+    "down_walk (row top minus column header bottom, px; list scrollTop)": {
+      "gemma4 (first model)": "row 268.3, header bottom 242.3, 26 below, scrollTop 0",
+      "qwen3.5:4b": "60.7 below, scrollTop 0",
+      "qwen2.5vl:3b": "95.3 below, scrollTop 0",
+      "nomic-embed-text": "114.7 below, scrollTop 0, row bottom exactly at list bottom (0 px gap)",
+      "Done": "button 122.9,402,290x40; the whole box scrolled 16 px (header bottom now 226.3)"
+    },
+    "up_walk": {
+      "nomic": "114.7 below header, scrollTop 0",
+      "qwen2.5vl:3b": "54.0 below, scrollTop 0",
+      "qwen3.5:4b": "19.3 below, scrollTop 0",
+      "gemma4 (first model) FOCUSED": "row 252.3 (34.7 tall), header bottom 226.3: row top is 26.0 px BELOW the header bottom, whole row visible; screenshot DeckCapture_20261002_150436_auto.png shows the full row (star, name, FOSS, size, X) clear of the header",
+      "Filters": "list scrollTop 0 (first row top 252.3, 26 below header). The outer dialog body is scrolled 16 px, the list itself 0.",
+      "Refresh": "reached between Filters and Advanced this time (last block it was skipped)",
+      "Advanced": "reached last, ring 656.4,120,70.6x22"
+    },
+    "after_B": "box closed; ring on 'Manage AI models' (64,305.4,268x44)"
+  },
+  "expected": "every focused model row whole below the column header on the way down; back at the first model its whole row below the header (header bottom and row top written); at Filters scrollTop 0; B returns the ring to Manage AI models",
+  "verdict_down": "PASS - every focused model row is whole below the header on the way down (26.0 to 114.7 px below).",
+  "verdict_first_model_back_up": "PASS - header bottom 226.3, first model row top 252.3, 26.0 px clear; nothing hidden (last time 15.3 px above).",
+  "verdict_filters_scrollTop": "PASS - list scrollTop 0 at Filters.",
+  "verdict_B": "PASS - B closed the box and the ring is on Manage AI models.",
+  "verdict": "PASS - all four halves pass."
+}

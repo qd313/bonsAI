@@ -1,0 +1,34 @@
+{
+  "row": "P79-X-RING-SAME",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:09-15:11 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Test chat 6f3cc055 (chat row read before the question). Send-question script VERIFIED, field held 'List every boss in Hollow Knight in order with a long tip for each and a second tip for the hardest ones'. Walked card -> chip -> box -> Ask, focus read: BUTTON 'ask' (48.7,399.8,262.7x36), then A.",
+  "pressed": "A on Ask; Right, Right to 'Stop generation' (322.3,371.5,20x20) (focus read); A on Stop while the thinking steps were showing ('is in good hands now'). Chat showed 'Request cancelled.', the question text was put back in the box, and a Clear (X) appeared (311.4,399.8,36x36) on the first try. Down (ask), Right, focus read = BUTTON 'Clear'; A. Then read A. Then Up (chip 'When should I use Expert mode...', 48,290.8,147x30), Down back to the box, read B.",
+  "seen": {
+    "after_X_box": "value '' (empty); Clear button gone",
+    "read_A": {
+      "focused": "INPUT, the question box, box 72.7,323.5,274.7x44",
+      "classes": "DialogInput DialogInputPlaceholder DialogTextInputBase Focusable gpfocus gpfocuswithin",
+      "gpfocus_gpfocuswithin_elements": "INPUT box 72.7,323.5,274.7x44 (gpfocus); wrapper DIV _DialogLayout 72.7,323.5,274.7x44 (gpfocuswithin); then four panel ancestors 48,84,300,370 / 48,84,300,0 / 48,88,300,366 / 48,88,300,366",
+      "computed_style": "outline rgba(0,0,0,0) none 0px; box-shadow none; border 0px none",
+      "document.activeElement": "the same INPUT, same box",
+      "hasFocus": true,
+      "screenshot": "screenshots/DeckCapture_20261002_151028_auto.png: no ring drawn, no caret visible either; only the box's normal faint border"
+    },
+    "read_B": {
+      "focused": "INPUT, the question box, box 72.7,323.5,274.7x44",
+      "classes": "identical to read A",
+      "gpfocus_elements": "identical to read A",
+      "computed_style": "outline none, box-shadow none (same as A)",
+      "screenshot": "screenshots/DeckCapture_20261002_151045_auto.png: no ring drawn; a thin text caret is visible at the left of the placeholder"
+    },
+    "difference_A_vs_B": "Same element, same box (0 px difference), same classes. The only visible difference: B shows a blinking caret, A did not (caret was in its off blink)."
+  },
+  "expected": "box empty after the X; reads A and B name the same element with the same box (within 1 px) and the same focus classes; a ring is drawn in both screenshots",
+  "verdict_box_empty": "PASS - empty after the X.",
+  "verdict_same_element": "PASS - A and B are the same INPUT, same box, same classes.",
+  "verdict_ring_drawn": "FAIL - no ring is drawn in either screenshot (outline none, box-shadow none); only a text caret shows in B.",
+  "verdict": "FAIL - the two reads match each other, but no ring is drawn on the question box after the X, nor when walking back onto it.",
+  "side_effect": "One question asked in the test chat 6f3cc055 (the allowed place) and stopped: the chat now ends with the question and a 'Request cancelled.' turn (about 194 entries). The ask may have triggered another automatic 'Summing up the chat' step (not checked)."
+}

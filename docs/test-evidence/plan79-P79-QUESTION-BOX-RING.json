@@ -1,0 +1,16 @@
+{
+  "row": "P79-QUESTION-BOX-RING",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:16-16:19 EDT",
+  "screen": "built-in 854x454",
+  "setup": "Test chat 6f3cc055 (title read before the question). Main tab, LB from the Ollama tab, walked Down chat row -> 99 earlier -> newest question -> Show reasoning -> answer -> Mark reply helpful (not pressed) -> Show details -> note card -> chip -> question box.",
+  "pressed": "Down onto the question box (focus read: INPUT). Screenshot. Up to the chip. Send-question script 'where do I buy the map in Dirtmouth in Hollow Knight' (VERIFIED, field read back whole). Down to the box, Down to 'ask' (focus read: BUTTON ask), A on Ask. Waited for the answer to finish (Stop gone, ~41 s). Read focus + screenshot. Never A on the box.",
+  "seen": {
+    "ring_on_box": "computed outline solid 2px rgba(255,255,255,0.88), offset -2px, box 73,324,275x44; wrapper has no outline. Screenshot screenshots/DeckCapture_20261002_161645_auto.png: white line 3 screen px thick (=2 css px at 1.5) on all four sides, found by pixel scan: left x868-870, top y546-548, bottom y609-611, right x1277-1279 (the right line sits flush against the screen's right edge but is the full 3 px, not cut).",
+    "ring_after_up": "Up to the chip: input outline 'none 0px', box-shadow none; ring on chip 'Check Steam players for bans'",
+    "after_ask": "answer finished, ring on the question box (INPUT is the gpfocus), outline solid 2px rgba(255,255,255,0.88), box 73,323,275x44, value empty; screenshot DeckCapture_20261002_161806_auto.png shows the white ring on all sides. The answer offered two choice buttons."
+  },
+  "expected": "thin white ring just inside the box edge, 2px solid, no side cut; none after Up; ring drawn again after Ask lands back on the box",
+  "verdict": "PASS - ring drawn on all four sides (right side flush with the screen edge but complete), gone after Up, drawn again after the answer.",
+  "side_effect": "One real question added to the test chat (answer finished, no rating pressed)."
+}

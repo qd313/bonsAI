@@ -1,0 +1,30 @@
+{
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 15:40-15:50",
+  "screen": "built-in 854x454 (window size read 854x454), Hades running in front, Quick Access panel over it",
+  "setup": "Hades launched with deck_launchGame (6 presses, ran 84 ms to appear; free memory 2682 MB available after start). Waited 45 s, then deck_openPlugin (QAM chord, 1 DOWN to place the ring); Context line read 'active game Hades'. Pinned test chips: dev_frozen_test_chips = [] in settings.json (read over SSH; Developer tab not opened, nothing cleared). Corpus: Hades has 15 note sections (1 area, 2 boss, 6 item, 6 mechanic) so the pass line stays ten.",
+  "row": "P79-CHIP-SOFT-FILL",
+  "pressed": "deck_walkTo Ask (DOWN, 14 presses), then UP x2 onto a chip (focus read: button 'Tip'), no A. Then DOWN once to move the ring away.",
+  "seen": {
+    "ring_on_chip_What should I know about Mirror of Night?": {
+      "background_image": "two layers: linear-gradient(rgba(56,189,248,0.2)) over the grey glass gradient (rgba(56,70,84,0.5)->rgba(16,22,30,0.55)) = soft sky-blue fill",
+      "border": "0.667px solid rgba(255,255,255,0.1)",
+      "outline": "none",
+      "box_shadow": "inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 3px rgba(0,0,0,0.4)",
+      "bar_under (::after/::before)": "none (content none, height auto)"
+    },
+    "ring_away (same chip, label had rotated)": {
+      "background_image": "only the grey glass gradient, no blue layer",
+      "border": "0.667px rgba(255,255,255,0.1)",
+      "outline": "none",
+      "bar_under": "none"
+    },
+    "other_chip_unfocused_while_first_focused": "grey gradient only, no blue",
+    "screenshots": [
+      "screenshots/DeckCapture_20261002_154926_auto.png (ring on)",
+      "screenshots/DeckCapture_20261002_154940_auto.png (ring away)"
+    ]
+  },
+  "expected": "Ring on: soft blue fill, thin bright edge, no bar under it; ring away: no fill. Look is the maintainer's call.",
+  "verdict": "PASS (measured) - soft blue fill present with the ring on and gone with it away, no bar under the chip. The edge is the one doubtful part: the computed border is only white at 10 percent, 0.67 px, the same with the ring on or off; in the screenshot the focused chip shows a thin lighter edge, but nothing in the chip's own styles makes it 'bright'. Owner to judge from the two screenshots."
+}

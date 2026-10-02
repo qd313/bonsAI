@@ -1,0 +1,34 @@
+{
+  "row": "P79-RING-WALK-TABS",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:11-15:26 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); panel scope 300 x 390 at (48,64)",
+  "setup": "Test chat untouched. Plugin open. Method: direction presses only (Up, Down, Left, Right, RB), never A. A passive recorder in the page (reads only) logged the focused element, its box, whether it sat inside the scroll area, whether it was the top thing at its centre, and whether it or an ancestor carried an outline / box-shadow ring. Where the recorder could not tell (toggles, sliders, Steam's own buttons, text fields) a screenshot was taken at that stop. Ollama tab: one sweep (Up to top, back Down to the end) for geometry, then Up and Down for rings. Settings: Down to the end, Right to Clear all data, then Up to the top. Developer tab (shown: show_developer_tab is on, not changed): Down to the end, then Up to the top.",
+  "pressed": "Directions and RB only. A never pressed in this row.",
+  "seen": {
+    "ollama": {
+      "stops": "Run AI on this Deck (toggle 38x22), Start the AI with the Deck (toggle), Update AI & models (268x36), Browse models (268x36), Test connection (135x38), Use local knowledge base (toggle), Update knowledge base (166x44, Right = Remove), Reply style slider, Thinking Off/Brief/Balanced/Deep, Custom timeouts (toggle), Unload delay slider, Manage AI models (268x44), Set text model try order (268x36), Set vision model try order (268x36, end).",
+      "visible": "all 17 stops 100 percent visible (sweep: 0 not visible, 0 cycles, 33 presses)",
+      "rings": "Buttons: white 2 px outline plus inner line on Manage, text order, vision order, Browse models, Test connection, Update AI & models, Update knowledge base, Thinking Off (outline measured by the recorder, screenshot of vision order). Toggles: grey row highlight plus a ring round the switch (screenshots: Run AI, Start the AI, Use local knowledge base, Custom timeouts). Sliders (Reply style, Unload delay): square marker drawn round the knob (screenshots).",
+      "find_on_network": "not shown on this tab in this mode"
+    },
+    "settings": {
+      "stops_top_to_bottom": "tab header; Adjust UI automatically (toggle); Apply UI scale (268x36); screenshot quality Save memory / Balanced / Best detail (85.3x44 each); Remember what I typed (toggle); Hide spoilers until I tap (toggle); Show one chip instead of two (toggle); tiny.en row; base.en row (268x34.7); Reinstall voice engine (146x38); Voice replies Off / By voice / Always (85.3x36 each); AI voice & personality (toggle); Ali G character picker button (268x38); Accent intensity 'Strong' button (62.6x26); Show Developer tab (toggle); Clear cache (130x38); Clear all data (130x38, reached with Right; Down from Clear cache did not move, 3 tries).",
+      "rings": "Quality choices: white ring (Best detail screenshot DeckCapture_20261002_151856). Voice replies choices: outline on all three. Character picker: outline. Apply UI scale: outline. Clear cache and Clear all data: outline plus ring (screenshot DeckCapture_20261002_151611). Toggles: row highlight plus ring (screenshots). Accent button: only a thin grey frame round the small button (DeckCapture_20261002_151636), dimmer than the white ring. Reinstall voice engine: same thin grey frame (DeckCapture_20261002_151730).",
+      "voice_model_rows_exempt": "base.en row shows a thin grey rectangle round the whole 268 px row, wider than the button (DeckCapture_20261002_151743). tiny.en row is the same kind of row (recorded: focus landed, outline not measurable, no separate screenshot).",
+      "visible": "every recorded stop inside the scroll area and on top (inPane true, hit true)"
+    },
+    "developer": {
+      "stops_top_to_bottom": "tab header; Install seed knowledge base (268x40); Hybrid retrieval (toggle); On-screen debug HUD (toggle); Warm the Ask model at boot (toggle); Jump to Steam Input (running game) (268x60); Clear (1) (268x41); captured error text block (268 x 530 tall); Tab to open on: A Main / B Resume / C 5 min; App activity logging Off / Default / Verbose; Auto-save chat (toggle); Verbose Ask logging (toggle); Force session RAG chips (toggle); Preset suggestions fade / carousel / static / decode; Scramble animation (toggle); How letters settle Settle / Chip pace / Fixed tail; how long 300/400/500/600/800; letter colour Same / Dimmer / bonsAI green / Streaming cyan; Steam Web API key field (268x40, end).",
+      "rings": "Option rows (tab resume, log level, animations, settle, durations, colours): white ring on every choice (screenshots on A, B, C, Off, Verbose, fade, decode, Settle, Cyan; others measured as outline). Toggles: row highlight plus ring. Install seed knowledge base, Jump to Steam Input and Clear (1): white filled button (Steam's own highlight, no extra ring) (screenshots DeckCapture_20261002_151954 / 152004 / 152012 / 152513). Error text block: thin grey frame (152021). Steam Web API key field: filled white with dark text, against a dark grey box when not focused (152350 vs 152402); no ring, but a clear change.",
+      "visible": "all recorded stops inside the scroll area and on top, except the error text block, which is 530 px tall, so its top is above the view whenever it is focused (it scrolls)."
+    }
+  },
+  "expected": "every stop on the three tabs draws a ring or highlight, including Browse models / Test connection; on Settings the screenshot quality choices, Voice replies choices, character picker, accent button, Clear cache, Clear all data; on Developer the option rows and the tab-resume and log-level choices",
+  "stops_with_no_ring": "none",
+  "verdict_ollama": "PASS - every stop draws a ring or highlight, including Browse models and Test connection.",
+  "verdict_settings": "PASS - every named stop draws a ring or highlight. Weak spots (not failures): the accent button and Reinstall voice engine get only a thin grey frame, and the voice model rows a grey frame round the whole row.",
+  "verdict_developer": "PASS - every stop draws a ring or highlight. The API key field shows a white fill only (no ring).",
+  "verdict": "PASS on all three tabs",
+  "side_effect": "A passive page recorder (reads only) was left installed in the Quick Access page; it goes away on the next reload. The Developer tab screenshot DeckCapture_20261002_152330_auto.png, 152350 and 152402 show the Steam Web API key in clear text (the key was not typed or changed by me). Those files are in the repo screenshots folder, untracked: do not commit them."
+}

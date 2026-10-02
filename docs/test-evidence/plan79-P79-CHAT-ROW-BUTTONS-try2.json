@@ -1,0 +1,23 @@
+{
+  "row": "P79-CHAT-ROW-BUTTONS-try2",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:19-16:23 EDT",
+  "screen": "built-in 854x454",
+  "setup": "Test chat 6f3cc055, Main tab, chat row title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. The name box was read three times: ring on a suggestion chip (scrollTop 566, read y -458.5 so page y 107.5), ring on the chat row, ring on the '99 earlier' pill.",
+  "pressed": "Up from a chip walking past the row to the header (walkTo skipped the unnamed row), Down, Down to the chat row (focus read: bonsai-chat-slot-row-focus), Down to the pill, Up to the row, Left (active stop = save, read), A, focus read (Save window, input 'Note name', 123,290,608x40), B (no modal left), Right, Right (active stop = delete, read), screenshot + zoom, A (focus read: 'Keep chat' 123,298,194x40), A on Keep chat.",
+  "seen": {
+    "name_box_x_y_w_h": {
+      "ring_on_chip": "125.2, 107.5, 145.6, 14.4",
+      "ring_on_chat_row": "125.2, 107.5, 145.6, 14.4",
+      "ring_on_pill_(away_again)": "125.2, 107.5, 145.6, 14.4"
+    },
+    "name_difference_px": "0 in x, y and width between all three reads",
+    "disk_bin": "ring on chip: both visibility hidden; ring on pill: both hidden; ring on row: both visible (disk 99.3,103.7,22x22; bin 274.7,103.7,22x22). LB and RB marks drawn at the row's ends in the screenshot (DeckCapture_20261002_161946_auto.png) with the ring on the row; not drawn in the pill/chip screenshots.",
+    "left_reaches_disk": "active stop class bonsai-chat-slot-save--active-stop; A opened 'Save to Desktop note' with the ring on the Note name field; B closed it (0 dialogs)",
+    "right_twice_delete": "active stop bonsai-chat-slot-delete--active-stop; zoomed screenshot (bin_zoom) shows a bin with a lid and two vertical slots; A opened 'Delete chat slot?' with the ring on 'Keep chat'",
+    "keep_chat": "A closed the box (0 dialogs); the chat row still reads the same title; chat still there (10 slot dots)"
+  },
+  "expected": "name's x, y, width same in all three within 1 px; disk/bin/LB/RB only with the ring on the row; Left reaches disk, A opens Save with ring on name field, B closes; Right x2 reaches Delete with two-slot bin; A opens Delete box with ring on Keep chat; A on Keep chat closes the box, chat still there",
+  "verdict": "PASS - all lines met. Name box did not move at all (0 px). Nothing saved, nothing deleted.",
+  "note": "deck_walkTo with the name 'How do I beat the boss' passed over the chat row (its stop has no name of its own), so the row was reached by Down from the tab bar."
+}

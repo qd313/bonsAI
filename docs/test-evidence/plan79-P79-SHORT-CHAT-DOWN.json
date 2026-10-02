@@ -1,0 +1,16 @@
+{
+  "row": "P79-SHORT-CHAT-DOWN",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 about 15:07-15:09 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Read the saved chats over SSH (chat_slots/index.json and each file): 6f3cc055 (test chat) 192 entries, 351b2838 178, d2aa6252 200, d052dacc 2, 92a45014 2, a8fb9f67 2, 66df6be3 4, 4baaccbc 4. An entry is one question or one answer, so 2 entries = 1 question. Chose d052dacc-d35e-4a28-b89b-8ae811884178 ('how should i spend my first hour in a new open world game', 1 question, 1 answer). Nothing was asked; no chat was created.",
+  "pressed": "From the test chat's first question, Up, Up onto the chat row (48,88,300x48.3). RB x3 switched 6f3cc055 -> 351b2838 -> d2aa6252 -> d052dacc (chat row names read after the first and last RB). Down once. Up once. LB x3 back to the test chat.",
+  "seen": {
+    "down_from_chat_row": "question text 'how should i spend my first hour in a new open world game' (146.7,151,184.7x28.6). The Retry button is at (142.7,162.6,20x20); it did NOT get the ring. No 'N earlier' pill is in this short chat. Screenshot DeckCapture_20261002_150810_auto.png shows the ring on the question bubble, not on Retry.",
+    "up_from_question": "chat row (48,88,300x48.3), name 'how should i spend my first hour in a new open world game'",
+    "back_in_test_chat": "after LB x3 the chat row reads 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'",
+    "active_chat_in_settings": "The active chat is not stored in settings.json (no chat key; its modified time is still 11:48:43, nothing rewrote it). chat_slots/index.json modified time still 11:55:35 and its order is unchanged, test chat first. So the check is the chat row name on screen: it is the test chat again."
+  },
+  "expected": "Down from the chat row lands on the first question's text, not on its Retry; Up from there goes back to the chat row",
+  "verdict": "PASS - Down from the chat row in a one-question chat lands on the question text (not Retry), and Up goes back to the chat row. Test chat is active again."
+}

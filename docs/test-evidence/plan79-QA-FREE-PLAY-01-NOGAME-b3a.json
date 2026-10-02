@@ -1,0 +1,59 @@
+{
+  "row": "QA-FREE-PLAY-01 (no game)",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:24-16:36 EDT",
+  "screen": "built-in 854x454",
+  "setup": "No game. Test chat 6f3cc055 (title read before each question). Case check: newest answer had 1 section and no cover, so Question A (early-game plan) was asked: 2 sections, no cover, it answered with choice buttons. Question B (soul sanctum walk-through) was asked: 4 answer sections, 2 covers ('Spoiler - tap to show'). Waited for Stop to go and Retry to appear.",
+  "pressed": "Ring to the Main tab bar (walkTo Up). deck_sweep Down, budget 80, lanes 1, RB, stall 2 (run runs/plan79-QA-FREE-PLAY-01-NOGAME-b3a.json): the Down leg ended at the tall second answer section after 2 presses that did not move the ring (the pane was scrolling), the Up leg did the same; RB then went to the Ollama tab (not another chat) and walked it. LB returned to Main, chat title read: the test chat. Then the same sweep again with stall limit 5 and no lane (runs/plan79-QA-FREE-PLAY-01-NOGAME-b3a-try2.json), which is the walk judged below.",
+  "seen": {
+    "down_leg_16_stops": [
+      "chat row",
+      "99 earlier",
+      "newest question (89%, behind Retry icon: known false alarm)",
+      "Show reasoning",
+      "answer section 1",
+      "Spoiler cover 1",
+      "answer section 2 (tall 245x291, 67% behind the dock row: judged by entry edge, its top y88 is inside the band)",
+      "Spoiler cover 2",
+      "answer section 4 / last section (89% behind the Copy icon: known false alarm)",
+      "choice A",
+      "choice B",
+      "Mark reply helpful",
+      "Show details",
+      "chip 'How do I balance FPS and battery?'",
+      "question box",
+      "ask"
+    ],
+    "up_leg_16_stops": [
+      "question box",
+      "chip 'What do the model policy tiers mean?' (chips swap, different text)",
+      "Show details",
+      "Mark reply helpful",
+      "choice B",
+      "choice A",
+      "Spoiler cover 2",
+      "answer section 2 (tall, bottom y290 inside the band, 67% by box, top clipped by design)",
+      "Spoiler cover 1",
+      "answer section 1",
+      "Show reasoning",
+      "newest question (89% Retry icon)",
+      "99 earlier",
+      "chat row",
+      "Main tab",
+      "bonsAI header button"
+    ],
+    "difference_up_vs_down": "The LAST answer section (the one drawn right under Spoiler cover 2, behind the Copy icon) is a stop going Down but is skipped going Up: Up from choice A goes straight to Spoiler cover 2.",
+    "cycles": 0,
+    "retry_as_stop": "never (no stop labelled Retry or in the Retry corner in either leg)",
+    "not_visible_by_box": "5 stops partial, all explained: newest question x2 (known Retry false alarm), last section (known Copy false alarm), the tall section Down (67% behind dock row, top inside band) and Up (67%, clipped at top by the panel, bottom inside band). No word of text hidden.",
+    "day_lines": "opened 'N earlier' once in P79-EARLIER-BY-DAY on this build; question box ring checked in P79-QUESTION-BOX-RING; chat row name box checked in P79-CHAT-ROW-BUTTONS-try2 (not moved).",
+    "free_rider_THINKING_OPENER": "not measured"
+  },
+  "expected": "cycles 0; no dead press; every stop visible except the known false alarms; Up leg visits the same stops as the Down leg; Down ends on the question box or Ask, Up on the tab bar",
+  "verdict": [
+    "PASS - cycles 0, Retry never a stop, Down ends on Ask, Up ends on the tab bar (and the header), every non-visible stop is a known false alarm or a tall section judged by entry edge",
+    "FAIL - the Up leg does not visit the same stops as the Down leg: the last answer section (behind Copy icon) is a stop going Down and is skipped going Up (16 stops each, but not the same set). This looks like the known 'skipped walking Up' bug 12 shape, here with a cover in front of it, not game words.",
+    "UNCLEAR - the first sweep (stall limit 2, with the RB lane) stopped early in the tall section because presses that only scroll count as stalls; the lane went to the Ollama tab, not to another chat. Rerun with stall limit 5 gives the picture above."
+  ],
+  "side_effect": "Two real questions added to the test chat (Question A and B), no rating pressed."
+}

@@ -6,23 +6,28 @@ All notable changes to this project are documented in this file.
 
 ### Plan 79 (2026-10-02)
 
+- **The question box now shows a white ring while the D-pad is on it,** drawn just inside its edge. Before, it looked the same with or without the ring. Passed on the Deck 2026-10-02.
+- **Opening "N earlier" shows one line per day instead of a row per question.** Down and Up visit the same stops. Passed on the Deck 2026-10-02; opening or closing a day line drops the ring for one press, which is filed as a bug.
+- **The AI models box holds the try order.** The Ollama tab has one "AI models" button; each installed model shows its place with up and down buttons, "Reset order" asks first, and models too big for the Deck say they are skipped. Opening, the places, the walk and Reset order passed on the Deck 2026-10-02; moving a place and the PC half owe their Deck check.
+- **While you read an answer, its Show details line takes the suggestion chip's place above the question box.** Owes its Deck check.
+- **The two Clear boxes in Settings and the "Large model - continue?" box open on the button that does nothing,** so an A pressed by habit clears or downloads nothing. They owe their Deck checks.
 - **Up and Down under an answer now follow the drawn rating rows.** Up from "Bad info" lands on Helpful, and Down from the speaker lands on "Wrong game or topic". The choices are smaller and softer too. The walk passed on the Deck 2026-10-02; the look is the maintainer's to judge.
 - **A cut-off answer that ends inside a spoiler cover no longer shows the word "undefined".** Passed on the Deck 2026-10-02.
 - **Show details: the ring sits on the one chip you are on,** not on the whole column of chips. Passed on the Deck 2026-10-02.
-- **The Ollama tab shows where the ring is on every button.** The Settings and Developer tabs, the character picker, Clear cache and the Ask bar's Clear button got the same fix. The Ollama tab passed on the Deck 2026-10-02; the rest owes its Deck check.
+- **The Ollama tab shows where the ring is on every button.** The Settings and Developer tabs, the character picker, Clear cache and the Ask bar's Clear button got the same fix. Passed on the Deck 2026-10-02 on all three tabs; a few controls get only a thin grey frame, filed as a bug.
 - **"Install options" is gone from the Ollama tab.** Browse models has an "Install the starter set" button that asks first, and a first Install Ollama offers the starter models. Passed on the Deck 2026-10-02 except pressing yes and the first-install offer.
 - **"Remember what I typed" is one on/off switch.** A saved "Search" now loads as off. Passed on the Deck 2026-10-02.
 - **Summing up can offer a fresher chat title,** with Rename and Keep on the summary card. A chat you renamed by hand is never offered one. The offer and Keep passed on the Deck 2026-10-02; Rename owes its Deck check.
-- **A chat's Save and Delete buttons show only while the ring is on its row,** and Delete is a bin with two slots. Four of five steps passed on the Deck 2026-10-02; the chat's name still moves a little when the buttons appear.
-- **The knowledge-base buttons carry icons, and a game now offers ten of its own suggestion chips, not six.** Both owe their Deck checks.
-- **A long suggestion chip scrolls to its end, stands still, then leaves; its words are centred,** and the chip under the ring gets a soft blue fill. Owes its Deck check.
-- **Pressing Ask or emptying the question box now ends microphone dictation,** and the X beside Ask hands the ring to the question box. The box clears on the Deck, but the ring is not drawn on it yet.
+- **A chat's Save and Delete buttons show only while the ring is on its row,** and Delete is a bin with two slots. The Delete box opens on "Keep chat", and the chat's name no longer moves when the ring comes onto the row. Passed on the Deck 2026-10-02.
+- **The knowledge-base buttons carry icons, and a game now offers ten of its own suggestion chips, not six.** The ten chips passed on the Deck 2026-10-02; the icons owe their Deck check.
+- **A long suggestion chip scrolls to its end, stands still, then leaves; its words are centred,** and the chip under the ring gets a soft blue fill. On the Deck 2026-10-02 the words stop at their end and the fill is drawn, but the chip stays 3.2 to 10.2 s after the words stop, so the pause is an open question for the maintainer; centring was not measured.
+- **Pressing Ask or emptying the question box now ends microphone dictation,** and the X beside Ask hands the ring to the question box. The box clears on the Deck and the ring is drawn on it. A spoken question is still the maintainer's check.
 - **A spoken question no longer comes out with stretches of words doubled.** Owes its Deck check, with the real microphone.
 - **Power and battery questions now get an answer with numbers you can set** (a TDP in watts, a frame cap, a refresh rate). On the PC, 27 of 30 test answers had one, against 3 of 30 before. Owes its Deck check.
-- **A button pressed under a Hollow Knight answer keeps Hollow Knight's notes and spoiler covers,** even with another game running. Owes its Deck check.
-- **Up and Down no longer stop on a question's Retry button;** Left from the question is the way onto it. The Down half passed on the Deck 2026-10-02; Up from the question text needed a second round.
-- **The AI models box no longer leaves the first model half under the column header,** and the bronze note card keeps a gap of 8 px above the suggestion chips. Both failed their first Deck check and have a second round landed, waiting for a re-check.
-- **When the Steam settings list closes under the ring, the ring goes to the question box.** Down with Steam's ring on the whole answer no longer does nothing when the panel has lost the browser's focus. Both owe their Deck checks.
+- **A button pressed under a Hollow Knight answer keeps Hollow Knight's notes and spoiler covers,** even with another game running. Passed on the Deck 2026-10-02; whether the turn's own game label should change, and whether covers should show, are the maintainer's to judge.
+- **Up and Down no longer stop on a question's Retry button;** Left from the question is the way onto it. Passed on the Deck 2026-10-02 after a second round.
+- **The AI models box no longer leaves the first model half under the column header,** and the bronze note card keeps a gap of 8 px above the suggestion chips. Both failed their first Deck check and passed on the second, on the Deck 2026-10-02.
+- **When the Steam settings list closes under the ring, the ring goes to the question box.** Down with Steam's ring on the whole answer no longer does nothing when the panel has lost the browser's focus. Three routes were tried on the Deck 2026-10-02 and none trapped; the fix's own state could not be made there, so the maintainer's daily use is the last check.
 
 ### Plan 78 (2026-09-30)
 

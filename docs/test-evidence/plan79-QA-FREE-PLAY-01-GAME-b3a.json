@@ -1,0 +1,56 @@
+{
+  "row": "QA-FREE-PLAY-01 (with a game)",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:26-16:34 EDT",
+  "screen": "built-in; page window 854x534 with the game running (854x454 without)",
+  "setup": "Deep Rock Galactic: Survivor (appid 2321470) launched by hand route: deck_launchGame refused (ring on nothing after Home, tile not nameable); Left once put the ring on the first Recent Games tile, which was DRG:S (focus read), A, then A on 'Play' (focus read). Game splash in front (screenshot DeckCapture_20261002_162728_auto.png), waited 30 s, process alive. Plugin not reloaded. Close/reopen of Quick Access: Context line read 'Context: active game Deep Rock Galactic: Survivor'. Memory available 1.7 to 2.2 GB while the game ran (below 2,000 MB at times, so no reload was an option). Test chat title read before the question. Case check: newest answer (from the no-game question B) still in the chat: 4 sections and 2 covers, so no Hades question was needed.",
+  "pressed": "deck_sweep Down, budget 120, lanes 1, RB, stall limit 5 from the Main tab bar (full list in runs/plan79-QA-FREE-PLAY-01-GAME-b3a.json). The tool output was too long to read in the chat, so I summarised it with a script.",
+  "seen": {
+    "totals": "66 stops recorded, cycles 0, 94 presses, 4 legs (Down 16 stops, Up 16, lane Down 17, lane Up 16). RB from the header button re-walked the Main tab (it did not change tab or chat).",
+    "down_leg": [
+      "chat row",
+      "99 earlier",
+      "newest question (89% Retry icon, known)",
+      "Show reasoning",
+      "answer section 1",
+      "Spoiler cover 1",
+      "answer section 2 (tall, 67% behind the dock row; top y128 inside the band)",
+      "Spoiler cover 2",
+      "last answer section (89% behind Copy icon, known)",
+      "choice A",
+      "choice B",
+      "Mark reply helpful",
+      "Show details",
+      "chip 'Tip'",
+      "question box",
+      "ask"
+    ],
+    "up_leg": [
+      "question box",
+      "chip 'Tip'",
+      "Show details",
+      "Mark reply helpful",
+      "choice B",
+      "choice A",
+      "Spoiler cover 2",
+      "answer section 2 (67%, clipped at the top, bottom inside the band)",
+      "Spoiler cover 1",
+      "answer section 1",
+      "Show reasoning",
+      "newest question (89%, known)",
+      "99 earlier",
+      "chat row",
+      "Main tab",
+      "bonsAI header button"
+    ],
+    "same_asymmetry_as_without_game": "yes: the last answer section (behind the Copy icon) is a stop going Down and skipped going Up (Up from choice A goes to Spoiler cover 2), in both lanes.",
+    "retry_as_stop": "never",
+    "chips": "two chips shown at once, a game chip with a Tip badge and a general one; the Up leg met a different chip text than the Down leg (they swap sides), 'Any Steam Input issues for this game?' in the lane Up leg."
+  },
+  "expected": "as 1.1: cycles 0, no dead press, every stop visible except the two known false alarms and tall sections judged by entry edge, Up visits the same stops as Down, Down ends on the box or Ask, Up on the tab bar",
+  "verdict": [
+    "PASS - cycles 0, Retry never a stop, Down ends on ask, Up ends on the tab bar (and header), all non-visible stops are known false alarms or tall sections",
+    "FAIL - Up does not visit the same stops as Down: the last answer section under Spoiler cover 2 is skipped going Up (same as the no-game walk); count it for the owner with the no-game result"
+  ],
+  "side_effect": "none beyond the game launch and exit (process confirmed gone over SSH)"
+}

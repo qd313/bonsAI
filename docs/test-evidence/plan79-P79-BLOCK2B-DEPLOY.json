@@ -1,0 +1,15 @@
+{
+  "row": "P79-BLOCK2B-DEPLOY",
+  "build_commit": "678aaa3d (experimental) The note card's 8 px of room is exactly 8 px, not 14.7",
+  "deck_time_local": "2026-10-02 15:00-15:03 EDT",
+  "screen": "page window 854 x 454 (the Deck's own screen); QAM panel scope 300 x 390 at (48,64)",
+  "setup": "No game: pgrep AppId empty over SSH, free 4613 MB available. npm run build ok, deck_deploy ok (loader ready after 351 ms). Keep-awake retaken ttl 480.",
+  "pressed": "deck_openPlugin twice: first failed as expected, second opened bonsAI, .bonsai-scope present.",
+  "seen": {
+    "buildMatches": "true, 126 files match",
+    "keep_awake_expiresAt": "2026-10-03T03:01:52.799Z = 23:01 Deck time",
+    "settings_vs_backup": "diff of settings.json against ~/p79-settings.bak.json: identical before and after the deploy"
+  },
+  "expected": "build matches 678aaa3d, keep-awake retaken, settings unchanged by deploy",
+  "verdict": "PASS - build matches the checkout tip 678aaa3d, settings unchanged, plugin open."
+}

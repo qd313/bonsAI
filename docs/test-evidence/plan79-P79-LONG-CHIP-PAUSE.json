@@ -1,0 +1,46 @@
+{
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 15:40-15:50",
+  "screen": "built-in 854x454 (window size read 854x454), Hades running in front, Quick Access panel over it",
+  "setup": "Hades launched with deck_launchGame (6 presses, ran 84 ms to appear; free memory 2682 MB available after start). Waited 45 s, then deck_openPlugin (QAM chord, 1 DOWN to place the ring); Context line read 'active game Hades'. Pinned test chips: dev_frozen_test_chips = [] in settings.json (read over SSH; Developer tab not opened, nothing cleared). Corpus: Hades has 15 note sections (1 area, 2 boss, 6 item, 6 mechanic) so the pass line stays ten.",
+  "row": "P79-LONG-CHIP-PAUSE",
+  "pressed": "none (passive read every 100 ms for 200 s)",
+  "seen": {
+    "chip_box_width_px": "117 (game chip with badge) / 130 (general chip); chip itself 147 wide",
+    "long_chips": "every chip seen scrolled (words wider than the box): widest 297 px (Darkness, keys and gems) vs box 117; shortest 131 vs box 130",
+    "scroll_timeline": "each chip: 'waiting' 1.5 s at its start, then scrolls to its end (translate reached -(words - box), e.g. -90 for 207/117, -180 for 297/117), then stands still",
+    "hold_at_end_before_chip_is_replaced_ms": "min 3200 (Weapon aspects), typical 4400-5600, max 10200 (How do I beat Megaera?); game chips: 3200..10200, general chips 4200..9600",
+    "examples": [
+      {
+        "label": "What should I know about Darkness, keys and gems?",
+        "scroll_done_ms": 44900,
+        "replaced_ms": 48800,
+        "hold_ms": 3900
+      },
+      {
+        "label": "How do I use Heart-Seeking Bow?",
+        "scroll_done_ms": 29900,
+        "replaced_ms": 34400,
+        "hold_ms": 4500
+      },
+      {
+        "label": "What should I know about Weapon aspects?",
+        "scroll_done_ms": 56900,
+        "replaced_ms": 60100,
+        "hold_ms": 3200
+      },
+      {
+        "label": "How do I beat Megaera?",
+        "scroll_done_ms": 89900,
+        "replaced_ms": 100100,
+        "hold_ms": 10200
+      }
+    ],
+    "raw": "scratchpad p79/deck/chips_raw.txt (positions every 100 ms)"
+  },
+  "expected": "Words scroll to their end, stand still about 1.5 s (1.2 to 1.9 s measured), then the chip leaves; a short chip's words are centred within 2 px.",
+  "verdict": [
+    "FAIL (long chip) - the words do scroll to the end and stand still, but the chip stays 3.2 to 10.2 s after they stop, never 1.2 to 1.9 s. The 1.5 s wait I measured is at the START of each chip, before it scrolls. Owner: check whether the fix means the start wait or the end hold.",
+    "COULD NOT RUN (short chip centring) - no chip in 200 s was short enough: shortest words 131 px in a 130 px box, so none sat unscrolled to measure the left and right gaps"
+  ]
+}

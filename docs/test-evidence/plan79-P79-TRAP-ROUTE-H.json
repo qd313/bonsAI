@@ -1,0 +1,19 @@
+{
+  "row": "P79-TRAP-ROUTE-H",
+  "build_commit": "678aaa3d",
+  "deck_time_local": "2026-10-02 15:37-15:55",
+  "screen": "built-in 854x454 panel (window size read: 854x454)",
+  "setup": "Test chat 6f3cc055 active (label 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Sent 'What is the Soul Master weak point in Hollow Knight?' with send script (VERIFIED), walked to Ask, A, answer finished (863 chars, 25 s thinking, offers choice buttons A/B).",
+  "pressed": "Ask A once; then UP x7 from Ask: preset chip, notes block, Show details, Helpful, branch B, branch A, whole-answer ring (7 presses, within the 10 allowed). Screenshot DeckCapture_20261002_153945_auto.png shows one white ring round the answer. Then GUIDE+A chord to close QAM, deck_openPlugin to reopen (ring came back on Main tab, not on the answer). Then Down x5 from tab bar reached the answer ring again; then Down 9 with focus read each step; then back up and Down again twice with scroll reads.",
+  "seen": {
+    "ring_on_whole_answer": "chunk bonsai-answer-stop, w 245 h 342, covers all 863 chars, the only answer chunk (one bubble, one chunk)",
+    "after_reopen": "document.hasFocus true; ring reset to Main tab bar (not kept on answer)",
+    "try1_down_from_answer_ring (pane scrolled to top)": "Down1 no move (ring stays, 67%->33% visible), Down2 no move (56%), Down3 moved to branch button A; so 3 presses to leave",
+    "try2_down_from_answer_ring (pane scrollTop 237)": "Down1 ring stays, pane scrolls 237->317; Down2 moved to branch button A; so 2 presses",
+    "from_scrolled_bottom_position": "Down1 moved at once to branch B (scrollTop 466)",
+    "trap": "none; walk continued down to Mark reply helpful then Show details. No recovery needed."
+  },
+  "expected": "After leaving and returning, Down moves the ring off the whole-answer ring within 2 presses and the walk goes on.",
+  "verdict": "UNCLEAR - the ring never got stuck and the walk always went on, but (a) the leave and return reset the ring to the Main tab, so it was not the ring-kept-across-return case (LEFT from content does not reach the side rail, tried once); (b) one try needed 3 Downs to leave (two scrolled the panel with the ring staying), the other 2. Owner decides whether 'scroll first' counts as moving.",
+  "side_effect": "none beyond the question asked in the test chat (chat now 198 entries). Quick Access closed and reopened once."
+}

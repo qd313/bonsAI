@@ -1,0 +1,39 @@
+{
+  "row": "P79-MODELS-TRY-ORDER",
+  "build_commit": "6e297645",
+  "deck_time_local": "2026-10-02 16:12-16:25 EDT",
+  "screen": "Quick Access page 854x454; the AI models box is a Steam dialog whose page is 854x534 (built-in screen)",
+  "setup": "AI on this Deck (Run AI on this Deck on). Settings read before: text_model_routing_order ['gemma4:e2b-it-qat'], vision_model_routing_order ['gemma4:e2b-it-qat']. Installed: gemma4:e2b-it-qat (answers) and nomic-embed-text (cannot answer). Filters: Open source only, Essentials only.",
+  "pressed": "Ollama tab, Down 12 to the 'AI models' button (focus read), A. In the box: Down one press at a time (focus read after each) from 'Advanced' to 'Done', Up back to Filters, Down to the first model, Right x4 / Left x4 along its row, Up to Text, Right x2 to 'Reset order', A (focus read first), B, Left to Pictures, A, Left to Text, A, B.",
+  "seen": {
+    "a": "Section is one button 'AI models… — Open source only (recommended)' (box 64,346,268x44, 100% visible). A opened the box; first ring on 'Advanced ›'. B closed it and the ring was back on the 'AI models' button, no dialog left.",
+    "b_row": "'Try order for [Text] [Pictures] [Reset order]' is under the Filters row (Text, Pictures, Reset are real buttons). Rows: gemma4 shows place 1 with ▲ ▼ X; qwen3.5:4b and qwen2.5vl:3b are not installed (select-to-pull boxes, no place); nomic-embed-text shows '—' and X.",
+    "b_down_stops": [
+      "Advanced",
+      "Refresh model catalog",
+      "Filters",
+      "Try order Text",
+      "gemma4 star",
+      "Select qwen3.5:4b",
+      "Select qwen2.5vl:3b",
+      "nomic star",
+      "Done (Down again does nothing)"
+    ],
+    "b_up_stops": "Done, nomic, qwen2.5vl, qwen3.5, gemma4 star, Text, Filters - the same stops in reverse; no Up or Down stop on ▲, ▼ or X",
+    "b_row_walk": "Right from the gemma4 star: ▲, ▼, X, then nothing (Right on X does not move). Left: ▼, ▲, star, then nothing. All 100% visible. Header box 123,231,604x26; first model row 123,282,604x35 (below the header, not under it).",
+    "c": "Only one installed model can answer, so no model sits at place 2 and there is no second row to move. Nothing pressed on ▲/▼.",
+    "d": "A on 'Reset order' (focus read: 'Reset the try order to automatic' before the A) opened 'Put the text try order back to automatic?' with the ring on 'Not now' (123,295,194x40, 100% visible). B closed it, ring back on Reset order. text_model_routing_order on disk after: ['gemma4:e2b-it-qat'] (same as before), vision order same.",
+    "e": "A on Pictures: aria-pressed Pictures true / Text false. A on Text: Text true / Pictures false. The place numbers could not differ: both orders hold only gemma4 (place 1).",
+    "skipped_too_big": "no model shows 'Skipped: too big' (none installed is too big)",
+    "pc_half": "not tested (this Deck runs its own AI; I did not look for a PC address)"
+  },
+  "expected": "see the row's pass lines a to e",
+  "verdict": [
+    "PASS a - one button, A opens, B closes with the ring back on the button",
+    "PASS b - Try order row present, place number with ▲ ▼ on the installed model, Down/Up stops right, Right/Left along the row star, ▲, ▼, X and back",
+    "COULD NOT RUN c - only one answering model is installed (place 1); no model at place 2 to move; I did not pull one (downloads not allowed)",
+    "PASS d - box with the ring on Not now; B left the key unchanged",
+    "PASS e (switch only) - Pictures and Text switch; numbers identical because both orders hold one model",
+    "COULD NOT RUN - Skipped: too big, and the PC half"
+  ]
+}

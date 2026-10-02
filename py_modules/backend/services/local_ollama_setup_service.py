@@ -953,7 +953,7 @@ async def run_local_setup(
             if not tags:
                 log(
                     "[bonsAI] No models installed locally — nothing to update. "
-                    "Use Install Tier 1 essentials or Tier 2 one-model multimodal first."
+                    "Use Browse models (or the starter set there) to install one first."
                 )
                 state["stage"] = "complete"
                 state["phase"] = "done"

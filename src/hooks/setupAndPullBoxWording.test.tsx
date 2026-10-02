@@ -92,10 +92,12 @@ describe("wording of the install and pull boxes", () => {
     expect(text).not.toMatch(/FOSS/);
   });
 
-  it("the update box points at the renamed button", async () => {
+  it("the update box points at Browse models, not at the removed Install options buttons", async () => {
     const text = openSetupBox("update_installed");
     await act(async () => {});
-    expect(text).toContain("Install Gemma 4");
+    expect(text).toContain("Browse models");
+    expect(text).not.toContain("Install Gemma 4");
+    expect(text).not.toContain("Install Tier 1");
     expect(text).not.toContain("Tier 2 multimodal");
   });
 

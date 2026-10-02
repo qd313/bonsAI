@@ -32,7 +32,7 @@
  */
 import { useCallback, useEffect, type MutableRefObject, type RefObject } from "react";
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
 import { TIER1_ESSENTIALS_TAG, TIER2_MULTIMODAL_TAG } from "../data/deckEssentialsTags";
 import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
@@ -48,6 +48,7 @@ import {
   LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
   LOCAL_SETUP_TIER2_DOWNLOAD_SIZE,
 } from "../components/OllamaWhereAiRunsSection.constants";
+import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "./localOllamaStarterSet";
 import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
@@ -134,7 +135,8 @@ export function useLocalOllamaSetupFlow({
         | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS
         | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL
         | typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
-      returnId: ModalReturnFocusId
+      returnId: ModalReturnFocusId,
+      opts?: { offerStarterModels?: boolean }
     ) => {
       if (localSetupBusy) return;
       const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
@@ -177,8 +179,8 @@ export function useLocalOllamaSetupFlow({
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
               {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
               <div style={{ marginTop: 8 }}>
-                If nothing is installed yet, the update finishes after the binary refresh — use Install Tier 1 essentials or
-                Install Gemma 4 to pull a model first.
+                If nothing is installed yet, the update finishes after the binary refresh — use Browse models to pull a
+                model first.
               </div>
             </>
           ) : (
@@ -198,62 +200,37 @@ export function useLocalOllamaSetupFlow({
           )}
         </div>
       );
-      const startSetup = () => {
-        void callDeckyWithTimeout<
-          [{ profile: string }],
-          {
-            accepted?: boolean;
-            reason?: string;
-          }
-        >("start_local_ollama_setup", [{ profile }], 15000)
-          .then((out) => {
-            if (!out?.accepted) {
-              toaster.toast({
-                title: "Setup not started",
-                body: out?.reason ?? "Unknown error.",
-                duration: 6000,
-              });
-              return;
-            }
-            toaster.toast({
-              title: "Local Ollama setup started",
-              body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
-              duration: 6000,
-            });
-            void callDeckyWithTimeout<[], LocalOllamaSetupStatus>(
-              "get_local_ollama_setup_status",
-              [],
-              DECKY_RPC_TIMEOUT_MS
-            )
-              .then(setLocalSetupStatus)
-              .catch(() => {});
-          })
-          .catch((e: unknown) => {
-            toaster.toast({
-              title: "Setup RPC failed",
-              body: formatDeckyRpcError(e),
-              duration: 6000,
-            });
-          });
-      };
       // This box is the download notice itself (plan72-F-DL): the sites and sizes, the permission
       // question while downloads are off, and the ring on "Not now" -- never on "Start update".
       // The note "the ring returns to returnId" is left armed only if a box really opened (kids lock
       // or a seen site answer at once, and the note is taken back).
       void rememberReturnWhileBoxOpens(returnId, () =>
         confirmDownload(localSetupDownloadNotices(profile), { always: true, title, body, actionLabel })
-      ).then(
-        (go) => {
-          if (!go) return;
-          setupAutoTestRanRef.current = false;
-          lastCompletedSetupProfileRef.current = profile;
-          if (isTier2 && onApplyTier2MultimodalPolicy) {
-            void Promise.resolve(onApplyTier2MultimodalPolicy()).then(startSetup);
-          } else {
-            startSetup();
-          }
+      ).then(async (go) => {
+        if (!go) return;
+        // A Deck with no models: the same box flow then offers the starter models, with the ring on
+        // "Not now". Declining (or B) installs the engine only, as before; Install Ollama is already
+        // agreed to by now, so this box only asks about the models.
+        let chosen = profile;
+        if (opts?.offerStarterModels && isUpdateInstalled) {
+          const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
+            confirmDownload(starterSetNotices(), {
+              always: true,
+              title: "Also install the starter models?",
+              body: starterSetBoxBody(true),
+              actionLabel: "Install Ollama and the starter models",
+            })
+          );
+          if (wantsStarter) chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
         }
-      );
+        setupAutoTestRanRef.current = false;
+        lastCompletedSetupProfileRef.current = chosen;
+        if (isTier2 && onApplyTier2MultimodalPolicy) {
+          void Promise.resolve(onApplyTier2MultimodalPolicy()).then(() => startLocalOllamaSetup(chosen, setLocalSetupStatus));
+        } else {
+          startLocalOllamaSetup(chosen, setLocalSetupStatus);
+        }
+      });
     },
     [localSetupBusy, onApplyTier2MultimodalPolicy]
   );

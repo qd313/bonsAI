@@ -33,12 +33,12 @@ import {
 export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 
 /** The model site and the size, in the shape the download notice takes. */
-function starterSetNotices(): DownloadNotice[] {
+export function starterSetNotices(): DownloadNotice[] {
   return [modelPullNotice([TIER1_ESSENTIALS_TAG], LOCAL_SETUP_TIER1_DOWNLOAD_SIZE)];
 }
 
 /** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama. */
-function starterSetBoxBody(engineAlreadyAsked: boolean) {
+export function starterSetBoxBody(engineAlreadyAsked: boolean) {
   return (
     <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
       <div style={{ marginBottom: 8 }}>
@@ -60,7 +60,7 @@ function starterSetBoxBody(engineAlreadyAsked: boolean) {
  * Starts the setup run for a profile (Ollama's engine if missing, then the profile's models) and
  * tells the person it began. `onStatus` hears the run's first status line when the screen keeps one.
  */
-function startLocalOllamaSetup(profile: string, onStatus?: (s: LocalOllamaSetupStatus) => void): void {
+export function startLocalOllamaSetup(profile: string, onStatus?: (s: LocalOllamaSetupStatus) => void): void {
   void callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string }>(
     "start_local_ollama_setup",
     [{ profile }],

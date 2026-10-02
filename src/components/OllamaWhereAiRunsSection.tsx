@@ -544,7 +544,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   className="bonsai-settings-focus-btn"
                   disabled={localSetupBusy}
                   onClick={() => {
-                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup");
+                    // Known to be empty (engine not up, or up with no models): the box then offers the starter models.
+                    const noModels = connectionStatus != null && !(connectionStatus.models?.length ?? 0);
+                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", {
+                      offerStarterModels: noModels,
+                    });
                   }}
                   {...({
                     onMoveUp: () => focusAutostartToggle(),

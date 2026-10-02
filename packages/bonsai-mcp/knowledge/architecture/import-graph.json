@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 663,
-  "edgeCount": 1867,
+  "fileCount": 664,
+  "edgeCount": 1870,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1166,6 +1166,13 @@
         "src/components/OllamaWhereAiRunsSection.tsx"
       ]
     },
+    "src/components/OllamaTab.focusRing.test.tsx": {
+      "imports": [
+        "src/components/OllamaTab.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaTab.modalReturnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
@@ -1191,6 +1198,7 @@
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx"
       ]
@@ -1204,7 +1212,8 @@
     },
     "src/components/OllamaThinkingEffortRow.tsx": {
       "imports": [
-        "src/data/askThinkEffort.ts"
+        "src/data/askThinkEffort.ts",
+        "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
         "src/components/OllamaTab.tsx",
@@ -4615,6 +4624,7 @@
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
+        "src/components/OllamaTab.focusRing.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts",
@@ -4889,7 +4899,8 @@
       "imports": [],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
-        "src/components/OllamaTab.tsx"
+        "src/components/OllamaTab.tsx",
+        "src/components/OllamaThinkingEffortRow.tsx"
       ]
     },
     "src/test-harness/chipRowSimulation.tsx": {

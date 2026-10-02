@@ -25,6 +25,7 @@ import {
   ASK_THINK_EFFORT_LABELS,
   type AskThinkEffortId,
 } from "../data/askThinkEffort";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type OllamaThinkingEffortRowProps = {
   value: AskThinkEffortId;
@@ -90,6 +91,7 @@ export function OllamaThinkingEffortRow({
             <Button
               key={`think-effort-${option}`}
               onClick={() => onChange(option)}
+              className={FOCUS_RING_BTN_CLASS}
               style={{
                 flex: 1,
                 minHeight: 36,

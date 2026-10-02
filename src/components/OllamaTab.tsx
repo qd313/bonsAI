@@ -42,7 +42,7 @@ import type { ReplyVerbosityId } from "../data/replyVerbosity";
 import type { AskThinkEffortId } from "../data/askThinkEffort";
 import { OllamaThinkingEffortRow } from "./OllamaThinkingEffortRow";
 import type { NamedOllamaHost } from "../data/bonsaiSettingsSchema";
-import { SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
 import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
@@ -432,6 +432,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                 rememberModalReturnFocus("ollama-models-hub-settings");
                 onOpenOllamaModelsHub({ initialSection: "policy" });
               }}
+              className={FOCUS_RING_BTN_CLASS}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",
@@ -447,6 +448,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                 rememberModalReturnFocus("ollama-text-try-order");
                 onOpenRoutingOrderModal("text");
               }}
+              className={FOCUS_RING_BTN_CLASS}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",
@@ -462,6 +464,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                 rememberModalReturnFocus("ollama-vision-try-order");
                 onOpenRoutingOrderModal("vision");
               }}
+              className={FOCUS_RING_BTN_CLASS}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",

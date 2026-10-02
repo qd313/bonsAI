@@ -523,6 +523,6 @@ def no_installed_routing_models_message(installed: list[str], requires_vision: b
     return (
         f"No {kind}model in bonsAI's routing list is installed on this Ollama host. "
         f"{installed_clause}"
-        f"Open {OLLAMA_TAB_WHERE_AI_RUNS} and run Install Tier 1 essentials, or pull {essential} "
+        f"Open {OLLAMA_TAB_WHERE_AI_RUNS} and use Install Ollama or Browse models (Install the starter set), or pull {essential} "
         "(one small multimodal model for chat and screenshots). Optional: gemma4:e2b-it-qat."
     )

@@ -137,7 +137,7 @@ export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
       if (installed.length === 0) {
         toaster.toast({
           title: "No installed models",
-          body: "Pull an answering model on the Ollama tab (Browse models or Install options), then try again.",
+          body: "Pull an answering model on the Ollama tab (Browse models, or Install Ollama if it is not set up yet), then try again.",
           duration: 5000,
         });
         return;

@@ -15,7 +15,7 @@ import {
   focusContextHint,
   focusSessionContextStrip,
 } from "./liveTurnFocusGraph";
-import { isDeckDirectionLeftEvent, isDownDeckButtonEvent } from "./focusNavigation";
+import { isDeckDirectionLeftEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "./focusNavigation";
 import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
@@ -126,6 +126,28 @@ function takeHolderFocus(holder: NavRefHolder): boolean {
  */
 export function questionMoveUpOut(above: NavRefHolder | null | undefined): () => boolean {
   return () => (above ? takeHolderFocus(above) : takeNavFocus("chat-slot-row"));
+}
+
+/**
+ * The "N earlier" line's moves, which are `earlierPillNavHandlers` plus Up to the chat slot row
+ * (plan 79). The line is always the first stop in the transcript once there are earlier turns.
+ * Opened or closed, nothing above it is a sibling for Steam to climb to, which is the shape that
+ * ran 18 Up presses to the tab bar without the slot row ever taking the ring
+ * (`firstArchivedHeaderMoveUp` below, measured 2026-09-04): so the line claims Up the same way the
+ * first question row did before the line stayed on screen. `nextTurnId` is null while the day
+ * lines are showing, since the next stop down is then a day line and Steam's own Down is right.
+ */
+export function earlierLineNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
+  const base = earlierPillNavHandlers(nextTurnId);
+  const up = () => takeNavFocus("chat-slot-row");
+  return {
+    ...base,
+    onMoveUp: up,
+    onButtonDown: (button: unknown) => {
+      if (isUpDeckButtonEvent(button)) return up();
+      return (base.onButtonDown as (b: unknown) => boolean)(button);
+    },
+  };
 }
 
 /**

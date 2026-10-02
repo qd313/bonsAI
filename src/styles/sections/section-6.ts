@@ -630,6 +630,17 @@ ${buildReplyRatingChoicesSection()}
           height: 1px;
           background: rgba(255, 255, 255, 0.09);
         }
+        /* A day line under an opened "N earlier" ("Yesterday · 30"): the same line, a little brighter
+           (opacity .9, the drawing's grouped rows), with a chevron at the right end that shows
+           whether the day is open. The opened "N earlier" line carries the chevron too. */
+        .bonsai-scope .bonsai-chat-earlier-day-row {
+          opacity: 0.9;
+        }
+        .bonsai-scope .bonsai-chat-earlier-chev {
+          font-size: ${uiScalePx(13)};
+          line-height: 1;
+          color: #8fa8c4;
+        }
 
         /* Empty slot / create-position preview, directly under the slot row. */
         .bonsai-scope .bonsai-chat-empty-state {

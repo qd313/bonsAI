@@ -9,6 +9,7 @@
  *     (empty-state logo, only when this chat has nothing in it yet)
  *
  *     [ N earlier ]                    <- only once there are 2+ old turns
+ *       (opened: one line per day, "Yesterday · 30", each opening on its own)
  *     ── older question ──
  *        (its answer, only while that turn is the one expanded)
  *     ── older question ──
@@ -43,9 +44,10 @@
  *    one on screen. A leftover answer still sitting in state after the real
  *    history has already archived it should not summon a stray extra turn.
  * 2. Work out how many of the older, finished turns to actually draw. Once
- *    there are two or more, they collapse behind an "N earlier" pill and
- *    stay collapsed until someone taps it; the newest turn is never one of
- *    the ones hidden behind it.
+ *    there are two or more, they collapse behind an "N earlier" line and
+ *    stay collapsed until someone opens it, which shows one line per day
+ *    (buildEarlierList.tsx); a day opens on its own to that day's questions.
+ *    The newest turn is never one of the ones hidden behind it.
  * 3. For every turn shown — older or live — draw the same three pieces in
  *    the same order: its question header (buildTurnHeaderElement()), its
  *    answer (buildAnswerBubbleElement(), through the shared
@@ -144,7 +146,6 @@ import {
   focusChatPermissionHintRow,
   focusDownFromReplyUtilityRowOrPermHint,
   earlierPillLeftNavHandlers,
-  earlierPillNavHandlers,
   closedQuestionMoveDown,
   questionMoveUpOut,
   earlierPillNav,
@@ -213,6 +214,7 @@ import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
 import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
+import { buildEarlierList } from "./buildEarlierList";
 import { useTitleOverflow } from "../hooks/useTitleOverflow";
 import { useKbNotesFold } from "../hooks/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
@@ -701,9 +703,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 
-  /* The "N earlier" pill's own open/close state and first-row focus handoff — lifted into its
+  /* The "N earlier" line's open/close state and which days are open under it — lifted into its
      own hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
-  const { earlierExpanded, setEarlierExpanded, firstArchivedTurnNavRef } = useEarlierTurnsPill({
+  const { earlierExpanded, setEarlierExpanded, openDays, toggleDay } = useEarlierTurnsPill({
     askThreadCollapsed,
   });
 
@@ -1049,13 +1051,25 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const earlierTurns = showLiveTurn ? askThreadCollapsed : askThreadCollapsed.slice(0, -1);
   const earlierCount = earlierTurns.length;
-  const hidesEarlierTurns = earlierCount >= 2 && !earlierExpanded;
-  /* Index offset so each rendered turn keeps its position in `askThreadCollapsed` — the
-     transparency lookup and the newest-archived check both depend on it. */
-  const archivedRenderOffset = hidesEarlierTurns ? earlierCount : 0;
-  const archivedTurnsToRender = hidesEarlierTurns
-    ? askThreadCollapsed.slice(earlierCount)
-    : askThreadCollapsed;
+  /*
+   * Opened, "N earlier" shows one line per day and the questions of the days that are open (plan 79,
+   * buildEarlierList.tsx); the turns after the earlier ones always show. Each rendered turn keeps
+   * its position in `askThreadCollapsed` (`turnIndex` below) — the transparency lookup and the
+   * newest-archived check both depend on it.
+   */
+  const hasEarlierLine = earlierCount >= 2;
+  const earlier = buildEarlierList({
+    turns: askThreadCollapsed,
+    earlierCount,
+    showLiveTurn,
+    earlierExpanded,
+    setEarlierExpanded,
+    openDays,
+    toggleDay,
+    expandedTurnKey,
+    onTurnActivate,
+  });
+  const archivedTurnsToRender = earlier.turnsToRender;
 
   /*
    * The text the ban-lookup permission row is judged on. The live reply while there is one; after a
@@ -1094,19 +1108,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       }}
     >
       <div className="bonsai-chat-transcript">
-        {hidesEarlierTurns ? (
-          <Focusable
-            className="bonsai-chat-earlier-pill-row"
-            onActivate={() => setEarlierExpanded(true)}
-            onOKButton={() => setEarlierExpanded(true)}
-            {...earlierPillNavHandlers(archivedTurnsToRender[0]?.id ?? (showLiveTurn ? "live" : null))}
-          >
-            <span className="bonsai-chat-earlier-pill">{earlierCount} earlier</span>
-            <span className="bonsai-chat-earlier-rule" />
-          </Focusable>
-        ) : null}
+        {earlier.line}
         {archivedTurnsToRender.map((turn, renderIndex) => {
-          const turnIndex = renderIndex + archivedRenderOffset;
+          const turnIndex = askThreadCollapsed.indexOf(turn);
           /* Hoisted out of the reply-actions IIFE below: the strategy panels need it too. */
           const isNewestArchivedTurn = turnIndex === askThreadCollapsed.length - 1;
           /*
@@ -1122,14 +1126,15 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
            */
           const isNewestStoppedArchivedTurn =
             isNewestArchivedTurn && askStopped && !isStopNoticeResponse(turn.answer);
+          /* The turn after this one, unless a day line sits between: Down then is Steam's own move. */
+          const nextTurn = archivedTurnsToRender[renderIndex + 1];
           return (
+          <React.Fragment key={turn.id}>
+          {earlier.dayLinesBefore(turn.id)}
           <Focusable
             key={turn.id}
             flow-children="vertical"
             className="bonsai-chat-turn-slot"
-            {...(renderIndex === 0
-              ? ({ navRef: firstArchivedTurnNavRef } as Record<string, unknown>)
-              : {})}
           >
             {buildTurnHeaderElement({
               turnId: turn.id,
@@ -1147,15 +1152,17 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               headerRef: (el: HTMLElement | null) => {
                 turnHeaderElRefs.current[turn.id] = el;
               },
-              onMoveUp: firstArchivedHeaderMoveUp(turnIndex),
-              onMoveDownPast: closedQuestionMoveDown(
-                archivedTurnsToRender[renderIndex + 1]?.id ?? (showLiveTurn ? "live" : null)
-              ),
-              /* What is drawn right over this row, for the question text's Up (plan 79). */
+              /* Only a turn with no "N earlier" line above it has nothing for Up to climb to. */
+              onMoveUp: firstArchivedHeaderMoveUp(hasEarlierLine ? -1 : turnIndex),
+              onMoveDownPast: earlier.dayLineFollows(nextTurn)
+                ? undefined
+                : closedQuestionMoveDown(nextTurn?.id ?? (showLiveTurn ? "live" : null)),
+              /* What is drawn right over this row, for the question text's Up (plan 79): a day
+                 line, else the turn above, else the "N earlier" line, else the chat slot row. */
               onMoveUpOut: questionMoveUpOut(
                 renderIndex > 0
                   ? headerRingProps(archivedTurnsToRender[renderIndex - 1]!.id).headerNavRef
-                  : hidesEarlierTurns
+                  : hasEarlierLine
                     ? earlierPillNav
                     : null
               ),
@@ -1375,8 +1382,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               </>
             ) : null}
           </Focusable>
+          </React.Fragment>
           );
         })}
+        {earlier.trailingDayLines}
         {showLiveTurn ? (
           <Focusable key="live" flow-children="vertical" className="bonsai-chat-turn-slot">
             {buildTurnHeaderElement({
@@ -1399,7 +1408,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               onMoveUpOut: questionMoveUpOut(
                 archivedTurnsToRender.length > 0
                   ? headerRingProps(archivedTurnsToRender[archivedTurnsToRender.length - 1]!.id).headerNavRef
-                  : hidesEarlierTurns
+                  : hasEarlierLine
                     ? earlierPillNav
                     : null
               ),

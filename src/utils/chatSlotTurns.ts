@@ -120,6 +120,9 @@ export function turnsToCollapsedTurns(
         // assistant turn. Only ever set there (see chatSlotsApi.ts), so the question turn is never
         // consulted -- unlike appId/appName there is no slot-level fallback to fall back to.
         chatSummary: turn.chat_summary,
+        // When the question was asked, for grouping the "N earlier" list by day (plan 79). The
+        // question's own time, else the answer's; left off when the saved turn has neither.
+        createdAt: pendingQ.created_at || turn.created_at || undefined,
       });
       pendingQ = null;
     }

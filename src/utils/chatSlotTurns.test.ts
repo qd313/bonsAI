@@ -47,6 +47,23 @@ describe("turnsToCollapsedTurns", () => {
     expect(collapsed[0]?.transparency?.route).toBe("ollama");
   });
 
+  it("carries the day the question was asked onto the collapsed turn (plan 79, grouping by day)", () => {
+    // The saved question carries its time (seconds); the screen's turn type did not, so the
+    // "N earlier" list had nothing to group by day with. The question's time wins over the
+    // answer's, and a turn saved with neither stays undated.
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "asked on Monday", created_at: 1_790_000_000 },
+      { id: "a1", role: "assistant", text: "answered a bit later", created_at: 1_790_000_030 },
+      { id: "u2", role: "user", text: "no date saved" },
+      { id: "a2", role: "assistant", text: "no date either" },
+      { id: "u3", role: "user", text: "only the answer is dated" },
+      { id: "a3", role: "assistant", text: "dated answer", created_at: 1_790_100_000 },
+    ]);
+    expect(collapsed[0]?.createdAt).toBe(1_790_000_000);
+    expect(collapsed[1]?.createdAt).toBeUndefined();
+    expect(collapsed[2]?.createdAt).toBe(1_790_100_000);
+  });
+
   it("carries the persisted app id onto the collapsed turn", () => {
     // Regression (DRG-GLOSSARY-01, device 2026-08-28): this was hardcoded to "", so a reply that
     // showed glossary chips while it streamed lost them the moment it settled into history —

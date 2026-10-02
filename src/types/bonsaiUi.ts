@@ -145,6 +145,13 @@ export type AskThreadCollapsedTurn = {
    * `reasoning` above.
    */
   chatSummary?: "written" | "failed";
+  /**
+   * When the question was asked, in seconds since 1970, straight off the saved turn (plan 79). It is
+   * what the "N earlier" list groups by day with. Absent on a turn minted this session before its
+   * chat reloaded from disk (the grouping reads the time from its `turn-<ms>-` id instead) and on
+   * any turn restored without a date; the grouping puts those under "Earlier".
+   */
+  createdAt?: number;
 };
 
 /** Accordion key for the Ask transcript: archived turn id, live turn, or all collapsed. */

@@ -441,6 +441,18 @@ Nothing yet.
   the knowledge-base icons, the one switch, removing "Install options…", the fresher title, long chips, Save and
   Delete with the ring); K, L and M on the six drawings; N on the list of owed Deck checks. Waiting: the D-pad and
   layout fixes for their measurements, the drawn features for the maintainer's picks.
+- **2026-10-02, about 02:35 to 03:05, the six drawings are ready for the maintainer's pick:**
+  Delete icon (recommended 1, a simple bin) https://claude.ai/artifact/63R4GDY8nR77n4VsWT9FZA ·
+  chip highlight (recommended 6, a soft fill with a thin bright edge) https://claude.ai/artifact/UTPzj1j4n8B1Nnj3Uun6VF ·
+  calmer rating choices (recommended 2, smaller and softer; with a list of eight other loud spots)
+  https://claude.ai/artifact/SXg99cQ5NN2rfh2pcGRkqv · the Show details line in the chip's place, in motion
+  (recommended 2, a quick cross-fade) https://claude.ai/artifact/PXBGwEczcN97skhX4EANN9 · opening "N earlier"
+  (recommended 1, a few at a time) https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18 · folding "Models & routing"
+  into the AI models box (recommended A, a strip in the box's top row) https://claude.ai/artifact/2xUbgB3AvhfzVKvwQZ3XMJ.
+  The first three get built with the recommended choice if no pick comes; the last three wait. Also: the list of owed
+  Deck checks is done (9 the rig can run as written, 9 more with a prepared setup); the bookkeeper's first pass moved
+  the maintainer's passed Clear-mid-answer check to Done and fixed ten places where the documents disagreed
+  (`478df823`); the two add-ons started (a button keeps its answer's game; ten game chips).
 
 ## For the helpers: who owns which files
 

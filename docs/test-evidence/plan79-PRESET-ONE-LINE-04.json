@@ -1,0 +1,18 @@
+{
+ "deck_time_local": "2026-10-02T09:22 to 09:35 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454, dpr 1.5; no game; two chips showing (preset_single_chip false).",
+ "setup": "dev_frozen_test_chips was [] (read first). Set by SSH edit to the six Batch B strings (what happens at the end of the main story / my saves wont load after a mod update what should i delete / my proton prefix is broken how do i start fresh / how do i install a mod safely / what should i do next / is there anything nearby worth checking); the SSH edit was allowed. Plugin reloaded at once (no game). The first open after the reload failed once and the second worked. All six chips carry a Test badge and are longer than the 100 px text box.",
+ "pressed": "No D-pad presses for the watch itself. Steam button, Down x6 to Settings (read focus), A, Down x10 to Accessibility (read focus), Right, Down x2 to Reduce Motion (read focus), A. Screenshot showed the switch on. B x2 back to Steam Home (screenshot), deck_openPlugin.",
+ "seen": {
+  "case_check_control_RM_off": "matchMedia(prefers-reduced-motion: reduce) false. 35 s of 1-second reads: chips showed the marquee mode (class bonsai-preset-chip-text--marquee) or the decode churn (scrollWidth 195 to 360 against 100); 6 distinct chips cycled.",
+  "control_60s_RM_off": "65 s of 500 ms reads. In marquee mode every chip carried the scrolling element (a child with a --duration style, Steam scrolling text, text-overflow clip), its transform offset moved by -59 to -279 px (for example -58.6, -122.8, -187.1, -251.3 for the 'my saves wont load' chip over 9 s). Control passes: scrolling element present, offset moves at least 20 px.",
+  "RM_on": "matchMedia true on the plugin page. Reduce Motion switch on in Steam (screenshot DeckCapture_20261002_092816_auto.png).",
+  "watch_3min_RM_on": "385 reads over 192.5 s at 500 ms. In 385 of 385 reads at least one chip text was cut with text-overflow ellipsis and scrollWidth above clientWidth (for example 239 and 338 against 100). 0 reads with a scrolling element. 0 reads with a non-zero transform offset (offset constant 0). 0 reads with a typing caret. Only one chip class (plain). 6 distinct chip texts appeared and all were clean strings (no scrambled letters): the chips swapped instantly."
+ },
+ "expected": "An overflowing label shows an ellipsis (text-overflow: ellipsis, no scrolling element) in at least 5 reads and does not move (offset constant to 0.5 px); chips swap with no scrambled letters and no caret.",
+ "verdict": "PASS - ellipsis on 385 of 385 reads, no scrolling element, offset constant at 0, no caret, no scrambled text. The control with Reduce Motion off showed the scrolling element moving 59 to 279 px.",
+ "restore_status": "Reduce Motion still ON and dev_frozen_test_chips still pinned when this file was written; they are put back before the next checks (see the handover note).",
+ "side_effect": "Steam Reduce Motion switched on; test chips pinned; both restored later (see handover).",
+ "row": "PRESET-ONE-LINE-04",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

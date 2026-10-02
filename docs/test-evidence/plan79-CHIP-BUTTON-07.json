@@ -1,0 +1,24 @@
+{
+ "deck_time_local": "2026-10-02T09:40 to 09:52 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454, dpr 1.5; no game; two chips showing; the everyday chips (no pinned test chips).",
+ "setup": "Reduce Motion turned on in Steam (Steam button, Settings, Accessibility, Reduce Motion, A; screenshot DeckCapture_20261002_094113_auto.png). matchMedia(prefers-reduced-motion: reduce) true on the plugin page. As found: preset_chip_animation decode, preset_chip_fade_animation_enabled false. Page-side watcher, 25 ms, on the chip that holds the ring: class list (bonsai-preset-chip-blocked-edge), computed transition, full computed box-shadow (the edge is the inset 0 -2px shadow: normal colour rgba(56,189,248,0.55), blocked colour rgb(150,225,255)), box. (My first watcher cut the shadow text too short to see the colour; it was rebuilt and the fade presses rerun; the file counts only the rebuilt watcher.)",
+ "pressed": "Developer tab: walked to 'Preset animation: fade', A (settings file then read fade and fade_animation_enabled TRUE). Main tab, ring on the left chip: Left (blocked), then Right to the right chip, Right (blocked), 2.5 s apart. Then static: Developer tab, Right x2 to 'Preset animation: static' (read focus), A (file read static, fade flag false). Main tab, ring on the right chip: Right (blocked), Left (move), Left (blocked), 2.5 s apart.",
+ "seen": {
+  "fade_left_chip": "class on for 271 ms (t 2005 to 2276); computed transition none / 0s while on; edge colour went straight to rgb(150,225,255) at the first read (one state change, no steps between); box 48,290.8,147,30 unchanged; ring stayed on the chip.",
+  "fade_right_chip": "class on 270 ms (18780 to 19050); transition none/0s; colour rgb(150,225,255) at first read; box 201,290.8,147,30 unchanged; ring stayed.",
+  "static_right_chip": "class on 286 ms (5514 to 5800); transition none/0s; colour full at first read; box 201,290.8,147,30 unchanged; ring stayed.",
+  "static_left_chip": "class on 289 ms (13036 to 13325); transition none/0s; colour full at first read; box 48,290.8,147,30 unchanged; ring stayed.",
+  "presses_seen": "2 of 2 per style.",
+  "side_note": "Outside the blocked flash the chip's transition is opacity, transform, color 0.42 s (not none) even with Reduce Motion on; only the flashing chip reads none, as the rule requires."
+ },
+ "expected": "Per style: edge class on 150 to 400 ms; computed transition none; colour at full strength at the first read; box moves at most 0.5 px; ring stays; 2 of 2 presses seen.",
+ "verdict": [
+  "PASS - fade style: 2 of 2 presses, 271 and 270 ms, transition none, full colour at first read, box moved 0 px, ring stayed.",
+  "PASS - static style: 2 of 2 presses, 286 and 289 ms, transition none, full colour at first read, box moved 0 px, ring stayed.",
+  "PASS (earlier, not rerun) - decode style passed 2026-09-26 (plan70-L5-FLOW5-REDUCED-MOTION)."
+ ],
+ "restore": "preset_chip_animation put back to decode through the Developer tab; settings file read: decode, preset_chip_fade_animation_enabled false (choosing fade had set it true, choosing static set it false, choosing decode left it false), and the whole file equals ~/p79-settings.bak.json (empty difference list). Reduce Motion switched off in Steam (screenshot ...095004_auto.png), matchMedia read false after reopening the plugin.",
+ "side_effect": "Selecting fade in the Developer tab also flipped preset_chip_fade_animation_enabled to true; it went back to false by itself when static was chosen. Both were checked at the end.",
+ "row": "CHIP-BUTTON-07",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

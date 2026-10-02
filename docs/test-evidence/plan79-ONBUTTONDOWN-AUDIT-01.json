@@ -1,0 +1,30 @@
+{
+ "deck_time_local": "2026-10-02T08:55 to 09:20 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454, dpr 1.5; visible band y 88 to about 290; no game.",
+ "setup": "Test chat 6f3cc055 open (title read). Chat has 87 earlier turns. Box 1 not run (cannot be produced).",
+ "pressed": "Down x7 to Show details, A (open), Down to tabs row, Right (Session tab), Down x10, Up x1, A on a non-newest session row, B. Then Down/Up across closed Show details x3. Then Up to the 87 earlier pill and A (read focus first), A on the first collapsed header (read focus first), Down/Up past its Show details x2. Then Down on three collapsed headers. Then Down from two open question headers (two different turns, opening the second with A on its collapsed header). Page-side 40 ms watchers logged the blue row, first chip and any aria-expanded true.",
+ "seen": {
+  "box2_R0": "87 session rows, one blue row (index 86, the newest, bg rgba(56,189,248,0.12)), first chip label Keyword + meaning (chips: Keyword + meaning / KB: 14 sections / Reply style: balanced).",
+  "box2_down": "10 Down presses (Sum up again, What the AI remembers card, then 8 session rows). Watcher over 490 reads (about 20 s): 0 changes in the blue row or the first chip. Every row stop 100 percent visible. The What the AI remembers card stop was only 33 percent visible, covered by the question input box (a card taller than the band; entry edge from Down is its top; noted, not judged a box failure).",
+  "box2_A_on_row": "Up once to row 6 (not newest), read focus, A. Result: exactly 1 blue row, index 6 = the row that had the ring; chip ladder now KB: 13 sections (was 14), first chip label unchanged. B closed the whole details panel and the ring landed on Show details (y 274, 100 percent visible).",
+  "box3_newest_closed": "3 of 3 passes: Down from Show details lands on the chip button below it, Up returns. After the run aria-expanded false and label Show details; watcher 855 reads, 0 reads with an expanded divider or any details-tabs/session-body element. Reached Show details again every time.",
+  "box3_older_turn_open": "87 earlier pill opened with A (after reading focus); the list showed 88 headers, 87 collapsed. A on the first header opened that turn. 2 of 2 passes: Down then Up across its own Show details (Down lands on the next header), aria-expanded false, label Show details, 0 expanded or details panels over 1596 reads.",
+  "box3_summed_note": "NOT TESTED. Opening an older turn closes the newest turn (only one turn is open at a time), and the newest turn is 87 collapsed headers away, so its summed-itself-up note was not on screen. Page text had no summed text. I stopped rather than spend 90 presses.",
+  "box4_collapsed_header_down": "3 of 3: from collapsed headers Any tips for the Soul Sanctum, how do i beat megaera in hades, what does fsr do on the steam deck, Down went to the next header each time (megaera, fsr, explain every class in deep rock). Never onto a .bonsai-answer-stop (stop false each time), aria-expanded false each time, boxes y 176 to 247, inside the band.",
+  "box4_open_header_down": "2 of 2 on two different turns: open question header of turn 1 (How do I beat the boss...), Down lands on Show reasoning 25 s (y 196, h 15, visible). Second turn (Any tips for the Soul Sanctum..., opened with A), Down lands on Show reasoning 17 s (y 232, h 15, visible). Both inside the band 88 to 290.",
+  "other_observations": "(1) Opening an older turn closes the open one (accordion), also the newest. (2) After the pill is opened it is gone, and Up from the chip row under the question box jumps to the open turn at the top (Show details, scrollTop 0), skipping the 86 collapsed headers; Down passes through all of them. (3) The What the AI remembers card is 33 percent visible behind the question box when entered from above."
+ },
+ "expected": "Box 2: highlight and chip ladder stay equal on Down, A on a row moves exactly one highlight, B closes. Box 3: closed Show details never opens on a pass. Box 4: collapsed header Down never lands on an answer section; open header Down lands on Show reasoning or first answer section, visible.",
+ "verdict": [
+  "PASS - Box 2: 0 changes in 10 Down presses; A on row 6 gave exactly one blue row on the ringed row and a changed chip ladder (KB: 13 vs 14); B closed the panel with the ring on Show details. One stop (the card) was 33 percent visible, noted.",
+  "PASS - Box 3, closed Show details on the newest turn: 3 of 3.",
+  "PASS - Box 3, Show details on an opened older turn: 2 of 2.",
+  "UNCLEAR - Box 3, summed-itself-up note: not on screen (newest turn closed by the accordion); not tested.",
+  "PASS - Box 4, collapsed header Down: 3 of 3, never onto an answer section. (The code returns false for a collapsed header by design; Down went to the next header.)",
+  "PASS - Box 4, open header Down: 2 of 2 on two different turns, ring on Show reasoning, visible.",
+  "NOT RUN - Box 1 (cannot be produced, per the task)."
+ ],
+ "side_effect": "The chat view is left with the second turn (Any tips for the Soul Sanctum...) open and the pill gone; this is screen state only, no chat file changed. No question asked.",
+ "row": "ONBUTTONDOWN-AUDIT-01",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

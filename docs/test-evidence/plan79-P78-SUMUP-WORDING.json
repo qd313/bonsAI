@@ -1,0 +1,17 @@
+{
+ "deck_time_local": "2026-10-02T09:50 to 09:55 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454; no game.",
+ "setup": "Backed up the test chat file to ~/p79-6f3cc055.sumup.bak (the older ~/p79-chat-slots.bak copy is from block 0). The chat's origin_app_id and origin_app_name were both empty. Set origin to 1145360 / Hades over SSH (json rewrite), reloaded the plugin with no game running (the first open after the reload failed once, the second worked; it reopened on the Developer tab, walked back to Main).",
+ "pressed": "Walked Down to 'Show details' (read focus), A, Down (landed on the notes block, tabs row is two stops further here), Down, Right: Session tab open. Read the Sum up button.",
+ "seen": {
+  "button": "'Sum up again', class bonsai-sumup-btn--off, aria-disabled true (greyed)",
+  "line": "This chat is already summed up. Ask more, then you can sum up again.",
+  "card": "What the AI remembers, 78 turns, 21 h ago, Games: Deep Rock Galactic: Survivor, Hollow Knight, Hades, Half-Life 2, Palworld (the card on file; not rebuilt)."
+ },
+ "expected": "Case check: the button is not greyed and shows no 'already summed up' line. Pass: first name on the Game line is Hades.",
+ "verdict": "UNCLEAR - COULD NOT RUN the live half: the Sum up button stayed greyed ('This chat is already summed up') even with the origin set to Hades, so no new card could be made. Under the list's rule this row is 'proven by its tests only' (tests/test_chat_summary_tidy.py, KnownGamesTests.test_the_game_the_chat_was_opened_in_comes_first_then_running_games_by_count, and the 45-summary measurement on the PC). Third night in a row the button is greyed on this chat.",
+ "restore": "Chat file copied back from the backup at once, diff empty ('RESTORED_IDENTICAL'), plugin reloaded, diff still empty three seconds after the reload (CHAT_IDENTICAL). origin_app_name back to empty, 180 messages.",
+ "side_effect": "The chat file was rewritten for about 4 minutes (origin Hades) and then restored byte for byte. Nothing was asked.",
+ "row": "P78-SUMUP-WORDING",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

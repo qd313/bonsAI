@@ -341,6 +341,10 @@ text — the log's memory line or the chat file itself shows it either way.
 
 ---
 
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-30 (plan 77 block 3, row SUMUP-12):** the Deck check of the guards PASSED: a saved answer with its markers doubled loaded as one closed cover, and the hidden word appeared nowhere in the log's memory line, the new answer or the rest of the chat file (no summary existed to check). The original cause is still unproven, so this stays PARTIAL. Evidence `docs/test-evidence/plan77-SUMUP-12.json`.
+
 ## Make the preset chips look more like chips
 
 Shipped 2026-09-17 under plan 60 (D110). Each chip now looks raised: a thin light line along its top edge and a soft
@@ -742,6 +746,10 @@ Fallout 4 with the game named rather than running, since the question box was de
 game. The library itself is still not published (the maintainer runs the push). Full readings in
 [Flow L7 findings](#flow-l7-findings). Evidence `docs/test-evidence/plan70-R4-try3.json`,
 `plan70-R4-try4.json`, `plan70-R4-try6.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Done). The chip labels fit on 2026-09-26. **2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`):** the promise that one of the game's own chips always shows failed on the Deck 2026-09-26 (`docs/test-evidence/plan70-L6-PHASE4-CHIPS-01.json`). Cause: three of the four chip styles dealt the game's chips only once, and with one chip showing the promised chip sat in a spot that is off screen. Fixed, and the chip promise passed on the Deck 2026-10-01 (rows P78-TIP-CHIP and P78-CHIP-PACE; evidence `docs/test-evidence/plan78-P78-TIP-CHIP-try2.json`); the maintainer's own look at the pace is still owed, under the Verify entry "The game's own chip never came back, and the chips turned over too slowly".
 
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
@@ -2828,8 +2836,69 @@ Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 9, 
 
   **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.
 
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`, row P78-REOPEN-CHECKLIST), partly passed:** on two tries by the corrected route the AI wrote no checklist at all (the saved turns hold none), so the reopen proved nothing; the checklist half could not be produced in four tries over two blocks and rests on its unit tests. The follow-up's mode passed: the "Not really" then "Too long" follow-up went out in Strategy mode (log line "ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)"). On the maintainer's list (plan 78 question 9). Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try3.json`. Older note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
+
 ## A faded ghost of the tab bar is left drawn over the chip row after touching the screen
 
 Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
 
   **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
+
+## The chat summary reads oddly in places
+
+Older dated note moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the entry at five lines. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `docs/test-evidence/plan78-P78-SUMUP-WORDING.json`.
+
+## Plan 79 measurements of the maintainer's 2026-10-02 bugs
+
+Full wording of the measurements whose short form sits on the roadmap Bugs entries (2026-10-02, plan 79). Nothing was removed.
+
+- **Up and Down between the rating choices and the speaker button go to the wrong place:** Down from the speaker landed on "Bad info" the first time and on "Wrong game or topic" the second. "Helpful" and "Not really" can be reached only by Left; Up from any choice goes to the speaker or the summary note, never to them.
+- **Down from "N earlier" stops on the question's Retry button before the question itself:** Down from the "84 earlier" button lands on Retry first, then on the question bubble. Up from the bubble lands on Retry on the way back to the button. Left from the bubble lands on Retry and Right returns to the bubble.
+- **In the AI models box, going all the way down and back up leaves the top model half hidden:** After Down to the bottom and Up to the top, the first model row is still scrolled 41 px inside its list. The ring is left on Advanced, outside the list, and the list does not scroll back to the top when the ring leaves it going Up.
+- **After picking a setting from the search list above the question box:** The routes: a pick from the Quick Access list and from the Steam Settings list; the on-screen keyboard opened and closed (the word itself was put in by the test script, so the typing route is only half done); B on a list row, and a pick then back and B. Down and Up moved normally with one ring each time. One side finding became its own entry (the ring vanishes when the list closes under it).
+- **Moving through the Show details chips puts the ring on the whole block:** The box reaches down behind the question box to Ask; its place changes on every press, in both directions. The tabs row and the note card get a sensible box.
+- **The highlight goes invisible on some tabs:** Ollama tab, no ring: Browse models, Install options, Test connection, Thinking Off, Manage AI models and the two try-order buttons. Settings tab, nothing drawn: Apply UI scale, Remember what I typed, the character picker, Clear cache; Save memory and Voice replies cannot be told from the chosen-value look. Developer tab, nothing drawn: Tab to open on, App activity logging, Preset animation, scramble time, letter colour; two more undecidable. Permissions and About looked fine. Every stop was fully visible in position.
+
+## When the length limit cuts a choice menu, the next part of the answer is lost
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-30 (plan 77 block 4, build `7d84ee3b`, row P77-CUT-MENU-TEXT), UNCLEAR:** at a 300-token limit both long questions were cut twice and continued; no fence text or JSON in 248 reads; the screen and the saved chat agree letter for letter. But the model never reached its choice menu before the wall, so the exact case was not produced. Unit tests are the proof so far. Evidence `docs/test-evidence/plan77-P77-CUT-MENU-TEXT.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`), UNCLEAR, second session running:** four questions (two at a limit of 300, two at 340) never produced the case: no "dropped a choice fence" log line. The screen checks held on all 897 reads but prove nothing without the case. The edit to the installed copy was put back. Unit tests are the proof so far. Evidence `docs/test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
+
+## The game's own chip never came back, and the chips turned over too slowly
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 1, build `57586da0`): both Deck rows passed.** One chip: 9.53 chips a minute (asked 8 to 10.5); two chips: 11.16 a minute with the closest two changes 2.49 s apart (asked: none within 2.3 s); a chip under the highlight ring did not change in 42.5 s. The game's own chips were 0.53 to 0.55 of all shown in all four styles, and two general chips never came back to back. With two chips (fade), in 46 of 430 one-second reads only the general chip was fully visible, because the game's chip was part-way through its fade; the session's ruling is that this passes, since the spot always holds one of the game's chips, and it is noted for the maintainer's own look. Evidence `docs/test-evidence/plan78-P78-TIP-CHIP-try2.json`, `docs/test-evidence/plan78-P78-CHIP-PACE-try2.json`.
+
+## After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01, 12:52 to 13:00 (build `f0a4f2c4`), UNCLEAR:** not run. On a Deck that has seen the quick start, removing the flag left an ordinary suggestion chip, and after a plugin reload the flag read "1" again; the only reset, "Clear all plugin data", is not allowed. The fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
+
+## A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-29 (plan 77 block 2, row P77-OLLAMA-NOBOX-NOTE):** the box half PASSED: the Update, Tier 1 and Tier 2 boxes open on "Not now" and B returns the ring. The parental-lock half **still owed**: it needs Steam Family View with a PIN, so it is on the maintainer's checks page; the no-box half rests on unit tests. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+
+## After the release: two clean-ups behind the scenes
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-30 (plan 78 helper G):** the read-through was done and its real findings are fixed: findings 1 to 3 (plan 78 helper L) and 4 and 5 (helper M) are under Verify, each with its unit tests; finding 6 is still only possible. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md`. The other half, removing the unused live-line trimming code, still waits for after the release.
+
+## The walk check calls a stop hidden when a corner icon merely overlaps its box
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.

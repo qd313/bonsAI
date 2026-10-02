@@ -1,0 +1,21 @@
+{
+ "deck_time_local": "2026-10-02T09:25 to 09:40 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454, dpr 1.5; no game; no reload.",
+ "setup": "Model gemma4:e2b-it-qat unloaded over SSH (keep_alive 0), /api/ps listed only nomic-embed-text. Case check: a 1-token generate reported load_duration 7,640,265,820 ns (7.6 s, above the 1.5 s needed). Unloaded again (ps empty of gemma). Strategy mode, test chat (strip title 'How do I beat the boss in the S...' read before each question). Question A and B sent with the send-question script (both VERIFIED). Before each ask the model was confirmed unloaded.",
+ "pressed": "Q A: script, 97-press walk Down to ask (read focus: ask, ready), A. Q B: script, one Down from the question box to ask (read focus), A. No A on the question box.",
+ "seen": {
+  "question_A": "how do i save battery life on the steam deck while playing in handheld mode. My watcher only read the newest turn slot text, so it saw the question plus reasoning steps (Analyze the Request, Determine Strategy, Draft the Response) and then the answer; the status lines above the slot were not captured. The slot showed 'Analyze the Request' for about 7 s after the question appeared (the model load time). Not usable as evidence for the slow-start lines.",
+  "question_B": "what is the quickest way to find out why my game stutters on the steam deck. Watcher read the whole chat pane every 250 ms (139 reads in 34 s). Lines in order with time from watcher start in ms: 1251 'Thinking...' (1 read only); 1502 'Boss? What boss? Just \"what is the quickest way to find out why my game stutte...\".' (an opener that quotes the question); 2751 'Waking the model up for \"what is the quickest way to find out why my game stutte...\"...' (connecting line, held until 11118, 8.4 s = about 33 reads in a row); 11118 'Still on it...'; 18290 line gone; 18504 'Analyze the Request...'; 27250 'Formulate the Answer...'; 28751 'Draft the Response...'; 31002 'Review and Refine...'. Distinct status lines before the reasoning steps: 4 (Thinking, Boss? What boss?, Waking the model up, Still on it). Order never went backwards. Banned words (riveting, typical, joy, glamorous, 'again?', seriously, sigh): none. The building line ('Building context for' etc) and the writing line ('Writing your answer on' etc) did not appear; the 'Boss? What boss?' opener took the building slot.",
+  "bare_thinking": "'Thinking...' stood alone on 1 read of 250 ms (limit: flag at 2 or more).",
+  "chat_after": "180 messages in the test chat file (176 + two questions and two answers). The model is loaded again."
+ },
+ "expected": "At least 3 different lines; order never backwards (building, connecting, writing); at least one connecting line for 1.5 s or more (6 reads in a row at 250 ms); no banned words.",
+ "verdict": [
+  "PASS - question B: 4 different lines, order never backwards, the connecting line 'Waking the model up for ...' held 8.4 s (about 33 reads in a row), no banned words. Clause: the building line was never seen (an opener quoting the question stood in its place) and the writing line did not appear before the reasoning steps; 3 other distinct lines were seen and the connecting line lasted over 1.5 s, so it passes under the list's clause.",
+  "UNCLEAR - question A: the watcher was too narrow to see the status lines; not counted either way."
+ ],
+ "free_rider_THINKING-OPENER-01": "PASS on question B only: the first readable line after 'Thinking...' quotes the question. Bare 'Thinking...' on 1 read. Question A not measured.",
+ "side_effect": "Two real questions were added to the test chat (and its answers); the model was unloaded and reloaded by the answer.",
+ "row": "THINKING-SLOW-01",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

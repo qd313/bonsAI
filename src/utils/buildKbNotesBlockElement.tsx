@@ -289,7 +289,7 @@ export function buildKbNotesBlockElement(args: {
   const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
   return (
-    <React.Fragment key={`kb-notes-block-${turnKey}`}>
+    <div key={`kb-notes-block-${turnKey}`} className="bonsai-kb-notes-block-wrap">
     <Focusable
       className="bonsai-kb-notes-block"
       ref={(el: HTMLElement | null) => registerKbNotesBlockEl(turnKey, el)}
@@ -402,8 +402,8 @@ export function buildKbNotesBlockElement(args: {
         </div>
       ) : null}
     </Focusable>
-    {/* Room under the card: a real 8 px box, not a margin, so it survives at the end of the scroll area. */}
+    {/* Room under the card: a real 8 px box, not a margin. Card and spacer share this wrapper so the turn slot's 6 px row gap (answerBubble.ts) cannot add to it. */}
     <div className="bonsai-kb-notes-block-gap" aria-hidden="true" style={{ height: 8, pointerEvents: "none" }} />
-    </React.Fragment>
+    </div>
   );
 }

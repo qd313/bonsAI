@@ -8,6 +8,7 @@
  */
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
+import { buildAnswerBubbleSection } from "../styles/sections/answerBubble";
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
@@ -69,5 +70,15 @@ describe("the note card on the newest answer", () => {
     expect(gap.hasAttribute("tabindex")).toBe(false);
     expect(gap.style.pointerEvents).toBe("none");
     expect(gap.children.length).toBe(0);
+    /* The turn slot lays its children out with a row gap (real stylesheet rule). Total room from the
+       card's bottom to whatever comes next = spacer + the gap between card and spacer, which is that
+       row gap only if the two are separate children of the slot. */
+    const slotGap = Number(/bonsai-chat-turn-slot \{[^}]*?gap: (\d+)px/.exec(buildAnswerBubbleSection())?.[1]);
+    expect(slotGap).toBeGreaterThan(0);
+    const parent = card.parentElement as HTMLElement;
+    const gapBetween = parent.classList.contains("bonsai-chat-turn-slot") ? slotGap : 0;
+    expect(parent.contains(gap)).toBe(true);
+    expect(parent.className).not.toContain("bonsai-chat-turn-slot");
+    expect(gap.style.height === "8px" ? 8 + gapBetween : -1).toBe(8);
   });
 });

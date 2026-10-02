@@ -53,12 +53,16 @@ import decky
 
 from backend.services import chat_turn_recorder
 from backend.services.chat_memory_service import (
-    build_chat_memory,
     build_memory_lines,
     plan_and_build_chat_memory,
-    turns_not_yet_summarized,
 )
 from backend.services.chat_slot_service import MAX_SUMMARY_TEXT_LEN
+from backend.services.chat_summary_plan import (  # noqa: F401 -- re-exported for the callers and tests
+    MIN_KEPT_TURNS,
+    SUMMARY_INPUT_CAP_TOKENS,
+    SummaryPlan,
+    plan_summary,
+)
 from backend.services.chat_summary_tidy import known_games_of_chat, tidy_summary_text
 from backend.services.ollama_chat_stream import _stream_ollama_chat_once
 from backend.services.ollama_stop_service import close_ollama_chat_response
@@ -73,11 +77,6 @@ logger = decky.logger
 # three times the worst measured, never under 60 -- 120 comfortably covers a slower Deck.
 SUMMARY_TIME_LIMIT_SECONDS = 120
 
-# How much the summarizer reads in one request (the previous summary plus the turns it covers).
-# Measured: the 144-turn "wheatley fight" chat is about 8,650 tokens and still finished at 39.6
-# seconds worst case. A bigger input risked pushing a cold start past a minute, so what does not
-# fit is left for a later summary instead, and counted as unread rather than silently dropped.
-SUMMARY_INPUT_CAP_TOKENS = 9000
 
 # A summary that has nothing to build from yet (a brand new chat, or an allowance of zero) has no
 # real room to grow into either -- this is only the fallback used before any real Ask has planned
@@ -97,10 +96,6 @@ SUMMARY_INSTRUCTION = (
     "guess what it was."
 )
 
-# The newest word-for-word tail is never shorter than this many turns (two questions and their
-# answers), whatever the allowance says -- so a follow-up right after a summary still has
-# something exact to read, not just prose about it.
-MIN_KEPT_TURNS = 4
 
 _FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
 _BONSAI_STATUS_TAG_RE = re.compile(r"</?bonsai-status[^>]*>", re.IGNORECASE)
@@ -139,21 +134,6 @@ def reset_last_memory_allowance() -> None:
 
 
 @dataclass
-class SummaryPlan:
-    """Whether a chat has outgrown its room, and if so, what the next summary should cover.
-
-    Pure: reads only the chat and the numbers handed in, touches no network and no disk. The
-    button reuses this to decide its own greyed-out state before making any call.
-    """
-
-    needed: bool
-    covered_turns: list
-    kept_turns: list
-    oldest_turns_unread: int
-    previous: Optional[dict]
-
-
-@dataclass
 class SummaryOutcome:
     """What actually happened when a summary call was made."""
 
@@ -161,76 +141,6 @@ class SummaryOutcome:
     summary: Optional[dict]
     seconds: float
     error: str
-
-
-def plan_summary(
-    chat: dict, *, memory_allowance_tokens: int, model_name: str
-) -> SummaryPlan:
-    """Decide whether ``chat`` has outgrown its room, and if so, how the next summary should
-    split its older turns from the newest word-for-word tail.
-
-    "Outgrown its room" (plan 68 section 4): the turns a previous summary does not already cover
-    would be left behind by today's ordinary memory. Reuses ``chat_memory_service.build_chat_memory``
-    to answer that -- it is the exact same allowance-fitting walk an ordinary question's memory
-    goes through, run here as a probe rather than to build a prompt.
-    """
-    turns = [t for t in (chat.get("turns") or []) if isinstance(t, dict)]
-    # The question being asked right now is already the chat's newest turn (it is saved when the
-    # Ask is accepted). It is neither summed up nor one of the kept turns -- the answer's own
-    # memory drops it too -- so "the newest two questions and answers" means two finished ones.
-    while turns and str(turns[-1].get("role") or "").strip().lower() == "user":
-        turns.pop()
-    previous = chat.get("summary") if isinstance(chat.get("summary"), dict) else None
-    not_covered = turns_not_yet_summarized(turns, previous)
-
-    allowance = max(0, int(memory_allowance_tokens or 0))
-    probe = build_chat_memory(not_covered, allowance, model_name)
-    if probe.turns_left_out <= 0:
-        return SummaryPlan(
-            needed=False,
-            covered_turns=[],
-            kept_turns=list(not_covered),
-            oldest_turns_unread=0,
-            previous=previous,
-        )
-
-    # The newest word-for-word tail: as many turns as fit in half the allowance, never fewer
-    # than MIN_KEPT_TURNS. ``build_memory_lines`` walks from the newest backwards exactly the
-    # way an ordinary memory does; its ``turns_scanned`` is how many of the newest turns that
-    # walk reached before running out of half-allowance, whether or not each one produced a
-    # line (a stopped answer sitting in the middle is still "reached", just not written out).
-    half_allowance = allowance // 2
-    _lines, _carried, _left, _hidden, _used, half_scanned = build_memory_lines(
-        not_covered, half_allowance, model_name
-    )
-    kept_count = max(half_scanned, min(MIN_KEPT_TURNS, len(not_covered)))
-    if kept_count:
-        kept_turns = not_covered[len(not_covered) - kept_count :]
-        covered_candidates = not_covered[: len(not_covered) - kept_count]
-    else:
-        kept_turns = []
-        covered_candidates = list(not_covered)
-
-    # The one-go reading cap: keep the newest of the covered turns that fit
-    # SUMMARY_INPUT_CAP_TOKENS, and count the rest as newly unread rather than reading them
-    # anyway and risking a summary call that runs long. The summary still covers through the
-    # newest covered turn either way.
-    _cap_lines, _cap_carried, _cap_left, _cap_hidden, _cap_used, cap_scanned = build_memory_lines(
-        covered_candidates, SUMMARY_INPUT_CAP_TOKENS, model_name
-    )
-    if cap_scanned:
-        covered_turns = covered_candidates[len(covered_candidates) - cap_scanned :]
-    else:
-        covered_turns = []
-    newly_unread = len(covered_candidates) - cap_scanned
-
-    return SummaryPlan(
-        needed=True,
-        covered_turns=covered_turns,
-        kept_turns=kept_turns,
-        oldest_turns_unread=newly_unread,
-        previous=previous,
-    )
 
 
 def _summary_request_messages(

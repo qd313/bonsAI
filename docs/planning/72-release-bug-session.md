@@ -630,7 +630,13 @@ before the release.
   late in very long answers.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
-- bonsAI's highlight ring looks slightly different from Steam's own on some controls.
+- bonsAI's highlight ring looks slightly different from Steam's own on some controls, and is faint on a few
+  Settings controls (the accent button, "Reinstall voice engine").
+
+_2026-10-02 (plan 79): the D-pad line stays. Two more fixes landed for ways into it, and it was not seen in eleven tries
+on the Deck, but its own case cannot be made to happen on purpose, so it is not proven gone. The ring line grew a few
+words: the Deck found two Settings controls whose ring is only a thin grey frame (row P79-RING-WALK-TABS). Nothing
+else from plan 79 is something a player would notice as a fault._
 
 _2026-10-01: the line about asking about a different story game while one game runs came off this list. The fix passed on the Deck (row P77-SPOILER-OTHER-GAME)._
 

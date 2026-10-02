@@ -1306,7 +1306,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             }}
           >
             <Button
-              onClick={clearUnifiedInput}
+              /* The X vanishes once the box is empty, so the ring goes to the box (Deck 2026-10-02: nothing owned it). */
+              onClick={() => { clearUnifiedInput(); takeNavFocus("unified-input"); }}
               aria-label="Clear"
               style={{
                 width: "100%",

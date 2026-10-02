@@ -1,5 +1,5 @@
 /**
- * Title: Stop hands the ring to the question box, never to the microphone
+ * Title: Stop and the X hand the ring to the question box, never to the microphone
  *
  * Purpose: Pin the plan 72 fix for docs/test-evidence/plan72-A2-STOP-RING-try1..3.json: Stop and
  * Voice input are the same corner button, so when an answer was stopped the ring stayed on that one
@@ -79,5 +79,19 @@ describe("Stop hands the ring to the question box (plan 72: it stayed on the mic
     fireEvent.click(getByLabelText("Voice input"));
     expect(onMicInput).toHaveBeenCalled();
     expect(spy).not.toHaveBeenCalledWith("unified-input");
+  });
+});
+
+describe("The X hands the ring to the question box (Deck 2026-10-02: after X nothing owned the ring)", () => {
+  it("clears the question and hands the ring to the question box", () => {
+    const spy = vi.spyOn(navFocusRegistry, "takeNavFocus");
+    const clearUnifiedInput = vi.fn();
+    const { getByLabelText } = render(
+      <MainTabUnifiedAskBar {...buildProps({ unifiedInput: "a question", showSearchClearButton: true, clearUnifiedInput })} />,
+    );
+    fireEvent.click(getByLabelText("Clear"));
+    expect(clearUnifiedInput).toHaveBeenCalled();
+    // The X disappears the moment the box is empty; without a hand-off the ring was on a button that no longer exists.
+    expect(spy).toHaveBeenCalledWith("unified-input");
   });
 });

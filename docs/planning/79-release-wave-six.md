@@ -469,6 +469,10 @@ Nothing yet.
   (the invisible ring, Opus medium); A and B got the readings. Deck block 1b started: the ring on the Settings and
   Developer tabs, the Main tab's "before" walk, older owed checks with no game, and a second try at the trap through
   Steam's on-screen keyboard, the way a person types.
+- **2026-10-02, about 03:15 to 03:30:** a network drop stopped every helper and the Deck driver at the same moment;
+  each was resumed by message with its work intact. **The maintainer picked three drawings:** Delete icon 2 (the bin
+  with slots), chip highlight 1 (the soft fill), calmer ratings "after 2" (smaller and softer). Written into D122.
+  They are built by helpers W (after J), X (after I) and S (the rating row, with bug 7).
 
 ## For the helpers: who owns which files
 

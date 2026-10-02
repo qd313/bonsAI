@@ -2043,3 +2043,8 @@ own section, "Your calls for this session", has the same list.
    its spoiler covers stay), and a game offers ten of its own chips where it offered six.
 10. **The Deck otherwise:** as plan 78, call 4: the test chat only, and the oldest chat may be deleted if there is
     no spare slot, its file copied aside first.
+
+**Picks from the drawings, 2026-10-02 (about 03:30):** the Delete icon is **icon 2, the bin with slots**; the
+highlighted suggestion chip gets **highlight 1, the soft fill** (replacing the underline); the rating choices under an
+answer become **"after 2", smaller and softer**. Drawings: https://claude.ai/artifact/63R4GDY8nR77n4VsWT9FZA,
+https://claude.ai/artifact/UTPzj1j4n8B1Nnj3Uun6VF, https://claude.ai/artifact/SXg99cQ5NN2rfh2pcGRkqv.

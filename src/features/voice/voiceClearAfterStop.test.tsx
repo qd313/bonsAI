@@ -172,3 +172,44 @@ describe("the X beside Ask after Ask and Stop", () => {
     expect(boxText(container)).toBe("");
   }, SLOW);
 });
+
+describe("Ask while the microphone is still listening ends dictation", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    asked.question = "";
+    window.localStorage.clear();
+    fakeMicrophone();
+  });
+
+  it("sends the box as it was, ignores words heard afterwards, and offers the mic again", async () => {
+    const { container } = await mountPlugin();
+    await press(container, "Voice input");
+    await waitFor(() => expect(boxText(container)).toBe(SPOKEN));
+
+    // The back end takes a moment to accept the question; Ask only empties the box once it has.
+    // That gap is where a still-listening mic used to add words to the box.
+    setRpcHandler("start_background_game_ai", async (...args: unknown[]) => {
+      asked.question = String((args[0] as { question?: string } | undefined)?.question ?? "");
+      await new Promise((r) => setTimeout(r, 1200));
+      return { accepted: true, status: "pending" as const, request_id: 1 };
+    });
+    await press(container, "Ask");
+    // The mic hears more right after the press; nothing heard after it may land anywhere.
+    setRpcHandler("get_voice_transcription_status", () => ({
+      status: "recording",
+      recording: true,
+      streaming: true,
+      partial_transcript: "and also the second boss",
+      finalized_transcript: SPOKEN,
+    }));
+    await waitFor(() => expect(asked.question).not.toBe(""));
+    expect(asked.question).toBe(SPOKEN);
+
+    await settle(400);
+    expect(boxText(container)).toBe(SPOKEN);
+    await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "stop_voice_transcription")).toBe(true));
+    expect(asked.question).toBe(SPOKEN);
+    await press(container, "Stop generation");
+    expect(button(container, "Voice input")).not.toBeNull();
+  }, SLOW);
+});

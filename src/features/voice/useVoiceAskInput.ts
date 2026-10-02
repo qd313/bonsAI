@@ -155,13 +155,20 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
    * `lastVoiceText` non-empty means the loop had written words, so a box that is simply still empty
    * at the start of a recording does not trip this.
    */
+  const endDictation = useCallback(
+    (forgetWords: boolean) => {
+      invalidateVoice();
+      setVoiceRecording(false);
+      if (forgetWords) setLastVoiceText("");
+      void call("stop_voice_transcription").catch(() => undefined);
+    },
+    [invalidateVoice],
+  );
+
   useEffect(() => {
     if (!voiceRecording || lastVoiceText === "" || a.unifiedInput.trim() !== "") return;
-    invalidateVoice();
-    setVoiceRecording(false);
-    setLastVoiceText("");
-    void call("stop_voice_transcription").catch(() => undefined);
-  }, [voiceRecording, lastVoiceText, a.unifiedInput, invalidateVoice]);
+    endDictation(true);
+  }, [voiceRecording, lastVoiceText, a.unifiedInput, endDictation]);
 
   useEffect(() => {
     if (a.microphoneAccess) {
@@ -212,6 +219,8 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   return {
     voiceRecording,
     onMicInput,
+    /** Ends a recording that is still listening without touching the box (Ask pressed, X pressed). */
+    endDictation,
     stopVoiceTranscription,
     invalidateVoice,
     micPermissionDenied,

@@ -74,6 +74,7 @@ export function useVoiceAskWithReadAloud({
   const {
     voiceRecording,
     onMicInput,
+    endDictation,
     micPermissionDenied,
     dismissMicPermissionDeny,
     askCameFromMic,
@@ -119,10 +120,13 @@ export function useVoiceAskWithReadAloud({
   const onAskOllamaWithReadAloud = useCallback(
     (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
       const asked = overrideQuestion ?? unifiedInput;
+      /* Pressing Ask while the mic is still listening ends dictation: the question sent is the box as
+         it is now, and nothing heard afterwards may be written into the box during the answer. */
+      if (voiceRecording) endDictation(false);
       noteAskPressed(questionCameFromMic(askCameFromMic, asked, lastVoiceText));
       return onAskOllama(overrideQuestion, opts);
     },
-    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText],
+    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText, voiceRecording, endDictation],
   );
 
   return {

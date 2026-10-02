@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 664,
-  "edgeCount": 1870,
+  "fileCount": 665,
+  "edgeCount": 1872,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4626,10 +4626,18 @@
         "src/components/BonsaiPluginShell.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
+        "src/styles/buttonFocusRing.test.ts",
         "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts",
         "src/styles/sections/presetChipLabel.test.ts"
       ]
+    },
+    "src/styles/buttonFocusRing.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": []
     },
     "src/styles/presetChipFocusRing.test.ts": {
       "imports": [
@@ -4900,7 +4908,8 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/OllamaThinkingEffortRow.tsx"
+        "src/components/OllamaThinkingEffortRow.tsx",
+        "src/styles/buttonFocusRing.test.ts"
       ]
     },
     "src/test-harness/chipRowSimulation.tsx": {

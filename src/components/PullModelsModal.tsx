@@ -97,7 +97,6 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, ty
 import { Button, ConfirmModal, Focusable, TextField } from "@decky/ui";
 import {
   PULL_MODEL_MODE_FILTER_OPTIONS,
-  PULL_MODEL_RATING_COLUMN_LABEL,
   formatGtaStars,
   formatPullModelTags,
   formatReleasedYmShort,
@@ -109,6 +108,7 @@ import {
 } from "../data/pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsStarterSetChip } from "./PullModelsStarterSetChip";
+import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { useListHeaderClearance } from "./pullModelsListClearance";
@@ -610,24 +610,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
       deleteCellRefs.current[rowIndex] = el;
       if (el) el.tabIndex = -1;
     };
-
-  const renderTableHeader = () => (
-    <div ref={listHeaderRef} className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--head" role="row">
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="columnheader">Pull</div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="columnheader">Model</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">Size</div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--date" role="columnheader">Date</div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--modes" role="columnheader">Modes</div>
-      <div
-        className="bonsai-pullmodels-col bonsai-pullmodels-col--rating"
-        role="columnheader"
-        title="Curated Steam Deck quality — more stars = stronger pick"
-      >
-        {PULL_MODEL_RATING_COLUMN_LABEL}
-      </div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="columnheader">Del</div>
-    </div>
-  );
 
   const renderCatalogRow = (entry: PullModelEntry, rowIndex: number) => {
     const installed = isTagInstalled(entry.tag, installedTags);
@@ -1195,7 +1177,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
               </div>
             ) : flatRows.length > 0 ? (
               <div className="bonsai-pullmodels-table" role="table">
-                {renderTableHeader()}
+                <PullModelsTableHeader headerRef={listHeaderRef} />
                 <div role="rowgroup">
                   {tableSections.map((section) => (
                     <div key={section.title}>

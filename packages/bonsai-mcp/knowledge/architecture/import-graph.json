@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 694,
-  "edgeCount": 1983,
+  "fileCount": 695,
+  "edgeCount": 1985,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1587,6 +1587,7 @@
         "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsStarterSetChip.tsx",
+        "src/components/PullModelsTableHeader.tsx",
         "src/components/pullModelsListClearance.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
@@ -1652,6 +1653,14 @@
         "src/data/deckEssentialsTags.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/utils/pullModelFilters.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/components/PullModelsTableHeader.tsx": {
+      "imports": [
+        "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
@@ -2334,6 +2343,7 @@
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsTableHeader.tsx",
         "src/data/pullModelCatalog.test.ts",
         "src/data/pullModelLicencePill.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",

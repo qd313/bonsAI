@@ -39,8 +39,8 @@
  *       3. the section above (its last word on screen, if it has one: `landGoingUpInto`) -- or, when
  *          that section holds a hidden cover: the section's box if it
  *          has a box stop, brought under the tab header (`stepUpIntoSection`; the cover follows on
- *          the next press), else the cover (`focusCoverGoingUp`), which is also how the walk
- *          enters an answer from below
+ *          the next press), else the cover (`focusCoverGoingUp`); the walk enters an answer from
+ *          below the same way, into its last section
  *          When the ring's section has been read from its top and the one above is wholly above the
  *          header, the panel is first set so that one's bottom sits at the dock (`hopToSectionAbove`).
  *          A section taller than the screen is entered from its end: its bottom edge is brought
@@ -162,7 +162,7 @@ import {
   orderedAnswerStops,
 } from "./answerStopRegistry";
 
-import { coverToLandOnGoingUp, focusCoverGoingUp, stepUpIntoSection } from "./answerBubbleCoverUp";
+import { coverToLandOnGoingUp, stepUpIntoSection } from "./answerBubbleCoverUp";
 import { forgetUpWalk, landGoingUpInto, wordStepUp } from "./answerBubbleWordsUp";
 
 /** The section a walk Down is in and the last small stop in it the ring has been on; see `walkAnchor`. */
@@ -387,11 +387,14 @@ export function focusLastAnswerChunk(answerKey: string): boolean {
   // Registered handles, not a page query — same registry the section walk itself reads.
   const stops = orderedAnswerStops(answerKey, el);
   const last = stops[stops.length - 1];
-  if (last && focusCoverGoingUp(last, findScrollablePanel(el))) return true;
+  const scroll = findScrollablePanel(el);
+  /* A hidden cover in the last section: as Up into any section (`stepUpIntoSection`), its box first when
+     text runs on under the cover, the stop Down made after the cover. Going straight to the cover skipped
+     that box (plan 79, plan79-QA-FREE-PLAY-01-NOGAME-b3a.json: Up from choice A landed on cover 2). */
+  if (last && scroll && stepUpIntoSection(last, scroll)) return true;
   /* Coming into the answer from below — Up out of the Show details line — lands here, and it is
      the one entry point that skipped the dock check (measured 2026-09-06). The section's last word
      comes first when it has one on screen: a walk Down left the answer from it. */
-  const scroll = findScrollablePanel(el);
   if (last && scroll && landGoingUpInto(el, last, scroll)) return true;
   if (last && focusAnswerStop(last)) return true;
   return focusPanelEl(el);

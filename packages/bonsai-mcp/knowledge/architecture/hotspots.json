@@ -131,13 +131,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 740,
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 797,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 727,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 740,
       "role": ""
     },
     {
@@ -148,11 +148,6 @@
     {
       "path": "src/components/SettingsTab.tsx",
       "lines": 709,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 704,
       "role": ""
     },
     {

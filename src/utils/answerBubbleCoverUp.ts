@@ -42,7 +42,7 @@ import { uiGamepadFocusElement } from "./uiDocument";
  * (docs/test-evidence/plan74-P74-COVER-UP.json). `showCoverFromAbove` brings such a cover down onto
  * the screen first, when that is no more than a screen's scroll.
  */
-export function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): boolean {
+function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): boolean {
   if (!scroll) return false;
   const inView = findLastSpoilerFenceIn(section, (el) => elementIsWithinViewportOf(el, scroll));
   if (inView) return focusSpoilerFence(inView);

@@ -405,13 +405,14 @@ export function ChatSlotRow({
         }}
       >
         <div className="bonsai-chat-slot-row-inner">
-          {focused ? (
-            <span
-              className={`bonsai-chat-slot-bumper-pill${carouselIndex === 0 ? " bonsai-chat-slot-bumper-pill--dead" : ""}`}
-            >
-              LB
-            </span>
-          ) : null}
+          {/* Always drawn, hidden by the stylesheet while the ring is elsewhere: their room is held, so
+              the name's box is the same whether the ring is on the row or not. */}
+          <span
+            className={`bonsai-chat-slot-bumper-pill${carouselIndex === 0 ? " bonsai-chat-slot-bumper-pill--dead" : ""}`}
+            aria-hidden
+          >
+            LB
+          </span>
           <div className="bonsai-chat-slot-center">
             {/*
               Always rendered, empty or not - a line that appears on some rows and not others is
@@ -424,21 +425,27 @@ export function ChatSlotRow({
             <div className="bonsai-chat-slot-game">
               {isCreatePosition || !focused ? "" : (activeSlot?.origin_app_name ?? "")}
             </div>
-            <div className={`bonsai-chat-slot-title-row${showSave ? " bonsai-chat-slot-title-row--has-save" : ""}`}>
-              {showGhosts && prevSlot && (prevSlot.id === generatingSlotId || unreadSlotIds?.has(prevSlot.id)) ? (
-                <span
-                  className={`bonsai-chat-slot-ghost-spark${prevSlot.id === generatingSlotId ? " bonsai-chat-slot-ghost-spark--pending" : " bonsai-chat-slot-ghost-spark--unread"}`}
-                  aria-hidden
-                />
-              ) : null}
-              {showGhosts && prevIsCreatePosition ? (
-                <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev bonsai-chat-slot-ghost--create">
-                  <PencilIcon />
+            <div className="bonsai-chat-slot-title-row">
+              {/* The neighbours hang off a zero-width anchor beside the name, so they never take room
+                  from it: the name's box does not move when they stand down. */}
+              <span className="bonsai-chat-slot-ghost-anchor bonsai-chat-slot-ghost-anchor--prev">
+                <span className="bonsai-chat-slot-ghost-anchor-inner">
+                  {showGhosts && prevSlot && (prevSlot.id === generatingSlotId || unreadSlotIds?.has(prevSlot.id)) ? (
+                    <span
+                      className={`bonsai-chat-slot-ghost-spark${prevSlot.id === generatingSlotId ? " bonsai-chat-slot-ghost-spark--pending" : " bonsai-chat-slot-ghost-spark--unread"}`}
+                      aria-hidden
+                    />
+                  ) : null}
+                  {showGhosts && prevIsCreatePosition ? (
+                    <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev bonsai-chat-slot-ghost--create">
+                      <PencilIcon />
+                    </span>
+                  ) : null}
+                  {showGhosts && prevSlot ? (
+                    <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev">{prevSlot.label}</span>
+                  ) : null}
                 </span>
-              ) : null}
-              {showGhosts && prevSlot ? (
-                <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--prev">{prevSlot.label}</span>
-              ) : null}
+              </span>
               {showSave ? (
                 <span
                   className={`bonsai-chat-slot-save${stop === "save" ? " bonsai-chat-slot-save--active-stop" : ""}${saveChatEnabled ? "" : " bonsai-chat-slot-save--disabled"}`}
@@ -478,15 +485,19 @@ export function ChatSlotRow({
                   <TrashBinSlotsIcon />
                 </span>
               ) : null}
-              {showGhosts && nextSlot ? (
-                <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--next">{nextSlot.label}</span>
-              ) : null}
-              {showGhosts && nextSlot && (nextSlot.id === generatingSlotId || unreadSlotIds?.has(nextSlot.id)) ? (
-                <span
-                  className={`bonsai-chat-slot-ghost-spark${nextSlot.id === generatingSlotId ? " bonsai-chat-slot-ghost-spark--pending" : " bonsai-chat-slot-ghost-spark--unread"}`}
-                  aria-hidden
-                />
-              ) : null}
+              <span className="bonsai-chat-slot-ghost-anchor bonsai-chat-slot-ghost-anchor--next">
+                <span className="bonsai-chat-slot-ghost-anchor-inner">
+                  {showGhosts && nextSlot ? (
+                    <span className="bonsai-chat-slot-ghost bonsai-chat-slot-ghost--next">{nextSlot.label}</span>
+                  ) : null}
+                  {showGhosts && nextSlot && (nextSlot.id === generatingSlotId || unreadSlotIds?.has(nextSlot.id)) ? (
+                    <span
+                      className={`bonsai-chat-slot-ghost-spark${nextSlot.id === generatingSlotId ? " bonsai-chat-slot-ghost-spark--pending" : " bonsai-chat-slot-ghost-spark--unread"}`}
+                      aria-hidden
+                    />
+                  ) : null}
+                </span>
+              </span>
             </div>
             {orderedSlots.length > 0 ? (
               <div className="bonsai-chat-slot-dots" aria-hidden>
@@ -510,13 +521,12 @@ export function ChatSlotRow({
               </div>
             ) : null}
           </div>
-          {focused ? (
-            <span
-              className={`bonsai-chat-slot-bumper-pill${carouselIndex >= positionCount - 1 ? " bonsai-chat-slot-bumper-pill--dead" : ""}`}
-            >
-              RB
-            </span>
-          ) : null}
+          <span
+            className={`bonsai-chat-slot-bumper-pill${carouselIndex >= positionCount - 1 ? " bonsai-chat-slot-bumper-pill--dead" : ""}`}
+            aria-hidden
+          >
+            RB
+          </span>
         </div>
       </Focusable>
     </div>

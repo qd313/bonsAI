@@ -13,6 +13,14 @@
  *
  * Does not: Style the small dots marking every chat's position --
  * savedChatSlotDots.ts, called from section-6.ts right after this file.
+ *
+ * How it works:
+ * 1. The row's own `--focused` class (set while the ring is on the row) is the one switch: it lights
+ *    the row, shows the LB/RB pills and the Save and Delete buttons, and stands the ghosts down.
+ * 2. Nothing is allowed to change the name's box when that switch flips: the pills are drawn all the
+ *    time and only hidden, the buttons are positioned out of the flow, the ghosts hang off zero-width
+ *    anchors (savedChatSlotsGhosts.ts), and the row's top padding is the same with and without the
+ *    ring. Only the room below grows. ChatSlotRow.buttonsOnRing.test.tsx compares the two states.
  */
 import { uiScalePx } from "./uiScalePx";
 import { buildSavedChatSlotGhostsSection } from "./savedChatSlotsGhosts";
@@ -68,8 +76,10 @@ export function buildSavedChatSlotsRowSection(): string {
           border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-row-inner {
-          /* Trimmed from 12 to 7 for the same reason as the resting padding above. */
-          padding: ${uiScalePx(7)} ${uiScalePx(8)};
+          /* Trimmed from 12 to 7 for the same reason as the resting padding above. The extra 4px
+             is all BELOW, so the top is the resting 5px and the name does not drop 2px when the ring
+             arrives (Deck 2026-10-02); the row grows by the same 4px as before. */
+          padding: ${uiScalePx(5)} ${uiScalePx(8)} ${uiScalePx(9)};
           background: linear-gradient(180deg, rgba(28, 36, 44, 0.92), rgba(18, 26, 34, 0.55));
           border-top-color: rgba(156, 231, 255, 0.22);
           border-bottom-color: rgba(156, 231, 255, 0.22);
@@ -93,6 +103,11 @@ export function buildSavedChatSlotsRowSection(): string {
           color: #9ce7ff;
           background: rgba(18, 26, 34, 0.55);
           box-shadow: 0 0 12px 1px rgba(156, 231, 255, 0.25);
+        }
+        /* Drawn all the time so the row's room is the same with and without the ring, and hidden
+           until it arrives: the name's box must not move when the ring comes onto the row. */
+        .bonsai-scope .bonsai-chat-slot-row:not(.bonsai-chat-slot-row--focused) .bonsai-chat-slot-bumper-pill {
+          visibility: hidden;
         }
         /* Carousel boundary: the pill for a direction that cannot move dims out. */
         .bonsai-scope .bonsai-chat-slot-row--focused .bonsai-chat-slot-bumper-pill--dead {
@@ -142,7 +157,8 @@ export function buildSavedChatSlotsRowSection(): string {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: ${uiScalePx(6)};
+          /* No gap: the neighbours are zero-width anchors, and a gap would count them. */
+          gap: 0;
           min-width: 0;
           /*
             Reserved to the delete box's height. Without it the row was two different heights: on a

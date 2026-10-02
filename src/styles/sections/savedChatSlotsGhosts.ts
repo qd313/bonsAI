@@ -16,11 +16,36 @@ import { uiScalePx } from "./uiScalePx";
 
 /** In: nothing. Out: a block of CSS text for the ghost neighbours. */
 export function buildSavedChatSlotGhostsSection(): string {
-  return `        .bonsai-scope .bonsai-chat-slot-ghost {
-          /* 0 1 auto + a cap, not 1 1 0: an equal split handed the ghosts every pixel the
-             title's max-width left behind, which is the other half of why so little name fit. */
+  return `        /*
+          The neighbours take NO room beside the name (Deck 2026-10-02: the name moved 15px and
+          lost 32px of width when they stood down for the ring). Each hangs off a zero-width anchor
+          touching the name's edge and draws outward over the spare room, so the name's box is the
+          same with the ring on or off, and centred even with a neighbour on one side only.
+        */
+        .bonsai-scope .bonsai-chat-slot-ghost-anchor {
+          position: relative;
+          flex: 0 0 0;
+          width: 0;
+          align-self: center;
+        }
+        .bonsai-scope .bonsai-chat-slot-ghost-anchor-inner {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          display: flex;
+          align-items: center;
+          gap: ${uiScalePx(6)};
+        }
+        .bonsai-scope .bonsai-chat-slot-ghost-anchor--prev .bonsai-chat-slot-ghost-anchor-inner {
+          right: ${uiScalePx(6)};
+        }
+        .bonsai-scope .bonsai-chat-slot-ghost-anchor--next .bonsai-chat-slot-ghost-anchor-inner {
+          left: ${uiScalePx(6)};
+        }
+        .bonsai-scope .bonsai-chat-slot-ghost {
+          /* A cap in px: the ghosts hang off a zero-width anchor, so a % of it would be nothing. */
           flex: 0 1 auto;
-          max-width: 15%;
+          max-width: ${uiScalePx(42)};
           min-width: 0;
           font-size: ${uiScalePx(11)};
           color: rgba(200, 214, 230, 0.28);
@@ -53,17 +78,6 @@ export function buildSavedChatSlotGhostsSection(): string {
           width: ${uiScalePx(12)};
           height: ${uiScalePx(12)};
           display: block;
-        }
-        /*
-          At rest on the newest chat with a long name, the name and the ghosts fill the whole row,
-          so the pencil ghost sits at the row's left edge - under the save icon, which would hide
-          it. A name ghost is meant to be overlapped there (the icon sits over its faded start, the
-          way the x sits over the next one); the pencil is not a fragment, so it steps clear of the
-          icon's 22px box and a 6px gap. The drawing never showed the two together; this is the
-          smallest change that keeps both visible.
-        */
-        .bonsai-scope .bonsai-chat-slot-title-row--has-save .bonsai-chat-slot-ghost--create {
-          margin-left: ${uiScalePx(28)};
         }
         /* No directional fade on the create ghost: the prev mask hides everything left of 55%
            of the span, which on a small whole glyph eats half of it. A name ghost wants the fade

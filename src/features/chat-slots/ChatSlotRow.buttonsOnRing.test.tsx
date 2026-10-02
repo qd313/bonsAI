@@ -195,3 +195,76 @@ describe("Save and Delete show only while the ring is on the chat's row", () => 
     expect(stop(container)).toBe("save");
   });
 });
+
+/*
+ * Round two (Deck 2026-10-02): the name's box moved 15px right, lost 32px of width and dropped 2px
+ * when the ring came onto the row. jsdom lays nothing out, so the claim is proved by its causes: every
+ * box that decides where the name sits has the same layout-deciding style with the ring off and on.
+ * What moved it: the LB/RB pills (drawn only with the ring, so the middle shrank by 84px), the
+ * neighbours (in the flow at rest and display:none with the ring, so they shared out the room), and
+ * the row's top padding (5px at rest, 7px with the ring).
+ */
+const LAYOUT_PROPS = [
+  "display", "position", "width", "min-width", "max-width", "flex-grow", "flex-shrink", "flex-basis",
+  "margin-top", "margin-right", "margin-bottom", "margin-left", "padding-top", "padding-right",
+  "padding-bottom", "padding-left", "gap", "left", "right", "top", "bottom", "box-sizing",
+  "font-size", "line-height", "min-height", "align-self", "justify-content", "transform",
+];
+const BOXES = [
+  ".bonsai-chat-slot-row-inner", ".bonsai-chat-slot-bumper-pill:first-child",
+  ".bonsai-chat-slot-center", ".bonsai-chat-slot-title-row", ".bonsai-chat-slot-title",
+  ".bonsai-chat-slot-ghost-anchor--prev", ".bonsai-chat-slot-ghost-anchor--next",
+  ".bonsai-chat-slot-save", ".bonsai-chat-slot-delete",
+];
+function layoutOf(container: HTMLElement): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const sel of BOXES) {
+    const el = container.querySelector(sel);
+    expect(el, sel).not.toBeNull();
+    const cs = getComputedStyle(el as Element);
+    for (const prop of LAYOUT_PROPS) out[`${sel} ${prop}`] = cs.getPropertyValue(prop);
+  }
+  const pills = container.querySelectorAll(".bonsai-chat-slot-bumper-pill");
+  out["pill count"] = String(pills.length);
+  for (const pill of Array.from(pills)) out[`pill display`] = getComputedStyle(pill).display;
+  // What is in the flow of the name's line: only the name may be (the buttons and neighbours are not).
+  const inFlow = Array.from(container.querySelector(".bonsai-chat-slot-title-row")!.children)
+    .filter((c) => {
+      const cs = getComputedStyle(c);
+      return cs.display !== "none" && cs.position !== "absolute";
+    })
+    .map((c) => c.className);
+  out["in flow of the name line"] = inFlow.join(" | ");
+  return out;
+}
+
+describe("the chat's name stays put when the ring comes onto the row", () => {
+  for (const [what, props] of [
+    ["a chat with a neighbour each side", { activeSlotId: "b" }],
+    ["the newest chat, with a neighbour on one side only", { activeSlotId: "a" }],
+  ] as const) {
+    it(`${what}: the same boxes with the ring off and on`, () => {
+      const { container } = render(row(props));
+      const off = layoutOf(container);
+      ringOnRow(true);
+      const on = layoutOf(container);
+      expect(on).toEqual(off);
+      // Both pills' room is held at rest, and only the name is in the flow of its line.
+      expect(off["pill count"]).toBe("2");
+      expect(off["in flow of the name line"]).toContain("bonsai-chat-slot-title");
+      // The zero-width anchors are in the flow but take no room; the neighbours themselves are not.
+      expect(off["in flow of the name line"]).not.toMatch(/ghost(?!-anchor)/);
+    });
+  }
+
+  it("keeps the pills unseen until the ring arrives, and the neighbours until it leaves", () => {
+    const { container } = render(row());
+    const pills = () => Array.from(container.querySelectorAll(".bonsai-chat-slot-bumper-pill"));
+    expect(pills().every((p) => getComputedStyle(p).visibility === "hidden")).toBe(true);
+    ringOnRow(true);
+    expect(pills().every((p) => getComputedStyle(p).visibility !== "hidden")).toBe(true);
+    ringOnRow(false);
+    const ghost = container.querySelector(".bonsai-chat-slot-ghost--prev");
+    expect(getComputedStyle(ghost!).display).not.toBe("none");
+  });
+});

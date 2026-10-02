@@ -36,6 +36,7 @@ from backend.services.chat_summary_service import (
     plan_summary,
     write_chat_summary,
 )
+from backend.services.chat_summary_title import title_to_second_guess
 from backend.services.local_ollama_setup_service import (
     is_loopback_ollama_host,
     list_installed_ollama_tags,
@@ -204,6 +205,7 @@ async def _run_sum_up_job(
             window_tokens=window_tokens,
             reply_language=reply_language,
             request_id=request_id,
+            title_offer_for=title_to_second_guess(chat),
         )
     except asyncio.CancelledError:
         return

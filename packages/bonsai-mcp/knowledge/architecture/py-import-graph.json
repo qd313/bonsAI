@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 111,
-  "edgeCount": 295,
+  "fileCount": 112,
+  "edgeCount": 298,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -14,6 +14,7 @@
     "py_modules/backend/services/background_request_state.py",
     "py_modules/backend/services/branch_menu_example_guard.py",
     "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_summary_title.py",
     "py_modules/backend/services/compat_topic_router.py",
     "py_modules/backend/services/desktop_note_service.py",
     "py_modules/backend/services/destructive_advice_guard.py",
@@ -169,6 +170,10 @@
     },
     {
       "path": "py_modules/backend/services/chat_memory_service.py",
+      "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/chat_summary_title.py",
       "count": 3
     },
     {
@@ -755,6 +760,7 @@
     },
     "py_modules/backend/services/chat_slot_service.py": {
       "imports": [
+        "py_modules/backend/services/chat_summary_title.py",
         "py_modules/backend/services/ollama_service.py"
       ],
       "importedBy": [
@@ -771,6 +777,7 @@
         "py_modules/backend/services/background_request_state.py",
         "py_modules/backend/services/chat_slot_service.py",
         "py_modules/backend/services/chat_summary_service.py",
+        "py_modules/backend/services/chat_summary_title.py",
         "py_modules/backend/services/chat_turn_recorder.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_extras.py",
@@ -797,6 +804,7 @@
         "py_modules/backend/services/chat_slot_service.py",
         "py_modules/backend/services/chat_summary_plan.py",
         "py_modules/backend/services/chat_summary_tidy.py",
+        "py_modules/backend/services/chat_summary_title.py",
         "py_modules/backend/services/chat_turn_recorder.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/ollama_chat_stream.py",
@@ -816,6 +824,14 @@
         "py_modules/backend/services/knowledge_base_schema.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/chat_summary_service.py"
+      ]
+    },
+    "py_modules/backend/services/chat_summary_title.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/chat_slot_service.py",
+        "py_modules/backend/services/chat_sum_up_job.py",
         "py_modules/backend/services/chat_summary_service.py"
       ]
     },

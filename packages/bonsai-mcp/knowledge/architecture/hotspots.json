@@ -111,6 +111,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "lines": 840,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 836,
       "role": ""
@@ -118,11 +123,6 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 824,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 776,
       "role": ""
     },
     {

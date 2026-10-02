@@ -25,6 +25,7 @@ from typing import Any
 
 from backend.services.chat_slot_service import (
     create_slot as chat_create_slot,
+    decline_title_offer as chat_decline_title_offer,
     delete_slot as chat_delete_slot,
     list_slot_summaries,
     load_slot as chat_load_slot,
@@ -119,19 +120,29 @@ async def delete_chat_slot(self, slot_id: str = "", payload: Any = None):
 
 
 async def rename_chat_slot(self, payload: Any = None):
-    """Rename a chat slot label."""
+    """Rename a chat slot label, or answer the summary card's title offer (plan 79).
+
+    A plain rename is the person typing a title: the chat is marked as named by hand and is never
+    offered another. ``from_title_offer`` is the same rename after a yes on the card's offer: the
+    chat stays open to fresher suggestions. ``keep_title_offer`` is a no: the offer is closed and
+    the title is left alone, so no label is needed."""
     if not isinstance(payload, dict):
         return {"ok": False, "error": "Invalid payload"}
     sid = str(payload.get("slot_id") or payload.get("slotId") or payload.get("id") or "").strip()
     label = str(payload.get("label") or "").strip()
+    keep_offer = payload.get("keep_title_offer") is True
     if not sid:
         return {"ok": False, "error": "Slot id required"}
-    if not label:
+    if not label and not keep_offer:
         return {"ok": False, "error": "Label required"}
     settings_dir = self._chat_slots_settings_dir()
 
     def _run():
-        return chat_update_slot_label(settings_dir, sid, label, logger)
+        if keep_offer:
+            return chat_decline_title_offer(settings_dir, sid, logger)
+        return chat_update_slot_label(
+            settings_dir, sid, label, logger, by_hand=payload.get("from_title_offer") is not True
+        )
 
     async with self._chat_slots_store_lock:
         saved = await asyncio.to_thread(_run)

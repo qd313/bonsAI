@@ -59,6 +59,7 @@ import time
 import uuid
 from typing import Any
 
+from backend.services.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
 from backend.services.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
 
 SCHEMA_VERSION = 1
@@ -262,7 +263,7 @@ def _normalize_summary(raw: Any) -> dict[str, Any] | None:
         except (TypeError, ValueError):
             return 0.0
 
-    return {
+    summary = {
         "text": text[:MAX_SUMMARY_TEXT_LEN],
         "covers_through_turn_id": str(raw.get("covers_through_turn_id") or "").strip()[
             :MAX_SUMMARY_TURN_ID_LEN
@@ -274,6 +275,12 @@ def _normalize_summary(raw: Any) -> dict[str, Any] | None:
         "seconds": _clamped_seconds(raw.get("seconds")),
         "model": str(raw.get("model") or "")[:MAX_SUMMARY_MODEL_LEN],
     }
+    # Plan 79: the fresher chat title the summary call suggested, waiting for a yes or a no on the
+    # summary card. Only present while an offer is open -- "absent, not empty", like ``reasoning``.
+    suggested = " ".join(str(raw.get("suggested_title") or "").split())[:MAX_SUGGESTED_TITLE_CHARS]
+    if suggested:
+        summary["suggested_title"] = suggested
+    return summary
 
 
 def _normalize_subject(raw: Any) -> dict[str, Any] | None:
@@ -396,6 +403,11 @@ def sanitize_slot(raw: Any) -> dict[str, Any] | None:
         "updated_at": int(raw.get("updated_at") or time.time()),
         "origin_app_id": str(raw.get("origin_app_id", "") or "").strip()[:32],
         "origin_app_name": str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
+        # Plan 79: True once the person typed this title themselves (the rename box). A typed title
+        # is never second-guessed by the summary. Chats saved before this existed read False.
+        "label_by_hand": raw.get("label_by_hand") is True,
+        # The title the person last answered Keep to, so the same suggestion is not offered again.
+        "declined_title": " ".join(str(raw.get("declined_title") or "").split())[:MAX_SUGGESTED_TITLE_CHARS],
         # Plan 68 step 2: the chat's own summary of its older turns, and its remembered follow-up
         # subject. Always present as a key, ``None`` when there is none yet -- the same "always a
         # key, sometimes null" shape ``_normalize_turn_transparency`` gives a turn, not the
@@ -695,19 +707,54 @@ def append_turn(
     return saved
 
 
+def _without_title_offer(slot: dict[str, Any]) -> None:
+    """Close the open title offer on ``slot``'s summary, if there is one (it has been answered)."""
+    summary = slot.get("summary")
+    if isinstance(summary, dict) and "suggested_title" in summary:
+        slot["summary"] = {k: v for k, v in summary.items() if k != "suggested_title"}
+
+
 def update_slot_label(
-    settings_dir: str, slot_id: str, label: str, logger: Any = None
+    settings_dir: str, slot_id: str, label: str, logger: Any = None, *, by_hand: bool = True
 ) -> dict[str, Any] | None:
+    """Rename a chat. ``by_hand`` (the rename box, the default) marks the title as typed by the
+    person, so the summary never offers another one; saying yes to a suggested title passes False,
+    and the chat stays open to a fresher suggestion later. Either way the open offer is answered."""
     slot = load_slot(settings_dir, slot_id, logger)
     if slot is None:
         return None
     slot["label"] = str(label or "").strip()[:MAX_LABEL_LEN] or slot.get("label", "New chat")
+    if by_hand:
+        slot["label_by_hand"] = True
+    _without_title_offer(slot)
     slot["updated_at"] = int(time.time())
     saved = save_slot(settings_dir, slot, logger)
     index = load_index(settings_dir, logger)
     index = _upsert_index_row(index, saved)
     save_index(settings_dir, index, logger)
     return saved
+
+
+def decline_title_offer(settings_dir: str, slot_id: str, logger: Any = None) -> dict[str, Any] | None:
+    """Keep: close the open title offer and remember the suggestion so it is not offered again.
+    Changes nothing else -- not the title, ``updated_at`` or the index. ``None``: no such chat."""
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    summary = slot.get("summary")
+    if isinstance(summary, dict) and summary.get("suggested_title"):
+        slot["declined_title"] = summary["suggested_title"]
+    _without_title_offer(slot)
+    return save_slot(settings_dir, slot, logger)
+
+
+def _summary_for_screen(slot: dict[str, Any]) -> Any:
+    """The summary as the screen gets it: a typed title never carries an offer, even one saved
+    before the person renamed the chat."""
+    summary = slot.get("summary")
+    if slot.get("label_by_hand") and isinstance(summary, dict) and "suggested_title" in summary:
+        return {k: v for k, v in summary.items() if k != "suggested_title"}
+    return summary
 
 
 def slot_to_rpc_payload(slot: dict[str, Any]) -> dict[str, Any]:
@@ -722,9 +769,26 @@ def slot_to_rpc_payload(slot: dict[str, Any]) -> dict[str, Any]:
         # draw straight from the loaded chat. ``subject`` deliberately stays off this payload --
         # it is the same in-process-only bookkeeping ``kb_followup_memory`` already keeps, never
         # shown to a reader, now just stored per chat instead of for the whole plugin.
-        "summary": slot.get("summary"),
+        "summary": _summary_for_screen(slot),
+        "label_by_hand": slot.get("label_by_hand") is True,
         "turns": slot.get("turns") or [],
     }
+
+
+def _summary_with_open_offer_only(slot: dict[str, Any], summary: dict[str, Any] | None) -> Any:
+    """``summary`` without a title offer that should not be made, judged on the chat as it is now
+    (a rename can land while a summary is being written): a typed title is never second-guessed,
+    the title the person already said Keep to is not offered twice, and the chat's own title is
+    not offered back to it."""
+    if not isinstance(summary, dict) or "suggested_title" not in summary:
+        return summary
+    offered = str(summary.get("suggested_title") or "")
+    drop = (
+        slot.get("label_by_hand") is True
+        or offered.casefold() == str(slot.get("declined_title") or "").casefold()
+        or offered.casefold() == str(slot.get("label") or "").casefold()
+    )
+    return {k: v for k, v in summary.items() if k != "suggested_title"} if drop else summary
 
 
 def save_slot_summary(
@@ -744,7 +808,7 @@ def save_slot_summary(
     slot = load_slot(settings_dir, slot_id, logger)
     if slot is None:
         return None
-    slot["summary"] = summary
+    slot["summary"] = _summary_with_open_offer_only(slot, summary)
     return save_slot(settings_dir, slot, logger)
 
 

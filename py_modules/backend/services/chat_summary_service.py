@@ -36,6 +36,9 @@ How it works:
     connection out from under it if the model is still going at 120 seconds.
  5. The reply is cleaned (any fence or status tag stripped, capped at 2,000 characters) and
     handed back as a plain dict the caller saves. Nothing is saved here.
+ 6. For a chat whose title the person did not type, the same request also asks whether the title
+    still fits (``chat_summary_title.py``); a better title the AI suggests rides in the summary
+    as ``suggested_title``, never applied -- the summary card asks the person.
 """
 
 from __future__ import annotations
@@ -56,7 +59,7 @@ from backend.services.chat_memory_service import (
     build_memory_lines,
     plan_and_build_chat_memory,
 )
-from backend.services.chat_slot_service import MAX_SUMMARY_TEXT_LEN
+from backend.services.chat_slot_service import MAX_SUMMARY_TEXT_LEN, load_slot as chat_load_slot
 from backend.services.chat_summary_plan import (  # noqa: F401 -- re-exported for the callers and tests
     MIN_KEPT_TURNS,
     SUMMARY_INPUT_CAP_TOKENS,
@@ -64,6 +67,13 @@ from backend.services.chat_summary_plan import (  # noqa: F401 -- re-exported fo
     plan_summary,
 )
 from backend.services.chat_summary_tidy import known_games_of_chat, tidy_summary_text
+from backend.services.chat_summary_title import (
+    clean_suggested_title,
+    newest_questions_block,
+    split_title_line,
+    title_instruction,
+    title_to_second_guess,
+)
 from backend.services.ollama_chat_stream import _stream_ollama_chat_once
 from backend.services.ollama_stop_service import close_ollama_chat_response
 from backend.services.ollama_window_fit import ollama_base_from_chat_url
@@ -144,21 +154,30 @@ class SummaryOutcome:
 
 
 def _summary_request_messages(
-    plan: SummaryPlan, model_name: str, reply_language: str
+    plan: SummaryPlan, model_name: str, reply_language: str, title_offer_for: str = ""
 ) -> list[dict]:
     """The two messages sent to the model, built from the same line format the chat's ordinary
-    memory uses (``chat_memory_service.build_memory_lines``) rather than a second formatter."""
+    memory uses (``chat_memory_service.build_memory_lines``) rather than a second formatter.
+
+    ``title_offer_for`` (the chat's current title, blank when it may not be second-guessed) adds
+    the title question to the instruction and the player's newest questions to the request."""
     lines, *_rest = build_memory_lines(plan.covered_turns, 10**9, model_name)
     body = "\n".join(lines)
     previous_text = str((plan.previous or {}).get("text") or "").strip()
+    system = SUMMARY_INSTRUCTION
+    extra = ""
+    if title_offer_for:
+        system += " " + title_instruction(title_offer_for)
+        newest = newest_questions_block(list(plan.covered_turns) + list(plan.kept_turns))
+        extra = f"{newest}\n\n" if newest else ""
     if previous_text:
         user = (
             f"Notes from earlier in this chat:\n{previous_text}\n\n"
-            f"What was said since, oldest first:\n{body}\n\nWrite the notes now."
+            f"What was said since, oldest first:\n{body}\n\n{extra}Write the notes now."
         )
     else:
-        user = f"The conversation so far, oldest first:\n{body}\n\nWrite the notes now."
-    system = SUMMARY_INSTRUCTION + build_reply_language_block(reply_language)
+        user = f"The conversation so far, oldest first:\n{body}\n\n{extra}Write the notes now."
+    system += build_reply_language_block(reply_language)
     return [
         {"role": "system", "content": system},
         {"role": "user", "content": user},
@@ -223,11 +242,16 @@ async def write_chat_summary(
     window_tokens: int,
     reply_language: str,
     request_id: Optional[int],
+    title_offer_for: str = "",
 ) -> SummaryOutcome:
     """Make the one streamed call that sums up ``plan.covered_turns``. Saves nothing -- the
-    caller saves the returned summary, and only once this has actually returned."""
+    caller saves the returned summary, and only once this has actually returned.
+
+    ``title_offer_for`` is the chat's current title when the chat may be offered a fresher one
+    (``chat_summary_title.title_to_second_guess``), else blank: the same call then also asks
+    whether that title still fits, and a suggestion rides back inside the summary."""
     started = time.time()
-    messages = _summary_request_messages(plan, model_name, reply_language)
+    messages = _summary_request_messages(plan, model_name, reply_language, title_offer_for)
     input_tokens = estimate_tokens_from_chars(
         sum(len(str(m.get("content") or "")) for m in messages), model_name
     )
@@ -329,7 +353,12 @@ async def write_chat_summary(
         )
         return SummaryOutcome(status="stopped", summary=None, seconds=elapsed, error="")
 
-    cleaned = _clean_summary_text(result.get("visible_raw")) if result.get("success") else ""
+    visible = str(result.get("visible_raw") or "") if result.get("success") else ""
+    suggested_title = ""
+    if title_offer_for:
+        visible, title_words = split_title_line(visible)
+        suggested_title = clean_suggested_title(title_words, title_offer_for)
+    cleaned = _clean_summary_text(visible)
     if cleaned:
         cleaned = await _tidy_written_text(
             plugin, cleaned, chat=chat, plan=plan, reply_language=reply_language
@@ -364,6 +393,8 @@ async def write_chat_summary(
         "seconds": round(elapsed, 1),
         "model": str(model_name or ""),
     }
+    if suggested_title:
+        summary["suggested_title"] = suggested_title
     logger.info(
         "chat_summary: written in %.1f s — covered %d turns, %d unread, ~%d input tokens, "
         "model %s",
@@ -384,6 +415,18 @@ def _hidden_notes_in(turns: list, model_name: str) -> int:
         turns, 10**9, model_name
     )
     return hidden_removed
+
+
+async def _title_to_second_guess(plugin: Any, chat_id: str) -> str:
+    """The title a summary written before an answer may offer a fresher one for, read from the
+    saved chat (the chat the Ask carries has no title). Blank for a typed title or on any
+    trouble reading the chat: the summary is then written exactly as it always was."""
+    try:
+        settings_dir = plugin._chat_slots_settings_dir()
+        slot = await asyncio.to_thread(chat_load_slot, settings_dir, chat_id, logger)
+    except Exception:  # noqa: BLE001 -- a title offer must never cost the summary
+        return ""
+    return title_to_second_guess(slot)
 
 
 async def decide_and_write_chat_summary(
@@ -463,6 +506,7 @@ async def decide_and_write_chat_summary(
         window_tokens=room_tokens,
         reply_language=reply_language,
         request_id=active_request_id,
+        title_offer_for=await _title_to_second_guess(plugin, chat_id),
     )
     if outcome.status == "stopped":
         return turns, previous, "", True

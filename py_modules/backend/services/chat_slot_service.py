@@ -382,6 +382,25 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     return turn
 
 
+def _title_looks_typed(raw: dict[str, Any], label: str, turns: list[dict[str, Any]]) -> bool:
+    """For a chat file saved before ``label_by_hand`` existed: was this title typed by the person?
+
+    The plugin names a chat after its first question (``heuristic_slot_label``), or after the game
+    when there is no question yet, or leaves "New chat". A title that is none of those can only
+    have come from the rename box, so it counts as typed and is never second-guessed. When the
+    first question has since been trimmed away (the 200-turn cap) the name cannot be rebuilt and
+    the title counts as typed -- the safe side: no offer is made on a guess.
+    """
+    first_user = next((t for t in turns if t.get("role") == "user"), None)
+    app_name = str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN]
+    own_names = {"New chat", heuristic_slot_label("", app_name)}
+    if first_user is not None:
+        own_names.add(heuristic_slot_label(first_user.get("text", ""), app_name))
+        if first_user.get("display_text"):
+            own_names.add(heuristic_slot_label(first_user["display_text"], app_name))
+    return label not in own_names
+
+
 def sanitize_slot(raw: Any) -> dict[str, Any] | None:
     if not isinstance(raw, dict):
         return None
@@ -404,8 +423,13 @@ def sanitize_slot(raw: Any) -> dict[str, Any] | None:
         "origin_app_id": str(raw.get("origin_app_id", "") or "").strip()[:32],
         "origin_app_name": str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
         # Plan 79: True once the person typed this title themselves (the rename box). A typed title
-        # is never second-guessed by the summary. Chats saved before this existed read False.
-        "label_by_hand": raw.get("label_by_hand") is True,
+        # is never second-guessed by the summary. A chat saved before the flag existed has no such
+        # key: it counts as typed unless its title is one the plugin would have given it itself.
+        "label_by_hand": (
+            raw["label_by_hand"] is True
+            if "label_by_hand" in raw
+            else _title_looks_typed(raw, label, turns)
+        ),
         # The title the person last answered Keep to, so the same suggestion is not offered again.
         "declined_title": " ".join(str(raw.get("declined_title") or "").split())[:MAX_SUGGESTED_TITLE_CHARS],
         # Plan 68 step 2: the chat's own summary of its older turns, and its remembered follow-up
@@ -592,6 +616,9 @@ def create_slot(
         # Already passed in for the label heuristic; kept now rather than discarded, because the
         # slot row shows the game above the title and nothing else records the NAME.
         "origin_app_name": str(app_name or "").strip()[:MAX_APP_NAME_LEN],
+        # Always written, so a new chat never goes through the guess made for chats saved before the
+        # flag existed. Only the rename box sets it (``update_slot_label``).
+        "label_by_hand": False,
         "turns": [],
     }
     save_slot(settings_dir, slot, logger)

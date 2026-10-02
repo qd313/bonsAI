@@ -181,9 +181,47 @@ class SlotAndRenameTests(unittest.TestCase):
     def _offer(self, title="Half-Life 2 weapons"):
         return save_slot_summary(self.dir, self.sid, {"text": "notes", "covers_through_turn_id": "t1", "suggested_title": title})
 
-    def test_an_older_chat_with_no_flag_counts_as_not_typed_by_hand(self):
-        raw = {"id": "x", "label": "old chat", "turns": []}
-        self.assertFalse(sanitize_slot(raw)["label_by_hand"])
+    def _old_file(self, label, first_question="how do i beat the helicopter", **extra):
+        """A chat file saved before label_by_hand existed: the key is simply not in it."""
+        raw = {
+            "id": "old", "label": label, "created_at": 1, "updated_at": 2, "origin_app_name": "Half-Life 2",
+            "turns": [
+                {"id": "q1", "role": "user", "text": first_question},
+                {"id": "a1", "role": "assistant", "text": "use the rocket launcher"},
+            ],
+            "summary": {"text": "notes", "covers_through_turn_id": "a1", "suggested_title": "Half-Life 2 weapons"},
+            **extra,
+        }
+        self.assertNotIn("label_by_hand", raw)
+        return raw
+
+    def test_an_old_chat_still_named_by_the_plugin_stays_open_to_an_offer(self):
+        for label in ("how do i beat the helicopter", "New chat"):
+            slot = sanitize_slot(self._old_file(label))
+            self.assertFalse(slot["label_by_hand"], label)
+            self.assertEqual(title_to_second_guess(slot), label)
+
+    def test_an_old_chat_with_any_other_title_counts_as_typed_and_is_never_offered_one(self):
+        slot = sanitize_slot(self._old_file("my helicopter notes"))
+        self.assertTrue(slot["label_by_hand"])
+        self.assertEqual(title_to_second_guess(slot), "")
+        self.assertNotIn("suggested_title", slot_to_rpc_payload(slot)["summary"])
+
+    def test_an_old_chat_named_after_its_game_or_a_long_first_question_is_still_the_plugins_name(self):
+        game = self._old_file("Half-Life 2")
+        game["turns"] = []
+        self.assertFalse(sanitize_slot(game)["label_by_hand"])
+        long_q = "how do i beat the helicopter " * 8
+        long_name = long_q.strip()[:119] + "…"
+        self.assertFalse(sanitize_slot(self._old_file(long_name, first_question=long_q))["label_by_hand"])
+
+    def test_a_chat_with_the_key_present_is_read_as_it_says(self):
+        self.assertFalse(sanitize_slot({**self._old_file("my helicopter notes"), "label_by_hand": False})["label_by_hand"])
+        self.assertTrue(sanitize_slot({**self._old_file("how do i beat the helicopter"), "label_by_hand": True})["label_by_hand"])
+
+    def test_a_new_chat_is_not_taken_for_a_typed_one_when_it_is_saved(self):
+        sid = create_slot(self.dir, first_question="where is the crossbow", app_name="Half-Life 2")["id"]
+        self.assertFalse(load_slot(self.dir, sid)["label_by_hand"])
 
     def test_the_offer_is_stored_with_the_summary_and_reaches_the_screen(self):
         self._offer()

@@ -20,6 +20,11 @@ hallucinate short filler words ("you", "yes", "test") on quiet or noisy
 audio; `_whisper_decode_usable()` and `_is_isolated_filler_partial()` hold
 those back unless the audio was actually loud enough to be real speech.
 
+Fuzzy seams (2026-10-02): each pass is a fresh decode of the same audio, so
+the shared words rarely come back spelled the same way ("two" then "2",
+"Testing" then "Testin"). `_align_window_to_tail()` matches them anyway, so
+the old text is replaced by the new decode instead of being kept next to it.
+
 Does not: Record any audio, or decide when a recording starts or stops --
 see voice_audio_capture_service.py and
 voice_transcription_service.VoiceTranscriptionSession for that.
@@ -191,6 +196,96 @@ def _join_transcript_parts(left: str, right: str) -> str:
     return f"{left} {right}"
 
 
+_SPOKEN_NUMBERS = {
+    "zero": "0", "one": "1", "won": "1", "two": "2", "to": "2", "too": "2",
+    "three": "3", "four": "4", "for": "4", "five": "5", "six": "6",
+    "seven": "7", "eight": "8", "ate": "8", "nine": "9", "ten": "10",
+}
+# How many leading words of a new decode may be a clipped half-word or noise.
+_MAX_LEADING_SKIP = 2
+_TAIL_EXTRA_WORDS = 4
+
+
+def _fuzzy_key(word: str) -> str:
+    key = _normalize_merge_word(word)
+    return _SPOKEN_NUMBERS.get(key, key)
+
+
+def _fuzzy_words_match(left: str, right: str) -> bool:
+    """Same word heard twice: equal, one a clipped piece of the other, or one letter off."""
+    if left == right:
+        return bool(left)
+    short, long_ = sorted((left, right), key=len)
+    if len(short) >= 3 and long_.startswith(short) and len(long_) - len(short) <= 3:
+        return True
+    if len(short) >= 3 and long_.endswith(short) and len(long_) - len(short) <= 2:
+        return True
+    if len(short) >= 4 and len(long_) - len(short) <= 1:
+        mismatches = sum(a != b for a, b in zip(short, long_)) + (len(long_) - len(short))
+        return mismatches <= 1
+    return False
+
+
+def _align_window_to_tail(
+    tail_words: list[str], new_words: list[str]
+) -> tuple[int, int, int] | None:
+    """Find where a fresh decode picks up inside the text already heard.
+
+    Returns ``(tail_start, new_start, length)``: ``tail_words[tail_start:]`` is
+    the same speech as ``new_words[new_start:new_start + length]``. The words
+    may be spelled differently ("two" / "2") or clipped, and the new decode may
+    start with up to two broken leading words. None when nothing lines up.
+    """
+    tail = [_fuzzy_key(w) for w in tail_words]
+    new = [_fuzzy_key(w) for w in new_words]
+    best: tuple[int, int, int] | None = None
+    best_score = 0
+    for length in range(min(len(tail), len(new)), 0, -1):
+        for skip in range(0, _MAX_LEADING_SKIP + 1):
+            if skip + length > len(new):
+                break
+            region = new[skip : skip + length]
+            start = len(tail) - length
+            if not _fuzzy_words_match(tail[start], region[0]):
+                continue
+            matches = sum(_fuzzy_words_match(a, b) for a, b in zip(tail[start:], region))
+            if length - matches > length // 3:
+                continue
+            if matches < 2 and not (skip == 0 and length == 1 and tail[start] == region[0]):
+                continue
+            score = matches * 10 - skip
+            if score > best_score:
+                best, best_score = (start, skip, length), score
+    return best
+
+
+def _merge_by_alignment(
+    finalized: str, previous_partial: str, window_text: str
+) -> tuple[str, str] | None:
+    """Merge a fresh decode onto finalized + partial when they share speech."""
+    fin_words = _word_list(finalized)
+    prev_words = _word_list(previous_partial)
+    new_words = _word_list(window_text)
+    keep = len(new_words) + _TAIL_EXTRA_WORDS
+    tail_all = fin_words + prev_words
+    offset = max(0, len(tail_all) - keep)
+    found = _align_window_to_tail(tail_all[offset:], new_words)
+    if found is None:
+        return None
+    start, skip, _length = found
+    start += offset
+    in_partial = start - len(fin_words)
+    if in_partial >= 0:
+        committed = prev_words[:in_partial]
+        if committed:
+            finalized = _join_transcript_parts(finalized, " ".join(committed))
+        return finalized, " ".join(new_words[skip:])
+    # The overlap reaches back into text already committed: it stays as it is,
+    # and the new decode only replaces the live partial.
+    past_committed = skip + (len(fin_words) - start)
+    return finalized, " ".join(new_words[past_committed:])
+
+
 def merge_sliding_window_transcript(
     finalized: str,
     previous_partial: str,
@@ -218,7 +313,8 @@ def merge_sliding_window_transcript(
             win_words = _word_list(window_text)
             remainder = " ".join(win_words[overlap:])
             return finalized, remainder
-        return finalized, window_text
+        aligned = _merge_by_alignment(finalized, "", window_text)
+        return aligned if aligned is not None else (finalized, window_text)
 
     if window_text.startswith(previous_partial):
         return finalized, window_text
@@ -248,6 +344,10 @@ def merge_sliding_window_transcript(
 
     if _is_stale_word_fragment(previous_partial, window_text):
         return finalized, window_text
+
+    aligned = _merge_by_alignment(finalized, previous_partial, window_text)
+    if aligned is not None:
+        return aligned
 
     finalized = _join_transcript_parts(finalized, previous_partial)
     return finalized, window_text

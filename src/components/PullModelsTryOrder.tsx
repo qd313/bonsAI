@@ -3,9 +3,9 @@
  *
  * Purpose: The part of the AI models box that shows and changes the order bonsAI tries the installed
  * models in. A "Text / Pictures" switch sits above the table, each installed model's row carries its
- * place number with small up and down buttons, and a few quiet lines say what is going on: that a
- * change is saved at once, how many models in the order the filters hide, or why there are no places
- * (no host, host not reachable, no installed model).
+ * place number with small up and down buttons, and quiet words say what is going on: that a change is
+ * saved at once (beside the switch, to cost no height), how many models in the order the filters hide,
+ * or why there are no places (no host, host not reachable, no installed model).
  *
  * Used for: PullModelsModal.tsx, through usePullModelTryNav(); drawn only when the box was opened with
  * a host (see useTryOrderPlaces.ts), so Browse models opened on its own looks as it always did.
@@ -201,17 +201,17 @@ export function usePullModelTryNav(a: {
           >
             Reset order
           </Button>
-        </Focusable>
-        {note ? <div className="bonsai-pullmodels-tryorder-note">{note}</div> : null}
-        {places.status === "ready" ? (
-          <>
-            <div className="bonsai-pullmodels-tryorder-note">
+          {/* Beside the buttons, not under them: the box's body is only 264 px tall on the Deck's own
+              screen, and a line of its own would cost a model row. Not a focus stop. */}
+          {places.status === "ready" ? (
+            <span className="bonsai-pullmodels-tryorder-saved">
               {places.onPc ? "These places are for the PC the AI runs on. " : ""}A place change is saved at once;
               Cancel does not undo it.
-            </div>
-            {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden)}</div> : null}
-          </>
-        ) : null}
+            </span>
+          ) : null}
+        </Focusable>
+        {note ? <div className="bonsai-pullmodels-tryorder-note">{note}</div> : null}
+        {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden)}</div> : null}
       </div>
     );
   };

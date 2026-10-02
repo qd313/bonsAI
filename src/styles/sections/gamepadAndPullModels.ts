@@ -579,6 +579,13 @@ export function buildPullModelsStylesheet(): string {
           font-size: 10px;
           color: #8fa8c4;
         }
+        .bonsai-scope .bonsai-pullmodels-tryorder-saved {
+          flex: 1 1 0;
+          min-width: 0;
+          font-size: 10px;
+          line-height: 1.2;
+          color: #9fb7d5;
+        }
         .bonsai-scope .bonsai-pullmodels-tryorder-note {
           font-size: 10px;
           line-height: 1.35;

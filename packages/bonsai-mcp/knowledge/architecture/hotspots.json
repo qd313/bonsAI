@@ -121,13 +121,13 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/section-6.ts",
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 835,
       "role": ""
     },
     {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 828,
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 835,
       "role": ""
     },
     {

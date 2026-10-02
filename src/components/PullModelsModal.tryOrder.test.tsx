@@ -112,6 +112,17 @@ describe("what the box draws", () => {
     expect(container.textContent).toContain("A place change is saved at once; Cancel does not undo it.");
   });
 
+  it("keeps the switch row one row tall: the saved-at-once words sit beside the buttons, not on a line of their own", async () => {
+    // The box's body is 264 px tall on the Deck's own screen; a line of its own would cost a model row.
+    const { container } = renderBox(DECK);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    const row = container.querySelector(".bonsai-pullmodels-tryorder-row")!;
+    expect(row.querySelector(".bonsai-pullmodels-tryorder-saved")?.textContent).toContain("saved at once");
+    expect(container.querySelectorAll(".bonsai-pullmodels-tryorder-note")).toHaveLength(0);
+    // Words only: every focus stop in the row is a button.
+    expect(row.querySelector(".bonsai-pullmodels-tryorder-saved button")).toBeNull();
+  });
+
   it("draws nothing of it when the box was not given a host", async () => {
     const { container } = renderBox(undefined);
     await waitFor(() => expect(container.querySelectorAll(".bonsai-pullmodels-slot--installed").length).toBeGreaterThan(2));

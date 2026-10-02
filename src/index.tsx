@@ -110,7 +110,6 @@ import { DEFAULT_LATENCY_WARNING_SECONDS, type BonsaiSettings } from "./data/bon
 import { setFrozenTestChips } from "./data/presets";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
-import { PULL_MODEL_CATALOG } from "./data/pullModelCatalog";
 import { activeOllamaRoutingTag } from "./utils/activeOllamaRoutingTag";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
@@ -160,7 +159,6 @@ import { useDownloadPermissionBridge } from "./features/downloads/downloadNotice
 import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
 import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToolActions";
 import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/plugin-shell/useUnifiedInputBehaviors";
-import { useRoutingOrderModal } from "./features/model-routing/useRoutingOrderModal";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
 import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/plugin-shell/useDesktopNoteSaveModal";
@@ -336,9 +334,7 @@ const Content: React.FC = () => {
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
     textModelRoutingOrder,
-    setTextModelRoutingOrder,
     visionModelRoutingOrder,
-    setVisionModelRoutingOrder,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
     ollamaLocalAutostart,
@@ -850,31 +846,6 @@ const Content: React.FC = () => {
     finalizeShowModalAndRestoreActiveTab,
   });
 
-  const catalogByTag = useMemo(() => {
-    const m = new Map<string, (typeof PULL_MODEL_CATALOG)[number]>();
-    for (const e of PULL_MODEL_CATALOG) m.set(e.tag, e);
-    return m;
-  }, []);
-
-  const openRoutingOrderModal = useRoutingOrderModal({
-    ollamaLocalOnDeck,
-    ollamaIp,
-    textModelRoutingOrder,
-    visionModelRoutingOrder,
-    setTextModelRoutingOrder,
-    setVisionModelRoutingOrder,
-    catalogByTag,
-    modelPolicyTier,
-    modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
-    setLastConnectionStatus,
-    captureSessionBeforeModal,
-    finalizeShowModalAndRestoreActiveTab,
-    pauseDebouncedSettingsSave,
-    buildSettingsPayload,
-    hydrateFromSettings,
-  });
-
   // =====================================================================
   // TAB CONTENT
   // =====================================================================
@@ -1070,13 +1041,11 @@ const Content: React.FC = () => {
     ollamaLocalAutostart,
     setOllamaLocalAutostart,
     onLastConnectionStatus: setLastConnectionStatus,
-    lastConnectionStatus,
     namedOllamaHosts,
     setNamedOllamaHosts,
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
     onOpenOllamaModelsHub: openOllamaModelsHub,
-    onOpenRoutingOrderModal: openRoutingOrderModal,
     latencyWarningSeconds,
     requestTimeoutSeconds,
     latencyTimeoutsCustomEnabled,

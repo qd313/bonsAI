@@ -5,10 +5,9 @@
  * but needs a starting order to try them in, and the Ollama tab needs to show that order as a
  * list. This file holds the built-in starting order — one for a plain question, a separate one
  * for a question that includes a picture — plus the rules for whether a model looks like it can
- * handle pictures, whether a model is large enough that it is a bad idea to run on the Deck's
- * shared graphics memory, and whether a model's licence is allowed under the current Settings
- * licence tier. It builds the final "try these, in this order" list that both the Ollama tab's
- * preview and the actual Ask request use.
+ * handle pictures, and whether a model is large enough that it is a bad idea to run on the Deck's
+ * shared graphics memory. It builds the "try these, in this order" list that the AI models box
+ * starts from (its licence filter hides rows; it does not change the order).
  *
  * Used for: the Ollama tab's routing preview list, and the ranking behind the "which model would
  * help here" suggestions on the Pull Models screen.
@@ -32,11 +31,10 @@
  *     person — it turns that gap into its own "unknown" warning rather than a silent pass, without
  *     changing what actually gets tried at Ask time.
  */
-import type { PullModelEntry, PullModelLicenseClass } from "../data/pullModelCatalog";
-import type { ModelPolicyTierId } from "../data/modelPolicy";
+import type { PullModelEntry } from "../data/pullModelCatalog";
 
 /** Keep aligned with ``ollama_routing.py`` essentials chains. */
-export const DEFAULT_TEXT_ROUTING_SEED: readonly string[] = [
+const DEFAULT_TEXT_ROUTING_SEED: readonly string[] = [
   "qwen2.5vl:3b",
   "qwen2.5:3b",
   "gemma4:e2b-it-qat",
@@ -44,7 +42,7 @@ export const DEFAULT_TEXT_ROUTING_SEED: readonly string[] = [
   "gemma4:latest",
 ];
 
-export const DEFAULT_VISION_ROUTING_SEED: readonly string[] = [
+const DEFAULT_VISION_ROUTING_SEED: readonly string[] = [
   "qwen2.5vl:3b",
   "qwen3.5:4b",
   "llava:7b",
@@ -67,7 +65,7 @@ const KNOWN_HIGH_VRAM_TAGS = new Set([
   "qwen3-vl:30b-a3b",
 ]);
 
-export function isVisionCapableTag(tag: string, catalogEntry?: PullModelEntry): boolean {
+function isVisionCapableTag(tag: string, catalogEntry?: PullModelEntry): boolean {
   if (catalogEntry?.tags.includes("vision")) return true;
   const t = tag.trim().toLowerCase();
   if (!t) return false;
@@ -97,18 +95,6 @@ export function modelSizeWarning(tag: string, sizeGb?: number): ModelSizeWarning
   if (isHighVramTag(tag, sizeGb)) return "large";
   if (typeof sizeGb !== "number") return "unknown";
   return "none";
-}
-
-export function licenseClassAllowed(
-  licenseClass: PullModelLicenseClass | undefined,
-  tier: ModelPolicyTierId,
-  nonFossUnlocked: boolean,
-): boolean {
-  const cls = licenseClass ?? "unknown";
-  if (tier === "open_source_only") return cls === "foss";
-  if (tier === "open_weight") return cls === "foss" || cls === "open_weight";
-  if (nonFossUnlocked) return true;
-  return cls === "foss" || cls === "open_weight" || cls === "non_foss";
 }
 
 export function buildPickerOrder(

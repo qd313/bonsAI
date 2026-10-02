@@ -238,11 +238,11 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 | SOLAR | CC BY-NC 4.0 (non-commercial) | 2 |
 | Moondream, MiniCPM | Apache 2.0 / MiniCPM licence | 3 (not in the family table) |
 
-### Model try-order pickers (text + vision)
+### Model try order (text + vision)
 
-**Feature:** **Ollama** tab → **Models & routing** → **Set text model try order…** / **Set vision model try order…** opens a fullscreen picker. Order is user-owned (max 16 tags); empty saved lists fall back to shipped essentials ∩ installed.
+**Feature:** **Ollama** tab → **AI models…** opens the AI models box. Its **Text / Pictures** switch picks which order you are looking at, and each installed model's row shows its place with small up and down buttons. A change is saved at once (Cancel does not undo it); **Reset order** goes back to automatic. Order is user-owned (max 16 tags); empty saved lists fall back to shipped essentials ∩ installed. A model hidden by a Filters choice keeps its place; one quiet line says how many. With the AI on a PC the places belong to the PC's installed models.
 
-**High-VRAM:** **Allow high-VRAM models in routing** (AI models hub → **Advanced**) controls whether large tags are *tried* at Ask time. When off, heavy models stay in the list but appear grayed and are skipped (positions preserved). When on, newly pulled large models are inserted at the **top**; already-installed heavy models keep their saved position.
+**High-VRAM:** **Allow high-VRAM models in routing** (AI models hub → **Advanced**) controls whether large tags are *tried* at Ask time. When off, heavy models keep their place in the order but are skipped at Ask time. When on, newly pulled large models are inserted at the **top**; already-installed heavy models keep their saved position.
 
 **Pull/delete:** Successful model pulls append the tag to both lists (bottom, or top when high-VRAM rules apply). Deleting a model in bonsAI removes the tag from saved orders.
 
@@ -470,7 +470,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 **Keeping Ollama and models current:** With **Ollama on this Deck** enabled, opening the **Ollama** tab quietly probes the local host so **Update AI & models** appears when Ollama is reachable (no need to tap **Test connection** first). **Update AI & models** (or **Install Ollama** when not reachable yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. That flow also refreshes the **Pull Models living catalog** (bonsAI-recommended overlay from GitHub; cached under `~/.bonsai/cache`). In **Browse models…**, tap **↻** to refresh installed tags, catalog recommendations, and live sizes.
 
-**Text/vision try order:** **Models & routing → Set text/vision model try order…** fetches installed tags when the modal opens (same connection probe). Reorder and tap **Done** to save.
+**Text/vision try order:** **AI models… →** the **Text / Pictures** switch asks the computer that answers for its installed tags when the box opens (this Deck's own list, or one connection test to the PC). If there is no PC address, the PC cannot be reached, or nothing that can answer is installed, the box says so where the places would be. Up and down save at once; there is no Done step for the order.
 
 **Symptom:** `ollama pull` fails with `open /home/deck/.ollama/id_ed25519: no such file or directory` (often after **Clear all data**).
 

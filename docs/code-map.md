@@ -162,7 +162,6 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **MainTabUnifiedAskBar.types.ts** (src/components/MainTabUnifiedAskBar.types.ts) — *The Ask bar's own prop shape*: The prop type MainTabUnifiedAskBar takes, and the one small helper that turns a screenshot media-permission error message into the capability key the Permissions screen needs to jump to the right toggle.
 - **ModelPolicyTierPanel.tsx** (src/components/ModelPolicyTierPanel.tsx) — *Model policy tier draft state*: `useModelPolicyTierDraft` — the small draft-until-Done state hook OllamaModelsHubModal uses to hold a pending Licence pick before the person presses Done.
 - **ModelRoutingAdvancedPanel.tsx** (src/components/ModelRoutingAdvancedPanel.tsx) — *Model routing advanced panel*: Advanced toggles for non-FOSS unlock and high-VRAM fallback routing in the models hub.
-- **ModelRoutingOrderModal.tsx** (src/components/ModelRoutingOrderModal.tsx) — *Model routing order modal*: The full-screen list reached from the Ollama tab's "Set text model try order" and "Set vision model try order" buttons. […]
 - **OllamaModelsHubModal.tsx** (src/components/OllamaModelsHubModal.tsx) — *The AI models screen*: The full-screen popup for everything about which AI models this plugin can use: browsing and downloading models (with the model licence choice folded in as one of the Browse screen's own filters, and each installed model's place in the try order, saved as soon as it is changed)…
 - **OllamaReplyVerbositySlider.tsx** (src/components/OllamaReplyVerbositySlider.tsx) — *Reply verbosity slider*: Three-stop Deck slider for Caveman / Balanced / Detailed reply prose style.
 - **OllamaSavedHostsRows.tsx** (src/components/OllamaSavedHostsRows.tsx) — *Saved PC hosts rows*: On the Ollama tab, when the AI runs on a PC rather than on this Deck, these are the two rows that let a person keep a short list of PC addresses they use. […]
@@ -262,7 +261,6 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/features/model-routing
 
-- **useRoutingOrderModal.ts** (src/features/model-routing/useRoutingOrderModal.ts) — *"Which model to try first" popup*: Opens the popup where a person orders their installed AI models from most to least preferred — one order for plain questions, another for questions that include a picture. […]
 - **useTryOrderPlaces.ts** (src/features/model-routing/useTryOrderPlaces.ts) — *The AI models box's try-order places*: Gives the Browse screen in the AI models box what it needs to show each installed model's place in the order bonsAI tries them in, for text questions or for questions with a picture, and to move a model one place up or down. […]
 
 ## src/features/plugin-shell

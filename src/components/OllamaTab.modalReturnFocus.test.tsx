@@ -1,8 +1,10 @@
 /**
  * Title: Ollama tab modal return-focus wiring
- * Purpose: Pin that the two "Set ... model try order..." buttons, and the Thinking row's own
- *          one-time notice, arm and register themselves with the modal return-focus registry, the
- *          same way Settings -> Data's two confirm-modal openers already do.
+ * Purpose: Pin that the tab's one "AI models" button, and the Thinking row's own one-time notice,
+ *          arm and register themselves with the modal return-focus registry, the same way
+ *          Settings -> Data's two confirm-modal openers already do. The two "Set ... model try
+ *          order..." buttons that used to sit beside it are gone (plan 79: the try order lives in
+ *          the AI models box), so the tab's list of return-focus ids shrank from three to one.
  * Used for: plan 55 bug B2 -- closing the try-order picker put the ring on the Ollama tab's outer
  *           frame instead of back on the button that opened it -- and the 2026-09-17 device
  *           finding for the Thinking row's notice (docs/test-evidence/plan57-REASONING-07.json):
@@ -13,7 +15,7 @@
  * Solves: Neither try-order button ever called `rememberModalReturnFocus` nor registered a ref with
  *         the registry, so there was nothing for the picker's already-correct close path to restore
  *         focus to. The Thinking row's notice had the same gap.
- * Does not: Exercise the picker modal itself -- the test harness's `showModal` stub discards its
+ * Does not: Exercise the box itself -- the test harness's `showModal` stub discards its
  *           argument rather than rendering it (src/test-harness/fakeDeckyUi.tsx). This only proves
  *           the wiring the fix depends on is in place. What happens once "Show thinking" or "Keep
  *           it off" is actually pressed is pinned in useThinkingNoticeGate.test.tsx, not here.
@@ -43,7 +45,6 @@ function buildProps(overrides: Partial<OllamaTabProps> = {}): OllamaTabProps {
     onBeforeDeckyModal: () => {},
     onCompleteDeckyModalClose: (close) => close(),
     onOpenOllamaModelsHub: () => {},
-    onOpenRoutingOrderModal: () => {},
     latencyWarningSeconds: 20,
     requestTimeoutSeconds: 60,
     latencyTimeoutsCustomEnabled: false,
@@ -76,15 +77,15 @@ describe("OllamaTab modal return focus", () => {
    * "Browse models" button does, and a comment there had already predicted this exact gap for the
    * second entry point.
    */
-  it("remembers ollama-models-hub-settings when Manage AI models is pressed", () => {
+  it("remembers ollama-models-hub-settings when AI models is pressed", () => {
     const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
-    fireEvent.click(getByLabelText("Manage AI models"));
+    fireEvent.click(getByLabelText("AI models"));
     expect(peekModalReturnFocus()).toBe("ollama-models-hub-settings");
   });
 
-  it("registers the Manage AI models button so the registry can focus it back", () => {
+  it("registers the AI models button so the registry can focus it back", () => {
     const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
-    const button = getByLabelText("Manage AI models");
+    const button = getByLabelText("AI models");
     const focus = vi.spyOn(button, "focus");
 
     fireEvent.click(button);
@@ -93,13 +94,13 @@ describe("OllamaTab modal return focus", () => {
     expect(focus).toHaveBeenCalled();
   });
 
-  it("still opens the models screen when Manage AI models is pressed", () => {
+  it("still opens the models screen when AI models is pressed", () => {
     const onOpenOllamaModelsHub = vi.fn();
     const { getByLabelText } = render(<OllamaTab {...buildProps({ onOpenOllamaModelsHub })} />);
 
-    fireEvent.click(getByLabelText("Manage AI models"));
+    fireEvent.click(getByLabelText("AI models"));
 
-    expect(onOpenOllamaModelsHub).toHaveBeenCalledWith({ initialSection: "policy" });
+    expect(onOpenOllamaModelsHub).toHaveBeenCalledTimes(1);
   });
 
   /*
@@ -109,56 +110,19 @@ describe("OllamaTab modal return focus", () => {
    */
   it("does not reuse the Browse models button's id", () => {
     const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
-    fireEvent.click(getByLabelText("Manage AI models"));
+    fireEvent.click(getByLabelText("AI models"));
     expect(peekModalReturnFocus()).not.toBe("ollama-models-hub");
   });
 
-  it("remembers ollama-text-try-order when Set text model try order... is pressed", () => {
-    const { getByText } = render(<OllamaTab {...buildProps()} />);
-    fireEvent.click(getByText("Set text model try order…"));
-    expect(peekModalReturnFocus()).toBe("ollama-text-try-order");
-  });
-
-  it("remembers ollama-vision-try-order when Set vision model try order... is pressed", () => {
-    const { getByText } = render(<OllamaTab {...buildProps()} />);
-    fireEvent.click(getByText("Set vision model try order…"));
-    expect(peekModalReturnFocus()).toBe("ollama-vision-try-order");
-  });
-
-  it("registers the text try-order button so the registry can focus it back", () => {
-    const { getByText } = render(<OllamaTab {...buildProps()} />);
-    const button = getByText("Set text model try order…");
-    const focus = vi.spyOn(button, "focus");
-
-    fireEvent.click(button);
-    restoreModalReturnFocus();
-
-    expect(focus).toHaveBeenCalled();
-  });
-
-  it("registers the vision try-order button so the registry can focus it back", () => {
-    const { getByText } = render(<OllamaTab {...buildProps()} />);
-    const button = getByText("Set vision model try order…");
-    const focus = vi.spyOn(button, "focus");
-
-    fireEvent.click(button);
-    restoreModalReturnFocus();
-
-    expect(focus).toHaveBeenCalled();
-  });
-
-  it("does not cross-wire the two try-order buttons", () => {
-    const { getByText } = render(<OllamaTab {...buildProps()} />);
-    const textButton = getByText("Set text model try order…");
-    const visionButton = getByText("Set vision model try order…");
-    const textFocus = vi.spyOn(textButton, "focus");
-    const visionFocus = vi.spyOn(visionButton, "focus");
-
-    fireEvent.click(visionButton);
-    restoreModalReturnFocus();
-
-    expect(visionFocus).toHaveBeenCalled();
-    expect(textFocus).not.toHaveBeenCalled();
+  /*
+   * Plan 79: "Models & routing" shrank to this one button. The two try-order buttons, and the ids
+   * they registered, are gone with the screens they opened.
+   */
+  it("registers no return-focus id of the two removed try-order buttons", () => {
+    const { container, queryByText } = render(<OllamaTab {...buildProps()} />);
+    expect(queryByText(/try order/i)).toBeNull();
+    expect(container.querySelector('[aria-label*="try order" i]')).toBeNull();
+    expect(container.textContent).not.toContain("Models & routing");
   });
 
   it("remembers ollama-thinking-effort when a Thinking button opens the one-time notice", () => {
@@ -180,5 +144,25 @@ describe("OllamaTab modal return focus", () => {
     restoreModalReturnFocus();
 
     expect(focus).toHaveBeenCalled();
+  });
+});
+
+describe("the AI models section is one button", () => {
+  it("names the licence on the button: the only line on the tab that says which models may be tried", () => {
+    const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
+    expect(getByLabelText("AI models").textContent).toBe("AI models… — Open source only (recommended)");
+  });
+
+  it("follows the chosen licence", () => {
+    const { getByLabelText } = render(<OllamaTab {...buildProps({ modelPolicyTier: "open_weight" })} />);
+    expect(getByLabelText("AI models").textContent).toBe("AI models… — Also try open-weight models");
+  });
+
+  it("is drawn whichever computer answers: with the AI on a PC it is the only door into the box", () => {
+    for (const ollamaLocalOnDeck of [true, false]) {
+      const { getAllByLabelText, unmount } = render(<OllamaTab {...buildProps({ ollamaLocalOnDeck })} />);
+      expect(getAllByLabelText("AI models")).toHaveLength(1);
+      unmount();
+    }
   });
 });

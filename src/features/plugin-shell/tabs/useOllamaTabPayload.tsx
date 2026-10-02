@@ -48,13 +48,11 @@ export function useOllamaTabPayload({
   ollamaLocalAutostart,
   setOllamaLocalAutostart,
   onLastConnectionStatus,
-  lastConnectionStatus,
   namedOllamaHosts,
   setNamedOllamaHosts,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onOpenOllamaModelsHub,
-  onOpenRoutingOrderModal,
   latencyWarningSeconds,
   requestTimeoutSeconds,
   latencyTimeoutsCustomEnabled,
@@ -88,13 +86,11 @@ export function useOllamaTabPayload({
         ollamaLocalAutostart={ollamaLocalAutostart}
         setOllamaLocalAutostart={setOllamaLocalAutostart}
         onLastConnectionStatus={onLastConnectionStatus}
-        lastConnectionStatus={lastConnectionStatus}
         namedOllamaHosts={namedOllamaHosts}
         setNamedOllamaHosts={setNamedOllamaHosts}
         onBeforeDeckyModal={onBeforeDeckyModal}
         onCompleteDeckyModalClose={onCompleteDeckyModalClose}
         onOpenOllamaModelsHub={onOpenOllamaModelsHub}
-        onOpenRoutingOrderModal={onOpenRoutingOrderModal}
         latencyWarningSeconds={latencyWarningSeconds}
         requestTimeoutSeconds={requestTimeoutSeconds}
         latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
@@ -120,7 +116,6 @@ export function useOllamaTabPayload({
       ollamaLocalOnDeck,
       ollamaLocalAutostart,
       ollamaTabResetKey,
-      lastConnectionStatus,
       namedOllamaHosts,
       latencyWarningSeconds,
       requestTimeoutSeconds,
@@ -135,7 +130,6 @@ export function useOllamaTabPayload({
       onBeforeDeckyModal,
       onCompleteDeckyModalClose,
       onOpenOllamaModelsHub,
-      onOpenRoutingOrderModal,
     ]
   );
 }

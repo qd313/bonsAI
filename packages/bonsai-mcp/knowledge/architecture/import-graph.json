@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 700,
-  "edgeCount": 2010,
+  "fileCount": 694,
+  "edgeCount": 1979,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -70,7 +70,6 @@
       "importedBy": [
         "src/components/CharacterPickerModal.tsx",
         "src/components/DesktopNoteSaveModal.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/PluginHelpModal.tsx",
         "src/components/PullModelsModal.tsx",
@@ -218,7 +217,6 @@
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/tabs/useDeveloperTabPayload.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/utils/ollamaTabLocalSurvival.ts"
@@ -1162,46 +1160,6 @@
         "src/components/OllamaModelsHubModal.tsx"
       ]
     },
-    "src/components/ModelRoutingOrderModal.doneNoop.test.tsx": {
-      "imports": [
-        "src/components/ModelRoutingOrderModal.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
-      ],
-      "importedBy": []
-    },
-    "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx": {
-      "imports": [
-        "src/components/ModelRoutingOrderModal.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
-      ],
-      "importedBy": []
-    },
-    "src/components/ModelRoutingOrderModal.test.tsx": {
-      "imports": [
-        "src/components/ModelRoutingOrderModal.tsx",
-        "src/data/pullModelCatalog.ts",
-        "src/utils/navFocusRegistry.ts",
-        "src/utils/uiDocument.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/ModelRoutingOrderModal.tsx": {
-      "imports": [
-        "src/components/BonsaiModalScope.tsx",
-        "src/data/modelPolicy.ts",
-        "src/data/pullModelCatalog.ts",
-        "src/utils/modelRoutingOrder.ts",
-        "src/utils/navFocusRegistry.ts",
-        "src/utils/uiDocument.ts"
-      ],
-      "importedBy": [
-        "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
-        "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
-        "src/components/ModelRoutingOrderModal.test.tsx",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
-        "src/features/model-routing/useRoutingOrderModal.ts"
-      ]
-    },
     "src/components/OllamaFindLanHidden.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -2126,8 +2084,6 @@
         "src/data/characterUiAccent.ts",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -2269,14 +2225,12 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/ModelPolicyTierPanel.tsx",
         "src/components/ModelRoutingAdvancedPanel.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/useExternalNavigationActions.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
@@ -2290,7 +2244,6 @@
         "src/utils/activeOllamaRoutingTag.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/inputTransparency.ts",
-        "src/utils/modelRoutingOrder.ts",
         "src/utils/pullModelFilters.ts"
       ]
     },
@@ -2367,8 +2320,6 @@
     "src/data/pullModelCatalog.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/ModelRoutingOrderModal.test.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
@@ -2376,7 +2327,6 @@
         "src/components/PullModelsTableHeader.tsx",
         "src/data/pullModelCatalog.test.ts",
         "src/data/pullModelLicencePill.ts",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/usePullModelCatalog.ts",
@@ -2392,7 +2342,6 @@
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelTier2Wording.test.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
-        "src/index.tsx",
         "src/utils/mergePullModelCatalog.test.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/modelRoutingOrder.ts",
@@ -2809,33 +2758,6 @@
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx"
-      ]
-    },
-    "src/features/model-routing/useRoutingOrderModal.test.tsx": {
-      "imports": [
-        "src/components/ModelRoutingOrderModal.tsx",
-        "src/data/bonsaiSettingsSchema.ts",
-        "src/features/model-routing/useRoutingOrderModal.ts",
-        "src/test-harness/fakeDeckyRpc.ts",
-        "src/test-harness/fakeDeckyUi.tsx",
-        "src/test-harness/rpcFixtures.ts",
-        "src/utils/bonsaiSessionSurvival.ts"
-      ],
-      "importedBy": []
-    },
-    "src/features/model-routing/useRoutingOrderModal.ts": {
-      "imports": [
-        "src/components/DeveloperTab.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
-        "src/data/bonsaiSettingsSchema.ts",
-        "src/data/modelPolicy.ts",
-        "src/data/pullModelCatalog.ts",
-        "src/utils/bonsaiSessionSurvival.ts",
-        "src/utils/deckyCall.ts"
-      ],
-      "importedBy": [
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
-        "src/index.tsx"
       ]
     },
     "src/features/model-routing/useTryOrderPlaces.test.tsx": {
@@ -4812,10 +4734,8 @@
         "src/context/UiScaleContext.tsx",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/presets.ts",
-        "src/data/pullModelCatalog.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/downloads/downloadNotice.tsx",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/PluginErrorBoundary.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
@@ -5350,7 +5270,6 @@
         "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx",
         "src/components/VoiceInputSettingsSection.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/voice/useVoiceAskInput.test.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
@@ -5434,8 +5353,6 @@
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
-        "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
-        "src/components/ModelRoutingOrderModal.resetToAutomatic.test.tsx",
         "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
@@ -5459,7 +5376,6 @@
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
@@ -5503,7 +5419,6 @@
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
@@ -6105,8 +6020,6 @@
       ],
       "importedBy": [
         "src/features/downloads/downloadNotice.tsx",
-        "src/features/model-routing/useRoutingOrderModal.test.tsx",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
@@ -6533,7 +6446,6 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/downloads/downloadNotice.tsx",
-        "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
@@ -6998,11 +6910,9 @@
     },
     "src/utils/modelRoutingOrder.ts": {
       "imports": [
-        "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/utils/modelRoutingOrder.test.ts"
       ]
@@ -7044,8 +6954,6 @@
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
-        "src/components/ModelRoutingOrderModal.test.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/buildEarlierList.tsx",
@@ -7712,8 +7620,6 @@
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
-        "src/components/ModelRoutingOrderModal.test.tsx",
-        "src/components/ModelRoutingOrderModal.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/SettingsTab.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",

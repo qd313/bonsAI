@@ -3,7 +3,8 @@
  * Purpose: Advanced toggles for non-FOSS unlock and high-VRAM fallback routing in the models hub.
  * Used for: OllamaModelsHubModal advanced section alongside tier selection.
  * Solves: Groups policy intro copy with tier buttons and boolean routing switches in one panel.
- * Does not: Reorder model lists — see ModelRoutingOrderModal for per-chain ordering.
+ * Does not: Reorder model lists — each installed model's place in the try order is set in the box's Browse
+ *   screen (PullModelsTryOrder.tsx).
  */
 import React from "react";
 import { Button, ToggleField } from "@decky/ui";
@@ -47,7 +48,7 @@ export function ModelRoutingAdvancedPanel({
       />
       <ToggleField
         label="Allow high-VRAM models in routing"
-        description="When on, newly pulled large models are added to the top of your try-order lists. When off, they stay visible but grayed and are skipped at Ask time."
+        description="When on, newly pulled large models are added to the top of your try-order lists. When off, they keep their place in the order but are skipped at Ask time."
         checked={modelAllowHighVramFallbacks}
         onChange={onModelAllowHighVramFallbacksChange}
       />

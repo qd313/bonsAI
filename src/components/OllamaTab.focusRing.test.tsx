@@ -3,7 +3,7 @@
  * Purpose: Pin the fix for roadmap "The highlight goes invisible on some tabs, starting with Down from
  *          'Update AI & models'" (measured on the Deck 2026-10-02, plan79-P79-M2-OLLAMA-INVISIBLE.json:
  *          13 of 28 presses on this tab had focus on a fully visible button and drew nothing).
- * Used for: The Manage AI models button, the two try-order buttons and the Thinking choices.
+ * Used for: The AI models button and the Thinking choices.
  * Solves: Steam marks the focused control with its `gpfocus` class and shows focus on its own buttons
  *         by changing their fill. These buttons set their fill inline (the glass look), and an inline
  *         style always beats a class rule, so Steam's cue never appeared and nothing else drew one.
@@ -38,7 +38,6 @@ function props(): OllamaTabProps {
     onBeforeDeckyModal: noop,
     onCompleteDeckyModalClose: (close) => close(),
     onOpenOllamaModelsHub: noop,
-    onOpenRoutingOrderModal: noop,
     latencyWarningSeconds: 20,
     requestTimeoutSeconds: 60,
     latencyTimeoutsCustomEnabled: false,
@@ -83,7 +82,7 @@ describe("Ollama tab: a focused button always shows a ring", () => {
     );
   }
 
-  it.each(["Manage AI models", "Set text model try order", "Set vision model try order"])(
+  it.each(["AI models"])(
     "%s draws a solid outline while Steam has focus on it, and none otherwise",
     (label) => {
       const button = renderTab().getByLabelText(label);

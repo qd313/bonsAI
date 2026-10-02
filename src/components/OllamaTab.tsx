@@ -7,9 +7,9 @@
  * OllamaWhereAiRunsSection), the local knowledge base toggle, Reply style
  * (how detailed replies are and how much thinking happens before
  * answering), Connection tuning (how long to wait before a warning or a
- * timeout, and how long to keep a model loaded in memory), and Models &
- * routing (a Manage AI models button, plus buttons to set the try order for
- * text and vision models). This file also owns handing the D-pad between
+ * timeout, and how long to keep a model loaded in memory), and AI models
+ * (one button into the AI models box, which holds browsing, the licence
+ * filter and the try order). This file also owns handing the D-pad between
  * every one of those pieces, since each is its own separate file.
  *
  * Used for: The Ollama tab in index.tsx.
@@ -66,13 +66,11 @@ export type OllamaTabProps = {
   ollamaLocalAutostart: boolean;
   setOllamaLocalAutostart: (v: boolean) => void;
   onLastConnectionStatus?: (status: DeveloperConnectionStatus | null) => void;
-  lastConnectionStatus?: DeveloperConnectionStatus | null;
   namedOllamaHosts: NamedOllamaHost[];
   setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
   onOpenOllamaModelsHub: (opts?: { initialSection?: "policy" | "browse" | "advanced" }) => void;
-  onOpenRoutingOrderModal: (kind: "text" | "vision") => void;
 
 
   latencyWarningSeconds: number;
@@ -126,9 +124,8 @@ export type OllamaTabProps = {
  * 5. Connection tuning: a custom-timeouts toggle that swaps in either a
  *    default-values line or the warning/timeout slider, followed by the
  *    keep-models-loaded slider.
- * 6. Models & routing: the installed-model count (read straight off the
- *    last connection status) and the three buttons that open the models
- *    hub and the two try-order modals.
+ * 6. AI models: one button that opens the models hub, with the licence
+ *    name on it. The Text / Pictures try order is inside the hub now.
  */
 export const OllamaTab: React.FC<OllamaTabProps> = ({
   ollamaIp,
@@ -140,13 +137,11 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   ollamaLocalAutostart,
   setOllamaLocalAutostart,
   onLastConnectionStatus,
-  lastConnectionStatus,
   namedOllamaHosts,
   setNamedOllamaHosts,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onOpenOllamaModelsHub,
-  onOpenRoutingOrderModal,
   latencyWarningSeconds,
   requestTimeoutSeconds,
   latencyTimeoutsCustomEnabled,
@@ -262,11 +257,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     connectionTestBtnRef.current?.focus();
     return Boolean(connectionTestBtnRef.current);
   }, []);
-
-  const installedCount =
-    lastConnectionStatus?.reachable && Array.isArray(lastConnectionStatus.models)
-      ? lastConnectionStatus.models.length
-      : null;
 
   return (
     <div
@@ -406,72 +396,35 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         </PanelSectionRow>
       </PanelSection>
 
-      <PanelSection title="Models & routing">
+      <PanelSection title="AI models">
         <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%", minWidth: 0 }}>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#8fa0b4", lineHeight: 1.35, marginBottom: 8 }}>
-              Policy tiers, installed models, pull/delete, and advanced routing.
-              {installedCount != null ? (
-                <span style={{ display: "block", marginTop: 4, color: "#9fb7d5" }}>
-                  Installed on host: {installedCount} model{installedCount === 1 ? "" : "s"}
-                </span>
-              ) : null}
-            </div>
             <Button
               /*
-               * Closing the models screen used to leave the ring on Steam's own Quick Access rail,
-               * outside the plugin, when it had been opened from here -- measured on the Deck
-               * 2026-09-20. Where AI runs' "Browse models..." button remembers itself before
-               * opening and gets the ring back; this one never did, so there was nothing to return
-               * to. Its own id, because the registry needs one per opener, not one per popup.
+               * The one door into the AI models box (browse and pull, the licence filter, the Advanced
+               * switches, and each installed model's place in the try order). With the AI on a PC
+               * "Browse models..." is not drawn, so this is the only way in. The licence name stays on
+               * the button: it is the only line on the tab that says which models may be tried.
+               *
+               * It remembers itself before opening so the ring comes back here when the box closes:
+               * without that, closing it left the ring on Steam's own Quick Access rail (measured on
+               * the Deck 2026-09-20). Its own id, because the registry needs one per opener.
                */
               ref={(el) => {
                 registerModalReturnFocusOwner("ollama-models-hub-settings", el as HTMLElement | null);
               }}
               onClick={() => {
                 rememberModalReturnFocus("ollama-models-hub-settings");
-                onOpenOllamaModelsHub({ initialSection: "policy" });
-              }}
-              className={FOCUS_RING_BTN_CLASS}
-              style={{
-                ...SETTINGS_GLASS_BTN,
-                width: "100%",
-                marginBottom: 8,
-              }}
-              aria-label="Manage AI models"
-            >
-              Manage AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
-            </Button>
-            <Button
-              ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-text-try-order", el)}
-              onClick={() => {
-                rememberModalReturnFocus("ollama-text-try-order");
-                onOpenRoutingOrderModal("text");
-              }}
-              className={FOCUS_RING_BTN_CLASS}
-              style={{
-                ...SETTINGS_GLASS_BTN,
-                width: "100%",
-                marginBottom: 8,
-              }}
-              aria-label="Set text model try order"
-            >
-              Set text model try order…
-            </Button>
-            <Button
-              ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-vision-try-order", el)}
-              onClick={() => {
-                rememberModalReturnFocus("ollama-vision-try-order");
-                onOpenRoutingOrderModal("vision");
+                onOpenOllamaModelsHub();
               }}
               className={FOCUS_RING_BTN_CLASS}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",
               }}
-              aria-label="Set vision model try order"
+              aria-label="AI models"
             >
-              Set vision model try order…
+              AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
             </Button>
           </div>
         </PanelSectionRow>

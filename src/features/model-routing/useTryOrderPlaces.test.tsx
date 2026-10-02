@@ -280,6 +280,39 @@ describe("a place change saves at once", () => {
   });
 });
 
+/*
+ * The old order screens started from the tab's own copy of the order when a fresh read of the settings
+ * file failed or took too long (plan 78 round 3). The box does the same, for the places it first shows
+ * and for the order a move starts from.
+ */
+describe("when the settings file cannot be read in time", () => {
+  const HOST_WITH_ORDER: TryOrderHost = { ...DECK_HOST, textModelRoutingOrder: ["b:1b", "a:1b"] };
+
+  it("the places start from the tab's copy when the read fails", async () => {
+    setRpcHandler("load_settings", () => {
+      throw new Error("backend down");
+    });
+    const { box } = mountPlaces({ host: HOST_WITH_ORDER, deckInstalled: ["a:1b", "b:1b"] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    expect(box.latest!.placeOf("b:1b")).toBe(1);
+  });
+
+  it("a move does not wait longer than the read's limit when the read hangs", async () => {
+    setRpcHandler("load_settings", () => new Promise(() => {}));
+    const { box } = mountPlaces({ host: HOST_WITH_ORDER, deckInstalled: ["a:1b", "b:1b"] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    vi.useFakeTimers();
+    try {
+      const moving = box.latest!.move("b:1b", 1);
+      await vi.advanceTimersByTimeAsync(2000);
+      await moving;
+    } finally {
+      vi.useRealTimers();
+    }
+    expect(savedBody()).toEqual([{ text_model_routing_order: ["a:1b", "b:1b"] }]);
+  });
+});
+
 describe("a star pressed in the box moves the places", () => {
   it("reads the order again when the starred model changes", async () => {
     const { box, rerender } = mountPlaces({ host: DECK_HOST, deckInstalled: ["a:1b", "b:1b"], refreshKey: null });

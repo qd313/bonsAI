@@ -40,6 +40,8 @@ from __future__ import annotations
 import re
 from typing import Any, Literal
 
+from backend.services.strategy_guide_parse import is_strategy_followup_question
+
 SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown"]
 
 # Low narrative: routine boss/tactics rarely spoil progressive story secrets.
@@ -259,26 +261,76 @@ def resolve_turn_title_spoiler_profile(
     return profile
 
 
+def questions_the_answer_above_answered(
+    question: str, reply_followup: Any = None, chat_turns: Any = None
+) -> list[str]:
+    """The earlier question(s) a button or chip pressed under an answer belongs to, newest first.
+
+    Plan 79 helper AE (D122 item 9). A choice button ("I'm at: ...") and a refine chip are sent as
+    new questions that name no game, but they belong to the answer above them, and that answer's
+    game must stay with them. Two things tell the back end which question that was:
+
+    - A refine chip sends ``reply_followup`` with the parent question, exactly.
+    - A choice button sends text starting with ``[Strategy follow-up]``. The screen also quotes
+      "Earlier I asked: ..." into it, but only from a memory that is empty after a plugin reload
+      or a reopened chat, so the saved chat is read too: the user turns before the live one,
+      newest first, stepping back over earlier button presses until a typed question is reached.
+
+    A plain typed question returns ``[]``: it goes to the running game (plan 78 question 1).
+    """
+    found: list[str] = []
+    if isinstance(reply_followup, dict):
+        parent = str(reply_followup.get("parent_question") or "").strip()
+        if parent:
+            found.append(parent)
+    if not (is_strategy_followup_question(question) or (found and is_strategy_followup_question(found[-1]))):
+        return found
+    turns = [t for t in chat_turns if isinstance(t, dict)] if isinstance(chat_turns, list) else []
+    if turns and str(turns[-1].get("role") or "") == "user":
+        turns = turns[:-1]  # the live question is saved into the chat before it runs
+    for turn in reversed(turns):
+        text = str(turn.get("text") or "").strip()
+        if str(turn.get("role") or "") != "user" or not text:
+            continue
+        found.append(text)
+        if not is_strategy_followup_question(text):
+            break
+    return found
+
+
 def set_aside_running_game_for_named_story_game(
-    app_id: str, app_name: str, question: str, log: Any
-) -> tuple[str, str, str]:
-    """``(app_id, app_name, named_story_game)`` for one turn: the running game's own id and name,
-    or blanks plus the named game when the exception in
+    app_id: str, app_name: str, question: str, log: Any, earlier_questions: Any = ()
+) -> tuple[str, str, str, str]:
+    """``(app_id, app_name, named_story_game, title_text)`` for one turn: the running game's own
+    id and name, or blanks plus the named game when the exception in
     ``story_game_named_over_running_no_story_game`` fires.
 
     Blank id and name make the rest of the ask treat the turn exactly as the same question with
     nothing running (D19): the title the question names is looked up in the library, its notes
     are attached, its covers and choice menu apply, and the follow-up memory keys the turn by
     that title, not the running game. Writes the one log line the Deck check reads when it fires.
+
+    ``title_text`` is the text that names the game, which the title lookup must read: the
+    question itself, or (plan 79 helper AE) the earlier question a button or chip pressed under
+    an answer belongs to, when only that one names the game. ``earlier_questions`` comes from
+    ``questions_the_answer_above_answered``; the question itself always wins.
     """
     named = story_game_named_over_running_no_story_game(app_id, app_name, question)
+    title_text, carried = question, False
     if not named:
-        return app_id, app_name, ""
+        for earlier in earlier_questions or ():
+            named = story_game_named_over_running_no_story_game(app_id, app_name, earlier)
+            if named:
+                title_text, carried = earlier, True
+                break
+    if not named:
+        return app_id, app_name, "", question
     log.info(
         "spoiler: named story game picks the notes this turn (running no-story game %r appid=%s, "
-        "question names %r) -- notes, covers and menu follow the named game",
+        "%s names %r) -- notes, covers and menu follow the named game",
         app_name,
         app_id,
+        "the answer above, whose question" if carried else "question",
         named,
     )
-    return "", "", named
+    return "", "", named, title_text

@@ -6,6 +6,7 @@ from backend.services.spoiler_title_profiles import (
     LOW_NARRATIVE_APP_IDS,
     PROTECT_PROGRESSION_APP_IDS,
     protected_title_named_in_question,
+    questions_the_answer_above_answered,
     resolve_title_spoiler_profile,
     story_game_named_over_running_no_story_game,
     title_profile_is_low_narrative,
@@ -125,6 +126,42 @@ class StoryGameNamedOverRunningNoStoryGameTests(unittest.TestCase):
         )
         # Nothing running: the usual title lookup already handles it.
         self.assertEqual(story_game_named_over_running_no_story_game("", "", question), "")
+
+
+class QuestionsTheAnswerAboveAnsweredTests(unittest.TestCase):
+    """Plan 79 helper AE (D122 item 9): which earlier question a button or chip belongs to."""
+
+    PICK = "[Strategy follow-up] I'm at: the boss room.\nGive coaching."
+
+    @staticmethod
+    def _chat(*pairs):
+        return [{"role": role, "text": text} for role, text in pairs]
+
+    def test_a_refine_chip_carries_its_parent_question(self):
+        chip = {"chip_id": "too_long", "parent_question": "beat hades", "parent_answer": "x"}
+        self.assertEqual(questions_the_answer_above_answered("shorter please", chip, []), ["beat hades"])
+
+    def test_a_choice_button_reads_the_typed_question_from_the_saved_chat(self):
+        turns = self._chat(("user", "beat hades"), ("assistant", "ok"), ("user", self.PICK))
+        self.assertEqual(questions_the_answer_above_answered(self.PICK, None, turns), ["beat hades"])
+
+    def test_a_choice_button_steps_back_over_an_earlier_button_press(self):
+        turns = self._chat(
+            ("user", "beat hades"), ("assistant", "ok"), ("user", self.PICK), ("assistant", "ok"),
+            ("user", self.PICK + "2"),
+        )
+        self.assertEqual(
+            questions_the_answer_above_answered(self.PICK + "2", None, turns),
+            [self.PICK, "beat hades"],
+        )
+
+    def test_a_typed_question_has_no_answer_above_it(self):
+        turns = self._chat(("user", "beat hades"), ("assistant", "ok"), ("user", "and the second phase"))
+        self.assertEqual(questions_the_answer_above_answered("and the second phase", None, turns), [])
+
+    def test_no_saved_chat_and_no_chip_gives_nothing(self):
+        self.assertEqual(questions_the_answer_above_answered(self.PICK, None, None), [])
+        self.assertEqual(questions_the_answer_above_answered(self.PICK, None, []), [])
 
 
 if __name__ == "__main__":

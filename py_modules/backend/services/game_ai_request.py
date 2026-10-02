@@ -157,6 +157,7 @@ from backend.services.kb_attached_notes import (
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.services.spoiler_risk_service import build_spoiler_risk_signals
 from backend.services.spoiler_title_profiles import (
+    questions_the_answer_above_answered,
     resolve_turn_title_spoiler_profile,
     set_aside_running_game_for_named_story_game,
 )
@@ -377,19 +378,30 @@ async def run_game_ai_request(
         # parameter doc above for why.
         effective_display_question = question_for_display.strip() or question_for_retrieval
 
-        # Plan 78 helper A, the maintainer's call D121 item 1 (an exception to D19's "the running
-        # game picks the notes"): a no-story game is running and the question names, in full, a
-        # game on the short protected story list. For this one turn the named game picks the
-        # notes, so the turn is treated exactly as the same question with nothing running: the
-        # running game's id and name are set aside here, and the D19 title lookup just below then
-        # resolves the named game. Same notes, same spoiler covers, same choice menu, same credit
-        # line. The covers come from the attached notes (they name the bosses to hide), which is
-        # why judging the turn by the named game's profile alone (plan 77, helper J) changed
-        # nothing on the Deck. Only this turn: a bare follow-up names no game, so it goes back to
-        # the running game, and the follow-up memory (keyed by game) does not carry the subject.
-        # The rule, and the one log line the Deck check reads, live in spoiler_title_profiles.py.
-        app_id, app_name, named_story_game = set_aside_running_game_for_named_story_game(
-            app_id, app_name, question_for_retrieval, logger
+        active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
+        # Plan 68 step 2: the chat this request belongs to, loaded once here -- {} when the Ask
+        # did not come from a saved chat. Used below for this chat's own remembered follow-up
+        # subject, and (task 3) for the chat's-own-game fallback when nothing is running and the
+        # question names nothing. A restart loses every in-memory subject, so the chat's own
+        # saved one is seeded back in here, once, before anything below might read it -- never
+        # overwriting a subject this process already worked out by asking (see seed()'s guard).
+        request_chat = (
+            plugin.chat_for_request(active_rid) if hasattr(plugin, "chat_for_request") else {}
+        )
+        # Plan 78 helper A, the maintainer's call D121 item 1 (an exception to D19): a no-story
+        # game is running and the question names a protected story game, so for this one turn the
+        # named game picks the notes, covers and menu, as if nothing were running. Plan 79 helper
+        # AE (D122 item 9): a button or chip pressed under that answer names no game but keeps
+        # the answer's game; a typed question that names none still goes to the running game. The
+        # rules and the log line live in spoiler_title_profiles.py.
+        app_id, app_name, named_story_game, title_text = set_aside_running_game_for_named_story_game(
+            app_id,
+            app_name,
+            question_for_retrieval,
+            logger,
+            questions_the_answer_above_answered(
+                question_for_retrieval, reply_followup, request_chat.get("turns")
+            ),
         )
         app_context = "active" if app_id else "none"
 
@@ -407,16 +419,6 @@ async def run_game_ai_request(
             else None
         )
 
-        active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
-        # Plan 68 step 2: the chat this request belongs to, loaded once here -- {} when the Ask
-        # did not come from a saved chat. Used below for this chat's own remembered follow-up
-        # subject, and (task 3) for the chat's-own-game fallback when nothing is running and the
-        # question names nothing. A restart loses every in-memory subject, so the chat's own
-        # saved one is seeded back in here, once, before anything below might read it -- never
-        # overwriting a subject this process already worked out by asking (see seed()'s guard).
-        request_chat = (
-            plugin.chat_for_request(active_rid) if hasattr(plugin, "chat_for_request") else {}
-        )
         chat_id = str(request_chat.get("id") or "")
         kb_followup_memory.seed(chat_id, request_chat.get("subject"))
         # The opening blurb is composed by start_background_game_ai and published before this task
@@ -488,7 +490,7 @@ async def run_game_ai_request(
         # on why "nothing running" and "a game only named in the question" are different facts.
         text_resolved_title = ""
         if not str(app_id or "").strip() and not str(app_name or "").strip():
-            text_resolved_title = resolve_title_from_question(settings, question_for_retrieval)
+            text_resolved_title = resolve_title_from_question(settings, title_text)
             if not text_resolved_title:
                 # Plan 68 step 2: the first memory-check failure from the plan's own § 1 -- with
                 # no game running and the question naming nothing, the knowledge-base search used
@@ -497,7 +499,7 @@ async def run_game_ai_request(
                 chat_own_title = _chat_own_game_title(settings, request_chat)
                 # A question naming some other well-known game the library has nothing on is not
                 # a bare follow-up: attach no game's notes rather than the chat's own.
-                other_game = other_game_besides(question_for_retrieval, chat_own_title)
+                other_game = other_game_besides(title_text, chat_own_title)
                 if other_game:
                     logger.info(
                         "kb: question names a game the library does not know (%s) -- "

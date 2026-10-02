@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 697,
-  "edgeCount": 1989,
+  "fileCount": 699,
+  "edgeCount": 1995,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2557,6 +2557,15 @@
       ],
       "importedBy": []
     },
+    "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/chatSlotsApi.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -2601,6 +2610,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -5047,8 +5057,17 @@
         "src/styles/sections/section-6.ts"
       ]
     },
+    "src/styles/sections/savedChatSlotsGhosts.ts": {
+      "imports": [
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/savedChatSlotsRow.ts"
+      ]
+    },
     "src/styles/sections/savedChatSlotsRow.ts": {
       "imports": [
+        "src/styles/sections/savedChatSlotsGhosts.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -5193,6 +5212,7 @@
         "src/styles/sections/replyRatingChoices.ts",
         "src/styles/sections/savedChatSlotDots.test.ts",
         "src/styles/sections/savedChatSlotDots.ts",
+        "src/styles/sections/savedChatSlotsGhosts.ts",
         "src/styles/sections/savedChatSlotsRow.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
@@ -5405,6 +5425,7 @@
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -6331,6 +6352,7 @@
       ],
       "importedBy": [
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -6994,6 +7016,7 @@
         "src/components/PermissionsTab.tsx",
         "src/components/buildEarlierList.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",

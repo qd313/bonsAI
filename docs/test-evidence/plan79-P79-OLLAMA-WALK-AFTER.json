@@ -1,0 +1,47 @@
+{
+  "row": "P79-OLLAMA-WALK-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:18-11:23 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Ollama tab (RB from Main). Ring unowned at start. Down walk done with deck_sweep (direction presses only, never A) for geometry, then walked again by single presses with a screenshot at the stops the runbook names. Sweep raw file moved to scratch folder p79/deck/raw/sweep_20261002_111948.json.",
+  "pressed": "Directions only (Down, Up, Right, Left). Never A. Right/Left only on the Thinking choices and the Update/Remove pair, not on the two sliders.",
+  "seen": {
+    "down_order_with_boxes": [
+      "Run AI on this Deck (toggle) 38x22",
+      "Start the AI with the Deck (toggle) 38x22",
+      "Update AI & models button 268x36",
+      "Browse models... button 268x36",
+      "Test connection button 135x38",
+      "Use local knowledge base (toggle) 38x22",
+      "Update knowledge base 166x44",
+      "Reply style slider 42x28",
+      "Thinking: Off 63x36 (Right: Brief, Balanced, Deep)",
+      "Custom timeouts (toggle) 38x22",
+      "Unload delay slider 42x29",
+      "Manage AI models 268x44",
+      "Set text model try order 268x36",
+      "Set vision model try order 268x36 (end, Down stalls)"
+    ],
+    "up_order": "exact reverse (vision, text, Manage, Unload delay, Custom timeouts, Thinking Off, Reply style, Update knowledge base, Use local KB, Test connection, Browse, Update AI, Start with Deck, Run AI, Ollama tab header, back button)",
+    "visibility": "all 17 stops 100 percent visible, 0 not-visible, 0 cycles, no dead press (sweep: 32 presses, 29 stops)",
+    "install_options_button": "none: the tab text has no 'Install options' and no button with that name in the page",
+    "rings_in_screenshots": {
+      "Manage AI models": "ring drawn",
+      "Set text model try order": "ring drawn",
+      "Set vision model try order": "ring drawn",
+      "Thinking Off, Brief, Balanced, Deep": "ring drawn on each of the four",
+      "Browse models": "ring drawn (white border)",
+      "Test connection": "ring drawn (white border)",
+      "Update AI & models": "ring drawn",
+      "Run AI / Start with Deck toggles": "row highlight with ring on the switch",
+      "Update knowledge base / Remove": "ring drawn on each",
+      "Reply style slider": "square marker drawn on the knob"
+    },
+    "kb_buttons": "Update knowledge base has a refresh icon before the words; Remove has a bin icon before the words (one svg in each button, both seen in the screenshot). Down to Update (64,330,166x44), Right to Remove (238,330,94x44), Left back to Update: all as expected."
+  },
+  "expected": "(a) no Install options; chain Run AI -> Start with the Deck -> Update AI & models -> Browse models -> Test connection with no dead press, Up retraces; (b) ring on Manage, text order, vision order, every Thinking choice; (c) icons on Update/Remove, Down/Right/Left as before",
+  "verdict_a": "PASS - no Install options button; chain in the stated order, Up retraces it, no dead press.",
+  "verdict_b": "PASS - ring drawn on Manage AI models, both try-order buttons and all four Thinking choices. Browse models and Test connection ALSO show a ring now (recorded, not required).",
+  "verdict_c": "PASS - both buttons have an icon before the words; Down to Update, Right to Remove, Left back worked.",
+  "verdict": "PASS (a), PASS (b), PASS (c)"
+}

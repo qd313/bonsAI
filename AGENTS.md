@@ -90,9 +90,12 @@ Adding one setting the user can see touches the Settings tab, the settings hook,
 methods, the back-end settings service, and two schema files on the screen side.
 
 **That list is the cheap half.** Measured: one true/false setting is about 18 files and 30 separate
-edits end to end. The cost is not the value-checking, it is the plumbing. The settings hook repeats
-the field list in **seven** places; the plugin root in five; each tab's payload hook in three. None
-of that repetition is caught by a type or a test. Budget for the plumbing.
+edits end to end (measured before the hook was folded into one table). The cost is not the
+value-checking, it is the plumbing. The settings hook now names every setting **once**, in one table
+(`SETTINGS_FIELD_BACKEND_KEY`) that will not compile with a setting missing, and a read-back test
+(`9c8d7157`) saves every setting and loads it again. The plugin root still repeats a setting in five
+places and each tab's payload hook in three; a type or a test does not catch those. Budget for the
+plumbing.
 
 Two things make it survivable:
 

@@ -1,21 +1,6 @@
 # bonsAI Roadmap
 
-> **Clean-up task — trim this file. Done 2026-09-15.** The other four big documents each carry their own trim
-> task at the top; the roadmap entry that tracks all five is under Features.
->
-> Reading this now costs roughly **19,000 tokens**, and the house rules say it is read before any work is marked
-> done, so that cost lands on every piece of work. Together with the testing rows, trimming both saves about
-> **31,000 tokens per landing**.
->
-> **100 KB down to 83 KB.** 2026-09-13: the finished list moved to the archive. 2026-09-14: the parked entries moved
-> to their own file, the old decisions under *Calls waiting on you* dropped to a pointer, the longest entries reworded,
-> and six finished items moved to Done and archived. 2026-09-15: a seventh finished item split so the part that still
-> fails stays visible, the knowledge-base opening stopped quoting numbers it then retracts, and the three longest
-> entries sent their reference detail to the details file.
->
-> **What is left is not worth taking.** Thirty-four entries still run past five lines, but most by only a line or
-> two, and the ones that run long are long because the work is. Grinding those down would cost more in understanding
-> than it saves in tokens. The bigger wins are now in the other four files, each with its own trim task at the top.
+> Trim task, done 2026-09-15: the roadmap's earlier trims and what was left are written up in [roadmap-details.md](roadmap-details.md#roadmap-clean-up-task-trim-this-file-done-2026-09-15).
 
 Open bugs, work fixed but not yet confirmed on the Deck, planned features, parked work, and what shipped for v0.5.0. Five
 lists plus one section for the knowledge base, each sorted from one star to six.
@@ -80,6 +65,9 @@ starts work outside this.
   text rather than boxes, measure the text before filing. Evidence
   `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
   **2026-10-01 (plan 78):** the answer's last line overlapped the Copy icon by 7 by 3 px. Full note: [roadmap-details.md](roadmap-details.md#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box).
+- ★ `[chat]` **The "Delete chat slot?" box opens with the highlight on Delete, so an A pressed by habit deletes the chat** — **OPEN, seen 2026-10-02 (plan 79, Deck).**
+  Opened from the chat row's bin, the first focus read was on Delete, not Cancel. The session pressed B only, so nothing was deleted. No fix has landed yet.
+  Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json` (step 4).
 - ★ `[focus]` **Steam's own scroll keeps a top margin even for a stop already on screen, which the test setup does not model** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
   On the Deck a cover the walk placed at y 104 ended at y 204. No player-visible fault is known; this is a note so the next walk fix knows. Found while fixing the extra Down press (`84cc0029`).
 - ★ `[focus]` **Walking Up can land on a section taller than the screen with only a sliver of it showing at the top** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
@@ -87,20 +75,12 @@ starts work outside this.
 - ★ `[focus]` **Underlined game words are stops walking Down but are skipped walking Up** — **OPEN, seen 2026-10-01 on the Deck with Deep Rock Galactic: Survivor running (plan 78, Deck block 3b).**
   A section with three underlined words took one landing and two scrolls going Up, so Up is not the mirror of Down there; the maintainer's rule (D120 item 6) is that both directions visit the same stops. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
   Cause (the helper's read, 2026-10-01): with the ring on a section the word finder never counts words inside that section as before the ring going Up. A fix needs a change in the word finder, an Up-side memory of the last word passed (the mirror of Down's), and room in the navigation file, which is at 397 of its 400 lines. After the release.
-- ★ `[focus]` **When the Steam settings list above the question box closes while the ring is on one of its rows, the ring vanishes until the next press** — **OPEN, found 2026-10-02 (plan 79, Deck).**
-  No ring is drawn; one Down then lands on Ask. Possibly related to the ★★★ trap above. Evidence `docs/test-evidence/plan79-P79-M1-TRAP-try3.json`.
+- ★ `[focus]` **The plugin's own claim of the ring when the panel reopens may not run after a switch between Quick Access tabs** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); needs a Deck check before anything is built.**
+  Not seen on the Deck yet, so it is only a suspicion from reading the code. No evidence file.
 - ★ `[focus]` **With "N earlier" opened, Up from the chip row jumps to the open turn at the top and skips the collapsed question rows that Down visits one by one** — **OPEN, found 2026-10-02 (plan 79, Deck).**
   87 collapsed rows in the test chat: Down visits each, Up none. Evidence `docs/test-evidence/plan79-ONBUTTONDOWN-AUDIT-01.json`.
 - ★ `[layout]` **The step that lifts a control clear of the dock moves it about 80 px too far** — **OPEN, measured 2026-10-01 (plan 78 helper D).**
   The choices and Helpful under an answer land at y 172 to 204 with the dock at 290. Harmless for anything under about 116 px tall; answer sections are exempt since `b417c271`. The cure is to take Steam's 80 px out of the lift's margin and re-measure every landing below an answer. For after the release. Evidence `docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json`.
-- ★ `[layout]` **The bronze note card sits right on top of the suggestion chip, with no gap** — **OPEN, found by the
-  maintainer 2026-10-02.** The card that names the note an answer used ("Nail upgrades and Pale Ore — From the
-  Hollow Knight wiki") touches the top of the chip row. Wanted: a little room between them.
-  Screenshot `screenshots/DeckCapture_20261002_004918_game.png`.
-  **Measured 2026-10-02:** 0 px gap, ring on the card or on the question box. Evidence `docs/test-evidence/plan79-P79-M10-CARD-CHIP-GAP.json`.
-- ★ `[reply]` **A power question's answer often has no number in it** — **OPEN, found 2026-09-27 (plan 72), narrowed 2026-09-30 (plan 78 helper I).**
-  It happens with no chat history at all: 5 of 18 test answers had a number, with or without earlier turns. So it comes from the instructions the AI gets for power questions, not from the chat's memory. Not fixed tonight.
-  Evidence for the original sighting: `docs/test-evidence/plan72-Z-FREEPLAY.json`.
 - ★ `[reply]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note.**
   The words shown held no protected name; the name itself arrived after the words were hidden. Not known whether it was always so; one 250 ms read in the same answer also showed the live text 66 letters shorter and then back. Evidence `docs/test-evidence/plan78-P78-BORROWED-RUNNING-GAME.json`.
 - ★ `[reply]` **After the release: the AI's own instructions write the hidden-block label in the odd shape** — **OPEN, from plan 78 (helper N).** Six places in the instructions show the label between two sets of backticks (`ollama_prompts.py` line 483; `strategy_spoiler_policy.py` lines 138, 149, 160, 164, 271), the likely reason a small model copies it.
@@ -126,51 +106,20 @@ starts work outside this.
   Older note: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
-- ★★ `[ask]` **After a spoken question and Stop, the X on the Ask bar does not clear the question** — **OPEN, found
-  by the maintainer 2026-10-02 on the real microphone.** Stop did stop the answer, but pressing the X beside Ask
-  then did nothing; the spoken words stayed in the question box.
-  **Measured 2026-10-02:** the typed route clears (2 of 2 tries); the bug is specific to a spoken question, which the rig cannot speak, so it was not run. Evidence `docs/test-evidence/plan79-P79-M5-X-AFTER-STOP.json`.
-- ★★ `[focus]` **Up and Down between the rating choices and the speaker button go to the wrong place** — **OPEN, found
-  by the maintainer 2026-10-02.** Up from "Bad info" lands on the speaker button; it should land on "Helpful". Down from
-  the speaker lands wrong too; it should land on "Wrong game or topic" (the choice under it).
-  Screenshot of the layout `screenshots/DeckCapture_20261002_004918_game.png`.
-  **Measured 2026-10-02:** reproduced. Up from "Bad info" lands on the speaker; Down from the speaker follows the last choice. Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW.json`.
-- ★★ `[focus]` **Down from "N earlier" stops on the question's Retry button before the question itself** — **OPEN,
-  found by the maintainer 2026-10-02.** Up and Down should never land on Retry. The only way onto it should be Left
-  while the ring is on the question bubble.
-  **Measured 2026-10-02:** reproduced. Retry is hit once each way (press 1 of 6 going down, press 5 of 6 coming up). Evidence `docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json`.
+- ★★ `[focus]` **Up from the question box skips rows when the newest question is closed and an older one is open** — **OPEN, found 2026-10-02 by helper Y (plan 79) while building the list grouped by day; not seen on the Deck.**
+  Up lands on the open older question's Show details, past the rows between. Not fixed yet. No evidence file; the nearest Deck sighting is the entry above about "N earlier" (`docs/test-evidence/plan79-ONBUTTONDOWN-AUDIT-01.json`).
+- ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
+  Not fixed. No evidence file; seen in the test setup's walk, not on the Deck.
 - ★★ `[platform]` **Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted** — **OPEN, seen once, 2026-10-01 12:29 (plan 78, Deck block 3e).**
   Black Mesa running, about 550 MB free of 14.8 GB, the rig's plugin reload, then no Quick Access page for six minutes or more; the maintainer restarted the Deck. Evidence `docs/test-evidence/plan78-THINKING-SLOW-01.json`.
   A real player never reloads the plugin this way (it is a developer action), so this is first a rule for the Deck driver. Whether an ordinary Steam restart of the plugin under low memory can do the same is not known.
   In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
-- ★★ `[layout]` **In the AI models box, going all the way down and back up leaves the top model half hidden** —
-  **OPEN, found by the maintainer 2026-10-02.** After D-pad Down to the bottom of the list and then Up to the top,
-  the first model sits partly behind the box's title bar.
-  **Measured 2026-10-02:** the first row sits 16 of 35 px behind the list's column-header row; the title bar itself does not overlap it. Evidence `docs/test-evidence/plan79-P79-M9-MODELS-BOX-TOP.json`.
-- ★★ `[reply]` **A spoiler cover cut off by Clear shows the word "undefined" when opened** — **OPEN, found by the
-  maintainer 2026-10-02 during their Clear-while-answering check.** The kept part of the answer ended inside a spoiler
-  cover; opening the cover shows "undefined" instead of the words that had arrived (or nothing). The check itself
-  passed: the answer was kept. Screenshot `screenshots/DeckCapture_20261002_003908_game.png`.
-  **Measured 2026-10-02:** in the saved parrying chat the last answer (turn 177 of 178, stopped) ends with an opening hidden-block mark and no body. Evidence `docs/test-evidence/plan79-P79-M4-UNDEFINED-READ.json`.
-- ★★ `[voice]` **A spoken question sometimes comes out with its words doubled** — **OPEN, found by the maintainer
-  2026-10-02 on the real microphone.** Saying "testing one two three…" gave "Testing one, two. Testing 1 2 3 4
-  Testing One, two, three, four, five. 3 4 5 6 567 for 5-6-7-8. 5 6 7 8 9 10": stretches of it repeat.
-  Screenshot `screenshots/DeckCapture_20261002_004142_game.png`.
 - ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the
   answer** — **OPEN, found by the maintainer 2026-10-02; only a Steam restart cleared it.** The answer is also drawn
   behind the question box, and the ring shows as one big box around both. Screenshot
   `screenshots/DeckCapture_20261002_004346_game.png`. Measure on the Deck first; may be kin to the old focus trap.
   **Not reproduced on the Deck in seven tries by three routes (2026-10-02; `docs/test-evidence/plan79-P79-M1-TRAP.json`, `-try2`, `-try3`).**
-- ★★★ `[focus]` **Moving through the Show details chips puts the ring on the whole block, not the chip, and it
-  jumps** — **OPEN, found by the maintainer 2026-10-02.** The ring is a wide box around the chips and the answer
-  area under them, and its place jumps from press to press. It should sit on the one chip. Screenshots
-  `screenshots/DeckCapture_20261002_005210_game.png`, `screenshots/DeckCapture_20261002_005227_game.png`.
-  **Measured 2026-10-02:** reproduced. A box 290 px wide and 169 to 337 px tall, on 7 of 7 chip presses. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING.json`.
-- ★★★ `[focus]` **The highlight goes invisible on some tabs, starting with Down from "Update AI & models"** —
-  **OPEN, found by the maintainer 2026-10-02; they say it keeps coming back.** On the Ollama tab, one Down from
-  "Update AI & models" and nothing on screen shows where the ring is. Seen on other tabs too. Measure on the Deck
-  first, and check the older fixed entries for the same cause before building a new fix.
-  **Measured 2026-10-02:** reproduced. No ring on 13 of 28 Ollama presses, 4 of 15 Settings stops and 5 of 16 Developer stops. Evidence `docs/test-evidence/plan79-P79-M2-*.json`.
+  **2026-10-02 (plan 79):** two fixes for kin of this fault landed; neither is proven to be the maintainer's own route. Down with Steam's ring on the whole answer no longer does nothing when the panel's page has lost the browser's focus (`affa7fa0`, test `src/utils/answerBubbleNavigation.ringOnBubble.test.ts`), and a closing settings list now hands the ring to the question box (`8c8fffb0`, in Verify). Deck check owed: row **P79-TRAP-DOWN-BUBBLE**, the same route five times. Not run yet.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found
   2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27).**
   [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed); two older notes moved there 2026-10-01.
@@ -198,10 +147,6 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](archive/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
-- ★ `[ollama]` **Remove the "Install options…" button from the Ollama tab** — **OPEN, asked for by the maintainer
-  2026-10-02.** It repeats what Browse models already offers. One thing to keep: on a fresh Deck it is today the
-  only one-press way to get the starter models (Install Ollama installs the engine only). Before removing it, give
-  Browse models a one-press "install the starter set", or have a first Install Ollama offer the starter models.
 - ★ `[platform]` **Four small build-setup tidy-ups, deferred on purpose in 2026-08** — **OPEN, carried over
   2026-09-24 from plan 24 when it was archived.** Nothing a person would notice: name the package manager's
   version in `package.json` (the workflow repeats it by hand today), move `packages/bonsai-mcp` off npm so the
@@ -212,36 +157,18 @@ replace it with a specific issue when one exists.
   `selectedIndex` value that only the old fake on-screen marker ever read, and two other files still pass it
   through even though nothing acts on it any more. Nothing a person notices; removing it touches three files
   (`src/index.tsx`, `src/components/MainTab.tsx`, `src/features/plugin-shell/tabs/useMainTabPayload.tsx`).
-- ★ `[ui]` **"Remember what I typed" becomes one on/off switch** — **OPEN, asked for by the maintainer 2026-10-02.**
-  Today it is three buttons: All, Search, None. Wanted: one switch, on = All, off = None. A saved "Search" becomes
-  off (the maintainer's call, 2026-10-02).
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on
   a question bubble that has been cut short, nothing on screen says the rest is there. Chosen 2026-09-05 from four drawn options: the
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
   is added and nothing shifts. The same fade already sits in the stylesheet with no user, written for cut-off answer bubbles.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
-- ★★ `[chat]` **Summing up offers a fresher title** — **OPEN, asked for by the maintainer 2026-09-25.** Each
-  *Sum up this chat* also hands the AI the chat's current title; when the AI judges it stale, the person is
-  offered its suggestion and chooses to rename or keep. [Detail](roadmap-details.md#summing-up-offers-a-fresher-title).
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
   [Detail](roadmap-details.md#first-run-ghost-new-chat-label).
-- ★★ `[chat]` **Show a chat's Save and Delete buttons only while its tab has the ring, and try other Delete icons**
-  — **PARTIAL, asked for by the maintainer 2026-10-02.** The ring half is built (Verify). Open: the Delete icon; the maintainer picked icon 2, the bin with slots; not put in yet.
 - ★★ `[chat]` **Search in bonsAI** — **OPEN, asked for by the maintainer 2026-10-02; not built in plan 79.**
   A find box to jump to an earlier question by a word in it, with word buttons built from the questions so a word can be picked with the D-pad alone (A on a text box opens Steam's on-screen keyboard). Option 4 at https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18.
-- ★★ `[chips]` **Long suggestion chips: pause at the end, centred text, a new highlight** — **OPEN, asked for by
-  the maintainer 2026-10-02.** A chip too long to fit should stop for a moment once it has scrolled to the end of
-  its words. The words should be centred. The underline that shows the highlighted chip should become something
-  else. **Mockups first, at a later time:** several highlight styles drawn true size; the maintainer picks.
-  Replaces the underline in the Verify entry "A preset chip has a bright blue underline".
 - ★★ `[chips]` **The four chip styles still differ in small ways, and share no drawing code** — **OPEN, held until after the release (plan 78 helper F; the maintainer's call, D121 item 10).**
   What still differs: what restarts them after an answer, how long each waits after the highlight leaves the row, how many recent chips each avoids, and how each first appears. Folding them into one shared engine is a reshaping of code, so it waits.
-- ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
-  (plan 55, D104), carried over 2026-09-24 when that plan was archived.** About fifty settings, and the screen
-  side names every one of them by hand in seven places in one file. Miss one when adding a setting and it looks
-  fine but quietly resets after a restart; that already happened once, to four settings together. Fix: write
-  the list once and have the other six read it. Nothing is broken today. [Why](archive/55-bugfix-session-three.md).
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed
   2026-09-08. Not yet (D99, 2026-09-12): it waits for its own go.** The model would open every answer with
   one short sentence that carries the point and gives nothing away. **The 2026-09-12 count:** only 2 of 10
@@ -271,9 +198,6 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
-- ★★ `[ui]` **Calmer rating choices under an answer** — **OPEN, asked for by the maintainer 2026-10-02.** Helpful,
-  Not really and the "What went wrong?" choices are loud on screen. Mute them. The wider rule from the maintainer:
-  wherever we can, don't overwhelm the person; look for other loud spots while doing this one.
 - ★★★ `[chat]` **Opening "N earlier" floods a long chat with rows** — **OPEN, reported by the maintainer
   2026-09-25; needs a drawing of the options first.** Every earlier question becomes its own row, 42 in one
   chat, filling the screen. [Detail](roadmap-details.md#opening-n-earlier-floods-a-long-chat-with-rows).
@@ -440,12 +364,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **2026-09-29 (plan 77):** box half PASSED; the parental-lock half is still owed (maintainer's checks page). Full note: [roadmap-details.md](roadmap-details.md#a-press-that-never-opens-its-box-parental-lock-on-can-leave-a-stale-return-the-ring-here-note-behind).
 - ★★ `[ask]` **The chat summary reads oddly in places** — **VERIFY, fixed 2026-09-30 (plan 78 helper H, `569abd5f`, `318c0da3`). Was OPEN, found 2026-09-25 (plan 68).**
   The "What the AI remembers" card no longer shows a Game line naming something that is not a game, and no longer shows lines that say nothing ("Stuck on: None apparent in this log"). The Game line is rebuilt from names that can be checked (the chat's own game, a game the library knows, a well-known game); a line is dropped only when its whole answer says nothing, and a real line is never cut. English summaries only.
-  Measured on this PC's copy of the Deck's model, 45 summaries: a non-game on the Game line in 24 before, 0 after; lines that say nothing, 25 lines before, 10 after (the rest carry a clause and are kept on purpose); real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py` (23), one in `tests/test_chat_summary_service.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
+  Measured on this PC, 45 summaries: a non-game on the Game line in 24 before, 0 after; real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
   **2026-10-02 (plan 79, build `f0a4f2c4`), UNCLEAR for the in-a-game half:** the Sum up button stayed greyed ("already summed up") even with the chat's game set to Hades, so no card was made; that half rests on its unit tests. Evidence `docs/test-evidence/plan79-P78-SUMUP-WORDING.json`.
   Older note (2026-10-01): [roadmap-details.md](roadmap-details.md#the-chat-summary-reads-oddly-in-places).
 - ★★ `[chips]` **The game's own chip never came back, and the chips turned over too slowly** — **VERIFY, fixed 2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`). Was OPEN, failed on the Deck 2026-09-26 (plan 70, rows PHASE4-CHIPS-01 and CHIP-ROTATION-01).**
-  Cause: three of the four chip styles dealt the game's chips only once, when the panel opened, and with one chip showing the promised game chip was put in a spot that is off screen. Now one rule decides which chip comes next in all four styles (one chip: after a general chip the next is the game's own, after a game chip the game's again one time in five; two chips: one of the two is always the game's own), and one rule decides how long a chip stays, with the chip count in it (one chip: about 7 seconds a turn where it was about 15; two chips: about 10 seconds in each spot; the two spots never change within 2.5 seconds of each other).
-  The maintainer's calls: D121 items 9 and 10. Unit tests: the next-chip rule, the pace and the spacing, plus a seven-minute run of the real chip row in each style at one chip and at two. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01 (below). Still owed: the maintainer's own look at the pace (it is on their Thursday list) and their pick from the preview page.
+  One rule now decides which chip comes next in all four styles, and one rule decides how long a chip stays (one chip about 7 seconds a turn, two chips about 10 in each spot). The cause and the rules in full: [roadmap-details.md](roadmap-details.md#the-games-own-chip-never-came-back-and-the-chips-turned-over-too-slowly).
+  The maintainer's calls: D121 items 9 and 10. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01. Still owed: the maintainer's own look at the pace and their pick from the preview page.
   **2026-10-01 (plan 78, Deck block 1): both Deck rows passed.** The numbers: [roadmap-details.md](roadmap-details.md#the-games-own-chip-never-came-back-and-the-chips-turned-over-too-slowly).
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   Measured on the Deck 2026-09-23: the label colour reads rgb(196,211,226) at rest and rgb(220,235,248) with
@@ -458,32 +382,53 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   highlight cue left, since Steam's own white ring has been clipped off chips since 2026-09-01, so it must
   stay clearly visible, not just calmer.
 - ★★ `[reply]` **When the length limit cuts a choice menu, the next part of the answer is lost** — **VERIFY, fixed 2026-09-30 (plan 77 helper L, `4d750ae1`). Was OPEN, found 2026-09-30 (plan 77).**
-  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
-  A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
-  Older note (2026-09-30, UNCLEAR, the same result as below): [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
+  On a test build with the limit at 300 tokens, the piece after a menu cut by the length wall never reached the screen or the saved chat. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+  A cut menu that the continuation does not finish is now dropped cleanly and the rest of the answer is kept, shown and saved. Deck check owed: row **P77-CUT-MENU-TEXT** (the same low-limit run as SOFT-PREDICT-04). Older notes and the full check: [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
   **2026-10-01 (plan 78, 3c), UNCLEAR again;** unit tests are the proof. Full note: [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
 - ★★ `[voice]` **With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud** — **VERIFY, fixed 2026-09-30 (plan 78 helper M, `c3a1f16a`, `27a450ed`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
   The note "this came from the mic" is now written the moment Ask is pressed, so a spoken question's answer reads itself. Proven by tests that failed before the fix: panel open, panel closed, closed and reopened between question and answer, and a typed question after a spoken one. "Always" and "Off" were never affected.
-  Limits: a retry of a spoken question counts as typed and is not read (plan 78 questions item 8). The read-through's finding 5 (the setting's copy reset for a moment on every panel open, so an answer finishing in the first moments was not read) is fixed in `27a450ed`, proven by its unit test only, because the moment is too short to hit on purpose on the Deck or by hand. Finding 6 (developer builds only) is still only possible.
+  Limits: a retry of a spoken question counts as typed and is not read. The first-moments finding (`27a450ed`) rests on its unit test only. Full text: [roadmap-details.md](roadmap-details.md#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud).
   Unit tests: `src/features/voice/useVoiceAskWithReadAloud.test.tsx` (6, two of them for finding 5), 2 in `src/hooks/useReadAloud.test.ts`. Deck check owed, and it is the maintainer's, with a real voice: row **READ-ALOUD-05**. Evidence for the finding `docs/test-evidence/plan78-G-after-answer-readthrough.md` (findings 4 to 6).
 - ★★ `[reply]` **A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode** — **VERIFY, fixed 2026-09-30 (plan 78 helper L, `553f46ec`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
-  The back end's status now says which mode the question was asked in, and a reopened panel reads it from there instead of assuming Speed; with no mode known, the mode and the attachments are left unset, never made up. A second cause is fixed in the same commit: a saved checklist that began loading when the panel opened could finish after the new checklist was drawn and wipe it. Limit: after a reopen a refine chip still does not re-send the original screenshot (nothing saved holds it).
+  The back end's status now says which mode the question was asked in, and a reopened panel reads it from there instead of assuming Speed; a saved checklist still loading can no longer wipe a new one. Limit: after a reopen a refine chip does not re-send the original screenshot.
   Unit tests: `src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts`, `tests/test_background_status_ask_mode.py`. Deck row **P78-REOPEN-CHECKLIST**: partly passed, below. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md` (finding 1).
   **2026-10-01 (plan 78), partly passed:** the follow-up's mode passed; the checklist half rests on unit tests. Full note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
 - ★ `[reply]` **Quit or switch games while a Strategy answer writes, and the old game's checklist is drawn under it** — **VERIFY, fixed 2026-09-30 (plan 78 helper L, `a92cabe4`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
   The checklist is now drawn only if the answer's game is still the running game. It is still saved under the game it was for, with no ticks borrowed from another game's list.
   Proven by unit tests only (in `src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts`); there is no Deck row, because it cannot be made to happen reliably. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md` (finding 3).
 - ★★ `[chips]` **After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row** — **VERIFY, fixed 2026-10-01 (plan 78 helper P, `f0a4f2c4`). Was OPEN, found on the Deck 2026-10-01 (build `9feef02e`).**
-  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
+  Real, and there for weeks; it showed once one chip filled the whole row. Opening the quick start left a note of the session saying "help not seen", and the fresh panel trusted it over the stored flag. The popup now marks the note as seen. Tests: `src/index.helpChip.test.tsx` (4, 2 fail without the fix). Full cause: [roadmap-details.md](roadmap-details.md#after-the-quick-start-is-opened-and-closed-the-help-chip-stayed-and-the-suggestion-chips-never-took-the-row).
   Deck row **P78-HELP-CHIP-DISMISS**; finding `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`. The flag reading empty after a reload was the rig's own reload; only "Clear all plugin data" removes it.
   **2026-10-01, UNCLEAR:** not run; rests on unit tests and the first-install check. Full note: [roadmap-details.md](roadmap-details.md#after-the-quick-start-is-opened-and-closed-the-help-chip-stayed-and-the-suggestion-chips-never-took-the-row).
+- ★ `[focus]` **When the Steam settings list above the question box closes while the ring is on one of its rows, the ring vanishes until the next press** — **VERIFY, fixed 2026-10-02 (plan 79, `8c8fffb0`). Was OPEN, found 2026-10-02 (plan 79, Deck).**
+  The plugin now asks where the ring is while the screen draws, and when the list closes the question box takes the ring through Steam's own hand-over. Test: `src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx`.
+  Deck check owed: row **P79-SETTINGS-LIST-RING** (ring on a row of the search list, empty the box, a ring is drawn on the question box at once). Not run yet. Before: `docs/test-evidence/plan79-P79-M1-TRAP-try3.json`.
+- ★ `[layout]` **The bronze note card sits right on top of the suggestion chip, with no gap** — **VERIFY, second round landed 2026-10-02 (plan 79, `678aaa3d`; first try `26d298e1`). Was OPEN, found by the maintainer 2026-10-02.**
+  The Deck measured the first try at 14.7 px between the card and the chip row (wanted 8), with the ring on the card, the chip and the question box: the turn slot added its own 6 px row gap to the spacer. The card and spacer now share one wrapper, so the room is exactly 8 px. The D-pad order card, chip, question box passed unchanged.
+  Row **P79-M10-CARD-CHIP-GAP**: gap FAIL on the first try, re-check owed on the second. Evidence `docs/test-evidence/plan79-P79-M10-CARD-CHIP-GAP-AFTER.json` (0 px before: `plan79-P79-M10-CARD-CHIP-GAP.json`). Test: `src/components/MainTabChatTranscript.kbNotesGap.test.tsx`.
+- ★ `[reply]` **A power question's answer often has no number in it** — **VERIFY, fixed 2026-10-02 (plan 79, `7ef1d70f`). Was OPEN, found 2026-09-27 (plan 72), narrowed 2026-09-30 (plan 78 helper I).**
+  Power, battery, TDP and frame-cap questions now get the Quick Access tuning instructions, so the answer carries a TDP in watts, a frame cap and a refresh rate. Measured on this PC with the Deck's model, 10 questions three times each: answers with a number you can set went from 3 of 30 to 27 of 30. Tests: `tests/test_power_question_instructions.py`, `tests/test_ollama_service.py`.
+  Deck check owed: row **P79-POWER-NUMBERS** (ask a battery question, the answer holds a number you can set). Not run on the Deck; the PC measurement is in the commit message, with no evidence file.
+- ★★ `[ask]` **After a spoken question and Stop, the X on the Ask bar does not clear the question** — **VERIFY, fixed 2026-10-02 (plan 79, `01ba0525`, `04161088`, `42615a6b`); failed its first Deck check. Was OPEN, found by the maintainer 2026-10-02 on the real microphone.**
+  Emptying the box now ends dictation, the X hands the ring to the question box, and Ask ends listening. **Deck 2026-10-02 (build `d810328b`, typed question): the box empties and stays empty (still empty 30 s later), but no ring is drawn on the question box after the X, though focus is on it. FAIL for the ring;** a second round has not landed yet. A spoken question stays the maintainer's check (the rig cannot speak).
+  Row **P79-X-AFTER-STOP**. Evidence `docs/test-evidence/plan79-P79-X-AFTER-STOP-AFTER.json`. Tests: `src/components/MainTabUnifiedAskBar.stopRing.test.tsx`, `src/features/voice/voiceClearAfterStop.test.tsx`.
+- ★★ `[focus]` **Down from "N earlier" stops on the question's Retry button before the question itself** — **VERIFY, second round landed 2026-10-02 (plan 79, `2134dcfd`, `8fa304eb`; first try `f7b90c1c`). Was OPEN, found by the maintainer 2026-10-02.**
+  First try, Deck 2026-10-02 (build `d810328b`): none of 6 Down presses landed on Retry, and Left reached it with Right coming back, but **Up from the question text still landed on Retry (2 of 2 tries).** Second round: the question text now claims Up and hands the ring to whatever is drawn above the row, and Down from the chat row goes to the first question's text, not its Retry.
+  Row **P79-M8-EARLIER-RETRY**: Up half FAIL, re-check owed on the second round. Evidence `docs/test-evidence/plan79-P79-M8-EARLIER-RETRY-AFTER.json`. Tests: `src/components/MainTabChatTranscript.retryNotAStop.test.tsx`, `src/components/MainTab.chatRowDownRetry.test.tsx`.
+- ★★ `[layout]` **In the AI models box, going all the way down and back up leaves the top model half hidden** — **VERIFY, second round landed 2026-10-02 (plan 79, `e25be22e`; first try `084900c4`). Was OPEN, found by the maintainer 2026-10-02.**
+  First try, Deck 2026-10-02 (build `d810328b`): on the way down every model row was whole below the list's column header, and B put the ring back on Manage AI models, but **Up onto the first model left the list scrolled 41 px, with 15 of its 35 px behind the header (FAIL).** Second round: when a model row takes the ring the plugin measures it against the header and scrolls the list itself.
+  Row **P79-M9-MODELS-BOX**: re-check owed on the second round. Evidence `docs/test-evidence/plan79-P79-M9-MODELS-BOX-AFTER.json`. Test: `src/components/PullModelsModal.listScroll.test.tsx`.
+- ★★ `[voice]` **A spoken question sometimes comes out with its words doubled** — **VERIFY, fixed 2026-10-02 (plan 79, `7b6e1de5`). Was OPEN, found by the maintainer 2026-10-02 on the real microphone.**
+  Stretches of text that overlap are now merged, so no stretch appears twice. Test: `tests/test_voice_overlap_merge.py`.
+  Deck check owed: row **P79-DOUBLED-WORDS** (one recorded sentence five times, no stretch repeated). **The real microphone is the final check and is the maintainer's.** Not run yet.
+- ★★★ `[focus]` **The highlight goes invisible on some tabs, starting with Down from "Update AI & models"** — **VERIFY, half passed: fixed 2026-10-02 (plan 79, `aa07e4d5`, `d810328b`, `25511e75`). Was OPEN, found by the maintainer 2026-10-02.**
+  Buttons that set their own fill hid Steam's ring; they now carry the plugin's ring class, and a guard test names every button still on the old way. **Ollama tab passed on the Deck (build `d810328b`):** 17 stops all fully visible, no dead press, a ring drawn on Manage AI models, both try-order buttons and all four Thinking choices (and on Browse models and Test connection too).
+  **Still owed:** the Settings tab (6 buttons) and the Developer tab, fixed in `25511e75` after that build. Row **P79-OLLAMA-WALK**. Evidence `docs/test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json` (before: `plan79-P79-M2-*.json`).
 
 ### Features that need verification
 
 - ★ `[ui]` **Icons on the "Update knowledge base" and "Remove" buttons** — **VERIFY, built 2026-10-02 (`2975570f`), asked for by the maintainer.**
   Update keeps the refresh arrow, Download gets a download arrow, Remove gets a bin; words and D-pad order unchanged. Deck check owed: **P79-KB-BUTTON-ICONS**.
-- ★★ `[chat]` **A chat's Save and Delete buttons show only while its row has the ring** — **VERIFY, built 2026-10-02 (`deea4f20`), asked for by the maintainer.**
-  The disk and the × hide unless the ring is on the row; the name does not move. The Delete icon is open, under Features. Deck check owed: row **P79-CHAT-ROW-BUTTONS** (five steps).
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60
   (D110).** Chips now look raised, sit closer together, and the chip the controller is on shows a light bar
   instead of the old outline. Rows 02 to 06 and 08 passed by measurement. Row 09 failed on 2026-09-18, was fixed
@@ -525,6 +470,18 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   failed on 2026-09-18 (evidence `docs/test-evidence/plan61-CHAT-SLOTS-V3-05a-busyhalf.json`, `-06a.json`, `-06b.json`); that bug is on the watch list since 2026-09-29, not reproduced in two clean sessions, and those three rows are not re-run. **15d passed** and **06c passed on its fourth try** on the Deck
   2026-09-23 ("Reply ready" now shows within a second; fixed in `73be15f`); the runs are in the detail.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+- ★★ `[chat]` **A chat's Save and Delete buttons show only while its row has the ring, and Delete is a bin with two slots** — **VERIFY, built 2026-10-02 (`deea4f20`, `d2c1d93c`), asked for by the maintainer; the maintainer picked icon 2, the bin with slots.**
+  **Deck 2026-10-02 (build `d810328b`): four of five steps pass.** With the ring elsewhere there is no disk or bin; Left reaches the disk and A opens Save, B closes it; Right twice reaches Delete, a bin with a lid and two slots, A opens the Delete box, B closes it; moving away hides both. **FAIL: the chat's name moves 15.2 px right and shrinks 31.8 px when the ring comes onto the row (the pass line is under 1 px).** A second round has not landed yet; re-check owed.
+  Row **P79-CHAT-ROW-BUTTONS**. Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json`. The Delete box opening on Delete is its own bug under Bugs.
+- ★★ `[chat]` **Summing up offers a fresher title** — **VERIFY, built 2026-10-02 (plan 79, `a7fe4ac2`, `888a0efa`, `379f8d8b`, `aaf9dca3`), asked for by the maintainer 2026-09-25.**
+  When the AI judges the chat's title stale, the summary card ends with "Rename this chat to ...?" with Rename and Keep; a chat renamed by hand is never offered one. **Deck 2026-10-02 (build `d810328b`):** an offer from the automatic summing-up showed both buttons, the D-pad reached both, and Keep took the offer away and left the title. **Still owed:** pressing Rename (never pressed, so "a yes renames the chat everywhere it shows" is unproven) and the Sum up button route (it was greyed, already summed up).
+  Row **P79-FRESHER-TITLE**. Evidence `docs/test-evidence/plan79-P79-FRESHER-TITLE.json`.
+- ★★ `[chips]` **Long suggestion chips: pause at the end, centred text, a new highlight** — **VERIFY, built 2026-10-02 (plan 79, `2fa5a5a4`, `70a47e4b`, `27172839`), asked for by the maintainer 2026-10-02.**
+  A chip too long to fit scrolls to the end of its words, stands still for the agreed pause, then leaves; the words are centred; the chip under the D-pad ring gets a soft blue fill instead of the bottom bar (the maintainer's pick, drawing 1). Replaces the underline in the Verify entry "A preset chip has a bright blue underline".
+  Deck check owed: row **P79-LONG-CHIPS**; the look is the maintainer's. Tests: `src/styles/presetChipHighlightFill.test.ts`, `src/styles/presetChipFocusRing.test.ts`. Not run on the Deck yet.
+- ★★ `[ui]` **Calmer rating choices under an answer** — **VERIFY, built 2026-10-02 (plan 79, `8b414628`), asked for by the maintainer; the maintainer picked drawing 2, smaller and softer.**
+  Helpful, Not really and the "What went wrong?" choices are smaller and softer. **Deck 2026-10-02 (build `d810328b`):** the thumbs measure 28 px tall, the reasons 24 px, the words 11 px, and the D-pad walk has no dead press (row **P79-M7-RATING-ROW**, in Done). Colours were not measured against the drawing, so **the look is still the maintainer's to judge.** The wider rule (look for other loud spots) stays open.
+  Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW-AFTER.json`. Test: `src/styles/sections/replyRatingChoices.test.ts`.
 
 ---
 
@@ -799,58 +756,18 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 Everything shipped since v0.4.9 (2026-07-08), one line each — moved out to its own file to keep this one small,
 copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
-Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
-line for line, nothing reworded, to keep this document under its size limit.
+Newest first. Every earlier closed block, from 2026-09-16 up to plan 78's Deck block 3c and now also plan 73's hand check,
+plan 78's blocks 3f and 3d and the 2026-09-26 docs clean-up, was moved into that file, copied line for line, nothing
+reworded, to keep this document under its size limit. The archive file says when each block moved.
 
-Plan 64's flow G block, and the first two entries of its flow H block, were moved out the same way on
-2026-09-24 during plan 65's bookkeeping pass, oldest of the remaining Done entries first, again to keep
-this document under its size limit.
+**Closed 2026-10-02 (plan 79, Deck block 2a, build `d810328b`):**
 
-The rest of plan 64's flow H block was moved out the same way on 2026-09-24, during the planning-folder
-review, again to keep this document under its size limit.
-
-The chat-summary feature (plan 68, all three Deck passes), the CHAT-MEMORY-01 re-check (plan 68 Deck
-pass, 2026-09-25) and the plan 65 trim-and-split entries were moved out the same way on 2026-09-26,
-during the twelfth bookkeeping pass, again to keep this document under its size limit.
-
-Plan 77's first docs sweep and plan 76's docs sweeps 6, 7 and 8 (the 2026-09-29 blocks) were moved out the same
-way on 2026-09-30, during plan 78's second docs sweep, again to keep this document under its size limit.
-
-Plan 77's Deck blocks 1b, 2, 3 and 4 (the 2026-09-30 closes) were moved out the same way on 2026-10-01, during plan 78's
-sixth docs sweep, again to keep this document under its size limit.
-
-Plan 78's Deck block 1 closes (the 2026-10-01 morning, build `57586da0`) were moved out the same way on 2026-10-01, during plan 78's
-seventh docs sweep, again to keep this document under its size limit.
-
-Plan 78's Deck block 2 closes (the 2026-10-01 morning, build `1fe0787a`) were moved out the same way on 2026-10-01, during plan 78's
-eighth docs sweep, again to keep this document under its size limit.
-
-Plan 78's Deck block 3a closes (the 2026-10-01 late morning, build `c8d6b094`) were moved out the same way on 2026-10-01, during plan 78's
-ninth docs sweep, again to keep this document under its size limit.
-
-Plan 78's Deck block 3b closes (the 2026-10-01 late morning, builds `c8d6b094` and `b417c271`) were moved out the same way on 2026-10-01, during plan 78's eleventh docs sweep, again to keep this document under its size limit.
-
-Plan 78's Deck block 3c closes (the 2026-10-01 midday, build `24cbbd6b`) were moved out the same way on 2026-10-01, during plan 78's fourteenth docs sweep, again to keep this document under its size limit.
-
-**Closed 2026-10-02 (plan 73, the maintainer's hand check 1):**
-
-- ★★ `[chat]` **Clearing a session while an answer is still being written may lose that answer** — **DONE 2026-10-02, passed on the Deck by the maintainer's own hand check (plan 73 check 1; fix `1069c8f1`, plan 72).** After Clear mid-answer the chat kept the part of the answer that had arrived. The earlier try could not run: the answer finished in 33 seconds (`docs/test-evidence/plan72-F-CLEAR.json`). The "undefined" cover seen in the same check is its own entry under Bugs. Evidence: results table, check 1, in `docs/planning/73-maintainer-checks-before-0.6.0.md`; screenshot `screenshots/DeckCapture_20261002_003908_game.png`.
-- ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **DONE 2026-10-02.** The main and reopen halves were confirmed on the Deck 2026-08-27 and 2026-09-03. The last half, clearing while a reply is still being written, passed as the same hand check (plan 73 check 1, results table in `docs/planning/73-maintainer-checks-before-0.6.0.md`). The saved chat staying behind after a clear is a measured follow-up, not a regression. Row **CLEAR-CACHE-01** in testing.md. Older notes: [roadmap-details.md](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
-
-**Closed 2026-10-01 (plan 78, Deck block 3f, build `09bf7fd7`):**
-
-- ★★★ `[reply]` **A hidden block whose opening and closing marks are both one line of backticks around the label was shown as plain text** — **DONE 2026-10-01, passed on the Deck, all five parts (row P78-BARE-SPOILER-MARK; fix `09bf7fd7`).** The control showed one closed cover. The Deck's own shape gave one closed cover with the hidden word unreadable, the word after it readable, and no "bonsai-spoiler" or backtick on the page (two reads). Two pairs gave two covers with the text between them readable. Copy gave the outer text with "[Spoiler hidden — reveal it on screen to copy]" in place of the hidden sentence. Opening the cover showed only the hidden sentence. Evidence `docs/test-evidence/plan78-P78-BARE-SPOILER-MARK.json`.
-
-**Closed 2026-10-01 (plan 78, Deck block 3d, build `9feef02e`):**
-
-- ★★ `[focus]` **Walking Down, a long section's text is skipped when its spoiler cover is deep inside it** — **DONE 2026-10-01, passed on the Deck (row P78-DOWN-DEEP-COVER; fix `b3cbb6e8`).** On a Hollow Knight answer with one 461 px section (visible space 202 px) and its cover 398 px down inside it, Down from the reasoning line landed on the section with its top at y 88.2, not on the cover. Four section stops (scroll 206, 286, 366, 446); all 193 words were on screen before the cover was landed on; the cover was landed on once each way; the next Down left it for Helpful; Up visited the same stops in reverse; scroll never fell going Down or rose going Up; no dead press. A cover at the head of a section still came first. Evidence `docs/test-evidence/plan78-P78-DOWN-DEEP-COVER.json`. [Full detail](archive/roadmap-bugs-fixed.md#walking-down-a-long-sections-text-is-skipped-when-its-spoiler-cover-is-deep-inside-it-closed-2026-10-01)
-- ★ `[focus]` **A section only a few pixels taller than the screen takes a whole extra press** — **DONE 2026-10-01, passed on the Deck by the session's ruling (row P78-SHORT-LAST-STEP; fix `9feef02e`).** Three presses that moved less than 80 px (39, 40 and 70) each left the section's edge within 1 px of the dock's top going Down or the panel's top going Up, which is what the fix adds. The morning's exact case, a section only 4 to 80 px taller than the visible space, did not come back in the answers (sections of 321 and 351 px). Evidence `docs/test-evidence/plan78-P78-SHORT-LAST-STEP.json`. [Full detail](archive/roadmap-bugs-fixed.md#a-section-only-a-few-pixels-taller-than-the-screen-takes-a-whole-extra-press-closed-2026-10-01)
-- ★ `[reply]` **A hidden block's opening mark glued onto a sentence is drawn as visible inline code** — **DONE 2026-10-01, passed on the Deck from history, second try (row P77-GLUED-SPOILER; fix `0d805d37`).** On a Hollow Knight turn the control showed one closed cover; the mark glued onto a word also became one closed cover, with no marks, no backticks and the hidden word nowhere on the page (same on both reads). "While streaming" still rests on unit tests, as the row says. Evidence `docs/test-evidence/plan78-P77-GLUED-SPOILER-try2.json` (first try `docs/test-evidence/plan78-P77-GLUED-SPOILER.json`, unclear). [Full detail](archive/roadmap-bugs-fixed.md#a-hidden-blocks-opening-mark-glued-onto-a-sentence-is-drawn-as-visible-inline-code-closed-2026-10-01)
-
-**Closed 2026-09-26 (docs clean-up):**
-
-- ★★ `[docs]` **Some long-notes blocks and testing rows didn't match what was found** — **DONE
-  2026-09-26, docs only.** [Full detail](archive/roadmap-bugs-fixed.md#some-long-notes-blocks-and-testing-rows-dont-match-what-was-found-closed-2026-09-26).
+- ★★ `[focus]` **Up and Down between the rating choices and the speaker button go to the wrong place** — **DONE 2026-10-02, passed on the Deck (row P79-M7-RATING-ROW; fix `749ff9dc`).** Up from "Bad info" lands on Helpful, Up from "Wrong game or topic" on "Not really", Down from the speaker on "Wrong game or topic" in 5 of 5 tries; the full walk has no dead press (one edge: Right from the last choice). Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW-AFTER.json`.
+- ★★ `[reply]` **A spoiler cover cut off by Clear shows the word "undefined" when opened** — **DONE 2026-10-02, passed on the Deck (row P79-UNDEFINED-COVER; fix `e065c41d`).** On the saved chat whose last answer ends in an opening mark with no body, "undefined" appears nowhere in the panel (three reads), the words before the cut show, and no empty cover is drawn at the end. Evidence `docs/test-evidence/plan79-P79-UNDEFINED-COVER-AFTER.json`.
+- ★★★ `[focus]` **Moving through the Show details chips puts the ring on the whole block, not the chip, and it jumps** — **DONE 2026-10-02, passed on the Deck by the session's ruling (row P79-M3-DETAILS-RING; fix `313377af`).** Seven chips, each visited once both ways, the ring on the one chip (25 px tall), no tall frame; Down off the last chip lands on the suggestion chip and Up ends on the tabs row. B on a chip closed the Show details section and put the ring on "Show details" with the panel still open; the session counted that as the pass. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING-AFTER.json`.
+- ★ `[ollama]` **Remove the "Install options…" button from the Ollama tab** — **DONE 2026-10-02, passed on the Deck (rows P79-OLLAMA-WALK and P79-STARTER-SET-BUTTON; fixes `c76ef452`, `d9c00827`, `745e3bad`).** The button is gone and the walk from Run AI to Test connection has no dead press. Browse models has an "Install the starter set" button on its top row; its ask-first box opens on Not now, B closes it and nothing downloads. **Still owed under P79-STARTER-SET-BUTTON:** pressing yes (a 3 to 4 GiB download) and the offer after a first Install Ollama (unit tests only). Evidence `docs/test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json`, `plan79-P79-STARTER-SET-BUTTON.json`.
+- ★ `[ui]` **"Remember what I typed" becomes one on/off switch** — **DONE 2026-10-02, passed on the Deck with the session's ruling on the ring (row P79-REMEMBER-TYPED-SWITCH; fixes `a16aca77`, `268e2f8a`).** One switch, no All, Search or None; on saved "all" and kept the typed words after closing and reopening Quick Access, off saved "none" and cleared them, and off stayed off after a plugin reload. The D-pad lands on it with a grey highlight across the row, not a separate ring; the session counted that as the pass. **Still owed:** a Deck that had "Search" saved showing off (unit test only) and the on position after a reload. Evidence `docs/test-evidence/plan79-P79-REMEMBER-TYPED-SWITCH.json`.
+- ★★ `[platform]` **The settings list is written out seven times** — **DONE 2026-09-21 (`ba21f33a`); read-back test added 2026-10-02 (`9c8d7157`).** The settings hook now names every setting once, in one table that will not compile with a setting missing, and builds the starting values, loading, failed-load reset, save watch list and returned object from it. The test saves a changed value for every setting, loads them in a fresh hook and checks each came back. **Still owed:** a read-back of the whole list after a plugin restart on the Deck (only the Remember switch was seen to survive a reload). Evidence: the two commits.
 
 **Plan 70 (2026-09-26 to 2026-09-27): 41 items closed** — the knowledge-base wave four and the Deck test wave,
 flows L1 to L7 and the helpers' landings. Each one, word for word, with its evidence: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the long notes in

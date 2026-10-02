@@ -1,0 +1,33 @@
+{
+  "row": "P79-M9-MODELS-BOX-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:25-11:29 EDT",
+  "screen": "page window 854 x 454; the box is a modal in the 'Steam Big Picture Mode' page",
+  "setup": "Ollama tab, walked Down to 'Manage AI models' (focus read: 64,330,268x44), A, box opened with ring on 'Advanced >' (656,128,71x22). A never pressed again. No model row or Remove used. Measured with a page read after every press (target Steam Big Picture Mode).",
+  "pressed": "Down x8 (Refresh, Filters, 4 model slots, Done, Done no move), Up x8 (nomic, qwen2.5vl, qwen3.5, gemma4, Filters, Advanced...), B.",
+  "seen": {
+    "header_row": "column header PULL/MODEL/SIZE box 604 x 25.7; bottom edge at 242.3 at scrollTop 0, 226.4 once the box scrolled 16 px",
+    "down_walk_row_top_minus_header_bottom_px": {
+      "gemma4 (first model)": "268.3 row top vs 242.3 = 26 below, scrollTop 0",
+      "qwen3.5:4b": "60.7 below, scrollTop 0",
+      "qwen2.5vl:3b": "95.3 below, scrollTop 0",
+      "nomic-embed-text": "114.7 below, list scrollTop 41.3",
+      "Done": "(button 122.9,402,290x40, list scrollTop 41.3)"
+    },
+    "up_walk": {
+      "nomic": "row 341.0, 114.7 below header bottom, scrollTop 41.3",
+      "qwen2.5vl:3b": "row 280.3, 54.0 below, scrollTop 41.3",
+      "qwen3.5:4b": "row 245.7, 19.3 below, scrollTop 41.3",
+      "gemma4 (first model) FOCUSED": "row 211.0 (to 245.7), header bottom 226.4 -> row top is 15.3 px ABOVE the header bottom, so about 15 of its 34.7 px are behind the header. Screenshot DeckCapture_20261002_112711 shows the gemma4 row cut by the header (FOSS badge, Apr '26 and the X cut in half). list scrollTop 41.3.",
+      "Filters": "scrollTop 0, first model row top 252.3 vs header bottom 226.4 = 26 below (whole row visible)",
+      "Advanced": "reached after Filters (Refresh skipped on the way up)"
+    },
+    "after_B": "box closed; ring on 'Manage AI models' (64,305,268x44)"
+  },
+  "expected": "every focused model row whole below the header on the way down; back at the first model its whole row is below the header; at Filters scrollTop 0; B returns the ring to Manage AI models",
+  "verdict_down": "PASS - on the way down every focused model row is whole below the header.",
+  "verdict_first_model_back_up": "FAIL - Up onto the first model (gemma4) leaves the list scrolled 41.3 px; its row top is 15.3 px above the header's bottom edge, so about 15 of 34.7 px are hidden behind the column header.",
+  "verdict_filters_scrollTop": "PASS - at Filters scrollTop is 0 (first row whole, 26 px below the header).",
+  "verdict_B": "PASS - B closed the box and the ring landed on Manage AI models.",
+  "verdict": "FAIL - the first-model-on-the-way-up half still hides part of the row; the other halves pass."
+}

@@ -1,0 +1,29 @@
+{
+  "row": "P79-M3-DETAILS-RING-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:09-11:18 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen; panel scope 300 x 390)",
+  "setup": "Test chat 6f3cc055 (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), newest answer. Walked Down from Retry to 'Show details' (focus read: Show details, 267x15), pressed A as its own step; details opened (button became 'Hide details'). Down: Sources card ('Classes (+2 more)'), Down: tabs row 'This answer | Session' (290x28), then Down one press at a time through the chip ladder.",
+  "pressed": "Down x7 through chips 1..7, Down once more, Up x7 back, Up once more, Down to chip 1, B.",
+  "seen": {
+    "down_walk": [
+      "chip1 Keyword + meaning: focused box 126x25 at (52,117)",
+      "chip2 KB: 13 sections: 102x25",
+      "chip3 Reply style: balanced: 133x25",
+      "chip4 Thinking: Balanced...: 228x25",
+      "chip5 Spoiler risk: low: 104x25",
+      "chip6 Routed gemma4:e2b-it-qat: 166x25",
+      "chip7 Developer details: 113x25",
+      "Down off chip7: suggestion chip 'How do I set up voice input on the Deck?' 147x30 (BUTTON bonsai-preset-glass)"
+    ],
+    "up_walk": "suggestion -> chip7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 (same boxes as above, each once) -> tabs row 'This answer | Session' (290x28)",
+    "ring_elements": "at every ladder press the only gpfocus leaf was the chip; the other gpfocuswithin elements were the chip-ladder container (290 wide, 169 to 337 tall, a container not a ring), the turn slot and scroll parents. In 14 screenshots the white ring wraps only the one chip; no tall frame down to Ask.",
+    "ring_vs_chip_box": "ring drawn at about the chip box (a few px outside in screenshots; leaf box is the chip's own box by definition)",
+    "chip_height_px": 25,
+    "B_on_chip": "B on chip 1 collapsed the details section and put the ring on 'Show details'. The Quick Access panel itself stayed open (bonsai-scope present, screenshot shows panel)."
+  },
+  "expected": "each chip visited once each way, ring on one chip (about 28 px tall), Down off last chip lands on suggestion chip, Up ends on tabs row, no tall frame, B on a chip closes the panel",
+  "verdict_ladder": "PASS - 7 chips each once both ways, single-chip ring (25 px chips, not 28), no tall frame, last chip -> suggestion chip, Up ends on tabs row.",
+  "verdict_B": "UNCLEAR - B on a chip closed the details section (ring to 'Show details'), not the whole Quick Access panel. The runbook says 'closes the panel'; owner to say whether 'the panel' means the details panel.",
+  "verdict": "PASS for the ring walk; UNCLEAR for the B half (see above)"
+}

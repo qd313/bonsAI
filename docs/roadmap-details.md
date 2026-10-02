@@ -2840,6 +2840,10 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
   **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`, row P78-REOPEN-CHECKLIST), partly passed:** on two tries by the corrected route the AI wrote no checklist at all (the saved turns hold none), so the reopen proved nothing; the checklist half could not be produced in four tries over two blocks and rests on its unit tests. The follow-up's mode passed: the "Not really" then "Too long" follow-up went out in Strategy mode (log line "ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)"). On the maintainer's list (plan 78 question 9). Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try3.json`. Older note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
 
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  The back end's status now says which mode the question was asked in, and a reopened panel reads it from there instead of assuming Speed; with no mode known, the mode and the attachments are left unset, never made up. A second cause is fixed in the same commit: a saved checklist that began loading when the panel opened could finish after the new checklist was drawn and wipe it. Limit: after a reopen a refine chip still does not re-send the original screenshot (nothing saved holds it).
+
 ## A faded ghost of the tab bar is left drawn over the chip row after touching the screen
 
 Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
@@ -2851,6 +2855,10 @@ Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14
 Older dated note moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the entry at five lines. Nothing was removed.
 
   **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `docs/test-evidence/plan78-P78-SUMUP-WORDING.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Measured on this PC's copy of the Deck's model, 45 summaries: a non-game on the Game line in 24 before, 0 after; lines that say nothing, 25 lines before, 10 after (the rest carry a clause and are kept on purpose); real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py` (23), one in `tests/test_chat_summary_service.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
 
 ## Plan 79 measurements of the maintainer's 2026-10-02 bugs
 
@@ -2873,17 +2881,32 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
   **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`), UNCLEAR, second session running:** four questions (two at a limit of 300, two at 340) never produced the case: no "dropped a choice fence" log line. The screen checks held on all 897 reads but prove nothing without the case. The edit to the installed copy was put back. Unit tests are the proof so far. Evidence `docs/test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
 
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+  A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
+  Older note (2026-09-30, UNCLEAR, the same result as below): [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
+
 ## The game's own chip never came back, and the chips turned over too slowly
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
   **2026-10-01 (plan 78, Deck block 1, build `57586da0`): both Deck rows passed.** One chip: 9.53 chips a minute (asked 8 to 10.5); two chips: 11.16 a minute with the closest two changes 2.49 s apart (asked: none within 2.3 s); a chip under the highlight ring did not change in 42.5 s. The game's own chips were 0.53 to 0.55 of all shown in all four styles, and two general chips never came back to back. With two chips (fade), in 46 of 430 one-second reads only the general chip was fully visible, because the game's chip was part-way through its fade; the session's ruling is that this passes, since the spot always holds one of the game's chips, and it is noted for the maintainer's own look. Evidence `docs/test-evidence/plan78-P78-TIP-CHIP-try2.json`, `docs/test-evidence/plan78-P78-CHIP-PACE-try2.json`.
 
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Cause: three of the four chip styles dealt the game's chips only once, when the panel opened, and with one chip showing the promised game chip was put in a spot that is off screen. Now one rule decides which chip comes next in all four styles (one chip: after a general chip the next is the game's own, after a game chip the game's again one time in five; two chips: one of the two is always the game's own), and one rule decides how long a chip stays, with the chip count in it (one chip: about 7 seconds a turn where it was about 15; two chips: about 10 seconds in each spot; the two spots never change within 2.5 seconds of each other).
+  The maintainer's calls: D121 items 9 and 10. Unit tests: the next-chip rule, the pace and the spacing, plus a seven-minute run of the real chip row in each style at one chip and at two. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01 (below). Still owed: the maintainer's own look at the pace (it is on their Thursday list) and their pick from the preview page.
+
 ## After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
   **2026-10-01, 12:52 to 13:00 (build `f0a4f2c4`), UNCLEAR:** not run. On a Deck that has seen the quick start, removing the flag left an ordinary suggestion chip, and after a plugin reload the flag read "1" again; the only reset, "Clear all plugin data", is not allowed. The fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
 
 ## A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind
 
@@ -2902,3 +2925,30 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
   **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.
+
+## With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Limits: a retry of a spoken question counts as typed and is not read (plan 78 questions item 8). The read-through's finding 5 (the setting's copy reset for a moment on every panel open, so an answer finishing in the first moments was not read) is fixed in `27a450ed`, proven by its unit test only, because the moment is too short to hit on purpose on the Deck or by hand. Finding 6 (developer builds only) is still only possible.
+
+## Roadmap clean-up task: trim this file (done 2026-09-15)
+
+Moved here from the top of the roadmap on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+**Clean-up task — trim this file. Done 2026-09-15.** The other four big documents each carry their own trim
+task at the top; the roadmap entry that tracks all five is under Features.
+
+Reading this now costs roughly **19,000 tokens**, and the house rules say it is read before any work is marked
+done, so that cost lands on every piece of work. Together with the testing rows, trimming both saves about
+**31,000 tokens per landing**.
+
+**100 KB down to 83 KB.** 2026-09-13: the finished list moved to the archive. 2026-09-14: the parked entries moved
+to their own file, the old decisions under *Calls waiting on you* dropped to a pointer, the longest entries reworded,
+and six finished items moved to Done and archived. 2026-09-15: a seventh finished item split so the part that still
+fails stays visible, the knowledge-base opening stopped quoting numbers it then retracts, and the three longest
+entries sent their reference detail to the details file.
+
+**What is left is not worth taking.** Thirty-four entries still run past five lines, but most by only a line or
+two, and the ones that run long are long because the work is. Grinding those down would cost more in understanding
+than it saves in tokens. The bigger wins are now in the other four files, each with its own trim task at the top.

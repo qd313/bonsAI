@@ -4,6 +4,26 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 79 (2026-10-02)
+
+- **Up and Down under an answer now follow the drawn rating rows.** Up from "Bad info" lands on Helpful, and Down from the speaker lands on "Wrong game or topic". The choices are smaller and softer too. The walk passed on the Deck 2026-10-02; the look is the maintainer's to judge.
+- **A cut-off answer that ends inside a spoiler cover no longer shows the word "undefined".** Passed on the Deck 2026-10-02.
+- **Show details: the ring sits on the one chip you are on,** not on the whole column of chips. Passed on the Deck 2026-10-02.
+- **The Ollama tab shows where the ring is on every button.** The Settings and Developer tabs, the character picker, Clear cache and the Ask bar's Clear button got the same fix. The Ollama tab passed on the Deck 2026-10-02; the rest owes its Deck check.
+- **"Install options" is gone from the Ollama tab.** Browse models has an "Install the starter set" button that asks first, and a first Install Ollama offers the starter models. Passed on the Deck 2026-10-02 except pressing yes and the first-install offer.
+- **"Remember what I typed" is one on/off switch.** A saved "Search" now loads as off. Passed on the Deck 2026-10-02.
+- **Summing up can offer a fresher chat title,** with Rename and Keep on the summary card. A chat you renamed by hand is never offered one. The offer and Keep passed on the Deck 2026-10-02; Rename owes its Deck check.
+- **A chat's Save and Delete buttons show only while the ring is on its row,** and Delete is a bin with two slots. Four of five steps passed on the Deck 2026-10-02; the chat's name still moves a little when the buttons appear.
+- **The knowledge-base buttons carry icons, and a game now offers ten of its own suggestion chips, not six.** Both owe their Deck checks.
+- **A long suggestion chip scrolls to its end, stands still, then leaves; its words are centred,** and the chip under the ring gets a soft blue fill. Owes its Deck check.
+- **Pressing Ask or emptying the question box now ends microphone dictation,** and the X beside Ask hands the ring to the question box. The box clears on the Deck, but the ring is not drawn on it yet.
+- **A spoken question no longer comes out with stretches of words doubled.** Owes its Deck check, with the real microphone.
+- **Power and battery questions now get an answer with numbers you can set** (a TDP in watts, a frame cap, a refresh rate). On the PC, 27 of 30 test answers had one, against 3 of 30 before. Owes its Deck check.
+- **A button pressed under a Hollow Knight answer keeps Hollow Knight's notes and spoiler covers,** even with another game running. Owes its Deck check.
+- **Up and Down no longer stop on a question's Retry button;** Left from the question is the way onto it. The Down half passed on the Deck 2026-10-02; Up from the question text needed a second round.
+- **The AI models box no longer leaves the first model half under the column header,** and the bronze note card keeps a gap of 8 px above the suggestion chips. Both failed their first Deck check and have a second round landed, waiting for a re-check.
+- **When the Steam settings list closes under the ring, the ring goes to the question box.** Down with Steam's ring on the whole answer no longer does nothing when the panel has lost the browser's focus. Both owe their Deck checks.
+
 ### Plan 78 (2026-09-30)
 
 - **A hidden-block mark written as the label between two sets of backticks, with nothing between them, is now a mark, not text.** A small model wrote that line as both the opening and the closing mark; the page showed the label twice, drew no cover and left the sentence between them readable. Such a mark now opens a hidden block outside one and closes it inside one, on the screen and in the chat's memory and summary. Passed on the Deck.

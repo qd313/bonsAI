@@ -1,0 +1,33 @@
+{
+  "row": "P79-M10-CARD-CHIP-GAP-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:34-11:37 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); screenshot y = page y * 1.5 + about 59",
+  "setup": "Test chat 6f3cc055, newest answer (note card 'Classes (+2 more) / From bonsAI's own note', details collapsed, chat scrolled to its end: scrollTop 1078 of max 1078). walkTo Down to 'Show details' (focus read: 52,198,267x15) then Down presses, one read after each.",
+  "pressed": "Down (card), Down (chip), Down (question box). No A.",
+  "seen": {
+    "ring_on_card": {
+      "focused": "DIV note card 52,228.9,266.8 x 47",
+      "card_bottom_y": 275.9,
+      "chip_row_top_y": 290.6,
+      "gap_px": 14.7,
+      "screenshot": "screenshots/DeckCapture_20261002_113550_auto.png"
+    },
+    "ring_on_chip": {
+      "focused": "BUTTON 'Any known issues running this...' 48,290.6,147 x 30",
+      "gap_card_to_chip_row_px": 14.7,
+      "chip_bottom_to_question_input_px": 2.7
+    },
+    "ring_on_question_box": {
+      "focused": "INPUT 72.7,323.3,274.7 x 44",
+      "gap_card_to_chip_row_px": 14.7,
+      "chip_row_box": "48,290.6,300 x 30",
+      "screenshot": "screenshots/DeckCapture_20261002_113617_auto.png"
+    },
+    "dpad_order": "card -> chip -> question box, as before; nothing new is a stop"
+  },
+  "expected": "gap between card bottom and chip row top 6 to 10 px with the ring on the card and on the question box; D-pad card -> chip -> question box; no new stop",
+  "verdict_gap": "FAIL - the gap is 14.7 px with the ring on the card, on the chip and on the question box (target 6 to 10). It was 0 px before; it is now about 5 px more than the top of the allowed range.",
+  "verdict_order": "PASS - D-pad goes card -> chip -> question box, nothing new is a stop.",
+  "verdict": "FAIL (gap 14.7 px, outside 6 to 10); order PASS"
+}

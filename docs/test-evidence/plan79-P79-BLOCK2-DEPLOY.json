@@ -1,0 +1,16 @@
+{
+  "row": "P79-BLOCK2-DEPLOY",
+  "build_commit": "d810328b (experimental tip, Ring guard: two fewer known buttons...)",
+  "deck_time_local": "2026-10-02 about 11:07-11:12 EDT",
+  "screen": "page window 854 x 454; QAM panel scope 300 x 390 at (48,64)",
+  "setup": "No game running (pgrep AppId empty over SSH, free 5154 MB available). npm run build ok, deck_deploy ok (loader ready after 935 ms). Keep-awake retaken ttl 480, expiresAt 2026-10-02T23:08:52Z.",
+  "pressed": "deck_openPlugin twice: first failed as expected (no pane), second opened bonsAI, .bonsai-scope present.",
+  "seen": {
+    "buildMatches": "true, 126 files match",
+    "runningAppId_check": "unknown (ECONNRESET on the rig check); confirmed none over SSH instead",
+    "settings_vs_backup": "diff of settings.json against ~/p79-settings.bak.json: identical, no difference",
+    "unified_input_persistence_mode_now": "no_persist"
+  },
+  "expected": "build matches, keep-awake retaken, settings unchanged by deploy",
+  "verdict": "PASS - build matches the checkout tip d810328b, settings unchanged. (runningAppId rig field came back unknown once; no-game confirmed over SSH.)"
+}

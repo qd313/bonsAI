@@ -2870,3 +2870,26 @@ _Copied line for line from the roadmap's Verify entries, with the closing note a
   **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`), UNCLEAR:** the control showed no cover, because the test chat's newest turn was a Deep Rock Galactic turn, a low-story game, where hidden blocks are shown plain by design. The glued text was not tried. Runs again in the next Deck block on a Hollow Knight turn. Evidence `docs/test-evidence/plan78-P77-GLUED-SPOILER.json`.
 
   **Closed 2026-10-01, passed on the Deck from history, second try (plan 78, Deck block 3d, build `9feef02e`, row P77-GLUED-SPOILER).** The test chat's newest turn was a Hollow Knight question asked with no game running. Control: "Here is the fight.", one closed cover, "Good luck."; the made-up word absent, no backticks, no mark text. Glued: "Here is the fight.The" then one closed cover then "Good luck."; no mark text, no backtick, the made-up word hidden, one cover element; both reads the same. Covers the finished answer only; "while streaming" stays on unit tests. Evidence `docs/test-evidence/plan78-P77-GLUED-SPOILER-try2.json`.
+
+## Closed 2026-10-02 (plan 79, Deck block 2a, build `d810328b`)
+
+- ★★ `[focus]` **Up and Down between the rating choices and the speaker button go to the wrong place** — **OPEN, found
+  by the maintainer 2026-10-02.** Up from "Bad info" lands on the speaker button; it should land on "Helpful". Down from
+  the speaker lands wrong too; it should land on "Wrong game or topic" (the choice under it).
+  Screenshot of the layout `screenshots/DeckCapture_20261002_004918_game.png`.
+  **Measured 2026-10-02:** reproduced. Up from "Bad info" lands on the speaker; Down from the speaker follows the last choice. Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW.json`.
+  **Closed 2026-10-02, passed on the Deck (row P79-M7-RATING-ROW; fix `749ff9dc`).** Up from "Bad info" landed on Helpful, Up from "Wrong game or topic" on "Not really", Down from the speaker on "Wrong game or topic" in 5 of 5 tries; the full walk had no dead press (one edge, Right from the last choice). Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW-AFTER.json`.
+
+- ★★ `[reply]` **A spoiler cover cut off by Clear shows the word "undefined" when opened** — **OPEN, found by the
+  maintainer 2026-10-02 during their Clear-while-answering check.** The kept part of the answer ended inside a spoiler
+  cover; opening the cover shows "undefined" instead of the words that had arrived (or nothing). The check itself
+  passed: the answer was kept. Screenshot `screenshots/DeckCapture_20261002_003908_game.png`.
+  **Measured 2026-10-02:** in the saved parrying chat the last answer (turn 177 of 178, stopped) ends with an opening hidden-block mark and no body. Evidence `docs/test-evidence/plan79-P79-M4-UNDEFINED-READ.json`.
+  **Closed 2026-10-02, passed on the Deck (row P79-UNDEFINED-COVER; fix `e065c41d`).** "undefined" appeared nowhere in the panel at three reads on the saved chat whose last answer ends in an opening mark with no body; the words before the cut showed and no empty cover was drawn at the end. Evidence `docs/test-evidence/plan79-P79-UNDEFINED-COVER-AFTER.json`.
+
+- ★★★ `[focus]` **Moving through the Show details chips puts the ring on the whole block, not the chip, and it
+  jumps** — **OPEN, found by the maintainer 2026-10-02.** The ring is a wide box around the chips and the answer
+  area under them, and its place jumps from press to press. It should sit on the one chip. Screenshots
+  `screenshots/DeckCapture_20261002_005210_game.png`, `screenshots/DeckCapture_20261002_005227_game.png`.
+  **Measured 2026-10-02:** reproduced. A box 290 px wide and 169 to 337 px tall, on 7 of 7 chip presses. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING.json`.
+  **Closed 2026-10-02, passed on the Deck by the session's ruling (row P79-M3-DETAILS-RING; fix `313377af`).** Seven chips each once both ways with the ring on the one chip (25 px); no tall frame. B on a chip closed the Show details section and put the ring on "Show details", the panel staying open; the session counted that as the pass. Evidence `docs/test-evidence/plan79-P79-M3-DETAILS-RING-AFTER.json`.

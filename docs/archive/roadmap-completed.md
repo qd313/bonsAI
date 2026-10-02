@@ -1672,3 +1672,22 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 
 **Closed 2026-09-28.** SETTINGS-CARD-06 and SETTINGS-CARD-07 both passed on the Deck 2026-09-26 (plan 70, flow 2b.2), as `docs/testing.md` already says. Evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made, because the longest setting name fits on two lines; that is not a fail.
 
+## Closed 2026-10-02 (plan 79, Deck block 2a, build `d810328b`)
+
+- ★ `[ollama]` **Remove the "Install options…" button from the Ollama tab** — **OPEN, asked for by the maintainer
+  2026-10-02.** It repeats what Browse models already offers. One thing to keep: on a fresh Deck it is today the
+  only one-press way to get the starter models (Install Ollama installs the engine only). Before removing it, give
+  Browse models a one-press "install the starter set", or have a first Install Ollama offer the starter models.
+  **Closed 2026-10-02, passed on the Deck (rows P79-OLLAMA-WALK and P79-STARTER-SET-BUTTON; fixes `c76ef452`, `d9c00827`, `745e3bad`).** The button is gone; the walk had no dead press; Browse models has an "Install the starter set" button whose ask-first box opens on Not now and downloads nothing. Still owed: pressing yes, and the offer after a first Install Ollama (unit tests only). Evidence `docs/test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json`, `plan79-P79-STARTER-SET-BUTTON.json`.
+
+- ★ `[ui]` **"Remember what I typed" becomes one on/off switch** — **OPEN, asked for by the maintainer 2026-10-02.**
+  Today it is three buttons: All, Search, None. Wanted: one switch, on = All, off = None. A saved "Search" becomes
+  off (the maintainer's call, 2026-10-02).
+  **Closed 2026-10-02, passed on the Deck with the session's ruling on the ring (row P79-REMEMBER-TYPED-SWITCH; fixes `a16aca77`, `268e2f8a`).** One switch; on kept the typed words, off cleared them, off stayed off after a reload; the D-pad lands on it with a grey row highlight, counted as the pass. Still owed: a Deck with "Search" saved showing off, and the on position after a reload. Evidence `docs/test-evidence/plan79-P79-REMEMBER-TYPED-SWITCH.json`.
+
+- ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
+  (plan 55, D104), carried over 2026-09-24 when that plan was archived.** About fifty settings, and the screen
+  side names every one of them by hand in seven places in one file. Miss one when adding a setting and it looks
+  fine but quietly resets after a restart; that already happened once, to four settings together. Fix: write
+  the list once and have the other six read it. Nothing is broken today. [Why](archive/55-bugfix-session-three.md).
+  **Closed 2026-10-02:** done by `ba21f33a` (2026-09-21), read-back test `9c8d7157`. The hook names every setting once. Still owed: a whole-list read-back after a plugin restart on the Deck.

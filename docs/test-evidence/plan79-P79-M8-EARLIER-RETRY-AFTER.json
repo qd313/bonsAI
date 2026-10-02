@@ -1,0 +1,38 @@
+{
+  "row": "P79-M8-EARLIER-RETRY-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:36-11:42 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Test chat 6f3cc055, Main tab. walkTo Up to the pill '92 earlier' (52,146,290x22). Retry button box (82,215,20,20) is on the first visible question 'explain every weapon class...'. A never pressed on Retry.",
+  "pressed": "Down x6 from the pill, Up x6 back, then (by mistake, see side_effect) one Down, then Up, Up again (second try of the route), Down, Left, Right.",
+  "seen": {
+    "down_from_pill": [
+      "1 question text 'explain every weapon class...' (86,189,245x43)",
+      "2 Show reasoning - 49 s divider (52,249,290x15)",
+      "3 answer chunk 1 'Right then, listen up...' (63,89,245x306)",
+      "4 answer chunk 1 (same element, scrolled, y 9)",
+      "5 answer chunk 1 (same element, scrolled, y -15)",
+      "6 answer chunk 2 'First off, you gotta figure out...' (63,89,245x291)"
+    ],
+    "no_down_press_landed_on_retry": true,
+    "up_back": [
+      "1 chunk 1 (y -15)",
+      "2 chunk 1 (y 65)",
+      "3 chunk 1 (y 89)",
+      "4 Show reasoning divider (52,204,290x15)",
+      "5 question text (86,189,245x43)",
+      "6 RETRY same prompt (82,215,20x20)  <-- Up landed on Retry",
+      "7 (extra) pill '92 earlier'"
+    ],
+    "second_try_of_the_route": "From the question text pressed Up again: landed on Retry again (82,215,20x20); Up once more: pill '92 earlier'.",
+    "down_from_retry": "question text",
+    "left_from_question": "Retry same prompt (82,215,20x20)",
+    "right_from_retry": "question text (86,189,245x43)"
+  },
+  "expected": "no Up or Down press lands on Retry; Down from 'N earlier' lands on the question text; Left from the question lands on Retry and Right comes back",
+  "verdict_down": "PASS - Down from '92 earlier' lands on the question text; none of the 6 Down presses landed on Retry.",
+  "verdict_up": "FAIL - Up from the question text lands on Retry (seen twice, 2 of 2 tries), so Retry is still an Up stop between the question and the '92 earlier' pill.",
+  "verdict_left_right": "PASS - Left from the question lands on Retry, Right comes back to the question text.",
+  "verdict": "FAIL - Retry is still reached by Up (question text -> Retry -> pill); Down no longer lands on it.",
+  "side_effect": "Once I sent a stray Down while Retry had the ring (my mistake, sent alongside a read). It only moved the ring from Retry to the question text; no A was pressed, nothing changed on the Deck."
+}

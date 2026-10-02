@@ -1,0 +1,31 @@
+{
+  "row": "P79-CHAT-ROW-BUTTONS",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:36-11:40 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); screenshot y = page y * 1.5 + about 59",
+  "setup": "Test chat 6f3cc055, Main tab, chat row title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Chat row sits at the top of the scrolling chat; reached by walkTo Up to '92 earlier' then Up once. The row is ONE focus stop (DIV.bonsai-chat-slot-row-focus 48,88,300x48.3); Left/Right move an inner 'active stop' class (save / title / delete) while the focus element stays the row.",
+  "pressed": "Up onto the row; Left; A (after the active stop read as save); B; Left, Right, Right to the delete stop; A (after read); B; Down.",
+  "seen": {
+    "part1_ring_on_question_box_and_on_pill": "disk and bin spans have visibility hidden (save 56,103.7,22x22 and delete 318,103.7,22x22 at opacity 0.85 but hidden); screenshot with ring on the pill shows neither. Read with the ring on the question box (hidden) and on the '92 earlier' pill (hidden).",
+    "part2_up_onto_row": {
+      "before_title_box_ring_on_pill": "110, 107.5, 177.4 x 14.4",
+      "after_title_box_ring_on_row": "125.2, 109.5, 145.6 x 14.4",
+      "title_moved_px": "x +15.2, y +2.0, width -31.8",
+      "disk_after": "visible, 99.3,105.7,22x22",
+      "bin_after": "visible, 274.7,105.7,22x22",
+      "screenshot": "screenshots/DeckCapture_20261002_113744_auto.png (LB and RB glyph boxes also appear at the row's ends)"
+    },
+    "part3_left_reaches_disk": "Left set the inner active stop to the disk (class bonsai-chat-slot-save--active-stop); A opened 'Save to Desktop note' window (Note name bonsai-debug, Save, Cancel); B closed it, no modal left, active stop returned to the title. Nothing saved (I never pressed Save).",
+    "part4_delete": "Left (disk), Right (title), Right (delete): bin icon seen in a 6x zoom of the screenshot with a lid and two slots inside the body (svg with 5 paths). A opened 'Delete chat slot?' box (default highlight on Delete!). I pressed B only; box closed, chat still there with its title and 9 dots. Nothing deleted.",
+    "part5_ring_away": "Down to the pill: disk and bin hidden again; title box back to 110,107.5,177.4 x 14.4"
+  },
+  "expected": "(1) no disk/bin with ring on chip or question box; (2) Up onto the row shows both and the name's box moves within 1 px; (3) Left reaches the disk, A opens Save window, B closes; (4) Right twice reaches Delete with a two-slot bin, A opens Delete box, B/Cancel; (5) ring away hides both",
+  "verdict_1": "PASS - no disk or bin with the ring off the row.",
+  "verdict_2_appear": "PASS - both appear when the ring is on the row.",
+  "verdict_2_name_stays": "FAIL - the chat name's box moved 15.2 px right and shrank 31.8 px (and 2 px down) when the ring came onto the row; the pass line is within 1 px.",
+  "verdict_3": "PASS - Left reached the disk; A opened the Save window; B closed it, nothing saved.",
+  "verdict_4": "PASS - the bin shows a lid and two slots; A opened the Delete box; B closed it, nothing deleted.",
+  "verdict_5": "PASS - ring away hides both again.",
+  "verdict": "FAIL overall - the name shifts when the buttons appear; all the other parts pass.",
+  "note": "The Delete box opens with the highlight on 'Delete' (not Cancel); a stray A there would delete the chat."
+}

@@ -1,0 +1,36 @@
+{
+  "row": "P79-M7-RATING-ROW-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:26-11:35 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Main tab, test chat 6f3cc055, newest answer. Walked to 'Mark reply helpful' (focus read), Right to 'Mark reply not helpful' (focus read: 141,204,94x28), A on it (as the runbook allows) -> 'What went wrong?' with 5 choices appeared. Nothing was chosen from the five.",
+  "pressed": "Direction presses only after that; one focus read after every press. Never A on a reason, never A on Read aloud.",
+  "seen": {
+    "Up_from_Bad_info": "Helpful (52,204,81x28)",
+    "Up_from_Wrong_game_or_topic": "Mark reply not helpful ('Not really') (141,204,94x28)",
+    "Down_from_Helpful": "Bad info (52,267,60x24)",
+    "Down_from_speaker_5_of_5": [
+      "trial 1, last reason visited Bad info: Wrong game or topic",
+      "trial 2, last reasons visited Spoiled it then Too long, left via Wrong game: Wrong game or topic",
+      "trial 3, last reason visited Too short, left via Wrong game: Wrong game or topic",
+      "trial 4, last reasons visited Spoiled it then Bad info: Wrong game or topic",
+      "trial 5, last reasons visited Spoiled it then Bad info: Wrong game or topic"
+    ],
+    "walk_both_ways": "Down/Up/Left/Right presses through Helpful, Not really, speaker (Read aloud 30x32), Bad info, Wrong game or topic, Spoiled it, Too long, Too short: every press moved focus to a control. One press did not move: Right from 'Wrong game or topic' (right edge of the reasons block, nothing to the right), recorded as an edge, not a trap.",
+    "other_observation": "Down from 'Wrong game or topic' goes to a remembered choice, not always the same one: Spoiled it twice, Too short twice. Up from 'Spoiled it' went to 'Wrong game or topic' once and 'Bad info' once; Up from 'Too short' and 'Too long' went to 'Wrong game or topic'.",
+    "measured_sizes_computed": {
+      "Helpful": "80.8 x 28 px, font 11px",
+      "Not really": "94.3 x 28 px, font 11px",
+      "Bad info": "60.4 x 24 px, font 11px",
+      "Wrong game or topic": "127.3 x 24 px, font 11px",
+      "Spoiled it": "66 x 24 px, font 11px",
+      "Too long": "62.1 x 24 px, font 11px",
+      "Too short": "66.8 x 24 px, font 11px",
+      "Read aloud speaker": "30 x 32 px, font 12px"
+    },
+    "ring_on_Too_long": "drawn: white ring round the 'Too long' button in screenshot DeckCapture_20261002_112920"
+  },
+  "expected": "Up from Bad info -> Helpful; Up from Wrong game -> Not really; Down from speaker -> Wrong game 5/5; Down from Helpful -> Bad info; no dead press; thumbs 28 px, reasons 24 px, words 11 px; ring drawn on Too long",
+  "verdict": "PASS - all four landing rules hold (5 of 5 for the speaker), sizes are 28 / 24 / 11 px, ring drawn on Too long.",
+  "side_effect": "I pressed A on 'Not really' on the newest answer in the test chat, as the runbook allows. This opens the 'What went wrong?' row and may record a not-helpful mark for that answer in the test chat's feedback. No reason was chosen."
+}

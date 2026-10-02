@@ -1,0 +1,27 @@
+{
+  "row": "P79-REMEMBER-TYPED-SWITCH",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:47-11:52 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Key unified_input_persistence_mode read first: 'no_persist' (this equals the backup file ~/p79-settings.bak.json). Settings tab (RB x2 from Main). The section 'REMEMBER WHAT I TYPED' has one row 'Remember what I typed' with one on/off switch; the page text has no 'All', 'Search' or 'None' buttons in that section.",
+  "pressed": "walkTo Down to 'Remember what I typed' (focus read: DIV 290,292,38x22 = the switch), A (switch on); file read after 2 s; LB x2 to Main; send-question script 'Persistence check on one' (VERIFIED); GUIDE+A chord to close Quick Access; deck_openPlugin to reopen; read box. RB x2, walk, A (switch off); file read after 2 s; LB x2; script 'Persistence check off one' (VERIFIED); close with the chord, reopen; read box. deck_reloadPlugin (no game; confirmed by SSH), reopened (first open failed as usual, second ok with a blind chord, third opened), walked to the switch again.",
+  "seen": {
+    "one_switch": "yes, one switch; no All/Search/None buttons",
+    "dpad_lands_with_ring": "yes: Down x3 from the tab bar lands on the switch (38x22). Drawn as a grey highlight across the whole row (830..1280 x 483..620 in the screenshot) with the switch inside; no separate white ring on the switch itself (same row-highlight look as the other switches on the tab).",
+    "A_on": "file after 2 s: unified_input_persistence_mode = persist_all",
+    "box_when_on": "after closing and reopening Quick Access the box still held 'Persistence check on one'",
+    "A_off": "file after 2 s: unified_input_persistence_mode = no_persist; screenshot shows the switch off",
+    "box_when_off": "after closing and reopening Quick Access the box was empty (value '')",
+    "after_reload_plugin": "the switch is still off (class list has no 'on' class, screenshot DeckCapture_20261002_115059 shows it off); file still no_persist",
+    "put_back": "original value was no_persist (switch off); the last A left it at no_persist, so no further change was needed. diff of settings.json against ~/p79-settings.bak.json: identical (SAME)."
+  },
+  "expected": "one on/off switch, no All/Search/None; D-pad lands with a ring; A flips it, file reads persist_all on / no_persist off; on keeps typed text, off clears it; reload keeps position; key put back",
+  "verdict_one_switch": "PASS",
+  "verdict_dpad_ring": "UNCLEAR - D-pad lands on the switch and the row is highlighted, but the highlight is a grey row fill, not a ring around the switch; owner to say whether that counts as a ring drawn.",
+  "verdict_file_values": "PASS - persist_all when on, no_persist when off (read after 2 s).",
+  "verdict_keep_or_clear": "PASS - on kept the text, off cleared it.",
+  "verdict_reload": "PASS for the off position (switch stayed off after a plugin reload). The on position was not reloaded.",
+  "verdict_put_back": "PASS - key is no_persist again, settings file identical to the backup.",
+  "verdict": "PASS except the ring-drawn half, which is UNCLEAR",
+  "side_effect": "The two test sentences I put in the box ('Persistence check on one', 'Persistence check off one') were never asked; the first one was in the box at the reopen with the setting on and then cleared when it went off. During the reload the first two deck_openPlugin tries failed (expected), the second sent a blind Quick Access chord."
+}

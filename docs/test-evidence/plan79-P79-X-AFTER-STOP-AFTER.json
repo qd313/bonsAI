@@ -1,0 +1,20 @@
+{
+  "row": "P79-X-AFTER-STOP-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:42-11:47 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen); typed route only (the rig cannot speak)",
+  "setup": "Test chat 6f3cc055 (title read before each question). Question 1 sent with the send-question script (VERIFIED, full text read back): 'List every boss in Hollow Knight in order with a long tip for each and a second tip for the hardest ones'. Question 2 (try 2, new wording, per rule 10): 'Name each Hollow Knight boss in story order and give a long tip for every one, plus a second tip for the toughest bosses' (VERIFIED).",
+  "pressed": "Round 1: walkTo ask (focus read: BUTTON ask 49,400,263x36), A on Ask; focus jumped to the question input by itself; the chat first showed 'Summing up the chat so far - 9 s', then the thinking steps; Right, Right to 'Stop generation' (322,372,20x20), focus read, A (the answer text had already started to stream). Round 2: Ask (focus read: ask), A, Right, Right, focus read = Stop generation (322,371,20x20) while the thinking steps were still showing ('Determine Action based on Policy...'), A. Then Down (ask 49,400,263x36), Right (Clear 311,400,36x36, focus read), A on Clear.",
+  "seen": {
+    "round1_after_stop": "chat kept the partial answer (a spoiler cover and a cut-off sentence); the question box was EMPTY; no Clear (X) button existed (buttons: attach, mode, mic, ask only); Down went to ask and Right stayed on ask. So there was no X to press in round 1.",
+    "round2_after_stop": "chat showed 'Request cancelled.'; the question text was put back in the box ('Name each Hollow Knight boss in story order and give a long tip for every one, plus a second tip for the toughest bosses'); a Clear (X) button appeared at 311,400,36x36 right of Ask (ask now 263 wide). Focus after Stop was the input box.",
+    "round2_after_X": "box value '' (empty); read again 3+ seconds later: still empty ('' at 3 s and at about 30 s); the Clear button is gone. Focus owner (gpfocus and document.activeElement) = the question input (73,324,275x44).",
+    "ring_drawn_on_question_box": "NOT drawn: the input has outline none and no box-shadow (computed), and the screenshots at 0 s and about 30 s (DeckCapture_20261002_114618, _114647) show the box with no highlight ring, only the faint normal border. Focus is on the box (INPUT, agree true), so it is focused but not drawn."
+  },
+  "expected": "the box is empty after the X and stays empty for 3 s; the ring is on the question box (focus read) and drawn",
+  "verdict_box_empty": "PASS - empty after the X and still empty after 3 s (round 2).",
+  "verdict_ring_focus_read": "PASS - focus read puts the ring on the question box (INPUT, 73,324,275x44).",
+  "verdict_ring_drawn": "FAIL - no ring is drawn on the question box in either screenshot (outline none, box-shadow none).",
+  "verdict": "FAIL - box empties and stays empty, but the ring is not drawn on the question box after the X.",
+  "side_effect": "Both questions were asked in the test chat 6f3cc055 (the allowed place). Round 1 was stopped late and left a partial answer turn; round 2 left a 'Request cancelled.' turn. The chat's turn count is now about 190. The first Ask also triggered the chat's own 'Summing up the chat so far' step, which may have written a new summary into the test chat file (relevant to the Sum up row)."
+}

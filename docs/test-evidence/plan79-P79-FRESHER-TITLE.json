@@ -1,0 +1,19 @@
+{
+  "row": "P79-FRESHER-TITLE",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:47-11:58 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "Test chat 6f3cc055. At the time of this row the newest turn was 'Request cancelled.' (no Show details on it), so I asked one extra short question in the test chat ('In one short sentence what is a Hollow Knight charm', script VERIFIED) to get a finished answer with 'Show details'. Show details, A, Down x2 to the tab row 'This answer | Session - 93', Right.",
+  "pressed": "Show details (A after focus read), Down, Down, Right (tab row: Session), Down (Sum up again, focus read), Down (the 'What the AI remembers' card), Down (focus read: Rename), Right (focus read: Keep), A on Keep.",
+  "seen": {
+    "sum_up_button": "'Sum up again' is greyed (class bonsai-sumup-btn--off) with the text 'This chat is already summed up. Ask more, then you can sum up again.' The chat had been summed up automatically at about 11:44 when my first question was asked in the X-after-stop row ('Summing up the chat so far' showed for 9 s; the summary says 87 turns, written 12 min before this read).",
+    "offer_card": "The summary card (87 turns) ends with 'Rename this chat to \"Hollow Knight guide and Steam Deck issues\"?' and two buttons: Rename (63,177,131x27) and Keep (200,204,131x27). Focus read after Down was on Rename; Right moved focus to Keep. Both reachable.",
+    "after_Keep": "the offer disappeared from the page text (no 'Rename this chat to'); the chat's title still reads 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'; chat file label on the Deck = 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (192 turns), index.json label the same.",
+    "rename_never_pressed": true
+  },
+  "expected": "if Sum up can run: A on it, wait for the card, card shows Rename/Keep, both reachable, Keep removes the offer and leaves the title",
+  "verdict_button_route": "COULD NOT RUN - the Sum up button was greyed ('already summed up'), as the runbook allows for this case.",
+  "verdict_offer_card": "PASS - an offer card from the automatic summing-up showed 'Rename this chat to \"Hollow Knight guide and Steam Deck issues\"?' with Rename and Keep; the D-pad reached both; Keep removed the offer and the chat's title (file label) is unchanged.",
+  "verdict": "COULD NOT RUN for the Sum up button; PASS for the offer card reached by the automatic route",
+  "side_effect": "The extra question 'In one short sentence what is a Hollow Knight charm' and its answer were added to the test chat (now 192 turns). A on the '94 earlier' pill expanded the whole history in the transcript (no effect on data). A deck_walkTo across the expanded history took 98 Down presses (no A pressed)."
+}

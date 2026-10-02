@@ -1,0 +1,18 @@
+{
+  "row": "P79-UNDEFINED-COVER-AFTER",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:39-11:46 EDT",
+  "screen": "page window 854 x 454 (Deck's own screen)",
+  "setup": "From the test chat, ring on the chat row (Up onto it), RB switched to the next chat 'what is a good way to practice parrying in action games' (id 351b2838-3a5e-4863-9a9b-72b5438f3cb3, 178 turns, shown pill '88 earlier'). Nothing was asked in that chat. Its file on the Deck: turn 178 is an assistant turn with outcome 'stopped' whose text starts with a ```bonsai-spoiler fence line and ends with a dangling '```bonsai-spoiler' fence (the cut-off).",
+  "pressed": "RB (switch), Down x6 through the last question, the covered first line, the answer chunks to the end of the answer, then walkTo Up to the pill, LB by mistake while the ring was on the transcript (that changed the tab Main -> About; I pressed RB to come back to Main, no other effect), Up onto the chat row, LB to return to the test chat.",
+  "seen": {
+    "undefined_in_page_text": "none: regex /undefined/i over the whole panel text = no match, at three reads (chat opened, mid-answer, end of answer)",
+    "answer_text_before_cut": "shows: 'It ain't rocket science, mate, but this fella is a real trickster. You gotta keep your eyes peeled... We gotta learn the rhythm of his moves, yeah? Now, here's the skinny on how to handle him... That's the key, see?'",
+    "covers": "one 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide).' cover (71,251,237x55 at the first read), covering the answer's first sentence only (the first fence in the stored text). No second or empty 'Spoiler' cover at the end of the answer: after scrolling to scrollTop 250 the page has exactly 1 cover, now above the viewport (y -3), and the screenshot of the end of the answer shows plain text, then the copy icon.",
+    "end_of_answer_screenshot": "screenshots/DeckCapture_20261002_114148_auto.png",
+    "start_of_answer_screenshot": "screenshots/DeckCapture_20261002_114121_auto.png"
+  },
+  "expected": "page text has no 'undefined'; answer text before the cut shows; no empty Spoiler cover at its end",
+  "verdict": "PASS - no 'undefined' anywhere, the answer text shows, and no empty Spoiler cover is drawn at the end.",
+  "side_effect": "I pressed LB once with the ring on the transcript, not on the chat row. That moved the bonsAI tab from Main to About. I pressed RB to return to Main. Nothing was changed in any setting or chat. Test chat is the open chat again (pill '92 earlier')."
+}

@@ -1,0 +1,17 @@
+{
+  "row": "P79-STARTER-SET-BUTTON",
+  "build_commit": "d810328b",
+  "deck_time_local": "2026-10-02 11:23-11:25 EDT",
+  "screen": "page window 854 x 454; the box is a modal in the 'Steam Big Picture Mode' page (854 x 534 area)",
+  "setup": "Ollama tab. ollama list before: nomic-embed-text:latest (274 MB), gemma4:e2b-it-qat (4.3 GB). walkTo Browse and pull: focus read = BUTTON 'Browse and pull Ollama models' (64,271,268x36). Then A.",
+  "pressed": "A on Browse models (after focus read); Down, Down, Right, Right to the starter button; focus read = 'Install the starter set' (623,185,104x26) on the top row beside Filters and 'Type a name'; A (after focus read); focus read in the ask box; B; B to close Browse models.",
+  "seen": {
+    "button": "An 'Install the starter set' button sits at the right end of the box's top row (same row as the Filters line and 'Type a name'), 104 x 26 px, ring drawn when focused.",
+    "ask_first_box": "Title 'Install the starter set?'. Text: bonsAI will connect to https://registry.ollama.ai to download qwen2.5vl:3b (about 3-4 GiB). Three buttons: 'Not now', 'Install the starter set', 'Cancel'. Focus read right after opening: 'Not now' (123,375,194x60), screenshot shows it highlighted blue.",
+    "after_B": "Box closed, ring back on the 'Install the starter set' button in the Browse box. ollama list after: identical to before (nomic-embed-text, gemma4:e2b-it-qat). No 'ollama pull' process (pgrep empty). B on the Browse box closed it; ring back on 'Browse and pull Ollama models'.",
+    "download_started": false
+  },
+  "expected": "button on top row; A opens ask-first box with ring on Not now; B closes it; nothing downloads",
+  "verdict": "PASS - button on the top row, ask-first box opens with the ring on Not now, B closes it, ollama list unchanged and no pull running. I never accepted the download.",
+  "note": "The starter set it offers is only qwen2.5vl:3b although gemma4 is already installed; not judged here."
+}

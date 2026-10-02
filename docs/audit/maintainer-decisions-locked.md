@@ -2058,3 +2058,8 @@ session settled meanwhile (plan 79, questions 2 to 4), open to the maintainer's 
 **Pick, 2026-10-02 (about 08:45): the Show details line in the suggestion chip's place uses way 2, the short
 cross-fade** (https://claude.ai/artifact/PXBGwEczcN97skhX4EANN9), built as drawn: the line shows in the chip's place
 only while that answer's own Show details line is out of sight, and the chip comes back once it is on screen.
+
+**Pick, 2026-10-02 (about 08:55): opening "N earlier" groups the earlier questions by day** (option 2, drawn as
+"by day"; https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18): opening the line shows one line per day, and each day
+line opens on its own. The find box from the same drawing (option 4, a word box with word buttons) is to go on the
+roadmap as its own feature, search in bonsAI, not built this session.

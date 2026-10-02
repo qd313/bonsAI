@@ -1,0 +1,16 @@
+{
+ "row": "P79-UP-LANDING-VISIBLE",
+ "build_commit": "156baf42",
+ "deck_time_local": "2026-10-02 ~18:50-18:53 EDT",
+ "screen": "live window 854x454 css px (Deck's own screen); dock top 290, question box (input) top 324, answer pane top 88",
+ "setup": "Test chat 6f3cc055 (chat row shows 'How do I beat the boss in the Soul Sanctum...'). Answer 1 = the newest (open by default). Opened '84 earlier' (A after reading focus), the 'Wed 30 Sep - 18' day line, then older question 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (A on its header after a focus read) = answer 2; closed it (A on header) and opened 'Any tips for the Soul Sanctum boss fight in Hollow Knight?' = answer 3. Ring walked Down to each Show details line (focus read, 100% visible), then one Up. Re-read after 2 s each time: landing did not move.",
+ "pressed": "Answer 1: Down (ring to chip), Up, Up to Show details, Up once. Answers 2 and 3: A on header, Down walk to Show details, Up once. Never A on a cover.",
+ "seen": {
+  "answer_1_newest": {"landing": "Mark reply helpful (Helpful button)", "box_top": 204, "box_bottom": 232, "dock_top": 290, "question_box_top": 324, "scrollTop": 335, "wholly_in_view": true},
+  "answer_2_older": {"landing": "Read aloud", "box_top": 172, "box_bottom": 204, "dock_top": 290, "question_box_top": 324, "scrollTop": 532, "wholly_in_view": true},
+  "answer_3_older": {"landing": "Read aloud", "box_top": 204, "box_bottom": 236, "dock_top": 290, "question_box_top": 324, "scrollTop": 494, "wholly_in_view": true}
+ },
+ "expected": "every Up landing wholly in view, clear of the dock and the question box, on all three answers.",
+ "verdict": "PASS - all three landings are wholly in view (bottoms 232, 204, 236 against dock top 290), 100% visible, stable after 2 s.",
+ "note": "On the newest answer the Up from Show details lands on the rating row (Mark reply helpful), not on the Read aloud button; on the older answers it lands on Read aloud."
+}

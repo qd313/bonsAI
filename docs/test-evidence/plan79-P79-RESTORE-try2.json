@@ -1,0 +1,22 @@
+{
+ "row": "P79-RESTORE-try2",
+ "build_commit": "156baf42",
+ "deck_time_local": "2026-10-02 ~19:00-19:02 EDT",
+ "screen": "not measured (restore row)",
+ "setup": "Panel moved to another chat with RB on the chat row (asked nothing), then files copied, then one plugin reload with no game running.",
+ "pressed": "Down, Down to the chat row, RB once (to 'what is a good way to practice parrying...'); deck_reloadPlugin; deck_openPlugin (failed twice with 'could not reach Steam CEF' right after the reload, worked on the third try); read the chat row.",
+ "seen": {
+  "chat_slots_before_restore": "only 6f3cc055 and index.json differed from ~/p79-chat-slots.bak/ (the Zhukov question was added to the test chat this block); the other 7 chat files identical.",
+  "restore": "cp -p of 6f3cc055-d603-4e3e-9adf-15d71df4ec14.json and index.json from ~/p79-chat-slots.bak/; cmp identical.",
+  "after_reload": "all 9 files in chat_slots identical to the backup (md5), re-checked 20 s later still identical. Label 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' equals the backup; turn count 170 on disk and in index.json equals the backup (170). Panel shows the test chat as the active dot, '88 earlier', newest question 'How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please'.",
+  "settings": "settings.json vs ~/p79-settings.bak.json key by key: no differing keys (no value printed). I changed no setting this block. dev_frozen_test_chips = [].",
+  "pinned_chips": "empty",
+  "game": "none (RunningApps empty, no AppId process over SSH)",
+  "plugin": "open on Main, test chat; checkReady buildMatches true on 156baf42",
+  "keep_awake": "released with deck_restorePowerSettings (wasHeld true, released true)",
+  "summary_backup": "~/p79-6f3cc055.sumup.bak left in place. Not used: the task names only the chat-slots backup, and the summary lives inside the chat file, which is restored."
+ },
+ "expected": "Test chat file and index back from the backup, label and turn count match; other chats compared; settings key by key; chips empty; no game; plugin open on Main in the test chat; keep-awake released.",
+ "verdict": "PASS - everything is back as in the backup; other chat files report no difference.",
+ "side_effect": "At the start of this block the test chat showed '84 earlier' and the newest question 'what is a good first upgrade in Hollow Knight'; after the restore and reload it shows '88 earlier' and newest question '... quick tips please'. The file on disk equals the backup both times it was checked, so the difference is in what the panel was showing from memory at the start (not a file difference); worth noting for the next reader."
+}

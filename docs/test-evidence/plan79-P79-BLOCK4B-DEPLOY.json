@@ -1,0 +1,16 @@
+{
+ "row": "P79-BLOCK4B-DEPLOY",
+ "build_commit": "156baf42",
+ "deck_time_local": "2026-10-02 18:46-18:49 EDT",
+ "screen": "not measured yet (deploy row)",
+ "setup": "No game running (SSH, RunningApps empty). git HEAD 156baf42 on experimental, tree clean. npm run build ok. deck_deploy ok, loader ready.",
+ "pressed": "deck_openPlugin once: worked first time (panel open, ring unowned).",
+ "seen": {
+  "buildMatches": true,
+  "files_compared": 126,
+  "keep_awake": "ttlMinutes 480, expiresAt 2026-10-03T06:47:33Z = 02:47 Deck time (Oct 3)",
+  "settings_vs_backup": "key by key: no differing keys; dev_frozen_test_chips is []"
+ },
+ "expected": "buildMatches true on 156baf42; keep-awake taken; settings equal to the backup.",
+ "verdict": "PASS - the Deck runs 156baf42, keep-awake held until 02:47, settings equal the backup."
+}

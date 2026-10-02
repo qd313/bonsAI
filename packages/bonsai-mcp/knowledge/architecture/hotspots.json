@@ -91,11 +91,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 942,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/chat_slot_service.py",
       "lines": 867,
       "role": ""
@@ -118,6 +113,11 @@
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 845,
+      "role": ""
+    },
+    {
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 839,
       "role": ""
     },
     {

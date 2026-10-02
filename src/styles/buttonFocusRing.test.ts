@@ -42,8 +42,8 @@ const KNOWN: Record<string, { count: number; why: string }> = {
     count: 2,
     why: "the Ask bar's Clear button and the settings-search result rows; not yet looked at on the Deck",
   },
-  "components/OllamaWhereAiRunsSection.tsx": { count: 5, why: "helper G owns this file in plan 79" },
-  "components/SettingsTab.tsx": { count: 7, why: "helper F owns this file in plan 79" },
+  "components/OllamaWhereAiRunsSection.tsx": { count: 4, why: "Browse models, Test connection and two more; a plan 79 follow-up gives them the ring class" },
+  "components/SettingsTab.tsx": { count: 6, why: "Screenshot quality, Voice replies, the character picker, accent, Clear cache; a plan 79 follow-up" },
   "components/VoiceInputSettingsSection.tsx": {
     count: 1,
     why: "voice model rows: Steam rings the Focusable around the button instead (the wide frame)",

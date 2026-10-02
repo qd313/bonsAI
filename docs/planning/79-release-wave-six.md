@@ -1,7 +1,7 @@
 # Plan 79 — release wave six: the last session before 0.6.0
 
-**Status: PLANNED 2026-10-02 (Friday), the maintainer's calls are in. Nothing has started. It runs in a new chat
-on Opus extra-high: open one and say "Run plan 79. Go." That chat starts at [How to start](#how-to-start).**
+**Status: RUNNING since 2026-10-02, about 02:00, in a new chat on Opus extra-high. The log at the end says where
+things stand.**
 
 Asked for by the maintainer: "Final session before v0.6.0 … a massive bug fix session as a follow-up from last
 night … in addition to those bugs, I want these features implemented … 15 subagents going at the same time … do an
@@ -433,6 +433,14 @@ Nothing yet.
 - **2026-10-02, planning:** the roadmap, last night's plan and the runbook were read; the working branch is clean
   at `e4c6c655` and its quick check passes; the Deck and Ollama answer and no other chat is driving the Deck. The
   Opus medium helper file was added. The maintainer's ten calls are in. Nothing else has started.
+- **2026-10-02, about 02:00 to 02:35, the start (tip `862f78b7`):** the maintainer's calls went into the locked
+  decisions file (D122) and the helper limit was raised to fifteen for this session. Both machines are held awake
+  (this PC until about 17:50; the Deck's hold is retaken at every Deck block). A timed check wakes the session every
+  20 minutes. Fifteen at work: the Deck driver on setup and the ten measurements; helpers A to J on the bugs and
+  features that need no measurement (the "undefined" cover, the X after Stop, doubled spoken words, power answers,
+  the knowledge-base icons, the one switch, removing "Install options…", the fresher title, long chips, Save and
+  Delete with the ring); K, L and M on the six drawings; N on the list of owed Deck checks. Waiting: the D-pad and
+  layout fixes for their measurements, the drawn features for the maintainer's picks.
 
 ## For the helpers: who owns which files
 

@@ -39,6 +39,11 @@ from backend.services.knowledge_base_schema import resolve_corpus_db_path
 
 _CHIP_TEXT_MAX_LEN = 80
 
+# How many of the running game's own chips the library offers. Ten, not six: with one chip
+# showing at a time a given chip came back about every 66 seconds on six, about 108 on ten
+# (plan 79, D122 item 9).
+_GAME_CHIP_POOL_SIZE = 10
+
 # Section types surfaced first for session preset chips (boss / stuck-style). This is the
 # order kinds are *drawn* in, one at a time — see _list_game_sections_for_chips — not a
 # priority that lets an earlier kind take every slot. Kinds absent from this tuple still
@@ -208,7 +213,7 @@ def _list_game_sections_for_chips(
     conn: sqlite3.Connection,
     game_id: int,
     *,
-    limit: int = 6,
+    limit: int = _GAME_CHIP_POOL_SIZE,
 ) -> list[tuple[str, str]]:
     """One card per kind, then a second from each, until ``limit`` — not the first N by kind.
 
@@ -218,8 +223,8 @@ def _list_game_sections_for_chips(
     unreachable, and six boss names offered up in a carousel a player is only browsing.
 
     Round-robin costs nothing where kinds are already lopsided: Left 4 Dead 2 keeps its
-    seventeen `mechanic` cards feeding the pool once the other kinds run dry, so it returns
-    the same six chips it did before, reordered.
+    seventeen `mechanic` cards feeding the pool once the other kinds run dry, so it fills the
+    pool the same way, reordered.
     """
     order_cases = " ".join(
         f"WHEN lower(section_type) = '{st}' THEN {i}"

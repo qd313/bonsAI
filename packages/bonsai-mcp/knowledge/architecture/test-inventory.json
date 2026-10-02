@@ -372,6 +372,7 @@
     "tests/test_kb_ranking_starting_out_demotion.py",
     "tests/test_kb_starting_out_rescue.py",
     "tests/test_keep_awake.py",
+    "tests/test_knowledge_base_chip_pool_size.py",
     "tests/test_knowledge_base_schema.py",
     "tests/test_knowledge_base_schema_compat_app_id.py",
     "tests/test_knowledge_base_service.py",

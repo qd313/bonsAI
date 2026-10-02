@@ -779,13 +779,17 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         "How do I use Red Sugar?",
         "What should I know about Mining and the run timer?",
         "How do I beat Dreadnought Twins?",
+        "How do I deal with Praetorian?",
+        "How do I use Nitra?",
+        "What should I know about Classes?",
+        "How do I deal with Acid Spitter?",
         "Any known Proton issues for this game?",
         "Any Steam Input issues for this game?",
       ],
     )
     self.assertEqual(
       [c.domain for c in result.candidates],
-      ["strategy"] * 6 + ["compat", "compat"],
+      ["strategy"] * 10 + ["compat", "compat"],
     )
   def test_chip_pool_draws_one_kind_at_a_time_rather_than_flooding(self):
     """Measured 2026-08-19: after the Phase 4 cards, Ocarina of Time's six chips were six
@@ -805,14 +809,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     )
     self.assertTrue(result.ok)
     strategy = [c.text for c in result.candidates if c.domain == "strategy"]
-    self.assertEqual(sum(1 for t in strategy if t.startswith("How do I beat ")), 2)
+    # At six chips this was exactly two; at ten the count depends on the kinds, so the row now
+    # protects the thing that mattered: bosses never take half the pool.
+    self.assertLess(sum(1 for t in strategy if t.startswith("How do I beat ")), len(strategy) / 2)
     # One of each other kind the title has, before any kind gets a second turn.
     self.assertIn("How do I deal with ReDead and Gibdo?", strategy)
     self.assertIn("How do I use Bottles?", strategy)
     self.assertIn("How do I get through Shadow Temple invisible floors?", strategy)
 
   def test_chip_pool_still_fills_from_one_kind_when_a_title_has_only_one(self):
-    """The direction interleaving must not cost anything: the pool is still six.
+    """The direction interleaving must not cost anything: the pool is still full (ten).
 
     Left 4 Dead 2 was the lopsided title -- seventeen cards filed as `mechanic` against two
     bosses and one area -- so a per-kind cap would have shrunk its pool. Round-robin keeps
@@ -831,7 +837,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     }
     result = suggest_chip_candidates(settings, app_id="550", app_name="Left 4 Dead 2")
     strategy = [c.text for c in result.candidates if c.domain == "strategy"]
-    self.assertEqual(len(strategy), 6)
+    self.assertEqual(len(strategy), 10)
     openers = {t.split(" ")[0] + " " + t.split(" ")[1] for t in strategy}
     self.assertGreaterEqual(
       len(openers), 3, "interleaving should reach several kinds, got: %r" % (strategy,)

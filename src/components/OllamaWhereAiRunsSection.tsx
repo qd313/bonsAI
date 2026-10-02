@@ -121,6 +121,7 @@ import {
   LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
@@ -577,6 +578,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               ) : null}
               <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                 <Button
+                  className={FOCUS_RING_BTN_CLASS}
                   ref={(el) => {
                     browseModelsBtnRef.current = el as HTMLButtonElement | null;
                     // This is the button users actually press to reach the models hub; the one on
@@ -616,6 +618,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               {localSetupBusy ? (
                 <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     ref={(el) => {
                       cancelSetupBtnRef.current = el as HTMLButtonElement | null;
                     }}
@@ -798,6 +801,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 </div>
               )}
               <Button
+                className={FOCUS_RING_BTN_CLASS}
                 ref={(el) => {
                   if (connectionTestBtnRef) connectionTestBtnRef.current = el as HTMLButtonElement | null;
                 }}
@@ -830,6 +834,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               </Button>
               {findLanShown ? (
                 <Button
+                  className={FOCUS_RING_BTN_CLASS}
                   onClick={openMdnsDiscoveryConfirm}
                   disabled={mdnsDiscovering || connectionTesting || localSetupBusy}
                   style={{

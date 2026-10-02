@@ -97,6 +97,7 @@ import {
 } from "../utils/runningGameCharacterSuggestions";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import { BonsaiModalScope } from "./BonsaiModalScope";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type AiCharacterPickerDraft = {
   random: boolean;
@@ -683,6 +684,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                   return (
                     <Button
                       key={`run-suggest-${entry.id}`}
+                      className={FOCUS_RING_BTN_CLASS}
                       ref={(el: HTMLElement | null) => {
                         suggestionButtonRefs.current[si] = el;
                       }}

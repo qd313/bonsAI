@@ -30,6 +30,7 @@
  */
 import React from "react";
 import { Button, Focusable, PanelSectionRow } from "@decky/ui";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type DeveloperOptionRowOption<T extends string | number> = {
   value: T;
@@ -78,6 +79,7 @@ export function DeveloperOptionRow<T extends string | number>({
             const active = option.value === activeValue;
             return (
               <Button
+                className={FOCUS_RING_BTN_CLASS}
                 key={option.value}
                 onClick={() => onSelect(option.value)}
                 style={{

@@ -134,7 +134,7 @@ function renderWithRoom(props: MainTabUnifiedAskBarProps) {
 }
 
 function cardRowButtons(): Array<Record<string, unknown>> {
-  return hoisted.buttonProps.filter((p) => p.className === "bonsai-settings-results-card-row");
+  return hoisted.buttonProps.filter((p) => String(p.className).split(" ").includes("bonsai-settings-results-card-row"));
 }
 
 beforeEach(() => {

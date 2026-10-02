@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 687,
-  "edgeCount": 1953,
+  "fileCount": 688,
+  "edgeCount": 1961,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -105,6 +105,7 @@
         "src/components/BonsaiModalScope.tsx",
         "src/components/CharacterRoleplayEmoticon.tsx",
         "src/data/characterCatalog.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/runningGameCharacterSuggestions.ts"
       ],
       "importedBy": [
@@ -189,7 +190,9 @@
       ]
     },
     "src/components/DeveloperOptionRow.tsx": {
-      "imports": [],
+      "imports": [
+        "src/styles/settingsGlassButton.ts"
+      ],
       "importedBy": [
         "src/components/DeveloperTab.tsx"
       ]
@@ -207,6 +210,7 @@
         "src/components/PermissionDenyAction.tsx",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/permissionDeepLink.ts"
       ],
@@ -1079,6 +1083,7 @@
         "src/hooks/useAskBarSettingsCardVisibility.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/useSteamSettingsSearch.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/mediaFormat.ts",
         "src/utils/navFocusRegistry.ts",
@@ -1359,6 +1364,7 @@
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
         "src/hooks/useSettingsLoadedFlag.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/ollamaAddress.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
@@ -1673,6 +1679,13 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTab.focusRing.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.mdns.test.ts": {
       "imports": [
         "src/test-harness/fakeDeckyRpc.ts"
@@ -1697,12 +1710,14 @@
         "src/data/uiScaleProfile.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/settingsTabLocalSurvival.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabRememberTypedSwitch.test.tsx",
@@ -4813,6 +4828,7 @@
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/buttonFocusRing.test.ts",
         "src/styles/presetChipHighlightFill.test.ts",
@@ -5119,9 +5135,15 @@
     "src/styles/settingsGlassButton.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/CharacterPickerModal.tsx",
+        "src/components/DeveloperOptionRow.tsx",
+        "src/components/DeveloperTab.tsx",
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaThinkingEffortRow.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/SettingsTab.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]
     },

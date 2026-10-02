@@ -99,6 +99,7 @@ import { DeveloperOptionRow } from "./DeveloperOptionRow";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import type { StreamScrambleSettings } from "../features/stream-scramble/streamScrambleContext";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
   off: "Off",
@@ -416,6 +417,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                 const active = mode === tabResumeMode;
                 return (
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     key={mode}
                     onClick={() => setTabResumeMode(mode)}
                     style={{
@@ -476,6 +478,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                 const active = level === desktopAppLogLevel;
                 return (
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     key={level}
                     onClick={() => setDesktopAppLogLevel(level)}
                     style={{

@@ -141,6 +141,7 @@ import {
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
 import { SETTINGS_CARD_ROW_HEIGHT_PX } from "../hooks/useSteamSettingsSearch";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
 // that imports it from this file (tests included) needs to change.
@@ -979,7 +980,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           ref={(el) => {
             settingsCardRowRefs.current[i] = el;
           }}
-          className="bonsai-settings-results-card-row"
+          className={`bonsai-settings-results-card-row ${FOCUS_RING_BTN_CLASS}`}
           {...({
             /*
              * Up walks toward the heading (index 0, nearest the tab bar) and holds still once
@@ -1308,15 +1309,14 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             <Button
               /* The X vanishes once the box is empty, so the ring goes to the box (Deck 2026-10-02: nothing owned it). */
               onClick={() => { clearUnifiedInput(); takeNavFocus("unified-input"); }}
-              aria-label="Clear"
+              className={FOCUS_RING_BTN_CLASS} aria-label="Clear"
               style={{
                 width: "100%",
                 height: "100%",
                 minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
                 padding: 0,
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: "center", justifyContent: "center",
                 border: "none",
                 background: askLooksReady ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.075)",
                 color: "#c8d4e0",

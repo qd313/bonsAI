@@ -97,6 +97,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "When I asked by voice",
@@ -342,6 +343,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 const active = option === screenshotAttachmentPreset;
                 return (
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     key={`preset-${option}`}
                     onClick={() => setScreenshotAttachmentPreset(option)}
                     style={{
@@ -418,6 +420,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 const active = mode === voiceReplyMode;
                 return (
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     key={mode}
                     onClick={() => {
                       setVoiceReplyMode(mode);
@@ -466,7 +469,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             {aiCharacterEnabled && (
               <>
                 <Button
-                  className="bonsai-ai-character-picker-open"
+                  className={`bonsai-ai-character-picker-open ${FOCUS_RING_BTN_CLASS}`}
                   ref={(el: HTMLElement | null) =>
                     registerModalReturnFocusOwner("character-picker-settings", el)
                   }
@@ -518,7 +521,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       {...({ navRef: accentTriggerNavRef } as Record<string, unknown>)}
                     >
                     <Button
-                      className="bonsai-accent-intensity-trigger"
+                      className={`bonsai-accent-intensity-trigger ${FOCUS_RING_BTN_CLASS}`}
                       {...({
                         onOKButton: (evt: { stopPropagation: () => void }) => {
                           evt.stopPropagation();
@@ -612,6 +615,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         }}
       >
         <Button
+          className={FOCUS_RING_BTN_CLASS}
           ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-cache", el)}
           onClick={() => {
             rememberModalReturnFocus("settings-clear-cache");
@@ -646,6 +650,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           Clear cache...
         </Button>
         <Button
+          className={FOCUS_RING_BTN_CLASS}
           ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-all-data", el)}
           onClick={() => {
             rememberModalReturnFocus("settings-clear-all-data");

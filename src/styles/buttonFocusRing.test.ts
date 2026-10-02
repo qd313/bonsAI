@@ -33,17 +33,9 @@ const SRC = join(__dirname, "..");
 /** Files with buttons still painting their own fill with no ring class: count, and why left. */
 const KNOWN: Record<string, { count: number; why: string }> = {
   "components/CharacterPickerModal.tsx": {
-    count: 2,
-    why: "picker tiles; ringed by the `.bonsai-ai-char-grid-col button.gpfocus` ancestor rule (check the suggestion row on the Deck)",
+    count: 1,
+    why: "picker tiles; ringed by the `.bonsai-ai-char-grid-col button.gpfocus` ancestor rule (the Playing suggestion row sits outside that grid and carries the ring class)",
   },
-  "components/DeveloperOptionRow.tsx": { count: 1, why: "Developer tab, not yet looked at on the Deck" },
-  "components/DeveloperTab.tsx": { count: 2, why: "Developer tab, not yet looked at on the Deck" },
-  "components/MainTabUnifiedAskBar.tsx": {
-    count: 2,
-    why: "the Ask bar's Clear button and the settings-search result rows; not yet looked at on the Deck",
-  },
-  "components/OllamaWhereAiRunsSection.tsx": { count: 4, why: "Browse models, Test connection and two more; a plan 79 follow-up gives them the ring class" },
-  "components/SettingsTab.tsx": { count: 6, why: "Screenshot quality, Voice replies, the character picker, accent, Clear cache; a plan 79 follow-up" },
   "components/VoiceInputSettingsSection.tsx": {
     count: 1,
     why: "voice model rows: Steam rings the Focusable around the button instead (the wide frame)",

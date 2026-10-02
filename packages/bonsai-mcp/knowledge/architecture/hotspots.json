@@ -82,7 +82,7 @@
     },
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 963,
+      "lines": 968,
       "role": ""
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 853,
+      "lines": 855,
       "role": ""
     },
     {
@@ -142,7 +142,7 @@
     },
     {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 692,
+      "lines": 697,
       "role": ""
     },
     {
@@ -162,7 +162,7 @@
     },
     {
       "path": "src/components/DeveloperTab.tsx",
-      "lines": 653,
+      "lines": 656,
       "role": ""
     },
     {

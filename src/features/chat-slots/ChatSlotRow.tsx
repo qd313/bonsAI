@@ -4,7 +4,7 @@
  * Purpose: The row that always sits at the top of the main tab, above the
  * preset chips. It is a small carousel of your saved chats: press LB/RB (or
  * step the D-pad through it) to flip between them, press A on the middle to
- * rename the current chat, move onto its × to delete it, or onto the save
+ * rename the current chat, move onto its bin to delete it, or onto the save
  * icon at the left end to save it to the Desktop. Step left past your newest
  * chat to reach the new-chat spot (a pencil and "New chat") and start a new
  * one. Dots below show your
@@ -48,6 +48,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ConfirmModal, Focusable, showModal } from "@decky/ui";
 
+import { TrashBinSlotsIcon } from "../../components/icons";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
 import {
   isBumperLeftDeckEvent,
@@ -96,7 +97,7 @@ const MAX_DOTS = 8;
 
 /*
  * The two icons the maintainer picked from the true-size drawing of 2026-09-27 (plan 72): save
- * option B, a floppy disk at the row's left end facing the ×, and new-chat option 4, a pencil. Both
+ * option B, a floppy disk at the row's left end facing the bin, and new-chat option 4, a pencil. Both
  * are copied exactly from that drawing, stroked in the current text colour.
  */
 function DiskIcon() {
@@ -125,7 +126,7 @@ function PencilIcon() {
  * callbacks for creating, selecting, renaming and deleting a chat, plus
  * which chat (if any) is currently generating or has an unread reply.
  * Out: the row itself — the shoulder-button pills, the center title (with a
- * small × to delete it), the ghost previews of the chat to either side, and
+ * small bin to delete it), the ghost previews of the chat to either side, and
  * the row of activity dots.
  *
  * What can go wrong: the carousel position and the "active chat" id can
@@ -139,9 +140,9 @@ function PencilIcon() {
  *    neighbours, for the ghost previews to either side.
  * 3. On LB/RB (handled by useChatSlotBumpers), move carouselIndex and, unless
  *    it landed on the new-chat spot, call onSelectSlot. D-pad Left/Right walk
- *    the row's three stops: save icon, name, ×.
+ *    the row's three stops: save icon, name, bin.
  * 4. Pressing A: on the new-chat spot, calls onCreateSlot; otherwise opens
- *    the rename modal (useChatSlotRenameModal), or, on the × stop, the delete
+ *    the rename modal (useChatSlotRenameModal), or, on the bin stop, the delete
  *    confirmation, or, on the save stop, the save-to-Desktop window.
  * 5. A layout effect measures whether the title text is wider than its box
  *    and, only while focused, swaps it for Steam's Marquee with the chips'
@@ -469,7 +470,7 @@ export function ChatSlotRow({
                   className={`bonsai-chat-slot-delete${stop === "delete" ? " bonsai-chat-slot-delete--active-stop" : ""}`}
                   aria-hidden
                 >
-                  ×
+                  <TrashBinSlotsIcon />
                 </span>
               ) : null}
               {showGhosts && nextSlot ? (

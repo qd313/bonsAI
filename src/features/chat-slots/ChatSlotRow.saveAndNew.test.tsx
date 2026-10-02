@@ -164,6 +164,25 @@ describe("the save icon", () => {
   });
 });
 
+describe("the delete button", () => {
+  it("draws the bin with two slots, not the letter x", () => {
+    const { container } = render(row());
+    const del = container.querySelector(".bonsai-chat-slot-delete")!;
+    expect(del.textContent).toBe("");
+    expect(del.textContent).not.toContain("×");
+    const svg = del.querySelector("svg")!;
+    expect(svg.getAttribute("viewBox")).toBe("0 0 24 24");
+    expect(svg.getAttribute("width")).toBe("14");
+    expect(Array.from(svg.querySelectorAll("path")).map((p) => p.getAttribute("d"))).toEqual([
+      "M3 6h18",
+      "M8 6V4h8v2",
+      "M6 6l1 14h10l1-14",
+      "M10 10.5v6",
+      "M14 10.5v6",
+    ]);
+  });
+});
+
 describe("the new-chat spot", () => {
   it("shows a pencil and the words New chat, with no save icon and no ×", () => {
     const { container } = render(row({ activeSlotId: null }));

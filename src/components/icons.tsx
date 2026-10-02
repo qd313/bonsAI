@@ -370,3 +370,16 @@ export const TrashBinIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
     </svg>
   </IconShell>
 );
+
+/** The chat row's Delete button: a bin with two slots (the maintainer's pick, 2026-10-02), stroked like the Save disk beside it. */
+export const TrashBinSlotsIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M3 6h18" />
+      <path d="M8 6V4h8v2" />
+      <path d="M6 6l1 14h10l1-14" />
+      <path d="M10 10.5v6" />
+      <path d="M14 10.5v6" />
+    </svg>
+  </IconShell>
+);

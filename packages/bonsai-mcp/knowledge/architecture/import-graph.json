@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 671,
-  "edgeCount": 1895,
+  "edgeCount": 1896,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1819,6 +1819,7 @@
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/ReplyCopyButton.tsx",
         "src/components/icons.bonsaiGeometry.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/index.tsx",
@@ -2428,6 +2429,7 @@
     },
     "src/features/chat-slots/ChatSlotRow.tsx": {
       "imports": [
+        "src/components/icons.tsx",
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",

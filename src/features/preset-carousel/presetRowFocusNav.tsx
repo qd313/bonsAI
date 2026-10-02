@@ -175,11 +175,7 @@ export function usePresetRowNav(
         // The two permission rows sit between the reply and the chips when they show, lowest
         // first; Up skipped both for Show details (plan70-PERMS-CLEAN-05-06.json). The Save chat to
         // Desktop row that sat below them is gone since plan 72 (it is the chat row's save icon).
-        exitUp: () =>
-          takeNavFocus("chat-perm-hint-deny") ||
-          takeNavFocus("chat-perm-hint-troubleshoot") ||
-          focusBottomOfNewestReply() ||
-          takeNavFocus("chat-slot-row"),
+        exitUp: chipRowExitUp,
         advanceAtEnd,
         onBlockedEdge: () => flagBlockedEdge(index),
       }) as unknown as Record<string, unknown>,
@@ -201,4 +197,18 @@ export function usePresetRowNav(
     [],
   );
   return { setButtonRef, handlersFor, focusChip, isBlockedEdge, rowHeld };
+}
+
+/**
+ * Up out of the suggestion chips: the stop just above the dock, tried in the order the comment in
+ * usePresetRowNav's `handlersFor` explains. Its own named function so the Show details line, when it
+ * takes the chip's place above the question box (DetailsSlot.tsx), leaves by exactly the same way.
+ */
+function chipRowExitUp(): boolean {
+  return (
+    takeNavFocus("chat-perm-hint-deny") ||
+    takeNavFocus("chat-perm-hint-troubleshoot") ||
+    focusBottomOfNewestReply() ||
+    takeNavFocus("chat-slot-row")
+  );
 }

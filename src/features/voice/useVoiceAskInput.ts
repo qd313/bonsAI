@@ -160,6 +160,8 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       invalidateVoice();
       setVoiceRecording(false);
       if (forgetWords) setLastVoiceText("");
+      // Raw call(), no deadline, like the other stop path: stop runs whisper finalization over the
+      // recorded buffer, which can exceed any UI timeout on Deck hardware (nobody waits on it here).
       void call("stop_voice_transcription").catch(() => undefined);
     },
     [invalidateVoice],

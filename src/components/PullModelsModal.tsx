@@ -72,6 +72,9 @@
  *    or, when embedded is true, as a bare panel inside another modal (the
  *    AI models hub), reporting its own footer state up through
  *    onFooterStateChange() instead of drawing one.
+ * 8. The Filters row also carries "Type a name" and, while the starter model is not installed,
+ *    "Install the starter set" (PullModelsStarterSetChip): it asks first with the size, then
+ *    starts the setup run the old Tier 1 button started.
  *
  * Gotchas:
  * - The "New" badge is tracked entirely in the browser's own storage,
@@ -105,6 +108,7 @@ import {
   type PullModelModeFilterId,
 } from "../data/pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
+import { PullModelsStarterSetChip } from "./PullModelsStarterSetChip";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
@@ -522,6 +526,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
     evt.stopPropagation();
     fn();
   };
+
+  /** Down from any button on the top row: the Filters panel if it is open, else the first table row. */
+  const moveDownFromTopRow = (): boolean => (filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull());
 
   // Lifted into usePullModelTier2Confirm. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.
@@ -980,8 +987,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   }}
                   aria-label="Pull custom model tag"
                   {...({
-                    onMoveDown: () =>
-                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onMoveDown: moveDownFromTopRow,
                     onOKButton: okButtonRuns(() => {
                       if (isPlausibleOllamaPullTag(customTagInput) && !customPullBusy && !pullBusy) {
                         void onPullCustomTag();
@@ -1003,8 +1009,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   }}
                   aria-label="Close typing a model name by hand"
                   {...({
-                    onMoveDown: () =>
-                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onMoveDown: moveDownFromTopRow,
                     onOKButton: okButtonRuns(() => closeCustomTagEntry()),
                   } as unknown as Record<string, unknown>)}
                 >
@@ -1027,8 +1032,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   aria-expanded={filtersOpen}
                   aria-label={`Filters, ${activeFilterLabels.length} on: ${activeFilterLabels.join(", ")}`}
                   {...({
-                    onMoveDown: () =>
-                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onMoveDown: moveDownFromTopRow,
                     onOKButton: okButtonRuns(() => {
                       if (filtersOpen) closeFiltersPanel();
                       else openFiltersPanel();
@@ -1053,8 +1057,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   }}
                   aria-label="Type a model name by hand"
                   {...({
-                    onMoveDown: () =>
-                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onMoveDown: moveDownFromTopRow,
                     onOKButton: okButtonRuns(() => {
                       setCustomTagEntryOpen(true);
                       focusAfterRedraw(() => focusCustomTagClose());
@@ -1063,6 +1066,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 >
                   Type a name
                 </Button>
+                <PullModelsStarterSetChip installedTags={installedTags} onMoveDown={moveDownFromTopRow} okButtonRuns={okButtonRuns} />
               </Focusable>
             )}
             {customTagEntryOpen && customTagInput.trim() && !isPlausibleOllamaPullTag(customTagInput) ? (

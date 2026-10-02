@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 678,
-  "edgeCount": 1919,
+  "fileCount": 681,
+  "edgeCount": 1933,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1273,6 +1273,7 @@
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
@@ -1366,6 +1367,7 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts"
@@ -1522,6 +1524,7 @@
         "src/components/BonsaiModalScope.tsx",
         "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsStarterSetChip.tsx",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
@@ -1552,7 +1555,8 @@
         "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
-        "src/components/PullModelsModal.test.tsx"
+        "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsStarterSetChip.test.tsx"
       ]
     },
     "src/components/PullModelsModal.types.ts": {
@@ -1569,6 +1573,25 @@
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",
         "src/utils/pullModelFilters.ts"
+      ]
+    },
+    "src/components/PullModelsStarterSetChip.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsStarterSetChip.tsx": {
+      "imports": [
+        "src/data/deckEssentialsTags.ts",
+        "src/hooks/localOllamaStarterSet.tsx",
+        "src/utils/pullModelFilters.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
       ]
     },
     "src/components/ReplyCopyButton.test.tsx": {
@@ -2065,6 +2088,8 @@
     "src/data/deckEssentialsTags.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/PullModelsStarterSetChip.tsx",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx"
       ]
@@ -2629,9 +2654,11 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
+        "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -2645,6 +2672,7 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx"
@@ -3548,6 +3576,19 @@
         "src/test-harness/rpcFixtures.ts"
       ],
       "importedBy": []
+    },
+    "src/hooks/localOllamaStarterSet.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.constants.tsx",
+        "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/data/deckEssentialsTags.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsStarterSetChip.tsx"
+      ]
     },
     "src/hooks/setupAndPullBoxWording.test.tsx": {
       "imports": [
@@ -5119,6 +5160,7 @@
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
         "src/components/VoiceInputSettingsSection.downloadNotice.test.tsx",
         "src/components/VoiceInputSettingsSection.test.tsx",
@@ -5210,6 +5252,7 @@
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
+        "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",
@@ -6271,6 +6314,7 @@
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/voice/useVoiceAskInput.ts",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -6926,6 +6970,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsStarterSetChip.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTableData.ts",

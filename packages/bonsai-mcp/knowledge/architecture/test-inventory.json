@@ -104,6 +104,7 @@
     "src/components/PullModelsModal.listScroll.test.tsx",
     "src/components/PullModelsModal.otherInstalledSize.test.tsx",
     "src/components/PullModelsModal.test.tsx",
+    "src/components/PullModelsStarterSetChip.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",
     "src/components/SettingsTab.accentMenuRing.test.tsx",

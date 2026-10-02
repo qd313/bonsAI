@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 660,
-  "edgeCount": 1858,
+  "fileCount": 662,
+  "edgeCount": 1863,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3176,6 +3176,7 @@
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.test.ts",
         "src/features/preset-carousel/sessionRagComposer.ts",
+        "src/styles/sections/presetChipLabel.ts",
         "src/styles/sections/section-4.test.ts",
         "src/styles/sections/section-4.ts"
       ]
@@ -4603,7 +4604,8 @@
         "src/components/BonsaiPluginShell.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/sections/gameRunningLighter.test.ts",
-        "src/styles/sections/gamepadAndPullModels.test.ts"
+        "src/styles/sections/gamepadAndPullModels.test.ts",
+        "src/styles/sections/presetChipLabel.test.ts"
       ]
     },
     "src/styles/presetChipFocusRing.test.ts": {
@@ -4673,6 +4675,23 @@
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"
+      ]
+    },
+    "src/styles/sections/presetChipLabel.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/presetChipLabel.ts",
+        "src/styles/sections/section-4.ts"
+      ],
+      "importedBy": []
+    },
+    "src/styles/sections/presetChipLabel.ts": {
+      "imports": [
+        "src/features/preset-carousel/presetRowLayout.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/presetChipLabel.test.ts",
+        "src/styles/sections/section-4.ts"
       ]
     },
     "src/styles/sections/questionBubble.ts": {
@@ -4757,11 +4776,13 @@
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/unified-input/constants.ts",
         "src/hooks/useSteamSettingsSearch.ts",
+        "src/styles/sections/presetChipLabel.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
+        "src/styles/sections/presetChipLabel.test.ts",
         "src/styles/sections/section-4.test.ts"
       ]
     },

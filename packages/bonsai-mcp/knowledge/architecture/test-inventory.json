@@ -144,6 +144,7 @@
     "src/features/preset-carousel/carouselState.test.ts",
     "src/features/preset-carousel/changeSpacing.test.ts",
     "src/features/preset-carousel/nextChipRule.test.ts",
+    "src/features/preset-carousel/presetChipButton.scroll.test.tsx",
     "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
     "src/features/preset-carousel/presetRowLayout.test.ts",
     "src/features/preset-carousel/presetRowNav.test.ts",

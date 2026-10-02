@@ -8,9 +8,13 @@ import { describe, expect, it } from "vitest";
 import { presetPace, TWO_SPOT_MIN_GAP_MS } from "./presetPace";
 import {
   effectivePresetVisibleSlots,
+  PRESET_CHIP_END_PAUSE_MS,
   PRESET_CHIP_GAP_PX,
+  PRESET_MARQUEE_DELAY_S,
+  PRESET_MARQUEE_SPEED,
   PRESET_VISIBLE_SLOTS,
   presetHoldMs,
+  presetScrollPlan,
   presetTurnMs,
 } from "./presetRowLayout";
 
@@ -83,5 +87,39 @@ describe("the pace of a chip", () => {
 
   it("two spots never change within 2.5 s of each other", () => {
     expect(TWO_SPOT_MIN_GAP_MS).toBe(2500);
+  });
+});
+
+/*
+ * Plan 79 I: a long chip scrolls to the end of its words, stands still for a moment, then leaves.
+ * The time line of that is one function, shared by the chip's scroller and the stay time.
+ */
+describe("the time line of a long chip", () => {
+  it("stands still at the end for 1.5 s, the same wait the words make at the start", () => {
+    expect(PRESET_CHIP_END_PAUSE_MS).toBe(1500);
+    expect(PRESET_CHIP_END_PAUSE_MS).toBe(PRESET_MARQUEE_DELAY_S * 1000);
+  });
+
+  it("has no scroll for words that fit", () => {
+    expect(presetScrollPlan(0)).toBeNull();
+    expect(presetScrollPlan(-12)).toBeNull();
+  });
+
+  it("is wait, then scroll at the set speed, then the pause", () => {
+    const plan = presetScrollPlan(200)!;
+    expect(plan.delayMs).toBe(1500);
+    expect(plan.crawlMs).toBe((200 / PRESET_MARQUEE_SPEED) * 1000);
+    expect(plan.pauseMs).toBe(PRESET_CHIP_END_PAUSE_MS);
+    expect(plan.endMs).toBe(plan.delayMs + plan.crawlMs);
+    expect(plan.stayMs).toBe(plan.endMs + plan.pauseMs);
+  });
+
+  it("is never cut short: a long chip stays for the whole scroll and the pause, one chip or two", () => {
+    for (const chips of [1, 2]) {
+      const text = "x".repeat(90);
+      const room = chips === 1 ? 284 : 131; // the label room the stay time works with
+      const plan = presetScrollPlan(text.length * 6.45 - room)!;
+      expect(presetHoldMs(text, chips)).toBeGreaterThanOrEqual(plan.stayMs - 1);
+    }
   });
 });

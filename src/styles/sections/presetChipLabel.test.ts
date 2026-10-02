@@ -24,4 +24,13 @@ describe("buildPresetChipLabelCss", () => {
     expect(chipAt).toBeGreaterThan(-1);
     expect(focusAt).toBeGreaterThan(chipAt);
   });
+
+  it("clips the words in the room and keeps the moving words on one line", () => {
+    const css = buildPresetChipLabelCss();
+    const room = css.match(/\.bonsai-preset-chip-text--marquee\s*\{([^}]*)\}/)?.[1] ?? "";
+    expect(room).toMatch(/overflow:\s*hidden/);
+    const moving = css.match(/\.bonsai-preset-chip-text-run\s*\{([^}]*)\}/)?.[1] ?? "";
+    expect(moving).toMatch(/display:\s*inline-block/);
+    expect(moving).toMatch(/white-space:\s*nowrap/);
+  });
 });

@@ -88,6 +88,23 @@ export function buildPresetChipLabelCss(): string {
           white-space: nowrap !important;
         }
         /*
+          A long chip scrolls its words by moving the inner span inside the outer one (the chip's own
+          scroller, PresetChipScrollText in presetChipButton.tsx). The outer span is the room the words
+          scroll in and clips them; the inner span is as wide as the words, on one line, and is what
+          moves. Neither width is set here: both come from the words and the chip (design-language
+          rule 4), and the scroller reads them off the live elements.
+        */
+        .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-text--marquee {
+          display: block !important;
+          overflow: hidden !important;
+          white-space: nowrap !important;
+        }
+        .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-text-run {
+          display: inline-block !important;
+          white-space: nowrap !important;
+          will-change: transform;
+        }
+        /*
           Decode mode (Ghost in the Shell chip decode -- replaces the old \`stream\` typewriter).
           The reveal loop in MainTabPresetAnimatedChips.tsx writes scrambled/resolving glyphs and
           the blinking block caret straight into the label's textContent from a single shared

@@ -48,17 +48,51 @@ export const PRESET_CHIP_SIDE_PADDING_PX = 8;
 export const PRESET_CHIP_BLOCKED_EDGE_FLASH_MS = 320;
 
 /*
- * Steam Marquee settings. "Slow and calm" per the maintainer (2026-09-01). The units are Steam's and
- * undocumented; these are calibrated on device (row PRESET-ONE-LINE-04) and only ever change here.
- * The chat row's long chat name scrolls with these same settings (ChatSlotRow.tsx, through
- * SteamMarqueeText), so a chip label and a chat name always move alike. Speed lowered 20%, 25 to
+ * Scroll settings. "Slow and calm" per the maintainer (2026-09-01). The units are Steam's Marquee and
+ * undocumented (measured on device: about one pixel a second per unit); calibrated on device (row
+ * PRESET-ONE-LINE-04) and only ever changed here. The chat row's long chat name scrolls with these same
+ * settings (ChatSlotRow.tsx, through SteamMarqueeText), and the suggestion chips' own scroller
+ * (PresetChipScrollText) reads the same speed and start wait, so a chip label and a chat name move alike. Speed lowered 20%, 25 to
  * 20, by the maintainer's call in plan 72 (2026-09-27); the pause before the start is unchanged.
  */
 export const PRESET_MARQUEE_SPEED = 20;
 export const PRESET_MARQUEE_DELAY_S = 1.5;
 export const PRESET_MARQUEE_FADE_LENGTH = 8;
-/** Pause after a label has scrolled to its end before a chip may rotate out. */
-const PRESET_MARQUEE_END_PAUSE_MS = 1500;
+/**
+ * How long a long label stands still once its words have scrolled to the end, before the chip may
+ * leave. 1.5 s on purpose: it is the same wait the words make at the start (PRESET_MARQUEE_DELAY_S),
+ * so the beginning and the end of a scroll feel alike, and it is long enough to read the last three
+ * or four words after the movement stops, yet short enough that a chip does not seem stuck. The
+ * maintainer asked for a pause here on 2026-10-02 (roadmap, "Long suggestion chips").
+ */
+export const PRESET_CHIP_END_PAUSE_MS = 1500;
+
+/** The time line of one long label: wait, scroll to the end, stand still. All in milliseconds. */
+export interface PresetScrollPlan {
+  /** Standing at the start before the words begin to move. */
+  delayMs: number;
+  /** The scroll itself, from the first word at the left edge to the last word at the right edge. */
+  crawlMs: number;
+  /** Standing still at the end. */
+  pauseMs: number;
+  /** From mounting to the moment the words reach the end (delay plus scroll). */
+  endMs: number;
+  /** From mounting to the moment the chip may leave (delay, scroll and pause). */
+  stayMs: number;
+}
+
+/**
+ * The time line for a label that overflows its room by `overflowPx`, or null when it fits. The
+ * chip's scroller (PresetChipScrollText in presetChipButton.tsx) and the stay time below both read
+ * this one function, so what is on screen and how long the chip stays cannot drift apart.
+ */
+export function presetScrollPlan(overflowPx: number): PresetScrollPlan | null {
+  if (!(overflowPx > 0)) return null;
+  const delayMs = PRESET_MARQUEE_DELAY_S * 1000;
+  const crawlMs = (overflowPx / PRESET_MARQUEE_SPEED) * 1000;
+  const pauseMs = PRESET_CHIP_END_PAUSE_MS;
+  return { delayMs, crawlMs, pauseMs, endMs: delayMs + crawlMs, stayMs: delayMs + crawlMs + pauseMs };
+}
 
 /**
  * Device-measured 6.45 px per character at 12 px (PHASE4-CHIPS-01, 2026-08-29: 219.2 px for 34
@@ -81,13 +115,8 @@ function labelRoomPx(chipCount: number): number {
 
 /** How long a scrolling label needs to be read through once: delay, one crawl, a pause. */
 function marqueeHoldFloorMs(text: string, chipCount: number): number {
-  const overflowPx = Math.max(0, text.length * PRESET_LABEL_PX_PER_CHAR - labelRoomPx(chipCount));
-  if (overflowPx === 0) return 0;
-  return (
-    PRESET_MARQUEE_DELAY_S * 1000 +
-    (overflowPx / PRESET_MARQUEE_SPEED) * 1000 +
-    PRESET_MARQUEE_END_PAUSE_MS
-  );
+  const overflowPx = text.length * PRESET_LABEL_PX_PER_CHAR - labelRoomPx(chipCount);
+  return presetScrollPlan(overflowPx)?.stayMs ?? 0;
 }
 
 /**

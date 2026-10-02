@@ -17,7 +17,7 @@
  * Does not: Decide the D-pad wiring or the focus container — see presetRowFocusNav in the same
  * folder.
  */
-import React from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button, Marquee, type MarqueeProps } from "@decky/ui";
 import type { AskModeId } from "../../data/askMode";
 import type { PresetPrompt } from "../../data/presets";
@@ -26,6 +26,7 @@ import {
   PRESET_MARQUEE_DELAY_S,
   PRESET_MARQUEE_FADE_LENGTH,
   PRESET_MARQUEE_SPEED,
+  presetScrollPlan,
 } from "./presetRowLayout";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 
@@ -61,23 +62,96 @@ export function SteamMarqueeText({
   );
 }
 
+type ScrollPhase = "waiting" | "scrolling" | "end";
+
 /**
- * The prompt text. A prompt longer than its chip scrolls sideways through Steam's own Marquee —
- * the crawl the library uses for long game names — which decides "does this overflow" on the live
- * element, never from a predicted width (the roadmap's marquee item insists on that, with receipts).
- * Decky finds the component in Steam's bundle at runtime; when it is missing, and under reduced
- * motion, the label is cut off with an ellipsis instead.
+ * The words of a chip, scrolled sideways when they are too long for it. The chip's own scroll rather
+ * than Steam's Marquee, because the Marquee has no stop at the end: its scroll cannot be told to stand
+ * still for a moment once the last words are in view, and that is what the maintainer asked for
+ * (2026-10-02). The overflow is still decided on the live element, never from a predicted width: the
+ * words' width and the room are read off the two elements after they are laid out (and again when the
+ * room changes), as the roadmap's marquee item insists.
+ *
+ * The time line is presetScrollPlan (presetRowLayout.ts), the same one the chip's stay time reads:
+ * the words wait at the left edge, scroll to the end at the set speed, and then stay where they are.
+ * Nothing moves again, so the pause lasts for as long as the chip stays, and the stay time always
+ * holds it for at least the pause. Words that fit are left alone, so the chip can centre them.
+ * `data-scroll-phase` says where the line has got to: fits, waiting, scrolling or end.
+ */
+function PresetChipScrollText({ text }: { text: string }) {
+  const roomRef = useRef<HTMLSpanElement>(null);
+  const wordsRef = useRef<HTMLSpanElement>(null);
+  const [overflowPx, setOverflowPx] = useState(0);
+  const [phase, setPhase] = useState<ScrollPhase>("waiting");
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const room = roomRef.current;
+      const words = wordsRef.current;
+      if (!room || !words || room.clientWidth <= 0) return setOverflowPx(0);
+      setOverflowPx(Math.max(0, Math.ceil(words.scrollWidth - room.clientWidth)));
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined" || !roomRef.current) return;
+    const watcher = new ResizeObserver(measure);
+    watcher.observe(roomRef.current);
+    return () => watcher.disconnect();
+  }, [text]);
+
+  const plan = presetScrollPlan(overflowPx);
+  const crawlMs = plan?.crawlMs;
+  const delayMs = plan?.delayMs;
+  useLayoutEffect(() => {
+    setPhase("waiting");
+    if (crawlMs === undefined || delayMs === undefined) return;
+    const startScroll = window.setTimeout(() => setPhase("scrolling"), delayMs);
+    const reachEnd = window.setTimeout(() => setPhase("end"), delayMs + crawlMs);
+    return () => {
+      window.clearTimeout(startScroll);
+      window.clearTimeout(reachEnd);
+    };
+  }, [crawlMs, delayMs]);
+
+  const shown = plan ? phase : "fits";
+  // Steam's marquee faded the words at the edges; the same fade here, on the side the words leave.
+  const fade = PRESET_MARQUEE_FADE_LENGTH;
+  const mask =
+    shown === "fits"
+      ? undefined
+      : shown === "waiting"
+        ? `linear-gradient(to right, #000 calc(100% - ${fade}px), transparent)`
+        : shown === "scrolling"
+          ? `linear-gradient(to right, transparent, #000 ${fade}px, #000 calc(100% - ${fade}px), transparent)`
+          : `linear-gradient(to right, transparent, #000 ${fade}px)`;
+  return (
+    <span
+      ref={roomRef}
+      className="bonsai-preset-chip-text bonsai-preset-chip-text--marquee"
+      style={mask ? { WebkitMaskImage: mask, maskImage: mask } : undefined}
+    >
+      <span
+        ref={wordsRef}
+        className="bonsai-preset-chip-text-run"
+        data-scroll-phase={shown}
+        style={{
+          transform: shown === "scrolling" || shown === "end" ? `translateX(-${overflowPx}px)` : "translateX(0px)",
+          transition: shown === "scrolling" ? `transform ${plan!.crawlMs}ms linear` : "none",
+        }}
+      >
+        {text}
+      </span>
+    </span>
+  );
+}
+
+/**
+ * The prompt text. A prompt longer than its chip scrolls its words sideways (PresetChipScrollText),
+ * stands still at the end, and the chip leaves after that. Under reduced motion the label is cut off
+ * with an ellipsis instead and nothing moves.
  */
 export function PresetChipText({ text, scroll }: { text: string; scroll: boolean }) {
-  const plain = <span className="bonsai-preset-chip-text">{text}</span>;
-  if (!scroll) return plain;
-  return (
-    <SteamMarqueeText
-      text={text}
-      className="bonsai-preset-chip-text bonsai-preset-chip-text--marquee"
-      fallback={plain}
-    />
-  );
+  if (!scroll) return <span className="bonsai-preset-chip-text">{text}</span>;
+  return <PresetChipScrollText key={text} text={text} />;
 }
 
 /**

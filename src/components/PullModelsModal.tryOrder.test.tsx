@@ -322,6 +322,19 @@ describe("a model the filters hide", () => {
   });
 });
 
+describe("a model the PC has and this Deck does not", () => {
+  it("keeps its place and is counted in the quiet line, which does not blame the filters alone", async () => {
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3:14b"] }
+        : { reachable: true, models: DECK_MODELS },
+    );
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    expect(container.textContent).toContain("1 model in the order is not in this list (hidden by the filters, or not on this Deck).");
+  });
+});
+
 describe("walking the box with the D-pad", () => {
   const labelOf = (el: Element) => el.getAttribute("aria-label") ?? el.textContent ?? "";
   const press = (name: string): boolean => {

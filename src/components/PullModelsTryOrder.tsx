@@ -56,10 +56,15 @@ export type TryCellArgs = {
   okButtonRuns: OkRuns;
 };
 
-/** Plain text for a count of models, "1 model ... is", "2 models ... are". */
-function hiddenLine(hidden: number): string {
+/**
+ * Plain text for a count of models, "1 model ... is", "2 models ... are". With the AI on a PC some of
+ * them may be models the PC has and this Deck does not, which the table never lists, so the filters
+ * are not the whole reason there.
+ */
+function hiddenLine(hidden: number, onPc: boolean): string {
   const one = hidden === 1;
-  return `${hidden} ${one ? "model" : "models"} in the order ${one ? "is" : "are"} hidden by the filters. ${
+  const why = onPc ? "not in this list (hidden by the filters, or not on this Deck)" : "hidden by the filters";
+  return `${hidden} ${one ? "model" : "models"} in the order ${one ? "is" : "are"} ${why}. ${
     one ? "It keeps" : "They keep"
   } ${one ? "its" : "their"} place; the numbers skip ${one ? "it" : "them"}.`;
 }
@@ -211,7 +216,7 @@ export function usePullModelTryNav(a: {
           ) : null}
         </Focusable>
         {note ? <div className="bonsai-pullmodels-tryorder-note">{note}</div> : null}
-        {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden)}</div> : null}
+        {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden, places.onPc)}</div> : null}
       </div>
     );
   };

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 682,
-  "edgeCount": 1938,
+  "fileCount": 683,
+  "edgeCount": 1939,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4787,6 +4787,7 @@
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/buttonFocusRing.test.ts",
+        "src/styles/presetChipHighlightFill.test.ts",
         "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts",
         "src/styles/sections/presetChipLabel.test.ts",
@@ -4804,6 +4805,12 @@
       "imports": [
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/styles/sections/section-4.ts"
+      ],
+      "importedBy": []
+    },
+    "src/styles/presetChipHighlightFill.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
     },

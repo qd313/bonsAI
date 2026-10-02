@@ -207,6 +207,7 @@
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/buttonFocusRing.test.ts",
     "src/styles/presetChipFocusRing.test.ts",
+    "src/styles/presetChipHighlightFill.test.ts",
     "src/styles/sections/answerBubble.test.ts",
     "src/styles/sections/gameRunningLighter.test.ts",
     "src/styles/sections/gamepadAndPullModels.test.ts",

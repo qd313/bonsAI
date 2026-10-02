@@ -52,7 +52,8 @@
  *    stopped taking that ring (gamepadAndPullModels.ts) and show a lit
  *    bar along their own bottom edge instead, drawn inside the chip where
  *    nothing can cut it off. The "ran out of chips" flash moved onto the
- *    same bar, so the two cues are no longer the same shape.
+ *    same bar. Since 2026-10-02 the resting cue is a pale blue fill, not a
+ *    bar, and only the flash still draws one.
  *
  * Both bar rules repeat the chip's resting hairline and drop shadow in
  * their own list on purpose: box-shadow replaces the whole list rather
@@ -249,7 +250,7 @@ export function buildSection4Section(): string {
           min-width: 0 !important;
         }
         /*
-          The lit bar under the chip the D-pad is on. It marks which chip a press would act on, and
+          The soft blue fill on the chip the D-pad is on. It marks which chip a press would act on, and
           it must never appear on a chip the D-pad has left: ungated, the old version of this sat on
           a chip permanently, so with the D-pad up on the tab strip the screen still showed a
           highlighted chip — the fake focus ring found on device 2026-08-28, which fooled the
@@ -260,12 +261,13 @@ export function buildSection4Section(): string {
           stamps only the chip. Gate 3 keeps the marker on desktop, in the in-IDE preview and on
           touch, where nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in
           uiDocument.ts. The last two arms light the rows whose slots carry no --focus marker at
-          all (fade, static and decode), which get the same bar.
+          all (fade, static and decode), which get the same fill.
 
           2026-09-17 (plan 60) changed what these gates draw, not when. See the file header,
-          point 2: the blue line round the chip became a lit bar inside its bottom edge, and the
-          hairline and drop shadow are repeated in the list because box-shadow replaces rather than
-          adds. \`outline: none\` stops Steam's plain focus outline showing up clipped in its place.
+          point 2: the blue line round the chip became a lit bar inside its bottom edge. On 2026-10-02
+          the bar gave way to a pale blue tint laid over the chip's own gradient (the maintainer's
+          pick, "highlight 1"); the hairline and drop shadow stay in the list because box-shadow
+          replaces rather than adds. \`outline: none\` stops Steam's plain focus outline showing up clipped in its place.
         */
         .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
@@ -273,9 +275,10 @@ export function buildSection4Section(): string {
         .bonsai-scope button.bonsai-preset-glass.gpfocus,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible {
           outline: none !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important; /* alpha toned 0.85->0.55, 2026-09-19, too bright */
+          background: linear-gradient(rgba(56, 189, 248, 0.20), rgba(56, 189, 248, 0.20)), linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
-        /* The label brightens with the bar, so the whole chip reads as the live one. Decode used to
+        /* The label brightens with the fill, so the whole chip reads as the live one. Decode used to
            be excluded here (its label owned its own colour); that rule is gone (bug fix
            2026-09-19), so a focused decode chip now brightens like every other mode. */
         .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
@@ -283,7 +286,7 @@ export function buildSection4Section(): string {
         :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
         .bonsai-scope button.bonsai-preset-glass.gpfocus .bonsai-preset-chip-label,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible .bonsai-preset-chip-label {
-          color: #dcebf8 !important;
+          color: #eef7fd !important;
         }
 
         /*

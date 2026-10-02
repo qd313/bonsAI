@@ -1,7 +1,7 @@
 /**
  * Title: Preset chip focus cue honesty
  * Purpose: Pin that a suggestion chip only looks focused when it really holds Steam's gamepad ring,
- *          and that the cue it shows is the lit bar along its own bottom edge — not Steam's white
+ *          and that the cue it shows is a soft blue fill inside itself — not Steam's white
  *          ring, which the row around the chips has been cutting off since 2026-09-01.
  * Used for: The chips' focus styling in section-4.ts and the shared white ring in
  *           gamepadAndPullModels.ts.
@@ -89,16 +89,15 @@ describe("preset chip focus cue", () => {
     expect(ringCss).toContain("outline: 2px solid rgba(255, 255, 255, 0.9) !important;");
   });
 
-  it("draws the bar, the hairline and the soft shadow in one list, so none of them erases another", () => {
+  it("keeps the hairline and the soft shadow in one list, so none of them erases another", () => {
     // box-shadow replaces the whole list rather than adding to it. Leaving the resting hairline and
     // drop shadow out of this line would flatten the chip the moment the D-pad landed on it — the
     // "two effects on the same edge can cancel each other" lesson. This is the guard for that.
     const body = focusBarRuleBody();
     expect(body).toMatch(/inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.10\)/);
-    // Toned from 0.85 to 0.55 (bug report, 2026-09-19: too bright, drew the eye more than the
-    // chip); still present, still visible -- this is the guard that catches it disappearing too.
-    expect(body).toMatch(/inset 0 -2px 0 rgba\(56,\s*189,\s*248,\s*0\.55\)/);
-    expect(body).not.toMatch(/rgba\(56,\s*189,\s*248,\s*0\.85\)/);
+    // The bottom bar is gone (2026-10-02: the soft fill replaced it, see presetChipHighlightFill
+    // .test.ts); only the edge flash still draws one.
+    expect(body).not.toMatch(/inset 0 -2px 0/);
     expect(body).toMatch(/0 2px 3px rgba\(0,\s*0,\s*0,\s*0\.4\)\s*!important/);
     // The blue border that used to be the cue is gone from both stylesheets.
     expect(body).not.toMatch(/border-color:/);
@@ -122,7 +121,7 @@ describe("preset chip focus cue", () => {
     for (const sel of labelSelectors) {
       expect(sel).not.toContain("bonsai-preset-glass--decode");
     }
-    expect(buildSection4Section()).toContain("color: #dcebf8 !important;");
+    expect(buildSection4Section()).toContain("color: #eef7fd !important;");
   });
 
   it("no longer tints a decode chip's whole label with the accent colour", () => {

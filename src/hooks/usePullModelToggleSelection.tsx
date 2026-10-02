@@ -108,9 +108,16 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
                 slowly on Deck CPU/RAM. Pull only if you have room and accept longer waits.
               </div>
             }
-            strOKButtonText="Pull anyway"
+            /*
+              Steam opens a confirm box with the ring on OK, so OK queues nothing and "Pull anyway" sits
+              on the middle button (the download notice's shape): an A pressed by habit no longer
+              queues a big download. Cancel and B also change nothing.
+            */
+            strOKButtonText="Not now"
+            strMiddleButtonText="Pull anyway"
             strCancelButtonText="Cancel"
-            onOK={() => {
+            onOK={() => completeNestedModalClose(() => handle.Close())}
+            onMiddleButton={() => {
               stretchConfirmedRef.current.add(entry.tag);
               completeNestedModalClose(() => handle.Close());
               confirmOpenWeightTierIfNeeded(entry, queueSelection);

@@ -9,7 +9,6 @@ system really produces).
 import asyncio
 import json
 import os
-import threading
 import time
 import unittest
 from unittest.mock import patch
@@ -31,7 +30,7 @@ from backend.services.chat_summary_service import (
     write_chat_summary,
 )
 from backend.services.token_accounting_service import reset_token_accounting
-from fake_ollama_stream import ndjson_response
+from fake_ollama_stream import FakePlugin, one_line_reply
 
 FIXTURE_PATH = os.path.join(
     os.path.dirname(__file__), "fixtures", "plan68_real_summaries.json"
@@ -142,27 +141,6 @@ class _StopMidReadResponse:
         pass
 
 
-class _FakePlugin:
-    """The handful of attributes ``write_chat_summary`` reads and sets on ``plugin`` -- the same
-    ones the real Plugin class carries for the answer's own streamed call."""
-
-    def __init__(self):
-        self._abort_current_ollama_chat = threading.Event()
-        self._chat_resp_ready_evt = None
-        self._active_ollama_chat_http_response = None
-        self._active_ollama_chat_pc_ip = None
-        self._active_ollama_chat_model = None
-
-    def _abort_ollama_chat_check(self) -> bool:
-        return self._abort_current_ollama_chat.is_set()
-
-
-def _ok_response_for(text: str):
-    return ndjson_response(
-        [json.dumps({"message": {"role": "assistant", "content": text}, "done": True})]
-    )
-
-
 class PlanSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
         reset_token_accounting()
@@ -259,7 +237,7 @@ class LastMemoryAllowanceTests(unittest.TestCase):
 class WriteChatSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
         reset_token_accounting()
-        self.plugin = _FakePlugin()
+        self.plugin = FakePlugin()
 
     def _run(self, plan, turns, *, reply_language="english"):
         return asyncio.run(
@@ -291,7 +269,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "english")
         turns = _chat(20)
         plan = self._plan_for(turns)
-        mock_urlopen.return_value = _ok_response_for(fixture["text"])
+        mock_urlopen.return_value = one_line_reply(fixture["text"])
 
         outcome = self._run(plan, turns)
 
@@ -313,7 +291,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "spanish")
         turns = _chat(6)
         plan = self._plan_for(turns)
-        mock_urlopen.return_value = _ok_response_for(fixture["text"])
+        mock_urlopen.return_value = one_line_reply(fixture["text"])
 
         outcome = self._run(plan, turns, reply_language="spanish")
 
@@ -328,7 +306,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         turns = _chat(4)
         previous = {"text": "Player is fighting Wheatley.", "covers_through_turn_id": "a0"}
         plan = self._plan_for(turns, previous=previous)
-        mock_urlopen.return_value = _ok_response_for("Notes updated.")
+        mock_urlopen.return_value = one_line_reply("Notes updated.")
 
         self._run(plan, turns)
 
@@ -344,7 +322,7 @@ class WriteChatSummaryTests(unittest.TestCase):
             {"id": "a0", "role": "assistant", "text": HOLLOW_KNIGHT_SPOILER_ANSWER},
         ]
         plan = self._plan_for(turns)
-        mock_urlopen.return_value = _ok_response_for("Notes about Hollow Knight.")
+        mock_urlopen.return_value = one_line_reply("Notes about Hollow Knight.")
 
         self._run(plan, turns)
 
@@ -397,7 +375,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         raised until the next call lowers it. A summary that ran first without lowering it itself
         would report itself as stopped on the very first request."""
         self.plugin._abort_current_ollama_chat.set()
-        mock_urlopen.return_value = _ok_response_for("Fine, notes written.")
+        mock_urlopen.return_value = one_line_reply("Fine, notes written.")
         turns = _chat(2)
         plan = self._plan_for(turns)
 
@@ -427,7 +405,7 @@ class WriteChatSummaryTests(unittest.TestCase):
             {"id": "a1", "role": "assistant", "text": "Dash through the fire.", "app_name": "Hades"},
         ]
         plan = self._plan_for(turns)
-        mock_urlopen.return_value = _ok_response_for(reply)
+        mock_urlopen.return_value = one_line_reply(reply)
 
         outcome = asyncio.run(
             write_chat_summary(

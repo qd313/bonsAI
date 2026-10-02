@@ -10,7 +10,6 @@ so these end on the payload the screen gets.
 import asyncio
 import json
 import tempfile
-import threading
 import unittest
 from unittest.mock import patch
 
@@ -39,7 +38,7 @@ from backend.services.chat_summary_title import (  # noqa: E402
     title_instruction,
     title_to_second_guess,
 )
-from fake_ollama_stream import ndjson_response  # noqa: E402
+from fake_ollama_stream import FakePlugin, one_line_reply  # noqa: E402
 from test_chat_sum_up_job import ChatSlotJobTestCase, _seed_chat  # noqa: E402
 
 
@@ -107,33 +106,17 @@ class TitleLineTests(unittest.TestCase):
         self.assertIn("say 'hi'", text)
 
 
-class _FakePlugin:
-    def __init__(self):
-        self._abort_current_ollama_chat = threading.Event()
-        self._chat_resp_ready_evt = None
-        self._active_ollama_chat_http_response = None
-        self._active_ollama_chat_pc_ip = None
-        self._active_ollama_chat_model = None
-
-    def _abort_ollama_chat_check(self) -> bool:
-        return self._abort_current_ollama_chat.is_set()
-
-
-def _reply(text: str):
-    return ndjson_response([json.dumps({"message": {"role": "assistant", "content": text}, "done": True})])
-
-
 def _plan(turns):
     return SummaryPlan(needed=True, covered_turns=turns, kept_turns=[], oldest_turns_unread=0, previous=None)
 
 
 class SummaryRequestAndReplyTests(unittest.TestCase):
     def _write(self, urlopen, reply, *, title_offer_for):
-        urlopen.return_value = _reply(reply)
+        urlopen.return_value = one_line_reply(reply)
         turns = _turns(6)
         outcome = asyncio.run(
             write_chat_summary(
-                _FakePlugin(), chat={"turns": turns}, plan=_plan(turns), model_name="gemma4:e2b-it-qat",
+                FakePlugin(), chat={"turns": turns}, plan=_plan(turns), model_name="gemma4:e2b-it-qat",
                 url="http://127.0.0.1:11434/api/chat", keep_alive="5m", window_tokens=16384,
                 reply_language="english", request_id=1, title_offer_for=title_offer_for,
             )

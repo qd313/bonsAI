@@ -22,30 +22,37 @@ class _Logger:
         return None
 
 
+def _sanitize_with_defaults(data):
+    """``sanitize_settings`` with the same plain defaults and limits, for tests that only vary ``data``."""
+    return sanitize_settings(
+        data=data,
+        default_latency_warning_seconds=15,
+        default_request_timeout_seconds=120,
+        min_latency_warning_seconds=5,
+        max_latency_warning_seconds=300,
+        min_request_timeout_seconds=10,
+        max_request_timeout_seconds=300,
+        valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+        default_persistence_mode="no_persist",
+        valid_ask_modes={"speed", "strategy", "expert"},
+        default_ask_mode="speed",
+    )
+
+
 class SettingsServiceTests(unittest.TestCase):
     """Service-level tests for settings normalization and persistence round-trip behavior."""
 
     def test_sanitize_settings_clamps_and_defaults(self):
         """Verify sanitization clamps numbers and falls back for invalid enum-like values."""
-        sanitized = sanitize_settings(
-            data={
+        sanitized = _sanitize_with_defaults(
+            {
                 "latency_warning_seconds": 500,
                 "request_timeout_seconds": "5",
                 "unified_input_persistence_mode": "invalid",
                 "screenshot_max_dimension": "1920",
                 "desktop_debug_note_auto_save": "yes",
                 "ask_mode": "bogus",
-            },
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
+            }
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 295)
         self.assertEqual(sanitized["request_timeout_seconds"], 300)
@@ -80,20 +87,8 @@ class SettingsServiceTests(unittest.TestCase):
 
     def test_show_developer_tab_migrates_legacy_show_debug_tab(self):
         """Legacy show_debug_tab enables Developer tab on read."""
-        kwargs = dict(
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
-        self.assertTrue(sanitize_settings(data={"show_debug_tab": True}, **kwargs)["show_developer_tab"])
-        self.assertFalse(sanitize_settings(data={"show_debug_tab": False}, **kwargs)["show_developer_tab"])
+        self.assertTrue(_sanitize_with_defaults({"show_debug_tab": True})["show_developer_tab"])
+        self.assertFalse(_sanitize_with_defaults({"show_debug_tab": False})["show_developer_tab"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""
@@ -724,19 +719,7 @@ class RememberWhatITypedSwitchTests(unittest.TestCase):
 
     @staticmethod
     def _sanitize(data):
-        return sanitize_settings(
-            data=data,
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
+        return _sanitize_with_defaults(data)
 
     def test_all_three_saved_names_still_load(self):
         for saved, shown in (

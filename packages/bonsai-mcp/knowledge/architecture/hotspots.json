@@ -96,13 +96,18 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 858,
+      "role": ""
+    },
+    {
       "path": "src/components/CharacterPickerModal.tsx",
       "lines": 853,
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 838,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 847,
       "role": ""
     },
     {
@@ -113,11 +118,6 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 836,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 802,
       "role": ""
     },
     {

@@ -54,7 +54,11 @@
  *    row are Steam's own default sibling movement — Helpful, then Not
  *    really, then the speaker, in that DOM order — except while the thumbs
  *    are greyed and there is no speaker to reach, when the row swallows the
- *    press instead of hopping between two dead buttons.
+ *    press instead of hopping between two dead buttons. While the five
+ *    "What went wrong?" choices show, the stops follow the drawn rows: Up from
+ *    Bad info is Helpful, Up from Wrong game or topic is Not really (both
+ *    greyed by then, and still landed on), Down from Helpful is Bad info, and
+ *    Down from Not really or the speaker is Wrong game or topic (plan 79).
  * 4. Each row answers presses two ways — its own onMoveUp/onMoveDown, and a
  *    shared pressHandler() wired to onButtonDown — because Decky delivers a
  *    directional press through onButtonDown in practice, though onMoveUp and
@@ -225,6 +229,29 @@ function focusChipInRow(row: ChipRowParts, index: number): boolean {
 /** Which chip in the row holds the ring, or -1. Reads Steam's ring, not `activeElement`. */
 function ringChipIndex(row: ChipRowParts): number {
   return row.chips.findIndex((c) => elementHasGamepadFocus(c));
+}
+
+/**
+ * Put the ring on Helpful or Not really whether or not the button is greyed. A greyed button still
+ * takes the ring on the Deck (replyStopRegistry.ts), and under the choices it is the right landing:
+ * the maintainer wants Up from the first row to meet the thumb drawn above. Helpful has its own nav
+ * node; Not really sits in the thumbs row, so that row takes the transfer first and the plain focus
+ * after only moves between siblings inside it (AGENTS.md, "The Steam Deck focus graph").
+ */
+function focusThumbEvenIfGreyed(id: "helpful" | "not-really", thumbsRowNav: SteamNavHolder): boolean {
+  const el = getReplyStop(id);
+  if (!el?.isConnected) return false;
+  try {
+    (id === "helpful" ? replyStopNavRef("helpful") : thumbsRowNav).current?.TakeFocus?.(true);
+  } catch {
+    /* the focus + check below decides */
+  }
+  try {
+    el.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(el);
 }
 
 function renderChipRow(
@@ -426,7 +453,20 @@ export function buildReplyActionsElement(
   };
 
 
-  const downFromThumbsRow = () => downFromThumbs();
+  /*
+   * With the "What went wrong?" choices showing, Down from the thumbs row goes straight to the
+   * choice drawn under the button (plan 79, roadmap "Up and Down between the rating choices and the
+   * speaker button go to the wrong place"): Helpful to Bad info, Not really and the speaker to
+   * Wrong game or topic. Left to Steam it followed the choice last left (plan79-P79-M7-RATING-ROW.json).
+   */
+  const downFromThumbsRow = () => {
+    if (!showChipRows) return downFromThumbs();
+    if (elementHasGamepadFocus(getReplyStop("helpful"))) return focusChipInRow(refineRow, 0);
+    if (elementHasGamepadFocus(getReplyStop("not-really")) || elementHasGamepadFocus(getReplyStop("read-aloud"))) {
+      return focusChipInRow(refineRow, 1);
+    }
+    return false;
+  };
 
   const thumbsRowNav: SteamNavHolder = { current: null };
   thumbsRowNavByKey.set(replyKey, thumbsRowNav);
@@ -510,7 +550,7 @@ export function buildReplyActionsElement(
    * was flagged for. Swallow only when there is truly nowhere live to go: thumbs greyed AND no
    * speaker in this row at all.
    */
-  const swallowThumbsSideways = () => thumbsDisabled && !showReadAloudRow;
+  const swallowThumbsSideways = () => thumbsDisabled && !showReadAloudRow && !showChipRows;
 
   /*
    * Column-preserving vertical hops when thumbs sit directly above utility
@@ -603,6 +643,11 @@ export function buildReplyActionsElement(
   const lengthRow = newChipRowParts();
   const upFromRefineRow = () => {
     if (onMoveUpFromChips?.()) return true;
+    /* The thumbs above the choices, greyed or not: Bad info up to Helpful, Wrong game or topic up to
+       Not really (plan 79). Greyed is the usual case here, since Not really was just pressed. */
+    if (showThumbs && focusThumbEvenIfGreyed(ringChipIndex(refineRow) === 1 ? "not-really" : "helpful", thumbsRowNav)) {
+      return true;
+    }
     if (focusReplyHelpful(turnSlot())) return true;
     if (showReadAloudRow) {
       try {

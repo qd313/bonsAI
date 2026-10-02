@@ -65,7 +65,18 @@ vi.mock("@decky/ui", async () => {
       return <Base {...rest} ref={setRef} />;
     },
   );
-  return { ...stubs, Focusable: NavFocusable };
+  /*
+   * A greyed button still takes the ring on the Deck (measured 2026-09-16, replyStopRegistry.ts), unlike
+   * a native disabled one, so it is marked aria-disabled here (plan 79: Up from the choices lands on it).
+   */
+  const BaseButton = stubs.Button as React.ComponentType<Record<string, unknown>>;
+  const DeckButton = React.forwardRef<HTMLButtonElement, Record<string, unknown>>(function DeckButton(
+    { disabled, ...rest },
+    ref,
+  ) {
+    return <BaseButton {...rest} aria-disabled={disabled ? true : undefined} ref={ref} />;
+  });
+  return { ...stubs, Focusable: NavFocusable, Button: DeckButton };
 });
 
 const QUESTION = "what is a good way to practice parrying in action games";
@@ -274,15 +285,16 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(byText(container, "Wrong game or topic"));
   });
 
-  it("the top chip row goes Up onto Read aloud (the thumbs are greyed once rated)", () => {
+  /* Plan 79: the greyed thumbs are stops now -- Up lands on the thumb drawn above the chip, not the speaker. */
+  it("the top chip row goes Up onto the thumb above each chip, greyed or not", () => {
     const { container } = renderTurn();
     focusOn(byText(container, "Wrong game or topic"));
     expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+    expect(document.activeElement).toBe(byLabel(container, "Mark reply not helpful"));
 
     focusOn(byText(container, "Bad info"));
     expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+    expect(document.activeElement).toBe(byLabel(container, "Mark reply helpful"));
   });
 
   it("with no reason chips, Show details still goes Up onto Read aloud", () => {
@@ -318,7 +330,7 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(seen).toEqual([
       "Spoiled it",
       "Bad info",
-      "Read aloud",
+      "Mark reply helpful",
       "B.",
       "A.",
       "answer's last section",

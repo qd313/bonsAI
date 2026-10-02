@@ -40,6 +40,7 @@
     "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
     "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
     "src/components/MainTabChatTranscript.questionFade.test.tsx",
+    "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
     "src/components/MainTabChatTranscript.readAloud.test.tsx",
     "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
     "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",

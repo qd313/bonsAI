@@ -647,6 +647,26 @@ describe("buildReplyActionsElement Left/Right in the thumbs row", () => {
 });
 
 /*
+ * Plan 79: with the "What went wrong?" choices showing, Up from them reaches the greyed thumbs, so
+ * the thumbs have to step to each other (and to the speaker) even with no speaker in the row.
+ */
+describe("buildReplyActionsElement Left/Right in the thumbs row with the choices showing", () => {
+  it("leaves Left and Right to Steam even with no speaker, once the choices are showing", () => {
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: "down",
+      onRate: () => {},
+      showFeedback: true,
+      onChip: () => {},
+    });
+    const row = findByClassName(el, "bonsai-chat-reply-actions-row");
+    const props = row!.props as Record<string, unknown>;
+    expect((props.onMoveLeft as () => boolean)()).toBe(false);
+    expect((props.onMoveRight as () => boolean)()).toBe(false);
+  });
+});
+
+/*
  * Show details is a line across the bottom of the reply, not a button in the row (D76). It reads as
  * the end of the answer and gives the row its width back.
  */

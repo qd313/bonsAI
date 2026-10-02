@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 667,
-  "edgeCount": 1882,
+  "fileCount": 668,
+  "edgeCount": 1887,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -599,6 +599,16 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.readAloud.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -777,6 +787,7 @@
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
+        "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
@@ -5067,6 +5078,7 @@
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
+        "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
@@ -5248,6 +5260,7 @@
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
+        "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
@@ -6367,6 +6380,7 @@
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
+        "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
@@ -7276,6 +7290,7 @@
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
+        "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",

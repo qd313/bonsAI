@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 708,
-  "edgeCount": 2040,
+  "fileCount": 709,
+  "edgeCount": 2043,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2811,7 +2811,9 @@
         "src/features/details-slot/DetailsSlot.tsx",
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/utils/buildDetailsPanelElement.tsx",
-        "src/utils/buildReplyActionsElement.tsx"
+        "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/handRingOnWhenGone.test.ts"
       ]
     },
     "src/features/downloads/downloadNotice.test.tsx": {
@@ -5347,6 +5349,7 @@
         "src/utils/answerBubbleNavigation.downVisible.test.ts",
         "src/utils/answerBubbleNavigation.firstSection.test.ts",
         "src/utils/answerBubbleNavigation.lastSection.test.ts",
+        "src/utils/answerBubbleNavigation.lastSectionCover.test.ts",
         "src/utils/answerBubbleNavigation.lastStep.test.ts",
         "src/utils/answerBubbleNavigation.mirrorWalk.test.ts",
         "src/utils/answerBubbleNavigation.readingWalk.test.ts",
@@ -5824,6 +5827,12 @@
       "importedBy": []
     },
     "src/utils/answerBubbleNavigation.lastSection.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerBubbleNavigation.lastSectionCover.test.ts": {
       "imports": [
         "src/test-harness/deckAnswerWalk.ts"
       ],
@@ -6496,6 +6505,7 @@
     },
     "src/utils/chatTranscriptNavHelpers.ts": {
       "imports": [
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/focusNavigation.ts",
@@ -6829,6 +6839,7 @@
     },
     "src/utils/handRingOnWhenGone.test.ts": {
       "imports": [
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"

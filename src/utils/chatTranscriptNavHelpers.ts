@@ -20,6 +20,7 @@ import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
+import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
 
 /**
  * Hand the ring to whichever permission-hint row is mounted below the transcript — the
@@ -257,7 +258,8 @@ export function vacDenyRowMoveUp(): boolean {
 /**
  * A on the troubleshooting hint's Dismiss removes the whole hint, button included, and left the ring
  * on nothing (plan70-L5-PERMS-CLEAN-06.json). Once the hint is gone, hand the ring to the next row
- * down through Steam's own transfer: the ban-lookup row when it shows, else the suggestion chips.
+ * down through Steam's own transfer: the ban-lookup row when it shows, else the chip's slot, which is
+ * the Show details line while an answer is read (the chips are hidden then, plan 79), else the chips.
  */
 export function dismissHintKeepingRing(
   buttons: { current: (HTMLElement | null)[] },
@@ -266,7 +268,7 @@ export function dismissHintKeepingRing(
   pressThenHandRingOn(buttons.current[1], dismiss, () => {
     void (
       takeNavFocus("chat-perm-hint-deny") ||
-      takeNavFocus("preset-carousel")
+      takeChipSlotFocus()
     );
   });
 }

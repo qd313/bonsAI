@@ -96,13 +96,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 858,
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 860,
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 857,
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 858,
       "role": ""
     },
     {

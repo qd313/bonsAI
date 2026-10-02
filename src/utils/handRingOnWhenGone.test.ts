@@ -12,6 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { dismissHintKeepingRing } from "./chatTranscriptNavHelpers";
 import { registerNavFocus, resetNavFocusRegistry } from "./navFocusRegistry";
 import { resetUiDocument } from "./uiDocument";
+import { setSlotShowsLine } from "../features/details-slot/detailsSlotStore";
 
 function fakeNavHolder() {
   return { current: { TakeFocus: vi.fn(() => true) } };
@@ -65,6 +66,26 @@ describe("Dismiss on the troubleshooting hint", () => {
     vi.runAllTimers();
 
     expect(chips.current.TakeFocus).toHaveBeenCalledWith(true);
+  });
+
+  it("falls through to the Show details line when it stands in the chip's slot, not to the hidden chips", () => {
+    // Plan 79 (helper AA's finding): while an answer is read, the slot above the question box shows the
+    // Show details line and the chips are hidden. The old hand-off named the chip row, so the ring went
+    // to chips no one could see.
+    const { dismissBtn, buttons, dismiss } = mountHint();
+    const chips = fakeNavHolder();
+    const line = fakeNavHolder();
+    registerNavFocus("preset-carousel", chips);
+    registerNavFocus("details-slot-line", line);
+    setSlotShowsLine(true);
+    dismissBtn.focus();
+
+    dismissHintKeepingRing(buttons, dismiss);
+    vi.runAllTimers();
+    setSlotShowsLine(false);
+
+    expect(line.current.TakeFocus).toHaveBeenCalledWith(true);
+    expect(chips.current.TakeFocus).not.toHaveBeenCalled();
   });
 
   it("moves nothing when the ring was not on Dismiss (a touch press)", () => {

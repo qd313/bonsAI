@@ -1,7 +1,9 @@
 # Plan 79 — release wave six: the last session before 0.6.0
 
-**Status: RUNNING since 2026-10-02, about 02:00, in a new chat on Opus extra-high. The log at the end says where
-things stand.**
+**Status: FINISHED 2026-10-02, about 19:15. Every bug and feature landed; the Deck part ran in eleven blocks and the
+Deck is back as found. Results, the code summary and a developer guide are in "Results" below; the report is
+https://claude.ai/artifact/NKMQpy6Vz9rjNXA2e7egE7 and the maintainer's checks page
+https://claude.ai/artifact/8hhevjkTdcGhq8gzDHZ419.**
 
 Asked for by the maintainer: "Final session before v0.6.0 … a massive bug fix session as a follow-up from last
 night … in addition to those bugs, I want these features implemented … 15 subagents going at the same time … do an
@@ -472,7 +474,157 @@ New ones go here, with the choice taken in the meantime.
 
 ## Results
 
-Nothing yet.
+### Where things stand (2026-10-02, evening: the session's end)
+
+**Every bug in the plan and every feature is built and landed** on the working branch, each with all checks green at
+landing, the wider quick check included. Nothing is pushed. **Nothing known blocks the release.** The newest
+code commit is `156baf42`, and it is the build on the Deck. Most of it is proven there; what is not is listed below
+with why. The Deck was put back as found: the test chat restored from its backup, settings unchanged, no game
+running, the keep-awake released.
+
+**Bugs (13)**
+
+| What a player would notice | On the Deck |
+|---|---|
+| After picking from the settings search list, Down cannot get past the answer (the ★★★ trap) | Two fixes for two ways it can happen. Never reproduced in eleven tries across the day, before or after; its own case cannot be made on the rig. Watch for it in daily use |
+| The highlight invisible on the Ollama tab, and on sixteen more buttons on three tabs | Passed: a ring at every stop on the Ollama, Settings and Developer tabs |
+| In Show details the ring sat round the whole block | Passed: one chip at a time |
+| A spoiler cover cut off by Clear showed "undefined" | Passed |
+| After Stop, the X did not clear the question | Passed for a typed question; the spoken half is your microphone check |
+| A spoken question with its words doubled | Its tests, with recorded sound on this PC; your microphone is the last check |
+| Up and Down between the rating choices go to the wrong place | Passed, five of five |
+| Retry was an Up or Down stop | Passed on the second round (Up, Down, and Down from the chat row in a short chat) |
+| The first model half hidden in the AI models box | Passed on the second round (26 px clear of the header) |
+| The note card touching the chip | Passed on the second round (8.7 px) |
+| A power question's answer with no number | Not a Deck check: 3 of 30 test answers had a number before, 27 of 30 after |
+| Underlined game words skipped walking Up | Passed on the second round: every word a stop both ways, and Up the reverse of Down whatever came before |
+| A button under an answer losing that answer's game | Passed (Hollow Knight's notes kept with Deep Rock running) |
+
+**Features (12, plus your two add-ons)**
+
+| Feature | On the Deck |
+|---|---|
+| Icons on the knowledge-base buttons | Passed |
+| "Remember what I typed" as one switch | Passed |
+| "Install options…" removed; the starter models offered in Browse models and after a first Install Ollama | Passed (the ask-first box opens on "Not now"; nothing downloads) |
+| Summing up offers a fresher title | Passed by the automatic route |
+| Long chips: pause at the end, centred words | The words stop at the end; how long the chip then stays is question 12; centring could not be measured (no chip short enough) |
+| Save and Delete only with the ring; the name still; the bin icon | Passed on the second round (the name moved 0 px) |
+| Calmer rating choices | Passed on size; the look is yours |
+| The soft fill under the ring | Passed on what can be measured; the look is yours |
+| Ten game chips | Passed (ten Hades chips before the first repeat) |
+| "N earlier" grouped by day | Passed, with the day lines keeping the ring on the second round |
+| The models fold (option C): place numbers in the AI models box | Mostly passed; moving a place could not run (one model installed), and the PC half needs a PC |
+| The Show details line in the chip's place | Mostly passed; reaching it from the question box needs a right-stick scroll, which the rig cannot do: your hand check |
+| The settings list written once | Already done on 21 September; a read-back test was added |
+| Two of the four build tidy-ups | Done; the other two wait for a GitHub run (question 13) |
+
+**Found and fixed the same day:** the question box never showed a ring at all; four boxes opened on the button that
+does the thing (Delete chat, Clear cache, Clear all data, a big download); the day lines dropped the ring for one
+press; a section under a second spoiler cover was skipped walking Up; the help hint's Dismiss could put the ring on
+hidden chips; the models fold left a PC person unable to change the try order; and, in the evening, a landing going Up
+left behind the question box and an Up order around underlined words that depended on what came before (both
+brought in by that afternoon's walking-Up change, both fixed and passed on the Deck within two hours).
+
+**Found, not fixed (all on the roadmap):** weak rings on the accent button, "Reinstall voice engine" and the Steam
+key field; removing a model on the Deck also drops it from a PC's saved order; B on the "Clear all data" box also
+moves the plugin to the Main tab; an underlined word's own definition card can cover the word; going Up onto a tall
+first section shows only its top third; the plugin's own ring claim after a Quick Access tab switch may not run; Up
+from the whole-answer ring scrolls the whole answer.
+
+### What went wrong, and how it was handled
+
+- **The network dropped for about five hours overnight** and every helper stopped. Each was resumed by message;
+  no work was lost.
+- **The usage limit stopped the session at about 12:10;** the helpers finished their work meanwhile, and the
+  session went on at about 14:50.
+- **I logged one Deck result wrongly** (the X after Stop as passed when it had failed on the ring) and corrected it
+  within the hour. The failure turned out to be a bigger bug: the question box drew no ring on any route.
+- **Reading every change before landing caught one real gap:** the models fold would have left anyone with the AI on
+  a PC unable to change the try order. It went back for a second round.
+- **Two helpers had to change the same spot** (the chips' way out going Up); they were told the same function name,
+  and the second one did the merge itself.
+- **With fifteen helpers running their own tests, two slow test files timed out** at every landing; they were run
+  again alone with a longer limit and had to pass there.
+- **The walking-Up change brought in one step backwards,** a landing hidden behind the question box, which only the
+  last Deck block's walk showed. It was fixed and re-checked before the end. Its tests now model Steam's own scroll a
+  moment after a press, which is what the first round missed.
+- **After the final restore the panel showed "88 earlier" where the restored file holds 84;** the file on disk matched
+  the backup each time it was read, so it is most likely the plugin's own memory of the session. If the test chat
+  looks a few questions longer than it should, that is why.
+- **The Steam Web API key shows in clear text** on the Developer tab; screenshots that show it stayed out of git and
+  out of every page, and later drivers read single settings only.
+
+### The code summary
+
+| Change | Where | How it works |
+|---|---|---|
+| The ★★★ trap (two ways in) | `answerBubbleNavigation.ts`, `useAskBarSettingsCardRows.ts` | With Steam's ring on the whole answer, Down first asks for the panel's focus back; if the ring still stays, the press is passed on so Steam itself moves it to the row below. When the settings list closes under the ring, the ring is handed to the question box |
+| Invisible highlights (about 25 buttons) | `FOCUS_RING_BTN_CLASS` in `settingsGlassButton.ts`; guard `buttonFocusRing.test.ts` | A button that paints its own fill beats Steam's focus fill, so each now carries the plugin's ring class. The guard lists every such button and fails on a new one without the class; its list may only shrink |
+| The question box ring | `section-5.ts` | Steam marks the focused field on the input itself and nothing drew it; a rule now draws a 2 px white ring just inside the field's edge, only with Steam's focus class |
+| Retry never an Up or Down stop | `buildTurnHeaderElement.tsx`, `chatTranscriptNavHelpers.ts`, `ChatSlotRow.tsx` | The question's text claims Up and Down and hands the ring on with Steam's own transfer to what is above or below; left alone, Steam picked Retry as the nearest stop. Left is the one way onto Retry |
+| Walking Up mirrors walking Down | `answerBubbleNavigation.ts`, new `answerBubbleWordsUp.ts` and `answerBubbleCoverUp.ts`, `presetRowFocusNav.tsx` (`chipRowExitUp`), `useLiveTurnHeaderRingRestore.ts` | A section is read box, then its underlined words, then the next section, both ways; Up remembers the last word it passed, so a scroll cannot lose the ones above; the newest question, when closed, is a registered stop, so Up from the chips lands on it; a box Up lands on is placed again once Steam's own short scroll after the press is over (150, 300 and 900 ms), so it stays clear of the dock |
+| Smaller D-pad fixes | `ContextChipLadder.tsx`, the rating row, `pullModelsListClearance.ts`, `buildKbNotesBlockElement.tsx` | Each Show details chip is its own stop; Up and Down follow the drawn rating rows; the plugin scrolls the models list itself so the first row clears the column header; the note card and its 8 px spacer share one wrapper, so the row gap cannot add to it |
+| Answers and voice | `MainTabBonsaiAiMarkdownChunk.tsx`, `useVoiceAskInput.ts`, `voice_transcript_decode_service.py`, `ask_topic_instructions.py` | An empty spoiler block draws nothing ("undefined" gone); emptying the box or pressing Ask ends dictation; the merge for spoken questions counts spoken numbers as digits and clipped words as matches; a power question asks the AI for exact values |
+| A button keeps its answer's game | `spoiler_title_profiles.py` and the ask request | A follow-up sent by a button under an answer carries that answer's game, so its notes and covers apply even with another game running |
+| Grouped by day | `earlierTurnsByDay.ts`, `buildEarlierList.tsx`, `EarlierListLine.tsx`, `useEarlierTurnsPill.ts`, `chatSlotTurns.ts` | A restored question carries its saved time; earlier questions are grouped by the Deck's own day; each line is its own stop with its own nav node; lines and rows are one flat keyed list, so opening a day never rebuilds the line under the ring |
+| The models fold (option C) | new `useTryOrderPlaces.ts`, `PullModelsTryOrder.tsx`, `PullModelsPcRow.tsx`; the two old order screens deleted | Each model's place shows in the AI models box; a move reads the saved order fresh, swaps and saves at once, one move behind another; on a PC the PC's own models get an "On the PC" group; Reset asks first; a big model that will be skipped says so |
+| The Show details line in the chip's place | new `src/features/details-slot/` | The answer's real line registers itself in a small store; the slot measures on every scroll and on a slow tick, and cross-fades between the chip and the line in 120 ms; A on the slot's line hands the ring to the real line first, then opens it |
+| Save and Delete only with the ring | `savedChatSlotsRow.ts`, new `savedChatSlotsGhosts.ts`, `ChatSlotRow.tsx` | The buttons and the LB and RB marks are always drawn and only hidden; the faint neighbour names hang off zero-width anchors; so the name's box never changes |
+| Boxes open on the safe choice | `ChatSlotRow.tsx`, `SettingsTab.tsx`, `usePullModelToggleSelection.tsx` | Steam starts a box on its first button, so that button is now the harmless one ("Keep chat", "Keep cache", "Keep my data", "Not now") and the action is the middle button |
+| The other features | `KnowledgeBaseButtonLabel.tsx`, `SettingsTab.tsx`, `PullModelsStarterSetChip.tsx`, `chat_summary_title.py`, `presetChipButton.tsx`, `section-4.ts`, `knowledge_base_chips.py` | Icons on two buttons; one switch, with a saved "Search" loading as off; the starter set offered in Browse models and after Install Ollama; a fresher title offered by the summary, never for a hand-typed one; one time line drives a long chip's scroll and its stay; the soft fill; a pool of ten game chips |
+| Behind the scenes | `usePluginSettings.readBack.test.ts`, `tests/fake_ollama_stream.py`, `sync-version-from-plugin.mjs`, `package.json` | Every setting survives a save and a fresh load (a test); shared back-end test helpers brought the copy-paste count back under its best; the version file is written only when it changes; a package-manager setting nothing reads is gone |
+
+**What surprised us.** The X after Stop "failing" on the Deck was a much older bug: the question box, the plugin's
+most-used control, had never drawn a ring of its own, because Steam marks the input itself and no rule painted it.
+Four first-round fixes passed every test and failed on the Deck, each for a detail the tests did not model: Steam picks
+Retry as the nearest stop when Up is left unclaimed; the turn's 6 px row gap added to the new spacer; Steam does not
+scroll a partly hidden row; the LB and RB marks and the neighbour names shared out the room around the chat's name.
+Each second round modelled what the Deck measured, and passed. The settings reshape had already been done on 21
+September. A day line drawn inside the next row's wrapper was rebuilt whenever a day opened, which dropped the ring:
+a detail of how the screen is put together, not of the D-pad. Three pairs of helpers changed the same lines; each time
+the later helper put its work on top of the landed one itself, which kept every merge clean.
+
+**What you could have done differently to make the session easier.** Four small things would have made the Deck
+checks fuller. A second answering model on the Deck (one is installed) would have let the rig move a model's place in
+the new models box. A PC address the Deck can reach would have let it check the "On the PC" group. A fresh test chat:
+the one used reached its 200-entry cap, so new questions pushed out its oldest entries. And the Steam Web API key shows
+in clear text on the Developer tab, so every block had to work around it (hiding that field is a small change worth
+asking for). On the session side, fifteen helpers at once made the two slowest test files time out at every landing;
+ten would have landed nearly as much with less waiting. The midday usage limit cost about two and a half hours.
+
+### A short developer guide to how this plan went into the code
+
+**Where the D-pad lives.** Steam draws its own ring and moves it between "nav nodes"; the browser's focus is a separate
+thing. A plain `focus()` only moves the ring between neighbours in one container. Between containers the plugin uses
+Steam's own transfer: each important stop registers a name in `navFocusRegistry.ts` (for example `chat-slot-row`,
+`preset-carousel` and `unified-input`, and from this plan `details-slot-line` and `newest-closed-question`), and
+`takeNavFocus(name)` hands the ring there. A stop that must not be skipped, or must not be landed on, claims the press
+itself (`onMoveUp`, `onMoveDown`) instead of leaving it to Steam's guess. That is how Retry stopped being a stop.
+
+**The chat.** `MainTabChatTranscript.tsx` draws every turn. The "N earlier" part is decided in `buildEarlierList.tsx`
+(which lines, which rows), with the grouping in `earlierTurnsByDay.ts`; each question's row comes from
+`buildTurnHeaderElement.tsx`. Walking through an answer is `answerBubbleNavigation.ts`, with the Up steps for words and
+covers in `answerBubbleWordsUp.ts` and `answerBubbleCoverUp.ts`. Their tests use `src/test-harness/deckAnswerWalk.ts`,
+which copies how Steam scrolls a landing into view, so a test walks the way the Deck does.
+
+**The dock.** Above the question box sits the chip slot: `src/features/details-slot/DetailsSlot.tsx` wraps the chips
+and can show an answer's Show details line instead. Up out of the chips or the slot is one function, `chipRowExitUp`.
+The question box is `MainTabUnifiedAskBar.tsx`.
+
+**Rings.** A button with its own background needs `FOCUS_RING_BTN_CLASS`, and the guard test says so. The question
+box's ring is a stylesheet rule in `section-5.ts`; the slot line's is drawn inside its edge, because the chip row clips
+anything outside it.
+
+**Boxes.** Steam opens a confirm box with the ring on its first button, so that button is the harmless choice and the
+action is the middle one.
+
+**The models box.** `useTryOrderPlaces.ts` reads and saves the try order; `PullModelsTryOrder.tsx` draws the place
+numbers and the switch and wires the D-pad; `PullModelsPcRow.tsx` draws the PC's rows.
+
+**How each change was proven.** A test that fails without the change, at the level the Deck sees (what a press lands
+on, what is on screen); every check green at landing; then a Deck row with its own evidence file in
+`docs/test-evidence/`, named `plan79-…`.
 
 ## Log
 
@@ -597,6 +749,14 @@ Nothing yet.
   paperwork sweep (`9449c30d`), and walking Up mirroring Down (`c1efd8e8`: underlined game words, the newest closed
   question, the skipped spoiler section, and the help hint's Dismiss). Every helper has now reported. The last job,
   two of the four build tidy-ups (question 13), runs alone. Deck block 3b is on the Deck.
+- **2026-10-02, about 17:10 to 19:15, the end:** the two build tidy-ups landed (`f3541fd1`, with a one-line comment
+  mend `49fc8894`). Deck block 3b passed the day lines keeping the ring, the three safe-first boxes and most of the
+  Show details line in the chip's place (reaching it from the question box needs the right stick: the maintainer's
+  check). Block 4 on the final build passed the smoke test on every tab and put the Deck back, and found that
+  the afternoon's walking-Up change could leave a landing behind the question box and did not always reverse Down
+  around underlined words; both were fixed (`17a54809`, `156baf42`) and block 4b passed them on three answers and
+  both ways, then put the Deck back again: the test chat restored, settings unchanged, no game, the keep-awake
+  released. Paperwork sweeps 5 and 6 recorded every result. The report and the checks page were published.
 
 ## For the helpers: who owns which files
 

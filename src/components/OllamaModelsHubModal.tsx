@@ -38,7 +38,7 @@
  *   custom Up/Down of its own -- the row it replaces never had any either, so Steam's own spatial
  *   nav already knows how to reach it and leave it.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
@@ -124,6 +124,11 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     setDraftHighVram,
   } = useModelRoutingAdvancedDraft(modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks);
 
+  // The Advanced switch is a draft until Done, so the box marks "Skipped: too big" from the draft, not the saved value.
+  const hostWithDraft = useMemo(
+    () => (tryOrderHost ? { ...tryOrderHost, modelAllowHighVramFallbacks: draftHighVram } : undefined),
+    [tryOrderHost, draftHighVram],
+  );
   const [browseFooter, setBrowseFooter] = useState<PullModelsFooterState>({
     okText: "Pull selected",
     onOk: () => {},
@@ -300,7 +305,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
               initialFiltersOpen={false}
-              tryOrderHost={tryOrderHost}
+              tryOrderHost={hostWithDraft}
             />
           ) : null}
           {section === "advanced" ? (

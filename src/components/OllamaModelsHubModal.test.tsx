@@ -211,10 +211,28 @@ describe("Done saves the licence + advanced draft", () => {
 
 describe("the try order in the box (plan 79)", () => {
   it("hands the host choice to Browse, so the box can show each model's place; without it Browse gets none", () => {
-    const host = { ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20", textModelRoutingOrder: [], visionModelRoutingOrder: [] };
+    const host = {
+      ollamaLocalOnDeck: false,
+      ollamaIp: "192.168.1.20",
+      textModelRoutingOrder: [],
+      visionModelRoutingOrder: [],
+      modelAllowHighVramFallbacks: false,
+    };
     render(<OllamaModelsHubModal {...buildProps({ tryOrderHost: host })} />);
-    expect(hoisted.pullModelsProps?.tryOrderHost).toBe(host);
+    expect(hoisted.pullModelsProps?.tryOrderHost).toEqual(host);
     render(<OllamaModelsHubModal {...buildProps()} />);
     expect(hoisted.pullModelsProps?.tryOrderHost).toBeUndefined();
+  });
+
+  it("marks big models from the high-VRAM switch as it stands in the box (a draft until Done), not the saved value", () => {
+    const host = {
+      ollamaLocalOnDeck: true,
+      ollamaIp: "",
+      textModelRoutingOrder: [],
+      visionModelRoutingOrder: [],
+      modelAllowHighVramFallbacks: true,
+    };
+    render(<OllamaModelsHubModal {...buildProps({ tryOrderHost: host, modelAllowHighVramFallbacks: false })} />);
+    expect((hoisted.pullModelsProps?.tryOrderHost as { modelAllowHighVramFallbacks: boolean }).modelAllowHighVramFallbacks).toBe(false);
   });
 });

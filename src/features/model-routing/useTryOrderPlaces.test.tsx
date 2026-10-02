@@ -36,6 +36,7 @@ const DECK_HOST: TryOrderHost = {
   ollamaIp: "",
   textModelRoutingOrder: [],
   visionModelRoutingOrder: [],
+  modelAllowHighVramFallbacks: true,
 };
 const PC_HOST: TryOrderHost = { ...DECK_HOST, ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20" };
 

@@ -282,7 +282,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   });
 
   // The Try column and switch (useTryOrderPlaces.ts); off, and drawing nothing, unless the box was given a host.
-  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal });
+  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal, catalog: mergedCatalog, tier: modelPolicyTier, modeFilters, liveSizeGbByTag });
+  const rowTotal = flatRows.length + tryNav.pcCount; // the Deck's rows, then the "On the PC" rows
 
   const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
 
@@ -370,8 +371,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const focusCustomTagClose = useCallback((): boolean => focusAndReveal(customTagCloseBtnRef.current), []);
 
   const focusRowCell = useCallback((rowIndex: number, cell: "select" | "delete"): boolean => {
-    if (!flatRows.length) return false;
-    const i = Math.max(0, Math.min(rowIndex, flatRows.length - 1));
+    if (!rowTotal) return false;
+    const i = Math.max(0, Math.min(rowIndex, rowTotal - 1));
     const target =
       cell === "select" ? selectCellRefs.current[i] : deleteCellRefs.current[i];
     if (!target) return false;
@@ -380,16 +381,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
     // The Deck's scroll leaves a row that is partly under the sticky header where it is (pullModelsListClearance.ts).
     clearListHeader(target, i === 0);
     return true;
-  }, [flatRows.length, clearListHeader]);
+  }, [rowTotal, clearListHeader]);
 
   const focusNextRowSelect = useCallback(
     (fromIndex: number): boolean => {
-      for (let j = fromIndex + 1; j < flatRows.length; j++) {
+      for (let j = fromIndex + 1; j < rowTotal; j++) {
         if (selectCellRefs.current[j]) return focusRowCell(j, "select");
       }
       return false;
     },
-    [flatRows.length, focusRowCell]
+    [rowTotal, focusRowCell]
   );
 
   const focusPrevRowSelect = useCallback(
@@ -452,7 +453,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         return false;
       },
     }),
-    [flatRows.length, leaveListUp, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav]
+    [rowTotal, leaveListUp, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav]
   );
 
   const recommendedEntries = useMemo(
@@ -1081,7 +1082,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
             ) : null}
           </div>
 
-          {tryNav.bar({ okButtonRuns, onMoveUp: focusFiltersButton, onMoveDown: moveDownPastSwitch })}
+          {tryNav.bar({ okButtonRuns, onMoveUp: focusFiltersButton, onMoveDown: moveDownPastSwitch, nested: { before: onBeforeNestedDeckyModal, complete: completeNestedModalClose } })}
 
           <div ref={listRef} className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
             {filtersOpen ? (
@@ -1197,7 +1198,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   Close filters
                 </Button>
               </div>
-            ) : flatRows.length > 0 ? (
+            ) : rowTotal > 0 ? (
               <div className={`bonsai-pullmodels-table${tryNav.enabled ? " bonsai-pullmodels-table--try" : ""}`} role="table">
                 <PullModelsTableHeader headerRef={listHeaderRef} withTry={tryNav.enabled} />
                 <div role="rowgroup">
@@ -1213,6 +1214,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                       })}
                     </div>
                   ))}
+                  {tryNav.pcGroup({ startIndex: rowCounter, bindSelect: bindSelectRef, nav: (i) => rowNavHandlers(i, "select", false), okButtonRuns })}
                 </div>
               </div>
             ) : (

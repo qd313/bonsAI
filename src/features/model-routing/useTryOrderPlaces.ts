@@ -46,6 +46,8 @@ export type TryOrderHost = {
   /** The tab's copies of the saved orders: used only when a fresh read of the settings file fails. */
   textModelRoutingOrder: string[];
   visionModelRoutingOrder: string[];
+  /** Whether Ask may try big models: with it off, a big model keeps its place but is skipped when someone asks. */
+  modelAllowHighVramFallbacks: boolean;
 };
 
 export type TryOrderStatus = "off" | "loading" | "ready" | "refused";

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 694,
-  "edgeCount": 1979,
+  "fileCount": 695,
+  "edgeCount": 1985,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1471,7 +1471,8 @@
         "src/data/pullModelLicencePill.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsPcRow.tsx"
       ]
     },
     "src/components/PullModelsModal.customTagCancel.test.tsx": {
@@ -1615,6 +1616,15 @@
         "src/utils/pullModelFilters.ts"
       ]
     },
+    "src/components/PullModelsPcRow.tsx": {
+      "imports": [
+        "src/components/PullModelLicenceSlot.tsx",
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsTryOrder.tsx"
+      ]
+    },
     "src/components/PullModelsStarterSetChip.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -1645,7 +1655,11 @@
     "src/components/PullModelsTryOrder.tsx": {
       "imports": [
         "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsPcRow.tsx",
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
+        "src/utils/modelRoutingOrder.ts",
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
@@ -2229,6 +2243,7 @@
         "src/components/OllamaTab.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsTryOrder.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/plugin-shell/useExternalNavigationActions.ts",
@@ -2324,7 +2339,9 @@
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
+        "src/components/PullModelsPcRow.tsx",
         "src/components/PullModelsTableHeader.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/data/pullModelCatalog.test.ts",
         "src/data/pullModelLicencePill.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
@@ -6913,6 +6930,7 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
+        "src/components/PullModelsTryOrder.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/utils/modelRoutingOrder.test.ts"
       ]

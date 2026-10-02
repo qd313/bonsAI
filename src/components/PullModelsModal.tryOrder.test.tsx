@@ -23,7 +23,10 @@ import { configure, fireEvent, render, waitFor } from "@testing-library/react";
 
 configure({ asyncUtilTimeout: 10000 });
 
-const hoisted = vi.hoisted(() => ({ propsByEl: new WeakMap<Element, Record<string, unknown>>() }));
+const hoisted = vi.hoisted(() => ({
+  propsByEl: new WeakMap<Element, Record<string, unknown>>(),
+  shown: [] as Array<{ props: Record<string, (() => void) | string | undefined> }>,
+}));
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
@@ -46,7 +49,15 @@ vi.mock("@decky/ui", async () => {
       );
     }
   );
-  return { ...stubs, Button: CapturingButton };
+  return {
+    ...stubs,
+    Button: CapturingButton,
+    // The boxes this screen raises (the Reset question): kept so a test can press their buttons.
+    showModal: (el: unknown) => {
+      hoisted.shown.push(el as { props: Record<string, (() => void) | string | undefined> });
+      return { Close: () => {}, Update: () => {} };
+    },
+  };
 });
 
 import { PullModelsModal } from "./PullModelsModal";
@@ -56,7 +67,13 @@ import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { buildPullModelsStylesheet } from "../styles/sections/gamepadAndPullModels";
 import { LIST_HEIGHT, LIST_TOP, layOutList, steamNearest } from "../test-harness/pullModelsListLayout";
 
-const DECK: TryOrderHost = { ollamaLocalOnDeck: true, ollamaIp: "", textModelRoutingOrder: [], visionModelRoutingOrder: [] };
+const DECK: TryOrderHost = {
+  ollamaLocalOnDeck: true,
+  ollamaIp: "",
+  textModelRoutingOrder: [],
+  visionModelRoutingOrder: [],
+  modelAllowHighVramFallbacks: true,
+};
 const PC: TryOrderHost = { ...DECK, ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20" };
 const DECK_MODELS = ["qwen2.5vl:3b", "qwen3.5:4b", "gemma4:e2b-it-qat", "nomic-embed-text:latest"];
 
@@ -64,6 +81,7 @@ let styleEl: HTMLStyleElement;
 const originalScroll = Element.prototype.scrollIntoView;
 
 beforeEach(() => {
+  hoisted.shown = [];
   resetFakeDeckyRpc();
   setRpcHandler("load_settings", () => defaultSettingsFixture());
   setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: DECK_MODELS }));
@@ -84,15 +102,31 @@ function renderBox(host: TryOrderHost | undefined, props: Record<string, unknown
   );
 }
 
-const rowOf = (container: HTMLElement, tag: string): HTMLElement => {
+/** The Deck's row for a model, or with `pc` the row in the "On the PC" group. */
+const rowOf = (container: HTMLElement, tag: string, pc = false): HTMLElement => {
   const row = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-pullmodels-table-row--data")).find(
-    (r) => r.querySelector(".bonsai-pullmodels-tag-name-text")?.textContent?.trim() === tag,
+    (r) =>
+      r.querySelector(".bonsai-pullmodels-tag-name-text")?.textContent?.trim() === tag &&
+      r.classList.contains("bonsai-pullmodels-table-row--pc") === pc,
   );
-  if (!row) throw new Error(`no row for ${tag}`);
+  if (!row) throw new Error(`no ${pc ? "PC " : ""}row for ${tag}`);
   return row;
 };
-const placeOf = (container: HTMLElement, tag: string) =>
-  rowOf(container, tag).querySelector(".bonsai-pullmodels-place-num")?.textContent ?? null;
+const placeOf = (container: HTMLElement, tag: string, pc = false) =>
+  rowOf(container, tag, pc).querySelector(".bonsai-pullmodels-place-num")?.textContent ?? null;
+const hasRow = (container: HTMLElement, tag: string, pc: boolean) => {
+  try {
+    rowOf(container, tag, pc);
+    return true;
+  } catch {
+    return false;
+  }
+};
+/** Opens the Reset question and returns its last box. */
+const askReset = (container: HTMLElement) => {
+  fireEvent.click(button(container, "Reset the try order to automatic"));
+  return hoisted.shown[hoisted.shown.length - 1]!.props;
+};
 const savedOrders = () =>
   getRpcCallLog()
     .filter((c) => c.method === "save_settings")
@@ -213,7 +247,6 @@ describe("pressing a place button", () => {
     fireEvent.click(button(container, "Move qwen2.5vl:3b down"));
     await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
     fireEvent.click(button(container, "Try order for pictures questions"));
-    fireEvent.click(button(container, "Reset the try order to automatic"));
     await new Promise((r) => setTimeout(r, 30));
     expect(onSubmit).not.toHaveBeenCalled();
   });
@@ -245,9 +278,46 @@ describe("pressing a place button", () => {
     }));
     const { container } = renderBox(DECK);
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
-    fireEvent.click(button(container, "Reset the try order to automatic"));
+    const box = askReset(container);
+    expect(savedOrders()).toEqual([]); // asking changes nothing
+    (box.onMiddleButton as () => void)();
     await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: [] }]));
     await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+  });
+
+  it("Reset order asks first: the ring lands on the choice that changes nothing, and Not now, Cancel and B all leave the order alone", async () => {
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"],
+    }));
+    const { container } = renderBox(DECK);
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    const box = askReset(container);
+    expect(box.strTitle).toBe("Put the text try order back to automatic?");
+    // Steam puts the ring on OK, so OK is the harmless one and the action is the middle button.
+    expect(box.strOKButtonText).toBe("Not now");
+    expect(box.strMiddleButtonText).toBe("Reset order");
+    (box.onOK as () => void)();
+    (box.onCancel as () => void)();
+    await new Promise((r) => setTimeout(r, 30));
+    expect(savedOrders()).toEqual([]);
+    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1");
+  });
+
+  it("the Reset question names the pictures order when the switch is on Pictures", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", "qwen3.5:4b"] }));
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      vision_model_routing_order: ["qwen3.5:4b", "qwen2.5vl:3b"],
+    }));
+    const { container } = renderBox(DECK);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).not.toBeNull());
+    fireEvent.click(button(container, "Try order for pictures questions"));
+    await waitFor(() => expect(placeOf(container, "qwen3.5:4b")).toBe("1"));
+    const box = askReset(container);
+    expect(box.strTitle).toBe("Put the pictures try order back to automatic?");
+    (box.onMiddleButton as () => void)();
+    await waitFor(() => expect(savedOrders()).toEqual([{ vision_model_routing_order: [] }]));
   });
 
   it("a star pressed in the box moves the places too", async () => {
@@ -264,20 +334,114 @@ describe("pressing a place button", () => {
 });
 
 describe("the AI on a PC", () => {
-  it("the places belong to the PC's models, not the Deck's", async () => {
+  const pcModels = (models: string[]) =>
     setRpcHandler("test_ollama_connection", (target) =>
-      String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b"] }
-        : { reachable: true, models: DECK_MODELS },
+      String(target).startsWith("192.168.1.20") ? { reachable: true, models } : { reachable: true, models: DECK_MODELS },
     );
+
+  it("the places belong to the PC's models: an \"On the PC\" group, and the Deck's rows carry no place", async () => {
+    pcModels(["gemma4:e2b-it-qat", "qwen3.5:4b"]);
     const { container } = renderBox(PC);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
-    expect(placeOf(container, "qwen3.5:4b")).toBe("2");
-    // On the Deck but not on the PC: it cannot be tried, so it has no place to show.
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1"));
+    expect(placeOf(container, "qwen3.5:4b", true)).toBe("2");
+    expect(Array.from(container.querySelectorAll(".bonsai-pullmodels-group-title")).map((e) => e.textContent)).toContain("On the PC");
+    // The Deck's own rows (what Pull and Remove act on) keep their star and X but claim no place.
     expect(placeOf(container, "qwen2.5vl:3b")).toBeNull();
-    expect(container.textContent).toContain("These places are for the PC the AI runs on.");
+    expect(placeOf(container, "gemma4:e2b-it-qat")).toBeNull();
+    // A PC row has no star, no Remove and no pull box: nothing on it says the Deck has the model.
+    const pcRow = rowOf(container, "qwen3.5:4b", true);
+    expect(pcRow.querySelector(".bonsai-pullmodels-slot")).toBeNull();
+    expect(pcRow.querySelector(".bonsai-pullmodels-delete-btn")).toBeNull();
+    expect(pcRow.textContent).toContain("PC");
+    expect(container.textContent).toContain("Pull and Remove act on this Deck.");
     fireEvent.click(button(container, "Move qwen3.5:4b up"));
     await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["qwen3.5:4b", "gemma4:e2b-it-qat"] }]));
+    await waitFor(() => expect(placeOf(container, "qwen3.5:4b", true)).toBe("1"));
+  });
+
+  it("a person with no model on the Deck can still reorder the PC's models", async () => {
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"] }
+        : { reachable: true, models: [] },
+    );
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1"));
+    expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("2");
+    fireEvent.click(button(container, "Move qwen2.5vl:3b down"));
+    await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"] }]));
+  });
+
+  it("the PC's Pictures order lists only the PC models that can read pictures", async () => {
+    pcModels(["qwen2.5vl:3b", "qwen3:4b"]);
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(placeOf(container, "qwen3:4b", true)).not.toBeNull());
+    fireEvent.click(button(container, "Try order for pictures questions"));
+    await waitFor(() => expect(hasRow(container, "qwen3:4b", true)).toBe(false));
+    expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1");
+  });
+
+  it("a PC model the person's own licence filter hides keeps its place, and one quiet line says so", async () => {
+    // gemma3:4b is open-weight: the default licence filter (open source only) hides it.
+    pcModels(["gemma4:e2b-it-qat", "gemma3:4b", "qwen3.5:4b"]);
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      text_model_routing_order: ["gemma4:e2b-it-qat", "gemma3:4b", "qwen3.5:4b"],
+    }));
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(placeOf(container, "qwen3.5:4b", true)).toBe("3"));
+    expect(hasRow(container, "gemma3:4b", true)).toBe(false);
+    expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1");
+    expect(container.textContent).toContain("1 model in the order is hidden by the filters.");
+  });
+
+  it("a PC model the catalog does not know still gets a row", async () => {
+    pcModels(["my-own-model:7b", "gemma4:e2b-it-qat"]);
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(hasRow(container, "my-own-model:7b", true)).toBe(true));
+    expect(rowOf(container, "my-own-model:7b", true).textContent).toContain("Other");
+  });
+});
+
+describe("a place must not promise a model that never runs", () => {
+  // The saved order keeps a big model; with "Allow high-VRAM models in routing" off, Ask passes over it
+  // (ollama_routing.py resolve_routing_order), so the row says so.
+  const BIG = "qwen2.5:32b";
+  const withBig = () =>
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["gemma4:e2b-it-qat", BIG] }));
+
+  it("marks a big model's place \"Skipped: too big\" while the switch is off, and only that model", async () => {
+    withBig();
+    const { container } = renderBox({ ...DECK, modelAllowHighVramFallbacks: false });
+    await waitFor(() => expect(placeOf(container, BIG)).not.toBeNull());
+    expect(rowOf(container, BIG).textContent).toContain("Skipped: too big");
+    expect(rowOf(container, "gemma4:e2b-it-qat").textContent).not.toContain("Skipped");
+  });
+
+  it("shows no mark when big models are allowed", async () => {
+    withBig();
+    const { container } = renderBox({ ...DECK, modelAllowHighVramFallbacks: true });
+    await waitFor(() => expect(placeOf(container, BIG)).not.toBeNull());
+    expect(container.querySelector(".bonsai-pullmodels-place-skipped")).toBeNull();
+  });
+
+  it("marks a big PC model too", async () => {
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? { reachable: true, models: ["gemma4:e2b-it-qat", BIG] }
+        : { reachable: true, models: [] },
+    );
+    const { container } = renderBox({ ...PC, modelAllowHighVramFallbacks: false });
+    await waitFor(() => expect(placeOf(container, BIG, true)).not.toBeNull());
+    expect(rowOf(container, BIG, true).textContent).toContain("Skipped: too big");
+  });
+
+  it("the big model keeps its place number and its buttons: only the mark is added", async () => {
+    withBig();
+    const { container } = renderBox({ ...DECK, modelAllowHighVramFallbacks: false });
+    await waitFor(() => expect(placeOf(container, BIG)).not.toBeNull());
+    expect(button(container, `Move ${BIG} up`)).not.toBeNull();
+    expect(button(container, `Move ${BIG} down`)).not.toBeNull();
   });
 });
 
@@ -319,19 +483,6 @@ describe("a model the filters hide", () => {
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("3"));
     expect(placeOf(container, "qwen2.5vl:3b")).toBe("1");
     expect(container.textContent).toContain("1 model in the order is hidden by the filters.");
-  });
-});
-
-describe("a model the PC has and this Deck does not", () => {
-  it("keeps its place and is counted in the quiet line, which does not blame the filters alone", async () => {
-    setRpcHandler("test_ollama_connection", (target) =>
-      String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3:14b"] }
-        : { reachable: true, models: DECK_MODELS },
-    );
-    const { container } = renderBox(PC);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
-    expect(container.textContent).toContain("1 model in the order is not in this list (hidden by the filters, or not on this Deck).");
   });
 });
 
@@ -396,6 +547,76 @@ describe("walking the box with the D-pad", () => {
     expect(list.scrollTop).toBe(0);
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement).toBe(filters);
+  });
+
+  it("with the AI on a PC every PC model is reached by Down and back by Up, each once, never a Remove", async () => {
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"] }
+        : { reachable: true, models: [] },
+    );
+    const { container } = renderBox(PC);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1"));
+    const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
+    layOutList(list);
+    Element.prototype.scrollIntoView = function (this: Element) {
+      if (list.contains(this)) steamNearest(list, this as HTMLElement);
+    };
+    container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-filters-button")!.focus();
+    press("onMoveDown"); // the switch
+    const visited: Element[] = [];
+    for (let guard = 0; guard < 60; guard++) {
+      if (!press("onMoveDown")) break;
+      const el = document.activeElement!;
+      expect(visited, `stop visited twice: ${labelOf(el)}`).not.toContain(el);
+      expect(el.className, `Down landed on ${labelOf(el)}`).not.toMatch(/delete-btn/);
+      visited.push(el);
+    }
+    const pcStops = visited.filter((e) => /^Move .* up$/.test(labelOf(e)));
+    expect(pcStops.map(labelOf).sort()).toEqual([
+      "Move gemma4:e2b-it-qat up",
+      "Move qwen2.5vl:3b up",
+      "Move qwen3.5:4b up",
+    ]);
+    // Along a PC row: up, then down, and the row ends there (no Remove to land on).
+    const last = document.activeElement as HTMLElement;
+    expect(labelOf(last)).toMatch(/^Move .* up$/);
+    expect(press("onMoveRight")).toBe(true);
+    expect(labelOf(document.activeElement!)).toMatch(/^Move .* down$/);
+    expect(press("onMoveRight")).toBe(false);
+    expect(press("onMoveLeft")).toBe(true);
+    expect(document.activeElement).toBe(last);
+    // And back up through every stop once.
+    const up: Element[] = [];
+    for (let guard = 0; guard < 60; guard++) {
+      const el = document.activeElement!;
+      if (labelOf(el) === "Try order for text questions") break;
+      expect(up, `stop visited twice on the way up: ${labelOf(el)}`).not.toContain(el);
+      up.push(el);
+      expect(press("onMoveUp")).toBe(true);
+    }
+    expect(up.length).toBe(visited.length);
+  });
+
+  it("the first model is whole under the column header when Down goes switch to first row, and when Up comes back", async () => {
+    const { container } = renderBox(DECK);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
+    const { header } = layOutList(list);
+    Element.prototype.scrollIntoView = function (this: Element) {
+      if (list.contains(this)) steamNearest(list, this as HTMLElement);
+    };
+    const firstRowTop = () => document.activeElement!.closest(".bonsai-pullmodels-table-row--data")!.getBoundingClientRect().top;
+    container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-filters-button")!.focus();
+    press("onMoveDown"); // switch
+    // Walk to the bottom so the list is scrolled, then all the way back to the switch.
+    while (press("onMoveDown")) { /* bounded by the rows */ }
+    expect(list.scrollTop).toBeGreaterThan(0);
+    while (labelOf(document.activeElement!) !== "Try order for text questions") press("onMoveUp");
+    expect(list.scrollTop).toBe(0);
+    press("onMoveDown"); // switch -> first row
+    expect(firstRowTop()).toBeGreaterThanOrEqual(header.getBoundingClientRect().bottom);
+    expect(document.activeElement!.closest(".bonsai-pullmodels-table-row--data")).toBe(container.querySelector(".bonsai-pullmodels-table-row--data"));
   });
 
   it("along a row it walks star, up, down, Remove by Right and back by Left, and Up or Down from a place button is the row's own", async () => {

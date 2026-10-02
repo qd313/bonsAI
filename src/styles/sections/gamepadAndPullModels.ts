@@ -560,6 +560,16 @@ export function buildPullModelsStylesheet(): string {
           font-size: 10px !important;
           scroll-margin-top: 32px;
         }
+        .bonsai-scope .bonsai-pullmodels-col--try {
+          flex-wrap: wrap;
+        }
+        /* "Skipped: too big": the model keeps its place but is passed over when someone asks. */
+        .bonsai-scope .bonsai-pullmodels-place-skipped {
+          flex-basis: 100%;
+          font-size: 8px;
+          line-height: 1.1;
+          color: #f2cf84;
+        }
         .bonsai-scope .bonsai-pullmodels-place-btn[aria-disabled="true"] {
           opacity: 0.4;
         }

@@ -5,7 +5,13 @@
  * models in. A "Text / Pictures" switch sits above the table, each installed model's row carries its
  * place number with small up and down buttons, and quiet words say what is going on: that a change is
  * saved at once (beside the switch, to cost no height), how many models in the order the filters hide,
- * or why there are no places (no host, host not reachable, no installed model).
+ * or why there are no places (no host, host not reachable, no installed model). A place whose model
+ * Ask skips because big models are switched off says "Skipped: too big". "Reset order" asks first.
+ *
+ * With the AI on a PC the places belong to the PC's models, so they are drawn in their own "On the PC"
+ * group after the Deck's rows (pcGroup()): one row per answering model the PC has, minus what the
+ * person's licence and Ask-mode filters hide. Pull and Remove only ever act on this Deck, so the Deck's
+ * rows keep their star and X and claim no place, and a PC row has neither (its Pull column reads "PC").
  *
  * Used for: PullModelsModal.tsx, through usePullModelTryNav(); drawn only when the box was opened with
  * a host (see useTryOrderPlaces.ts), so Browse models opened on its own looks as it always did.
@@ -21,15 +27,20 @@
  * Focus: the switch row is one horizontal Focusable under the Filters row; its buttons hand Up to the
  * Filters button and Down to the first row (the caller's two functions). In a row the chain is star,
  * the up button, the down button, then the X, by Right and Left; Down and Up skip all of them and go
- * row to row from the star's own handlers, so a vertical walk never lands on the X. A button at an
+ * row to row from the star's own handlers, so a vertical walk never lands on the X. A PC row has no
+ * star: its up button is the row's stop (it fills the same ref), and the chain ends at its down button. A button at an
  * end of the order stays focusable and does nothing (aria-disabled), so the ring never falls off a
  * button that just went dim. A press goes through onOKButton as well as onClick, as every control on
  * this screen must (the screen is a confirm box with its own OK).
  */
-import { useCallback, useRef, type ReactNode } from "react";
-import { Button, Focusable } from "@decky/ui";
+import { useCallback, useRef, type ReactNode, type RefCallback } from "react";
+import { Button, ConfirmModal, Focusable, showModal } from "@decky/ui";
 import type { TableSection } from "./PullModelsModal.types";
-import { isTagInstalled } from "../utils/pullModelFilters";
+import { PullModelsPcRow } from "./PullModelsPcRow";
+import type { PullModelEntry, PullModelModeFilterId } from "../data/pullModelCatalog";
+import type { ModelPolicyTierId } from "../data/modelPolicy";
+import { entryMatchesLicenceTier, entryMatchesModeFilters, isTagInstalled } from "../utils/pullModelFilters";
+import { isHighVramTag } from "../utils/modelRoutingOrder";
 import {
   placeCountHidden,
   useTryOrderPlaces,
@@ -38,6 +49,8 @@ import {
 } from "../features/model-routing/useTryOrderPlaces";
 
 type OkRuns = (fn: () => void) => (evt: { stopPropagation: () => void }) => void;
+/** The screen's nested-box handoff, so a box raised from here returns the ring the way its other boxes do. */
+export type NestedModalHooks = { before?: () => void; complete: (close: () => void) => void };
 type Reveal = (el: HTMLElement | null | undefined) => boolean;
 
 const KINDS: Array<{ kind: TryOrderKind; label: string }> = [
@@ -54,17 +67,19 @@ export type TryCellArgs = {
   goSelect: () => boolean;
   goDelete: () => boolean;
   okButtonRuns: OkRuns;
+  /** A row of the "On the PC" group: it has no star or X, and its up button is the row's first stop. */
+  pc?: boolean;
+  bindSelect?: RefCallback<HTMLElement>;
 };
 
-/**
- * Plain text for a count of models, "1 model ... is", "2 models ... are". With the AI on a PC some of
- * them may be models the PC has and this Deck does not, which the table never lists, so the filters
- * are not the whole reason there.
- */
-function hiddenLine(hidden: number, onPc: boolean): string {
+/** Shown on a place whose model the order keeps but Ask skips because "Allow high-VRAM models" is off. */
+const SKIPPED_MARK = "Skipped: too big";
+const SKIPPED_HINT = "Allow high-VRAM models in routing is off (Advanced), so this model is skipped when you ask.";
+
+/** Plain text for a count of models, "1 model ... is", "2 models ... are". */
+function hiddenLine(hidden: number): string {
   const one = hidden === 1;
-  const why = onPc ? "not in this list (hidden by the filters, or not on this Deck)" : "hidden by the filters";
-  return `${hidden} ${one ? "model" : "models"} in the order ${one ? "is" : "are"} ${why}. ${
+  return `${hidden} ${one ? "model" : "models"} in the order ${one ? "is" : "are"} hidden by the filters. ${
     one ? "It keeps" : "They keep"
   } ${one ? "its" : "their"} place; the numbers skip ${one ? "it" : "them"}.`;
 }
@@ -83,10 +98,28 @@ export function usePullModelTryNav(a: {
   refreshKey: string | null;
   flatRows: TableSection["rows"];
   reveal: Reveal;
+  /** The table's catalog, licence pick, Ask-mode filters and live sizes: what the "On the PC" group is filtered and drawn with. */
+  catalog: PullModelEntry[];
+  tier: ModelPolicyTierId;
+  modeFilters: ReadonlySet<PullModelModeFilterId>;
+  liveSizeGbByTag: Record<string, number>;
 }) {
-  const { host, installedTags, loading, refreshKey, flatRows, reveal } = a;
+  const { host, installedTags, loading, refreshKey, flatRows, reveal, catalog, tier, modeFilters, liveSizeGbByTag } = a;
   const places = useTryOrderPlaces({ host, deckInstalled: installedTags, deckLoading: loading, refreshKey });
   const enabled = places.status !== "off";
+  const onPcReady = places.onPc && places.status === "ready";
+  const entryOf = (tag: string) => catalog.find((e) => e.tag === tag || `${e.tag}:latest` === tag);
+  const sizeOf = (tag: string): number | undefined => liveSizeGbByTag[tag] ?? entryOf(tag)?.sizeGb;
+  /** With the AI on a PC: every answering model the PC has, minus what the person's own licence and Ask-mode filters hide. */
+  const pcTags = onPcReady
+    ? places.order
+        .filter((t) => {
+          const e = entryOf(t);
+          return !e || (entryMatchesLicenceTier(e, tier) && entryMatchesModeFilters(e, modeFilters));
+        })
+        .sort((x, y) => x.localeCompare(y))
+    : [];
+  const skipsBig = (tag: string) => host?.modelAllowHighVramFallbacks === false && isHighVramTag(tag, sizeOf(tag));
   const switchRefs = useRef<Partial<Record<TryOrderKind, HTMLElement | null>>>({});
   const upRefs = useRef<(HTMLElement | null)[]>([]);
   const downRefs = useRef<(HTMLElement | null)[]>([]);
@@ -100,7 +133,9 @@ export function usePullModelTryNav(a: {
 
   const cell = (c: TryCellArgs): ReactNode => {
     if (!enabled) return null;
-    const place = c.installed && places.status === "ready" ? places.placeOf(c.tag) : null;
+    // With the AI on a PC the places belong to the PC's models, drawn in the "On the PC" group below the table.
+    const forThisRow = c.pc || !places.onPc;
+    const place = forThisRow && c.installed && places.status === "ready" ? places.placeOf(c.tag) : null;
     const last = places.order.length;
     const press = (delta: -1 | 1) => void places.move(c.tag, delta);
     const button = (dir: "up" | "down") => {
@@ -111,6 +146,7 @@ export function usePullModelTryNav(a: {
         <Button
           ref={(el: HTMLElement | null) => {
             refs.current[c.rowIndex] = el;
+            if (dir === "up") c.bindSelect?.(el);
           }}
           focusable
           className="bonsai-pullmodels-chip bonsai-pullmodels-place-btn"
@@ -137,15 +173,78 @@ export function usePullModelTryNav(a: {
     return (
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--try" role="cell">
         {place == null ? (
-          c.installed ? <span className="bonsai-pullmodels-place-none">—</span> : null
+          c.installed && forThisRow ? <span className="bonsai-pullmodels-place-none">—</span> : null
         ) : (
           <>
             <span className="bonsai-pullmodels-place-num">{place}</span>
             {button("up")}
             {button("down")}
+            {skipsBig(c.tag) ? (
+              <span className="bonsai-pullmodels-place-skipped" title={SKIPPED_HINT}>
+                {SKIPPED_MARK}
+              </span>
+            ) : null}
           </>
         )}
       </div>
+    );
+  };
+
+  /**
+   * The "On the PC" group (AI on a PC only): one row per answering model the PC has, in a fixed
+   * order by name so a row never moves when its place changes, each with its place and up/down. The
+   * rows come after the Deck's, and `startIndex` continues the table's row numbering.
+   */
+  const pcGroup = (g: {
+    startIndex: number;
+    bindSelect: (rowIndex: number) => RefCallback<HTMLElement>;
+    nav: (rowIndex: number) => Record<string, unknown>;
+    okButtonRuns: OkRuns;
+  }): ReactNode =>
+    pcTags.length === 0 ? null : (
+      <div key="on-the-pc">
+        <div className="bonsai-pullmodels-group-title">On the PC</div>
+        {pcTags.map((tag, i) => {
+          const rowIndex = g.startIndex + i;
+          const tryCell = cell({
+            tag,
+            rowIndex,
+            installed: true,
+            pc: true,
+            nav: g.nav(rowIndex),
+            goSelect: () => false,
+            goDelete: () => false,
+            okButtonRuns: g.okButtonRuns,
+            bindSelect: g.bindSelect(rowIndex),
+          });
+          return <PullModelsPcRow key={`pc-${tag}`} tag={tag} entry={entryOf(tag)} sizeGb={sizeOf(tag)} tryCell={tryCell} />;
+        })}
+      </div>
+    );
+
+  /** The box that asks before the order goes back to automatic. The ring lands on the choice that changes nothing. */
+  const askReset = (nested: NestedModalHooks) => {
+    const word = places.kind === "vision" ? "pictures" : "text";
+    nested.before?.();
+    const handle = showModal(
+      <ConfirmModal
+        strTitle={`Put the ${word} try order back to automatic?`}
+        strDescription={
+          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+            Automatic means bonsAI works the order out from the models installed, and keeps following its defaults when
+            you add or remove a model. The order you set by hand is forgotten.
+          </div>
+        }
+        strOKButtonText="Not now"
+        strMiddleButtonText="Reset order"
+        strCancelButtonText="Cancel"
+        onOK={() => nested.complete(() => handle.Close())}
+        onMiddleButton={() => {
+          nested.complete(() => handle.Close());
+          void places.reset();
+        }}
+        onCancel={() => nested.complete(() => handle.Close())}
+      />,
     );
   };
 
@@ -153,6 +252,7 @@ export function usePullModelTryNav(a: {
     okButtonRuns: OkRuns;
     onMoveUp: () => boolean;
     onMoveDown: () => boolean;
+    nested: NestedModalHooks;
   }): ReactNode => {
     if (!enabled) return null;
     const shown: string[] = [];
@@ -160,7 +260,8 @@ export function usePullModelTryNav(a: {
       if (row.kind === "other") shown.push(row.tag);
       else if (isTagInstalled(row.entry.tag, installedTags)) shown.push(row.entry.tag);
     }
-    const hidden = places.status === "ready" ? placeCountHidden(places.order, shown) : 0;
+    const hidden =
+      places.status !== "ready" ? 0 : places.onPc ? places.order.length - pcTags.length : placeCountHidden(places.order, shown);
     const nav = (extra: Record<string, unknown>) =>
       ({ onMoveUp: b.onMoveUp, onMoveDown: b.onMoveDown, ...extra }) as unknown as Record<string, unknown>;
     let note: string | null = null;
@@ -196,11 +297,11 @@ export function usePullModelTryNav(a: {
             onClick={(ev) => {
               ev.stopPropagation();
               ev.preventDefault();
-              if (!places.isAutomatic) void places.reset();
+              if (!places.isAutomatic) askReset(b.nested);
             }}
             {...nav({
               onOKButton: b.okButtonRuns(() => {
-                if (!places.isAutomatic) void places.reset();
+                if (!places.isAutomatic) askReset(b.nested);
               }),
             })}
           >
@@ -210,16 +311,16 @@ export function usePullModelTryNav(a: {
               screen, and a line of its own would cost a model row. Not a focus stop. */}
           {places.status === "ready" ? (
             <span className="bonsai-pullmodels-tryorder-saved">
-              {places.onPc ? "These places are for the PC the AI runs on. " : ""}A place change is saved at once;
+              {places.onPc ? "These places are for the PC the AI runs on; Pull and Remove act on this Deck. " : ""}A place change is saved at once;
               Cancel does not undo it.
             </span>
           ) : null}
         </Focusable>
         {note ? <div className="bonsai-pullmodels-tryorder-note">{note}</div> : null}
-        {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden, places.onPc)}</div> : null}
+        {hidden > 0 ? <div className="bonsai-pullmodels-tryorder-note">{hiddenLine(hidden)}</div> : null}
       </div>
     );
   };
 
-  return { enabled, focusSwitch, focusPlaceUp, focusPlaceDown, cell, bar };
+  return { enabled, pcCount: pcTags.length, focusSwitch, focusPlaceUp, focusPlaceDown, cell, pcGroup, bar };
 }

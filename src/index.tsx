@@ -825,8 +825,8 @@ const Content: React.FC = () => {
   });
 
   const tryOrderHost = useMemo(
-    () => ({ ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder }),
-    [ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder],
+    () => ({ ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder, modelAllowHighVramFallbacks }),
+    [ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder, modelAllowHighVramFallbacks],
   );
   const { openOllamaModelsHub, onApplyTier2MultimodalPolicy } = useOllamaModelsHubModal({
     modelPolicyTier,

@@ -37,7 +37,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tsx",
-      "lines": 1243,
+      "lines": 1245,
       "role": ""
     },
     {
@@ -116,13 +116,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 836,
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 845,
       "role": ""
     },
     {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 835,
+      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
+      "lines": 836,
       "role": ""
     },
     {
@@ -166,6 +166,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tryOrder.test.tsx",
+      "lines": 649,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
       "lines": 634,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 606,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 601,
       "role": ""
     }
   ]

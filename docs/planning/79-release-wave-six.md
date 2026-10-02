@@ -492,6 +492,9 @@ Nothing yet.
   character picker, Clear cache), on Developer 5 of 16. When the driver came back after the drop, the Deck showed a
   black screen with a full-screen Steam dialog (Steam had restarted itself at 07:51 and its log shows a failed
   download); nothing more was pressed. Evidence `plan79-P79-M2-SETTINGS-DEV.json`, `plan79-QA-FREE-PLAY-01-NOGAME.json`.
+- **2026-10-02, about 08:45:** the maintainer picked way 2, the short cross-fade, for the Show details line taking the
+  suggestion chip's place, built as drawn (the line shows only while the answer's own line is out of sight). Helper
+  AA builds it after R and X have landed. Still waiting for a pick: opening "N earlier".
 
 ## For the helpers: who owns which files
 

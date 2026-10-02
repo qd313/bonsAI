@@ -2054,3 +2054,7 @@ carries its own place** (https://claude.ai/artifact/2xUbgB3AvhfzVKvwQZ3XMJ). A T
 models table; each installed row shows its place in the try order with small up and down buttons; the two separate
 order screens go; the Ollama tab keeps one button into the box, with the licence name on it. Three details the
 session settled meanwhile (plan 79, questions 2 to 4), open to the maintainer's change.
+
+**Pick, 2026-10-02 (about 08:45): the Show details line in the suggestion chip's place uses way 2, the short
+cross-fade** (https://claude.ai/artifact/PXBGwEczcN97skhX4EANN9), built as drawn: the line shows in the chip's place
+only while that answer's own Show details line is out of sight, and the chip comes back once it is on screen.

@@ -423,6 +423,14 @@ New ones go here, with the choice taken in the meantime.
    *Meanwhile:* after the Install Ollama box is agreed to, a second box asks "Also install the starter models?" with
    the ring on "Not now"; declining installs the engine only. A true single box means changing the shared download
    box every download uses. **Your call:** keep the two boxes, or ask for the single box after the release.
+6. **Remove in the AI models box is reached by Right from a model's down button.** Each installed model's row now
+   reads: pick, place number, up, down, Remove. *Meanwhile:* kept as built; Up and Down never land on Remove.
+7. **A "Reset order" button in the AI models box** puts the try order back to automatic. You did not ask for it; the
+   old order screens had one. *Meanwhile:* kept, and it asks first with the ring on Cancel.
+8. **The old small notes on model rows are gone** ("Tier blocked", "High VRAM off", "Size unknown", "Vision
+   unverified"). *Meanwhile:* the licence filter hides blocked models and one quiet line counts them; a big model
+   that is skipped while "Allow high-VRAM models" is off gets a short "skipped" mark; the other two notes stay gone.
+   **Your call:** bring any of them back.
 
 ## At the end
 
@@ -524,6 +532,22 @@ Nothing yet.
   reproduced; the settings list closing under the ring is fixed (helper P, waiting to land) and a stronger helper
   is testing the ring sitting on the whole answer bubble. Deck block 2a, one check per landed fix, started on the
   new build.
+- **2026-10-02, about 11:10 to 15:00:** Deck block 2a passed the Show details ring, the Ollama tab walk, the
+  starter-set button, the rating row, the "undefined" cover and the one switch; the fresher title passed by the
+  automatic route (the Sum up button was greyed). Five failed and went back to their helpers: the first model still
+  half under the AI models box's header, Up from the question still landing on Retry, the card's gap 14.7 px instead
+  of 8, the chat's name moving 15 px when Save and Delete appear (the Delete box also opens on Delete; it must open on
+  Cancel), and after the X the box empties but no ring is drawn on it. Batches C and D landed (the
+  settings list closing under the ring, the soft-fill chip, the shared test helpers that brought the copy-paste count
+  back under its best, the settings read-back test, the models box's second round). The usage limit stopped the
+  session at about 12:10; the helpers finished meanwhile and it went on at about 14:50. **Batch E landed at 14:59,
+  every check green (3,037 tests, tip `678aaa3d`):** the trap fix for Steam's ring on the whole answer (Down asks for
+  the panel's focus back, and if the ring still stays, it passes the press on), Retry's second round (the question's
+  Up goes to what is above), Down from the chat row in a short chat, the ring on sixteen more buttons, and the gap's
+  second round. Reading the models fold (option C) before landing found that with the AI on a PC most models would
+  get no place at all, so the try order could not be changed there; it went back for a second round with questions
+  6 to 8. "Grouped by day" is being merged with Retry's second round, which changed the same lines. Deck block 2b
+  (second rounds, the rings, the trap routes) started.
 
 ## For the helpers: who owns which files
 

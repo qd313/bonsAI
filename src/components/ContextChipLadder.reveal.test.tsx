@@ -5,9 +5,9 @@
  *          steps) and the same sighting in plan 72 free play (plan72-Z-FREEPLAY.json finding 1: the
  *          ladder's bottom at 652 against a dock top of 586, 67% visible, on "Chip 6 of 6").
  * Used for: ContextChipLadder.tsx, using chatPanelScroll.ts's revealBelowKeeping.
- * Solves: The ladder is one Focusable, so stepping between its chips changes what it shows (the
- *         active chip's details grow or shrink underneath) without any new focus event for the dock
- *         lift to answer. The ladder now scrolls itself clear when it takes the ring and after every
+ * Solves: Stepping between its chips changes what the ladder shows (the open chip's details
+ *         grow or shrink underneath) with no focus event on the ladder for the dock lift to
+ *         answer (since plan 79 the ring moves chip to chip, inside it). The ladder now scrolls itself clear when it takes the ring and after every
  *         step, keeping its own top (the chip row) on screen. Scrolling only; it never moves the ring.
  * Does not: Prove it on the Deck. jsdom has no layout, so every box reads its place from the pane's
  *           scrollTop, the way the real screen would move it.
@@ -75,8 +75,12 @@ const SNAPSHOT = {
   context_chips: [chip("kb", "Keyword + meaning"), chip("routing", "Routed gemma3"), chip("developer", "Developer")],
 } as unknown as TransparencySnapshot;
 
+/* Since plan 79 each chip is its own stop and carries the moves and B; the open chip holds them
+   for the tests below (the ladder itself no longer has any). */
+const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
+
 function ladderProps(): Record<string, unknown> {
-  const matches = hoisted.focusableProps.filter((p) => p.className === "bonsai-chip-ladder");
+  const matches = hoisted.focusableProps.filter((p) => p.className === OPEN_CHIP);
   return matches[matches.length - 1]!;
 }
 

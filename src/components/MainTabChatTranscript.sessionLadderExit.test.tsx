@@ -82,6 +82,10 @@ function renderTranscript(overrides: Partial<MainTabChatTranscriptProps> = {}) {
   return render(<MainTabChatTranscript {...props} />);
 }
 
+/* Since plan 79 each chip is its own stop and carries the moves and B; the open chip holds them
+   for the tests below (the ladder itself no longer has any). */
+const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
+
 function latestPropsFor(className: string): Record<string, unknown> | undefined {
   const matches = hoisted.focusableProps.filter((p) => p.className === className);
   return matches[matches.length - 1];
@@ -101,7 +105,7 @@ function openSessionTabLadder(container: HTMLElement): HTMLElement {
 function press(direction: "onMoveDown" | "onMoveUp" | "onMoveRight"): boolean {
   let handled = false;
   act(() => {
-    handled = (latestPropsFor("bonsai-chip-ladder")?.[direction] as () => boolean)();
+    handled = (latestPropsFor(OPEN_CHIP)?.[direction] as () => boolean)();
   });
   return handled;
 }

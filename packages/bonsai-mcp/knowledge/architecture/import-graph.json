@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 670,
-  "edgeCount": 1890,
+  "fileCount": 671,
+  "edgeCount": 1895,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -146,6 +146,15 @@
       ],
       "importedBy": []
     },
+    "src/components/ContextChipLadder.ringWalk.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/ContextChipLadder.test.tsx": {
       "imports": [
         "src/components/ContextChipLadder.tsx",
@@ -160,6 +169,7 @@
         "src/utils/chatPanelScroll.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -772,6 +782,7 @@
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
@@ -5072,6 +5083,7 @@
       "imports": [],
       "importedBy": [
         "src/components/ContextChipLadder.reveal.test.tsx",
+        "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
@@ -6329,6 +6341,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
@@ -6389,6 +6402,7 @@
       ],
       "importedBy": [
         "src/components/ContextChipLadder.reveal.test.tsx",
+        "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/MainTab.tsx",
@@ -6638,6 +6652,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",

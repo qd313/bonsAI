@@ -6,8 +6,8 @@
  * Solves: The active/inactive split was only a couple of subtle inline-style differences that
  *         nothing asserted on; this pins it as a class so a future style pass can't drop it
  *         silently.
- * Does not: Drive the D-pad. The ladder is one Focusable and Steam's ring lands on the row, not
- *           on a chip -- that focus graph is unchanged here, by design (see roadmap entry).
+ * Does not: Walk the D-pad. Since plan 79 each chip is its own stop and the ring sits on it;
+ *           ContextChipLadder.ringWalk.test.tsx walks that through the real details panel.
  */
 import React from "react";
 import { render } from "@testing-library/react";
@@ -37,13 +37,17 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, Focusable: CapturingFocusable };
 });
 
+/* Since plan 79 each chip is its own stop and carries the moves and B; the open chip holds them
+   for the tests below (the ladder itself no longer has any). */
+const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
+
 /*
  * `hoisted.focusableProps` is append-only across every re-render in one test, so a plain `.find()`
  * would read the FIRST capture rather than the current one. This mount only ever renders one
- * `.bonsai-chip-ladder`, so the last match is always the live one.
+ * open chip, so the last match is always the live one.
  */
 function latestLadderProps(): Record<string, unknown> | undefined {
-  const matches = hoisted.focusableProps.filter((p) => p.className === "bonsai-chip-ladder");
+  const matches = hoisted.focusableProps.filter((p) => p.className === OPEN_CHIP);
   return matches[matches.length - 1];
 }
 

@@ -110,6 +110,10 @@ function renderTranscript(overrides: Partial<MainTabChatTranscriptProps> = {}) {
   return render(<MainTabChatTranscript {...props} />);
 }
 
+/* Since plan 79 each chip is its own stop and carries the moves and B; the open chip holds them
+   for the tests below (the ladder itself no longer has any). */
+const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
+
 function clickShowDetails(container: HTMLElement) {
   const toggle = container.querySelector('[aria-label="Show details"], [aria-label="Hide details"]');
   expect(toggle).not.toBeNull();
@@ -429,7 +433,7 @@ describe("the This answer / Session tabs, on the newest answer", () => {
       const { container } = renderTranscript();
       clickShowDetails(container);
 
-      const ladderProps = latestPropsFor("bonsai-chip-ladder");
+      const ladderProps = latestPropsFor(OPEN_CHIP);
       const onCancelButton = ladderProps?.onCancelButton as (e: unknown) => void;
       expect(onCancelButton).toBeTypeOf("function");
       act(() => {

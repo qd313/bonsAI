@@ -20,16 +20,19 @@
  * contents comes from a snapshot built elsewhere (the inputTransparency
  * utils and orchestration hooks); this file only draws them.
  *
- * Gotchas: The ladder is one single Focusable, so Steam's own D-pad ring
- * always lands on the whole row, never on one chip by itself — Left/Right
- * just move which chip is "active" inside it. That active-chip highlight is
- * a separate, hand-drawn cue (a different color from the real focus ring)
- * on purpose: an earlier version glowed the active chip in the same color
- * Steam's own ring uses, and on a row that already had colored borders for
- * license tier and credits, a real D-pad ring showed up on top of all of it
- * and was unreadable.
+ * Gotchas: Each chip is its own Focusable, so Steam's ring sits on the one
+ * chip, and the D-pad moves it chip to chip; the chip holding the ring is the
+ * open one. Until plan 79 the whole ladder was one Focusable, and the Deck
+ * drew the ring round the label, the row and the open chip's panel together:
+ * a box 169 to 337 px tall that changed size on every press and reached down
+ * behind the question box (plan79-P79-M3-DETAILS-RING.json). The ladder's
+ * own root still takes focus from the callers that look it up by name or
+ * class, and hands it straight on to the open chip. The open chip's fill is a
+ * hand-drawn cue in a different colour from the ring, on purpose: an earlier
+ * version glowed it in the ring's colour, which was unreadable next to it.
  */
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import type { FocusEvent } from "react";
 import { Focusable } from "@decky/ui";
 import type {
   AskDiagnosticsSnapshot,
@@ -55,17 +58,17 @@ import {
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
-import { elementHasGamepadFocus } from "../utils/uiDocument";
+import { elementHasFocus, elementHasGamepadFocus } from "../utils/uiDocument";
+import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;
 
-// The ladder is one Focusable, so Steam's own ring lands on the whole row, never on a single
-// chip (roadmap: "The active chip in Show details is hard to spot") -- Left/Right just move
-// `activeIndex` within it. This is a manual "which one is showing below" cue, not the hardware
-// D-pad ring, so it deliberately does not reuse the reserved-for-real-focus white ring from
-// design-tokens.md; it uses DECK_HIGHLIGHT_CYAN, the token already meant for "active controls".
+// The open chip's fill: a manual "which one is showing below" cue (roadmap: "The active chip in
+// Show details is hard to spot"), drawn whether or not the ring is on the ladder, so it
+// deliberately does not reuse the reserved-for-real-focus white ring from design-tokens.md; it
+// uses DECK_HIGHLIGHT_CYAN, the token already meant for "active controls".
 //
 // One colour on the row, chosen by the maintainer 2026-09-05 after seeing it on device: the first
 // version of this cue added a cyan glow *on top of* borders that were already green, orange, red or
@@ -162,6 +165,23 @@ export function ContextChipLadder({
   const [expanded, setExpanded] = useState(!collapsedHint);
   const [activeIndex, setActiveIndex] = useState(0);
   const ladderElRef = useRef<HTMLElement | null>(null);
+  /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
+  const chipEls = useRef(new Map<number, HTMLElement>());
+  const openIndexRef = useRef(0);
+  /* A step onto a chip the window had not drawn yet: ring it once the step has drawn it. */
+  const pendingRing = useRef<number | null>(null);
+
+  const ringOnChip = (idx: number): boolean => {
+    const el = chipEls.current.get(idx);
+    return el ? focusRowElement(el) : false;
+  };
+
+  useLayoutEffect(() => {
+    const idx = pendingRing.current;
+    if (idx === null) return;
+    pendingRing.current = null;
+    ringOnChip(idx);
+  });
 
   const setExpandedBoth = useCallback(
     (v: boolean) => {
@@ -180,6 +200,7 @@ export function ContextChipLadder({
   }
 
   const safeIndex = Math.min(activeIndex, chips.length - 1);
+  openIndexRef.current = safeIndex;
   const active = chips[safeIndex];
   const showAllChips = chips.length <= CONTEXT_CHIP_SHOW_ALL_MAX;
   const { start, end } = showAllChips
@@ -234,42 +255,55 @@ export function ContextChipLadder({
     if (el && elementHasGamepadFocus(el)) revealBelowKeepingAsItSettles(el, () => el);
   };
 
-  const stepChip = (delta: number) => {
-    setActiveIndex((i) => Math.max(0, Math.min(chips.length - 1, i + delta)));
+  /*
+   * Every chip carries its own moves, because Steam calls them on the element holding the ring.
+   * A step is a plain focus() onto the next chip: the chips are siblings inside this one
+   * container, the case AGENTS.md ("The Steam Deck focus graph") says a plain focus() carries the
+   * ring. Off either end the press goes to the caller, as it always did.
+   */
+  const last = chips.length - 1;
+  const stepTo = (idx: number): boolean => {
+    setActiveIndex(idx);
+    if (!ringOnChip(idx)) pendingRing.current = idx;
+    revealWhileRinged();
+    return true;
+  };
+  const leaveDown = () => Boolean(onMoveDownFromLadder?.());
+  const chipMoves = (idx: number) => ({
+    onMoveLeft: () => (idx > 0 ? stepTo(idx - 1) : false),
+    onMoveRight: () => (idx < last ? stepTo(idx + 1) : leaveDown()),
+    onMoveUp: () => (idx > 0 ? stepTo(idx - 1) : Boolean(onMoveUpFromLadder?.())),
+    onMoveDown: () => (idx < last ? stepTo(idx + 1) : leaveDown()),
+  });
+
+  /*
+   * The root itself is focused by name or class from outside (the tabs row, Up from the chips
+   * below, the reply's own Down chain). Hand that on to the open chip once the focus event has
+   * finished, so Steam has seen the root's focus before the chip's and the chip's is the last
+   * word. A chip's own focus bubbles here too; it only needs the reveal.
+   */
+  const onLadderFocus = (e: FocusEvent<HTMLElement>) => {
+    const root = e.currentTarget;
+    if (e.target === root) {
+      queueMicrotask(() => {
+        const onAChip = [...chipEls.current.values()].some((el) => elementHasFocus(el));
+        if (elementHasFocus(root) && !onAChip) ringOnChip(openIndexRef.current);
+      });
+    }
     revealWhileRinged();
   };
 
-  const moveLeft = () => {
-    if (safeIndex <= 0) return false;
-    stepChip(-1);
-    return true;
-  };
-
-  const moveRight = () => {
-    if (safeIndex >= chips.length - 1) {
-      if (onMoveDownFromLadder?.()) return true;
-      return false;
-    }
-    stepChip(1);
-    return true;
-  };
-
-  const moveUp = () => {
-    if (safeIndex <= 0) {
-      if (onMoveUpFromLadder?.()) return true;
-      return false;
-    }
-    stepChip(-1);
-    return true;
-  };
-
-  const moveDown = () => {
-    if (safeIndex >= chips.length - 1) {
-      if (onMoveDownFromLadder?.()) return true;
-      return false;
-    }
-    stepChip(1);
-    return true;
+  /*
+   * B collapses the ladder back to its own hint link. `onCancelButton` + `preventDefault`, not
+   * `onButtonDown` checking the button code: measured on device 2026-08-28
+   * (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown` does receive B,
+   * but returning `true` from it does NOT stop Steam also backing the ring out of the panel —
+   * only `onCancelButton` genuinely consumes the press. It sits on each chip, the element holding
+   * the ring. Safe unconditionally: the chips only exist while the ladder is expanded.
+   */
+  const onCancelButton = (e: unknown) => {
+    setExpandedBoth(false);
+    (e as { preventDefault?: () => void })?.preventDefault?.();
   };
 
   return (
@@ -279,31 +313,8 @@ export function ContextChipLadder({
         ladderElRef.current = el;
         rootRef?.(el);
       }}
-      onFocus={revealWhileRinged}
+      onFocus={onLadderFocus}
       style={{ marginTop: 8, width: "100%", maxWidth: "100%", minWidth: 0 }}
-      {...deckNav({
-        onMoveLeft: moveLeft,
-        onMoveRight: moveRight,
-        onMoveUp: moveUp,
-        onMoveDown: moveDown,
-      })}
-      /*
-       * B collapses the ladder back to its own hint link. `onCancelButton` + `preventDefault`,
-       * not `onButtonDown` checking the button code: measured on device 2026-08-28
-       * (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown` does receive
-       * B, but returning `true` from it does NOT stop Steam also backing the ring out of the
-       * panel — only `onCancelButton` genuinely consumes the press. Safe to attach
-       * unconditionally here (unlike those two examples' "only while open" gating): this whole
-       * Focusable only exists while the ladder itself is expanded — the collapsed hint above
-       * renders a different Focusable entirely — so there is no "closed" state of this same node
-       * where B ought to fall through instead.
-       */
-      {...({
-        onCancelButton: (e: unknown) => {
-          setExpandedBoth(false);
-          (e as { preventDefault?: () => void })?.preventDefault?.();
-        },
-      } as Record<string, unknown>)}
     >
       <div
         style={{
@@ -335,8 +346,14 @@ export function ContextChipLadder({
           const truncated = !isActive && !showAllChips;
           const far = truncated && Math.abs(idx - safeIndex) >= 2;
           return (
-            <span
+            <Focusable
               key={chip.id}
+              ref={(el: HTMLElement | null) => {
+                if (el) chipEls.current.set(idx, el);
+              }}
+              onFocus={() => setActiveIndex(idx)}
+              {...deckNav(chipMoves(idx))}
+              {...({ onCancelButton } as Record<string, unknown>)}
               className={
                 isActive
                   ? "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active"
@@ -362,7 +379,7 @@ export function ContextChipLadder({
               }}
             >
               {chip.label}
-            </span>
+            </Focusable>
           );
         })}
       </div>

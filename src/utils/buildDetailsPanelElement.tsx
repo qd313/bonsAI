@@ -145,7 +145,8 @@ function revealWhenOpened(panel: HTMLElement | null): void {
  *      | Down                                          ^ Up
  *   This answer | Session · N        <- new stop, only on the newest turn ("bonsai-details-tabs-row")
  *      | Down                                          ^ Up
- *   This answer tab: the existing chip ladder, exactly as before ("bonsai-chip-ladder")
+ *   This answer tab: the chip ladder ("bonsai-chip-ladder"), one stop per chip since plan 79,
+ *   Down off its last chip to what sits below the panel, the Session tab's way
  *   Session tab (plan 68): Sum up this chat, the summary card when there is one, then the turn row
  *   list and the active row's own chips (SessionContextTabBody; its own graph is drawn in
  *   SessionSumUpSection.tsx). No Clear.
@@ -328,12 +329,13 @@ export function buildDetailsPanelElement(args: {
           rootRef={(el) => registerChipLadderEl(turnKey, el)}
           onMoveUpFromLadder={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
           /*
-           * Same shape the pre-tabs ladder always had, kept for consistency with the older-turn
-           * branch above — see that branch's own comment for why calling the now-defunct
-           * `focusSessionContextStrip()` is harmless rather than stale: it safely reports false
-           * with the standalone strip gone (plan 62 3c), and Down falls through to Steam's default.
+           * Down off the last chip leaves the panel by name, the Session tab's way (plan 72). It
+           * used to fall through to Steam's own guess, which found the suggestion chips from the
+           * ladder as a whole; since plan 79 the ring is on one chip nested inside the ladder, so
+           * the guess would start from somewhere else. `focusSessionContextStrip()` stays first
+           * for the older-turn branch's reason above: it safely reports false.
            */
-          onMoveDownFromLadder={() => focusSessionContextStrip()}
+          onMoveDownFromLadder={() => focusSessionContextStrip() || downPastPanel()}
           devDiagnostics={devDiagnostics}
           creditsView={creditsView}
           onExpandChange={(expanded) => {

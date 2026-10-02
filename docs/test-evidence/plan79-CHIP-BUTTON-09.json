@@ -1,0 +1,20 @@
+{
+  "row": "CHIP-BUTTON-09",
+  "screen": "built-in 854x534 (game running), 1.5 ratio; chip column x48-348",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 10:06-10:13",
+  "setup": "Settings read first: preset_single_chip false (two chips), dev_frozen_test_chips [], preset_chip_animation decode, nothing changed. Half-Life 2 launched by the launch tool (no reload); title screen in front 75 s before the plugin opened; Context read \"active game Half-Life 2\"; no plugin reload. Page-side sampler (read-only) every 250 ms: 969 reads over 242 s of every chip text box, label box, chip box and Tip badge box. Test chat open; no question asked.",
+  "pressed": "none after opening the plugin (plugin opened by deck_openPlugin); game launched by deck_launchGame",
+  "seen": {
+    "case_check": "Tip chips with an overflowing label were on screen from the first read: Tips for Sandtraps in this game? (label 204 px in a 117 px box), Tips for Ravenholm in this game? (210), How do I beat Hunter-Chopper (helicopter)? (271), How do I beat Strider? (149), How do I use Gravity Gun? (172), How do I deal with Antlions? (184). The scrolling half was produced (first time).",
+    "dot_left_edge_left_chip": "56.67 px on all 380 reads of a Tip label there; range 0.00 px, while the label moved from x 69.7 to x -130.4 (200 px)",
+    "dot_left_edge_right_chip": "209.67 px on all 462 reads of a Tip label there; range 0.00 px, while the label moved from x 222.7 to x 22.3 (200 px)",
+    "dot_size": "7 x 7 px on every read (only size seen)",
+    "dot_before_label": "yes on every read: dot right edge 63.67 / 216.67, text box left 69.7 / 222.7",
+    "dot_visible": "yes, in the screenshot the amber square sits at the left of the right chip while its label scrolls (plan79-CHIP-BUTTON-09.png)",
+    "caveat": "During the scramble (decode) frames the label box is replaced; those reads were left out of the label table but the dot box was identical."
+  },
+  "expected": "dot left edge changes by 0.5 px or less while the label moves at least 20 px; dot stays visible, 7x7, before the label on every read",
+  "verdict": "PASS - dot moved 0.00 px against 200 px of label movement on 842 reads; 7x7 and before the label every time",
+  "screenshot": "plan79-CHIP-BUTTON-09.png"
+}

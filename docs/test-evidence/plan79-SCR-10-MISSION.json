@@ -1,0 +1,62 @@
+{
+  "row": "SCR-10-MISSION (with GAME-LIGHT-01, STREAM-PIECES-01, SCR-03)",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 10:13-10:25",
+  "screen": "built-in 854x534 (game running), 1.5 ratio",
+  "setup": "Deep Rock Galactic: Survivor launched by the launch tool from Home (5 Right presses), no plugin reload at any time. 60 s later the screenshot showed the game (title, \"Press any key\"). The panel was closed so presses reached the game. A presses: 10 in total (title, save slot 3 already selected, Play, Main Missions, Elimination, Sector 01, Crystalline Caverns, Engineer, Maintenance Worker, Hazard 1), then one more on \"Press any key\" after loading = 11 presses in all, i.e. the first plus 10 more (the limit). The screenshot at 10:18 showed a live run (HP 511/511, score, mission bar); the game process was at 100 to 176 percent CPU. The game then stood on a LEVEL UP choice screen (the game stopped at a pick) for the rest of the check. Free memory ~380 MB, available ~2,100 MB. Plugin opened; Context line: \"active game Deep Rock Galactic: Survivor\". Test chat open, Strategy mode. Scramble setting as found. Counter: page-side requestAnimationFrame, 2.5 s slices, first 0.3 s of each dropped, with answer text length (relative to the 352 letters already on screen) and Stop-button state.",
+  "pressed": "see setup; then walkTo DOWN to Ask, A on Ask (focus read first both times, never A on the question box). Questions sent by the send script, VERIFIED.",
+  "seen": {
+    "idle_panel_fps_median": 87.9,
+    "idle_slices": 8,
+    "answer_A": {
+      "question": "give me a very detailed step by step guide to this game from the first mission onward, with a section for each weapon class and its upgrades",
+      "thinking_slices": 24,
+      "thinking_median": 83.15,
+      "thinking_min": 63.2,
+      "answer_slices": 18,
+      "answer_median": 68.8,
+      "answer_min": 64.5,
+      "answer_length_letters": 1700,
+      "slices_after_1200_letters": [
+        67,
+        68.1,
+        70.3,
+        70,
+        69,
+        85.2
+      ],
+      "seconds_to_answer": "about 100 s thinking and ~45 s writing",
+      "sections": 3
+    },
+    "answer_B": {
+      "question": "explain every weapon class in this game and how to upgrade each one, section by section, from the start of the game to the end",
+      "thinking_slices": 29,
+      "thinking_median": 83.4,
+      "thinking_min": 60.1,
+      "answer_slices": 17,
+      "answer_median": 69.6,
+      "answer_min": 63.8,
+      "answer_length_letters": 1635,
+      "slices_after_1200_letters": [
+        69.6,
+        70.3,
+        68.1,
+        69.3,
+        77.9
+      ]
+    },
+    "game_own_frame_rate_overlay": "Steam performance overlay (gamescope fps): 45 FPS idle with the panel open (3 screenshots), 44 FPS and 43 FPS in screenshots taken while the answers were being written (10:19 and 10:23); 45 FPS again after (10:24). The game sat on a level-up choice screen, so this is the game paused at a menu, not a fight.",
+    "test_chat_messages": "was 182, now 186 (two questions, four turns)"
+  },
+  "expected": "answer-phase median at least 30 on each answer; GAME-LIGHT-01 also thinking at least 35; STREAM-PIECES-01: on an answer of 2,000 letters or more no slice under 30 after 1,200 letters; SCR-03 no written limit: report",
+  "verdict": "PASS (SCR-10) - answer-phase median 68.8 and 69.6 on the two answers, lowest slice 64.5 and 63.8; both far over 30. Reached a live mission for the first time.",
+  "verdict_GAME_LIGHT_01": "PASS - answer median 68.8 and 69.6 (limit 30) and thinking median 83.15 and 83.4 (limit 35). Caveat: game was stopped on a level-up pick, not mid-fight.",
+  "verdict_STREAM_PIECES_01": "UNCLEAR - neither answer reached 2,000 letters (1,700 and 1,635), so the rule cannot be applied as written. For what it is worth: no slice under 63 at any length and none under 67 after 1,200 letters.",
+  "verdict_SCR_03": "UNCLEAR - report only, no written limit: game 45 fps idle, 43 to 44 while answering, panel 69 fps median while writing. The game was on a level-up menu, so it was not under full fight load. The maintainer judges.",
+  "screenshots": [
+    "plan79-SCR-10-MISSION-live-run.png",
+    "plan79-SCR-10-MISSION-answerA-thinking.png",
+    "plan79-SCR-10-MISSION-answerB-writing.png",
+    "plan79-SCR-10-MISSION-idle-after.png"
+  ]
+}

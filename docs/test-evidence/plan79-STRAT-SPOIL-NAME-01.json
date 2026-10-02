@@ -1,0 +1,13 @@
+{
+  "row": "STRAT-SPOIL-NAME-01",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 09:57",
+  "screen": "not measured (no game)",
+  "setup": "Row read from Steam Home (launch tool walk) and from the library play-time list over the debug connection. Nothing launched for this row.",
+  "pressed": "none",
+  "seen": {
+    "doom_64_family_in_library": "DOOM 64 and Doom 64: Retribution are in the library but last-played 0, not on Recent Games; Super Mario 64, Mario Kart 64 and Pikmin 2 also last-played 0. Recent Games shelf as walked: Black Mesa, Sifu, Call of Juarez Gunslinger, Half-Life 2, Deep Rock Galactic: Survivor, Hades (later reordered by play; Ship of Harkinian is far down the list and is a protected-story title)."
+  },
+  "expected": "one of Doom 64, Doom 64: Retribution, Super Mario 64, Mario Kart 64, Pikmin 2 on the Recent Games row",
+  "verdict": "COULD NOT RUN - none of the five games is on the Recent Games row (fourth time); proven by its tests only. Adding a non-Steam shortcut is the maintainer chore."
+}

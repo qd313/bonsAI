@@ -1,0 +1,36 @@
+{
+  "row": "P79-RECENT-GAMES",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 09:57",
+  "screen": "built-in 854x534 (read with a game running; 854x454 panel without)",
+  "setup": "Nothing launched in this step. Row read from Steam Home as the launch tool walked it (Black Mesa, Sifu, Call of Juarez Gunslinger, Half-Life 2, Deep Rock Galactic: Survivor, Hades; walk stopped at Hades) and from the library play-time list read over the debug connection.",
+  "pressed": "none in this step (the launch tool refused a made-up name, 0 presses)",
+  "seen": {
+    "recent_games_in_shelf_order_as_walked": [
+      "Black Mesa",
+      "Sifu",
+      "Call of Juarez Gunslinger",
+      "Half-Life 2",
+      "Deep Rock Galactic: Survivor",
+      "Hades"
+    ],
+    "by_last_played_time_next": [
+      "Stardew Valley",
+      "Brotato",
+      "Red Dead Redemption 2",
+      "GTA San Andreas DE",
+      "Cyberpunk 2077",
+      "Team Fortress 2",
+      "Left 4 Dead 2",
+      "Palworld",
+      "God of War",
+      "Hollow Knight",
+      "Portal 2",
+      "SteamVR",
+      "Ship of Harkinian"
+    ],
+    "doom64": "DOOM 64 and Doom 64: Retribution are in the library with last-played 0 (never played), so not on the row; Super Mario 64, Mario Kart 64, Pikmin 2 also last-played 0"
+  },
+  "expected": "whole row written in order",
+  "verdict": "PASS - row read; the first six tiles are certain, the rest of the order is from play times"
+}

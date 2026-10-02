@@ -1,0 +1,19 @@
+{
+ "deck_time_local": "2026-10-02T08:49 to 08:52 -0400",
+ "screen": "Deck built-in screen after the maintainer's restart. Quick Access page 854x454, dpr 1.5; screenshot 1280x800. Steam Home was normal (Black Mesa tile focused, no dialog) before the plugin was opened; first screenshot showed a black frame with only the performance overlay, the second (after opening Quick Access) showed Steam Home blurred behind the panel.",
+ "setup": "deck_status: Deck reachable, Ollama reachable. checkReady awake/noForeignCdpTunnel/buildMatches all pass (124 files match). Keep-awake taken 480 min, expiresAt 2026-10-02T20:48:49Z (16:48 Deck time). Settings file diffed against ~/p79-settings.bak.json: identical. Ollama: already running as a user process (/home/deck/.local/bin/ollama serve, started 08:44, before this block); systemctl --user and systemctl both say inactive for 'ollama'. So Ollama was NOT down; the plugin Ollama-tab/Test-connection steps were not needed and not pressed. API tags: gemma4:e2b-it-qat and nomic-embed-text present. Free memory 8337 MB, available 12409 MB. No game. 9 chat files in chat_slots (8 chats + index). Test chat 6f3cc055: 176 entries (user plus assistant messages), last written 03:21, so no question was asked since block 1b. The handover said 174; the 174 in the earlier evidence file looks like a different count (172 + 2 questions = 174 questions-plus-answers by that driver's counting; the file holds 176 messages). Open chat title read on screen: 'How do I beat the boss in the S...' (the test chat).",
+ "pressed": "deck_openPlugin only (blind QAM chord, 4 rail presses, activate). No A on anything but the plugin entry.",
+ "seen": {
+  "page": "854x454",
+  "hasFocus": true,
+  "reduce_motion_matchMedia": false,
+  "plugin_open": true,
+  "tab": "MAIN",
+  "context_line": "Context: no active game detected",
+  "free_mem_mb": 8337
+ },
+ "expected": "Deck answers, build matches, no dialog on screen, settings unchanged, Ollama up (or started by the plugin), test chat present.",
+ "verdict": "PASS - Deck ready, build matches, no dialog, settings identical, Ollama up with both models, test chat present. Note: the one-D-pad-press arrival check is done in the next check's first press.",
+ "row": "P79-BLOCK1C-SETUP",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

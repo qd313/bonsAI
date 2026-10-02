@@ -1,0 +1,31 @@
+{
+  "row": "QA-FREE-PLAY-01 (with a game)",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 10:01-10:04",
+  "screen": "built-in screen: page 854 x 534 at 1.5 ratio (game running), panel x48-348, panel top ~88, dock top y 330 (measured dock box 330-494; the Ask button at y440-476)",
+  "setup": "Hades launched by the launch tool from Home (5 Right presses), no plugin reload. Title screen in front, 90 fps, up 30+ s (screenshot 09:58:38 showed the Hades title). Plugin opened; Context line read \"active game Hades\". Test chat open (title \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"). Newest answer had 1 answer section and 0 covers, so Question A was asked: \"who is waiting at the very end of the game in hades\" (sent with the send script, VERIFIED, Ask pressed after a focus read). Answer finished (no Stop button, Retry present), then ~10 s more: 2 answer-stop sections, 1 cover (Spoiler - tap to show). Test chat now 182 messages (was 180).",
+  "pressed": "deck_walkTo DOWN to Ask (13 presses), A on Ask (focus read first), walkTo UP to the top (15), then deck_sweep DOWN, returnTrip, budget 80, lanes 1, laneButton RB (61 presses, 4 legs, 3 presses retried for a busy serial port). After the sweep the chat file holds 182 messages and the open chat is still the test chat (both lanes show the same newest question).",
+  "seen": {
+    "cycles": 0,
+    "stops_visited": 14,
+    "stops_recorded_lane0": 27,
+    "down_leg_stops": 13,
+    "up_leg_stops": 13,
+    "same_names_both_legs": true,
+    "dead_presses": 0,
+    "down_leg_end": "ask (y440, visible 100%)",
+    "up_leg_end": "bonsAI header logo button (top of the tab bar)",
+    "stops_focused_but_not_visible": "4 reads, all the same one: the question row \"who is waiting...\" at 78% behind the Retry icon (known false alarm 1; the text box 176,229,156x29 vs the Retry icon 172,241,20x20)",
+    "other_stops_visible_percent": "100 on every other stop",
+    "tall_section": "the answer text section 245x105 (63,226) scrolled with the pane (scrollTop 80, 175, 268), visible 100",
+    "repeat_counts": "every stop visited once per leg; none more than twice over the two legs of a lane",
+    "underlined_game_words": "none in this answer (no element with an underline; the only cover is the spoiler box). Walking Up could not be compared for underlined words: no case.",
+    "free_rider_W2_R7": "only partial stop is 78% (question row behind Retry); no word of text hidden when judged by the text line boxes",
+    "free_rider_THINKING_OPENER": "not read (answer finished while the Deck was waiting; reasoning header showed \"Show reasoning - 21 s\")",
+    "case_check": "2 answer sections (checks list asked for 4+) and 1 cover. Only one question was needed for the cover, so Question B was not asked; the walk is shorter than the plan 78 picture (13 stops each way against 19 and 20 with a longer answer)"
+  },
+  "expected": "cycles 0; no stop more than twice; dead presses 0; every stop visible apart from the two known false alarms; Up visits same stops as Down; Down ends at question box or Ask, Up on tab bar. Last good: 19 Up / 20 Down.",
+  "verdict": "PASS - 0 cycles, 0 dead presses, same 13 stops each way, the only not-fully-visible stop is the known question-row-behind-Retry alarm (78%). Note: the answer was short (2 sections) so this is a smaller walk than the plan 78 picture.",
+  "verdict_underlined_up_vs_down": "COULD NOT RUN - no underlined game words in the answer, nothing to compare for bug 12",
+  "screenshot": "plan79-QA-FREE-PLAY-01-GAME.png"
+}

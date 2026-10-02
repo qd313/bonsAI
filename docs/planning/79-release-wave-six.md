@@ -418,6 +418,11 @@ New ones go here, with the choice taken in the meantime.
    *Meanwhile:* a place change saves at once, like the star, and Cancel does not undo it.
 4. **Option C and the filters.** A model hidden by a filter would hide its place. *Meanwhile:* a hidden model keeps
    its place, the numbers skip it, and one quiet line says how many models in the order the filters hide.
+5. **One box or two for the starter models after a first Install Ollama.** The ask-first box holds only "Not now" and
+   one download button, so it cannot offer "with the starter models", "engine only" and "nothing" at once.
+   *Meanwhile:* after the Install Ollama box is agreed to, a second box asks "Also install the starter models?" with
+   the ring on "Not now"; declining installs the engine only. A true single box means changing the shared download
+   box every download uses. **Your call:** keep the two boxes, or ask for the single box after the release.
 
 ## At the end
 
@@ -499,6 +504,26 @@ Nothing yet.
   "N earlier" (helper Y builds it after T, which needs the turn's date passed to the screen). The drawing's find box
   goes on the roadmap as its own feature (search in bonsAI), not built tonight. All six drawings now have a pick.
   Deck block 1c started: bring the AI back up after the restart the plugin's own way, then the rest of block 1b.
+- **2026-10-02, about 09:00 to 11:10, landings (tip `d810328b`):** twenty-two helper changes are on the working branch,
+  every check green at landing: the knowledge-base icons, ten game chips, Save and Delete only with the ring, the
+  "undefined" cover, long chips (pause at the end, centred words), the invisible-ring fix on the Ollama tab with a
+  guard that stops new buttons repeating it, doubled spoken words, power answers with numbers (3 of 30 test answers
+  had one before, 27 of 30 after), a button under an answer keeping its game, the X after Stop (and Ask now ends
+  listening), Retry no longer an Up/Down stop, the rating row's Up and Down with the calmer look the maintainer
+  picked, the Show details ring on one chip, the bin icon, the note card's gap, the fresher title, the one switch,
+  the AI models box's top row, and "Install options…" removed with the starter models offered in Browse models and
+  after a first Install Ollama (as a second ask-first box: one box cannot hold three choices; question 5). **How
+  landings changed:** with fifteen helpers running their own tests, the two slowest screen test files time out at
+  20 s, so a failed file is run again alone with a longer limit and must pass there; and after the first chain,
+  unrelated changes that had each been read on their own were landed in batches with one run of every check
+  (batch A five changes, batch B ten), to keep the queue from running for hours. One guard number was lowered by
+  hand at landing (its own rule), and the back-end tests' copy-paste count went over its best by nine lines (two
+  new tests copied older helpers); a helper is sharing them. Deck block 1d (with games) passed the Main tab walk
+  with Hades, the Tip dot on a scrolling label (first time produced) and the frame rate inside a Deep Rock mission
+  (first time reached: about 69 frames a second in the panel while an answer is written). The trap is still not
+  reproduced; the settings list closing under the ring is fixed (helper P, waiting to land) and a stronger helper
+  is testing the ring sitting on the whole answer bubble. Deck block 2a, one check per landed fix, started on the
+  new build.
 
 ## For the helpers: who owns which files
 

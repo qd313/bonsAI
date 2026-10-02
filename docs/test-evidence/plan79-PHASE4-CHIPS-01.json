@@ -1,0 +1,195 @@
+{
+  "row": "PHASE4-CHIPS-01 (a fresh look at the widest labels)",
+  "screen": "built-in 854x534 (game running), 1.5 ratio; chip column x48-348",
+  "build_commit": "f0a4f2c4",
+  "deck_time_local": "2026-10-02 10:06-10:13",
+  "setup": "Settings read first: preset_single_chip false (two chips), dev_frozen_test_chips [], preset_chip_animation decode, nothing changed. Half-Life 2 launched by the launch tool (no reload); title screen in front 75 s before the plugin opened; Context read \"active game Half-Life 2\"; no plugin reload. Page-side sampler (read-only) every 250 ms: 969 reads over 242 s of every chip text box, label box, chip box and Tip badge box. Test chat open; no question asked. Ridden on CHIP-BUTTON-09 (same reads).",
+  "pressed": "none",
+  "seen": {
+    "chip_widths": "each chip is 147 px wide; its text box is 117 px (Tip chip, dot takes the left) or 130 px (no dot); chip column right edge x 348, text box right edge max 339.3",
+    "rule": "every one of the 22 clean labels is wider than its box; every one scrolls as a marquee inside the box and is clipped at the box edge (overflow hidden on the scrolling element, text-overflow clip). None ends in an ellipsis. No label showed outside x 348 on any read; the screenshot at 10:12 shows the labels cut inside the chips.",
+    "widest_label": "Which Ollama essentials should I pull for this Deck? 312 px in a 130 px box; longest Tip label Hunter-Chopper 271 px in 117 px",
+    "labels": [
+      {
+        "label": "How do I beat Hunter-Chopper (helicopter)?",
+        "text_width_px": 271,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Tips for Sandtraps in this game?",
+        "text_width_px": 204,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Tips for Ravenholm in this game?",
+        "text_width_px": 210,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "How do I beat Strider?",
+        "text_width_px": 149,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "How do I use Gravity Gun?",
+        "text_width_px": 172,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "How do I deal with Antlions?",
+        "text_width_px": 184,
+        "text_box_px": 117,
+        "tip": "tip",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Which Ollama essentials should I pull for this Deck?",
+        "text_width_px": 312,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "When should I use Expert mode instead of Speed?",
+        "text_width_px": 305,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "What's the efficiency sweet spot for this game?",
+        "text_width_px": 291,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Any Steam Input issues for this game?",
+        "text_width_px": 238,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "What are the best settings for 60fps?",
+        "text_width_px": 234,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "What do the model policy tiers mean?",
+        "text_width_px": 237,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Help me troubleshoot a Proton issue",
+        "text_width_px": 228,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Help me beat this boss or encounter",
+        "text_width_px": 228,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Any known issues running this on Deck?",
+        "text_width_px": 225,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "What's ahead (without spoilers)?",
+        "text_width_px": 208,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "What are the best FSR settings?",
+        "text_width_px": 203,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Check Steam players for bans",
+        "text_width_px": 190,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Why is my Deck running hot?",
+        "text_width_px": 188,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "How can I reduce input lag?",
+        "text_width_px": 179,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "Why is my game crashing?",
+        "text_width_px": 174,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      },
+      {
+        "label": "How do I fix stuttering?",
+        "text_width_px": 155,
+        "text_box_px": 130,
+        "tip": "-",
+        "overflows": true,
+        "behaviour": "scrolls (marquee), clipped by the box, no ellipsis"
+      }
+    ],
+    "before_picture_note": "this is the BEFORE picture for tonight long-chip change: all labels scroll, none cut with ellipsis, text box 117 / 130 px"
+  },
+  "expected": "no label runs past the right edge of the chip column (x 348); a long one is cut or scrolls inside its chip",
+  "verdict": "PASS - 22 labels measured, all longer than their box (149 to 312 px against 117 or 130), all scroll inside the chip, none past x 348",
+  "screenshot": "plan79-CHIP-BUTTON-09.png"
+}

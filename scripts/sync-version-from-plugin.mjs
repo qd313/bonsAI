@@ -7,8 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Writes `text` (written with plain 
- line endings) to `file` only when it
+ * Writes `text` (written with plain LF line endings) to `file` only when it
  * really differs from what is there, ignoring line endings. When it does
  * write, it keeps the line endings the file already has. Returns true when it
  * wrote. This keeps `npm test` and `npm run build` from leaving the file

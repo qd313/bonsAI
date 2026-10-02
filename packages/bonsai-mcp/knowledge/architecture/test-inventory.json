@@ -148,6 +148,7 @@
     "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
     "src/features/chat-sum-up/chatSumUpModel.test.ts",
     "src/features/chat-sum-up/useChatSumUpJob.test.ts",
+    "src/features/details-slot/DetailsSlot.deck.test.tsx",
     "src/features/downloads/downloadNotice.test.tsx",
     "src/features/model-routing/useTryOrderPlaces.test.tsx",
     "src/features/plugin-shell/TabIndicatorBar.test.tsx",

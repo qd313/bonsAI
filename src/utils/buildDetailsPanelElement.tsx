@@ -25,6 +25,7 @@ import { focusPerTurnRow } from "./focusPerTurnRow";
 import { focusKbNotesBlock } from "./buildKbNotesBlockElement";
 import { focusChatPermissionHintRow } from "./chatTranscriptNavHelpers";
 import { takeNavFocus } from "./navFocusRegistry";
+import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
@@ -217,11 +218,12 @@ export function buildDetailsPanelElement(args: {
     focusReplyUtilityRow(querySlot());
   /*
    * Down off the bottom of the panel, to what sits below Show details in the chat: a permission
-   * hint row when one shows, else the suggestion chips, else the question box. Each is a registered
+   * hint row when one shows, else the slot above the question box (the chips, or this line standing
+   * in for them, DetailsSlot.tsx), else the question box. Each is a registered
    * nav node outside this turn's own container, so only Steam's transfer carries the ring there.
    */
   const downPastPanel = () =>
-    focusChatPermissionHintRow() || takeNavFocus("preset-carousel") || takeNavFocus("unified-input");
+    focusChatPermissionHintRow() || takeChipSlotFocus() || takeNavFocus("unified-input");
 
   if (!isNewest) {
     /*

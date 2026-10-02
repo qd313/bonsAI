@@ -106,13 +106,13 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 855,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 856,
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 847,
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 855,
       "role": ""
     },
     {

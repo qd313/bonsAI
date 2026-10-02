@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 701,
-  "edgeCount": 1999,
+  "fileCount": 705,
+  "edgeCount": 2025,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -456,6 +456,7 @@
         "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.gameLighter.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
     },
@@ -988,6 +989,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/data/askMode.ts",
         "src/data/presets.ts",
+        "src/features/details-slot/DetailsSlot.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/utils/joinPresetWithRunningGame.ts"
@@ -2770,6 +2772,47 @@
         "src/hooks/useChatSlots.ts"
       ]
     },
+    "src/features/details-slot/DetailsSlot.deck.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/details-slot/detailsSlotStore.ts",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/detailsSlot.ts",
+        "src/test-harness/deckAnswerWalk.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/details-slot/DetailsSlot.tsx": {
+      "imports": [
+        "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetRow.tsx"
+      ]
+    },
+    "src/features/details-slot/detailsSlotStore.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/replyStopRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/details-slot/DetailsSlot.tsx",
+        "src/hooks/useMainTabAskBarFocus.ts",
+        "src/utils/buildDetailsPanelElement.tsx",
+        "src/utils/buildReplyActionsElement.tsx"
+      ]
+    },
     "src/features/downloads/downloadNotice.test.tsx": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -3419,6 +3462,7 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/details-slot/DetailsSlot.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/utils/permHintRowNav.test.ts"
@@ -3459,6 +3503,7 @@
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.test.ts",
         "src/features/preset-carousel/sessionRagComposer.ts",
+        "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/presetChipLabel.ts",
         "src/styles/sections/section-4.test.ts",
         "src/styles/sections/section-4.ts"
@@ -3627,6 +3672,7 @@
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/hooks/useTabStripBodyOffset.ts",
         "src/index.tsx",
+        "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
         "src/styles/sections/section-4.test.ts",
@@ -4117,6 +4163,7 @@
     },
     "src/hooks/useMainTabAskBarFocus.ts": {
       "imports": [
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -4904,6 +4951,7 @@
     },
     "src/styles/bonsaiScopeStylesheet.ts": {
       "imports": [
+        "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/gameRunningLighter.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/styles/sections/scopeBase.ts",
@@ -4924,6 +4972,7 @@
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/buttonFocusRing.test.ts",
         "src/styles/presetChipHighlightFill.test.ts",
@@ -4984,6 +5033,17 @@
       "imports": [],
       "importedBy": [
         "src/styles/sections/gamepadAndPullModels.ts"
+      ]
+    },
+    "src/styles/sections/detailsSlot.ts": {
+      "imports": [
+        "src/features/preset-carousel/presetRowLayout.ts",
+        "src/features/unified-input/constants.ts",
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
     "src/styles/sections/gameRunningLighter.test.ts": {
@@ -5225,6 +5285,7 @@
       "importedBy": [
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/styles/sections/answerBubble.ts",
+        "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/replyRatingChoices.ts",
         "src/styles/sections/savedChatSlotDots.test.ts",
@@ -5276,6 +5337,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/utils/answerBubbleNavigation.coverMargin.test.ts",
         "src/utils/answerBubbleNavigation.coverMirror.test.ts",
         "src/utils/answerBubbleNavigation.deepCoverEntry.test.ts",
@@ -5449,6 +5511,7 @@
         "src/features/chat-slots/ChatSlotRow.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
@@ -5618,6 +5681,7 @@
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/components/buildEarlierList.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -6173,6 +6237,7 @@
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/chatPanelScroll.ts",
@@ -6260,6 +6325,7 @@
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/icons.tsx",
         "src/data/replyMicroActions.ts",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/chatPanelScroll.ts",
@@ -6326,6 +6392,8 @@
         "src/components/ContextChipLadder.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
+        "src/features/details-slot/DetailsSlot.tsx",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
@@ -6779,6 +6847,7 @@
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useInputTransparencyRefresh.ts",
@@ -7039,6 +7108,9 @@
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/details-slot/DetailsSlot.tsx",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
@@ -7328,6 +7400,7 @@
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -7705,6 +7778,8 @@
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
+        "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/details-slot/DetailsSlot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",

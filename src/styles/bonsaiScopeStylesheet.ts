@@ -10,6 +10,7 @@ import { buildSection1Section } from "./sections/section-1";
 import { buildSection2Section } from "./sections/section-2";
 import { buildSection3Section } from "./sections/section-3";
 import { buildSection4Section } from "./sections/section-4";
+import { buildDetailsSlotSection } from "./sections/detailsSlot";
 import { buildSection5Section } from "./sections/section-5";
 import { buildSection6Section } from "./sections/section-6";
 import { buildSection7Section } from "./sections/section-7";
@@ -31,6 +32,7 @@ export function buildBonsaiScopeStylesheet(): string {
     buildSection2Section() +
     buildSection3Section() +
     buildSection4Section() +
+    buildDetailsSlotSection() +
     buildSection5Section() +
     buildSection6Section() +
     buildSection7Section() +

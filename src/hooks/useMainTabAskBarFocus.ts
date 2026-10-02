@@ -37,6 +37,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import { takeNavFocus } from "../utils/navFocusRegistry";
+import { takeDetailsSlotLineFocus } from "../features/details-slot/detailsSlotStore";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
 
 export type MainTabAskBarFocusRefs = {
@@ -159,6 +160,8 @@ export function useMainTabAskBarFocus(
       help.focus();
       return elementHasGamepadFocus(help);
     }
+    /* The Show details line, while it holds the chip's place (DetailsSlot.tsx); else the chips. */
+    if (takeDetailsSlotLineFocus()) return true;
     if (takeNavFocus("preset-carousel")) return true;
     const btn =
       host?.querySelector<HTMLElement>(

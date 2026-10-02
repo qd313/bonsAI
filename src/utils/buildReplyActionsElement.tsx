@@ -122,6 +122,7 @@ import {
   focusDrgGlossaryTermChip,
 } from "./drgGlossaryTermRegistry";
 import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
+import { syncDetailsLine } from "../features/details-slot/detailsSlotStore";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
@@ -801,9 +802,17 @@ export function buildReplyActionsElement(
             askInFlight ? " bonsai-chat-details-divider--disabled" : ""
           }`}
           ref={(el: HTMLElement | null) => {
+            /* The chip slot above the question box can stand in for this line (DetailsSlot.tsx). */
+            syncDetailsLine(dividerEl.current, el, {
+              open: Boolean(transparencyOpen),
+              disabled: Boolean(askInFlight),
+              toggle: onToggleTransparency,
+            });
             dividerEl.current = el;
             registerReplyStop("show-details", el);
           }}
+          /* Its own nav node, so Steam's transfer can carry the ring here from the dock. */
+          {...({ navRef: replyStopNavRef("show-details") } as Record<string, unknown>)}
           /*
            * Two sources, deliberately not three. `onOKButton` is the D-pad A press; `onClick` is a
            * finger on the screen. `onActivate` is left off on purpose: Steam fires it for the A

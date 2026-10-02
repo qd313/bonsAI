@@ -23,6 +23,7 @@ import { Button } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type { AskModeId } from "../data/askMode";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
+import { DetailsSlot } from "../features/details-slot/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "../features/preset-carousel/presetRowLayout";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import {
@@ -66,7 +67,8 @@ export type MainTabPresetRowProps = {
  *    read exactly the same as the old ones.
  * 3. Draw the row's host element. Inside it: the help chip while it has not
  *    been dismissed, otherwise MainTabPresetAnimatedChips() with the current
- *    suggestions and animation settings.
+ *    suggestions and animation settings, inside DetailsSlot(), which swaps in
+ *    the answer's Show details line while that line is out of sight.
  * 4. After that: an extra chip if the game handed one in, a same-sized blank
  *    placeholder while one is expected but not here yet, or nothing.
  */
@@ -154,18 +156,21 @@ export function MainTabPresetRow({
           How to use bonsAI
         </Button>
       ) : (
-        <MainTabPresetAnimatedChips
-          seeds={suggestedPrompts}
-          setUnifiedInput={setUnifiedInput}
-          fadeAnimationEnabled={presetChipAnimation === "fade"}
-          animationMode={presetChipAnimation}
-          onPreferAskMode={onPresetPreferAskMode}
-          onCarouselExitDown={focusUnifiedTextField}
-          useLocalKnowledgeBase={useLocalKnowledgeBase}
-          askRestartToken={askRestartToken}
-          holdStill={isAsking}
-          presetSingleChip={presetSingleChip}
-        />
+        /* While an answer's own Show details line is out of sight, it takes the chips' place. */
+        <DetailsSlot focusUnifiedTextField={focusUnifiedTextField}>
+          <MainTabPresetAnimatedChips
+            seeds={suggestedPrompts}
+            setUnifiedInput={setUnifiedInput}
+            fadeAnimationEnabled={presetChipAnimation === "fade"}
+            animationMode={presetChipAnimation}
+            onPreferAskMode={onPresetPreferAskMode}
+            onCarouselExitDown={focusUnifiedTextField}
+            useLocalKnowledgeBase={useLocalKnowledgeBase}
+            askRestartToken={askRestartToken}
+            holdStill={isAsking}
+            presetSingleChip={presetSingleChip}
+          />
+        </DetailsSlot>
       )}
       {presetCarouselInject?.text?.trim() ? (
         <Button

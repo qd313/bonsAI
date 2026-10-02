@@ -204,7 +204,7 @@ export function usePresetRowNav(
  * usePresetRowNav's `handlersFor` explains. Its own named function so the Show details line, when it
  * takes the chip's place above the question box (DetailsSlot.tsx), leaves by exactly the same way.
  */
-function chipRowExitUp(): boolean {
+export function chipRowExitUp(): boolean {
   return (
     takeNavFocus("chat-perm-hint-deny") ||
     takeNavFocus("chat-perm-hint-troubleshoot") ||

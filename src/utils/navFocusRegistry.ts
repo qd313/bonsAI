@@ -79,6 +79,8 @@ export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-car
   /** The Session tab's "What the AI remembers" card: where the ring goes when Sum up finishes
    *  (plan 72 job E2; a plain focus() there left Steam's ring on the button, plan72-F6-SUMUP.json). */
   | "session-summary-card"
+  /** The Show details line while it stands in the chip's place above the question box (DetailsSlot.tsx). */
+  | "details-slot-line"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
   | `tab-body:${string}`;
 

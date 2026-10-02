@@ -624,8 +624,16 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <ConfirmModal
                 strTitle="Clear session cache?"
                 strDescription="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
-                strOKButtonText="Clear"
-                onOK={() => {
+                /*
+                  Steam opens a confirm box with the ring on OK, so OK keeps everything and the
+                  clearing sits on the middle button (the Delete chat and Remove knowledge base
+                  boxes' shape): an A pressed by habit clears nothing. Cancel and B also change nothing.
+                */
+                strOKButtonText="Keep cache"
+                strMiddleButtonText="Clear"
+                strCancelButtonText="Cancel"
+                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
+                onMiddleButton={() => {
                   onResetSession();
                   onCompleteDeckyModalClose(() => handle.Close());
                 }}
@@ -665,8 +673,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   "It does not delete Desktop logs under bonsAI_logs.\n\n" +
                   "Afterward, set your Ollama host again and re-enable any permissions you need."
                 }
-                strOKButtonText="Clear all data"
-                onOK={() => {
+                /* OK keeps everything and the wipe is the middle button; see the cache box above. */
+                strOKButtonText="Keep my data"
+                strMiddleButtonText="Clear all data"
+                strCancelButtonText="Cancel"
+                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
+                onMiddleButton={() => {
                   void Promise.resolve(onClearAllPluginData()).finally(() => {
                     onCompleteDeckyModalClose(() => handle.Close());
                   });

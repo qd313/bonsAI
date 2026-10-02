@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 699,
-  "edgeCount": 1995,
+  "fileCount": 700,
+  "edgeCount": 1997,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1730,6 +1730,13 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTab.clearBoxes.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.focusRing.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
@@ -1768,6 +1775,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
@@ -5422,6 +5430,7 @@
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",

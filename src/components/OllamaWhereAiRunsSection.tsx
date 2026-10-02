@@ -5,7 +5,7 @@
  * you choose whether the AI runs on this Deck itself or on a PC somewhere
  * on your home network — and everything involved in setting that up:
  * installing or updating Ollama on the Deck, picking a starting model
- * bundle to pull, finding a PC's Ollama on the network automatically, and
+ * set of models to start with, finding a PC's Ollama on the network automatically, and
  * testing the connection either way.
  *
  * Used for: OllamaTab, the first section drawn.
@@ -17,8 +17,8 @@
  *
  * Does not: Pull, browse, or manage individual models one at a time, or
  * decide the try-order between them — that is PullModelsModal and the
- * model routing panels. This section only offers two starting bundles
- * (Tier 1 essentials, Tier 2 multimodal) and an update-everything option.
+ * model routing panels. This section only installs or updates Ollama and,
+ * on a Deck with no models, offers the starter models in the same box flow.
  *
  * How it works:
  *
@@ -28,7 +28,7 @@
  *     │  — if Run-on-Deck is ON —                            │
  *     │ [ Install Ollama / Update AI & models ]              │
  *     │ [ Browse models… ]                                   │
- *     │ [ Install options… ] -> Tier 1 / Tier 2 / Cancel     │
+ *     │ [ Cancel ]  (only while a setup runs)                │
  *     │ setup log / status line                              │
  *     │  — if Run-on-Deck is OFF —                            │
  *     │ Saved Ollama hosts (LAN)  <- quick-pick buttons      │
@@ -44,10 +44,10 @@
  *    the result; it auto-runs once, quietly, on mount, so the
  *    Install/Update button already knows whether Ollama is reachable
  *    before anyone presses Test.
- * 2. openLocalSetupConfirm() asks first, then starts one of three setup
- *    profiles (Tier 1 essentials, Tier 2 multimodal, or Update installed).
- *    Tier 2 also switches the model policy tier first, since the model it
- *    installs needs that tier to be usable at Ask time.
+ * 2. openLocalSetupConfirm() asks first, then starts the install/update run.
+ *    With no models installed it then asks a second question, whether to add
+ *    the starter models; yes runs the engine-then-models setup, no installs
+ *    the engine only.
  * 3. While a local setup runs, a poll every 1.5 seconds reads its status
  *    and fills in the log tail on screen; once it reports done with no
  *    error, a separate effect runs the connection test again automatically
@@ -61,10 +61,11 @@
  *
  * Gotchas:
  * - The Deck-local setup buttons form one fixed vertical chain — toggle →
- *   Start-at-boot toggle → Install/Update → Browse → Install options →
- *   Test connection — and Up/Down on every one of them is wired by hand to
- *   match it, because Steam's own automatic layout guess does not follow
- *   it correctly here.
+ *   Start-at-boot toggle → Install/Update → Browse → Test connection — and
+ *   Up/Down on every one of them is wired by hand to match it, because
+ *   Steam's own automatic layout guess does not follow it correctly here.
+ *   While a setup runs, Install/Update and Browse are disabled and the
+ *   chain is Start-at-boot toggle → Cancel → Test connection.
  * - The "Browse models…" button on this panel registers itself as the
  *   return-focus target for the models hub modal. A second, less-used
  *   entry point to the same hub exists on the main Ollama tab but is not
@@ -118,8 +119,6 @@ import type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.t
 import {
   TEST_CONNECTION_TIMEOUT_SECONDS,
   LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS,
-  LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
-  LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 
@@ -155,7 +154,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onOpenOllamaModelsHub,
-  onApplyTier2MultimodalPolicy,
   onMoveDownFromConnectionRow,
   connectionTestBtnRef,
 }) => {
@@ -177,9 +175,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     () => peekOllamaTabLocalPending()?.mdnsDiscoveryMessage ?? null
   );
   const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
-  const [localInstallMenuOpen, setLocalInstallMenuOpen] = useState(
-    () => peekOllamaTabLocalPending()?.localInstallMenuOpen ?? false
-  );
   const setupAutoTestRanRef = useRef(false);
   const lastCompletedSetupProfileRef = useRef<string>("");
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
@@ -205,9 +200,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const ollamaAutostartToggleNavRef = useRef<HTMLDivElement>(null);
   const installUpdateBtnRef = useRef<HTMLButtonElement | null>(null);
   const browseModelsBtnRef = useRef<HTMLButtonElement | null>(null);
-  const installOptionsBtnRef = useRef<HTMLButtonElement | null>(null);
-  const tier1EssentialsBtnRef = useRef<HTMLButtonElement | null>(null);
-  const tier2MultimodalBtnRef = useRef<HTMLButtonElement | null>(null);
+  const cancelSetupBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const focusLocalToggle = useCallback((): boolean => {
     const host = ollamaLocalToggleNavRef.current;
@@ -226,49 +219,47 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     return true;
   }, []);
 
-  const focusInstallUpdateBtn = useCallback((): boolean => {
-    installUpdateBtnRef.current?.focus();
-    return Boolean(installUpdateBtnRef.current);
+  /*
+   * Put the ring on a button of the chain, but only if it can take it: a disabled button refuses
+   * focus, and a hand-wired move that claimed the press anyway would leave the ring where it was
+   * (the old chain did exactly that while a setup ran).
+   */
+  const focusChainBtn = useCallback((ref: { current: HTMLButtonElement | null }): boolean => {
+    const el = ref.current;
+    if (!el || el.disabled) return false;
+    el.focus();
+    return true;
   }, []);
 
-  const focusBrowseModelsBtn = useCallback((): boolean => {
-    browseModelsBtnRef.current?.focus();
-    return Boolean(browseModelsBtnRef.current);
-  }, []);
-
-  const focusInstallOptionsBtn = useCallback((): boolean => {
-    installOptionsBtnRef.current?.focus();
-    return Boolean(installOptionsBtnRef.current);
-  }, []);
-
-  const focusTier1Btn = useCallback((): boolean => {
-    tier1EssentialsBtnRef.current?.focus();
-    return Boolean(tier1EssentialsBtnRef.current);
-  }, []);
-
-  const focusTier2Btn = useCallback((): boolean => {
-    tier2MultimodalBtnRef.current?.focus();
-    return Boolean(tier2MultimodalBtnRef.current);
-  }, []);
+  const focusInstallUpdateBtn = useCallback((): boolean => focusChainBtn(installUpdateBtnRef), [focusChainBtn]);
+  const focusBrowseModelsBtn = useCallback((): boolean => focusChainBtn(browseModelsBtnRef), [focusChainBtn]);
+  const focusCancelSetupBtn = useCallback((): boolean => focusChainBtn(cancelSetupBtnRef), [focusChainBtn]);
 
   const focusConnectionTestBtn = useCallback((): boolean => {
-    connectionTestBtnRef?.current?.focus();
-    return Boolean(connectionTestBtnRef?.current);
+    const el = connectionTestBtnRef?.current;
+    if (!el || el.disabled) return false;
+    el.focus();
+    return true;
   }, [connectionTestBtnRef]);
 
+  /** Down from the last button of the chain: Test connection, or (it is disabled while a setup runs) on to the next section. */
+  const moveDownToTestOrOn = useCallback((): boolean => {
+    if (focusConnectionTestBtn()) return true;
+    onMoveDownFromConnectionRow?.();
+    return true;
+  }, [focusConnectionTestBtn, onMoveDownFromConnectionRow]);
+
   /**
-   * Local Deck setup vertical chain: toggle → Start-at-boot toggle → Install/Update → Browse →
-   * Install options → Test. The startup-entry toggle sits right under "Run AI on this Deck" in
-   * both branches (local install UI shown or not), so both the "on" install-menu fallback and the
-   * "off" plain fallback land on it rather than back on the first toggle.
+   * Local Deck setup vertical chain: toggle → Start-at-boot toggle → Install/Update → Browse → Test.
+   * While a setup runs, Install/Update and Browse are disabled and Cancel stands in for them.
+   * The startup-entry toggle sits right under "Run AI on this Deck" in both branches (local install
+   * UI shown or not), so both the "on" fallback and the "off" plain fallback land on it rather than
+   * back on the first toggle.
    */
   const handleMoveUpFromConnection = useCallback((): boolean => {
-    if (ollamaLocalOnDeck) {
-      if (localInstallMenuOpen && focusTier2Btn()) return true;
-      if (focusInstallOptionsBtn()) return true;
-    }
+    if (ollamaLocalOnDeck && (focusBrowseModelsBtn() || focusCancelSetupBtn())) return true;
     return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusAutostartToggle);
-  }, [focusAutostartToggle, focusInstallOptionsBtn, focusTier2Btn, localInstallMenuOpen, ollamaLocalOnDeck]);
+  }, [focusAutostartToggle, focusBrowseModelsBtn, focusCancelSetupBtn, ollamaLocalOnDeck]);
 
   const handleMoveUpFromLocalToggle = useCallback((): boolean => {
     return tryMoveUpWithPanelScroll(ollamaLocalToggleNavRef.current);
@@ -283,9 +274,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   }, [focusLocalToggle]);
 
   const handleMoveDownFromAutostartToggle = useCallback((): boolean => {
-    if (ollamaLocalOnDeck && focusInstallUpdateBtn()) return true;
-    return focusConnectionTestBtn();
-  }, [focusConnectionTestBtn, focusInstallUpdateBtn, ollamaLocalOnDeck]);
+    if (ollamaLocalOnDeck && (focusInstallUpdateBtn() || focusCancelSetupBtn())) return true;
+    return moveDownToTestOrOn();
+  }, [focusCancelSetupBtn, focusInstallUpdateBtn, moveDownToTestOrOn, ollamaLocalOnDeck]);
 
   useLayoutEffect(() => {
     const local = consumeOllamaTabLocalPending();
@@ -293,7 +284,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     setConnectionStatus(local.connectionStatus);
     setMdnsHosts(local.mdnsHosts);
     setMdnsDiscoveryMessage(local.mdnsDiscoveryMessage);
-    setLocalInstallMenuOpen(local.localInstallMenuOpen);
     if (local.connectionStatus != null) {
       autoProbeModeRef.current = ollamaLocalOnDeck;
     }
@@ -304,10 +294,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
       connectionStatus,
       mdnsHosts,
       mdnsDiscoveryMessage,
-      localInstallMenuOpen,
+      // The Install options menu is gone; the snapshot's field stays for its shape.
+      localInstallMenuOpen: false,
     }));
     return () => unregisterOllamaTabLocalGetter();
-  }, [connectionStatus, mdnsHosts, mdnsDiscoveryMessage, localInstallMenuOpen]);
+  }, [connectionStatus, mdnsHosts, mdnsDiscoveryMessage]);
 
   useEffect(() => {
     callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)
@@ -409,18 +400,10 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     localSetupBusy,
     setupAutoTestRanRef,
     lastCompletedSetupProfileRef,
-    onApplyTier2MultimodalPolicy,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
     onTestConnectionRef,
   });
-
-  // The install menu closes as a choice is pressed, so its buttons are gone when the box closes;
-  // the ring goes back to "Install options..", which stays (plan 76 lane 2).
-  const openInstallBox = (profile: Parameters<typeof openLocalSetupConfirm>[0]) => {
-    setLocalInstallMenuOpen(false);
-    openLocalSetupConfirm(profile, "ollama-install-options");
-  };
 
   const { handleToggleAutostart } = useOllamaLocalAutostart({
     setAutostartStatus,
@@ -609,7 +592,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   }}
                   {...({
                     onMoveUp: () => focusInstallUpdateBtn(),
-                    onMoveDown: () => focusInstallOptionsBtn(),
+                    onMoveDown: () => moveDownToTestOrOn(),
                   } as unknown as Record<string, unknown>)}
                   style={{
                     flex: "1 1 160px",
@@ -630,78 +613,17 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   Browse models…
                 </Button>
               </Focusable>
-              <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
-                <Button
-                  ref={(el) => {
-                    installOptionsBtnRef.current = el as HTMLButtonElement | null;
-                    registerModalReturnFocusOwner("ollama-install-options", el as HTMLElement | null);
-                  }}
-                  disabled={localSetupBusy}
-                  onClick={() => setLocalInstallMenuOpen((o) => !o)}
-                  {...({
-                    onMoveUp: () => focusBrowseModelsBtn(),
-                    onMoveDown: () =>
-                      localInstallMenuOpen ? focusTier1Btn() : focusConnectionTestBtn(),
-                  } as unknown as Record<string, unknown>)}
-                  style={{
-                    flex: "1 1 140px",
-                    minHeight: 36,
-                    minWidth: 0,
-                    padding: "6px 8px",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: "1px solid rgba(255,255,255,0.22)",
-                    background: localInstallMenuOpen
-                      ? "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)"
-                      : "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)",
-                    color: "#e8eef5",
-                  }}
-                  aria-expanded={localInstallMenuOpen}
-                  aria-label="Install model bundles"
-                >
-                  Install options…
-                </Button>
-                {localInstallMenuOpen ? (
-                  <Focusable
-                    flow-children="vertical"
-                    style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}
-                  >
-                    <Button
-                      ref={(el) => {
-                        tier1EssentialsBtnRef.current = el as HTMLButtonElement | null;
-                      }}
-                      disabled={localSetupBusy}
-                      onClick={() => openInstallBox(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS)}
-                      {...({
-                        onMoveUp: () => focusInstallOptionsBtn(),
-                        onMoveDown: () => focusTier2Btn(),
-                      } as unknown as Record<string, unknown>)}
-                      style={{ width: "100%", minHeight: 34, fontSize: 11, fontWeight: 600 }}
-                      aria-label="Install Tier 1 essentials"
-                    >
-                      Install Tier 1 essentials
-                    </Button>
-                    <Button
-                      ref={(el) => {
-                        tier2MultimodalBtnRef.current = el as HTMLButtonElement | null;
-                      }}
-                      disabled={localSetupBusy}
-                      onClick={() => openInstallBox(LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL)}
-                      {...({
-                        onMoveUp: () => focusTier1Btn(),
-                        onMoveDown: () => focusConnectionTestBtn(),
-                      } as unknown as Record<string, unknown>)}
-                      style={{ width: "100%", minHeight: 34, fontSize: 11, fontWeight: 600 }}
-                      aria-label="Install Gemma 4 (all-in-one model)"
-                    >
-                      Install Gemma 4 (all-in-one model)
-                    </Button>
-                  </Focusable>
-                ) : null}
-                {localSetupBusy ? (
+              {localSetupBusy ? (
+                <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                   <Button
+                    ref={(el) => {
+                      cancelSetupBtnRef.current = el as HTMLButtonElement | null;
+                    }}
                     onClick={() => void cancelLocalSetup()}
+                    {...({
+                      onMoveUp: () => focusAutostartToggle(),
+                      onMoveDown: () => moveDownToTestOrOn(),
+                    } as unknown as Record<string, unknown>)}
                     style={{
                       flex: "0 1 auto",
                       minHeight: 36,
@@ -717,8 +639,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   >
                     Cancel
                   </Button>
-                ) : null}
-              </Focusable>
+                </Focusable>
+              ) : null}
               {(localSetupStatus?.phase === "running" ||
                 (localSetupStatus?.log_tail?.length ?? 0) > 0 ||
                 localSetupStatus?.phase === "failed" ||

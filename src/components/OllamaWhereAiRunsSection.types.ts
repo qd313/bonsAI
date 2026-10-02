@@ -68,7 +68,7 @@ export type OllamaWhereAiRunsSectionProps = {
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
   onOpenOllamaModelsHub: (opts?: { initialSection?: "policy" | "browse" | "advanced" }) => void;
-  /** When user confirms Tier 2 one-model multimodal setup — bump policy tier before pull. */
+  /** No longer used here (the Tier 2 install button is gone, plan 79); OllamaTab still passes it, so it stays optional until that file drops it. */
   onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
   /** Focus graph: move from connection row into Knowledge base section. */
   onMoveDownFromConnectionRow?: () => void;

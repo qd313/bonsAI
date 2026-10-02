@@ -61,11 +61,6 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1041,
-      "role": ""
-    },
-    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 1007,
       "role": ""
@@ -83,6 +78,11 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 969,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 963,
       "role": ""
     },
     {

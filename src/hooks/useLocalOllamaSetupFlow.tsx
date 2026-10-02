@@ -2,9 +2,9 @@
  * Title: The local-on-Deck install and update flow
  *
  * Purpose: Everything that runs when a person installs Ollama on the Deck
- * itself, updates it, or pulls one of the two starting model bundles: the
- * three confirm dialogs (Tier 1 essentials, Tier 2 multimodal, update
- * installed), the Cancel button's RPC, the status-line wording while a
+ * itself or updates it: the download box behind "Install Ollama" / "Update AI
+ * & models" (and, on a Deck with no models, the follow-up box that offers the
+ * starter models), the Cancel button's RPC, the status-line wording while a
  * setup runs, the poll that reads setup progress every 1.5 seconds, and
  * the effect that runs a connection test automatically once a setup
  * finishes cleanly.
@@ -18,10 +18,11 @@
  * reads `localSetupStatus` directly (it stays a prop of the panel, not of
  * this hook) to draw the log tail and the phase line.
  *
- * Does not: Own `localSetupStatus`, `localInstallMenuOpen`, or the derived
- * `localSetupBusy` flag — the panel's own JSX renders the log tail, the
- * error line, and the "Install options…" submenu from that state directly,
- * so it stays in the panel and is handed in here as values and a setter.
+ * Does not: Own `localSetupStatus` or the derived `localSetupBusy` flag —
+ * the panel's own JSX renders the log tail and the error line from that
+ * state directly, so it stays in the panel and is handed in here as values
+ * and a setter. The starter models' words and the call that starts a setup
+ * live in localOllamaStarterSet.tsx, shared with Browse models.
  * Does not run the connection test itself; it only unblocks the ref the
  * panel's own onTestConnection is stashed behind.
  *
@@ -34,50 +35,29 @@ import { useCallback, useEffect, type MutableRefObject, type RefObject } from "r
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
-import { TIER1_ESSENTIALS_TAG, TIER2_MULTIMODAL_TAG } from "../data/deckEssentialsTags";
-import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
 import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
-  LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
   OLLAMA_MODELS_DISK_HINT,
-  LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
-  LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
-  LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
-  LOCAL_SETUP_TIER2_DOWNLOAD_SIZE,
 } from "../components/OllamaWhereAiRunsSection.constants";
 import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "./localOllamaStarterSet";
 import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
-import {
-  OLLAMA_PROGRAM_NOTICE,
-  OLLAMA_REGISTRY_SITE,
-  OLLAMA_SITE,
-  modelPullNotice,
-} from "../features/downloads/downloadSites";
+import { OLLAMA_REGISTRY_SITE, OLLAMA_SITE } from "../features/downloads/downloadSites";
 
-/** Where each setup profile connects: Ollama itself from ollama.com, the models from the registry. */
-function localSetupDownloadNotices(profile: string): DownloadNotice[] {
-  if (profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED) {
-    return [
-      { site: OLLAMA_SITE, what: "the latest Ollama", size: null },
-      { site: OLLAMA_REGISTRY_SITE, what: "fresh copies of every model already installed", size: null },
-    ];
-  }
-  const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
+/** Where the update/install run connects: Ollama itself from ollama.com, the models from the registry. */
+function localSetupDownloadNotices(): DownloadNotice[] {
   return [
-    OLLAMA_PROGRAM_NOTICE,
-    isTier1
-      ? modelPullNotice([TIER1_ESSENTIALS_TAG], LOCAL_SETUP_TIER1_DOWNLOAD_SIZE)
-      : modelPullNotice([TIER2_MULTIMODAL_TAG], LOCAL_SETUP_TIER2_DOWNLOAD_SIZE),
+    { site: OLLAMA_SITE, what: "the latest Ollama", size: null },
+    { site: OLLAMA_REGISTRY_SITE, what: "fresh copies of every model already installed", size: null },
   ];
 }
 
 /**
- * The three confirm dialogs (each is the download notice itself), the Cancel RPC, the status-line wording, the setup poll, and the
+ * The confirm dialogs (each is the download notice itself), the Cancel RPC, the status-line wording, the setup poll, and the
  * auto-test-after-done effect. Every hook below must keep its position — React matches hooks by
  * the order they run in.
  */
@@ -88,7 +68,6 @@ export function useLocalOllamaSetupFlow({
   localSetupBusy,
   setupAutoTestRanRef,
   lastCompletedSetupProfileRef,
-  onApplyTier2MultimodalPolicy,
   onTestConnectionRef,
 }: {
   ollamaLocalOnDeck: boolean;
@@ -97,7 +76,6 @@ export function useLocalOllamaSetupFlow({
   localSetupBusy: boolean;
   setupAutoTestRanRef: MutableRefObject<boolean>;
   lastCompletedSetupProfileRef: MutableRefObject<string>;
-  onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
   /** No longer used here: the setup box is the download notice, which takes the shell's own box hooks. */
   onBeforeDeckyModal: () => void;
   /** No longer used here, as above. */
@@ -131,73 +109,26 @@ export function useLocalOllamaSetupFlow({
 
   const openLocalSetupConfirm = useCallback(
     (
-      profile:
-        | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS
-        | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL
-        | typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
+      profile: typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
       returnId: ModalReturnFocusId,
       opts?: { offerStarterModels?: boolean }
     ) => {
       if (localSetupBusy) return;
-      const isTier1 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
-      const isTier2 = profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER2_MULTIMODAL;
-      const isUpdateInstalled = profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
-      const title = isTier1
-        ? "Install Tier 1 essentials?"
-        : isUpdateInstalled
-          ? "Update Ollama and models?"
-          : "Install Gemma 4?";
-      const actionLabel = isTier1
-        ? "Install Tier 1 essentials"
-        : isUpdateInstalled
-          ? "Start update"
-          : "Install Gemma 4";
       const body = (
         <div
           className="bonsai-prose"
           style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}
         >
-          {isTier1 ? (
-            <>
-              <div style={{ marginBottom: 8 }}>
-                Pulls <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span> — one small model for
-                chat, screenshots, OCR, and Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
-              </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-              <div style={{ marginTop: 8 }}>
-                Install uses the official script; if it fails in this environment, finish in Desktop Konsole and
-                retry here for pulls only.
-              </div>
-            </>
-          ) : isUpdateInstalled ? (
-            <>
-              <div style={{ marginBottom: 8 }}>
-                Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
-                newer weights are fetched when upstream changed.
-              </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-              <div style={{ marginTop: 8 }}>
-                If nothing is installed yet, the update finishes after the binary refresh — use Browse models to pull a
-                model first.
-              </div>
-            </>
-          ) : (
-            <>
-              <div style={{ marginBottom: 8 }}>
-                Pulls <span style={{ color: "#9ce7ff" }}>{TIER2_MULTIMODAL_TAG}</span> (falls back to gemma4:e2b if
-                needed). {LOCAL_SETUP_SIZE_TIER2_MULTIMODAL_GIB}
-              </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                Gemma 4 is open source (Apache 2.0). bonsAI will also switch Model policy to{" "}
-                <strong>Tier 2 (open-weight)</strong>, so Ask can use open-weight models you install later, such as
-                Gemma 3 or Llama. {TIER2_PULL_NOTE}
-              </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-              {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-            </>
-          )}
+          <div style={{ marginBottom: 8 }}>
+            Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
+            newer weights are fetched when upstream changed.
+          </div>
+          <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+          {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+          <div style={{ marginTop: 8 }}>
+            If nothing is installed yet, the update finishes after the binary refresh — use Browse models to pull a
+            model first.
+          </div>
         </div>
       );
       // This box is the download notice itself (plan72-F-DL): the sites and sizes, the permission
@@ -205,14 +136,19 @@ export function useLocalOllamaSetupFlow({
       // The note "the ring returns to returnId" is left armed only if a box really opened (kids lock
       // or a seen site answer at once, and the note is taken back).
       void rememberReturnWhileBoxOpens(returnId, () =>
-        confirmDownload(localSetupDownloadNotices(profile), { always: true, title, body, actionLabel })
+        confirmDownload(localSetupDownloadNotices(), {
+          always: true,
+          title: "Update Ollama and models?",
+          body,
+          actionLabel: "Start update",
+        })
       ).then(async (go) => {
         if (!go) return;
         // A Deck with no models: the same box flow then offers the starter models, with the ring on
         // "Not now". Declining (or B) installs the engine only, as before; Install Ollama is already
         // agreed to by now, so this box only asks about the models.
-        let chosen = profile;
-        if (opts?.offerStarterModels && isUpdateInstalled) {
+        let chosen: string = profile;
+        if (opts?.offerStarterModels) {
           const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
             confirmDownload(starterSetNotices(), {
               always: true,
@@ -225,14 +161,10 @@ export function useLocalOllamaSetupFlow({
         }
         setupAutoTestRanRef.current = false;
         lastCompletedSetupProfileRef.current = chosen;
-        if (isTier2 && onApplyTier2MultimodalPolicy) {
-          void Promise.resolve(onApplyTier2MultimodalPolicy()).then(() => startLocalOllamaSetup(chosen, setLocalSetupStatus));
-        } else {
-          startLocalOllamaSetup(chosen, setLocalSetupStatus);
-        }
+        startLocalOllamaSetup(chosen, setLocalSetupStatus);
       });
     },
-    [localSetupBusy, onApplyTier2MultimodalPolicy]
+    [localSetupBusy]
   );
 
   useEffect(() => {

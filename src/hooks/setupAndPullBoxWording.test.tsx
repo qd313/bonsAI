@@ -1,17 +1,18 @@
 /**
  * Title: The install and pull boxes describe their models truthfully
  *
- * Purpose: Pin plan 77 (licence labels, round 2). The Tier 1 install box used to call the default
- * model "FOSS" (Qwen's card gives its 3B size the Qwen Research licence); the "Tier 2 one-model
- * multimodal" install actually pulls Gemma 4, which is Apache 2.0 and counts as Tier 1; the
- * "Enable Tier 2 before pulling?" box said Tier 1 keeps to "FOSS-friendly tags". What each button
- * installs and which tier it switches on is unchanged.
+ * Purpose: Pin plan 77 (licence labels, round 2). The starter-models box (once the Tier 1 install
+ * box) used to call the default model "FOSS" (Qwen's card gives its 3B size the Qwen Research
+ * licence); the "Enable Tier 2 before pulling?" box said Tier 1 keeps to "FOSS-friendly tags".
+ * Plan 79 removed the Tier 1 / Tier 2 install buttons, so their two boxes and the first-run
+ * notice's mention of them are gone; the update box and the notice point at Browse models.
  */
 import { act, render, renderHook } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PullModelEntry } from "../data/pullModelCatalog";
+import { starterSetBoxBody } from "./localOllamaStarterSet";
 
 const hoisted = vi.hoisted(() => ({
   opts: null as Record<string, unknown> | null,
@@ -53,9 +54,7 @@ beforeEach(() => {
   resetFakeDeckyRpc();
 });
 
-type Profile = "tier1_essentials" | "tier2_multimodal" | "update_installed";
-
-function openSetupBox(profile: Profile): string {
+function openSetupBox(profile: "update_installed"): string {
   const { result } = renderHook(() =>
     useLocalOllamaSetupFlow({
       ollamaLocalOnDeck: false,
@@ -64,7 +63,6 @@ function openSetupBox(profile: Profile): string {
       localSetupBusy: false,
       setupAutoTestRanRef: { current: false },
       lastCompletedSetupProfileRef: { current: "" },
-      onApplyTier2MultimodalPolicy: vi.fn(),
       onBeforeDeckyModal: () => {},
       onCompleteDeckyModalClose: (close) => close(),
       onTestConnectionRef: { current: async () => {} },
@@ -76,20 +74,10 @@ function openSetupBox(profile: Profile): string {
 }
 
 describe("wording of the install and pull boxes", () => {
-  it("Tier 1 install box does not call the default model FOSS", async () => {
-    const text = openSetupBox("tier1_essentials");
-    await act(async () => {});
-    expect(text).toContain("one small model");
-    expect(text).not.toMatch(/FOSS/);
-  });
-
-  it("the Gemma 4 install says Gemma 4 is open source and still switches to Tier 2", async () => {
-    const text = openSetupBox("tier2_multimodal");
-    await act(async () => {});
-    expect(hoisted.opts).toMatchObject({ title: "Install Gemma 4?", actionLabel: "Install Gemma 4" });
-    expect(text).toContain("Gemma 4 is open source (Apache 2.0)");
-    expect(text).toContain("Tier 2 (open-weight)");
-    expect(text).not.toMatch(/FOSS/);
+  it("the starter models box does not call the default model FOSS", () => {
+    const { container } = render(<div>{starterSetBoxBody(true)}</div>);
+    expect(container.textContent).toContain("one small model");
+    expect(container.textContent).not.toMatch(/FOSS/);
   });
 
   it("the update box points at Browse models, not at the removed Install options buttons", async () => {
@@ -125,7 +113,8 @@ describe("wording of the install and pull boxes", () => {
   it("the first-run local AI notice and the Settings intro do not say FOSS", () => {
     const notice = localRuntimeBetaNoticeDescription();
     expect(notice).not.toMatch(/FOSS/);
-    expect(notice).toContain("Install Gemma 4");
+    expect(notice).not.toContain("Install Tier 1");
+    expect(notice).not.toContain("Install Gemma 4");
     expect(MODEL_POLICY_SETTINGS_INTRO).not.toMatch(/FOSS/);
   });
 });

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 682,
-  "edgeCount": 1940,
+  "fileCount": 681,
+  "edgeCount": 1935,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1287,15 +1287,6 @@
       ],
       "importedBy": []
     },
-    "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx": {
-      "imports": [
-        "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/features/plugin-shell/settingsLoadedSignal.ts",
-        "src/test-harness/fakeDeckyRpc.ts"
-      ],
-      "importedBy": []
-    },
     "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -1334,15 +1325,6 @@
       ],
       "importedBy": []
     },
-    "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx": {
-      "imports": [
-        "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/features/plugin-shell/settingsLoadedSignal.ts",
-        "src/hooks/usePullModelTier2Confirm.tsx",
-        "src/test-harness/fakeDeckyRpc.ts"
-      ],
-      "importedBy": []
-    },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
         "src/components/OllamaSavedHostsRows.tsx",
@@ -1364,12 +1346,11 @@
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx"
+        "src/components/OllamaWhereAiRunsSection.walk.test.tsx"
       ]
     },
     "src/components/OllamaWhereAiRunsSection.types.ts": {
@@ -1384,6 +1365,15 @@
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts"
       ]
+    },
+    "src/components/OllamaWhereAiRunsSection.walk.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
     },
     "src/components/PermissionDenyAction.test.tsx": {
       "imports": [
@@ -2102,8 +2092,7 @@
       "importedBy": [
         "src/components/PullModelsStarterSetChip.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
-        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.tsx"
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx"
       ]
     },
     "src/data/deprioritizedModels.ts": {
@@ -2799,7 +2788,6 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -2842,12 +2830,11 @@
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/useSettingsLoadedFlag.ts"
       ]
@@ -3603,6 +3590,7 @@
       ],
       "importedBy": [
         "src/components/PullModelsStarterSetChip.tsx",
+        "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx"
       ]
     },
@@ -3610,6 +3598,7 @@
       "imports": [
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
+        "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -3972,12 +3961,10 @@
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
-        "src/data/deckEssentialsTags.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/localOllamaStarterSet.tsx",
-        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelCatalogRefresh.ts",
         "src/utils/rememberReturnWhileBoxOpens.ts"
@@ -4263,9 +4250,7 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
         "src/components/PullModelsModal.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
         "src/hooks/usePullModelTier2Wording.test.tsx"
@@ -5166,12 +5151,11 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.installOptionsReturnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
-        "src/components/OllamaWhereAiRunsSection.tier2Wording.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
@@ -5267,6 +5251,7 @@
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",

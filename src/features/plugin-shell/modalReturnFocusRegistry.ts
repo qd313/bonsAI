@@ -49,12 +49,6 @@ export type ModalReturnFocusId =
    */
   | "ollama-local-setup"
   /**
-   * "Install options..." on the Ollama tab: where the ring goes after the box of the Tier 1 or
-   * Tier 2 install choice closes. Those two buttons sit in a menu that closes as one is pressed, so
-   * the button that stays is the one to return to (plan 76 lane 2).
-   */
-  | "ollama-install-options"
-  /**
    * The Knowledge base section's two buttons whose boxes rebuild the tab on close (plan 76 lane 2):
    * the Download / Update button (its "Choose download location" box; also where the ring goes once
    * Remove has removed the library, since the Remove button is gone by then) and Remove itself.

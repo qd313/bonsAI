@@ -1,0 +1,63 @@
+{
+ "deck_time_local": "2026-10-02T03:19 to 03:26 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5); visible band about y 88 to 290; no game running (RunningApps empty, no game process).",
+ "setup": "Test chat 6f3cc055 open (title read before each question). Newest answer was 'Request cancelled.', so a case question was needed. Question A (early game plan) sent with the script (VERIFIED), answer had 2 answer sections and no cover. Question B (soul sanctum walk) sent with the script (VERIFIED): after it the page held 3 answer sections, 1 cover ('Spoiler - tap to show', 1 tap-to-show), a two-choice menu, rating row, Retry present, Stop gone. Chat is now 174 turns. Ring was left on the BONSAI back arrow by the end of the sweep, not on the tab bar.",
+ "pressed": "deck_sweep DOWN, returnTrip, budget 80, lanes 1, RB, runName plan79-QA-FREE-PLAY-01-NOGAME (runs/plan79-QA-FREE-PLAY-01-NOGAME.json). It started with the ring on the question box. 58 presses, 4 legs. Then LB once: the open chat is still the test chat. Saved with deck_saveCheck as checks/plan79-QA-FREE-PLAY-01-NOGAME.json (a second sweep, lanes 0).",
+ "seen": {
+  "totals": "stopsRecorded 50, cycles 0, unlabeled stops 4 (these are the question row, the last answer section, the answer chunk and the first-turn header: text-only boxes without a name), stopsFocusedButNotVisible 6 (all six are the two known false alarms, each 89 percent, covered by the Retry or Copy corner icon).",
+  "down_leg_16_stops (top to bottom)": [
+   "Main tab",
+   "question row of the first visible turn (unlabeled, 88,48)",
+   "87 earlier",
+   "Retry same prompt (BUG 8: Retry is a stop between '87 earlier' and the question)",
+   "question row behind Retry (89 percent box, known false alarm)",
+   "Show reasoning 20 s",
+   "answer chunk (171,120)",
+   "Spoiler - tap to show cover",
+   "last answer section behind Copy (89 percent box, known false alarm)",
+   "A. menu choice",
+   "B. menu choice",
+   "Mark reply helpful (rating row)",
+   "Show details",
+   "chip row",
+   "question box",
+   "ask"
+  ],
+  "up_leg_16_stops (question box to the top)": [
+   "question box",
+   "chip",
+   "Show details",
+   "Mark reply helpful",
+   "B",
+   "A",
+   "last answer section (Copy)",
+   "Spoiler cover",
+   "answer chunk",
+   "Show reasoning",
+   "question row (Retry)",
+   "Retry same prompt",
+   "87 earlier",
+   "unlabeled first row",
+   "Main tab",
+   "BONSAI back arrow (bonsAIv0.5.0)"
+  ],
+  "same_stops_both_ways": "Yes: the same 16 stops by name and count in both directions. Differences: the Up leg goes one stop past the tab bar onto the BONSAI back-arrow button (do not press A there); the chip row shows different chips on the two passes (carousel changes), same position.",
+  "repeats": "No stop landed more than once per leg. 0 cycles.",
+  "dead_presses": "0. Every press moved the ring; each leg's last 2 presses were the planned stall presses that end a leg (3, 18, 18, 18 presses for 1, 16, 16, 16 stops).",
+  "visible": "Every stop 100 percent visible except the 6 known false alarms. Tall sections: none taller than 202 px.",
+  "false_alarm_text_check": "Text-node line boxes against the Retry icon (111,215,20,20) and the Copy icon (292,591,20,20): 0 overlapping words for both. Words clear.",
+  "W2-R7_visible_percent": "100 at 44 of 50 stops; 89 at the 6 false-alarm stops (box overlap only, text clear). The 67 percent stop of earlier builds did not appear.",
+  "known_open_bugs_met": "Bug 8 (Retry as a stop on the way Down from 87 earlier and on the way Up from the question row): present, both ways, both lanes. Bug 7 (rating row): Mark reply helpful sits between B and Show details in both directions, no speaker stop seen between. Bug 3 (Show details ladder takes the whole block): Show details was not opened, so not measured here.",
+  "THINKING-OPENER-01": "Question A: first matching live line at 2.0 s read 'Model's warming up for \"give me a step by step plan for the early game in hollo...\". Hang in there...' - it quotes the question. The 6 reads before it (0.25 to 1.75 s) matched none of my word patterns (Stop button on from 0.76 s), so what showed there is unknown. A bare 'Thinking' line standing alone: 0 reads of 203. Question B: my reader matched nothing for the first 28 s (patterns too narrow, 'Structure the Answer' appeared at 28 s), so the opener line was not captured."
+ },
+ "expected": "cycles 0; no stop more than twice; 0 dead presses; every stop visible except the two false alarms; Up and Down visit the same stops; Down ends on the question box or Ask, Up on the tab bar.",
+ "verdict": [
+  "PASS (walk, QA-FREE-PLAY-01 no game): cycles 0, dead presses 0, same 16 stops both ways, only the two known false alarms not fully visible (words clear). The Down leg ends on Ask. Note: the Up leg ends one stop beyond the tab bar, on the BONSAI back-arrow button; the row says tab bar. I record the walk as passing and the extra stop as an observation for the owner.",
+  "UNCLEAR (case check): the newest answer had 3 answer sections (row asks for 4 or more) and 1 cover; the cover case was produced on Question B.",
+  "PASS (W2-R7, measuring only): 100 percent at 44 of 50 stops, 89 percent at 6 (text clear).",
+  "UNCLEAR (THINKING-OPENER-01): Question A's 2.0 s line quotes the question and no bare 'Thinking' line stood alone, but the first 1.75 s and all of Question B's early lines were not captured by my reader."
+ ],
+ "side_effect": "Two real questions were asked in the test chat (Question A and Question B), as the row allows. Chat grew from 172 to 174 turns. A bare tool file runs/plan79-QA-FREE-PLAY-01-NOGAME.json and checks/plan79-QA-FREE-PLAY-01-NOGAME.json were written into the repo by the rig tools.",
+ "row": "QA-FREE-PLAY-01-NOGAME",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

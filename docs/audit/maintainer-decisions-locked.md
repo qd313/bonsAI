@@ -2044,7 +2044,13 @@ own section, "Your calls for this session", has the same list.
 10. **The Deck otherwise:** as plan 78, call 4: the test chat only, and the oldest chat may be deleted if there is
     no spare slot, its file copied aside first.
 
-**Picks from the drawings, 2026-10-02 (about 03:30):** the Delete icon is **icon 2, the bin with slots**; the
+**Picks from the drawings, 2026-10-02 (about 08:35):** the Delete icon is **icon 2, the bin with slots**; the
 highlighted suggestion chip gets **highlight 1, the soft fill** (replacing the underline); the rating choices under an
 answer become **"after 2", smaller and softer**. Drawings: https://claude.ai/artifact/63R4GDY8nR77n4VsWT9FZA,
 https://claude.ai/artifact/UTPzj1j4n8B1Nnj3Uun6VF, https://claude.ai/artifact/SXg99cQ5NN2rfh2pcGRkqv.
+
+**Pick, 2026-10-02 (about 08:40): "Models & routing" folds into the AI models box as option C, each model row
+carries its own place** (https://claude.ai/artifact/2xUbgB3AvhfzVKvwQZ3XMJ). A Text / Pictures switch above the
+models table; each installed row shows its place in the try order with small up and down buttons; the two separate
+order screens go; the Ollama tab keeps one button into the box, with the licence name on it. Three details the
+session settled meanwhile (plan 79, questions 2 to 4), open to the maintainer's change.

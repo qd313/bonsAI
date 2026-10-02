@@ -1,0 +1,181 @@
+{
+ "deck_time_local": "2026-10-02T02:56 to 03:18 -0400",
+ "screen": "Deck built-in screen, Quick Access page 854x454 (dpr 1.5). document.hasFocus() true at every press. Exactly one gpfocus element at every press. Every stop was 100 percent visible (box inside the panel, not behind the dock).",
+ "setup": "Keep-awake retaken (ttlMinutes 480, expiresAt 2026-10-02T14:51:03Z = 10:51 Deck time). Settings file equal to ~/p79-settings.bak.json. No game running. Plugin open, Main tab, test chat. RB twice to the Settings tab (focus entered the tab on its first control), later RB twice to the Developer tab. A was never pressed anywhere. One press at a time, focus box read from the page and a screenshot after each press.",
+ "pressed": {
+  "settings_tab": "Down x14 to the end (15th Down did not move), then Up x14 plus 1 to the tab bar. 15 stops each way.",
+  "developer_tab": "Down x16 to the end (the 17th did not move), then Up x16 to the tab bar. 16 stops each way."
+ },
+ "seen": {
+  "settings_tab_stops_down_and_up_same_in_both_directions": [
+   [
+    "Adjust UI automatically toggle",
+    "row highlight + toggle outline",
+    "drawn"
+   ],
+   [
+    "Apply UI scale",
+    "light button, looks the same focused or not",
+    "NOTHING"
+   ],
+   [
+    "Screenshot quality: Save memory",
+    "lighter border, but that is also how the chosen value looks",
+    "NOTHING beyond chosen-value style (cannot tell)"
+   ],
+   [
+    "Remember what I typed: All",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Hide spoilers until I tap toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Show one chip instead of two toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "STT model tiny.en",
+    "grey ring around the button",
+    "drawn"
+   ],
+   [
+    "STT model base.en",
+    "grey ring",
+    "drawn"
+   ],
+   [
+    "Reinstall voice engine",
+    "grey ring",
+    "drawn"
+   ],
+   [
+    "Voice replies: Off",
+    "lighter border, same as the chosen value",
+    "NOTHING beyond chosen-value style (cannot tell)"
+   ],
+   [
+    "AI voice & personality toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Ali G - Other (character picker button)",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Accent intensity: Strong",
+    "grey ring",
+    "drawn"
+   ],
+   [
+    "Show Developer tab toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Clear cache...",
+    "no change",
+    "NOTHING"
+   ]
+  ],
+  "settings_counts": "15 stops each way. Clearly drawn 9. NOTHING 4 (Apply UI scale, Remember: All, Ali G picker, Clear cache). 2 more (Save memory, Voice replies Off) are the chosen value of their group, so a ring cannot be told from the chosen look. Per leg: 4 definite nothing, 2 undecidable. Both legs: 8 definite, 4 undecidable of 30 presses.",
+  "developer_tab_stops_down_and_up_same_in_both_directions": [
+   [
+    "Install seed knowledge base",
+    "white-grey fill + dark row bands",
+    "drawn (fill)"
+   ],
+   [
+    "Hybrid retrieval toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "On-screen debug HUD toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Warm the Ask model at boot toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Jump to Steam Input (running game)",
+    "white fill + row bands",
+    "drawn (fill)"
+   ],
+   [
+    "Tab to open on: A - Main",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "App activity logging: Off",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Auto-save chat toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Verbose Ask logging toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Force session RAG chips toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "Preset animation: fade",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Scramble animation toggle",
+    "row highlight",
+    "drawn"
+   ],
+   [
+    "How letters settle: Settle",
+    "chosen-value look only",
+    "NOTHING beyond chosen-value style (cannot tell)"
+   ],
+   [
+    "How long each letter scrambles: 300",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Scrambled letter colour: Same",
+    "no change",
+    "NOTHING"
+   ],
+   [
+    "Steam Web API key text field",
+    "white field, no extra ring (it is a text box; its saved text is on screen, not copied here)",
+    "NOTHING extra (cannot tell from a plain white box)"
+   ]
+  ],
+  "developer_counts": "16 stops each way. Drawn 9. NOTHING 5 (A - Main, logging Off, fade, 300, Same). 2 undecidable (Settle, the key field). Both legs: 10 definite nothing, 4 undecidable of 32 presses.",
+  "other": "Frozen test chips read: None pinned. Up from the first stop of each tab reached the tab bar in one press. No dead press. The 15th/17th Down at the end of each tab did not move (end of tab), as expected."
+ },
+ "expected": "A ring or row highlight on every control that has the focus, on both tabs.",
+ "verdict": [
+  "FAIL (Settings tab): 4 of 15 stops drew no ring or highlight at all (Apply UI scale, Remember what I typed: All, the Ali G character picker button, Clear cache...), 2 more cannot be told apart from the chosen-value look. Same on the way Up. Every stop was fully visible.",
+  "FAIL (Developer tab): 5 of 16 stops drew nothing (Tab to open on A - Main, App activity logging Off, Preset animation fade, scramble time 300, letter colour Same), 2 more undecidable (Settle, the key text box). Same on the way Up. Every stop was fully visible."
+ ],
+ "side_effect": "none. One extra Up press (Developer tab, Install seed knowledge base) was sent before its screenshot; it only moved focus to the tab bar. The Steam Web API key field is readable in the screenshots DeckCapture_20261002_031203 to 031314 in the screenshots folder; it is a secret stored on the Deck, so those screenshots should not be shared.",
+ "row": "P79-M2-SETTINGS-DEV",
+ "build_commit": "f0a4f2c4 (code; deck build hash matched local)"
+}

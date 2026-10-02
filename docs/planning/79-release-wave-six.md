@@ -410,6 +410,14 @@ New ones go here, with the choice taken in the meantime.
 
 1. **A reboot of the Deck over the network may ask for a password.** *Meanwhile:* the session tries Steam's own
    restart first; if a reboot needs a password it sends a phone notification and waits.
+2. **Option C with the AI on a PC.** The AI models box lists this Deck's own models today, while the try order
+   belongs to whichever computer answers. *Meanwhile:* while the order switch is in use, the box lists the answering
+   computer's installed models, so every place number belongs to a model that can really be tried. Pulling and
+   removing stay about this Deck, as today.
+3. **Option C and saving.** The box keeps its other choices as a draft until Done, while the star saves at once.
+   *Meanwhile:* a place change saves at once, like the star, and Cancel does not undo it.
+4. **Option C and the filters.** A model hidden by a filter would hide its place. *Meanwhile:* a hidden model keeps
+   its place, the numbers skip it, and one quiet line says how many models in the order the filters hide.
 
 ## At the end
 
@@ -469,10 +477,21 @@ Nothing yet.
   (the invisible ring, Opus medium); A and B got the readings. Deck block 1b started: the ring on the Settings and
   Developer tabs, the Main tab's "before" walk, older owed checks with no game, and a second try at the trap through
   Steam's on-screen keyboard, the way a person types.
-- **2026-10-02, about 03:15 to 03:30:** a network drop stopped every helper and the Deck driver at the same moment;
-  each was resumed by message with its work intact. **The maintainer picked three drawings:** Delete icon 2 (the bin
-  with slots), chip highlight 1 (the soft fill), calmer ratings "after 2" (smaller and softer). Written into D122.
+- **2026-10-02, some time after 03:10 until about 08:30:** a network drop of about five hours stopped every helper and
+  the Deck driver at the same moment; each was resumed by message at about 08:35 with its work intact. **The
+  maintainer picked three drawings:** Delete icon 2 (the bin with slots), chip highlight 1 (the soft fill), calmer
+  ratings "after 2" (smaller and softer). Written into D122.
   They are built by helpers W (after J), X (after I) and S (the rating row, with bug 7).
+- **2026-10-02, about 08:40:** the maintainer picked option C for folding "Models & routing" into the AI models
+  box (each model row carries its own place). Helper Z builds it after Q and U have landed (the same tab and box);
+  three details were settled meanwhile (questions 2 to 4).
+- **2026-10-02, Deck block 1b (cut short by the network drop):** two of seven checks ran. The Main tab's "before" walk
+  with no game passed (16 stops each way, no loop, no dead press, only the two known corner-icon false alarms; Retry
+  is still a stop next to the question, bug 8). The Settings and Developer tabs have the same missing highlight as the
+  Ollama tab: on Settings 4 of 15 stops draw nothing (Apply UI scale, the "Remember what I typed" buttons, the
+  character picker, Clear cache), on Developer 5 of 16. When the driver came back after the drop, the Deck showed a
+  black screen with a full-screen Steam dialog (Steam had restarted itself at 07:51 and its log shows a failed
+  download); nothing more was pressed. Evidence `plan79-P79-M2-SETTINGS-DEV.json`, `plan79-QA-FREE-PLAY-01-NOGAME.json`.
 
 ## For the helpers: who owns which files
 

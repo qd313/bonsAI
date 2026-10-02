@@ -69,6 +69,7 @@
     "src/components/MainTabPresetRow.ringHold.test.tsx",
     "src/components/MainTabPresetRow.test.tsx",
     "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
+    "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
     "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
     "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
     "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",

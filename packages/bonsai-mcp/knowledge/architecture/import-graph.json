@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 695,
-  "edgeCount": 1985,
+  "fileCount": 696,
+  "edgeCount": 1988,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1022,6 +1022,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabUnifiedAskBar.boxRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -1123,6 +1131,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
+        "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
@@ -4878,6 +4887,7 @@
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
+        "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -5361,6 +5371,7 @@
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
+        "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",

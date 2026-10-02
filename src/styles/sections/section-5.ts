@@ -117,6 +117,20 @@ export function buildSection5Section(): string {
         }
 
         /*
+          The D-pad ring on the question box. Steam marks the focused field by putting gpfocus on the
+          INPUT itself, and the box drew nothing for it, so it looked the same focused or not (Deck
+          2026-10-02, plan79-P79-X-RING-SAME.json). Same white and thickness as the settings buttons'
+          ring (FOCUS_RING_BTN_CLASS), but drawn INSIDE the field's edge (offset -2px): outside it, the
+          Ask row below, the dock and the glass card would cut it off. Only gpfocus, never
+          :focus-visible: the on-screen keyboard being open keeps the same one ring and adds none.
+        */
+        .bonsai-scope .bonsai-unified-input-host input.gpfocus,
+        .bonsai-scope .bonsai-unified-input-host textarea.gpfocus {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: -2px !important;
+        }
+
+        /*
           The mirrors must copy the field's own wrapping and font stack, never declare their own
           (roadmap: "The question overlay sits a few pixels off the native text field") -- a
           mismatch here wraps a long line one character sooner than the real field does and drifts

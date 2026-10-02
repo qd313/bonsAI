@@ -10,12 +10,12 @@
  * Used for: `PullModelsModal.tsx` (the list, the row handlers) and the table rules in
  * `src/styles/sections/gamepadAndPullModels.ts`.
  *
- * How it models the Deck: the real stylesheet is put on the page, every row and the sticky header get
- * the box the Deck measured (header 26 px, rows 35 px, a list too short for all its rows) and follow the list's scrollTop,
- * and `scrollIntoView` does what the Deck's does for `block: "nearest"`: it ignores the sticky header
- * but honours the element's scroll-margin-top. The same scroll is also applied after every press to
- * whatever took the ring, as Steam does. The walk is bounded: each stop is visited once going down and
- * once coming back up.
+ * How it models the Deck: every row and the sticky header get the box the Deck measured (header 26 px,
+ * rows 35 px, a list too short for all its rows) and follow the list's scrollTop. `scrollIntoView`
+ * does what the Deck's did: the sticky header counts as free space, scroll-margin-top changed
+ * nothing, and a row already partly inside the list is not scrolled at all (so the plugin itself
+ * has to clear the header). The same scroll also runs after every press on whatever took the
+ * ring, as Steam does. The walk is bounded: each stop is visited once going down and once coming back up.
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -43,7 +43,6 @@ vi.mock("@decky/ui", async () => {
 
 import { PullModelsModal } from "./PullModelsModal";
 import { setRpcHandler } from "../test-harness/fakeDeckyRpc";
-import { buildPullModelsStylesheet } from "../styles/sections/gamepadAndPullModels";
 
 const LIST_TOP = 217;
 const LIST_HEIGHT = 130; // short enough that four rows overflow, as the Deck's list did (it scrolled 41 px)
@@ -84,18 +83,16 @@ function layOutList(list: HTMLElement) {
   return { header, scrollHeight };
 }
 
-/** The scroll-margin-top the page's own stylesheet gives this element, in px. */
-function scrollMarginTop(el: HTMLElement): number {
-  const value = window.getComputedStyle(el).getPropertyValue("scroll-margin-top");
-  return parseFloat(value) || 0;
-}
-
-/** `scrollIntoView({block:"nearest"})` as the Deck does it: sticky header ignored, scroll-margin honoured. */
+/**
+ * `scrollIntoView({block:"nearest"})` as the Deck did it on 2026-10-02 (plan79-P79-M9-MODELS-BOX-AFTER.json):
+ * the sticky header counts as free space, and scroll-margin-top changed nothing. Going Up onto the first model
+ * with the list scrolled 41 px, the row was already partly inside the list's box, so the list was NOT scrolled
+ * at all and 15 px of the row stayed behind the header. A row that overflows the bottom edge is scrolled in.
+ */
 function steamNearest(list: HTMLElement, el: HTMLElement) {
   const r = el.getBoundingClientRect();
-  const top = r.top - scrollMarginTop(el);
   const maxScroll = Math.max(0, list.scrollHeight - LIST_HEIGHT);
-  if (top < LIST_TOP) list.scrollTop = Math.max(0, list.scrollTop - (LIST_TOP - top));
+  if (r.top < LIST_TOP && r.bottom <= LIST_TOP) list.scrollTop = Math.max(0, list.scrollTop - (LIST_TOP - r.top));
   else if (r.bottom > LIST_TOP + LIST_HEIGHT) {
     list.scrollTop = Math.min(maxScroll, list.scrollTop + (r.bottom - (LIST_TOP + LIST_HEIGHT)));
   }
@@ -111,19 +108,14 @@ function latestByClassName(className: string): Record<string, unknown> | undefin
   return matches[matches.length - 1];
 }
 
-let styleEl: HTMLStyleElement;
 const original = Element.prototype.scrollIntoView;
 
 beforeEach(() => {
   hoisted.buttonProps = [];
-  styleEl = document.createElement("style");
-  styleEl.textContent = buildPullModelsStylesheet();
-  document.head.appendChild(styleEl);
 });
 
 afterEach(() => {
   Element.prototype.scrollIntoView = original;
-  styleEl.remove();
   document.body.innerHTML = "";
 });
 
@@ -197,5 +189,36 @@ describe("the model list under its sticky header row", () => {
     expect(document.activeElement?.classList.contains("bonsai-pullmodels-filters-button")).toBe(true);
     expect(up.length).toBe(visited.length);
     expect(list.scrollTop).toBe(0);
+  });
+  it("puts the first model back under the header when Steam scrolls the list again just after the press", async () => {
+    setRpcHandler("test_ollama_connection", () => ({
+      reachable: true,
+      version: "0.5.0",
+      models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
+    }));
+    const { container } = render(
+      <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded />
+    );
+    await waitFor(() => {
+      expect(container.querySelectorAll(".bonsai-pullmodels-slot--installed").length).toBeGreaterThanOrEqual(4);
+    });
+    const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
+    const { header } = layOutList(list);
+    Element.prototype.scrollIntoView = function () {};
+    list.scrollTop = 41.3; // the list as the walk down left it
+
+    const second = latestByAriaLabel("Use qwen3.5:4b for Ask")!;
+    const first = latestByAriaLabel("Use gemma4:e2b-it-qat for Ask")!;
+    expect((first.onMoveDown as () => boolean)()).toBe(true); // ring on the second model
+    expect((second.onMoveUp as () => boolean)()).toBe(true); // Up onto the first model
+    const firstRow = () =>
+      (document.activeElement as HTMLElement).closest<HTMLElement>(".bonsai-pullmodels-table-row--data")!.getBoundingClientRect();
+    expect(firstRow().top).toBeGreaterThanOrEqual(header.getBoundingClientRect().bottom);
+
+    list.scrollTop = 41.3; // Steam puts its own scroll back a moment after the press
+    expect(firstRow().top).toBeLessThan(header.getBoundingClientRect().bottom);
+    await waitFor(() => {
+      expect(firstRow().top).toBeGreaterThanOrEqual(header.getBoundingClientRect().bottom);
+    });
   });
 });

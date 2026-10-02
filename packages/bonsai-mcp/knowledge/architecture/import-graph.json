@@ -1,6 +1,6 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 684,
+  "fileCount": 685,
   "edgeCount": 1941,
   "cycles": [],
   "orphans": [],
@@ -1508,7 +1508,6 @@
     "src/components/PullModelsModal.listScroll.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
-        "src/styles/sections/gamepadAndPullModels.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -1536,6 +1535,7 @@
         "src/components/PullModelLicenceSlot.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsStarterSetChip.tsx",
+        "src/components/pullModelsListClearance.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
@@ -1885,6 +1885,12 @@
         "src/index.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx"
+      ]
+    },
+    "src/components/pullModelsListClearance.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
       ]
     },
     "src/context/UiScaleContext.tsx": {
@@ -4879,7 +4885,6 @@
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
-        "src/components/PullModelsModal.listScroll.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts"

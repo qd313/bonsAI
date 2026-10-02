@@ -111,6 +111,7 @@ import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsStarterSetChip } from "./PullModelsStarterSetChip";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
+import { useListHeaderClearance } from "./pullModelsListClearance";
 import { MODEL_POLICY_PERMISSIONS_INTRO, MODEL_POLICY_TIER_LABELS_PLAIN } from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
@@ -242,7 +243,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
-  const listRef = useRef<HTMLDivElement | null>(null);
+  const { listRef, headerRef: listHeaderRef, clearForRow: clearListHeader } = useListHeaderClearance();
 
   // Lifted into usePullModelCatalogRefresh. It must stay at exactly this point in the hook
   // list: React matches hooks by the order they run, not by name.
@@ -367,8 +368,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
     if (!target) return false;
     target.focus();
     target.scrollIntoView({ block: "nearest", inline: "nearest" });
+    // The Deck's scroll leaves a row that is partly under the sticky header where it is (pullModelsListClearance.ts).
+    clearListHeader(target, i === 0);
     return true;
-  }, [flatRows.length]);
+  }, [flatRows.length, clearListHeader]);
 
   const focusNextRowSelect = useCallback(
     (fromIndex: number): boolean => {
@@ -609,7 +612,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     };
 
   const renderTableHeader = () => (
-    <div className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--head" role="row">
+    <div ref={listHeaderRef} className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--head" role="row">
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="columnheader">Pull</div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="columnheader">Model</div>
       <div className="bonsai-pullmodels-col" role="columnheader">Size</div>

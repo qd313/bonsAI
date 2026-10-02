@@ -9,7 +9,7 @@
  * Does not: Decide when a row mounts or unmounts — the transcript still owns that; these only say
  * what a D-pad press on an already-mounted row should do.
  */
-import { takeNavFocus } from "./navFocusRegistry";
+import { refocusPanelWindowIfLost, takeNavFocus, type NavRefHolder } from "./navFocusRegistry";
 import {
   focusContextChipLadder,
   focusContextHint,
@@ -79,6 +79,9 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
   };
 }
 
+/** The "N earlier" pill's Steam nav node: the transcript is the only one that draws it. */
+export const earlierPillNav: NavRefHolder = { current: null };
+
 /**
  * The "N earlier" pill's moves: Left holds still (above) and Down goes to the question below it
  * (plan 79). `nextTurnId` is the turn drawn right under the pill. Left alone, Steam entered that
@@ -87,7 +90,8 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
  * a next turn without Retry has no such stop, the call reports false and Down stays Steam's own.
  */
 export function earlierPillNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
-  const left = earlierPillLeftNavHandlers();
+  /* The pill's own nav node, so the question's Up can hand the ring back to it (questionMoveUpOut). */
+  const left: Record<string, unknown> = { ...earlierPillLeftNavHandlers(), navRef: earlierPillNav };
   if (!nextTurnId) return left;
   const down = () => takeOpenQuestionText(nextTurnId);
   return {
@@ -98,6 +102,30 @@ export function earlierPillNavHandlers(nextTurnId: string | null | undefined): R
       return (left.onButtonDown as (b: unknown) => boolean)(button);
     },
   };
+}
+
+/** Steam's transfer onto a nav node held in a ref, with the same window check `takeNavFocus` makes. */
+function takeHolderFocus(holder: NavRefHolder): boolean {
+  const node = holder.current;
+  if (!node || typeof node.TakeFocus !== "function") return false;
+  refocusPanelWindowIfLost();
+  try {
+    return node.TakeFocus(true) !== false;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Where Up goes from the open question's text, past its row (plan 79). `above` is the nav node of
+ * whatever is drawn right over the question's row: the previous turn's closed header or the "N
+ * earlier" pill. With nothing over it, the chat slot row, the same target the first header's own Up
+ * has. Never Retry: an Up left to Steam picks Retry, the nearest stop in the row (Deck,
+ * plan79-P79-M8-EARLIER-RETRY-AFTER.json). The transfer is Steam's own, since the target is a
+ * different container.
+ */
+export function questionMoveUpOut(above: NavRefHolder | null | undefined): () => boolean {
+  return () => (above ? takeHolderFocus(above) : takeNavFocus("chat-slot-row"));
 }
 
 /**

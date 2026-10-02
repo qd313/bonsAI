@@ -26,6 +26,7 @@ import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn, StrategyGuideBranchesPayload } from "../types/bonsaiUi";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { resetUiDocument } from "../utils/uiDocument";
+import { registerNavFocus, unregisterNavFocus } from "../utils/navFocusRegistry";
 
 type NavHandlers = Partial<Record<"onMoveUp" | "onMoveDown", () => unknown>>;
 type NavEl = HTMLElement & { __nav?: NavHandlers };
@@ -223,9 +224,19 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(body).not.toBeNull();
     expect(document.activeElement).toBe(body);
 
-    /* Plan 79: Retry is reached by Left from the text only. Up claims nothing here and leaves the row. */
-    expect(press("onMoveUp")).toBe(false);
-    expect(document.activeElement).toBe(body);
+    /* Plan 79: Retry is reached by Left from the text only. Up claims the press and hands it to what is
+       above the row (here the chat slot row, a different container); with nothing there to take it, the
+       press is unclaimed and Steam would pick Retry, so it must be claimed with the row registered. */
+    const slotRow = document.createElement("div");
+    slotRow.setAttribute("tabindex", "0");
+    document.body.appendChild(slotRow);
+    const holder = { current: { TakeFocus: () => (slotRow.focus(), true) } };
+    registerNavFocus("chat-slot-row", holder);
+    focusOn(body!);
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(slotRow);
+    unregisterNavFocus("chat-slot-row", holder);
+    slotRow.remove();
 
     /* Down is unchanged: from the text it still goes to the Show reasoning line. */
     focusOn(body!);

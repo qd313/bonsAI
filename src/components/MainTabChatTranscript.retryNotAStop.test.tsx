@@ -10,8 +10,9 @@
  * Solves: The walk presses D-pad Down/Up from the pill through the newest turn and back. A press that
  *         a plugin handler claims runs that handler, as Steam does. A press no handler claims is
  *         Steam's own move, modelled the way the Deck measured it: it never steps sideways inside the
- *         question's row, and entering a row from above lands on the row's first control in page order
- *         (Retry, before the fix) while entering it from below lands on its last.
+ *         question's row, except one hop: an Up nothing claims, from the question text, goes to Retry
+ *         (the nearest stop in the row; plan79-P79-M8-EARLIER-RETRY-AFTER.json). Entering a row from
+ *         above lands on its first control in page order (Retry, before the fix), from below on its last.
  * Does not: Model Steam's scroll-into-view. The fix moves no stop and changes no height, so the walk
  *           has no scroll to loop on; the answer-section walks that do are in
  *           answerBubbleNavigation.*.test.ts, with the scroll modelled.
@@ -25,6 +26,7 @@ import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { resetUiDocument } from "../utils/uiDocument";
+import { registerNavFocus, unregisterNavFocus } from "../utils/navFocusRegistry";
 
 type Dir = "Up" | "Down" | "Left" | "Right";
 type NavHandlers = Partial<Record<`onMove${Dir}`, () => unknown>>;
@@ -201,6 +203,15 @@ function press(container: HTMLElement, dir: Dir): boolean {
   });
   if (claimed) return true;
   if (dir === "Left" || dir === "Right") return false;
+  /* The Deck, twice (plan79-P79-M8-EARLIER-RETRY-AFTER.json): an Up from the question text that nothing
+     claims is Steam's, and Steam picks Retry, the nearest stop in the row. */
+  if (dir === "Up" && (start as HTMLElement | null)?.classList.contains("bonsai-chat-turn-row-body")) {
+    const retry = rowOf(start)?.querySelector<HTMLElement>('[aria-label="Retry same prompt"]');
+    if (retry) {
+      act(() => retry.focus());
+      return true;
+    }
+  }
   const all = stops(container);
   const here = all.indexOf(start as HTMLElement);
   /* Past the last stop the model knows, Steam leaves the transcript: the walk is over. */
@@ -272,11 +283,25 @@ describe("Retry is reached by Left from the question and nothing else (plan 79)"
     expect(up).toEqual([...down.slice(0, down.indexOf(up[0]!) + 1)].reverse());
   });
 
-  it("Up from the question does not land on Retry", () => {
+  it("Up from the question goes to the pill above it, not to Retry", () => {
     const { container } = renderChat();
     focusOn(container.querySelector<HTMLElement>(".bonsai-chat-turn-row-body")!);
-    press(container, "Up");
-    expect(isRetry(document.activeElement)).toBe(false);
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("pill");
+  });
+
+  it("with no pill and no older turn, Up from the question goes to the chat slot row, not to Retry", () => {
+    const slotRow = document.createElement("div");
+    slotRow.setAttribute("tabindex", "0");
+    document.body.appendChild(slotRow);
+    const holder = { current: { TakeFocus: () => (slotRow.focus(), true) } };
+    registerNavFocus("chat-slot-row", holder);
+    const { container } = renderChat({}, [TURNS[3]!], "t4");
+    focusOn(container.querySelector<HTMLElement>(".bonsai-chat-turn-row-body")!);
+    expect(press(container, "Up")).toBe(true);
+    expect(document.activeElement).toBe(slotRow);
+    unregisterNavFocus("chat-slot-row", holder);
+    slotRow.remove();
   });
 
   it("Up from the Show reasoning line stops on the question, and the next Up does not stop on Retry", () => {
@@ -284,8 +309,8 @@ describe("Retry is reached by Left from the question and nothing else (plan 79)"
     focusOn(container.querySelector<HTMLElement>(".bonsai-chat-reasoning-fold")!);
     expect(press(container, "Up")).toBe(true);
     expect(nameOf(document.activeElement)).toBe("question:what is a good first upgrade in Hollow Knight");
-    press(container, "Up");
-    expect(isRetry(document.activeElement)).toBe(false);
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("pill");
   });
 
   it("with an older question closed just above, Down from it lands on the question, and back Up does not stop on Retry", () => {
@@ -300,6 +325,10 @@ describe("Retry is reached by Left from the question and nothing else (plan 79)"
     const up = walk(container, "Up");
     expect(up).not.toContain("RETRY");
     expect(up[up.length - 1]).toBe(nameOf(older));
+    /* Up from the question text goes straight to the closed question above it. */
+    focusOn(container.querySelector<HTMLElement>(".bonsai-chat-turn-row-body")!);
+    expect(press(container, "Up")).toBe(true);
+    expect(document.activeElement).toBe(older);
   });
 
   it("Left from the question lands on Retry and Right comes back", () => {

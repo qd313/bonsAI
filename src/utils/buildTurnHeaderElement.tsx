@@ -8,7 +8,8 @@
  * Retry is a Left-only stop (plan 79): Up and Down never land on it. Left from the question text is
  *   the one way onto it, and Right is the way back. Something above that wants to enter this row
  *   goes to the question text through `takeOpenQuestionText`, never by letting Steam pick the row's
- *   first control.
+ *   first control. Up from the text is claimed too (`onMoveUpOut`): left to Steam it picks Retry, the
+ *   nearest stop in the row (plan79-P79-M8-EARLIER-RETRY-AFTER.json).
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -91,6 +92,15 @@ export type BuildTurnHeaderElementArgs = {
    * `takeOpenQuestionText`). Ignored on an open question, where Down goes into the answer.
    */
   onMoveDownPast?: () => boolean;
+  /**
+   * Where Up goes from the open question's text (plan 79): whatever is above the question's row --
+   * the previous turn's header, the "N earlier" pill or the chat slot row -- never Retry. Left
+   * unclaimed, Steam's own Up picks Retry, the nearest stop in the row (measured on the Deck,
+   * plan79-P79-M8-EARLIER-RETRY-AFTER.json, twice). The caller owns the target, since it is a
+   * different container and only the transcript knows what sits above; it returns whether the ring
+   * was placed. Only used on a question with Retry.
+   */
+  onMoveUpOut?: () => boolean;
 };
 
 /**
@@ -169,6 +179,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     headerNavRef,
     bodyRef,
     onMoveDownPast,
+    onMoveUpOut,
   } = args;
 
   const headerClass = [
@@ -336,15 +347,20 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         {...({
           navRef: questionTextNav(turnId),
           /*
-           * Left is the one way onto Retry (plan 79). The text used to send Up there too, so Up from
-           * the text stopped on Retry on the way to the line above; the maintainer's rule is that Up
-           * and Down never land on it, so the text claims no Up and it leaves the row as it did
-           * before plan 72 A-4. Retry and the text are siblings in this row, so a plain focus is the
-           * right move; a greyed Retry declines.
+           * Left is the one way onto Retry (plan 79). The text used to send Up there too (plan 72
+           * A-4); the maintainer's rule is that Up and Down never land on it. Dropping that handler
+           * was not enough: an unclaimed Up is Steam's, and Steam picked Retry, the nearest stop in
+           * this row, both times it was tried. So the text claims Up and hands it to whatever sits
+           * above the row. Retry and the text are siblings in this row, so Left's plain focus is
+           * the right move; a greyed Retry declines.
            */
+          onMoveUp: () => onMoveUpOut?.() ?? false,
           onMoveLeft: () => leftIntoRetry(),
-          onButtonDown: (button: unknown) =>
-            isDeckDirectionLeftEvent(button) ? leftIntoRetry() : false,
+          onButtonDown: (button: unknown) => {
+            if (isDeckDirectionLeftEvent(button)) return leftIntoRetry();
+            if (isUpDeckButtonEvent(button)) return onMoveUpOut?.() ?? false;
+            return false;
+          },
         } as Record<string, unknown>)}
       >
         {titleSpan}

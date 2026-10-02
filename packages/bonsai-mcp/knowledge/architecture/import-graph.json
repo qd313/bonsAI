@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 686,
-  "edgeCount": 1945,
+  "edgeCount": 1947,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -670,6 +670,7 @@
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
@@ -839,6 +840,7 @@
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
@@ -6828,7 +6830,9 @@
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
+        "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
+        "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",

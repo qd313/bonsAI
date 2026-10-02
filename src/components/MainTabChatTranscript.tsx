@@ -146,6 +146,8 @@ import {
   earlierPillLeftNavHandlers,
   earlierPillNavHandlers,
   closedQuestionMoveDown,
+  questionMoveUpOut,
+  earlierPillNav,
   firstArchivedHeaderMoveUp,
   troubleshootHintRowNavHandlers,
   vacDenyRowMoveUp,
@@ -1149,6 +1151,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               onMoveDownPast: closedQuestionMoveDown(
                 archivedTurnsToRender[renderIndex + 1]?.id ?? (showLiveTurn ? "live" : null)
               ),
+              /* What is drawn right over this row, for the question text's Up (plan 79). */
+              onMoveUpOut: questionMoveUpOut(
+                renderIndex > 0
+                  ? headerRingProps(archivedTurnsToRender[renderIndex - 1]!.id).headerNavRef
+                  : hidesEarlierTurns
+                    ? earlierPillNav
+                    : null
+              ),
               ...headerRingProps(turn.id),
               onActivate: () => onTurnActivate?.(turn.id),
               /*
@@ -1386,6 +1396,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               isStreaming: isStreamingPreview,
               onActivate: () => onTurnActivate?.("live"),
               ...headerRingProps("live"),
+              onMoveUpOut: questionMoveUpOut(
+                archivedTurnsToRender.length > 0
+                  ? headerRingProps(archivedTurnsToRender[archivedTurnsToRender.length - 1]!.id).headerNavRef
+                  : hidesEarlierTurns
+                    ? earlierPillNav
+                    : null
+              ),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,
             })}

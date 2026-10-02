@@ -1,0 +1,28 @@
+{
+ "row": "P79-DETAILS-SLOT",
+ "deck_time_local": "2026-10-02 ~17:00-17:12",
+ "screen": "Deck's own screen (window 854x454). Reading area top y=88, dock (slot) top y=291.",
+ "setup": "Test chat 6f3cc055. Newest answer (Soul Master refine, 383 px tall bubble, reading area 366 tall, scroll height 935) is longer than the screen, so no new question was asked.",
+ "pressed": "walked Down from '99 earlier' into the answer one press at a time, read the slot after each; A on the real Show details line; B; A; Down through the open details; Up/Down at the slot; A on the slot's Hide details line; Up from a chip.",
+ "seen": {
+  "step1": "Answer top (reasoning fold focused, scrollTop 88): slot reads 'Show details ↓' (line opacity 1, chip opacity 0). Screenshot screenshots/DeckCapture_20261002_165913_auto.png.",
+  "step2": "Real line top y by scrollTop: 686 (scroll 88), 554 (220), 474 (300), 394 (380), 390 (384), all with slot line shown. At scroll 475 real line top y=299 (8 px below the dock top 291, hidden): slot line still shown. At scroll 554 real line y=220-235, wholly on screen 56 px above the dock: chip back (chip opacity 1, line 0). Screenshot DeckCapture_20261002_165959_auto.png shows chips back and real line visible. No Down stop exists between scroll 475 and 554, so the exact 8 px edge was not sampled.",
+  "step3": "Could not set up: every D-pad route from the answer to the question box scrolls the real line into view first (Down from Helpful/Read aloud lands on the real line, scroll goes to max 569, chip is back). Tried: Down walk, Right/Left on the body, QAM close/reopen (ring then starts on the Main tab bar). With the details OPEN, the same Up from the box did work: question box (input y 324) then Up landed on the slot's 'Hide details ↑' line, rect 48,291,300x30, outline 2px solid, inset ring visible whole in screenshot DeckCapture_20261002_170335_auto.png.",
+  "step4": "Not run from the slot (no 'Show details' slot line to press). Nearest: A on the REAL Show details line (focus read first): details opened, real line top at y=97, i.e. 9 px below the reading-area top 88, ring on the real line ('Hide details'), slot shows chip again (line opacity 0).",
+  "step5": "B on the real 'Hide details' line: details closed, line reads 'Show details ↓', ring stayed on it (y 205, scroll 569).",
+  "step6": "Opened details again, Down through the open details (sources card, 'This answer', Keyword + meaning, KB 14 sections, Reply style, Thinking, Spoiler risk, Routed model, Developer details chips): real line went to y=77 (partly off the top) and the slot read 'Hide details ↑'; at real line y=-39 still 'Hide details ↑'. Ring to question box then Up: slot line (outline 2px). A (focus read first): details closed, ring on the real line (focus 'Show details'), slot back to chip. Real line top then at y=205 = 117 px below the reading-area top, not 8 px: the closed answer is shorter, scrollTop 568.7 of max 569, so the page cannot scroll further.",
+  "step7": "Up from the slot's 'Hide details ↑' line lands on the last chip of the open details ('Developer details', chip-ladder chip). Up from the suggestion chip with details closed lands on the Soul Master sources block (last stop above the dock). Both go to the last stop above the slot."
+ },
+ "expected": "See task step list",
+ "verdict_step1": "PASS slot reads 'Show details ↓' instead of the chip at the top of the answer",
+ "verdict_step2": "PASS chip returns once the real line is wholly on screen (56 px clear); the exact 8 px edge could not be sampled by D-pad stops. Fade look is the maintainer's.",
+ "verdict_step3": "UNCLEAR could not place the ring on the question box with the real line hidden below; only the open-details (Hide details) face could be reached, and its ring is whole and 2px",
+ "verdict_step4": "UNCLEAR could not press A on a 'Show details' slot line; A on the real line pins it 9 px below the top (measured)",
+ "verdict_step5": "PASS B closes and the ring stays on the line (done on the real line, not after a slot press)",
+ "verdict_step6a": "PASS slot reads 'Hide details ↑' once the real line is off the top; Up from the box lands on it; A closes the details",
+ "verdict_step6b": "UNCLEAR the real line is not 8 px from the top after the close: it is 117 px down because the shorter closed answer is already at its scroll limit (max 569). Ring is on the real line.",
+ "verdict_step7": "PASS Up from the slot line goes to the last stop above (Developer details chip); Up from a chip goes to the last stop above (Soul Master sources block). Same rule.",
+ "side_effect": "none beyond opening and closing the newest answer's details several times. QAM closed and reopened once with GUIDE+A.",
+ "verdict": "UNCLEAR overall: steps 1, 2, 5, 6a, 7 PASS; 3, 4, 6b UNCLEAR (see lines)",
+ "build_commit": "c98f749e"
+}

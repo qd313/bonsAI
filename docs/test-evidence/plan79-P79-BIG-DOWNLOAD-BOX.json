@@ -1,0 +1,17 @@
+{
+ "row": "P79-BIG-DOWNLOAD-BOX",
+ "deck_time_local": "2026-10-02 ~17:09",
+ "screen": "Deck's own screen (854x454)",
+ "setup": "Ollama tab, 'Browse models…' (button label 'Browse and pull Ollama models'). Baseline over SSH: ollama installed = nomic-embed-text:latest (274302450 bytes) and gemma4:e2b-it-qat (4336358185 bytes); no pull process. With the opening filters (Open source only, Essentials only) the list had nothing near 7 GB, so inside the box's Filters panel I turned 'Essentials only' off (a list filter that lives only in the open box, not a saved setting; the Licence choice 'Open source only (recommended)' untouched).",
+ "pressed": "A on Browse models…; Down x2 to Filters; A; Down through the panel (never on the Licence rows); A on 'Essentials only' (off); B; walk Down to the pull mark of qwen2.5:14b (8.4 GB, Expert (large)), focus read: 'Select qwen2.5:14b to pull'; A; focus read: 'Not now'; A; B to close.",
+ "seen": {
+  "box": "'Large model — continue?' opened: 'qwen2.5:14b is about 8.4 GB on disk and may run slowly...'; buttons Not now, Pull anyway, Cancel; ring on 'Not now' (blue). Screenshot screenshots/DeckCapture_20261002_170939_auto.png.",
+  "after_not_now": "Box closed, ring back on the row's pull mark ('Select qwen2.5:14b to pull'); the box header reads 'Queue 0 · < 0.1 GB'; no row selected.",
+  "ollama_after": "ollama installed list unchanged (same two models, same byte sizes); no 'ollama pull' process; no partial blobs.",
+  "close": "B closed Browse models; ring on 'Browse and pull Ollama models' again."
+ },
+ "expected": "Box opens with ring on 'Not now'; A closes it, row not selected, no pull, ollama list unchanged",
+ "verdict": "PASS",
+ "side_effect": "Turned the box's 'Essentials only' list filter off for the visit (not saved; it resets when the box is reopened). Settings file not touched.",
+ "build_commit": "c98f749e"
+}

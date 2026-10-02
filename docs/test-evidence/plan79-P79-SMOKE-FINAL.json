@@ -1,0 +1,21 @@
+{
+ "row": "P79-SMOKE-FINAL",
+ "build_commit": "49fc8894",
+ "deck_time_local": "2026-10-02 ~18:00-18:05 EDT",
+ "screen": "854x454 css px (Deck's own screen, no game)",
+ "setup": "No game. Test chat open on Main. Each tab opened with RB from the Main tab bar; Down and Up walks by deck_sweep (directions only), except Developer, which was walked by hand with a reader that never prints an input field (the Steam key field was only walked past, never read, never photographed).",
+ "pressed": "RB through Ollama, Settings, Permissions, Developer, About; LB x5 back to Main. On Main: send-question script ('What is the Soul Masters weak point?', no apostrophe so it survives the shell), walk to Ask, A on Ask.",
+ "seen": {
+  "Main": "walked in the P79-UP-MIRRORS rows on this build (bonsAI header to Ask and back, no stop twice, no Retry stop). Not repeated.",
+  "Ollama": "Down 12 stops (Run AI on this Deck, Start the AI with the Deck, Update AI engine, Browse and pull, Test connection, Use local knowledge base, Update knowledge base, Reply style, thinking Off, Custom timeouts, Unload delay, AI models); Up the exact reverse; 0 not visible; runs/p79-b4-smoke-ollama.json",
+  "Settings": "Down 15 stops ending at 'Clear cache...'; Up the exact reverse; 0 not visible; runs/p79-b4-smoke-settings.json",
+  "Permissions": "opened once: draws (16 focusable controls); not walked (not on the brief's list)",
+  "Developer": "draws; Down 18 stops (Install seed knowledge base, Hybrid retrieval, On-screen debug HUD, Warm the Ask model at boot, Jump to Steam Input, Clear (1), a log line, 'A \u00b7 Main', Off: No app activity log, Auto-save chat, Verbose Ask logging, Force session RAG chips, Preset animation, Scramble animation, Settle, 300, Same as text, then the key field as the last stop - Down on it stays put at scrollTop 2432 of 2798, nothing below); Up the exact reverse; every stop had a box inside the panel; none twice",
+  "About": "Down 5 stops (Follow system, GitHub, Built on Ollama!, Bugs & Feature Requests, Support my Steam Sale habit); Up the exact reverse; 0 not visible; runs/p79-b4-smoke-about.json",
+  "main_question": "Answer arrived in 35.6 s (log: stream done, 659 tokens, completed). It was a choice answer (A. Early game in Dirtmouth / B. Soul Sanctum and the Soul Master boss fight). Afterwards: the ring on the question box (input box, outline solid 2px, white ring in screenshots/DeckCapture_20261002_180406_auto.png), box empty, the Show details line and two chips above it. The first read right after the answer showed no ring for a moment; a read a few seconds later showed it on the box.",
+  "log": "plugin log file 2026-10-02 17.43.30.log (deploy to end): no error, traceback or exception lines; only INFO lines; answer checker warnings=[]. journalctl filter 'rror': no lines."
+ },
+ "expected": "Every tab draws; one Down and Up walk on each reaches its end with a ring at every stop and no stop twice; on Main the question's answer arrives, the ring is on the question box, the chip row or Show details line is above it; no errors in the log.",
+ "verdict": "PASS - all five tabs draw and mirror; the answer arrived with the ring on the box and the chip row and Show details line above; no errors in the log.",
+ "side_effect": "One question was added to the test chat (the chat was already at its 200-turn cap, so its oldest entries slid off). The test chat file differs from the backup anyway; P79-RESTORE handles that."
+}

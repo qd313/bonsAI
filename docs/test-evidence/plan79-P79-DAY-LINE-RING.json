@@ -1,0 +1,22 @@
+{
+ "row": "P79-DAY-LINE-RING",
+ "deck_time_local": "2026-10-02 ~17:05",
+ "screen": "Deck's own screen (page window 854x454)",
+ "setup": "test chat 6f3cc055 (chat row reads 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', matches the slot index). Ring walked up to '99 earlier'.",
+ "pressed": "A on '99 earlier'; Down; A on 'Wed 30 Sep · 11' (focus read first); Down; Up; B; Up. Then same on 'Yesterday · 67' and 'Today · 21'. Then Up to '99 earlier', B.",
+ "seen": {
+  "A_on_N_earlier": "opens (arrow ▸ to ▾), ring stays on '99 earlier' (y 146)",
+  "day_lines": [
+   "Wed 30 Sep · 11",
+   "Yesterday · 67",
+   "Today · 21"
+  ],
+  "Wed30": "A: ring stayed on the line (y 184, arrow ▾). Down: first question 'how do I get past the Soul Sanctum fight in Hollow Knight'. Up: back on the line. B: closed (▸), ring stayed (y 184). Up: '99 earlier' (y 146).",
+  "Yesterday": "A: ring stayed (y 222, ▾). Down: 'in three short sentences, what is the best first upgrade in…'. Up: line. B: closed, ring stayed. Up: 'Wed 30 Sep · 11'.",
+  "Today": "A: ring stayed (y 260, ▾). Down: 'List every boss in Hollow Knight in order with a long tip f…'. Up: line (y 204). B: closed, ring stayed. Up: 'Yesterday · 67'.",
+  "B_on_N_earlier": "closed, ring stayed on '99 earlier' (y 146), 0 day rows left; newest answer's header is expanded"
+ },
+ "expected": "ring stays on a day line after A and after B; one Down goes to its first question; one Up from the line goes to the line above; same on N earlier; newest answer open at the end",
+ "verdict": "PASS",
+ "build_commit": "c98f749e"
+}

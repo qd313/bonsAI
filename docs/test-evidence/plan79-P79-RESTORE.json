@@ -1,0 +1,23 @@
+{
+ "row": "P79-RESTORE",
+ "build_commit": "49fc8894",
+ "deck_time_local": "2026-10-02 ~18:05-18:15 EDT",
+ "screen": "854x454 css px (Deck's own screen)",
+ "setup": "With the plugin on another chat (the parrying chat, reached with RB on the chat row; nothing asked), copied ~/p79-chat-slots.bak/6f3cc055-....json over the test chat file and ~/p79-chat-slots.bak/index.json over index.json (md5 equal to the backup). The sumup.bak file holds the same summary as the 02:00 backup (same covers_through id, same length), so the 02:00 file already carries it. Reloaded the plugin (no game running); first open failed once as expected, second worked. Plugin came up on the first chat in the restored order (the parrying chat); RB moved to the test chat.",
+ "pressed": "RB on the chat row (twice in all, nothing asked), deck_reloadPlugin, deck_openPlugin x2.",
+ "seen": {
+  "test_chat_label": "How do I beat the boss in the Soul Sanctum in Hollow Knight?",
+  "test_chat_turns_on_disk": 170,
+  "test_chat_turns_backup": 170,
+  "newest_question_on_screen": "what is a good first upgrade in Hollow Knight",
+  "other_chat_files": "all 7 other chat files and index.json: md5 identical to the backup (no difference to report)",
+  "settings": "settings.json compared key by key with ~/p79-settings.bak.json: no differing keys; I changed no key this block",
+  "pinned_test_chips": "dev_frozen_test_chips = [] (single key read)",
+  "game": "no AppId process (SSH), 4,643 MB available",
+  "keep_awake": "released with deck_restorePowerSettings (wasHeld true, released true)",
+  "backups": "left in place"
+ },
+ "expected": "Test chat label and turn count match the backup; other chats unchanged; settings equal; chips empty; no game; keep-awake released.",
+ "verdict": "PASS - all of the above hold.",
+ "side_effect": "I also restored index.json (it differs from the backup only through the test chat's activity: order and turn count). Plugin state at the end: open on Main, test chat, ring on the chat row."
+}

@@ -2978,3 +2978,11 @@ Original entries moved from Features on 2026-10-02 when their builds went to Ver
   question box"**, below. **Needs a plan and animated mockups before anything is built**, since the swap
   between the chip and the line happens as the person scrolls — drawn at the Deck's real size, from the
   real screen, showing the swap in motion.
+
+## Around underlined words, Up is not always the reverse of Down
+
+_The entry's first wording and cause, from before the 2026-10-02 fix. It was titled "Underlined game words are stops walking Down but are skipped walking Up"._
+
+`[focus]` **Underlined game words are stops walking Down but are skipped walking Up** — **OPEN, seen 2026-10-01 on the Deck with Deep Rock Galactic: Survivor running (plan 78, Deck block 3b).**
+  A section with three underlined words took one landing and two scrolls going Up, so Up is not the mirror of Down there; the maintainer's rule (D120 item 6) is that both directions visit the same stops. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
+  Cause (the helper's read, 2026-10-01): with the ring on a section the word finder never counts words inside that section as before the ring going Up. A fix needs a change in the word finder, an Up-side memory of the last word passed (the mirror of Down's), and room in the navigation file, which is at 397 of its 400 lines. After the release.

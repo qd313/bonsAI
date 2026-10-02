@@ -1,0 +1,17 @@
+{
+ "row": "P79-BLOCK3B-DEPLOY",
+ "deck_time_local": "2026-10-02 ~16:57",
+ "screen": "not measured",
+ "setup": "no game running (no reaper/proton process, 3.9 GB available). npm run build, deck_deploy (loader ready), deck_checkReady buildMatches",
+ "pressed": "none",
+ "seen": {
+  "checkout_commit": "c98f749e",
+  "buildMatches": true,
+  "files": 126,
+  "keepAwake_expiresAt": "2026-10-03T04:56:26Z (= 00:56 Deck time)",
+  "settings_vs_backup_differing_keys": []
+ },
+ "expected": "build matches, settings same as backup",
+ "verdict": "PASS",
+ "build_commit": "c98f749e"
+}

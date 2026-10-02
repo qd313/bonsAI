@@ -1,0 +1,21 @@
+{
+ "row": "P79-SETTINGS-CLEAR-BOXES",
+ "deck_time_local": "2026-10-02 ~17:05",
+ "screen": "Deck's own screen (854x454)",
+ "setup": "Settings tab, walked Down 14 presses to 'Clear cache...' (walk only presses directions; passed 'Show Developer tab' without pressing it).",
+ "pressed": "A on 'Clear cache...' (focus read first); A on 'Keep cache' (focus read: gpfocus text 'Keep cache'); Right to 'Clear all data...' (read); A; read focus; B.",
+ "seen": {
+  "clear_cache_box": "'Clear session cache?' box opened; ring on 'Keep cache' (blue). Screenshot screenshots/DeckCapture_20261002_170613_auto.png. Buttons: Keep cache, Clear, Cancel.",
+  "after_keep_cache": "Box closed, ring back on 'Clear cache...'. Chat still there afterwards: test chat index still 200 turns, answer and day lines still on the Main tab (screenshot DeckCapture_20261002_170649_auto.png).",
+  "clear_all_box": "'Clear all plugin data?' box opened; ring on 'Keep my data'.",
+  "after_B": "Box closed. The ring then read 'Main tab' and the screenshot shows the plugin on the MAIN tab: B on the box closed it and also took the panel from Settings back to Main.",
+  "settings_vs_backup": "settings.json compared key by key with ~/p79-settings.bak.json: 0 differing keys"
+ },
+ "expected": "Clear cache box opens on Keep cache, A closes without clearing; Clear all data box opens on Keep my data, B closes it, settings unchanged",
+ "verdict_clear_cache": "PASS",
+ "verdict_clear_all_data": "PASS box opens on Keep my data, B closes it, settings file unchanged",
+ "note": "After B the plugin was on Main, not Settings. Not part of the pass line; flag to the maintainer.",
+ "side_effect": "none",
+ "verdict": "PASS",
+ "build_commit": "c98f749e"
+}

@@ -1,0 +1,14 @@
+{
+ "row": "P79-HINT-DISMISS-SLOT",
+ "build_commit": "49fc8894",
+ "deck_time_local": "2026-10-02 ~17:51 and ~17:57 EDT",
+ "screen": "854x454 (no game), 854x534 (game running)",
+ "setup": "Looked at the page for a troubleshooting hint with a Dismiss button: once on the test chat before the game, once after the Zhukov answer with the game running.",
+ "pressed": "nothing",
+ "seen": {
+  "dismiss_buttons": 0,
+  "troubleshooting_hint_text": false
+ },
+ "expected": "If a hint with Dismiss is on screen, A on Dismiss lands the ring on the slot above the question box.",
+ "verdict": "COULD NOT RUN - no troubleshooting hint was on screen either time; the brief says not to try to make one."
+}

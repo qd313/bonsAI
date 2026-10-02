@@ -1,0 +1,17 @@
+{
+ "row": "P79-BLOCK4-DEPLOY",
+ "build_commit": "49fc8894",
+ "deck_time_local": "2026-10-02 17:42-17:44 EDT",
+ "screen": "854x454 css px (Deck's own screen)",
+ "setup": "No game running (RunningApps empty). git log -1 = 49fc8894 on experimental. npm run build ok (dist created, 52 licences). deck_deploy: copied dist, main.py, plugin.json, package.json, assets, py_modules, bin; loader ready.",
+ "pressed": "deck_openPlugin twice (first failed as expected right after deploy: 'no pane appeared'; second worked: ring on bonsAI, panel open).",
+ "seen": {
+  "buildMatches": true,
+  "files_compared": 126,
+  "runningAppId_check": "unknown (CDP ECONNRESET during the check; RunningApps was read empty by deck_openPlugin and by SSH)",
+  "keep_awake": "deck_holdAwake ttlMinutes 120, expiresAt 2026-10-02T23:43:33Z = 19:43 Deck time",
+  "settings_vs_backup": "settings.json compared key by key with ~/p79-settings.bak.json: no differing keys"
+ },
+ "expected": "buildMatches true on 49fc8894; keep-awake retaken; settings equal to the backup.",
+ "verdict": "PASS - the Deck runs 49fc8894 (build hash matches 126 files), keep-awake retaken to 19:43, settings equal the backup."
+}

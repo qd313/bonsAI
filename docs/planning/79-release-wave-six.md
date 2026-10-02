@@ -445,6 +445,17 @@ New ones go here, with the choice taken in the meantime.
    then stand still. The 1.5 s at the end is a minimum: the chip then leaves on the row's own beat, which the Deck
    measured at 3.2 to 10.2 s after the words stopped (Hades, two chips showing). *Meanwhile:* as built, so the end
    is never cut short. **Your call:** have a long chip leave about 1.5 s after its words stop, or keep it.
+13. **Two of the four build tidy-ups wait until after the release.** Naming the package manager's version in the
+   package file would change which version builds the release zip on GitHub: that workflow runs an older one on an
+   older Node, and the step that sets it up refuses a version named in two places. Moving the help-server package
+   to the same package manager needs a fresh install and a GitHub run to prove. This session never pushes, so
+   neither can be proven tonight. *Meanwhile:* the two safe ones are done (the test run no longer leaves a changed
+   file behind; an old setting the package manager ignores, and warns about, is gone). **Your call:** schedule the
+   other two for the first session after 0.6.0.
+14. **The Show details line in the chip's place, where the build and the drawing differ.** Up from the slot's line
+   goes where Up from a chip goes (the drawing went back to the paragraph being read); the chip's own fade keeps
+   running underneath (the drawing paused it); B on the slot's line does nothing (as on a chip); the "How to use
+   bonsAI" chip is never swapped out. *Meanwhile:* as built. **Your call:** any of these the drawing's way.
 
 ## At the end
 
@@ -575,6 +586,17 @@ Nothing yet.
   (question 11). Started: the Show details line in the chip's place (way 2) and walking Up mirroring Down (bug 12
   and the rows Up skipped). Deck block 2c (the trap route, ten chips, long chips, a button keeping its game) is on
   the Deck.
+- **2026-10-02, about 16:05 to 17:10:** Deck block 2c: ten different Hades chips before the first repeat (pass), the
+  soft fill under the ring (pass; the look is yours), a button under a Hollow Knight answer keeping Hollow Knight's
+  notes with Deep Rock running (pass), the long chip's end pause (question 12), and the trap's own case could not be
+  produced on the rig (the ring never stuck). Block 3a on the newest build passed grouped by day, the question box
+  ring, the chat row (the name moved 0 px) and most of the models fold (moving a place could not run: one model
+  installed); it found that A or B on a day line dropped the ring for one press, and that a section under a second
+  spoiler cover was skipped walking Up. Both were fixed the same hour. Landed, every check green: the three safe-first
+  boxes (`bd799953`), the Show details line in the chip's place (`5a19a558`), the day-line ring (`c98f749e`), the
+  paperwork sweep (`9449c30d`), and walking Up mirroring Down (`c1efd8e8`: underlined game words, the newest closed
+  question, the skipped spoiler section, and the help hint's Dismiss). Every helper has now reported. The last job,
+  two of the four build tidy-ups (question 13), runs alone. Deck block 3b is on the Deck.
 
 ## For the helpers: who owns which files
 

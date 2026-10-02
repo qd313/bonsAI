@@ -52,6 +52,18 @@ const DRG_OVERCLOCKS: WordShape = {
 };
 
 /** Three short sections, each wholly on screen at once, the middle one holding three words. */
+/**
+ * The Zhukov answer of the Deck's round 2 (plan79-P79-UP-MIRRORS-DOWN-WORDS.json): one section a little
+ * taller than the band (246 px) with its two underlined words on its first lines. Up from the row under it
+ * first landed on the words when they were on screen, and on the box first when they were not: the order
+ * changed with where the panel happened to sit.
+ */
+const ZHUKOV: WordShape = {
+  sections: [[300, 546]],
+  words: [[0, [312, 327]], [0, [334, 349]]],
+  start: 0,
+};
+
 const SHORT_WITH_WORDS: WordShape = {
   sections: [[236, 340], [348, 470], [478, 560]],
   words: [[1, [360, 375]], [1, [400, 415]], [1, [440, 455]]],
@@ -98,8 +110,9 @@ function walk(a: WordAnswer, dir: "down" | "up", limit = 60) {
     if (ring === before) continue;
     // The ring moved from a word to the section holding it because a scroll carried the word off the
     // screen: a hand-off. Going Down that is the only way it moves there (the section's placing may then
-    // un-cut the word); going Up the press scrolled up, or left the word cut off at the dock.
-    if (ring.contains(before) && (dir === "down" || moved < 0 || !inBand(before))) continue;
+    // un-cut the word); going Up it happens only when the scroll left the word cut off at the dock. Up
+    // from a section's first word onto its box is a landing, even when placing the box scrolls the panel.
+    if (ring.contains(before) && (dir === "down" || !inBand(before))) continue;
     landings.push(name);
     const tall = a.bottom(ring) - a.top(ring) > a.dockTop - PANE_TOP;
     const edgeShows = (y: number) => y >= PANE_TOP - 1 && y <= a.dockTop + 4;
@@ -113,6 +126,7 @@ function walk(a: WordAnswer, dir: "down" | "up", limit = 60) {
 describe.each([
   ["Deep Rock Galactic overclocks", DRG_OVERCLOCKS],
   ["three short sections", SHORT_WITH_WORDS],
+  ["Zhukov", ZHUKOV],
 ])("the %s answer, Down to the end and then Up back to the top", (_name, shape) => {
   describe.each(WALK_DOCKS)("dock at y %i", (dockTop) => {
     describe.each(WALK_RULES)("Steam scroll rule: %s", (rule) => {
@@ -137,16 +151,18 @@ describe.each([
           expect(down.landings).toContain(`word${i}`);
           expect(up.landings).toContain(`word${i}`);
         }
-        // None twice in one direction, and Up is Down backwards.
+        // None twice in one direction, and Up is Down backwards. The walk Up starts where Down left the
+        // ring: on its last landing, or on the box a scroll handed the ring back to, which is not a stop.
+        const upStops = up.landings[0] === down.landings[down.landings.length - 1] ? up.landings : up.landings.slice(1);
         expect(new Set(down.landings).size).toBe(down.landings.length);
-        expect(new Set(up.landings).size).toBe(up.landings.length);
-        expect(up.landings).toEqual([...down.landings].reverse());
+        expect(new Set(upStops).size).toBe(upStops.length);
+        expect(upStops).toEqual([...down.landings].reverse());
       });
 
-      it("visits the same stops when the walk Up comes first, from the row under the answer", () => {
+      it.each([8, 60, 140])("visits the same stops when the walk Up comes first, from the row under the answer (panel %i px past its end)", (past) => {
         const a = wordAnswer(shape, rule, dockTop);
-        // The ring comes from the row below the answer, so the panel is scrolled to the answer's end.
-        a.pane.scrollTop = shape.sections[shape.sections.length - 1]![1] - dockTop + 8;
+        // The ring comes from the row below the answer, so the panel is scrolled to the answer's end or past it.
+        a.pane.scrollTop = shape.sections[shape.sections.length - 1]![1] - dockTop + past;
         expect(a.enterFromBelow()).toBe(true);
 
         const up = walk(a, "up");
@@ -160,6 +176,21 @@ describe.each([
         for (let i = 1; i <= shape.words.length; i += 1) expect(up.landings).toContain(`word${i}`);
         expect(new Set(up.landings).size).toBe(up.landings.length);
         expect(down.landings).toEqual([...up.landings].reverse());
+      });
+
+      it("Down to the end, out of the answer, and back in from the row under it: Up is Down reversed", () => {
+        // The Deck's second sweep: Down left the answer for the choices, then Up came back from them.
+        const a = wordAnswer(shape, rule, dockTop);
+        expect(a.enterFromAbove()).toBe(true);
+        const down = walk(a, "down");
+        a.pane.scrollTop = shape.sections[shape.sections.length - 1]![1] - dockTop + 40;
+        expect(a.enterFromBelow()).toBe(true);
+        const up = walk(a, "up");
+        if (process.env.WALK_DEBUG) console.log("LAND2", dockTop, rule, down.landings.join(" "), "|", up.landings.join(" "));
+
+        expect(down.problems).toEqual([]);
+        expect(up.problems).toEqual([]);
+        expect(up.landings).toEqual([...down.landings].reverse());
       });
     });
   });

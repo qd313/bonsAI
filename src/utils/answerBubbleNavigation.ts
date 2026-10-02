@@ -806,7 +806,8 @@ export function handleAnswerBubbleMoveUp(
    * then the box (plan 79 helper AC; the Deck skipped every word going Up,
    * plan78-QA-FREE-PLAY-01-GAME-try3.json). Words of the section above are reached through it.
    */
-  if (wordStepUp(bubble, ringSection(bubble, answerKey), scroll)) {
+  const ringSec = ringSection(bubble, answerKey);
+  if (wordStepUp(bubble, ringSec, scroll, walk && walk.section === ringSec ? walk.passed : null)) {
     forgetDownWalk();
     return true;
   }

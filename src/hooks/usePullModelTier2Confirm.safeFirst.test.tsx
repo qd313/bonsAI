@@ -10,13 +10,14 @@
  *
  * Does not: prove where the ring lands on the device; that is the Deck row's job.
  */
-import { act, renderHook } from "@testing-library/react";
-import type { ReactElement } from "react";
+import { act, render, renderHook } from "@testing-library/react";
+import type { ReactElement, ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PullModelEntry } from "../data/pullModelCatalog";
 
 type BoxProps = {
+  strDescription?: ReactNode;
   strOKButtonText?: unknown;
   strMiddleButtonText?: unknown;
   strCancelButtonText?: unknown;
@@ -69,6 +70,13 @@ describe('"Enable Tier 2 for this model?"', () => {
     expect(box.strOKButtonText).toBe("Not now");
     expect(box.strMiddleButtonText).toBe("Enable Tier 2 and queue");
     expect(box.strCancelButtonText).toBe("Cancel");
+  });
+
+  it("points to where the licence can be changed today: the AI models button and its Filters, not the removed Manage AI models and Policy", () => {
+    const { box } = openBox();
+    const { container } = render(<div>{box.strDescription}</div>);
+    expect(container.textContent).toContain("You can change this later under Ollama → AI models → Filters.");
+    expect(container.textContent).not.toContain("Manage AI models");
   });
 
   it("OK (the ring's first stop) closes the box and changes nothing", async () => {

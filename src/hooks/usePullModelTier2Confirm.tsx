@@ -97,7 +97,7 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
               <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
                 Enable <strong>Tier 2 (open-weight)</strong> so this tag is eligible for Ask fallbacks. {TIER2_PULL_NOTE}
               </div>
-              <div>You can change this later under Ollama → Manage AI models → Policy.</div>
+              <div>You can change this later under Ollama → AI models → Filters.</div>
             </div>
           }
           /*

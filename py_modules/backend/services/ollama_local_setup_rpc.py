@@ -59,13 +59,13 @@ from backend.ollama_routing import (
     is_valid_setup_pull_profile,
     is_vision_capable_tag,
     merge_pulled_tag,
-    prune_routing_orders_to_installed,
     remove_tag_from_routing_orders,
 )
 from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
 from backend.services.ollama_pc_models import tags_on_saved_pcs
+from backend.services.ollama_try_order_prune import prune_saved_orders_to_installed
 from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
@@ -440,43 +440,9 @@ async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
 
 
 async def _prune_saved_orders_to_installed(self) -> None:
-    """Drop saved try-order entries for models no longer on this Deck's own Ollama.
-
-    A model removed outside the plugin (`ollama rm` in a terminal, plan 76 row PULL-TRY-ORDER-01)
-    never went through delete_ollama_model, so its tag stayed in the saved orders. The AI models
-    screen reads the installed list every time it opens; this uses that read. It prunes only when
-    the read answered with at least one model: an unreachable Ollama, a timeout and an empty
-    store all come back as an empty list and change nothing. The caller has already checked that
-    Ollama is the Deck's own, which is the Ollama this list belongs to. Never raises.
-    """
-    try:
-        installed = await asyncio.wait_for(
-            asyncio.to_thread(lambda: list_installed_ollama_tags(DEFAULT_BASE)), timeout=8.0
-        )
-        if not installed:
-            return
-        # A download in progress is not installed yet and must not lose its place.
-        st = dict(getattr(self, "_local_ollama_setup_state", {}) or {})
-        downloading: set[str] = set()
-        if st.get("phase") == "running" and not st.get("done", True):
-            downloading = {str(t).strip() for t in (st.get("pull_tags") or [])}
-        current = await self.load_settings()
-        order_patch, pruned = prune_routing_orders_to_installed(current, installed, downloading)
-        if order_patch:
-            # Only now ask the saved PCs: a name one of them still has is not this Deck's to drop.
-            order_patch, pruned = prune_routing_orders_to_installed(
-                current, [*installed, *await tags_on_saved_pcs(current)], downloading
-            )
-        if not order_patch:
-            return
-        await self.save_settings(order_patch)
-        await self._maybe_app_log(
-            "local_setup.routing_prune",
-            "saved try order dropped models that are not installed",
-            fields={"pruned": ",".join(pruned), "installed_count": len(installed)},
-        )
-    except Exception:
-        logger.exception("pruning the saved try orders failed; they were left as they were")
+    """Drop saved try-order entries for models no longer on this Deck's own Ollama (see the helper)."""
+    # The reader is looked up by name at call time, so a test that replaces it here still works.
+    await prune_saved_orders_to_installed(self, lambda base: list_installed_ollama_tags(base))
 
 
 async def fetch_ollama_catalog_metadata(self, tags: Any = None):

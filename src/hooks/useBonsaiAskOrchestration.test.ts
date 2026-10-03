@@ -700,6 +700,30 @@ describe("useBonsaiAskOrchestration", () => {
     });
 
     /*
+     * Plan 81 helper S: the turn's spoiler consent, like the named thing above, is known to the
+     * back end before the answer completes; the live bubble can only honour it if the pending
+     * poll carries it onto `ollamaContext`.
+     */
+    it("carries the turn's spoiler consent while still pending", async () => {
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "plan for the next area, spoilers are okay",
+        request_id: 12,
+        app_name: "Hollow Knight",
+        strategy_spoiler_consent_effective: true,
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      expect(result.current.ollamaContext?.spoiler_consent).toBe(true);
+      vi.useRealTimers();
+    });
+
+    /*
      * Plan 69, 2026-09-24: every 150 ms poll used to hand React a fresh game-context object, a
      * fresh thinking record and a fresh notes list even when nothing in them had changed, and each
      * one re-rendered the whole plugin -- 85 to 100 ms a time on the Deck with a game running. A

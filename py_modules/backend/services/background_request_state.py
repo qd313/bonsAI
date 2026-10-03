@@ -171,6 +171,10 @@ def new_partial_stream_snapshot(request_id: Optional[int]) -> dict[str, Any]:
         # Plan 54 gap 2: the named thing, published before the model call so the streaming
         # bubble can open its spoiler box from the first word instead of waiting for completion.
         "asked_entity": "",
+        # Plan 81 helper S: whether this Ask has spoiler consent, published once it is decided
+        # (before the model call) so the streaming bubble can show every hidden block as plain
+        # text from the first word. The finished status carries the same fact at completion.
+        "spoiler_consent": False,
         "thinking_summary": None,
         # When thinking_summary last *changed*, not when it was last written. Repeated identical
         # publishes must not reset it, because this is what tells the read path how long one line

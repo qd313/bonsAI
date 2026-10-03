@@ -600,6 +600,18 @@ class Plugin:
                 return
             snap["asked_entity"] = (entity or "").strip()[:120]
 
+    def _publish_spoiler_consent(self, request_id: int, consent: bool) -> None:
+        """Publish whether this Ask has spoiler consent before the model call finishes.
+
+        The finished status carries it already; this is the same fact for the live poll, so the
+        streaming bubble shows every hidden block as plain text from the first word.
+        """
+        with self._partial_response_lock:
+            snap = self._partial_stream_snapshot
+            if snap.get("request_id") != request_id:
+                return
+            snap["spoiler_consent"] = bool(consent)
+
     def _publish_thinking_phase_key(
         self,
         request_id: int,
@@ -668,6 +680,7 @@ class Plugin:
             out["reasoning_seconds"] = snap.get("reasoning_seconds")
             if snap.get("asked_entity"):
                 out["strategy_spoiler_asked_entity"] = snap["asked_entity"]
+            out["strategy_spoiler_consent_effective"] = snap.get("spoiler_consent") is True
             # Plan 58 phase 1: the "From the notes" block's own material, published into the live
             # snapshot before the model call by game_ai_request.py's
             # `_publish_kb_attached_notes_live` -- this is the one line that was missing to carry

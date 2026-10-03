@@ -288,6 +288,8 @@ class TestPartialStreamSnapshot(unittest.TestCase):
                 "request_id",
                 "partial_response",
                 "asked_entity",
+                # Plan 81 helper S: whether the Ask has spoiler consent, live.
+                "spoiler_consent",
                 "thinking_summary",
                 "thinking_summary_monotonic",
                 "thinking_tone",
@@ -305,6 +307,7 @@ class TestPartialStreamSnapshot(unittest.TestCase):
         self.assertEqual(snap["request_id"], 5)
         self.assertIsNone(snap["partial_response"])
         self.assertEqual(snap["asked_entity"], "")
+        self.assertIs(snap["spoiler_consent"], False)
         self.assertIsNone(snap["thinking_summary"])
         self.assertEqual(snap["thinking_summary_monotonic"], 0.0)
         self.assertEqual(snap["thinking_tone"], "witty")

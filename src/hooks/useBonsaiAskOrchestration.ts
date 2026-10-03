@@ -492,6 +492,9 @@ export function useBonsaiAskOrchestration(
           // still streaming — lastExchange stays empty until completion.
           ...statusGame,
           asked_entity: status.strategy_spoiler_asked_entity ?? "",
+          // The same fact the finished status carries, known from the first poll so the live
+          // bubble never covers a hidden block the person said they were fine seeing.
+          spoiler_consent: status.strategy_spoiler_consent_effective === true,
         }));
         setIsAsking(true);
         setIsForeignPendingAsk(paintsForeignSlot);

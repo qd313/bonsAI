@@ -51,6 +51,13 @@ export type OllamaContextUi =
       app_name?: string;
       /** The backend's own guess at the named boss/thing, published before the answer completes. */
       asked_entity?: string;
+      /**
+       * Whether this Ask has spoiler consent ("spoilers are okay" in the question, or the toggle),
+       * published by the pending poll before the answer completes. `lastExchange` carries the
+       * same fact only after completion, so without this the live bubble covers every hidden block
+       * that streams in first.
+       */
+      spoiler_consent?: boolean;
     }
   | null;
 

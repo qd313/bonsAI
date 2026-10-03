@@ -2,22 +2,22 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2307,
+      "lines": 2320,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2198,
+      "lines": 2222,
       "role": ""
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1764,
+      "lines": 1768,
       "role": ""
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1561,
+      "lines": 1564,
       "role": ""
     },
     {

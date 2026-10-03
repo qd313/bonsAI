@@ -465,6 +465,41 @@ class BackgroundPartialStateTests(unittest.TestCase):
         merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
         self.assertNotIn("strategy_spoiler_asked_entity", merged)
 
+    def test_publish_spoiler_consent_reaches_a_pending_merge(self) -> None:
+        """Plan 81 helper S: the turn's consent must reach the live poll before completion, so
+        the streaming bubble can show every hidden block as plain text from its first word."""
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertFalse(merged.get("strategy_spoiler_consent_effective"))
+        self.plugin._publish_spoiler_consent(7, True)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertIs(merged.get("strategy_spoiler_consent_effective"), True)
+
+    def test_publish_spoiler_consent_for_a_stale_request_id_is_ignored(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_spoiler_consent(8, True)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertFalse(merged.get("strategy_spoiler_consent_effective"))
+
+    def test_publish_spoiler_consent_not_grafted_onto_a_completed_state(self) -> None:
+        self.plugin._background_state = {"status": "completed", "request_id": 7}
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_spoiler_consent(7, True)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertNotIn("strategy_spoiler_consent_effective", merged)
+
     def test_reasoning_reaches_a_pending_merge_before_any_answer_text(self) -> None:
         """Plan 57: a thinking chunk must reach the poll even while the visible answer is empty.
 

@@ -535,7 +535,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askQuestion: liveQuestion || lastExchange?.question || "", appId: ollamaContext?.app_id ?? null,
     appName: ollamaContext?.app_name || lastExchange?.appName || null,
     askedEntity: ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
-    spoilerConsentEffective: lastExchange?.spoilerConsentEffective === true,
+    /* While the answer is still coming, only the pending poll knows the turn's consent: `lastExchange`
+       is empty (or still the PREVIOUS turn's) until the answer completes. */
+    spoilerConsentEffective: isAsking
+      ? ollamaContext?.spoiler_consent === true
+      : lastExchange?.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(liveKbNotes),
   };
   const showLiveResponse =

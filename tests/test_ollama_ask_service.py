@@ -84,6 +84,9 @@ class _FakePlugin:
     def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
         return None
 
+    def _publish_spoiler_consent(self, request_id: Any, consent: Any) -> None:
+        return None
+
 
 class _SpoilerFakePlugin(_FakePlugin):
     """Adds a real-shaped attached-note header to the prompt (so ``kb_card_names`` finds a
@@ -625,6 +628,72 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
 
         texts = [call[1] for call in plugin.partial_updates]
         self.assertEqual(texts, ["The next boss is The Hi", "The next boss is The Hive."])
+
+
+class _ConsentOrderFakePlugin(_FakePlugin):
+    """Records, in one list, when the consent is published and when each partial is written."""
+
+    def __init__(self, active_request_id: Any = None) -> None:
+        super().__init__(active_request_id=active_request_id)
+        self.events: list[tuple[Any, ...]] = []
+
+    def _publish_spoiler_consent(self, request_id: Any, consent: Any) -> None:
+        self.events.append(("consent", request_id, consent))
+
+    def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
+        self.events.append(("partial", args[1]))
+
+
+class SpoilerConsentPublishedBeforeTheFirstPartialTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 81 helper S: the screen can only show a hidden block as plain text from the first
+    streamed word if the turn's consent reaches the live poll before the first partial."""
+
+    async def _ask(self, plugin: "_ConsentOrderFakePlugin", rid: int, *, consent: bool, guidance: bool) -> None:
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("Plan.", False, None)
+                on_delta("Plan. Done.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "Plan. Done.",
+                "assistant_raw": "Plan. Done.",
+            }
+
+        # The same patched model call the cover-streaming tests above use.
+        with SpoilerCoverStreamingTests._patched(self, fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "Give me a plan for the next area, spoilers are okay.",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=rid,
+                ask_mode="strategy",
+                strategy_spoiler_consent=consent,
+                strategy_domain_guidance=guidance,
+            )
+
+    async def test_consent_reaches_the_poll_before_the_first_partial(self) -> None:
+        plugin = _ConsentOrderFakePlugin(active_request_id=13)
+        await self._ask(plugin, 13, consent=True, guidance=True)
+        kinds = [e[0] for e in plugin.events]
+        self.assertEqual(plugin.events[0], ("consent", 13, True))
+        self.assertLess(kinds.index("consent"), kinds.index("partial"))
+
+    async def test_no_consent_publishes_false(self) -> None:
+        plugin = _ConsentOrderFakePlugin(active_request_id=14)
+        await self._ask(plugin, 14, consent=False, guidance=True)
+        self.assertEqual(plugin.events[0], ("consent", 14, False))
+
+    async def test_consent_without_strategy_guidance_is_not_effective(self) -> None:
+        """The same value the finished result reports: consent only counts for a Strategy-style ask."""
+        plugin = _ConsentOrderFakePlugin(active_request_id=15)
+        await self._ask(plugin, 15, consent=True, guidance=False)
+        self.assertEqual(plugin.events[0], ("consent", 15, False))
 
 
 class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):

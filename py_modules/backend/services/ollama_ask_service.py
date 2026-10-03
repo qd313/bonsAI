@@ -336,6 +336,9 @@ async def run_ask_ollama(
     if isinstance(token_stream_request_id, int):
         stream_rid = token_stream_request_id
         announced_generating = False
+        # Plan 81 helper S: the screen learns the turn's consent only from the finished result
+        # unless it is published here, and covers every hidden block that streams in before then.
+        plugin_inst._publish_spoiler_consent(stream_rid, ollama_extras["strategy_spoiler_consent_effective"])
 
         def _on_delta(
             text: str,

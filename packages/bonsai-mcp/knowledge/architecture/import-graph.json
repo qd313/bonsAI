@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 724,
-  "edgeCount": 2089,
+  "fileCount": 725,
+  "edgeCount": 2092,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -522,6 +522,7 @@
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+        "src/components/MainTabChatTranscript.liveConsent.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
         "src/components/MainTabChatTranscript.spoilerStaysOpen.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
@@ -647,6 +648,14 @@
         "src/styles/sections/answerBubble.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTabChatTranscript.liveConsent.test.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -865,6 +874,7 @@
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesGap.test.tsx",
+        "src/components/MainTabChatTranscript.liveConsent.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
@@ -5590,6 +5600,7 @@
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesGap.test.tsx",
+        "src/components/MainTabChatTranscript.liveConsent.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",

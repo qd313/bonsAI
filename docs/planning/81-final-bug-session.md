@@ -1,6 +1,6 @@
 # Plan 81 — the final bug session: both lists as close to zero as they honestly get
 
-**Status: PLANNED 2026-10-03. Nothing has started. Work begins in a new chat, on Opus high, when the maintainer says "go".**
+**Status: RUNNING since 2026-10-03 about 16:15. Progress is in the Log at the end.**
 
 Asked for by the maintainer: one last bug-fixing session before 0.6.0. Get the Bugs list and the Verify list as close
 to zero as possible, with helpers working side by side and the Deck never sitting idle. A bug is not called fixed
@@ -376,7 +376,16 @@ Not started.
 
 ## Log
 
-Not started.
+- **2026-10-03, about 16:15 to 16:45, the start (tip `afd2f444`):** the local copy was not behind the cloud. The
+  maintainer's ten calls went into the locked decisions file as D124. The chat runs on Opus 5.5 at extra-high effort
+  (one step above call 9). A timed check wakes the session every 20 minutes. Every check passed at the tip (3,280
+  screen tests, the Python tests, the quick check). The Deck helper started setup and the block 1 measurements. Ten
+  helpers started, each in its own copy cut from the tip: A (B on the Clear-all box), B (five weak rings), C (the try
+  order when a model is removed, and the PC), E (a long chip's pause), F (the hidden-block wording, with a
+  before-and-after count), G (a game's tip found by meaning), H (wrong-subject notes), I (the doubled-marks hunt, on
+  Opus), J (the walk check reads words, in the Deck tools project) and K (the test setup's top margin, then K2 and K3
+  once the Deck has measured). D waits for the first free slot. Early lead for A: the "Clear cache" button runs a
+  preparation step before its box opens, and the "Clear all data" button skips it.
 
 ## For the chat that runs this: helper types and pointers
 

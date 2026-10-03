@@ -36,6 +36,13 @@ const DOCK_TOP = 290;
 const PANE_BOTTOM = 366;
 /** Steam's own scroll padding at the bottom of the Quick Access pane (useDockClearanceOnFocus.ts). */
 const STEAM_SCROLL_PADDING_BOTTOM = 80;
+/**
+ * Steam's own scroll padding at the top of that pane: 116 px (docs/lessons-learned.md, "Steam's own scroll area
+ * keeps 116 pixels clear at its own top"), so a small stop is wanted at y 204 (pane top 88 + 116), not at 88.
+ */
+const STEAM_SCROLL_PADDING_TOP = 116;
+/** A stop whose bottom is this far past the dock still counts as on screen to Steam (the Deck left 291 with the dock at 290). */
+const STEAM_BOTTOM_SLACK_PX = 4;
 
 /**
  * The bubble's own frame on the Deck: the inner padding (8 px, answerBubble.ts) and the 1 px border, above
@@ -57,6 +64,14 @@ export interface DeckAnswerOptions {
   dockTop?: number;
   dockLift?: boolean;
   liftScrollsToEnd?: boolean;
+  /**
+   * Steam's glide as the Deck measured it under the "padded" rule: a small stop lying wholly inside the 116 px top
+   * margin is moved down to the margin line even though it is on screen, and a stop 1 to 4 px past the dock is
+   * left where it is. Off unless set: switched on, 18 older walk tests fail, every one with the dock at 262 under
+   * "padded" (a small section is carried to y 204 and its bottom is then cut off by a dock that high); plan 81
+   * helper K left them for the Up-landing and lift fixes (see answerBubbleNavigation.steamTopMargin.test.ts).
+   */
+  steamTopMargin?: boolean;
 }
 
 export type Box = [top: number, bottom: number];
@@ -171,13 +186,20 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     const r = el.getBoundingClientRect();
     const height = r.bottom - r.top;
     const small = height < 100;
-    const inside = r.top >= PANE_TOP && r.bottom <= dockTopY;
+    const measured = options.steamTopMargin ?? false;
+    const inside = r.top >= PANE_TOP && r.bottom <= dockTopY + (measured ? STEAM_BOTTOM_SLACK_PX : 0);
+    // The top margin: a small stop lying wholly above the 116 px line is moved down to it even though it is on
+    // screen (the Deck: a cover at y 104 ended at 204, and one at 147 to 202 ended at 204). One that straddles
+    // the line is left alone (the Deck kept covers at 167 to 222 and 182 to 237).
+    const marginLine = PANE_TOP + STEAM_SCROLL_PADDING_TOP;
+    const inTopMargin = measured && r.bottom <= marginLine;
     // A stop taller than the band got no glide on the Deck (plan77-BLOCK2-GAME.json: a 348 px box in a
     // 206 px band stayed exactly where the walk left it), so none is modelled for one.
     if (height > dockTopY - PANE_TOP) return;
     let target: number | null = null;
     if (steamScroll === "center" && small) target = PANE_TOP + (dockTopY - PANE_TOP - height) / 2;
-    else if (!inside) target = steamScroll === "padded" && small ? PANE_TOP + 116 : PANE_TOP;
+    else if (steamScroll === "padded" && small && (!inside || inTopMargin)) target = marginLine;
+    else if (!inside) target = PANE_TOP;
     if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
   };
   const settle = () => {

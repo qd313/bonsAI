@@ -6,10 +6,14 @@ usually starts its next piece by opening that block again. Glued on as it came, 
 then carries the block's opening marker twice. This drops that repeated opening marker, so the
 next piece simply continues the block it was cut off inside. When the limit fell while the marker
 itself was being typed ("```bons"), the next piece's whole marker finishes the half one instead.
+A cut-off answer that is not carried on (Stop pressed, or the last allowed piece cut) is tidied by
+``end_cut_answer_cleanly``: no bare opening marker or half-typed one at its end.
 Used for: ollama_chat_stream._stream_ollama_chat_once, on each later piece of a soft continue: both
 what the screen is shown while it streams and the words it hands back, which
 ollama_service.post_ollama_chat stitches into the answer that is saved.
-Solves: Plan 81 helper I, 2026-10-03: every saved answer on the Deck with a doubled opening marker
+Solves: Plan 81 helper N3, 2026-10-03: a stopped answer saved ending on a bare "```bonsai-spoiler" and
+a finished answer ending on a half-typed "```bons" both reopened as an empty code box.
+Plan 81 helper I, 2026-10-03: every saved answer on the Deck with a doubled opening marker
 at a joining point was a long guide cut off inside a hidden block (roadmap entry "Some saved answers
 have a hidden block's markers written twice").
 Does not: touch a piece when the answer so far is outside a hidden block (a new block is the
@@ -43,6 +47,7 @@ _STATUS_LINE_RE = re.compile(r"<bonsai-status>(?:(?!</bonsai-status>).)*</bonsai
 _SPOILER_OPENER = "```bonsai-spoiler"
 # The answer so far ends half way through typing that marker: three backticks and at least the
 # "b", on a line of its own or glued to a word (the covers give such a marker a line of its own).
+_SPOILER_OPENER_AT_START_RE = re.compile(r"\A\s*```bonsai-spoiler", re.IGNORECASE)
 _HALF_TYPED_OPENER_TAIL_RE = re.compile(r"(?<!`)(```b[a-z-]{0,13})\Z", re.IGNORECASE)
 
 
@@ -88,3 +93,26 @@ def drop_repeated_spoiler_opener(prefix: str, piece: str) -> str:
         # showed it while the marker was still there.
         lead += "\n"
     return lead + rest
+
+
+def end_cut_answer_cleanly(text: str) -> str:
+    """``text``, a cut-off answer, without a stray marker at its end.
+
+    Used on a stopped answer and on a finished one whose last allowed piece was cut. Two shapes:
+    a half-typed hidden-block marker at the very end ("```bons") is dropped; a hidden block still
+    open at the end is dropped when nothing was written inside it yet (the live cover holds its
+    words back, so a Stop leaves only the marker), and closed when words were written inside it,
+    so those words stay inside the cover and never show as plain text.
+    """
+    if not text or "```" not in text:
+        return text
+    if not _ends_inside_hidden_block(text):
+        return text
+    # Read the way the covers read it: an opener glued to a word counts as on its own line.
+    segments = _split_fenced_segments(move_midline_fence_openers_to_line_start(text) + "\n")
+    before = "".join(chunk for _, chunk in segments[:-1])
+    block = segments[-1][1][:-1]  # without the line break added above
+    written = _SPOILER_OPENER_AT_START_RE.sub("", block, count=1)
+    if not written.strip():
+        return before.rstrip()
+    return before + block.rstrip() + "\n" + "`" * 3

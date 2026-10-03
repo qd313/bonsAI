@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 116,
-  "edgeCount": 314,
+  "edgeCount": 315,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -293,6 +293,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/soft_continue_spoiler_join.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/spoiler_empty_label_marks.py",
       "count": 2
     },
@@ -461,10 +465,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/soft_continue_spoiler_join.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/steam_vac_service.py",
       "count": 1
     },
@@ -550,6 +550,7 @@
         "py_modules/backend/services/screenshot_media.py",
         "py_modules/backend/services/settings_service.py",
         "py_modules/backend/services/shortcut_setup_commands.py",
+        "py_modules/backend/services/soft_continue_spoiler_join.py",
         "py_modules/backend/services/strategy_checklist_rpc.py",
         "py_modules/backend/services/strategy_checklist_session_service.py",
         "py_modules/backend/services/tdp_service.py",
@@ -1544,6 +1545,7 @@
         "py_modules/backend/services/strategy_spoiler_policy.py"
       ],
       "importedBy": [
+        "main.py",
         "py_modules/backend/services/ollama_chat_stream.py"
       ]
     },

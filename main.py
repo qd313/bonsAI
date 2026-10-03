@@ -454,6 +454,7 @@ class Plugin:
         debris (``<`` from a status tag, ``` from a fence) — see ``partial_stream_has_content``.
         """
         from backend.services.bonsai_stream_tags import partial_stream_has_content
+        from backend.services.soft_continue_spoiler_join import end_cut_answer_cleanly
 
         with self._partial_response_lock:
             snap = self._partial_stream_snapshot
@@ -461,7 +462,12 @@ class Plugin:
                 return fallback
             partial = snap.get("partial_response")
         if isinstance(partial, str) and partial_stream_has_content(partial):
-            return partial.strip()
+            # A Stop inside a hidden block leaves its bare opening marker at the end (the live
+            # cover holds the block's words back); saved as it is, the chat reopens with an empty
+            # code box. All three stopped-answer saves read this, so the tidy-up lives here.
+            tidy = end_cut_answer_cleanly(partial.strip())
+            if partial_stream_has_content(tidy):
+                return tidy
         return fallback
 
     def _update_partial_response(

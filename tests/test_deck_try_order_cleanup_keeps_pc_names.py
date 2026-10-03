@@ -186,7 +186,7 @@ class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsy
 
     async def asyncSetUp(self) -> None:
         self.start_plugin_with_settings_file()
-        self.lists: dict[str, list[str]] = {}
+        self.lists: dict[str, list[str]] = {DECK_BASE: ["deck-only-model:1b"]}
 
         def fake_list(base: str, timeout_seconds: float = 5.0) -> list[str]:
             return list(self.lists.get(base, []))
@@ -234,6 +234,16 @@ class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsy
 
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
 
+    async def test_when_the_decks_own_list_cannot_be_read_nothing_is_pruned(self) -> None:
+        # The Deck's AI off or unreachable reads as []: a Deck-only name must not go for that.
+        self.lists[DECK_BASE] = []
+        before = self._raw()
+
+        out = await self._pc_lists(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(out, [])
+        self.assertEqual(self._raw(), before)
+
     async def test_an_empty_listing_changes_nothing(self) -> None:
         before = self._raw()
 
@@ -257,5 +267,36 @@ class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
 
 
+    # --- The wire: the connection test the box and the Ollama tab run ---
+
+    async def _connection_test(self, address: str, result: dict) -> dict:
+        from backend.services.ollama_connection_test import ConnectionTestOutcome
+
+        outcome = ConnectionTestOutcome(result=result, host=address, timeout_seconds=10)
+        with patch.object(main, "run_ollama_connection_test", AsyncMock(return_value=outcome)):
+            return await self.plugin.test_ollama_connection(address, 10)
+
+    async def test_a_reachable_pc_listing_cleans_the_saved_order(self) -> None:
+        await self._connection_test("192.168.1.20", {"reachable": True, "models": ["gemma4:e2b-it-qat"]})
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+
+    async def test_a_test_of_this_decks_own_ollama_never_cleans_the_order(self) -> None:
+        before = self._raw()
+
+        await self._connection_test("127.0.0.1:11434", {"reachable": True, "models": ["gemma4:e2b-it-qat"]})
+
+        self.assertEqual(self._raw(), before)
+
+    async def test_an_unreachable_pc_or_an_empty_list_cleans_nothing(self) -> None:
+        before = self._raw()
+
+        await self._connection_test("192.168.1.20", {"reachable": False, "error": "x"})
+        await self._connection_test("192.168.1.20", {"reachable": True, "models": []})
+
+        self.assertEqual(self._raw(), before)
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -23,7 +23,8 @@ How it works:
    answer adds nothing: an unreachable PC proves nothing about what it has, so its names are
    not protected.
 
-3. `prune_orders_after_pc_listing()` is the clean-up for a model taken off a PC (the plugin cannot
+3. `prune_after_connection_test()` is what main.py's test_ollama_connection calls with each answer;
+   `prune_orders_after_pc_listing()` is the clean-up for a model taken off a PC (the plugin cannot
    remove one there; it only sees the PC's list). Given a list a PC just answered with, it drops
    saved try-order names that neither that PC, this Deck's own Ollama, nor another saved PC has.
 
@@ -99,8 +100,8 @@ async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -
     In: the plugin (for its settings and log) and the model names a PC answered with just now.
     Out: the names dropped (empty when nothing changed). An empty list prunes nothing: an
     unreachable PC reads the same as a PC with no models. This Deck's own Ollama and the other saved
-    PCs are asked too, because the order is one list; a Deck that does not answer has nothing to
-    keep. A download in progress on the Deck keeps its place. Never raises.
+    PCs are asked too, because the order is one list. When this Deck's own list cannot be read,
+    nothing is pruned (a Deck-only name would otherwise be lost just because its Ollama was off). A download in progress on the Deck keeps its place. Never raises.
     """
     try:
         listed = [str(t).strip() for t in pc_models if str(t).strip()]
@@ -111,6 +112,10 @@ async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -
         if not patch:
             return []
         deck = await _tags_of(DEFAULT_BASE)
+        if not deck:
+            # This Deck's own Ollama did not answer (off, unreachable, or nothing installed): a
+            # name only the Deck holds cannot be told apart from a name gone everywhere, so keep all.
+            return []
         others = await tags_on_saved_pcs(current)
         state = dict(getattr(plugin, "_local_ollama_setup_state", {}) or {})
         downloading: set[str] = set()
@@ -128,4 +133,22 @@ async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -
         return pruned
     except Exception:
         logger.exception("pruning the saved try orders after a PC listing failed; they were left as they were")
+        return []
+
+
+async def prune_after_connection_test(plugin: Any, address: str, result: dict[str, Any]) -> list[str]:
+    """Called with every connection-test answer: prune only for a reachable PC that listed models.
+
+    The test also runs against this Deck's own Ollama (loopback), which is not a PC, so a loopback
+    address is skipped. Never raises.
+    """
+    try:
+        models = result.get("models") if isinstance(result, dict) else None
+        if not (isinstance(result, dict) and result.get("reachable") and isinstance(models, list) and models):
+            return []
+        host, _port, _base = normalize_ollama_base(address)
+        if is_loopback_ollama_host(host):
+            return []
+        return await prune_orders_after_pc_listing(plugin, models)
+    except Exception:
         return []

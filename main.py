@@ -211,6 +211,7 @@ from backend.services.ollama_mdns_discovery_service import (
     discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
 )
 from backend.services import ollama_local_setup_rpc
+from backend.services.ollama_pc_models import prune_after_connection_test
 from backend.services import ollama_pull_resume_service
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
@@ -1077,6 +1078,8 @@ class Plugin:
     async def test_ollama_connection(self, pc_ip: str = "", timeout_seconds: int = 10):
         """Ping Ollama's /api/version and /api/tags to verify reachability."""
         tested = await run_ollama_connection_test(pc_ip, timeout_seconds)
+        # A PC's fresh model list also cleans the saved try order of models taken off that PC.
+        await prune_after_connection_test(self, pc_ip, tested.result)
         await self._maybe_app_log(
             "connection.test",
             "ollama connection test",

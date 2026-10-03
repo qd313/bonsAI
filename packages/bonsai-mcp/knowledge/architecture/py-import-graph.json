@@ -261,6 +261,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/ollama_pc_models.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/ollama_pull_resume_service.py",
       "count": 2
     },
@@ -413,10 +417,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/ollama_pc_models.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/ollama_preload_service.py",
       "count": 1
     },
@@ -529,6 +529,7 @@
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
+        "py_modules/backend/services/ollama_pc_models.py",
         "py_modules/backend/services/ollama_pull_resume_service.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/plugin_data_reset.py",
@@ -1256,6 +1257,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py"
       ],
       "importedBy": [
+        "main.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py"
       ]
     },

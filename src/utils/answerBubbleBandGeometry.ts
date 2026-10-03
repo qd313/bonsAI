@@ -223,15 +223,20 @@ export function hopToSectionAbove(current: HTMLElement, prev: HTMLElement, scrol
  * Deck was top 58 px under the header and bottom 84 px under the dock, so neither edge showed
  * (docs/test-evidence/plan77-BLOCK2-GAME.json). `revealBelowDock` cannot help, it never scrolls past the
  * section's own top; this does, because for a tall section the top is not what the walk reads first.
- * Nothing moves for a section that fits the band, or whose bottom edge is already above the dock.
+ * Nothing moves for a section that fits the band, or whose bottom edge is already at the dock (within 4 px).
+ * An end above the dock is brought down to it, so a section the panel stood just past does not land with a
+ * sliver of its end showing under the header.
  */
 function revealTallFromItsEnd(section: HTMLElement, scroll: HTMLElement): boolean {
   const rect = section.getBoundingClientRect();
   if (rect.bottom - rect.top <= bandHeightOf(scroll)) return false;
   const hidden = rect.bottom - readableBottomOf(scroll);
-  if (hidden <= 4) return false;
+  /* An end more than 4 px ABOVE the dock comes down to it too, as far as the page goes (scrollTop 0): the plan 78
+     test setup left a tall section with 1 to 8 px of it showing under the header, the ring on it. Going Up
+     nothing is skipped by this, the section is read from its end upward. */
+  if (Math.abs(hidden) <= 4) return false;
   const before = scroll.scrollTop;
-  scroll.scrollTop = Math.min(panelScrollMax(scroll), before + hidden);
+  scroll.scrollTop = Math.max(0, Math.min(panelScrollMax(scroll), before + hidden));
   return scroll.scrollTop !== before;
 }
 

@@ -280,6 +280,8 @@ describe("Up onto a cover that is still above the screen", () => {
 
     expect(handleAnswerBubbleMoveUp(bubble, ref, 2, KEY)).toBe(true);
     expect(document.activeElement).toBe(stops[0]);
-    expect(pane.scrollTop).toBe(650);
+    // The ring is on the section, not the cover far above it. The section's end, only a sliver showing, comes
+    // down to the dock so it is read from its last lines upward (plan 81 K2b); before, the panel stayed at 650.
+    expect(pane.scrollTop).toBe(400);
   });
 });

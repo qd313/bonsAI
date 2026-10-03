@@ -249,6 +249,7 @@
     "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
     "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
     "src/utils/answerBubbleNavigation.steamTopMargin.test.ts",
+    "src/utils/answerBubbleNavigation.tallEndAboveDock.test.ts",
     "src/utils/answerBubbleNavigation.tallEntry.test.ts",
     "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
     "src/utils/answerBubbleNavigation.tallUpFromWord.test.ts",

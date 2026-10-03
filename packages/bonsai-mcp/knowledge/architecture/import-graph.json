@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 711,
-  "edgeCount": 2045,
+  "fileCount": 712,
+  "edgeCount": 2050,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1733,6 +1733,16 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTab.clearAllBack.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.clearBoxes.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
@@ -1778,6 +1788,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
@@ -2970,6 +2981,7 @@
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -3981,6 +3993,7 @@
         "src/utils/settingsTabLocalSurvival.ts"
       ],
       "importedBy": [
+        "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -5510,6 +5523,7 @@
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
@@ -6220,6 +6234,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",

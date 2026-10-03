@@ -662,6 +662,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-all-data", el)}
           onClick={() => {
             rememberModalReturnFocus("settings-clear-all-data");
+            /*
+              Tells the plugin shell which tab to come back to. Without it the shell came back to its
+              default, Main, so B on this box (or Cancel, or Keep my data) took the panel from Settings
+              to Main with the ring on "Main tab". Clear cache... above has always done this.
+            */
+            onBeforeDeckyModal();
             const handle = showModal(
               <ConfirmModal
                 strTitle="Clear all plugin data?"

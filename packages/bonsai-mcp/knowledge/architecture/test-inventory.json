@@ -111,6 +111,7 @@
     "src/components/ReplyCopyButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",
     "src/components/SettingsTab.accentMenuRing.test.tsx",
+    "src/components/SettingsTab.clearAllBack.test.tsx",
     "src/components/SettingsTab.clearBoxes.test.tsx",
     "src/components/SettingsTab.focusRing.test.tsx",
     "src/components/SettingsTab.mdns.test.ts",

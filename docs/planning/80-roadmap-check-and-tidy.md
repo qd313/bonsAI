@@ -1,6 +1,6 @@
 # Plan 80 — check the roadmap, then make it shorter and easier to use
 
-**Status: PLANNED 2026-10-03. Nothing has started. Work begins only when the maintainer says "go".**
+**Status: IN PROGRESS since 2026-10-03 (Go given; calls locked as D123). Step 1 under way.**
 
 Asked for by the maintainer: check that everything in the roadmap and its long-notes file is true, cut what is not
 needed, split the knowledge base and the parked work into their own files, and make sure every item waiting on a

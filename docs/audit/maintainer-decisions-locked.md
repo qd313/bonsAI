@@ -2063,3 +2063,27 @@ only while that answer's own Show details line is out of sight, and the chip com
 "by day"; https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18): opening the line shows one line per day, and each day
 line opens on its own. The find box from the same drawing (option 4, a word box with word buttons) is to go on the
 roadmap as its own feature, search in bonsAI, not built this session.
+
+### D123 — LOCKED 2026-10-03 (raised 2026-10-03) — Plan 80, check the roadmap and tidy it: the ten calls
+
+Made by the maintainer on 2026-10-03, while [plan 80](../planning/80-roadmap-check-and-tidy.md) was planned. The
+plan's own section, "The maintainer's calls", has the same list.
+
+1. **How deep the check goes.** Each entry is checked against the decisions list, the test documents, the evidence
+   files, the changelog and the code. No Deck runs. Anything only the Deck can settle is marked as needing a Deck
+   check, with a link to the missing evidence.
+2. **Timing.** Before the 0.6.0 release.
+3. **Parked work.** One file holds the full entries. It replaces both the roadmap's Shelved section and the archived
+   shelved file.
+4. **Long notes split too.** Knowledge base long notes move with the knowledge base roadmap.
+5. **Trimmed text is archived, never deleted.** It goes to the archive folder.
+6. **Links.** Fix links in live files only. Archived documents get a one-line warning that links may be stale.
+7. **The done section** is renamed for 0.6.0.
+8. **An entry that looks already fixed.** Look for proof in the repo that it was checked on the Deck. Proof found:
+   it moves to Done with the proof linked. No proof: it moves to Verify, with the fix named and the check owed.
+9. **Helpers** are the bookkeeper on Sonnet 5.5 medium. No low-effort helper for now.
+10. **One commit per step**, so any step can be undone alone.
+
+**Two calls at Go, 2026-10-03:** the session runs in the cloud, on Opus 5.5 high. Each step's commit is pushed to
+the experimental branch straight away, so nothing is lost if the cloud copy is thrown away. This replaces the
+plan's "Nothing is pushed".

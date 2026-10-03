@@ -59,6 +59,7 @@ from backend.services.ollama_stream_failures import (
     timed_out_reply,
     url_error_reply,
 )
+from backend.services.soft_continue_spoiler_join import drop_repeated_spoiler_opener
 from backend.services.strategy_guide_parse import hide_incomplete_strategy_branch_fence
 from backend.services.token_accounting_service import known_window_tokens, resolve_window_tokens
 from backend.services.ollama_window_fit import (
@@ -266,6 +267,7 @@ def _stream_ollama_chat_once(
                 def _publish_partial(joined: str) -> None:
                     if not on_delta:
                         return
+                    joined = drop_repeated_spoiler_opener(raw_prefix, joined)
                     _thinking, _visible = extract_bonsai_status(raw_prefix + joined)
                     _visible = hide_incomplete_strategy_branch_fence(_visible)
                     _reasoning_buf = reasoning_prefix + "".join(thinking_deltas)
@@ -419,6 +421,8 @@ def _stream_ollama_chat_once(
                     logger.warning("ask_ollama: %s", msg)
                     return {"success": False, "response": msg}
                 assistant_raw = "".join(deltas)
+                # A soft continue cut off inside a hidden block: the model re-opens it; keep one opener.
+                assistant_raw = drop_repeated_spoiler_opener(raw_prefix, assistant_raw)
                 # Rule 7 (plan 57): the model spent its whole budget thinking and the stream ended
                 # with no answer at all. There is no first-answer-chunk to freeze the clock at, so
                 # it freezes here instead, at the end of the stream. A soft continue never reaches

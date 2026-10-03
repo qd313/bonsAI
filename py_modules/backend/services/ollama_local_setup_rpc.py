@@ -15,6 +15,16 @@ no longer an RPC: the custom-pull runner calls it when a download finishes.
 Solves: Keeps the Deck-side install/pull/delete machinery -- the one-at-a-time lock, the
 background task, the try-order bookkeeping -- out of main.py.
 
+How it works:
+1. Every RPC here first checks that the AI runs on this Deck (`_require_local_ollama_on_deck`);
+   with the AI on a PC they refuse, because pulling and removing act on the Deck's own Ollama.
+2. A pull runs in one background task with one lock; progress is read back through
+   get_local_ollama_setup_status, and a finished pull merges its tags into the saved try orders.
+3. Removing a model runs `ollama rm`, then takes the name out of both saved try orders unless a
+   saved PC still has the same model (`ollama_pc_models.tags_on_saved_pcs`).
+4. Reading the Deck's installed models (fetch_ollama_catalog_metadata) also drops saved try-order
+   names that neither the Deck nor a saved PC holds any more.
+
 Does not: Cover the two small autostart-toggle RPCs (apply_ollama_local_autostart,
 get_ollama_local_autostart_status) -- those stay on the Plugin class itself because a
 test patches the names main.py imports them under, and moving them would only be a
@@ -55,6 +65,7 @@ from backend.ollama_routing import (
 from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
+from backend.services.ollama_pc_models import tags_on_saved_pcs
 from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
@@ -409,9 +420,12 @@ async def delete_ollama_model(self, tag: str = ""):
     # A removed model also leaves the saved try orders. remove_tag_from_routing_orders was
     # written for this and never called: on the Deck (plan 64 flow H) qwen2.5:1.5b was removed
     # through its row and the saved text order still read ['qwen2.5:1.5b'], so Ask's first
-    # choice was a model no longer there. Only the two order keys are written.
+    # choice was a model no longer there. Only the two order keys are written. The order is one list
+    # for whichever computer answers, so a name a saved PC still has stays in it (roadmap Bugs).
     current = await self.load_settings()
     cleaned = remove_tag_from_routing_orders(current, t)
+    if cleaned != current:  # the name is in an order: ask the saved PCs before it goes
+        cleaned = remove_tag_from_routing_orders(current, t, await tags_on_saved_pcs(current))
     order_patch = {
         key: cleaned[key]
         for key in ("text_model_routing_order", "vision_model_routing_order")
@@ -445,6 +459,11 @@ async def _prune_saved_orders_to_installed(self) -> None:
             downloading = {str(t).strip() for t in (st.get("pull_tags") or [])}
         current = await self.load_settings()
         order_patch, pruned = prune_routing_orders_to_installed(current, installed, downloading)
+        if order_patch:
+            # Only now ask the saved PCs: a name one of them still has is not this Deck's to drop.
+            order_patch, pruned = prune_routing_orders_to_installed(
+                current, [*installed, *await tags_on_saved_pcs(current)], downloading
+            )
         if not order_patch:
             return
         await self.save_settings(order_patch)

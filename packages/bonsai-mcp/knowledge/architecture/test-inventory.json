@@ -373,6 +373,7 @@
     "tests/test_clipboard_service.py",
     "tests/test_closed_rows_check.py",
     "tests/test_compat_topic_router.py",
+    "tests/test_deck_try_order_cleanup_keeps_pc_names.py",
     "tests/test_delete_model_cleans_routing_orders.py",
     "tests/test_desktop_note_service.py",
     "tests/test_destructive_advice_guard.py",

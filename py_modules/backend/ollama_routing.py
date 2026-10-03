@@ -45,7 +45,7 @@ Gotchas:
   the chain rather than giving up.
 """
 
-from typing import Any
+from typing import Any, Collection
 
 from backend.constants import OLLAMA_TAB_WHERE_AI_RUNS
 
@@ -426,10 +426,19 @@ def merge_pulled_tag(
     return _dedupe_preserve_order(merged)[:MAX_MODEL_ROUTING_ORDER_LEN]
 
 
-def remove_tag_from_routing_orders(settings: dict[str, Any], tag: str) -> dict[str, Any]:
-    """Remove one tag from both text and vision routing lists."""
+def remove_tag_from_routing_orders(
+    settings: dict[str, Any], tag: str, also_on_other_machines: frozenset[str] | set[str] = frozenset()
+) -> dict[str, Any]:
+    """Remove one tag from both text and vision routing lists.
+
+    ``also_on_other_machines`` holds the model names a PC the plugin also uses still has. The saved
+    order is one list for whichever computer answers, so a name that PC still has stays in it:
+    taking the model off this Deck is not taking it off the PC.
+    """
     t = (tag or "").strip()
     if not t:
+        return settings
+    if tag_in_names(t, also_on_other_machines):
         return settings
     out = dict(settings)
     for key in ("text_model_routing_order", "vision_model_routing_order"):
@@ -439,7 +448,7 @@ def remove_tag_from_routing_orders(settings: dict[str, Any], tag: str) -> dict[s
     return out
 
 
-def _tag_in_installed(tag: str, installed: set[str]) -> bool:
+def tag_in_names(tag: str, installed: Collection[str]) -> bool:
     """Ollama lists `llama3` as `llama3:latest`; a saved order may carry either spelling."""
     if tag in installed:
         return True
@@ -469,7 +478,7 @@ def prune_routing_orders_to_installed(
         cur = settings.get(key)
         if not isinstance(cur, list):
             continue
-        kept = [x for x in cur if str(x).strip() in keep or _tag_in_installed(str(x).strip(), names)]
+        kept = [x for x in cur if str(x).strip() in keep or tag_in_names(str(x).strip(), names)]
         if len(kept) != len(cur):
             patch[key] = kept
             pruned.extend(str(x).strip() for x in cur if x not in kept and str(x).strip() not in pruned)

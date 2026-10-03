@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 112,
-  "edgeCount": 299,
+  "fileCount": 113,
+  "edgeCount": 303,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -46,11 +46,15 @@
   "fanIn": [
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "count": 14
+      "count": 15
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "count": 12
+    },
+    {
+      "path": "py_modules/backend/ollama_urls.py",
+      "count": 9
     },
     {
       "path": "py_modules/backend/constants.py",
@@ -58,10 +62,6 @@
     },
     {
       "path": "py_modules/backend/ollama_reply_limits.py",
-      "count": 8
-    },
-    {
-      "path": "py_modules/backend/ollama_urls.py",
       "count": 8
     },
     {
@@ -78,7 +78,7 @@
     },
     {
       "path": "py_modules/backend/ollama_routing.py",
-      "count": 6
+      "count": 7
     },
     {
       "path": "py_modules/backend/services/knowledge_base_cards.py",
@@ -413,6 +413,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_pc_models.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_preload_service.py",
       "count": 1
     },
@@ -595,6 +599,7 @@
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
+        "py_modules/backend/services/ollama_pc_models.py",
         "py_modules/backend/services/ollama_preload_service.py",
         "py_modules/backend/services/settings_service.py"
       ]
@@ -611,6 +616,7 @@
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_embed_service.py",
+        "py_modules/backend/services/ollama_pc_models.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -1073,6 +1079,7 @@
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
+        "py_modules/backend/services/ollama_pc_models.py",
         "py_modules/backend/services/ollama_stop_service.py",
         "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_model_download_service.py",
@@ -1226,6 +1233,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_catalog_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
+        "py_modules/backend/services/ollama_pc_models.py",
         "py_modules/backend/services/ollama_pull_resume_service.py",
         "py_modules/backend/services/pull_model_catalog_service.py"
       ],
@@ -1239,6 +1247,16 @@
       ],
       "importedBy": [
         "main.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_pc_models.py": {
+      "imports": [
+        "py_modules/backend/ollama_routing.py",
+        "py_modules/backend/ollama_urls.py",
+        "py_modules/backend/services/local_ollama_setup_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_local_setup_rpc.py"
       ]
     },
     "py_modules/backend/services/ollama_preload_service.py": {

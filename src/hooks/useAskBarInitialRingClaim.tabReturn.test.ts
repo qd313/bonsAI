@@ -67,8 +67,13 @@ function mountPanel() {
     doc.querySelectorAll(".gpfocus").forEach((e) => e.classList.remove("gpfocus"));
     el?.classList.add("gpfocus");
   };
-  return { doc, tabIcon, backArrow, chip, setSize, putRingOn };
+  const panel = { doc, tabIcon, backArrow, chip, setSize, putRingOn };
+  lastPanel = panel;
+  return panel;
 }
+
+/** The panel the current test built: a successful transfer puts the ring on the question box. */
+let lastPanel: { putRingOn: (el: HTMLElement | null) => void; chip: HTMLElement } | null = null;
 
 const advance = (ms: number) =>
   act(() => {
@@ -83,7 +88,10 @@ describe("useAskBarInitialRingClaim on a return from another Quick Access tab (p
     resetNavFocusRegistry();
     resetUiDocument();
     clearModalReturnFocus();
-    takeFocus = vi.fn(() => true);
+    takeFocus = vi.fn(() => {
+      lastPanel?.putRingOn(lastPanel.chip);
+      return true;
+    });
     registerNavFocus("unified-input", { current: { TakeFocus: takeFocus } });
   });
 
@@ -219,7 +227,7 @@ describe("useAskBarInitialRingClaim on a return from another Quick Access tab (p
 
   it("keeps trying when the question box's nav node is not ready yet", () => {
     const { p } = settle();
-    takeFocus.mockReturnValueOnce(false).mockReturnValueOnce(false).mockReturnValue(true);
+    takeFocus.mockImplementationOnce(() => false).mockImplementationOnce(() => false);
     comeBack(p);
     p.putRingOn(p.backArrow);
     advance(2000);

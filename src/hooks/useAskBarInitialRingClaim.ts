@@ -23,17 +23,12 @@
  * window for it -- a few tries, then it gives up. A reopen that came back
  * with focus, the ordinary case, does nothing at all.
  *
- * And on a return from another Quick Access tab (plan 81): switching tabs does not close the panel's
- * page and does not rebuild the plugin -- Steam only hides the plugin's pane (its width goes to 0)
- * and shows it again. No visibility event fires, so neither half above ran, and the ring came back
- * on Decky's own back arrow in 6 of 6 returns (plan81-P81-LOOK-QAM-TAB-SWITCH.json). So the plugin
- * watches its own pane's size: each hidden-to-shown change arms a short window (about 10 s). While
- * armed it watches where Steam's ring is. A ring resting on the tab icon column (outside the pane)
- * is left alone -- that person may be about to press Down or Right. The first time the ring lands
- * inside the same Quick Access pane but outside the plugin (Decky's back arrow), it goes to the
- * question box, once. A ring that lands on a plugin control just ends the window. After the window
- * ends nothing more happens until the next return, so walking Up to the back arrow on purpose is
- * never undone. A box (modal) being open, or the pane hiding again, also ends the window.
+ * And past the first mount (plan 81): the plugin stays mounted across a tab switch (Steam only hides
+ * the pane, width 0, no visibility event) and, on the Deck, across a close-and-open too. The ring
+ * came back on Decky's back arrow after a tab switch (6 of 6) and on the plugin's own tab bar after a
+ * fresh open (3 of 3). So a short watch window starts when the pane is shown again, when the page
+ * turns visible, and on a fresh build's first mount; askBarRingWatch.ts says what it does with the
+ * ring and what it leaves alone (a person resting on the tab icons, or walking Up on purpose).
  *
  * Does not: Take any argument or hand anything back -- every value it needs
  * is either a literal ("unified-input") or an imported utility, and it acts
@@ -42,7 +37,7 @@
  */
 import { useEffect } from "react";
 
-import { peekModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { createRingWatch } from "./askBarRingWatch";
 import { refocusPanelWindowIfLost, takeNavFocus } from "../utils/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 
@@ -51,13 +46,8 @@ import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 const REOPEN_BEAT_MS = 150;
 const REOPEN_MAX_ASKS = 3;
 
-/* The return half: how long a return keeps watching for the ring to enter the pane, and how often
-   it looks. Polling, because a gamepad move is not shown to fire a focus event on the panel page. */
-const RETURN_WINDOW_MS = 10000;
-const RETURN_POLL_MS = 100;
-/* Steam's own id on the tab pane that holds the plugin (measured in dozens of focus paths, all under
-   `#quickaccess_content_999`); class names there are scrambled, the id prefix is not. */
-const QAM_PANE_SELECTOR = '[id^="quickaccess_content_"]';
+/* Scope elements a mount has already seen: tells a fresh build of the plugin from a rebuilt tab. */
+const scopesSeen = new WeakSet<Element>();
 
 /*
  * In: nothing.
@@ -130,65 +120,53 @@ export function useAskBarInitialRingClaim() {
   }, []);
 
   /*
-   * The tab-return half (plan 81). The observer only ARMS: hidden is a box of width or height 0,
-   * shown is anything bigger, and only a hidden-then-shown change arms. The observer comes from the
-   * panel's own window -- one made in SharedJSContext is not driven by the other page's frames.
-   * While armed, a poll reads the gamepad-aware ring owner (see the header for what each place
-   * means). With no Quick Access pane to compare against (desktop, tests without one) it never acts.
+   * The ring watch (plan 81): see askBarRingWatch.ts for what a window does. Three things start one.
+   * The pane's own size going from hidden to shown (a return from another Quick Access tab: hidden
+   * is a box of width or height 0; the observer comes from the panel's own window, because one made
+   * in SharedJSContext is not driven by the other page's frames). The panel's page turning visible
+   * (a fresh close-and-open). And the first mount of a fresh build of the plugin -- told by its scope
+   * element never having been seen before, so a Main tab rebuilt after a tab switch inside the same
+   * build starts nothing and a person's ring on the tab bar is left alone.
    */
   useEffect(() => {
     const doc = getUiDocument();
-    // Observing the pane's size, not looking for a focus target: nothing here is focused or moved.
-    // focus-patterns-allow: observing the pane's size to learn when Steam shows it again.
+    // Looking up the plugin's own root to watch it, not a focus target: nothing here is focused.
+    // focus-patterns-allow: finding the plugin's root to observe its size and compare ring places.
     const scope = doc.querySelector<HTMLElement>(".bonsai-scope");
-    const Observer = doc.defaultView?.ResizeObserver ?? globalThis.ResizeObserver;
-    if (!scope || typeof Observer !== "function") return;
+    if (!scope) return;
+    const watch = createRingWatch(doc, scope);
 
-    let wasHidden = false;
-    let armed = false;
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-    let windowEndsAt = 0;
-    const disarm = () => {
-      armed = false;
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = undefined;
+    const onVisibilityChange = () => {
+      if (doc.visibilityState === "visible") watch.start();
+      else watch.stop();
     };
-    const watch = () => {
-      timeoutId = undefined;
-      if (!armed) return;
-      if (Date.now() >= windowEndsAt || doc.visibilityState !== "visible") return disarm();
-      if (peekModalReturnFocus() !== null) return disarm(); // a box is open: the ring is its business
-      const holder = uiGamepadFocusElement();
-      if (holder && holder !== doc.body) {
-        if (scope.contains(holder)) return disarm(); // a plugin control has it
-        // The same Quick Access pane, outside the plugin: Decky's own header and back arrow.
-        // Anywhere else (the tab icon column) the person is still choosing a tab: keep watching.
-        // focus-patterns-allow: asking which pane the ring is in, not finding a target to focus.
-        const pane = scope.closest(QAM_PANE_SELECTOR);
-        if (pane?.contains(holder) && takeNavFocus("unified-input")) return disarm();
-      }
-      timeoutId = setTimeout(watch, RETURN_POLL_MS);
-    };
-    const observer = new Observer((entries) => {
-      const box = entries[entries.length - 1]?.contentRect;
-      if (!box) return;
-      const hidden = box.width === 0 || box.height === 0;
-      if (hidden) {
-        wasHidden = true;
-        disarm();
-        return;
-      }
-      if (!wasHidden) return; // first reading, or an ordinary resize while shown
-      wasHidden = false;
-      disarm();
-      armed = true;
-      windowEndsAt = Date.now() + RETURN_WINDOW_MS;
-      timeoutId = setTimeout(watch, RETURN_POLL_MS);
-    });
-    observer.observe(scope);
+    doc.addEventListener("visibilitychange", onVisibilityChange);
+
+    const fresh = !scopesSeen.has(scope);
+    scopesSeen.add(scope);
+    if (fresh && doc.visibilityState === "visible") watch.start();
+
+    const Observer = doc.defaultView?.ResizeObserver ?? globalThis.ResizeObserver;
+    let observer: ResizeObserver | undefined;
+    if (typeof Observer === "function") {
+      let wasHidden = false;
+      observer = new Observer((entries) => {
+        const box = entries[entries.length - 1]?.contentRect;
+        if (!box) return;
+        if (box.width === 0 || box.height === 0) {
+          wasHidden = true;
+          watch.stop();
+        } else if (wasHidden) {
+          wasHidden = false;
+          watch.start();
+        } // else: the first reading, or an ordinary resize while shown
+      });
+      observer.observe(scope);
+    }
     return () => {
-      observer.disconnect();
-      disarm();
+      doc.removeEventListener("visibilitychange", onVisibilityChange);
+      observer?.disconnect();
+      watch.stop();
     };
   }, []);
 }

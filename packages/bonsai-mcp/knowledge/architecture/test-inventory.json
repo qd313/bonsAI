@@ -182,6 +182,7 @@
     "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
     "src/features/voice/voiceClearAfterStop.test.tsx",
     "src/hooks/setupAndPullBoxWording.test.tsx",
+    "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
     "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
     "src/hooks/useAskBarInitialRingClaim.test.ts",
     "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",

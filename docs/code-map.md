@@ -351,6 +351,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/hooks
 
+- **askBarRingWatch.ts** (src/hooks/askBarRingWatch.ts) — *Ask bar ring watch*: A short window, started by the caller, in which the plugin watches where Steam's ring is and hands it to the question box the first time it lands somewhere the person did not choose to put it.
 - **localOllamaStarterSet.tsx** (src/hooks/localOllamaStarterSet.tsx) — *The starter models: what they are, what the box says, and how they start*: The starter models are one small model (qwen2.5vl:3b) that can chat, read screenshots and help in Strategy mode. […]
 - **useAskBarInitialRingClaim.ts** (src/hooks/useAskBarInitialRingClaim.ts) — *Ask bar initial ring claim*: On a fresh panel open, where nothing owns Steam's D-pad ring yet, try a few times to place it on the question box rather than leave the first press to land wherever Steam happens to put it.
 - **useAskBarMenuToggles.ts** (src/hooks/useAskBarMenuToggles.ts) — *Ask bar menu toggles*: The open/close functions for the Ask bar's two popover menus (the Ask-mode picker and the attach menu), and the effect that marks the nearest `.bonsai-scope` ancestor while either one is open.

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 725,
-  "edgeCount": 2092,
+  "fileCount": 727,
+  "edgeCount": 2098,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3037,8 +3037,8 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
+        "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
-        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
@@ -3877,6 +3877,16 @@
       ],
       "importedBy": []
     },
+    "src/hooks/askBarRingWatch.ts": {
+      "imports": [
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useAskBarInitialRingClaim.ts"
+      ]
+    },
     "src/hooks/localOllamaStarterSet.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
@@ -3905,6 +3915,14 @@
       ],
       "importedBy": []
     },
+    "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts": {
+      "imports": [
+        "src/hooks/useAskBarInitialRingClaim.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts": {
       "imports": [
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
@@ -3924,12 +3942,13 @@
     },
     "src/hooks/useAskBarInitialRingClaim.ts": {
       "imports": [
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/askBarRingWatch.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts"
       ]
@@ -7348,6 +7367,8 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/hooks/askBarRingWatch.ts",
+        "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
@@ -8021,6 +8042,8 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/hooks/askBarRingWatch.ts",
+        "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",

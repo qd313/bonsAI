@@ -47,13 +47,15 @@ describe("About tab: the support button is sized like the other link buttons", (
   it("is built exactly like GitHub, Built on Ollama! and Bugs & Feature Requests", () => {
     renderAbout();
     const shape = (button: HTMLButtonElement) => ({
-      // Straight inside its row, like the others -- no narrower box around it.
-      parent: button.parentElement?.getAttribute("data-decky-ui"),
+      // Inside its row like the others -- no narrower box around it. The only thing between is the
+      // plain ring host div every link button now has, so the white focus ring shows on each.
+      host: button.parentElement?.className,
+      parent: button.parentElement?.parentElement?.getAttribute("data-decky-ui"),
       layout: button.getAttribute("layout"),
       fontSize: (button.firstElementChild as HTMLElement | null)?.style.fontSize,
     });
     const neighbour = shape(buttonOf("GitHub"));
-    expect(neighbour).toEqual({ parent: "PanelSectionRow", layout: "below", fontSize: "13px" });
+    expect(neighbour).toEqual({ host: "bonsai-settings-item-ring-host", parent: "PanelSectionRow", layout: "below", fontSize: "13px" });
     expect(shape(buttonOf("Built on Ollama!"))).toEqual(neighbour);
     expect(shape(buttonOf("Bugs & Feature Requests"))).toEqual(neighbour);
     expect(shape(buttonOf("Support my Steam Sale habit"))).toEqual(neighbour);

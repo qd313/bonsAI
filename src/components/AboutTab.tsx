@@ -24,6 +24,7 @@ import supportPaypalQr from "../assets/qrcode.png";
 import { AboutReplyLanguageSection } from "./AboutReplyLanguageSection";
 import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
+import { FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
 
 const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
 
@@ -112,19 +113,25 @@ export const AboutTab: React.FC<Props> = ({
       */}
       <PanelSection title="Links">
         <PanelSectionRow>
-          <ButtonItem layout="below" onClick={() => openExternal(githubRepoUrl, "GitHub")}>
-            <span style={{ fontSize: 13 }}>GitHub</span>
-          </ButtonItem>
+          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+            <ButtonItem layout="below" onClick={() => openExternal(githubRepoUrl, "GitHub")}>
+              <span style={{ fontSize: 13 }}>GitHub</span>
+            </ButtonItem>
+          </div>
         </PanelSectionRow>
         <PanelSectionRow>
-          <ButtonItem layout="below" onClick={() => openExternal(ollamaRepoUrl, "Ollama")}>
-            <span style={{ fontSize: 13 }}>Built on Ollama!</span>
-          </ButtonItem>
+          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+            <ButtonItem layout="below" onClick={() => openExternal(ollamaRepoUrl, "Ollama")}>
+              <span style={{ fontSize: 13 }}>Built on Ollama!</span>
+            </ButtonItem>
+          </div>
         </PanelSectionRow>
         <PanelSectionRow>
-          <ButtonItem layout="below" onClick={() => openExternal(githubIssuesUrl, "Report a Bug")}>
-            <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
-          </ButtonItem>
+          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+            <ButtonItem layout="below" onClick={() => openExternal(githubIssuesUrl, "Report a Bug")}>
+              <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
+            </ButtonItem>
+          </div>
         </PanelSectionRow>
         {/*
           The PayPal QR code is a picture to scan with a phone, not part of the button. It used to be
@@ -147,9 +154,11 @@ export const AboutTab: React.FC<Props> = ({
           />
         </PanelSectionRow>
         <PanelSectionRow>
-          <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
-            <span style={{ fontSize: 13 }}>Support my Steam Sale habit</span>
-          </ButtonItem>
+          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+            <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
+              <span style={{ fontSize: 13 }}>Support my Steam Sale habit</span>
+            </ButtonItem>
+          </div>
         </PanelSectionRow>
       </PanelSection>
     </>

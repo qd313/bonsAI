@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 729,
-  "edgeCount": 2111,
+  "edgeCount": 2113,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -35,10 +35,12 @@
         "src/components/AboutReplyLanguageSection.tsx",
         "src/data/replyLanguage.ts",
         "src/features/unified-input/constants.ts",
-        "src/i18n/keys.ts"
+        "src/i18n/keys.ts",
+        "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
         "src/components/AboutTab.test.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx"
       ]
     },
@@ -1759,6 +1761,7 @@
     },
     "src/components/SettingsDeveloperLeftoverRing.test.tsx": {
       "imports": [
+        "src/components/AboutTab.tsx",
         "src/components/DeveloperTab.tsx",
         "src/components/OllamaSavedHostsRows.tsx",
         "src/components/PermissionsTab.tsx",
@@ -5489,6 +5492,7 @@
     "src/styles/settingsGlassButton.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/AboutTab.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
         "src/components/DeveloperTab.tsx",

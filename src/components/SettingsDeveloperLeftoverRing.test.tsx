@@ -20,6 +20,7 @@
 import { render } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
+import { AboutTab } from "./AboutTab";
 import { DeveloperTab } from "./DeveloperTab";
 import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { PermissionsTab } from "./PermissionsTab";
@@ -36,6 +37,33 @@ function byText(root: HTMLElement, re: RegExp): HTMLElement {
   const hit = Array.from(root.querySelectorAll("button")).find((b) => re.test(b.textContent ?? ""));
   if (!hit) throw new Error(`no button matching ${re}`);
   return hit as HTMLElement;
+}
+
+/** Each Steam button row shows one white ring, whether Steam marks the row or the button in it. */
+function expectOneRingPerRow(container: HTMLElement, labels: RegExp[]): void {
+  for (const re of labels) {
+    const button = byText(container, re);
+    // The stub has no Field around the button; Steam's real one is the row that can carry the mark.
+    const row = document.createElement("div");
+    row.className = "Field Focusable";
+    button.parentElement!.insertBefore(row, button);
+    row.appendChild(button);
+    // Steam marks the button itself.
+    const [onButton, rowWhenButton] = outlines([button, row], button);
+    expect(isWhiteRing(onButton!), `${re}: button ring (${onButton})`).toBe(true);
+    expect(rowWhenButton, `${re}: row not ringed too`).not.toMatch(/solid/);
+    // Steam marks the row around the button.
+    const [buttonWhenRow, onRow] = outlines([button, row], row);
+    expect(isWhiteRing(onRow!), `${re}: row ring (${onRow})`).toBe(true);
+    expect(buttonWhenRow, `${re}: button not ringed too`).not.toMatch(/solid/);
+    // Steam marks both at once: still one ring, on the inner part.
+    row.classList.add("gpfocus");
+    button.classList.add("gpfocus");
+    const both = [row, button].map((el) => getComputedStyle(el).outline);
+    row.classList.remove("gpfocus");
+    button.classList.remove("gpfocus");
+    expect(both.filter((o) => /solid/.test(o)), `${re}: exactly one ring when both are marked`).toHaveLength(1);
+  }
 }
 
 describe("the last Steam buttons on the four tabs draw the white ring", () => {
@@ -80,29 +108,25 @@ describe("the last Steam buttons on the four tabs draw the white ring", () => {
       /^Clear \(1\)$/,
       /^Clear frozen test chips$/,
     ];
-    for (const re of labels) {
-      const button = byText(container, re);
-      // The stub has no Field around the button; Steam's real one is the row that can carry the mark.
-      const row = document.createElement("div");
-      row.className = "Field Focusable";
-      button.parentElement!.insertBefore(row, button);
-      row.appendChild(button);
-      // Steam marks the button itself.
-      const [onButton, rowWhenButton] = outlines([button, row], button);
-      expect(isWhiteRing(onButton!), `${re}: button ring (${onButton})`).toBe(true);
-      expect(rowWhenButton, `${re}: row not ringed too`).not.toMatch(/solid/);
-      // Steam marks the row around the button.
-      const [buttonWhenRow, onRow] = outlines([button, row], row);
-      expect(isWhiteRing(onRow!), `${re}: row ring (${onRow})`).toBe(true);
-      expect(buttonWhenRow, `${re}: button not ringed too`).not.toMatch(/solid/);
-      // Steam marks both at once: still one ring, on the inner part.
-      row.classList.add("gpfocus");
-      button.classList.add("gpfocus");
-      const both = [row, button].map((el) => getComputedStyle(el).outline);
-      row.classList.remove("gpfocus");
-      button.classList.remove("gpfocus");
-      expect(both.filter((o) => /solid/.test(o)), `${re}: exactly one ring when both are marked`).toHaveLength(1);
-    }
+    expectOneRingPerRow(container, labels);
+  });
+
+  it("the four About tab link rows show one ring", () => {
+    const { container } = render(
+      <div className="bonsai-scope">
+        <AboutTab
+          githubRepoUrl="https://example.invalid/github"
+          ollamaRepoUrl="https://example.invalid/ollama"
+          githubIssuesUrl="https://example.invalid/issues"
+          replyLanguage="follow_system"
+          onReplyLanguageChange={() => {}}
+          effectiveLang="en"
+          steamClientLanguageLabel="English"
+          t={(key) => key}
+        />
+      </div>,
+    );
+    expectOneRingPerRow(container, [/^GitHub$/, /^Built on Ollama!$/, /^Bugs & Feature Requests$/, /^Support my Steam Sale habit$/]);
   });
 
   it("the saved Ollama host buttons show the ring", () => {

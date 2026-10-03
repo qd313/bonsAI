@@ -14,7 +14,7 @@
  *          (FOCUS_RING_BTN_CLASS counts). The ring classes are read from the stylesheet itself, so
  *          a class with no focus rule does not pass.
  *          A second check covers the buttons that paint NO fill of their own (plain Steam buttons):
- *          on the Settings, Developer, Ollama and Permissions tabs every one must also carry a ring
+ *          on the Settings, Developer, About, Ollama and Permissions tabs every one must also carry a ring
  *          class, and every Steam button row (ButtonItem) must sit inside the ring host div. Deck walk
  *          2026-10-03 (plan81-P81-RING-WALK-SETTINGS-DEV.json) found "Apply UI scale" with the
  *          browser's default outline and "Jump to Steam Input" with none, both plain.
@@ -128,6 +128,7 @@ const TAB_FILES = [
   "components/SettingsTab.tsx",
   "components/SettingsTabUiScaleSection.tsx",
   "components/DeveloperTab.tsx",
+  "components/AboutTab.tsx",
   "components/PermissionsTab.tsx",
   "components/PermissionDenyAction.tsx",
   "components/OllamaSavedHostsRows.tsx",

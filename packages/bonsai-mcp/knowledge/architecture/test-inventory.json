@@ -8,6 +8,7 @@
     "src/components/ContextChipLadder.ringWalk.test.tsx",
     "src/components/ContextChipLadder.test.tsx",
     "src/components/DeveloperTab.test.tsx",
+    "src/components/DrgGlossaryTermChip.placement.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",
     "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
     "src/components/KnowledgeBaseSection.httpsHost.test.tsx",

@@ -31,7 +31,7 @@
  *   `onCancelButton` is the one that actually stops there (measured on the
  *   Deck).
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Focusable } from "@decky/ui";
 
@@ -47,6 +47,11 @@ import {
   isOkDeckButtonEvent,
 } from "../utils/focusNavigation";
 import { registerDrgGlossaryTermChip } from "../utils/drgGlossaryTermRegistry";
+import { findTabContentsScroll, readableBottomOf } from "../utils/chatPanelScroll";
+import {
+  placeGlossaryTooltip,
+  type GlossaryTooltipPlacement,
+} from "../utils/drgGlossaryTooltipPlacement";
 
 /** Per-mount counter for chip ids; only needs to be unique among mounted chips. */
 let termChipSeq = 0;
@@ -59,6 +64,9 @@ export type DrgGlossaryTermChipProps = {
 };
 
 type ChipState = "idle" | "peek" | "full";
+
+/** Re-checks after an open, for moves that raise no scroll event we hear. */
+const TOOLTIP_SETTLE_PASS_DELAYS_MS = [100, 300, 900];
 
 /*
  * A tap-opened popup dismisses itself; a gamepad-opened one does not. Touch has no B button and no
@@ -88,9 +96,8 @@ function isAnyDirectionEvent(evt: unknown): boolean {
  * portalled to the very top of the page, so it can escape the reply
  * bubble's own clipping and blur effects.
  *
- * What can go wrong: the popup has to reposition itself against the
- * current screen every time it opens, since the chip can be anywhere on
- * screen — see the inline position math below. Nothing here calls the
+ * What can go wrong: the word moves after the popup opens (Steam scrolls it
+ * into view), so the popup re-places itself on every scroll — see reposition. Nothing here calls the
  * backend; the only side effect is onExplainFurther, which starts a new Ask
  * elsewhere.
  *
@@ -104,9 +111,8 @@ function isAnyDirectionEvent(evt: unknown): boolean {
  *    idle → peek → full → idle one stage at a time, with peek and full
  *    each dismissing themselves on a timer.
  * 5. When open, the popup is drawn through a portal to the page body
- *    rather than inside the chip, with its position computed fresh each
- *    render from the chip's own on-screen box and the plugin's visible
- *    column.
+ *    rather than inside the chip, placed from the word's current box,
+ *    above the dock, and placed again after every scroll.
  */
 export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
   const { term, matchedText, onExplainFurther } = props;
@@ -122,6 +128,66 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
 
   /** The chip's own DOM node, for anchoring the portal tooltip to its on-screen position. */
   const chipElRef = useRef<HTMLElement | null>(null);
+
+  /** The tooltip's own node and where it was last placed (null until the first measurement). */
+  const tooltipElRef = useRef<HTMLSpanElement | null>(null);
+  const [box, setBox] = useState<GlossaryTooltipPlacement | null>(null);
+
+  /*
+   * Place the tooltip from the word's box RIGHT NOW. It used to be placed once, from where the
+   * word stood at the press; Steam then scrolled the word into view and the tooltip stayed
+   * behind, so a word that had been under the dock ended up under its own definition (3 of 14
+   * stops on the Deck, 2026-10-03). So this runs after the render AND after every scroll. The
+   * bottom edge is the dock's top as the page reports it (readableBottomOf), never a number.
+   */
+  const reposition = () => {
+    const wordEl = chipElRef.current;
+    const tipEl = tooltipElRef.current;
+    const scope = wordEl?.closest(".bonsai-scope")?.getBoundingClientRect();
+    if (!wordEl || !tipEl || !scope) return;
+    const pane = findTabContentsScroll(wordEl);
+    const viewH = getUiDocument().documentElement?.clientHeight || 0;
+    let bottomLimit = pane ? readableBottomOf(pane) : viewH || Number.POSITIVE_INFINITY;
+    if (viewH > 0) bottomLimit = Math.min(bottomLimit, viewH);
+    const next = placeGlossaryTooltip({
+      word: wordEl.getBoundingClientRect(),
+      scope,
+      topLimit: Math.max(0, pane?.getBoundingClientRect().top ?? 0),
+      bottomLimit,
+      // scrollHeight is the text's own height even while capped; +2 is the border.
+      height: tipEl.scrollHeight + 2,
+    });
+    setBox((prev) =>
+      prev &&
+      prev.left === next.left &&
+      prev.top === next.top &&
+      prev.width === next.width &&
+      prev.maxHeight === next.maxHeight
+        ? prev
+        : next,
+    );
+  };
+  const repositionRef = useRef(reposition);
+  repositionRef.current = reposition;
+
+  useLayoutEffect(() => {
+    if (state === "idle") {
+      setBox(null);
+      return undefined;
+    }
+    repositionRef.current();
+    const doc = getUiDocument();
+    const again = () => repositionRef.current();
+    // Capture: scroll events do not bubble.
+    doc.addEventListener("scroll", again, true);
+    window.addEventListener("resize", again);
+    const timers = TOOLTIP_SETTLE_PASS_DELAYS_MS.map((ms) => window.setTimeout(again, ms));
+    return () => {
+      doc.removeEventListener("scroll", again, true);
+      window.removeEventListener("resize", again);
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [state]);
 
   const dismissTimerRef = useRef<number | null>(null);
   const clearDismissTimer = () => {
@@ -268,33 +334,21 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
          * ancestor from the response stack up clips overflow, so all that survived on screen was
          * a one-word-per-line sliver over the reply text. `position: fixed` alone cannot escape
          * either: the bubble's backdrop-filter makes it a containing block for fixed descendants.
-         * Only leaving the subtree entirely does — hence the portal. Anchored above the chip
-         * (below it when the chip sits near the top), clamped to the plugin column.
+         * Only leaving the subtree entirely does — hence the portal. Placed beside the chip
+         * (above, else below, never on it), clamped to the plugin column; see reposition.
          */
         createPortal(
           <span
             className="bonsai-drg-glossary-tooltip"
             role="tooltip"
+            ref={tooltipElRef}
             style={{
               position: "fixed",
-              ...(() => {
-                const doc = getUiDocument();
-                const chipRect = chipElRef.current?.getBoundingClientRect();
-                const scopeRect = chipElRef.current
-                  ?.closest(".bonsai-scope")
-                  ?.getBoundingClientRect();
-                const viewH = doc.documentElement?.clientHeight ?? 0;
-                if (!chipRect || !scopeRect) return { left: 0, top: 0, width: 240 };
-                const width = Math.max(120, Math.min(240, scopeRect.width - 16));
-                const left = Math.min(
-                  Math.max(scopeRect.left + 8, chipRect.left + chipRect.width / 2 - width / 2),
-                  scopeRect.right - width - 8,
-                );
-                // Near the top edge there is no room above the chip; open downward instead.
-                return chipRect.top < 180
-                  ? { left, top: chipRect.bottom + 6, width }
-                  : { left, bottom: viewH - chipRect.top + 6, width };
-              })(),
+              left: box?.left ?? 0,
+              top: box?.top ?? 0,
+              width: box?.width ?? 240,
+              // Set only when neither side fits the whole text: it scrolls instead of reaching the word.
+              ...(box?.maxHeight !== undefined ? { maxHeight: box.maxHeight, overflowY: "auto" as const } : {}),
               zIndex: 9000,
               boxSizing: "border-box",
               padding: "8px 10px",

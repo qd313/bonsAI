@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 719,
-  "edgeCount": 2078,
+  "fileCount": 721,
+  "edgeCount": 2083,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -223,6 +223,14 @@
         "src/utils/ollamaTabLocalSurvival.ts"
       ]
     },
+    "src/components/DrgGlossaryTermChip.placement.test.tsx": {
+      "imports": [
+        "src/components/DrgGlossaryTermChip.tsx",
+        "src/data/drgGlossaryTerms.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/DrgGlossaryTermChip.test.tsx": {
       "imports": [
         "src/components/DrgGlossaryTermChip.tsx",
@@ -235,11 +243,14 @@
     "src/components/DrgGlossaryTermChip.tsx": {
       "imports": [
         "src/data/drgGlossaryTerms.ts",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/drgGlossaryTermRegistry.ts",
+        "src/utils/drgGlossaryTooltipPlacement.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/DrgGlossaryTermChip.placement.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx"
       ]
@@ -2246,6 +2257,7 @@
     "src/data/drgGlossaryTerms.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/DrgGlossaryTermChip.placement.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
@@ -5541,6 +5553,7 @@
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
+        "src/components/DrgGlossaryTermChip.placement.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
@@ -6559,6 +6572,7 @@
       "imports": [],
       "importedBy": [
         "src/components/ContextChipLadder.tsx",
+        "src/components/DrgGlossaryTermChip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
@@ -6854,6 +6868,12 @@
         "src/utils/answerBubbleWordsUp.ts",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx"
+      ]
+    },
+    "src/utils/drgGlossaryTooltipPlacement.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/DrgGlossaryTermChip.tsx"
       ]
     },
     "src/utils/earlierTurnsByDay.test.ts": {

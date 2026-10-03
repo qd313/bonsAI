@@ -50,14 +50,22 @@ describe("liftAboveDock", () => {
     document.body.innerHTML = "";
   });
 
-  it("lifts an element sitting behind the dock, with the covered strip as its margin", () => {
+  it("lifts an element sitting behind the dock, with the covered strip less Steam's padding as its margin", () => {
     const t = makePane();
     const el = t.focusEl(400, 428); // fully inside the dock's overlay
 
     expect(liftAboveDock(el)).toBe(true);
     expect(el.scrollIntoView).toHaveBeenCalledWith({ block: "end", behavior: "auto" });
-    // 616 - 370 = 246 covered, plus the breathing pad.
-    expect(el.style.scrollMarginBottom).toBe("252px");
+    // 616 - 370 = 246 covered, plus the breathing pad, less Steam's own 80 px of bottom padding (K3).
+    expect(el.style.scrollMarginBottom).toBe("172px");
+  });
+
+  it("never asks for a negative margin when the dock covers less than Steam's own padding", () => {
+    const t = makePane({ dockTop: 580 }); // 36 px covered: 36 + 6 - 80 would be negative
+    const el = t.focusEl(570, 600);
+
+    expect(liftAboveDock(el)).toBe(true);
+    expect(el.style.scrollMarginBottom).toBe("0px");
   });
 
   it("lifts an element straddling the dock's top edge", () => {
@@ -218,7 +226,8 @@ describe("useDockClearanceOnFocus", () => {
     const scrollIntoView = vi.fn(() => {
       const margin = parseFloat(el.style.scrollMarginBottom || "0") || 0;
       const max = 277; // matches the on-device "how far the pane COULD scroll" reading
-      scrollTop = Math.max(0, Math.min(max, elDocBottom + margin - 616));
+      // Steam's pane keeps 80 px of scroll padding at its bottom (plan81-P81-M-K2K3-NOGAME.json).
+      scrollTop = Math.max(0, Math.min(max, elDocBottom + margin - (616 - 80)));
     });
     el.scrollIntoView = scrollIntoView;
     column.appendChild(el);
@@ -365,7 +374,7 @@ describe("liftForFocus", () => {
     const helpful = t.focusEl(400, 428);
 
     expect(liftForFocus(helpful)).toBe(true);
-    expect(helpful.style.scrollMarginBottom).toBe("252px");
+    expect(helpful.style.scrollMarginBottom).toBe("172px");
   });
 
   it("the hook's focus passes skip a section and lift a cover in it", () => {

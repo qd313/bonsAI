@@ -22,6 +22,15 @@ const DOCK_SELECTOR = ".bonsai-main-tab-dock";
 const CLEARANCE_PAD_PX = 6;
 
 /**
+ * Steam's own scroll-padding-bottom on the Quick Access pane: `scrollIntoView({ block: "end" })` already lands
+ * an element this far above the pane's bottom edge. Measured 2026-10-01 (docs/test-evidence/
+ * plan78-P78-DOWN-SHORT-SECTION.json) and again 2026-10-03 with and without a game running
+ * (plan81-P81-M-K2K3-NOGAME.json, plan81-P81-M-K2K3-GAME.json): with the scroll margin below at the covered
+ * strip plus 6, the element ended 86 px above the dock, 80 px of it Steam's. The margin leaves these 80 out.
+ */
+const STEAM_SCROLL_PADDING_BOTTOM_PX = 80;
+
+/**
  * Delays for the repeat passes after the first one, counted from the triggering focus event.
  *
  * Used to be a single pass at 150ms. Round 35 (2026-09-05) measured a reply's last paragraph on
@@ -72,7 +81,7 @@ export function liftAboveDock(el: HTMLElement): boolean {
   const readableBand = dockTop - paneRect.top - CLEARANCE_PAD_PX;
   const keepsItsStart = rect.bottom - rect.top > readableBand && rect.top >= paneRect.top - 1;
   if (!keepsItsStart) {
-    el.style.scrollMarginBottom = `${Math.ceil(covered) + CLEARANCE_PAD_PX}px`;
+    el.style.scrollMarginBottom = `${Math.max(0, Math.ceil(covered) + CLEARANCE_PAD_PX - STEAM_SCROLL_PADDING_BOTTOM_PX)}px`;
     el.scrollIntoView({ block: "end", behavior: "auto" });
   }
 
@@ -88,11 +97,11 @@ export function liftAboveDock(el: HTMLElement): boolean {
    * plan78-P78-DOWN-SHORT-SECTION.json): the request moves the pane, inside the answer and out,
    * and overshoots. Steam's pane carries scroll-padding-bottom: 80px, so "end" lands 80px above the
    * pane's bottom, and the scroll-margin set above (the covered strip plus the pad) lands it the
-   * dock's height higher again: the element's bottom ends 86px above the dock's top. A 180px answer
+   * dock's height higher again: the element's bottom ended 86px above the dock's top. A 180px answer
    * section was left at y 24 to 204 with the dock at 290, its top 64px above the pane; the choices
-   * and Helpful under an answer land at 172 to 204 the same way, which is harmless for a control
-   * that short. Answer sections are no longer lifted at all (liftForFocus); the overshoot for
-   * everything else is a known issue, not corrected here.
+   * and Helpful under an answer landed at 172 to 204 the same way. Answer sections are no longer
+   * lifted at all (liftForFocus), and the margin above now leaves Steam's 80px out, so everything
+   * else ends 6px above the dock (plan 81 K3; the Deck's landings are in the test).
    *
    * A plain scrollTop write is what the D-pad's own section steps use on a finished reply, and it
    * holds (the erased-write evidence in useStreamScrollPin is from mid-stream commits). Capped at

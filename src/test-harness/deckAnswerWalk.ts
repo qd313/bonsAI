@@ -112,10 +112,11 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
   /*
    * The pane's scrollIntoView, which jsdom lacks; only the plugin's lift off the dock calls it (block "end").
    * It does what the Deck measured on 2026-10-01: the end lands Steam's 80 px of scroll padding above the
-   * pane's bottom, with the lift's own scroll-margin (the dock's strip plus 6) above that, 86 px above the
-   * dock. A 180 px first section was left at y 24 to 204 with the dock at 290
-   * (plan78-P78-DOWN-SHORT-SECTION.json); a cover at 149 to 204, and the choices and Helpful below an answer
-   * at 172 to 204, show the same end. `liftScrollsToEnd: false` leaves the panel still instead, as the Deck
+   * pane's bottom, with the lift's own scroll-margin above that. The margin used to be the dock's strip plus 6,
+   * which ended an element 86 px above the dock (a 180 px first section at y 24 to 204 with the dock at 290,
+   * plan78-P78-DOWN-SHORT-SECTION.json; the choices and Helpful at 172 to 204, plan81-P81-M-K2K3-NOGAME.json);
+   * the lift now leaves Steam's 80 out of it, so an element ends 6 px above the dock (plan 81, K3).
+   * The margin is read off the element, so the model follows whatever the lift asks. `liftScrollsToEnd: false` leaves the panel still instead, as the Deck
    * measured inside the answer on 2026-09-06 (useDockClearanceOnFocus.ts); every walk passes under both.
    */
   const scrollIntoViewOf = (el: HTMLElement) => (arg?: boolean | ScrollIntoViewOptions) => {
@@ -188,6 +189,16 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     return el;
   };
 
+  /** A control under the answer, outside its bubble (a choice button, Helpful, Show details): Steam glides to it and the lift runs. */
+  const control = (box: Box): HTMLElement => {
+    const el = document.createElement("div");
+    el.className = "bonsai-reply-control Panel Focusable";
+    el.setAttribute("tabindex", "0");
+    place(el, box);
+    pane.appendChild(el);
+    return el;
+  };
+
   /* Steam's glide to a stop that just took focus, applied once the press that moved the ring is over. */
   let landed: HTMLElement | null = null;
   pane.addEventListener("focusin", (event) => {
@@ -216,7 +227,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
   const settle = () => {
     const el = landed;
     landed = null;
-    if (!el || el === bubble || !bubble.contains(el)) return;
+    if (!el || el === bubble) return;
     if (steamScroll) glide(el);
     // The plugin's own lift, whose last pass (900 ms) comes after Steam's glide (150 ms).
     if (options.dockLift ?? true) liftForFocus(el);
@@ -256,7 +267,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     return handled;
   };
   return {
-    pane, bubble, stops, cover, word, hideLine, top, bottom, down, up, land, enterFromAbove, enterFromBelow,
+    pane, bubble, stops, cover, word, hideLine, control, top, bottom, down, up, land, enterFromAbove, enterFromBelow,
     dockTop: dockTopY, paneTop: paneTopY,
   };
 }

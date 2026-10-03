@@ -92,12 +92,14 @@ describe("the Deck's measured landings are left where they are", () => {
   });
 });
 
-describe("Steam's 80 px of bottom padding stays", () => {
-  it("a cover half behind the dock, with no Steam glide, is lifted to end 86 px above the dock (the Deck: 149 to 204)", () => {
+describe("Steam's 80 px of bottom padding stays in the model", () => {
+  // Before plan 81 K3 the lift's margin stacked on this padding and ended the cover 86 px above the dock (149 to 204,
+  // as the Deck measured); the lift now leaves the padding out of its margin and the end is 6 px above the dock.
+  it("a cover half behind the dock, with no Steam glide, is lifted to end 6 px above the dock", () => {
     const a = deckAnswer([[280 + PANEL_AT, 345 + PANEL_AT]], PANEL_AT, undefined, { steamTopMargin: true });
     const cover = a.cover(a.stops[0]!, [284 + PANEL_AT, 339 + PANEL_AT]);
     a.land(cover);
-    expect([a.top(cover), a.bottom(cover)]).toEqual([149, 204]);
+    expect([a.top(cover), a.bottom(cover)]).toEqual([229, 284]);
   });
 });
 

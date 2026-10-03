@@ -23,7 +23,13 @@ type BoxProps = {
   onCancel?: () => void;
 };
 
-const hoisted = vi.hoisted(() => ({ box: null as BoxProps | null, closed: 0, deletes: [] as string[] }));
+const hoisted = vi.hoisted(() => ({
+  box: null as BoxProps | null,
+  closed: 0,
+  deletes: [] as string[],
+  deleteArgs: [] as unknown[][],
+  savedIp: "",
+}));
 
 vi.mock("@decky/ui", () => ({
   ConfirmModal: () => null,
@@ -32,12 +38,16 @@ vi.mock("@decky/ui", () => ({
     return { Close: () => (hoisted.closed += 1), Update: () => {} };
   },
 }));
+vi.mock("../features/plugin-shell/pluginStorage", () => ({ loadSavedIp: () => hoisted.savedIp }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 vi.mock("../utils/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   formatDeckyRpcError: String,
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {
-    if (method === "delete_ollama_model") hoisted.deletes.push(String(args[0]));
+    if (method === "delete_ollama_model") {
+      hoisted.deletes.push(String(args[0]));
+      hoisted.deleteArgs.push(args);
+    }
     return { ok: true };
   },
 }));
@@ -63,6 +73,8 @@ beforeEach(() => {
   hoisted.box = null;
   hoisted.closed = 0;
   hoisted.deletes = [];
+  hoisted.deleteArgs = [];
+  hoisted.savedIp = "";
 });
 
 describe('"Remove nomic-embed-text:latest from the Deck?"', () => {
@@ -92,5 +104,20 @@ describe('"Remove nomic-embed-text:latest from the Deck?"', () => {
     await act(async () => box.onMiddleButton?.());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.deletes).toEqual(["nomic-embed-text:latest"]);
+  });
+});
+
+describe("the remove call carries the PC address", () => {
+  it("sends the address the screen last saved, so a PC that has the model keeps its place in the order", async () => {
+    hoisted.savedIp = " 192.168.1.20 ";
+    const box = openBox();
+    await act(async () => box.onMiddleButton?.());
+    expect(hoisted.deleteArgs).toEqual([["nomic-embed-text:latest", "192.168.1.20"]]);
+  });
+
+  it("sends an empty address when none was ever saved", async () => {
+    const box = openBox();
+    await act(async () => box.onMiddleButton?.());
+    expect(hoisted.deleteArgs).toEqual([["nomic-embed-text:latest", ""]]);
   });
 });

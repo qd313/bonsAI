@@ -69,10 +69,10 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         base.update(extra)
         return base
 
-    async def _remove_on_deck(self, tag: str) -> dict:
+    async def _remove_on_deck(self, tag: str, *pc_ip: str) -> dict:
         rm = AsyncMock(return_value=(True, ""))
         with patch.object(RPC, "run_ollama_rm_async", rm):
-            return await self.plugin.delete_ollama_model(tag)
+            return await self.plugin.delete_ollama_model(tag, *pc_ip)
 
     async def _look(self, deck_has: list[str]) -> None:
         with patch.object(RPC, "list_installed_ollama_tags", return_value=list(deck_has)):
@@ -98,6 +98,22 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         await self._remove_on_deck("llama3")
 
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["llama3", "gemma4:e2b-it-qat"])
+
+    async def test_a_typed_pc_address_that_is_not_a_saved_host_protects_the_name_too(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+
+        await self._remove_on_deck("qwen2.5:1.5b", "192.168.1.30")
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+
+    async def test_an_old_call_without_the_address_still_works(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+
+        out = await self._remove_on_deck("qwen2.5:1.5b")
+
+        self.assertTrue(out["ok"])
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
 
     async def test_a_name_no_pc_has_is_dropped_as_before(self) -> None:
         self._write_settings(self._settings())

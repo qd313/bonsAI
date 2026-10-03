@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 719,
-  "edgeCount": 2077,
+  "edgeCount": 2078,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3030,6 +3030,7 @@
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useChatSlots.ts",
         "src/hooks/usePluginSettings.ts",
+        "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/index.tsx"
       ]
     },
@@ -4413,6 +4414,7 @@
     "src/hooks/usePullModelDeleteConfirm.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [

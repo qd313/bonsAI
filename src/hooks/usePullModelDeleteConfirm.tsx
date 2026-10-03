@@ -10,6 +10,9 @@
  * Solves: keeps the "are you sure" wording, the refusal toasts (in use, a pull is already running,
  * any other failure) and the follow-up refresh together, since they only ever run as one sequence.
  *
+ * The call also carries the PC address the screen last saved, so the back end can keep the removed
+ * model's place in the try order when that PC still has it.
+ *
  * Does not: decide whether the Del button itself is disabled — the screen still checks
  * activeRoutingTag and its own deleteBusyTag before rendering that button as clickable.
  *
@@ -23,6 +26,7 @@ import { ConfirmModal, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { formatSizeGb } from "../data/pullModelCatalog";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
 
 export type UsePullModelDeleteConfirmArgs = {
   activeRoutingTag: string | null;
@@ -83,9 +87,11 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
             void (async () => {
               setDeleteBusyTag(tag);
               try {
-                const res = await callDeckyWithTimeout<[string], { ok?: boolean; error?: string; removed?: string }>(
+                // The PC address this Deck last used travels with the call: the saved try order is one
+                // list, so a name that PC still has must stay in it (the back end asks that PC).
+                const res = await callDeckyWithTimeout<[string, string], { ok?: boolean; error?: string; removed?: string }>(
                   "delete_ollama_model",
-                  [tag],
+                  [tag, loadSavedIp().trim()],
                   DECKY_RPC_TIMEOUT_MS
                 );
                 if (res.ok) {

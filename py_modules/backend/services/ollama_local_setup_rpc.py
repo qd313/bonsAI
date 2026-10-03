@@ -381,8 +381,11 @@ async def merge_pulled_tags_into_routing_orders(self, tags: Any = None):
     }
 
 
-async def delete_ollama_model(self, tag: str = ""):
-    """Remove one installed Ollama model via ``ollama rm`` (argv form)."""
+async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
+    """Remove one installed Ollama model via ``ollama rm`` (argv form).
+
+    ``pc_ip`` (optional) is the PC address the screen last used; it is asked next to the saved hosts.
+    """
     ok_gate, gate_out = await _require_local_ollama_on_deck(self)
     if not ok_gate:
         return gate_out or {"ok": False, "error": "local_off"}
@@ -425,7 +428,7 @@ async def delete_ollama_model(self, tag: str = ""):
     current = await self.load_settings()
     cleaned = remove_tag_from_routing_orders(current, t)
     if cleaned != current:  # the name is in an order: ask the saved PCs before it goes
-        cleaned = remove_tag_from_routing_orders(current, t, await tags_on_saved_pcs(current))
+        cleaned = remove_tag_from_routing_orders(current, t, await tags_on_saved_pcs(current, [str(pc_ip or "")]))
     order_patch = {
         key: cleaned[key]
         for key in ("text_model_routing_order", "vision_model_routing_order")

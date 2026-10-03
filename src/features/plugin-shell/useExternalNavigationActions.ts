@@ -41,7 +41,7 @@ export function useExternalNavigationActions(): ExternalNavigationActions {
     try {
       Navigation.NavigateToExternalWeb(MODEL_POLICY_README_URL);
     } catch {
-      toaster.toast({ title: "README", body: MODEL_POLICY_README_URL, duration: 4000 });
+      toaster.toast({ title: "User guide", body: MODEL_POLICY_README_URL, duration: 4000 });
     }
   }, []);
 

@@ -135,10 +135,12 @@ class FetchCatalogMetadataRegistryAnswerTests(unittest.TestCase):
             side_effect=_missing_404(),
         ):
             meta = fetch_catalog_metadata(["zzz-plan64-missing-model"])
+            # Inside the patch too: outside it this call reached the real registry, so the test
+            # passed only on a machine whose network got the registry's real 404 back.
+            ok, bad = partition_pull_tags_by_registry(["zzz-plan64-missing-model"])
         self.assertEqual(meta["source"], "live")
         self.assertEqual(meta["tags"]["zzz-plan64-missing-model"], {"size_bytes": None, "exists": False})
 
-        ok, bad = partition_pull_tags_by_registry(["zzz-plan64-missing-model"])
         self.assertEqual(ok, [])
         self.assertEqual(bad, ["zzz-plan64-missing-model"])
 

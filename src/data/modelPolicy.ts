@@ -24,8 +24,11 @@
  */
 const GITHUB_REPO_BASE = "https://github.com/qd313/bonsAI";
 
-/** README `### Model policy tiers` anchor on GitHub. */
-export const MODEL_POLICY_README_URL = `${GITHUB_REPO_BASE}/blob/main/README.md#model-policy-tiers`;
+/**
+ * The user guide's "AI models and licences" section on GitHub. The README rewrite for 0.6.0 moved the
+ * model policy table there; the README no longer has a "Model policy tiers" heading.
+ */
+export const MODEL_POLICY_README_URL = `${GITHUB_REPO_BASE}/blob/main/docs/guide.md#ai-models-and-licences`;
 
 export type ModelSourceClass = "foss" | "open_weight" | "non_foss" | "unknown";
 

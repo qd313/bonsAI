@@ -1,4 +1,4 @@
-"""The README and troubleshooting wording about the model tiers must agree with the code.
+"""The user guide and troubleshooting wording about the model tiers must agree with the code.
 
 Licence labels pass (plan 77): the docs used to call Gemma a Tier 2 family and the one small
 default model "FOSS", while the code puts Gemma 4 in Tier 1 and the Qwen 3B sizes are under
@@ -21,22 +21,26 @@ def _read(rel: str) -> str:
 
 
 class ModelPolicyDocsTests(unittest.TestCase):
-    def test_readme_says_where_gemma_sits(self):
+    def test_guide_says_where_gemma_sits(self):
         self.assertEqual(classify_ollama_model_name("gemma4:e2b-it-qat"), "foss")
         self.assertEqual(classify_ollama_model_name("gemma3:4b"), "open_weight")
-        readme = _read("README.md")
-        self.assertNotIn("such as the Gemma family", readme)
-        tier1 = next(line for line in readme.splitlines() if line.startswith("| **Tier 1**"))
-        tier2 = next(line for line in readme.splitlines() if line.startswith("| **Tier 2**"))
-        self.assertIn("Gemma 4", tier1)
-        self.assertIn("Gemma 3", tier2)
+        guide = _read("docs/guide.md")
+        self.assertNotIn("such as the Gemma family", guide)
+        open_source = next(line for line in guide.splitlines() if line.startswith("| **Open source only**"))
+        open_weight = next(line for line in guide.splitlines() if line.startswith("| **Also try open-weight models**"))
+        self.assertIn("Gemma 4", open_source)
+        self.assertIn("Gemma 3", open_weight)
 
-    def test_readme_heading_matches_the_link_the_app_uses(self):
-        """modelPolicy.ts links to README.md#model-policy-tiers; the heading must produce it."""
-        self.assertIn("\n## Model policy tiers\n", _read("README.md"))
+    def test_guide_heading_matches_the_link_the_app_uses(self):
+        """modelPolicy.ts links to docs/guide.md#ai-models-and-licences; the heading must produce it.
 
-    def test_readme_names_the_qwen_3b_licence(self):
-        self.assertIn("Qwen Research", _read("README.md"))
+        The README rewrite for 0.6.0 moved the model policy table from the README to the user guide.
+        """
+        self.assertIn("docs/guide.md#ai-models-and-licences", _read("src/data/modelPolicy.ts"))
+        self.assertIn("\n## AI models and licences\n", _read("docs/guide.md"))
+
+    def test_guide_names_the_qwen_3b_licence(self):
+        self.assertIn("Qwen Research", _read("docs/guide.md"))
 
     def test_troubleshooting_agrees_with_the_code(self):
         text = _read("docs/troubleshooting.md")

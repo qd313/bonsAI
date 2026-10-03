@@ -387,6 +387,22 @@ Not started.
   once the Deck has measured). D waits for the first free slot. Early lead for A: the "Clear cache" button runs a
   preparation step before its box opens, and the "Clear all data" button skips it.
 
+- **2026-10-03, about 16:45 to 17:45 (tip `d0d11c28`):** **Landed, every check green:** the test setup's top margin
+  (K1), B on the Clear-all box no longer leaves Settings (A: the button skipped the step that tells the plugin which tab
+  to return to), the white ring on the five weak controls (B), the old live-line code removed (D), and a long chip
+  leaving 1.5 s after its words stop (E). The walk check that reads words (J) is committed in the Deck tools project
+  and rebuilt; it takes effect when the tool server restarts. Paperwork sweep 1 moved them to Verify. **Deck blocks 0
+  and 1** (build `afd2f444`): setup passed (backups in `~/p81-backup`); the Clear-all bug reproduced 3 of 3; with a
+  game, Up onto a 525 px section showed 19% of it (Down 38%); controls under an answer sit about 86 px above the dock;
+  after a Quick Access tab switch the ring lands on Decky's back arrow, 6 of 6; a word's tooltip covered the word in 3
+  of 14 stops; no tab-bar ghost from a pretend touch; the summary card could not be measured (every chat already summed
+  up). **New bug found:** after a choice button, the plugin can tell the AI "first question", so no checklist comes
+  (found while building the stand-in AI, which now works and is proven on this PC). Started: N1 (that bug), Q (the ring
+  after a tab switch; sent back once: it must not take the ring from someone resting on the tab icons), T (the
+  tooltip), K2 (the tall section, with the measurement), C's second round (the PC half). Deck block 2a (owed checks)
+  is running. Found: plan 79 never fed real sound to the Deck's microphone; block 2a tries a sentence played through
+  the Deck's own speaker.
+
 ## For the chat that runs this: helper types and pointers
 
 Kept out of the sections above, which are written for the maintainer.

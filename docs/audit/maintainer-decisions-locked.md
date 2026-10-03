@@ -2094,3 +2094,33 @@ checks it by hand; the open call on a general card outranking its members is lis
 waiting; the freeze after a reload on 2026-10-01 needed the whole Deck restarted; out-of-date test notes and the
 knowledge base status report are fixed in step 5. The session carries on through every step and stops only for
 something major.
+
+### D124 — LOCKED 2026-10-03 (raised 2026-10-03) — Plan 81, the final bug session before 0.6.0: the ten calls
+
+Made by the maintainer on 2026-10-03, while [plan 81](../planning/81-final-bug-session.md) was planned. The plan's
+own section, "Your calls for this session", has the same list.
+
+1. **Scope: everything, each fix gated.** Every bug on the list is in, the risky ones included, although none of
+   them crosses the release line. A fix stays in only if its Deck check passes. The release waits for this session's
+   clean Deck pass.
+2. **Checks whose case has never come up on the Deck:** one more try with a prepared setup, so the case must happen.
+   What still cannot be shown stays in Verify, marked "tests only". Nothing is moved to Done on its tests alone.
+3. **The Deck may be changed for a check, and put back afterwards,** in four ways: download a second small AI model
+   (about 2 GB, removed afterwards); point the Deck at this PC's AI; move bonsAI's saved data aside (never deleted);
+   move the game notes library aside (never deleted).
+4. **The summary card behind the dock gets one more try,** on an Opus helper, after a fresh Deck measurement. It lands
+   only if the Deck shows the card in view. If it fails again it stays accepted and keeps its release-notes line.
+5. **The walk check's false alarm is fixed in the Deck tools project itself.** One small change, committed there, not
+   pushed.
+6. **The two reload-under-a-game bugs are looked into on the Deck,** not just marked accepted.
+7. **Three waiting calls are built:** the AI's hidden-block instructions are reworded (kept only if the count of
+   spoiler covers does not drop); a long chip leaves about 1.5 seconds after its words stop; the try-order clean-up
+   also covers a PC.
+8. **Not built: holding a sentence back until its cover is known.** That bug stays open.
+9. **Models:** Opus high runs the session. Helpers are Sonnet medium for mechanical work and Sonnet high for anything
+   that needs a judgment. Two jobs go to an Opus helper (the summary card and the doubled-marks hunt).
+10. **New bugs found on the way** go on the roadmap and into the report, and each gets a real try at a fix in this
+    session.
+
+**At Go, 2026-10-03:** the session runs in the desktop app on Opus 5.5 at extra-high effort (one step above call 9's
+"high"; it matches the house table for landing D-pad work). Nothing is pushed.

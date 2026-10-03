@@ -53,6 +53,27 @@ test("packages are read from the map's source paths", () => {
   assert.equal(roots.find((r) => r.name === "inner").dir, "/repo/node_modules/outer/node_modules/inner");
 });
 
+test("decky:// source paths (Linux builds) resolve against the repo root, not dist/", () => {
+  const sources = [
+    "decky://decky/plugin/bonsAI/src/index.tsx",
+    "decky://decky/plugin/bonsAI/node_modules/.pnpm/@decky+api@1.1.3/node_modules/@decky/api/dist/index.js",
+    "decky://decky/plugin/bonsAI/node_modules/.pnpm/remark-parse@11.0.0/node_modules/remark-parse/lib/index.js",
+    "decky://decky/plugin/my%20plugin/node_modules/plain/index.js",
+    "../node_modules/.pnpm/bail@2.0.2/node_modules/bail/index.js",
+  ];
+  const roots = packageRootsFromSources(sources, "/home/user/bonsAI/dist");
+  assert.deepEqual(
+    roots.map((r) => [r.name, r.dir]),
+    [
+      ["@decky/api", "/home/user/bonsAI/node_modules/.pnpm/@decky+api@1.1.3/node_modules/@decky/api"],
+      ["bail", "/home/user/bonsAI/node_modules/.pnpm/bail@2.0.2/node_modules/bail"],
+      ["plain", "/home/user/bonsAI/node_modules/plain"],
+      ["remark-parse", "/home/user/bonsAI/node_modules/.pnpm/remark-parse@11.0.0/node_modules/remark-parse"],
+    ],
+  );
+  assert.ok(roots.every((r) => !r.dir.includes("decky:")));
+});
+
 test("two versions of one package are both listed", () => {
   const roots = packageRootsFromSources(
     [
@@ -72,6 +93,11 @@ test("icon sets are read from react-icons source paths", () => {
     "../src/x.ts",
   ]);
   assert.deepEqual(sets, ["fa6", "fi"]);
+  const deckySets = iconSetsFromSources([
+    "decky://decky/plugin/bonsAI/node_modules/.pnpm/react-icons@5.3.0_react@18.3.1/node_modules/react-icons/lib/iconBase.mjs",
+    "decky://decky/plugin/bonsAI/node_modules/.pnpm/react-icons@5.3.0_react@18.3.1/node_modules/react-icons/fi/index.mjs",
+  ]);
+  assert.deepEqual(deckySets, ["fi"]);
 });
 
 test("licence id and repository link are read from package.json shapes", () => {
@@ -148,11 +174,11 @@ test("rollup's commonjs helper is spotted in the bundle text", () => {
   assert.equal(bundleUsesCommonjsHelper("const a = 1;"), false);
 });
 
-function fakeRepo(pkgs) {
+function fakeRepo(pkgs, { prefix = "../" } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "tpl-"));
   const dist = path.join(root, "dist");
   fs.mkdirSync(dist);
-  const sources = ["../src/index.tsx"];
+  const sources = [`${prefix}src/index.tsx`];
   for (const p of pkgs) {
     const dir = path.join(root, "node_modules", p.name);
     fs.mkdirSync(dir, { recursive: true });
@@ -161,7 +187,7 @@ function fakeRepo(pkgs) {
       JSON.stringify({ name: p.name, version: p.version ?? "1.0.0", license: p.license, repository: "o/r" }),
     );
     if (p.licenceFile !== false) fs.writeFileSync(path.join(dir, "LICENSE"), `${p.license} text for ${p.name}\n`);
-    sources.push(`../node_modules/${p.name}/index.js`);
+    sources.push(`${prefix}node_modules/${p.name}/index.js`);
   }
   fs.writeFileSync(path.join(dist, "index.js"), "const a = 1;\n");
   fs.writeFileSync(path.join(dist, "index.js.map"), JSON.stringify({ version: 3, sources }));
@@ -179,6 +205,23 @@ test("main writes the licences file into dist/ for a clean bundle", () => {
   const text = fs.readFileSync(path.join(dist, "THIRD-PARTY-LICENSES.txt"), "utf8");
   assert.match(text, /alpha 1\.0\.0/);
   assert.match(text, /@scope\/beta 1\.0\.0/);
+  assert.match(text, /ISC text for @scope\/beta/);
+});
+
+test("main reads packages from a map whose sources use the decky:// form", () => {
+  const { dist } = fakeRepo(
+    [
+      { name: "alpha", license: "MIT" },
+      { name: "@scope/beta", license: "ISC" },
+    ],
+    { prefix: "decky://decky/plugin/bonsAI/" },
+  );
+  const errors = [];
+  const code = main({ distDir: dist, log: () => {}, error: (m) => errors.push(m) });
+  assert.equal(code, 0, errors.join("\n"));
+  const text = fs.readFileSync(path.join(dist, "THIRD-PARTY-LICENSES.txt"), "utf8");
+  assert.match(text, /^2 packages\.$/m);
+  assert.match(text, /alpha 1\.0\.0/);
   assert.match(text, /ISC text for @scope\/beta/);
 });
 

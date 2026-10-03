@@ -39,16 +39,28 @@ const COMMONJS_PACKAGE = "@rollup/plugin-commonjs";
 const toPosix = (p) => p.split("\\").join("/");
 
 /**
+ * @decky/rollup rewrites a leading `../` in each source to `decky://decky/plugin/<name>/`, so
+ * such a path is relative to the repo root (the dist folder's parent). The rewrite only fires
+ * where rollup hands it forward slashes: Linux and macOS builds get the URL form, Windows
+ * builds keep plain `../` paths.
+ */
+const DECKY_SOURCE_PREFIX = /^decky:\/\/decky\/plugin\/[^/]+\//;
+
+/**
  * Turn source-map paths into the package folders they came from, one per folder, sorted by
  * name. A path's package is the segment(s) after its LAST `node_modules/`, which handles pnpm's
  * `.pnpm/<id>/node_modules/<name>` layout and nested installs alike.
  */
 export function packageRootsFromSources(sources, mapDir) {
   const base = toPosix(mapDir);
+  const repoRoot = path.posix.dirname(base);
   const byDir = new Map();
   for (const raw of sources) {
     if (typeof raw !== "string" || raw.includes("\u0000")) continue;
-    const abs = path.posix.normalize(path.posix.join(base, toPosix(raw)));
+    const src = toPosix(raw);
+    const abs = DECKY_SOURCE_PREFIX.test(src)
+      ? path.posix.normalize(path.posix.join(repoRoot, src.replace(DECKY_SOURCE_PREFIX, "")))
+      : path.posix.normalize(path.posix.join(base, src));
     const marker = "/node_modules/";
     const i = abs.lastIndexOf(marker);
     if (i < 0) continue;

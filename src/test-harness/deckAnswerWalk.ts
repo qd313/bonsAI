@@ -41,6 +41,8 @@ const STEAM_SCROLL_PADDING_BOTTOM = 80;
  * keeps 116 pixels clear at its own top"), so a small stop is wanted at y 204 (pane top 88 + 116), not at 88.
  */
 const STEAM_SCROLL_PADDING_TOP = 116;
+/** A stop whose bottom touches the margin line is on it, not in it (the Deck left words at 228.8 to 243.8 with the line at 244). */
+const STEAM_TOP_SLACK_PX = 1;
 /** A stop whose bottom is this far past the dock still counts as on screen to Steam (the Deck left 291 with the dock at 290). */
 const STEAM_BOTTOM_SLACK_PX = 4;
 
@@ -72,6 +74,13 @@ export interface DeckAnswerOptions {
    * helper K left them for the Up-landing and lift fixes (see answerBubbleNavigation.steamTopMargin.test.ts).
    */
   steamTopMargin?: boolean;
+  /**
+   * Where the pane starts on the screen and ends. The default is the no-game Deck (88 to 366 in the setup's
+   * numbers); a running game makes the page 534 high and puts the pane at 128 to 534 with the dock at 330
+   * (plan81-P81-M-K2K3-GAME.json). Steam's top margin is 116 below `paneTop`.
+   */
+  paneTop?: number;
+  paneBottom?: number;
 }
 
 export type Box = [top: number, bottom: number];
@@ -84,17 +93,19 @@ export type SteamScrollRule = "top" | "padded" | "center";
 
 export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamScrollRule, options: DeckAnswerOptions = {}) {
   const dockTopY = options.dockTop ?? DOCK_TOP;
+  const paneTopY = options.paneTop ?? PANE_TOP;
+  const paneBottomY = options.paneBottom ?? paneTopY + (PANE_BOTTOM - PANE_TOP);
   const pane = document.createElement("div");
   pane.className = "TabContentsScroll";
   Object.defineProperty(pane, "scrollHeight", { value: 2000, configurable: true });
-  Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
+  Object.defineProperty(pane, "clientHeight", { value: paneBottomY - paneTopY, configurable: true });
   const rect = (top: number, bottom: number) =>
     ({ top, bottom, left: 0, right: 0, width: 0, height: bottom - top, x: 0, y: top, toJSON: () => ({}) }) as DOMRect;
-  pane.getBoundingClientRect = () => rect(PANE_TOP, PANE_BOTTOM);
+  pane.getBoundingClientRect = () => rect(paneTopY, paneBottomY);
   document.body.appendChild(pane);
   const dock = document.createElement("div");
   dock.className = "bonsai-main-tab-dock";
-  dock.getBoundingClientRect = () => rect(dockTopY, PANE_BOTTOM);
+  dock.getBoundingClientRect = () => rect(dockTopY, paneBottomY);
   pane.appendChild(dock);
   pane.scrollTop = scrollTop;
 
@@ -109,7 +120,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
    */
   const scrollIntoViewOf = (el: HTMLElement) => (arg?: boolean | ScrollIntoViewOptions) => {
     if (!(options.liftScrollsToEnd ?? true) || typeof arg !== "object" || arg.block !== "end") return;
-    const target = PANE_BOTTOM - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
+    const target = paneBottomY - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
     pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().bottom - target);
   };
   const place = (el: HTMLElement, [top, bottom]: Box) => {
@@ -187,19 +198,19 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     const height = r.bottom - r.top;
     const small = height < 100;
     const measured = options.steamTopMargin ?? false;
-    const inside = r.top >= PANE_TOP && r.bottom <= dockTopY + (measured ? STEAM_BOTTOM_SLACK_PX : 0);
+    const inside = r.top >= paneTopY && r.bottom <= dockTopY + (measured ? STEAM_BOTTOM_SLACK_PX : 0);
     // The top margin: a small stop lying wholly above the 116 px line is moved down to it even though it is on
     // screen (the Deck: a cover at y 104 ended at 204, and one at 147 to 202 ended at 204). One that straddles
     // the line is left alone (the Deck kept covers at 167 to 222 and 182 to 237).
-    const marginLine = PANE_TOP + STEAM_SCROLL_PADDING_TOP;
-    const inTopMargin = measured && r.bottom <= marginLine;
+    const marginLine = paneTopY + STEAM_SCROLL_PADDING_TOP;
+    const inTopMargin = measured && r.bottom < marginLine - STEAM_TOP_SLACK_PX;
     // A stop taller than the band got no glide on the Deck (plan77-BLOCK2-GAME.json: a 348 px box in a
     // 206 px band stayed exactly where the walk left it), so none is modelled for one.
-    if (height > dockTopY - PANE_TOP) return;
+    if (height > dockTopY - paneTopY) return;
     let target: number | null = null;
-    if (steamScroll === "center" && small) target = PANE_TOP + (dockTopY - PANE_TOP - height) / 2;
+    if (steamScroll === "center" && small) target = paneTopY + (dockTopY - paneTopY - height) / 2;
     else if (steamScroll === "padded" && small && (!inside || inTopMargin)) target = marginLine;
-    else if (!inside) target = PANE_TOP;
+    else if (!inside) target = paneTopY;
     if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
   };
   const settle = () => {
@@ -244,7 +255,10 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     settle();
     return handled;
   };
-  return { pane, bubble, stops, cover, word, hideLine, top, bottom, down, up, land, enterFromAbove, enterFromBelow, dockTop: dockTopY };
+  return {
+    pane, bubble, stops, cover, word, hideLine, top, bottom, down, up, land, enterFromAbove, enterFromBelow,
+    dockTop: dockTopY, paneTop: paneTopY,
+  };
 }
 
 /** Clear every registry and the page, for a test's beforeEach. */
@@ -419,12 +433,12 @@ export type ShapedAnswer = ReturnType<typeof shapedAnswer>;
 export function fullyVisible(a: ShapedAnswer, el: HTMLElement, dir: "down" | "up"): boolean {
   const top = a.top(el);
   const bottom = a.bottom(el);
-  const band = a.dockTop - PANE_TOP;
+  const band = a.dockTop - a.paneTop;
   if (bottom - top > band) {
-    return dir === "up" ? bottom <= a.dockTop + 4 && bottom > PANE_TOP : top >= PANE_TOP - 1 && top < a.dockTop;
+    return dir === "up" ? bottom <= a.dockTop + 4 && bottom > a.paneTop : top >= a.paneTop - 1 && top < a.dockTop;
   }
   // The bottom edge gets revealBelowDock's own 4 px of slack: a sliver that small is not "behind the dock".
-  return top >= PANE_TOP - 1 && bottom <= a.dockTop + 4;
+  return top >= a.paneTop - 1 && bottom <= a.dockTop + 4;
 }
 
 /** The section holding the ring (or the ring itself, when it is a section), or null outside the answer. */
@@ -468,7 +482,7 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, chec
     if (ring === before && (dir === "down" ? moved < 0 : moved > 0)) problems.push(`press ${i}: scrolled the wrong way (${named})`);
     const section = sectionOf(a, ring);
     const height = section ? a.bottom(section) - a.top(section) : 0;
-    if (ring === before && moved !== 0 && section && height <= a.dockTop - PANE_TOP) {
+    if (ring === before && moved !== 0 && section && height <= a.dockTop - a.paneTop) {
       const press = `press ${i}: only scrolled ${Math.abs(moved)} px on ${named}, whose section fits the band (${height} px)`;
       scrollOnly.push(press);
       problems.push(press);
@@ -478,12 +492,12 @@ export function walkAnswer(a: ShapedAnswer, dir: "down" | "up", limit = 40, chec
     // it (the Deck's Up walk, plan78-P78-TALL-SECTION-LOOP-BEFORE.json: cover, then the section at -72 to
     // 374). It must still be on screen.
     const handedToItsSection = before instanceof HTMLElement && ring !== before && ring.contains(before);
-    if (checkVisible && handedToItsSection && !(a.bottom(ring) > PANE_TOP && a.top(ring) < a.dockTop)) {
+    if (checkVisible && handedToItsSection && !(a.bottom(ring) > a.paneTop && a.top(ring) < a.dockTop)) {
       problems.push(`press ${i}: ${named} off screen after the hand-off (${a.top(ring)}..${a.bottom(ring)})`);
     }
     if (ring !== before && !handedToItsSection) landings.push(named);
     if (checkVisible && ring !== before && !handedToItsSection && !fullyVisible(a, ring, dir)) {
-      problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${PANE_TOP}..${a.dockTop})`);
+      problems.push(`press ${i}: ${named} not fully visible (${a.top(ring)}..${a.bottom(ring)}, band ${a.paneTop}..${a.dockTop})`);
     }
   }
   const stops = presses.filter((name, i) => i === 0 || name !== presses[i - 1]);

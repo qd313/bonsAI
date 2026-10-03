@@ -22,7 +22,8 @@
  *
  * How it works: `wordStepUp()` lands on the last word on screen of the ring's own section before the
  * ring (or before the last word passed, with the ring on the section), else, with the ring on the
- * section's first word and the section's top on screen, on the section's box. `landGoingUpInto()` places
+ * section's first word and the section's top on screen, on the section's box, a tall one's top then brought to
+ * the pane top where Down leaves it (`showTallSectionTop`). `landGoingUpInto()` places
  * a section entered from below as any Up landing, then lands on its last word on screen, else its box.
  * `forgetUpWalk()` clears the memory; the navigation file calls it on every entry and every Down press.
  * `settleBoxGoingUp()` places a box Up lands on clear of the dock after the focus, and again once Steam's
@@ -38,6 +39,7 @@
 import { readableBottomOf } from "./chatPanelScroll";
 import {
   CUT_TOLERANCE_PX, bandHeightOf, elementIsWithinViewportOf, revealBelowDock, revealSectionInBand, settleUpLanding,
+  showTallSectionTop,
 } from "./answerBubbleBandGeometry";
 import {
   findNextDrgGlossaryTermChipInView, focusDrgGlossaryTermChip, isDrgGlossaryTermChip,
@@ -113,6 +115,7 @@ export function wordStepUp(
   if (!onWord || !firstWord || upWalk?.boxLanded || !topNear || !focusAnswerStop(section)) return false;
   upWalk = null;
   revealSectionInBand(section, scroll);
+  showTallSectionTop(section, scroll);
   return true;
 }
 

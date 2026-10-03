@@ -248,6 +248,7 @@
     "src/utils/answerBubbleNavigation.steamTopMargin.test.ts",
     "src/utils/answerBubbleNavigation.tallEntry.test.ts",
     "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
+    "src/utils/answerBubbleNavigation.tallUpFromWord.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",
     "src/utils/answerBubbleNavigation.upLandingClear.test.ts",
     "src/utils/answerBubbleNavigation.walkThrough.test.ts",

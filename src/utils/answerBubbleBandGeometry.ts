@@ -163,6 +163,23 @@ export function revealSectionInBand(section: HTMLElement, scroll: HTMLElement, m
 }
 
 /**
+ * Up lands on the box of a section taller than the readable band, coming from the section's first word:
+ * bring the section's top to the top of the pane, where Down leaves it, so Up is Down reversed. The Deck
+ * (plan81-P81-M-K2K3-GAME.json) left a 525 px section where the walk had it, its top 101 px below the pane
+ * top with 99 px of earlier content above it: 19% of it showing, against 38% going Down. A section that
+ * fits the band is left to `revealSectionInBand`. Only scrolls the panel; true when it moved.
+ */
+export function showTallSectionTop(section: HTMLElement, scroll: HTMLElement): boolean {
+  const rect = section.getBoundingClientRect();
+  if (rect.bottom - rect.top <= bandHeightOf(scroll)) return false;
+  const delta = rect.top - scroll.getBoundingClientRect().top;
+  if (delta <= CUT_TOLERANCE_PX) return false;
+  const before = scroll.scrollTop;
+  scroll.scrollTop = Math.min(panelScrollMax(scroll), before + delta);
+  return scroll.scrollTop !== before;
+}
+
+/**
  * Down: the ring's section is already fully read (its bottom edge is inside the band) and the next one
  * starts below the dock, no more than a screen away. Scroll so the next section's top sits just under
  * the header, so the press that follows can land on it. Before this the press only scrolled 80 px and

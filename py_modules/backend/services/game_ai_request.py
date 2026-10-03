@@ -127,6 +127,7 @@ from backend.services.response_verify import (
     verify_ollama_response,
 )
 from backend.services.spy_confession_service import parse_spy_lies_tag
+from backend.services.strategy_guide_parse import is_strategy_followup_question
 from backend.services.strategy_spoiler_policy import (
     neutralize_protected_names_in_branch_menu,
     resolve_turn_spoiler_protected_names,
@@ -859,7 +860,15 @@ async def run_game_ai_request(
         # question_for_model above (asked-entity extraction, the person's own consent phrasing,
         # the risk signals) -- see finish3_prev_turn_block's own comment near where it is set.
         if finish3_prev_turn_block:
-            question_for_model = f"{finish3_prev_turn_block}\n{question_for_model}"
+            if is_strategy_followup_question(question_for_model):
+                # A choice button's question must still START with its "[Strategy follow-up]"
+                # marker: the prompt builder tells a button press (coach + checklist, no menu)
+                # from a first turn (write a menu) by that first word, and a reminder in front hid
+                # it, so the model was asked for a fresh menu again (plan 81, 2026-10-03). Behind
+                # the question it also keeps the person's words as the model's status-line topic.
+                question_for_model = f"{question_for_model}\n{finish3_prev_turn_block}"
+            else:
+                question_for_model = f"{finish3_prev_turn_block}\n{question_for_model}"
 
         # `request_chat`, loaded once near the top, goes to the model call too: its turns, its own
         # summary and its id (plan 68). The question being asked now IS its newest turn -- it is

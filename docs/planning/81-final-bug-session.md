@@ -357,19 +357,6 @@ New ones go here, with the choice taken in the meantime. Three are open from the
 3. **After the reload look:** if it is developer-only, are the two entries marked accepted with the rule written
    down? *Meanwhile:* they stay open, with what was found.
 
-## At the end
-
-- **The report,** sent to your phone, opening with what you must do next. Then: what was fixed and proven, what was
-  fixed and not proven, what failed and why, what was found, and every entry still on either list with what it
-  waits on.
-- **The code summary:** the files changed, how each change works, what surprised us and how it was handled, and what
-  you could have done differently to make the session easier.
-- **A short developer guide** to how this plan went into the code, in simple terms.
-- **The release notes' known issues:** any line whose bug is now fixed and proven comes off; anything new a player
-  might notice goes on.
-- **Your checks page** is brought up to date.
-- **The wider quick check** passes before the session calls itself finished.
-
 4. **The reworded hidden-block instructions cover more answers, including some harmless ones.** On this PC with
    the Deck's model, "which weapon is easiest to start with" in Hades came back covered in 8 of 10 answers (1 of 10
    before). Keep the rewording (more protection, an extra tap now and then), or prefer fewer covers? *Meanwhile:* kept,
@@ -382,6 +369,19 @@ New ones go here, with the choice taken in the meantime. Three are open from the
    *Meanwhile:* not built.
 7. **The chat-row check's "busy" reading.** An older note expects the other chat's Ask button to read ready while
    the first chat writes; today's check expected busy and passed. Which is right? *Meanwhile:* both recorded.
+
+## At the end
+
+- **The report,** sent to your phone, opening with what you must do next. Then: what was fixed and proven, what was
+  fixed and not proven, what failed and why, what was found, and every entry still on either list with what it
+  waits on.
+- **The code summary:** the files changed, how each change works, what surprised us and how it was handled, and what
+  you could have done differently to make the session easier.
+- **A short developer guide** to how this plan went into the code, in simple terms.
+- **The release notes' known issues:** any line whose bug is now fixed and proven comes off; anything new a player
+  might notice goes on.
+- **Your checks page** is brought up to date.
+- **The wider quick check** passes before the session calls itself finished.
 
 ## Results
 

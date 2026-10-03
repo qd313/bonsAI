@@ -25,6 +25,9 @@
  *   AI runs on the Deck, so no second probe starts the local server twice).
  * - Moves are queued one behind another: each reads the order on disk, swaps, saves, so two quick
  *   presses do not both start from the same old order.
+ * - The saved order is one list for whichever computer answers. A move keeps the saved names this
+ *   machine does not show (models only the other machine has), after the visible ones, so changing a
+ *   place on a PC does not wipe the Deck's places and the other way round.
  * - A save that fails changes nothing on screen and shows a notice; the places are only updated once
  *   the order is on disk.
  */
@@ -256,8 +259,12 @@ export function useTryOrderPlaces(a: {
         if (to < 0 || to >= current.length) return;
         const next = [...current];
         [next[from], next[to]] = [next[to], next[from]];
-        await saveOrder(kind, next);
-        setSaved((prev) => ({ ...prev, [kind]: next }));
+        // The saved list is shared by the Deck and a PC: names this machine does not show (a model only
+        // the other machine has) keep their relative order after the visible ones instead of being wiped.
+        const unseen = fresh.filter((t) => t.trim() && !current.includes(t) && !next.includes(t));
+        const toSave = [...next, ...unseen];
+        await saveOrder(kind, toSave);
+        setSaved((prev) => ({ ...prev, [kind]: toSave }));
       }),
     [enqueue, kind],
   );

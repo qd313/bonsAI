@@ -282,6 +282,71 @@ describe("a place change saves at once", () => {
 });
 
 /*
+ * The saved order is one list for whichever computer answers. A place change made while one machine
+ * answers must not wipe the names that machine does not show (models only the other machine has).
+ */
+describe("a place change keeps the saved names this machine does not show", () => {
+  it("with the AI on a PC, a Deck-only name stays in the saved order, after the PC's own models", async () => {
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      text_model_routing_order: ["deck-only:1b", "a:1b", "b:1b", "deck-too:3b"],
+    }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["a:1b", "b:1b"] }));
+    const { box } = mountPlaces({ host: PC_HOST, deckInstalled: ["deck-only:1b", "deck-too:3b"] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    await waitFor(() => expect(box.latest!.placeOf("a:1b")).toBe(1));
+    await act(async () => {
+      await box.latest!.move("b:1b", -1);
+    });
+    expect(savedBody()).toEqual([{ text_model_routing_order: ["b:1b", "a:1b", "deck-only:1b", "deck-too:3b"] }]);
+  });
+
+  it("with the AI on the Deck, a PC-only name stays too", async () => {
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      text_model_routing_order: ["pc-only:7b", "a:1b", "b:1b"],
+    }));
+    const { box } = mountPlaces({ host: DECK_HOST, deckInstalled: ["a:1b", "b:1b"] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    await waitFor(() => expect(box.latest!.placeOf("a:1b")).toBe(1));
+    await act(async () => {
+      await box.latest!.move("a:1b", 1);
+    });
+    expect(savedBody()).toEqual([{ text_model_routing_order: ["b:1b", "a:1b", "pc-only:7b"] }]);
+  });
+
+  it("the Pictures order keeps a name the Pictures list leaves out (a model that cannot read pictures)", async () => {
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      vision_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "deck-only:1b"],
+    }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", "gemma4:e2b-it-qat"] }));
+    const { box } = mountPlaces({ host: PC_HOST, deckInstalled: [] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    act(() => box.latest!.setKind("vision"));
+    await waitFor(() => expect(box.latest!.placeOf("qwen2.5vl:3b")).toBe(1));
+    await act(async () => {
+      await box.latest!.move("qwen2.5vl:3b", 1);
+    });
+    expect(savedBody()).toEqual([{ vision_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "deck-only:1b"] }]);
+  });
+
+  it("a note-search model is still never saved", async () => {
+    setRpcHandler("load_settings", () => ({
+      ...defaultSettingsFixture(),
+      text_model_routing_order: ["a:1b", "b:1b", "nomic-embed-text:latest"],
+    }));
+    const { box } = mountPlaces({ host: DECK_HOST, deckInstalled: ["a:1b", "b:1b"] });
+    await waitFor(() => expect(box.latest!.status).toBe("ready"));
+    await waitFor(() => expect(box.latest!.placeOf("a:1b")).toBe(1));
+    await act(async () => {
+      await box.latest!.move("a:1b", 1);
+    });
+    expect(savedBody()).toEqual([{ text_model_routing_order: ["b:1b", "a:1b"] }]);
+  });
+});
+
+/*
  * The old order screens started from the tab's own copy of the order when a fresh read of the settings
  * file failed or took too long (plan 78 round 3). The box does the same, for the places it first shows
  * and for the order a move starts from.

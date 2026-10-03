@@ -114,6 +114,18 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
         for text in flushes:
             self.assertLessEqual(text.count(OPEN), 1, text)
 
+    def test_a_limit_that_cuts_the_marker_itself_saves_one_whole_marker(self) -> None:
+        # Seen twice in 46 joins on this PC: the first piece ends half way through typing the
+        # marker, the next piece types it again in full. Glued, the half marker opened an ordinary
+        # block and the whole one became text inside it: the answer bubble showed the hidden words.
+        saved, _ = self._saved_answer(
+            f"{INTRO}Some plain advice first.\n{F}bons",
+            f"<bonsai-status>Continuing the guide request</bonsai-status>\n{OPEN}\n{HIDDEN_REST}\n{F}\n\n{AFTER}",
+        )
+        self._assert_one_block(saved)
+        self.assertNotIn(f"{F}bons\n", saved)
+        self.assertIn(f"{OPEN}\n{HIDDEN_REST}", saved)
+
     def test_a_reopening_with_the_text_on_the_same_line_is_saved_once(self) -> None:
         saved, _ = self._saved_answer(
             f"{INTRO}{OPEN}\n{HIDDEN_START}",

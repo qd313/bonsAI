@@ -4,7 +4,8 @@ Purpose: When a long answer hits its length limit, the plugin hands the model th
 asks it to carry on (a soft continue). If the limit fell inside a hidden (spoiler) block, the model
 usually starts its next piece by opening that block again. Glued on as it came, the saved answer
 then carries the block's opening marker twice. This drops that repeated opening marker, so the
-next piece simply continues the block it was cut off inside.
+next piece simply continues the block it was cut off inside. When the limit fell while the marker
+itself was being typed ("```bons"), the next piece's whole marker finishes the half one instead.
 Used for: ollama_chat_stream._stream_ollama_chat_once, on each later piece of a soft continue: both
 what the screen is shown while it streams and the words it hands back, which
 ollama_service.post_ollama_chat stitches into the answer that is saved.
@@ -38,6 +39,11 @@ _LEADING_SPOILER_OPENER_RE = re.compile(
     r"```bonsai-spoiler(?!`)[ \t]*(\n?)",
     re.IGNORECASE | re.DOTALL,
 )
+_STATUS_LINE_RE = re.compile(r"<bonsai-status>(?:(?!</bonsai-status>).)*</bonsai-status>", re.IGNORECASE | re.DOTALL)
+_SPOILER_OPENER = "```bonsai-spoiler"
+# The answer so far ends half way through typing that marker: three backticks and at least the
+# "b", on a line of its own or glued to a word (the covers give such a marker a line of its own).
+_HALF_TYPED_OPENER_TAIL_RE = re.compile(r"(?<!`)(```b[a-z-]{0,13})\Z", re.IGNORECASE)
 
 
 def _ends_inside_hidden_block(text: str) -> bool:
@@ -66,9 +72,17 @@ def drop_repeated_spoiler_opener(prefix: str, piece: str) -> str:
     if not m.group(2) and not rest:
         # Nothing after the marker yet: it may still grow into another label. Wait for more.
         return piece
+    lead = m.group(1)
+    half = _HALF_TYPED_OPENER_TAIL_RE.search(prefix)
+    if half and _SPOILER_OPENER.startswith(half.group(1).lower()):
+        # The limit fell while the marker itself was being typed ("```bons") and the next piece
+        # types it again in full. Glued, the half marker opens an ordinary block with the whole
+        # one as text inside it, and the hidden words show in plain view. Finish the half marker
+        # instead (status lines stay where they are; the screen never shows them).
+        tags = "".join(_STATUS_LINE_RE.findall(lead))
+        return tags + _SPOILER_OPENER[len(half.group(1)) :] + "\n" + rest
     if not _ends_inside_hidden_block(prefix):
         return piece
-    lead = m.group(1)
     if "\n" not in lead and not prefix.endswith("\n"):
         # Glued to the last cut-off word: keep the next piece on a line of its own, as the screen
         # showed it while the marker was still there.

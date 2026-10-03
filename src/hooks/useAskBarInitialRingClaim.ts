@@ -23,6 +23,18 @@
  * window for it -- a few tries, then it gives up. A reopen that came back
  * with focus, the ordinary case, does nothing at all.
  *
+ * And on a return from another Quick Access tab (plan 81): switching tabs does not close the panel's
+ * page and does not rebuild the plugin -- Steam only hides the plugin's pane (its width goes to 0)
+ * and shows it again. No visibility event fires, so neither half above ran, and the ring came back
+ * on Decky's own back arrow in 6 of 6 returns (plan81-P81-LOOK-QAM-TAB-SWITCH.json). So the plugin
+ * watches its own pane's size: each hidden-to-shown change arms a short window (about 10 s). While
+ * armed it watches where Steam's ring is. A ring resting on the tab icon column (outside the pane)
+ * is left alone -- that person may be about to press Down or Right. The first time the ring lands
+ * inside the same Quick Access pane but outside the plugin (Decky's back arrow), it goes to the
+ * question box, once. A ring that lands on a plugin control just ends the window. After the window
+ * ends nothing more happens until the next return, so walking Up to the back arrow on purpose is
+ * never undone. A box (modal) being open, or the pane hiding again, also ends the window.
+ *
  * Does not: Take any argument or hand anything back -- every value it needs
  * is either a literal ("unified-input") or an imported utility, and it acts
  * only through Steam's own nav registry, never a plain focus() call on a
@@ -30,6 +42,7 @@
  */
 import { useEffect } from "react";
 
+import { peekModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { refocusPanelWindowIfLost, takeNavFocus } from "../utils/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 
@@ -37,6 +50,14 @@ import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
    focusing its own window), then a couple more a beat apart while it is still missing. */
 const REOPEN_BEAT_MS = 150;
 const REOPEN_MAX_ASKS = 3;
+
+/* The return half: how long a return keeps watching for the ring to enter the pane, and how often
+   it looks. Polling, because a gamepad move is not shown to fire a focus event on the panel page. */
+const RETURN_WINDOW_MS = 10000;
+const RETURN_POLL_MS = 100;
+/* Steam's own id on the tab pane that holds the plugin (measured in dozens of focus paths, all under
+   `#quickaccess_content_999`); class names there are scrambled, the id prefix is not. */
+const QAM_PANE_SELECTOR = '[id^="quickaccess_content_"]';
 
 /*
  * In: nothing.
@@ -105,6 +126,69 @@ export function useAskBarInitialRingClaim() {
     return () => {
       doc.removeEventListener("visibilitychange", onVisibilityChange);
       if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
+
+  /*
+   * The tab-return half (plan 81). The observer only ARMS: hidden is a box of width or height 0,
+   * shown is anything bigger, and only a hidden-then-shown change arms. The observer comes from the
+   * panel's own window -- one made in SharedJSContext is not driven by the other page's frames.
+   * While armed, a poll reads the gamepad-aware ring owner (see the header for what each place
+   * means). With no Quick Access pane to compare against (desktop, tests without one) it never acts.
+   */
+  useEffect(() => {
+    const doc = getUiDocument();
+    // Observing the pane's size, not looking for a focus target: nothing here is focused or moved.
+    // focus-patterns-allow: observing the pane's size to learn when Steam shows it again.
+    const scope = doc.querySelector<HTMLElement>(".bonsai-scope");
+    const Observer = doc.defaultView?.ResizeObserver ?? globalThis.ResizeObserver;
+    if (!scope || typeof Observer !== "function") return;
+
+    let wasHidden = false;
+    let armed = false;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let windowEndsAt = 0;
+    const disarm = () => {
+      armed = false;
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = undefined;
+    };
+    const watch = () => {
+      timeoutId = undefined;
+      if (!armed) return;
+      if (Date.now() >= windowEndsAt || doc.visibilityState !== "visible") return disarm();
+      if (peekModalReturnFocus() !== null) return disarm(); // a box is open: the ring is its business
+      const holder = uiGamepadFocusElement();
+      if (holder && holder !== doc.body) {
+        if (scope.contains(holder)) return disarm(); // a plugin control has it
+        // The same Quick Access pane, outside the plugin: Decky's own header and back arrow.
+        // Anywhere else (the tab icon column) the person is still choosing a tab: keep watching.
+        // focus-patterns-allow: asking which pane the ring is in, not finding a target to focus.
+        const pane = scope.closest(QAM_PANE_SELECTOR);
+        if (pane?.contains(holder) && takeNavFocus("unified-input")) return disarm();
+      }
+      timeoutId = setTimeout(watch, RETURN_POLL_MS);
+    };
+    const observer = new Observer((entries) => {
+      const box = entries[entries.length - 1]?.contentRect;
+      if (!box) return;
+      const hidden = box.width === 0 || box.height === 0;
+      if (hidden) {
+        wasHidden = true;
+        disarm();
+        return;
+      }
+      if (!wasHidden) return; // first reading, or an ordinary resize while shown
+      wasHidden = false;
+      disarm();
+      armed = true;
+      windowEndsAt = Date.now() + RETURN_WINDOW_MS;
+      timeoutId = setTimeout(watch, RETURN_POLL_MS);
+    });
+    observer.observe(scope);
+    return () => {
+      observer.disconnect();
+      disarm();
     };
   }, []);
 }

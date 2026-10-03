@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 718,
-  "edgeCount": 2072,
+  "fileCount": 719,
+  "edgeCount": 2077,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3004,6 +3004,8 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
+        "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
@@ -3869,6 +3871,15 @@
       ],
       "importedBy": []
     },
+    "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts": {
+      "imports": [
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useAskBarInitialRingClaim.test.ts": {
       "imports": [
         "src/hooks/useAskBarInitialRingClaim.ts",
@@ -3879,11 +3890,13 @@
     },
     "src/hooks/useAskBarInitialRingClaim.ts": {
       "imports": [
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts"
       ]
     },
@@ -7276,6 +7289,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
@@ -7947,6 +7961,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",

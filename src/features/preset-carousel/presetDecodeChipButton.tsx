@@ -19,6 +19,7 @@ import type { PresetPrompt } from "../../data/presets";
 import { PresetChipLeadingBadges, PresetChipText } from "./presetChipButton";
 import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
 import type { DecodeTextParts } from "./presetChipDecodeText";
+import type { ChipScrollListener } from "./presetChipStay";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 
 /**
@@ -49,6 +50,8 @@ export function DecodePresetChipButton(props: {
   navHandlers?: Record<string, unknown>;
   /** The chip row just claimed a Left/Right press without moving anywhere -- ran out of chips. */
   blockedEdge?: boolean;
+  /** Told the settled label's scroll time line, so the row can replace the chip one pause after it. */
+  onScrollPlan?: ChipScrollListener;
 }) {
   const {
     preset: p,
@@ -60,6 +63,7 @@ export function DecodePresetChipButton(props: {
     buttonRef,
     navHandlers,
     blockedEdge,
+    onScrollPlan,
   } = props;
   return (
     <Button
@@ -98,7 +102,7 @@ export function DecodePresetChipButton(props: {
             copies that can go out of sync again. */}
         <PresetChipLeadingBadges p={p} />
         {resolved ? (
-          <PresetChipText text={p.text} scroll={scroll} />
+          <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} />
         ) : (
           <span className="bonsai-preset-chip-text bonsai-preset-chip-text--churn">
             <span ref={labelRefs.locked} />

@@ -119,4 +119,6 @@ export type DecodeSlotAnim = {
   resolved: boolean;
   /** Valid once `resolved`: when to start the next prompt's reveal. */
   holdEndAt: number;
+  /** The end of the settled label's own scroll (`Date.now()` clock) that `holdEndAt` was last set from; null until it reports. */
+  endsAt: number | null;
 };

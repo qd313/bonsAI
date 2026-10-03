@@ -50,6 +50,13 @@ const TWO_CHIP_PACE: PresetPace = {
  */
 export const TWO_SPOT_MIN_GAP_MS = 2_500;
 
+/**
+ * Two long chips whose scrolls end close together: each leaves one pause after its own words stop, so
+ * they only keep this far apart (instead of TWO_SPOT_MIN_GAP_MS), which holds the later one back by
+ * under half a second rather than by up to 2.5 s.
+ */
+export const TWO_LONG_CHIP_MIN_GAP_MS = 350;
+
 export function presetPace(chipCount: number): PresetPace {
   return chipCount <= 1 ? ONE_CHIP_PACE : TWO_CHIP_PACE;
 }

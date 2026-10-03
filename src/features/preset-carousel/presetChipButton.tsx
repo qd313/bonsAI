@@ -28,6 +28,7 @@ import {
   PRESET_MARQUEE_SPEED,
   presetScrollPlan,
 } from "./presetRowLayout";
+import type { ChipScrollListener } from "./presetChipStay";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 
 /**
@@ -74,14 +75,21 @@ type ScrollPhase = "waiting" | "scrolling" | "end";
  *
  * The time line is presetScrollPlan (presetRowLayout.ts), the same one the chip's stay time reads:
  * the words wait at the left edge, scroll to the end at the set speed, and then stay where they are.
- * Nothing moves again, so the pause lasts for as long as the chip stays, and the stay time always
- * holds it for at least the pause. Words that fit are left alone, so the chip can centre them.
+ * Nothing moves again, so the pause lasts for as long as the chip stays; the row replaces the chip
+ * when the pause is over (below). Words that fit are left alone, so the chip can centre them.
  * `data-scroll-phase` says where the line has got to: fits, waiting, scrolling or end.
+ *
+ * The line is also told to the row (`onScrollPlan`, presetChipStay.ts) the moment it starts: the row
+ * replaces the chip at the end of this line, one pause after the words stop, rather than guessing
+ * from the length of the words.
  */
-function PresetChipScrollText({ text }: { text: string }) {
+function PresetChipScrollText({ text, onScrollPlan }: { text: string; onScrollPlan?: ChipScrollListener }) {
+  const reportRef = useRef(onScrollPlan);
+  reportRef.current = onScrollPlan;
   const roomRef = useRef<HTMLSpanElement>(null);
   const wordsRef = useRef<HTMLSpanElement>(null);
-  const [overflowPx, setOverflowPx] = useState(0);
+  // null until the words and the room have been measured, so the row is not told anything early.
+  const [overflowPx, setOverflowPx] = useState<number | null>(null);
   const [phase, setPhase] = useState<ScrollPhase>("waiting");
 
   useLayoutEffect(() => {
@@ -98,19 +106,26 @@ function PresetChipScrollText({ text }: { text: string }) {
     return () => watcher.disconnect();
   }, [text]);
 
-  const plan = presetScrollPlan(overflowPx);
+  const plan = presetScrollPlan(overflowPx ?? 0);
   const crawlMs = plan?.crawlMs;
   const delayMs = plan?.delayMs;
+  const stayMs = plan?.stayMs;
   useLayoutEffect(() => {
     setPhase("waiting");
-    if (crawlMs === undefined || delayMs === undefined) return;
+    if (overflowPx === null) return;
+    if (crawlMs === undefined || delayMs === undefined || stayMs === undefined) {
+      reportRef.current?.(text, null); // measured, and the words fit
+      return;
+    }
+    reportRef.current?.(text, { startedAt: Date.now(), stayMs });
     const startScroll = window.setTimeout(() => setPhase("scrolling"), delayMs);
     const reachEnd = window.setTimeout(() => setPhase("end"), delayMs + crawlMs);
     return () => {
       window.clearTimeout(startScroll);
       window.clearTimeout(reachEnd);
+      reportRef.current?.(text, null);
     };
-  }, [crawlMs, delayMs]);
+  }, [overflowPx === null, crawlMs, delayMs, stayMs, text]);
 
   const shown = plan ? phase : "fits";
   // Steam's marquee faded the words at the edges; the same fade here, on the side the words leave.
@@ -134,7 +149,7 @@ function PresetChipScrollText({ text }: { text: string }) {
         className="bonsai-preset-chip-text-run"
         data-scroll-phase={shown}
         style={{
-          transform: shown === "scrolling" || shown === "end" ? `translateX(-${overflowPx}px)` : "translateX(0px)",
+          transform: shown === "scrolling" || shown === "end" ? `translateX(-${overflowPx ?? 0}px)` : "translateX(0px)",
           transition: shown === "scrolling" ? `transform ${plan!.crawlMs}ms linear` : "none",
         }}
       >
@@ -149,9 +164,17 @@ function PresetChipScrollText({ text }: { text: string }) {
  * stands still at the end, and the chip leaves after that. Under reduced motion the label is cut off
  * with an ellipsis instead and nothing moves.
  */
-export function PresetChipText({ text, scroll }: { text: string; scroll: boolean }) {
+export function PresetChipText({
+  text,
+  scroll,
+  onScrollPlan,
+}: {
+  text: string;
+  scroll: boolean;
+  onScrollPlan?: ChipScrollListener;
+}) {
   if (!scroll) return <span className="bonsai-preset-chip-text">{text}</span>;
-  return <PresetChipScrollText key={text} text={text} />;
+  return <PresetChipScrollText key={text} text={text} onScrollPlan={onScrollPlan} />;
 }
 
 /**
@@ -209,11 +232,19 @@ export function PresetChipLeadingBadges({ p }: { p: PresetPrompt }) {
  * Badges stay pinned at the left of the chip and only the prompt text scrolls: the Tip badge exists
  * to be seen at a glance (Phase 4 track 1), and a badge that scrolled away would defeat that.
  */
-function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
+function PresetChipLabel({
+  p,
+  scroll,
+  onScrollPlan,
+}: {
+  p: PresetPrompt;
+  scroll: boolean;
+  onScrollPlan?: ChipScrollListener;
+}) {
   return (
     <span className="bonsai-preset-chip-label">
       <PresetChipLeadingBadges p={p} />
-      <PresetChipText text={p.text} scroll={scroll} />
+      <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} />
       {p.beta ? (
         <span
           style={{
@@ -242,6 +273,8 @@ export function PresetChipButton(props: {
   navHandlers?: Record<string, unknown>;
   /** The chip row just claimed a Left/Right press without moving anywhere -- ran out of chips. */
   blockedEdge?: boolean;
+  /** Told the long chip's scroll time line, so the row can replace it one pause after it ends. */
+  onScrollPlan?: ChipScrollListener;
 }) {
   const {
     preset: p,
@@ -253,6 +286,7 @@ export function PresetChipButton(props: {
     buttonRef,
     navHandlers,
     blockedEdge,
+    onScrollPlan,
   } = props;
   return (
     <Button
@@ -276,7 +310,7 @@ export function PresetChipButton(props: {
         transition: "opacity 420ms ease, transform 420ms ease, color 420ms ease",
       }}
     >
-      <PresetChipLabel p={p} scroll={scroll} />
+      <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} />
     </Button>
   );
 }

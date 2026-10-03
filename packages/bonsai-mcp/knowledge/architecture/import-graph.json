@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 714,
-  "edgeCount": 2059,
+  "fileCount": 717,
+  "edgeCount": 2071,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -938,6 +938,7 @@
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetPace.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
@@ -950,6 +951,7 @@
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/features/preset-carousel/presetChipButton.scroll.test.tsx",
+        "src/features/preset-carousel/presetChipStay.row.test.tsx",
         "src/test-harness/chipRowSimulation.tsx"
       ]
     },
@@ -2353,6 +2355,7 @@
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
+        "src/features/preset-carousel/presetChipStay.row.test.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
@@ -3371,6 +3374,8 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/preset-carousel/changeSpacing.test.ts",
+        "src/features/preset-carousel/presetChipStay.test.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetDecodeSlots.tsx"
       ]
     },
@@ -3419,6 +3424,7 @@
       "imports": [
         "src/data/askMode.ts",
         "src/data/presets.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/utils/joinPresetWithRunningGame.ts"
       ],
@@ -3450,8 +3456,38 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/preset-carousel/presetChipStay.row.test.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx"
+      ]
+    },
+    "src/features/preset-carousel/presetChipStay.row.test.tsx": {
+      "imports": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/data/presets.ts",
+        "src/features/preset-carousel/presetChipShared.ts",
+        "src/features/preset-carousel/presetRowLayout.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/preset-carousel/presetChipStay.test.ts": {
+      "imports": [
+        "src/features/preset-carousel/changeSpacing.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
+        "src/features/preset-carousel/presetPace.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/preset-carousel/presetChipStay.ts": {
+      "imports": [
+        "src/features/preset-carousel/changeSpacing.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/features/preset-carousel/presetChipButton.tsx",
+        "src/features/preset-carousel/presetChipStay.test.ts",
+        "src/features/preset-carousel/presetDecodeChipButton.tsx",
+        "src/features/preset-carousel/presetDecodeSlots.tsx"
       ]
     },
     "src/features/preset-carousel/presetDecodeChipButton.tsx": {
@@ -3460,6 +3496,7 @@
         "src/data/presets.ts",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/utils/joinPresetWithRunningGame.ts"
       ],
@@ -3474,6 +3511,7 @@
         "src/features/preset-carousel/changeSpacing.ts",
         "src/features/preset-carousel/presetChipDecodeText.ts",
         "src/features/preset-carousel/presetChipShared.ts",
+        "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
@@ -3488,6 +3526,7 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/preset-carousel/changeSpacing.ts",
+        "src/features/preset-carousel/presetChipStay.test.ts",
         "src/features/preset-carousel/presetRowLayout.test.ts",
         "src/features/preset-carousel/presetRowLayout.ts"
       ]
@@ -3540,6 +3579,7 @@
         "src/features/preset-carousel/presetChipButton.scroll.test.tsx",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipDecodeText.ts",
+        "src/features/preset-carousel/presetChipStay.row.test.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",

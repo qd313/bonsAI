@@ -157,15 +157,17 @@ describe("a chip in the row does not leave in the middle of a scroll or of the p
     act(() => vi.advanceTimersByTime(plan.endMs));
     expect(label()?.dataset.scrollPhase).toBe("end");
     const atEnd = label()?.style.transform;
-    for (let waited = 0; waited < plan.pauseMs; waited += 100) {
+    for (let waited = 0; waited + 100 < plan.pauseMs; waited += 100) {
       act(() => vi.advanceTimersByTime(100));
       expect(label()?.textContent).toBe(first);
       expect(label()?.style.transform).toBe(atEnd);
     }
-    // The chip is still the same one right up to scroll plus pause, and has changed by its turn's end.
+    // The chip is still the same one right up to scroll plus pause, and leaves exactly when the
+    // pause is over (plan 81: the row used to wait on its own, much longer, beat).
+    act(() => vi.advanceTimersByTime(99)); // 1.4 s of the pause is over, and 99 ms of the last 100
     expect(label()?.textContent).toBe(first);
-    expect(presetTurnMs(longA, 1)).toBeGreaterThan(plan.stayMs);
-    act(() => vi.advanceTimersByTime(presetTurnMs(longA, 1) + 2_000));
+    act(() => vi.advanceTimersByTime(1));
     expect(label()?.textContent).not.toBe(first);
+    expect(presetTurnMs(longA, 1)).toBeGreaterThan(plan.stayMs);
   });
 });

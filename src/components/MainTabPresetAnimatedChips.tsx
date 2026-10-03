@@ -91,6 +91,7 @@ import {
 } from "../features/preset-carousel/presetRowLayout";
 import { presetPace } from "../features/preset-carousel/presetPace";
 import { makeChangeSpacer } from "../features/preset-carousel/changeSpacing";
+import { armLeave, makeChipStayBoard } from "../features/preset-carousel/presetChipStay";
 import {
   nextSlotPreset,
   startSlotRotation,
@@ -370,7 +371,8 @@ const PRESET_RING_HOLD_RECHECK_MS = 500;
 /**
  * PRESET_VISIBLE_SLOTS preset suggestion chips with independent fade in/out cycles — or, in static
  * mode, plain swaps. Hold time after each appearance scales with prompt length and is never shorter
- * than one full scroll of the label; fade durations are fixed. No new cycle starts while rowHeld();
+ * than one full scroll of the label (a long chip is replaced one pause after its own words stop,
+ * read off the chip: presetChipStay.ts); fade durations are fixed. No new cycle starts while rowHeld();
  * otherwise the row keeps changing for as long as it is mounted.
  */
 function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps) {
@@ -431,6 +433,9 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
   );
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
+  // What each long chip tells the row about its own scroll, so it is replaced one pause after its
+  // words stop (presetChipStay.ts).
+  const [stayBoard] = useState(makeChipStayBoard);
 
   useEffect(() => {
     const initial = normalizeThreeSeeds(seeds, samplerOptions);
@@ -441,6 +446,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     setSlots(first);
 
     const timeouts: number[] = [];
+    const standDown: (() => void)[] = [];
     let cancelled = false;
 
     /** Only gate starting a *new* cycle after a full fade-out; never abort mid fade/hold. */
@@ -473,20 +479,34 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
 
     if (staticMode) {
       setSlotFade(Array.from({ length: slotCount }, () => ({ opacity: 1, transitionMs: 0 })));
-      const loopStatic = (slotIndex: number, prompt: PresetPrompt, wait = spacer.delay(slotIndex, Date.now(), presetTurnMs(prompt.text, slotCount))) => {
-        pushTimeout(() => {
+      const loopStatic = (slotIndex: number, prompt: PresetPrompt, recheckMs?: number) => {
+        const swap = () => {
           if (!mayStartNextCycle()) return;
           // Held (rowHeld): keep this question and look again shortly.
           if (rowHeld()) return loopStatic(slotIndex, prompt, PRESET_RING_HOLD_RECHECK_MS);
           const next = pickNext(prompt);
           showInSlot(slotIndex, next);
           loopStatic(slotIndex, next);
-        }, wait);
+        };
+        if (recheckMs !== undefined) return pushTimeout(swap, recheckMs);
+        // A long chip is swapped one pause after its words stop; any other after its turn.
+        standDown.push(
+          armLeave({
+            board: stayBoard,
+            spacer,
+            slot: slotIndex,
+            text: prompt.text,
+            fallbackMs: presetTurnMs(prompt.text, slotCount),
+            tailMs: 0,
+            onLeave: swap,
+          }),
+        );
       };
       first.forEach((prompt, i) => loopStatic(i, prompt));
       return () => {
         cancelled = true;
         timeouts.forEach((id) => window.clearTimeout(id));
+        standDown.forEach((stop) => stop());
       };
     }
 
@@ -521,7 +541,18 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
                 loop(pickNext(prompt), 0);
               }, pace.fadeOutMs);
             };
-            pushTimeout(fadeOut, spacer.delayBefore(slotIndex, Date.now(), presetHoldMs(prompt.text, slotCount), pace.fadeOutMs));
+            // The fade-out starts one pause after a long chip's words stop (stayBoard), else after the hold.
+            standDown.push(
+              armLeave({
+                board: stayBoard,
+                spacer,
+                slot: slotIndex,
+                text: prompt.text,
+                fallbackMs: presetHoldMs(prompt.text, slotCount),
+                tailMs: pace.fadeOutMs,
+                onLeave: () => !cancelled && fadeOut(),
+              }),
+            );
           }, pace.fadeInMs);
         }, firstDelay);
       };
@@ -533,11 +564,12 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
     return () => {
       cancelled = true;
       timeouts.forEach((id) => window.clearTimeout(id));
+      standDown.forEach((stop) => stop());
     };
     // askRestartToken restarts this whole effect on every completed Ask (D58 #3) even when
     // seedsKey is unchanged, which is exactly what happens under a pinned QA batch: it always
     // resolves to the same three chips, so seedsKey alone never signals that an Ask happened.
-  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken, rowHeld]);
+  }, [seedsKey, seeds, staticMode, useLocalKnowledgeBase, slotCount, askRestartToken, rowHeld, stayBoard]);
 
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">
@@ -566,6 +598,7 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
               buttonRef={nav.setButtonRef[i]}
               navHandlers={nav.handlersFor(i, slots.length)}
               blockedEdge={nav.isBlockedEdge(i)}
+              onScrollPlan={(text, report) => stayBoard.report(i, text, report)}
             />
           </div>
         );

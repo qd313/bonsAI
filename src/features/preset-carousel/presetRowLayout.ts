@@ -2,7 +2,9 @@
  * Title: Preset row layout
  * Purpose: The numbers that shape the suggestion row — how many chips sit across it, their height
  *          and gap, and the scrolling-label settings — plus the hold and turn lengths of a chip at the
- *          pace for one chip or two (presetPace.ts), with the floor a scrolling label needs.
+ *          pace for one chip or two (presetPace.ts), with the estimate of what a scrolling label needs (the row replaces a long chip by the chip's own
+ *          measured time line instead, presetChipStay.ts; the estimate stands in until the chip has
+ *          reported, and for a chip that does not scroll).
  * Used for: MainTabPresetAnimatedChips, carouselState (window size), sessionRagComposer (which slot
  *           the corpus guarantee converts), section-4 styles.
  * Solves: One place for "two across" (D43, 2026-09-01) so the composer, the carousel window and the
@@ -121,7 +123,9 @@ function marqueeHoldFloorMs(text: string, chipCount: number): number {
 
 /**
  * Hold time for a chip: the length-scaled hold at this chip count's pace (presetPace.ts), but never
- * shorter than one full scroll of a label too long for its chip.
+ * shorter than one full scroll of a label too long for its chip, worked out from a character count.
+ * It is what the row waits when it has nothing better: a chip that scrolls tells the row its real time
+ * line (presetChipStay.ts) and is replaced at the end of that instead.
  */
 export function presetHoldMs(text: string, chipCount: number): number {
   return Math.max(holdMsForPresetText(text, presetPace(chipCount)), marqueeHoldFloorMs(text, chipCount));

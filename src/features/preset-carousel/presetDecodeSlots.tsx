@@ -25,6 +25,7 @@ import { DecodePresetChipButton, type DecodeLabelNodes, type DecodeLabelRefs, ty
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
 import { effectivePresetVisibleSlots, presetTurnMs } from "./presetRowLayout";
 import { makeChangeSpacer } from "./changeSpacing";
+import { makeChipStayBoard } from "./presetChipStay";
 import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSlotRotation";
 import { seedsKeyFrom } from "./carouselState";
 import {
@@ -104,6 +105,8 @@ export function MainTabPresetDecodeSlots(
   const [resolved, setResolved] = useState<boolean[]>(() => Array.from({ length: slotCount }, () => false));
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
+  // What each settled long label tells the row about its own scroll (presetChipStay.ts).
+  const [stayBoard] = useState(makeChipStayBoard);
 
   const labelRefs = useRef<DecodeLabelNodes[]>([]);
   /** Stable per-slot ref callbacks — an inline arrow per render would churn ref identity and
@@ -195,7 +198,7 @@ export function MainTabPresetDecodeSlots(
 
     const begin = (slotIndex: number, prompt: PresetPrompt, now: number) => {
       const churn = makeDecodeChurn(prompt.text.length);
-      state[slotIndex] = { prompt, startAt: now, churn, lastRevealedCount: -1, resolved: false, holdEndAt: 0 };
+      state[slotIndex] = { prompt, startAt: now, churn, lastRevealedCount: -1, resolved: false, holdEndAt: 0, endsAt: null };
       showInSlot(slotIndex, prompt);
       markResolved(slotIndex, false);
       // Frame 0: paint the full-length scramble immediately rather than waiting for the next rAF
@@ -209,6 +212,13 @@ export function MainTabPresetDecodeSlots(
       if (!anim) return;
 
       if (anim.resolved) {
+        // A long label is replaced one pause after its words stop: the label's own end, read off the
+        // board (Date.now clock) and moved onto this loop's clock. Told again if the label re-measures.
+        const ends = stayBoard.leaveAt(slotIndex, anim.prompt.text);
+        if (ends !== null && ends !== anim.endsAt) {
+          anim.endsAt = ends;
+          anim.holdEndAt = spacer.reserve(slotIndex, now + (ends - Date.now()), true);
+        }
         // rowHeld: an answer is being written or the ring is on the row; a reveal under way finishes.
         if (now >= anim.holdEndAt && mayStartNextCycle() && !nav.rowHeld()) {
           begin(slotIndex, pickNext(anim.prompt), now);
@@ -263,7 +273,7 @@ export function MainTabPresetDecodeSlots(
     // askRestartToken restarts this whole effect on every completed Ask (D58 #3) even when
     // seedsKey is unchanged, which is exactly what happens under a pinned QA batch: it always
     // resolves to the same three chips, so seedsKey alone never signals that an Ask happened.
-  }, [seedsKey, seeds, reducedMotion, useLocalKnowledgeBase, slotCount, askRestartToken]);
+  }, [seedsKey, seeds, reducedMotion, useLocalKnowledgeBase, slotCount, askRestartToken, stayBoard]);
 
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">
@@ -283,6 +293,7 @@ export function MainTabPresetDecodeSlots(
             buttonRef={nav.setButtonRef[i]}
             navHandlers={nav.handlersFor(i, slots.length)}
             blockedEdge={nav.isBlockedEdge(i)}
+            onScrollPlan={(text, report) => stayBoard.report(i, text, report)}
           />
         </div>
       ))}

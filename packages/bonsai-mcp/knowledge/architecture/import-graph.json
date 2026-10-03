@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 723,
-  "edgeCount": 2085,
+  "fileCount": 724,
+  "edgeCount": 2089,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2691,6 +2691,15 @@
         "src/features/chat-slots/ChatSlotRow.tsx"
       ]
     },
+    "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx": {
+      "imports": [
+        "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx": {
       "imports": [
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
@@ -2714,6 +2723,7 @@
       ],
       "importedBy": [
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
@@ -2772,6 +2782,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SessionContextStrip.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
@@ -5632,6 +5643,7 @@
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
@@ -7983,6 +7995,7 @@
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/SettingsTab.tsx",
+        "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",

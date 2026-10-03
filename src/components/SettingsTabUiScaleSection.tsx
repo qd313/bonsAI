@@ -32,6 +32,7 @@ import {
   UI_SCALE_PROFILE_LABEL,
 } from "../data/uiScaleProfile";
 import { SettingsTabUiScaleSlider } from "./SettingsTabUiScaleSlider";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type SettingsTabUiScaleSectionProps = {
   uiScaleAutoEnabled: boolean;
@@ -261,6 +262,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
                 ref={(el) => {
                   resetButtonRef.current = el as HTMLButtonElement | null;
                 }}
+                className={FOCUS_RING_BTN_CLASS}
                 onClick={handleResetAutomatic}
                 {...({
                   onMoveUp: () => focusSliderBridge(),
@@ -282,6 +284,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
             ref={(el) => {
               setApplyButtonRef(el as HTMLButtonElement | null);
             }}
+            className={FOCUS_RING_BTN_CLASS}
             onClick={handleApply}
             disabled={applying}
             {...({

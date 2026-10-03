@@ -13,6 +13,11 @@
  *          `className` names a class the plugin's real stylesheet draws a `.gpfocus` rule for
  *          (FOCUS_RING_BTN_CLASS counts). The ring classes are read from the stylesheet itself, so
  *          a class with no focus rule does not pass.
+ *          A second check covers the buttons that paint NO fill of their own (plain Steam buttons):
+ *          on the Settings, Developer, Ollama and Permissions tabs every one must also carry a ring
+ *          class, and every Steam button row (ButtonItem) must sit inside the ring host div. Deck walk
+ *          2026-10-03 (plan81-P81-RING-WALK-SETTINGS-DEV.json) found "Apply UI scale" with the
+ *          browser's default outline and "Jump to Steam Input" with none, both plain.
  * Does not: See pixels, or catch a button whose ring comes from an ancestor's rule (those are named
  *           in KNOWN with the reason). The Deck walk on each tab is still the real check.
  *
@@ -26,7 +31,7 @@ import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
 import { buildBonsaiScopeStylesheet } from "./bonsaiScopeStylesheet";
-import { FOCUS_RING_BTN_CLASS } from "./settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_ITEM_HOST_CLASS } from "./settingsGlassButton";
 
 const SRC = join(__dirname, "..");
 
@@ -115,5 +120,67 @@ describe("buttons that paint their own fill still show the D-pad ring", () => {
     // On a failure, `lines` names each button. A new one: give it className={FOCUS_RING_BTN_CLASS}.
     // A fixed one: lower (or remove) its file's number in KNOWN.
     expect({ counts, lines }).toEqual({ counts: expected, lines: expect.anything() });
+  });
+});
+
+/** The files that draw the Settings, Developer, Ollama and Permissions tabs' buttons. */
+const TAB_FILES = [
+  "components/SettingsTab.tsx",
+  "components/SettingsTabUiScaleSection.tsx",
+  "components/DeveloperTab.tsx",
+  "components/PermissionsTab.tsx",
+  "components/PermissionDenyAction.tsx",
+  "components/OllamaSavedHostsRows.tsx",
+  "components/OllamaWhereAiRunsSection.tsx",
+  "components/VoiceInputSettingsSection.tsx",
+  "components/KnowledgeBaseSection.tsx",
+];
+
+/** Buttons in TAB_FILES with no ring class, and Steam button rows outside the ring host div. */
+function unringedTabButtons(rings: Set<string>): string[] {
+  const found: string[] = [];
+  for (const file of TAB_FILES) {
+    const path = join(SRC, file);
+    const text = readFileSync(path, "utf8");
+    const sf = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const classOf = (node: ts.JsxOpeningElement | ts.JsxSelfClosingElement): string => {
+      for (const attr of node.attributes.properties) {
+        if (ts.isJsxAttribute(attr) && attr.name.getText(sf) === "className" && attr.initializer) {
+          return attr.initializer.getText(sf);
+        }
+      }
+      return "";
+    };
+    const visit = (node: ts.Node): void => {
+      if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+        const tag = node.tagName.getText(sf);
+        const line = sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
+        if (tag === "Button" || tag === "DialogButton") {
+          const words: string[] = classOf(node).match(/[\w-]+/g) ?? [];
+          const ringed = words.includes("FOCUS_RING_BTN_CLASS") || words.some((w) => rings.has(w));
+          if (!ringed) found.push(`${file}:${line} ${tag}`);
+        } else if (tag === "ButtonItem") {
+          let hosted = false;
+          for (let up: ts.Node | undefined = node.parent?.parent; up; up = up.parent) {
+            if (ts.isJsxElement(up) && classOf(up.openingElement).includes("FOCUS_RING_ITEM_HOST_CLASS")) hosted = true;
+          }
+          if (!hosted) found.push(`${file}:${line} ButtonItem outside ${FOCUS_RING_ITEM_HOST_CLASS}`);
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return found;
+}
+
+describe("plain Steam buttons on the four tabs also draw the ring", () => {
+  it("the ring host class has a focus rule in the stylesheet", () => {
+    // The host is an ancestor of the focused part, so it is not in ringClasses(): look for its rule.
+    expect(buildBonsaiScopeStylesheet()).toMatch(new RegExp(String.raw`\.${FOCUS_RING_ITEM_HOST_CLASS} \.gpfocus`));
+  });
+
+  it("every Button on those tabs has a ring class, every ButtonItem sits in the ring host", () => {
+    expect(unringedTabButtons(ringClasses())).toEqual([]);
   });
 });

@@ -31,6 +31,7 @@ import { Button } from "@decky/ui";
 
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { PERMISSION_DENY_MESSAGES } from "../utils/permissionDeepLink";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export type PermissionDenyActionProps = {
   capability: BonsaiCapabilityKey;
@@ -81,6 +82,7 @@ export function PermissionDenyAction({
          */}
         <Button
           focusable
+          className={FOCUS_RING_BTN_CLASS}
           onClick={() => onJump(capability)}
           style={{ fontSize: 11, padding: compact ? "4px 10px" : "6px 12px", minHeight: 34 }}
         >

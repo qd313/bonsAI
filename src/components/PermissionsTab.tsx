@@ -42,6 +42,7 @@ import {
   restorePermissionJumpFocusWithRetry,
 } from "../utils/permissionJumpRegistry";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 type Props = {
   capabilities: BonsaiCapabilities;
@@ -175,6 +176,7 @@ export const PermissionsTab: React.FC<Props> = ({
         {showBack ? (
           <PanelSectionRow>
             <Button
+              className={FOCUS_RING_BTN_CLASS}
               onClick={() => onReturnFromPermissionJump?.()}
               style={{ minHeight: 34, fontSize: 12, padding: "6px 12px" }}
             >

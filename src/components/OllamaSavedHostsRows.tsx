@@ -22,6 +22,7 @@ import { toaster } from "@decky/api";
 import { MAX_NAMED_OLLAMA_HOSTS } from "../data/bonsaiSettingsSchema";
 import type { NamedOllamaHost } from "../data/bonsaiSettingsSchema";
 import { isHttpsOllamaAddress } from "../utils/ollamaAddress";
+import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 type OllamaSavedHostsRowsProps = {
   namedOllamaHosts: NamedOllamaHost[];
@@ -46,6 +47,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
           {namedOllamaHosts.map((entry) => (
             <Button
               key={`${entry.label}-${entry.host}`}
+              className={FOCUS_RING_BTN_CLASS}
               onClick={() => {
                 onOllamaIpChange(entry.host);
                 onPersistOllamaIp(entry.host);
@@ -60,6 +62,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
     ) : null}
     <PanelSectionRow>
       <Button
+        className={FOCUS_RING_BTN_CLASS}
         disabled={
           !ollamaIp.trim() ||
           isHttpsOllamaAddress(ollamaIp) ||

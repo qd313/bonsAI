@@ -76,13 +76,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 969,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 970,
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 968,
+      "path": "py_modules/backend/services/transparency_service.py",
+      "lines": 969,
       "role": ""
     },
     {
@@ -166,14 +166,14 @@
       "role": ""
     },
     {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 666,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 665,
       "role": "Load/save/merge settings.json"
-    },
-    {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 658,
-      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

@@ -224,7 +224,10 @@ export function buildScopebaseSection(): string {
         }
         /* The key field: the ring goes on the innermost part Steam marks (the input, or its container
            if that is what Steam marks), never both. Outline only, so the key text does not move. */
-        .bonsai-scope .bonsai-settings-text-field-host .gpfocus:not(:has(.gpfocus)) {
+        /* A Steam button row (ButtonItem: Jump to Steam Input, Clear, Install seed knowledge base...)
+           has no class hook of its own, so it sits in a host and gets the same ring by the same rule. */
+        .bonsai-scope .bonsai-settings-text-field-host .gpfocus:not(:has(.gpfocus)),
+        .bonsai-scope .bonsai-settings-item-ring-host .gpfocus:not(:has(.gpfocus)) {
           outline: 2px solid rgba(255, 255, 255, 0.88) !important;
           outline-offset: -2px !important;
         }

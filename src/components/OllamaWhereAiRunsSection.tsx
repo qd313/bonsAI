@@ -889,6 +889,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   style={{ display: "flex", flexWrap: "wrap", gap: 6 }}
                 >
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     onClick={() => {
                       onOllamaIpChange(entry.host);
                       onPersistOllamaIp(entry.host);
@@ -904,6 +905,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     {entry.verified ? " ✓" : ""}
                   </Button>
                   <Button
+                    className={FOCUS_RING_BTN_CLASS}
                     disabled={namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS}
                     onClick={() => {
                       const host = entry.host.trim();

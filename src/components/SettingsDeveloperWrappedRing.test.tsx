@@ -20,86 +20,10 @@
 import { render } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
-import { SettingsTab, type SettingsTabProps } from "./SettingsTab";
-import { STREAM_SCRAMBLE_OFF } from "../features/stream-scramble/streamScrambleContext";
+import { DeveloperTab } from "./DeveloperTab";
+import { SettingsTab } from "./SettingsTab";
+import { developerProps, outlines, settingsProps } from "./ringTestProps";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
-
-function settingsProps(): SettingsTabProps {
-  return {
-    screenshotAttachmentPreset: "mid",
-    setScreenshotAttachmentPreset: () => {},
-    unifiedInputPersistenceMode: "persist_all",
-    setUnifiedInputPersistenceMode: () => {},
-    voiceReplyMode: "off",
-    setVoiceReplyMode: () => {},
-    aiCharacterEnabled: true,
-    setAiCharacterEnabled: () => {},
-    aiCharacterRandom: false,
-    aiCharacterPresetId: "",
-    aiCharacterCustomText: "",
-    aiCharacterAccentIntensity: "balanced",
-    setAiCharacterAccentIntensity: () => {},
-    showDeveloperTab: false,
-    setShowDeveloperTab: () => {},
-    strategySpoilerMaskingEnabled: true,
-    setStrategySpoilerMaskingEnabled: () => {},
-    presetSingleChip: false,
-    setPresetSingleChip: () => {},
-    voiceSttModel: "tiny.en",
-    setVoiceSttModel: () => {},
-    microphoneAccessEnabled: false,
-    uiScaleAutoEnabled: true,
-    uiScaleManualProfile: "handheld",
-    appliedUiScaleProfileId: "handheld",
-    onApplyUiScale: () => {},
-    onOpenCharacterPicker: () => {},
-    onBeforeDeckyModal: () => {},
-    onCompleteDeckyModalClose: (close) => close(),
-    onResetSession: () => {},
-    onClearAllPluginData: () => {},
-  };
-}
-
-function developerProps(): DeveloperTabProps {
-  return {
-    capturedErrors: [],
-    onClearErrors: () => {},
-    desktopDebugNoteAutoSave: false,
-    setDesktopDebugNoteAutoSave: () => {},
-    desktopAskVerboseLogging: false,
-    setDesktopAskVerboseLogging: () => {},
-    desktopAppLogLevel: "default",
-    setDesktopAppLogLevel: () => {},
-    filesystemWrite: false,
-    presetChipAnimation: "fade",
-    setPresetChipAnimation: () => {},
-    steamWebApiKey: "",
-    setSteamWebApiKey: () => {},
-    showOnscreenDebugHud: false,
-    setShowOnscreenDebugHud: () => {},
-    devForceSessionRagChips: false,
-    setDevForceSessionRagChips: () => {},
-    devPreloadAskModel: false,
-    setDevPreloadAskModel: () => {},
-    devFrozenTestChips: [],
-    setDevFrozenTestChips: () => {},
-    ragHybridRetrievalEnabled: false,
-    setRagHybridRetrievalEnabled: () => {},
-    tabResumeMode: "resume",
-    setTabResumeMode: () => {},
-    streamScramble: STREAM_SCRAMBLE_OFF,
-    onStreamScrambleChange: () => {},
-  };
-}
-
-/** Put Steam's focus class on `only` (and nowhere else in `all`), read each element's outline. */
-function outlines(all: HTMLElement[], only: HTMLElement | null): string[] {
-  for (const el of all) el.classList.toggle("gpfocus", el === only);
-  const out = all.map((el) => getComputedStyle(el).outline);
-  for (const el of all) el.classList.remove("gpfocus");
-  return out;
-}
 
 const SOLID_WHITE = /solid/;
 

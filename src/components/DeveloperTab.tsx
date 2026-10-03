@@ -99,7 +99,7 @@ import { DeveloperOptionRow } from "./DeveloperOptionRow";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import type { StreamScrambleSettings } from "../features/stream-scramble/streamScrambleContext";
-import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
 
 const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
   off: "Off",
@@ -286,9 +286,11 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
             </div>
           </PanelSectionRow>
           <PanelSectionRow>
-            <ButtonItem layout="below" disabled={seedKbBusy} onClick={runInstallSeedKb}>
-              {seedKbBusy ? "Installing seed knowledge base…" : "Install seed knowledge base"}
-            </ButtonItem>
+            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+              <ButtonItem layout="below" disabled={seedKbBusy} onClick={runInstallSeedKb}>
+                {seedKbBusy ? "Installing seed knowledge base…" : "Install seed knowledge base"}
+              </ButtonItem>
+            </div>
           </PanelSectionRow>
           <PanelSectionRow>
             <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
@@ -325,9 +327,11 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               Experimental: opens per-game controller configuration for the running game. Requires a focused/running
               title.
             </div>
-            <ButtonItem layout="below" onClick={onSteamInputPhase1Jump}>
-              Jump to Steam Input (running game)
-            </ButtonItem>
+            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+              <ButtonItem layout="below" onClick={onSteamInputPhase1Jump}>
+                Jump to Steam Input (running game)
+              </ButtonItem>
+            </div>
           </PanelSectionRow>
         ) : null}
         <PanelSectionRow>
@@ -337,9 +341,11 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
         </PanelSectionRow>
         {capturedErrors.length > 0 ? (
           <PanelSectionRow>
-            <ButtonItem layout="below" onClick={onClearErrors}>
-              <span style={{ fontSize: 12 }}>Clear ({capturedErrors.length})</span>
-            </ButtonItem>
+            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+              <ButtonItem layout="below" onClick={onClearErrors}>
+                <span style={{ fontSize: 12 }}>Clear ({capturedErrors.length})</span>
+              </ButtonItem>
+            </div>
           </PanelSectionRow>
         ) : null}
         {capturedErrors.length === 0 ? (
@@ -565,9 +571,11 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                 </ol>
               ) : null}
               {devFrozenTestChips.length > 0 ? (
-                <ButtonItem layout="below" onClick={() => setDevFrozenTestChips([])}>
-                  Clear frozen test chips
-                </ButtonItem>
+                <div className={FOCUS_RING_ITEM_HOST_CLASS}>
+                  <ButtonItem layout="below" onClick={() => setDevFrozenTestChips([])}>
+                    Clear frozen test chips
+                  </ButtonItem>
+                </div>
               ) : null}
             </div>
           </div>

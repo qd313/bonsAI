@@ -47,6 +47,13 @@ export const FOCUS_RING_BTN_CLASS = "bonsai-settings-focus-btn";
 export const FOCUS_RING_INSET_CLASS = "bonsai-settings-focus-inset";
 export const FOCUS_RING_WRAP_CLASS = "bonsai-settings-focus-wrap";
 
+/**
+ * For a Steam ButtonItem row (Jump to Steam Input, Clear, Install seed knowledge base). A ButtonItem
+ * takes no className, so put this on a plain div around it: the ring then goes on the innermost part
+ * Steam marks (the row, or the button inside it), never both.
+ */
+export const FOCUS_RING_ITEM_HOST_CLASS = "bonsai-settings-item-ring-host";
+
 /** SteamOS glass row button — matches Test connection / Browse models (no tint fill). Pair with FOCUS_RING_BTN_CLASS. */
 export const SETTINGS_GLASS_BTN: React.CSSProperties = {
   minHeight: 36,

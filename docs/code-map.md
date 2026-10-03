@@ -200,6 +200,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **buildEarlierList.tsx** (src/components/buildEarlierList.tsx) — *What the "N earlier" part of a long chat puts on screen*: Decide, for the transcript, the "N earlier" line, the day lines under it once it is open, which older questions are drawn as rows, and what A and B do on each line.
 - **icons.tsx** (src/components/icons.tsx) — *The plugin's icon set*: Every small icon drawn anywhere in the plugin, gathered in one file: the tab-title icons (a lock for Permissions, a gear for Settings, a bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase i" for About), the plugin's own logo as an inline icon (the open tab…
 - **pullModelsListClearance.ts** (src/components/pullModelsListClearance.ts) — *Keep a model row clear of the list's sticky column-header row*: The AI models list has a sticky "Pull / Model / Size ..." header row at its top. The Deck's scroll-into-view treats that strip as free space and does nothing for a row that is already partly inside the list, so going Up onto the first model with the list scrolled left 15 of the…
+- **ringTestProps.ts** (src/components/ringTestProps.ts) — *Shared props and a ring reader for the focus-ring tests*: The two ring tests (SettingsDeveloperWrappedRing, SettingsDeveloperLeftoverRing) both render the real Settings and Developer tabs and read back a computed outline. […]
 
 ## src/components/deck
 

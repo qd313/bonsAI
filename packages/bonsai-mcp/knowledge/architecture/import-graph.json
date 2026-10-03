@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 727,
-  "edgeCount": 2098,
+  "fileCount": 729,
+  "edgeCount": 2111,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -217,7 +217,9 @@
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/ringTestProps.ts",
         "src/features/plugin-shell/tabs/useDeveloperTabPayload.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/utils/ollamaTabLocalSurvival.ts"
@@ -1257,10 +1259,12 @@
     "src/components/OllamaSavedHostsRows.tsx": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/ollamaAddress.ts"
       ],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx"
       ]
     },
     "src/components/OllamaTab.focusRing.test.tsx": {
@@ -1440,6 +1444,7 @@
     },
     "src/components/PermissionDenyAction.tsx": {
       "imports": [
+        "src/styles/settingsGlassButton.ts",
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
@@ -1481,6 +1486,7 @@
     "src/components/PermissionsTab.tsx": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/permissionJumpRegistry.ts"
@@ -1489,6 +1495,7 @@
         "src/components/PermissionsTab.internetDownloads.test.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx"
       ]
     },
@@ -1750,11 +1757,22 @@
         "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
+    "src/components/SettingsDeveloperLeftoverRing.test.tsx": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/components/OllamaSavedHostsRows.tsx",
+        "src/components/PermissionsTab.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsDeveloperWrappedRing.test.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
         "src/components/SettingsTab.tsx",
-        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/components/ringTestProps.ts",
         "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
@@ -1820,6 +1838,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
@@ -1829,6 +1848,7 @@
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabRememberTypedSwitch.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
+        "src/components/ringTestProps.ts",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx"
       ]
     },
@@ -1890,7 +1910,8 @@
     "src/components/SettingsTabUiScaleSection.tsx": {
       "imports": [
         "src/components/SettingsTabUiScaleSlider.tsx",
-        "src/data/uiScaleProfile.ts"
+        "src/data/uiScaleProfile.ts",
+        "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
@@ -2039,6 +2060,17 @@
       "imports": [],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/components/ringTestProps.ts": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/features/stream-scramble/streamScrambleContext.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx"
       ]
     },
     "src/context/UiScaleContext.tsx": {
@@ -3742,8 +3774,8 @@
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tsx",
-        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
+        "src/components/ringTestProps.ts",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/features/stream-scramble/streamScrambleContext.test.ts",
@@ -5123,6 +5155,7 @@
         "src/components/BonsaiPluginShell.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
@@ -5461,10 +5494,14 @@
         "src/components/DeveloperTab.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaThinkingEffortRow.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/PermissionDenyAction.tsx",
+        "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]

@@ -44,6 +44,7 @@ from backend.services.local_ollama_setup_service import (
     DEFAULT_BASE,
     is_loopback_ollama_host,
     list_installed_ollama_tags,
+    local_ollama_cli_home_ready,
 )
 
 logger = logging.getLogger("bonsai")
@@ -100,8 +101,10 @@ async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -
     In: the plugin (for its settings and log) and the model names a PC answered with just now.
     Out: the names dropped (empty when nothing changed). An empty list prunes nothing: an
     unreachable PC reads the same as a PC with no models. This Deck's own Ollama and the other saved
-    PCs are asked too, because the order is one list. When this Deck's own list cannot be read,
-    nothing is pruned (a Deck-only name would otherwise be lost just because its Ollama was off). A download in progress on the Deck keeps its place. Never raises.
+    PCs are asked too, because the order is one list. When this Deck's own list cannot be read
+    but Ollama is set up here (`local_ollama_cli_home_ready`, the check the connection test uses for
+    "not set up on this Deck"), nothing is pruned: a Deck-only name would otherwise be lost just
+    because its Ollama was off. With no Ollama on the Deck at all, the PC's list decides. A download in progress on the Deck keeps its place. Never raises.
     """
     try:
         listed = [str(t).strip() for t in pc_models if str(t).strip()]
@@ -112,9 +115,11 @@ async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -
         if not patch:
             return []
         deck = await _tags_of(DEFAULT_BASE)
-        if not deck:
-            # This Deck's own Ollama did not answer (off, unreachable, or nothing installed): a
-            # name only the Deck holds cannot be told apart from a name gone everywhere, so keep all.
+        if not deck and local_ollama_cli_home_ready():
+            # Ollama IS set up on this Deck but did not answer (stopped, or no model): a name only the
+            # Deck holds cannot be told apart from a name gone everywhere, so keep all. When Ollama is
+            # not set up on the Deck at all (the usual "AI only on a PC" setup) no name can be
+            # Deck-only, so the PC's list is enough to go on.
             return []
         others = await tags_on_saved_pcs(current)
         state = dict(getattr(plugin, "_local_ollama_setup_state", {}) or {})

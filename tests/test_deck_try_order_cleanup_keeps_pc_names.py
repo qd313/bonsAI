@@ -250,15 +250,27 @@ class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsy
 
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
 
-    async def test_when_the_decks_own_list_cannot_be_read_nothing_is_pruned(self) -> None:
-        # The Deck's AI off or unreachable reads as []: a Deck-only name must not go for that.
+    async def _pc_lists_deck_silent(self, set_up_on_deck: bool) -> list[str]:
+        """The PC lists one model while this Deck's Ollama answers nothing (set up but stopped, or not set up)."""
         self.lists[DECK_BASE] = []
+        with patch.object(ollama_pc_models, "local_ollama_cli_home_ready", return_value=set_up_on_deck):
+            return await self._pc_lists(["gemma4:e2b-it-qat"])
+
+    async def test_ollama_set_up_on_the_deck_but_not_answering_prunes_nothing(self) -> None:
         before = self._raw()
-
-        out = await self._pc_lists(["gemma4:e2b-it-qat"])
-
-        self.assertEqual(out, [])
+        self.assertEqual(await self._pc_lists_deck_silent(True), [])
         self.assertEqual(self._raw(), before)
+
+    async def test_no_ollama_on_the_deck_at_all_the_pc_list_decides(self) -> None:
+        self.assertEqual(await self._pc_lists_deck_silent(False), ["gone:7b"])
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat"])
+
+    async def test_no_ollama_on_the_deck_still_keeps_a_name_another_saved_pc_has(self) -> None:
+        self.lists["http://192.168.1.20:11434"] = ["gone:7b"]
+        await self._pc_lists_deck_silent(False)
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
 
     async def test_an_empty_listing_changes_nothing(self) -> None:
         before = self._raw()

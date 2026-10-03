@@ -1,0 +1,23 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01, live half",
+  "prepared_answer": true,
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:25-18:28 EDT",
+  "screen": "Deck's own screen, Quick Access page 854x454, no game (Hollow Knight asked by name)",
+  "setup": "Stand-in AI on this PC, scenario spoiler-live (one prepared hidden block with the story fact, then three choice buttons, about 7 s). Deck pointed at it (see plan81-P77-CUT-MENU-TEXT.json). Strategy mode, spoiler masking on (strategy_spoiler_masking_enabled true). A page watcher polled the panel text and spoiler-class elements every 250 ms. Try 1 question (send script, VERIFIED): 'Give me a plan for the next area in Hollow Knight, spoilers are okay.' Try 2 (different wording): 'Spoilers are fine, what should I do in the next Hollow Knight area?' Each asked with the focus read on 'ask' and A as its own press.",
+  "pressed": "send script; DOWN from the question box to ask (read: ask); A.",
+  "seen": {
+    "try1": "Ask was pressed at about watcher time 26 s; answer log 18:26:08 POST, 18:26:15 completed (7.3 s). Watcher timeline: t 27.5 s the text 'Spoiler hidden until complete' appeared (1 spoiler-class element, panel text 651 letters); t 29.76 s that became a 'tap to show' cover (1 spoiler-class element); t 31.1 s the cover was gone and the story fact was plain text ('Story fact (prepared test text): the Hollow Knight was sealed inside the Black Egg Temple ...'). So for about 3.6 s while the answer was still coming in, a chip (2.25 s) and then a tap-to-show cover (1.35 s) were on screen before the plain text. Counts of 250 ms samples: 9 with the chip text, 5 with the tap-to-show text, 14 with a spoiler-class element, out of 181.",
+    "try1_after": "At the end of the answer and later reads (about 25 s and 60 s after): plain text, no chip, no cover, 0 spoiler-class elements. Saved turn: spoiler_consent true, exactly 1 bonsai-spoiler fence.",
+    "try2": "Ask at about watcher time 11 s (log 18:27:01 POST, 18:27:08 completed, 9.8 s). 79 samples (19.75 s): 0 with the chip, 0 with tap-to-show, 0 spoiler-class elements. But the prepared answer was not in the panel text at all from 4.5 s to 11.25 s (panel text only 476 letters; the answer appeared whole at 11.25 s, with the story fact as plain text). Read again 30 s later: plain, 0 covers. Saved turn: spoiler_consent true, 1 fence.",
+    "not_done": "The fold-and-reopen from the history was not done; the control question without 'spoilers are okay' (README's control) was not asked."
+  },
+  "expected": "the hidden block's words show as plain text from the first word while it streams (no tap-to-show cover, no 'Spoiler hidden until complete' chip); plain at every read; one hidden block and consent true in the saved turn",
+  "verdict": [
+    "FAIL (try 1) - while the answer streamed, a 'Spoiler hidden until complete' chip showed for about 2.25 s and then a tap-to-show cover for about 1.35 s before the plain text appeared (31.1 s on the watcher).",
+    "UNCLEAR (try 2) - no chip and no cover at any of 79 reads, but the answer text was not on screen at all until it was complete, so the 'plain from the first word while it streams' part could not be seen.",
+    "PASS - the finished answer, and every later read, shows the story fact as plain text; the saved turn holds one hidden block and consent true (both tries)."
+  ],
+  "side_effect": "The test chat holds two more prepared turns. The Deck still points at the stand-in until the put-back step.",
+  "memory": "no game, not recorded"
+}

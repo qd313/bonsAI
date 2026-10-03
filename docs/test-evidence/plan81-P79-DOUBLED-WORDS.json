@@ -1,0 +1,21 @@
+{
+  "row": "P79-DOUBLED-WORDS",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:09-18:12 EDT",
+  "screen": "Quick Access page window 854x454 (the Deck's own screen), no game running",
+  "setup": "Test chat open on Main. Voice engine present (whisper-cli, whisper-server, ggml-tiny.en.bin in the bonsAI folder), plugin listens with pw-record on the Internal Mic source. The recorded sentence (voice-sentence.wav, 313306 bytes, ~9.8 s) was copied to /tmp/p81-voice.wav on the Deck. Speaker volume read only: sink 'Audio Coprocessor Speaker' vol 0.15, Mute: no (not muted, so the step was allowed to run). A page watcher polled the question box and the mic button's label every 200 ms.",
+  "pressed": "RIGHT x2 from the question box to the 'Voice input' button (focus read: aria-label 'Voice input', never A on the box); A (label turned to 'Stop voice input', plugin was listening); at once pw-play /tmp/p81-voice.wav over SSH (played to the end, twice in the first listening session, about 40 s apart); A to stop; then a second listening session: A, pw-play once more, A to stop.",
+  "seen": {
+    "box_text_after_play_1": "(empty)",
+    "box_text_after_play_2_same_session": "(empty)",
+    "box_text_after_stop_1": "(empty)",
+    "second_session_box_text_after_play": "(empty)",
+    "second_session_box_text_after_stop": "(empty)",
+    "mic_level_measurement": "Separate 8 s recording from the Internal Mic source (pw-record, 16 kHz mono) while pw-play played the sentence: the sound level (RMS of 16-bit samples) was 0 in every one of the 8 one-second pieces. The plugin ignores sound under RMS 120. So the Deck's microphone path delivered pure silence, not even room noise, on this Deck tonight; the speaker's sound never reached the recorder.",
+    "plugin_log": "no voice or whisper lines logged during either session (the plugin ran whisper-server on port 18765 and pw-record as expected)."
+  },
+  "expected": "five spoken tries; in none of them a stretch of words appears twice",
+  "verdict": "COULD NOT RUN - the box stayed empty in three plays over two listening sessions (rule: stop after empty twice running). Measured cause: the Deck's recorder hears level 0 even with the sentence playing from the speaker. Zero of the five tries produced text, so doubled words could not be judged.",
+  "side_effect": "None on settings. Volume not changed. The listening was stopped (button reads 'Voice input' again, no pw-record left). Temporary files /tmp/p81-voice.wav stays on the Deck (313 KB); /tmp/p81-mic.wav removed.",
+  "prepared_answer": false
+}

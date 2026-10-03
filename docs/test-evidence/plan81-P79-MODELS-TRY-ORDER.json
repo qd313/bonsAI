@@ -1,0 +1,26 @@
+{
+  "row": "P79-MODELS-TRY-ORDER (c: move a place; PC half; 'Skipped: too big')",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:27-18:34 EDT",
+  "screen": "Deck's own screen. The AI models box is drawn by the Steam main window page ('Steam Big Picture Mode' target), not the Quick Access page. No game running.",
+  "setup": "Second small model pulled onto the Deck: qwen2.5:3b (1.9 GB). The plugin's own Browse models route opened the models box with the filters 'Open source only, Essentials only' on and its only way to name a model was 'Type a name' (needs the on-screen keyboard), so the pull was done with curl against the Deck's Ollama over SSH (api/pull, 'status: success'; /api/tags then lists it). Old saved try order: text_model_routing_order ['gemma4:e2b-it-qat'], vision ['gemma4:e2b-it-qat'], model_allow_high_vram_fallbacks false.",
+  "pressed_c": "Ollama tab, 'AI models' button (focus read), A. Inside the box one press at a time with the focus read after each: Down x3 (Advanced > Refresh model catalog > Filters > 'Try order for text questions'), Down ('gemma4:e2b-it-qat is used for Ask'), Down ('Select qwen3.5:4b to pull'), Down ('Select qwen2.5vl:3b to pull'), Down ('Use qwen2.5:3b for Ask' - never A here), Right ('Move qwen2.5:3b up'), A; Right ('Move qwen2.5:3b down'), A; B to close.",
+  "seen_c": {
+    "before": "gemma4:e2b-it-qat place 1, qwen2.5:3b place 2.",
+    "after_up": "gemma4:e2b-it-qat place 2, qwen2.5:3b place 1; settings text_model_routing_order read ['qwen2.5:3b','gemma4:e2b-it-qat'] at once.",
+    "after_down": "gemma4:e2b-it-qat place 1, qwen2.5:3b place 2 again; settings read ['gemma4:e2b-it-qat','qwen2.5:3b'].",
+    "order_left": "The places are as they were (gemma first). The saved list now holds two names instead of one because the second model is installed (it was ['gemma4:e2b-it-qat'] before the pull). vision order unchanged ['gemma4:e2b-it-qat']."
+  },
+  "pressed_pc": "'Run AI on this Deck' switch A (off), PC address set to 192.168.86.27:11434 through the page's input path (native setter + input event; no A on the field), Test connection (A, focus read): 'Connected . Ollama v0.35.1 . 31 models'. Then the AI models box as above. Allow-high-VRAM setting not touched (false).",
+  "seen_pc": {
+    "box_text": "A note says 'These places are for the PC the AI runs on; Pull and Remove act on this Deck. A place change is saved at once; Cancel does not undo it.' and '2 models in the order are hidden by the filters. They keep their place; the numbers skip them.' A section 'ON THE PC' lists 22 PC models, each with a PC tag, and a place number with up and down buttons, e.g. gemma4:e2b-it-qat 1, qwen2.5:3b 2, qwen3.5:4b 3, qwen3.5:9b 5, gemma4:e4b-it-qat 6, gemma4:12b-it-qat 7, qwen3.5:2b 8, granite4.2:8b 9, granite4.2:3b 10, bge-m3 11, qwen3.6:27b 12, gemma-cursor 13, qwen-cursor 14, gemma4:26b 15, gemma4:latest 16, qwen2.5:14b 18, qwen2.5-coder:14b 19, llava:latest 20, llava:7b 21, llama3:latest 22, gemma3:latest 23.",
+    "skipped_too_big": "The label 'Skipped: too big' appears NOWHERE in the box (searched all text, aria-labels and titles). The PC's real sizes: qwen3.6:27b 17.4 GB, gemma4:26b 18.0 GB, gemma-cursor:latest 18.0 GB (all 15 GB or more). In the box those rows show size '-', class 'Other', stars '?' and an ordinary place number (qwen3.6:27b 12, gemma4:26b 15, gemma-cursor 13) with up/down arrows. The box does not know the PC models' sizes."
+  },
+  "expected": "(c) place numbers change on screen and in the saved try order; PC models get their own rows with places; a PC model of 15 GB or more shows 'Skipped: too big' while Allow high-VRAM models is off",
+  "verdict": [
+    "PASS (c) - moving qwen2.5:3b up then down changed the place numbers on screen and the saved text order each time, and the order ended as it began.",
+    "PASS (PC rows) - the PC's models get their own rows with places once the Deck is pointed at the PC's Ollama.",
+    "FAIL ('Skipped: too big') - none of the PC's 15 GB or larger models (qwen3.6:27b, gemma4:26b, gemma-cursor) shows the label; their sizes are unknown to the box and they carry normal places."
+  ],
+  "side_effect": "qwen2.5:3b stays installed on the Deck (as the runbook says). The Deck is back on its own AI (Run AI on this Deck on; Test connection read 'Connected . Ollama v0.34.1 . 3 models'; PC address field set back to the default text 192.168.1.). The saved text try order now has two names (see above)."
+}

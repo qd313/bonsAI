@@ -1,0 +1,15 @@
+{
+  "row": "P78-HELP-CHIP-DISMISS",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:33-18:36 EDT",
+  "screen": "Deck's own screen, Quick Access page 854x454, no game",
+  "setup": "Read on the Quick Access page: localStorage['bonsai:plugin-help-dismissed'] = '1' and ['bonsai:disclaimer-accepted'] = '1' (11 bonsai keys in all). Removed only the help key (read back: null). Then over SSH asked Steam's web helper to restart (pkill -f steamwebhelper; my own SSH shell was killed by the same command, exit 255, which did not matter). Steam's helpers came back within about 10 s (10 steamwebhelper processes, the Quick Access page's own clock showed it had been running 11 s when read); Quick Access worked again at once.",
+  "pressed": "deck_openPlugin (opened after one chord, the panel mounted); LB x3 and one Down/LB to reach Main (the first LBs did nothing because the ring was deep in the Ollama tab, not on the tab bar).",
+  "seen": {
+    "flag_after_restart": "localStorage['bonsai:plugin-help-dismissed'] read '1' again, before I opened the panel or pressed anything in it (disclaimer key also '1'). I did not write it. Same as 2026-10-01: the value comes back by itself.",
+    "help_chip": "No 'How to use bonsAI' text anywhere on the Main tab; the chips are the ordinary suggestion chips."
+  },
+  "expected": "after the key is removed and the web helper restarted, the 'How to use bonsAI' help chip shows",
+  "verdict": "COULD NOT RUN - the help chip did not come back: the stored flag reads '1' again by itself after the web helper restart, so there was no help chip to open the quick start from. The key is '1' (as found); nothing needs putting back. The fix still rests on its unit tests and the maintainer's first-install check.",
+  "side_effect": "Steam's web helper was restarted once (about 10 s of no Quick Access). Plugin panel closed by the restart and reopened by me."
+}

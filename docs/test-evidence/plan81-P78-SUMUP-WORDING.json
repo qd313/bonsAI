@@ -1,0 +1,24 @@
+{
+  "row": "P78-SUMUP-WORDING (in-a-game half)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:15-18:17 EDT",
+  "screen": "Deck's own screen 854x454, no game running",
+  "setup": "Chat file restored from ~/p81-backup/6f3cc055.before-sumup.json, then summary set to null and origin_app_id '2321470' / origin_app_name 'Deep Rock Galactic: Survivor' written over SSH (python). Plugin reloaded with no game. Same route as the SUMUP file; the button read 'Sum up this chat', aria-disabled false. A pressed at 18:16:30 (written in 6.1 s).",
+  "pressed": "Show details, DOWN, RIGHT, DOWN, A on 'Sum up this chat' (focus read first each time)",
+  "seen": {
+    "card_lines": [
+      "What the AI remembers | 60 turns . just now",
+      "Games: Deep Rock Galactic: Survivor, Hades, Hollow Knight, Palworld, The Elder Scrolls V: Skyrim Special Edition",
+      "Done: Provided extensive guides/tips for DRG Survivor, HK bosses, and general game advice.",
+      "Stuck on: Specific strategies for Soul Master fight preparation and Glyphid Dreadnought combat.",
+      "Asked for: How to make battery last, TDP usage, taming wolves, and Glyphid Dreadnought tactics.",
+      "Too long to read in one go: this covers the newest 60 turns. The oldest 32 are not in it."
+    ],
+    "offer": "Rename this chat to 'Game strategy and combat guides'? (Rename / Keep, not pressed)",
+    "caveat": "The first run of the same chat (origin empty, plan81-P81-M-L-SUMUP-try2.json) gave the same Games order (Deep Rock Galactic: Survivor, Hades, Hollow Knight, ...), which is also alphabetical, so this run cannot separate 'the chat's own game first' from 'sorted by name'."
+  },
+  "expected": "the Games line names Deep Rock Galactic: Survivor first; no Game line names a non-game; no line that says nothing",
+  "verdict": "PASS - the Games line starts with Deep Rock Galactic: Survivor; all five names on it are games; every line holds a sentence of content. The order cannot be shown to come from the chat's own game (see caveat). The 'Done:' line is generic but says something.",
+  "side_effect": "Chat file then restored from the backup (cmp identical, also after a reload). Index label restored (see FRESHER-TITLE file).",
+  "prepared_answer": false
+}

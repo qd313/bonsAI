@@ -1,0 +1,16 @@
+{
+  "row": "P81-TAB-SWITCH-RING (added: fresh close-and-reopen of Quick Access, 2 cycles)",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 about 20:15-20:18 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "bonsAI open on the Ollama tab (ring had been on 'Test connection'). Quick Access closed with the GUIDE+A chord (panel hidden, no ring owned: confirmed), reopened with the same chord; ring read every 500 ms for 3 to 4 s.",
+  "pressed": "GUIDE+A (close), GUIDE+A (open), twice",
+  "seen": {
+    "cycle1": "from 0.5 s to 4.0 s the ring was on the bonsAI tab bar (div bonsai-tab-bar, 'Ollama tab', left 48, top 48 to 64), unchanged for 4 s",
+    "cycle2": "the same: tab bar 'Ollama tab' at 48-64 from 0.5 s to 3.0 s, unchanged",
+    "earlier_in_this_block": "the earlier fresh reopen from the Main tab also landed on the tab bar (48-64), still there 4 s later"
+  },
+  "expected": "a fresh close-and-open lands on the question box (runbook step 4); coordinator asked whether the tab-bar landing repeats",
+  "verdict": "UNCLEAR - it repeats: 3 of 3 fresh reopens (1 from Main, 2 from Ollama) put the ring on the tab bar, not on the question box, and it stays there. Whether the tab bar is the intended landing is the owner's call.",
+  "side_effect": "none"
+}

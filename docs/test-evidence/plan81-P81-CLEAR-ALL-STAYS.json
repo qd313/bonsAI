@@ -1,0 +1,19 @@
+{
+  "row": "P81-CLEAR-ALL-STAYS",
+  "build_commit": "5eca4271 (checkout tip, deployed 18:53 Deck time; deck_checkReady buildMatches = pass, 146 files)",
+  "deck_time_local": "2026-10-03 18:58 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Plugin open, Settings tab, walked Down to the Data section, Right from Clear cache... to Clear all data... (focus read: 'Clear all data...') before each A. Box opens with the ring on 'Keep my data' (read each time on the Steam main-window target).",
+  "pressed": "Round 1-3: A on 'Clear all data...', read ring = 'Keep my data', B. Round 4: A, ring read 'Keep my data', A on it. Round 5: A, ring 'Keep my data', Right (ring: 'Clear all data' - focus only), Right (ring: 'Cancel'), A on 'Cancel'. Never A on 'Clear all data' in the box.",
+  "seen": {
+    "after_B_round1": "box closed (0 dialogs), Settings tab still showing (header SETTINGS, screenshot -b1), ring on 'Clear all data...' (box top 376)",
+    "after_B_round2": "box closed (0 dialogs), tab SETTINGS, ring on 'Clear all data...'",
+    "after_B_round3": "tab SETTINGS, ring on 'Clear all data...' (screenshot -b3). The tool reported retried:true on this B press; the result was still a single closed box on Settings",
+    "after_A_keep_my_data": "box closed, tab SETTINGS, ring on 'Clear all data...' (screenshot -keep)",
+    "after_A_cancel": "box closed, tab SETTINGS, ring on 'Clear all data...' (screenshot -cancel)",
+    "settings_json_vs_backup": "1 differing key: text_model_routing_order (known: block 2c added qwen2.5:3b to it, recorded in handover-block2c). 0 other keys differ."
+  },
+  "expected": "B, Keep my data and Cancel each close the box, Settings stays showing, ring back on 'Clear all data...'; settings.json equal to the backup",
+  "verdict": "PASS - B x3, Keep my data and Cancel all left Settings showing with the ring on 'Clear all data...'. PASS (settings) - only the one key known to differ from the block-0 backup differs, so nothing was cleared.",
+  "side_effect": "none (never pressed A on the middle 'Clear all data' button)"
+}

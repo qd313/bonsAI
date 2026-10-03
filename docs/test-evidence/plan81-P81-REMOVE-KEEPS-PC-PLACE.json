@@ -1,0 +1,20 @@
+{
+  "row": "P81-REMOVE-KEEPS-PC-PLACE",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 about 19:10-19:20 EDT (Deck clock read 7:19 PM in the Steam bar during the step)",
+  "screen": "Deck's own screen, page window 854x454. The AI models box and its confirmation are drawn by the Steam main window target.",
+  "setup": "Ollama tab. 'Run AI on this Deck' switched off (A, focus read). The PC address field already held 192.168.86.27:11434 (not typed by me); Test connection (focus read, A) read: 'Connected . Ollama v0.35.1 . 32 models'. Then 'Run AI on this Deck' switched back on (A, focus read); Test connection read 'Connected . Ollama v0.34.1 . 3 models' (the Deck). Settings before removal: text_model_routing_order ['gemma4:e2b-it-qat','qwen2.5:3b'], vision_model_routing_order ['gemma4:e2b-it-qat'], ollama_local_on_deck true. The PC's /api/tags (curl from the Deck) lists qwen2.5:3b. Deck /api/tags: qwen2.5:3b, nomic-embed-text:latest, gemma4:e2b-it-qat.",
+  "pressed": "Ollama tab: Down to 'AI models' (focus read), A. In the box, one press at a time with focus read: Down x8 to 'Use qwen2.5:3b for Ask' (row: qwen2.5:3b, place 2), Right x3 ('Move qwen2.5:3b up', 'Move qwen2.5:3b down', 'Remove from Deck'), A. Confirmation 'Remove qwen2.5:3b from the Deck? This will free about 1.8 GB by running ollama rm qwen2.5:3b...' opened on 'Not now'; Right ('Remove model'), A. B closed the box.",
+  "seen": {
+    "deck_tags_after": "['nomic-embed-text:latest', 'gemma4:e2b-it-qat'] - qwen2.5:3b is gone from the Deck (box header 'Installed 2 - 4.3 GB').",
+    "saved_text_order_after": "text_model_routing_order = ['gemma4:e2b-it-qat'] - qwen2.5:3b is NOT named any more. vision order unchanged ['gemma4:e2b-it-qat'].",
+    "where_the_pc_address_is_kept": "not in settings.json (named_ollama_hosts is []) and grep finds 192.168.86.27 in no file under homebrew/settings, homebrew/data or the plugin folder, so the saved PC address lives in the page, not on disk; whether the removal code counts it as 'saved' is not known to me.",
+    "log": "the plugin log for the removal holds no line about the removal or the order."
+  },
+  "expected": "qwen2.5:3b is gone from the Deck (/api/tags) and the saved text order STILL names it (the PC has it)",
+  "verdict": [
+    "PASS (half 1) - qwen2.5:3b is gone from the Deck's /api/tags.",
+    "FAIL (half 2) - the saved text order no longer names qwen2.5:3b after the removal, although the PC lists it. Caveat: the PC address field held the PC's address, but I cannot prove the plugin counted it as the saved one."
+  ],
+  "side_effect": "qwen2.5:3b removed from the Deck as planned (frees 1.8 GB). The saved text try order is now ['gemma4:e2b-it-qat'], i.e. the value it had in the block-0 backup (so settings.json now equals the backup in that key). Deck is on its own AI (switch on)."
+}

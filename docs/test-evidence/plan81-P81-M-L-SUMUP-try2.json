@@ -1,0 +1,21 @@
+{
+  "row": "P81-M-L-SUMUP (try 2; measurement for fix L, summary card behind the dock)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:12-18:16 EDT",
+  "screen": "Deck's own screen: Quick Access page 854x454 css px, no game. Pane top y=88, dock top y=290.2 (so 202 px of room between them).",
+  "setup": "Test chat 6f3cc055 backed up to ~/p81-backup/6f3cc055.before-sumup.json (cmp identical). Its summary key set to null over SSH (python), plugin reloaded with no game. Show details (A on the newest answer's 'Show details', ring read first) -> one Down onto the 'This answer / Session' row -> Right (Session) -> Down onto the button, read: 'Sum up this chat', aria-disabled false, box 204.1-236.8, scrollTop 393. A 250 ms sampler (records changes only) was installed before A.",
+  "pressed": "A on 'Sum up this chat' (ring read first); then no press for 38 s after the card appeared; then DOWN, UP; later DOWN, DOWN (to Rename, see the FRESHER-TITLE file).",
+  "seen": {
+    "timing": "A at 18:13:21. Button text counted 'Summing up 0 s' to '27 s'. Log: 'chat_summary: written in 28.2 s - covered 120 turns, 64 unread'. The card appeared 31.5 s after the sampler start (about 29 s after A).",
+    "ring_the_whole_time": "The ring never left the button (first 'Sum up this chat' 204.1-236.8, then 'Summing up' with the same box, then 'Sum up again', greyed, class bonsai-sumup-btn--off). No sample after the card appeared changed for 38 s (hands off). document.hasFocus() was true at every sample.",
+    "at_the_moment_the_card_appeared": "the panel scrolled to scrollTop 501 and the button sat at 96.1-128.8 (near the pane top). Card box 171.6-434.5 (height 262.9); dock top 290.2, so the card's bottom was 144.3 px behind the dock; the lines block was 200.7-385.1; the foot line ('Too long to read in one go...') 391.1-425.8 (behind the dock); the Rename offer 440.5-519.3 and its buttons 483.9-510.7 (behind the dock and below the screen's bottom edge 454).",
+    "at_rest_after_that": "scrollTop was back at 393 and the button at 204.1-236.8 when read after the next press. Card then 279.6-542.5: only 10.6 px of the card's top edge (279.6 to 290.2) is above the dock; the Rename and Keep buttons at 591.9-618.7 are 301 px below the dock top.",
+    "one_Down": "landed on the card itself ('What the AI remembers', box 88.2-351.1, scrollTop 584): the card is taller than the room (263 px against 202 px), its bottom 60.9 px behind the dock; Rename/Keep at 400.6-427.3 not visible.",
+    "one_Up": "back on the button 'Sum up again' 204.1-236.8, scrollTop 393.",
+    "next_Down_twice": "Down, Down from the button: ring on the card, then on 'Rename' (box 177.3-204.0, scrollTop 807; visible, 86 px above the dock top)."
+  },
+  "expected": "measurement only: when the card appears, where it sits against the dock, what holds the ring, where Down goes",
+  "verdict": "MEASURED - the card is not clear of the dock: at rest only its top 10.6 px shows above the dock top (279.6 vs 290.2), the whole card is 263 px tall against 202 px of room, and the Rename/Keep offer is 301 px below the dock. The ring stays on the (now greyed) button for 38 s; Down reaches the card, then Rename, and the panel scrolls (to 584, then 807) to bring each into view.",
+  "side_effect": "A real summary was written into the test chat file (restored later from the backup, cmp identical). The test chat was renamed once on purpose in the FRESHER-TITLE check (see that file) and restored.",
+  "prepared_answer": false
+}

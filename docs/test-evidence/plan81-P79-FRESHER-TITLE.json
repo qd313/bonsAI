@@ -1,0 +1,22 @@
+{
+  "row": "P79-FRESHER-TITLE (Rename half)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:13-18:15 EDT",
+  "screen": "Deck's own screen 854x454, no game",
+  "setup": "As plan81-P81-M-L-SUMUP-try2.json: test chat (label is the plugin's own first-question name, label_by_hand false, summary set to null), Sum up pressed, summary written. The card ended with the offer: Rename this chat to 'Hollow Knight and Game Tips'? with Rename and Keep.",
+  "pressed": "From the Sum up button: DOWN (card), DOWN (ring read: 'Rename: Rename this chat to ...', box 177.3-204.0, visible above the dock top 290.2), then A on Rename.",
+  "seen": {
+    "before": "chat row title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'",
+    "after_A": "the offer disappeared; chat row title read 'Hollow Knight and Game Tips' (count of that text on the panel: 1). The chat file label and index.json label for the chat both read 'Hollow Knight and Game Tips' (label_by_hand false).",
+    "after_close_and_reopen_of_Quick_Access": "closed and reopened with the GUIDE+A chord; the panel read 'Hollow Knight and Game Tips' again (1 hit), still renamed.",
+    "session_tab": "The Session tab shows only 'Session . 99' (a count) and the list of questions; it does not print the chat name, so it has no title to compare. The only places a title shows are the chat row and the saved files.",
+    "chat_list": "The only chat list on screen is the chat row (one name per slot). No separate list screen was opened or found."
+  },
+  "expected": "Rename renames the chat everywhere it shows (chat row, Session tab, chat list) and it stays after a view restart",
+  "verdict": [
+    "PASS - Rename changed the chat row title and the saved chat (file and index), and it survived closing and reopening Quick Access.",
+    "UNCLEAR - the Session tab and a separate chat list could not be read for the title, because neither shows the chat's name on this build (only the chat row does)."
+  ],
+  "side_effect": "The test chat was renamed on purpose. It was put back later: chat file copied from the backup (cmp identical) and the index.json label for this chat set back by hand to the original title (copy of the changed index kept at ~/p81-backup/index.json.before-label-restore). After the restore the chat row shows the original title. Copying the chat file alone did NOT put the title back; the title the screen shows comes from index.json.",
+  "prepared_answer": false
+}

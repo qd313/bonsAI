@@ -1,0 +1,29 @@
+{
+  "row": "P81-RING-WALK-SETTINGS-DEV",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 18:56-19:01 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Plugin open, test chat. RB to Settings tab, Down walk top to bottom (direction presses only, focus read after every press); RB x2 to Developer tab, Down walk with a 150 ms page-side logger (ring element, label, outline, box-shadow); LB x3 to Ollama tab, Down to the knowledge base, Up/Right to its two buttons. Never pressed A in this walk.",
+  "pressed": "RB, DOWN x~14 (Settings), RB RB, DOWN x~17 (Developer), LB LB LB, DOWN x8, UP x2, RIGHT",
+  "seen": {
+    "accent_intensity_button (Settings, 'Strong')": "outline rgba(255,255,255,0.88) solid 2px, inset shadow rgba(255,255,255,0.45) 1px; screenshot -accent: one white ring, no grey frame. At rest it has its own deliberate 0.67px red border (185,28,28), not a ring.",
+    "reinstall_voice_engine (Settings)": "outline 2px solid rgba(255,255,255,0.88); screenshot -reinstall: one white ring",
+    "tiny.en row": "outline 2px solid rgba(255,255,255,0.88); screenshot -tiny: one white ring around the row only",
+    "base.en row": "outline 2px solid rgba(255,255,255,0.88); screenshot -base: one white ring",
+    "steam_web_api_key_field (Developer, last stop)": "computed outline rgba(255,255,255,0.88) solid 2px, no box shadow. NO screenshot taken, value never read.",
+    "developer_buttons (Preset animation, Settle, 300, Same as text, A-Main, activity log Off)": "all outline 2px solid rgba(255,255,255,0.88) with inset shadow",
+    "ollama_knowledge_base_buttons": "'Update knowledge base' and 'Remove' each: outline 2px solid rgba(255,255,255,0.88) + inset 1px shadow on the button itself; the three ancestors (Panel, bonsai-settings-focus-btn-host, bleed) have outline none 0px and no shadow, so ONE ring and no second frame (screenshots -kb-update, -kb-remove)",
+    "other_buttons_in_settings_ollama": "Clear cache..., Clear all data..., Set screenshot quality, AI character button, Update AI engine..., Browse and pull Ollama models, Test connection: all 2px solid rgba(255,255,255,0.88)",
+    "toggles": "Steam's own toggle rows (outline none, Steam draws its highlight): not touched",
+    "deviation_1": "'Apply UI scale' button (first Settings stop): computed outline is the browser default 'rgb(16,16,16) auto 0.67px' with no shadow, not 2px solid white. On screen (-applyuiscale) it still shows a white double ring, one frame, no grey frame.",
+    "deviation_2": "'Jump to Steam Input (running game)' (Developer tab, first button): computed outline 'rgb(35,38,46) none 0px', box-shadow rgba(0,0,0,0.25); no screenshot taken, so what is drawn is unseen."
+  },
+  "expected": "one white ring (about 2px solid rgba(255,255,255,0.88)) on each named control, no grey frame, no whole-row frame",
+  "verdict": [
+    "PASS - accent intensity, Reinstall voice engine, tiny.en, base.en: computed outline and screenshot match.",
+    "PASS - Steam Web API key field: computed outline 2px solid rgba(255,255,255,0.88) (outline only, no screenshot).",
+    "PASS - knowledge base buttons on the Ollama tab show one ring, none on their wrappers.",
+    "UNCLEAR - 'Apply UI scale' and 'Jump to Steam Input' do not carry the 2px white outline in their computed style (browser default ring / none). Not in the runbook list; the owner decides whether they matter."
+  ],
+  "side_effect": "none"
+}

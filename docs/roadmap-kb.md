@@ -44,15 +44,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
-- ★★ `[KB]` **Black Mesa's electrified-water question names two unrelated early-game notes** — **OPEN, found 2026-09-19.**
-  The answer is right and the real water note now attaches, but two generic notes still come first. Ranking general notes
-  lower was measured 2026-09-26 and made answers worse, so it stays off. Evidence
-  `docs/test-evidence/plan64-BLACKMESA-WATER.json`. [Detail](roadmap-kb-details.md#black-mesas-electrified-water-question)
-- ★★ `[KB]` **Questions with no real answer in the notes still get notes about the wrong subject** — **OPEN, found
-  2026-09-07, seen again 2026-09-26.** Black Mesa horse taming, Portal 2 house buying and a Hades boss that does not exist
-  all still attach a note. The "no close match" line is meant to warn, but on the Deck on 2026-09-26 it did not show for
-  the horse question (on the cut-off). Catching these costs twenty or more right answers elsewhere. Evidence
-  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`. [Detail](roadmap-kb-details.md#wrong-subject-notes)
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
@@ -70,6 +61,13 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★★ `[KB]` **Black Mesa's electrified-water question names two unrelated early-game notes** — **VERIFY, fixed 2026-10-03 (plan 81, `619842fd`). Was OPEN, found 2026-09-19.**
+  Typing the game's name in a question no longer puts the game's generic notes first: the word search now leaves the game's name out, because inside one game's notes it told the search nothing. A start-of-game question ("just got hollow knight, where do I even start") keeps the generic note. On this PC the right note first went from 108 to 159 of 287 test questions, none lost from the first three.
+  The answer test over the 13 questions whose notes changed: 102 to 105 of 195 facts kept (no drop); the two GTA V questions are lower (22 to 8 of 30) and the other 11 higher (80 to 97 of 165). [GTA V detail](roadmap-kb-details.md#black-mesas-electrified-water-question).
+  Deck check owed: row **P81-KB-NOTES-FIRST**. Test: `tests/test_kb_typed_game_name_search.py`. Evidence from before the fix `docs/test-evidence/plan64-BLACKMESA-WATER.json`.
+- ★★ `[KB]` **Questions with no real answer in the notes still get notes about the wrong subject** — **VERIFY for one case, fixed 2026-10-03 (plan 81, `2abaa0ae`). Was OPEN, found 2026-09-07, seen again 2026-09-26.**
+  The "No close match" line now also shows when no word of the question is in any attached note; for the Black Mesa horse question it now shows (the notes still attach). On this PC it changes the line on none of the other 574 test asks, and the 0.65 cut-off is not moved. Portal 2 house buying and the Hades boss that does not exist have not been tried again. Catching these in general still costs twenty or more right answers elsewhere.
+  Deck check owed: row **P81-KB-NOTES-FIRST**. Test: `tests/test_kb_no_close_match_lexical.py`. Evidence from before the fix `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`. [Detail](roadmap-kb-details.md#wrong-subject-notes)
 - ★ `[KB]` **A game's own tip is found only by its own words** — **VERIFY, fixed 2026-10-03 (plan 81, `e78f0d6e`,
   `6f758ff0`). Was OPEN, found 2026-09-26, seen again 2026-09-27.** In Strategy and Expert mode a game's tip is now also
   found by meaning: "the words on screen look blurry" attaches Render Scale; the boss question and Speed mode are unchanged
@@ -77,7 +75,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   check owed: row **P81-TIP-BY-MEANING**. Test `tests/test_kb_game_tip_meaning.py`. [Detail](roadmap-kb-details.md#flow-l7-findings)
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
-  plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18) and no-library (DRG-01b, 2026-09-23).
+  plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
   **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games.
   Evidence `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most

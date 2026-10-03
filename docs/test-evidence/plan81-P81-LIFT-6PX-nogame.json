@@ -1,0 +1,36 @@
+{
+  "row": "P81-LIFT-6PX (no game)",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:14-19:20 EDT",
+  "screen": "Deck's own screen, page window 854x454; dock top (bonsai-main-tab-dock) = 290, pane top about 88",
+  "setup": "Test chat (first slot, title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Strategy mode. Question sent with the send script (VERIFIED, whole text read back), Ask pressed with focus read as the Ask button: 'In two short paragraphs, how should I prepare for the Mantis Lords in Hollow Knight? End with two short choices.' Answer finished after about 30 s with two choices: 'A. Mastering the dodge and attack rhythm', 'B. Hunting for the necessary nail upgrade'. 150 ms page-side logger.",
+  "pressed": "UP x10 from the question box to the question row, then DOWN x8 back to the notes block",
+  "seen": {
+    "down_walk (name: box top-bottom, scrollTop)": [
+      "question row: 189-232, scroll 0",
+      "Show reasoning (18 s): 249-263, scroll 0",
+      "paragraph 1: 95-290, scroll 185 (section as tall as the room)",
+      "paragraph 2: 110-290, scroll 365",
+      "choice A: 236-284, scroll 481 -> bottom 6 px above dock",
+      "choice B: 236-284, scroll 537 -> bottom 6 px above dock",
+      "Mark reply helpful (Helpful): 256-284, scroll 623 -> bottom 6 px above dock",
+      "Show details: 269-284, scroll 654 -> bottom 6 px above dock",
+      "notes block (Mantis Lords (+1 more) - From the Hollow Knight wiki): 237-284, scroll 717 -> bottom 6 px above dock"
+    ],
+    "up_walk": [
+      "notes block: 235-282 (8 px above dock)",
+      "Show details: 204-219",
+      "Mark reply helpful: 204-232",
+      "choice B: 204-252 (38 px above dock)",
+      "choice A: 204-252 (38 px above dock)",
+      "paragraph 2: 110-290, scroll 365",
+      "paragraph 1: 95-290, scroll 185",
+      "Show reasoning: 204-219",
+      "question row: 189-232"
+    ],
+    "checks": "Going Down: choice A, choice B and Helpful each end 6 px above the dock (band 4 to 16). No control past the dock (all bottoms <= 290) or under the header (all tops >= 95). Up visits the same stops in exactly the reverse order. No stop was visited twice."
+  },
+  "expected": "choice A, choice B and Helpful have their bottom 4 to 16 px above the dock going Down; none past the dock or under the header; Up is Down reversed; no stop twice",
+  "verdict": "PASS - bottoms of A, B and Helpful are 6 px above the dock (290) going Down; Up is the reverse; nothing past the dock or under the header.",
+  "side_effect": "The test chat gained one new turn (the Mantis Lords question and its answer). Intended by the runbook, no other chat touched."
+}

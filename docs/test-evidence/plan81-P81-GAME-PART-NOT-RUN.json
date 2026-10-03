@@ -1,0 +1,21 @@
+{
+  "row": "P81-PART3 with Deep Rock Galactic: Survivor (steps 12-18: P79-LONG-CHIPS, P81-UP-TALL-SECTION, P81-LIFT-6PX with game, P81-TOOLTIP-CLEAR-OF-WORD, P81-TIP-BY-MEANING)",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:30-19:34 EDT (Deck clock via date; evidence files for steps 10-11 above carry guessed times about 45 min too late: the real Deck time for them was about 19:20-19:30)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Quick Access closed with the chord, deck_launchGame from the Recent Games row (appid 2321470, running after 271 ms). 35 s wait with the window in front. Background SSH memory log every 5 s (free -m and the 7 biggest processes), file mem-b3a.log in the scratch folder. Quick Access reopened (deck_openPlugin), LB to Main.",
+  "pressed": "launch (4 presses), GUIDE+A chord to open Quick Access, LB, Down x12 to the question box (no A), screenshot, deck_exitGame (11 presses)",
+  "seen": {
+    "context_line": "'Context: active game Deep Rock Galactic: Survivor' (step 12 PASS, no plugin reload was needed)",
+    "memory": "available memory with the game up and the plugin open: 2200 MB right after launch, then 1687 to 1766 MB for the rest of the stay (free column about 450 MB; the game's process held 1.2 GB, Steam web helper 1.1 GB, Ollama's llama-server 0.6 GB, loaded earlier by my Hollow Knight questions). Lowest value 1687 MB. After the game exit: 4112 MB available, process gone (pgrep finds none).",
+    "long_chips": "the Main tab showed NO chip row to watch: the newest answer carries two choice buttons (A. Dodging his teleporting attacks / B. Hitting him when he is charging orbs), and the chips container 'bonsai-details-slot__chips--away' sat at opacity 0 for every stop (screenshot DeckCapture_20261003_193219_auto.png shows the choices, Helpful row, 'Show details', and the question box with no chips). The only chip text elements with data-scroll-phase were inside that hidden container. Getting chips would need a new answer (blocked by the memory rule) or a new chat (the runbook forbids, it deletes the oldest chat)."
+  },
+  "expected": "memory available at least 4000 MB before each question with a game; Deep Rock launched; 200 s chip watch",
+  "verdict": [
+    "PASS - launch, Context line names the game (step 12).",
+    "COULD NOT RUN - P81-UP-TALL-SECTION (14), P81-LIFT-6PX with game (15), P81-TOOLTIP-CLEAR-OF-WORD (16), P81-TIP-BY-MEANING (17): each needs a question and the memory rule says no question below 4000 MB available; it was 1687 to 2200 MB the whole time, with the game's window up.",
+    "COULD NOT RUN - P79-LONG-CHIPS (13): no chip row was showing (hidden while the newest answer has choices) and nothing could be asked to bring it back.",
+    "PASS - step 18: game exited, process gone, 4112 MB available after."
+  ],
+  "side_effect": "none (never pressed A inside the plugin with the game up; the spoiler cover and the choice buttons were passed with Down only)"
+}

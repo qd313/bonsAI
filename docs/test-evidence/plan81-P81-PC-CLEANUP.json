@@ -1,0 +1,16 @@
+{
+  "row": "P81-PC-CLEANUP",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 about 19:35-20:00 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "The session had run 'ollama cp qwen2.5:3b p81-trial:latest' on the PC; the PC's /api/tags (curl from the Deck) listed p81-trial:latest. 'Run AI on this Deck' switched OFF (A, focus read), PC address 192.168.86.27:11434, Test connection read 'Connected . Ollama v0.35.1 . 32 models'. AI models box opened (A on 'AI models', focus read).",
+  "pressed": "In the box, Down presses (focus read after each batch; the PC rows take Down straight onto each row's 'Move ... up' arrow) to 'Move p81-trial:latest up', focus read, A. B closed the box. The session then removed p81-trial on the PC. Test connection again (focus read, A).",
+  "seen": {
+    "order_before_move": "text_model_routing_order ['gemma4:e2b-it-qat']; vision ['gemma4:e2b-it-qat']",
+    "after_move_up": "p81-trial place 2 -> 1, gemma4:e2b-it-qat 1 -> 2 on screen; saved text order ['p81-trial:latest','gemma4:e2b-it-qat','qwen3.5:4b','lfm2.5:8b','qwen3.5:9b','gemma4:e4b-it-qat','gemma4:12b-it-qat','qwen3.5:2b','granite4.2:8b','granite4.2:3b','bge-m3:latest','qwen3.6:27b','gemma-cursor:latest','qwen-cursor:latest','gemma4:26b','gemma4:latest'] (16 names; names p81-trial). Vision order unchanged.",
+    "after_pc_removal_and_test_connection": "Test connection read 'Connected . Ollama v0.35.1 . 31 models' (was 32). PC /api/tags no longer lists p81-trial:latest. Saved text order now has 15 names: ['gemma4:e2b-it-qat','qwen3.5:4b','lfm2.5:8b','qwen3.5:9b','gemma4:e4b-it-qat','gemma4:12b-it-qat','qwen3.5:2b','granite4.2:8b','granite4.2:3b','bge-m3:latest','qwen3.6:27b','gemma-cursor:latest','qwen-cursor:latest','gemma4:26b','gemma4:latest']. p81-trial is not named; gemma4:e2b-it-qat is named (first)."
+  },
+  "expected": "after the PC model is removed and Test connection is run, the saved order no longer names p81-trial; gemma4:e2b-it-qat is still named",
+  "verdict": "PASS - p81-trial dropped from the saved order (16 names -> 15) and gemma4:e2b-it-qat is still named; the other 14 names are unchanged.",
+  "side_effect": "The saved text try order was rewritten as listed (it was ['gemma4:e2b-it-qat'] at the block-0 backup). Run AI on this Deck is still OFF at this point (switched back after step 11)."
+}

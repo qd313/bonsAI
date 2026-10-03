@@ -1,0 +1,13 @@
+{
+  "row": "READ-ALOUD-05",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:12 EDT",
+  "screen": "Quick Access page window 854x454, no game",
+  "setup": "Not started. The runbook runs it only if the voice step (P79-DOUBLED-WORDS) produced text. It produced none (see plan81-P79-DOUBLED-WORDS.json: the Deck's microphone recorded level 0 while the sentence played from the speaker).",
+  "pressed": "nothing",
+  "seen": "Voice replies left at 'off' (voice_reply_mode off in settings.json, unchanged).",
+  "expected": "a spoken question's answer starts reading itself; a typed question's answer does not",
+  "verdict": "COULD NOT RUN - no spoken question can be made without a working microphone path (recorder level 0). The typed half (nothing is read) was not run on its own, because it needs the Voice replies setting changed and the runbook ties it to the spoken half.",
+  "side_effect": "none",
+  "prepared_answer": false
+}

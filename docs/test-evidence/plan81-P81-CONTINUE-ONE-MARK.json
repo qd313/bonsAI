@@ -1,0 +1,23 @@
+{
+  "row": "P81-CONTINUE-ONE-MARK",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:09-19:20 EDT (budget file changed 19:09, restored about 19:20)",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Backed up the installed ollama_ask_budgets.py (py_modules/backend/services/) to ~/p81-backup/ollama_ask_budgets.py.orig, changed line 28 \"strategy\": 1600 to 340 with sed over SSH (not refused), reloaded the plugin (no game). Strategy mode, test chat, 'Hide spoilers until I tap' on, knowledge base on. Each question sent with the send script (VERIFIED), Ask pressed with focus read as the Ask button.",
+  "pressed": "Q1 'Give me a guide to every boss area in Hollow Knight, three paragraphs each, and hide the story twists.' Q2 'Walk me through every chapter of Half-Life 2, three paragraphs each, hiding plot twists.' Then restored the file from the backup and reloaded.",
+  "seen": {
+    "q1_log": "ask budget answer=340 (num_predict 852 with thinking). Two soft continues: join 1 after 976 visible chars (done_reason=length), join 2 after 1920 visible chars; third call also cut by length; log line 'dropped a choice fence cut off by the length wall' (151 chars). Total 106.4 s, response_len 2806. The answer was written in 3 pieces, so 'Continuing' was in play (the 2 s poll did not catch the label itself).",
+    "q1_saved_turn": "2829 chars. Fence positions in the saved text: 954 '```bonsai-spoiler', 1382 '```bonsai-spoiler', 1594 '```', 1923 '```bonsai-spoiler', 2046 '```'. Join 1 (visible char 976) falls inside the block opened at 954 (content so far was just 'When'). The continuation then wrote 'Right, so when you are lookin at that False Knight ...' and opened a SECOND '```bonsai-spoiler' at 1382 while the one at 954 was never closed. Three opens, two closes: a hidden block opened twice without a close between. No half mark like '```bons' found at any end.",
+    "q1_on_screen": "2 spoiler covers drawn ('Spoiler - tap to show', 55 px high each); the text 'Right, so when you are lookin' is not in the page text and no fence text ('```' / 'bonsai-spoiler') is visible. Every hidden part shows as a cover.",
+    "q2": "finished with done_reason=stop in 36 s (1297 chars), no continue, no hidden block fences in the saved turn. Did not produce the case.",
+    "restore": "budgets file restored from the backup: grep -c '\"strategy\": 1600' prints 1 and cmp with the backup is identical; plugin reloaded afterwards."
+  },
+  "expected": "when 'Continuing' shows and a join falls inside a hidden block, the saved turn has no hidden block opened twice without a close between and no half mark; on screen every hidden part is a cover",
+  "verdict": [
+    "FAIL - Q1: a join fell inside a hidden block and the saved turn has the block at char 954 opened and never closed, then a second block opened at 1382 (3 opens, 2 closes).",
+    "PASS - no half mark like '```bons' in the saved turn.",
+    "PASS - on screen every hidden part is a cover (2 covers, no fence text visible).",
+    "UNCLEAR - Q2 (Half-Life 2) did not reach the length cut, so it adds no second sample. Two differently worded tries made as the runbook allows; no third."
+  ],
+  "side_effect": "The test chat gained four more turns (two questions, two answers). The budgets file was changed and restored as above."
+}

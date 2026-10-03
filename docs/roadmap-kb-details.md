@@ -252,6 +252,8 @@ closeness without the game's name, and that score landed at 0.6508 against the 0
 edge, close enough that ordinary differences between the PC's and the Deck's own embedding numbers can
 flip it. A measured cut-off is not retuned for one question; no code change made.
 
+**Fixed for this case 2026-10-03 (plan 81, `2abaa0ae`), the cut-off untouched:** the "No close match" line now also shows when the word search ranked none of the attached notes and not one word of the question appears in any attached note's title or text, so the meaning score alone supported them. On this PC over 287 test questions with a recorded right note, each asked with the game running and with its name typed (574 asks), the rule changes the line on none of them; the one ask it changes is the horse question. Deck check owed: row P81-KB-NOTES-FIRST.
+
 ## Hidden spoiler box stays shut on games with no Steam ID and on name-first questions
 
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
@@ -266,7 +268,7 @@ flip it. A measured cut-off is not retuned for one question; no code change made
   Retribution, Super Mario 64, Mario Kart 64 or Pikmin 2 is on the Deck's Recent Games row, the only list the launch tool can search,
   so one of them has to be played once by hand first. It is proven by its unit tests only. Evidence
   `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. **DRG-01c** was not tried on purpose (it would mean removing the library). **Tried 2026-10-03 (plan 81, build `afd2f444`): could not run** — Steam's
-  screen froze after the answer (filed under Bugs); evidence `docs/test-evidence/plan81-DRG-01c.json`.
+  screen froze after the answer (filed under Bugs); evidence `docs/test-evidence/plan81-DRG-01c.json`. **Second try, 2026-10-03, PASSED** (after a restart of the Deck, library moved aside, Deep Rock Galactic: Survivor running): a Glyphid Dreadnought question came out as plain text with no cover and no chip at any of 368 reads, the log reading "unavailable=corpus_missing"; the AI wrote no hidden block, so a cover was not tested directly. Evidence `docs/test-evidence/plan81-DRG-01c-try2.json`.
   [Plan 54](archive/54-spoiler-rules-gaps.md).
 
 **DRG-01b passed on the Deck 2026-09-23:** with Deep Rock Galactic: Survivor running, the knowledge
@@ -398,6 +400,10 @@ change** — having the game running did not affect this bug either way. Evidenc
 fix.** It helped the search test but hurt the answer test (46 to 41 of 57 right note first), so it
 stays off; it would not have cured this bug alone either, since a second generic note still ranks
 ahead.
+
+**Fixed 2026-10-03 (plan 81, `619842fd`), a different way, with nothing ranked lower:** the word search now leaves the game's name (and its aliases) out of the words it looks for, because it is already limited to the one game and the name only favoured notes with it in their title. Asking "black mesa how do i get across the electrified water" with nothing running now lists the water note first. A question that asks how to start keeps the name. Measured on this PC over the fixture questions, each asked with the game's name typed: the right note first went from 108 to 159 of 287, the right note in the first three from 201 to 209, none lost. On the held-back split the shipped search's first place went from 68.6 to 74.2 percent and its first three from 87.7 to 88.1; the tuning split is unchanged.
+
+**The answer test over the 13 questions whose notes changed (plan 81):** facts kept went from 102 to 105 of 195, so there is no drop overall. Two GTA V questions are lower, 22 to 8 of 30, because the facts the test expects sit in the generic note and its wording check misses a correct paraphrase of the new note; the other 11 questions are higher, 80 to 97 of 165. (The commit message for `619842fd` gives an earlier run of the same test, 70 to 61 of 117 facts kept on the 13 questions; the two runs differ in size.) Deck check owed: row P81-KB-NOTES-FIRST.
 
 ## KB transparency matches what the model got
 

@@ -1,0 +1,34 @@
+{
+  "row": "DRG-01c (try 2; boss tactics with the game notes library absent)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:02-18:09 EDT (question asked 18:05:22, answer done 18:06:22)",
+  "screen": "Quick Access page window 854x534 with the game running (854x454 before the game started): the Deck's own screen",
+  "setup": "Library folder /home/deck/.bonsai/rag moved to rag.p81aside with no game, plugin reloaded with no game (Deck had been restarted by hand at ~17:58, up 3 min). Deep Rock Galactic: Survivor (2321470) launched with deck_launchGame from Recent Games (appeared in RunningApps after 341 ms). Waited ~70 s with the window in front, then opened the plugin (deck_openPlugin worked first time with the game up). Context line read: 'Context: active game Deep Rock Galactic: Survivor'. Test chat open (6f3cc055; first chat on the row: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Ask mode strategy, strategy_spoiler_masking_enabled true (settings.json). Knowledge base switch on (use_local_knowledge_base true), library absent. A page watcher sampling the whole panel every 250 ms (counts of 'Spoiler hidden until complete', 'tap to show', and any element whose class holds 'spoiler') was installed before Ask. Different wording from try 1. Question sent with the send script: 'What is the best way to take down a Glyphid Dreadnought?' (VERIFIED, whole text read back). Walked to Ask (3 Down presses, no A on the box), focus read = button 'ask', then A as its own step.",
+  "pressed": "launch tool; openPlugin; send script; walkTo ask (3 DOWN); A on ask (one press); deck_exitGame afterwards.",
+  "memory": {
+    "rule": "ask only if available >= 4000 MB; stop and exit game if < 1500 MB",
+    "before_question_available_MB": 9178,
+    "log": "mem-drg-try2.log (scratch folder), every 5 s from 18:05:19",
+    "samples_available_MB": "18:05:19 9145, 18:05:24 9012, 18:05:29 5626, 18:05:34 3410, 18:05:39 3296, then 3244, 3229, 3227, 3222, 3220, 3219, 3203, 3191, 3188 (18:06:26), 3211, 3165, 3197, 3140, 3113, 3106 (18:06:56, lowest), 18:07:01 5476 after the game was closed",
+    "lowest_available_MB": 3106,
+    "10s_after_answer_end_available_MB": 3162,
+    "swap": "not used (0 before)",
+    "note": "The model (gemma4:e2b-it-qat) loading took the available memory from 9 GB to 3.4 GB within 10 s of Ask. It never went near 1500. Last time (before the restart) it started at 2035 MB, so this Deck's memory is much healthier right after a restart."
+  },
+  "seen": {
+    "log": [
+      "18:05:22 kb: question chose domain=strategy route=- method=keyword attached=0 dropped_for_room=0 unavailable=corpus_missing",
+      "18:05:22 ask_ollama POST model=gemma4:e2b-it-qat num_predict=2112 think=True",
+      "18:06:22 stream done done_reason=stop eval_count=625 visible_len=398; strategy fences branch_marker=True branch_options=2",
+      "18:06:22 run_game_ai_request: completed in 59.7s"
+    ],
+    "watcher": "368 samples at 250 ms (about 92 s, covering the whole stream of 60 s and the time after): 0 samples with the 'Spoiler hidden until complete' chip, 0 with 'tap to show', 0 elements with a spoiler class. Watcher also read clean at the end (chip false, no spoiler elements).",
+    "screen_text": "The answer text 'Right then, you wanna know how to take down that Glyphid Dreadnought, eh? ... The main trick with him is all about movement. He has some serious heavy armor ...' was plain, readable text, with 'Show reasoning 27 s' above it and two choice buttons below ('Where are you at in Deep Rock Galactic: Survivor?' A and B). No cover, no chip. Screenshot beside this file shows the panel at the bottom of the answer (choice B, Helpful / Not really) and no cover.",
+    "boss_tactics_caveat": "The answer was short (398 letters visible) and the AI gave general advice (use mobility, openings) without a named weak point. It is plain text, which is what the row asks about; no hidden block was drawn at all, so nothing was there to be covered. The check shows no cover appears; it cannot show a cover would have appeared with a hidden block."
+  },
+  "expected": "boss tactics in plain text from the first streamed word, no cover, no 'Spoiler hidden until complete' chip, with the library absent",
+  "verdict": "PASS - with the library absent (log: unavailable=corpus_missing, 0 chars attached), a Glyphid Dreadnought question on Deep Rock Galactic: Survivor came out as plain text with no cover and no 'Spoiler hidden until complete' chip at any of 368 reads (250 ms) from before Ask until 30 s after the end.",
+  "verdict_note": "UNCLEAR-leaning caveat is written in boss_tactics_caveat: the AI wrote no hidden block, so a cover was not tested directly. Reported as PASS because the row's expectation (plain text, no cover, no chip) is exactly what was seen.",
+  "library_restored": "mv rag.p81aside back to /home/deck/.bonsai/rag; ls shows corpus.db 2998272 bytes, corpus-manifest.json 29838, ATTRIBUTIONS.md 26743 (same as before). Plugin reloaded with no game; Ollama tab reads 'Installed', version 2026.09.26, path /home/deck/.bonsai/rag, 'Update knowledge base' and 'Remove' both present, each holds 1 svg; Down walk reached Update (6 presses), one Right landed on Remove, Left pressed back.",
+  "side_effect": "Game closed with deck_exitGame (A on Confirm only after the ring read exactly Confirm); process gone (no AppId= process). The reload attempt right after the library came back failed twice to open the panel (a second failure after the first expected one), third try opened it. The test chat has two more turns (the Dreadnought question, answer with two choice buttons). prepared_answer: false."
+}

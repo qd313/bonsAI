@@ -1,0 +1,16 @@
+{
+  "row": "P81-CHOICE-GETS-CHECKLIST",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:22-19:30 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Test chat open (first slot). Strategy mode, knowledge base on (toggle 'Use local knowledge base' on). Question sent with the send script (VERIFIED): 'How do I beat the Soul Master in Hollow Knight?'. Ask pressed with focus read as the Ask button.",
+  "pressed": "A on Ask; UP x6 to the first choice (focus read: 'A. Dodging his teleporting attacks', box 204-236); then A on it as its own step",
+  "seen": {
+    "first_answer": "finished in about 38 s with two choice buttons: 'A. Dodging his teleporting attacks' and 'B. Hitting him when he is vulnerable'",
+    "after_A_on_first_choice": "follow-up answer finished in about 48 s. It drew a step checklist block (class bonsai-glass-panel bonsai-strategy-check, title 'Soul Master Dodging and Attacking', line 'Progress is saved for this game until you reset session cache or start a new Strategy thread.') with 5 focusable item rows ('Watch for the visual cue of his dash or dive slam...', 'Keep a safe gap...', 'Use the ring of four orbs...', 'Focus on striking when he is conjuring orbs...', 'Run through the dodge sequence repeatedly...'). Buttons under the answer: Retry, Copy reply text, Helpful, Not really, Read aloud, Show details, Attach screenshot, Strategy, Voice input, ask. Buttons whose text starts 'A. ' or 'B. ': 0.",
+    "tries": 1
+  },
+  "expected": "the follow-up answer draws a step checklist with items and no new set of choice buttons",
+  "verdict": "PASS - the follow-up to the first choice drew a 5-item checklist and no new choice buttons (first try; the second question was not needed).",
+  "side_effect": "The test chat gained two more turns (the Soul Master question and the follow-up). Intended."
+}

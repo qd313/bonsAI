@@ -1,0 +1,22 @@
+{
+  "row": "P81-MOVE-KEEPS-OTHER-NAMES",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 about 20:05-20:15 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Deck pointed at the PC (Run AI on this Deck off, 192.168.86.27:11434, Test connection 31 models), AI models box open. Names the saved order held that the PC does NOT list: none (checked with the PC's /api/tags: empty list), because qwen2.5:3b had already been dropped from the order in step 9. So the 'unlisted name must survive' case could not be exercised with a real unlisted name.",
+  "pressed": "Down to 'Move bge-m3:latest up' (focus read), A; Right ('Move bge-m3:latest down', focus read), A; B closed the box. Then back on the Ollama tab: 'Run AI on this Deck' switched on (focus read, A), Test connection (focus read, A).",
+  "seen": {
+    "before": ["gemma4:e2b-it-qat","qwen3.5:4b","lfm2.5:8b","qwen3.5:9b","gemma4:e4b-it-qat","gemma4:12b-it-qat","qwen3.5:2b","granite4.2:8b","granite4.2:3b","bge-m3:latest","qwen3.6:27b","gemma-cursor:latest","qwen-cursor:latest","gemma4:26b","gemma4:latest"],
+    "after_up": ["gemma4:e2b-it-qat","qwen3.5:4b","lfm2.5:8b","qwen3.5:9b","gemma4:e4b-it-qat","gemma4:12b-it-qat","qwen3.5:2b","granite4.2:8b","bge-m3:latest","granite4.2:3b","qwen3.6:27b","gemma-cursor:latest","qwen-cursor:latest","gemma4:26b","gemma4:latest","gemma3:4b"],
+    "after_down": ["gemma4:e2b-it-qat","qwen3.5:4b","lfm2.5:8b","qwen3.5:9b","gemma4:e4b-it-qat","gemma4:12b-it-qat","qwen3.5:2b","granite4.2:8b","granite4.2:3b","bge-m3:latest","qwen3.6:27b","gemma-cursor:latest","qwen-cursor:latest","gemma4:26b","gemma4:latest","gemma3:4b"],
+    "notes": "bge-m3 swapped with granite4.2:3b going up and back going down; all 15 names stayed in both lists. A 16th name, gemma3:4b, was added at the end by the first save (it is on the PC). vision order stayed ['gemma4:e2b-it-qat'].",
+    "back_on_deck": "'Run AI on this Deck' on (ollama_local_on_deck true); Test connection read 'Connected . Ollama v0.34.1 . 2 models'. The PC address field is hidden in Deck mode; it held 192.168.86.27:11434 the whole block and I did not edit it."
+  },
+  "expected": "after each move the saved order still names every name it held before that this PC does not list; then the Deck back on its own AI, Test connection passes",
+  "verdict": [
+    "PASS - after each move the saved order still names all 15 names it held before (none was lost).",
+    "UNCLEAR - the specific case 'a name the PC does not list' was not present (none such in the order), so only the all-names-kept half was tested.",
+    "PASS - Deck back on its own AI and Test connection passes (2 models)."
+  ],
+  "side_effect": "Saved text try order is now the 16-name list above (gemma3:4b appended by the plugin); it was ['gemma4:e2b-it-qat'] in the block-0 backup. The runbook says to put back only keys I changed: this key is not restored here, the owner should decide."
+}

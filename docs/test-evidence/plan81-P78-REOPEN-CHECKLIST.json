@@ -1,0 +1,23 @@
+{
+  "row": "P78-REOPEN-CHECKLIST",
+  "prepared_answer": true,
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:21-18:26 EDT",
+  "screen": "Deck's own screen, Quick Access page 854x454, NO game running (the runbook says no game; the stand-in's own README says a game, so this is the screen side only)",
+  "setup": "Stand-in AI server on this PC, scenario slow-checklist; the Deck pointed at it as in plan81-P77-CUT-MENU-TEXT.json. Strategy mode, test chat open. Question sent with the send script (VERIFIED): 'How do I beat the boss I am stuck on?'. A on ask (focus read first).",
+  "pressed": "A on ask; reply 1 (8.3 s, prepared) showed three choice buttons 'A. The big swing', 'B. The small ones it calls in', 'C. Healing at the right time'; walked Up to 'A. The big swing' (focus read: that button), A (18:22:04); the GUIDE+A chord to close Quick Access about one second later (screenshot after: Steam Home, panel shut). Waited until the log said the answer was complete (18:22:39, 35.2 s), then deck_openPlugin (QAM opened, panel root present). Then walkTo to the reply's Helpful row, RIGHT to 'Not really' (aria-label 'Mark reply not helpful'), A; the chips 'What went wrong?' appeared (Bad info, Wrong game or topic, Spoiled it, Too long, Too short); moved to 'Too long' (Up, Right; focus read), A; it put 'Give a shorter answer - key points only...' into the question box; walkTo ask (focus read: ask), A.",
+  "seen": {
+    "after_reopen_screen": "Drawn under the answer: 'I'm at: The big swing' turn, the prepared prose, 'If you want to cheat...' (2 bullets), then the checklist titled 'Prepared test checklist: beat the big swing' with the line 'Progress is saved for this game until you reset session cache or start a new Strategy thread.' and four items: 'Stand at the far edge of the room', 'Wait for the slow swing, then step out of its reach', 'Strike twice while it recovers', 'Back off before the next wind-up'.",
+    "saved_turn": "The assistant turn in the test chat file holds the prose and the 'If you want to cheat...' list but has NO checklist field or checklist text. The checklist is saved in a separate file, strategy_checklist_session.json (key __none__, because no game was running: title 'Prepared test checklist: beat the big swing', four items, checked_ids empty, updated_at 18:23:25). Log: 'strategy fences ... checklist_marker=True checklist_parsed=True' at 18:22:39.",
+    "refine_log": "After Not really / Too long / Ask: log line at 18:25:04 'ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=)'. The log has no key named ask_mode; this is the same wording earlier builds used. The refine ask went to the stand-in and got reply 1 shape (expected).",
+    "reply_ready_notice": "Not looked at: no screenshot was taken during the 35 s; the screen after the wait showed Steam Home with no notice, and I reopened at 18:23:17 (38 s after the press)."
+  },
+  "expected": "after the reopen the checklist is drawn under the answer with the four items; the saved turn holds it; the refine chips send in Strategy mode",
+  "verdict": [
+    "PASS (prepared answer) - checklist drawn under the answer after the reopen, title and all four items as prepared.",
+    "UNCLEAR - 'the saved turn holds the checklist': the turn text does not hold it; the checklist is stored in strategy_checklist_session.json. Whether that counts is the owner's call.",
+    "PASS - the refine follow-up (Not really, Too long, Ask) went out in Strategy mode (log: mode=strategy)."
+  ],
+  "side_effect": "'Not really' was marked on a prepared reply in the test chat (feedback entry written by the plugin). The test chat holds three more prepared turns plus the refine turn. A new checklist file for key __none__ was written (strategy_checklist_session.json).",
+  "memory": "no game, not recorded"
+}

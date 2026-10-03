@@ -1,0 +1,15 @@
+{
+  "row": "D-SMOKE-REASONING (runbook step 8)",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:27-19:33 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Test chat, Strategy mode. 1 s page-side sampler of the reasoning elements. Question (send script, VERIFIED): 'What are the main attacks of the Soul Warrior in Hollow Knight? Keep it short.' A on Ask with focus read as the Ask button.",
+  "pressed": "A on Ask; later UP to the 'Show reasoning' fold (focus read: 'Show reasoning - 21 s'), A on it, A on it again to close",
+  "seen": {
+    "while_writing": "live reasoning steps drew from the first second: 'Analyze the Request...' (20 chars), then 'Analyze the Request / Identify Game/Context...' (44), then 67, then 88 chars with 'Draft the Response...'; at about 20 s the live steps changed to the fold 'Show reasoning - 17 s' while the answer was still being written; final fold 'Show reasoning - 21 s' once finished (Stop generation gone).",
+    "after": "A on the fold: fold read 'Hide reasoning - 21 s' and a reasoning block of 1348 chars appeared beginning '1. Analyze the Request: The user is asking for the main attacks of the Soul Warrior...' (some steps shown as [hidden]). A again collapsed it."
+  },
+  "expected": "Show reasoning still shows its text while an answer is written and after",
+  "verdict": "PASS - reasoning text was shown live during writing (up to 88 chars of steps) and the fold opened to 1348 chars of reasoning text afterwards.",
+  "side_effect": "The test chat gained two more turns (the Soul Warrior question and its answer, which carried two choices). The older 'A. Dodging his teleporting attacks' button was passed over with Up presses only, never pressed."
+}

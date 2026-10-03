@@ -1,0 +1,25 @@
+{
+  "row": "P77-CUT-MENU-TEXT",
+  "prepared_answer": true,
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 18:18-18:21 EDT",
+  "screen": "Deck's own screen, Quick Access page 854x454, no game",
+  "setup": "Stand-in AI server started on this PC (port 11500), scenario cut-menu. On the Deck, Ollama tab: 'Run AI on this Deck' turned OFF (old state: ON; saved key ollama_local_on_deck was true), PC address field set to 192.168.86.27:11500 (old text in the field: the default '192.168.1.'; set with the page's own input path, the native value setter plus an input event, the way scripts/deck_send_ask.py does, because thumb typing needs the on-screen keyboard; A was never pressed on a text field). Test connection (A on the button, focus read first) read: 'Connected . Ollama v0.35.1 . 31 models' (the stand-in forwards to the PC's real Ollama). Strategy mode (the box showed Strategy). Test chat open (first chat on the row). Question sent with the send script (VERIFIED, whole text): 'How do I beat the big boss here? Give me a plan.' Walked to ask (3 DOWN), A as its own press.",
+  "pressed": "ollama tab: A on the 'Run AI on this Deck' switch; page write of the PC address; RIGHT from the PC address box to 'Test connection', A; LB to Main; send script; walkTo ask; A.",
+  "seen": {
+    "log": [
+      "18:20:19 ask_ollama POST http://192.168.86.27:11500/api/chat",
+      "18:20:26 stream done done_reason=length visible_len=426; soft continue scheduled continue_index=1",
+      "18:20:30 stream done done_reason=stop; 'dropped a choice fence cut off by the length wall continue_index=1 mode=strategy dropped_chars=193'",
+      "18:20:30 OK response_len=804 soft_continues=1 done_reason=stop",
+      "18:20:30 run_game_ai_request: completed in 10.8s"
+    ],
+    "screen": "Answer text on screen starts '[PREPARED TEST ANSWER] This text was made up for a test...', then the first piece ending '...before you go back to the big one.', then 'Words after the cut (prepared): once the big one staggers, step in and strike twice, then back off before the next wind-up. If your health is low, run to the far side of the room first and heal there, because the small ones cannot reach you in time. When it drops to half health it speeds up, so shorten your hits to one strike and one step back. End of the prepared part two.' then the usual line 'No close match in my notes, this answer leans on the model's own knowledge.' Then Helpful / Not really. No choice buttons.",
+    "forbidden_text_check": "None of 'bonsai-strategy-branches', a backtick, a curly bracket, '\"question\"' or a stray 'Heal' appear anywhere in the answer text on screen.",
+    "saved_turn": "The last turn in the test chat file holds the same text (885 letters including the added notes line; the answer itself is 804, as the log's response_len says), ending with 'End of the prepared part two.' then the 'No close match' line. Same words as on screen."
+  },
+  "expected": "the answer ends with the prepared 'Words after the cut (prepared)...' text through 'End of the prepared part two.'; no fence text or JSON; the saved turn holds the same text; the log has the 'dropped a choice fence' line",
+  "verdict": "PASS (on a prepared answer) - the second piece after the cut shows in full on screen and in the saved chat, no fence text or JSON is visible, and the log has 'dropped a choice fence cut off by the length wall' with soft_continues=1. This proves the screen and save path, not what the real AI would write.",
+  "side_effect": "The test chat has one more (prepared) turn. The Deck still points at the stand-in until the put-back step (see the handover). The 'Run AI on this Deck' switch is off for now.",
+  "memory": "no game, not recorded"
+}

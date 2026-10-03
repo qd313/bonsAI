@@ -1,0 +1,27 @@
+{
+  "row": "P81-TAB-SWITCH-RING",
+  "build_commit": "5eca4271 (deployed 18:53, build matches)",
+  "deck_time_local": "2026-10-03 19:02-19:12 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "bonsAI open on Main, test chat, ring on the question box (input, box top 324 bottom 368). Route to the Quick Access icons as the runbook: Up x11 to Decky's back arrow (button at 64,20), Left lands on the Decky tab icon (0,387), Up lands on another tab icon (0,323; the bonsAI panel is then not visible), wait 3 s, Down back to the Decky icon (0,387; panel visible again), rest 2 s, Right into the panel. A 150 ms page-side logger and timed page reads were used (no polling watcher on a game).",
+  "pressed": "per cycle: UP x11, LEFT, UP, (3 s), DOWN, (2 s), RIGHT",
+  "seen": {
+    "cycle1": "via back arrow. After 3 s on other tab: panel hidden. Back on Decky icon, rested 2 s: ring still on icon (0,387). Right: ring on question box INPUT (324-368), outline 2px solid rgba(255,255,255,0.88), drawn. PASS",
+    "cycle2": "route deviation: left the panel with LEFT from the 'chat summed itself up' note (left 52, top 204), not via the back arrow. Icon rest 2 s: ring on icon. Right: ring on the summary note (204-236, outline 2px solid rgba(255,255,255,0.9)), visible and drawn, NOT the question box. Not counted as a runbook cycle.",
+    "cycle3": "via back arrow: icon rest ok, Right -> question box (324-368), outline W88 2px solid. PASS",
+    "cycle4": "via back arrow: icon rest ok, Right -> question box (324-368), drawn. PASS",
+    "cycle5": "via back arrow: icon rest ok, Right -> question box (324-368), drawn. PASS",
+    "timing_note": "the read after Right was taken by the next tool call, about 100-300 ms after the press (not timed to exactly 300 ms)",
+    "up_on_purpose": "pressed Up twice more at the back arrow, waited 3 s: ring still on the back arrow (BUTTON at 64,20). Not pulled back into the panel.",
+    "fresh_close_and_open": "closed Quick Access with the GUIDE+A chord (panel hidden, no ring), reopened with the chord: ring on the bonsAI tab bar (div bonsai-tab-bar at left 48, top 48 bottom 64), still there 4 s later. NOT the question box."
+  },
+  "expected": "five times: rest on the Decky icon 2 s with the ring still on the icon; Right lands on the question box, drawn; Up on purpose to the back arrow stays 3 s; a fresh close and open lands on the question box",
+  "verdict": [
+    "PASS - icon rest (not taken): in all 5 cycles the ring stayed on the Decky icon for 2 s.",
+    "PASS - Right into the panel lands on the drawn question box in the 4 cycles that left through the back arrow (cycles 1, 3, 4, 5).",
+    "UNCLEAR - cycle 2 left by a different route (Left from a control in the chat) and Right returned to that control, not the question box. Only 4 of the 5 cycles used the runbook route.",
+    "PASS - Up to the back arrow on purpose: ring stayed there 3 s.",
+    "UNCLEAR - a fresh close and open of Quick Access put the ring on the tab bar (48-64), not on the question box. The runbook expects the question box."
+  ],
+  "side_effect": "none (never pressed A except Quick Access chord GUIDE+A; plugin and Quick Access left open)"
+}

@@ -1,6 +1,6 @@
 # Plan 80 — check the roadmap, then make it shorter and easier to use
 
-**Status: IN PROGRESS since 2026-10-03 (Go given; calls locked as D123). Steps 1 and 2 done: findings sheets and the review in assets/plan-80 (the review is 11-review.md). Step 3, the split, next.**
+**Status: IN PROGRESS since 2026-10-03 (Go given; calls locked as D123). Steps 1 to 3 done: findings sheets, the review (assets/plan-80/11-review.md), and the split into the knowledge base and parked-work files. Step 4, the rewrite, next.**
 
 Asked for by the maintainer: check that everything in the roadmap and its long-notes file is true, cut what is not
 needed, split the knowledge base and the parked work into their own files, and make sure every item waiting on a

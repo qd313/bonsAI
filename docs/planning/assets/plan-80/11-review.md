@@ -156,6 +156,14 @@ have (plan 79 question 12); the chip ladder stepping one chip per press; the oth
 chat writes; retiring the chip-ladder half of a notes test; re-measuring the search weights on the bigger library;
 whether scrolling first counts as moving (the Down trap row); plan 79 questions 2, 7 and 14.
 
-## 6. Answers
+## 6. Answers (the maintainer, 2026-10-03)
 
-(Filled in when the maintainer answers.)
+1. Cut choice menu: **wait** for a check by hand. Stays in Verify.
+2. Quit-or-switch checklist: **close it** on its unit tests. Verify → Done (the maintainer's call, no Deck row).
+3. Up from the answer bubble: **keep it for now**; the maintainer will check it by hand later. Stays in Bugs, saying so.
+4. The open call on a general card outranking its members: **list it under "Calls waiting on you"**.
+5. The freeze after a reload on 2026-10-01: **the whole Deck** was restarted. The entry keeps "until the Deck is restarted".
+6. Out-of-date test notes and the knowledge base status report: **fix them** in step 5.
+
+Also: the maintainer asked the session to carry on through every step without stopping, and to stop only for
+something major.

@@ -2087,3 +2087,10 @@ plan's own section, "The maintainer's calls", has the same list.
 **Two calls at Go, 2026-10-03:** the session runs in the cloud, on Opus 5.5 high. Each step's commit is pushed to
 the experimental branch straight away, so nothing is lost if the cloud copy is thrown away. This replaces the
 plan's "Nothing is pushed".
+
+**Answers to the review's six questions, 2026-10-03:** the cut choice menu waits for a check by hand; the
+quit-or-switch checklist closes on its unit tests; the "Up from the answer bubble" bug stays until the maintainer
+checks it by hand; the open call on a general card outranking its members is listed under the knowledge base's calls
+waiting; the freeze after a reload on 2026-10-01 needed the whole Deck restarted; out-of-date test notes and the
+knowledge base status report are fixed in step 5. The session carries on through every step and stops only for
+something major.

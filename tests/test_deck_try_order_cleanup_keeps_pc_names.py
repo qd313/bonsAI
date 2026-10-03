@@ -5,6 +5,8 @@ Purpose: Pin, on the saved settings file, that the two Deck-side clean-ups of th
 Deck no longer holds (fetch_ollama_catalog_metadata) -- leave a name in both orders when a PC the
 plugin knows (a saved host) answers that it has the same model, and still drop it when no saved PC
 has it, when the PC does not answer, or when the PC only has other models.
+The last class covers the other direction: when the plugin lists a PC's models and a saved name is
+gone from that PC (and from this Deck and any other saved PC), it leaves both orders.
 Used for: main.py's delete_ollama_model and fetch_ollama_catalog_metadata (the AI models box).
 Solves: The saved order is one list for whichever computer answers. Removing a model on the Deck
 dropped its name even when the AI runs on a PC that has the same model, so the PC lost the place
@@ -174,6 +176,85 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         await self._look(["gemma4:e2b-it-qat", "qwen2.5:1.5b"])
 
         self.assertEqual(self.asked, [])
+
+
+DECK_BASE = ollama_pc_models.DEFAULT_BASE
+
+
+class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
+    """A model taken off a PC leaves the saved order the next time the plugin lists that PC's models."""
+
+    async def asyncSetUp(self) -> None:
+        self.start_plugin_with_settings_file()
+        self.lists: dict[str, list[str]] = {}
+
+        def fake_list(base: str, timeout_seconds: float = 5.0) -> list[str]:
+            return list(self.lists.get(base, []))
+
+        p = patch.object(ollama_pc_models, "list_installed_ollama_tags", side_effect=fake_list)
+        p.start()
+        self.addCleanup(p.stop)
+        self._write_settings(
+            {
+                "ollama_local_on_deck": False,
+                "named_ollama_hosts": [{"label": "Desktop", "host": "192.168.1.20"}],
+                "text_model_routing_order": ["gone:7b", "gemma4:e2b-it-qat"],
+                "vision_model_routing_order": ["gemma4:e2b-it-qat", "gone:7b"],
+                "desktop_app_log_level": "verbose",
+            }
+        )
+
+    def _raw(self) -> bytes:
+        with open(self.settings_path, "rb") as f:
+            return f.read()
+
+    async def _pc_lists(self, models: list[str]) -> list[str]:
+        return await ollama_pc_models.prune_orders_after_pc_listing(self.plugin, models)
+
+    async def test_a_name_the_pc_no_longer_lists_leaves_both_saved_orders(self) -> None:
+        out = await self._pc_lists(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(out, ["gone:7b"])
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat"])
+        self.assertEqual(saved["desktop_app_log_level"], "verbose")
+
+    async def test_a_name_this_deck_has_stays(self) -> None:
+        self.lists[DECK_BASE] = ["gone:7b"]
+
+        await self._pc_lists(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
+
+    async def test_a_name_another_saved_pc_has_stays(self) -> None:
+        self.lists["http://192.168.1.20:11434"] = ["gone:7b"]
+
+        await self._pc_lists(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
+
+    async def test_an_empty_listing_changes_nothing(self) -> None:
+        before = self._raw()
+
+        out = await self._pc_lists([])
+
+        self.assertEqual(out, [])
+        self.assertEqual(self._raw(), before)
+
+    async def test_a_listing_that_holds_every_saved_name_writes_nothing(self) -> None:
+        before = self._raw()
+
+        await self._pc_lists(["gone:7b", "gemma4:e2b-it-qat"])
+
+        self.assertEqual(self._raw(), before)
+
+    async def test_a_model_being_downloaded_to_the_deck_keeps_its_place(self) -> None:
+        self.plugin._local_ollama_setup_state = {"phase": "running", "done": False, "pull_tags": ["gone:7b"]}
+
+        await self._pc_lists(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gone:7b", "gemma4:e2b-it-qat"])
 
 
 if __name__ == "__main__":

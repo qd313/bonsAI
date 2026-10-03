@@ -6,11 +6,12 @@ not leave that list if a PC the person also uses still has the same model, or th
 the model's place the next time the AI is pointed there. This file asks the PCs the plugin
 knows about which models they have, and says which names are safe to drop.
 Used for: ollama_local_setup_rpc.py (after "ollama rm", and when the models list is read and
-the Deck's own list no longer holds a saved name).
+the Deck's own list no longer holds a saved name); `prune_orders_after_pc_listing()` is for the
+moment the plugin lists a PC's models (see its note on what calls it).
 Solves: Removing a model on the Deck dropped its name from both saved orders without asking
 whether a PC had it too (roadmap Bugs, found by reading the code in plan 79).
-Does not: Remove a model anywhere or write the saved order itself, and never talks to this
-Deck's own Ollama (the caller does). It cannot see a PC address that was only typed on the
+Does not: Remove a model anywhere, and (apart from `prune_orders_after_pc_listing`) write the
+saved order itself or talk to this Deck's own Ollama (the caller does). It cannot see a PC address that was only typed on the
 Ollama tab: the plugin keeps that on the screen side, not in its settings, so only the saved
 hosts (`named_ollama_hosts`) are asked.
 
@@ -22,6 +23,10 @@ How it works:
    answer adds nothing: an unreachable PC proves nothing about what it has, so its names are
    not protected.
 
+3. `prune_orders_after_pc_listing()` is the clean-up for a model taken off a PC (the plugin cannot
+   remove one there; it only sees the PC's list). Given a list a PC just answered with, it drops
+   saved try-order names that neither that PC, this Deck's own Ollama, nor another saved PC has.
+
 Gotchas:
 - Never raises. Any failure reads as "that PC has nothing to say".
 - A tag may be spelled `llama3` in the saved order and `llama3:latest` by Ollama; the match
@@ -29,11 +34,18 @@ Gotchas:
 """
 
 import asyncio
+import logging
 from typing import Any, Iterable
 
-from backend.ollama_routing import tag_in_names
+from backend.ollama_routing import prune_routing_orders_to_installed, tag_in_names
 from backend.ollama_urls import is_https_ollama_address, normalize_ollama_base
-from backend.services.local_ollama_setup_service import is_loopback_ollama_host, list_installed_ollama_tags
+from backend.services.local_ollama_setup_service import (
+    DEFAULT_BASE,
+    is_loopback_ollama_host,
+    list_installed_ollama_tags,
+)
+
+logger = logging.getLogger("bonsai")
 
 PC_LIST_TIMEOUT_SECONDS = 4.0
 """How long one PC gets to answer. A PC that is switched off must not stall a model removal."""
@@ -79,3 +91,41 @@ async def tags_on_saved_pcs(settings: dict[str, Any], extra: Iterable[str] = ())
     answers = await asyncio.gather(*(_tags_of(b) for b in bases))
     return {t.strip() for tags in answers for t in tags if t and t.strip()}
 
+
+
+async def prune_orders_after_pc_listing(plugin: Any, pc_models: Iterable[str]) -> list[str]:
+    """Drop saved try-order names a PC's fresh model list shows are gone, unless another machine has them.
+
+    In: the plugin (for its settings and log) and the model names a PC answered with just now.
+    Out: the names dropped (empty when nothing changed). An empty list prunes nothing: an
+    unreachable PC reads the same as a PC with no models. This Deck's own Ollama and the other saved
+    PCs are asked too, because the order is one list; a Deck that does not answer has nothing to
+    keep. A download in progress on the Deck keeps its place. Never raises.
+    """
+    try:
+        listed = [str(t).strip() for t in pc_models if str(t).strip()]
+        if not listed:
+            return []
+        current = await plugin.load_settings()
+        patch, pruned = prune_routing_orders_to_installed(current, listed)
+        if not patch:
+            return []
+        deck = await _tags_of(DEFAULT_BASE)
+        others = await tags_on_saved_pcs(current)
+        state = dict(getattr(plugin, "_local_ollama_setup_state", {}) or {})
+        downloading: set[str] = set()
+        if state.get("phase") == "running" and not state.get("done", True):
+            downloading = {str(t).strip() for t in (state.get("pull_tags") or [])}
+        patch, pruned = prune_routing_orders_to_installed(current, [*listed, *deck, *others], downloading)
+        if not patch:
+            return []
+        await plugin.save_settings(patch)
+        await plugin._maybe_app_log(
+            "local_setup.routing_prune",
+            "saved try order dropped models a PC no longer has",
+            fields={"pruned": ",".join(pruned), "pc_model_count": len(listed)},
+        )
+        return pruned
+    except Exception:
+        logger.exception("pruning the saved try orders after a PC listing failed; they were left as they were")
+        return []

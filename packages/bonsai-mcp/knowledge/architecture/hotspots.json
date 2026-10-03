@@ -151,6 +151,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tryOrder.test.tsx",
+      "lines": 682,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
       "lines": 678,
       "role": ""
@@ -168,11 +173,6 @@
     {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 658,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsModal.tryOrder.test.tsx",
-      "lines": 649,
       "role": ""
     },
     {

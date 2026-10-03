@@ -116,6 +116,24 @@ class TestProbeOllamaHealth(unittest.TestCase):
         self.assertEqual(out["models"], ["qwen2.5:7b", "llava:7b"])
         self.assertEqual(out["ps_loaded"][0]["vram_weight_share_pct_appx"], 90.0)
 
+    def test_each_models_size_comes_back_by_name(self):
+        """Ollama's /api/tags already carries every model's size; the PC's list used to drop it."""
+        fake = FakeUrlopen(
+            tags={
+                "models": [
+                    {"name": "qwen3.6:27b", "size": 18_700_000_000},
+                    {"name": "gemma4:e2b-it-qat", "size": 2_000_000_000},
+                    {"name": "no-size:1b"},
+                    {"name": "bad-size:1b", "size": "big"},
+                    {"name": "zero:1b", "size": 0},
+                ]
+            }
+        )
+        with mock.patch("urllib.request.urlopen", fake):
+            out = probe_ollama_health("http://1.2.3.4:11434", time.time() + 10)
+        self.assertEqual(out["model_sizes"], {"qwen3.6:27b": 18_700_000_000, "gemma4:e2b-it-qat": 2_000_000_000})
+        self.assertEqual(len(out["models"]), 5)
+
     def test_all_three_endpoints_are_queried(self):
         fake = FakeUrlopen()
         with mock.patch("urllib.request.urlopen", fake):

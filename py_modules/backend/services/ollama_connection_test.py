@@ -211,6 +211,7 @@ async def run_ollama_connection_test(
 
     version = str(tested.get("version", "unknown"))
     models = list(tested.get("models", []))
+    model_sizes = dict(tested.get("model_sizes") or {})
     ps_loaded = list(tested.get("ps_loaded", []))
 
     if loopback and not tools.installed_here():
@@ -227,6 +228,7 @@ async def run_ollama_connection_test(
         "reachable": True,
         "version": version,
         "models": models,
+        "model_sizes": model_sizes,
         "ps_loaded": ps_loaded,
     }
     if recovery_attempted:

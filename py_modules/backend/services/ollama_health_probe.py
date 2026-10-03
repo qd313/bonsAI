@@ -64,6 +64,24 @@ def _loaded_model_snapshots(ps_data: Any) -> list[dict[str, Any]]:
     return out
 
 
+def _installed_model_sizes(tags_data: Any) -> dict[str, int]:
+    """{name: size in bytes} for every model /api/tags gives a real size.
+
+    The AI models box needs a PC model's size to tell whether the routing would skip it (15 GB or
+    more) -- a name alone cannot say so for a model like qwen3.6:27b. A row without a usable size
+    is left out, so the screen reads it as unknown, never as 0.
+    """
+    sizes: dict[str, int] = {}
+    for m in tags_data.get("models", []) or []:
+        if not isinstance(m, dict):
+            continue
+        name = str(m.get("name") or "").strip()
+        size = m.get("size")
+        if name and isinstance(size, int) and not isinstance(size, bool) and size > 0:
+            sizes[name] = size
+    return sizes
+
+
 def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
     """Read /api/version, /api/tags and /api/ps from an Ollama host.
 
@@ -87,6 +105,7 @@ def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
     tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
     tags_data = read_json_capped(tags_resp, what="/api/tags reply")
     models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
+    model_sizes = _installed_model_sizes(tags_data)
 
     ps_snapshots: list[dict[str, Any]] = []
     ps_timeout = max(0.25, deadline - time.time())
@@ -97,4 +116,4 @@ def probe_ollama_health(base: str, deadline: float) -> dict[str, Any]:
     except Exception:
         ps_snapshots = []
 
-    return {"version": version_local, "models": models_local, "ps_loaded": ps_snapshots}
+    return {"version": version_local, "models": models_local, "model_sizes": model_sizes, "ps_loaded": ps_snapshots}

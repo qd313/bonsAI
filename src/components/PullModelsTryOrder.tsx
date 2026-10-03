@@ -109,7 +109,9 @@ export function usePullModelTryNav(a: {
   const enabled = places.status !== "off";
   const onPcReady = places.onPc && places.status === "ready";
   const entryOf = (tag: string) => catalog.find((e) => e.tag === tag || `${e.tag}:latest` === tag);
-  const sizeOf = (tag: string): number | undefined => liveSizeGbByTag[tag] ?? entryOf(tag)?.sizeGb;
+  // With the AI on a PC the PC's own size for a model comes first: it is the model that will run.
+  const sizeOf = (tag: string): number | undefined =>
+    (places.onPc ? places.pcSizeGbByTag[tag] : undefined) ?? liveSizeGbByTag[tag] ?? entryOf(tag)?.sizeGb;
   /** With the AI on a PC: every answering model the PC has, minus what the person's own licence and Ask-mode filters hide. */
   const pcTags = onPcReady
     ? places.order

@@ -436,6 +436,39 @@ describe("a place must not promise a model that never runs", () => {
     expect(rowOf(container, BIG, true).textContent).toContain("Skipped: too big");
   });
 
+  it("marks a PC model by the size the PC reports, when its name is not on the heavy list (Deck 2026-10-03)", async () => {
+    // The PC's Ollama lists qwen3.6:27b (17.4 GB) and gemma-cursor (18 GB): names the heavy list does not
+    // know, so only their size can mark them. The box used to drop that size and give them ordinary places.
+    const GB = 1024 * 1024 * 1024;
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? {
+            reachable: true,
+            models: ["gemma4:e2b-it-qat", "qwen3.6:27b", "gemma-cursor:latest"],
+            model_sizes: { "gemma4:e2b-it-qat": 2 * GB, "qwen3.6:27b": 17.4 * GB, "gemma-cursor:latest": 18 * GB },
+          }
+        : { reachable: true, models: [] },
+    );
+    const { container } = renderBox({ ...PC, modelAllowHighVramFallbacks: false });
+    await waitFor(() => expect(placeOf(container, "qwen3.6:27b", true)).not.toBeNull());
+    expect(rowOf(container, "qwen3.6:27b", true).textContent).toContain("Skipped: too big");
+    expect(rowOf(container, "gemma-cursor:latest", true).textContent).toContain("Skipped: too big");
+    expect(rowOf(container, "gemma4:e2b-it-qat", true).textContent).not.toContain("Skipped");
+  });
+
+  it("the PC's rows show the size the PC reports, and no mark when big models are allowed", async () => {
+    const GB = 1024 * 1024 * 1024;
+    setRpcHandler("test_ollama_connection", (target) =>
+      String(target).startsWith("192.168.1.20")
+        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.6:27b"], model_sizes: { "qwen3.6:27b": 17.4 * GB } }
+        : { reachable: true, models: [] },
+    );
+    const { container } = renderBox({ ...PC, modelAllowHighVramFallbacks: true });
+    await waitFor(() => expect(placeOf(container, "qwen3.6:27b", true)).not.toBeNull());
+    expect(rowOf(container, "qwen3.6:27b", true).textContent).toContain("17 GB");
+    expect(container.querySelector(".bonsai-pullmodels-place-skipped")).toBeNull();
+  });
+
   it("the big model keeps its place number and its buttons: only the mark is added", async () => {
     withBig();
     const { container } = renderBox({ ...DECK, modelAllowHighVramFallbacks: false });

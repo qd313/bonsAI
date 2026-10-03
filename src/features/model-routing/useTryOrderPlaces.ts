@@ -23,6 +23,8 @@
  * - With the AI on a PC the box's own list of installed models is the Deck's, so the list that gets
  *   places comes from one connection test to the PC instead (the Deck's list is used as it is when the
  *   AI runs on the Deck, so no second probe starts the local server twice).
+ *   That test also carries each model's size (`pcSizeGbByTag`), so a PC model of 15 GB or more is
+ *   marked skipped even when its name is not on the heavy list.
  * - Moves are queued one behind another: each reads the order on disk, swaps, saves, so two quick
  *   presses do not both start from the same old order.
  * - The saved order is one list for whichever computer answers. A move keeps the saved names this
@@ -35,7 +37,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toaster } from "@decky/api";
 
 import type { BonsaiSettings } from "../../data/bonsaiSettingsSchema";
-import { isEmbeddingOnlyTag } from "../../data/pullModelCatalog";
+import { bytesToGb, isEmbeddingOnlyTag } from "../../data/pullModelCatalog";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
 import { buildPickerOrder } from "../../utils/modelRoutingOrder";
@@ -71,6 +73,8 @@ export type TryOrderPlaces = {
   reset: () => Promise<void>;
   /** True when the AI runs on a PC, so the list belongs to that computer. */
   onPc: boolean;
+  /** With the AI on a PC: each of its models' size in GB, as that PC reports it (empty otherwise or when unknown). */
+  pcSizeGbByTag: Record<string, number>;
 };
 
 const CONNECTION_TEST_TIMEOUT_SECONDS = 10;
@@ -89,7 +93,10 @@ const OFF: TryOrderPlaces = {
   isAutomatic: true,
   reset: async () => {},
   onPc: false,
+  pcSizeGbByTag: {},
 };
+
+const NO_SIZES: Record<string, number> = {};
 
 /** The name in `order` that a table row's tag stands for, using the table's own matching rules. */
 export function resolveOrderTag(tag: string, order: readonly string[]): string | null {
@@ -135,7 +142,7 @@ async function saveOrder(kind: TryOrderKind, rawOrder: string[]): Promise<void> 
   );
 }
 
-type PcList = { state: "loading" } | { state: "ready"; models: string[] } | { state: "refused"; message: string };
+type PcList = { state: "loading" } | { state: "ready"; models: string[]; sizesGb: Record<string, number> } | { state: "refused"; message: string };
 
 /**
  * In: the host choice (undefined switches the feature off), the box's own set of models installed on
@@ -190,14 +197,24 @@ export function useTryOrderPlaces(a: {
     }
     let cancelled = false;
     setPc({ state: "loading" });
-    callDeckyWithTimeout<[string, number], { reachable?: boolean; models?: string[]; error?: string }>(
+    callDeckyWithTimeout<
+      [string, number],
+      { reachable?: boolean; models?: string[]; model_sizes?: Record<string, number>; error?: string }
+    >(
       "test_ollama_connection",
       [pcAddress, CONNECTION_TEST_TIMEOUT_SECONDS],
       CONNECTION_TEST_TIMEOUT_SECONDS * 1000 + REMOTE_PROBE_EXTRA_MS,
     )
       .then((res) => {
         if (cancelled) return;
-        if (res.reachable && Array.isArray(res.models)) setPc({ state: "ready", models: res.models });
+        if (res.reachable && Array.isArray(res.models)) {
+          // The PC's own sizes: the 15 GB rule cannot mark a big model it has no size for.
+          const sizesGb: Record<string, number> = {};
+          for (const [tag, bytes] of Object.entries(res.model_sizes ?? {})) {
+            if (typeof bytes === "number" && bytes > 0) sizesGb[tag] = bytesToGb(bytes);
+          }
+          setPc({ state: "ready", models: res.models, sizesGb });
+        }
         else setPc({ state: "refused", message: `Could not list models. ${res.error ?? "The PC did not answer."}` });
       })
       .catch((e: unknown) => {
@@ -281,5 +298,18 @@ export function useTryOrderPlaces(a: {
   );
 
   if (!enabled) return OFF;
-  return { status, refusal, kind, setKind, order, placeOf, move, isAutomatic: saved[kind].length === 0, reset, onPc };
+  const pcSizeGbByTag = onPc && pc.state === "ready" ? pc.sizesGb : NO_SIZES;
+  return {
+    status,
+    refusal,
+    kind,
+    setKind,
+    order,
+    placeOf,
+    move,
+    isAutomatic: saved[kind].length === 0,
+    reset,
+    onPc,
+    pcSizeGbByTag,
+  };
 }

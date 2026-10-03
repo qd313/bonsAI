@@ -88,6 +88,16 @@ class ConnectionTestDecisionTests(unittest.TestCase):
         self.assertEqual(calls["probe"], 1)
         self.assertNotIn("recovery_attempted", outcome.result)
 
+    def test_the_sizes_the_host_reports_reach_the_screen(self):
+        """The AI models box marks a PC's 15 GB or larger model "Skipped: too big" by this size."""
+        sizes = {"qwen3.6:27b": 18_700_000_000}
+        outcome, _calls = run(probe_results=[{**ANSWERS, "model_sizes": sizes}])
+        self.assertEqual(outcome.result["model_sizes"], sizes)
+
+    def test_a_host_with_no_sizes_still_answers_with_an_empty_map(self):
+        outcome, _calls = run()
+        self.assertEqual(outcome.result["model_sizes"], {})
+
     def test_a_host_on_the_network_is_never_restarted(self):
         """Nothing here could start Ollama on someone else's machine, so do not try."""
         outcome, calls = run(probe_results=[OSError("refused")], loopback=False)

@@ -1,0 +1,15 @@
+{
+  "row": "P79-SETTINGS-LIST-RING",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:31 EDT",
+  "screen": "Quick Access page window 854x534, no game; screenshot is the Deck's own 1280x800 frame",
+  "setup": "Test chat open, Main tab, box empty, ring on Ask after the previous check. 'brightness' put in the box with deck_send_ask.py (VERIFIED).",
+  "pressed": "UP once from Ask; then send script --clear (box emptied, VERIFIED field now ''); then DOWN once. No A anywhere.",
+  "seen": {
+    "after_UP": "ring on a settings-list row 'QAM > Brightness (QAM > Quick Settings)', rect 55,286,287x30, computed outline 2px solid rgba(255,255,255,0.88)",
+    "after_clear": "list gone (results card element count 0); focus on the question INPUT, rect 73,324,275x44, computed outline 'rgba(255, 255, 255, 0.88) solid 2px', activeElement is that same input; screenshot shows a white ring around the box",
+    "after_DOWN": "focus on the Ask button (class bonsai-ask-primary, text 'ask')"
+  },
+  "expected": "at once a ring is drawn on the question box, and one Down lands on Ask",
+  "verdict": "PASS - after the list closed a 2 px white ring was drawn on the question box (computed outline and screenshot), and one Down landed on Ask. Note: the read after the clear was taken a few seconds later than the clear itself, so 'at once' is shown by the ring being there on the first read after the clear, not by a timed measurement."
+}

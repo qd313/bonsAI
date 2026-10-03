@@ -1,0 +1,15 @@
+{
+  "row": "CHAT-SLOTS-V3-05a (busy half)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:35:53 EDT",
+  "screen": "Quick Access page window 854x534, no game; Deck's own 1280x800 frame in screenshots",
+  "setup": "Slot A = test chat 6f3cc055 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Slot B = its neighbour on the chat row, 'what is a good way to practice parrying in action games' (nothing asked in B). Strategy mode, no game. A asked 'In about 300 words, explain how to prepare for the Soul Master fight in Hollow Knight.' (send script VERIFIED, A on Ask). Ring walked Up to the chat row (bonsai-chat-slot-row-focus) then RB at about 17:35:53.",
+  "pressed": "A on Ask; UP x6 to the back arrow, DOWN x2 to the chat row; RB (to B, A still writing); wait for log 'run_game_ai_request: completed in 50.0s' at 17:36:44; LB (back to A).",
+  "seen": {
+    "B_title_on_screen": "what is a good way to practice parrying in action games",
+    "B_ask_button_class": "bonsai-askbar-target bonsai-ask-primary Disabled ... (text 'ask'), read 4 s after the RB; the screenshot shows a stop icon in B's box corner instead of the microphone",
+    "time_after_RB_s": 4
+  },
+  "expected": "Ask in slot A, RB to slot B mid-stream: B shows its own content and the ask bar still reads busy",
+  "verdict": "PASS - B showed its own content and its Ask button was disabled (busy) while A was still writing."
+}

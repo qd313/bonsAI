@@ -1,0 +1,26 @@
+{
+  "row": "P79-POWER-NUMBERS",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:28-17:32 EDT",
+  "screen": "Quick Access page window 854x534, no game running, Context line: no active game detected",
+  "setup": "Test chat 6f3cc055 open (title read from the chat row before each question), Strategy mode, no game. Chat's own game is Deep Rock Galactic: Survivor (log: 'using the chat's own game'). Questions sent with deck_send_ask.py (VERIFIED), Ask pressed with focus read on 'ask'.",
+  "pressed": "send script, walkTo Ask (2 presses then 1), A. Twice.",
+  "seen": {
+    "q1": "How can I make my battery last longer when I play?",
+    "q1_answer_number_lines": [
+      "If you're playing something light, keep that Thermal power limit around 6 W.",
+      "If you're running a proper heavy 3D game, you can bump it up to 10 or 12 W",
+      "for the framerate, stick to 60 FPS if you can handle it, or drop it to 40 if you're feeling cheeky and want to save some juice."
+    ],
+    "q1_log": "completed in 64.7s; 'parsed TDP recommendation: tdp_watts 7' (a first summing-up ran before it, then a second line of the log shows 7 W suggestion parsed)",
+    "q2": "What TDP should I use?",
+    "q2_answer_number_lines": [
+      "If you're just doing some light stuff, keep that Thermal power limit around 6 W.",
+      "you can bump it up to 10 or even 15 W",
+      "For a general starting point, let's go with 6 W."
+    ],
+    "q2_log": "completed in 41.9s; parsed TDP recommendation tdp_watts 6"
+  },
+  "expected": "each answer holds a number a person can set (TDP in watts, frame cap or refresh rate)",
+  "verdict": "PASS - both answers hold settable numbers (q1: 6 W, 10 or 12 W, 60 FPS / 40 FPS; q2: 6 W, 10 or 15 W)."
+}

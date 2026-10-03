@@ -1,0 +1,16 @@
+{
+  "row": "P79-KB-BUTTON-ICONS (installed half)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:37 EDT",
+  "screen": "Quick Access page window 854x534, no game; screenshot is the Deck's own frame",
+  "setup": "Ollama tab, knowledge-base section: 'Installed - version 2026.09.26', path /home/deck/.bonsai/rag. corpus.db 2998272 bytes (dir total 3054853 bytes).",
+  "pressed": "RB to the Ollama tab; DOWN x7 (walk, directions only) onto 'Update knowledge base'; RIGHT; LEFT. No A on these buttons.",
+  "seen": {
+    "walk": "Down landed on Update knowledge base (rect 64,330,166x44); Right landed on Remove (rect 238,330,94x44); Left landed back on Update knowledge base. Same order as the row says.",
+    "update_icon": "1 svg (viewBox 0 0 24 24, 16x16) before the words 'Update knowledge base'; the screenshot shows a circular refresh arrow",
+    "remove_icon": "1 svg (viewBox 0 0 24 24, 16x16, path 'M4.5 7h15M9.5 7V4.8h5V7M6.8 7l.8 12.2h8.8L17.2 7') before the word 'Remove'; the screenshot shows a bin",
+    "screenshot": "plan81-P79-KB-BUTTON-ICONS-installed.png (ring on Remove)"
+  },
+  "expected": "Update shows a refresh arrow, Remove a bin, and the walk is the same as the row says",
+  "verdict": "PASS - installed half: Update has a refresh arrow, Remove has a bin, the Down/Right/Left walk was unchanged. The not-installed half (Download arrow) is a separate row, step 8."
+}

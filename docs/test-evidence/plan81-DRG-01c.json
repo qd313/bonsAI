@@ -1,0 +1,19 @@
+{
+  "row": "DRG-01c",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:40-17:54 EDT",
+  "screen": "Quick Access page window 854x534 with the game running (read before the freeze)",
+  "setup": "Library folder moved aside (/home/deck/.bonsai/rag.p81aside), plugin reloaded, then Deep Rock Galactic: Survivor (2321470) launched from the Recent Games row with deck_launchGame (61 ms to appear in RunningApps). Waited 45 s; memory then: available 2035 MB (no reload done, none needed). Quick Access closed and reopened: Context line read 'Context: active game Deep Rock Galactic: Survivor'. Test chat open, Strategy mode, strategy_spoiler_masking_enabled true (read from settings.json). A page watcher (200 ms samples of the panel text for 'Spoiler hidden until complete' / 'tap to show' and spoiler-class elements) was installed before Ask. Question sent with the send script (VERIFIED): 'How do I beat the Glyphid Dreadnought?'; Ask pressed with focus read on 'ask'.",
+  "pressed": "launch tool; openPlugin; LB; send script; walkTo Ask (15 presses, 0 A); A on Ask.",
+  "seen": {
+    "log": [
+      "kb: question chose domain=strategy route=- method=keyword attached=0 dropped_for_room=0 unavailable=corpus_missing",
+      "ask_ollama ... (attached 0 chars) ... stream done visible_len=783",
+      "run_game_ai_request: completed in 54.7s (17:42:58)"
+    ],
+    "screen": "NOT READ. After the answer finished the Steam interface stopped answering: every debug target (Quick Access, Steam main window, SharedJSContext) timed out at 8-10 s on every read from about 17:46 to 17:54. At the same time memory available fell from 2035 MB to 973 MB (swap 1209 MB used), load average 8.3, Steam web helper processes at 100% CPU. The page watcher result and the answer text could not be fetched. The screenshot at 17:48 showed the game's title screen with Steam's side rail drawn but no panel."
+  },
+  "expected": "boss tactics in plain text from the first streamed word, no cover, no 'Spoiler hidden until complete' chip",
+  "verdict": "COULD NOT RUN - the answer was produced with the library absent (log: corpus_missing, 0 chars of notes), but the screen could not be read because Steam's interface stopped responding under memory pressure, so whether the tactics were plain with no cover or chip was never seen.",
+  "side_effect": "Stopped pressing as soon as the interface stopped answering (Deck rule: low memory with a game running). The game is STILL RUNNING and the library is STILL ASIDE. One L3 press (to wake the screen) was sent at about 17:45 and may have reached the game's title screen ('Press any key')."
+}

@@ -265,7 +265,8 @@ flip it. A measured cut-off is not retuned for one question; no code change made
   **STRAT-SPOIL-NAME-01 is still blocked.** It could not run four times, the last on 2026-10-02: none of Doom 64, Doom 64:
   Retribution, Super Mario 64, Mario Kart 64 or Pikmin 2 is on the Deck's Recent Games row, the only list the launch tool can search,
   so one of them has to be played once by hand first. It is proven by its unit tests only. Evidence
-  `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. **DRG-01c** was not tried on purpose (it would mean removing the library).
+  `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. **DRG-01c** was not tried on purpose (it would mean removing the library). **Tried 2026-10-03 (plan 81, build `afd2f444`): could not run** — Steam's
+  screen froze after the answer (filed under Bugs); evidence `docs/test-evidence/plan81-DRG-01c.json`.
   [Plan 54](archive/54-spoiler-rules-gaps.md).
 
 **DRG-01b passed on the Deck 2026-09-23:** with Deep Rock Galactic: Survivor running, the knowledge
@@ -419,6 +420,12 @@ the panel drew the chat in full and cleared it. Evidence `docs/test-evidence/pla
 Rock Galactic: Survivor attached no tip — its keyword score was 2.0 against the 4.0 cut-off — while "the
 text ... looks blurry" scores 6.9 and finds it. A question that avoids the tip's own words misses it; a
 rescue by meaning search was measured and left for a later lane. Evidence `docs/test-evidence/plan70-R4-try5.json`.
+**Fixed 2026-10-03 (plan 81, `e78f0d6e`, `6f758ff0`), Deck check owed (row P81-TIP-BY-MEANING).** In Strategy and Expert mode a game's
+tip is now also found by meaning: "the words on screen look blurry" attaches Render Scale. The boss question is unchanged, and Speed
+mode is unchanged on purpose. Held-back measurements are identical before and after: no right answer lost, no new wrong one.
+Limits: the long Deck sentence that also names the game ("deep rock galactic survivor the words on screen look blurry on my deck,
+what should i change") still misses; one made-up phrase, "how do i launch a mission", now attaches Fallout 4's launch-option tip.
+Test `tests/test_kb_game_tip_meaning.py`.
 
 **New sightings, open:** after a bare follow-up the suggestion chip read "Enable local knowledge base for
 better game tips" though the knowledge base was on (once); the plugin log warned twice that a Strategy

@@ -131,8 +131,8 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★★ `[chat]` `[watching]` **A chat that is still writing does not look busy from another chat** — found 2026-09-18, seen
-  three times, then not reproduced in two clean sessions. Open question: the other chat's Ask button read greyed while
-  the first was writing, and which reading is right is open; no decision recorded.
+  three times, then not reproduced in two clean sessions, then **passed 2026-10-03** (plan 81, build `afd2f444`: 05a busy half, 06a, 06b).
+  Open question: the other chat's Ask button read greyed while the first was writing (that check counted it as busy); which reading is right is open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `-06a.json`, `-06b.json`.
   [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
   Unshelves when: a new sighting.
 

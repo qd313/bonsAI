@@ -9,6 +9,11 @@ All notable changes to this project are documented in this file.
 - **B, Cancel and "Keep my data" on the "Clear all plugin data?" box now leave the panel on the Settings tab,** with the ring back on "Clear all data...". Before, every way of closing the box took you to Main. Measured on the Deck before the fix; owes its Deck check on the fixed build.
 - **The accent intensity button, "Reinstall voice engine", the two voice model rows and the Steam Web API key field now show the same white ring as every other control.** Before, the first four showed only a thin grey frame and the key field none. Owes its Deck check.
 - **A long suggestion chip now leaves 1.5 s after its words stop,** not 3 to 10 s later. In the fade style the chip starts fading at that moment; in the plain and decode styles the words swap then. The sliding style keeps its own beat, and a chip under the ring never changes. Owes its Deck check on the new build.
+- **A choice button under a Strategy answer now gets the follow-up instructions** (coaching and a step checklist, no new choice menu). Before, when the chat remembered a subject, a reminder in front of the follow-up could make the AI treat it as a first question, so the checklist never came. Owes its Deck check.
+- **Coming back to the Decky tab and pressing Right now puts the ring on the question box,** not on Decky's back arrow. Resting on the tab icon, and walking Up to the back arrow on purpose, are left alone. Owes its Deck check.
+- **Removing a model on the Deck no longer drops its place from the saved try order when a saved PC still has that model,** and a model taken off the PC leaves the try order the next time the PC is tested. Moving a place in the AI models box no longer wipes the saved places of models only the other machine has. Owes its Deck check.
+- **An underlined game word's tooltip is placed again after every scroll,** above the word if it fits, else below, so it no longer covers the word. Owes its Deck check.
+- **A long answer that carries on after the length limit inside a hidden block now keeps one opening mark,** and a mark cut in half no longer leaves the hidden sentence showing without a cover. Before, on this PC, 7 of 23 continued answers glued two opening marks together. Owes its Deck check.
 
 ### Plan 79 (2026-10-02)
 

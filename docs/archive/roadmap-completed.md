@@ -1712,3 +1712,11 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 
 - ★★ `[chips]` **The suggestion chip under the D-pad ring gets a soft blue fill instead of the bottom bar** — built as `27172839`, the maintainer's pick (drawing 1); part of the Verify entry "Long suggestion chips".
   **Closed 2026-10-02, passed on the Deck on what was measured (row P79-CHIP-SOFT-FILL).** Ring on the chip: a pale blue layer (rgba 56,189,248,0.2) over the grey gradient, no bar under it; ring away: grey only. The computed edge is white at 10 percent, 0.67 px, the same on or off. Look: the maintainer's checks page. Evidence `docs/test-evidence/plan79-P79-CHIP-SOFT-FILL.json`.
+
+## Closed 2026-10-03 (plan 81, Deck block 2a, moved from Verify)
+
+_Copied line for line from the roadmap's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★ `[ui]` **Icons on the "Update knowledge base" and "Remove" buttons** — **VERIFY, built 2026-10-02 (`2975570f`), asked for by the maintainer.**
+  Update keeps the refresh arrow, Download gets a download arrow, Remove gets a bin; words and D-pad order unchanged. Deck check owed, never run: **P79-KB-BUTTON-ICONS**.
+  **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 2a, build `afd2f444`; row P79-KB-BUTTON-ICONS).** Installed (library 2026.09.26): Update has a circular refresh arrow and Remove a bin, one 16 px icon before each label; Down, Right and Left landed on Update, Remove and back on Update as before. Not installed (library folder moved aside): the tab offers "Download knowledge base" with a download arrow (an arrow pointing down onto a line); Down, Right and Up moved as expected. Neither button was pressed. Evidence `docs/test-evidence/plan81-P79-KB-BUTTON-ICONS-installed.json`, `docs/test-evidence/plan81-P79-KB-BUTTON-ICONS-notinstalled.json` (+ .png).

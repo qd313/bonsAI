@@ -1,0 +1,16 @@
+{
+  "row": "P79-HINT-DISMISS-SLOT",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:32-17:35 EDT",
+  "screen": "Quick Access page window 854x534, no game; screenshot is the Deck's own 1280x800 frame",
+  "setup": "Permissions tab 'Read game & screenshot context' was ON (aria-checked true; settings.json media_library_access true, steam_logs_read true); turned OFF by screen route (focus read on the switch first, then A; read back false). Main tab, test chat open (title read from the chat row). 'why is my game crashing after the latest update' put in the box with the send script (VERIFIED), NOT asked.",
+  "pressed": "RB x3 to Permissions, A on the switch; LB x3 to Main; walked Up from Ask to 'Open Permissions' (hint row), RIGHT to Dismiss; focus read: BUTTON 'Dismiss' rect 172,242,63x34; then A (no other press). Then send script --clear, RB x3, focus read on the switch (label 'Read game & screenshot context', aria-checked false), A, read back true.",
+  "seen": {
+    "hint_before": "hint row 'Troubleshooting Ask detected. Enable Read game & screenshot context in Permissions...' with buttons Open Permissions and Dismiss was on screen",
+    "after_dismiss": "hint gone; ring on the first chip of the slot above the question box, 'How do I start a new named chat?', rect 48,276,147x30 (its bottom edge 306 is above the question box top 309; wholly inside the panel, visible). Focus style on that chip is a cyan-tinted fill gradient (rgba(56,189,248,0.2)) against the grey fill of the neighbour chip; its computed outline is none, so it is not a white outline. Screenshot plan81-P79-HINT-DISMISS-SLOT.png shows the chip lighter than its neighbour.",
+    "restored": "box cleared (field ''); switch read back true; settings.json capabilities media_library_access true, steam_logs_read true (same as before)"
+  },
+  "expected": "after A on Dismiss the ring lands on the slot above the question box (the chip's slot), drawn, not on a hidden chip",
+  "verdict": "PASS - the ring landed on a visible chip in the slot just above the question box, not on a hidden chip. Note for the owner: the focus is drawn as the chip's cyan fill, not a white outline.",
+  "side_effect": "The test chat now has the troubleshooting hint dismissed (per chat, remembered; stored in the page, not in the chat file: no hint/dismiss key in the chat file). The Permissions switch was off for about 3 minutes and is back on."
+}

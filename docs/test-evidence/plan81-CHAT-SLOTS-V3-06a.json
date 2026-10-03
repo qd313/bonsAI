@@ -1,0 +1,15 @@
+{
+  "row": "CHAT-SLOTS-V3-06a",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:35:53-17:36:16 EDT",
+  "screen": "Quick Access page window 854x534, no game; Deck's own 1280x800 frame in screenshots",
+  "setup": "Slot A = test chat 6f3cc055 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Slot B = its neighbour on the chat row, 'what is a good way to practice parrying in action games' (nothing asked in B). Strategy mode, no game. A asked 'In about 300 words, explain how to prepare for the Soul Master fight in Hollow Knight.' (send script VERIFIED, A on Ask). Ring walked Up to the chat row (bonsai-chat-slot-row-focus) then RB at about 17:35:53.",
+  "pressed": "A on Ask; UP x6 to the back arrow, DOWN x2 to the chat row; RB (to B, A still writing); wait for log 'run_game_ai_request: completed in 50.0s' at 17:36:44; LB (back to A).",
+  "seen": {
+    "A_dot_while_away": "class bonsai-chat-slot-dot--pending; border width 0; background transparent (rgba(0,0,0,0)); box-shadow 'rgba(56,189,248,0.9) 0 0 0 1px inset, rgba(56,189,248,0.55) 0 0 5px 0' = a hollow cyan ring with a glow. Idle dots for comparison: background rgba(143,168,196,0.3), no shadow.",
+    "spark": "element bonsai-chat-slot-ghost-spark bonsai-chat-slot-ghost-spark--pending present, rect 111,110,9x9, visible; A was the ghost neighbour (left) when B was open",
+    "screenshot": "plan81-CHAT-SLOTS-V3-06a.png shows the ring dot and the spark beside the left ghost"
+  },
+  "expected": "while away from slot A: A's dot is a hollow cyan ring; if A is the visible ghost neighbour, a cyan spark sits at that row edge, outside the ghost's fade",
+  "verdict": "PASS - A's dot was a hollow cyan ring (not like an idle dot) and a cyan spark was present at the ghost's edge. Whether the spark sits fully outside the ghost's fade was judged only from the screenshot, where it sits at the ghost's left end beside the title text."
+}

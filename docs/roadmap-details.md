@@ -215,7 +215,7 @@ the dock. Deck check owed once a fix lands.
 
 ---
 
-## Some saved answers have a hidden block's markers written twice, cause unknown
+## Some saved answers have a hidden block's markers written twice, cause found
 
 Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
 written twice and its closing marker written twice. The screen still drew one closed block correctly, but
@@ -225,7 +225,16 @@ the hidden text went into the chat's memory as plain words — for every later q
 
 The chat memory now copes with doubled markers (`6843f8e1`) and hides more, not less, whenever it is in
 doubt, proved by breaking it on all three doubled shapes (both doubled, opening doubled, closing doubled).
-**Why an answer ends up saved with doubled markers in the first place is not known.**
+**Why an answer ends up saved with doubled markers in the first place was not known until 2026-10-03.**
+
+**Cause found and fixed 2026-10-03 (plan 81, `ec329983`, `9be94867`, `8fba3a4f`), Deck check owed (row P81-CONTINUE-ONE-MARK).** When a long answer hits its
+length limit inside a hidden block, the AI opens the block again when it carries on, and the plugin glued both opening marks together. On this
+PC with the Deck's model, 7 of 23 continued answers had it before; none from that cause after. Also fixed: when the limit cut the mark itself in
+half, the hidden sentence showed in plain view with no cover. The AI's own doubling inside one piece remains, handled by the guard from `6843f8e1`.
+Test `tests/test_soft_continue_spoiler_join.py`.
+
+**Found by the helper, not fixed:** a half mark at the very end of an answer shows as an empty code block; a half mark before ordinary prose turns
+that prose into a code block (no hidden text leaks); a stopped answer cut inside a hidden block is saved ending on a bare opening mark.
 
 ---
 

@@ -39,10 +39,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Bugs
 
-- ★ `[KB]` **A game's own tip is found only by its own words** — **OPEN, found 2026-09-26, seen again 2026-09-27.** "The
-  words on screen look blurry" misses the Render Scale tip that "the text looks blurry" finds. The tip search reads words
-  only; a search by meaning was measured and left for later. Evidence `docs/test-evidence/plan72-F3-TIP.json`.
-  [Detail](roadmap-kb-details.md#flow-l7-findings)
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
@@ -74,16 +70,21 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★ `[KB]` **A game's own tip is found only by its own words** — **VERIFY, fixed 2026-10-03 (plan 81, `e78f0d6e`,
+  `6f758ff0`). Was OPEN, found 2026-09-26, seen again 2026-09-27.** In Strategy and Expert mode a game's tip is now also
+  found by meaning: "the words on screen look blurry" attaches Render Scale; the boss question and Speed mode are unchanged
+  (Speed on purpose). Held-back measurements are identical before and after. Limits and numbers in the long notes. Deck
+  check owed: row **P81-TIP-BY-MEANING**. Test `tests/test_kb_game_tip_meaning.py`. [Detail](roadmap-kb-details.md#flow-l7-findings)
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18) and no-library (DRG-01b, 2026-09-23).
   **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games.
   Evidence `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most
-  rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01. **Still owed:** NOTES-BLOCK-04 (no
-  question could be found that attaches nothing), NOTES-BLOCK-07 (needs a person listening to confirm the block is never
-  read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test; retiring that half is the maintainer's
-  call). Rows in [testing-manual.md](testing-manual.md).
+  rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03
+  (`docs/test-evidence/plan81-NOTES-BLOCK-04.json`). **Still owed:** 04's honesty-line half, NOTES-BLOCK-07 (needs a person
+  listening to confirm the block is never read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test;
+  retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md).
 
 ## Next
 

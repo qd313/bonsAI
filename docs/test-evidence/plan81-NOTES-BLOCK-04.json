@@ -1,0 +1,19 @@
+{
+  "row": "NOTES-BLOCK-04",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:34-17:36 EDT",
+  "screen": "Quick Access page window 854x534, no game running, Context line: no active game detected",
+  "setup": "Test chat 6f3cc055 (title read from chat row), Strategy mode (button reads Strategy), library installed, no game. The chat's own game is Deep Rock Galactic: Survivor. Question sent with the send script (VERIFIED), Ask pressed with focus read on 'ask'. One try only (the second wording was not needed because notes did not attach).",
+  "pressed": "send script 'How do I tame a wolf in Valheim?'; walkTo Ask; A.",
+  "seen": {
+    "log": [
+      "kb: question names a game the library does not know (valheim) -- not using the chat's own game Deep Rock Galactic: Survivor",
+      "kb: question chose nothing -- notes and tips not searched (domain=none)",
+      "ask_ollama: ... (attached 0 chars)",
+      "run_game_ai_request: completed in 41.7s"
+    ],
+    "screen": "Answer is plain text (Valheim wolf taming in a general voice) followed by a two-choice menu (A. Tips on finding a wolf in the world / B. Details on the taming interaction process). No notes block under the reply. Neither the 'Not in my notes' line nor the 'No close match' line appears anywhere under the reply (page text search for both: not found). Only 'Was this helpful?' and 'Show details'."
+  },
+  "expected": "no block appears under the reply (the 'no block' half); also write whether the 'Not in my notes' or 'No close match' line shows",
+  "verdict": "PASS - no notes block under the reply; 0 chars of notes attached. For the owner: neither honesty line ('Not in my notes' or 'No close match') showed on this reply, so the row's other half (the honesty line shows instead) is NOT shown by this question."
+}

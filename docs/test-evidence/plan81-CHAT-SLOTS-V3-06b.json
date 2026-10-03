@@ -1,0 +1,16 @@
+{
+  "row": "CHAT-SLOTS-V3-06b",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:36:44-17:36:50 EDT",
+  "screen": "Quick Access page window 854x534, no game; Deck's own 1280x800 frame in screenshots",
+  "setup": "Slot A = test chat 6f3cc055 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Slot B = its neighbour on the chat row, 'what is a good way to practice parrying in action games' (nothing asked in B). Strategy mode, no game. A asked 'In about 300 words, explain how to prepare for the Soul Master fight in Hollow Knight.' (send script VERIFIED, A on Ask). Ring walked Up to the chat row (bonsai-chat-slot-row-focus) then RB at about 17:35:53.",
+  "pressed": "A on Ask; UP x6 to the back arrow, DOWN x2 to the chat row; RB (to B, A still writing); wait for log 'run_game_ai_request: completed in 50.0s' at 17:36:44; LB (back to A).",
+  "seen": {
+    "A_finished": "log 'run_game_ai_request: completed in 50.0s' at 17:36:44 while B was on screen",
+    "A_dot_after_finish": "class bonsai-chat-slot-dot--unread; background rgb(74,222,128) (solid green), shadow rgba(74,222,128,0.65) 0 0 5px; read about 0.5 s after the log line",
+    "spark_after_finish": "bonsai-chat-slot-ghost-spark--unread, background rgb(74,222,128)",
+    "after_LB_to_A": "A is the active dot (rgb(156,231,255)); no green dot, no spark left (spark list empty); title read back as the test chat"
+  },
+  "expected": "A finishes while you are away: the ring turns solid green; returning to A clears it",
+  "verdict": "PASS - the dot turned solid green when A finished while away, and going back to A cleared it."
+}

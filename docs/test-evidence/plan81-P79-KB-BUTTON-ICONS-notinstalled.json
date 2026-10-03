@@ -1,0 +1,17 @@
+{
+  "row": "P79-KB-BUTTON-ICONS (not-installed half) with block step 7 (library moved aside)",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:37-17:40 EDT",
+  "screen": "Quick Access page window 854x534, no game running (RunningApps empty)",
+  "setup": "rag_corpus_path read from settings.json: /home/deck/.bonsai/rag (only that key read). Plugin idle, no game. Moved with: mv /home/deck/.bonsai/rag /home/deck/.bonsai/rag.p81aside (ls: ATTRIBUTIONS.md 26743, corpus-manifest.json 29838, corpus.db 2998272 bytes, all inside the aside folder). Plugin reloaded with deck_reloadPlugin (first deck_openPlugin failed once, second worked, as expected). Nothing deleted.",
+  "pressed": "RB to the Ollama tab; DOWN x7 to the 'Use local knowledge base' switch; DOWN to the button; RIGHT; UP. No A on the button.",
+  "seen": {
+    "step7": "Ollama tab knowledge-base section now reads 'Not installed - download to enable grounded strategy help.' and offers one button 'Download knowledge base' instead of Update and Remove.",
+    "download_button": "rect 64,330,268x44, 1 svg (viewBox 0 0 24 24, 16x16, path 'M12 4v11M7.5 10.8 12 15.3l4.5-4.5M5 19.5h14' = an arrow pointing down onto a line); the screenshot shows the download-arrow icon before the words",
+    "walk": "Down from the switch landed on Download; Right stayed on Download (nothing to the right); Up went back to the switch. Same order as before for the stops above it.",
+    "screenshot": "plan81-P79-KB-BUTTON-ICONS-notinstalled.png"
+  },
+  "expected": "Download button holds a download-arrow icon; the walk around it is unchanged; Download never pressed",
+  "verdict": "PASS - not-installed half: the Download button carries a download arrow, Down/Right/Up moved as expected. Step 7: PASS - with the library folder moved aside the tab offers Download instead of Update.",
+  "side_effect": "The game notes library folder is moved aside (/home/deck/.bonsai/rag.p81aside) until step 10 puts it back."
+}

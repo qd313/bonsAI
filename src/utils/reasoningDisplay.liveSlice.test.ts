@@ -1,12 +1,9 @@
 /**
- * Title: The live thinking line's three leftovers from the plan 72 Deck check
- * Purpose: Pin the fixes for what the Deck still showed after the rule checklist was taken out:
- *          a slice opening on the tail of a cut word ("ess:"), a line that was only ".", and the
- *          model's setup lines quoted back ("Mode: Strategy Guide mode (active)", "Voice: Ali G").
- * Used for: reasoningDisplay.ts's liveReasoningText and tidyReasoningText.
- * Solves: the computer side cuts the thinking to its newest 600 characters and only then swaps a
- *         sentence naming a protected thing for "[hidden]", so a cut slice can arrive shorter than
- *         600 and the old "600 or more means it was cut" test let the half word through.
+ * Title: The thinking tidy leaves out the model's setup lines
+ * Purpose: Pin that the model's setup lines quoted back ("Mode: Strategy Guide mode (active)",
+ *          "Voice: Ali G") are left out of the tidy thinking, and a line about the game is not.
+ * Used for: reasoningDisplay.ts's tidyReasoningText.
+ * Solves: the plan 72 Deck check still showed these lines after the rule checklist was taken out.
  * Does not: prove how it looks on the Deck.
  *
  * Where the fixtures come from: the 250 ms samples of the live line taken on the Deck on
@@ -16,25 +13,12 @@
  * fixtures put the model's "*   " back; every word is the Deck's.
  */
 import { describe, expect, it } from "vitest";
-import { liveReasoningText, tidyReasoningText } from "./reasoningDisplay";
+import { tidyReasoningText } from "./reasoningDisplay";
 
-/* Sample at 14.0 s: shorter than 600 characters because two sentences became "[hidden]". */
-const ESS_SLICE = [
-  "ess:",
-  "",
-  '1.  **Analyze the Request:** The user is asking for help learning the pattern of the "big mantis boss" in Hollow Knight.',
-  "2.  **Identify Context/Game:** The game is Hollow Knight. [hidden]",
-].join("\n");
-
-/* Samples at 14.25 s and 15.0 s: cut part way through a word or a sentence. */
-const MID_WORD_SLICE = [
-  'er is asking for help learning the pattern of the "big mantis boss" in Hollow Knight.',
-  "2.  **Identify Context/Game:** The game is Hollow Knight. [hidden]",
-].join("\n");
-
-/* Samples at 16.75 s to 18.26 s: the "Determine Constraints" heading has scrolled off above. */
+/* Samples at 16.75 s to 18.26 s: the "Determine Constraints" heading has scrolled off above. The
+ * cut-off opening fragment ("straints:") is left out here: dropping it was the removed live-line
+ * trimming's job, not the tidy's. */
 const SETUP_LINES_SLICE = [
-  "straints:",
   "    *   Mode: Strategy Guide mode (active).",
   "    *   Voice: Ali G (streetwise interviewer humor, pronounced accent, rhythm, idioms).",
   "    *   Constraint (Strategy Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.",
@@ -45,53 +29,9 @@ const SETUP_LINES_SLICE = [
   '    *   "The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side."',
 ].join("\n");
 
-/* Sample at 18.26 s: the slice starts inside "Constraint (Strategy Guide): ...". */
-const CLOSING_BRACKET_SLICE = [
-  "Guide): Keep coaching free of spoilers. Only use bonsai-spoiler for unavoidable spoilers.",
-  "    *   Constraint (Content): Must lead with tactics, skip orientation, and end with the branch fence.",
-  "",
-  "4.  [hidden]",
-].join("\n");
-
-describe("a slice that starts part way through a line", () => {
-  it("drops the tail of the cut 'Thinking Process:' heading even when the slice is under 600 characters", () => {
-    expect(ESS_SLICE.length).toBeLessThan(600);
-    expect(liveReasoningText(ESS_SLICE)).toBe(
-      [
-        '1.  Analyze the Request: The user is asking for help learning the pattern of the "big mantis boss" in Hollow Knight.',
-        "2.  Identify Context/Game: The game is Hollow Knight. [hidden]",
-      ].join("\n"),
-    );
-  });
-
-  it("starts at the next line when the slice opens mid-word", () => {
-    expect(liveReasoningText(MID_WORD_SLICE)).toBe("2.  Identify Context/Game: The game is Hollow Knight. [hidden]");
-  });
-
-  it("starts at the next line when the slice opens after an opening bracket it cannot see", () => {
-    expect(liveReasoningText(CLOSING_BRACKET_SLICE)).toBe("4.  [hidden]");
-  });
-
-  it("keeps a slice that starts on a real line whole", () => {
-    const whole = "[hidden]\nThe second phase is faster.";
-    expect(liveReasoningText(whole)).toBe(whole);
-    const quoted = '"The three sisters on the thrones do not attack until you challenge them."';
-    expect(liveReasoningText(quoted)).toBe(quoted);
-  });
-});
-
-describe("a slice with nothing left to read", () => {
-  it("shows the short plain line instead of a lone full stop (sample at 16.5 s)", () => {
-    expect(liveReasoningText(".")).toBe("Double-checking the answer…");
-    expect(liveReasoningText(".\n3.  **Determine Mode and Constraints:**\n    *   Mode: Strategy Guide mode (active).")).toBe(
-      "Double-checking the answer…",
-    );
-  });
-});
-
 describe("the model's setup lines quoted back", () => {
   it("leaves out Mode, Voice and Constraint lines and keeps the note about the game", () => {
-    expect(liveReasoningText(SETUP_LINES_SLICE)).toBe(
+    expect(tidyReasoningText(SETUP_LINES_SLICE, { dropRuleChecklist: true })).toBe(
       [
         "4.  [hidden]",
         '    • "The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side."',

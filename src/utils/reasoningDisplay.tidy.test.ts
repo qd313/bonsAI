@@ -2,7 +2,7 @@
  * Title: The live thinking line without the model's own rule checklist
  * Purpose: Pin what the thinking line keeps and what it drops, using thinking the model really
  *          wrote on the Deck, not shapes imagined here.
- * Used for: reasoningDisplay.ts's tidyReasoningText, and liveReasoningText which calls it.
+ * Used for: reasoningDisplay.ts's tidyReasoningText.
  * Solves: the roadmap bug "The live thinking line shows the model's own rule checklist while it
  *         works" -- the checklist, stray backtick marks and a raw "Thinking Process" heading showed
  *         on every answer.
@@ -18,7 +18,7 @@
  *   - NOTE_TITLE: the backtick-quoted note title in docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json.
  */
 import { describe, expect, it } from "vitest";
-import { liveReasoningText, tidyReasoningText } from "./reasoningDisplay";
+import { tidyReasoningText } from "./reasoningDisplay";
 
 const CHECKLIST_SCREENSHOT = [
   "    *   Direct and concise? Yes, within the character constraints.",
@@ -146,13 +146,13 @@ describe("the marks and the heading the model writes for itself", () => {
   });
 });
 
-describe("the live line uses the tidy", () => {
-  it("draws the screenshot's checklist as a short plain line instead of nothing", () => {
-    expect(liveReasoningText(CHECKLIST_SCREENSHOT)).toBe("Double-checking the answer…");
+describe("the live-line tidy (dropRuleChecklist)", () => {
+  it("leaves nothing of the screenshot's checklist", () => {
+    expect(tidyReasoningText(CHECKLIST_SCREENSHOT, { dropRuleChecklist: true })).toBe("");
   });
 
   it("draws the open-world thinking without the heading, the marks or the rules", () => {
-    const out = liveReasoningText(OPEN_WORLD);
+    const out = tidyReasoningText(OPEN_WORLD, { dropRuleChecklist: true });
     expect(out.startsWith("1.  Analyze the Request:")).toBe(true);
     expect(out).not.toMatch(/Thinking Process|Must start|`|\*\*/);
   });

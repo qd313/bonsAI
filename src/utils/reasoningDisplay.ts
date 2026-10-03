@@ -3,7 +3,7 @@
  *
  * Purpose: When a model that can think is asked a question, it writes out its thinking before it
  * writes the answer. This file turns that raw thinking into the small pieces the chat draws: the
- * newest thinking while the answer is still being made, the "41 s" on the fold row above a
+ * tidy thinking text, the "41 s" on the fold row above a
  * finished answer, and a tidy record of a turn's thinking to keep with the saved chat.
  *
  * Used for: the Main tab chat transcript (the live lines and the fold row), the hook that polls a
@@ -16,77 +16,11 @@
  * Does not: draw anything, decide when the fold row shows, or talk to the computer side.
  *
  * Gotchas:
- *   - The live text is the newest 600 characters, not the whole thinking, so once the model has
- *     thought for a while it starts mid-word; liveReasoningText drops that opening fragment.
+ *   - The live line draws step titles only (mergeLiveSteps, liveStepLines); tidyReasoningText
+ *     cleans the thinking kept for the opened fold.
  *   - A gap of under a second still reads "1 s". A row that says "0 s" looks broken.
  */
 import type { TurnReasoning } from "../types/bonsaiUi";
-
-/**
- * The most of the live thinking the computer side ever sends: the newest this many characters
- * (REASONING_LIVE_CHARS in ollama_chat_stream.py). A slice this long was cut from a longer think.
- */
-const REASONING_LIVE_SLICE_CHARS = 600;
-
-/**
- * Feature: the model's thinking under the question while it works, drawn as ordinary text.
- * In: the newest slice of the thinking. Out: the text to draw, trimmed.
- *
- * The maintainer's call, 2026-09-24: "let it display the thinking normally". It used to be the
- * newest three sentences, each cut to one line with an ellipsis, which read as a list of broken
- * lines. Now it is the slice as the model wrote it, line breaks kept, and the stylesheet keeps the
- * newest lines in view.
- *
- * Once the thinking is longer than the slice, the slice starts part way through a word. That
- * fragment is dropped, so the block never opens on half a word: up to the first line break when
- * one is near, otherwise up to the first sentence end. A slice with neither is drawn whole.
- *
- * The length alone does not tell a cut slice: the computer side cuts at 600 characters and only
- * then swaps a sentence naming a protected thing for "[hidden]", so a cut slice can arrive much
- * shorter (the Deck showed "ess:", the tail of "Thinking Process:", on a slice well under 600,
- * docs/test-evidence/plan72-F-THINK.json). So a slice that opens the way no line does -- a small
- * letter, a stop or comma, or a closing bracket with no opening one before it -- counts as cut too,
- * and starts at the next line. Only when a line break is near: a short one-line think is never cut
- * by this. The cost: a whole think that opens on a small letter and then breaks the line loses its
- * first line; the model's own thinking opens on "Thinking Process:" or a numbered step.
- */
-export function liveReasoningText(partial: string | null | undefined): string {
-  const text = partial ?? "";
-  let shown = text;
-  const lineBreak = text.indexOf("\n");
-  const nearLineBreak = lineBreak !== -1 && lineBreak <= FRAGMENT_LINE_MAX_CHARS;
-  if (text.length >= REASONING_LIVE_SLICE_CHARS) {
-    const firstEnd = /[.!?](?=\s)|\n/.exec(text);
-    if (nearLineBreak) shown = text.slice(lineBreak + 1);
-    else if (firstEnd) shown = text.slice(firstEnd.index + 1);
-  } else if (nearLineBreak && opensPartWayThroughALine(text)) {
-    shown = text.slice(lineBreak + 1);
-  }
-  const tidied = tidyReasoningText(shown, { dropRuleChecklist: true });
-  /*
-   * A slice that was nothing but the model re-checking its rules would leave the block empty, and
-   * the stock waiting phrase has already stepped aside for this turn -- one plain line says what
-   * is happening instead (the roadmap's own first option: "a short status line"). The same goes
-   * for a slice left with no word at all: the Deck once drew a lone "." here.
-   */
-  if (!HAS_WORD_RE.test(tidied) && shown.trim()) return LIVE_RULE_CHECK_LINE;
-  return tidied;
-}
-
-/** A cut first line longer than this is cut at its first sentence end instead, keeping the rest. */
-const FRAGMENT_LINE_MAX_CHARS = 300;
-const HAS_WORD_RE = /[\p{L}\p{N}]/u;
-
-function opensPartWayThroughALine(text: string): boolean {
-  const start = text.trimStart();
-  if (/^[\p{Ll}.,;:!?)\]}]/u.test(start)) return true;
-  const firstLine = start.split("\n", 1)[0];
-  const close = firstLine.indexOf(")");
-  return close !== -1 && !firstLine.slice(0, close).includes("(");
-}
-
-/** What the live line says while the model is only re-checking its own rules. */
-const LIVE_RULE_CHECK_LINE = "Double-checking the answer…";
 
 /*
  * The model's own thinking is written for itself, in markdown, and a large part of it is our own

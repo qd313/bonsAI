@@ -486,6 +486,7 @@
     "tests/test_shortcut_setup_commands.py",
     "tests/test_shortcut_setup_developer_gate.py",
     "tests/test_source_attribution.py",
+    "tests/test_spoiler_label_wording.py",
     "tests/test_spoiler_risk_service.py",
     "tests/test_spoiler_title_profiles.py",
     "tests/test_spoiler_title_profiles_contract.py",

@@ -480,7 +480,8 @@ def build_system_prompt(
             if strategy_kb_relaxed
             else "\n\nKNOWLEDGE BASE (offline corpus): Ground answers in the attached strategy/compat "
             "cards when relevant. "
-            "Put spoilery walkthrough detail inside ```bonsai-spoiler``` when the user has not opted in.\n"
+            "Put spoilery walkthrough detail inside a hidden block (opening line exactly ```bonsai-spoiler, "
+            "closing ``` on its own line) when the user has not opted in.\n"
         )
         # Phase 4 R1: structured cards carry labelled lines (Summary / Weak points / Uses /
         # Tips / Phases). Keep those labels in the reply as light bullets so an enemy or item

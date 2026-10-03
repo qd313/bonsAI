@@ -136,7 +136,7 @@ def _strategy_spoiler_low_risk_addendum(
         return (
             f"NAMED-ENTITY CONSENT: The user asked about “{entity}” by name, so they have already "
             "chosen to know about it. Keep direct tactics for that entity in plain text — do NOT wrap "
-            "them in ```bonsai-spoiler``` fences.\n"
+            "them in ```bonsai-spoiler fences.\n"
             "This applies to that entity ONLY. Everything the user did not name — story beats, later "
             "areas, adjacent secrets, endings, and other bosses — keeps the default spoiler treatment.\n\n"
         )
@@ -147,7 +147,7 @@ def _strategy_spoiler_low_risk_addendum(
     if entity:
         lines.append(
             f"The user asked about “{entity}”. Keep direct tactics for that entity in plain text; "
-            "do NOT wrap routine boss/enemy guidance in ```bonsai-spoiler``` fences."
+            "do NOT wrap routine boss/enemy guidance in ```bonsai-spoiler fences."
         )
     elif kb_entity_match:
         lines.append(
@@ -158,11 +158,11 @@ def _strategy_spoiler_low_risk_addendum(
         lines.append(
             "For bullet-heaven / roguelike / survivor-style titles, boss and elite enemy names are not narrative "
             "spoilers — keep mechanical coaching visible. Do NOT wrap routine boss/enemy guidance in "
-            "```bonsai-spoiler``` fences just because no specific entity was identified in this question — "
+            "```bonsai-spoiler fences just because no specific entity was identified in this question — "
             "the title-level low-spoiler-risk context above already applies with or without one."
         )
     lines.append(
-        "Reserve ```bonsai-spoiler``` only for hidden narrative twists, endings, or secret unlock paths — "
+        "Reserve ```bonsai-spoiler blocks only for hidden narrative twists, endings, or secret unlock paths — "
         "not standard boss move-sets or wave tactics.\n"
     )
     return "\n".join(lines) + "\n"

@@ -387,12 +387,13 @@ def should_show_no_close_match_notice(
     if (kb_notes or "").strip() == _COMPAT_TIPS_RESOLUTION:
         return False
     has_keyword_support = kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT
-    if has_keyword_support and _keyword_score_reflects_the_question(
+    reflects_the_question = _keyword_score_reflects_the_question(
         question=question,
         kb_game_name=kb_game_name,
         kb_source_titles=kb_source_titles,
         kb_source_texts=kb_source_texts,
-    ):
+    )
+    if has_keyword_support and reflects_the_question:
         return False
     effective_meaning = (
         kb_best_meaning_without_game_name
@@ -401,6 +402,19 @@ def should_show_no_close_match_notice(
     )
     if effective_meaning is None:
         return False
+    # Second signal, in words: no word of the question is in any attached title or any attached
+    # note's own text, and the keyword half never ranked these notes either. The meaning score is
+    # then the only thing that ever supported them, and it is not trusted past its ceiling. It
+    # was 0.6508 against 0.65 for "in black mesa how do I tame a horse": three Black Mesa notes
+    # about nothing the question asked, no line on the Deck (docs/test-evidence/
+    # plan70-NO-CLOSE-MATCH-HK-02.json). The 0.65 ceiling itself is not moved.
+    #
+    # Measured 2026-10-03 on the PC: 287 fixture questions that have a recorded right note
+    # (tests/fixtures/kb_eval_v2.json and kb_answer_eval.json), each asked twice, once with the
+    # game running and once with its name in the words. This rule changes the line on none of
+    # those 574 asks; the one ask it changes is the horse question.
+    if not has_keyword_support and not reflects_the_question:
+        return True
     return effective_meaning < _THIN_MATCH_MEANING_CEILING
 
 

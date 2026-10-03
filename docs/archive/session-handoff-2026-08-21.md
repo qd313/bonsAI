@@ -1,5 +1,7 @@
 # Handoff — RAG work, 2026-08-18 to 2026-08-21
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written so the next session starts from what was decided rather than re-deriving it. Plain
 language on purpose: the maintainer reads this file.
 

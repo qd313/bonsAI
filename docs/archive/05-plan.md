@@ -1,5 +1,7 @@
 # 05 — Ranked refactor plan (Phase 2g, 2026-08-02)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Synthesised from [01-map.md](01-map.md), [02-hotspots.md](02-hotspots.md),
 [04-coverage.md](04-coverage.md), and [06-doc-triage.md](06-doc-triage.md).
 

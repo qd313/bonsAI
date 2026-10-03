@@ -765,6 +765,18 @@ def metric_doc_size_kb_roadmap():
     return _doc_size_kb("docs/roadmap.md")
 
 
+def metric_doc_size_kb_roadmap_kb():
+    return _doc_size_kb("docs/roadmap-kb.md")
+
+
+def metric_doc_size_kb_roadmap_shelved():
+    return _doc_size_kb("docs/roadmap-shelved.md")
+
+
+def metric_doc_size_kb_roadmap_details():
+    return _doc_size_kb("docs/roadmap-details.md")
+
+
 def metric_doc_size_kb_testing():
     return _doc_size_kb("docs/testing.md")
 
@@ -839,6 +851,9 @@ MEASURERS: dict[str, Callable[[], tuple[Optional[int | float], Optional[str]]]] 
     "be_methods_with_no_caller": metric_be_methods_with_no_caller,
     "settings_field_list_repeats": metric_settings_field_list_repeats,
     "doc_size_kb_roadmap": metric_doc_size_kb_roadmap,
+    "doc_size_kb_roadmap_kb": metric_doc_size_kb_roadmap_kb,
+    "doc_size_kb_roadmap_shelved": metric_doc_size_kb_roadmap_shelved,
+    "doc_size_kb_roadmap_details": metric_doc_size_kb_roadmap_details,
     "doc_size_kb_testing": metric_doc_size_kb_testing,
     "doc_size_kb_claude": metric_doc_size_kb_claude,
     "doc_size_kb_agents": metric_doc_size_kb_agents,

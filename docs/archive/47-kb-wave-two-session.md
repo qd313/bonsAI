@@ -1,5 +1,7 @@
 # 47 — Knowledge base, wave two: fill the thin games, make troubleshooting reachable, three bugs, one release
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-07, before any code, and approved the same day. **Nothing here runs until you say "go".**
 The four calls in § 3 were answered before this was written and are recorded as **D85**. The one stop that
 stays after "go" is the public push of the release (§ 5, wave 4).

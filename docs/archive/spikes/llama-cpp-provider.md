@@ -2,6 +2,8 @@
 
 # Llama.cpp provider spike (POC)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 **Status:** **POC scaffold shipped** (2026-05-20) — maintainer env-gated only.  
 **Decision:** Add local **llama.cpp** inference evaluation **alongside** Ollama. This phase is **proof-of-concept only**; a shippable Decky provider is explicitly **out of scope** until a later go/no-go.
 

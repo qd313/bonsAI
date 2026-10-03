@@ -1,5 +1,7 @@
 # 09 — Steam Frame companion UX — feasibility (2026-08-03, rev. 2026-08-04)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Research only. No code, no roadmap edits, no implementation. Answers the six
 questions raised against the Planned item at
 [roadmap.md § Planned — Steam Frame companion UX](../roadmap.md#planned) — *"Research-first companion

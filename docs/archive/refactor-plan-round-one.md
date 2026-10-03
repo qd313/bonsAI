@@ -1,5 +1,7 @@
 # BonsAI Refactor Plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 > **Superseded on 2026-09-11 by [Plan 51: Refactor round two](51-refactor-round-two.md).**
 > Round one's finished items (3.1, 3.2, 3.4, 3.5) stay recorded below for history. This file moves to the
 > archive in plan 51's docs phase; do not start new work from it.

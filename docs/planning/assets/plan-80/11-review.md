@@ -167,3 +167,29 @@ whether scrolling first counts as moving (the Down trap row); plan 79 questions 
 
 Also: the maintainer asked the session to carry on through every step without stopping, and to stop only for
 something major.
+
+## 7. Step 5 record (2026-10-03)
+
+- **Links:** 9 broken links in live files fixed (the old `#planned` and `#knowledge-base` anchors); every link into a
+  roadmap file from a live document resolves (checked by script across 136 files). 65 archived documents and the two
+  finished plans got the one-line "links may be stale" note; `archive/roadmap-shelved.md` is marked replaced.
+- **Tooling:** the bookkeeper guard now covers `docs/roadmap-kb.md` and `docs/roadmap-shelved.md` (the long-notes files
+  stay unguarded, as before). The size check gained limits for `docs/roadmap-kb.md` (25 KB), `docs/roadmap-shelved.md`
+  (20 KB) and `docs/roadmap-details.md` (100 KB), and the roadmap's best was reset to 62.6 KB. The closed-rows check is
+  unchanged on purpose: closed entries still go to the roadmap's Done section and the archive files it already reads,
+  and the trimmed archives hold old wording of open entries too, so reading them would raise false alarms. Helper
+  files, the agents guide, CLAUDE.md, the documentation index, lessons learned and the two knowledge policies name the
+  new files. Code comments that name entries by title are left as they are.
+- **Test notes and the status report (answer 6):** CHIP-BUTTON-09 closed (`plan79-CHIP-BUTTON-09.json`);
+  GAME-LIGHT-01 passed with a real fight still owed, SCR-10 passed, SCR-03 and STREAM-PIECES-01 unclear
+  (`plan79-SCR-10-MISSION.json`); READ-ALOUD-05's test count corrected; KB-CANCEL-01 points at the parked-work file. The
+  knowledge base status report is brought in step with `docs/roadmap-kb.md`. The knowledge base roadmap's answer figure
+  now quotes the shape that shipped (79.5, `kb-answer-eval-2026-09-07-ANSWERFIRST.md`), not the one it replaced (76.6).
+- **Full checks:** typecheck, the JavaScript tests, headers, size check, growth limit, closed rows and the tool-server
+  check pass. Four Python tests and the build's licence step fail, and **all of them failed before plan 80 started**
+  (checked on the commit before plan 80): three README tests broke with the README rewrite just before this plan (the
+  app links to a README heading, "model policy tiers", that the rewrite removed), one download-list test fails in this
+  cloud copy before and after, and the licence step cannot read package folders on Linux. The first two were fixed in
+  their own commit (the app's licence link now goes to the user guide's "AI models and licences" section; the
+  download-list test no longer reaches the real network); the Python suite then passed in full. The licence step is
+  reported to the maintainer, not fixed here.

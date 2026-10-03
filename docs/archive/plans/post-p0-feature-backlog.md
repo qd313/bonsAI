@@ -2,6 +2,8 @@
 
 # Post-P0 feature backlog & model truth plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 **Status:** Implemented (2026-05-20) — see repo changelog / roadmap mirrors; SteamOS share path remains user-owned out of scope.
 
 **Overall scope:** ★★★★ (multi-surface product work across settings, RPC, prompts, and Deck UX).

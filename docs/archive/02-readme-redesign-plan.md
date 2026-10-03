@@ -1,5 +1,7 @@
 # 02 — README.md redesign — plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Planning answer to [roadmap-planning-questions.md](roadmap-planning-questions.md) § 2.
 Recon and specification only — **no README text written, no images produced**.
 Effort uses the roadmap GTA scale (`★` … `★★★★★★`).

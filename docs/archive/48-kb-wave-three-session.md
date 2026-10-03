@@ -1,5 +1,7 @@
 # 48 — Knowledge base, wave three: make the tests tell the truth, let the tip search say "none fit", and two things a player feels
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-07 after wave two landed, from a discovery round with the maintainer the same evening.
 The answers are recorded as **D86**. **Nothing here runs until you say "go"**, with one exception you
 asked for: **wave two's Deck evening runs first, now**, because the Deck is free. Two stops remain after

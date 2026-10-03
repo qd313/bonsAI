@@ -1,5 +1,7 @@
 # 16 — Soft `num_predict` + thinking budget (discovery lock)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Bug v1 landed 2026-08-10** — caps, soft continue, C1 budgets (`ollama_ask_budgets.py` + `post_ollama_chat`). On-Deck QA in [Verify](../roadmap.md#verify) / **SOFT-PREDICT-01…05**. This doc remains the lock; Thinking effort Settings stay Backlog. Streaming context: [05-token-streaming-review.md](05-token-streaming-review.md). Blurbs context: [06-thinking-blurbs-review.md](06-thinking-blurbs-review.md).
 
 ---

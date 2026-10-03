@@ -2,6 +2,8 @@
 
 # bonsAI documentation index
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** stays the primary install entry; **[CHANGELOG.md](../CHANGELOG.md)** is release history.
 
 | Doc | Audience | What it is |

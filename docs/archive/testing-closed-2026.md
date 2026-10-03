@@ -1,5 +1,7 @@
 # Testing: closed rows (archive)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 _Moved out of [testing.md](../testing.md) on 2026-09-13 during the phase 1 documents split — copied line for line, nothing reworded. These are the rows from the "Shipped feature coverage" table whose Status was Verified, Passed, Fixed, Retired, Closed, Accepted or Shipped._
 
 | Area | Covered by | Status | Notes |

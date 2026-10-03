@@ -1,6 +1,6 @@
 # Plan 80 — check the roadmap, then make it shorter and easier to use
 
-**Status: IN PROGRESS since 2026-10-03 (Go given; calls locked as D123). Steps 1 to 4 done: findings sheets, the review (assets/plan-80/11-review.md), the split, and the rewrite of all five files. Step 5, links and tooling, next.**
+**Status: DONE 2026-10-03 (calls locked as D123). All five steps landed, one commit each. The review and the step 5 record are in assets/plan-80/11-review.md. Correction: the "246 links" below was wrong; the real count was 113.**
 
 Asked for by the maintainer: check that everything in the roadmap and its long-notes file is true, cut what is not
 needed, split the knowledge base and the parked work into their own files, and make sure every item waiting on a

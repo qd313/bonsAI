@@ -1,5 +1,7 @@
 # 07 — Named chat slots: post-mortem and v2 redesign (2026-08-03)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Evidence for the ★★★★★ **Named chat slots** row in
 [roadmap.md](../roadmap.md#planned) ("redesign only; do not re-ship the old
 mini-list / fullscreen picker approach").

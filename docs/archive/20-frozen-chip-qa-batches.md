@@ -1,5 +1,7 @@
 # 20 — Frozen-chip QA batches for the 2026-08-23 parallel bug session
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Test plan for the ten bugs fixed on 2026-08-23 by five parallel worktrees. **Two batches of six
 frozen test chips**, grouped by which game is running. Written 2026-08-23; the question wording in
 § 3 and § 4 is **agreed with the maintainer and must not be reworded** — several of these questions

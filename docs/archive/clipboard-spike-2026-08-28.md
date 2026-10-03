@@ -1,5 +1,7 @@
 # Clipboard write spike — 2026-08-28
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Spike for roadmap **A2 — Copy reply to clipboard**
 ([13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) A2,
 [roadmap.md:191-194](../roadmap.md)). The roadmap calls out one risk by name: *"`wl-copy` has to

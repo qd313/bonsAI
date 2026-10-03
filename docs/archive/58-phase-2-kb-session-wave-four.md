@@ -1,5 +1,7 @@
 # 58 phase 2 — The knowledge-base session: wave four, with Deck checks running alongside
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-16, before any code was started, at the maintainer's request. They asked to pick the
 knowledge base back up, in the shape of [plan 56](56-feature-session-four.md): a plan first, work split
 across helpers running side by side, the Deck driven by the one running the session the whole time, and

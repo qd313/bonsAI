@@ -1,5 +1,7 @@
 # Plan 63 — the fourth bug-fixing session, and the verification pass that follows
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Written 2026-09-21. Status, corrected 2026-09-24: FINISHED 2026-09-22.** Blocks 0 to 6 ran over
 2026-09-21 and 22 (§ 8). The last bookkeeping commit is `6d60aca5` ("Plan 63 final bookkeeping"). Block
 7 was never written up, so this line kept saying "running". Plan 64 took over the next night and

@@ -2,7 +2,7 @@
 
 Research only. No code, no roadmap edits, no implementation. Answers the six
 questions raised against the Planned item at
-[roadmap.md § Planned — Wake-word listening](../roadmap.md#planned) — *"Opt-in always-on local wake on
+[roadmap.md § Planned — Wake-word listening](../roadmap.md#features) — *"Opt-in always-on local wake on
 fixed keyword **bonsAI** → STT → quiet Ask"* — whose stated dependencies are
 "Shipped Whisper voice Ask; Reply ready toast; Voice STT session daemon".
 
@@ -531,7 +531,7 @@ cost table.
 | **A — Bounded listening session** | User arms listening (QAM toggle or Steam Input chord); wake stays live for a capped window (~10–15 min) or until disarmed; auto-disarms on suspend and on game exit | **Recommended v1** |
 | B — True always-on | Armed permanently once the capability is granted | Defer to beta. §3.3 makes the cost unbounded and user-invisible |
 | C — Hold-to-talk only | Ship nothing; the mic button already exists | The honest fallback if VOICE-01 fails or the §8 spike shows unacceptable FA |
-| D — Steam Input chord only | Already documented ([roadmap.md § Planned — Native QAM shortcut tile](../roadmap.md#planned), troubleshooting §5) | Not a substitute — it is not hands-free, which is the entire point |
+| D — Steam Input chord only | Already documented ([roadmap.md § Planned — Native QAM shortcut tile](../roadmap.md#features), troubleshooting §5) | Not a substitute — it is not hands-free, which is the entire point |
 
 **A gives most of the value for a fraction of the risk.** The user is hands-free
 during the window that matters (mid-game, controller in hand), battery exposure is

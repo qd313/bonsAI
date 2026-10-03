@@ -1,5 +1,7 @@
 # Testing: row history (archive)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Made 2026-09-24 during plan 65's trim of `docs/testing.md`. Some rows in that file's "Shipped feature
 coverage" table are still open but had grown long with the dated history of earlier attempts — tries
 that were superseded by a later one, on the same row, before the row itself could close. Each block

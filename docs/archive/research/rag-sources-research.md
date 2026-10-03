@@ -2,6 +2,8 @@
 
 # RAG knowledge sources (research)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 > **Superseded for runtime architecture** by [knowledge-base.md](../../knowledge-base.md) (on-Deck offline v1, shipped 2026-07-12). This note retains source research and licensing context for the maintainer corpus pipeline.
 
 v1 uses **on-Deck SQLite + FTS5** (not PC-hosted Chroma). Ingest runs on the **maintainer PC** via `scripts/build_rag_db.py`.

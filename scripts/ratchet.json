@@ -137,7 +137,7 @@
   },
   "doc_size_kb_roadmap": {
     "label": "Living doc size: roadmap",
-    "best": 90.45,
+    "best": 62.6,
     "target": 40,
     "start_2026_09_09": 109,
     "direction": "lower_is_better",
@@ -145,6 +145,42 @@
     "advisory": true,
     "advisory_reason": "open work is added to these every time something lands, so they may drift up; the ceiling is what stops them ballooning back",
     "ceiling": 100
+  },
+  "doc_size_kb_roadmap_kb": {
+    "label": "Living doc size: knowledge-base roadmap",
+    "best": 14.7,
+    "target": 12,
+    "start_2026_10_03": null,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of docs/roadmap-kb.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "open work is added to these every time something lands, so they may drift up; the ceiling is what stops them ballooning back",
+    "ceiling": 25,
+    "added_2026_10_03": "plan 80 split the roadmap into these files; the roadmap's own best was reset by the same change"
+  },
+  "doc_size_kb_roadmap_shelved": {
+    "label": "Living doc size: parked work and watched sightings",
+    "best": 12.47,
+    "target": 10,
+    "start_2026_10_03": null,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of docs/roadmap-shelved.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "open work is added to these every time something lands, so they may drift up; the ceiling is what stops them ballooning back",
+    "ceiling": 20,
+    "added_2026_10_03": "plan 80 split the roadmap into these files; the roadmap's own best was reset by the same change"
+  },
+  "doc_size_kb_roadmap_details": {
+    "label": "Living doc size: roadmap long notes",
+    "best": 71.25,
+    "target": 50,
+    "start_2026_10_03": null,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of docs/roadmap-details.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "open work is added to these every time something lands, so they may drift up; the ceiling is what stops them ballooning back",
+    "ceiling": 100,
+    "added_2026_10_03": "plan 80 split the roadmap into these files; the roadmap's own best was reset by the same change"
   },
   "doc_size_kb_testing": {
     "label": "Living doc size: testing",

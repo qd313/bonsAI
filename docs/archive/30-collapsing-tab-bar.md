@@ -1,5 +1,7 @@
 # Plan 30 — The tab bar collapses when it is not in use
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** built and measured 2026-09-02 (W0–W7); rows TAB-BAR-07 (by eye), -08 (touch) and the desktop-note half of -09 are the maintainer's; D55 is open with option 1 built. Originally: decided 2026-09-01, build not started. Twelve discovery decisions answered by the maintainer
 (§ 3). Reopens locked decision **R5** as **D44** (open, answered in discovery, to be locked when the spike
 in § 5 passes). Written against branch `experimental` at `06b2d02`.

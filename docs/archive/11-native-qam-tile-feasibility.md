@@ -1,5 +1,7 @@
 # 11 — Native QAM shortcut tile + Decky decoupling — feasibility (2026-08-04)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 > **Replaced 2026-09-23 by [plan 66](../planning/66-quick-tab-own-menu-icon.md).** A separate plugin, Quick Tab, now
 > gives any Decky plugin its own menu icon, so the "blocked on Decky's team" verdict below no longer holds. Kept for its
 > section on running bonsAI outside Decky, which the roadmap's "one decision for three items" entry still leans on.

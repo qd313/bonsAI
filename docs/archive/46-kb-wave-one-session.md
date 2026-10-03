@@ -1,5 +1,7 @@
 # 46 — Knowledge base, wave one: four PC jobs, one release, then a long Deck check
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-06, before any code. **Nothing here runs until the maintainer says "go".** The calls in § 3 were
 answered the same day (D80), and the maintainer's direction is: once a milestone is verifiably complete and as
 intended, keep going without asking. The one stop that stays is the public push of the release (§ 5, wave 3).

@@ -37,7 +37,7 @@ Ground rules, all of them non-negotiable:
    A D-pad walking fix is tested with Steam's own scroll-into-view modelled
    (`src/test-harness/deckAnswerWalk.ts`) and with a bounded walk in which no stop is visited twice;
    a walk test without that scroll has passed while the Deck looped.
-6. **You do not touch `docs/roadmap.md`, `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`.**
+6. **You do not touch any roadmap file (`docs/roadmap.md`, `docs/roadmap-kb.md`, `docs/roadmap-shelved.md` and their long-notes files), `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`.**
    Policy since 2026-09-05 (AGENTS.md, 'Which model does which work'): the session driver moves every roadmap, test and changelog
    line itself, one commit per landing. Three lanes editing adjacent roadmap lines is what caused the
    merge clashes in the previous session. Instead, put in your report: which roadmap entry each commit

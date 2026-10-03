@@ -2,7 +2,7 @@
 
 Research only. No code, no roadmap edits, no implementation. Answers the six
 questions raised against the Planned item at
-[roadmap.md § Planned — Deep mod AI hints](../roadmap.md#planned) — *"★★★★★★ **Deep mod AI hints**
+[roadmap.md § Planned — Deep mod AI hints](../roadmap.md#features) — *"★★★★★★ **Deep mod AI hints**
 (install paths + compatdata) — Detect mod frameworks/files; mod-aware AI
 guidance"*.
 
@@ -223,7 +223,7 @@ the same change as tier A — the tier-A gate is what makes `domain="compat"`
 retrieval fire for these Asks.
 
 **D-per-AppID ★★★+:** per-title mod cards are catalog scale — that is RAG
-Phase 8 ([roadmap.md § Planned](../roadmap.md#planned)), gated behind the Phase 6 public
+Phase 8 ([roadmap.md § Planned](../roadmap.md#features)), gated behind the Phase 6 public
 publish. Not a v1 conversation.
 
 ### Summary
@@ -405,7 +405,7 @@ roadmap item.
 |---|---|
 | **Web permission** | Required for *live* mod/patch news and Workshop item **names**. Not required for v1 |
 | **RAG Phase 6 publish → Phase 8 catalog** | Required for **per-AppID** mod cards. Generic framework cards need neither |
-| **Steam Input layout parse** ([roadmap.md § Planned](../roadmap.md#planned)) | **Not a dependency** — different VDF, different purpose. One real synergy: it would build the first genuine VDF parser in the tree, which tier B2 could reuse. If both are wanted, sequence Steam Input first |
+| **Steam Input layout parse** ([roadmap.md § Planned](../roadmap.md#features)) | **Not a dependency** — different VDF, different purpose. One real synergy: it would build the first genuine VDF parser in the tree, which tier B2 could reuse. If both are wanted, sequence Steam Input first |
 | **`steam_web_api` capability** (shipped) | Would turn B1's opaque published-file IDs into names |
 
 ### Realistic timeline vs the ★★★★★★ label

@@ -1,5 +1,7 @@
 # 25 — AI character avatars (prop emblems): handoff intake (2026-08-26)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Intake notes for the design handoff that replaces the pixel-grid character
 placeholders with **prop emblems** — one object per character on a tinted,
 vignetted disc.

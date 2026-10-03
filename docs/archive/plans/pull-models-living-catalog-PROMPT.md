@@ -2,6 +2,8 @@
 
 # Copy-paste prompt: Pull Models living catalog plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 Use this in a **new Cursor chat** (Agent or Plan mode). Do not implement until the plan is agreed.
 
 ---

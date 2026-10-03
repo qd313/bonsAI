@@ -1,5 +1,7 @@
 # Roadmap planning questions (expanded)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Prepared prompts for a future AI planning session. Each section has a short summary of intent, then a detailed prompt to pass to another model.
 
 ---

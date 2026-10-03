@@ -1,6 +1,6 @@
 # Web permission — discovery (Ask live search)
 
-Discovery for the **Web permission** Planned item. Roadmap stub: [roadmap.md](../roadmap.md#planned).
+Discovery for the **Web permission** Planned item. Roadmap stub: [roadmap.md](../roadmap.md#features).
 
 ---
 

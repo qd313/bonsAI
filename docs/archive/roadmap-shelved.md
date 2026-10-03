@@ -1,5 +1,7 @@
 # Roadmap: shelved entries
 
+> Replaced on 2026-10-03 by [roadmap-shelved.md](../roadmap-shelved.md) (plan 80). Kept as the record; do not edit.
+
 Work that is parked on purpose, not dropped and not finished. Each one was moved out of
 [the roadmap](../roadmap.md) so the live lists stay short; the roadmap keeps a one-line pointer to each
 under its **Shelved** heading, saying what unshelves it.

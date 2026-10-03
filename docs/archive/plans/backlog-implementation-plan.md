@@ -2,6 +2,8 @@
 
 # Backlog implementation plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 **Status:** Planning document for deferred features — do **not** implement from this doc during bugfix-only passes unless a row is explicitly promoted.
 
 **Overall scope:** ★★★★ (multi-surface product work across settings, RPC, prompts, and Deck UX).

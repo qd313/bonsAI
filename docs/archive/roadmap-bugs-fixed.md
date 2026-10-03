@@ -1,5 +1,7 @@
 # bonsAI roadmap — fixed bugs (full detail)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 > **Archived** — active index: [roadmap.md](../roadmap.md). Reorg commit: `ba2e5c5` (`git show ba2e5c5`).
 
 Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA are also listed under [Verify](../roadmap.md#verify).

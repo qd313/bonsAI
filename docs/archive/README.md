@@ -1,5 +1,7 @@
 # bonsAI documentation archive
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Historical planning, research, sweeps, and superseded doc layouts. **Active documentation:**
 
 | Doc | Purpose |

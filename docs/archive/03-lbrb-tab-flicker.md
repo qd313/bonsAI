@@ -1,5 +1,7 @@
 # 03 — LB/RB tab-switch flicker when scrolled (root-cause recon)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 > **Superseded — read this before acting on anything below.** The bug is **fixed
 > and confirmed on device**: the flicker itself 2026-08-07, and the stale
 > `ResizeObserver` found alongside it 2026-08-08 ([roadmap § Bugs](../roadmap.md#bugs)).

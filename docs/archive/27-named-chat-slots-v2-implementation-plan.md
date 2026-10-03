@@ -1,5 +1,7 @@
 # Named chat slots v2 — implementation plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 > **SUPERSEDED 2026-08-30 by
 > [28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md).**
 > The turn-8 design review closed every A/B board and reversed two decisions locked here

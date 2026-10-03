@@ -1,5 +1,7 @@
 # 13 — New Planned feature ideas (star-rated)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Answers question 13 in [roadmap-planning-questions.md](roadmap-planning-questions.md).
 Nothing here re-rates or removes an existing roadmap row.
 

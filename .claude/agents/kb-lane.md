@@ -42,7 +42,8 @@ Ground rules, all of them non-negotiable:
    hook regenerates and stages it. If you add an RPC method, its name must contain the existing
    keyword for its domain, or the generated map files it under `other` with no warning — CLAUDE.md
    explains this.
-9. **You do not touch `docs/roadmap.md`, `docs/roadmap-details.md`, `docs/testing.md`,
+9. **You do not touch any roadmap file (`docs/roadmap.md`, `docs/roadmap-details.md`, `docs/roadmap-kb.md`,
+   `docs/roadmap-kb-details.md`, `docs/roadmap-shelved.md`), `docs/testing.md`,
    `docs/testing-manual.md`, `CHANGELOG.md` or `docs/planning/37-rag-status-report.md`.** Reading them
    is fine and often necessary. Editing them is the session owner's job, in one commit per landing.
 10. **Focus law.** On the device, Steam invokes `Focusable` move handlers (`onMoveUp` / `onMoveDown` /

@@ -1,5 +1,7 @@
 # 15 — Corpus licensing and attribution — executable plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** `DONE` 2026-08-09 — Stages 1–5 complete (licence gate, generated `ATTRIBUTIONS.md`,
 redistribution header, NOTICE + zip guard, drift/version tests + **KB-ATTRIB-02**).
 Still blocks *first public corpus publish* until Phase 6 packaging/HF land; the legal scrub

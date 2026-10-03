@@ -35,7 +35,7 @@ Ground rules, all of them non-negotiable:
    D-pad, and a direction press inside `onButtonDown` does not consume the press. Anything built on
    those is dead on the device however green the tests are, and fails review. A plain `focus()` is only
    safe between siblings inside one container.
-7. **You do not touch `docs/roadmap.md`, `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`.**
+7. **You do not touch any roadmap file (`docs/roadmap.md`, `docs/roadmap-kb.md`, `docs/roadmap-shelved.md` and their long-notes files), `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`.**
    Reading them is fine and often necessary. Editing them is the session owner's job, in one commit per
    landing. This is the rule that changed since the older lane brief on disk; that brief is out of date.
 8. Run all five gates before every commit. Commit messages say what changed and why, in plain language,

@@ -1,5 +1,7 @@
 # 05 — Token streaming: architecture review, risks, ship readiness
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status, corrected 2026-09-24: both phases built, and passed on the Deck.** Phase A (P1–P5) and
 Phase B (multi-stop navigation) both landed 2026-08-07 (commit `765de858` records Phase B) and passed on
 the Deck 2026-09-04 (the "Token streaming Phase A/B" line in

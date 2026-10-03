@@ -249,7 +249,7 @@ short of sending.
 Before marking Deck-facing work done — a feature, a plan step, or a bug fix — update these in the
 **same change set as the code**, not as a follow-up:
 
-1. **[docs/roadmap.md](docs/roadmap.md).** Feature shipped: move it to the completed archive and
+1. **[docs/roadmap.md](docs/roadmap.md)** (knowledge-base entries are in [docs/roadmap-kb.md](docs/roadmap-kb.md), parked ones in [docs/roadmap-shelved.md](docs/roadmap-shelved.md)). Feature shipped: move it to the completed archive and
    update anything that depended on it. Bug fixed: resolve the row. Partly shipped: move what
    landed, leave a smaller entry for the rest.
 2. **[docs/testing.md](docs/testing.md).** Add or update the coverage row, with the test's status

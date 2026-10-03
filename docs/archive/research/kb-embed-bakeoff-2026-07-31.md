@@ -1,5 +1,7 @@
 # KB embed model bake-off
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 > **Superseded 2026-08-09 — do not cite the conclusions below.** Three defects were found in
 > what this run measured. (1) **The hybrid arm was not the shipped code.** The eval applied
 > `search_query:` / `search_document:` task prefixes; production embedded bare text. So "hybrid"

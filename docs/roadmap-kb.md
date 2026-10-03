@@ -14,7 +14,7 @@ Architecture: [knowledge-base.md](knowledge-base.md). The agreed answer-quality 
 **Where things stand (2026-10-03).** The library on the Deck and on both download sites is 2026.09.26: 38 games, 414
 notes, 164 Deck tips (published 2026-09-27, checked on the Deck, its copy matching byte for byte). Search puts the right
 note in the top three 85.3 times in a hundred on questions nobody tuned against, measured 2026-09-18 on the older library.
-The Deck's own model keeps the note's facts 76.6 times in a hundred. Do not compare either with figures from before wave
+The Deck's own model keeps the note's facts 79.5 times in a hundred with the answer-first shape that shipped (2026-09-07). Do not compare either with figures from before wave
 three: both checks had faults. [Wave three's report](archive/48-kb-wave-three-session.md). More detail:
 [blind questions](roadmap-kb-details.md#blind-questions-done), [the three new games](roadmap-kb-details.md#three-new-games-and-their-notes).
 

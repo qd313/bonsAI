@@ -1,5 +1,7 @@
 # RAG retrieval quality remediation — implementation plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** **CLOSED 2026-08-09.** PR1 (Stages 1–5) shipped 2026-08-05. PR2 (Stage 6) complete: kill-switch, D16 router, `kb_eval_v2` (221 / 140 labeled), 13-title / 119-section seed, schema-v3 rebuild, arms bake-off, equal RRF weights locked on holdout **no separation**. Report: [archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](research/kb-retrieval-pr2-bakeoff-2026-08-09.md). Sign-off packet: [audit/rag-pr2-signoff.md](rag-pr2-signoff.md).  
 **Analysis source (do not edit as ship plan):** [archive/rag-retrieval-quality-remediation-plan.md](rag-retrieval-quality-remediation-plan.md)
 

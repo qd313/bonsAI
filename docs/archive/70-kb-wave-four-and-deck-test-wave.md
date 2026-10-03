@@ -1,5 +1,7 @@
 # 70 — Knowledge-base wave four, with an automated Deck test wave alongside
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-25 by the planning session (bonsai-50), at the maintainer's request: get ready for the next
 knowledge-base build and an automated test wave on the Deck, split across as many helpers as can run at once.
 It replaces [58 phase 2](../archive/58-phase-2-kb-session-wave-four.md), which was written on 16 September and

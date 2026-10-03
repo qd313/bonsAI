@@ -1,5 +1,7 @@
 # 26 — Thursday bugfix sesh
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Work plan for the next bugfix session, written 2026-08-27 so any agent — including a smaller
 model — can execute it without re-deriving context. Everything you need is in this file or one
 link away. The maintainer has approved the phasing.

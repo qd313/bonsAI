@@ -309,7 +309,7 @@ Output under **`out/*.zip`**.
 
 ## Change-risk hotspots
 
-Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[Bugs](roadmap.md#bugs)**, **[Backlog](roadmap.md#planned)**).
+Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[Bugs](roadmap.md#bugs)**, **[Backlog](roadmap.md#features)**).
 
 **How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate: [testing-automated.md](testing-automated.md). Deck smoke: [testing-manual.md](testing-manual.md). After **Settings** is acceptably calm (see **Completed** in [roadmap.md](roadmap.md)), pull the **next extraction** items from the bottom queue — one slice per PR.
 

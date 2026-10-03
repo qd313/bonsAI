@@ -18,13 +18,13 @@ Ground rules, all of them non-negotiable:
    branch. Other chats share this checkout, so **never switch branches, never create a worktree, never
    stash**. Files that are already modified when you arrive belong to someone else: do not touch them
    unless the brief names them, and list them in your report.
-2. Read `CLAUDE.md`. For a docs sweep also read the header of `docs/roadmap.md` (its section rules) and the
+2. Read `CLAUDE.md`. For a docs sweep also read the header of `docs/roadmap.md` (its section rules, which also cover `docs/roadmap-kb.md` and `docs/roadmap-shelved.md`) and the
    top of `docs/testing.md` and `CHANGELOG.md` so new lines match the ones around them.
 3. **Three jobs, and what each needs from the brief.** If the brief is missing one of these, stop and say so
    rather than guessing.
    - **Docs sweep after a landing.** The brief lists the commits and, for each, what a person using the
-     plugin will notice. You move roadmap entries between sections (Bugs / Features / Verify / Knowledge
-     base and RAG / Done) in place, never with a strike-through; add or update testing rows; add changelog
+     plugin will notice. You move roadmap entries between sections (Bugs / Features / Verify / Done in `docs/roadmap.md`; knowledge-base entries live in `docs/roadmap-kb.md`; parked
+     work and watched sightings in `docs/roadmap-shelved.md`) in place, never with a strike-through; add or update testing rows; add changelog
      lines; tick plan checklists. **Never invent a device result.** If the brief does not say a row passed
      on the Deck, it stays owed, and you say so in the row. **For every row you close, search for its ID
      across `docs/`** (`git grep -n "ROW-ID" -- docs`) and close it everywhere it still reads open: the
@@ -47,7 +47,7 @@ Ground rules, all of them non-negotiable:
      service "was started by hand" where the evidence said a system unit runs it, and the wrong one
      reached the roadmap.)
    - **Five lines an entry.** When your dated note takes a roadmap entry past the house limit, move its
-     older dated notes to `docs/roadmap-details.md` under the entry's heading in the same sweep, and
+     older dated notes to the entry's long-notes file under its heading (`docs/roadmap-details.md`, or `docs/roadmap-kb-details.md` for a knowledge-base entry) in the same sweep, and
      link them. Nothing is deleted.
 4. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** The pre-commit hook
    regenerates and stages it.

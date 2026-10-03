@@ -1,5 +1,7 @@
 # 04 — Strategy spoiler false positives (STRAT-SPOIL-DRG-01)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Recon only. No fixes applied. Scope: why the roadmap bug
 *"Genre-aware spoiler policy + KB entity match (DRG Survivor boss names); verify
 STRAT-SPOIL-DRG-01 on Deck"* ([roadmap.md § Bugs](../roadmap.md#bugs)) is still open, and what

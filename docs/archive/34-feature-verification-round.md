@@ -1,5 +1,7 @@
 # Plan 34 — The feature verification round
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** written 2026-09-05. The device came free the same evening and the round starts from § 5 block 0.
 **Purpose:** close as many of the roadmap's [Verify](../roadmap.md#verify) entries as one long overnight
 run can, in an order that spends the least device time per entry closed.

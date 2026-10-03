@@ -23,7 +23,7 @@ raises — an internal error lets the action through rather than blocking it:
 | Hook | Fires on | Does |
 |---|---|---|
 | `model-routing-check.py` | Every prompt; every subagent start | Injects the plain-language rule, and on an implementation-shaped prompt, the model/effort routing table from AGENTS.md, 'Which model does which work' |
-| `bookkeeper-guard.py` | Edit/Write/MultiEdit/NotebookEdit | Refuses a Fable-model edit to the roadmap, testing docs, changelog or a test file; points the session at the `bookkeeper` helper instead. Off via `BONSAI_BOOKKEEPER_GUARD=off` |
+| `bookkeeper-guard.py` | Edit/Write/MultiEdit/NotebookEdit | Refuses a Fable-model edit to the roadmap files (including `docs/roadmap-kb.md` and `docs/roadmap-shelved.md`), testing docs, changelog or a test file; points the session at the `bookkeeper` helper instead. Off via `BONSAI_BOOKKEEPER_GUARD=off` |
 | `no-push.py` | Bash | Refuses any `git push` unless `BONSAI_ALLOW_PUSH=1` is set for the session |
 | `read-range.py` | Read | Reminder only, never a block: suggests an offset/limit when reading a file over 600 lines whole |
 | `spawn-line.py` | Agent/Workflow | Stops new lanes once a session has spent too much of its usage window |

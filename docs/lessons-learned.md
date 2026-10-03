@@ -541,7 +541,7 @@ files gain rows from every landing, so choosing "mine" or "theirs" silently drop
 Merge row by row, and afterwards read the open sections against the finished one to make sure
 nothing was lost or double-listed.
 
-**Keep the roadmap's shape.** It runs Bugs, Features, Verify, Knowledge base, then Done. Entries
+**Keep the roadmap's shape.** It runs Bugs, Features, Verify, then Done for v0.6.0; the knowledge base lives in its own file (`docs/roadmap-kb.md`) and parked work in another (`docs/roadmap-shelved.md`). Entries
 are edited where they sit — never struck through. Something parked keeps its entry, tagged and
 dimmed, rather than being deleted.
 

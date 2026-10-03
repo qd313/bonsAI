@@ -18,6 +18,8 @@ import sys
 
 GUARDED_DOCS = {
     "docs/roadmap.md",
+    "docs/roadmap-kb.md",
+    "docs/roadmap-shelved.md",
     "docs/testing.md",
     "docs/testing-manual.md",
     "CHANGELOG.md",

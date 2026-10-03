@@ -1,5 +1,7 @@
 # Red / Blue counsel (archived)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 **Retired:** 2026-06-26. The April 2026 release-window requirements freeze has ended; ship/scope counsel via Red Team / Blue Team personas is no longer an active agent workflow.
 
 ## Contents

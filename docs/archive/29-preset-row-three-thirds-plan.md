@@ -1,5 +1,7 @@
 # Plan 29 — The preset row: chips side by side
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** built 2026-09-01 (uncommitted); rows 02 and 03 passed on device (03 re-run 2026-09-02); rows 01b/04 owed (§ 2). All four decisions answered (§ 3, § 3b): **two chips across**,
 sideways carousel, help chip owns the row until dismissed, every chip scrolls slowly (**D43** locked).
 **Fixes:** roadmap → Bugs → *The preset chips* — row **PRESET-ONE-LINE-02**, filed by the maintainer

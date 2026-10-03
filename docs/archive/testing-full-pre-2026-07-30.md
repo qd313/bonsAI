@@ -10,6 +10,8 @@ Related: [roadmap.md](roadmap.md) (planning), [development.md](development.md) (
 
 # Regression matrix and device smoke (standing gate)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Manual Deck work runs from **[testing.md](testing.md#device-qa-runbook)** (Tier 0ΓÇô1 first). Scenario detail and coverage index: **[testing.md](testing.md#shipped-feature-coverage)**. Hotspots: **[development.md](development.md#change-risk-hotspots)**.
 
 **Contract:** Run **┬º1** always. Add **┬º2** rows that match touched paths. Run **┬º3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursor/rules/docs-on-ship.mdc](../.cursor/rules/docs-on-ship.mdc)).

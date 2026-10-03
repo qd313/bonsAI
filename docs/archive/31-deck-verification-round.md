@@ -1,5 +1,7 @@
 # Plan 31 — The Deck verification round
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** **D57 locked 2026-09-03**, all nine answers recorded in
 [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md); the round started 2026-09-03
 with the rig driving unattended. Progress is written into § 11 as rows close. Written against branch

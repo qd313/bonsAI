@@ -1,5 +1,7 @@
 # Roadmap: text trimmed on 2026-10-03 (plan 80, step 4)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 This file holds text trimmed from [roadmap.md](roadmap.md) on 2026-10-03 by plan 80 step 4. Links in it may be stale. Each block is word for word as it stood in the roadmap, grouped under the section and entry it came from. The roadmap's own new text replaced these.
 
 ## From: Header

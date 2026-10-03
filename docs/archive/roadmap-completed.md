@@ -2,6 +2,8 @@
 
 # bonsAI roadmap — completed features (full detail)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 ## Completed
 
 Headings group related work. Star counts match the historical list.

@@ -2,6 +2,8 @@
 
 # Deck screen recording (composited QAM + bonsAI)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 **Status:** v1 maintainer scripts shipped — on-device QA required before sign-off.
 
 **Goal:** Record Steam Deck UI as video with **bonsAI / Decky plugin UI in frame** (same composited layer as `gamescope-atom` screenshots), for debugging and as foundation for a future in-plugin clip feature.

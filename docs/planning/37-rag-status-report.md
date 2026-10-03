@@ -1,12 +1,12 @@
-# 37 — The knowledge base, zoomed out (status report, 2026-09-25, sixth pass, plan 70 planned)
+# 37 — The knowledge base, zoomed out (status report, 2026-10-03, seventh pass, brought in step with the roadmap)
 
 Written from the roadmap, the knowledge-base architecture doc, the answer-quality plan, the locked
 decisions, the last eval reports, the last three session plans and the code. Plain language on
 purpose. It says where things stand, what each next step would buy a person using the plugin,
 roughly what it costs, and what is in the way. Links are at the end, not in the sentences.
 
-**The live list is the roadmap's [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag)
-section.** That is where entries move as work lands. This report is the zoomed-out view behind it and is
+**The live list is [roadmap-kb.md](../roadmap-kb.md)**, the knowledge-base part of the roadmap, which
+moved out of the main roadmap in October 2026. That is where entries move as work lands. This report is the zoomed-out view behind it and is
 updated whenever that section changes shape; the date in the title says when it was last brought in step.
 
 **Stars say how big a job is** — effort and risk together, on the roadmap's scale: `★` easiest up to
@@ -18,9 +18,9 @@ stars is section 6, because what is in the way is not a job anyone can size.
 
 ## 1. The picture in one paragraph
 
-With one of the thirty-five covered games running, a Strategy or Expert question gets the best one to
-five notes from a library of **372 game notes** glued onto the instructions the AI reads, and a
-troubleshooting question gets tips from a sheet of **159 Deck tips**. On the held-back questions nobody
+With one of the thirty-eight covered games running, a Strategy or Expert question gets the best one to
+five notes from a library of **414 game notes** glued onto the instructions the AI reads, and a
+troubleshooting question gets tips from a sheet of **164 Deck tips**. On the held-back questions nobody
 tuned against (177 rows), the search puts the right note in its top three **85.3 times in a hundred**,
 measured 2026-09-18 on the floored search against the new, bigger library — a new series, started because
 rows were added, so it does not compare with any older count. On the 21 newly labelled questions for the
@@ -29,19 +29,20 @@ three also found that the two checks behind the answer numbers were themselves w
 both, and took the numbers again on the shape that ships today — a Strategy answer about a named thing
 now gives the note's own advice first, then the same menu, instead of a short bit of orientation first.
 On that shape, the small model on the Deck keeps the notes' facts 79.5 times in a hundred and almost
-never contradicts them, 90.7 times in a hundred. **Nobody has read that new shape on the device yet.**
-Release `2026.09.18` carries the newest notes, the rewritten troubleshooting tips and a corrected Black
-Mesa note, and **was published to both places it publishes to on 2026-09-23.** **It is now on the
-maintainer's Deck too** — installed from the plugin's own button and checked by asking about the flooded
-rooms, which came back correct.
+never contradicts them, 90.7 times in a hundred. No Deck reading of that shape is
+recorded in the roadmap's knowledge-base file. The search figure above and the older paragraph on the
+library are from 2026-09-18, on the older library.
+The newest library is **`2026.09.26`: 38 games, 414 notes, 164 Deck tips. It was published to both
+download sites on 2026-09-27 and checked on the Deck** (plan 70, flow L9): it came down from the published
+site, the offer to download the meaning-search model appeared, and the next question used it.
 
-**Update 2026-09-26 (plan 70).** The library is now **38 games, 414 notes** (Brotato, Palworld and
+**Update 2026-09-26 (plan 70).** The library became **38 games, 414 notes** (Brotato, Palworld and
 Skyrim added), plus per-game Deck tips and a new "starting out" note kind with its own chip. The format
 bumped to 4 for this, so every installed library goes stale until it re-downloads; an old plugin
 degrades gracefully instead of crashing, and a too-new library now refuses on an old plugin with a plain
 message instead of half-working. A safety net now covers a boss's name in the reply if the question only
 described it — previously that could come back named in plain text with no spoiler cover at all, on a
-story-protected game. None of this has been confirmed on the Deck yet.
+story-protected game. The library itself was checked on the Deck after publishing (above).
 
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
@@ -106,8 +107,15 @@ facts survive, spoilers are hidden when they should be far more often, and a who
 clean on all three runs more often, in a reply twelve words shorter at the same speed. The one thing that
 moved the wrong way is contradictions — but that is one extra question, not a spread, and both failing
 questions are the same topic, the Pikmin 2 day limit, which was already wrong on the old shape too. The
-maintainer read this table and took the change on 2026-09-07; it shipped the same evening. **Nobody has
-read it on the device yet.**
+maintainer read this table and took the change on 2026-09-07; it shipped the same evening.
+
+**Which table is which.** Both tables come from 2026-09-07 runs of the same 61 questions, three runs each,
+with the corrected checks, on the 293-note library of that day. The table above is the run of the
+tactics-first shape that shipped (`docs/archive/research/kb-answer-eval-2026-09-07-ANSWERFIRST.md`). The
+roadmap's knowledge-base file quotes the other run, of the shape it replaced: 76.6 facts kept, 94.4 never
+contradicts, 100 a note attached, 98.6 menu when due, 60.7 clean on all three runs
+(`docs/archive/research/kb-answer-eval-2026-09-07-CLEANBREAK-after.md`). The two are not errors; they are
+two shapes measured side by side. Neither was re-measured on the 2026-09-26 library.
 
 **Search.** Right note in the top three, on the held-back questions nobody tuned against (177 rows):
 **85.3 in 100**, measured 2026-09-18 on the floored search against the new, bigger library. This is a new
@@ -128,7 +136,9 @@ that one phrase still got through; moved just above it, with no real tip lost. D
 that drift over the weeks is still not explained. A written budget of one second now exists with a check,
 but the check itself was found this wave to give a false all-clear: it reads 23 to 38 thousandths of a
 second when it never has to write an answer, while a real question takes over a second for that same step.
-A fix is in progress. **Tested and confirmed 2026-09-12:** the chat model and the meaning-search model were
+**Fixed 2026-09-15:** the check now refuses to pass a reading taken without a reply first, and it read 547, 23
+and 28 thousandths of a second against the one-second budget (the number swings with what is loaded in
+memory). **Tested and confirmed 2026-09-12:** the chat model and the meaning-search model were
 competing for memory on the Deck. The Deck can only hold one model at a time, so answering a question pushed
 the meaning-search model out and the next search paid to load it back in — 732 milliseconds, against 24 when
 nothing had evicted it. Raising the limit to two, tried on a spare copy of the setting that never touched
@@ -137,7 +147,8 @@ per-question wait, not the drift over weeks — a constant per-question reload d
 readings getting slower over time, so that part is still open, along with whether two models loaded together
 is fine with a heavy game running.
 
-**The library.** 372 notes over 35 games, 159 shared Deck tips, **every one of them indexed** — the build
+**The library.** *(Older paragraph, 2026-09-18; the current library is `2026.09.26`, above.)* 372 notes over
+35 games, 159 shared Deck tips, **every one of them indexed** — the build
 now refuses to finish if any note or tip is missing its meaning index, where it used to only print a
 warning. Library version `2026.09.18` is built and checked against that guarantee. Schema stays at 3, so
 nothing already installed goes stale. **2026-09-18:** the `2026.09.18` library was installed by hand on the
@@ -146,43 +157,37 @@ install moved it onto the device's internal storage, and the `2026.09.08` copy s
 **Published 2026-09-23:** `2026.09.18` is now live on both Hugging Face and the GitHub release, read back
 after publishing to confirm it. **Update 2026-09-26:** 38 games, 414 notes, 159 shared Deck tips plus new
 per-game ones. Schema bumped 3 → 4 for the per-game tip column, so this release makes every installed
-library stale until it re-downloads. Not yet built, published or read back on the Deck.
+library stale until it re-downloads. **Published 2026-09-27 and checked on the Deck** (plan 70, flow L9),
+164 tips in all.
 
 ## 4. What is open right now
 
-**Bugs.**
+**Bugs.** The live list, with each entry's evidence, is in [roadmap-kb.md](../roadmap-kb.md). In short, as of
+2026-10-03:
 
-- ★★★ **Raw computer text can appear in a reply — REOPENED 7 September; the fix built does not cover the
-  case that started this.** In Speed mode with a game running and the character voice on, a reply could end
-  with a raw line of settings-looking text. The cleanup deliberately leaves anything inside a code box
-  alone, but the plugin's own instructions tell the model to put that exact block inside a code box — so
-  the one case that needed catching is the one the fix cannot touch.
-- ★★ **Unrelated questions still get game cards.** Accepted 27 August; not being worked.
-- ★★★ **The panel only learns which game is running when it starts, and never again — cause found 7
-  September.** Checked on the Deck and the earlier fix does not hold: exiting a game left the old name
-  under the question box for minutes, through closing and reopening the panel. The opposite also happens —
-  launching a game with the panel already open went unnoticed for 48 seconds. A plugin restart fixes both
-  at once, which is what says the panel reads this only once, at start-up, and never listens for a change.
-- ★★★ **The note search has got about thirty per cent slower since August, and the check meant to catch it
-  gives a false all-clear.** The same three questions took 793 to 900 milliseconds in August and 1.1 to 1.2
-  seconds in early September; the drift over those weeks is still not explained. A written one-second budget
-  now exists with a check, but the check itself reads 23 to 38 thousandths of a second, because it never has
-  to write an answer, while a real question takes over a second for that same step and would fail the
-  budget. A fix is in progress. **Tested 2026-09-12: the chat model and the meaning-search model were
-  competing for memory**, because the Deck can only hold one model at a time — answering a question pushed
-  the meaning-search model out, and the next search paid 732 thousandths of a second to load it back, against
-  24 when nothing had evicted it. Raising the limit to two kept both models loaded and brought that cost back
-  to 24. That explains the per-question wait, but not the drift over weeks, and not whether it is fine with a
-  game running — both still open.
-- ★★★ **Follow-ups remember, step one: the search half works on the device, the answer half does not.**
-  Asking about a boss, then a bare "what about the second phase," now looks up the right boss first on the
-  device, exactly as built. But the reply named a different boss, because a better-matching wrong note was
-  still attached one place below the right one. Ranking the right note first is not enough on its own. A
-  call is waiting for the maintainer on how to finish this.
-- ★★ **Four questions still get notes about the wrong subject.** Asking Black Mesa how to tame a horse,
-  Portal 2 where to buy a house, and about a Hades boss that does not exist all still attach a note.
-  Catching these would cost twenty or more correct answers elsewhere in the library, so it is left as is.
-  Three of the four now carry a line saying the match was thin.
+- ★ **A game's own tip is found only by its own words.** "The words on screen look blurry" misses the Render
+  Scale tip that "the text looks blurry" finds. Found 2026-09-26, seen again 2026-09-27 on the Deck.
+- ★ **In Speed mode, the meaning check on troubleshooting tips never runs.** Chosen on purpose on 2026-09-05 to
+  save about a second; a stray word match can attach a wrong tip. Accepted.
+- ★★ **Black Mesa's electrified-water question names two unrelated early-game notes.** The real water note now
+  attaches, but two generic notes still come first. Found 2026-09-19.
+- ★★ **Questions with no real answer in the notes still get notes about the wrong subject.** Black Mesa horse
+  taming, Portal 2 house buying and a Hades boss that does not exist all still attach a note. The "no close
+  match" line is meant to warn, but on the Deck on 2026-09-26 it did not show for the horse question (it sat on
+  the cut-off), so "three of the four carry the line" is not shown on the device. Evidence
+  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+- ★★ **A symptom-only troubleshooting question reaches no tips.** Held back on 2026-09-06; the tips were
+  rewritten and a "none of these fit" floor exists, but the held fix has not been re-measured with it.
+- ★★ **Unrelated questions can still get a game card stapled on.** Accepted 2026-08-27; no Deck re-run since the
+  later floors.
+- ★★★★ **What ships loses to its own meaning half on questions nobody tuned against.** Held since 2026-09-06.
+  The reason given then (every note guaranteed an index) has been met since 2026-09-07; two other objections stand
+  and nothing was re-measured on the bigger library.
+
+Fixed since the 2026-09-07 snapshot this section used to carry: the speed check that gave a false all-clear
+(2026-09-15), the follow-up that named the wrong boss (`e1bf3324`, proven on the Deck), and the "No tip for this"
+line (retired 2026-09-27, `db4b3b4a`). The raw-computer-text and game-name-at-start-up bugs listed here before
+are not in the roadmap's bug list today; check the roadmap before relying on this report for either.
 
 **Settled, no longer open.**
 
@@ -204,47 +209,18 @@ library stale until it re-downloads. Not yet built, published or read back on th
   taller question bubble, which costs 18 pixels on every short question. The maintainer looked at that
   trade and chose to leave it as it is.
 
-**Owed on the Deck.**
+**Owed on the Deck.** Two checks sit in the roadmap's "Deck check owed" list in
+[roadmap-kb.md](../roadmap-kb.md): the hidden spoiler box on games with no Steam ID (STRAT-SPOIL-NAME-01 could not
+run four times, last 2026-10-02, because none of its games is on the Recent Games row), and the note's own words
+under the reply (NOTES-BLOCK-04, NOTES-BLOCK-07 and NOTES-BLOCK-LADDER still owed). The wave-two and wave-three
+evening rows this section used to list are no longer on the roadmap. Whether the tactics-first answer shape has
+been read on the Deck is not recorded there.
 
-- ★★★★ **Wave two's own evening — ran 7 September.** Rows **W2-R1** through **W2-R7** in
-  [plan 47](../archive/47-kb-wave-two-session.md) § 8: installing the release, the twelve new games and the filled
-  gaps passed, the troubleshooting tips half-passed (one of eight got the wrong tip), the "not in my notes"
-  line failed outright (it had no way to fire), and the two bug fixes both failed on a closer look. **R8**,
-  the five optional August rows, was skipped.
-- ★★★★ **Wave three's own evening — partly ran 7 September.** Installing the point release and the
-  corrected Black Mesa note both passed. Follow-ups remembering half-passed (see Bugs above) and the new
-  speed check failed (see Bugs above). Three rows never ran at all: the "no tip for this" line, both
-  searches saying "none of these fit," and the "no close match in my notes" line.
-- ★★ **The new answer shape needs its first read on the device.** Nobody has heard how the tactics-first
-  reply sounds on the Deck yet; see section 3.
-- ★★★★ **One question per new game on the device — ran 7 September, search half only.** All twelve
-  attached notes about the right game. Fallout: New Vegas still is not installed, so it was asked about by
-  name only, which the row allows.
-- ★ Five older checks from the August retrieval rework, never run on the device. Worth one evening with
-  pinned test chips, or worth closing.
-- ★★★ One glossary word, tapped rather than reached with the D-pad.
-- ★★★ The download Cancel button, which cannot be checked at all: the download finishes in about a second,
-  so there is no window to press it in.
-- ★★★ Which way a too-long chip label is cut off. Behind the preset-row work.
-
-**Your calls.** Four were decided on 7 September while wave two was planned (D85): fill the 21 real
-note gaps and top up the four thinnest games, keeping the eight deliberate blanks as a control; the "not in
-my notes" line reads *"Not in my notes — this answer is from the model's own knowledge."*; the meaning-index
-work ships the guarantee and only measures the tie-break; and the ring bug is fixed by the session running
-the wave rather than a helper. Four were decided on 6 September: the symptom-only search is held and
-rewriting the tips is the real job; leaning the search toward meaning is held until every note is guaranteed
-to have its meaning index built; the twelve new games ship with their coverage gap known and accepted; and
-about a second to search on the Deck is fine. On 7 September, planning wave three (D86): the Black Mesa
-water note, the answer test's scoring, the search test's stale-copy rebuild, the "no tip fits" line, the
-held symptom search, and follow-ups remembering were all decided — see the roadmap's "Calls waiting on
-you" for the full list. Also on 7 September: tactics-first was taken, on the numbers in section 3.
-
-**Two calls were answered this wave.** The Black Mesa water note was confirmed wrong from the maintainer's
-own account of the game, rewritten, and shipped in the `2026.09.08` release — checked on the Deck and
-correct. The ring half hidden behind the Copy or Retry icon was looked at and left as it is (see Settled
-above). **One new call is open:** how to finish follow-ups remembering, now that the search half works on
-the device but the reply can still name the wrong boss when a better-matching wrong note is still
-attached. It is being written up for the maintainer.
+**Your calls.** The roadmap's knowledge-base file lists one older call still open, D41 (a card named after a
+category outranks the cards inside it); its first step is a measurement, not yet a call to answer. Every call
+already made is in the locked decisions file. The calls decided on 6 and 7 September (D81 to D88) are answered.
+The follow-ups call this report used to call open is settled: follow-ups keep earlier answers on Strategy and
+Expert only, built and fixed.
 
 ## 5. Next phases: what each buys, and what it costs
 
@@ -391,7 +367,7 @@ carrying the same stars they carry here.
 
 ## Sources
 
-- [roadmap.md](../roadmap.md) — the Bugs, Verify, Features and Done lanes tagged `[KB]`
+- [roadmap-kb.md](../roadmap-kb.md) — the live knowledge-base list (bugs, Deck checks owed, plans); [roadmap.md](../roadmap.md) — the rest of the roadmap, including Done entries tagged `[KB]`
 - [knowledge-base.md](../knowledge-base.md) — architecture, phase locks, the recall pass
 - [30-kb-answer-quality-plan.md](30-kb-answer-quality-plan.md) — the answer-quality plan and its checklist
 - [28-phase5-corpus-depth.md](28-phase5-corpus-depth.md), [18-phase4-track3-per-game-compat-tips.md](18-phase4-track3-per-game-compat-tips.md), [17-kb-online-versus-strategy-content.md](17-kb-online-versus-strategy-content.md)

@@ -1,5 +1,7 @@
 # Roadmap details — closed entries (archive)
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Long-form notes for roadmap entries that have since **finished** — shipped and confirmed, fixed,
 or otherwise moved to Done or to one of the other archives. These blocks used to live in
 [roadmap-details.md](../roadmap-details.md); they still hold the same detail (what was tried,

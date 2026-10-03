@@ -1,5 +1,7 @@
 # 58 phase 1 — Show the note's own words, and take notes from wikis without rewriting them
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-17, before any code was started, at the maintainer's request. It came out of a read of
 the knowledge base against a list of lessons from someone running this kind of system in production
 for a year and a half. Two of those lessons land squarely on this plugin, and the maintainer asked for

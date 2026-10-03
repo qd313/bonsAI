@@ -1,5 +1,7 @@
 # 35 — The second bug-fixing session
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Written 2026-09-05, before any fix was started. The maintainer asked for a plan first: what to fix, in
 what order, what runs side by side, how each fix is proven on the Deck, and what needs their decision.
 The decisions are **D62** in [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md).

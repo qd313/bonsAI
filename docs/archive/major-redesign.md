@@ -1,5 +1,7 @@
 # Major redesign — named chat slots + Main-tab inversion
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 Captured 2026-08-09 from the Claude Design project
 [Named chat slots](https://claude.ai/design/p/01f22010-2448-4be9-89ad-209c25aa3b77?file=Named+chat+slots.dc.html).
 Companion to [design-tokens.md](../design-tokens.md) (the visual language the mockup

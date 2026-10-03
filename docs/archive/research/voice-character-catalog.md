@@ -2,6 +2,8 @@
 
 # Voice Character Catalog
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../../roadmap.md), [roadmap-kb.md](../../roadmap-kb.md), [roadmap-shelved.md](../../roadmap-shelved.md).
+
 This file tracks curated roleplay voice/accent presets for **Character Voice Roleplay Mode** (see `docs/roadmap.md`).
 
 **Implementation:** Preset ids, work titles, and UI grouping live in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); backend prompt text and validation use [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py). Keep these three in sync when editing the catalog.

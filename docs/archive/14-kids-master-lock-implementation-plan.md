@@ -1,5 +1,7 @@
 # 14 — Kids master lock — executable plan
 
+> Links in this file into the roadmap may be stale: the roadmap was split and trimmed on 2026-10-03 (plan 80). Current files: [roadmap.md](../roadmap.md), [roadmap-kb.md](../roadmap-kb.md), [roadmap-shelved.md](../roadmap-shelved.md).
+
 **Status:** `IMPLEMENTED` — Stage 0 live CEF deferred; see `08` ## Spike results (2026-08-09). On-Deck QA Open.
 **Research source (do not edit as ship plan):** [08-kids-master-lock-feasibility.md](08-kids-master-lock-feasibility.md)
 **Roadmap:** [Backlog § Knowledge base — Kids master lock](../roadmap.md#permissions--safety) (★★★)

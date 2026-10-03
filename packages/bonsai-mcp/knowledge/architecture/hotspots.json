@@ -31,13 +31,13 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1245,
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1264,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1231,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1245,
       "role": ""
     },
     {

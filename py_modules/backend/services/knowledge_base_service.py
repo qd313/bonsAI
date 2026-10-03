@@ -153,11 +153,13 @@ from backend.services.knowledge_base_game_match import (
 )
 from backend.services.knowledge_base_game_tip import (
     GAME_TIP_REROUTE_FLOOR,
+    SharedQueryEmbedding,
     _compat_app_keys_for_game,
     _compat_tip_card_by_pattern_id,
     _compat_tips_for_app_keys,
     _game_tip_query_terms,
     _reroute_to_game_tip_if_it_fits,
+    pick_game_tip_by_meaning,
 )
 from backend.services.knowledge_base_search import (
     BM25_RELEVANCE_FLOOR,
@@ -899,10 +901,48 @@ def retrieve_knowledge_context(
         # Plan 70, helper E2 (2026-09-26): a resolved game's own tips get a chance on every
         # question, not only ones already routed to the tip sheet -- see
         # _reroute_to_game_tip_if_it_fits for the measured gap this closes.
+        #
+        # Plan 81, lane G: a game's own tip is also found by what the question MEANS, for the
+        # sentence that avoids the tip's own words ("the words on screen look blurry" against a
+        # tip written about "text"). One embed of the question serves both this check and the
+        # notes search below -- see SharedQueryEmbedding for why it must not be two calls.
+        query_embedding = SharedQueryEmbedding(
+            lambda: embed_texts(
+                pc_ip,
+                [format_embed_query(expanded, model=DEFAULT_EMBEDDING_MODEL)],
+                model=DEFAULT_EMBEDDING_MODEL,
+                timeout_s=3.0,
+                keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
+            )[0]
+        )
+        already_routed_to_tips = domain == "compat"
+
+        def _own_tip_by_meaning(tip_ids: list[int]) -> Optional[int]:
+            # Same permissions as every other meaning search here: not Speed (D62 #2), not with
+            # hybrid switched off, not against a library or model that cannot support it. A turn
+            # already routed to the tips pulls the game's tips into its own pool and orders them
+            # by cosine, so it needs no rescue.
+            if (
+                already_routed_to_tips
+                or speed_mode
+                or not hybrid_enabled
+                or not variant_ok
+                or not corpus_has_usable_compat_vectors(conn, manifest)
+            ):
+                return None
+            vectors = _load_compat_vectors(conn, tip_ids)
+            if not vectors or not nomic_embed_available(pc_ip, model=DEFAULT_EMBEDDING_MODEL):
+                return None
+            try:
+                return pick_game_tip_by_meaning(vectors, query_embedding.get())
+            except (OllamaEmbedError, EmbeddingDimensionMismatch, IndexError, ValueError):
+                return None
+
         game_tip_override, forced_tip_id = _reroute_to_game_tip_if_it_fits(
             conn,
             game_id=game_id,
             expanded_question=expanded,
+            tip_by_meaning=_own_tip_by_meaning,
         )
         if game_tip_override:
             domain = "compat"
@@ -1055,15 +1095,8 @@ def retrieve_knowledge_context(
         if nomic_ready and (cards or topic_cards or vector_recall_ready):
             t_embed = time.perf_counter()
             try:
-                query_vectors = embed_texts(
-                    pc_ip,
-                    [format_embed_query(expanded, model=DEFAULT_EMBEDDING_MODEL)],
-                    model=DEFAULT_EMBEDDING_MODEL,
-                    timeout_s=3.0,
-                    keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
-                )
-                query_vector = query_vectors[0]
-                embed_ms = round((time.perf_counter() - t_embed) * 1000, 2)
+                query_vector = query_embedding.get()
+                embed_ms = query_embedding.elapsed_ms
                 t_rerank = time.perf_counter()
                 recall_cards: list[KnowledgeCard] = []
                 if domain == "compat":
@@ -1136,7 +1169,7 @@ def retrieve_knowledge_context(
                 rerank_ms = round((time.perf_counter() - t_rerank) * 1000, 2)
                 retrieval_method = "hybrid"
             except (OllamaEmbedError, EmbeddingDimensionMismatch, IndexError, ValueError):
-                embed_ms = round((time.perf_counter() - t_embed) * 1000, 2)
+                embed_ms = round(max(query_embedding.elapsed_ms, (time.perf_counter() - t_embed) * 1000), 2)
                 cards = _merge_preferred_first(cards, topic_cards, preferred_ids, top_k=top_k)
                 retrieval_method = "keyword_embed_unavailable"
         else:

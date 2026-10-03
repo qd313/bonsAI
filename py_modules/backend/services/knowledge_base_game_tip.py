@@ -14,6 +14,10 @@ did not already look like a troubleshooting one, and a strategy question must no
 display tip stapled onto it for sharing one stray word. This file owns the cut-offs
 that keep those two apart.
 
+Also reads what the question MEANS (plan 81): a question that avoids the tip's own words
+("the words on screen look blurry" for a tip written about "text") still finds it, when the
+embedding model is installed and the Ask mode is allowed to use it.
+
 Does not: Search the rest of the tips, rank or blend notes, or format the block the AI
 reads -- knowledge_base_search.py and knowledge_base_service.py own those. Moved out of
 knowledge_base_service.py unchanged in plan 81 so the service file stays under its growth limit.
@@ -23,7 +27,8 @@ from __future__ import annotations
 
 import re
 import sqlite3
-from typing import Optional
+import time
+from typing import Callable, Optional
 
 from backend.services.knowledge_base_cards import KnowledgeCard, _compat_row_to_card
 from backend.services.knowledge_base_search import (
@@ -31,6 +36,7 @@ from backend.services.knowledge_base_search import (
     _COMPAT_BM25,
     _FTS_MAX_TOKENS,
     _FTS_STOPWORDS,
+    _dot_similarity,
 )
 
 
@@ -191,6 +197,7 @@ def _reroute_to_game_tip_if_it_fits(
     *,
     game_id: Optional[int],
     expanded_question: str,
+    tip_by_meaning: Optional[Callable[[list[int]], Optional[int]]] = None,
 ) -> tuple[bool, Optional[int]]:
     """Should this turn use the resolved game's own tips even though nothing routed it there?
 
@@ -210,12 +217,13 @@ def _reroute_to_game_tip_if_it_fits(
     question ("how do I beat the dreadnought") shares no real vocabulary with a display-scaling
     tip, so it is not rerouted and its own strategy notes are untouched.
 
-    Keyword only, deliberately: a meaning-search rescue was measured too, but every one of the
-    three real questions this fix exists for is a keyword hit, and running it would cost a
-    second embed call on every Strategy/Expert Ask for a game with a tip, not only a matching
-    one -- doubling the round trip test_hybrid_retrieval_keeps_the_embed_model_loaded_like_the_
-    answer_model already pins at one call. Left for a future lane if a real paraphrase turns up
-    that keyword alone cannot catch.
+    Words first, then meaning (plan 81). The keyword floor alone missed a real paraphrase on the
+    Deck -- "the words on screen look blurry" scored 2.0 against a tip a question saying "the
+    text" scores 4.9 on. So when no tip clears the keyword floor, ``tip_by_meaning`` (when the
+    caller gives one) is asked which of this game's tips, if any, the question means; the caller
+    decides whether a meaning search is allowed at all this turn and shares one embed of the
+    question with its notes search, so the round trip stays at one call (see
+    ``SharedQueryEmbedding``). A game with no tip of its own never reaches it.
 
     Returns ``(reroute, forced_tip_id)``. ``forced_tip_id`` is the one tip that actually
     cleared the floor, not merely "one of this game's tips" -- a game with more than one tip
@@ -234,9 +242,93 @@ def _reroute_to_game_tip_if_it_fits(
         return False, None
 
     keyword_scores = _game_tip_keyword_scores(conn, pattern_ids=tip_ids, query=expanded_question)
-    if not keyword_scores:
-        return False, None
-    best_id = max(keyword_scores, key=keyword_scores.get)
-    if keyword_scores[best_id] >= GAME_TIP_REROUTE_FLOOR:
-        return True, best_id
+    if keyword_scores:
+        best_id = max(keyword_scores, key=keyword_scores.get)
+        if keyword_scores[best_id] >= GAME_TIP_REROUTE_FLOOR:
+            return True, best_id
+    if tip_by_meaning is not None:
+        meaning_id = tip_by_meaning(tip_ids)
+        if meaning_id is not None:
+            return True, meaning_id
     return False, None
+
+
+# --- Finding the tip by meaning (plan 81, lane G, 2026-10-03) --------------------------------
+#
+# The word search above misses a question that avoids the tip's own words: "the words on screen
+# look blurry" scores 2.0 against Deep Rock Galactic: Survivor's Render Scale tip (the cut-off is
+# 4.0) while "the text looks blurry" scores 4.9. This is the rescue by meaning that plan 70 measured
+# and left for later.
+#
+# Measured 2026-10-03 against the library built that day (nomic-embed-text, cosine against each
+# game's own stored tip vector, the question put through the same _expand_query the Ask uses):
+#
+#   - 114 strategy questions in kb_eval_v2.json for the four games that ship a tip: the strongest
+#     scored 0.5873 ("just got Fallout 4, what should I actually do at the start"). Most were
+#     0.40 to 0.55.
+#   - 27 hand-written ways to ask what those tips answer: DRG 0.5931 to 0.6918 (12 sentences),
+#     Fallout 4 0.4949 to 0.7673, GTA San Andreas 0.7437 to 0.7468, Ocarina of Time 0.6494 to 0.7137.
+#     "the words on screen look blurry" itself scored 0.6772.
+#   - 12 further strategy phrases written to collide ("how do I start a new game" 0.6289,
+#     "how do I start the quest" 0.5938): all under 0.64, except "how do i launch a mission"
+#     against Fallout 4's launch-option tip (0.6556) -- a word collision the model reads as meaning.
+#     That one is a known miss in the other direction and is not fixed by raising the number
+#     without losing the target (0.6772) too.
+#
+# 0.64 sits 0.05 above the strategy ceiling and 0.04 under the target. It does not catch every
+# paraphrase ("everything looks fuzzy and the letters are tiny" scores 0.6043, "the font looks
+# pixelated" 0.6377): a thin sample, so re-measure before moving it. The check is also only run
+# for a question nothing already routed to the tips -- a troubleshooting question already pulls
+# the game's tips into its own pool, ordered by this same cosine.
+GAME_TIP_MEANING_FLOOR = 0.64
+
+
+def pick_game_tip_by_meaning(
+    vectors_by_id: dict[int, list[float]],
+    query_vector: list[float],
+    *,
+    floor: float = GAME_TIP_MEANING_FLOOR,
+) -> Optional[int]:
+    """The one of a game's own tips whose meaning is closest to the question, if close enough.
+
+    ``vectors_by_id`` maps a tip's pattern_id to its stored vector. Returns that id when its
+    cosine is at least ``floor``, else None -- "none of this game's tips is what was asked".
+    """
+    if not vectors_by_id:
+        return None
+    best_id, best = max(
+        ((pid, _dot_similarity(query_vector, vec)) for pid, vec in vectors_by_id.items()),
+        key=lambda pair: pair[1],
+    )
+    return best_id if best >= floor else None
+
+
+class SharedQueryEmbedding:
+    """One question's embedding, made at most once per Ask and shared by everyone who needs it.
+
+    The tip check runs before the notes search and both need the question's vector. Embedding
+    twice would double the round trip every Strategy and Expert Ask for a covered game pays (the
+    cost a past comment here refused to add), so the first caller embeds and the rest reuse it.
+    A failure is remembered too, and raised again unchanged for each caller to handle as before,
+    so a down embed model is not retried several times in one Ask.
+    """
+
+    def __init__(self, embed: Callable[[], list[float]]):
+        self._embed = embed
+        self._vector: Optional[list[float]] = None
+        self._error: Optional[BaseException] = None
+        self.elapsed_ms = 0.0
+
+    def get(self) -> list[float]:
+        if self._error is not None:
+            raise self._error
+        if self._vector is None:
+            started = time.perf_counter()
+            try:
+                self._vector = self._embed()
+            except Exception as exc:
+                self._error = exc
+                raise
+            finally:
+                self.elapsed_ms = round((time.perf_counter() - started) * 1000, 2)
+        return self._vector

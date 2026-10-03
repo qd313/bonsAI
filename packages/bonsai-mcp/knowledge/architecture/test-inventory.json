@@ -408,6 +408,7 @@
     "tests/test_internet_downloads_permission.py",
     "tests/test_kb_choice_log_line.py",
     "tests/test_kb_followup_memory.py",
+    "tests/test_kb_game_tip_meaning.py",
     "tests/test_kb_not_in_notes_notice.py",
     "tests/test_kb_not_in_notes_wiring.py",
     "tests/test_kb_notice.py",

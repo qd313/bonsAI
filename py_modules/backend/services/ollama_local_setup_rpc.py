@@ -23,7 +23,8 @@ How it works:
 3. Removing a model runs `ollama rm`, then takes the name out of both saved try orders unless a
    saved PC still has the same model (`ollama_pc_models.tags_on_saved_pcs`).
 4. Reading the Deck's installed models (fetch_ollama_catalog_metadata) also drops saved try-order
-   names that neither the Deck nor a saved PC holds any more.
+   names that neither the Deck nor a saved PC holds any more. Both this and the removal are also
+   handed the PC address the screen holds (`pc_ip`), because the box runs one right after the other.
 
 Does not: Cover the two small autostart-toggle RPCs (apply_ollama_local_autostart,
 get_ollama_local_autostart_status) -- those stay on the Plugin class itself because a
@@ -429,6 +430,16 @@ async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
     cleaned = remove_tag_from_routing_orders(current, t)
     if cleaned != current:  # the name is in an order: ask the saved PCs before it goes
         cleaned = remove_tag_from_routing_orders(current, t, await tags_on_saved_pcs(current, [str(pc_ip or "")]))
+        kept = cleaned == current
+        await self._maybe_app_log(
+            "local_setup.routing_remove",
+            "removed model was in the saved try order",
+            fields={
+                "kept_for_pc": t if kept else "",
+                "dropped": "" if kept else t,
+                "pc_address_sent": bool(str(pc_ip or "").strip()),
+            },
+        )
     order_patch = {
         key: cleaned[key]
         for key in ("text_model_routing_order", "vision_model_routing_order")
@@ -439,13 +450,13 @@ async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
     return {"ok": True, "removed": t, "error": ""}
 
 
-async def _prune_saved_orders_to_installed(self) -> None:
+async def _prune_saved_orders_to_installed(self, pc_ip: str = "") -> None:
     """Drop saved try-order entries for models no longer on this Deck's own Ollama (see the helper)."""
     # The reader is looked up by name at call time, so a test that replaces it here still works.
-    await prune_saved_orders_to_installed(self, lambda base: list_installed_ollama_tags(base))
+    await prune_saved_orders_to_installed(self, lambda base: list_installed_ollama_tags(base), pc_ip)
 
 
-async def fetch_ollama_catalog_metadata(self, tags: Any = None):
+async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = ""):
     """A tag already installed gets its real size from this Deck's own Ollama; registry.ollama.ai
     is only asked about a tag that is not installed yet.
 
@@ -459,7 +470,7 @@ async def fetch_ollama_catalog_metadata(self, tags: Any = None):
     if not ok_gate:
         return {**(gate_out or {}), "source": "offline", "tags": {}}
 
-    await _prune_saved_orders_to_installed(self)
+    await _prune_saved_orders_to_installed(self, pc_ip)
 
     raw = tags if isinstance(tags, list) else []
     normalized = normalize_ollama_pull_tags(raw)

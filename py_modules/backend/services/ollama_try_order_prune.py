@@ -14,8 +14,8 @@ How it works:
 1. Read the Deck's installed models with the time limit below. An empty answer (Ollama off, a
    timeout, an empty store) proves nothing and changes nothing.
 2. Models being downloaded right now keep their place.
-3. Work out which saved names are missing from the Deck; only then ask the saved PCs, and keep
-   any name one of them still has (the saved order is one list for whichever computer answers).
+3. Work out which saved names are missing from the Deck; only then ask the saved PCs (and the PC
+   address the screen sends along), and keep any name one of them still has (the saved order is one list for whichever computer answers).
 4. Save just the two order keys and log what was dropped. Never raises.
 """
 
@@ -32,7 +32,9 @@ logger = logging.getLogger("bonsai")
 DECK_LIST_TIMEOUT_SECONDS = 8.0
 
 
-async def prune_saved_orders_to_installed(plugin: Any, list_deck_tags: Callable[[str], list[str]]) -> None:
+async def prune_saved_orders_to_installed(
+    plugin: Any, list_deck_tags: Callable[[str], list[str]], pc_ip: str = ""
+) -> None:
     """Drop saved try-order entries for models no longer on this Deck's own Ollama.
 
     A model removed outside the plugin (`ollama rm` in a terminal, plan 76 row PULL-TRY-ORDER-01)
@@ -40,7 +42,8 @@ async def prune_saved_orders_to_installed(plugin: Any, list_deck_tags: Callable[
     screen reads the installed list every time it opens; this uses that read. It prunes only when
     the read answered with at least one model: an unreachable Ollama, a timeout and an empty
     store all come back as an empty list and change nothing. The caller has already checked that
-    Ollama is the Deck's own, which is the Ollama this list belongs to. Never raises.
+    Ollama is the Deck's own, which is the Ollama this list belongs to. ``pc_ip`` is the PC address
+    the screen holds (it is not in the settings), asked next to the saved hosts. Never raises.
     """
     try:
         installed = await asyncio.wait_for(
@@ -58,7 +61,7 @@ async def prune_saved_orders_to_installed(plugin: Any, list_deck_tags: Callable[
         if order_patch:
             # Only now ask the saved PCs: a name one of them still has is not this Deck's to drop.
             order_patch, pruned = prune_routing_orders_to_installed(
-                current, [*installed, *await tags_on_saved_pcs(current)], downloading
+                current, [*installed, *await tags_on_saved_pcs(current, [str(pc_ip or "")])], downloading
             )
         if not order_patch:
             return

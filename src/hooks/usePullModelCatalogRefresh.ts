@@ -26,6 +26,7 @@ import { toaster } from "@decky/api";
 import { PULL_MODEL_CATALOG, bytesToGb } from "../data/pullModelCatalog";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
 import { getCatalogTags, isCatalogModelTagInList, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
 import { normalizeInstalledSet } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse, ConnectionTestResult } from "../components/PullModelsModal.types";
@@ -106,9 +107,12 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
         const otherInstalled = installedList.filter((t) => !isCatalogModelTagInList(catalog, t));
         const metaTags = Array.from(new Set([...catalogTags, ...otherInstalled]));
 
-        const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
+        // The PC address this Deck last saved travels with the look: the back end trims the saved try
+        // order to what the Deck holds here, and must keep a name that PC still has (it is not in the
+        // saved hosts, so only the screen knows it). Without it this look undid a removal's keep.
+        const meta = await callDeckyWithTimeout<[string[], string], CatalogMetadataResponse>(
           "fetch_ollama_catalog_metadata",
-          [metaTags],
+          [metaTags, loadSavedIp().trim()],
           DECKY_RPC_TIMEOUT_MS
         );
         const src = meta.source === "live" ? "live" : "offline";

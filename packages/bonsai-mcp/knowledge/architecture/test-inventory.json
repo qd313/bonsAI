@@ -107,6 +107,7 @@
     "src/components/PullModelsModal.licencePill.test.tsx",
     "src/components/PullModelsModal.listScroll.test.tsx",
     "src/components/PullModelsModal.otherInstalledSize.test.tsx",
+    "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
     "src/components/PullModelsModal.test.tsx",
     "src/components/PullModelsModal.tryOrder.test.tsx",
     "src/components/PullModelsStarterSetChip.test.tsx",

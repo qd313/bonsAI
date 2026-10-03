@@ -27,6 +27,7 @@ import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
 import { findUnavailableRegistryTags } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse } from "../components/PullModelsModal.types";
 import { confirmDownload } from "../features/downloads/downloadNotice";
@@ -92,9 +93,9 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
         // must not block a pull that would otherwise work; it just skips the warning.
         let unavailable: string[] = [];
         try {
-          const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
+          const meta = await callDeckyWithTimeout<[string[], string], CatalogMetadataResponse>(
             "fetch_ollama_catalog_metadata",
-            [tags],
+            [tags, loadSavedIp().trim()],
             DECKY_RPC_TIMEOUT_MS
           );
           unavailable = findUnavailableRegistryTags(tags, meta);

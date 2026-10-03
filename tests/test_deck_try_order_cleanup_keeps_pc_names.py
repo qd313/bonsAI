@@ -74,9 +74,9 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         with patch.object(RPC, "run_ollama_rm_async", rm):
             return await self.plugin.delete_ollama_model(tag, *pc_ip)
 
-    async def _look(self, deck_has: list[str]) -> None:
+    async def _look(self, deck_has: list[str], *pc_ip: str) -> None:
         with patch.object(RPC, "list_installed_ollama_tags", return_value=list(deck_has)):
-            await self.plugin.fetch_ollama_catalog_metadata(["gemma4:e2b-it-qat"])
+            await self.plugin.fetch_ollama_catalog_metadata(["gemma4:e2b-it-qat"], *pc_ip)
 
     # --- Remove from Deck ---
 
@@ -165,6 +165,71 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
 
         self.assertEqual(self.asked, [])
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+
+    # --- The AI models box: Remove, then the refresh it runs right after, both with the typed address ---
+    # The Deck check of plan 81 (docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE.json): the PC was
+    # typed on the Ollama tab only (no saved host), the removal kept the name, the refresh dropped it.
+
+    async def _box_removes(self, tag: str, pc_ip: str) -> None:
+        self.assertTrue((await self._remove_on_deck(tag, pc_ip))["ok"])
+        await self._look(["gemma4:e2b-it-qat", "nomic-embed-text:latest"], pc_ip)
+
+    async def test_the_refresh_after_a_removal_keeps_a_name_the_typed_pc_has(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+
+        await self._box_removes("qwen2.5:1.5b", "192.168.1.30:11434")
+
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat", "qwen2.5:1.5b"])
+
+    async def test_a_name_the_typed_pc_does_not_have_still_leaves_both_orders(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["something-else:1b"]
+
+        await self._box_removes("qwen2.5:1.5b", "192.168.1.30:11434")
+
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat"])
+
+    async def test_a_look_with_the_typed_address_keeps_a_name_the_deck_lacks(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+
+        await self._look(["gemma4:e2b-it-qat"], "192.168.1.30:11434")
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+
+    async def test_a_look_without_an_address_behaves_as_before(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+
+        await self._look(["gemma4:e2b-it-qat"])
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+
+    async def test_the_removal_logs_what_it_kept_and_what_it_dropped(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+        logged: list[dict] = []
+
+        async def spy(event: str, message: str, fields: dict | None = None, **_kw: object) -> None:
+            if event == "local_setup.routing_remove":
+                logged.append(dict(fields or {}))
+
+        with patch.object(self.plugin, "_maybe_app_log", side_effect=spy):
+            await self._remove_on_deck("qwen2.5:1.5b", "192.168.1.30:11434")
+            await self._remove_on_deck("gemma4:e2b-it-qat", "192.168.1.30:11434")
+
+        self.assertEqual(
+            logged,
+            [
+                {"kept_for_pc": "qwen2.5:1.5b", "dropped": "", "pc_address_sent": True},
+                {"kept_for_pc": "", "dropped": "gemma4:e2b-it-qat", "pc_address_sent": True},
+            ],
+        )
 
     # --- The look at the models list (a model removed outside the plugin) ---
 

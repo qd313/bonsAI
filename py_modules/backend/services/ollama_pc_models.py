@@ -13,7 +13,9 @@ whether a PC had it too (roadmap Bugs, found by reading the code in plan 79).
 Does not: Remove a model anywhere, and (apart from `prune_orders_after_pc_listing`) write the
 saved order itself or talk to this Deck's own Ollama (the caller does). It cannot see a PC address that was only typed on the
 Ollama tab: the plugin keeps that on the screen side, not in its settings, so only the saved
-hosts (`named_ollama_hosts`) are asked.
+hosts (`named_ollama_hosts`) and an address the caller hands in (`extra`) are asked. Every call
+that can drop a name (the removal, and the models-list look the box runs right after it) must
+hand the address in, or the later call undoes what the earlier one kept.
 
 How it works:
 1. `saved_pc_hosts()` takes the saved hosts and leaves out any that point at this Deck itself

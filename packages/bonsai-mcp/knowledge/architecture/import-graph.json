@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 729,
-  "edgeCount": 2113,
+  "fileCount": 730,
+  "edgeCount": 2120,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1578,6 +1578,16 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.removeKeepsPcName.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/data/storageKeys.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -1638,6 +1648,7 @@
         "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
+        "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx"
@@ -2581,6 +2592,7 @@
     "src/data/storageKeys.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -3098,7 +3110,9 @@
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useChatSlots.ts",
         "src/hooks/usePluginSettings.ts",
+        "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/index.tsx"
       ]
     },
@@ -4472,6 +4486,7 @@
         "src/components/PullModelsModal.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/pullModelCatalog.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
         "src/utils/deckyCall.ts",
         "src/utils/mergePullModelCatalog.ts",
         "src/utils/pullModelFilters.ts"
@@ -4586,6 +4601,7 @@
         "src/data/pullModelCatalog.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelFilters.ts"
@@ -5598,6 +5614,7 @@
         "src/components/PullModelsModal.licencePill.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
+        "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
@@ -5700,6 +5717,7 @@
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
+        "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
@@ -5759,6 +5777,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",

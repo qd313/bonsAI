@@ -1227,9 +1227,12 @@ class Plugin:
         saved try order."""
         return await ollama_local_setup_rpc.delete_ollama_model(self, tag, pc_ip)
 
-    async def fetch_ollama_catalog_metadata(self, tags: Any = None):
-        """Live sizes from registry.ollama.ai with offline fallback metadata."""
-        return await ollama_local_setup_rpc.fetch_ollama_catalog_metadata(self, tags)
+    async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = ""):
+        """Live sizes from registry.ollama.ai with offline fallback metadata.
+
+        ``pc_ip`` is the PC address kept on the screen side; the clean-up of the saved try order that
+        runs here asks that PC too, so a name it still has is not dropped."""
+        return await ollama_local_setup_rpc.fetch_ollama_catalog_metadata(self, tags, pc_ip)
 
     async def fetch_pull_model_catalog(self, opts: Any = None):
         """Living Pull Models overlay (remote JSON + disk cache) for frontend merge."""

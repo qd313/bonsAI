@@ -176,6 +176,7 @@ from backend.services.knowledge_base_search import (
     _fts_match_query,
     _genre_fallback,
     _merge_preferred_first,
+    _question_asks_how_to_start,
     _search_compat_patterns,
     _search_sections,
     _section_types_named,
@@ -704,21 +705,13 @@ DEMOTE_STARTING_OUT_NOTES = False
 # kind once one exists.
 _STARTING_OUT_NAME_PREFIX = "starting out in"
 
-# A question that is itself asking how to begin should still get the generic note first --
-# demoting it there would be exactly backwards. Kept short and literal on purpose, per the brief:
-# widen this list only with a measured phrase, not a guess.
-_START_INTENT_PHRASES = ("where do i start", "how do i get started", "beginner tips", "new to")
+# (`_question_asks_how_to_start`, with the phrases it reads, lives in knowledge_base_search.py: the
+# word search needs it too, and this module imports from there.)
 
 
 def _is_starting_out_card(card: KnowledgeCard) -> bool:
     """True for a generic "Starting out in <game>" note, guessed from its own name."""
     return (card.name or "").strip().lower().startswith(_STARTING_OUT_NAME_PREFIX)
-
-
-def _question_asks_how_to_start(question: str) -> bool:
-    """True when the question itself is asking how to begin -- see `_START_INTENT_PHRASES`."""
-    q = (question or "").strip().lower()
-    return any(phrase in q for phrase in _START_INTENT_PHRASES)
 
 
 def _fuse_cards_by_rrf(

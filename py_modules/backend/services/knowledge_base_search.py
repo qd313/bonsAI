@@ -375,6 +375,102 @@ def _compat_tips_for_topics(
     return out
 
 
+# A question that is itself asking how to begin wants the game's generic "Starting out" note, and
+# the game's own name is what finds that note ("just got hollow knight, what should I do first"
+# shares no other word with it). Two uses: the name stays in the word search for such a question
+# (`_question_without_typed_game_name`), and `_fuse_cards_by_rrf`'s measurement-only demotion of a
+# generic note is skipped for it. Kept short and literal, each phrase one a fixture question was
+# measured to need: widen it only with a measured phrase, not a guess.
+_START_INTENT_PHRASES = (
+    "where do i start",
+    "how do i get started",
+    "beginner tips",
+    "new to",
+    "brand new",
+    "just got",
+    "just bought",
+    "just picked up",
+    "just started",
+    "just installed",
+    "just downloaded",
+)
+
+
+def _question_asks_how_to_start(question: str) -> bool:
+    """True when the question itself is asking how to begin -- see `_START_INTENT_PHRASES`, plus
+    the words of the "starting out" rescue (`_TYPE_WORDS`: "start", "begin", "beginner", ...)."""
+    q = " ".join(re.findall(r"\w+", (question or "").lower()))
+    return "starting_out" in _section_types_named(question) or any(
+        phrase in q for phrase in _START_INTENT_PHRASES
+    )
+
+
+_NAME_TOKEN_RE = re.compile(r"\w+(?:['’]\w+)*")
+
+
+def _name_tokens(text: str) -> list[str]:
+    """Lowercase word tokens with apostrophes folded out, so "Baldur's" matches "baldurs"."""
+    return [t.lower().replace("'", "").replace("’", "") for t in _NAME_TOKEN_RE.findall(text or "")]
+
+
+def _game_name_phrases(conn: sqlite3.Connection, game_id: int) -> list[list[str]]:
+    """Every way the corpus knows to spell one game's name, longest first, as token lists."""
+    phrases: list[list[str]] = []
+    row = conn.execute(
+        "SELECT canonical_title FROM games WHERE game_id = ?", (game_id,)
+    ).fetchone()
+    if row and row["canonical_title"]:
+        title = str(row["canonical_title"])
+        phrases.append(_name_tokens(title))
+        # "Fallout: New Vegas" is asked about as "fallout" too, and "Black Mesa" has no colon.
+        if ":" in title:
+            phrases.append(_name_tokens(title.split(":", 1)[0]))
+    for alias in conn.execute(
+        "SELECT alias_normalized FROM aliases WHERE game_id = ?", (game_id,)
+    ).fetchall():
+        phrases.append(_name_tokens(str(alias["alias_normalized"])))
+    unique = {tuple(p) for p in phrases if p}
+    return sorted((list(p) for p in unique), key=lambda p: (-len(p), p))
+
+
+def _question_without_typed_game_name(
+    conn: sqlite3.Connection, game_id: int, question: str
+) -> str:
+    """``question`` with the resolved game's own name taken out of it.
+
+    The search is already scoped to this one game, so its name tells the keyword half nothing
+    about which note is wanted -- except that it sits in the title of the game's generic notes
+    ("Starting out in Black Mesa"), and a note title counts ten times a body word. Typing the
+    game's name therefore floated that note, and the next-best note that merely repeats the
+    name, above the one that holds the real answer: "black mesa how do i get across the
+    electrified water" listed "Starting out in Black Mesa" and the opening tram ride ahead of
+    "Crossing the electrified waste pools"; "in black mesa how do I tame a horse" matched three
+    notes on "black mesa" alone (docs/test-evidence/plan64-BLACKMESA-WATER.json,
+    plan70-NO-CLOSE-MATCH-HK-02.json). Taking the name out is not the rejected idea of ranking
+    generic notes lower: nothing is ranked down, a word that carried no information is dropped.
+
+    Returned unchanged when the name is not in the question or is all of it, and when the question
+    is asking how to start: there the game's generic "Starting out in ..." note is the right
+    answer, and the name is what finds it ("just got hollow knight, where do I even start").
+    """
+    tokens = _NAME_TOKEN_RE.findall(question or "")
+    if not tokens or _question_asks_how_to_start(question):
+        return question
+    folded = _name_tokens(question)
+    phrases = _game_name_phrases(conn, game_id)
+    kept: list[str] = []
+    i = 0
+    while i < len(tokens):
+        for phrase in phrases:
+            if folded[i : i + len(phrase)] == phrase:
+                i += len(phrase)
+                break
+        else:
+            kept.append(tokens[i])
+            i += 1
+    return " ".join(kept) if kept else question
+
+
 def _search_sections(
     conn: sqlite3.Connection,
     *,
@@ -383,6 +479,8 @@ def _search_sections(
     top_k: int,
     min_relevance: float = BM25_RELEVANCE_FLOOR,
 ) -> list[KnowledgeCard]:
+    if game_id is not None:
+        query = _question_without_typed_game_name(conn, game_id, query)
     fts_q = _fts_match_query(query)
     if not fts_q:
         return []

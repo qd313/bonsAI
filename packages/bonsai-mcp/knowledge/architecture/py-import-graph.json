@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 113,
-  "edgeCount": 304,
+  "fileCount": 114,
+  "edgeCount": 307,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -82,7 +82,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_cards.py",
-      "count": 6
+      "count": 7
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
@@ -249,6 +249,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_search.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/ollama_ask_budgets.py",
       "count": 2
     },
@@ -377,7 +381,7 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_search.py",
+      "path": "py_modules/backend/services/knowledge_base_game_tip.py",
       "count": 1
     },
     {
@@ -990,6 +994,7 @@
         "py_modules/backend/services/kb_attached_notes.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
+        "py_modules/backend/services/knowledge_base_game_tip.py",
         "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/transparency_service.py"
@@ -1018,6 +1023,15 @@
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
+    "py_modules/backend/services/knowledge_base_game_tip.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_cards.py",
+        "py_modules/backend/services/knowledge_base_search.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/knowledge_base_service.py"
+      ]
+    },
     "py_modules/backend/services/knowledge_base_schema.py": {
       "imports": [],
       "importedBy": [
@@ -1040,6 +1054,7 @@
         "py_modules/backend/services/knowledge_base_cards.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/knowledge_base_game_tip.py",
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
@@ -1049,6 +1064,7 @@
         "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
+        "py_modules/backend/services/knowledge_base_game_tip.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/ollama_embed_service.py",

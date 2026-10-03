@@ -21,11 +21,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 1436,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1340,
       "role": ""
@@ -38,6 +33,11 @@
     {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1245,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_service.py",
+      "lines": 1231,
       "role": ""
     },
     {

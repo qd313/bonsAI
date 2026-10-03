@@ -102,6 +102,18 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
         )
         self._assert_one_block(saved)
 
+    def test_a_reopening_after_the_models_own_status_line_is_saved_once(self) -> None:
+        # The shape this PC's Ollama gave with the Deck's model (gemma4:e2b-it-qat), 2026-10-03:
+        # each continued piece starts with a status line, then the opening marker again.
+        saved, flushes = self._saved_answer(
+            f"<bonsai-status>Writing the guide</bonsai-status>\n{INTRO}{OPEN}\n{HIDDEN_START}",
+            f"<bonsai-status>Continuing the guide request</bonsai-status>\n{OPEN}\n{HIDDEN_REST}\n{F}\n\n{AFTER}",
+        )
+        self._assert_one_block(saved)
+        self.assertNotIn("bonsai-status", saved)
+        for text in flushes:
+            self.assertLessEqual(text.count(OPEN), 1, text)
+
     def test_a_reopening_with_the_text_on_the_same_line_is_saved_once(self) -> None:
         saved, _ = self._saved_answer(
             f"{INTRO}{OPEN}\n{HIDDEN_START}",

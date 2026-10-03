@@ -28,10 +28,16 @@ from backend.services.response_verify import (
 )
 from backend.services.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
 
-# The piece's first words, once its first line has ended: optional blank space, then a hidden
-# block's opening marker alone on its line, or with the block's text after it on the same line.
+# The piece's first words: optional blank space and status lines, then a hidden block's opening
+# marker alone on its line, or with the block's text after it on the same line. The status line
+# matters: with the Deck's model (gemma4:e2b-it-qat) nearly every continued piece starts with one,
+# "<bonsai-status>Continuing the guide</bonsai-status>", and the marker right after it (2026-10-03).
 # Not the label-between-backticks mark ("```bonsai-spoiler```"): inside a block that one closes it.
-_LEADING_SPOILER_OPENER_RE = re.compile(r"\A([ \t\r\n]*)```bonsai-spoiler(?!`)[ \t]*(\n?)")
+_LEADING_SPOILER_OPENER_RE = re.compile(
+    r"\A((?:[ \t\r\n]*<bonsai-status>(?:(?!</bonsai-status>).)*</bonsai-status>)*[ \t\r\n]*)"
+    r"```bonsai-spoiler(?!`)[ \t]*(\n?)",
+    re.IGNORECASE | re.DOTALL,
+)
 
 
 def _ends_inside_hidden_block(text: str) -> bool:

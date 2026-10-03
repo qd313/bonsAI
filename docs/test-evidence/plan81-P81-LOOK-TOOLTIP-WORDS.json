@@ -1,0 +1,58 @@
+{
+  "row": "P81-LOOK-TOOLTIP-WORDS",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:20-17:50 EDT (Deck clock)",
+  "screen": "Deck's own screen, Deep Rock Galactic: Survivor running. Quick Access page 854x534 css px, dpr 1.5; pane top 128, dock top 330. Context line: 'Context: active game Deep Rock Galactic: Survivor'.",
+  "setup": "Game still running from row 7, plugin not reloaded, test chat 6f3cc055 (title read before every question). Five differently worded questions (no repeats). For each: send script VERIFIED with the whole text read back, walk to Ask (focus read = ask), A on Ask, wait for the answer, then Up to the '... earlier' pill (not recorded for the row) and Down from there over the answer with every press read back by deck_runSequence. A page logger recorded, for each stop, the box, scrollTop, and for each underlined word (class bonsai-drg-glossary-term) the word box, the tooltip box (class bonsai-drg-glossary-tooltip, position fixed) and their overlap in px and percent of the word's box.",
+  "pressed": "Questions: (1) 'What do overclocks do in Deep Rock Galactic: Survivor, in two short paragraphs?' (2) 'Which overclocks work best on the Zhukov in Deep Rock Galactic: Survivor?' (3) 'How should I spend my upgrades and overclocks early in a Deep Rock Galactic: Survivor run?' (4) 'What are the best weapon overclocks for a Driller in Deep Rock Galactic: Survivor?' (5) 'Explain overclocks versus upgrades in Deep Rock Galactic: Survivor briefly.'",
+  "seen": {
+    "answer_1": {
+      "underlined_words": 3,
+      "stops": [
+        "word 1 'overclocks' box x70.7 y243.9 w59.1 h15, 100% visible; tooltip x56 y189.8 w240 h48.1 (above, bottom 237.9); overlap 0 px, 0%",
+        "word 2 'overclocks' box x243.8 y293.9 w59.1 h15, 100% visible; tooltip x100 y315.8 w240 h48.1 (below); overlap 0 px, 0%",
+        "word 3 'kiting' box x155.6 y309.6 w31.2 h15, 100% above the dock; tooltip x56 y300.2 w240 h32.7 (covers y300.2-332.9): overlap 468 px = 100% of the word. Rig: 'COVERED by span.bonsai-drg-glossary-tooltip', 0% of the word visible, 0 of 9 points."
+      ]
+    },
+    "answer_2": {
+      "underlined_words": 2,
+      "stops": [
+        "word 1 'overclocks' box x107.1 y243.9 w59.1 h15; tooltip x56 y189.8 w240 h48.1 (above); overlap 0%",
+        "word 2 'overclocks' box x105.7 y243.9 w59.1 h15; tooltip x56 y189.8 (above); overlap 0%"
+      ]
+    },
+    "answer_3": {
+      "underlined_words": 3,
+      "stops": [
+        "word 1 'overclocks' box x136.9 y244.2 w59.1 h15; tooltip x56 y190.1 (above); overlap 0%",
+        "word 2 'overclock' box x190.5 y234.2 w53.4 h15; tooltip x97.2 y280.1 w240 h48.1 (below); overlap 0%",
+        "word 3 'overclocks' box x181.5 y309.5 w59.1 h15; tooltip x91.1 y300.1 w240 h48.1 (covers y300.1-348.2): overlap 887 px = 100% of the word. Rig: 'COVERED by span.bonsai-drg-glossary-tooltip'."
+      ]
+    },
+    "answer_4": {
+      "underlined_words": 3,
+      "stops": [
+        "word 1 'overclocks' box x211.3 y243.9 w59.1 h15; tooltip x100 y189.8 (above); overlap 0%",
+        "word 2 'overclocks' box x178.2 y303.9 w59.1 h15; tooltip x87.8 y249.8 w240 h48.1 (above, bottom 297.9); overlap 0%",
+        "word 3 'overclocks' box x112.6 y244.3 w59.1 h15; tooltip x56 y190.1 (above); overlap 0%"
+      ],
+      "note": "two presses after word 2 only scrolled the pane (scrollTop 77 to 156 to 170), the word then sat at y224.6 and y210.6 with no tooltip drawn: scroll only."
+    },
+    "answer_5": {
+      "underlined_words": 3,
+      "stops": [
+        "word 1 'overclocks' box x95.1 y244.3 w59.1 h15; tooltip x56 y190.1 (above); overlap 0%",
+        "word 2 'overclocks' box x93.1 y278.9 w59.1 h15; tooltip x56 y286.1 w240 h48.1 (starts 7.2 px below the word's top): overlap 461 px = 52% of the word; rig: 33% visible, covered by the tooltip.",
+        "word 3 'Overclocks' box x147.6 y293.9 w61.5 h15; tooltip x58.3 y239.8 (above, bottom 287.9); overlap 0%"
+      ]
+    },
+    "totals": "14 underlined-word stops in 5 answers, all 100% visible against pane and dock (box y 224-324, dock 330). The tooltip covered the word it belongs to in 3 of 14 stops: 100% (answer 1 word 3 'kiting'), 100% (answer 3 word 3), 52% (answer 5 word 2). In all 3 the word sat low in the pane (word top 278.9 to 309.6, near the dock top 330) and the tooltip was drawn from about y286-300 down. For words higher up (word top 210-304 with room above) the tooltip is drawn above the word with a 6 px gap.",
+    "tooltip_height": "48.1 px for a normal tip; 32.7 px for 'kiting'."
+  },
+  "expected": "Measurement row: for each underlined word stop, its box, % visible, whether a tooltip or popup box is drawn over it.",
+  "verdict": [
+    "MEASURED: yes, a tooltip covers its own word in 3 of 14 stops (two fully, one 52%). The words are not hidden by the dock; the tooltip is what hides them.",
+    "MEASURED: the other 11 stops had the tooltip above or below the word with 0 px overlap."
+  ],
+  "side_effect": "Five questions were added to the test chat 6f3cc055 (plus the one in row 7). Game exited afterwards with deck_exitGame (Steam menu, Exit game, Confirm; gone from RunningApps in 1131 ms; 0 AppId=2321470 processes over SSH; free -m available 4227 MB)."
+}

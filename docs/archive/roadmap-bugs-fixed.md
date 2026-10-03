@@ -3007,3 +3007,11 @@ _Copied line for line from the roadmap's Verify entries, nothing reworded, with 
   The checklist is now drawn only if the answer's game is still the running game. It is still saved under the game it was for, with no ticks borrowed from another game's list.
   Proven by unit tests only (in `src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts`); there is no Deck row, because it cannot be made to happen reliably. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md` (finding 3).
   **Closed 2026-10-03 (plan 80), on its unit tests, by the maintainer's call recorded under D123 (answers to the review's questions).** No Deck row exists.
+
+## Closed 2026-10-03 (plan 81, moved from Bugs)
+
+_Copied line for line from the roadmap's Bugs entry, nothing reworded, with the closing note added at the end._
+
+- ★ `[focus]` **Steam's own scroll keeps a top margin even for a stop already on screen, which the test setup does not model** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
+  On the Deck a cover the walk placed at y 104 ended at y 204. No player-visible fault is known; this is a note so the next walk fix knows. Found beside `84cc0029`.
+  **Closed 2026-10-03 (plan 81), test setup only, no Deck check owed.** Fix `0e885c77`: the test setup can now model Steam's 116 px top margin (an option, off by default), so a small stop lying wholly above y 204 is carried to 204, as the Deck measured. Switched on for every walk, 18 older walk tests fail, all with the dock at 262 (a higher dock than the Deck's 290): a small section carried to 204 is then cut off by that dock. Proof: `src/utils/answerBubbleNavigation.steamTopMargin.test.ts` reproduces the landings in `docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json`.

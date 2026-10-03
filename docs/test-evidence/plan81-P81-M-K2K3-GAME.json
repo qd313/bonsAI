@@ -1,0 +1,33 @@
+{
+  "row": "P81-M-K2K3-GAME",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:04-17:20 EDT (Deck clock)",
+  "screen": "Deck's own screen, game running. With the game up the Quick Access page is 854x534 css px (not 454) at dpr 1.5; pane top y=128, dock top y=330.0 (329.85 to 330.17), so room above the dock = 201.9 px (same as the no-game rows 202.2). Context line read: 'Context: active game Deep Rock Galactic: Survivor'.",
+  "setup": "Game: Deep Rock Galactic: Survivor (appid 2321470; it is on Recent Games, 4th tile). Launched with deck_launchGame (Steam button, Home, 3 RIGHT on the shelf, A on tile, A on Play; 7 presses, running in 456 ms). Waited about 65 s with the game window in front (screenshot: title screen 'press any key'). free -m then: total 14800, available 2064 MB. Closed and reopened Quick Access with deck_openPlugin (QAM chord over the game; bonsAI panel mounted; Context line names the game). Plugin NOT reloaded. free -m before the question: available 1975 MB; after the answer: 1973 MB (under 2000, so no reload was ever an option).",
+  "pressed": "Test chat title read ('How do I beat the boss in the Soul Sanctum in Hollow Knight?') on the chat row before the question. Question sent with the send script: 'Without headings or lists, write one single long paragraph of at least 180 words on which overclocks to pick for the Zhukov in Deep Rock Galactic: Survivor, then end with two short follow-up choices.' VERIFIED, full text read back, walked to Ask (16 presses, focus read = ask), A on Ask. Answer finished after about 67 s (Show reasoning 31 s). Then page logger (window.__p81) plus deck_runSequence: Up from Ask (22 presses, passed beyond the question row to the back arrow), Down from the back arrow (20 presses, to the question box), Up from Ask again (17 presses, to '87 earlier'). Every press read back; the logger kept box, scrollTop, pane top and dock top.",
+  "seen": {
+    "answer": "2 sections: section 1 = 525 px high (class bonsai-ai-response-chunk, the long paragraph), section 2 = 45 px (closing line). Strategy picker 169 px with choice A 48 px (2 lines) and choice B 32 px. Underlined game words (bonsai-drg-glossary-term, each a focus stop 15 px high): 5 in section 1 ('overclocks', 'overclocks', 'overclock', 'overclock', 'overclocks'). Section 1 (525 px) is taller than the room above the dock (201.9 px): this is the tall-section case.",
+    "tall_section_down_walk": "Down from 'Show reasoning' (229.1-243.8, sc88) landed on section 1 at top 128.5, bottom 653.5 (h 525), scrollTop 220, pane top 128: top edge exactly at the pane top, 38% of the box between pane top and dock top (rig said 33% covered by the question box). Next Down went to the first underlined word.",
+    "tall_section_up_walk (both Up walks, same numbers)": "Up from the first underlined word (244.1-259.1, sc119) landed on section 1 at top 229.1, bottom 754.1 (h 525), scrollTop 119 (the pane did NOT scroll to the section; 99 px of earlier content stays above it): visible between pane top (128) and dock top (330) = 100.9 px of 525 = 19%. Rig read 33% visible, covered by the Context line. Its bottom edge is 424 px below the dock.",
+    "underlined_words_down": "5 stops in order: 244.1-259.1 sc119, 229.1-244.1 sc209, 228.8-243.8 sc375, 228.8-243.8 sc465, 288.8-303.8 sc465, each 100% visible (all above dock 330). The press after the 5th word did not move the ring: it only scrolled the pane (465 to 543) and the word then sat at 210.8-225.8 ('scroll only', not a stop). Next Down then went to section 2.",
+    "underlined_words_up": "5 stops all 100% visible, tops 244.1, 228.8, 228.8, 229.1, 244.1 (scrollTop 509, 465, 375, 209, 119).",
+    "section_2_45px": "Down: 244.1-289.1 sc629 100% (bottom 289.1, 40.9 above the dock). Up: 244.1-289.1 sc629 100%. (Rig noted 89% covered by the Copy icon: known false alarm.)",
+    "controls_under_answer (both ways, same landing)": [
+      "choice A 195.8-243.8 h48 sc820 100% (Down) / 243.8-291.8 sc772 (first Up)... second Up walk: A 195.8-243.8 sc820",
+      "choice B 251.8-283.8 h32 sc820 (Down); 243.8-275.8 sc828 (Up)",
+      "Mark reply helpful 216-244 h28 sc945 (Down and second Up); 244-272 sc917 (first Up)",
+      "Show details 260-274.6 sc945 (Down); 244-258.6 sc961 (Up)",
+      "notes block 258.6-305.7 h47 sc977 (both ways), bottom 305.7 is 24.3 above the dock top 330",
+      "Not Really and the Read aloud speaker are never stops on their own; no 'chat summed itself up' note in this answer"
+    ],
+    "no_wasted_press": "One scroll-only press (after the 5th underlined word on Down). All other presses landed on a new stop. No loop.",
+    "distinct_numbers": "First Up walk: 22 presses (20 moves, last 2 at the back arrow). Down walk: 20 presses, 19 moves + 1 scroll-only. Second Up: 17 presses, all moved."
+  },
+  "expected": "Measurement row: same walks and records as row 2 with a game, plus underlined words as stops and their % visible.",
+  "verdict": [
+    "MEASURED: the tall-section case occurred. Up onto a 525 px section shows 19% of it (top 229.1 to dock 330, ring box runs 424 px below the dock); Down onto it shows 38% (top at the pane top 128.5). The two directions leave it in different places, and in both its bottom is hidden behind the dock.",
+    "MEASURED: all 5 underlined words are 100% visible as stops, both ways; controls under the answer land fully above the dock, lowest bottom edge 305.7 (notes block).",
+    "PASS-LEVEL FACT for the owner: one Down press after the last underlined word only scrolled (no new stop)."
+  ],
+  "side_effect": "Deep Rock Galactic: Survivor is still running (exit comes after row 8). One question was added to the test chat 6f3cc055. The plugin was not reloaded."
+}

@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 81 (2026-10-03)
+
+- **B, Cancel and "Keep my data" on the "Clear all plugin data?" box now leave the panel on the Settings tab,** with the ring back on "Clear all data...". Before, every way of closing the box took you to Main. Measured on the Deck before the fix; owes its Deck check on the fixed build.
+- **The accent intensity button, "Reinstall voice engine", the two voice model rows and the Steam Web API key field now show the same white ring as every other control.** Before, the first four showed only a thin grey frame and the key field none. Owes its Deck check.
+- **A long suggestion chip now leaves 1.5 s after its words stop,** not 3 to 10 s later. In the fade style the chip starts fading at that moment; in the plain and decode styles the words swap then. The sliding style keeps its own beat, and a chip under the ring never changes. Owes its Deck check on the new build.
+
 ### Plan 79 (2026-10-02)
 
 - **The question box now shows a white ring while the D-pad is on it,** drawn just inside its edge. Before, it looked the same with or without the ring. Passed on the Deck 2026-10-02.

@@ -227,6 +227,7 @@ this and withdrawn the same night, and the question-row entry had already been o
 before on the same reading. Before filing anything about either of these, ask the page where the TEXT
 is -- take the element's own text range rectangles and compare those against the icon -- rather than
 trusting the percentage. Evidence: `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
+Fixed in the Deck tools project (`cde1c0e`), pending a Deck walk after the tool server restarts.
 
 **A question can be put to the Deck without the pinned sentences and without thumb-typing.** Proved
 end to end 2026-09-22. `scripts/deck_send_ask.py` writes an exact sentence into the Ask field through

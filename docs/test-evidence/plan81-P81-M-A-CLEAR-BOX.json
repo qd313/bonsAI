@@ -1,0 +1,22 @@
+{
+  "row": "P81-M-A-CLEAR-BOX",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 16:32-16:36 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. Settings tab scroll pane box y88-454 (366 high), scrollTop 1747 of 2112 at the Clear buttons. No game. No monitor.",
+  "setup": "Settings tab. Walked Down from the tab bar to 'Clear cache...' with deck_walkTo (15 presses first time, 16 later; ring read after each press). The two buttons sit side by side in one row ('Clear cache...' left, 'Clear all data...' right, both box y375.8-413.8, 38 high); Down ends on 'Clear cache...' and RIGHT reaches 'Clear all data...'. The dialogs draw in the Big Picture window (not the Quick Access page), so their ring was read from that page.",
+  "pressed": "Cache box: A on 'Clear cache...' (focus read first), then B. All-data box: RIGHT (read: 'Clear all data...'), A (its own step), ring read in box, B. All-data box done 3 times; between times RB, RB from the Main tab back to Settings and walkTo 'Clear cache' again, then RIGHT, read, A, read, B. The settings file was never touched; A was never pressed inside either box.",
+  "seen": {
+    "cache_box": "'Clear session cache?' box: ring on 'Keep cache' (first button, then Clear, then Cancel). After B: Settings tab still showing (tab label SETTINGS), ring on 'Clear cache...' button, box top 375.8 bottom 413.8, 100% visible, scrollTop 1747. Screenshot plan81-P81-M-A-CLEAR-BOX-cache-after-B.png.",
+    "all_data_box_try_1": "'Clear all plugin data?' box: ring on 'Keep my data' (box top 358, bottom 398 in the 854x534 window; x 123-317). After B: tab label MAIN, Main tab content showing (chat transcript, input, Ask). Ring on the tab bar ('Main tab', class bonsai-tab-bar, box x48 y64 w300 h20), main-tab scrollTop 0. Screenshot plan81-P81-M-A-CLEAR-BOX-alldata-after-B-1.png.",
+    "all_data_box_try_2": "Same: ring on 'Keep my data' (358-398). After B: tab MAIN, ring on 'Main tab' tab bar (y64-84, 20 high).",
+    "all_data_box_try_3": "Same: ring on 'Keep my data' (358-398); A press reported retried:true but the box was open once and only once. After B: tab MAIN, ring on 'Main tab' tab bar (y64-84). Screenshot plan81-P81-M-A-CLEAR-BOX-alldata-after-B-3.png.",
+    "settings_json_compare": "settings.json now vs backup ~/p81-backup/settings-bonsAI/settings.json: 52 keys both, 0 differing keys. diff -rq of the whole bonsAI settings folder vs the backup: no difference (30 entries)."
+  },
+  "expected": "Measurement row (bug A: B on 'Clear all plugin data?' leaves Settings). The runbook expects the cache box to be the control (B stays on Settings) and the all-data box to be the case under test.",
+  "verdict": [
+    "MEASURED: cache box - B closes it and the ring returns to 'Clear cache...' on the Settings tab (control behaves).",
+    "MEASURED: all-data box - B jumped to the Main tab with the ring on the tab bar in 3 of 3 tries. The bug reproduces every time.",
+    "PASS: settings.json unchanged (0 differing keys of 52)."
+  ],
+  "side_effect": "None. Three Cancel-by-B presses on the all-data box, one on the cache box; nothing cleared. After this row the panel sits on the Main tab, ring on the tab bar."
+}

@@ -1,0 +1,77 @@
+{
+  "row": "P81-M-K2K3-NOGAME",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 16:38-16:52 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. Pane top y=88, dock top y=290.17 on every read, so room above the dock = 202.2 px. No game running.",
+  "setup": "Strategy mode (as set), no game, test chat 6f3cc055 (title read open before each question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Method: page-side logger (window.__p81, 100 ms poll, logs a state once it held 350 ms: ring element, box top/bottom, height, pane scrollTop, dock top, % of its box between pane top and dock top); presses sent one at a time with deck_runSequence (ring read after every press), logger read after each walk. Walk legs went further than the question row (to the chat row / tab bar / back button) because the runbook asks for the question row but the ring passed it; the stops past it are listed too.",
+  "pressed": {
+    "question_1": "'Without any headings or lists, write one single long paragraph of at least 180 words on how to beat the Soul Master in Hollow Knight, then end with two short follow-up choices.' - send script VERIFIED, whole text read back; walked to Ask (12 presses, focus read = ask), A on Ask. Answer finished in about 32 s.",
+    "question_2": "'In a single unbroken paragraph of about 220 words, no lists, explain how to prepare for the Soul Master fight in Hollow Knight.' (the one more try the runbook allows because answer 1 had no section taller than the room). VERIFIED; walked Down to Ask (15 presses), A on Ask. Answer finished in about 45 s.",
+    "walks_on_answer_1": "Up (from Ask, 20 presses), Down (21 presses), Up again (15 presses). Walks on answer 2: Down 18 presses (saved as a check)."
+  },
+  "seen": {
+    "answer_1_sections": "6 sections (class bonsai-ai-response-chunk) of 105, 105, 90, 60, 105, 90 px; plus 2 choice buttons (A and B, 32 px each) in a 136 px picker, Helpful 28 px, Not really 28 px, Read aloud speaker 32 px, Show details 15 px, notes block 47 px. NO 'chat summed itself up' note in this answer. Tallest section 105 px; room above the dock 202.2 px, so NO section was taller than the room.",
+    "answer_2_sections": "5 sections of 90, 120, 75, 105, 60 px; choice A 32 px, choice B 48 px (two lines); Helpful 28, Show details 15, notes block 47. Tallest 120 px. No section taller than the room (202.2). Two tries, neither made the case.",
+    "answer_1_down_walk (box top-bottom, h, scrollTop, % between pane top 88 and dock top 290.17)": [
+      "tab bar 'Main tab' 64-84 h20 sc0 (above pane)",
+      "chat row 88-136.3 h48.3 sc0 100%",
+      "'85 earlier' 146.3-168.3 h22 sc0 100%",
+      "question row body 189-246.2 h57.2 sc0 100% (box also reported 89% covered by the Retry icon, known false alarm)",
+      "Show reasoning 262.8-277.5 h14.7 sc0 100%",
+      "section 1 185.5-290.5 h105 sc109 100%",
+      "section 2 185.8-290.8 h105 sc213 99%",
+      "section 3 200.2-290.2 h90 sc304 100%",
+      "section 4 204.2-264.2 h60 sc390 100%",
+      "section 5 185.5-290.5 h105 sc469 100%",
+      "section 6 200.5-290.5 h90 sc559 99% (rig said 89% covered by Copy icon, the known false alarm)",
+      "choice A 171.8-203.8 h32 sc757 100%",
+      "choice B 211.8-243.8 h32 sc757 100%",
+      "Mark reply helpful 176-204 h28 sc883 100%",
+      "Show details 220-234.7 h14.7 sc883 100%",
+      "notes block 235.3-282.4 h47 sc898 100%",
+      "suggestion chip (in dock) 290.8-320.8, question box 323.5-367.5, Ask 399.8-435.8 (dock, sc898)"
+    ],
+    "answer_1_up_walk_1 (from Ask)": [
+      "question box 323.5-367.5 sc898",
+      "chip 290.8-320.8 sc898",
+      "notes block 235.3-282.4 h47 sc898 100%",
+      "Show details 204.7-219.3 sc898 100%",
+      "Mark reply helpful 204-232 h28 sc855 100%",
+      "choice B 203.8-235.8 sc765 100%",
+      "choice A 203.8-235.8 sc725 100%",
+      "section 6 200.5-290.5 h90 sc559 99%",
+      "section 5 185.5-290.5 h105 sc469 100%",
+      "section 4 204.2-264.2 h60 sc390 100%",
+      "section 3 200.2-290.2 h90 sc304 100%",
+      "section 2 185.8-290.8 h105 sc213 99%",
+      "section 1 185.5-290.5 h105 sc109 100%",
+      "Show reasoning 204.2-218.8 sc59 100%",
+      "question row body 189-246.2 h57.2 sc0 100%",
+      "then (walked past): '85 earlier' 146.3-168.3, chat row 88-136.3, tab bar 64-84, back button 20-48"
+    ],
+    "answer_1_up_walk_2": "Same list as walk 1: Ask, box, chip, notes block (235.3-282.4), Show details (204.7-219.3 sc898), Helpful (176-204 sc883), B (203.8-235.8 sc765), A (171.8-203.8 sc757), sections 6 to 1 (sc 559, 469, 390, 304, 213, 109, tops 200.5, 185.5, 204.2, 200.2, 185.8, 185.5; all 99-100%), Show reasoning (204.2-218.8 sc59), question row (189-246.2 sc0). 15 presses, 15 different stops, no wasted press, no stop hidden behind the dock.",
+    "answer_2_down_walk": [
+      "question row 189-231.9 h42.9 sc0 100%",
+      "Show reasoning 248.5-263.2 sc0 100%",
+      "section 1 200.5-290.5 h90 sc79 99%",
+      "section 2 170.5-290.5 h120 sc199 100%",
+      "section 3 203.9-278.9 h75 sc286 100%",
+      "section 4 185.5-290.5 h105 sc379 99%",
+      "section 5 203.9-263.9 h60 sc466 100%",
+      "choice A 171.9-203.9 h32 sc621 100%",
+      "choice B 211.9-259.9 h48 sc621 100%",
+      "Mark reply helpful 176.1-204.1 h28 sc762 100%",
+      "Show details 220.1-234.7 sc762 100%",
+      "notes block 235.4-282.4 h47 sc777 100%"
+    ],
+    "controls_under_the_answer_summary": "Every control under the answer (choice A, choice B, Helpful, Show details, notes block) landed fully above the dock top (290.17) both ways: lowest bottom edge 282.4 (notes block), 7.8 px above the dock; 100% visible each time. Not Really and the Read aloud speaker are never a stop on their own (Helpful, then Show details). The Retry icon and Copy icon overlap the question row and last section boxes by design (rig: 89%, known false alarms; text itself not under the icons).",
+    "wasted_presses": "None: every press of 20 Up, 21 Down (last two at Ask = end of list), 15 Up and 18 Down moved the ring to a new stop. No loop.",
+    "check_saved": "deck_saveCheck plan81-M-K2K3-NOGAME (the Down walk on answer 2, 18 presses). Saved as C:\\Users\\still\\Documents\\BonsAI\\checks\\plan81-M-K2K3-NOGAME.json. Rig run file for the first Down walk moved to the scratch folder (p81-k2k3-nogame-down.json)."
+  },
+  "expected": "Measurement row. For every section taller than (dock top - pane top) = 202.2 px, record how much is visible on the Down and the Up walk; for every control under the answer, record where it lands against the dock top.",
+  "verdict": [
+    "MEASURED: controls under the answer land fully above the dock both ways in both answers (numbers above). No hidden control.",
+    "UNCLEAR: the tall-section case did not occur. Answer 1: 6 sections, tallest 105 px; answer 2 (second try): 5 sections, tallest 120 px; room above the dock 202.2 px. The AI split both paragraphs into 60-120 px sections, so K2 (Up onto a tall section) was not exercised. No third try, as the runbook says."
+  ],
+  "side_effect": "Two test questions went into the test chat 6f3cc055 (turn count 170 -> 174 entries; the screen's 'earlier' counter went 84 -> 86). A debug logger (window.__p81) is installed in the Quick Access page until the next reload. The rig wrote runs/p81-k2k3-nogame-down.json into the repo (I moved it to the scratch folder) and checks/plan81-M-K2K3-NOGAME.json (kept). Walk legs went past the question row to the tab bar and back button; no A pressed there."
+}

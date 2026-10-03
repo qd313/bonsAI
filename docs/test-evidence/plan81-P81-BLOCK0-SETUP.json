@@ -1,0 +1,33 @@
+{
+  "row": "P81-BLOCK0-SETUP",
+  "build_commit": "afd2f444 (checkout tip; deployed with deck_deploy at 16:29 Deck time; deck_checkReady buildMatches: pass, 142 files)",
+  "deck_time_local": "2026-10-03 16:27-16:35 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page innerWidth 854 x innerHeight 454, dpr 1.5. Big Picture window 854x534. No monitor.",
+  "setup": {
+    "ready": "Deck reachable; automation armed (no stop switch); no game (RunningApps empty, 0 AppId= processes). deck_checkReady noForeignCdpTunnel FAILED before deploy: registry held a CDP tunnel (pid 4624, owner pid 2620, dated 2026-09-27) but owner pid 2620 does not exist on this PC and pid 4624 is now an unrelated svchost, so it is a stale registry entry, not another driver. No foreign press seen.",
+    "keep_awake": "deck_holdAwake ttlMinutes 480 -> held:true, expiresAt 2026-10-04T04:27:46.046Z (= 2026-10-04 00:27 EDT).",
+    "backups": "~/p81-backup/settings-bonsAI = copy of ~/homebrew/settings/bonsAI (diff -r: IDENTICAL, 30 entries). rag_corpus_path = /home/deck/.bonsai/rag, size 3.0M, free space on /home 734G (>= 2x), copied to ~/p81-backup/library/ (diff -r: LIBOK). ~/p81-backup total 90M.",
+    "deploy": "deck_deploy ok, loader ready in 281 ms. deck_openPlugin: attempt 1 failed (QAM chord sent blind, no pane), attempt 2 failed (chord sent, no pane), attempt 3 opened it (verified by .bonsai-scope). So two failures after the deploy, not one.",
+    "opened_on": "Permissions tab (last tab used). Walked LB x3 to Main later.",
+    "parental_lock": "Permissions tab text read in full: no 'Parental controls active' text anywhere (toggles: Read game & screenshot context, Save files to Desktop, Steam ban lookup, Voice input, Internet downloads).",
+    "ollama_models": "nomic-embed-text:latest 0.27 GB; gemma4:e2b-it-qat 4.34 GB. Ollama runs as a user process (/home/deck/.local/bin/ollama serve, pid 1610, user deck); the system service 'ollama' is inactive.",
+    "memory_free_m": "before deploy: total 14800, used 9686, free 1814, available 5114. After: available 5484.",
+    "recent_games_row": "Read from the Big Picture page DOM (read only, no D-pad walk): Doom 64: Retribution, Pikmin 2, Super Mario 64, Deep Rock Galactic: Survivor (Last two weeks 7.1 hrs), Left 4 Dead 2, Hades, Half-Life 2, Sifu, Call of Juarez Gunslinger, Black Mesa, Stardew Valley, Brotato, Grand Theft Auto: San Andreas - The Definitive Edition, Cyberpunk 2077, Fallout 4, Team Fortress 2, Red Dead Redemption 2, Persona 3 Reload, then 'New to library': Palworld, Hollow Knight. Focus when read: first tile (Doom 64: Retribution).",
+    "test_chat": "id 6f3cc055-d603-4e3e-9adf-15d71df4ec14 exists in chat_slots (923779 bytes, 170 turns in the file, 'summary' key present: yes). Opened in the panel with Down onto the chat row, then RB, RB; slot 1 was a 'New chat', slot 2 'what is a good way to practice parrying in action games', slot 3 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (title read after each press).",
+    "frozen_test_chips": "dev_frozen_test_chips = [] (empty, as expected)",
+    "chat_files": "chat_slots holds 8 chats: 351b2838 (178 turns, summary yes), 4baaccbc (4, no), 66df6be3 (4, no), 6f3cc055 (170, yes), 92a45014 (2, no), a8fb9f67 (2, no), d052dacc (2, no), d2aa6252 (200, yes)."
+  },
+  "pressed": "deck_openPlugin x3; LB x1 on Permissions tab (no tab change, ring was unowned: the first press placed nothing visible); DOWN via assertFocusMove (back button -> tab bar, moved:true, steam-routed: step 10); LB x3 to Main; DOWN (tab bar -> chat row); RB x2 (chat row).",
+  "seen": {
+    "step_10": "DOWN moved focus from the bonsAI back button to the tab bar ('Permissions tab'), moved:true, fidelity steam-routed.",
+    "step_13": "Run on the Deck with py_modules on the path: ModuleNotFoundError: No module named 'decky'. One try only, skipped as the runbook says. So no yes/no per chat for 'can sum up'.",
+    "deck_state_after": "Quick Access open, bonsAI plugin, Main tab, ring on the chat row, test chat open. No game."
+  },
+  "expected": "Steps 1-12 done and build matches.",
+  "verdict": [
+    "PASS: steps 1-8 and 10-12 done, build matches the checkout tip afd2f444.",
+    "UNCLEAR: step 9 (Recent Games) - I read all tile names from the page DOM instead of walking Left/Right with the D-pad; the list is complete but the walk itself was not done.",
+    "COULD NOT RUN: step 13 (can-sum-up per chat) - import needs Decky's own module, one try failed."
+  ],
+  "side_effect": "Two failed openPlugin attempts each sent a Quick Access chord (toggle) with nothing visible happening; no button landed anywhere harmful (ring stayed on the first Recent Games tile, no A pressed). A page-side logger (window.__p81) is installed in the Quick Access page and stays until the next reload. Backups were written under ~/p81-backup on the Deck (90M). Nothing deleted."
+}

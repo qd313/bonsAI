@@ -1,0 +1,26 @@
+{
+  "row": "P81-LOOK-QAM-TAB-SWITCH",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 16:54-16:58 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5.",
+  "setup": "Plugin open on Main, test chat open (title read), ring first placed on the question box (read: INPUT 'Describe the level, boss, or puzzle you're stuck on.', box x73 y324 w275 h44). Route found with D-pad only: LEFT from the question box goes to 'Attach screenshot to Ask' and LEFT again does nothing (the plugin does not hand the ring to the icon column). The only way to the icon column is UP through the whole panel to Decky's back arrow (bonsAI title bar), then LEFT onto the Decky tab icon (id quickaccess_tab_999), then UP onto the Help tab icon (quickaccess_tab_6). Returning: DOWN back onto the Decky tab icon, RIGHT into the panel.",
+  "pressed": "Per cycle: LEFT (back arrow -> Decky tab icon), UP (Help tab shown, bonsAI panel hidden: scope width 0), wait 3 s, DOWN (Decky tab icon, bonsAI shown again, scope width 300), wait 3 s, RIGHT, wait 3 s, read. Six cycles. Cycle 1 started with the ring on the back arrow after walking up from the question box (it did not start on the question box, because the tab column cannot be reached from the question box). Cycle 6 started after the ring had been on a chip ('How can I reduce input lag?', box x48 y291 w147 h30) and then walked up 14 presses to the back arrow: a chip cannot be the control that holds the ring while the tab is switched, only before the walk.",
+  "seen": {
+    "after_each_of_6_returns": "Ring on Decky's own back arrow (button class DialogButton _DialogLayout Secondary, box x64 y20 w40 h28), which is part of the Decky title bar, NOT a bonsAI control (inside .bonsai-scope: false). It is on screen (100% visible), drawn (screenshot plan81-P81-LOOK-QAM-TAB-SWITCH.png shows the white highlight on the back arrow), document.hasFocus() true, visible Quick Access pane quickaccess_content_999 (bonsAI, Main tab). Same result in all six; the 3 s wait made no difference.",
+    "per_cycle": [
+      "1: back arrow, drawn, hasFocus true, box 64,20,40,28",
+      "2: back arrow, same",
+      "3: back arrow, same",
+      "4: back arrow, same",
+      "5: back arrow, same",
+      "6 (after ring had been on a chip earlier): back arrow, same"
+    ],
+    "tab_switch_effect": "Help tab = quickaccess_content_6 shown while away, Decky tab content 999 shown on return; plugin did not rebuild (Main tab, same chat, scroll position kept)."
+  },
+  "expected": "If all is well: the ring is on a visible bonsAI control after every return.",
+  "verdict": [
+    "MEASURED (does not match the expected 'ring on a bonsAI control'): in 6 of 6 returns the ring was on Decky's back arrow in the title bar, drawn and visible, with document focus true. It never landed on a bonsAI control, and nothing was lost or hidden. The back arrow is the control just above the plugin's tab strip, so a person can continue by pressing Down.",
+    "UNCLEAR: the 'ring on a chip, then switch away' case cannot be built with D-pad only, since reaching the tab icons means walking up through every control to the back arrow first; cycle 6 is the closest."
+  ],
+  "side_effect": "None on the Deck's saved data. The ring now sits on Decky's back arrow in the bonsAI panel, Main tab."
+}

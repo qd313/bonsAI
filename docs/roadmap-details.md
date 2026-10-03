@@ -806,11 +806,15 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
   **2026-09-30 (plan 78 helper G):** the read-through was done and its real findings are fixed: findings 1 to 3 (plan 78 helper L) and 4 and 5 (helper M) are under Verify, each with its unit tests; finding 6 is still only possible. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md`. The other half, removing the unused live-line trimming code, still waits for after the release.
 
+  **2026-10-03 (plan 81, `45c73585`):** the first half is done. The old live-line trimming code (`liveReasoningText`), which nothing called any more, is removed; nothing a player sees changes. Owed: the end-of-session smoke test (Show reasoning still shows during and after an answer). The roadmap entry now holds only the second half (finding 6, only possible).
+
 ## The walk check calls a stop hidden when a corner icon merely overlaps its box
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
   **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.
+
+  **2026-10-03 (plan 81):** fixed in the Deck tools project (commit `cde1c0e`, not pushed): the walk check now judges a control with words by where its words are. It takes effect after the tool server restarts. Entry moved to Verify; row **P81-WALK-READS-WORDS**.
 
 ## With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud
 

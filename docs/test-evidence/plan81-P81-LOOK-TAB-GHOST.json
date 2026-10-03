@@ -1,0 +1,20 @@
+{
+  "row": "P81-LOOK-TAB-GHOST",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 17:00-17:05 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5.",
+  "setup": "Test chat 6f3cc055 open on Main. Show details opened on the newest answer (A, ring read first = 'Show details'), DOWN, DOWN (tabs row 'This answer / Session'), RIGHT (Session tab active: 'Session - 87', box x199 y96 w143 h28).",
+  "pressed": "Pretend touch sent through the debug link with CDP Input.dispatchTouchEvent (touchStart, 120 ms, touchEnd) at the centre of the Session tab (x 270.5, y 110.4), using a scratch script piped to python3 on the Deck (scratch folder ghost.py, built from the transport in scripts/deck_send_ask.py). Sent twice: the first time without a listener, the second with a page listener that logs the events that arrive. Then B to close details.",
+  "seen": {
+    "before_touch": "Tab-strip elements drawn (non-zero box and opacity above 0): top tab bar .bonsai-tab-bar 1 (box x48 y64 w300 h20, opacity 1); the open strip .bonsai-tab-bar__strip 0 (box 48,64,300,66 but opacity 0). Details row (This answer / Session) 1.",
+    "events_that_arrived": "pointerdown, touchstart, pointerup, touchend, mousedown, mouseup, click, all at (271,110) on the Session tab. So the touch was delivered as a real touch and the click followed.",
+    "after_touch": "At 0.3 s, 1.0 s and 2.0 s after: tab bar 1 drawn, open strip 0 drawn, details row 1 (identical to before) in both sends. Screenshot after the first send (plan81-P81-LOOK-TAB-GHOST.png) shows one compact tab bar (LB, dashes, MAIN, RB) and no second bar.",
+    "after_B_close_details": "B closed details (ring on 'Show details', details row gone). Count: tab bar 1, open strip 0, details row 0."
+  },
+  "expected": "Count of tab bars drawn at once, with a screenshot, after a touch on the Session tab; one try.",
+  "verdict": [
+    "MEASURED: no ghost. One tab bar is drawn at all times (strip with opacity 0 does not count), before the touch, 0.3/1/2 s after it, and after closing details.",
+    "UNCLEAR: the touch hit a tab that was already active, and on the Deck's Chromium touch is not otherwise enabled (ontouchstart reads false). The row cannot say whether a touch on a different tab or from real fingers would draw a ghost."
+  ],
+  "side_effect": "A temporary event listener (window.__p81ev) was added to the Quick Access page by the second send; it stays until the next reload and only records. Details are now closed; ring is on 'Show details' in the test chat."
+}

@@ -43,25 +43,20 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 ## Bugs
 
-- ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN, measured on the Deck 2026-09-21.**
-  The check samples a box, not the words. The question row and the last answer section read part-hidden behind the Retry and Copy icons, though the words clear them (6 px at Retry; the last line only touches Copy by its line spacing, 7 by 3 px on 2026-10-01).
-  Until the check reads text, measure the text before filing. Evidence `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`. Full note: [roadmap-details.md](roadmap-details.md#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box).
-- ★ `[focus]` **Steam's own scroll keeps a top margin even for a stop already on screen, which the test setup does not model** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
-  On the Deck a cover the walk placed at y 104 ended at y 204. No player-visible fault is known; this is a note so the next walk fix knows. Found beside `84cc0029`.
 - ★ `[focus]` **Walking Up can land on a section taller than the screen with only a sliver of it showing at the top** — **OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck; may have been changed by the plan 79 Up fixes, not re-measured.**
   Only 1 to 8 px of the section showed. It passes the "bottom edge showing" rule but looks poor. For after the release (plan 79 list).
 - ★ `[focus]` **Walking Up onto a tall first answer section shows only its top third above the dock** — **OPEN, seen on the Deck 2026-10-02 (plan 79, build `156baf42`).**
   With a game running, the Up landing on the first section of the answer had 33 percent of it above the dock; the Down walk showed the same section 67 percent. The walk itself goes on and the section is a stop both ways. Evidence `docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-WORDS-try2.json`.
-- ★ `[focus]` **The plugin's own claim of the ring when the panel reopens may not run after a switch between Quick Access tabs** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); needs a Deck check before anything is built.**
-  Only a suspicion from reading the code (`useAskBarInitialRingClaim.ts`). No evidence file.
-- ★ `[focus]` **Some controls get only a thin grey frame, and the Steam Web API key field gets no ring** — **OPEN, seen on the Deck 2026-10-02 (plan 79, build `678aaa3d`); every stop is still visible, so the ring walk passed.**
-  On the Settings tab the accent intensity button and "Reinstall voice engine" show a thin grey frame, dimmer than the white ring, and the two voice model rows a grey frame round the whole row. On the Developer tab the Steam Web API key field turns white with no ring.
-  Evidence `docs/test-evidence/plan79-P79-RING-WALK-TABS.json`.
-- ★ `[focus]` **An underlined game word's own tooltip can cover the word itself** — **OPEN, seen once on the Deck 2026-10-02 (plan 79, build `49fc8894`); not seen again on build `156baf42`.**
-  Walking Down, the second underlined word was a stop with 33 percent showing because a tooltip box covered it. The next sweep showed both words whole. No fix is aimed at it.
-  Evidence `docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-WORDS.json`, `plan79-P79-UP-MIRRORS-DOWN-WORDS-try2.json`.
+  **2026-10-03 (plan 81, build `afd2f444`, Deep Rock running):** a 525 px section; Up landed with 19% showing (top 229, the pane did not scroll), Down with 38%. Evidence `docs/test-evidence/plan81-P81-M-K2K3-GAME.json`.
+- ★ `[focus]` **The plugin's own claim of the ring when the panel reopens may not run after a switch between Quick Access tabs** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); seen on the Deck 2026-10-03 (plan 81, build `afd2f444`).**
+  In 6 of 6 returns to the Decky tab the ring sat on Decky's own back arrow, drawn and visible, never on a bonsAI control. Nothing was lost, and Down continues from there. A ring on a chip before the switch could not be built with the D-pad alone.
+  The cause was first a suspicion from reading the code (`useAskBarInitialRingClaim.ts`). Evidence `docs/test-evidence/plan81-P81-LOOK-QAM-TAB-SWITCH.json`.
+- ★ `[focus]` **An underlined game word's own tooltip can cover the word itself** — **OPEN, seen once on the Deck 2026-10-02 (plan 79, build `49fc8894`); not seen on build `156baf42`; seen again 2026-10-03 (plan 81, build `afd2f444`).**
+  Walking Down, the second underlined word was a stop with 33 percent showing because a tooltip box covered it. The next sweep showed both words whole.
+  **2026-10-03:** 3 of 14 stops over 5 answers had the tooltip over the word (100%, 100% and 52% of the word covered), always with the word low in the pane. Evidence `docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-WORDS.json`, `plan79-P79-UP-MIRRORS-DOWN-WORDS-try2.json`, `docs/test-evidence/plan81-P81-LOOK-TOOLTIP-WORDS.json`.
 - ★ `[layout]` **The step that lifts a control clear of the dock moves it about 80 px too far** — **OPEN, measured 2026-10-01 (plan 78 helper D).**
   The choices and Helpful under an answer land at y 172 to 204 with the dock at 290. Harmless under about 116 px tall; answer sections are exempt since `b417c271`. The cure is to take Steam's 80 px out of the lift's margin and re-measure every landing below an answer. After the release. Evidence `docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json`.
+  **2026-10-03 (plan 81, no game):** going Down, choice A landed 171.8-203.8 and Helpful 176-204 with the dock at 290.17, about 86 px above it; every control still fully visible. Evidence `docs/test-evidence/plan81-P81-M-K2K3-NOGAME.json`.
 - ★ `[reply]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note. Waiting on the maintainer's call ([plan 78](planning/78-release-wave-five.md), question 12; no decision recorded).**
   The words shown held no protected name; the name arrived after the words were hidden. Not known whether it was always so. Evidence `docs/test-evidence/plan78-P78-BORROWED-RUNNING-GAME.json`.
 - ★ `[reply]` **After the release: the AI's own instructions write the hidden-block label in the odd shape** — **OPEN, from plan 78 (helper N).**
@@ -69,16 +64,16 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   Rewording waits for the maintainer's call ([plan 78](planning/78-release-wave-five.md), question 13; no decision recorded) and a before-and-after count of covers.
 - ★ `[ollama]` **Removing a model on the Deck also drops its name from the saved try order, even when the AI runs on a PC that has the same model** — **OPEN, found 2026-10-02 by reading the code (plan 79, models helper); not seen on the Deck.**
   No fix has landed yet. No evidence file.
-- ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.**
-  Remove the old live-line trimming code, now used only by its tests. Read the step that runs after an answer for stale copies: findings 1 to 5 are fixed (Verify); finding 6 is only possible.
+- ★ `[platform]` **After the release: two clean-ups behind the scenes** — **PARTIAL, from plan 72; the first half is done in `45c73585` (plan 81).**
+  The old live-line trimming code is removed (nothing called it); nothing a player sees changes. Owed: the end-of-session smoke test (Show reasoning still shows during and after an answer).
+  What is left: read the step that runs after an answer for stale copies. Findings 1 to 5 are fixed (Verify); finding 6 is only possible.
   Full note: [roadmap-details.md](roadmap-details.md#after-the-release-two-clean-ups-behind-the-scenes).
 - ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28 (plan 75).**
   Seen three times. Once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`). Once it never showed a window (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`). Once, on 2026-09-29, one A on Resume brought it back (`docs/test-evidence/plan77-P77-TRAP-LONG.json`).
-- ★ `[ui]` **B on the "Clear all plugin data?" box also takes the panel from Settings back to Main** — **OPEN, seen on the Deck 2026-10-02 (plan 79, build `c98f749e`).**
-  The box closed as wanted, nothing was cleared and the settings file was unchanged, but the ring then sat on "Main tab". The Clear cache box and the big-download box did not do this. No fix yet. Evidence `docs/test-evidence/plan79-P79-SETTINGS-CLEAR-BOXES.json`; row P79-CLEAR-BOXES-SAFE.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`).**
   After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
   Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
+  **2026-10-03 (plan 81):** one pretend touch through the debug link on the Session tab: no ghost, one tab bar drawn throughout. The touch was on the tab already showing, so a touch on a different tab is not proven. Stays the maintainer's finger check. Evidence `docs/test-evidence/plan81-P81-LOOK-TAB-GHOST.json`.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL; accepted for 0.6.0 in plan 79's list (not a locked decision).**
   Modal scoping shipped; a blanket rule was tried and reverted in favour of Steam's native outline (no commit found to name). Weak rings are still listed above. [Detail](roadmap-details.md#small-and-cosmetic-as-filed).
 - ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
@@ -87,9 +82,13 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   Black Mesa running, about 550 MB free of 14.8 GB, the rig's plugin reload, then no Quick Access page for six minutes or more; the maintainer restarted the Deck. Evidence `docs/test-evidence/plan78-THINKING-SLOW-01.json`.
   A real player never reloads the plugin this way (it is a developer action), so this is first a rule for the Deck driver. Whether an ordinary Steam restart of the plugin under low memory can do the same is not known.
   In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
+- ★★ `[reply]` **After a choice button under a Strategy answer, the AI can be told it is a first question, so the step checklist never comes** — **OPEN, found 2026-10-03 by reading the code (plan 81), not yet seen on the Deck.**
+  With the knowledge base on and the chat remembering what it was about, a "previous turn" reminder is put in front of the follow-up, and the check for a follow-up only looks at the very start of the text, so the AI gets the first-question instructions (a new choice menu) instead of the follow-up ones (a step checklist). Likely why the checklist never showed on the Deck in four tries.
+  Related: the Verify entry "A Strategy checklist that arrives while the panel is closed never shows ..." (row P78-REOPEN-CHECKLIST). Found by reading the code; no evidence file.
 - ★★★ `[layout]` **The chat summary card appears behind the dock until Down is pressed** — **PARTIAL, found 2026-09-25 (plan 68). Accepted as is for 0.6.0 (the maintainer, 2026-09-27; [plan 72 § 8](planning/72-release-bug-session.md#8-known-issues-for-the-060-release-notes-final-2026-09-27)).**
   The card shows itself and one Down reaches it. Two more tries to hand over the ring failed on the Deck (`docs/test-evidence/plan72-F7-SUMUP.json`, `plan72-F8-SUMUP.json`): Steam keeps the ring on the greyed "Sum up again". Named in the release notes.
   After the release: finish the hand-off or take the tries out of the code (they do no harm). Row F6-SUMUP. [Detail](roadmap-details.md#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed).
+  **2026-10-03 (plan 81):** the measurement could not run: every chat that had a summary showed "Sum up again" greyed. Evidence `docs/test-evidence/plan81-P81-M-L-SUMUP.json`.
 - ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause unknown** — **PARTIAL, found 2026-09-25 (plan 68).**
   The chat memory now copes with the doubling (`6843f8e1`) and the guards passed on the Deck 2026-09-30 (`docs/test-evidence/plan77-SUMUP-12.json`). Why it happens has not been found.
   [Detail](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-unknown).
@@ -264,9 +263,19 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **When the Steam settings list above the question box closes while the ring is on one of its rows, the ring vanishes until the next press** — **VERIFY, fixed 2026-10-02 (plan 79, `8c8fffb0`). Was OPEN, found 2026-10-02 (plan 79, Deck).**
   The plugin now asks where the ring is while the screen draws, and when the list closes the question box takes the ring through Steam's own hand-over. Test: `src/components/MainTabUnifiedAskBar.settingsCardRingOnHide.test.tsx`.
   Deck check owed: row **P79-SETTINGS-LIST-RING**. Not run as written. Close case seen on the Deck 2026-10-02 (build `678aaa3d`, route F): the list closed by itself and the ring moved onto the question box (`docs/test-evidence/plan79-P79-TRAP-ROUTES-AFTER.json`). Before: `docs/test-evidence/plan79-P79-M1-TRAP-try3.json`.
+- ★ `[focus]` **Some controls get only a thin grey frame, and the Steam Web API key field gets no ring** — **VERIFY, fixed 2026-10-03 (plan 81, `0469319c`). Was OPEN, seen on the Deck 2026-10-02 (plan 79, build `678aaa3d`).**
+  The accent intensity button, "Reinstall voice engine", the two voice model rows and the Steam Web API key field now show the same white ring as every other stop. Before, on the Settings tab the first four showed a thin grey frame dimmer than the white ring, and on the Developer tab the key field turned white with no ring. Test: `src/components/SettingsDeveloperWrappedRing.test.tsx`.
+  Deck check owed: row **P81-RING-WALK-SETTINGS-DEV**. Evidence from before the fix `docs/test-evidence/plan79-P79-RING-WALK-TABS.json`.
+- ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **VERIFY, fixed 2026-10-03 in the Deck tools project (plan 81, tools commit `cde1c0e`, not pushed). Was OPEN, measured on the Deck 2026-09-21.**
+  The walk check now judges a control with words by where its words are (its text lines), so the question row next to Retry and the last answer section next to Copy should read fully visible. The tool server was rebuilt; it takes effect only after the tool server restarts (likely a new chat).
+  Deck check owed: row **P81-WALK-READS-WORDS**. Evidence from before the fix `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`. Full note: [roadmap-details.md](roadmap-details.md#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box).
 - ★ `[reply]` **A power question's answer often has no number in it** — **VERIFY, fixed 2026-10-02 (plan 79, `7ef1d70f`). Was OPEN, found 2026-09-27 (plan 72), narrowed 2026-09-30 (plan 78 helper I).**
   Power, battery, TDP and frame-cap questions now get the Quick Access tuning instructions, so the answer carries a TDP in watts, a frame cap and a refresh rate. Measured on this PC only (in the commit message, no evidence file), 10 questions three times each: answers with a number you can set went from 3 of 30 to 27 of 30. Tests: `tests/test_power_question_instructions.py`, `tests/test_ollama_service.py`.
   Deck check owed: row **P79-POWER-NUMBERS** (ask a battery question, the answer holds a number you can set). Not run on the Deck.
+- ★ `[ui]` **B on the "Clear all plugin data?" box also takes the panel from Settings back to Main** — **VERIFY, fixed 2026-10-03 (plan 81, `b6f4d03a`). Was OPEN, seen on the Deck 2026-10-02 (plan 79, build `c98f749e`).**
+  The "Clear all data..." button did not tell the plugin which tab to return to (the "Clear cache" button always did), so every way of closing the box (B, Cancel, Keep my data) went back to Main. Test: `src/components/SettingsTab.clearAllBack.test.tsx`.
+  Measured again on the Deck before the fix (2026-10-03, build `afd2f444`): B on the Clear cache box stayed on Settings; B on the Clear all box went to Main with the ring on the tab bar, 3 of 3. Evidence `docs/test-evidence/plan81-P81-M-A-CLEAR-BOX.json`, `docs/test-evidence/plan79-P79-SETTINGS-CLEAR-BOXES.json`.
+  Deck check owed: row **P81-CLEAR-ALL-STAYS**.
 - ★★ `[voice]` **A spoken question sometimes comes out with its words doubled** — **VERIFY, fixed 2026-10-02 (plan 79, `7b6e1de5`). Was OPEN, found by the maintainer 2026-10-02 on the real microphone.**
   Stretches of text that overlap are now merged, so no stretch appears twice. Test: `tests/test_voice_overlap_merge.py`.
   Deck check owed: row **P79-DOUBLED-WORDS** (one recorded sentence five times, no stretch repeated). **The real microphone is the final check and is the maintainer's.** Not run yet.
@@ -315,9 +324,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   While an answer is read and its own Show details line is out of sight, that line sits in the chip's place; once the real line is on screen, or the answer is scrolled past, the chip comes back. A on the slot's line opens the details; Up from the question box lands on whatever the slot shows. Tests: `src/features/details-slot/DetailsSlot.deck.test.tsx`.
   **Deck 2026-10-02 (build `c98f749e`):** the slot's wording, the chip's return, B closing details with the ring staying, and Up from the slot or a chip pass. **Still owed:** reaching the slot's line from the question box and pressing A on it (needs a right-stick scroll, the maintainer's hand check, checks page, Friday check 4), and the closed line landing 8 px inside the top.
   Row **P79-SHOW-DETAILS-SLOT**. Evidence `docs/test-evidence/plan79-P79-DETAILS-SLOT.json`.
-- ★★ `[chips]` **Long suggestion chips: pause at the end, centred text** — **VERIFY, built 2026-10-02 (plan 79, `2fa5a5a4`, `70a47e4b`), asked for by the maintainer 2026-10-02.**
-  **Deck 2026-10-02 (build `678aaa3d`, Hades running, 200 s watched):** the words do scroll to their end and stand still, but the chip leaves 3.2 to 10.2 s later on the row's own beat, not after the pause of about 1.5 s; the 1.5 s wait seen is at the start of each chip. **An open call for the maintainer** ([plan 79](planning/79-release-wave-six.md), question 12; no decision recorded): which pause was meant.
-  Centring a short chip could not be measured, since every chip was longer than its box. The soft blue fill passed and is in Done. Row **P79-LONG-CHIPS**. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. Tests: `src/styles/presetChipFocusRing.test.ts`.
+- ★★ `[chips]` **Long suggestion chips: pause at the end, centred text** — **VERIFY, built 2026-10-02 (plan 79, `2fa5a5a4`, `70a47e4b`) and changed 2026-10-03 (plan 81, `0b46df34`, `fc1f1d51`), asked for by the maintainer.**
+  **The maintainer's call 7 ([D124](audit/maintainer-decisions-locked.md#d124--locked-2026-10-03-raised-2026-10-03--plan-81-the-final-bug-session-before-060-the-ten-calls)):** a long chip now tells its row when its own scroll ends, and the row replaces it one pause (1.5 s) later, instead of 3 to 10 s later on the row's own beat. In the fade style (the default) the chip starts fading at that moment; in the plain and decode styles the words swap then. Two long chips can now change about 0.35 s apart (was 2.5 s). The sliding style keeps its own beat. A chip under the ring still never changes.
+  **Owed again on the new build** (row **P79-LONG-CHIPS**): over 200 s with a game running, every long chip starts to leave 1.2 to 1.9 s after its words stop (fade style: the moment its opacity starts to fall); a chip under the ring never changes; a short chip's words are centred within 2 px (still never measured).
+  Before the change (Deck 2026-10-02, build `678aaa3d`, Hades running): the words scrolled to their end and stood still, but the chip left 3.2 to 10.2 s later. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. The soft blue fill passed and is in Done.
+  Tests: `src/features/preset-carousel/presetChipStay.row.test.tsx`, `src/styles/presetChipFocusRing.test.ts`.
 
 ---
 
@@ -339,6 +350,10 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 ## Done for v0.6.0
 
 Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+
+**Closed 2026-10-03 (plan 81, from Bugs):**
+
+- ★ `[focus]` **Steam's own scroll keeps a top margin even for a stop already on screen, which the test setup does not model** — **DONE 2026-10-03, test setup only, no Deck check owed (`0e885c77`).** The test setup can now model Steam's 116 px top margin (an option, off by default): a small stop lying wholly above y 204 is carried to 204, as the Deck measured. Nothing a player sees changes. Switched on for every walk, 18 older walk tests fail, all with the dock at 262 (a higher dock than the Deck's 290): a small section carried to 204 is then cut off by that dock. Proof: `src/utils/answerBubbleNavigation.steamTopMargin.test.ts` reproduces the landings in `docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json`.
 
 **Closed 2026-10-03 (plan 80, from Verify):**
 

@@ -1,0 +1,19 @@
+{
+  "row": "P81-M-L-SUMUP",
+  "build_commit": "afd2f444",
+  "deck_time_local": "2026-10-03 16:52-17:03 EDT (Deck clock)",
+  "screen": "Deck's own screen. Quick Access page 854x454 css px, dpr 1.5. Pane top y=88, dock top y=290 (Session tab of Show details).",
+  "setup": "Block 0 step 13 (chat_can_sum_up per chat) could not run (needs Decky's own module). So I looked at the button itself on each chat's Session tab. No sampler was installed because the button never became pressable.",
+  "pressed": "Test chat 6f3cc055: Show details (A, ring read first), DOWN, DOWN (tabs row 'This answer / Session'), RIGHT, DOWN onto the Sum up button. Then to the 'wheatley fight' chat (id d2aa6252, by RB on the chat row, title read), Show details (A), DOWN, DOWN, RIGHT, DOWN onto the button. Then to the chat 'what is a good way to practice parrying in action games' (id 351b2838, by LB, title read) and walked Down looking for Show details, once, then once more after revealing its spoiler cover (A on 'Spoiler - tap to show'). No A was ever pressed on a Sum up button.",
+  "seen": {
+    "test_chat_6f3cc055": "Button reads 'Sum up again' with class bonsai-sumup-btn--off (aria-disabled true); line under it reads 'This chat is already summed up. Ask more, then you can sum up again.' The card 'What the AI remembers' is already there ('78 turns - 10/1/2026'). Button box y203.7-236.4 (h 32.7), 100% between pane top 88 and dock top 290. The chat file has 174 entries and its summary covers 156 of them (18 not covered).",
+    "wheatley_fight_d2aa6252": "Same: 'Sum up again' greyed, same 'already summed up' line, card '95 turns - 16 h ago'. Button y203.8-236.5. File: 200 entries, summary covers 190 (10 not covered).",
+    "parrying_351b2838": "File: 178 entries, summary covers 154 (24 not covered). Its newest answer shows no 'Show details' stop: Down from the question row went spoiler cover ('Spoiler - tap to show'), then (after A) 'tap to hide', answer section, Read aloud, suggestion chip, question box, Ask. The label 'Show details' exists in the page but the ring never lands on it in 13 plus 8 presses. So its Session tab could not be reached from this answer. (Earlier answers were not tried.)",
+    "other_chats": "Five other chats have 2 to 4 entries and no summary, so nothing to sum up."
+  },
+  "expected": "A chat whose Sum up button is pressable; then a 250 ms sampler, A, 30 s hands off, one Down, one Up, with the card's top and bottom against the dock top.",
+  "verdict": [
+    "COULD NOT RUN: no chat that I could reach had a pressable Sum up button. Test chat and 'wheatley fight' both read 'already summed up, ask more first' (button greyed). The third chat with a summary had no Show details stop on its newest answer. I did not ask extra questions in a maintainer chat to push one over the line. The owner may want a chat that has had more than about 20 new turns since its last summary, or a fresh long chat."
+  ],
+  "side_effect": "Opened the Session tab (Show details) in the test chat and in 'wheatley fight' and left them open; revealed the spoiler-covered newest answer in the 'parrying' chat (id 351b2838) by A on 'Spoiler - tap to show' (the cover now reads 'tap to hide'; I did not hide it again). No question was asked in those two chats and nothing was summed up. Switching chats on the chat row changed which chat is open; it is back on the test chat."
+}

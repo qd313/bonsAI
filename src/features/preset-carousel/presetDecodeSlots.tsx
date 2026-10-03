@@ -1,9 +1,9 @@
 /**
  * Title: Preset decode-mode chip row
  *
- * Purpose: Decode mode's chip button (DecodePresetChipButton) and the row component that drives
- * it (MainTabPresetDecodeSlots) -- the "Ghost in the Shell" reveal where each chip's text
- * scrambles into place, letter by letter, behind a blinking caret.
+ * Purpose: The row component that drives decode mode (MainTabPresetDecodeSlots) -- the "Ghost in the
+ * Shell" reveal where each chip's text scrambles into place, letter by letter, behind a blinking
+ * caret. The chip button it draws is DecodePresetChipButton, in presetDecodeChipButton.tsx.
  *
  * Used for: MainTabPresetAnimatedChipsInner in src/components/MainTabPresetAnimatedChips.tsx,
  * when the chip-animation setting is "decode".
@@ -19,17 +19,14 @@
  * file, so importing it here does not create an import cycle (the component file imports this
  * file, to render decode mode).
  */
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@decky/ui";
-import type { AskModeId } from "../../data/askMode";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PresetPrompt } from "../../data/presets";
-import { PresetChipLeadingBadges, PresetChipText } from "./presetChipButton";
+import { DecodePresetChipButton, type DecodeLabelNodes, type DecodeLabelRefs, type DecodeLabelPart } from "./presetDecodeChipButton";
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
-import { effectivePresetVisibleSlots, PRESET_CHIP_HEIGHT_PX, presetTurnMs } from "./presetRowLayout";
+import { effectivePresetVisibleSlots, presetTurnMs } from "./presetRowLayout";
 import { makeChangeSpacer } from "./changeSpacing";
 import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSlotRotation";
 import { seedsKeyFrom } from "./carouselState";
-import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 import {
   composeDecodeParts,
   decodeHoldMs,
@@ -50,13 +47,6 @@ import {
 /** How often a reduced-motion chip held by `rowHeld` checks whether it may change yet. */
 const PRESET_DECODE_HOLD_RECHECK_MS = 500;
 
-/**
- * A churning label's three spans, one per part of `composeDecodeParts`: the locked letters, the
- * caret (in the accent colour, section-4.ts) and the still-churning tail.
- */
-type DecodeLabelPart = keyof DecodeTextParts;
-type DecodeLabelNodes = Record<DecodeLabelPart, HTMLSpanElement | null>;
-type DecodeLabelRefs = Record<DecodeLabelPart, (el: HTMLSpanElement | null) => void>;
 
 /**
  * Writes one frame of a reveal into a label's spans. It runs only when the old single whole-label
@@ -74,100 +64,6 @@ function paintDecodeLabel(nodes: DecodeLabelNodes | undefined, parts: DecodeText
   }
 }
 
-/**
- * The label's text is owned by the reveal effect below while the prompt is still churning, written
- * straight to the churn span's three parts via `labelRefs` — never through React state. React
- * renders those spans empty and never writes into them, so the effect's writes are never fought
- * over; they are blank only during a slot's stagger delay, before its first `begin` call. Every
- * frame after that bypasses React entirely, which is the point of the rewrite (see the module
- * header comment on frame cost). Once the prompt has resolved the churn span is replaced by the
- * ordinary label, so Steam's Marquee measures settled text, never a mid-churn frame.
- */
-function DecodePresetChipButton(props: {
-  preset: PresetPrompt;
-  resolved: boolean;
-  scroll: boolean;
-  labelRefs: DecodeLabelRefs;
-  setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
-  onPreferAskMode?: (mode: AskModeId) => void;
-  buttonRef?: (el: HTMLElement | null) => void;
-  navHandlers?: Record<string, unknown>;
-  /** The chip row just claimed a Left/Right press without moving anywhere -- ran out of chips. */
-  blockedEdge?: boolean;
-}) {
-  const {
-    preset: p,
-    resolved,
-    scroll,
-    labelRefs,
-    setUnifiedInput,
-    onPreferAskMode,
-    buttonRef,
-    navHandlers,
-    blockedEdge,
-  } = props;
-  return (
-    <Button
-      className={
-        "bonsai-preset-glass bonsai-preset-glass--decode" +
-        (blockedEdge ? " bonsai-preset-chip-blocked-edge" : "")
-      }
-      ref={buttonRef}
-      {...(navHandlers ?? {})}
-      focusable
-      onClick={() => {
-        // Always the real prompt, never whatever is mid-churn on screen — the text is known from
-        // frame 0, so there is no "partial" to accidentally submit.
-        setUnifiedInput(joinPresetWithRunningGame(p.text));
-        if (p.preferAskMode && onPreferAskMode) {
-          onPreferAskMode(p.preferAskMode);
-        }
-      }}
-      style={{
-        width: "100%",
-        minHeight: PRESET_CHIP_HEIGHT_PX,
-        fontSize: 12,
-        // Same normal chip-text colour PresetChipButton uses below (never the accent): the label
-        // used to be tinted `--bonsai-ui-accent-toned` by a CSS rule in section-4.ts, which made a
-        // decode chip's words read in the same colour family as its Tip dot -- the dot is the only
-        // thing meant to carry the accent (maintainer bug report, 2026-09-19). Set inline, not left
-        // to the Button's own default, so it reads the same as every other animation mode.
-        color: "#c4d3e2",
-      }}
-    >
-      <span className="bonsai-preset-chip-label">
-        {/* Shared with every other animation mode (PresetChipLeadingBadges, above) -- decode used
-            to draw its own copy of just the Test badge and never picked up the Tip one when it
-            was added later, which is exactly how CHIP-BUTTON-09 happened (a real, note-sourced
-            chip with ragTip=true whose dot never drew in decode mode). One function now, not two
-            copies that can go out of sync again. */}
-        <PresetChipLeadingBadges p={p} />
-        {resolved ? (
-          <PresetChipText text={p.text} scroll={scroll} />
-        ) : (
-          <span className="bonsai-preset-chip-text bonsai-preset-chip-text--churn">
-            <span ref={labelRefs.locked} />
-            <span className="bonsai-preset-chip-caret" ref={labelRefs.caret} />
-            <span ref={labelRefs.tail} />
-          </span>
-        )}
-        {p.beta ? (
-          <span
-            style={{
-              marginLeft: 6,
-              fontSize: 10,
-              fontStyle: "italic",
-              color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
-              fontWeight: 600,
-            }}
-          >
-            [beta]
-          </span>
-        ) : null}
-      </span>
-    </Button>
-  );
-}
 
 /**
  * Ghost in the Shell title-sequence reveal: each chip arrives as a full-width block of scrambled
